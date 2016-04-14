@@ -1,0 +1,3 @@
+const UNAUTHORIZED = 'caiman/UNAUTHORIZED';
+
+export { UNAUTHORIZED };

@@ -1,0 +1,78 @@
+@import '../../styles/colors';
+@import '../../styles/spacing';
+@import '../../styles/typography';
+
+$topbar-color: $brand-secondary;
+$font-size-offset: -2px;
+$color: white;
+$inactive-color: transparentize($color, 0.3);
+$disabled-color: mix($topbar-color, $inactive-color, 60%);
+$logo-width: 128px;
+
+.base {
+  height: $topbar-height;
+  color: white;
+  font-family: $default-font;
+  width: 100%;
+  background-color: $brand-secondary;
+  position: fixed;
+  top: 0;
+  z-index: 600;
+  font-weight: 300;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.nav-item-text {
+  text-decoration: none;
+  transition: all 0.1s;
+  text-transform: uppercase;
+  font-size: calc(1rem + #{$font-size-offset});
+  letter-spacing: 1px;
+  color: $disabled-color;
+}
+
+.logo-container {
+  margin-right: auto;
+  background-color: $brand-secondary-dark;
+}
+
+.logout-container {
+  margin-left: auto;
+  width: $logo-width;
+}
+
+.logout {
+  @extend .nav-item-text;
+  color: $color;
+}
+
+.nav-item {
+  @extend .nav-item-text;
+
+  padding: 25px 16px;
+  transition: all 0.1s;
+  border-bottom: 2px solid transparent;
+
+  &:hover {
+    background-color: lighten($topbar-color, 5);
+  }
+}
+
+.logo {
+  width: 128px;
+  padding: 8px;
+}
+
+@media screen and (min-width: 0px) and (max-width: 560px) {
+  .logo {
+    display: none;
+  }
+}
+
+.active {
+  border-color: $brand-accent;
+  color: $color;
+}
+

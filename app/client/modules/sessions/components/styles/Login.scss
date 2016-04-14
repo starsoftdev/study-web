@@ -1,0 +1,28 @@
+.container {
+  margin: auto;
+  padding: 32px;
+  width: 100%;
+}
+
+.center {
+  margin: auto;
+}
+
+.button {
+  font-family: "AvenirNext-Regular";
+  border: 1.5px solid #4497e6;
+  transition: color .1s,background-color .1s,border-color .1s;
+  padding: 0 14px;
+  border-radius: 14px;
+  color: #4497e6;
+  text-align: center;
+  line-height: 28px;
+  font-size: 16px;
+  width: 100%;
+
+  &:hover {
+    color: #fff;
+    background-color: #4497e6;
+  }
+}
+
