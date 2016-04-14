@@ -1,4 +1,3 @@
-/* eslint arrow-body-style: 0 */
 const styles = require('./styles/TopBar');
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';

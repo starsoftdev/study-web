@@ -12,6 +12,7 @@
     "camelcase": [2, {"properties": "always"}],
     "dot-notation": [2, {"allowPattern": "^[a-z]+(_[a-z]+)+$"}],
     "no-param-reassign": 0,
+    "arrow-body-style": 0,
     "new-cap": 1,
     "no-use-before-define": [2, "nofunc"],
     "babel/new-cap": 2,

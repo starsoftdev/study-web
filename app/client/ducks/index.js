@@ -1,3 +1,3 @@
-const UNAUTHORIZED = 'caiman/UNAUTHORIZED';
+const UNAUTHORIZED = 'study/UNAUTHORIZED';
 
 export { UNAUTHORIZED };

@@ -1,15 +1,13 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 
-export default class FieldError extends Component {
+const FieldError = (props) => {
+  return (
+    <p className="error-msg text-danger"><small>{props.message}</small></p>
+  );
+};
 
-  static propTypes = {
-    message: PropTypes.string
-  }
+FieldError.propTypes = {
+  message: PropTypes.string
+};
 
-  render() {
-    return (
-      <p className="error-msg text-danger"><small>{this.props.message}</small></p>
-    );
-  }
-
-}
+export default FieldError;

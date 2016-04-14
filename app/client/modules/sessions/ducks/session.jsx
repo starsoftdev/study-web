@@ -2,11 +2,11 @@ import immutable from 'seamless-immutable';
 import { request } from '../../../lib';
 import { UNAUTHORIZED } from '../../../ducks';
 
-const CREATING = 'caiman/session/CREATING';
-const CREATED = 'caiman/session/CREATED';
-const CREATE_ERROR = 'caiman/session/CREATE_ERROR';
+const CREATING = 'study/session/CREATING';
+const CREATED = 'study/session/CREATED';
+const CREATE_ERROR = 'study/session/CREATE_ERROR';
 
-const DESTROY = 'caiman/session/DESTROY';
+const DESTROY = 'study/session/DESTROY';
 
 const defaultState = {};
 

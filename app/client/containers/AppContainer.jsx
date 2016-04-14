@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { routerActions } from 'react-router-redux';
 import { connect } from 'react-redux';
@@ -13,11 +13,13 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class AppContainer extends Component {
-  render() {
-    return (
-      <App {...this.props} />
-    );
-  }
-}
+const AppContainer = (props) => {
+  return (
+    <App {...props} />
+  );
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppContainer);

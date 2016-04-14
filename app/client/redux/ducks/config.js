@@ -1,6 +1,6 @@
 /* global __API_HOST__ */
 
-const GET = 'caiman/config/GET';
+const GET = 'study/config/GET';
 
 export default function reducer(state = {}, { type } = {}) {
   switch (type) {

@@ -1,5 +1,5 @@
 {
-  "name": "caiman",
+  "name": "sutudykik-web",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SRVentures/caiman.git"
+    "url": "git+https://github.com:studykik/web.git"
   },
   "author": "",
   "license": "UNLICENSED",
@@ -78,10 +78,9 @@
     "moment": "^2.12.0",
     "node-bourbon": "^4.2.3",
     "node-sass": "^3.4.2",
-    "pure-render-decorator": "^0.2.0",
-    "purecss-sass": "^0.6.0",
     "raw-loader": "^0.5.1",
     "react": "^0.14.7",
+    "react-bootstrap": "^0.28.5",
     "react-css-modules": "^3.7.5",
     "react-document-title": "^2.0.1",
     "react-dom": "^0.14.7",
@@ -102,5 +101,5 @@
     "webpack": "^1.12.14",
     "winston": "^2.1.1"
   },
-  "homepage": "https://github.com/SRVentures/caiman#readme"
+  "homepage": "https://github.com/sutdykik/web#readme"
 }

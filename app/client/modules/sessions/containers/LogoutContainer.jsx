@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import { Logout } from '../components';
 import { destroySession } from '../ducks/session';
+import _ from 'lodash';
 
 const mapStateToProps = (state) => {
   const isAuthenticated = !!_.get(state, 'session.user.token', false);

@@ -3,7 +3,7 @@
 @import '../../styles/typography';
 
 $topbar-color: $brand-secondary;
-$font-size-offset: -2px;
+$font-size-offset: 2px;
 $color: white;
 $inactive-color: transparentize($color, 0.3);
 $disabled-color: mix($topbar-color, $inactive-color, 60%);
@@ -75,4 +75,3 @@ $logo-width: 128px;
   border-color: $brand-accent;
   color: $color;
 }
-
