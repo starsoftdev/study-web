@@ -1,4 +1,5 @@
 import immutable from 'seamless-immutable';
+import { push } from 'react-router-redux';
 import { request } from '../../../lib';
 import { UNAUTHORIZED } from '../../../ducks';
 
@@ -32,14 +33,14 @@ export default function reducer(state = defaultState, { type, ...payload } = {})
   }
 }
 
-export function createUser(payload) {
+export function createUser(payload, redirect) {
   return async (dispatch, getState) => {
     dispatch({ type: CREATING });
     try {
-      debugger;
       const { apiHost } = getState().config;
       const response = await request.post(`${apiHost}/users`, payload);
       dispatch({ type: CREATED, user: response.body.user });
+      dispatch(push(redirect));
     } catch (e) {
       dispatch({ type: CREATE_ERROR, error: e.message });
     }

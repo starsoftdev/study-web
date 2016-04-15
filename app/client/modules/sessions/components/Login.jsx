@@ -43,7 +43,8 @@ export default class Login extends Component {
       isValid = this.refs[ref].validate() && isValid;
     });
     if (isValid) {
-      this.props.createSession(this.formData());
+      // params: payload { email, password}, redirect to onSuccess
+      this.props.createSession(this.formData(), '/landing');
     }
   }
 

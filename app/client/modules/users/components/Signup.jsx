@@ -43,8 +43,7 @@ export default class Signup extends Component {
       isValid = this.refs[ref].validate() && isValid;
     });
     if (isValid) {
-      debugger;
-      this.props.createUser(this.formData());
+      this.props.createUser(this.formData(), '/login');
     }
   }
 
@@ -53,7 +52,6 @@ export default class Signup extends Component {
     this.state.fields.forEach(ref => {
       data[ref] = this.refs[ref].state.value;
     });
-    debugger;
     return data;
   }
 

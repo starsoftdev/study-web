@@ -26,7 +26,7 @@ export default class NavLayout extends Component {
     return (
       <DocumentTitle title="Study KIK">
         <div>
-          <TopBar />
+          <TopBar {...this.props} />
 
           <div className={classnames(styles.content)}>
             {this.props.children}
