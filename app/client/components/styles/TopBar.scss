@@ -48,6 +48,12 @@ $logo-width: 128px;
   color: $color;
 }
 
+.signup {
+  @extend .nav-item-text;
+  color: $color;
+}
+
+
 .nav-item {
   @extend .nav-item-text;
 

@@ -8,6 +8,8 @@ const TopBar = (props) => {
     <div className={styles.base} style={props.customStyle}>
       <Link className={styles['nav-item']} activeClassName={styles.active}
         to="/login">Login</Link>
+      <Link className={styles['nav-item']} activeClassName={styles.active}
+        to="/signup">Signup</Link>
       <div className={classnames(styles['logout-container'], styles['nav-item'])}>
         <Link className={classnames(styles.logout)} to="/logout">Logout</Link>
       </div>

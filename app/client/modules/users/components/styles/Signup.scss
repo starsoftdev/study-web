@@ -1,0 +1,35 @@
+.container {
+  margin: auto;
+  padding: 32px;
+}
+
+.center {
+  margin: auto;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.center.is-responsive {
+  width: 50%;
+  height: 50%;
+  min-width: 200px;
+  max-width: 400px;
+  padding: 40px;
+}
+
+.button {
+  font-family: "AvenirNext-Regular";
+  border: 1.5px solid #4497e6;
+  transition: color .1s,background-color .1s,border-color .1s;
+  padding: 0 14px;
+  border-radius: 14px;
+  color: #4497e6;
+  text-align: center;
+  line-height: 28px;
+  font-size: 16px;
+  width: 100%;
+
+  &:hover {
+    color: #fff;
+    background-color: #4497e6;
+  }
+}
