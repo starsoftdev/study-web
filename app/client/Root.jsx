@@ -13,7 +13,7 @@ const Root = (props) => {
       <Router history={history}>
         <Route path="/" component={AppContainer}>
           <IndexRedirect to="/landing" />
-          <Route path="/landing" component={UserIsAuthenticated(LandingContainer)}/>
+          <Route path="/landing" component={UserIsAuthenticated(LandingContainer)} />
 					<Route path="/signup" component={SignupContainer} />
 					<Route path="/login" component={LoginContainer} />
           <Route path="/logout" component={UserIsAuthenticated(LogoutContainer)} />
