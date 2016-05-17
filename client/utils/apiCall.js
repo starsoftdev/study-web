@@ -26,8 +26,8 @@ export default function apiCall (path, options, cb) {
       method: method || 'get',
       credentials: 'include',
       mode: 'cors',
-      headers: headers,
-      body: body
+      headers,
+      body
     }),
     res => (dispatch, getState) => {
       if (res.status === 200) {

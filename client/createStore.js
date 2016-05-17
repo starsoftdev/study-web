@@ -54,7 +54,7 @@ if (top !== window) {
 }
 
 middleware = middleware.concat([
-  effects, fetchEffect, 
+  effects, fetchEffect,
   thunk
 ])
 

@@ -86,6 +86,7 @@ module.exports = function createWebpackConfig (env) {
         utils: __dirname + '/client/utils',
         actions: __dirname + '/client/actions',
         effects: __dirname + '/client/effects',
+        assets: __dirname + '/client/assets',
       },
       root: path.resolve('./'),
     },

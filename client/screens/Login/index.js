@@ -7,17 +7,17 @@ import { Link } from 'react-router'
 import { login } from 'actions'
 import history from 'utils/history'
 
-// import studykikLogo from 'studykik-logo.svg'
+import './login.less'
 
 let Form = t.form.Form
 
 let LoginFields = t.struct({
-  username: t.Str,
+  email: t.Str,
   password: t.Str,
 })
 
 let loginValues = {
-  username: null,
+  email: null,
   password: null,
 }
 
@@ -26,7 +26,7 @@ let loginTemplate = function (locals) {
     <div>
       <div className="row">
         <div className="col-sm-12">
-          {locals.inputs.username}
+          {locals.inputs.email}
         </div>
       </div>
       <div className="row">
@@ -43,11 +43,11 @@ let loginOptions = {
   template: loginTemplate,
   auto: 'placeholders',
   fields: {
-    username: {
+    email: {
       error: '',
       attrs: {
         autoFocus: true,
-        placeholder: 'Username or email',
+        placeholder: 'User Name or Email',
       }
     },
     password: {
@@ -79,7 +79,7 @@ class Login extends React.Component {
     )
     if (justAuthorized) {
       let previousPath = selectn('state.previousPathname', this.props.location)
-      let path = previousPath ? previousPath : '/loads'
+      let path = previousPath ? previousPath : '/dashboard'
       history.push(path)
     }
   }
@@ -95,23 +95,41 @@ class Login extends React.Component {
   render () {
     let authorization = this.props.authorization
     return (
-      <form className="login-form" onSubmit={(e) => this.login(e)}>
-          <Form
-            ref="form"
-            type={LoginFields}
-            options={loginOptions}
-            value={loginValues}
-          />
+      <div className="login-page-wrapper">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-4 col-md-push-4">
+          <div className="login-block">
+          <div className="text-center">
+            <h3>StudyKik Login</h3>
+          </div>
           <br />
-          {authorization.error && (
-            <div className="">
-              Oops! we had trouble logging you in. Did you forget your password?
-            </div>
-          )}
-          <button type="submit" disabled={authorization.authorizing}>
-            {authorization.authorizing ? <i className="fa fa-repeat fa-spin"/> : 'Login'}
-          </button>
-      </form>
+          <form className="login-form" onSubmit={(e) => this.login(e)}>
+                <Form
+                  ref="form"
+                  type={LoginFields}
+                  options={loginOptions}
+                  value={loginValues}
+                />
+              <br />
+              {authorization.error && (
+                <div className="alert alert-danger">
+                  Oops! we had trouble logging you in. Did you forget your password? <Link to="forgot_password" className="forgot-password-link">Reset Your Password</Link>
+                </div>
+              )}
+              <div className="row">
+              <div className="col-sm-12">
+                  <button className="btn btn-success btn-block" type="submit" disabled={authorization.authorizing}>
+                    {authorization.authorizing ? <i className="fa fa-repeat fa-spin"/> : 'Login'}
+                  </button>
+              </div>
+              </div>
+          </form>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
     )
   }
 }

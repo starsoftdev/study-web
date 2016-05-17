@@ -3,7 +3,7 @@ import asyncAction from 'utils/asyncAction'
 import apiCall from 'utils/apiCall'
 
 function loginRequest (credentials, cb) {
-  return apiCall('/auth/login', { method: 'post', body: credentials }, cb)
+  return apiCall('/users/login', { method: 'post', body: credentials }, cb)
 }
 
 export default function login (credentials) {
