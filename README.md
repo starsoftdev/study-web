@@ -12,7 +12,7 @@ the following values:
 ```bash
 NODE_ENV=development
 PORT=8080
-API_URL=http://localhost:3000
+API_URL=http://localhost:3000/api/v1
 ```
 
 Don't commit your `.env` file to version control, its your env not mine!
@@ -20,13 +20,14 @@ Don't commit your `.env` file to version control, its your env not mine!
 If you want to use production search indices, change your config to:
 
 ```bash
-API_URL=https://api.studykik.com
+API_URL=https://studykik.com/api/v1
 ```
 
 ### Running the app:
 
 ```bash
 npm install
+
 npm start
 # or with redux devtools
 DEVTOOLS=true npm start
@@ -45,7 +46,6 @@ npm run browsers
 
 # all tests
 npm run test
-
 ```
 
 
@@ -61,6 +61,12 @@ Style Guide
 ----------------
 
 Most of our style is handled by eslint, however, there are some extra bits to consider.
+
+There is a pre-commit hook installed for running lint so that we always commit eslint-clean code.
+However you can run the linter anytime and check styles.
+```bash
+npm run lint
+```
 
 ### Configuration
 Various IDEs provide linting plugins. For Sublime Text,
