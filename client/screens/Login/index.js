@@ -63,7 +63,7 @@ let loginOptions = {
 class Login extends React.Component {
 
   static propTypes = {
-    dispatch: PropTypes.func,
+    onLogin: PropTypes.func,
     authorization: PropTypes.object,
     location: PropTypes.object,
   }
@@ -88,7 +88,7 @@ class Login extends React.Component {
     e.preventDefault()
     const value = this.refs.form.getValue()
     if (value) {
-      this.props.dispatch(login(value))
+      this.props.onLogin(value)
     }
   }
 
@@ -136,11 +136,13 @@ class Login extends React.Component {
 
 const mapStateToProps = (state) => ({
   authorization: state.authorization,
-  location: state.location
+  location: state.location,
 })
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  onLogin: login,
+}
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Login)

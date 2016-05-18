@@ -39,7 +39,7 @@ export default function apiCall (path, options, cb) {
           dispatch({
             type: ActionTypes.LOGIN,
             status: 'failed',
-            err: res.data.message
+            err: res.data.error
           })
         } else {
           dispatch({ type: ActionTypes.EXPIRE_SESSION })
