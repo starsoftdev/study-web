@@ -1,5 +1,5 @@
 import apiCall from './apiCall'
-import { ActionTypes } from '../constants'
+import { ActionTypes } from 'constants'
 
 let refreshingAuth = false
 let pendingCallbacks = []

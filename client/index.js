@@ -1,6 +1,6 @@
 import 'whatwg-fetch'
 import 'font-awesome-webpack'
-import './assets/styles/index.less'
+import 'assets/styles/index.less'
 
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
@@ -51,9 +51,9 @@ class Root extends React.Component {
 }
 
 ReactDOM.render(<Provider store={store}>
-  <Root history={ history } />
+  <Root history={history} />
 </Provider>, document.getElementById('app'))
 
 if (__DEVTOOLS__) {
-  ReactDOM.render(<DevTools store={ store } />, document.getElementById('debug-panel'))
+  ReactDOM.render(<DevTools store={store} />, document.getElementById('debug-panel'))
 }

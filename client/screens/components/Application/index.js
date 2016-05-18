@@ -16,6 +16,10 @@ class Application extends React.Component {
   }
 }
 
-export default connect(state => ({
-}), {
-})(Application)
+const mapStateToProps = () => ({})
+const mapDispatchToProps = {}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Application)

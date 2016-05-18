@@ -5,7 +5,13 @@ var webpack = require('webpack')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 
-function id (x) { return x }
+// this regex should be modified to match your setup.
+// in this app, we know route components are any files
+// matching screens/*.js or screens/SOMETHING/*.js
+// screens/components/**/*.js will be ignored
+
+// var routeComponentRegex = /screens\/([^\/]+\/?[^\/]+).js/
+var routeComponentRegex = /screens\/([^\/]+\/?)index.js/ // preferrably index.js
 
 module.exports = function createWebpackConfig (env) {
   assert([
@@ -34,11 +40,13 @@ module.exports = function createWebpackConfig (env) {
       development: {
           filename: 'app.js',
           path: path.join(__dirname, 'dist'),
+          chunkFilename: '[id].chunk.js',
           publicPath: '/'
       },
       production: {
         filename: '[name].[hash].min.js',
         path: path.join(__dirname, 'dist'),
+        chunkFilename: '[id].chunk.js',
         publicPath: '/'
       }
     })[env],
@@ -83,10 +91,9 @@ module.exports = function createWebpackConfig (env) {
       ],
       alias: {
         'constants$': __dirname + '/client/constants.js',
-        utils: __dirname + '/client/utils',
-        actions: __dirname + '/client/actions',
-        effects: __dirname + '/client/effects',
         assets: __dirname + '/client/assets',
+        actions: __dirname + '/client/actions',
+        utils: __dirname + '/client/utils',
       },
       root: path.resolve('./'),
     },
@@ -103,14 +110,20 @@ module.exports = function createWebpackConfig (env) {
               'css?sourceMap!less?sourceMap'
           )
         }, {
+          // make sure to exclude route components here
           test: /\.js$/,
+          exclude: routeComponentRegex,
+          include: path.resolve(__dirname, 'client'),
           loader: 'babel',
           query: {
             cacheDirectory: true,
-            plugins: [ 'transform-decorators-legacy' ],
             presets: [ 'es2015', 'stage-0', 'react' ]
           },
-          exclude: /node_modules/
+        }, {
+          // lazy load route components
+          test: routeComponentRegex,
+          include: path.resolve(__dirname, 'client'),
+          loaders: ['bundle?lazy', 'babel?cacheDirectory=ture,presets[]=es2015,presets[]=stage-0,presets[]=react']
         }, {
           test: /\.json$/,
           loader: 'json'
@@ -147,3 +160,5 @@ module.exports = function createWebpackConfig (env) {
     watch: env === 'test'
   }
 }
+
+function id (x) { return x }

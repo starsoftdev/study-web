@@ -120,7 +120,7 @@ class Login extends React.Component {
               <div className="row">
               <div className="col-sm-12">
                   <button className="btn btn-success btn-block" type="submit" disabled={authorization.authorizing}>
-                    {authorization.authorizing ? <i className="fa fa-repeat fa-spin"/> : 'Login'}
+                    {authorization.authorizing ? <i className="fa fa-repeat fa-spin" /> : 'Login'}
                   </button>
               </div>
               </div>
@@ -134,11 +134,13 @@ class Login extends React.Component {
   }
 }
 
-let select = (state) => {
-  return {
-    authorization: state.authorization,
-    location: state.location
-  }
-}
+const mapStateToProps = (state) => ({
+  authorization: state.authorization,
+  location: state.location
+})
+const mapDispatchToProps = {}
 
-export default connect(select)(Login)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login)
