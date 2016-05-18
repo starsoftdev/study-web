@@ -1,20 +1,91 @@
+////////////////////////////////////////////////////////////////////////////////
+// - http://eslint.org/docs/rules/
+// - https://github.com/yannickcr/eslint-plugin-react#recommended-configuration
+////////////////////////////////////////////////////////////////////////////////
+
 {
   "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
   "plugins": [
-    "babel"
+    "react"
   ],
-  "extends": "airbnb",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "globals": {
+    "__DEVTOOLS__": true,
+    "__LOGGER__": true,
+    "API_URL": true
+  },
+  // "extends": ["eslint:recommended", "plugin:react/recommended"],
   "rules": {
+    // Stylistic Issues
+    "array-bracket-spacing": [2, "always"],
+    "camelcase": 2,
+    "computed-property-spacing": [2, "never"],
+    "eol-last": 2,
+    "jsx-quotes": 2,
+    "keyword-spacing": [2, {"before": true, "after": true, "overrides": {}}],
+    "new-cap": [2, {"capIsNew": false}],
+    "no-mixed-spaces-and-tabs": 2,
+    "no-multiple-empty-lines": [2, {"max": 2}],
+    "no-trailing-spaces": 2,
+    "object-curly-spacing": [2, "always"],
+    "quotes": [2, "single"],
+    "semi": [2, "never"],
+    "space-before-blocks": [2, "always"],
+    "space-before-function-paren": [2, "always"],
+
+    // Possible Errors
     "comma-dangle": 0,
+
+    // Best Practices
+    "consistent-return": 1,
+    "curly": 2,
+    "eqeqeq": 2,
+    "no-eq-null": 2,
+    "no-warning-comments": [1, {
+      "terms": ["todo", "fixme"], "location": "anywhere"
+    }],
+
+    // Variables
+    "no-use-before-define": [2, "nofunc"],
+    "no-undef": 2,
+
+    // ECMAScript 6
+    "no-var": 2,
     "object-shorthand": 2,
     "prefer-spread": 2,
-    "func-names": 0,
-    "camelcase": [2, {"properties": "always"}],
-    "dot-notation": [2, {"allowPattern": "^[a-z]+(_[a-z]+)+$"}],
-    "no-param-reassign": 0,
-    "arrow-body-style": 0,
-    "no-use-before-define": [2, "nofunc"],
-    "react/jsx-closing-bracket-location": 0,
-    "react/prefer-es6-class": 2
+
+    // eslint-plugin-react
+    "react/display-name": 0,
+    "react/jsx-boolean-value": 2,
+    "react/jsx-curly-spacing": [2, "never"],
+    "react/jsx-equals-spacing": [2, "never"],
+    "react/jsx-no-undef": 2,
+    "react/jsx-sort-props": 0,
+    "react/jsx-space-before-closing": [2, "always"],
+    "react/jsx-uses-react": 2,
+    "react/jsx-uses-vars": 2,
+    "react/no-did-mount-set-state": 1,
+    "react/no-did-update-set-state": 2,
+    "react/no-multi-comp": 0,
+    "react/no-unknown-property": 2,
+    "react/prefer-es6-class": 2,
+    "react/prop-types": 1,
+    "react/react-in-jsx-scope": 2,
+    "react/self-closing-comp": 2,
+    "react/wrap-multilines": 2,
+    
+    // Strict Mode
+    "strict": 0
   }
 }
+

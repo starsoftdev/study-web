@@ -1,13 +1,23 @@
 {
+  "presets": ["es2015", "stage-0", "react"],
   "env": {
-    "server": {
-      "presets": ["es2015-node5","stage-3","stage-2"]
-    },
-    "webpack": {
-      "presets": ["react", "es2015","stage-0"],
+    "development": {
       "plugins": [
+        ["react-transform", {
+          "transforms": [{
+            "transform": "react-transform-hmr",
+            "imports": ["react"],
+            "locals": ["module"]
+          }, {
+            "transform": "react-transform-catch-errors",
+            "imports": ["react", "redbox-react"]
+          }]
+        }],
         ["transform-decorators-legacy"]
       ]
+    },
+    "test": {
+      "plugins": ["rewire"]
     }
   }
 }
