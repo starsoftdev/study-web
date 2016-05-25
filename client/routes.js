@@ -5,6 +5,7 @@ import Application from './screens/components/Application'
 import NotFound from './screens/components/NotFound'
 
 import Dashboard from './screens/Dashboard'
+import GetProposal from './screens/GetProposal'
 import Home from './screens/Home'
 import Login from './screens/Login'
 
@@ -28,6 +29,7 @@ export default (store) => {
         <Route path="dashboard" getComponent={lazyLoadComponent(Dashboard)} />
       </Route>
 
+      <Route path="getproposal" getComponent={lazyLoadComponent(GetProposal)} />
       <Route path="login" getComponent={lazyLoadComponent(Login)} />
 
       <Route path="*" component={NotFound} status={404} />
