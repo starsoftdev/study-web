@@ -114,10 +114,10 @@ export const options = {
   }
 }
 
-const PatientForm = {
+const GetProposalForm = {
   getModel,
   // layout,
   options,
 }
 
-export default PatientForm
+export default GetProposalForm

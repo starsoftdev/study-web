@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import DocumentTitle from 'react-document-title'
 import t from 'tcomb-form'
 import selectn from 'selectn'
 
@@ -9,7 +8,7 @@ import { savePatient } from 'actions'
 import {
   getModel as getPatientType,
   options as patientFormOptions
-} from 'forms/Patient'
+} from 'forms/GetProposal'
 
 const TCombForm = t.form.Form
 
@@ -29,7 +28,7 @@ let NEW_PATIENT = {
   patientMessagingSuite: false,
 }
 
-class EditPatientForm extends React.Component {
+class GetProposalForm extends React.Component {
   static propTypes = {
     patient: PropTypes.object,
     editing: PropTypes.bool,
@@ -74,28 +73,29 @@ class EditPatientForm extends React.Component {
     const pageTitle = this.props.editing ? 'Editing Patient' : 'Get A Study Proposal'
     const saving = this.props.savingPatient
     return (
-      <DocumentTitle title={pageTitle}>
-        <form onSubmit={this.handleSubmit.bind(this)}>
-          <TCombForm
-            ref="form"
-            type={getPatientType(patient)}
-            options={this.state.options}
-            value={patient}
-          />
-          <div className="form-group">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={saving}
-            >
-              {saving
-                ? <span>Saving...</span>
-                : 'Get Proposal!'
-              }
-            </button>
-          </div>
-        </form>
-      </DocumentTitle>
+      <form
+        className="form-green proposal-form"
+        onSubmit={this.handleSubmit.bind(this)}
+      >
+        <TCombForm
+          ref="form"
+          type={getPatientType(patient)}
+          options={this.state.options}
+          value={patient}
+        />
+        <div className="form-group">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={saving}
+          >
+            {saving
+              ? <span>Saving...</span>
+              : 'Get Proposal!'
+            }
+          </button>
+        </div>
+      </form>
     )
   }
 }
@@ -111,4 +111,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(EditPatientForm)
+)(GetProposalForm)
