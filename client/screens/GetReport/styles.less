@@ -1,0 +1,291 @@
+@import '~assets/styles/variables.less';
+
+.get-report-container {
+
+  .report-banner {
+    color: #00afef;
+      float: left;
+      padding-bottom: 30px; 
+      text-align: center;
+      width: 100%;
+      vertical-align: middle;
+
+      div {
+          display: inline-block;
+        h1 {
+          padding: 0;
+          margin: 4px 0px;
+          float: left;
+        }
+
+        a {
+        float:left;
+        margin-left: 15px;
+        &:hover {
+              text-decoration: none;
+          }
+        }
+    }
+  }
+
+  .report-section {
+    background-color: @light-blue;
+    padding: 30px 30px;
+    
+    .report-form {
+
+      background-image: url('../../assets/images/get_report_img.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      padding-top: 12%;
+      padding-left: 20%;
+    }
+  }
+
+  .video-section {
+    background-color: @orange;
+    color: @pure-white;
+    text-align: center;
+    padding: 30px 30px;
+
+    .video-container {
+      max-width: 926px;
+      width: 100%;
+      display: inline-block;  
+      p {
+        font: 16px arial;
+      }
+    }
+  }
+
+
+
+  .patients-banner {
+    background: @green;
+    width: 100%;
+    padding: 0px 10px 10px 10px;
+    text-align: center;
+
+    p {
+      color: @pure-white;
+      /*float: left;*/
+      font-size: 20px;
+      line-height: 30px;
+      margin: 10px 0 18px;
+      text-align: left;
+    }
+
+    .video-section-border {
+      background: url('../../assets/images/inner-banner-bottom.png') 0 0 repeat-x;
+      height: 12px;
+    }
+  }
+
+  .listings {
+    margin: 15px auto auto;
+    text-align: center; 
+    width: 730px;
+    display: block;
+    /*width: 100%;*/
+
+    .block-1 {
+        width: 100%;
+        float: left;
+        margin-bottom: 29px;
+
+        .search-left {
+          width: 22%;
+          float: left;
+
+          img {
+            width: 100%;
+        }
+      }
+
+      .right-text {
+          width: 75%;
+          float: right;
+          position: relative;
+
+          h3 {
+            color: #949ca1;
+            float: left;
+            font-size: 26px;
+            /*margin: 60px 0 0;*/
+            text-align: left;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: normal;
+        }
+
+        .search_line {
+          margin: -80px 0 0 370px;
+          width: 167px;
+        }
+
+
+        .search-line-2 {
+          margin: -20px 0 0 120px;
+        }
+
+        .search-line-3 {
+          margin: 55px 0 0 -400px;
+        }
+
+        .search-line-4 {
+          margin: -70px 0 0 40px;
+        }
+
+        .search-line-5 {
+          margin: -20px 0 0 -50px;
+        }
+
+        .search-line-6 {
+          margin: 60px 0 0 -370px;
+        }
+
+        .search-line-7 {
+          margin: 60px 0 0 -670px;
+        }
+      }
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #9fcf67;
+        text-align: center;
+        text-transform: uppercase;
+    }
+  }
+
+  .price-section-border {
+      background: url('../../assets/images/StudyKIK-Company-Information-v2-2.jpg');
+      background-repeat: repeat-x;
+      height: 78px;
+  }
+
+  .price-section-top {
+    background: @lighter-blue;
+    padding: 10px 10px;
+    text-align: center;
+    h1 {
+      margin: 15px 0px; 
+      text-transform: uppercase; 
+      color: rgb(255, 255, 255) ! important; 
+      font-family: sans-serif; 
+      font-weight: bold; 
+      font-size: 24px; 
+      line-height: 34px;
+    }
+  }
+
+  .price-section {
+    background: #f5f5f5;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .map-section img {
+    margin-top: 20px;
+  }
+
+  .popular-section {
+    margin: 10px auto auto;
+    padding-bottom: 50px;
+    text-align: center; 
+    width: 100%; 
+    background: @orange;
+    color: @pure-white;
+
+    .even {
+      background: @light-orange;
+    }
+  }
+
+  .instruction-section {
+    .instruction {
+      .row {
+        padding-top: 10px;
+        height: 100%;
+        .left {
+          text-align: right;
+          img {
+            width: 100%;
+            min-width: 40px;
+            max-width: 73px;
+            margin-top: 0px;
+          }
+        }
+        
+        .right {
+          color: @gray;
+          font-size: 28px;
+          padding-top: 15px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+} 
+
+@media screen and (max-width: 992px) {
+  .get-report-container .instruction-section .instruction .row .right {
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .get-report-container .instruction-section .instruction .row .left {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .get-report-container {
+    .patients-banner {
+      img {
+        width: 100%
+      }
+    }
+    .listings {
+      width: 100%;
+
+      .block-1 {
+        .right-text {
+          img {
+              display: none;
+          }
+        }     
+      }
+    }
+  }
+
+}
+
+@media screen and (max-width: 500px) {
+  .get-report-container {
+    .listings {
+
+      .block-1 {
+        .right-text {
+          h3 {
+              font-size: 16px;
+              margin: 15px 0 0;
+          }
+        }
+      }
+    }
+
+    .instruction-section .instruction .row .right {
+      font-size: 14px;
+    }
+
+    .instruction-section .instruction .row .left {
+      img {
+        width: 40px;
+      }
+    }
+  }
+
+
+}
