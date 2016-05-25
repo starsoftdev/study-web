@@ -1,0 +1,134 @@
+
+body {
+  background-color: @pure-white;
+  font-family: @default-font;
+  font-weight: @default-font-weight;
+}
+
+.ordinal {
+  font-size: 0.6em;
+  vertical-align: top;
+  position: relative;
+  top: -3px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+}
+
+.content {
+  /*margin-top: @topbar-height;*/
+  min-height: @content-height;
+  background-image: url('../images/banner-bg.png');
+  background-repeat: repeat-x; 
+  padding-top: 40px;
+  padding-bottom: 20px;
+
+  .inner-page {
+    background-color: @pure-white;
+    min-height: @content-height - 40px;
+    width: 100%;
+    padding-top: 20px;
+  }
+
+}
+
+/*
+** Clear line div 
+*/
+.clearBox {
+  clear: both;
+}
+
+/*======================Form elements =====================*/
+/* Buttons */
+
+.btn.btn-orange {
+  font-size: 29px;
+  font-family: Arial;
+
+  width: auto;
+  min-width: 243px;
+
+  padding: 2px 12px;
+
+  -moz-box-shadow: inset 2px 2px 2px rgba(255, 255, 255, .4), inset -2px -2px 2px rgba(0, 0, 0, .4);
+  -webkit-box-shadow: inset 2px 2px 2px rgba(255, 255, 255, .4), inset -2px -2px 2px rgba(0, 0, 0, .4);
+  box-shadow: inset 2px 2px 2px rgba(255, 255, 255, .4), inset -2px -2px 2px rgba(0, 0, 0, .4);
+  /*text-shadow: 2px 2px #777;*/
+  
+  border: 1px solid transparent;
+  border-radius: 1px;
+
+  transition: color .1s,background-color .1s,border-color .1s;
+  background-color: #F78F1E;
+  color: @pure-white;
+
+  &:hover {
+    color: @pure-white;
+    background-color: #E77F0E;
+  }
+}
+
+.btn.btn-green {
+  font-size: 29px;
+  font-family: Arial;
+
+  width: auto;
+  min-width: 243px;
+
+  padding: 2px 12px;
+
+  -moz-box-shadow: inset 2px 2px 2px rgba(255, 255, 255, .4), inset -2px -2px 2px rgba(0, 0, 0, .4);
+  -webkit-box-shadow: inset 2px 2px 2px rgba(255, 255, 255, .4), inset -2px -2px 2px rgba(0, 0, 0, .4);
+  box-shadow: inset 2px 2px 2px rgba(255, 255, 255, .4), inset -2px -2px 2px rgba(0, 0, 0, .4);
+  /*text-shadow: 2px 2px #777;*/
+  
+  border: 1px solid transparent;
+  border-radius: 1px;
+
+  transition: color .1s,background-color .1s,border-color .1s;
+  background-color: @green;
+  color: @pure-white;
+
+  &:hover {
+    color: @pure-white;
+    background-color: @dark-green;
+  }
+}
+
+.btn.btn-green.btn-lg {
+  font-size: 40px;
+  padding: 5px 17px;
+}
+
+.btn.btn-blue {
+  font-size: 29px;
+  font-family: Arial;
+
+  width: auto;
+  min-width: 243px;
+
+  padding: 2px 12px;
+
+  -moz-box-shadow: inset 2px 2px 2px rgba(255, 255, 255, .4), inset -2px -2px 2px rgba(0, 0, 0, .4);
+  -webkit-box-shadow: inset 2px 2px 2px rgba(255, 255, 255, .4), inset -2px -2px 2px rgba(0, 0, 0, .4);
+  box-shadow: inset 2px 2px 2px rgba(255, 255, 255, .4), inset -2px -2px 2px rgba(0, 0, 0, .4);
+  /*text-shadow: 2px 2px #777;*/
+  
+  border: 1px solid transparent;
+  border-radius: 1px;
+
+  transition: color .1s,background-color .1s,border-color .1s;
+  background-color: @light-blue;
+  color: @pure-white;
+
+  &:hover {
+    color: @pure-white;
+    background-color: @blue;
+  }
+}
+
+.text-underline {
+  text-decoration: underline;
+}
