@@ -43,6 +43,7 @@
     "react-dom": "^15.0.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.4.0",
+    "react-youtube": "^6.1.0",
     "redux": "^3.5.2",
     "redux-effects": "^0.4.3",
     "redux-logger": "^2.6.1",
