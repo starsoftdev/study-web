@@ -2,6 +2,7 @@
 
 .proposal-section {
   padding: 30px 30px;
+  margin: 30px 0;
   background-image: url('../../assets/images/proposal-small.png');
   background-repeat: no-repeat;
   /*background-size: contain;*/
@@ -11,14 +12,23 @@
 
     label {
       display: block;
+      margin-left: 10px;
+      line-height: 34px;
+      font-weight: bold;
+      font-size: 18px;
+      color: @gray-lightisher;
     }
 
-    .form-group .control-span{
+    .form-group .control-span {
       color: @gray;
       line-height: 34px;
-        margin-left: 10px;
-        font-weight: bold;
-        font-size: 18px;
+      margin-left: 10px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    input[type="checkbox"] {
+      margin-left: -25px;
     }
   }
 }

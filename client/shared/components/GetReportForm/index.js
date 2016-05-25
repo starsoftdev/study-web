@@ -79,7 +79,7 @@ class GetReportForm extends React.Component {
         <div className="form-group">
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn btn-orange block"
             disabled={saving}
           >
             {saving
