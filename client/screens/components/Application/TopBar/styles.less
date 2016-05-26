@@ -1,95 +1,74 @@
 @import '~assets/styles/variables.less';
 
-@topbar-color: @pure-white;
 @font-size-offset: 3px;
-@color: @gray-dark;
+@text-color: @gray-lightisher;
 @hover-color: @light-blue;
-@inactive-color: transparentize(@color, 0.3);
+@inactive-color: transparentize(@text-color, 0.3);
 @disabled-color: @gray;
 @logo-width: 128px;
 
-.nav-item-text {
-  text-decoration: none;
-  transition: all 0.1s;
-  text-transform: uppercase;
-  font-size: calc(1rem + @font-size-offset);
-  letter-spacing: 1px;
-  color: @disabled-color !important;
-}
-
-
-.logout-container {
-  margin-left: auto;
-  width: @logo-width;
-}
-
-.logout {
-  @extend .nav-item-text;
-  color: @color;
-}
-
-.signup {
-  @extend .nav-item-text;
-  color: @color;
-}
-
-
 .navbar-studykik {
+  background-color: @pure-white;
   z-index: 100;
   border: none;
   margin: 0;
-  padding-top: 15px;
-  padding-bottom: 15px;
   min-height: @topbar-height;
+}
 
-  li {
-    background-color: @pure-white;
+a.logo-link {
+  padding: 26px 15px;
+}
+
+.nav.navbar-nav {
+  padding-top: 15px;
+
+  &.social-share {
+    padding-top: 5px;
   }
+}
 
-  .nav-item {
-    padding: 14px 0px 10px 0px;
-    transition: all 0.1s;
-    border-bottom: 2px solid transparent;
+li.nav-item {
+  a {
+    margin: 15px 0;
+    padding: 0 10px;
+    color: @text-color !important;
+    text-transform: uppercase;
+    border-right: 1px solid @disabled-color;
 
-    a {
-      padding: 0px 4px !important;
-      border-right: 1px solid @disabled-color;
-      /*text-transform: uppercase;*/
-
-      &:hover {
-        color: @hover-color !important;
-      }
+    &.active, &:hover {
+      color: @hover-color !important;
     }
   }
-
-  .nav-item:last-child a {
-    border-right: none; 
-  }
-
-  .navbar-nav {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-
-  ul.head-social {
-      list-style: none;
-      margin: 0 0 0 0;
-      padding: 0;
-      width: 120px;
-
-      li a{
-        padding: 0 5px 5px 0;
-        margin: 0;
-      }
+  &:last-child a {
+    border-right: none;
   }
 
 }
+
+li.nav-item.blue-color {
+  a {
+    color: @hover-color !important;
+    text-transform: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+ul.social-share {
+  list-style: none;
+  margin: 0 0 0 0;
+  padding: 0;
+  width: 120px;
+
+  li a {
+    padding: 0 5px 5px 0;
+    margin: 0;
+  }
+}
+
 @media screen and (min-width: 0px) and (max-width: 768px) {
-  /*.navbar-studykik .logo {
-    float: none;
-    text-align: center;
-  }*/
-  .navbar-studykik ul.head-social {
+  .navbar-studykik ul.social-share {
     width: 100%;
     display: block;
     background-color: @pure-white;
@@ -97,6 +76,14 @@
     li {
       float: left;
     }
+  }
+
+  li.nav-item a {
+    border-right: none;
+  }
+
+  a.logo-link {
+    padding: 11px;
   }
 }
 
@@ -107,8 +94,10 @@
     text-align: center;
   }
 
-  .logo {
+  a.logo-link {
     float: none;
+    display: inline-block;
+    padding: 11px;
 
     img {
       display: inherit;
@@ -116,5 +105,3 @@
   }
 
 }
-
-
