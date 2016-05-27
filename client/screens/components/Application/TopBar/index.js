@@ -14,7 +14,7 @@ import htpImg from 'assets/images/social/htp.png'
 
 const menuItems = [ {
   text: 'Trial Search',
-  link: '/' // Need to define exactly since it'll have 'active' class always
+  link: '/trials' // Need to define exactly since it'll have 'active' class always
 }, {
   text: 'List Your Trials',
   link: '/clinical-trial-patient-recruitment-patient-enrollment'
@@ -72,8 +72,8 @@ export default class TopBar extends React.Component {
         <Navbar.Collapse>
           <Nav>
             {menuItems.map((item, index) =>
-              <li className="nav-item">
-                <Link to={item.link}>{item.text}</Link>
+              <li className="nav-item" key={index}>
+                <Link to={item.link} activeClassName="active">{item.text}</Link>
               </li>
             )}
           </Nav>
