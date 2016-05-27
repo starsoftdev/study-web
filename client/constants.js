@@ -22,3 +22,21 @@ export const CampaignLengths = keymirror({
   'Two Months': null,
   'Three Months': null,
 })
+
+export const DistanceOptions = [
+  { value: '8000', text: 'Distance' },
+  { value: '10', text: '10 miles' },
+  { value: '50', text: '50 miles' },
+  { value: '100', text: '100 miles' },
+  { value: '250', text: '250 miles' },
+]
+
+export const EnumOfDistances = [ '8000', '10', '50', '100', '250' ]
+
+export const StudyTypes = {
+  '0':   'Any Type',
+  '350': 'Abnormal bleeding',
+  '351': 'Acid Reflux',
+  '352': 'Acne',
+  '353': 'Actinic Keratosis',
+}

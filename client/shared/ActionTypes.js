@@ -15,4 +15,9 @@ export const ActionTypes = keymirror({
 
   CREATE_PATIENT: null,
   UPDATE_PATIENT: null,
+
+  SUBMIT_GET_TRIAL_NOTIFICATION_FORM: null,
+
+  FETCH_STUDIES: null,
+  FETCH_STUDY: null,
 })

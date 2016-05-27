@@ -7,6 +7,15 @@ function entityRequest (path, entityData, method, cb = () => {}) {
   }
 }
 
+export function searchEntities (path, searchParams, cb) {
+  const queryString = serializeParams(searchParams)
+  let pathWithQuery = path
+  if (queryString) {
+    pathWithQuery = `${path}?${queryString}`
+  }
+  return entityRequest(pathWithQuery, null, 'get', cb)
+}
+
 export function updateEntity (path, entityData, cb) {
   return entityRequest(path, entityData, 'put', cb)
 }
@@ -17,4 +26,14 @@ export function createEntity (path, entityData, cb) {
 
 export function deleteEntity (path, entityData, cb) {
   return entityRequest(path, entityData, 'delete', cb)
+}
+
+function serializeParams (obj) {
+  let str = []
+  for (let p in obj) {
+    if (obj.hasOwnProperty(p) && !!obj[p]) {
+      str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]))
+    }
+  }
+  return str.join('&')
 }

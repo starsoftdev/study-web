@@ -1,0 +1,68 @@
+@import '~assets/styles/variables.less';
+
+.study-search {
+  text-align: center;
+  padding: 20px 15px;
+
+  h1 {
+    color: #00AFEF;
+    font: 48px Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+  }
+
+  .search-form {
+    margin: 0 auto;
+    width: 400px;
+
+    .form-green {
+      input {
+        color: #88DD25;
+        float: left;
+        font: 40px/61px Arial, Helvetica, sans-serif;
+        height: 77px;
+        padding: 0 3%;
+        background-color: #e8e8e8;
+        width: 100%;
+        border: 0 none;
+        -moz-box-shadow: inset 3px 2px 5px #c5c5c5;
+        -webkit-box-shadow: inset 3px 2px 5px #c5c5c5;
+        box-shadow: inset 3px 2px 5px #c5c5c5;
+        margin-bottom: 15px;
+      }
+
+      select.form-control {
+        color: #88DD25;
+        float: left;
+        font: 40px/61px Arial, Helvetica, sans-serif;
+        height: 77px;
+        padding: 0 0 0 3%;
+        background-color: #e8e8e8;
+        background-size: contain;
+        width: 100%;
+        margin-bottom: 15px;
+        border: 0 none;
+        -moz-box-shadow: inset 3px 2px 5px #c5c5c5;
+        -webkit-box-shadow: inset 3px 2px 5px #c5c5c5;
+        box-shadow: inset 3px 2px 5px #c5c5c5;
+      }
+
+      .btn.btn-orange {
+        text-transform: uppercase;
+        font: 44px/61px Arial, Helvetica, sans-serif;
+        height: 77px;
+        padding: 0 3%;
+        width: 100%;
+        border: 0 none;
+        -moz-box-shadow: inset 3px 3px 3px rgba(255, 255, 255, .4), inset -3px -3px 3px rgba(0, 0, 0, .4);
+        -webkit-box-shadow: inset 3px 3px 3px rgba(255, 255, 255, .4), inset -3px -3px 3px rgba(0, 0, 0, .4);
+        box-shadow: inset 3px 3px 3px rgba(255, 255, 255, .4), inset -3px -3px 3px rgba(0, 0, 0, .4);
+      }
+    }
+  } 
+}
+
+@media screen and (max-width: 768px) {
+  .study-search .search-form {
+    width: 100%;
+  }
+}

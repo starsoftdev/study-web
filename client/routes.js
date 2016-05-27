@@ -1,5 +1,5 @@
 import React from 'react'
-import { IndexRoute, Route } from 'react-router'
+import { IndexRoute, IndexRedirect, Route } from 'react-router'
 
 import Application from './screens/components/Application'
 import NotFound from './screens/components/NotFound'
@@ -9,6 +9,7 @@ import GetProposal from './screens/GetProposal'
 import GetReport from './screens/GetReport'
 import Home from './screens/Home'
 import Login from './screens/Login'
+import TrialListing from './screens/TrialListing'
 
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
@@ -23,7 +24,7 @@ export default (store) => {
   return (
     <Route path="/" component={Application}>
       {/* Home (main) route */}
-      <IndexRoute getComponent={lazyLoadComponent(Home)} />
+      <IndexRedirect to="/trials" />
 
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
@@ -33,6 +34,7 @@ export default (store) => {
       <Route path="clinical-trial-patient-recruitment-patient-enrollment" getComponent={lazyLoadComponent(GetReport)} />
       <Route path="getproposal" getComponent={lazyLoadComponent(GetProposal)} />
       <Route path="login" getComponent={lazyLoadComponent(Login)} />
+      <Route path="trials" getComponent={lazyLoadComponent(TrialListing)} />
 
       <Route path="*" component={NotFound} status={404} />
     </Route>
