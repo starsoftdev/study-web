@@ -7,7 +7,7 @@ import { Link } from 'react-router'
 import { login } from 'actions'
 import history from 'utils/history'
 
-import './login.less'
+import './styles.less'
 
 let Form = t.form.Form
 
