@@ -1,14 +1,13 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import t from 'tcomb-form'
-import selectn from 'selectn'
 
 import { savePatient } from 'actions'
 
 import {
   getModel as getPatientType,
   options as patientFormOptions
-} from 'forms/GetReport'
+} from 'forms/GetProposal'
 
 const TCombForm = t.form.Form
 
@@ -16,12 +15,19 @@ let NEW_PATIENT = {
   firstName: '',
   lastName: '',
   email: '',
-  company: '',
-  zipCode: '',
+  phone: '',
+  siteAddress: '',
+  organization: '',
+  protocolNumber: '',
+  sponsorEmail: '',
+  croEmail: '',
   indication: '',
+  exposureLevel: '',
+  campaignLength: '',
+  patientMessagingSuite: false,
 }
 
-class GetReportForm extends React.Component {
+class GetProposalForm extends React.Component {
   static propTypes = {
     patient: PropTypes.object,
     editing: PropTypes.bool,
@@ -67,7 +73,7 @@ class GetReportForm extends React.Component {
     const saving = this.props.savingPatient
     return (
       <form
-        className="form-green report-form"
+        className="form-green proposal-form"
         onSubmit={this.handleSubmit.bind(this)}
       >
         <TCombForm
@@ -84,7 +90,7 @@ class GetReportForm extends React.Component {
           >
             {saving
               ? <span>Saving...</span>
-              : 'Get Report!'
+              : 'Get Proposal!'
             }
           </button>
         </div>
@@ -104,4 +110,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(GetReportForm)
+)(GetProposalForm)

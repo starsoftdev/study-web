@@ -1,7 +1,7 @@
 import React from 'react'
 import DocumentTitle from 'react-document-title'
 
-import GetProposalForm from 'components/GetProposalForm'
+import GetProposalForm from './components/GetProposalForm'
 
 import './styles.less'
 

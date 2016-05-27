@@ -3,7 +3,7 @@ import DocumentTitle from 'react-document-title'
 import { Button } from 'react-bootstrap'
 import YouTube from 'react-youtube'
 
-import GetReportForm from 'components/GetReportForm'
+import GetReportForm from './components/GetReportForm'
 
 import './styles.less'
 
