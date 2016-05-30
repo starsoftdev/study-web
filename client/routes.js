@@ -1,12 +1,16 @@
 import React from 'react'
-import { IndexRoute, Route } from 'react-router'
+import { IndexRoute, IndexRedirect, Route } from 'react-router'
 
 import Application from './screens/components/Application'
 import NotFound from './screens/components/NotFound'
 
 import Dashboard from './screens/Dashboard'
+import GetProposal from './screens/GetProposal'
+import GetReport from './screens/GetReport'
 import Home from './screens/Home'
 import Login from './screens/Login'
+import Study from './screens/Study'
+import TrialListing from './screens/TrialListing'
 
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
@@ -21,14 +25,18 @@ export default (store) => {
   return (
     <Route path="/" component={Application}>
       {/* Home (main) route */}
-      <IndexRoute getComponent={lazyLoadComponent(Home)} />
+      <IndexRedirect to="/trials" />
 
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
         <Route path="dashboard" getComponent={lazyLoadComponent(Dashboard)} />
       </Route>
 
+      <Route path="clinical-trial-patient-recruitment-patient-enrollment" getComponent={lazyLoadComponent(GetReport)} />
+      <Route path="getproposal" getComponent={lazyLoadComponent(GetProposal)} />
       <Route path="login" getComponent={lazyLoadComponent(Login)} />
+      <Route path="studies/:id" getComponent={lazyLoadComponent(Study)} />
+      <Route path="trials" getComponent={lazyLoadComponent(TrialListing)} />
 
       <Route path="*" component={NotFound} status={404} />
     </Route>

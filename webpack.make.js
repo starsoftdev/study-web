@@ -149,7 +149,16 @@ module.exports = function createWebpackConfig (env) {
           query: {
             mimetype: 'image/png'
           }
+        }, {
+          test: /\.jpg$/,
+          loader: env === 'production' ?
+            'url-loader?limit=10240' :
+            'url-loader',
+          query: {
+            mimetype: 'image/jpeg'
+          }
         }
+
       ].filter(id)
     },
 

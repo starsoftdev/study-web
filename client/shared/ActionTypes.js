@@ -12,4 +12,13 @@ export const ActionTypes = keymirror({
   RESET_PASSWORD: null,
   CHANGE_PASSWORD: null,
   CHANGE_EMAIL: null,
+
+  CREATE_PATIENT: null,
+  UPDATE_PATIENT: null,
+
+  SUBMIT_GET_TRIAL_NOTIFICATION_FORM: null,
+
+  FETCH_STUDIES: null,
+  FETCH_STUDY: null,
+  CLEAR_STUDIES: null,
 })
