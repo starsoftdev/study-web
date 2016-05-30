@@ -9,7 +9,8 @@ import {
   options as formOptions
 } from 'forms/SearchTrials'
 
-import Spinner from 'components/Spinner'
+import ActivityIcon from 'components/ActivityIcon'
+import LoadingResults from 'components/LoadingResults'
 
 import './styles.less'
 
@@ -66,7 +67,7 @@ class SearchTrialsForm extends React.Component {
                 disabled={isFetching}
               >
                 {isFetching
-                  ? <span><Spinner />Searching...</span>
+                  ? <span><ActivityIcon />Searching...</span>
                   : <span>Find Studies!</span>
                 }
               </button>

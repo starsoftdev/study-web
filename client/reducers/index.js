@@ -8,3 +8,4 @@ export submittingGetTrialNotificationForm from './submittingGetTrialNotification
 export fetchingStudies from './fetchingStudies'
 export fetchingStudy from './fetchingStudy'
 export studies from './studies'
+export currentStudy from './currentStudy'

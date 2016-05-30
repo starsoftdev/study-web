@@ -9,6 +9,7 @@ import GetProposal from './screens/GetProposal'
 import GetReport from './screens/GetReport'
 import Home from './screens/Home'
 import Login from './screens/Login'
+import Study from './screens/Study'
 import TrialListing from './screens/TrialListing'
 
 export default (store) => {
@@ -34,6 +35,7 @@ export default (store) => {
       <Route path="clinical-trial-patient-recruitment-patient-enrollment" getComponent={lazyLoadComponent(GetReport)} />
       <Route path="getproposal" getComponent={lazyLoadComponent(GetProposal)} />
       <Route path="login" getComponent={lazyLoadComponent(Login)} />
+      <Route path="studies/:id" getComponent={lazyLoadComponent(Study)} />
       <Route path="trials" getComponent={lazyLoadComponent(TrialListing)} />
 
       <Route path="*" component={NotFound} status={404} />
