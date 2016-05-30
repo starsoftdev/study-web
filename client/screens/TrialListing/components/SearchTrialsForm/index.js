@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import t from 'tcomb-form'
 
-import { fetchStudies } from 'actions'
+import { fetchStudies, clearStudies } from 'actions'
 
 import {
   getModel as getFormType,
@@ -26,6 +26,7 @@ class SearchTrialsForm extends React.Component {
   static propTypes = {
     isFetching: PropTypes.bool,
     fetchStudies: PropTypes.func,
+    clearStudies: PropTypes.func,
   }
 
   constructor (props) {
@@ -35,6 +36,12 @@ class SearchTrialsForm extends React.Component {
       options: formOptions,
       formData: NEW_FORM,
     }
+  }
+
+  componentWillUnmount () {
+    // Redux store keeps `studies` reducer, so need to clear them
+    // Not sure we actually need this behavior
+    this.props.clearStudies()
   }
 
   handleSubmit (ev) {
@@ -84,6 +91,7 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = {
   fetchStudies,
+  clearStudies,
 }
 
 export default connect(

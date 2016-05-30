@@ -10,3 +10,4 @@ export submitGetTrialNotificationForm from './submitGetTrialNotificationForm'
 
 export fetchStudies from './fetchStudies'
 export fetchStudy from './fetchStudy'
+export clearStudies from './clearStudies'

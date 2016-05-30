@@ -20,4 +20,5 @@ export const ActionTypes = keymirror({
 
   FETCH_STUDIES: null,
   FETCH_STUDY: null,
+  CLEAR_STUDIES: null,
 })
