@@ -1,7 +1,9 @@
+import selectn from 'selectn'
+
 export const getAccessToken = () => {
-  if (localStorage.authData) {
-    return JSON.parse(localStorage.authData).id
-  } else {
+  try {
+    return selectn('id', JSON.parse(localStorage.authData))
+  } catch (e) {
     return null
   }
 }
