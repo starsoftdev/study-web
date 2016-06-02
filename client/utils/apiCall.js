@@ -1,10 +1,14 @@
 import { bind } from 'redux-effects'
+import selectn from 'selectn'
+
 import { fetch } from '../effects/fetch'
+import userSettings from './userSettings'
 
 import { ActionTypes } from 'ActionTypes'
 
 export default function apiCall (path, options, cb) {
   let method, headers, body
+  const accessToken = userSettings.getAccessToken()
 
   if (!cb) {
     cb = options
@@ -14,6 +18,10 @@ export default function apiCall (path, options, cb) {
 
   headers = {
     'Accept': 'application/json'
+  }
+
+  if (accessToken) {
+    headers['Authorization'] = accessToken
   }
 
   if (!(body instanceof FormData)) {
@@ -44,6 +52,7 @@ export default function apiCall (path, options, cb) {
         } else {
           dispatch({ type: ActionTypes.EXPIRE_SESSION })
         }
+        cb(selectn('error.message', res.data))
       } else {
         cb({ status: res.status, data: res.data })
       }
