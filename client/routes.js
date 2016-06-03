@@ -11,6 +11,7 @@ import Home from './screens/Home'
 import Login from './screens/Login'
 import Study from './screens/Study'
 import TrialListing from './screens/TrialListing'
+import PatientDetails from './screens/PatientDetails'
 
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
@@ -37,6 +38,7 @@ export default (store) => {
       <Route path="login" getComponent={lazyLoadComponent(Login)} />
       <Route path="studies/:id" getComponent={lazyLoadComponent(Study)} />
       <Route path="trials" getComponent={lazyLoadComponent(TrialListing)} />
+      <Route path="patient-details" getComponent={lazyLoadComponent(PatientDetails)} />
 
       <Route path="*" component={NotFound} status={404} />
     </Route>
