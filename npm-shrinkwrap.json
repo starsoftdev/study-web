@@ -4498,7 +4498,11 @@
     },
     "karma-sinon": {
       "version": "1.0.5",
+<<<<<<< e86558a78f5e2cc2a6fc8ae58fa67c152c2acb69
       "from": "karma-sinon@>=1.0.5 <2.0.0",
+=======
+      "from": "karma-sinon@latest",
+>>>>>>> KIK-373 add karma-sinon, sinon dependency
       "resolved": "https://registry.npmjs.org/karma-sinon/-/karma-sinon-1.0.5.tgz"
     },
     "karma-sourcemap-loader": {
@@ -6819,7 +6823,11 @@
     },
     "sinon": {
       "version": "1.17.4",
+<<<<<<< e86558a78f5e2cc2a6fc8ae58fa67c152c2acb69
       "from": "sinon@>=1.17.4 <2.0.0",
+=======
+      "from": "sinon@latest",
+>>>>>>> KIK-373 add karma-sinon, sinon dependency
       "resolved": "https://registry.npmjs.org/sinon/-/sinon-1.17.4.tgz"
     },
     "sister": {
