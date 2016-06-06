@@ -151,15 +151,11 @@ export default class TopBar extends React.Component {
 }
 
 
-const mapStateToProps = (state) => ({
-  authorization: state.authorization,
-  location: state.location,
-})
 const mapDispatchToProps = {
   logoutRequest: logout,
 }
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(TopBar)

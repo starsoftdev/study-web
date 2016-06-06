@@ -16,7 +16,7 @@ class Application extends React.Component {
     return (
       <DocumentTitle title="StudyKik Home Page">
         <div>
-          <TopBar />
+          <TopBar authorization={this.props.authorization} location={this.props.location} />
 
           <div className="content">
             {this.props.children}
