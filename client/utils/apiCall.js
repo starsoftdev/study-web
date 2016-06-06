@@ -40,6 +40,8 @@ export default function apiCall (path, options, cb) {
     res => (dispatch, getState) => {
       if (res.status === 200) {
         cb(null, res.data)
+      } else if (res.status === 204) {
+        cb(null)
       } else if (res.status === 401) {
         // Recognize when the user is authenticating and failed, and when the
         // session expired.

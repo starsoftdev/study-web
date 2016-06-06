@@ -18,6 +18,12 @@ export function fetch (url = '', params = {}) {
 }
 
 function deserialize (res) {
+  if (res.status === 204) {
+    return {
+      status: 204
+    }
+  }
+
   const header = res.headers.get('Content-Type')
   const promise = !header ?
     res.text() :
