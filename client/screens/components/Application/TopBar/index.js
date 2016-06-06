@@ -1,6 +1,11 @@
 import React, { PropTypes } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Nav, Navbar, NavItem } from 'react-bootstrap'
+
+import { logout } from 'actions'
+import isSessionExpired from 'utils/isSessionExpired'
+import history from 'utils/history'
 
 import './styles.less'
 
@@ -56,7 +61,37 @@ const socialShares = [ {
 } ]
 
 export default class TopBar extends React.Component {
+  static propTypes = {
+    authorization: PropTypes.any,
+    location: PropTypes.any,
+    logoutRequest: PropTypes.func.isRequired,
+  }
+
+  componentDidMount () {
+    this.clearSessionWhenExpired()
+  }
+
+  componentDidUpdate () {
+    this.clearSessionWhenExpired()
+  }
+
+  clearSessionWhenExpired () {
+    if (this.props.authorization.authorized === true) {
+      const { authData } = this.props.authorization
+
+      if (isSessionExpired(authData)) {
+        this.props.logoutRequest()
+
+        history.push('/login', {
+          previousPathname: this.props.location.pathname
+        })
+      }
+    }
+  }
+
   render () {
+    const { authorized } = this.props.authorization
+
     return (
       <Navbar className="navbar-studykik">
 
@@ -80,7 +115,16 @@ export default class TopBar extends React.Component {
 
           <Nav pullRight>
             <li className="blue-color nav-item">
-              <Link to="/login">Login</Link>
+              {!authorized &&
+                <Link to="/login">Login</Link>
+              }
+              {authorized &&
+                <Link to="/logout"
+                  onClick={this.handleLogoutClick.bind(this)}
+                >
+                  Logout
+                </Link>
+              }
             </li>
           </Nav>
 
@@ -98,4 +142,20 @@ export default class TopBar extends React.Component {
       </Navbar>
     )
   }
+
+  handleLogoutClick (ev) {
+    ev.preventDefault()
+
+    this.props.logoutRequest()
+  }
 }
+
+
+const mapDispatchToProps = {
+  logoutRequest: logout,
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(TopBar)
