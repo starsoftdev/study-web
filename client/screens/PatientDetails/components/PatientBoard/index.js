@@ -55,6 +55,7 @@ export default class PatientBoard extends Component {
 
     const contentList = patientCategories.map((item, index) => (
       <PatientColItem
+            key={index}
             items={patientArr[item.id] ? patientArr[item.id] : []}
             category={item.name}
             categoryId={item.id}

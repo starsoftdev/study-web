@@ -7,7 +7,7 @@ export default class PatientColItem extends Component {
   static propTypes = {
     items: PropTypes.array,
     category: PropTypes.string,
-    categoryId: PropTypes.string,
+    categoryId: PropTypes.number,
     onDragAndDrop: PropTypes.func
   }
 
