@@ -26,6 +26,6 @@ export default function updatePatientCategory (patientId, patientCategoryId) {
     postData['patient_category_id'] = patientCategoryId
     postData['scheduled_date'] = '2015-05-02 23:23:22'
 
-    dispatch(createEntity('patients/update_category/', postData, afterSave))
+    dispatch(createEntity('/patients/update_category/', postData, afterSave))
   })
 }

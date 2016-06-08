@@ -62,7 +62,7 @@ export default class PatientBoard extends Component {
             onDragAndDrop={this.handleDragAndDrop}
         />
     ))
-    console.log(patientCategories)
+
     return (
       <div className="patient-board">
         {contentList}
