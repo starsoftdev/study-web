@@ -14,5 +14,6 @@ export clearStudies from './clearStudies'
 
 export fetchPatientCategories from './fetchPatientCategories'
 export fetchPatients from './fetchPatients'
+export fetchPatientsByStudy from './fetchPatientsByStudy'
 
 export updatePatientCategory from './updatePatientCategory'

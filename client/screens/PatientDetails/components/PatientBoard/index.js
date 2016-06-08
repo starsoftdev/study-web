@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import PatientColItem from './PatientColItem'
 
-import { fetchPatientCategories, fetchPatients, updatePatientCategory } from 'actions'
+import { fetchPatientCategories, fetchPatientsByStudy, updatePatientCategory } from 'actions'
 
 import ActivityIcon from 'components/ActivityIcon'
 import LoadingResults from 'components/LoadingResults'
@@ -20,12 +20,15 @@ export default class PatientBoard extends Component {
     patientCategories: PropTypes.array,
 
     isFetchingPatients: PropTypes.bool,
-    fetchPatients: PropTypes.func,
-    patients: PropTypes.array,
+    fetchPatientsByStudy: PropTypes.func,
+    patientsByStudy: PropTypes.array,
 
     isUpdatingPatientCategory: PropTypes.bool,
-    updatePatientCategory: PropTypes.func
+    updatePatientCategory: PropTypes.func,
+
+    studyId: PropTypes.number.isRequired
   }
+  static patientsPerPage = 10
 
   constructor (props) {
     super(props)
@@ -35,11 +38,15 @@ export default class PatientBoard extends Component {
     // }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     // Redux store keeps `studies` reducer, so need to clear them
     // Not sure we actually need this behavior
     this.props.fetchPatientCategories()
-    this.props.fetchPatients()
+    this.props.fetchPatientsByStudy(this.props.studyId, {
+      offset: 0,
+      limit: PatientBoard.patientsPerPage,
+      category: '*'
+    })
   }
 
   handleDragAndDrop = (item, category) => {
@@ -47,11 +54,12 @@ export default class PatientBoard extends Component {
   }
 
   render () {
-    const { patientCategories, patients } = this.props
+    const { patientCategories, patientsByStudy } = this.props
+    let patientArr = {}
 
-    const patientArr = _.groupBy(patients, (item) => (
-      item.studyPatientCategoryId
-    ))
+    _.forEach(patientsByStudy, (pbs) => {
+      patientArr[pbs.patientCategory.id] = pbs.patients
+    })
 
     const contentList = patientCategories.map((item, index) => (
       <PatientColItem
@@ -77,13 +85,13 @@ const mapStateToProps = (state) => ({
   patientCategories: state.patientCategories,
 
   isFetchingPatients: state.fetchingPatients,
-  patients: state.patients,
+  patientsByStudy: state.patientsByStudy,
 
   isUpdatingPatientCategory: state.updatingPatientCategory
 })
 const mapDispatchToProps = {
   fetchPatientCategories,
-  fetchPatients,
+  fetchPatientsByStudy,
   updatePatientCategory
 }
 

@@ -38,7 +38,7 @@ export default (store) => {
       <Route path="login" getComponent={lazyLoadComponent(Login)} />
       <Route path="studies/:id" getComponent={lazyLoadComponent(Study)} />
       <Route path="trials" getComponent={lazyLoadComponent(TrialListing)} />
-      <Route path="patient-details" getComponent={lazyLoadComponent(PatientDetails)} />
+      <Route path="studies/:id/patient-details" getComponent={lazyLoadComponent(PatientDetails)} />
 
       <Route path="*" component={NotFound} status={404} />
     </Route>

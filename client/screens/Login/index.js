@@ -12,12 +12,12 @@ import './styles.less'
 let Form = t.form.Form
 
 let LoginFields = t.struct({
-  username: t.Str,
+  email: t.Str,
   password: t.Str,
 })
 
 let loginValues = {
-  username: null,
+  email: null,
   password: null,
 }
 
@@ -26,7 +26,7 @@ let loginTemplate = function (locals) {
     <div>
       <div className="row">
         <div className="col-sm-12">
-          {locals.inputs.username}
+          {locals.inputs.email}
         </div>
       </div>
       <div className="row">
@@ -43,11 +43,11 @@ let loginOptions = {
   template: loginTemplate,
   auto: 'placeholders',
   fields: {
-    username: {
+    email: {
       error: '',
       attrs: {
         autoFocus: true,
-        placeholder: 'User Name',
+        placeholder: 'User Name or Email',
       }
     },
     password: {

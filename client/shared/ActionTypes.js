@@ -24,6 +24,7 @@ export const ActionTypes = keymirror({
 
   FETCH_PATIENT_CATEGORIES: null,
   FETCH_PATIENTS: null,
+  FETCH_PATIENTS_BY_STUDY: null,
 
   UPDATE_PATIENT_CATEGORY: null,
 })
