@@ -11,3 +11,9 @@ export submitGetTrialNotificationForm from './submitGetTrialNotificationForm'
 export fetchStudies from './fetchStudies'
 export fetchStudy from './fetchStudy'
 export clearStudies from './clearStudies'
+
+export fetchPatientCategories from './fetchPatientCategories'
+export fetchPatients from './fetchPatients'
+export fetchPatientsByStudy from './fetchPatientsByStudy'
+
+export updatePatientCategory from './updatePatientCategory'
