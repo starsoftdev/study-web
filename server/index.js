@@ -24,7 +24,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/../dist/', 'index.html'))
 })
 
-app.listen(PORT, 'localhost', (err) => {
+app.listen(PORT, (err) => {
   if (err) {
     logger.error(err)
   } else {
