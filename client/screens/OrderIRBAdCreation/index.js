@@ -2,10 +2,8 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import t from 'tcomb-form'
-import selectn from 'selectn'
 
-import { login } from 'actions'
-import history from 'utils/history'
+import { submitOrderIRBAd } from 'actions'
 
 import './styles.less'
 
@@ -79,7 +77,7 @@ const irbAdTemplate = (locals) => {
 
 const irbAdOptions = {
   template: irbAdTemplate,
-  auto: 'placeholders',
+  auto: 'none',
   fields: {
     siteLocation: {
       nullOption: {
@@ -95,26 +93,25 @@ const irbAdOptions = {
     },
   }
 }
+
 class OrderIRBAdCreation extends React.Component {
-
   static propTypes = {
-    authorization: PropTypes.object,
-    location: PropTypes.object,
+    isSaving: PropTypes.bool,
+    submitOrderIRBAd: PropTypes.func,
   }
 
-  static contextTypes = {
-    router: PropTypes.any
-  }
-
-  submit (e) {
-
+  handleSubmit (ev) {
+    ev.preventDefault()
+    const value = this.refs.form.getValue()
+    this.props.submitOrderIRBAd(value)
   }
 
   render () {
+    const { isSaving } = this.props
 
     return (
       <div className="irb-ad-creation-wrapper">
-        <form onSubmit={(e) => this.submit(e)}>
+        <form onSubmit={(ev) => this.handleSubmit(ev)}>
           <Form
             ref="form"
             type={irbAdForm}
@@ -124,8 +121,8 @@ class OrderIRBAdCreation extends React.Component {
           <br />
           <div className="row">
             <div className="col-md-offset-8 col-md-2">
-                <button className="btn btn-success btn-block" type="submit" disabled={false}>
-                  {true ? <i className="fa fa-repeat fa-spin" /> : 'SUBMIT'}
+                <button className="btn btn-success btn-block" type="submit" disabled={isSaving}>
+                  {isSaving ? <i className="fa fa-repeat fa-spin" /> : 'SUBMIT'}
                 </button>
             </div>
           </div>
@@ -136,11 +133,11 @@ class OrderIRBAdCreation extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  authorization: state.authorization,
-  location: state.location,
+  isSaving: state.submittingOrderIRBAd,
 })
-const mapDispatchToProps = {
 
+const mapDispatchToProps = {
+  submitOrderIRBAd,
 }
 
 export default connect(

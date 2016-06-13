@@ -18,3 +18,4 @@ export patients from './patients'
 export patientsByStudy from './patientsByStudy'
 
 export updatingPatientCategory from './updatingPatientCategory'
+export submittingOrderIRBAd from './submittingOrderIRBAd'
