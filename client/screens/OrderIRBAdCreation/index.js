@@ -9,12 +9,20 @@ import './styles.less'
 
 const { Form } = t.form
 
+const Currency = t.refinement(t.Str, (str) => {
+  const regex = /(?=.)^\$?(([1-9][0-9]{0,2}(,[0-9]{3})*)|[0-9]+)?(\.[0-9]{1,2})?$/
+  return regex.test(str)
+})
+Currency.getValidationErrorMessage = (value, path, context) => {
+  return 'This is not a valid currency format.'
+}
+
 const irbAdForm = t.struct({
   siteLocation: t.enums({}),
   indication: t.enums({}),
   irbName: t.maybe(t.Str),
   irbEmail: t.maybe(t.Str),
-  compensationAmount: t.maybe(t.Str),
+  compensationAmount: t.maybe(Currency),
   clinicaltrialsGovLink: t.maybe(t.Str),
   notes: t.maybe(t.Str),
 })
@@ -103,7 +111,10 @@ class OrderIRBAdCreation extends React.Component {
   handleSubmit (ev) {
     ev.preventDefault()
     const value = this.refs.form.getValue()
-    this.props.submitOrderIRBAd(value)
+
+    if (value) {
+      this.props.submitOrderIRBAd(value)
+    }
   }
 
   render () {
