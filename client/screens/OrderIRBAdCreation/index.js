@@ -2,19 +2,21 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import t from 'tcomb-form'
+import ReactTooltip from 'react-tooltip'
+import _ from 'lodash'
 
 import { submitOrderIRBAd } from 'actions'
+import { isValidCurrency, strToFloat } from 'utils/number'
 
 import './styles.less'
 
 const { Form } = t.form
 
 const Currency = t.refinement(t.Str, (str) => {
-  const regex = /(?=.)^\$?(([1-9][0-9]{0,2}(,[0-9]{3})*)|[0-9]+)?(\.[0-9]{1,2})?$/
-  return regex.test(str)
+  return isValidCurrency(str)
 })
 Currency.getValidationErrorMessage = (value, path, context) => {
-  return 'This is not a valid currency format.'
+  return 'Enter a valid currency format.'
 }
 
 const irbAdForm = t.struct({
@@ -37,69 +39,45 @@ const irbAdValues = {
   notes: null,
 }
 
-const irbAdTemplate = (locals) => {
-  return (
-    <div>
-      <div className="row">
-        <div className="col-md-3 col-md-offset-2">SITE LOCATION *</div>
-        <div className="col-md-5">{locals.inputs.siteLocation}</div>
-      </div>
-      <div className="row">
-        <div className="col-md-3 col-md-offset-2">INDICATION *</div>
-        <div className="col-md-5">{locals.inputs.indication}</div>
-      </div>
-      <div className="row">
-        <div className="col-md-3 col-md-offset-2">IRB NAME</div>
-        <div className="col-md-5">{locals.inputs.irbName}</div>
-      </div>
-      <div className="row">
-        <div className="col-md-3 col-md-offset-2">IRB EMAIL</div>
-        <div className="col-md-5">{locals.inputs.irbEmail}</div>
-      </div>
-      <div className="row">
-        <div className="col-md-3 col-md-offset-2">COMPENSATION AMOUNT</div>
-        <div className="col-md-5">{locals.inputs.compensationAmount}</div>
-      </div>
-      <div className="row">
-        <div className="col-md-3 col-md-offset-2">CLINICALTRIALS.GOV LINK</div>
-        <div className="col-md-5">{locals.inputs.clinicaltrialsGovLink}</div>
-      </div>
-      <div className="row">
-        <div className="col-md-3 col-md-offset-2">FILE UPLOADED PROTOCOL</div>
-        <div className="col-md-5">
-          <div className="form-group">
-            <div className="fileUpload btn form-control">
-              <span>BROWSE</span>
-              <input type="file" className="upload" name="fileUploadedProtocol" />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-md-3 col-md-offset-2">NOTES</div>
-        <div className="col-md-5">{locals.inputs.notes}</div>
-      </div>
-    </div>
-  )
-}
-
 const irbAdOptions = {
-  template: irbAdTemplate,
   auto: 'none',
+  config: {
+    // for each of lg md sm xs you can specify the columns width
+    horizontal: {
+      md: [ 4, 8 ],
+    },
+  },
   fields: {
     siteLocation: {
+      label: 'SITE LOCATION *',
       nullOption: {
         value: '',
         text: 'Select Site Location'
       },
     },
     indication: {
+      label: 'INDICATION *',
       nullOption: {
         value: '',
         text: 'Select Indication'
       },
     },
-  }
+    irbName: {
+      label: 'IRB NAME',
+    },
+    irbEmail: {
+      label: 'IRB EMAIL',
+    },
+    compensationAmount: {
+      label: 'COMPENSATION AMOUNT',
+    },
+    clinicaltrialsGovLink: {
+      label: 'CLINICALTRIALS.GOV LINK'
+    },
+    notes: {
+      label: 'NOTES'
+    },
+  },
 }
 
 class OrderIRBAdCreation extends React.Component {
@@ -108,13 +86,32 @@ class OrderIRBAdCreation extends React.Component {
     submitOrderIRBAd: PropTypes.func,
   }
 
+  state = {
+    formOptions: irbAdOptions
+  }
+
   handleSubmit (ev) {
     ev.preventDefault()
-    const value = this.refs.form.getValue()
+    const validateResult = this.refs.form.validate()
+    let newFormOptions = _.cloneDeep(irbAdOptions)
 
-    if (value) {
+    if (validateResult.errors.length > 0) {
+      for (let err of validateResult.errors) {
+        _.set(newFormOptions, `fields.${err.path[0]}.attrs.data-tip`, err.message)
+      }
+    }
+    else {
+      const value = {
+        ...validateResult.value,
+        compensationAmount: strToFloat(validateResult.compensationAmount)
+      }
+      console.log (value)
       this.props.submitOrderIRBAd(value)
     }
+
+    this.setState({
+      formOptions: newFormOptions
+    })
   }
 
   render () {
@@ -122,22 +119,26 @@ class OrderIRBAdCreation extends React.Component {
 
     return (
       <div className="irb-ad-creation-wrapper">
-        <form onSubmit={(ev) => this.handleSubmit(ev)}>
-          <Form
-            ref="form"
-            type={irbAdForm}
-            options={irbAdOptions}
-            value={irbAdValues}
-          />
-          <br />
-          <div className="row">
-            <div className="col-md-offset-8 col-md-2">
-                <button className="btn btn-success btn-block" type="submit" disabled={isSaving}>
-                  {isSaving ? <i className="fa fa-repeat fa-spin" /> : 'SUBMIT'}
-                </button>
+        <div className="col-md-offset-2 col-md-8">
+          <form onSubmit={(ev) => this.handleSubmit(ev)}>
+            <ReactTooltip type="error" />
+            <Form
+              ref="form"
+              type={irbAdForm}
+              options={this.state.formOptions}
+              value={irbAdValues}
+              context={{ comp: this }}
+            />
+            <br />
+            <div className="row">
+              <div className="col-md-offset-8 col-md-2">
+                  <button className="btn btn-success btn-block" type="submit" disabled={isSaving}>
+                    {isSaving ? <i className="fa fa-repeat fa-spin" /> : 'SUBMIT'}
+                  </button>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     )
   }
