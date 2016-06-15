@@ -1,5 +1,5 @@
 {
-  "name": "sutudykik-web",
+  "name": "studykik-web",
   "version": "0.1.0",
   "dependencies": {
     "abbrev": {
@@ -5995,8 +5995,7 @@
         },
         "source-map": {
           "version": "0.4.4",
-          "from": "source-map@0.4.4",
-          "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.4.4.tgz"
+          "from": "source-map@>=0.4.2 <0.5.0"
         }
       }
     },
@@ -6381,6 +6380,11 @@
       "version": "1.0.0",
       "from": "react-sortablejs@latest",
       "resolved": "https://registry.npmjs.org/react-sortablejs/-/react-sortablejs-1.0.0.tgz"
+    },
+    "react-tooltip": {
+      "version": "2.0.3",
+      "from": "react-tooltip@latest",
+      "resolved": "https://registry.npmjs.org/react-tooltip/-/react-tooltip-2.0.3.tgz"
     },
     "react-transform-catch-errors": {
       "version": "1.0.2",
@@ -7453,8 +7457,7 @@
       "dependencies": {
         "source-map": {
           "version": "0.4.4",
-          "from": "source-map@0.4.4",
-          "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.4.4.tgz"
+          "from": "source-map@>=0.4.1 <0.5.0"
         }
       }
     },

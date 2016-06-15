@@ -12,6 +12,7 @@ import Login from './screens/Login'
 import Study from './screens/Study'
 import TrialListing from './screens/TrialListing'
 import PatientDetails from './screens/PatientDetails'
+import OrderIRBAdCreation from './screens/OrderIRBAdCreation'
 
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
@@ -39,6 +40,7 @@ export default (store) => {
       <Route path="studies/:id" getComponent={lazyLoadComponent(Study)} />
       <Route path="trials" getComponent={lazyLoadComponent(TrialListing)} />
       <Route path="studies/:id/patient-details" getComponent={lazyLoadComponent(PatientDetails)} />
+      <Route path="order-irb-ad-creation" getComponent={lazyLoadComponent(OrderIRBAdCreation)} />
 
       <Route path="*" component={NotFound} status={404} />
     </Route>

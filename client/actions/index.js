@@ -17,3 +17,4 @@ export fetchPatients from './fetchPatients'
 export fetchPatientsByStudy from './fetchPatientsByStudy'
 
 export updatePatientCategory from './updatePatientCategory'
+export submitOrderIRBAd from './submitOrderIRBAd'
