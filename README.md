@@ -93,6 +93,8 @@ If there are more than 5 import statements, feel free to add a line break betwee
 Tech Used
 ---------
 
+- [ESLint](http://eslint.org/) for linting
+- [Express](http://expressjs.com/) for web server
 - [React](https://github.com/facebook/react) for all the goodness.
 - [Redux](https://github.com/gaearon/redux) for the _Atomic Flux_ architecture.
 - [React-Router](https://github.com/rackt/react-router) for routing goodness.
