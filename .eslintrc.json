@@ -28,7 +28,7 @@
   "rules": {
     // Stylistic Issues
     "array-bracket-spacing": [2, "always"],
-    "camelcase": 2,
+    "camelcase": [2, {"properties": "never"}],
     "computed-property-spacing": [2, "never"],
     "eol-last": 2,
     "jsx-quotes": 2,
