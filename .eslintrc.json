@@ -57,7 +57,7 @@
 
     // Variables
     "no-use-before-define": [2, "nofunc"],
-    "no-undef": 2,
+    "no-undef": 1,
 
     // ECMAScript 6
     "no-var": 2,

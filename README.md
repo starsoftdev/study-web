@@ -11,6 +11,7 @@ Create a file named `.env` at the root of this project that includes the followi
 NODE_ENV=development
 PORT=8080
 API_URL=http://localhost:3000/api
+HOST_URL=http://localhost:3000
 
 ```
 
