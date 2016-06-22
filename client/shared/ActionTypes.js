@@ -27,5 +27,8 @@ export const ActionTypes = keymirror({
   FETCH_PATIENTS_BY_STUDY: null,
 
   UPDATE_PATIENT_CATEGORY: null,
+
+  FETCH_SITE_LOCATIONS: null,
+  FETCH_STUDY_CATEGORIES: null,
   SUBMIT_ORDER_IRB_AD: null,
 })
