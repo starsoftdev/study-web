@@ -18,6 +18,10 @@ export const ActionTypes = keymirror({
 
   SUBMIT_GET_TRIAL_NOTIFICATION_FORM: null,
 
+  FETCH_SITES: null,
+  CLEAR_SITES: null,
+  FETCH_USERS: null,
+  CLEAR_USERS: null,
   FETCH_STUDIES: null,
   FETCH_STUDY: null,
   CLEAR_STUDIES: null,
