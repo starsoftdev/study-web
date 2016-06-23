@@ -10,6 +10,7 @@ import GetReport from './screens/GetReport'
 import Home from './screens/Home'
 import Login from './screens/Login'
 import Study from './screens/Study'
+import SitesUsers from './screens/SitesUsers'
 import TrialListing from './screens/TrialListing'
 import PatientDetails from './screens/PatientDetails'
 import OrderIRBAdCreation from './screens/OrderIRBAdCreation'
@@ -37,6 +38,7 @@ export default (store) => {
       <Route path="clinical-trial-patient-recruitment-patient-enrollment" getComponent={lazyLoadComponent(GetReport)} />
       <Route path="getproposal" getComponent={lazyLoadComponent(GetProposal)} />
       <Route path="login" getComponent={lazyLoadComponent(Login)} />
+      <Route path="sites-users" getComponent={lazyLoadComponent(SitesUsers)} />
       <Route path="studies/:id" getComponent={lazyLoadComponent(Study)} />
       <Route path="trials" getComponent={lazyLoadComponent(TrialListing)} />
       <Route path="studies/:id/patient-details" getComponent={lazyLoadComponent(PatientDetails)} />

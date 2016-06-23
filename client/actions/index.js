@@ -8,6 +8,11 @@ export savePatient from './savePatient'
 
 export submitGetTrialNotificationForm from './submitGetTrialNotificationForm'
 
+export fetchSites from './fetchSites'
+export clearSites from './clearSites'
+export fetchUsers from './fetchUsers'
+export clearUsers from './clearUsers'
+
 export fetchStudies from './fetchStudies'
 export fetchStudy from './fetchStudy'
 export clearStudies from './clearStudies'
