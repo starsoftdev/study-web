@@ -12,6 +12,25 @@ class Application extends React.Component {
     children: PropTypes.any,
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.authorization.authData) {
+      this.socket = io(`${HOST_URL}/notifications`, { query: `userId=${nextProps.authorization.authData.userId}` })
+
+      this.socket.on('connect', () => {
+
+      })
+
+      this.socket.on('notification', (notification) => {
+        console.log (notification)
+      })
+    }
+    else {
+      if (this.socket) {
+        this.socket.disconnect()
+      }
+    }
+  }
+
   render () {
     return (
       <DocumentTitle title="StudyKik Home Page">

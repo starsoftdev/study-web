@@ -83,6 +83,7 @@ function objectFromArray (arr, key, value) {
 
 class OrderIRBAdCreation extends React.Component {
   static propTypes = {
+    authorization: PropTypes.object,
     isSaving: PropTypes.bool,
     siteLocations: PropTypes.object,
     studyCategories: PropTypes.object,
@@ -148,6 +149,7 @@ class OrderIRBAdCreation extends React.Component {
         notes: value.notes,
         studyaddress_id: value.siteLocation,
         study_category_id: value.indication,
+        user_id: this.props.authorization.authData.userId,
       }
 
       this.props.submitOrderIRBAd(newValue)
@@ -194,6 +196,7 @@ class OrderIRBAdCreation extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  authorization: state.authorization,
   isSaving: state.submittingOrderIRBAd,
   siteLocations: state.siteLocations,
   studyCategories: state.studyCategories,
