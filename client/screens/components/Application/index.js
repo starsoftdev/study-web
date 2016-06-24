@@ -12,21 +12,34 @@ class Application extends React.Component {
     children: PropTypes.any,
   }
 
+  constructor (props) {
+    super (props)
+
+    this.configureSocket (props)     // comes here when loading from direct url change
+  }
+
   componentWillReceiveProps (nextProps) {
-    if (nextProps.authorization.authData) {
-      this.socket = io(`${HOST_URL}/notifications`, { query: `userId=${nextProps.authorization.authData.userId}` })
+    this.configureSocket (nextProps)
+  }
 
-      this.socket.on('connect', () => {
+  configureSocket = (props) => {
+    if (props.authorization.authData) {
+      if (!this.socket) {
+        this.socket = io(`${HOST_URL}/notifications`)
 
-      })
+        this.socket.on('connect', () => {
+          this.socket.emit('newUser', props.authorization.authData.userId)
+        })
 
-      this.socket.on('notification', (notification) => {
-        console.log (notification)
-      })
+        this.socket.on('notification', (notification) => {
+          console.log (notification)
+        })
+      }
     }
     else {
       if (this.socket) {
         this.socket.disconnect()
+        this.socket = null
       }
     }
   }
