@@ -18,8 +18,8 @@ export default function (state = initialState, action) {
         }
       }
       return {
+        ...state,
         isFetching: statusFunc(state, action),
-        studyCategories: []
       }
   }
 
