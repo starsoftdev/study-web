@@ -141,7 +141,8 @@ export default class TopBar extends React.Component {
           </ul>
 
           <ul className="nav navbar-nav navbar-right">
-            <NotificationBox authorization={this.props.authorization} />
+            {authorized &&
+              <NotificationBox authorization={this.props.authorization} />}
           </ul>
 
         </Navbar.Collapse>

@@ -39,3 +39,12 @@ export function setNotificationAsRead (notificationId) {
     dispatch(updateEntity(`/user_notifications/${notificationId}`, postData, afterSave))
   })
 }
+
+export function notificationArrived (notification) {
+	return dispatch => {
+		dispatch ({
+			type: ActionTypes.NOTIFICATION_ARRIVED,
+			data: notification
+		})
+	}
+}

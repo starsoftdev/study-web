@@ -2,7 +2,9 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
-import { fetchNotifications, fetchUnreadNotificationsCount } from 'actions'
+import { fetchUnreadNotificationsCount } from 'actions'
+
+import NotificationList from './notificationList'
 
 import './styles.less'
 
@@ -10,24 +12,35 @@ export default class NotificationBox extends React.Component {
   static propTypes = {
     authorization: PropTypes.any,
     notification: PropTypes.object,
-    fetchNotifications: PropTypes.func,
     fetchUnreadNotificationsCount: PropTypes.func,
   }
 
-  constructor (props) {
-    super (props)
+  state = {
+    dropdownOpen: false
+  }
 
-    const { authData } = props.authorization
+  componentWillMount () {
+    const { authData } = this.props.authorization
 
     if (authData) {
-      props.fetchUnreadNotificationsCount(authData.userId)
+      this.props.fetchUnreadNotificationsCount(authData.userId)
     }
+  }
+
+  handleBadgeNumberClick = () => {
+    this.setState ({
+      dropdownOpen: !this.state.dropdownOpen
+    })
   }
 
   render () {
     return (
-      <div className="notification-box">
-        {this.props.notification.unreadNotificationsCount}
+      <div className="notification-box" style={{ marginRight: '20px' }}>
+        <span className="badge-number" onClick={() => this.handleBadgeNumberClick()}>{this.props.notification.unreadNotificationsCount}</span>
+
+        {this.state.dropdownOpen &&
+          <NotificationList authorization={this.props.authorization} notification={this.props.notification} />
+        }
       </div>
     )
   }
@@ -38,7 +51,6 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-  fetchNotifications,
   fetchUnreadNotificationsCount,
 }
 

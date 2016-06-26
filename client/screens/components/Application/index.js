@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import DocumentTitle from 'react-document-title'
 
+import { notificationArrived } from 'actions'
+
 import TopBar from './TopBar'
 import BottomBar from './BottomBar'
 
@@ -10,12 +12,11 @@ class Application extends React.Component {
     authorization: PropTypes.any,
     location: PropTypes.any,
     children: PropTypes.any,
+    notificationArrived: PropTypes.func,
   }
 
-  constructor (props) {
-    super (props)
-
-    this.configureSocket (props)     // comes here when loading from direct url change
+  componentDidMount () {
+    this.configureSocket (this.props)     // comes here when loading from direct url change
   }
 
   componentWillReceiveProps (nextProps) {
@@ -32,7 +33,7 @@ class Application extends React.Component {
         })
 
         this.socket.on('notification', (notification) => {
-          console.log (notification)
+          props.notificationArrived (notification)
         })
       }
     }
@@ -65,7 +66,9 @@ const mapStateToProps = (state) => ({
   authorization: state.authorization,
   location: state.location,
 })
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  notificationArrived,
+}
 
 export default connect(
   mapStateToProps,
