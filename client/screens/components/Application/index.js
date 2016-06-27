@@ -4,6 +4,8 @@ import DocumentTitle from 'react-document-title'
 
 import { notificationArrived } from 'actions'
 
+import './styles.less'
+
 import TopBar from './TopBar'
 import BottomBar from './BottomBar'
 

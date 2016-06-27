@@ -43,21 +43,23 @@ export default function (state = initialState, action) {
 
     case ActionTypes.SET_NOTIFICATION_AS_READ:
       // DISCUSS: are we updating UI instantly or after successful response?
-
       const { notifications } = state
-      let { unreadNotificationsCount } = state
-      const targetNotification = _.find(notifications, { id: action.data.notificationId, read: false })
+      const targetIndex = _.findIndex(notifications, { id: action.notificationId, read: false })
 
-      if (targetNotification) {
-        targetNotification.read = true
-        unreadNotificationsCount--
+      if (targetIndex >= 0) {                         // creates a fresh notification with read=true so that it causes rerender on the notification item
+        const newNotification = {
+          ...notifications[targetIndex],
+          read: true,
+        }
+
+        return {
+          ...state,
+          notifications: [ ...notifications.slice(0, targetIndex), newNotification, ...notifications.slice(targetIndex + 1) ],
+          unreadNotificationsCount: state.unreadNotificationsCount - 1
+        }
       }
 
-      return {
-        ...state,
-        notifications,
-        unreadNotificationsCount
-      }
+      return state
 
     case ActionTypes.NOTIFICATION_ARRIVED:
       return {
