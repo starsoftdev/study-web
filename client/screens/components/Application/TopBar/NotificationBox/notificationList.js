@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
-import { fetchNotifications } from 'actions'
+import { fetchNotifications, setNotificationAsRead } from 'actions'
 
 import NotificationItem from './notificationItem'
 
@@ -11,6 +11,7 @@ export default class NotificationList extends React.Component {
     authorization: PropTypes.any,
     notification: PropTypes.object,
     fetchNotifications: PropTypes.func,
+    setNotificationAsRead: PropTypes.func,
   }
 
   componentWillMount () {
@@ -25,9 +26,15 @@ export default class NotificationList extends React.Component {
 
   }
 
+  handleItemClick = (itemData) => {
+    if (!itemData.read) {
+      this.props.setNotificationAsRead(itemData.id)
+    }
+  }
+
   render () {
 		const list = this.props.notification.notifications.map((n, index) => {
-			return <NotificationItem key={index} itemData={n} />
+			return <NotificationItem key={index} itemData={n} handleItemClick={this.handleItemClick} />
 		})
 
     return (
@@ -40,6 +47,7 @@ export default class NotificationList extends React.Component {
 
 const mapDispatchToProps = {
   fetchNotifications,
+  setNotificationAsRead,
 }
 
 export default connect(
