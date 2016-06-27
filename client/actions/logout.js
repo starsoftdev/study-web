@@ -10,10 +10,10 @@ function logoutRequest (cb = () => {}) {
 export default function logout () {
   return function (dispatch) {
     dispatch(logoutRequest((err, data) => {
-			if (!err) {
-				dispatch({ type: ActionTypes.LOGOUT })
-				history.push('/login')
-			}
+      if (!err) {
+        dispatch({ type: ActionTypes.LOGOUT })
+        history.push('/login')
+      }
     }))
   }
 }

@@ -1,12 +1,12 @@
 export function isValidCurrency (str) {
-	const regex = /(?=.)^\$?(([1-9][0-9]{0,2}(,[0-9]{3})*)|[0-9]+)?(\.[0-9]{1,2})?$/
+  const regex = /(?=.)^\$?(([1-9][0-9]{0,2}(,[0-9]{3})*)|[0-9]+)?(\.[0-9]{1,2})?$/
   return regex.test(str)
 }
 
 export function strToFloat (str) {
-	if (!str) {
-		return 0
-	}
+  if (!str) {
+    return 0
+  }
 
-	return Number(str.replace(/[^0-9\.]+/g, ''))
+  return Number(str.replace(/[^0-9\.]+/g, ''))
 }

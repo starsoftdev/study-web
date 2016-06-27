@@ -7,7 +7,7 @@ import asyncAction from 'utils/asyncAction'
 
 export default function submitOrderIRBAd (data) {
   return asyncAction(ActionTypes.SUBMIT_ORDER_IRB_AD, (cb, dispatch, getState) => {
-		function afterSave (err, payload) {
+    function afterSave (err, payload) {
       cb(err, payload)
       if (!err) {
         history.push({ pathname: 'thankyou' })

@@ -29,8 +29,8 @@ export default class PatientColItem extends Component {
         <Sortable
             // See all Sortable options at https://github.com/RubaXa/Sortable#options
             options={{
-                group: 'shared',
-                onAdd: dragEnd
+              group: 'shared',
+              onAdd: dragEnd
             }}
             tag="ul"
         >

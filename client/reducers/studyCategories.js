@@ -2,12 +2,12 @@ import { ActionTypes } from 'ActionTypes'
 import asyncActionIsFetching from 'utils/asyncActionIsFetching'
 
 const initialState = {
-	isFetching: true,
-	studyCategories: []
+  isFetching: true,
+  studyCategories: []
 }
 
 export default function (state = initialState, action) {
-	const statusFunc = asyncActionIsFetching(ActionTypes.FETCH_STUDY_CATEGORIES)
+  const statusFunc = asyncActionIsFetching(ActionTypes.FETCH_STUDY_CATEGORIES)
 
   switch (action.type) {
     case ActionTypes.FETCH_STUDY_CATEGORIES:
@@ -19,8 +19,10 @@ export default function (state = initialState, action) {
       }
       return {
         ...state,
-        isFetching: statusFunc(state, action),
+        isFetching: statusFunc(state, action)
       }
+    default:
+      break
   }
 
   return state
