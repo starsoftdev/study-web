@@ -59,6 +59,7 @@ module.exports = function createWebpackConfig (env) {
           '__DEVTOOLS__': env === 'production' ? 'false' : JSON.stringify(JSON.parse(process.env.DEVTOOLS || 'false')),
           '__LOGGER__': env === 'production' ? 'false' : 'true',
           'API_URL': JSON.stringify(process.env.API_URL),
+          'HOST_URL': JSON.stringify(process.env.HOST_URL),
         }),
         env === 'development' && new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),

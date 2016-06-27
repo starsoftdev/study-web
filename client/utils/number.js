@@ -4,5 +4,9 @@ export function isValidCurrency (str) {
 }
 
 export function strToFloat (str) {
+	if (!str) {
+		return 0
+	}
+
 	return Number(str.replace(/[^0-9\.]+/g, ''))
 }

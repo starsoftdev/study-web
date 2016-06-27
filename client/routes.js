@@ -13,6 +13,7 @@ import Study from './screens/Study'
 import TrialListing from './screens/TrialListing'
 import PatientDetails from './screens/PatientDetails'
 import OrderIRBAdCreation from './screens/OrderIRBAdCreation'
+import Notifications from './screens/Notifications'
 
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
@@ -32,6 +33,8 @@ export default (store) => {
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
         <Route path="dashboard" getComponent={lazyLoadComponent(Dashboard)} />
+        <Route path="notifications" getComponent={lazyLoadComponent(Notifications)} />
+        <Route path="order-irb-ad-creation" getComponent={lazyLoadComponent(OrderIRBAdCreation)} />
       </Route>
 
       <Route path="clinical-trial-patient-recruitment-patient-enrollment" getComponent={lazyLoadComponent(GetReport)} />
@@ -40,7 +43,6 @@ export default (store) => {
       <Route path="studies/:id" getComponent={lazyLoadComponent(Study)} />
       <Route path="trials" getComponent={lazyLoadComponent(TrialListing)} />
       <Route path="studies/:id/patient-details" getComponent={lazyLoadComponent(PatientDetails)} />
-      <Route path="order-irb-ad-creation" getComponent={lazyLoadComponent(OrderIRBAdCreation)} />
 
       <Route path="*" component={NotFound} status={404} />
     </Route>
