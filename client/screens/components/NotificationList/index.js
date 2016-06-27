@@ -6,12 +6,15 @@ import { fetchNotifications, setNotificationAsRead } from 'actions'
 
 import NotificationItem from './notificationItem'
 
+import './styles.less'
+
 export default class NotificationList extends React.Component {
   static propTypes = {
     authorization: PropTypes.any,
     notification: PropTypes.object,
     fetchNotifications: PropTypes.func,
     setNotificationAsRead: PropTypes.func,
+    isNotificationPage: PropTypes.bool.isRequired,
   }
 
   componentWillMount () {
@@ -34,7 +37,7 @@ export default class NotificationList extends React.Component {
 
   render () {
 		const list = this.props.notification.notifications.map((n, index) => {
-			return <NotificationItem key={index} itemData={n} handleItemClick={this.handleItemClick} />
+			return <NotificationItem key={index} itemData={n} handleItemClick={this.handleItemClick} isNotificationPage={this.props.isNotificationPage} />
 		})
 
     return (

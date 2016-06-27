@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 
 import { fetchUnreadNotificationsCount } from 'actions'
 
-import NotificationList from './notificationList'
+import NotificationList from '../../../NotificationList'
 
 import './styles.less'
 
@@ -35,11 +35,17 @@ export default class NotificationBox extends React.Component {
 
   render () {
     return (
-      <div className="notification-box" style={{ marginRight: '20px' }}>
+      <div className="notification-box">
         <span className="badge-number" onClick={() => this.handleBadgeNumberClick()}>{this.props.notification.unreadNotificationsCount}</span>
 
         {this.state.dropdownOpen &&
-          <NotificationList authorization={this.props.authorization} notification={this.props.notification} />
+          <div className="notification-dropdown">
+            <div className="header-label">NOTIFICATIONS</div>
+            <NotificationList authorization={this.props.authorization} notification={this.props.notification} isNotificationPage={false} />
+            <Link to="/notifications">
+              <div className="see-all-button">See All</div>
+            </Link>
+          </div>
         }
       </div>
     )
