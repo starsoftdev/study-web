@@ -15,12 +15,14 @@ import PatientDetails from './screens/PatientDetails'
 import OrderIRBAdCreation from './screens/OrderIRBAdCreation'
 import Notifications from './screens/Notifications'
 
+import isSessionExpired from 'utils/isSessionExpired'
+
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
     let { authorization: { authData } } = store.getState()
-    if (!authData) {
+    if (!authData || isSessionExpired(authData)) {
       // oops, not logged in, so can't be here!
-      replace('/')
+      replace('/login')
     }
     cb()
   }

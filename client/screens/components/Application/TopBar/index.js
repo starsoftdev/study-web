@@ -83,10 +83,6 @@ export default class TopBar extends React.Component {
 
       if (isSessionExpired(authData)) {
         this.props.logoutRequest()
-
-        history.push('/login', {
-          previousPathname: this.props.location.pathname
-        })
       }
     }
   }
