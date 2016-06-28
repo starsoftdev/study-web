@@ -7,8 +7,9 @@ export default function users (state=[], action) {
     case ActionTypes.FETCH_USERS:
       if (action.status === 'succeeded') {
         return action.payload
+      } else {
+        return []
       }
-      return state
   }
 
   return state

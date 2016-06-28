@@ -1,27 +1,29 @@
 import React, { Component, PropTypes } from 'react'
-import { Link } from 'react-router'
 
 export default class UserItem extends Component {
   static propTypes = {
     id: PropTypes.number,
-    name: PropTypes.string,
+    username: PropTypes.string,
     email: PropTypes.string,
     access: PropTypes.string
   }
 
   render () {
     return (
-      <div className="user-container">
-        <div className="name">
-          <span>{this.props.name}</span>
-        </div>
-        <div className="email">
+      <tr className="user-container">
+        <td className="name">
+          <span>{this.props.username}</span>
+        </td>
+        <td className="email">
           <span>{this.props.email}</span>
-        </div>
-        <div className="access">
+        </td>
+        <td className="access">
           <span>{this.props.access}</span>
-        </div>
-      </div>
+        </td>
+        <td className="action">
+          <button type="button" className="btn btn-default edit-user">Edit</button>
+        </td>
+      </tr>
     )
   }
 }

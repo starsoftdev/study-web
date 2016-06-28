@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
 import UserItem from './UserItem'
-
 import './styles.less'
 
 export default class UsersList extends Component {
@@ -13,17 +12,29 @@ export default class UsersList extends Component {
 
   render () {
     const { users } = this.props
-
     const listContents = users.map((item, index) => (
       <UserItem {...item} key={index} />
     ))
 
     if (users.length > 0) {
       return (
-        <div className="users">
-          <div className="container">
-            <div className="row">
-              {listContents}
+        <div className="row">
+          <div className="col-sm-12">
+            <h3>Users</h3>
+            <div className="table-responsive">
+              <table className="table table-striped">
+                <thead>
+                  <tr>
+                    <th>NAME</th>
+                    <th>EMAIL</th>
+                    <th>ACCESS</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {listContents}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

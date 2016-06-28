@@ -15,27 +15,30 @@ export default class SiteItem extends Component {
     const { assignedUsers } = this.props
 
     const assignedUsersContent = assignedUsers.map((item, index) => (
-      <span>{item.name}</span>
+      <span key={index}>{item.name}</span>
     ))
 
     return (
-      <div className="site-container">
-        <div className="name">
+      <tr className="site-container">
+        <td className="name">
           <span>{this.props.name}</span>
-        </div>
-        <div className="principal-investigator">
+        </td>
+        <td className="principal-investigator">
           <span>{this.props.principalInvestigator}</span>
-        </div>
-        <div className="phone">
+        </td>
+        <td className="phone">
           <span>{this.props.phone}</span>
-        </div>
-        <div className="address">
+        </td>
+        <td className="address">
           <span>{this.props.address}</span>
-        </div>
-        <div className="assigned-users">
+        </td>
+        <td className="assigned-users">
           {assignedUsersContent}
-        </div>
-      </div>
+        </td>
+        <td className="action">
+          <button type="button" className="btn btn-default edit-site">Edit</button>
+        </td>
+      </tr>
     )
   }
 }

@@ -16,10 +16,6 @@ import './styles.less'
 
 const TCombForm = t.form.Form
 
-let NEW_FORM = {
-  siteName: ''
-}
-
 class SearchSitesForm extends React.Component {
   static propTypes = {
     isFetching: PropTypes.bool,
@@ -29,11 +25,6 @@ class SearchSitesForm extends React.Component {
 
   constructor (props) {
     super(props)
-
-    this.state = {
-      options: formOptions,
-      formData: NEW_FORM
-    }
   }
 
   componentWillUnmount () {
@@ -52,29 +43,21 @@ class SearchSitesForm extends React.Component {
   }
 
   render () {
-    const { formData } = this.state
     const { isFetching } = this.props
     return (
       <div className="sites-search">
         <div className="search-form">
           <form className="form-green" onSubmit={this.handleSubmit.bind(this)}>
-            <TCombForm
-              ref="form"
-              type={getFormType(formData)}
-              options={this.state.options}
-              value={formData}
-              />
-            <div className="form-group">
-              <button
-                type="submit"
-                className="btn btn-orange block"
-                disabled={isFetching}
-                >
-                {isFetching
-                  ? <span><ActivityIcon />Searching...</span>
-                  : <span>Search Sites</span>
-                }
-              </button>
+            <div className="input-group">
+              <TCombForm ref="form" type={getFormType()} options={formOptions} />
+              <span className="input-group-btn">
+                <button type="submit" className="btn btn-default" disabled={isFetching}>
+                  {isFetching
+                    ? <span><ActivityIcon /></span>
+                    : <span>Go</span>
+                  }
+                </button>
+              </span>
             </div>
           </form>
         </div>

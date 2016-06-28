@@ -12,6 +12,7 @@ export fetchSites from './fetchSites'
 export clearSites from './clearSites'
 export fetchUsers from './fetchUsers'
 export clearUsers from './clearUsers'
+export fetchUser from './fetchUser'
 
 export fetchStudies from './fetchStudies'
 export fetchStudy from './fetchStudy'
