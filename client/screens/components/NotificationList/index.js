@@ -36,9 +36,9 @@ export default class NotificationList extends React.Component {
   }
 
   render () {
-		const list = this.props.notification.notifications.map((n, index) => {
-			return <NotificationItem key={index} itemData={n} handleItemClick={this.handleItemClick} isNotificationPage={this.props.isNotificationPage} />
-		})
+    const list = this.props.notification.notifications.map((n, index) => {
+      return <NotificationItem key={index} itemData={n} handleItemClick={this.handleItemClick} isNotificationPage={this.props.isNotificationPage} />
+    })
 
     return (
       <div className="notification-list">

@@ -33,7 +33,7 @@ export function setNotificationAsRead (notificationId) {
     }
 
     const postData = {
-			read: true
+      read: true
     }
 
     dispatch(updateEntity(`/user_notifications/${notificationId}`, postData, afterSave))
@@ -41,10 +41,10 @@ export function setNotificationAsRead (notificationId) {
 }
 
 export function notificationArrived (notification) {
-	return dispatch => {
-		dispatch ({
-			type: ActionTypes.NOTIFICATION_ARRIVED,
-			data: notification
-		})
-	}
+  return dispatch => {
+    dispatch ({
+      type: ActionTypes.NOTIFICATION_ARRIVED,
+      data: notification
+    })
+  }
 }

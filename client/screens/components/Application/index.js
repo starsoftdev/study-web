@@ -14,7 +14,7 @@ class Application extends React.Component {
     authorization: PropTypes.any,
     location: PropTypes.any,
     children: PropTypes.any,
-    notificationArrived: PropTypes.func,
+    notificationArrived: PropTypes.func
   }
 
   componentDidMount () {
@@ -66,10 +66,10 @@ class Application extends React.Component {
 
 const mapStateToProps = (state) => ({
   authorization: state.authorization,
-  location: state.location,
+  location: state.location
 })
 const mapDispatchToProps = {
-  notificationArrived,
+  notificationArrived
 }
 
 export default connect(

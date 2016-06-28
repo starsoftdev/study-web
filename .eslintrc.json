@@ -31,6 +31,7 @@
     "camelcase": [2, {"properties": "never"}],
     "computed-property-spacing": [2, "never"],
     "eol-last": 2,
+    "indent": ["error", 2, {"SwitchCase": 1}],
     "jsx-quotes": 2,
     "keyword-spacing": [2, {"before": true, "after": true, "overrides": {}}],
     "new-cap": [2, {"capIsNew": false}],
@@ -83,9 +84,8 @@
     "react/react-in-jsx-scope": 2,
     "react/self-closing-comp": 2,
     "react/wrap-multilines": 2,
-    
+
     // Strict Mode
     "strict": 0
   }
 }
-
