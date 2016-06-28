@@ -1,7 +1,7 @@
 import React from 'react'
 import t from 'tcomb-form'
 
-export function getModel() {
+export function getModel () {
   const spec = {
     username: t.maybe(t.String)
   }
