@@ -26,12 +26,6 @@ module.exports = function (config) {
     webpack: createWebpackConfig('test'),
     webpackServer: {
       noInfo: true
-    },
-    customLaunchers: {
-      Chrome_travis_ci: {
-        base: 'Chrome',
-        flags: [ '--no-sandbox' ]
-      }
     }
   })
 }
