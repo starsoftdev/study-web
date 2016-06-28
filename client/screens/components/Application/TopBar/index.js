@@ -7,6 +7,8 @@ import { logout } from 'actions'
 import isSessionExpired from 'utils/isSessionExpired'
 import history from 'utils/history'
 
+import NotificationBox from './NotificationBox'
+
 import './styles.less'
 
 import logoImg from 'assets/images/logo.png'
@@ -84,10 +86,6 @@ export default class TopBar extends React.Component {
 
       if (isSessionExpired(authData)) {
         this.props.logoutRequest()
-
-        history.push('/login', {
-          previousPathname: this.props.location.pathname
-        })
       }
     }
   }
@@ -139,6 +137,11 @@ export default class TopBar extends React.Component {
                 </a>
               </li>
             )}
+          </ul>
+
+          <ul className="nav navbar-nav navbar-right">
+            {authorized &&
+              <NotificationBox authorization={this.props.authorization} />}
           </ul>
 
         </Navbar.Collapse>

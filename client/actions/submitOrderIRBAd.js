@@ -7,12 +7,12 @@ import asyncAction from 'utils/asyncAction'
 
 export default function submitOrderIRBAd (data) {
   return asyncAction(ActionTypes.SUBMIT_ORDER_IRB_AD, (cb, dispatch, getState) => {
-	function afterSave (err, payload) {
+    function afterSave (err, payload) {
       cb(err, payload)
       if (!err) {
-        // history.push({ pathname: 'thankyou' })
+        history.push({ pathname: 'thankyou' })
       }
     }
-    dispatch(createEntity('/', data, afterSave))			// fix this endpoint
+    dispatch(createEntity('/irbAdCreations', data, afterSave))			// fix this endpoint
   })
 }
