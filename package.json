@@ -16,8 +16,11 @@
     "pre-commit": "PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:./node_modules/.bin eslint .",
     "pretest": "npm run lint",
     "start": "npm run build && node server/index.js",
-    "#test": "npm run unit && npm run browsers",
-    "unit": "BABEL_ENV=test karma start"
+    "test": "npm run unit",
+    "unit": "BABEL_ENV=test karma start",
+    "unit-debug": "BABEL_ENV=test karma start karma.conf.js --browsers=Chrome --single-run=false --debug",
+    "browsers": "nightwatch -e chrome --suiteRetries 3",
+    "chrome": "nightwatch -e chrome"
   },
   "repository": {
     "type": "git",
