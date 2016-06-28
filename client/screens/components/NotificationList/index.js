@@ -25,10 +25,6 @@ export default class NotificationList extends React.Component {
     }
   }
 
-  handleSeeAllClick = () => {
-
-  }
-
   handleItemClick = (itemData) => {
     if (!itemData.read) {
       this.props.setNotificationAsRead(itemData.id)
