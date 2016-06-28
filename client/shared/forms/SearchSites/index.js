@@ -1,7 +1,7 @@
 import React from 'react'
 import t from 'tcomb-form'
 
-export function getModel (value) {
+export function getModel () {
   const spec = {
     name: t.maybe(t.String)
   }
@@ -10,20 +10,27 @@ export function getModel (value) {
 }
 
 export let layout = function (locals) {
-
+  return (
+    <div>
+      {locals.inputs.name}
+    </div>
+  )
 }
 
 export const options = {
-  // template: layout,
-  auto: 'placeholders',
+  template: layout,
+  auto: 'none',
   fields: {
-    name: {}
+    name: {
+      attrs: {
+        placeholder: 'Search site name...'
+      }
+    }
   }
 }
 
 const SearchSitesForm = {
   getModel,
-  // layout,
   options
 }
 

@@ -12,14 +12,36 @@ export default class SitesUsers extends React.Component {
   render () {
     return (
       <DocumentTitle title="Manage Sites / Users">
-        <div>
+        <div className="sites-users-page">
           <div className="container">
-            <SearchSitesForm {...this.props} />
-            <SearchUsersForm {...this.props} />
+            <div className="row form-group">
+              <div className="col-sm-12">
+                <h1>Manage Sites / Users</h1>
+              </div>
+            </div>
+            <div className="row form-group">
+              <div className="col-sm-4">
+                <SearchSitesForm />
+              </div>
+              <div className="col-sm-8">
+                <button type="button" className="btn btn-default">+ Add Site</button>
+              </div>
+            </div>
+            <div className="row form-group">
+              <div className="col-sm-4">
+                <SearchUsersForm />
+              </div>
+              <div className="col-sm-8">
+                <button type="button" className="btn btn-default">+ Add User</button>
+              </div>
+            </div>
+            <div className="users">
+              <UsersList />
+            </div>
+            <div className="sites">
+              <SitesList />
+            </div>
           </div>
-
-          <UsersList />
-          <SitesList />
         </div>
       </DocumentTitle>
     )

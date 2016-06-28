@@ -20,10 +20,25 @@ export default class SitesList extends Component {
 
     if (sites.length > 0) {
       return (
-        <div className="sites">
-          <div className="container">
-            <div className="row">
-              {listContents}
+        <div className="row">
+          <div className="col-sm-12">
+            <h3>Sites</h3>
+            <div className="table-responsive">
+              <table className="table table-striped">
+                <thead>
+                  <tr>
+                    <th>SITE NAME</th>
+                    <th>PRINCIPAL INVESTIGATOR</th>
+                    <th>SITE PHONE</th>
+                    <th>SITE ADDRESS</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {listContents}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

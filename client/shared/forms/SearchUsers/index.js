@@ -1,29 +1,36 @@
 import React from 'react'
 import t from 'tcomb-form'
 
-export function getModel (value) {
+export function getModel() {
   const spec = {
-    name: t.maybe(t.String)
+    username: t.maybe(t.String)
   }
 
   return t.struct(spec)
 }
 
 export let layout = function (locals) {
-
+  return (
+    <div>
+      {locals.inputs.username}
+    </div>
+  )
 }
 
 export const options = {
-  // template: layout,
-  auto: 'placeholders',
+  template: layout,
+  auto: 'none',
   fields: {
-    name: {}
+    username: {
+      attrs: {
+        placeholder: 'Search user name...'
+      }
+    }
   }
 }
 
 const SearchUsersForm = {
   getModel,
-  // layout,
   options
 }
 

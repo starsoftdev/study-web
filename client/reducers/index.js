@@ -7,8 +7,10 @@ export submittingGetTrialNotificationForm from './submittingGetTrialNotification
 
 export fetchingSites from './fetchingSites'
 export fetchingUsers from './fetchingUsers'
+export fetchingUser from './fetchingUser'
 export sites from './sites'
 export users from './users'
+export selectedUser from './selectedUser'
 
 export fetchingStudies from './fetchingStudies'
 export fetchingStudy from './fetchingStudy'
