@@ -70,7 +70,7 @@ describe('GetReportForm component', () => {
     TestUtils.scryRenderedDOMComponentsWithTag(component, 'input')
       .filter(el => el.name === 'company')[0]
 
- const zipCodeField = () =>
+  const zipCodeField = () =>
     TestUtils.scryRenderedDOMComponentsWithTag(component, 'input')
       .filter(el => el.name === 'zipCode')[0]
 
