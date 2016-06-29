@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import t from 'tcomb-form'
-
 import { fetchSites, clearSites } from 'actions'
 
 import {
@@ -10,8 +9,6 @@ import {
 } from 'forms/SearchSites'
 
 import ActivityIcon from 'components/ActivityIcon'
-import LoadingResults from 'components/LoadingResults'
-
 import './styles.less'
 
 const TCombForm = t.form.Form

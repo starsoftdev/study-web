@@ -1,19 +1,33 @@
 import React, { Component, PropTypes } from 'react'
-import { Link } from 'react-router'
+import { connect } from 'react-redux'
+import { fetchSite } from 'actions'
 
-export default class SiteItem extends Component {
+import ActivityIcon from 'components/ActivityIcon'
+
+class SiteItem extends Component {
   static propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
     principalInvestigator: PropTypes.string,
     phone: PropTypes.string,
     address: PropTypes.string,
-    assignedUsers: PropTypes.array
+    assignedUsers: PropTypes.array,
+    isFetching: PropTypes.bool,
+    fetchSite: PropTypes.func
+  }
+
+  constructor (props) {
+    super(props)
+  }
+
+  editSiteItem (ev) {
+    ev.preventDefault()
+
+    this.props.fetchSite(this.props.id)
   }
 
   render () {
-    const { assignedUsers } = this.props
-
+    const { isFetching, assignedUsers } = this.props
     const assignedUsersContent = assignedUsers.map((item, index) => (
       <span key={index}>{item.name}</span>
     ))
@@ -36,9 +50,26 @@ export default class SiteItem extends Component {
           {assignedUsersContent}
         </td>
         <td className="action">
-          <button type="button" className="btn btn-default edit-site">Edit</button>
+          <button type="button" className="btn btn-default btn-edit-site pull-right" onClick={this.editSiteItem.bind(this)} disabled={isFetching}>
+            {isFetching
+              ? <span><ActivityIcon /></span>
+              : <span>Edit</span>
+            }
+          </button>
         </td>
       </tr>
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  isFetching: state.fetchingSite
+})
+const mapDispatchToProps = {
+  fetchSite
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SiteItem)

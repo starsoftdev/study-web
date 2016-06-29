@@ -9,6 +9,8 @@ export default function selectedUser (state=null, action) {
         return action.payload
     }
     return state
+  } else if (action.type === ActionTypes.CLEAR_SELECTED_USER) {
+    return null
   } else {
     return state
   }
