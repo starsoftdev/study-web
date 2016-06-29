@@ -20,9 +20,12 @@ export const ActionTypes = keymirror({
 
   FETCH_SITES: null,
   CLEAR_SITES: null,
+  FETCH_SITE: null,
+  CLEAR_SELECTED_SITE: null,
   FETCH_USERS: null,
   CLEAR_USERS: null,
   FETCH_USER: null,
+  CLEAR_SELECTED_USER: null,
   FETCH_STUDIES: null,
   FETCH_STUDY: null,
   CLEAR_STUDIES: null,
@@ -40,5 +43,5 @@ export const ActionTypes = keymirror({
   FETCH_NOTIFICATIONS: null,
   FETCH_UNREAD_NOTIFICATIONS_COUNT: null,
   SET_NOTIFICATION_AS_READ: null,
-  NOTIFICATION_ARRIVED: null,
+  NOTIFICATION_ARRIVED: null
 })
