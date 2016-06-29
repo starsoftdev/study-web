@@ -5,7 +5,7 @@ const StatsItem = ({ data }) => {
   return (
 		<div className="col-xs-12 col-sm-6 col-md-4 col-lg-3 center-wrapper">
 			<div className="stats-item">
-				<div className="stats-header">
+				<div className="stats-row stats-header">
 					<span className="description">{data.headerLabel}</span>
 					<span className="value">{data.headerValue}</span>
 				</div>
