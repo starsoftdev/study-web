@@ -5,7 +5,22 @@ import _ from 'lodash'
 const initialState = {
   isFetchingNotifications: true,
   notifications: [],
-  unreadNotificationsCount: 0
+  unreadNotificationsCount: 0,
+  patientSignUps: {
+    today: 0,
+    yesterday: 0,
+  },
+  patientMessages: {
+    unreadTexts: 0,
+    unreadEmails: 0,
+  },
+  studyListings: {
+    active: 0,
+    inactive: 0,
+  },
+  rewards: {
+    total: 0
+  },
 }
 
 export default function (state = initialState, action) {
@@ -62,11 +77,39 @@ export default function (state = initialState, action) {
       return state
 
     case ActionTypes.NOTIFICATION_ARRIVED:
-      return {
+      let newState = {
         ...state,
         notifications: [ action.data, ...state.notifications ],
         unreadNotificationsCount: state.unreadNotificationsCount + 1,
       }
+
+      switch (action.data.notification.type) {
+        case 'PATIENT_SIGN_UP':
+          newState = {
+            ...newState,
+            patientSignUps: {
+              today: newState.patientSignUps.today + 1,
+              yesterday: newState.patientSignUps.yesterday,
+            },
+          }
+
+          break
+      }
+
+      return newState
+
+    case ActionTypes.FETCH_PATIENT_SIGN_UPS:
+      if (action.status === 'succeeded') {
+        return {
+          ...state,
+          patientSignUps: {
+            today: action.payload.signUps.today,
+            yesterday: action.payload.signUps.yesterday,
+          },
+        }
+      }
+
+      return state
   }
 
   return state

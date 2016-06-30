@@ -35,6 +35,7 @@ export default (store) => {
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
         <Route path="dashboard" getComponent={lazyLoadComponent(Dashboard)} />
+        <Route path="home" getComponent={lazyLoadComponent(Home)} />
         <Route path="notifications" getComponent={lazyLoadComponent(Notifications)} />
         <Route path="order-irb-ad-creation" getComponent={lazyLoadComponent(OrderIRBAdCreation)} />
       </Route>
