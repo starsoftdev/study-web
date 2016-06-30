@@ -36,4 +36,5 @@ export const ActionTypes = keymirror({
   FETCH_UNREAD_NOTIFICATIONS_COUNT: null,
   SET_NOTIFICATION_AS_READ: null,
   NOTIFICATION_ARRIVED: null,
+  FETCH_PATIENT_SIGN_UPS: null,
 })
