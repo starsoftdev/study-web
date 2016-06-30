@@ -6,6 +6,7 @@ import NotFound from './screens/components/NotFound'
 
 import Dashboard from './screens/Dashboard'
 import GetProposal from './screens/GetProposal'
+import GetReferral from './screens/GetReferral'
 import GetReport from './screens/GetReport'
 import Home from './screens/Home'
 import Login from './screens/Login'
@@ -44,8 +45,9 @@ export default (store) => {
       <Route path="getproposal" getComponent={lazyLoadComponent(GetProposal)} />
       <Route path="login" getComponent={lazyLoadComponent(Login)} />
       <Route path="studies/:id" getComponent={lazyLoadComponent(Study)} />
-      <Route path="trials" getComponent={lazyLoadComponent(TrialListing)} />
       <Route path="studies/:id/patient-details" getComponent={lazyLoadComponent(PatientDetails)} />
+      <Route path="trials" getComponent={lazyLoadComponent(TrialListing)} />
+      <Route path="get-referral" getComponent={lazyLoadComponent(GetReferral)} />
 
       <Route path="*" component={NotFound} status={404} />
     </Route>
