@@ -16,6 +16,11 @@ export const layout = function (locals) {
   return (
     <fieldset>
       <div className="row">
+        <div className="col-md-8">
+          <h1>Refer</h1>
+        </div>
+      </div>
+      <div className="row">
         <label className="col-md-4">
           Contact Name <span className="asterisk">*</span>
         </label>

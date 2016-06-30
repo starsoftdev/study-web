@@ -11,14 +11,36 @@ import {
 
 const TCombForm = t.form.Form
 
+let NEW_FORM_DATA = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  companyName: '',
+  companyType: '',
+  message: '',
+}
+
 class GetProposalForm extends React.Component {
   static propTypes = {
+    formData: PropTypes.object,
     isSaving: PropTypes.bool,
     saveReferralForm: PropTypes.func,
   }
 
   constructor (props) {
     super(props)
+
+    const { formData } = this.props
+
+    if (formData) {
+      this.state = {
+        formData
+      }
+    } else {
+      this.state = {
+        formData: NEW_FORM_DATA
+      }
+    }
   }
 
   handleSubmit (ev) {
@@ -41,6 +63,7 @@ class GetProposalForm extends React.Component {
           ref="form"
           type={formSchema}
           options={formOptions}
+          value={this.state.formData}
         />
         <div className="form-group pull-right">
           <button
