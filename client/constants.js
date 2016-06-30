@@ -40,3 +40,9 @@ export const StudyTypes = {
   '352': 'Acne',
   '353': 'Actinic Keratosis',
 }
+
+export const ContactCompanyTypes = keymirror({
+  'Site': null,
+  'Sponsor': null,
+  'CRO': null,
+})
