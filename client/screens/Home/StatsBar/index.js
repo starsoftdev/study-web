@@ -22,7 +22,7 @@ class StatsBar extends React.Component {
 
     const patientSignUps = {
       headerLabel: 'PATIENT SIGN UPS',
-      headerValue: 119,
+      headerValue: notification.patientSignUps.today + notification.patientSignUps.yesterday,
       firstLabel: 'Today',
       firstValue: notification.patientSignUps.today,
       secondLabel: 'Yesterday',
