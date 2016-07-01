@@ -7,7 +7,7 @@ const StatsItem = ({ data }) => {
 			<div className="stats-item">
 				<div className="stats-row stats-header">
 					<span className="description">{data.headerLabel}</span>
-					<span className="value">{data.headerValue}</span>
+					<span className="value">Total - {data.headerValue}</span>
 				</div>
 				<div className="stats-row">
 					<span className="description">{data.firstLabel}</span>

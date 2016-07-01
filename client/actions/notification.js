@@ -54,3 +54,21 @@ export function fetchPatientSignUps () {
     dispatch(searchEntities('/patients/signUps', {}, cb))
   })
 }
+
+export function fetchPatientMessages () {
+  return asyncAction(ActionTypes.FETCH_PATIENT_MESSAGES, (cb, dispatch, getState) => {
+    dispatch(searchEntities('/patient/messages', {}, cb))
+  })
+}
+
+export function fetchStudyListingsCount () {
+  return asyncAction(ActionTypes.FETCH_STUDY_LISTINGS_COUNT, (cb, dispatch, getState) => {
+    dispatch(searchEntities('/studyListings', {}, cb))
+  })
+}
+
+export function fetchRewardsCount () {
+  return asyncAction(ActionTypes.FETCH_REWARDS_COUNT, (cb, dispatch, getState) => {
+    dispatch(searchEntities('/rewards', {}, cb))
+  })
+}

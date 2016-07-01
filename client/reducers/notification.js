@@ -110,6 +110,44 @@ export default function (state = initialState, action) {
       }
 
       return state
+
+    case ActionTypes.FETCH_PATIENT_MESSAGES:
+      if (action.status === 'succeeded') {
+        return {
+          ...state,
+          patientMessages: {
+            unreadTexts: action.payload.patientMessages.unreadTexts,
+            unreadEmails: action.payload.patientMessages.unreadEmails,
+          },
+        }
+      }
+
+      return state
+
+    case ActionTypes.FETCH_STUDY_LISTINGS_COUNT:
+      if (action.status === 'succeeded') {
+        return {
+          ...state,
+          studyListings: {
+            active: action.payload.studyListings.active,
+            inactive: action.payload.studyListings.inactive,
+          },
+        }
+      }
+
+      return state
+
+    case ActionTypes.FETCH_REWARDS_COUNT:
+      if (action.status === 'succeeded') {
+        return {
+          ...state,
+          rewards: {
+            total: action.payload.rewards.total,
+          },
+        }
+      }
+
+      return state
   }
 
   return state
