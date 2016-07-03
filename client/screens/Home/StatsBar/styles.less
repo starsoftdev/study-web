@@ -3,14 +3,14 @@
 	padding: 30px;
 	text-align: center;
 
-	.stats-item {		
+	.stats-item {
 		width: 300px;
 		font-size: 13px;
 		padding: 15px 0;
 		text-align: initial;		
 
 		.stats-header {
-			padding: 20px 20px;
+			height: 60px !important;
 			.description {
 				font-weight: bold;
 			}
@@ -19,9 +19,11 @@
 			}
 		}
 		.stats-row {
-			padding: 15px 20px;
+			height: 50px;
+			padding: 0 20px;
 			display: flex;
 			justify-content: space-between;
+			align-items: center;
 		}
 		&>:nth-child(odd) {
 			background: white;

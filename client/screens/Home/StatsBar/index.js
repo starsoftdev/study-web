@@ -20,6 +20,10 @@ class StatsBar extends React.Component {
     this.props.fetchPatientSignUps()
   }
 
+  handleRedeemClick = () => {
+    console.log ('redeem clicked')
+  }
+
   render () {
     const { notification } = this.props
 
@@ -62,7 +66,7 @@ class StatsBar extends React.Component {
           <StatsItem data={patientSignUps} />
           <StatsItem data={patientMessages} />
           <StatsItem data={studyListings} />
-          <StatsItem data={rewards} />
+          <StatsItem data={rewards} handleRedeemClick={() => this.handleRedeemClick()} />
         </div>
       </div>
     )
