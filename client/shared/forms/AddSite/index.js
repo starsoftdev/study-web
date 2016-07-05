@@ -1,9 +1,7 @@
 import React from 'react'
 import t from 'tcomb-form'
 
-let selectedSite = null
-export function getModel (selectedSiteInput) {
-  selectedSite = selectedSiteInput
+export function getModel () {
   const spec = {
     name: t.String,
     principalInvestigator: t.String,
@@ -63,9 +61,9 @@ export const options = {
   }
 }
 
-const EditSiteForm = {
+const AddSiteForm = {
   getModel,
   options
 }
 
-export default EditSiteForm
+export default AddSiteForm
