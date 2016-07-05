@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
 import t from 'tcomb-form'
-import { clearSelectedSite } from 'actions'
+import { clearSelectedSite, saveSite } from 'actions'
 
 import {
   getModel as getFormType,
@@ -20,7 +20,8 @@ export default class SitesList extends Component {
     sites: PropTypes.array,
     users: PropTypes.array,
     selectedSite: PropTypes.object,
-    clearSelectedSite: PropTypes.func
+    clearSelectedSite: PropTypes.func,
+    saveSite: PropTypes.func,
   }
 
   constructor (props) {
@@ -37,15 +38,15 @@ export default class SitesList extends Component {
 
   updateSite (ev) {
     ev.preventDefault()
-    const value = this.refs.form.getValue()
 
-    if (value) {
-      console.log(value)
+    const siteData = this.refs.form.getValue()
+    if (siteData) {
+      this.props.saveSite(this.props.selectedSite.id, siteData)
     }
   }
 
   render () {
-    const { sites, users, selectedSite } = this.props
+    const { sites, users, selectedSite, savingSite } = this.props
     const sitesListContents = sites.map((item, index) => (
       <SiteItem {...item} key={index} />
     ))
@@ -81,7 +82,12 @@ export default class SitesList extends Component {
                   <TCombForm ref="form" type={getFormType(selectedSite)} options={formOptions} />
                 </Modal.Body>
                 <Modal.Footer>
-                  <button type="submit" className="btn btn-default">UPDATE</button>
+                  <button type="submit" className="btn btn-default" disabled={savingSite}>
+                    {savingSite
+                      ? <span>Saving...</span>
+                      : <span>UPDATE</span>
+                    }
+                  </button>
                 </Modal.Footer>
               </form>
             </Modal>
@@ -100,7 +106,8 @@ const mapStateToProps = (state) => ({
   selectedSite: state.selectedSite
 })
 const mapDispatchToProps = {
-  clearSelectedSite
+  clearSelectedSite,
+  saveSite,
 }
 
 export default connect(

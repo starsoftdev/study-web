@@ -1,19 +1,16 @@
 import React from 'react'
 import t from 'tcomb-form'
 
-let selectedUser = null
-export function getModel (selectedUserInput, siteValues) {
-  selectedUser = selectedUserInput
+export function getModel (siteValues) {
   let enumFields = {}
   siteValues.forEach(function (siteIterator) {
     enumFields[siteIterator.id] = siteIterator.name
   })
   const SitesEnum = t.enums(enumFields)
   const spec = {
+    name: t.String,
     email: t.String,
     site: SitesEnum,
-    purchase: t.Boolean,
-    rewards: t.Boolean
   }
 
   return t.struct(spec)
@@ -35,9 +32,9 @@ export const options = {
   }
 }
 
-const EditUserForm = {
+const AddUserForm = {
   getModel,
   options
 }
 
-export default EditUserForm
+export default AddUserForm

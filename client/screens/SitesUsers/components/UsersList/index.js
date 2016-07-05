@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
 import t from 'tcomb-form'
-import { clearSelectedUser } from 'actions'
+import { clearSelectedUser, saveUser } from 'actions'
 
 import {
   getModel as getFormType,
@@ -20,7 +20,8 @@ export default class UsersList extends Component {
     users: PropTypes.array,
     sites: PropTypes.array,
     selectedUser: PropTypes.object,
-    clearSelectedUser: PropTypes.func
+    clearSelectedUser: PropTypes.func,
+    saveUser: PropTypes.func,
   }
 
   constructor (props) {
@@ -37,10 +38,10 @@ export default class UsersList extends Component {
 
   updateUser (ev) {
     ev.preventDefault()
-    const value = this.refs.form.getValue()
 
-    if (value) {
-      console.log(value)
+    const userData = this.refs.form.getValue()
+    if (userData) {
+      this.props.saveUser(this.props.selectedUser.id, userData)
     }
   }
 
@@ -49,7 +50,7 @@ export default class UsersList extends Component {
   }
 
   render () {
-    const { sites, users, selectedUser } = this.props
+    const { sites, users, selectedUser, savingUser } = this.props
     const usersListContents = users.map((item, index) => (
       <UserItem {...item} key={index} />
     ))
@@ -84,7 +85,12 @@ export default class UsersList extends Component {
                 </Modal.Body>
                 <Modal.Footer>
                   <button type="button" className="btn btn-default" onClick={this.removeUser.bind(this)}>REMOVE</button>
-                  <button type="submit" className="btn btn-default">UPDATE</button>
+                  <button type="submit" className="btn btn-default" disabled={savingUser}>
+                    {savingUser
+                      ? <span>Saving...</span>
+                      : <span>UPDATE</span>
+                    }
+                  </button>
                 </Modal.Footer>
               </form>
             </Modal>
@@ -103,7 +109,8 @@ const mapStateToProps = (state) => ({
   selectedUser: state.selectedUser
 })
 const mapDispatchToProps = {
-  clearSelectedUser
+  clearSelectedUser,
+  saveUser,
 }
 
 export default connect(
