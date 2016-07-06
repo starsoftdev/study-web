@@ -28,7 +28,7 @@
   "author": "",
   "license": "UNLICENSED",
   "engines": {
-    "node": ">= 4.1.0"
+    "node": ">= 6.2.0"
   },
   "dependencies": {
     "classnames": "^2.2.5",
