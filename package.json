@@ -10,17 +10,16 @@
     "clean": "rm -rf dist",
     "deploy": "npm run dist && gh-pages -d dist",
     "dist": "NODE_ENV=production npm run build",
+    "install": "node install.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prestart": "node scripts/check-pre-hook",
     "pre-commit": "PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:./node_modules/.bin eslint .",
     "pretest": "npm run lint",
     "start": "npm run build && node server/index.js",
-    "test": "npm run unit",
+    "test": "npm run unit && npm run browsers",
     "unit": "BABEL_ENV=test karma start",
-    "unit-debug": "BABEL_ENV=test karma start karma.conf.js --browsers=Chrome --single-run=false --debug",
-    "browsers": "nightwatch -e chrome --suiteRetries 3",
-    "chrome": "nightwatch -e chrome"
+    "unit-debug": "BABEL_ENV=test karma start karma.conf.js --browsers=Chrome --single-run=false --debug"
   },
   "repository": {
     "type": "git",
@@ -82,6 +81,7 @@
     "express": "^4.13.4",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
+    "git-validate": "^2.1.4",
     "html-webpack-plugin": "^2.16.1",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^1.0.1",
@@ -111,5 +111,11 @@
     "webpack-hot-middleware": "^2.10.0",
     "winston": "^2.2.0"
   },
+  "pre-commit#develop": [
+    "pre-commit"
+  ],
+  "pre-commit#master": [
+    "pre-commit"
+  ],
   "homepage": "https://github.com/sutdykik/web#readme"
 }
