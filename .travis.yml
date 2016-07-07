@@ -9,7 +9,7 @@ notifications:
       - http://ec2-52-90-254-67.compute-1.amazonaws.com:9001/notifications
     on_success: always
     on_failure: never
-    on_start: always
+    on_start: never
 
 sudo: required
 dist: trusty
