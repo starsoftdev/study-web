@@ -1,0 +1,33 @@
+.stats-bar {
+	background: #e8e8e8;
+	padding: 30px;
+	text-align: center;
+
+	.stats-item {		
+		width: 300px;
+		font-size: 15px;
+		padding: 15px 0;
+		text-align: initial;		
+
+		.stats-header {
+			padding: 20px 20px;
+			.description {
+				font-weight: bold;
+			}
+			.value {
+				font-size: 12px;
+			}
+		}
+		.stats-row {
+			padding: 15px 20px;
+			display: flex;
+			justify-content: space-between;
+		}
+		&>:nth-child(odd) {
+			background: white;
+		}
+		&>:nth-child(even) {
+			background: #f8f8f8;
+		}
+	}
+}

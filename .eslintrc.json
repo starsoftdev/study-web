@@ -63,7 +63,7 @@
     // ECMAScript 6
     "no-var": 2,
     "object-shorthand": 2,
-    "prefer-spread": 2,
+    "prefer-spread": 1,
 
     // eslint-plugin-react
     "react/display-name": 0,

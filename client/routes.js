@@ -6,6 +6,7 @@ import NotFound from './screens/components/NotFound'
 
 import Dashboard from './screens/Dashboard'
 import GetProposal from './screens/GetProposal'
+import GetReferral from './screens/GetReferral'
 import GetReport from './screens/GetReport'
 import Home from './screens/Home'
 import Login from './screens/Login'
@@ -36,6 +37,7 @@ export default (store) => {
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
         <Route path="dashboard" getComponent={lazyLoadComponent(Dashboard)} />
+        <Route path="home" getComponent={lazyLoadComponent(Home)} />
         <Route path="notifications" getComponent={lazyLoadComponent(Notifications)} />
         <Route path="order-irb-ad-creation" getComponent={lazyLoadComponent(OrderIRBAdCreation)} />
       </Route>
@@ -45,8 +47,9 @@ export default (store) => {
       <Route path="login" getComponent={lazyLoadComponent(Login)} />
       <Route path="sites-users" getComponent={lazyLoadComponent(SitesUsers)} />
       <Route path="studies/:id" getComponent={lazyLoadComponent(Study)} />
-      <Route path="trials" getComponent={lazyLoadComponent(TrialListing)} />
       <Route path="studies/:id/patient-details" getComponent={lazyLoadComponent(PatientDetails)} />
+      <Route path="trials" getComponent={lazyLoadComponent(TrialListing)} />
+      <Route path="get-referral" getComponent={lazyLoadComponent(GetReferral)} />
 
       <Route path="*" component={NotFound} status={404} />
     </Route>

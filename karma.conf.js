@@ -1,3 +1,5 @@
+'use strict'
+
 let createWebpackConfig = require('./webpack.make')
 
 module.exports = function (config) {

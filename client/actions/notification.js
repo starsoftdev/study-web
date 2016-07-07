@@ -36,7 +36,7 @@ export function setNotificationAsRead (notificationId) {
       read: true
     }
 
-    dispatch(updateEntity(`/user_notifications/${notificationId}`, postData, afterSave))
+    dispatch(updateEntity(`/userNotifications/${notificationId}`, postData, afterSave))
   })
 }
 
@@ -47,4 +47,10 @@ export function notificationArrived (notification) {
       data: notification
     })
   }
+}
+
+export function fetchPatientSignUps () {
+  return asyncAction(ActionTypes.FETCH_PATIENT_SIGN_UPS, (cb, dispatch, getState) => {
+    dispatch(searchEntities('/patients/signUps', {}, cb))
+  })
 }
