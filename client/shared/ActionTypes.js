@@ -25,13 +25,17 @@ export const ActionTypes = keymirror({
   UPDATE_SITE: null,
   CREATE_SITE: null,
   FINISH_SAVE_SITE: null,
+
   FETCH_USERS: null,
   CLEAR_USERS: null,
   FETCH_USER: null,
   CLEAR_SELECTED_USER: null,
   UPDATE_USER: null,
   CREATE_USER: null,
+  DELETE_USER: null,
   FINISH_SAVE_USER: null,
+  FINISH_DELETE_USER: null,
+
   FETCH_STUDIES: null,
   FETCH_STUDY: null,
   CLEAR_STUDIES: null,

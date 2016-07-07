@@ -27,7 +27,9 @@ export default class SitesUsers extends Component {
   static propTypes = {
     sites: PropTypes.array,
     saveSite: PropTypes.func,
+    savingSite: PropTypes.boolean,
     saveUser: PropTypes.func,
+    savingUser: PropTypes.boolean,
   }
 
   constructor (props) {
@@ -152,6 +154,8 @@ export default class SitesUsers extends Component {
 
 const mapStateToProps = (state) => ({
   sites: state.sites,
+  savingSite: state.savingSite,
+  savingUser: state.savingUser,
 })
 const mapDispatchToProps = {
   saveSite,

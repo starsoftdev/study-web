@@ -19,6 +19,7 @@ export clearUsers from './clearUsers'
 export fetchUser from './fetchUser'
 export clearSelectedUser from './clearSelectedUser'
 export saveUser from './saveUser'
+export removeUser from './removeUser'
 
 export fetchStudies from './fetchStudies'
 export fetchStudy from './fetchStudy'
