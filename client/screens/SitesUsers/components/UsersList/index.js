@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
 import t from 'tcomb-form'
-import { clearSelectedUser, saveUser } from 'actions'
+import { clearSelectedUser, saveUser, removeUser } from 'actions'
 
 import {
   getModel as getFormType,
@@ -21,7 +21,10 @@ export default class UsersList extends Component {
     sites: PropTypes.array,
     selectedUser: PropTypes.object,
     clearSelectedUser: PropTypes.func,
+    savingUser: PropTypes.boolean,
     saveUser: PropTypes.func,
+    removeUser: PropTypes.func,
+    removingUser: PropTypes.boolean,
   }
 
   constructor (props) {
@@ -46,11 +49,13 @@ export default class UsersList extends Component {
   }
 
   removeUser (ev) {
+    ev.preventDefault()
 
+    this.props.removeUser(this.props.selectedUser.id)
   }
 
   render () {
-    const { sites, users, selectedUser, savingUser } = this.props
+    const { sites, users, selectedUser, savingUser, removingUser } = this.props
     const usersListContents = users.map((item, index) => (
       <UserItem {...item} key={index} />
     ))
@@ -84,7 +89,12 @@ export default class UsersList extends Component {
                   <TCombForm ref="form" type={getFormType(selectedUser, sites)} options={formOptions} />
                 </Modal.Body>
                 <Modal.Footer>
-                  <button type="button" className="btn btn-default" onClick={this.removeUser.bind(this)}>REMOVE</button>
+                  <button type="button" className="btn btn-default" disabled={removingUser} onClick={this.removeUser.bind(this)}>
+                    {removingUser
+                      ? <span>Removing...</span>
+                      : <span>REMOVE</span>
+                    }
+                  </button>
                   <button type="submit" className="btn btn-default" disabled={savingUser}>
                     {savingUser
                       ? <span>Saving...</span>
@@ -106,11 +116,14 @@ export default class UsersList extends Component {
 const mapStateToProps = (state) => ({
   users: state.users,
   sites: state.sites,
-  selectedUser: state.selectedUser
+  selectedUser: state.selectedUser,
+  savingUser: state.savingUser,
+  removingUser: state.removingUser,
 })
 const mapDispatchToProps = {
   clearSelectedUser,
   saveUser,
+  removeUser,
 }
 
 export default connect(

@@ -21,6 +21,7 @@ export default class SitesList extends Component {
     users: PropTypes.array,
     selectedSite: PropTypes.object,
     clearSelectedSite: PropTypes.func,
+    savingSite: PropTypes.boolean,
     saveSite: PropTypes.func,
   }
 
@@ -103,7 +104,8 @@ export default class SitesList extends Component {
 const mapStateToProps = (state) => ({
   sites: state.sites,
   users: state.users,
-  selectedSite: state.selectedSite
+  selectedSite: state.selectedSite,
+  savingSite: state.savingSite,
 })
 const mapDispatchToProps = {
   clearSelectedSite,

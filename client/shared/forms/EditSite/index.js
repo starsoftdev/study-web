@@ -17,32 +17,32 @@ export function getModel (selectedSiteInput) {
 const nameTemplate = t.form.Form.templates.textbox.clone({
   renderInput: (locals) => {
     return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-                  placeholder={locals.placeholder} type={locals.type} value={locals.value}
-                  onChange={function (evt) { locals.onChange(evt.target.value) }} />)
+                   placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedSite)? selectedSite.name: null}
+                   onChange={function (evt) { locals.onChange(evt.target.value) }} />)
   }
 })
 
 const principalInvestigatorTemplate = t.form.Form.templates.textbox.clone({
   renderInput: (locals) => {
     return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-                  placeholder={locals.placeholder} type={locals.type} value={locals.value}
-                  onChange={function (evt) { locals.onChange(evt.target.value) }} />)
+                   placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedSite)? selectedSite.principalInvestigator: null}
+                   onChange={function (evt) { locals.onChange(evt.target.value) }} />)
   }
 })
 
 const phoneTemplate = t.form.Form.templates.textbox.clone({
   renderInput: (locals) => {
     return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-                  placeholder={locals.placeholder} type={locals.type} value={locals.value}
-                  onChange={function (evt) { locals.onChange(evt.target.value) }} />)
+                   placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedSite)? selectedSite.phone: null}
+                   onChange={function (evt) { locals.onChange(evt.target.value) }} />)
   }
 })
 
 const addressTemplate = t.form.Form.templates.textbox.clone({
   renderInput: (locals) => {
     return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-                  placeholder={locals.placeholder} type={locals.type} value={locals.value}
-                  onChange={function (evt) { locals.onChange(evt.target.value) }} />)
+                   placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedSite)? selectedSite.address: null}
+                   onChange={function (evt) { locals.onChange(evt.target.value) }} />)
   }
 })
 

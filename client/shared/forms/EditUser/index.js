@@ -22,8 +22,8 @@ export function getModel (selectedUserInput, siteValues) {
 const emailTemplate = t.form.Form.templates.textbox.clone({
   renderInput: (locals) => {
     return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-                  placeholder={locals.placeholder} type={locals.type} value={locals.value}
-                  onChange={function (evt) { locals.onChange(evt.target.value) }} />)
+                   placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedUser)? selectedUser.email: null}
+                   onChange={function (evt) { locals.onChange(evt.target.value) }} />)
   }
 })
 
