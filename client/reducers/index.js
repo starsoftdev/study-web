@@ -26,3 +26,4 @@ export submittingOrderIRBAd from './submittingOrderIRBAd'
 export notification from './notification'
 
 export savingReferralForm from './savingReferralForm'
+export notification from './notificationReducer'

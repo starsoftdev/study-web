@@ -18,9 +18,7 @@
     "start": "npm run build && node server/index.js",
     "test": "npm run unit",
     "unit": "BABEL_ENV=test karma start",
-    "unit-debug": "BABEL_ENV=test karma start karma.conf.js --browsers=Chrome --single-run=false --debug",
-    "browsers": "nightwatch -e chrome --suiteRetries 3",
-    "chrome": "nightwatch -e chrome"
+    "unit-debug": "BABEL_ENV=test karma start karma.conf.js --browsers=Chrome --single-run=false --debug"
   },
   "repository": {
     "type": "git",
@@ -50,6 +48,7 @@
     "react-redux": "^4.4.5",
     "react-router": "^2.4.0",
     "react-sortablejs": "^1.0.0",
+    "react-toastr": "^2.7.0",
     "react-tooltip": "^2.0.3",
     "react-youtube": "^6.1.0",
     "redux": "^3.5.2",
