@@ -27,9 +27,9 @@ export default class SitesUsers extends Component {
   static propTypes = {
     sites: PropTypes.array,
     saveSite: PropTypes.func,
-    savingSite: PropTypes.boolean,
+    savingSite: PropTypes.bool,
     saveUser: PropTypes.func,
-    savingUser: PropTypes.boolean,
+    savingUser: PropTypes.bool,
   }
 
   constructor (props) {
