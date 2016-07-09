@@ -21,7 +21,7 @@ export default class SitesList extends Component {
     users: PropTypes.array,
     selectedSite: PropTypes.object,
     clearSelectedSite: PropTypes.func,
-    savingSite: PropTypes.boolean,
+    savingSite: PropTypes.bool,
     saveSite: PropTypes.func,
   }
 

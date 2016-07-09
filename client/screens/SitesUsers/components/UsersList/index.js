@@ -21,10 +21,10 @@ export default class UsersList extends Component {
     sites: PropTypes.array,
     selectedUser: PropTypes.object,
     clearSelectedUser: PropTypes.func,
-    savingUser: PropTypes.boolean,
+    savingUser: PropTypes.bool,
     saveUser: PropTypes.func,
     removeUser: PropTypes.func,
-    removingUser: PropTypes.boolean,
+    removingUser: PropTypes.bool,
   }
 
   constructor (props) {
