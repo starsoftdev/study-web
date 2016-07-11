@@ -17,7 +17,19 @@ export function subscribe (socket, event, params, next) {
 export function unsubscribe (socket, params, next) {
   return asyncAction(ActionTypes.UNSUBSCRIBE_REQUEST, (cb, dispatch, getState) => {
     dispatch(() => {
-      socket.emit('unsubscribe', { params }, (err, data) => {
+      if (socket) {
+        socket.emit('unsubscribeFromAll', { params }, (err, data) => {
+          next(err, data, cb)
+        })
+      }
+    })
+  })
+}
+
+export function unsubscribeCurrent (socket, event, params, next) {
+  return asyncAction(ActionTypes.UNSUBSCRIBE_REQUEST, (cb, dispatch, getState) => {
+    dispatch(() => {
+      socket.emit('unsubscribeCurrent', { event, params }, (err, data) => {
         next(err, data, cb)
       })
     })
@@ -39,7 +51,7 @@ export function displayNotification (notification) {
   return {
     type: ActionTypes.RECEIVE_MESSAGE,
     payload: Object.assign({}, {
-      event:  notification.event,
+      event: notification.event,
       event_params: notification.event_params,
       entity_ref: notification.entity_ref
     })
