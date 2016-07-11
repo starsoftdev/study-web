@@ -14,7 +14,7 @@ export function subscribe (socket, event, params, next) {
   })
 }
 
-export function unsubscribe (socket, params, next) {
+export function unsubscribeFromAll (socket, params, next) {
   return asyncAction(ActionTypes.UNSUBSCRIBE_REQUEST, (cb, dispatch, getState) => {
     dispatch(() => {
       if (socket) {
