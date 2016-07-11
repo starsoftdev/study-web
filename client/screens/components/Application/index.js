@@ -5,7 +5,7 @@ import DocumentTitle from 'react-document-title'
 import {
   notificationArrived,
   subscribe,
-  unsubscribe,
+  unsubscribeFromAll,
   displayNotification
 } from 'actions'
 
@@ -14,6 +14,7 @@ import './styles.less'
 import TopBar from './TopBar'
 import BottomBar from './BottomBar'
 import GlobalNotifications from '../globalNotifications'
+import Dispatcher from '../../../utils/dispatcher'
 
 class Application extends React.Component {
   static propTypes = {
@@ -21,7 +22,8 @@ class Application extends React.Component {
     location: PropTypes.any,
     children: PropTypes.any,
     subscribe: PropTypes.func,
-    unsubscribe: PropTypes.func,
+    unsubscribeFromAll: PropTypes.func,
+    unsubscribeCurrent: PropTypes.func,
     notificationArrived: PropTypes.func,
     displayNotification: PropTypes.func
   }
@@ -55,26 +57,30 @@ class Application extends React.Component {
   }
 
   componentDidMount () {
-    this.pathname = this.props.location.pathname
+    const scope = this
+    this.appDispatcher = new Dispatcher()
     this.configureSocket(this.props)// comes here when loading from direct url change
     this.subscribe(this.props)
+
+    this.appDispatcher.register(function (payload) {
+      if (payload.actionType === 'changePathname') {
+
+        scope.props.unsubscribeFromAll(scope.io, { pathname: scope.props.location.pathname }, (err, data, cb) => {
+          cb(err, data)
+
+          scope.io.disconnect()
+          scope.io = null
+
+          scope.configureSocket(scope.props)
+          scope.subscribe(scope.props)
+        })
+      }
+    })
   }
 
   componentWillReceiveProps (nextProps) {
-    if (this.pathname !== this.props.location.pathname) {
-      this.props.unsubscribe(this.io, { pathname: this.pathname }, (err, data, cb) => {
-        cb(err, data)
-
-        this.io.disconnect()
-        this.io = null
-        this.pathname = this.props.location.pathname
-        this.configureSocket(nextProps)
-        this.subscribe(nextProps)
-      })
-    } else {
-      this.configureSocket(nextProps)
-      this.subscribe(nextProps)
-    }
+    this.configureSocket(nextProps)
+    this.subscribe(nextProps)
   }
 
   subscribe (props) {
@@ -89,6 +95,17 @@ class Application extends React.Component {
             props.displayNotification(notification)
           })
         })
+
+      if (props.location.pathname === '/dashboard') {
+        props.subscribe(this.io, 'update_study',
+          { pathname: props.location.pathname }, (err, data, cb) => {
+            cb(err, data)
+
+            this.io.on('notification', (notification) => {
+              props.displayNotification(notification)
+            })
+          })
+      }
     })
   }
 
@@ -140,7 +157,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   notificationArrived,
   subscribe,
-  unsubscribe,
+  unsubscribeFromAll,
   displayNotification
 }
 
