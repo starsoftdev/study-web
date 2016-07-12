@@ -4,9 +4,13 @@ import t from 'tcomb-form'
 export function getModel () {
   const spec = {
     name: t.String,
-    principalInvestigator: t.String,
+    piFirstName: t.String,
+    piLastName: t.String,
     phone: t.String,
-    address: t.String
+    address: t.String,
+    city: t.String,
+    state: t.String,
+    zip: t.String,
   }
 
   return t.struct(spec)
@@ -20,7 +24,15 @@ const nameTemplate = t.form.Form.templates.textbox.clone({
   }
 })
 
-const principalInvestigatorTemplate = t.form.Form.templates.textbox.clone({
+const piFirstNameTemplate = t.form.Form.templates.textbox.clone({
+  renderInput: (locals) => {
+    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
+                  placeholder={locals.placeholder} type={locals.type} value={locals.value}
+                  onChange={function (evt) { locals.onChange(evt.target.value) }} />)
+  }
+})
+
+const piLastNameTemplate = t.form.Form.templates.textbox.clone({
   renderInput: (locals) => {
     return (<input disabled={locals.disabled} className="form-control" name={locals.name}
                   placeholder={locals.placeholder} type={locals.type} value={locals.value}
@@ -44,19 +56,59 @@ const addressTemplate = t.form.Form.templates.textbox.clone({
   }
 })
 
+const cityTemplate = t.form.Form.templates.textbox.clone({
+  renderInput: (locals) => {
+    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
+                  placeholder={locals.placeholder} type={locals.type} value={locals.value}
+                  onChange={function (evt) { locals.onChange(evt.target.value) }} />)
+  }
+})
+
+const stateTemplate = t.form.Form.templates.textbox.clone({
+  renderInput: (locals) => {
+    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
+                  placeholder={locals.placeholder} type={locals.type} value={locals.value}
+                  onChange={function (evt) { locals.onChange(evt.target.value) }} />)
+  }
+})
+
+const zipTemplate = t.form.Form.templates.textbox.clone({
+  renderInput: (locals) => {
+    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
+                  placeholder={locals.placeholder} type={locals.type} value={locals.value}
+                  onChange={function (evt) { locals.onChange(evt.target.value) }} />)
+  }
+})
+
 export const options = {
   fields: {
     name: {
-      template: nameTemplate
+      template: nameTemplate,
     },
-    principalInvestigator: {
-      template: principalInvestigatorTemplate
+    piFirstName: {
+      template: piFirstNameTemplate,
+      label: 'PI First Name',
+    },
+    piLastName: {
+      template: piLastNameTemplate,
+      label: 'PI Last Name',
     },
     phone: {
-      template: phoneTemplate
+      template: phoneTemplate,
     },
     address: {
-      template: addressTemplate
+      template: addressTemplate,
+    },
+    city: {
+      template: cityTemplate,
+    },
+    state: {
+      template: stateTemplate,
+      label: 'State / Province',
+    },
+    zip: {
+      template: zipTemplate,
+      label: 'Postal Code',
     }
   }
 }

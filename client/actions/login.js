@@ -6,18 +6,28 @@ function loginRequest (credentials, cb) {
   return apiCall('/users/login', { method: 'post', body: credentials }, cb)
 }
 
+function getCurrentUserInfo (authData, cb) {
+  const queryString = encodeURIComponent('filter') + '=' +
+    encodeURIComponent('{"include":"roleForClient"}') + '&access_token=' + authData.id
+  return apiCall('/users/' + authData.userId + '?' + queryString, { method: 'get' }, cb)
+}
+
 export default function login (credentials) {
   return asyncAction(ActionTypes.LOGIN, (cb, dispatch, getState) => {
     dispatch(loginRequest(credentials, (error, authData) => {
       if (error) {
-        cb(error)
+        return cb(error)
       }
-      else {
+      dispatch(getCurrentUserInfo(authData, (err, userInfo) => {
+        if (err) {
+          return cb(err)
+        }
+        authData.userInfo = userInfo
         cb(null, {
           ...authData,
           lastRefresh: new Date().valueOf()
         })
-      }
+      }))
     }))
   })
 }

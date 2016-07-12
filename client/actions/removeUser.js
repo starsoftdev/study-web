@@ -4,21 +4,26 @@ import { ActionTypes } from 'ActionTypes'
 import { deleteEntity } from 'utils/entityReadWrite'
 import asyncAction from 'utils/asyncAction'
 
-export default function removeUser (userId) {
+export default function removeUser (id) {
   const actionType = ActionTypes.DELETE_USER
 
-  return asyncAction(actionType, { userId }, (cb, dispatch, getState) => {
+  return asyncAction(actionType, { id }, (cb, dispatch, getState) => {
 
     function afterDelete (err, payload) {
       cb(err, payload)
-      if (!err) {
-        dispatch({
-          type: ActionTypes.FINISH_DELETE_USER,
-          userData: payload
-        })
+      let userResultData = {}
+      userResultData = payload.clientRole
+      userResultData.user = payload.user
+      const result = {
+        userResultData
       }
+
+      dispatch({
+        type: ActionTypes.FINISH_DELETE_USER,
+        userData: result
+      })
     }
 
-    dispatch(deleteEntity('/users/' + userId, null, afterDelete))
+    dispatch(deleteEntity('/users/' + id, null, afterDelete))
   })
 }

@@ -15,6 +15,7 @@ const TCombForm = t.form.Form
 
 class SearchSitesForm extends React.Component {
   static propTypes = {
+    currentUser: PropTypes.object,
     isFetching: PropTypes.bool,
     fetchSites: PropTypes.func,
     clearSites: PropTypes.func
@@ -35,7 +36,7 @@ class SearchSitesForm extends React.Component {
     const value = this.refs.form.getValue()
 
     if (value) {
-      this.props.fetchSites(value)
+      this.props.fetchSites(this.props.currentUser, value)
     }
   }
 
@@ -64,7 +65,8 @@ class SearchSitesForm extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  isFetching: state.fetchingSites
+  currentUser: state.authorization.authData,
+  isFetching: state.fetchingSites,
 })
 const mapDispatchToProps = {
   fetchSites,

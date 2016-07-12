@@ -2,11 +2,12 @@ import { bind } from 'redux-effects'
 
 import { ActionTypes } from 'ActionTypes'
 import { searchEntities } from 'utils/entityReadWrite'
-import history from 'utils/history'
 import asyncAction from 'utils/asyncAction'
 
-export default function fetchUsers (searchParams) {
+export default function fetchUsers (currentUser, searchParams) {
   return asyncAction(ActionTypes.FETCH_USERS, (cb, dispatch, getState) => {
-    dispatch(searchEntities('/users', searchParams, cb))
+    searchParams = JSON.parse(JSON.stringify(searchParams))
+    searchParams.filter = '{"include":"user"}'
+    dispatch(searchEntities('/clients/' + currentUser.userInfo.roleForClient.client_id + '/roles', searchParams, cb))
   })
 }

@@ -25,6 +25,7 @@ const TCombForm = t.form.Form
 export default class SitesUsers extends Component {
 
   static propTypes = {
+    currentUser: PropTypes.object,
     sites: PropTypes.array,
     saveSite: PropTypes.func,
     savingSite: PropTypes.bool,
@@ -62,7 +63,7 @@ export default class SitesUsers extends Component {
 
     const siteData = this.refs.siteForm.getValue()
     if (siteData) {
-      this.props.saveSite(null, siteData)
+      this.props.saveSite(this.props.currentUser, null, siteData)
     }
   }
 
@@ -71,7 +72,18 @@ export default class SitesUsers extends Component {
 
     const userData = this.refs.userForm.getValue()
     if (userData) {
-      this.props.saveUser(null, userData)
+      const userInput = {
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        siteId: userData.siteId,
+        clientRole: {
+          purchase: userData.purchase,
+          reward: userData.reward,
+        }
+      }
+
+      this.props.saveUser(this.props.currentUser, null, userInput)
     }
   }
 
@@ -153,6 +165,7 @@ export default class SitesUsers extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  currentUser: state.authorization.authData,
   sites: state.sites,
   savingSite: state.savingSite,
   savingUser: state.savingUser,

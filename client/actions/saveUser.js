@@ -4,25 +4,32 @@ import { ActionTypes } from 'ActionTypes'
 import { createEntity, updateEntity } from 'utils/entityReadWrite'
 import asyncAction from 'utils/asyncAction'
 
-export default function saveUser (userId, userData) {
+export default function saveUser (currentUser, userId, userData) {
   const actionType = userId? ActionTypes.UPDATE_USER: ActionTypes.CREATE_USER
 
   return asyncAction(actionType, { userId, userData }, (cb, dispatch, getState) => {
 
     function afterSave (err, payload) {
       cb(err, payload)
-      if (!err) {
-        dispatch({
-          type: ActionTypes.FINISH_SAVE_USER,
-          userData: payload
-        })
+      const operation = (userData.siteId === 0)? 'save': 'delete'
+      let userResultData = {}
+      userResultData = payload.clientRole
+      userResultData.user = payload.user
+      const result = {
+        operation,
+        userResultData,
       }
+
+      dispatch({
+        type: ActionTypes.FINISH_SAVE_USER,
+        userData: result
+      })
     }
 
     if (userId) {
-      dispatch(updateEntity('/users/' + userId, userData, afterSave))
+      dispatch(updateEntity('/clients/' + currentUser.userInfo.roleForClient.client_id + '/updateUserWithClientRole', userData, afterSave))
     } else {
-      dispatch(createEntity('/users', userData, afterSave))
+      dispatch(createEntity('/clients/' + currentUser.userInfo.roleForClient.client_id + '/addUserWithClientRole', userData, afterSave))
     }
   })
 }

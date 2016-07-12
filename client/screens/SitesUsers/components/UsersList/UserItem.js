@@ -7,9 +7,10 @@ import ActivityIcon from 'components/ActivityIcon'
 class UserItem extends Component {
   static propTypes = {
     id: PropTypes.number,
-    username: PropTypes.string,
-    email: PropTypes.string,
-    access: PropTypes.string,
+    name: PropTypes.string,
+    reward: PropTypes.bool,
+    purchase: PropTypes.bool,
+    user: PropTypes.object,
     isFetching: PropTypes.bool,
     fetchUser: PropTypes.func
   }
@@ -18,28 +19,43 @@ class UserItem extends Component {
     super(props)
   }
 
-  editUserItem (ev) {
+  editUser (ev) {
     ev.preventDefault()
 
-    this.props.fetchUser(this.props.id)
+    this.props.fetchUser(this.props.user.id)
   }
 
   render () {
     const { isFetching } = this.props
+    let accessStr = ''
+
+    if (this.props.name === 'Super Admin') {
+      accessStr = this.props.name
+    } else {
+      if (this.props.purchase && this.props.reward) {
+        accessStr = 'All Access'
+      } else if (this.props.purchase && !this.props.reward) {
+        accessStr = 'Purchase'
+      } else if (!this.props.purchase && this.props.reward) {
+        accessStr = 'Rewards'
+      } else {
+        accessStr = 'No Access'
+      }
+    }
 
     return (
       <tr className="user-container">
-        <td className="username">
-          <span>{this.props.username}</span>
+        <td className="name">
+          <span>{this.props.user.firstName} {this.props.user.lastName}</span>
         </td>
         <td className="email">
-          <span>{this.props.email}</span>
+          <span>{this.props.user.email}</span>
         </td>
         <td className="access">
-          <span>{this.props.access}</span>
+          <span>{accessStr}</span>
         </td>
         <td className="action">
-          <button type="button" className="btn btn-default btn-edit-user pull-right" onClick={this.editUserItem.bind(this)} disabled={isFetching}>
+          <button type="button" className="btn btn-default btn-edit-user pull-right" onClick={this.editUser.bind(this)} disabled={isFetching}>
             {isFetching
               ? <span><ActivityIcon /></span>
               : <span>Edit</span>

@@ -7,7 +7,7 @@ export default function users (state=[], action) {
 
   if (action.userData) {
     userData = action.userData
-    foundUserIndex = _.findIndex(state, { id: userData.id })
+    foundUserIndex = _.findIndex(state, { id: userData.userResultData.id })
   }
 
   switch (action.type) {
@@ -16,15 +16,20 @@ export default function users (state=[], action) {
     case ActionTypes.FETCH_USERS:
       if (action.status === 'succeeded') {
         return action.payload
-      } else {
-        return []
       }
+
+      return state
     case ActionTypes.FINISH_SAVE_USER:
-      if (foundUserIndex < 0) {
-        state.push(userData)
-      } else {
-        state[foundUserIndex] = userData
+      if (userData.operation === 'delete') {
+        state.splice(foundUserIndex, 1)
+      } else if (userData.operation === 'save') {
+        if (foundUserIndex < 0) {
+          state.push(userData.userResultData)
+        } else {
+          state[foundUserIndex] = userData.userResultData
+        }
       }
+
       return state
     case ActionTypes.FINISH_DELETE_USER:
       if (foundUserIndex > -1) {
