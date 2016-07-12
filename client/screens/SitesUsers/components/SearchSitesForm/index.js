@@ -18,7 +18,7 @@ class SearchSitesForm extends React.Component {
     currentUser: PropTypes.object,
     isFetching: PropTypes.bool,
     fetchSites: PropTypes.func,
-    clearSites: PropTypes.func
+    clearSites: PropTypes.func,
   }
 
   constructor (props) {
@@ -70,7 +70,7 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = {
   fetchSites,
-  clearSites
+  clearSites,
 }
 
 export default connect(

@@ -18,7 +18,7 @@ class SearchUsersForm extends React.Component {
     currentUser: PropTypes.object,
     isFetching: PropTypes.bool,
     fetchUsers: PropTypes.func,
-    clearUsers: PropTypes.func
+    clearUsers: PropTypes.func,
   }
 
   constructor (props) {
@@ -70,7 +70,7 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = {
   fetchUsers,
-  clearUsers
+  clearUsers,
 }
 
 export default connect(

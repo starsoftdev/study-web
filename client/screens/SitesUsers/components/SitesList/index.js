@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
 import t from 'tcomb-form'
-import { clearSelectedSite, saveSite } from 'actions'
+import { clearSelectedSite, saveSite, fetchSites, clearSites } from 'actions'
 
 import {
   getModel as getFormType,
@@ -23,10 +23,19 @@ export default class SitesList extends Component {
     clearSelectedSite: PropTypes.func,
     savingSite: PropTypes.bool,
     saveSite: PropTypes.func,
+    fetchSites: PropTypes.func,
+    clearSites: PropTypes.func,
   }
 
   constructor (props) {
     super(props)
+    this.props.fetchSites(this.props.currentUser, {})
+  }
+
+  componentWillUnmount () {
+    // Redux store keeps `sites` reducer, so need to clear them
+    // Not sure we actually need this behavior
+    this.props.clearSites()
   }
 
   modalShouldBeShown () {
@@ -110,6 +119,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   clearSelectedSite,
   saveSite,
+  fetchSites,
+  clearSites,
 }
 
 export default connect(

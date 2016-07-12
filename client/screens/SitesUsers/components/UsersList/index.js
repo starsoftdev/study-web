@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
 import t from 'tcomb-form'
-import { clearSelectedUser, saveUser, removeUser } from 'actions'
+import { clearSelectedUser, saveUser, removeUser, fetchUsers, clearUsers } from 'actions'
 
 import {
   getModel as getFormType,
@@ -26,10 +26,19 @@ export default class UsersList extends Component {
     saveUser: PropTypes.func,
     removeUser: PropTypes.func,
     removingUser: PropTypes.bool,
+    fetchUsers: PropTypes.func,
+    clearUsers: PropTypes.func,
   }
 
   constructor (props) {
     super(props)
+    this.props.fetchUsers(this.props.currentUser, {})
+  }
+
+  componentWillUnmount () {
+    // Redux store keeps `users` reducer, so need to clear them
+    // Not sure we actually need this behavior
+    this.props.clearUsers()
   }
 
   modalShouldBeShown () {
@@ -137,6 +146,8 @@ const mapDispatchToProps = {
   clearSelectedUser,
   saveUser,
   removeUser,
+  fetchUsers,
+  clearUsers,
 }
 
 export default connect(
