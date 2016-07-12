@@ -8,7 +8,7 @@ Create a file named `.env` at the root of this project that includes the followi
 ```
 NODE_ENV=development
 PORT=8080
-API_URL=http://localhost:3000/api
+API_URL=http://localhost:3000/api/v1
 HOST_URL=http://localhost:3000
 ```
 
