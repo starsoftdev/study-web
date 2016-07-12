@@ -27,3 +27,4 @@ export notification from './notification'
 
 export savingReferralForm from './savingReferralForm'
 export notification from './notificationReducer'
+export fetchingAvailNumbers from './fetchingAvailNumbers'
