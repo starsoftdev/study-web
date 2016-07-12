@@ -49,7 +49,7 @@ export default class UsersList extends Component {
         firstName: userData.firstName,
         lastName: userData.lastName,
         email: userData.email,
-        siteId: userData.siteId,
+        siteId: parseInt(userData.siteId),
         clientRole: {
           purchase: userData.purchase,
           reward: userData.reward,

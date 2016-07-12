@@ -27,6 +27,8 @@ export default function saveUser (currentUser, userId, userData) {
     }
 
     if (userId) {
+      userData = JSON.parse(JSON.stringify(userData))
+      userData.userId = userId
       dispatch(updateEntity('/clients/' + currentUser.userInfo.roleForClient.client_id + '/updateUserWithClientRole', userData, afterSave))
     } else {
       dispatch(createEntity('/clients/' + currentUser.userInfo.roleForClient.client_id + '/addUserWithClientRole', userData, afterSave))

@@ -17,6 +17,7 @@ export default function saveSite (currentUser, siteId, siteData) {
       })
     }
 
+    siteData = JSON.parse(JSON.stringify(siteData))
     siteData.client_id = currentUser.userInfo.roleForClient.client_id
     if (siteId) {
       dispatch(updateEntity('/sites/' + siteId, siteData, afterSave))
