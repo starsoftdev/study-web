@@ -41,5 +41,6 @@ export const ActionTypes = keymirror({
   SAVE_REFERRAL_FORM: null,
   SUBSCRIBE_REQUEST: null,
   UNSUBSCRIBE_REQUEST: null,
-  RECEIVE_MESSAGE: null
+  RECEIVE_MESSAGE: null,
+  FETCH_AVAIL_NUMBERS: null
 })

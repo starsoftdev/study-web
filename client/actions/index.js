@@ -23,6 +23,7 @@ export fetchStudyCategories from './fetchStudyCategories'
 export submitOrderIRBAd from './submitOrderIRBAd'
 
 export saveReferralForm from './saveReferralForm'
+export fetchAvailNumbers from './fetchAvailNumbers'
 export * from './notificationActions'
 
 export * from './notification'
