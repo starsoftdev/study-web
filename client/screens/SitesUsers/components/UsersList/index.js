@@ -17,8 +17,9 @@ const TCombForm = t.form.Form
 export default class UsersList extends Component {
 
   static propTypes = {
-    users: PropTypes.array,
+    currentUser: PropTypes.object,
     sites: PropTypes.array,
+    users: PropTypes.array,
     selectedUser: PropTypes.object,
     clearSelectedUser: PropTypes.func,
     savingUser: PropTypes.bool,
@@ -44,7 +45,18 @@ export default class UsersList extends Component {
 
     const userData = this.refs.form.getValue()
     if (userData) {
-      this.props.saveUser(this.props.selectedUser.id, userData)
+      const userInput = {
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        siteId: userData.siteId,
+        clientRole: {
+          purchase: userData.purchase,
+          reward: userData.reward,
+        }
+      }
+
+      this.props.saveUser(this.props.currentUser, this.props.selectedUser.id, userInput)
     }
   }
 
@@ -64,7 +76,7 @@ export default class UsersList extends Component {
       return (
         <div className="row">
           <div className="col-sm-12">
-            <h3>Users</h3>
+            <h3>ADMINS</h3>
             <div className="table-responsive">
               <table className="table table-striped">
                 <thead>
@@ -86,7 +98,7 @@ export default class UsersList extends Component {
                   <Modal.Title>Edit User</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <TCombForm ref="form" type={getFormType(selectedUser, sites)} options={formOptions} />
+                  <TCombForm ref="form" type={getFormType(sites, selectedUser)} options={formOptions} />
                 </Modal.Body>
                 <Modal.Footer>
                   <button type="button" className="btn btn-default" disabled={removingUser} onClick={this.removeUser.bind(this)}>
@@ -114,8 +126,9 @@ export default class UsersList extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  users: state.users,
+  currentUser: state.authorization.authData,
   sites: state.sites,
+  users: state.users,
   selectedUser: state.selectedUser,
   savingUser: state.savingUser,
   removingUser: state.removingUser,

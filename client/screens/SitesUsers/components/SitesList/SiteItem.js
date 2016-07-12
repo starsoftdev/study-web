@@ -8,10 +8,11 @@ class SiteItem extends Component {
   static propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
-    principalInvestigator: PropTypes.string,
+    piFirstName: PropTypes.string,
+    piLastName: PropTypes.string,
     phone: PropTypes.string,
     address: PropTypes.string,
-    assignedUsers: PropTypes.array,
+    users: PropTypes.array,
     isFetching: PropTypes.bool,
     fetchSite: PropTypes.func
   }
@@ -27,10 +28,7 @@ class SiteItem extends Component {
   }
 
   render () {
-    const { isFetching, assignedUsers } = this.props
-    const assignedUsersContent = assignedUsers.map((item, index) => (
-      <span key={index}>{item.name}</span>
-    ))
+    const { isFetching, users } = this.props
 
     return (
       <tr className="site-container">
@@ -38,7 +36,7 @@ class SiteItem extends Component {
           <span>{this.props.name}</span>
         </td>
         <td className="principal-investigator">
-          <span>{this.props.principalInvestigator}</span>
+          <span>{this.props.piFirstName} {this.props.piLastName}</span>
         </td>
         <td className="phone">
           <span>{this.props.phone}</span>
@@ -47,7 +45,7 @@ class SiteItem extends Component {
           <span>{this.props.address}</span>
         </td>
         <td className="assigned-users">
-          {assignedUsersContent}
+          <span>Assigned User</span>
         </td>
         <td className="action">
           <button type="button" className="btn btn-default btn-edit-site pull-right" onClick={this.editSiteItem.bind(this)} disabled={isFetching}>

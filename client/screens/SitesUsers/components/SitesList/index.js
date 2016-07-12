@@ -17,8 +17,8 @@ const TCombForm = t.form.Form
 export default class SitesList extends Component {
 
   static propTypes = {
+    currentUser: PropTypes.object,
     sites: PropTypes.array,
-    users: PropTypes.array,
     selectedSite: PropTypes.object,
     clearSelectedSite: PropTypes.func,
     savingSite: PropTypes.bool,
@@ -42,12 +42,12 @@ export default class SitesList extends Component {
 
     const siteData = this.refs.form.getValue()
     if (siteData) {
-      this.props.saveSite(this.props.selectedSite.id, siteData)
+      this.props.saveSite(this.props.currentUser, this.props.selectedSite.id, siteData)
     }
   }
 
   render () {
-    const { sites, users, selectedSite, savingSite } = this.props
+    const { sites, selectedSite, savingSite } = this.props
     const sitesListContents = sites.map((item, index) => (
       <SiteItem {...item} key={index} />
     ))
@@ -56,7 +56,7 @@ export default class SitesList extends Component {
       return (
         <div className="row">
           <div className="col-sm-12">
-            <h3>Sites</h3>
+            <h3>SITE LOCATIONS</h3>
             <div className="table-responsive">
               <table className="table table-striped">
                 <thead>
@@ -102,8 +102,8 @@ export default class SitesList extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  currentUser: state.authorization.authData,
   sites: state.sites,
-  users: state.users,
   selectedSite: state.selectedSite,
   savingSite: state.savingSite,
 })
