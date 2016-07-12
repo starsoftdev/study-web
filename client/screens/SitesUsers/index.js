@@ -64,6 +64,7 @@ export default class SitesUsers extends Component {
     const siteData = this.refs.siteForm.getValue()
     if (siteData) {
       this.props.saveSite(this.props.currentUser, null, siteData)
+      this.closeAddSiteModal()
     }
   }
 
@@ -76,7 +77,7 @@ export default class SitesUsers extends Component {
         firstName: userData.firstName,
         lastName: userData.lastName,
         email: userData.email,
-        siteId: userData.siteId,
+        siteId: parseInt(userData.siteId),
         clientRole: {
           purchase: userData.purchase,
           reward: userData.reward,
@@ -84,6 +85,7 @@ export default class SitesUsers extends Component {
       }
 
       this.props.saveUser(this.props.currentUser, null, userInput)
+      this.closeAddUserModal()
     }
   }
 

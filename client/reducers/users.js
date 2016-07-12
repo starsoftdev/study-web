@@ -5,11 +5,6 @@ export default function users (state=[], action) {
   let userData = null
   let foundUserIndex = -1
 
-  if (action.userData) {
-    userData = action.userData
-    foundUserIndex = _.findIndex(state, { id: userData.userResultData.id })
-  }
-
   switch (action.type) {
     case ActionTypes.CLEAR_USERS:
       return []
@@ -20,6 +15,9 @@ export default function users (state=[], action) {
 
       return state
     case ActionTypes.FINISH_SAVE_USER:
+      userData = action.userData
+      foundUserIndex = _.findIndex(state, { id: userData.userResultData.id })
+
       if (userData.operation === 'delete') {
         state.splice(foundUserIndex, 1)
       } else if (userData.operation === 'save') {
@@ -35,6 +33,8 @@ export default function users (state=[], action) {
       if (foundUserIndex > -1) {
         state.splice(foundUserIndex, 1)
       }
+
+      return state
   }
 
   return state
