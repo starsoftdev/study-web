@@ -12,8 +12,7 @@ export default function saveUser (currentUser, userId, userData) {
     function afterSave (err, payload) {
       cb(err, payload)
       const operation = (userData.siteId === 0)? 'save': 'delete'
-      let userResultData = {}
-      userResultData = payload.clientRole
+      let userResultData = payload.clientRole
       userResultData.user = payload.user
       const result = {
         operation,

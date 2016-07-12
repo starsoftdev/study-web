@@ -5,7 +5,8 @@ const creatingSite = asyncActionIsFetching(ActionTypes.CREATE_SITE)
 const updatingSite = asyncActionIsFetching(ActionTypes.UPDATE_SITE)
 
 export default function savingSite (state = false, action) {
-  state = creatingSite(state, action)
-  state = updatingSite(state, action)
-  return state
+  let newState = null
+  newState = creatingSite(state, action)
+  newState = updatingSite(state, action)
+  return newState
 }

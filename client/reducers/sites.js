@@ -14,13 +14,14 @@ export default function sites (state=[], action) {
     case ActionTypes.FINISH_SAVE_SITE:
       const siteData = action.siteData
       const foundSiteIndex = _.findIndex(state, { id: siteData.id })
+      let newState = _.map(state, _.clone)
       if (foundSiteIndex < 0) {
-        state.push(siteData)
+        newState.push(siteData)
       } else {
-        state[foundSiteIndex] = siteData
+        newState[foundSiteIndex] = siteData
       }
 
-      return state
+      return newState
   }
 
   return state

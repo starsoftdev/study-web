@@ -11,8 +11,7 @@ export default function removeUser (id) {
 
     function afterDelete (err, payload) {
       cb(err, payload)
-      let userResultData = {}
-      userResultData = payload.clientRole
+      let userResultData = payload.clientRole
       userResultData.user = payload.user
       const result = {
         userResultData
