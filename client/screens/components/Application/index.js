@@ -87,17 +87,8 @@ class Application extends React.Component {
     const event = this.getEventType()
 
     this.connect(props, 'nsp', () => {
-      props.subscribe(this.io, event,
-        { pathname: props.location.pathname }, (err, data, cb) => {
-          cb(err, data)
-
-          this.io.on('notification', (notification) => {
-            props.displayNotification(notification)
-          })
-        })
-
       if (props.location.pathname === '/dashboard') {
-        props.subscribe(this.io, 'update_study',
+        props.subscribe(this.io, event,
           { pathname: props.location.pathname }, (err, data, cb) => {
             cb(err, data)
 
