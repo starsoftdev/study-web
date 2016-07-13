@@ -1,6 +1,0 @@
-#!/bin/bash
-
-echo "Linting started..."
-npm run pre-commit && exit 0
-echo "Linting failed!"
-exit 1

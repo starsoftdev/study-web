@@ -12,7 +12,7 @@
     "dist": "NODE_ENV=production npm run build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prestart": "node scripts/check-pre-hook",
+    "prestart": "node install.js",
     "pre-commit": "PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:./node_modules/.bin eslint .",
     "pretest": "npm run lint",
     "start": "npm run build && node server/index.js",
@@ -27,7 +27,7 @@
   "author": "",
   "license": "UNLICENSED",
   "engines": {
-    "node": ">= 4.1.0"
+    "node": ">= 6.2.0"
   },
   "dependencies": {
     "classnames": "^2.2.5",
@@ -83,6 +83,7 @@
     "express": "^4.13.4",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
+    "git-validate": "^2.1.4",
     "html-webpack-plugin": "^2.16.1",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^1.0.1",
@@ -112,5 +113,14 @@
     "webpack-hot-middleware": "^2.10.0",
     "winston": "^2.2.0"
   },
-  "homepage": "https://github.com/sutdykik/web#readme"
+  "pre-commit#develop": [
+    "pre-commit"
+  ],
+  "pre-commit#master": [
+    "pre-commit"
+  ],
+  "homepage": "https://github.com/sutdykik/web#readme",
+  "pre-commit": [
+    "lint"
+  ]
 }

@@ -26,6 +26,9 @@ const menuItems = [ {
   text: 'List Your Trials',
   link: '/clinical-trial-patient-recruitment-patient-enrollment'
 }, {
+  text: 'Sites and Users',
+  link: '/sites-users'
+}, {
   text: 'Blog',
   link: '/blog'
 }, {
