@@ -48,7 +48,9 @@ export const ActionTypes = keymirror({
 
   FETCH_SITE_LOCATIONS: null,
   FETCH_STUDY_CATEGORIES: null,
+  FETCH_STUDY_LEVELS: null,
   SUBMIT_ORDER_IRB_AD: null,
+  SUBMIT_LIST_STUDY: null,
 
   FETCH_NOTIFICATIONS: null,
   FETCH_UNREAD_NOTIFICATIONS_COUNT: null,
