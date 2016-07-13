@@ -3,18 +3,18 @@ import asyncActionIsFetching from 'utils/asyncActionIsFetching'
 
 const initialState = {
   isFetching: true,
-  siteLocations: []
+  studyLevels: []
 }
 
 export default function (state = initialState, action) {
-  const statusFunc = asyncActionIsFetching(ActionTypes.FETCH_SITE_LOCATIONS)
+  const statusFunc = asyncActionIsFetching(ActionTypes.FETCH_STUDY_LEVELS)
 
   switch (action.type) {
-    case ActionTypes.FETCH_SITE_LOCATIONS:
+    case ActionTypes.FETCH_STUDY_LEVELS:
       if (action.status === 'succeeded') {
         return {
           isFetching: false,
-          siteLocations: action.payload || []
+          studyLevels: action.payload || []
         }
       }
       return {

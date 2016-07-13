@@ -1,6 +1,7 @@
 import 'whatwg-fetch'
 import 'font-awesome-webpack'
 import 'assets/styles/index.less'
+import 'react-select2-wrapper/css/select2.css'
 
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
