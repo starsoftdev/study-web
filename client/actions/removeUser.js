@@ -4,17 +4,15 @@ import { ActionTypes } from 'ActionTypes'
 import { deleteEntity } from 'utils/entityReadWrite'
 import asyncAction from 'utils/asyncAction'
 
-export default function removeUser (id) {
+export default function removeUser (clientRoleId) {
   const actionType = ActionTypes.DELETE_USER
 
-  return asyncAction(actionType, { id }, (cb, dispatch, getState) => {
+  return asyncAction(actionType, { clientRoleId }, (cb, dispatch, getState) => {
 
     function afterDelete (err, payload) {
       cb(err, payload)
-      let userResultData = payload.clientRole
-      userResultData.user = payload.user
       const result = {
-        userResultData
+        clientRoleId,
       }
 
       dispatch({
@@ -23,6 +21,6 @@ export default function removeUser (id) {
       })
     }
 
-    dispatch(deleteEntity('/users/' + id, null, afterDelete))
+    dispatch(deleteEntity('/clientRoles/' + clientRoleId, null, afterDelete))
   })
 }
