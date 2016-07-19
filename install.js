@@ -4,6 +4,7 @@
 
 const Validate = require('git-validate')
 
-Validate.installScript('lint', 'eslint .')
-Validate.configureHook('pre-commit', [ 'lint' ])
-Validate.installHooks('pre-commit')
+Validate.configureHook('pre-commit#develop', [ 'pre-commit' ])
+Validate.installHooks('pre-commit#develop')
+Validate.configureHook('pre-commit#master', [ 'pre-commit' ])
+Validate.installHooks('pre-commit#master')
