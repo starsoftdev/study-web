@@ -1,14 +1,24 @@
 import { ActionTypes } from 'ActionTypes'
+import asyncActionIsFetching from 'utils/asyncActionIsFetching'
 
 const initialState = {
+  isFetching: false,
   avail: []
 }
 
-export default function fetchingAvailNumbers (state = initialState, action) {
+export default function availNumbers (state = initialState, action) {
+  const statusFunc = asyncActionIsFetching(ActionTypes.FETCH_AVAIL_NUMBERS)
+
   switch (action.type) {
-    case 'FETCH_AVAIL_NUMBERS':
-      return Object.assign({}, state, action.payload)
-    default:
-      return state
+    case ActionTypes.FETCH_AVAIL_NUMBERS:
+      if (action.status === 'succeeded') {
+        return Object.assign({}, state, { isFetching: false }, action.payload)
+      }
+      return {
+        ...state,
+        isFetching: statusFunc(state, action)
+      }
   }
+
+  return state
 }
