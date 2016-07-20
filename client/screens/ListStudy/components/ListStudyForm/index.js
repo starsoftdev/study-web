@@ -123,6 +123,8 @@ class ListStudyForm extends React.Component {
     saveStudy: PropTypes.func
   }
 
+  source_counter = 1
+
   order = [
     'siteLocation',
     'recruitmentPhone',
@@ -266,6 +268,40 @@ class ListStudyForm extends React.Component {
           let scope = this
           function addLeadSource (ev) {
             ev.preventDefault()
+            let formOptions = _.clone(scope.state.formOptions)
+            let formValues = _.clone(scope.state.formValues)
+            let studyFormOptions = scope.studyFormOptions
+            let index = (scope.source_counter === 1)
+              ? scope.order.indexOf('availNumbers') : scope.order.indexOf('availNumbers_' + (scope.source_counter - 1))
+
+            scope.order.splice(index + 1, 0, 'leadSource_' + scope.source_counter)
+            scope.order.splice(index + 2, 0, 'availNumbers_' + scope.source_counter)
+            formOptions.order = scope.order
+            formValues['leadSource_' + scope.source_counter] = null
+            formValues['availNumbers_' + scope.source_counter] = null
+            studyFormOptions['leadSource_' + scope.source_counter] = t.enums(leadSourcehObj)
+            if (scope.props.availNumbers.avail.length > 0) {
+              let availOptions = {}
+              let i = 0
+
+              for (let avail of scope.props.availNumbers.avail) {
+                availOptions[i] = avail.phoneNumber
+                i++
+              }
+
+              studyFormOptions['availNumbers_' + scope.source_counter] = t.enums(availOptions)
+            } else {
+              studyFormOptions['availNumbers_' + scope.source_counter] = t.enums({})
+            }
+            formOptions.fields['leadSource_' + scope.source_counter] = _.cloneDeep(scope.state.formOptions.fields.leadSource)
+            formOptions.fields['availNumbers_' + scope.source_counter] = _.cloneDeep(scope.state.formOptions.fields.availNumbers)
+            scope.setState({
+              formOptions,
+              formValues,
+              studyForm: t.struct(studyFormOptions)
+            })
+
+            scope.source_counter++
           }
 
           return (
@@ -365,8 +401,6 @@ class ListStudyForm extends React.Component {
     const validateResult = this.refs.form.validate()
     let newFormOptions = _.cloneDeep(this.studyOptions)
     let authData = this.props.authorization.authData
-    //console.log(validateResult)
-    //console.log(newFormOptions)
     if (validateResult.errors.length > 0) {
       for (let err of validateResult.errors) {
         _.set(newFormOptions, `fields.${err.path[0]}.attrs.data-tip`, err.message)
@@ -374,6 +408,24 @@ class ListStudyForm extends React.Component {
     }
     else {
       const { value } = validateResult
+      let sources = [], sourceCounter = this.source_counter, i
+
+      for (i = 0; i < sourceCounter; i++) {
+        if (i === 0) {
+          sources.push({
+            id: value.leadSource,
+            name: leadSourcehObj[value.leadSource],
+            call_number_info: this.props.availNumbers.avail[value.availNumbers] || null
+          })
+        } else {
+          sources.push({
+            id: value['leadSource_' + i],
+            name: leadSourcehObj[value['leadSource_' + i]],
+            call_number_info: this.props.availNumbers.avail[value['availNumbers_' + i]] || null
+          })
+        }
+      }
+
       const newValue = {
         siteLocation: value.siteLocation,
         recruitmentPhone: value.recruitmentPhone,
@@ -389,12 +441,7 @@ class ListStudyForm extends React.Component {
         campaignLength: value.campaignLength,
         // patientMessagingSuite: value.patientMessagingSuite,
         callTracking: value.callTracking,
-        leadSource: [
-          {
-            id: value.leadSource,
-            name: leadSourcehObj[value.leadSource]
-          }
-        ],
+        leadSource: sources,
         availNumbers: this.props.availNumbers.avail[value.availNumbers],
         startDate: value.startDate,
         notes: value.notes
