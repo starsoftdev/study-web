@@ -26,6 +26,9 @@ API_URL=https://studykik.com/api
 ```
 npm install
 ```
+for correct installation of package 'git-validate' it may be necessary
+to manually create a pre-commit file in ./.git/hooks directory and change
+the rights for it.
 
 ### Running the app:
 ```

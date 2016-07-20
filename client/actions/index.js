@@ -5,6 +5,7 @@ export setAuthData from './setAuthData'
 export routeChange from './routeChange'
 
 export savePatient from './savePatient'
+export saveStudy from './saveStudy'
 
 export submitGetTrialNotificationForm from './submitGetTrialNotificationForm'
 
@@ -38,7 +39,6 @@ export submitOrderIRBAd from './submitOrderIRBAd'
 
 export saveReferralForm from './saveReferralForm'
 export fetchAvailNumbers from './fetchAvailNumbers'
-export submitListStudy from './submitListStudy'
 
 export * from './notificationActions'
 export * from './notification'

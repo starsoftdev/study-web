@@ -1,12 +1,13 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
+//import { Link } from 'react-router'
 import t from 'tcomb-form'
 import ReactTooltip from 'react-tooltip'
 import Select2 from 'react-select2-wrapper'
 import _ from 'lodash'
 
-import { submitListStudy, fetchSiteLocations, fetchStudyCategories, fetchStudyLevels } from 'actions'
+import { fetchSiteLocations, fetchStudyCategories,
+  fetchStudyLevels, fetchAvailNumbers, saveStudy } from 'actions'
 import { isValidCurrency, strToFloat } from 'utils/number'
 
 import LoadingResults from 'components/LoadingResults'
@@ -21,7 +22,7 @@ const Currency = t.refinement(t.Str, (str) => {
 Currency.getValidationErrorMessage = (value, path, context) => {
   return 'Enter a valid currency format.'
 }
-console.log(t.form.Form.templates)
+//console.log(t.form.Form.templates)
 const select2Template = t.form.Form.templates.select.clone({
   renderSelect: (locals) => {
     return (
@@ -35,7 +36,6 @@ const select2Template = t.form.Form.templates.select.clone({
     )
   }
 })
-
 
 // let select2Template = function (locals) {
 //   console.log(locals)
@@ -58,104 +58,35 @@ const select2Template = t.form.Form.templates.select.clone({
 //   )
 // }
 
-const studyValues = {
-  site_id: null,
-  recruitment_phone: null,
-  indication: null,
-  protocol_number: null,
-  sponsor_name: null,
-  sponsor_email: null,
-  cro_name: null,
-  cro_email: null,
-  irb_name: null,
-  irb_email: null,
-  exposure_level: null,
-  campaign_length: null,
-  // patientMessagingSuite: null,
-  // callTracking: null,
-  start_date: null,
-  notes: null
+const exposureLevelObj = {
+  'Diamond Listing': 'Diamond Listing: $3,059',
+  'Platinum Listing': 'Platinum Listing: $1,559',
+  'Gold Listing': 'Gold Listing: $559',
+  'Silver Listing': 'Silver Listing: $209',
+  'Bronze Listing': 'Bronze Listing: $59'
 }
 
-const studyOptions = {
-  auto: 'none',
-  config: {
-    // for each of lg md sm xs you can specify the columns width
-    horizontal: {
-      md: [ 4, 8 ],
-    },
-  },
-  fields: {
-    siteLocation: {
-      label: 'SITE LOCATION *',
-      template: select2Template,
-      nullOption: {
-        value: '',
-        text: 'Select Site Location'
-      },
-    },
-    recruitmentPhone: {
-      label: 'RECRUITMENT PHONE *'
-    },
-    indication: {
-      label: 'INDICATION *',
-      nullOption: {
-        value: '',
-        text: 'Select Indication'
-      },
-    },
-    uploadStudyAd: {
-      type: 'file',
-      label: 'UPLOAD STUDY AD'
-    },
-    protocolNumber: {
-      label: 'PROTOCOL NUMBER *'
-    },
-    sponsorName: {
-      label: 'SPONSOR NAME *'
-    },
-    sponsorEmail: {
-      label: 'SPONSOR EMAIL'
-    },
-    croName: {
-      label: 'CRO NAME'
-    },
-    croEmail: {
-      label: 'CRO EMAIL'
-    },
-    irbName: {
-      label: 'IRB NAME'
-    },
-    irbEmail: {
-      label: 'IRB EMAIL'
-    },
-    exposureLevel: {
-      label: 'EXPOSURE LEVEL *',
-      nullOption: {
-        value: '',
-        text: 'Select Exposure Level'
-      }
-    },
-    campaignLength: {
-      label: 'CAMPAIGN LENGTH *',
-      nullOption: {
-        value: '',
-        text: 'Select Campaign Length'
-      }
-    },
-    patientMessagingSuite: {
-      label: 'PATIENT MESSAGING SUITE: $247'
-    },
-    callTracking: {
-      label: 'CALL TRACKING: $247'
-    },
-    startDate: {
-      label: 'START DATE  *'
-    },
-    notes: {
-      label: 'NOTES'
-    },
-  },
+const leadSourcehObj = {
+  '1': 'TV',
+  '2': 'Radio',
+  '3': 'Print',
+  '4': 'Digital',
+  '5': 'Other'
+}
+
+const campaignLengthObj = {
+  '1': '1 Month',
+  '2': '2 Months',
+  '3': '3 Months',
+  '4': '4 Months',
+  '5': '5 Months',
+  '6': '6 Months',
+  '7': '7 Months',
+  '8': '8 Months',
+  '9': '9 Months',
+  '10': '10 Months',
+  '11': '11 Months',
+  '12': '12 Months'
 }
 
 function objectFromArray (arr, key, value) {
@@ -166,7 +97,6 @@ function objectFromArray (arr, key, value) {
 
   return obj
 }
-
 
 function objectFromStudyLevels (arr, key) {
   let obj = {}
@@ -184,17 +114,195 @@ class ListStudyForm extends React.Component {
     siteLocations: PropTypes.object,
     studyLevels: PropTypes.object,
     studyCategories: PropTypes.object,
-    submitListStudy: PropTypes.func,
-    savedStudy: PropTypes.object,
+    savedStudy: PropTypes.array,
+    availNumbers: PropTypes.object,
     fetchSiteLocations: PropTypes.func,
     fetchStudyCategories: PropTypes.func,
     fetchStudyLevels: PropTypes.func,
+    fetchAvailNumbers: PropTypes.func,
+    saveStudy: PropTypes.func
+  }
+
+  order = [
+    'siteLocation',
+    'recruitmentPhone',
+    'indication',
+    'uploadStudyAd',
+    'protocolNumber',
+    'sponsorName',
+    'sponsorEmail',
+    'croName',
+    'croEmail',
+    'irbName',
+    'irbEmail',
+    'exposureLevel',
+    'campaignLength',
+    'patientMessagingSuite',
+    'callTracking',
+    'leadSource',
+    'availNumbers',
+    'addLeadSource',
+    'startDate',
+    'notes'
+  ]
+
+  studyValues = {
+    site_id: null,
+    recruitment_phone: null,
+    indication: null,
+    protocol_number: null,
+    sponsor_name: null,
+    sponsor_email: null,
+    cro_name: null,
+    cro_email: null,
+    irb_name: null,
+    irb_email: null,
+    exposure_level: null,
+    campaign_length: null,
+    // patientMessagingSuite: null,
+    callTracking: false,
+    leadSource: null,
+    availNumbers: null,
+    addLeadSource: null,
+    start_date: null,
+    notes: null
+  }
+
+  studyOptions = {
+    order: this.order,
+    auto: 'none',
+    config: {
+      // for each of lg md sm xs you can specify the columns width
+      horizontal: {
+        md: [ 4, 8 ]
+      }
+    },
+    fields: {
+      siteLocation: {
+        label: 'SITE LOCATION *',
+        template: select2Template,
+        nullOption: {
+          value: '',
+          text: 'Select Site Location'
+        }
+      },
+      recruitmentPhone: {
+        label: 'RECRUITMENT PHONE *'
+      },
+      indication: {
+        label: 'INDICATION *',
+        nullOption: {
+          value: '',
+          text: 'Select Indication'
+        }
+      },
+      uploadStudyAd: {
+        type: 'file',
+        label: 'UPLOAD STUDY AD'
+      },
+      protocolNumber: {
+        label: 'PROTOCOL NUMBER *'
+      },
+      sponsorName: {
+        label: 'SPONSOR NAME *'
+      },
+      sponsorEmail: {
+        label: 'SPONSOR EMAIL'
+      },
+      croName: {
+        label: 'CRO NAME'
+      },
+      croEmail: {
+        label: 'CRO EMAIL'
+      },
+      irbName: {
+        label: 'IRB NAME'
+      },
+      irbEmail: {
+        label: 'IRB EMAIL'
+      },
+      exposureLevel: {
+        label: 'EXPOSURE LEVEL *',
+        nullOption: {
+          value: '',
+          text: 'Select Exposure Level'
+        }
+      },
+      campaignLength: {
+        label: 'CAMPAIGN LENGTH *',
+        nullOption: {
+          value: '',
+          text: 'Select Campaign Length'
+        }
+      },
+      /*patientMessagingSuite: {
+       label: 'PATIENT MESSAGING SUITE: $247'
+       },*/
+      callTracking: {
+        label: 'CALL TRACKING: $247'
+      },
+      leadSource: {
+        label: 'LEAD SOURCE  *',
+        nullOption: {
+          value: '',
+          text: 'Select Lead Source'
+        },
+        attrs: {
+          className: ''
+        }
+      },
+      availNumbers: {
+        label: 'AVAIL NUMBERS *',
+        nullOption: {
+          value: '',
+          text: 'Select Avail Number'
+        },
+        attrs: {
+          className: ''
+        }
+      },
+      addLeadSource: {
+        template: () => {
+          let scope = this
+          function addLeadSource (ev) {
+            ev.preventDefault()
+          }
+
+          return (
+            <div className="form-group form-group-depth-1">
+              <div className="col-md-offset-4 col-md-8" onClick={function (evt) { addLeadSource(evt) }}>
+                <span className="add-lead-source">Add Lead Source</span>
+              </div>
+            </div>)
+        }
+      },
+      startDate: {
+        label: 'START DATE  *'
+      },
+      notes: {
+        label: 'NOTES'
+      }
+    }
   }
 
   state = {
-    formOptions: studyOptions,
-    formValues: studyValues,
+    formOptions: this.studyOptions,
+    formValues: this.studyValues,
+    studyForm: null
   }
+
+  setStudyForm (options, next) {
+    this.studyFormOptions = options
+    this.setState({
+      studyForm: t.struct(options)
+    }, () => {
+      if (next) {
+        next()
+      }
+    })
+  }
+
+  componentDidMount () {}
 
   componentWillMount () {
     const { fetchSiteLocations, fetchStudyCategories, fetchStudyLevels } = this.props
@@ -205,39 +313,17 @@ class ListStudyForm extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const { siteLocations, studyCategories, studyLevels, savedStudy } = nextProps
-    console.log('saved study')
-    console.log(savedStudy)
-    if (siteLocations.isFetching || studyCategories.isFetching || studyLevels.isFetching) {
-      this.studyForm = null
-    }
-    else {
+    const { siteLocations, studyCategories, studyLevels, savedStudy, availNumbers } = nextProps
+
+    if (siteLocations.isFetching || studyCategories.isFetching || studyLevels.isFetching || availNumbers.isFetching) {
+      //this.studyForm = null
+      //..
+    } else {
       const siteLocationsObj = objectFromArray(siteLocations.siteLocations, 'id', 'name')
       const studyCategoriesObj = objectFromArray(studyCategories.studyCategories, 'id', 'name')
       const studyLevelsObj = objectFromStudyLevels(studyLevels.studyLevels, 'id')
-      const exposureLevelObj = {
-        'Diamond Listing': 'Diamond Listing: $3,059',
-        'Platinum Listing': 'Platinum Listing: $1,559',
-        'Gold Listing': 'Gold Listing: $559',
-        'Silver Listing': 'Silver Listing: $209',
-        'Bronze Listing': 'Bronze Listing: $59'
-      }
-      const campaignLengthObj = {
-        '1': '1 Month',
-        '2': '2 Months',
-        '3': '3 Months',
-        '4': '4 Months',
-        '5': '5 Months',
-        '6': '6 Months',
-        '7': '7 Months',
-        '8': '8 Months',
-        '9': '9 Months',
-        '10': '10 Months',
-        '11': '11 Months',
-        '12': '12 Months'
-      }
 
-      this.studyForm = t.struct({
+      let options = this.studyFormOptions || {
         siteLocation: t.enums(siteLocationsObj),
         recruitmentPhone: t.Str,
         indication: t.enums(studyCategoriesObj),
@@ -255,16 +341,32 @@ class ListStudyForm extends React.Component {
         callTracking: t.maybe(t.Bool),
         startDate: t.Date,
         notes: t.maybe(t.Str)
-      })
+      }
+
+      if (availNumbers.avail.length > 0) {
+        let availOptions = {}
+        let i = 0
+
+        for (let avail of availNumbers.avail) {
+          availOptions[i] = avail.phoneNumber
+          i++
+        }
+
+        options.availNumbers = t.enums(availOptions)
+      }
+
+      this.setStudyForm(options)
     }
   }
 
   handleSubmit (ev) {
     ev.preventDefault()
+    const { saveStudy } = this.props
     const validateResult = this.refs.form.validate()
-    let newFormOptions = _.cloneDeep(studyOptions)
-    console.log(validateResult)
-    console.log(newFormOptions)
+    let newFormOptions = _.cloneDeep(this.studyOptions)
+    let authData = this.props.authorization.authData
+    //console.log(validateResult)
+    //console.log(newFormOptions)
     if (validateResult.errors.length > 0) {
       for (let err of validateResult.errors) {
         _.set(newFormOptions, `fields.${err.path[0]}.attrs.data-tip`, err.message)
@@ -273,27 +375,37 @@ class ListStudyForm extends React.Component {
     else {
       const { value } = validateResult
       const newValue = {
-        site_id: value.siteLocation,
-        recruitment_phone: value.recruitmentPhone,
+        siteLocation: value.siteLocation,
+        recruitmentPhone: value.recruitmentPhone,
         indication: value.indication,
-        protocol_number: value.protocolNumber,
-        sponsor_name: value.sponsorName,
-        sponsor_email: value.sponsorEmail,
-        cro_name: value.croName,
-        cro_email: value.croEmail,
-        irb_name: value.irbName,
-        irb_email: value.irbEmail,
-        exposure_level: value.exposureLevel,
-        campaign_length: value.campaignLength,
+        protocolNumber: value.protocolNumber,
+        sponsorName: value.sponsorName,
+        sponsorEmail: value.sponsorEmail,
+        croName: value.croName,
+        croEmail: value.croEmail,
+        irbName: value.irbName,
+        irbEmail: value.irbEmail,
+        exposureLevel: value.exposureLevel,
+        campaignLength: value.campaignLength,
         // patientMessagingSuite: value.patientMessagingSuite,
-        // callTracking: value.callTracking,
-        start_date: value.startDate,
+        callTracking: value.callTracking,
+        leadSource: [
+          {
+            id: value.leadSource,
+            name: leadSourcehObj[value.leadSource]
+          }
+        ],
+        availNumbers: this.props.availNumbers.avail[value.availNumbers],
+        startDate: value.startDate,
         notes: value.notes
       }
-      console.log(value)
-      console.log(newValue)
-      value.uploadStudyAd.uploadFile()
-      // this.props.submitListStudy(newValue)
+      //value.uploadStudyAd.uploadFile()
+
+      if (authData) {
+        saveStudy(authData, null, newValue)
+      } else {
+        console.error('need auth')
+      }
     }
 
     this.setState({
@@ -302,23 +414,54 @@ class ListStudyForm extends React.Component {
     })
   }
 
-  render () {
-    const { isSaving, siteLocations, studyCategories, studyLevels, savedStudy } = this.props
+  onChange (value) {
+    const { comp } = this.ctx.context
+    const { fetchAvailNumbers } = comp.props
+    const formOptions = comp.state.formOptions
 
+    if (value.callTracking !== comp.state.formValues.callTracking) {
+      if (value.callTracking) {
+        comp.studyFormOptions.leadSource = t.enums(leadSourcehObj)
+        comp.studyFormOptions.addLeadSource = t.maybe(t.Str)
+        comp.setStudyForm(comp.studyFormOptions, () => {
+          fetchAvailNumbers({
+            country: 'US',
+            areaCode: '510',
+            contains: '151055****'
+          })
+        })
+      } else {
+        delete comp.studyFormOptions['leadSource']
+        delete comp.studyFormOptions['availNumbers']
+        delete comp.studyFormOptions['addLeadSource']
+        value.availNumbers = value.leadSource = null
+        comp.setStudyForm(comp.studyFormOptions)
+      }
+    }
+
+    comp.setState({
+      formOptions,
+      formValues: value
+    })
+  }
+
+  render () {
+    const { isSaving, siteLocations, studyCategories, studyLevels, savedStudy, availNumbers } = this.props
     return (
       <div className="irb-ad-creation-wrapper">
         {
-          siteLocations.isFetching || studyCategories.isFetching || studyLevels.isFetching ?
+          siteLocations.isFetching || studyCategories.isFetching || studyLevels.isFetching || availNumbers.isFetching ?
             <LoadingResults /> :
             <div className="col-md-offset-2 col-md-8">
               <form onSubmit={(ev) => this.handleSubmit(ev)}>
                 <ReactTooltip type="error" />
                 <Form
                   ref="form"
-                  type={this.studyForm}
+                  type={this.state.studyForm}
                   options={this.state.formOptions}
                   value={this.state.formValues}
                   context={{ comp: this }}
+                  onChange={this.onChange}
                 />
                 <br />
                 <div className="row">
@@ -338,18 +481,21 @@ class ListStudyForm extends React.Component {
 
 const mapStateToProps = (state) => ({
   authorization: state.authorization,
-  isSaving: state.submittingListStudy,
+  isSaving: state.savingStudy,
   siteLocations: state.siteLocations,
   studyCategories: state.studyCategories,
   studyLevels: state.studyLevels,
-  savedStudy: state.savedStudy
+  availNumbers: state.availNumbers,
+  savedStudy: state.savedStudy,
+  saveStudy: state.saveStudy
 })
 
 const mapDispatchToProps = {
+  fetchAvailNumbers,
   fetchSiteLocations,
   fetchStudyCategories,
   fetchStudyLevels,
-  submitListStudy,
+  saveStudy
 }
 
 export default connect(

@@ -25,6 +25,9 @@ export const ActionTypes = keymirror({
   UPDATE_SITE: null,
   CREATE_SITE: null,
   FINISH_SAVE_SITE: null,
+  UPDATE_STUDY: null,
+  CREATE_STUDY: null,
+  FINISH_SAVE_STUDY: null,
 
   FETCH_USERS: null,
   CLEAR_USERS: null,
