@@ -254,10 +254,10 @@ class ListStudyForm extends React.Component {
         }
       },
       availNumbers: {
-        label: 'AVAIL NUMBERS *',
+        label: 'PHONE NUMBER *',
         nullOption: {
           value: '',
-          text: 'Select Avail Number'
+          text: 'Select Number'
         },
         attrs: {
           className: ''
@@ -399,11 +399,11 @@ class ListStudyForm extends React.Component {
     ev.preventDefault()
     const { saveStudy } = this.props
     const validateResult = this.refs.form.validate()
-    let newFormOptions = _.cloneDeep(this.studyOptions)
+    let formOptions = _.clone(this.state.formOptions)
     let authData = this.props.authorization.authData
     if (validateResult.errors.length > 0) {
       for (let err of validateResult.errors) {
-        _.set(newFormOptions, `fields.${err.path[0]}.attrs.data-tip`, err.message)
+        _.set(formOptions, `fields.${err.path[0]}.attrs.data-tip`, err.message)
       }
     }
     else {
@@ -454,11 +454,6 @@ class ListStudyForm extends React.Component {
         console.error('need auth')
       }
     }
-
-    this.setState({
-      formOptions: newFormOptions,
-      formValues: validateResult.value
-    })
   }
 
   onChange (value) {
