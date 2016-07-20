@@ -125,7 +125,7 @@ class ListStudyForm extends React.Component {
 
   source_counter = 1
 
-  order = [
+  order = [//remove lead and sources when uncheck callTracking
     'siteLocation',
     'recruitmentPhone',
     'indication',
@@ -148,7 +148,7 @@ class ListStudyForm extends React.Component {
     'notes'
   ]
 
-  studyValues = {
+  studyValues = {//remove lead and sources when uncheck callTracking
     site_id: null,
     recruitment_phone: null,
     indication: null,
@@ -473,11 +473,21 @@ class ListStudyForm extends React.Component {
           })
         })
       } else {
-        delete comp.studyFormOptions['leadSource']
-        delete comp.studyFormOptions['availNumbers']
+        let sourceCounter = comp.source_counter, i
+        for (i = 0; i < sourceCounter; i++) {
+          if (i === 0) {
+            delete comp.studyFormOptions['leadSource']
+            delete comp.studyFormOptions['availNumbers']
+            value.availNumbers = value.leadSource = null
+          } else {
+            delete comp.studyFormOptions['leadSource_' + i]
+            delete comp.studyFormOptions['availNumbers_' + i]
+            value['availNumbers_' + i] = value['leadSource_' + i] = null
+          }
+        }
+
         delete comp.studyFormOptions['addLeadSource']
-        value.availNumbers = value.leadSource = null
-        comp.setStudyForm(comp.studyFormOptions)
+        comp.setStudyForm(comp.studyFormOptions, false)
       }
     }
 
