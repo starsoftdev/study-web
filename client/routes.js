@@ -12,6 +12,7 @@ import Home from './screens/Home'
 import Login from './screens/Login'
 import Study from './screens/Study'
 import SitesUsers from './screens/SitesUsers'
+import PatientDatabase from './screens/PatientDatabase'
 import TrialListing from './screens/TrialListing'
 import PatientDetails from './screens/PatientDetails'
 import OrderIRBAdCreation from './screens/OrderIRBAdCreation'
@@ -40,6 +41,7 @@ export default (store) => {
         <Route path="home" getComponent={lazyLoadComponent(Home)} />
         <Route path="notifications" getComponent={lazyLoadComponent(Notifications)} />
         <Route path="sites-users" getComponent={lazyLoadComponent(SitesUsers)} />
+        <Route path="patient-database" getComponent={lazyLoadComponent(PatientDatabase)} />
         <Route path="order-irb-ad-creation" getComponent={lazyLoadComponent(OrderIRBAdCreation)} />
       </Route>
 

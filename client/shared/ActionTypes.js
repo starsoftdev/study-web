@@ -36,6 +36,8 @@ export const ActionTypes = keymirror({
   FINISH_SAVE_USER: null,
   FINISH_DELETE_USER: null,
 
+  FETCH_INDICATIONS: null,
+
   FETCH_STUDIES: null,
   FETCH_STUDY: null,
   CLEAR_STUDIES: null,

@@ -19,6 +19,9 @@ export users from './users'
 export selectedSite from './selectedSite'
 export selectedUser from './selectedUser'
 
+export fetchingIndications from './fetchingIndications'
+export indications from './indications'
+
 export fetchingStudies from './fetchingStudies'
 export fetchingStudy from './fetchingStudy'
 export studies from './studies'

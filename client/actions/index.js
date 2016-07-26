@@ -21,6 +21,8 @@ export clearSelectedUser from './clearSelectedUser'
 export saveUser from './saveUser'
 export removeUser from './removeUser'
 
+export fetchIndications from './fetchIndications'
+
 export fetchStudies from './fetchStudies'
 export fetchStudy from './fetchStudy'
 export clearStudies from './clearStudies'
@@ -28,6 +30,7 @@ export clearStudies from './clearStudies'
 export fetchPatientCategories from './fetchPatientCategories'
 export fetchPatients from './fetchPatients'
 export fetchPatientsByStudy from './fetchPatientsByStudy'
+export clearPatients from './clearPatients'
 
 export updatePatientCategory from './updatePatientCategory'
 
