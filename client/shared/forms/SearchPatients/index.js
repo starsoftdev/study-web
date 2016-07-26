@@ -3,7 +3,7 @@ import { reduxForm } from 'redux-form'
 import Select from 'react-select'
 import 'react-select/less/default.less'
 import './styles.less'
-export const fields = ['name', 'includeIndication', 'excludeIndication', 'gender', 'ageFrom', 'ageTo', 'bmiFrom', 'bmiTo']
+export const fields = [ 'name', 'includeIndication', 'excludeIndication', 'gender', 'ageFrom', 'ageTo', 'bmiFrom', 'bmiTo' ]
 
 class SearchPatientsForm extends Component {
   static propTypes = {
@@ -35,7 +35,7 @@ class SearchPatientsForm extends Component {
             <div className="col-sm-10">
               <div className="row">
                 <div className="col-sm-2">
-                  <input className="form-control search-name" type="text" disabled={submitting || loading} placeholder="Search Name" {...name}/>
+                  <input className="form-control search-name" type="text" disabled={submitting || loading} placeholder="Search Name" {...name} />
                 </div>
                 <div className="col-sm-2">
                   <label>Include Indication</label>
@@ -44,12 +44,11 @@ class SearchPatientsForm extends Component {
                     <Select
                       {...includeIndication}
                       options={indications}
-                      multi={true}
-                      joinValues={true}
+                      multi
+                      joinValues
                       disabled={submitting || loading}
                       onBlur={() => { includeIndication.onBlur(includeIndication) }}
-                      >
-                    </Select>
+                      />
                   </div>
                 </div>
                 <div className="col-sm-2">
@@ -58,12 +57,11 @@ class SearchPatientsForm extends Component {
                     <Select
                       {...excludeIndication}
                       options={indications}
-                      multi={true}
-                      joinValues={true}
+                      multi
+                      joinValues
                       disabled={submitting || loading}
                       onBlur={() => { excludeIndication.onBlur(excludeIndication) }}
-                      >
-                    </Select>
+                      />
                   </div>
                 </div>
                 <div className="col-sm-2">
@@ -74,20 +72,19 @@ class SearchPatientsForm extends Component {
                       options={genderOptions}
                       disabled={submitting || loading}
                       onBlur={() => { gender.onBlur(gender) }}
-                      >
-                    </Select>
+                      />
                   </div>
                 </div>
                 <div className="col-sm-2">
                   <label>Age Range</label>
                   <div>
-                    <input className="form-control age-from" type="text" disabled={submitting || loading} placeholder="From" {...ageFrom}/><span> - </span><input className="form-control age-to" type="text" disabled={submitting || loading} placeholder="To" {...ageTo}/>
+                    <input className="form-control age-from" type="text" disabled={submitting || loading} placeholder="From" {...ageFrom} /><span> - </span><input className="form-control age-to" type="text" disabled={submitting || loading} placeholder="To" {...ageTo} />
                   </div>
                 </div>
                 <div className="col-sm-2">
                   <label>BMI Range</label>
                   <div>
-                    <input className="form-control bmi-from" type="text" disabled={submitting || loading} placeholder="From" {...bmiFrom}/><span> - </span><input className="form-control bmi-to" type="text" disabled={submitting || loading} placeholder="To" {...bmiTo}/>
+                    <input className="form-control bmi-from" type="text" disabled={submitting || loading} placeholder="From" {...bmiFrom} /><span> - </span><input className="form-control bmi-to" type="text" disabled={submitting || loading} placeholder="To" {...bmiTo} />
                   </div>
                 </div>
               </div>

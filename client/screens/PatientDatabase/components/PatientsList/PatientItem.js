@@ -25,8 +25,8 @@ class PatientItem extends Component {
   }
 
   render () {
-    const {id, firstName, lastName, email, phone, age, gender, bmi, indication_id, indication,
-      info_source_id, infoSource, study_patient_category_id, studyPatientCategory} = this.props
+    const { id, firstName, lastName, email, phone, age, gender, bmi, indication_id, indication,
+      info_source_id, infoSource, study_patient_category_id, studyPatientCategory } = this.props
 
     return (
       <tr className="patient-container">

@@ -17,7 +17,7 @@ class SearchPatientsFormPanel extends React.Component {
 
   constructor (props) {
     super(props)
-    this.props.fetchIndications();
+    this.props.fetchIndications()
   }
 
   componentWillUnmount () {
@@ -30,7 +30,7 @@ class SearchPatientsFormPanel extends React.Component {
 
   render () {
     const { indications, fetchingPatients, fetchingIndications } = this.props
-    const genderOptions = [{label: 'All', value: 'All'}, {label: 'Male', value: 'Male'}, {label: 'Female', value: 'Female'}]
+    const genderOptions = [ { label: 'All', value: 'All' }, { label: 'Male', value: 'Male' }, { label: 'Female', value: 'Female' } ]
     return (
       <div className="patients-search">
         <div className="search-form">
