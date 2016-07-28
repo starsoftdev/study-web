@@ -8,8 +8,8 @@ export const fields = [ 'name', 'selectedIndicationFilter', 'includeIndication',
 class SearchPatientsForm extends Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
-    indications: PropTypes.object.isRequired,
-    genderOptions: PropTypes.object.isRequired,
+    indicationOptions: PropTypes.array.isRequired,
+    genderOptions: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -22,7 +22,7 @@ class SearchPatientsForm extends Component {
   render () {
     const {
       fields: { name, selectedIndicationFilter, includeIndication, excludeIndication, gender, ageFrom, ageTo, bmiFrom, bmiTo },
-      indications,
+      indicationOptions,
       genderOptions,
       handleSubmit,
       submitting,
@@ -62,7 +62,7 @@ class SearchPatientsForm extends Component {
                   <div>
                     <Select
                       {...includeIndication}
-                      options={indications}
+                      options={indicationOptions}
                       placeholder="Search..."
                       multi
                       joinValues
@@ -79,7 +79,7 @@ class SearchPatientsForm extends Component {
                   <div>
                     <Select
                       {...excludeIndication}
-                      options={indications}
+                      options={indicationOptions}
                       placeholder="Search..."
                       multi
                       joinValues

@@ -1,5 +1,3 @@
-import { bind } from 'redux-effects'
-
 import { ActionTypes } from 'ActionTypes'
 import { searchEntities } from 'utils/entityReadWrite'
 import asyncAction from 'utils/asyncAction'

@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { fetchUser } from 'actions'
-
 import ActivityIcon from 'components/ActivityIcon'
 
 class UserItem extends Component {
@@ -12,16 +11,14 @@ class UserItem extends Component {
     purchase: PropTypes.bool,
     user: PropTypes.object,
     isFetching: PropTypes.bool,
-    fetchUser: PropTypes.func
+    fetchUser: PropTypes.func,
   }
 
   constructor (props) {
     super(props)
   }
 
-  editUser (ev) {
-    ev.preventDefault()
-
+  editUser () {
     this.props.fetchUser(this.props.user.id)
   }
 

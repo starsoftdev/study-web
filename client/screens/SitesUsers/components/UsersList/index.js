@@ -36,8 +36,6 @@ export default class UsersList extends Component {
   }
 
   componentWillUnmount () {
-    // Redux store keeps `users` reducer, so need to clear them
-    // Not sure we actually need this behavior
     this.props.clearUsers()
   }
 
@@ -49,9 +47,7 @@ export default class UsersList extends Component {
     this.props.clearSelectedUser()
   }
 
-  updateUser (ev) {
-    ev.preventDefault()
-
+  updateUser () {
     const userData = this.refs.form.getValue()
     if (userData) {
       const userInput = {

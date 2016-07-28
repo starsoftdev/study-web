@@ -37,6 +37,7 @@ export const ActionTypes = keymirror({
   FINISH_DELETE_USER: null,
 
   FETCH_INDICATIONS: null,
+  FETCH_INFO_SOURCES: null,
 
   FETCH_STUDIES: null,
   FETCH_STUDY: null,
@@ -47,6 +48,10 @@ export const ActionTypes = keymirror({
   FETCH_PATIENTS_BY_STUDY: null,
 
   UPDATE_PATIENT_CATEGORY: null,
+
+  FETCH_PATIENT: null,
+  CLEAR_SELECTED_PATIENT: null,
+  FINISH_SAVE_PATIENT: null,
 
   FETCH_SITE_LOCATIONS: null,
   FETCH_STUDY_CATEGORIES: null,

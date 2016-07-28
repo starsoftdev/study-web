@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { fetchPatients, clearPatients, fetchIndications } from 'actions'
+import { fetchPatients, fetchIndications } from 'actions'
 import SearchPatientsForm from 'forms/SearchPatients'
 import ActivityIcon from 'components/ActivityIcon'
 import './styles.less'
@@ -12,17 +12,12 @@ class SearchPatientsFormPanel extends React.Component {
     fetchingIndications: PropTypes.bool,
     indications: PropTypes.array,
     fetchPatients: PropTypes.func,
-    clearPatients: PropTypes.func,
     fetchIndications: PropTypes.func,
   }
 
   constructor (props) {
     super(props)
     this.props.fetchIndications()
-  }
-
-  componentWillUnmount () {
-    this.props.clearPatients()
   }
 
   handleSubmit (searchFilter) {
@@ -45,7 +40,7 @@ class SearchPatientsFormPanel extends React.Component {
         <div className="panel-body">
           <div className="patients-search">
             <div className="search-form">
-              <SearchPatientsForm loading={fetchingIndications} submitting={fetchingPatients} indications={indications} genderOptions={genderOptions} onSubmit={this.handleSubmit.bind(this)} />
+              <SearchPatientsForm loading={fetchingIndications} submitting={fetchingPatients} indicationOptions={indications} genderOptions={genderOptions} onSubmit={this.handleSubmit.bind(this)} />
             </div>
           </div>
         </div>
@@ -61,7 +56,6 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = {
   fetchPatients,
-  clearPatients,
   fetchIndications,
 }
 
