@@ -33,6 +33,14 @@ class Calendar extends React.Component {
             popup
             events={myEventsList}
             defaultDate={new Date(2015, 3, 1)}
+            eventPropGetter={(event, start, end, isSelected)=>{
+              return {
+                style: {
+                  color: 'gray',
+                  backgroundColor: '#f3f3f3'
+                }
+              }
+            }}
           />
         </div>
       </div>
