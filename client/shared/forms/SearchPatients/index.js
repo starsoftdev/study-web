@@ -3,12 +3,13 @@ import { reduxForm } from 'redux-form'
 import Select from 'react-select'
 import 'react-select/less/default.less'
 import './styles.less'
-export const fields = [ 'name', 'includeIndication', 'excludeIndication', 'gender', 'ageFrom', 'ageTo', 'bmiFrom', 'bmiTo' ]
+export const fields = [ 'name', 'selectedIndicationFilter', 'includeIndication', 'excludeIndication', 'gender', 'ageFrom', 'ageTo', 'bmiFrom', 'bmiTo' ]
 
 class SearchPatientsForm extends Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
-    indications: PropTypes.array.isRequired,
+    indications: PropTypes.object.isRequired,
+    genderOptions: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -20,7 +21,7 @@ class SearchPatientsForm extends Component {
 
   render () {
     const {
-      fields: { name, includeIndication, excludeIndication, gender, ageFrom, ageTo, bmiFrom, bmiTo },
+      fields: { name, selectedIndicationFilter, includeIndication, excludeIndication, gender, ageFrom, ageTo, bmiFrom, bmiTo },
       indications,
       genderOptions,
       handleSubmit,
@@ -34,57 +35,69 @@ class SearchPatientsForm extends Component {
           <div className="row">
             <div className="col-sm-10">
               <div className="row">
-                <div className="col-sm-2">
-                  <input className="form-control search-name" type="text" disabled={submitting || loading} placeholder="Search Name" {...name} />
-                </div>
-                <div className="col-sm-2">
-                  <label>Include Indication</label>
-                  <span className="label-helper"> (Or) </span>
+                <div className="col-sm-4 form-group">
+                  <label>Name</label>
                   <div>
-                    <Select
-                      {...includeIndication}
-                      options={indications}
-                      multi
-                      joinValues
-                      disabled={submitting || loading}
-                      onBlur={() => { includeIndication.onBlur(includeIndication) }}
-                      />
+                    <input className="form-control search-name" type="text" disabled={submitting || loading} placeholder="Search Name" {...name} />
                   </div>
                 </div>
-                <div className="col-sm-2">
-                  <label>Exclude Indication</label>
-                  <div>
-                    <Select
-                      {...excludeIndication}
-                      options={indications}
-                      multi
-                      joinValues
-                      disabled={submitting || loading}
-                      onBlur={() => { excludeIndication.onBlur(excludeIndication) }}
-                      />
-                  </div>
-                </div>
-                <div className="col-sm-2">
-                  <label>Gender</label>
-                  <div>
-                    <Select
-                      {...gender}
-                      options={genderOptions}
-                      disabled={submitting || loading}
-                      onBlur={() => { gender.onBlur(gender) }}
-                      />
-                  </div>
-                </div>
-                <div className="col-sm-2">
+                <div className="col-sm-4 form-group">
                   <label>Age Range</label>
                   <div>
                     <input className="form-control age-from" type="text" disabled={submitting || loading} placeholder="From" {...ageFrom} /><span> - </span><input className="form-control age-to" type="text" disabled={submitting || loading} placeholder="To" {...ageTo} />
                   </div>
                 </div>
-                <div className="col-sm-2">
+                <div className="col-sm-4 form-group">
                   <label>BMI Range</label>
                   <div>
                     <input className="form-control bmi-from" type="text" disabled={submitting || loading} placeholder="From" {...bmiFrom} /><span> - </span><input className="form-control bmi-to" type="text" disabled={submitting || loading} placeholder="To" {...bmiTo} />
+                  </div>
+                </div>
+                <div className="col-sm-4 form-group">
+                  <label>
+                    <input type="radio" {...selectedIndicationFilter} value="include" checked={selectedIndicationFilter.value === 'include'} className="indication-filter-selector" />
+                    Include Indication
+                  </label>
+                  <span className="label-helper"> (Or) </span>
+                  <div>
+                    <Select
+                      {...includeIndication}
+                      options={indications}
+                      placeholder="Search..."
+                      multi
+                      joinValues
+                      disabled={submitting || loading || selectedIndicationFilter.value !== 'include'}
+                      onBlur={() => { includeIndication.onBlur(includeIndication) }}
+                      />
+                  </div>
+                </div>
+                <div className="col-sm-4 form-group">
+                  <label>
+                    <input type="radio" {...selectedIndicationFilter} value="exclude" checked={selectedIndicationFilter.value === 'exclude'} className="indication-filter-selector" />
+                    Exclude Indication
+                  </label>
+                  <div>
+                    <Select
+                      {...excludeIndication}
+                      options={indications}
+                      placeholder="Search..."
+                      multi
+                      joinValues
+                      disabled={submitting || loading || selectedIndicationFilter.value !== 'exclude'}
+                      onBlur={() => { excludeIndication.onBlur(excludeIndication) }}
+                      />
+                  </div>
+                </div>
+                <div className="col-sm-4 form-group">
+                  <label>Gender</label>
+                  <div>
+                    <Select
+                      {...gender}
+                      options={genderOptions}
+                      placeholder="Select"
+                      disabled={submitting || loading}
+                      onBlur={() => { gender.onBlur(gender) }}
+                      />
                   </div>
                 </div>
               </div>

@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { fetchPatients, clearPatients, fetchIndications } from 'actions'
@@ -25,16 +26,28 @@ class SearchPatientsFormPanel extends React.Component {
   }
 
   handleSubmit (searchFilter) {
-    this.props.fetchPatients(searchFilter)
+    let queryParams = _.omit(_.omitBy(searchFilter, _.isUndefined), 'selectedIndicationFilter')
+
+    if (searchFilter.selectedIndicationFilter === 'include' && searchFilter.includeIndication) {
+      queryParams.includeIndication = _.map(searchFilter.includeIndication, i => i.value).join(',')
+    } else if (searchFilter.selectedIndicationFilter === 'exclude' && searchFilter.excludeIndication) {
+      queryParams.excludeIndication = _.map(searchFilter.excludeIndication, i => i.value).join(',')
+    }
+
+    this.props.fetchPatients(queryParams)
   }
 
   render () {
     const { indications, fetchingPatients, fetchingIndications } = this.props
     const genderOptions = [ { label: 'All', value: 'All' }, { label: 'Male', value: 'Male' }, { label: 'Female', value: 'Female' } ]
     return (
-      <div className="patients-search">
-        <div className="search-form">
-          <SearchPatientsForm loading={fetchingIndications} submitting={fetchingPatients} indications={indications} genderOptions={genderOptions} onSubmit={this.handleSubmit.bind(this)} />
+      <div className="panel panel-default">
+        <div className="panel-body">
+          <div className="patients-search">
+            <div className="search-form">
+              <SearchPatientsForm loading={fetchingIndications} submitting={fetchingPatients} indications={indications} genderOptions={genderOptions} onSubmit={this.handleSubmit.bind(this)} />
+            </div>
+          </div>
         </div>
       </div>
     )
