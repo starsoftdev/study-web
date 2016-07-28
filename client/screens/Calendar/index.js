@@ -27,7 +27,7 @@ class Calendar extends React.Component {
     ]
 
     return (
-      <div className="container">
+      <div className="calendar-page">
         <div className="calendar-box">
           <BigCalendar
             popup
