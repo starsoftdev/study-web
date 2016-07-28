@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
 import PatientColItem from './PatientColItem'
+import ChatForm from '../ChatForm'
 
 import { fetchPatientCategories, fetchPatientsByStudy, updatePatientCategory } from 'actions'
 
@@ -74,7 +75,7 @@ export default class PatientBoard extends Component {
     return (
       <div className="patient-board">
         {contentList}
-
+        <ChatForm {...this.props} />
       </div>
     )
   }

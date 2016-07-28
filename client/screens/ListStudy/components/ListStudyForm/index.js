@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 //import { Link } from 'react-router'
 import t from 'tcomb-form'
@@ -33,6 +33,36 @@ const select2Template = t.form.Form.templates.select.clone({
         id={locals.attrs.id}
         onChange={function (evt) { locals.onChange(evt.target.value) }}
       />
+    )
+  }
+})
+
+const availNumbersTemplate = t.form.Form.templates.select.clone({
+  renderSelect: (locals) => {
+    class SelectOptionWrapper extends Component {
+      render () {
+        return <option value={this.props.data.value}>{this.props.data.text}</option>
+      }
+    }
+
+    return (
+      <div>
+        <select
+          name={locals.attrs.name}
+          className={locals.attrs.className}
+          id={locals.attrs.id}
+          onChange={function (evt) { locals.onChange(evt.target.value) }}
+          value={locals.attrs.value}
+        >
+          {locals.options.map(function (i, key) {
+            return <SelectOptionWrapper key={i.value} data={i} />
+          })}
+        </select>
+        <span
+          className="remove-lead-source"
+          onClick={function (evt) {}}
+        >remove</span>
+      </div>
     )
   }
 })
@@ -255,6 +285,7 @@ class ListStudyForm extends React.Component {
       },
       availNumbers: {
         label: 'PHONE NUMBER *',
+        template: availNumbersTemplate,
         nullOption: {
           value: '',
           text: 'Select Number'
@@ -399,8 +430,8 @@ class ListStudyForm extends React.Component {
     ev.preventDefault()
     const { saveStudy } = this.props
     const validateResult = this.refs.form.validate()
+    const authData = this.props.authorization.authData
     let formOptions = _.clone(this.state.formOptions)
-    let authData = this.props.authorization.authData
     if (validateResult.errors.length > 0) {
       for (let err of validateResult.errors) {
         _.set(formOptions, `fields.${err.path[0]}.attrs.data-tip`, err.message)
@@ -426,7 +457,7 @@ class ListStudyForm extends React.Component {
         }
       }
 
-      const newValue = {
+      const options = {
         siteLocation: value.siteLocation,
         recruitmentPhone: value.recruitmentPhone,
         indication: value.indication,
@@ -442,18 +473,21 @@ class ListStudyForm extends React.Component {
         // patientMessagingSuite: value.patientMessagingSuite,
         callTracking: value.callTracking,
         leadSource: sources,
-        availNumbers: this.props.availNumbers.avail[value.availNumbers],
         startDate: value.startDate,
         notes: value.notes
       }
       //value.uploadStudyAd.uploadFile()
 
       if (authData) {
-        saveStudy(authData, null, newValue)
+        saveStudy(authData, null, options)
       } else {
         console.error('need auth')
       }
     }
+
+    this.setState({
+      formOptions
+    })
   }
 
   onChange (value) {
@@ -490,6 +524,12 @@ class ListStudyForm extends React.Component {
         comp.setStudyForm(comp.studyFormOptions, false)
       }
     }
+
+    /*for(var prop in value) {
+      if (!value.hasOwnProperty(prop)) continue
+      if(prop && prop !== ''){
+      }
+    }*/
 
     comp.setState({
       formOptions,
