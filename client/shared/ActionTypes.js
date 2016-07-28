@@ -66,5 +66,10 @@ export const ActionTypes = keymirror({
   SUBSCRIBE_REQUEST: null,
   UNSUBSCRIBE_REQUEST: null,
   RECEIVE_MESSAGE: null,
-  FETCH_AVAIL_NUMBERS: null
+  FETCH_AVAIL_NUMBERS: null,
+  FETCH_TWILIO_MESSAGES: null,
+  FINISH_SAVE_TWILIO_MESSAGE: null,
+  SAVE_TWILIO_MESSAGE: null,
+  SET_ACTIVE_CHAT: null,
+  UNSET_ACTIVE_CHAT: null
 })
