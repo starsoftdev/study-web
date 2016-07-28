@@ -90,10 +90,12 @@ export default class PatientsList extends Component {
               </table>
             </div>
             <Modal className="edit-patient" show={this.modalShouldBeShown()} onHide={this.closeModal.bind(this)}>
-              <EditPatientForm loading={fetchingIndications || fetchingPatientCategories || fetchingInfoSources}
-                               submitting={savingPatient} indicationOptions={indications} genderOptions={genderOptions}
-                               patientCategoryOptions={patientCategories} infoSourceOptions={infoSources}
-                               onSubmit={this.updatePatient.bind(this)} />
+              <div className="modal-body">
+                <EditPatientForm loading={fetchingIndications || fetchingPatientCategories || fetchingInfoSources}
+                                 submitting={savingPatient} indicationOptions={indications} genderOptions={genderOptions}
+                                 patientCategoryOptions={patientCategories} infoSourceOptions={infoSources}
+                                 selectedPatient={selectedPatient} onSubmit={this.updatePatient.bind(this)} />
+              </div>
             </Modal>
           </div>
         </div>

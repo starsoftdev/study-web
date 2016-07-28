@@ -7,7 +7,7 @@ export default function infoSources (state=[], action) {
       if (action.status === 'succeeded') {
         const infoSourcesResult = _.map(action.payload, infoSourceIterator => {
           return {
-            label: infoSourceIterator.name,
+            label: infoSourceIterator.type,
             value: infoSourceIterator.id,
           }
         })
