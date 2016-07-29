@@ -71,5 +71,7 @@ export const ActionTypes = keymirror({
   FINISH_SAVE_TWILIO_MESSAGE: null,
   SAVE_TWILIO_MESSAGE: null,
   SET_ACTIVE_CHAT: null,
-  UNSET_ACTIVE_CHAT: null
+  UNSET_ACTIVE_CHAT: null,
+  JOIN_TWILIO_CHAT: null,
+  LEAVE_TWILIO_CHAT: null
 })

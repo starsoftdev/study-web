@@ -1,27 +1,33 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-
 import { Modal, Button } from 'react-bootstrap'
-import { fetchTwilioMessages, saveTwilioMessage, unsetActiveChat } from 'actions'
+import {
+  fetchTwilioMessages,
+  saveTwilioMessage,
+  setActiveChat,
+  unsetActiveChat,
+  joinTwilioChat,
+  leaveTwilioChat
+} from 'actions'
 import { isValidCurrency, strToFloat } from 'utils/number'
-import LoadingResults from 'components/LoadingResults'
+import Dispatcher from 'utils/dispatcher'
+//import LoadingResults from 'components/LoadingResults'
 
 import _ from 'lodash'
 import t from 'tcomb-form'
-
 import './styles.less'
 
 const TCombForm = t.form.Form
 
 let formData = {
-  message: '',
+  message: ''
 }
 
 const schema = t.struct({
   message: t.maybe(t.String)
 })
 
-const layout = function (locals) {
+const layout = (locals) => {
   return (
     <fieldset>
       <div className="row">
@@ -40,18 +46,34 @@ const options = {
     message: {
       type: 'textarea',
       attrs: {
-        rows: 2
+        autoFocus: true,
+        rows: 2,
+        onBlur: () => {}
       }
     }
   }
 }
 
 class ChatForm extends React.Component {
+  constructor (props) {
+    super(props)
+    this.namespace = 'nsp'
+    this.appDispatcher = new Dispatcher()
+    this.state = {
+      showModal: false,
+      messages: null
+    }
+  }
+
   static propTypes = {
+    authorization: PropTypes.any,
     isSaving: PropTypes.bool,
     showModal: PropTypes.bool,
     activeChat: PropTypes.object,
+    setActiveChat: PropTypes.func,
     unsetActiveChat: PropTypes.func,
+    joinTwilioChat: PropTypes.func,
+    leaveTwilioChat: PropTypes.func,
     twilioMessages: PropTypes.object,
     fetchTwilioMessages: PropTypes.func,
     saveTwilioMessage: PropTypes.func,
@@ -59,14 +81,33 @@ class ChatForm extends React.Component {
     savingTwilioMessage: PropTypes.bool
   }
 
-  state = {
-    showModal: false,
-    messages: null
+  connect (nameSpace, cb) {
+    let authData = this.props.authorization.authData
+
+    if (authData) {
+      if (!this.io) {
+        this.io = io(`${HOST_URL}/${nameSpace}`)
+        this.io.on('connect', () => {
+          cb()
+        })
+      } else {
+        cb()
+      }
+    } else {
+      if (this.io) {
+        this.io.disconnect()
+        this.io = null
+      }
+    }
   }
 
   close () {
-    const { unsetActiveChat } = this.props
-    this.setState({ showModal: false }, () => {
+    let scope = this
+    const { activeChat, leaveTwilioChat, unsetActiveChat } = scope.props
+    scope.setState({ showModal: false }, () => {
+      /*leaveTwilioChat(scope.io, activeChat.data, (err, data, cb) => {
+        cb(err, data)
+      })*/
       unsetActiveChat()
     })
   }
@@ -75,12 +116,35 @@ class ChatForm extends React.Component {
     this.setState({ showModal: true })
   }
 
-  ID () {
-    return '_' + Math.random().toString(36).substr(2, 9)
-  }
-
   componentDidMount () {
-    //..
+    let scope = this
+    const { setActiveChat, fetchTwilioMessages, joinTwilioChat } = this.props
+    this.appDispatcher.register(function (payload) {
+      if (payload.actionType === 'setActiveChat') {
+        scope.connect(scope.namespace, () => {
+          /*joinTwilioChat(scope.io, payload.data, (err, data, cb) => {
+            cb(err, data)
+          })*/
+
+          setActiveChat(scope.io, payload.data, (err, data, cb) => {
+            if (!err) {
+              scope.open()
+            }
+
+            scope.io.on('notifyMessage', () => {
+              fetchTwilioMessages(scope.io, {
+                studyId: payload.data.studyId,
+                patientId: payload.data.patientId
+              }, (err, data, cb) => {
+                cb(err, data)
+              })
+            })
+
+            cb(err, data)
+          })
+        })
+      }
+    })
   }
 
   componentWillMount () {
@@ -89,39 +153,40 @@ class ChatForm extends React.Component {
 
   componentWillReceiveProps (nextProps) {
     const { activeChat } = nextProps
-    if (!_.isEmpty(activeChat.data)) {
-      this.open()
-    }
+    if (!_.isEmpty(activeChat.data)) {}
   }
 
   handleSubmit (ev) {
     ev.preventDefault()
     const { activeChat, saveTwilioMessage, fetchTwilioMessages } = this.props
     const value = this.refs.form.getValue()
+    let options = {
+      body: value.message,
+      studyId: activeChat.data.studyId,
+      patientId: activeChat.data.patientId,
+      to: activeChat.data.phone
+    }
 
     if (value) {
-      saveTwilioMessage({
-        body: value.message,
-        studyId: activeChat.data.studyId,
-        patientId: activeChat.data.patientId
-      }, (err, payload) => {
-        if (err) {
-          console.error(err)
-        } else {
-          fetchTwilioMessages({
-            studyId: payload.studyId,
-            patientId: payload.patientId
+      saveTwilioMessage(this.io, options, (err, data, cb) => {
+        if (!err) {
+          fetchTwilioMessages(this.io, {
+            studyId: data.studyId,
+            patientId: data.patientId
+          }, (err, data, cb) => {
+            cb(err, data)
           })
         }
+
+        cb(err, data)
       })
     }
   }
 
   render () {
-    let scope = this
-    const { isSaving } = scope.props
+    const { isSaving } = this.props
     const listMessages =
-      (scope.props.twilioMessages.messages.length) ? scope.props.twilioMessages.messages.map((item, index) => (
+      (this.props.twilioMessages.messages.length) ? this.props.twilioMessages.messages.map((item, index) => (
       <span
         key={item.twilioTextMessage.sid}
         className={'message ' + item.twilioTextMessage.direction}
@@ -169,6 +234,7 @@ class ChatForm extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  authorization: state.authorization,
   isSaving: state.savingTwilioMessage || state.fetchingTwilioMessages,
   activeChat: state.activeChat,
   twilioMessages: state.twilioMessages,
@@ -179,7 +245,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   fetchTwilioMessages,
   saveTwilioMessage,
-  unsetActiveChat
+  setActiveChat,
+  unsetActiveChat,
+  joinTwilioChat,
+  leaveTwilioChat
 }
 
 export default connect(
