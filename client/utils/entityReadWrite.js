@@ -9,6 +9,7 @@ function entityRequest (path, entityData, method, cb = () => {}) {
 
 export function searchEntities (path, searchParams, cb) {
   const queryString = serializeParams(searchParams)
+
   let pathWithQuery = path
   if (queryString) {
     pathWithQuery = `${path}?${queryString}`
@@ -31,7 +32,7 @@ export function deleteEntity (path, entityData, cb) {
 function serializeParams (obj) {
   let str = []
   for (let p in obj) {
-    if (obj.hasOwnProperty(p) && !!obj[p]) {
+    if (obj.hasOwnProperty(p) && obj[p] !== undefined && obj[p] !== null ) {  // we need to pass 0 and empty string
       str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]))
     }
   }

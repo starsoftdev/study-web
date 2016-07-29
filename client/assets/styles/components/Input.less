@@ -5,7 +5,7 @@ input.form-control {
   font: 18px Arial, Helvetica, sans-serif;
   height: 46px;
   margin: 0 0 13px;
-  padding: 0 2%;
+  padding: 0 10px;
   width: 100%;
   background-color: @gray-lightest;
   color: @orange;
@@ -31,4 +31,21 @@ input[type="checkbox"] {
   -moz-box-shadow: inset 3px 2px 5px #c5c5c5;
   -webkit-box-shadow: inset 3px 2px 5px #c5c5c5;
   box-shadow: inset 3px 2px 5px #c5c5c5;
+}
+
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    width: 150px;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
 }

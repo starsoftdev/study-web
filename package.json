@@ -1,21 +1,24 @@
 {
-  "name": "sutudykik-web",
+  "name": "studykik-web",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "browsers": "nightwatch -e chrome --suiteRetries 3",
     "build": "npm run clean && webpack",
+    "chrome": "nightwatch -e chrome",
     "clean": "rm -rf dist",
     "deploy": "npm run dist && gh-pages -d dist",
     "dist": "NODE_ENV=production npm run build",
-    "lint": "eslint client",
-    "prestart": "node scripts/check-pre-hook",
-    "pre-commit": "npm run lint",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prestart": "node install.js",
+    "pre-commit": "PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:./node_modules/.bin eslint .",
+    "pretest": "npm run lint",
     "start": "npm run build && node server/index.js",
-    "test": "npm run unit && npm run browsers",
+    "test": "npm run unit",
     "unit": "BABEL_ENV=test karma start",
-    "browsers": "nightwatch -e chrome --suiteRetries 3",
-    "chrome": "nightwatch -e chrome"
+    "unit-debug": "BABEL_ENV=test karma start karma.conf.js --browsers=Chrome --single-run=false --debug"
   },
   "repository": {
     "type": "git",
@@ -24,7 +27,7 @@
   "author": "",
   "license": "UNLICENSED",
   "engines": {
-    "node": ">= 4.1.0"
+    "node": ">= 6.2.0"
   },
   "dependencies": {
     "classnames": "^2.2.5",
@@ -33,6 +36,7 @@
     "font-awesome-webpack": "0.0.4",
     "history": "^2.1.1",
     "keymirror": "^0.1.1",
+    "lodash": "https://registry.npmjs.org/lodash/-/lodash-4.12.0.tgz",
     "moment": "^2.13.0",
     "qs": "^6.2.0",
     "react": "^15.0.2",
@@ -43,12 +47,15 @@
     "react-dom": "^15.0.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.4.0",
+    "react-sortablejs": "^1.0.0",
+    "react-tooltip": "^2.0.3",
     "react-youtube": "^6.1.0",
     "redux": "^3.5.2",
     "redux-effects": "^0.4.3",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
     "selectn": "^1.0.20",
+    "sortablejs": "^1.4.2",
     "tcomb-form": "^0.9.5",
     "tcomb-validation": "^3.0.0",
     "whatwg-fetch": "^1.0.0"
@@ -73,11 +80,13 @@
     "express": "^4.13.4",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
+    "git-validate": "^2.1.4",
     "html-webpack-plugin": "^2.16.1",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^1.0.1",
     "karma-cli": "^1.0.0",
     "karma-mocha": "^1.0.1",
+    "karma-sinon": "^1.0.5",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
     "less": "^2.7.1",
@@ -93,6 +102,7 @@
     "redux-devtools-dock-monitor": "^1.1.1",
     "redux-devtools-log-monitor": "^1.0.11",
     "selenium-standalone": "^5.1.0",
+    "sinon": "^1.17.4",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.0",
@@ -100,5 +110,11 @@
     "webpack-hot-middleware": "^2.10.0",
     "winston": "^2.2.0"
   },
+  "pre-commit#develop": [
+    "pre-commit"
+  ],
+  "pre-commit#master": [
+    "pre-commit"
+  ],
   "homepage": "https://github.com/sutdykik/web#readme"
 }

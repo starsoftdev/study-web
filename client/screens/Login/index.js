@@ -88,7 +88,15 @@ class Login extends React.Component {
     e.preventDefault()
     const value = this.refs.form.getValue()
     if (value) {
-      this.props.onLogin(value)
+      if (value.email.indexOf('@')>-1 && value.email.indexOf('.')>-1) {
+        this.props.onLogin(value)
+      }
+      else {
+        this.props.onLogin({
+          username: value.email,
+          password: value.password
+        })
+      }
     }
   }
 
@@ -144,5 +152,5 @@ const mapDispatchToProps = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Login)
