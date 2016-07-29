@@ -57,6 +57,24 @@ export default class PatientsList extends Component {
     const { indications, patientCategories, infoSources,
       fetchingIndications, fetchingPatientCategories, fetchingInfoSources,
       patients, selectedPatient, savingPatient } = this.props
+    const indicationOptions = _.map(indications, indicationIterator => {
+      return {
+        label: indicationIterator.name,
+        value: indicationIterator.id,
+      }
+    })
+    const patientCategoryOptions = _.map(patientCategories, patientCategoryIterator => {
+      return {
+        label: patientCategoryIterator.name,
+        value: patientCategoryIterator.id,
+      }
+    })
+    const infoSourceOptions = _.map(infoSources, infoSourceIterator => {
+      return {
+        label: infoSourceIterator.type,
+        value: infoSourceIterator.id,
+      }
+    })
     const genderOptions = [ { label: 'Male', value: 'Male' }, { label: 'Female', value: 'Female' } ]
     const patientsListContents = patients.map((item, index) => (
       <PatientItem {...item} key={index} index={index} />
@@ -90,12 +108,15 @@ export default class PatientsList extends Component {
               </table>
             </div>
             <Modal className="edit-patient" show={this.modalShouldBeShown()} onHide={this.closeModal.bind(this)}>
-              <div className="modal-body">
+              <Modal.Header closeButton>
+                <Modal.Title>Edit Patient</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
                 <EditPatientForm loading={fetchingIndications || fetchingPatientCategories || fetchingInfoSources}
-                                 submitting={savingPatient} indicationOptions={indications} genderOptions={genderOptions}
-                                 patientCategoryOptions={patientCategories} infoSourceOptions={infoSources}
+                                 submitting={savingPatient} indicationOptions={indicationOptions} genderOptions={genderOptions}
+                                 patientCategoryOptions={patientCategoryOptions} infoSourceOptions={infoSourceOptions}
                                  selectedPatient={selectedPatient} onSubmit={this.updatePatient.bind(this)} />
-              </div>
+              </Modal.Body>
             </Modal>
           </div>
         </div>

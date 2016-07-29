@@ -34,13 +34,19 @@ class SearchPatientsFormPanel extends React.Component {
 
   render () {
     const { indications, fetchingPatients, fetchingIndications } = this.props
+    const indicationOptions = _.map(indications, indicationIterator => {
+      return {
+        label: indicationIterator.name,
+        value: indicationIterator.id,
+      }
+    })
     const genderOptions = [ { label: 'All', value: 'All' }, { label: 'Male', value: 'Male' }, { label: 'Female', value: 'Female' } ]
     return (
       <div className="panel panel-default">
         <div className="panel-body">
           <div className="patients-search">
             <div className="search-form">
-              <SearchPatientsForm loading={fetchingIndications} submitting={fetchingPatients} indicationOptions={indications} genderOptions={genderOptions} onSubmit={this.handleSubmit.bind(this)} />
+              <SearchPatientsForm loading={fetchingIndications} submitting={fetchingPatients} indicationOptions={indicationOptions} genderOptions={genderOptions} onSubmit={this.handleSubmit.bind(this)} />
             </div>
           </div>
         </div>
