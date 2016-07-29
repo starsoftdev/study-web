@@ -43,6 +43,7 @@ export fetchTwilioMessages from './fetchTwilioMessages'
 export saveTwilioMessage from './saveTwilioMessage'
 export setActiveChat from './setActiveChat'
 export unsetActiveChat from './unsetActiveChat'
+export * from './twilioChat'
 
 export * from './notificationActions'
 export * from './notification'

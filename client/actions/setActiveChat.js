@@ -1,11 +1,10 @@
 import { ActionTypes } from 'ActionTypes'
-import { searchEntities } from 'utils/entityReadWrite'
 import asyncAction from 'utils/asyncAction'
 
-export default function setActiveChat (searchParams) {
+export default function setActiveChat (socket, searchParams, next) {
   return asyncAction(ActionTypes.FETCH_TWILIO_MESSAGES, (cb, dispatch, getState) => {
     function afterSave (err, payload) {
-      cb(err, payload)
+      next(err, payload, cb)
       if (!err) {
         dispatch({
           type: ActionTypes.SET_ACTIVE_CHAT,
@@ -14,6 +13,10 @@ export default function setActiveChat (searchParams) {
       }
     }
 
-    dispatch(searchEntities('/textMessages/studyPatientMessages', searchParams, afterSave))
+    dispatch(() => {
+      if (socket) {
+        socket.emit('getStudyPatientMessages', searchParams, afterSave)
+      }
+    })
   })
 }

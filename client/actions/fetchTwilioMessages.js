@@ -1,9 +1,16 @@
 import { ActionTypes } from 'ActionTypes'
-import { searchEntities } from 'utils/entityReadWrite'
 import asyncAction from 'utils/asyncAction'
 
-export default function fetchTwilioMessages (searchParams) {
+export default function fetchTwilioMessages (socket, searchParams, next) {
   return asyncAction(ActionTypes.FETCH_TWILIO_MESSAGES, (cb, dispatch, getState) => {
-    dispatch(searchEntities('/textMessages/studyPatientMessages', searchParams, cb))
+    function afterSave (err, payload) {
+      next(err, payload, cb)
+    }
+
+    dispatch(() => {
+      if (socket) {
+        socket.emit('getStudyPatientMessages', searchParams, afterSave)
+      }
+    })
   })
 }
