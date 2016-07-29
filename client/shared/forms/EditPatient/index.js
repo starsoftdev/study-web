@@ -38,29 +38,33 @@ class EditPatientForm extends Component {
     return (
       <form className="form-edit-patient form-horizontal" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label className="col-sm-4 control-label">NAME</label>
-          <div className="col-sm-4">
-            <input type="text" className="form-control" disabled={submitting || loading} {...firstName} />
-          </div>
-          <div className="col-sm-4">
-            <input type="text" className="form-control" disabled={submitting || loading} {...lastName} />
+          <label className="col-sm-3 control-label">NAME</label>
+          <div className="col-sm-9">
+            <div className="row">
+              <div className="col-sm-6">
+                <input type="text" className="form-control" disabled={submitting || loading} {...firstName} />
+              </div>
+              <div className="col-sm-6">
+                <input type="text" className="form-control" disabled={submitting || loading} {...lastName} />
+              </div>
+            </div>
           </div>
         </div>
         <div className="form-group">
-          <label className="col-sm-4 control-label">EMAIL</label>
-          <div className="col-sm-8">
+          <label className="col-sm-3 control-label">EMAIL</label>
+          <div className="col-sm-9">
             <input type="text" className="form-control" disabled={submitting || loading} {...email} />
           </div>
         </div>
         <div className="form-group">
-          <label className="col-sm-4 control-label">PHONE</label>
-          <div className="col-sm-8">
+          <label className="col-sm-3 control-label">PHONE</label>
+          <div className="col-sm-9">
             <input type="text" className="form-control" disabled={submitting || loading} {...phone} />
           </div>
         </div>
         <div className="form-group">
-          <label className="col-sm-4 control-label">INDICATION</label>
-          <div className="col-sm-8">
+          <label className="col-sm-3 control-label">INDICATION</label>
+          <div className="col-sm-9">
             <Select
               {...indication}
               options={indicationOptions}
@@ -71,14 +75,14 @@ class EditPatientForm extends Component {
           </div>
         </div>
         <div className="form-group">
-          <label className="col-sm-4 control-label">AGE</label>
-          <div className="col-sm-8">
+          <label className="col-sm-3 control-label">AGE</label>
+          <div className="col-sm-9">
             <input type="text" className="form-control" disabled={submitting || loading} {...age} />
           </div>
         </div>
         <div className="form-group">
-          <label className="col-sm-4 control-label">GENDER</label>
-          <div className="col-sm-8">
+          <label className="col-sm-3 control-label">GENDER</label>
+          <div className="col-sm-9">
             <Select
               {...gender}
               options={genderOptions}
@@ -89,14 +93,14 @@ class EditPatientForm extends Component {
           </div>
         </div>
         <div className="form-group">
-          <label className="col-sm-4 control-label">BMI</label>
-          <div className="col-sm-8">
+          <label className="col-sm-3 control-label">BMI</label>
+          <div className="col-sm-9">
             <input type="text" className="form-control" disabled={submitting || loading} {...bmi} />
           </div>
         </div>
         <div className="form-group">
-          <label className="col-sm-4 control-label">STATUS</label>
-          <div className="col-sm-8">
+          <label className="col-sm-3 control-label">STATUS</label>
+          <div className="col-sm-9">
             <Select
               {...status}
               options={patientCategoryOptions}
@@ -107,8 +111,8 @@ class EditPatientForm extends Component {
           </div>
         </div>
         <div className="form-group">
-          <label className="col-sm-4 control-label">SOURCE</label>
-          <div className="col-sm-8">
+          <label className="col-sm-3 control-label">SOURCE</label>
+          <div className="col-sm-9">
             <Select
               {...source}
               options={infoSourceOptions}
@@ -119,12 +123,14 @@ class EditPatientForm extends Component {
           </div>
         </div>
         <div className="form-group">
-          <button type="submit" className="btn btn-default" disabled={submitting || loading}>
-            {submitting
-              ? <span>Saving...</span>
-              : <span>UPDATE</span>
-            }
-          </button>
+          <div className="col-sm-12">
+            <button type="submit" className="btn btn-default pull-right" disabled={submitting || loading}>
+              {submitting
+                ? <span>Saving...</span>
+                : <span>UPDATE</span>
+              }
+            </button>
+          </div>
         </div>
       </form>
     )
