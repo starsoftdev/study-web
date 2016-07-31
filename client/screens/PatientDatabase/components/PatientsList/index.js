@@ -6,6 +6,7 @@ import { clearSelectedPatient, savePatient, fetchPatients, clearPatients,
 import EditPatientForm from 'forms/EditPatient'
 import ActivityIcon from 'components/ActivityIcon'
 import PatientItem from './PatientItem'
+import _ from 'lodash'
 import './styles.less'
 
 export default class PatientsList extends Component {
@@ -57,6 +58,17 @@ export default class PatientsList extends Component {
     const { indications, patientCategories, infoSources,
       fetchingIndications, fetchingPatientCategories, fetchingInfoSources,
       patients, selectedPatient, savingPatient } = this.props
+    let selectedPatientInput = {}
+
+    if (selectedPatient) {
+      selectedPatientInput = _.omit(selectedPatient, [ 'created', 'indication_id', 'indication', 'info_source_id', 'infoSource', 'lastAction', 'study_patient_category_id', 'studyPatientCategory' ])
+      _.assign(selectedPatientInput, {
+        indication: selectedPatient.indication_id,
+        status: selectedPatient.study_patient_category_id,
+        source: selectedPatient.info_source_id,
+      })
+    }
+
     const indicationOptions = _.map(indications, indicationIterator => {
       return {
         label: indicationIterator.name,
@@ -115,7 +127,7 @@ export default class PatientsList extends Component {
                 <EditPatientForm loading={fetchingIndications || fetchingPatientCategories || fetchingInfoSources}
                                  submitting={savingPatient} indicationOptions={indicationOptions} genderOptions={genderOptions}
                                  patientCategoryOptions={patientCategoryOptions} infoSourceOptions={infoSourceOptions}
-                                 selectedPatient={selectedPatient} onSubmit={this.updatePatient.bind(this)} />
+                                 initialValues={selectedPatientInput} onSubmit={this.updatePatient.bind(this)} />
               </Modal.Body>
             </Modal>
           </div>

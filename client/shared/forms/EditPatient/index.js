@@ -8,7 +8,6 @@ export const fields = [ 'firstName', 'lastName', 'email', 'phone', 'indication',
 class EditPatientForm extends Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
-    selectedPatient: PropTypes.object.isRequired,
     indicationOptions: PropTypes.array.isRequired,
     genderOptions: PropTypes.array.isRequired,
     patientCategoryOptions: PropTypes.array.isRequired,
@@ -25,7 +24,6 @@ class EditPatientForm extends Component {
   render () {
     const {
       fields: { firstName, lastName, email, phone, indication, age, gender, bmi, status, source },
-      selectedPatient,
       indicationOptions,
       genderOptions,
       patientCategoryOptions,
