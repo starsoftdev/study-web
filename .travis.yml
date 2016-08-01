@@ -7,16 +7,15 @@ branches:
   - master
   - develop
 notifications:
+  slack: studykik:nxDZXJcNFYdWoXibXQ9T0013
+    on_success: always
+    on_failure: always
   webhooks:
     urls:
       - http://web-staging.studykik.com:9001/notifications
     on_success: always
     on_failure: never
     on_start: never
-  
-  slack: studykik:nxDZXJcNFYdWoXibXQ9T0013
-    on_success: always
-    on_failure: always
 
 sudo: required
 dist: trusty
