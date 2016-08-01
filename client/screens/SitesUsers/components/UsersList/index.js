@@ -137,7 +137,7 @@ export default class UsersList extends Component {
 const mapStateToProps = (state) => ({
   currentUser: state.authorization.authData,
   sites: state.sites,
-  users: state.users,
+  users: state.clientRoles,
   selectedUser: state.selectedUser,
   savingUser: state.savingUser,
   removingUser: state.removingUser,

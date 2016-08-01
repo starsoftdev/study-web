@@ -15,7 +15,7 @@ export savingUser from './savingUser'
 export removingUser from './removingUser'
 
 export sites from './sites'
-export users from './users'
+export clientRoles from './users'
 export selectedSite from './selectedSite'
 export selectedUser from './selectedUser'
 
