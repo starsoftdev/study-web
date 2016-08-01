@@ -29,7 +29,7 @@ export default function users (state=[], action) {
 
       return newState
     case ActionTypes.FINISH_DELETE_USER:
-      foundUserIndex = _.findIndex(state, { id: userData.userResultData.id })
+      foundUserIndex = _.findIndex(state, { id: userData.clientRoleId })
       if (foundUserIndex > -1) {
         newState.splice(foundUserIndex, 1)
       }
