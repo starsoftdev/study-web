@@ -15,6 +15,7 @@ import Dispatcher from 'utils/dispatcher'
 
 import _ from 'lodash'
 import t from 'tcomb-form'
+import $ from 'jquery'
 import './styles.less'
 
 const TCombForm = t.form.Form
@@ -156,6 +157,13 @@ class ChatForm extends React.Component {
     if (!_.isEmpty(activeChat.data)) {}
   }
 
+  componentDidUpdate (prevProps, prevState) {
+    let messContainer = $('#mess-container')
+    if (messContainer.length > 0) {
+      messContainer.scrollTop(messContainer[0].scrollHeight)
+    }
+  }
+
   handleSubmit (ev) {
     ev.preventDefault()
     const { activeChat, saveTwilioMessage, fetchTwilioMessages } = this.props
@@ -207,7 +215,7 @@ class ChatForm extends React.Component {
             className="form-green chat-form"
             onSubmit={this.handleSubmit.bind(this)}
           >
-            <div className="messages">
+            <div className="messages" id="mess-container">
               {listMessages}
             </div>
             <TCombForm
