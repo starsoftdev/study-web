@@ -21,7 +21,7 @@ class SearchPatientsFormPanel extends React.Component {
   }
 
   handleSubmit (searchFilter) {
-    let queryParams = _.omit(_.omitBy(searchFilter, _.isUndefined), 'selectedIndicationFilter')
+    let queryParams = _.omit(_.omitBy(searchFilter, _.isUndefined), [ 'selectedIndicationFilter', 'includeIndication', 'excludeIndication' ])
 
     if (searchFilter.selectedIndicationFilter === 'include' && searchFilter.includeIndication) {
       queryParams.includeIndication = _.map(searchFilter.includeIndication, i => i.value).join(',')
@@ -41,12 +41,15 @@ class SearchPatientsFormPanel extends React.Component {
       }
     })
     const genderOptions = [ { label: 'All', value: 'All' }, { label: 'Male', value: 'Male' }, { label: 'Female', value: 'Female' } ]
+    const initialSearchFilter = {
+      selectedIndicationFilter: 'include'
+    }
     return (
       <div className="panel panel-default">
         <div className="panel-body">
           <div className="patients-search">
             <div className="search-form">
-              <SearchPatientsForm loading={fetchingIndications} submitting={fetchingPatients} indicationOptions={indicationOptions} genderOptions={genderOptions} onSubmit={this.handleSubmit.bind(this)} />
+              <SearchPatientsForm loading={fetchingIndications} submitting={fetchingPatients} indicationOptions={indicationOptions} genderOptions={genderOptions} initialValues={initialSearchFilter} onSubmit={this.handleSubmit.bind(this)} />
             </div>
           </div>
         </div>

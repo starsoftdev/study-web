@@ -134,7 +134,7 @@ export default class PatientsList extends Component {
         </div>
       )
     } else {
-      return <div />
+      return <div><h4>No matching patients found</h4></div>
     }
   }
 }

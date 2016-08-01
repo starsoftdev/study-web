@@ -103,7 +103,7 @@ class SearchPatientsForm extends Component {
               </div>
             </div>
             <div className="col-sm-2">
-              <button type="submit" className="btn btn-default btn-search">Search</button>
+              <button type="submit" className="btn btn-success btn-search">Search</button>
             </div>
           </div>
         </div>
