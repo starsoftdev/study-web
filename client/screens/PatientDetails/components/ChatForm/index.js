@@ -102,6 +102,13 @@ class ChatForm extends React.Component {
     }
   }
 
+  scrollMessContainer () {
+    let messContainer = $('#mess-container')
+    if (messContainer.length > 0) {
+      messContainer.scrollTop(messContainer[0].scrollHeight)
+    }
+  }
+
   close () {
     let scope = this
     const { activeChat, leaveTwilioChat, unsetActiveChat } = scope.props
@@ -137,6 +144,7 @@ class ChatForm extends React.Component {
                 studyId: payload.data.studyId,
                 patientId: payload.data.patientId
               }, (err, data, cb) => {
+                scope.scrollMessContainer()
                 cb(err, data)
               })
             })
@@ -158,10 +166,7 @@ class ChatForm extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    let messContainer = $('#mess-container')
-    if (messContainer.length > 0) {
-      messContainer.scrollTop(messContainer[0].scrollHeight)
-    }
+    this.scrollMessContainer()
   }
 
   handleSubmit (ev) {
