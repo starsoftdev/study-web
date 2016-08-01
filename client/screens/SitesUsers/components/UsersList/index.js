@@ -72,7 +72,7 @@ export default class UsersList extends Component {
   removeUser (ev) {
     ev.preventDefault()
 
-    this.props.removeUser(this.props.selectedUser.id)
+    this.props.removeUser(this.props.selectedUser.roleForClient.id)
   }
 
   render () {
