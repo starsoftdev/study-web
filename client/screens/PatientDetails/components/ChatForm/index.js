@@ -83,7 +83,7 @@ class ChatForm extends React.Component {
 
   connect (nameSpace, cb) {
     let authData = this.props.authorization.authData
-
+    //console.log(authData);
     if (authData) {
       if (!this.io) {
         this.io = io(`${HOST_URL}/${nameSpace}`)
