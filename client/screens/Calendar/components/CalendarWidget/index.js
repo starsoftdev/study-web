@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { Modal } from 'react-bootstrap'
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
+import SchedulePatientModal from '../SchedulePatientModal'
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
@@ -16,10 +16,14 @@ class CalendarWidget extends React.Component {
 
   currentDate = new Date(2015, 3, 1)
 
-  closeModal() {
+  handleCloseModal () {
     this.setState({
       isModalVisible: false,
     })
+  }
+
+  handleSubmit (data) {
+    console.log(data)
   }
 
   render () {
@@ -66,24 +70,17 @@ class CalendarWidget extends React.Component {
             }
           }}
         />
-        <Modal className="edit-user" show={this.state.isModalVisible} onHide={this.closeModal.bind(this)}>
-          <form className="form-green">
-            <Modal.Header closeButton>
-              <Modal.Title>SCHEDULE PAYMENT</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-
-            </Modal.Body>
-            <Modal.Footer>
-              <button type="submit" className="btn btn-default" disabled={submitting}>
-                {submitting
-                  ? <span>SUBMITTING...</span>
-                  : <span>SUBMIT</span>
-                }
-              </button>
-            </Modal.Footer>
-          </form>
-        </Modal>
+        <SchedulePatientModal
+          siteLocationOptions={[{label:'aa', value: 'aa'}, {label:'bb', value:'bb'}]}
+          protocolOptions={[{label:'aa', value: 'aa'}, {label:'bb', value:'bb'}]}
+          patientOptions={[{label:'aa', value: 'aa'}, {label:'bb', value:'bb'}]}
+          onSubmit={this.handleSubmit.bind(this)}
+          handleCloseModal={this.handleCloseModal.bind(this)}
+          submitting={false}
+          loading={false}
+          visible={this.state.isModalVisible}
+          initialValues={{am: 'AM'}}
+        />
       </div>
     )
   }
