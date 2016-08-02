@@ -8,6 +8,7 @@ export default function savePatient (patientId, patientData) {
   return asyncAction(actionType, { patientId, patientData }, (cb, dispatch) => {
 
     function afterSave (err, payload) {
+      patientData.id = payload.id
       cb(err, payload)
       dispatch({
         type: ActionTypes.FINISH_SAVE_PATIENT,
