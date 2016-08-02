@@ -41,6 +41,12 @@ class SchedulePatientModal extends Component {
     visible: PropTypes.bool.isRequired,
   }
 
+  handleCloseModal () {
+    this.setState({
+      isModalVisible: false,
+    })
+  }
+
   render () {
     const {
       fields: { siteLocation, protocol, patient, hour, minute, am },

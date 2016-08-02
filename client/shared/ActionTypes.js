@@ -58,4 +58,7 @@ export const ActionTypes = keymirror({
   FETCH_PATIENT_SIGN_UPS: null,
 
   SAVE_REFERRAL_FORM: null,
+  SCHEDULE_PATIENT: null,
+
+  FETCH_PROTOCOLS: null,
 })

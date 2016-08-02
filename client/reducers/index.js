@@ -40,3 +40,7 @@ export submittingOrderIRBAd from './submittingOrderIRBAd'
 export notification from './notification'
 
 export savingReferralForm from './savingReferralForm'
+
+export schedulingPatient from './schedulingPatient'
+
+export protocols from './protocols'
