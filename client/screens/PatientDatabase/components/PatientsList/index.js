@@ -51,7 +51,12 @@ export default class PatientsList extends Component {
   }
 
   updatePatient (patientData) {
-    this.props.savePatient(this.props.selectedPatient.id, patientData)
+    let payload = _.omit(patientData, [ 'indication', 'status', 'source' ])
+    payload.indication_id = patientData.indication
+    payload.info_source_id = patientData.source
+    payload.patient_category_id = patientData.status
+
+    this.props.savePatient(this.props.selectedPatient.id, payload)
   }
 
   render () {
@@ -64,7 +69,7 @@ export default class PatientsList extends Component {
       selectedPatientInput = _.omit(selectedPatient, [ 'created', 'indication_id', 'indication', 'info_source_id', 'infoSource', 'lastAction', 'study_patient_category_id', 'studyPatientCategory' ])
       _.assign(selectedPatientInput, {
         indication: selectedPatient.indication_id,
-        status: selectedPatient.study_patient_category_id,
+        status: parseInt(selectedPatient.studyPatientCategory.patient_category_id),
         source: selectedPatient.info_source_id,
       })
     }
