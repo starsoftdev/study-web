@@ -88,7 +88,7 @@ export default function fetchPatients (searchParams) {
     }
 
     const queryParams = {
-      filter:  JSON.stringify(filterObj)
+      filter: JSON.stringify(filterObj)
     }
 
     dispatch(searchEntities('/patients', queryParams, cb))

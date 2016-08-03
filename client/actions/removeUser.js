@@ -1,18 +1,16 @@
-import { bind } from 'redux-effects'
-
 import { ActionTypes } from 'ActionTypes'
 import { deleteEntity } from 'utils/entityReadWrite'
 import asyncAction from 'utils/asyncAction'
 
-export default function removeUser (clientRoleId) {
+export default function removeUser (userId) {
   const actionType = ActionTypes.DELETE_USER
 
-  return asyncAction(actionType, { clientRoleId }, (cb, dispatch, getState) => {
+  return asyncAction(actionType, { userId }, (cb, dispatch) => {
 
     function afterDelete (err, payload) {
       cb(err, payload)
       const result = {
-        clientRoleId,
+        userId,
       }
 
       dispatch({
@@ -21,6 +19,6 @@ export default function removeUser (clientRoleId) {
       })
     }
 
-    dispatch(deleteEntity('/clientRoles/' + clientRoleId, null, afterDelete))
+    dispatch(deleteEntity('/users/' + userId, null, afterDelete))
   })
 }

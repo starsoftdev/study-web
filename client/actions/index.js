@@ -15,6 +15,7 @@ export fetchUser from './fetchUser'
 export clearSelectedUser from './clearSelectedUser'
 export saveUser from './saveUser'
 export removeUser from './removeUser'
+export removeClientRole from './removeClientRole'
 
 export fetchIndications from './fetchIndications'
 export fetchInfoSources from './fetchInfoSources'

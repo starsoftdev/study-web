@@ -1,123 +1,95 @@
-import React from 'react'
-import t from 'tcomb-form'
+import React, { Component, PropTypes } from 'react'
+import { reduxForm } from 'redux-form'
+import ActivityIcon from 'components/ActivityIcon'
+export const fields = [ 'name', 'piFirstName', 'piLastName', 'phone', 'address', 'city', 'state', 'zip' ]
 
-let selectedSite = null
-export function getModel (selectedSiteInput) {
-  selectedSite = selectedSiteInput
-  const spec = {
-    name: t.String,
-    piFirstName: t.String,
-    piLastName: t.String,
-    phone: t.String,
-    address: t.String,
-    city: t.String,
-    state: t.String,
-    zip: t.String,
+class EditSiteForm extends Component {
+  static propTypes = {
+    fields: PropTypes.object.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+    submitting: PropTypes.bool.isRequired,
   }
 
-  return t.struct(spec)
-}
-
-const nameTemplate = t.form.Form.templates.textbox.clone({
-  renderInput: (locals) => {
-    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-             placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedSite)? selectedSite.name: null}
-             onChange={function (evt) { locals.onChange(evt.target.value) }} />)
+  constructor (props) {
+    super(props)
   }
-})
 
-const piFirstNameTemplate = t.form.Form.templates.textbox.clone({
-  renderInput: (locals) => {
-    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-             placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedSite)? selectedSite.piFirstName: null}
-             onChange={function (evt) { locals.onChange(evt.target.value) }} />)
-  }
-})
+  render () {
+    const {
+      fields: { name, piFirstName, piLastName, phone, address, city, state, zip },
+      handleSubmit,
+      submitting,
+      } = this.props
 
-const piLastNameTemplate = t.form.Form.templates.textbox.clone({
-  renderInput: (locals) => {
-    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-             placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedSite)? selectedSite.piLastName: null}
-             onChange={function (evt) { locals.onChange(evt.target.value) }} />)
-  }
-})
-
-const phoneTemplate = t.form.Form.templates.textbox.clone({
-  renderInput: (locals) => {
-    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-             placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedSite)? selectedSite.phone: null}
-             onChange={function (evt) { locals.onChange(evt.target.value) }} />)
-  }
-})
-
-const addressTemplate = t.form.Form.templates.textbox.clone({
-  renderInput: (locals) => {
-    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-             placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedSite)? selectedSite.address: null}
-             onChange={function (evt) { locals.onChange(evt.target.value) }} />)
-  }
-})
-
-const cityTemplate = t.form.Form.templates.textbox.clone({
-  renderInput: (locals) => {
-    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-             placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedSite)? selectedSite.city: null}
-             onChange={function (evt) { locals.onChange(evt.target.value) }} />)
-  }
-})
-
-const stateTemplate = t.form.Form.templates.textbox.clone({
-  renderInput: (locals) => {
-    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-             placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedSite)? selectedSite.state: null}
-             onChange={function (evt) { locals.onChange(evt.target.value) }} />)
-  }
-})
-
-const zipTemplate = t.form.Form.templates.textbox.clone({
-  renderInput: (locals) => {
-    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-             placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedSite)? selectedSite.zip: null}
-             onChange={function (evt) { locals.onChange(evt.target.value) }} />)
-  }
-})
-
-export const options = {
-  fields: {
-    name: {
-      template: nameTemplate
-    },
-    piFirstName: {
-      template: piFirstNameTemplate,
-      label: 'PI First Name'
-    },
-    piLastName: {
-      template: piLastNameTemplate,
-      label: 'PI Last Name'
-    },
-    phone: {
-      template: phoneTemplate
-    },
-    address: {
-      template: addressTemplate
-    },
-    city: {
-      template: cityTemplate
-    },
-    state: {
-      template: stateTemplate,
-      label: 'State / Province'
-    },
-    zip: {
-      template: zipTemplate,
-      label: 'Postal Code'
-    }
+    return (
+      <form className="form-edit-site form-horizontal" onSubmit={handleSubmit}>
+        <div className="edit-site">
+          <div className="form-group">
+            <label className="col-sm-3 control-label">NAME</label>
+            <div className="col-sm-9">
+              <input type="text" className="form-control" disabled={submitting} {...name} />
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="col-sm-3 control-label">PRINCIPAL INVESTIGATOR</label>
+            <div className="col-sm-9">
+              <div className="row">
+                <div className="col-sm-6">
+                  <input type="text" className="form-control" disabled={submitting} placeholder="First Name" {...piFirstName} />
+                </div>
+                <div className="col-sm-6">
+                  <input type="text" className="form-control" disabled={submitting} placeholder="Last Name" {...piLastName} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="col-sm-3 control-label">PHONE</label>
+            <div className="col-sm-9">
+              <input type="text" className="form-control" disabled={submitting} {...phone} />
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="col-sm-3 control-label">ADDRESS</label>
+            <div className="col-sm-9">
+              <input type="text" className="form-control" disabled={submitting} {...address} />
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="col-sm-3 control-label">CITY</label>
+            <div className="col-sm-9">
+              <input type="text" className="form-control" disabled={submitting} {...city} />
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="col-sm-3 control-label">STATE / PROVINCE</label>
+            <div className="col-sm-9">
+              <input type="text" className="form-control" disabled={submitting} {...state} />
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="col-sm-3 control-label">POSTAL CODE</label>
+            <div className="col-sm-9">
+              <input type="text" className="form-control" disabled={submitting} {...zip} />
+            </div>
+          </div>
+          <div className="form-group">
+            <div className="col-sm-12">
+              <button type="submit" className="btn btn-success pull-right" disabled={submitting}>
+                {submitting
+                  ? <span><ActivityIcon /></span>
+                  : <span>SUBMIT</span>
+                }
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    )
   }
 }
 
-const EditSiteForm = {
-  getModel,
-  options
-}
-
-export default EditSiteForm
+export default reduxForm({
+  form: 'editSite',
+  fields
+})(EditSiteForm)

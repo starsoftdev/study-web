@@ -4,7 +4,6 @@ import { Modal } from 'react-bootstrap'
 import { clearSelectedPatient, savePatient, fetchPatients, clearPatients,
   fetchIndications, fetchPatientCategories, fetchInfoSources } from 'actions'
 import EditPatientForm from 'forms/EditPatient'
-import ActivityIcon from 'components/ActivityIcon'
 import PatientItem from './PatientItem'
 import _ from 'lodash'
 import './styles.less'

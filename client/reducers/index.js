@@ -11,6 +11,7 @@ export fetchingUsers from './fetchingUsers'
 export fetchingUser from './fetchingUser'
 export savingUser from './savingUser'
 export removingUser from './removingUser'
+export removingClientRole from './removingClientRole'
 export users from './users'
 export selectedUser from './selectedUser'
 

@@ -1,18 +1,10 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
-import t from 'tcomb-form'
-import { clearSelectedUser, saveUser, removeUser, fetchUsers, clearUsers } from 'actions'
-
-import {
-  getModel as getFormType,
-  options as formOptions
-} from 'forms/EditUser'
-
+import EditUserForm from 'forms/EditUser'
+import { clearSelectedUser, saveUser, removeClientRole } from 'actions'
 import UserItem from './UserItem'
 import './styles.less'
-
-const TCombForm = t.form.Form
 
 export default class UsersList extends Component {
 
@@ -24,58 +16,57 @@ export default class UsersList extends Component {
     clearSelectedUser: PropTypes.func,
     savingUser: PropTypes.bool,
     saveUser: PropTypes.func,
-    removeUser: PropTypes.func,
-    removingUser: PropTypes.bool,
-    fetchUsers: PropTypes.func,
-    clearUsers: PropTypes.func,
+    removingClientRole: PropTypes.bool,
+    removeClientRole: PropTypes.func,
   }
 
   constructor (props) {
     super(props)
-    this.props.fetchUsers(this.props.currentUser, {})
-  }
-
-  componentWillUnmount () {
-    this.props.clearUsers()
   }
 
   modalShouldBeShown () {
-    return (this.props.selectedUser !== null)
+    return (this.props.selectedUser && this.props.selectedUser.roleForClient)
   }
 
   closeModal () {
     this.props.clearSelectedUser()
   }
 
-  updateUser () {
-    const userData = this.refs.form.getValue()
-    if (userData) {
-      const userInput = {
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email,
-        siteId: parseInt(userData.siteId),
-        clientRole: {
-          purchase: userData.purchase,
-          reward: userData.reward,
-        }
+  updateUser (userData) {
+    const userInput = {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      siteId: userData.site,
+      clientRole: {
+        purchase: userData.purchase,
+        reward: userData.reward,
       }
-
-      this.props.saveUser(this.props.currentUser, this.props.selectedUser.id, userInput)
     }
+
+    this.props.saveUser(this.props.currentUser, this.props.selectedUser.id, userInput)
   }
 
-  removeUser (ev) {
-    ev.preventDefault()
-
-    this.props.removeUser(this.props.selectedUser.roleForClient.id)
+  removeClientRole () {
+    this.props.removeClientRole(this.props.selectedUser.roleForClient.id)
   }
 
   render () {
-    const { sites, users, selectedUser, savingUser, removingUser } = this.props
+    const { sites, users, selectedUser, savingUser, removingClientRole } = this.props
     const usersListContents = users.map((item, index) => (
       <UserItem {...item} key={index} />
     ))
+    let siteOptions = _.map(sites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id }))
+    siteOptions.push({ label: 'All', value: 0 })
+    let selectedUserInput = {}
+    if (selectedUser && selectedUser.roleForClient) {
+      selectedUserInput.firstName = selectedUser.firstName
+      selectedUserInput.lastName = selectedUser.lastName
+      selectedUserInput.email = selectedUser.email
+      selectedUserInput.site = 0
+      selectedUserInput.purchase = selectedUser.roleForClient.purchase
+      selectedUserInput.reward = selectedUser.roleForClient.reward
+    }
 
     if (users.length > 0) {
       return (
@@ -97,35 +88,20 @@ export default class UsersList extends Component {
                 </tbody>
               </table>
             </div>
-            <Modal className="edit-user" show={this.modalShouldBeShown()} onHide={this.closeModal.bind(this)}>
-              <form className="form-green" onSubmit={this.updateUser.bind(this)}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Edit User</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <TCombForm ref="form" type={getFormType(sites, selectedUser)} options={formOptions} />
-                </Modal.Body>
-                <Modal.Footer>
-                  <button type="button" className="btn btn-default" disabled={removingUser} onClick={this.removeUser.bind(this)}>
-                    {removingUser
-                      ? <span>Removing...</span>
-                      : <span>REMOVE</span>
-                    }
-                  </button>
-                  <button type="submit" className="btn btn-default" disabled={savingUser}>
-                    {savingUser
-                      ? <span>Saving...</span>
-                      : <span>UPDATE</span>
-                    }
-                  </button>
-                </Modal.Footer>
-              </form>
+            <Modal className="edit-user" show={(this.modalShouldBeShown())} onHide={this.closeModal.bind(this)}>
+              <Modal.Header closeButton>
+                <Modal.Title>Edit User</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <EditUserForm submitting={savingUser} removing={removingClientRole} siteOptions={siteOptions}
+                              initialValues={selectedUserInput} onRemove={this.removeClientRole.bind(this)} onSubmit={this.updateUser.bind(this)} />
+              </Modal.Body>
             </Modal>
           </div>
         </div>
       )
     } else {
-      return <div />
+      return <div><h3>No matching users found!</h3></div>
     }
   }
 }
@@ -136,14 +112,12 @@ const mapStateToProps = (state) => ({
   users: state.users,
   selectedUser: state.selectedUser,
   savingUser: state.savingUser,
-  removingUser: state.removingUser,
+  removingClientRole: state.removingClientRole,
 })
 const mapDispatchToProps = {
   clearSelectedUser,
   saveUser,
-  removeUser,
-  fetchUsers,
-  clearUsers,
+  removeClientRole,
 }
 
 export default connect(

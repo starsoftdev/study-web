@@ -33,8 +33,10 @@ export const ActionTypes = keymirror({
   UPDATE_USER: null,
   CREATE_USER: null,
   DELETE_USER: null,
+  DELETE_CLIENT_ROLE: null,
   FINISH_SAVE_USER: null,
   FINISH_DELETE_USER: null,
+  FINISH_DELETE_CLIENT_ROLE: null,
 
   FETCH_INDICATIONS: null,
   FETCH_INFO_SOURCES: null,

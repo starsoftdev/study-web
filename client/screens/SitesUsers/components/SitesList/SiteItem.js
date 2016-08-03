@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { fetchSite } from 'actions'
-
+import { fetchSite, fetchUser } from 'actions'
 import ActivityIcon from 'components/ActivityIcon'
 
 class SiteItem extends Component {
@@ -13,22 +12,46 @@ class SiteItem extends Component {
     phone: PropTypes.string,
     address: PropTypes.string,
     users: PropTypes.array,
-    isFetching: PropTypes.bool,
-    fetchSite: PropTypes.func
+    fetchingSite: PropTypes.bool,
+    fetchSite: PropTypes.func,
+    fetchingUser: PropTypes.bool,
+    fetchUser: PropTypes.func,
   }
 
   constructor (props) {
     super(props)
   }
 
-  editSiteItem (ev) {
-    ev.preventDefault()
+  state = {
+    assignedUsersCollapsed: true,
+  }
 
+  toggleAssignedUsers () {
+    const collapsed = !this.state.assignedUsersCollapsed
+    this.setState({ assignedUsersCollapsed: collapsed })
+  }
+
+  editSite () {
     this.props.fetchSite(this.props.id)
   }
 
+  editAssignedUser (assignedUser) {
+    this.props.fetchUser(assignedUser.id)
+  }
+
   render () {
-    const { isFetching, users } = this.props
+    const { fetchingSite, fetchingUser, users } = this.props
+    const assignedUsersContents = users.map((item, index) => (
+      <div className="assigned-user" key={index}>
+        <span>{item.firstName} {item.lastName}</span>
+        <span className="edit-assigned-user" disabled={fetchingUser} onClick={this.editAssignedUser.bind(this, item)}>
+          {fetchingUser
+            ? <span><ActivityIcon /></span>
+            : <span className="fa fa-pencil-square-o"></span>
+          }
+        </span>
+      </div>
+    ))
 
     return (
       <tr className="site-container">
@@ -45,11 +68,21 @@ class SiteItem extends Component {
           <span>{this.props.address}</span>
         </td>
         <td className="assigned-users">
-          <span>Assigned User</span>
+          <div className="toggle-assigned-users" onClick={this.toggleAssignedUsers.bind(this)}>
+            <span>Assigned Users</span>
+            {this.state.assignedUsersCollapsed
+              ? <span className="fa fa-plus-square-o"></span>
+              : <span className="fa fa-minus-square-o"></span>
+            }
+          </div>
+          {!this.state.assignedUsersCollapsed
+            ? <div className="assigned-users-list">{assignedUsersContents}</div>
+            : <div></div>
+          }
         </td>
         <td className="action">
-          <button type="button" className="btn btn-default btn-edit-site pull-right" onClick={this.editSiteItem.bind(this)} disabled={isFetching}>
-            {isFetching
+          <button type="button" className="btn btn-default btn-edit-site pull-right" onClick={this.editSite.bind(this)} disabled={fetchingSite}>
+            {fetchingSite
               ? <span><ActivityIcon /></span>
               : <span>Edit</span>
             }
@@ -61,10 +94,12 @@ class SiteItem extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  isFetching: state.fetchingSite
+  fetchingSite: state.fetchingSite,
+  fetchingUser: state.fetchingUser,
 })
 const mapDispatchToProps = {
-  fetchSite
+  fetchSite,
+  fetchUser,
 }
 
 export default connect(
