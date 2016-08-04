@@ -1,7 +1,7 @@
 import { ActionTypes } from 'ActionTypes'
 import _ from 'lodash'
 
-export default function users (state=[], action) {
+export default function clientRoles (state=[], action) {
   const userData = action.userData
   let foundUserIndex = -1
   let newState = _.map(state, _.cloneDeep)
