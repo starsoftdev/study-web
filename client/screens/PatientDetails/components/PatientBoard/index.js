@@ -1,8 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { Glyphicon, Button } from 'react-bootstrap'
+import ReactDOM from 'react-dom'
+
+import Dispatcher from 'utils/dispatcher'
 
 import PatientColItem from './PatientColItem'
 import ChatForm from '../ChatForm'
+import BlastForm from '../BlastForm'
 
 import { fetchPatientCategories, fetchPatientsByStudy, updatePatientCategory } from 'actions'
 
@@ -54,7 +59,20 @@ export default class PatientBoard extends Component {
     this.props.updatePatientCategory(item.id, category)
   }
 
+  initBlastForm = () => {
+    const appDispatcher = new Dispatcher()
+    let params = {
+      blastType: 'text'
+    }
+
+    appDispatcher.dispatch({
+      actionType: 'setActiveBlastForm',
+      data: params
+    })
+  }
+
   render () {
+    let scope = this
     const { patientCategories, patientsByStudy } = this.props
     let patientArr = {}
 
@@ -73,9 +91,28 @@ export default class PatientBoard extends Component {
     ))
 
     return (
-      <div className="patient-board">
-        {contentList}
+      <div>
+        <div className="controls">
+          <Button
+            type="submit"
+            className=""
+            bsStyle="primary"
+            onClick={scope.initBlastForm.bind(scope)}
+          >
+            <Glyphicon
+              className=""
+              glyph="envelope"
+            />
+            <span>
+              Text / Email Blast
+            </span>
+          </Button>
+        </div>
+        <div className="patient-board">
+          {contentList}
+        </div>
         <ChatForm {...this.props} />
+        <BlastForm {...this.props} />
       </div>
     )
   }

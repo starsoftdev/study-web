@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
+import ReactDOM from 'react-dom'
 import {
   fetchTwilioMessages,
   saveTwilioMessage,
@@ -30,13 +31,9 @@ const schema = t.struct({
 
 const layout = (locals) => {
   return (
-    <fieldset>
-      <div className="row">
-        <div className="col-md-12">
-          {locals.inputs.message}
-        </div>
-      </div>
-    </fieldset>
+    <div className="form-group">
+      {locals.inputs.message}
+    </div>
   )
 }
 
@@ -103,6 +100,7 @@ class ChatForm extends React.Component {
   }
 
   scrollMessContainer () {
+    //console.log(ReactDOM.findDOMNode(this))
     let messContainer = $('#mess-container')
     if (messContainer.length > 0) {
       messContainer.scrollTop(messContainer[0].scrollHeight)
@@ -220,25 +218,31 @@ class ChatForm extends React.Component {
             className="form-green chat-form"
             onSubmit={this.handleSubmit.bind(this)}
           >
-            <div className="messages" id="mess-container">
-              {listMessages}
-            </div>
-            <TCombForm
-              ref="form"
-              type={schema}
-              options={options}
-              value={formData}
-            />
-            <div className="form-group pull-right">
-              <Button
-                type="submit"
-                className=""
-                bsStyle="primary"
-                disabled={isSaving}
-              >
-                {isSaving ? <i className="fa fa-repeat fa-spin" /> : 'Send'}
-              </Button>
-            </div>
+            <fieldset>
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="form-group messages" id="mess-container">
+                    {listMessages}
+                  </div>
+                  <TCombForm
+                    ref="form"
+                    type={schema}
+                    options={options}
+                    value={formData}
+                  />
+                  <div className="form-group pull-right">
+                    <Button
+                      type="submit"
+                      className=""
+                      bsStyle="primary"
+                      disabled={isSaving}
+                    >
+                      {isSaving ? <i className="fa fa-repeat fa-spin" /> : 'Send'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
           </form>
         </Modal.Body>
       </Modal>
