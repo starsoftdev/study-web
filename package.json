@@ -122,8 +122,5 @@
   "pre-commit#master": [
     "pre-commit"
   ],
-  "homepage": "https://github.com/sutdykik/web#readme",
-  "pre-commit": [
-    "lint"
-  ]
+  "homepage": "https://github.com/sutdykik/web#readme"
 }
