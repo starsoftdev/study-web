@@ -40,6 +40,6 @@ export notification from './notification'
 
 export savingReferralForm from './savingReferralForm'
 
-export schedulingPatient from './schedulingPatient'
+export schedules from './schedules'
 
 export protocols from './protocols'

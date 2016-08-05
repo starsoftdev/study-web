@@ -59,6 +59,7 @@ export const ActionTypes = keymirror({
 
   SAVE_REFERRAL_FORM: null,
   SCHEDULE_PATIENT: null,
+  FETCH_SCHEDULES: null,
 
   FETCH_PROTOCOLS: null,
 })

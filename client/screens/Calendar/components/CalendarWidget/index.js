@@ -10,32 +10,27 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 
 class CalendarWidget extends React.Component {
   static propTypes = {
+    schedules: PropTypes.object.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
   }
 
-  currentDate = new Date(2015, 3, 1)
+  currentDate = new Date()
 
   render () {
-    const myEventsList = [
-      {
-        'title': 'All Day Event',
-        'allDay': true,
-        'start': new Date(2015, 3, 0),
-        'end': new Date(2015, 3, 0)
-      },
-      {
-        'title': 'Long Event',
-        'start': new Date(2015, 3, 7),
-        'end': new Date(2015, 3, 10)
+    const eventsList = this.props.schedules.schedules.map(s => {
+      return {
+        'title': s.first_name + ' ' + s.last_name + ' ' + moment(s.time).format('h:mm A'),
+        'start': s.time,
+        'end': s.time,
       }
-    ]
+    })
 
     return (
       <div className="calendar-box">
         <BigCalendar
           popup
           selectable
-          events={myEventsList}
+          events={eventsList}
           defaultDate={this.currentDate}
           onNavigate={(date)=>{
             this.currentDate = date
@@ -50,7 +45,7 @@ class CalendarWidget extends React.Component {
           }}
           onSelectSlot={({start, end, slots})=>{
             if (slots.length === 1 && moment(this.currentDate).month() === moment(start).month()) {
-              this.props.handleOpenModal()
+              this.props.handleOpenModal(start)
             }
           }}
         />
