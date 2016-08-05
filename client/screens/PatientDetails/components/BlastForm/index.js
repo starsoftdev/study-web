@@ -257,6 +257,7 @@ export default class BlastForm extends Component {
     let val = splitName[1]
     let fCategory = (type === 'source') ? filter.sources : filter.categories
     let fSource = (type === 'source') ? leadSourceObj : patientCategories
+    let ref = (type === 'source') ? this.refs.sourceAll : this.refs.categoryAll
     let ucIndex
 
     if (val !== 'all') {
@@ -284,19 +285,18 @@ export default class BlastForm extends Component {
       }
     }
 
-    if (this.formData['all' + type] && patientCategories.length !== fCategory.length) {
+    if (this.formData['all' + type] && _.toArray(fSource).length !== fCategory.length) {
       this.formData['all' + type] = false
-      this.refs.categoryAll.checked = false
+      ref.checked = false
     }
 
-    if (!this.formData['all' + type] && patientCategories.length === fCategory.length) {
+    if (!this.formData['all' + type] && _.toArray(fSource).length === fCategory.length) {
       this.formData['all' + type] = true
-      this.refs.categoryAll.checked = true
+      ref.checked = true
     }
 
     this.setState({ filter }, () => {
       let filteredPatientsId = this.getFilteredPatientsId(filter)
-      console.log(filteredPatientsId)
       this.refs.form.refs.input.refs.toPatients.refs.patients.el.val(filteredPatientsId).trigger('change')
     })
   }
@@ -345,7 +345,6 @@ export default class BlastForm extends Component {
         >
           <label>
             <input
-              disabled
               id={'source-' + key}
               value={source}
               type="checkbox"
@@ -397,7 +396,7 @@ export default class BlastForm extends Component {
                 <li>
                   <label>
                     <input
-                      disabled
+                      ref="sourceAll"
                       type="checkbox"
                       id="source-all"
                       value="all"
