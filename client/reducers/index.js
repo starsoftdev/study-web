@@ -33,7 +33,6 @@ export patientsByStudy from './patientsByStudy'
 
 export updatingPatientCategory from './updatingPatientCategory'
 
-export siteLocations from './siteLocations'
 export studyCategories from './studyCategories'
 export submittingOrderIRBAd from './submittingOrderIRBAd'
 

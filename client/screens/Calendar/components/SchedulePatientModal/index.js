@@ -64,7 +64,7 @@ class SchedulePatientModal extends Component {
       <Modal className="modal-schedule-patient" show={visible} onHide={handleCloseModal}>
         <form className="form-schedule-patient form-horizontal" onSubmit={handleSubmit}>
           <Modal.Header closeButton>
-            <Modal.Title>SCHEDULE PAYMENT</Modal.Title>
+            <Modal.Title>SCHEDULE PATIENT</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="form-group">

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import CalendarWidget from './components/CalendarWidget'
 import SchedulePatientModal from './components/SchedulePatientModal'
 
-import { fetchSiteLocations, fetchProtocols, fetchPatients, schedulePatient } from 'actions'
+import { fetchSites, fetchProtocols, fetchPatients, schedulePatient } from 'actions'
 
 import './styles.less'
 
@@ -13,9 +13,9 @@ class Calendar extends React.Component {
   }
 
   componentWillMount () {
-    const { fetchSiteLocations, fetchProtocols, fetchPatients } = this.props
+    const { fetchSites, fetchProtocols, fetchPatients } = this.props
 
-    fetchSiteLocations()
+    // fetchSites()
     // fetchProtocols()
     fetchPatients()
   }
@@ -32,18 +32,18 @@ class Calendar extends React.Component {
   }
 
   render () {
-    const { siteLocations, patients, protocols } = this.props
-    
+    const { fetchingSites, sites, patients, protocols } = this.props
+
     return (
       <div className="calendar-page">
         <CalendarWidget
           handleOpenModal={this.handleModalVisibility.bind(this, true)}
         />
         <SchedulePatientModal
-          siteLocationOptions={siteLocations.siteLocations.map(l => {
+          siteLocationOptions={sites.map(s => {
             return {
-              label: l.name,
-              value: l.id,
+              label: s.location,
+              value: s.location,
             }
           })}
           protocolOptions={[{label:'aa', value: 'aa'}, {label:'bb', value:'bb'}]}
@@ -66,12 +66,13 @@ class Calendar extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  siteLocations: state.siteLocations,
+  fetchingSites: state.fetchingSites,
+  sites: state.sites,
   protocols: state.protocols,
   patients: state.patients,
 })
 const mapDispatchToProps = {
-  fetchSiteLocations,
+  fetchSites,
   fetchProtocols,
   fetchPatients,
   schedulePatient,
