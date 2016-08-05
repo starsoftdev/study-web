@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-//import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import { Glyphicon, Modal, Button } from 'react-bootstrap'
 
@@ -20,7 +19,7 @@ const select2Template = t.form.Form.templates.select.clone({
         multiple
         data={locals.options}
         className="form-control"
-        ref="to-patients"
+        ref="patients"
         name={locals.attrs.name}
         id={locals.attrs.id}
         options={{ placeholder: 'To' }}
@@ -38,21 +37,11 @@ const select2Template = t.form.Form.templates.select.clone({
   }
 })
 
-const leadSourcehObj = {
-  '1': 'TV',
-  '2': 'Radio',
-  '3': 'Print',
-  '4': 'Digital',
-  '5': 'Other'
-}
-
-const order = [
-  'toPatients',
-  'message'
-]
-
 const options = {
-  order,
+  order: [
+    'toPatients',
+    'message'
+  ],
   auto: 'none',
   fields: {
     message: {
@@ -84,11 +73,25 @@ export default class BlastForm extends Component {
     super(props)
     this.namespace = 'nsp'
     this.appDispatcher = new Dispatcher()
+    this.leadSourceObj = {
+      1: 'TV',
+      2: 'Radio',
+      3: 'Print',
+      4: 'Digital',
+      5: 'Other'
+    }
     this.formData = {
-      message: ''
+      allcategory: false,
+      allsource: false,
+      message: '',
+      toPatients: null
     }
     this.state = {
-      showModal: false
+      showModal: false,
+      filter: {
+        categories: [],
+        sources: []
+      }
     }
   }
 
@@ -116,13 +119,9 @@ export default class BlastForm extends Component {
     let scope = this
     this.appDispatcher.register(function (payload) {
       if (payload.actionType === 'setActiveBlastForm') {
-        switch (payload.data.blastType) {
-          case 'text':
-            scope.open(payload)
-            scope.connect(scope.namespace, () => {})
-            break
-          default:
-            break
+        if (payload.data.blastType === 'text') {
+          scope.open(payload)
+          scope.connect(scope.namespace, () => {})
         }
       }
     })
@@ -138,8 +137,8 @@ export default class BlastForm extends Component {
       })
     })
 
-    let toPatients = t.enums(this.select2Format(patienstArr), 'toPatients')
     this.formData.toPatients = this.select2Format(patienstArr)
+    let toPatients = t.enums(this.select2Format(patienstArr), 'toPatients')
     this.schema = t.struct({
       message: t.maybe(t.String),
       toPatients: t.list(toPatients)
@@ -168,6 +167,31 @@ export default class BlastForm extends Component {
 
     _.forEach(selectedPatients, (item) => {
       resultArr.push(_.find(patienstArr, { id: parseInt(item) }))
+    })
+
+    return resultArr
+  }
+
+  getFilteredPatientsId (filter) {
+    const { patientsByStudy } = this.props
+    let patientArr = []
+    let resultArr = []
+
+    _.forEach(patientsByStudy, (pbs) => {
+      _.map(pbs.patients, (patient) => {
+        patientArr.push(patient)
+      })
+    })
+
+    _.forEach(filter.categories, (item) => {
+      let filtered = _.filter(patientArr, (patient) => {
+        return patient.studyPatientCategory.patientCategoryId === item
+      })
+      if (filtered.length > 0) {
+        _.map(filtered, (el) => {
+          resultArr.push(el.id)
+        })
+      }
     })
 
     return resultArr
@@ -208,6 +232,8 @@ export default class BlastForm extends Component {
           patients: this.getPatientObj(value.toPatients)
         }
         saveTwilioMessage(this.io, options, (err, data, cb) => {
+          this.formData.message = ''
+          this.setState({})
           cb(err, data)
         })
       } else {
@@ -217,24 +243,120 @@ export default class BlastForm extends Component {
   }
 
   onChange (value) {
-    const { comp } = this.ctx.context
-    console.log(value)
+    this.formData.message = value.message
+  }
+
+  checkFilter (value) {
+    const { leadSourceObj } = this
+    const { patientCategories } = this.props
+
+    let filter = _.clone(this.state.filter)
+    let target = value.target
+    let splitName = target.name.split('-')
+    let type = splitName[0]
+    let val = splitName[1]
+    let fCategory = (type === 'source') ? filter.sources : filter.categories
+    let fSource = (type === 'source') ? leadSourceObj : patientCategories
+    let ucIndex
+
+    if (val !== 'all') {
+      if (target.checked) {
+        fCategory.push(val)
+      } else {
+        ucIndex = fCategory.indexOf(val)
+        if (ucIndex !== -1) {
+          fCategory.splice(ucIndex, 1)
+        }
+      }
+    } else {
+      if (target.checked) {
+        this.formData['all' + type] = true
+        _.map(fSource, (item, index) => {
+          let el = (type === 'source') ? index : item.id
+          ucIndex = fCategory.indexOf(_.toString(el))
+          if (ucIndex === -1) {
+            fCategory.push(_.toString(el))
+          }
+        })
+      } else {
+        this.formData['all' + type] = false
+        fCategory.length = 0
+      }
+    }
+
+    if (this.formData['all' + type] && patientCategories.length !== fCategory.length) {
+      this.formData['all' + type] = false
+      this.refs.categoryAll.checked = false
+    }
+
+    if (!this.formData['all' + type] && patientCategories.length === fCategory.length) {
+      this.formData['all' + type] = true
+      this.refs.categoryAll.checked = true
+    }
+
+    this.setState({ filter }, () => {
+      let filteredPatientsId = this.getFilteredPatientsId(filter)
+      console.log(filteredPatientsId)
+      this.refs.form.refs.input.refs.toPatients.refs.patients.el.val(filteredPatientsId).trigger('change')
+    })
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    const { filter } = this.state
+    let filteredPatientsId = this.getFilteredPatientsId(filter)
+    if (this.refs.form) {
+      this.refs.form.refs.input.refs.toPatients.refs.patients.el.val(filteredPatientsId).trigger('change')
+    }
   }
 
   render () {
-    const { schema, formData, onChange } = this
+    const { schema, formData, onChange, checkFilter, leadSourceObj } = this
     const { patientCategories } = this.props
+    let filter = _.clone(this.state.filter)
     let listSources = []
-    let listCategories = patientCategories.map((item, index) => (
-      <li key={index} className={'category-' + item.id}>
-        {item.name}
-      </li>
+    let listCategories = []
+
+    _.map(patientCategories, (item, index) => (
+      listCategories.push(
+        <li
+          key={index}
+          className={'category-' + item.id}
+        >
+          <label>
+            <input
+              id={'category-' + item.id}
+              value={item.name}
+              type="checkbox"
+              name={'category-' + item.id}
+              onChange={checkFilter.bind(this)}
+              checked={(filter.categories.indexOf(_.toString(item.id)) !== -1)}
+            />
+            {item.name}
+          </label>
+        </li>
+      )
     ))
 
-    _.map(leadSourcehObj, (source, key) => {
-      listSources.push(<li key={key} className={'source-' + key}>
-        {source}
-      </li>)
+    _.map(leadSourceObj, (source, key) => {
+      listSources.push(
+        <li
+          key={key}
+          className={'source-' + key}
+        >
+          <label>
+            <input
+              disabled
+              id={'source-' + key}
+              value={source}
+              type="checkbox"
+              name={'source-' + key}
+              onChange={checkFilter.bind(this)}
+              checked={(filter.sources.indexOf(key) !== -1)}
+            />
+            {source}
+          </label>
+        </li>
+      )
     })
 
     return (
@@ -251,19 +373,43 @@ export default class BlastForm extends Component {
               <h4>
                 Category
               </h4>
-              <div>
-                <ul>
-                  {listCategories}
-                </ul>
-              </div>
+              <ul className="category-filter">
+                <li>
+                  <label>
+                    <input
+                      ref="categoryAll"
+                      type="checkbox"
+                      id="category-all"
+                      value="all"
+                      name="category-all"
+                      onChange={checkFilter.bind(this)}
+                      checked={formData.allcategory}
+                    />
+                    All
+                  </label>
+                </li>
+                {listCategories}
+              </ul>
               <h4>
                 Source
               </h4>
-              <div>
-                <ul>
-                  {listSources}
-                </ul>
-              </div>
+              <ul className="source-filter">
+                <li>
+                  <label>
+                    <input
+                      disabled
+                      type="checkbox"
+                      id="source-all"
+                      value="all"
+                      name="source-all"
+                      onChange={checkFilter.bind(this)}
+                      checked={formData.allsource}
+                    />
+                    All
+                  </label>
+                </li>
+                {listSources}
+              </ul>
             </div>
             <div className="blast-part part-right">
               <Modal.Header closeButton>
@@ -283,7 +429,7 @@ export default class BlastForm extends Component {
                       options={options}
                       value={formData}
                       context={{ comp: this }}
-                      onChange={onChange}
+                      onChange={onChange.bind(this)}
                     />
                     <fieldset className="fieldset">
                       <div className="form-group">
