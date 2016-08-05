@@ -50,7 +50,7 @@ class Application extends React.Component {
   getEventType () {
     switch (this.props.location.pathname) {
       case '/dashboard':
-        return 'create_study'
+        return 'create-study'
       default:
         return null
     }
