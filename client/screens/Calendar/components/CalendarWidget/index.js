@@ -10,16 +10,16 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 
 class CalendarWidget extends React.Component {
   static propTypes = {
-    schedules: PropTypes.object.isRequired,
+    schedules: PropTypes.array.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
   }
 
   currentDate = new Date()
 
   render () {
-    const eventsList = this.props.schedules.schedules.map(s => {
+    const eventsList = this.props.schedules.map(s => {
       return {
-        'title': s.first_name + ' ' + s.last_name + ' ' + moment(s.time).format('h:mm A'),
+        'title': s.patient.firstName + ' ' + s.patient.lastName + ' ' + moment(s.time).format('h:mm A'),
         'start': s.time,
         'end': s.time,
       }

@@ -17,7 +17,7 @@ export default function (state = initialState, action) {
         return {
           ...state,
           isFetching: false,
-          schedules: action.payload.schedules || []
+          schedules: action.payload || []
         }
       }
       return {
@@ -29,6 +29,7 @@ export default function (state = initialState, action) {
         return {
           ...state,
           schedulingPatient: false,
+          schedules: action.payload || []
         }
       }
       return {

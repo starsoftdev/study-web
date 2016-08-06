@@ -25,7 +25,14 @@ class Calendar extends React.Component {
   }
 
   state = {
+    filter: {
+      patientName: '',
+      siteLocation: '',
+      indication: '',
+      protocol: '',
+    },
     isModalVisible: true,
+    filteredSchedules: []
   }
 
   componentWillMount () {
@@ -35,6 +42,36 @@ class Calendar extends React.Component {
     // fetchProtocols()
     fetchPatients()
     fetchSchedules()
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if ((this.props.schedules.isFetching && !nextProps.schedules.isFetching) || (this.props.schedules.schedulingPatient && !nextProps.schedules.schedulingPatient)) {
+      this.filterSchedules (nextProps.schedules, this.state.filter)
+    }
+  }
+
+  filterSchedules (schedules, filter) {
+    this.setState({
+      filteredSchedules: schedules.schedules.filter(s => {
+        return (s.patient.firstName+' '+s.patient.lastName).toLowerCase().indexOf(filter.patientName.toLowerCase()) > -1 &&
+          (!filter.siteLocation || s.siteLocation === filter.siteLocation) &&
+          (!filter.indication || s.indication === filter.indication) &&
+          (!filter.protocol || s.protocolNumber === filter.protocol)
+      })
+    })
+  }
+
+  updateFilter (field, newValue) {
+    const newFilter = {
+      ...this.state.filter,
+      [field]: newValue
+    }
+
+    this.setState({
+      filter: newFilter
+    })
+
+    this.filterSchedules (this.props.schedules, newFilter)
   }
 
   handleModalVisibility (visible, selectedDate) {
@@ -52,14 +89,14 @@ class Calendar extends React.Component {
     const submitData = {
       // siteLocation: data.siteLocation,
       // indication:
-      siteLocation: '1',
-      indication: '1',
+      siteLocation: 'Palmer Tech',
+      indication: 'acne',
       protocolNumber: data.protocol,
       patient_id: data.patient,
       time: moment(this.selectedDate).add(data.am==='AM'?data.hour:data.hour+12, 'hours').add(data.minute, 'minutes').toDate()
     }
 
-    this.props.schedulePatient(null, submitData)
+    this.props.schedulePatient(submitData)
   }
 
   render () {
@@ -86,10 +123,11 @@ class Calendar extends React.Component {
           siteLocationOptions={siteLocationOptions}
           indicationOptions={indicationOptions}
           protocolOptions={protocolOptions}
-          fetchSchedules={fetchSchedules}
+          filter={this.state.filter}
+          updateFilter={this.updateFilter.bind(this)}
         />
         <CalendarWidget
-          schedules={schedules}
+          schedules={this.state.filteredSchedules}
           handleOpenModal={this.handleModalVisibility.bind(this, true)}
         />
         <SchedulePatientModal

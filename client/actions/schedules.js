@@ -5,23 +5,19 @@ import { createEntity, updateEntity, searchEntities } from 'utils/entityReadWrit
 import history from 'utils/history'
 import asyncAction from 'utils/asyncAction'
 
-export function fetchSchedules (searchParams) {
+export function fetchSchedules () {
   return asyncAction(ActionTypes.FETCH_SCHEDULES, (cb, dispatch, getState) => {
-    dispatch(searchEntities('/callReminders/getSchedules', searchParams, cb))
+    dispatch(searchEntities('/callReminders/getSchedules', {}, cb))
   })
 }
 
-export function schedulePatient (callReminderId, data) {
+export function schedulePatient (data) {
   return asyncAction(ActionTypes.SCHEDULE_PATIENT, { data }, (cb, dispatch, getState) => {
 
     function afterSave (err, payload) {
       cb(err, payload)
     }
-    
-    if (callReminderId) {
-      dispatch(updateEntity('/callReminders', {...data, id: callReminderId}, afterSave))
-    } else {
-      dispatch(createEntity('/callReminders', data, afterSave))
-    }
+
+    dispatch(createEntity('/callReminders/upsertSchedule', data, afterSave))
   })
 }

@@ -9,27 +9,14 @@ class FilterBar extends Component {
     siteLocationOptions: PropTypes.array.isRequired,
     indicationOptions: PropTypes.array.isRequired,
     protocolOptions: PropTypes.array.isRequired,
-    fetchSchedules: PropTypes.func.isRequired,
-  }
-
-  state = {
-    patientName: '',
-    siteLocation: '',
-    indication: '',
-    protocol: ''
+    filter: PropTypes.object.isRequired,
+    updateFilter: PropTypes.func.isRequired,
   }
 
   handleFilterChange = (field, ev) => {
     const newValue = ev ? ev.value : ''
 
-    this.setState({
-      [field]: newValue
-    })
-
-    this.props.fetchSchedules ({
-      ...this.state,
-      [field]: newValue
-    })
+    this.props.updateFilter (field, newValue)
   }
 
   render () {
@@ -37,17 +24,17 @@ class FilterBar extends Component {
       siteLocationOptions,
       indicationOptions,
       protocolOptions,
-      fetchSchedules,
+      filter,
     } = this.props
 
     return (
       <div className="filter-bar row">
         <div className="col-sm-3">
-          <input className="search-box" type="text" placeholder="Search" onChange={(ev) => this.handleFilterChange('patientName', ev)}/>
+          <input className="search-box" type="text" placeholder="Search" onChange={(ev) => this.handleFilterChange('patientName', ev.target)}/>
         </div>
         <div className="col-sm-3">
           <Select
-            value={this.state.siteLocation}
+            value={filter.siteLocation}
             options={siteLocationOptions}
             placeholder="--Select Site Location--"
             onChange={(ev) => this.handleFilterChange('siteLocation', ev)}
@@ -55,7 +42,7 @@ class FilterBar extends Component {
         </div>
         <div className="col-sm-3">
           <Select
-            value={this.state.indication}
+            value={filter.indication}
             options={indicationOptions}
             placeholder="--Select Indication--"
             onChange={(ev) => this.handleFilterChange('indication', ev)}
@@ -63,7 +50,7 @@ class FilterBar extends Component {
         </div>
         <div className="col-sm-3">
           <Select
-            value={this.state.protocol}
+            value={filter.protocol}
             options={protocolOptions}
             placeholder="--Select Protocol--"
             onChange={(ev) => this.handleFilterChange('protocol', ev)}
