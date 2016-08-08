@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { fetchUser } from 'actions'
-
 import ActivityIcon from 'components/ActivityIcon'
 
 class UserItem extends Component {
@@ -12,24 +11,23 @@ class UserItem extends Component {
     purchase: PropTypes.bool,
     user: PropTypes.object,
     isFetching: PropTypes.bool,
-    fetchUser: PropTypes.func
+    fetchUser: PropTypes.func,
   }
 
   constructor (props) {
     super(props)
   }
 
-  editUser (ev) {
-    ev.preventDefault()
-
+  editUser () {
     this.props.fetchUser(this.props.user.id)
   }
 
   render () {
     const { isFetching } = this.props
     let accessStr = ''
+    const isSuperAdmin = (this.props.name === 'Super Admin')
 
-    if (this.props.name === 'Super Admin') {
+    if (isSuperAdmin) {
       accessStr = this.props.name
     } else {
       if (this.props.purchase && this.props.reward) {
@@ -55,12 +53,14 @@ class UserItem extends Component {
           <span>{accessStr}</span>
         </td>
         <td className="action">
-          <button type="button" className="btn btn-default btn-edit-user pull-right" onClick={this.editUser.bind(this)} disabled={isFetching}>
-            {isFetching
-              ? <span><ActivityIcon /></span>
-              : <span>Edit</span>
-            }
-          </button>
+          {!isSuperAdmin &&
+            <button type="button" className="btn btn-default btn-edit-user pull-right" onClick={this.editUser.bind(this)} disabled={isFetching}>
+              {isFetching
+                ? <span><ActivityIcon /></span>
+                : <span>Edit</span>
+              }
+            </button>
+          }
         </td>
       </tr>
     )

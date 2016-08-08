@@ -49,13 +49,18 @@
     "react-dom": "^15.0.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.4.0",
+<<<<<<< HEAD
     "react-select2-wrapper": "^1.0.0",
+=======
+    "react-select": "^1.0.0-beta14",
+>>>>>>> KIK-504
     "react-sortablejs": "^1.0.0",
     "react-toastr": "^2.7.0",
     "react-tooltip": "^2.0.3",
     "react-youtube": "^6.1.0",
     "redux": "^3.5.2",
     "redux-effects": "^0.4.3",
+    "redux-form": "^5.3.1",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
     "selectn": "^1.0.20",
@@ -116,11 +121,11 @@
     "webpack-hot-middleware": "^2.10.0",
     "winston": "^2.2.0"
   },
+  "homepage": "https://github.com/studykik/web#readme",
   "pre-commit#develop": [
     "pre-commit"
   ],
   "pre-commit#master": [
     "pre-commit"
-  ],
-  "homepage": "https://github.com/studykik/web#readme"
+  ]
 }

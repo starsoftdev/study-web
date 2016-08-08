@@ -1,25 +1,29 @@
 export authorization from './authorization'
 export location from './location'
 
-export savingPatient from './savingPatient'
-
-export submittingGetTrialNotificationForm from './submittingGetTrialNotificationForm'
-
 export fetchingSites from './fetchingSites'
 export fetchingSite from './fetchingSite'
 export savingSite from './savingSite'
+
 export savingStudy from './savingStudy'
 export listStudy from './savingStudy'
 
 export fetchingUsers from './fetchingUsers'
 export fetchingUser from './fetchingUser'
+export selectedUser from './selectedUser'
 export savingUser from './savingUser'
 export removingUser from './removingUser'
 
 export sites from './sites'
-export clientRoles from './users'
 export selectedSite from './selectedSite'
-export selectedUser from './selectedUser'
+
+export removingClientRole from './removingClientRole'
+export clientRoles from './users'
+
+export fetchingIndications from './fetchingIndications'
+export indications from './indications'
+export fetchingInfoSources from './fetchingInfoSources'
+export infoSources from './infoSources'
 
 export fetchingStudies from './fetchingStudies'
 export fetchingStudy from './fetchingStudy'
@@ -28,11 +32,12 @@ export currentStudy from './currentStudy'
 
 export fetchingPatientCategories from './fetchingPatientCategories'
 export patientCategories from './patientCategories'
-
 export fetchingPatients from './fetchingPatients'
 export patients from './patients'
 export patientsByStudy from './patientsByStudy'
-
+export fetchingPatient from './fetchingPatient'
+export selectedPatient from './selectedPatient'
+export savingPatient from './savingPatient'
 export updatingPatientCategory from './updatingPatientCategory'
 
 export siteLocations from './siteLocations'
@@ -46,7 +51,7 @@ export savedStudy from './savedStudy'
 export submittingOrderIRBAd from './submittingOrderIRBAd'
 
 export notification from './notification'
-
+export submittingGetTrialNotificationForm from './submittingGetTrialNotificationForm'
 export savingReferralForm from './savingReferralForm'
 export notification from './notificationReducer'
 export availNumbers from './availNumbers'
