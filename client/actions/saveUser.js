@@ -1,5 +1,4 @@
-import { bind } from 'redux-effects'
-
+import _ from 'lodash'
 import { ActionTypes } from 'ActionTypes'
 import { createEntity, updateEntity } from 'utils/entityReadWrite'
 import asyncAction from 'utils/asyncAction'
@@ -7,15 +6,14 @@ import asyncAction from 'utils/asyncAction'
 export default function saveUser (currentUser, userId, userData) {
   const actionType = userId? ActionTypes.UPDATE_USER: ActionTypes.CREATE_USER
 
-  return asyncAction(actionType, { userId, userData }, (cb, dispatch, getState) => {
+  return asyncAction(actionType, { userId, userData }, (cb, dispatch) => {
 
     function afterSave (err, payload) {
       cb(err, payload)
-      const operation = (userData.siteId === 0)? 'save': 'delete'
-      let userResultData = payload.clientRole
-      userResultData.user = payload.user
+      const userType = (userData.siteId === 0)? 'admin': 'nonAdmin'
+      const userResultData = _.assign({ siteId: userData.siteId }, payload.clientRole, { user: payload.user })
       const result = {
-        operation,
+        userType,
         userResultData,
       }
 

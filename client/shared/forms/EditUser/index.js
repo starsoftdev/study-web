@@ -1,92 +1,105 @@
-import React from 'react'
-import t from 'tcomb-form'
+import React, { Component, PropTypes } from 'react'
+import { reduxForm } from 'redux-form'
+import Select from 'react-select'
+import 'react-select/less/default.less'
+import ActivityIcon from 'components/ActivityIcon'
+export const fields = [ 'firstName', 'lastName', 'email', 'site', 'purchase', 'reward' ]
 
-let selectedUser = null
-export function getModel (siteValues, selectedUserInput) {
-  selectedUser = selectedUserInput
-  let enumFields = { 0: 'All Sites' }
-  siteValues.forEach(function (siteIterator) {
-    enumFields[siteIterator.id] = siteIterator.name
-  })
-  const SitesEnum = t.enums(enumFields)
-  const spec = {
-    firstName: t.String,
-    lastName: t.String,
-    email: t.String,
-    siteId: SitesEnum,
-    purchase: t.Bool,
-    reward: t.Bool
+class EditUserForm extends Component {
+  static propTypes = {
+    fields: PropTypes.object.isRequired,
+    siteOptions: PropTypes.array.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+    onRemove: PropTypes.func,
+    submitting: PropTypes.bool.isRequired,
+    removing: PropTypes.bool,
   }
 
-  return t.struct(spec)
+  constructor (props) {
+    super(props)
+  }
+
+  render () {
+    const {
+      fields: { firstName, lastName, email, site, purchase, reward },
+      siteOptions,
+      handleSubmit,
+      onRemove,
+      submitting,
+      removing,
+      } = this.props
+
+    return (
+      <form className="form-edit-user form-horizontal" onSubmit={handleSubmit}>
+        <div className="edit-user">
+          <div className="form-group">
+            <label className="col-sm-3 control-label">NAME</label>
+            <div className="col-sm-9">
+              <div className="row">
+                <div className="col-sm-6">
+                  <input type="text" className="form-control" disabled={submitting || removing} {...firstName} />
+                </div>
+                <div className="col-sm-6">
+                  <input type="text" className="form-control" disabled={submitting || removing} {...lastName} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="col-sm-3 control-label">EMAIL</label>
+            <div className="col-sm-9">
+              <input type="text" className="form-control" disabled={submitting || removing} {...email} />
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="col-sm-3 control-label">SITE LOCATION</label>
+            <div className="col-sm-9">
+              <Select
+                {...site}
+                options={siteOptions}
+                placeholder="Select Site Location"
+                disabled={submitting || removing}
+                onBlur={() => { site.onBlur(site) }}
+                />
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="col-sm-3 control-label">PURCHASE</label>
+            <div className="col-sm-9">
+              <input type="checkbox" disabled={submitting || removing} {...purchase} />
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="col-sm-3 control-label">REWARD</label>
+            <div className="col-sm-9">
+              <input type="checkbox" disabled={submitting || removing} {...reward} />
+            </div>
+          </div>
+          <div className="form-group">
+            <div className="col-sm-12">
+              <button type="submit" className="btn btn-success pull-right" disabled={submitting || removing}>
+                {submitting
+                  ? <span><ActivityIcon /></span>
+                  : <span>SUBMIT</span>
+                }
+              </button>
+              {onRemove &&
+                <button type="button" className="btn btn-default pull-right" disabled={submitting || removing} onClick={onRemove}>
+                  {removing
+                    ? <span><ActivityIcon /></span>
+                    : <span>REMOVE</span>
+                  }
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+      </form>
+    )
+  }
 }
 
-const firstNameTemplate = t.form.Form.templates.textbox.clone({
-  renderInput: (locals) => {
-    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-                   placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedUser)? selectedUser.firstName: null}
-                   onChange={function (evt) { locals.onChange(evt.target.value) }} />)
-  }
-})
-
-const lastNameTemplate = t.form.Form.templates.textbox.clone({
-  renderInput: (locals) => {
-    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-                   placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedUser)? selectedUser.lastName: null}
-                   onChange={function (evt) { locals.onChange(evt.target.value) }} />)
-  }
-})
-
-const emailTemplate = t.form.Form.templates.textbox.clone({
-  renderInput: (locals) => {
-    return (<input disabled={locals.disabled} className="form-control" name={locals.name}
-                   placeholder={locals.placeholder} type={locals.type} defaultValue={(selectedUser)? selectedUser.email: null}
-                   onChange={function (evt) { locals.onChange(evt.target.value) }} />)
-  }
-})
-
-const purchaseTemplate = t.form.Form.templates.checkbox.clone({
-  renderInput: (locals) => {
-    return (<input disabled={locals.disabled} name={locals.name}
-                   type={locals.type} defaultValue={(selectedUser)? selectedUser.roleForClient.purchase: null}
-                   onChange={function (evt) { locals.onChange(evt.target.value) }} />)
-  }
-})
-
-const rewardTemplate = t.form.Form.templates.checkbox.clone({
-  renderInput: (locals) => {
-    return (<input disabled={locals.disabled} name={locals.name}
-                   type={locals.type} defaultValue={(selectedUser)? selectedUser.roleForClient.reward: null}
-                   onChange={function (evt) { locals.onChange(evt.target.value) }} />)
-  }
-})
-
-export const options = {
-  fields: {
-    firstName: {
-      template: firstNameTemplate,
-    },
-    lastName: {
-      template: lastNameTemplate,
-    },
-    email: {
-      template: emailTemplate,
-    },
-    siteId: {
-      label: 'Site Location'
-    },
-    purchase: {
-      template: purchaseTemplate
-    },
-    reward: {
-      template: rewardTemplate
-    }
-  }
-}
-
-const EditUserForm = {
-  getModel,
-  options,
-}
-
-export default EditUserForm
+export default reduxForm({
+  form: 'editUser',
+  fields
+})(EditUserForm)

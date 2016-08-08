@@ -1,18 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
-import t from 'tcomb-form'
-import { clearSelectedSite, saveSite, fetchSites, clearSites } from 'actions'
-
-import {
-  getModel as getFormType,
-  options as formOptions
-} from 'forms/EditSite'
-
+import EditSiteForm from 'forms/EditSite'
+import EditUserForm from 'forms/EditUser'
+import { clearSelectedSite, clearSelectedUser, saveSite, saveUser, removeUser } from 'actions'
 import SiteItem from './SiteItem'
 import './styles.less'
-
-const TCombForm = t.form.Form
 
 export default class SitesList extends Component {
 
@@ -20,46 +13,77 @@ export default class SitesList extends Component {
     currentUser: PropTypes.object,
     sites: PropTypes.array,
     selectedSite: PropTypes.object,
+    selectedUser: PropTypes.object,
     clearSelectedSite: PropTypes.func,
+    clearSelectedUser: PropTypes.func,
     savingSite: PropTypes.bool,
     saveSite: PropTypes.func,
-    fetchSites: PropTypes.func,
-    clearSites: PropTypes.func,
+    savingUser: PropTypes.bool,
+    saveUser: PropTypes.func,
+    removingUser: PropTypes.bool,
+    removeUser: PropTypes.func,
   }
 
   constructor (props) {
     super(props)
-    this.props.fetchSites(this.props.currentUser, {})
   }
 
-  componentWillUnmount () {
-    // Redux store keeps `sites` reducer, so need to clear them
-    // Not sure we actually need this behavior
-    this.props.clearSites()
+  editSiteModalShouldBeShown () {
+    return (this.props.selectedSite)
   }
 
-  modalShouldBeShown () {
-    return (this.props.selectedSite !== null)
+  editUserModalShouldBeShown () {
+    return (this.props.selectedUser && !this.props.selectedUser.roleForClient)
   }
 
-  closeModal () {
+  closeEditSiteModal () {
     this.props.clearSelectedSite()
   }
 
-  updateSite (ev) {
-    ev.preventDefault()
+  closeEditUserModal () {
+    this.props.clearSelectedUser()
+  }
 
-    const siteData = this.refs.form.getValue()
-    if (siteData) {
-      this.props.saveSite(this.props.currentUser, this.props.selectedSite.id, siteData)
+  updateSite (siteData) {
+    this.props.saveSite(this.props.currentUser, this.props.selectedSite.id, siteData)
+  }
+
+  updateUser (userData) {
+    const userInput = {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      siteId: userData.site,
+      clientRole: {
+        purchase: userData.purchase,
+        reward: userData.reward,
+      }
     }
+
+    this.props.saveUser(this.props.currentUser, this.props.selectedUser.id, userInput)
+  }
+
+  removeUser () {
+    this.props.removeUser(this.props.selectedUser.id)
   }
 
   render () {
-    const { sites, selectedSite, savingSite } = this.props
+    const { sites, selectedSite, savingSite, selectedUser, savingUser, removingUser } = this.props
     const sitesListContents = sites.map((item, index) => (
       <SiteItem {...item} key={index} />
     ))
+    let siteOptions = _.map(sites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id }))
+    siteOptions.push({ label: 'All', value: 0 })
+    let selectedUserInput = {}
+    if (selectedUser && !selectedUser.roleForClient) {
+      selectedUserInput.firstName = selectedUser.firstName
+      selectedUserInput.lastName = selectedUser.lastName
+      selectedUserInput.email = selectedUser.email
+      const foundSiteIndex = _.findIndex(sites, (siteIterator) => {
+        return (_.findIndex(siteIterator.users, { id: selectedUser.id }) > -1)
+      })
+      selectedUserInput.site = sites[foundSiteIndex].id
+    }
 
     if (sites.length > 0) {
       return (
@@ -83,29 +107,28 @@ export default class SitesList extends Component {
                 </tbody>
               </table>
             </div>
-            <Modal className="edit-site" show={this.modalShouldBeShown()} onHide={this.closeModal.bind(this)}>
-              <form className="form-green" onSubmit={this.updateSite.bind(this)}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Edit Site</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <TCombForm ref="form" type={getFormType(selectedSite)} options={formOptions} />
-                </Modal.Body>
-                <Modal.Footer>
-                  <button type="submit" className="btn btn-default" disabled={savingSite}>
-                    {savingSite
-                      ? <span>Saving...</span>
-                      : <span>UPDATE</span>
-                    }
-                  </button>
-                </Modal.Footer>
-              </form>
+            <Modal className="edit-site" show={(this.editSiteModalShouldBeShown())} onHide={this.closeEditSiteModal.bind(this)}>
+              <Modal.Header closeButton>
+                <Modal.Title>Edit Site</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <EditSiteForm submitting={savingSite} initialValues={selectedSite} onSubmit={this.updateSite.bind(this)} />
+              </Modal.Body>
+            </Modal>
+            <Modal className="edit-user" show={(this.editUserModalShouldBeShown())} onHide={this.closeEditUserModal.bind(this)}>
+              <Modal.Header closeButton>
+                <Modal.Title>Edit User</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <EditUserForm submitting={savingUser} removing={removingUser} siteOptions={siteOptions}
+                              initialValues={selectedUserInput} onRemove={this.removeUser.bind(this)} onSubmit={this.updateUser.bind(this)} />
+              </Modal.Body>
             </Modal>
           </div>
         </div>
       )
     } else {
-      return <div />
+      return <div><h3>No matching sites found!</h3></div>
     }
   }
 }
@@ -115,12 +138,16 @@ const mapStateToProps = (state) => ({
   sites: state.sites,
   selectedSite: state.selectedSite,
   savingSite: state.savingSite,
+  selectedUser: state.selectedUser,
+  savingUser: state.savingUser,
+  removingUser: state.removingUser,
 })
 const mapDispatchToProps = {
   clearSelectedSite,
   saveSite,
-  fetchSites,
-  clearSites,
+  clearSelectedUser,
+  saveUser,
+  removeUser,
 }
 
 export default connect(
