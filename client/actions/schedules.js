@@ -5,9 +5,9 @@ import { createEntity, updateEntity, searchEntities } from 'utils/entityReadWrit
 import history from 'utils/history'
 import asyncAction from 'utils/asyncAction'
 
-export function fetchSchedules () {
+export function fetchSchedules (data) {
   return asyncAction(ActionTypes.FETCH_SCHEDULES, (cb, dispatch, getState) => {
-    dispatch(searchEntities('/callReminders/getSchedules', {}, cb))
+    dispatch(searchEntities('/callReminders/getSchedules', data, cb))
   })
 }
 

@@ -14,6 +14,7 @@ import './styles.less'
 
 class Calendar extends React.Component {
   static propTypes = {
+    authorization: PropTypes.object.isRequired,
     fetchingSites: PropTypes.bool.isRequired,
     sites: PropTypes.array.isRequired,
     protocols: PropTypes.object.isRequired,
@@ -39,12 +40,12 @@ class Calendar extends React.Component {
   selectedCellInfo = {}
 
   componentWillMount () {
-    const { fetchSites, fetchProtocols, fetchPatients, fetchSchedules } = this.props
+    const { fetchSites, fetchProtocols, fetchPatients, fetchSchedules, authorization } = this.props
 
     // fetchSites()
     // fetchProtocols()
     fetchPatients()
-    fetchSchedules()
+    fetchSchedules({user_id: authorization.authData.userId})
   }
 
   componentWillReceiveProps (nextProps) {
@@ -78,7 +79,6 @@ class Calendar extends React.Component {
   }
 
   getTimeComponents (strTime) {
-    console.log (strTime)
     return {
       hour: moment(strTime).hour() % 12 + 1,
       minute: moment(strTime).minute(),
@@ -98,14 +98,8 @@ class Calendar extends React.Component {
 
   handleSubmit (data) {
     let submitData
-    console.log ('******', data)
-    if (data.date) {
-      submitData = {
-        id: this.selectedCellInfo.data.id,
-        time: moment(data.date).add(data.period==='AM'?data.hour:data.hour+12, 'hours').add(data.minute, 'minutes').toDate()
-      }
-    }
-    else {
+
+    if (data.patient) { // CREATE
       submitData = {
         // siteLocation: data.siteLocation,
         // indication:
@@ -113,7 +107,22 @@ class Calendar extends React.Component {
         indication: 'acne',
         protocolNumber: data.protocol,
         patient_id: data.patient,
+        user_id: this.props.authorization.authData.userId,
         time: moment(this.selectedCellInfo.selectedDate).add(data.period==='AM'?data.hour:data.hour+12, 'hours').add(data.minute, 'minutes').toDate()
+      }
+    }
+    else {  // UPDATE
+      let updatedDate
+      if (data.date) {
+        updatedDate = moment(data.date)
+      }
+      else {  // React Datepicker doesn't submit its initial value
+        updatedDate = moment(this.selectedCellInfo.data.time).startOf('day')
+      }
+
+      submitData = {
+        id: this.selectedCellInfo.data.id,
+        time: updatedDate.add(data.period==='AM'?data.hour:data.hour+12, 'hours').add(data.minute, 'minutes').toDate()
       }
     }
 
@@ -171,6 +180,7 @@ class Calendar extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  authorization: state.authorization,
   fetchingSites: state.fetchingSites,
   sites: state.sites,
   protocols: state.protocols,
