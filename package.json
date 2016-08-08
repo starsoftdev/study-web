@@ -49,11 +49,8 @@
     "react-dom": "^15.0.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.4.0",
-<<<<<<< HEAD
     "react-select2-wrapper": "^1.0.0",
-=======
     "react-select": "^1.0.0-beta14",
->>>>>>> KIK-504
     "react-sortablejs": "^1.0.0",
     "react-toastr": "^2.7.0",
     "react-tooltip": "^2.0.3",
