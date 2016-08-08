@@ -8,6 +8,8 @@ import moment from 'moment'
 
 import { fetchSites, fetchProtocols, fetchPatients, fetchSchedules, schedulePatient } from 'actions'
 
+import { SchedulePatientModalType } from 'constants'
+
 import './styles.less'
 
 class Calendar extends React.Component {
@@ -31,9 +33,10 @@ class Calendar extends React.Component {
       indication: '',
       protocol: '',
     },
-    isModalVisible: true,
+    modalType: SchedulePatientModalType.HIDDEN,
     filteredSchedules: []
   }
+  selectedCellInfo = {}
 
   componentWillMount () {
     const { fetchSites, fetchProtocols, fetchPatients, fetchSchedules } = this.props
@@ -74,27 +77,47 @@ class Calendar extends React.Component {
     this.filterSchedules (this.props.schedules, newFilter)
   }
 
-  handleModalVisibility (visible, selectedDate) {
+  getTimeComponents (strTime) {
+    console.log (strTime)
+    return {
+      hour: moment(strTime).hour() % 12 + 1,
+      minute: moment(strTime).minute(),
+      period: moment(strTime).hour() >= 12 ? 'PM' : 'AM'
+    }
+  }
+
+  handleModalVisibility (modalType, data) {
     this.setState({
-      isModalVisible: visible,
+      modalType: modalType,
     })
-    if (visible) {
-      this.selectedDate = selectedDate
+
+    if (modalType!=SchedulePatientModalType.HIDDEN) {
+      this.selectedCellInfo = data
     }
   }
 
   handleSubmit (data) {
-    this.handleModalVisibility (false)
-
-    const submitData = {
-      // siteLocation: data.siteLocation,
-      // indication:
-      siteLocation: 'Palmer Tech',
-      indication: 'acne',
-      protocolNumber: data.protocol,
-      patient_id: data.patient,
-      time: moment(this.selectedDate).add(data.am==='AM'?data.hour:data.hour+12, 'hours').add(data.minute, 'minutes').toDate()
+    let submitData
+    console.log ('******', data)
+    if (data.date) {
+      submitData = {
+        id: this.selectedCellInfo.data.id,
+        time: moment(data.date).add(data.period==='AM'?data.hour:data.hour+12, 'hours').add(data.minute, 'minutes').toDate()
+      }
     }
+    else {
+      submitData = {
+        // siteLocation: data.siteLocation,
+        // indication:
+        siteLocation: 'Palmer Tech',
+        indication: 'acne',
+        protocolNumber: data.protocol,
+        patient_id: data.patient,
+        time: moment(this.selectedCellInfo.selectedDate).add(data.period==='AM'?data.hour:data.hour+12, 'hours').add(data.minute, 'minutes').toDate()
+      }
+    }
+
+    this.handleModalVisibility (SchedulePatientModalType.HIDDEN)
 
     this.props.schedulePatient(submitData)
   }
@@ -128,18 +151,19 @@ class Calendar extends React.Component {
         />
         <CalendarWidget
           schedules={this.state.filteredSchedules}
-          handleOpenModal={this.handleModalVisibility.bind(this, true)}
+          handleOpenModal={this.handleModalVisibility.bind(this)}
         />
         <SchedulePatientModal
           siteLocationOptions={siteLocationOptions}
           protocolOptions={protocolOptions}
           patientOptions={patientOptions}
           onSubmit={this.handleSubmit.bind(this)}
-          handleCloseModal={this.handleModalVisibility.bind(this, false)}
+          handleCloseModal={this.handleModalVisibility.bind(this, SchedulePatientModalType.HIDDEN)}
           submitting={false}
           loading={false}
-          visible={this.state.isModalVisible}
-          initialValues={{am: 'AM'}}
+          selectedCellInfo={this.selectedCellInfo}
+          modalType={this.state.modalType}
+          initialValues={this.selectedCellInfo.data?this.getTimeComponents(this.selectedCellInfo.data.time):{period: 'AM'}}
         />
       </div>
     )

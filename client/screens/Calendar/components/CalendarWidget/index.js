@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
 
+import { SchedulePatientModalType } from 'constants'
+
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
 BigCalendar.momentLocalizer(moment) // or globalizeLocalizer
@@ -19,6 +21,7 @@ class CalendarWidget extends React.Component {
   render () {
     const eventsList = this.props.schedules.map(s => {
       return {
+        'data': s,
         'title': s.patient.firstName + ' ' + s.patient.lastName + ' ' + moment(s.time).format('h:mm A'),
         'start': s.time,
         'end': s.time,
@@ -45,8 +48,11 @@ class CalendarWidget extends React.Component {
           }}
           onSelectSlot={({start, end, slots})=>{
             if (slots.length === 1 && moment(this.currentDate).month() === moment(start).month()) {
-              this.props.handleOpenModal(start)
+              this.props.handleOpenModal(SchedulePatientModalType.CREATE, {selectedDate: start})
             }
+          }}
+          onSelectEvent={(event) => {
+            this.props.handleOpenModal(SchedulePatientModalType.UPDATE, event)
           }}
         />
       </div>

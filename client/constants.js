@@ -46,3 +46,9 @@ export const ContactCompanyTypes = keymirror({
   'Sponsor': null,
   'CRO': null,
 })
+
+export const SchedulePatientModalType = keymirror({
+  CREATE: null,
+  UPDATE: null,
+  HIDDEN: null,
+})
