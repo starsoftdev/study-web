@@ -19,6 +19,9 @@ export default function sites (state=[], action) {
       return state
     case ActionTypes.FINISH_SAVE_SITE:
       foundSiteIndex = _.findIndex(newState, { id: siteData.id })
+      if (!siteData.users) {
+        siteData.users = []
+      }
 
       if (foundSiteIndex < 0) {
         newState.push(siteData)
@@ -38,7 +41,13 @@ export default function sites (state=[], action) {
         _.forEach(newState, site => {
           foundUserIndex = _.findIndex(site.users, { id: userData.userResultData.user.id })
           if (foundUserIndex > -1) {
-            site.users[foundUserIndex] = userData.userResultData.user
+            if (site.id === userData.userResultData.siteId) {
+              site.users[foundUserIndex] = userData.userResultData.user
+            } else {
+              site.users.splice(foundUserIndex, 1)
+              foundUserIndex = -1
+            }
+
             return false
           }
         })
