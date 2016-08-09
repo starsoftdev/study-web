@@ -18,6 +18,7 @@ import TrialListing from './screens/TrialListing'
 import PatientDetails from './screens/PatientDetails'
 import OrderIRBAdCreation from './screens/OrderIRBAdCreation'
 import Notifications from './screens/Notifications'
+import Calendar from './screens/Calendar'
 
 import isSessionExpired from 'utils/isSessionExpired'
 
@@ -38,6 +39,7 @@ export default (store) => {
 
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
+        <Route path="calendar" getComponent={lazyLoadComponent(Calendar)} />
         <Route path="dashboard" getComponent={lazyLoadComponent(Dashboard)} />
         <Route path="home" getComponent={lazyLoadComponent(Home)} />
         <Route path="notifications" getComponent={lazyLoadComponent(Notifications)} />

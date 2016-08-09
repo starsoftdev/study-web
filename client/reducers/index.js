@@ -40,7 +40,6 @@ export selectedPatient from './selectedPatient'
 export savingPatient from './savingPatient'
 export updatingPatientCategory from './updatingPatientCategory'
 
-export siteLocations from './siteLocations'
 export studyCategories from './studyCategories'
 export studyLevels from './studyLevels'
 
@@ -60,3 +59,7 @@ export activeBlastForm from './activeBlastForm'
 export fetchingTwilioMessages from './fetchingTwilioMessages'
 export twilioMessages from './twilioMessages'
 export savingTwilioMessage from './savingTwilioMessage'
+
+export schedules from './schedules'
+
+export protocols from './protocols'

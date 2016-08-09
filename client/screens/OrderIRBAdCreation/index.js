@@ -5,7 +5,7 @@ import t from 'tcomb-form'
 import ReactTooltip from 'react-tooltip'
 import _ from 'lodash'
 
-import { submitOrderIRBAd, fetchSiteLocations, fetchStudyCategories } from 'actions'
+import { submitOrderIRBAd, fetchSites, fetchStudyCategories } from 'actions'
 import { isValidCurrency, strToFloat } from 'utils/number'
 
 import LoadingResults from 'components/LoadingResults'
@@ -85,10 +85,11 @@ class OrderIRBAdCreation extends React.Component {
   static propTypes = {
     authorization: PropTypes.object,
     isSaving: PropTypes.bool,
-    siteLocations: PropTypes.object,
+    fetchingSites: PropTypes.bool,
+    sites: PropTypes.object,
     studyCategories: PropTypes.object,
     submitOrderIRBAd: PropTypes.func,
-    fetchSiteLocations: PropTypes.func,
+    fetchSites: PropTypes.func,
     fetchStudyCategories: PropTypes.func,
   }
 
@@ -98,20 +99,20 @@ class OrderIRBAdCreation extends React.Component {
   }
 
   componentWillMount () {
-    const { fetchSiteLocations, fetchStudyCategories } = this.props
+    const { fetchSites, fetchStudyCategories } = this.props
 
-    fetchSiteLocations()
+    fetchSites()
     fetchStudyCategories()
   }
 
   componentWillReceiveProps (nextProps) {
-    const { siteLocations, studyCategories } = nextProps
+    const { sites, studyCategories, fetchingSites } = nextProps
 
-    if (siteLocations.isFetching || studyCategories.isFetching) {
+    if (fetchingSites || studyCategories.isFetching) {
       this.irbAdForm = null
     }
     else {
-      const siteLocationsObj = objectFromArray(siteLocations.siteLocations, 'id', 'name')
+      const siteLocationsObj = objectFromArray(sites, 'id', 'name')
       const studyCategoriesObj = objectFromArray(studyCategories.studyCategories, 'id', 'name')
 
       this.irbAdForm = t.struct({
@@ -160,12 +161,12 @@ class OrderIRBAdCreation extends React.Component {
   }
 
   render () {
-    const { isSaving, siteLocations, studyCategories } = this.props
+    const { isSaving, sites, studyCategories } = this.props
 
     return (
       <div className="irb-ad-creation-wrapper">
         {
-          siteLocations.isFetching || studyCategories.isFetching ?
+          sites || studyCategories.isFetching ?
             <LoadingResults /> :
             <div className="col-md-offset-2 col-md-8">
               <form onSubmit={(ev) => this.handleSubmit(ev)}>
@@ -196,12 +197,13 @@ class OrderIRBAdCreation extends React.Component {
 const mapStateToProps = (state) => ({
   authorization: state.authorization,
   isSaving: state.submittingOrderIRBAd,
-  siteLocations: state.siteLocations,
+  sites: state.sites,
+  fetchingSites: state.fetchingSites,
   studyCategories: state.studyCategories,
 })
 
 const mapDispatchToProps = {
-  fetchSiteLocations,
+  fetchSites,
   fetchStudyCategories,
   submitOrderIRBAd,
 }
