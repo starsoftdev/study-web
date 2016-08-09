@@ -84,5 +84,9 @@ export const ActionTypes = keymirror({
   UNSET_ACTIVE_BLAST_FORM: null,
   UNSET_ACTIVE_CHAT: null,
   JOIN_TWILIO_CHAT: null,
-  LEAVE_TWILIO_CHAT: null
+  LEAVE_TWILIO_CHAT: null,
+  SCHEDULE_PATIENT: null,
+  FETCH_SCHEDULES: null,
+
+  FETCH_PROTOCOLS: null,
 })

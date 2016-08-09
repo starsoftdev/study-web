@@ -38,7 +38,6 @@ export clearSelectedPatient from './clearSelectedPatient'
 export fetchPatient from './fetchPatient'
 export updatePatientCategory from './updatePatientCategory'
 
-export fetchSiteLocations from './fetchSiteLocations'
 export fetchStudyCategories from './fetchStudyCategories'
 export fetchStudyLevels from './fetchStudyLevels'
 export submitOrderIRBAd from './submitOrderIRBAd'
@@ -54,5 +53,8 @@ export setActiveBlastForm from './setActiveBlastForm'
 export unsetActiveBlastForm from './unsetActiveBlastForm'
 export * from './twilioChat'
 
+export fetchProtocols from './fetchProtocols'
+
 export * from './notificationActions'
 export * from './notification'
+export * from './schedules'
