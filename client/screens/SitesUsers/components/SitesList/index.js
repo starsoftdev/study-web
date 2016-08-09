@@ -49,12 +49,14 @@ export default class SitesList extends Component {
   }
 
   updateUser (userData) {
-    const userInput = {
+    let userInput = {
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
       siteId: userData.site,
-      clientRole: {
+    }
+    if (userData.site === 0) {
+      userInput.clientRole = {
         purchase: userData.purchase,
         reward: userData.reward,
       }
