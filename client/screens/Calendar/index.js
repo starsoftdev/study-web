@@ -45,7 +45,7 @@ class Calendar extends React.Component {
     // fetchSites()
     // fetchProtocols()
     // fetchPatients()
-    fetchSchedules({ user_id: authorization.authData.userId })
+    fetchSchedules({ userId: authorization.authData.userId })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -99,15 +99,15 @@ class Calendar extends React.Component {
   handleSubmit (data) {
     let submitData
 
-    if (data.patient) { // CREATE
+    if (data.protocol) { // CREATE
       submitData = {
         // siteLocation: data.siteLocation,
         // indication:
         siteLocation: 'Palmer Tech',
         indication: 'acne',
         protocolNumber: data.protocol,
-        patient_id: data.patient,
-        user_id: this.props.authorization.authData.userId,
+        patientId: data.patient,
+        userId: this.props.authorization.authData.userId,
         time: moment(this.selectedCellInfo.selectedDate).add(data.period==='AM'?data.hour:data.hour+12, 'hours').add(data.minute, 'minutes').toDate()
       }
     }
