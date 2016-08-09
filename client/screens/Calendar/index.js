@@ -44,7 +44,7 @@ class Calendar extends React.Component {
 
     // fetchSites()
     // fetchProtocols()
-    fetchPatients()
+    // fetchPatients()
     fetchSchedules({ user_id: authorization.authData.userId })
   }
 
