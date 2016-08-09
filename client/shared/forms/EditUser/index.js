@@ -29,6 +29,10 @@ class EditUserForm extends Component {
       removing,
       } = this.props
 
+    const checkSelectedSiteIsAll = () => {
+      return (site.value === 0)
+    }
+
     return (
       <form className="form-edit-user form-horizontal" onSubmit={handleSubmit}>
         <div className="edit-user">
@@ -63,18 +67,25 @@ class EditUserForm extends Component {
                 />
             </div>
           </div>
-          <div className="form-group">
-            <label className="col-sm-3 control-label">PURCHASE</label>
-            <div className="col-sm-9">
-              <input type="checkbox" disabled={submitting || removing} {...purchase} />
-            </div>
-          </div>
-          <div className="form-group">
-            <label className="col-sm-3 control-label">REWARD</label>
-            <div className="col-sm-9">
-              <input type="checkbox" disabled={submitting || removing} {...reward} />
-            </div>
-          </div>
+          {checkSelectedSiteIsAll()
+            ? (
+                <div>
+                  <div className="form-group">
+                    <label className="col-sm-3 control-label">PURCHASE</label>
+                    <div className="col-sm-9">
+                      <input type="checkbox" disabled={submitting || removing} {...purchase} />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="col-sm-3 control-label">REWARD</label>
+                    <div className="col-sm-9">
+                      <input type="checkbox" disabled={submitting || removing} {...reward} />
+                    </div>
+                  </div>
+                </div>
+              )
+            : null
+          }
           <div className="form-group">
             <div className="col-sm-12">
               <button type="submit" className="btn btn-success pull-right" disabled={submitting || removing}>
