@@ -1,7 +1,7 @@
 import { bind } from 'redux-effects'
 
 import { ActionTypes } from 'ActionTypes'
-import { createEntity, updateEntity, searchEntities } from 'utils/entityReadWrite'
+import { createEntity, deleteEntity, searchEntities } from 'utils/entityReadWrite'
 import history from 'utils/history'
 import asyncAction from 'utils/asyncAction'
 
@@ -19,5 +19,11 @@ export function schedulePatient (data) {
     }
 
     dispatch(createEntity('/callReminders/upsertSchedule', data, afterSave))
+  })
+}
+
+export function deleteSchedule (scheduleId, userId) {
+  return asyncAction(ActionTypes.DELETE_SCHEDULE, (cb, dispatch, getState) => {
+    dispatch(deleteEntity(`/callReminders/${scheduleId}/deleteSchedule`, { userId }, cb))
   })
 }
