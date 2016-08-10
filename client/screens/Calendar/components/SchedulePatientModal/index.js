@@ -41,6 +41,7 @@ class SchedulePatientModal extends Component {
     patientOptions: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     handleCloseModal: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     modalType: PropTypes.string.isRequired,
@@ -68,6 +69,7 @@ class SchedulePatientModal extends Component {
       protocolOptions,
       patientOptions,
       handleCloseModal,
+      handleDelete,
       handleSubmit,
       submitting,
       loading,
@@ -210,12 +212,12 @@ class SchedulePatientModal extends Component {
               </div>
               <div className="form-group">
                 <div className="col-sm-offset-4 col-sm-3">
-                  <button className="btn btn-default pull-right" disabled={submitting}>
+                  <div type="button" className="btn btn-default pull-right" disabled={submitting} onClick={() => handleDelete(selectedCellInfo.data.id)}>
                     {submitting
-                      ? <span>DELETTING...</span>
+                      ? <span>DELETING...</span>
                       : <span>DELETE</span>
                     }
-                  </button>
+                  </div>
                 </div>
                 <div className="col-sm-3">
                   <button type="submit" className="btn btn-default pull-right" disabled={submitting}>
