@@ -15,6 +15,8 @@ import TopBar from './TopBar'
 import BottomBar from './BottomBar'
 import GlobalNotifications from '../globalNotifications'
 import Dispatcher from '../../../utils/dispatcher'
+import NewTopBar from './NewTopBar'
+import NewSideBar from './NewSideBar'
 
 class Application extends React.Component {
   static propTypes = {
@@ -123,16 +125,24 @@ class Application extends React.Component {
   }
 
   render () {
+    const { authorized } = this.props.authorization
     return (
       <DocumentTitle title="StudyKik Home Page">
         <div>
-          <TopBar authorization={this.props.authorization} location={this.props.location} />
+          {/* <TopBar authorization={this.props.authorization} location={this.props.location} /> */}
+
+          {authorized &&
+            <NewTopBar />
+          }
+          {authorized &&
+            <NewSideBar />
+          }
 
           <div className="content">
             {this.props.children}
           </div>
 
-          <BottomBar />
+          {/* <BottomBar /> */}
 
           <GlobalNotifications />
         </div>
