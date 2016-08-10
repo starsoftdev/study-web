@@ -2,10 +2,6 @@ language: node_js
 node_js:
   - "6"
 # safelist for specific branches for travis to test
-branches:
-  only:
-  - master
-  - develop
 notifications:
   webhooks:
     urls:
@@ -16,7 +12,7 @@ notifications:
   slack: studykik:nxDZXJcNFYdWoXibXQ9T0013
     on_success: never
     on_failure: always
-    
+
 sudo: required
 dist: trusty
 
