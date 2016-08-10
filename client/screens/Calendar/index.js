@@ -6,7 +6,7 @@ import FilterBar from './components/FilterBar'
 
 import moment from 'moment'
 
-import { fetchSites, fetchProtocols, fetchPatients, fetchSchedules, schedulePatient } from 'actions'
+import { fetchSites, fetchProtocols, fetchPatients, fetchSchedules, schedulePatient, deleteSchedule } from 'actions'
 
 import { SchedulePatientModalType } from 'constants'
 
@@ -25,6 +25,7 @@ class Calendar extends React.Component {
     fetchPatients: PropTypes.func.isRequired,
     fetchSchedules: PropTypes.func.isRequired,
     schedulePatient: PropTypes.func.isRequired,
+    deleteSchedule: PropTypes.func.isRequired,
   }
 
   state = {
@@ -49,7 +50,9 @@ class Calendar extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if ((this.props.schedules.isFetching && !nextProps.schedules.isFetching) || (this.props.schedules.schedulingPatient && !nextProps.schedules.schedulingPatient)) {
+    if ((this.props.schedules.isFetching && !nextProps.schedules.isFetching) ||
+      (this.props.schedules.schedulingPatient && !nextProps.schedules.schedulingPatient) ||
+      (this.props.schedules.isDeleting && !nextProps.schedules.isDeleting)) {
       this.filterSchedules (nextProps.schedules, this.state.filter)
     }
   }
@@ -131,6 +134,12 @@ class Calendar extends React.Component {
     this.props.schedulePatient(submitData)
   }
 
+  handleDelete (scheduleId) {
+    this.handleModalVisibility (SchedulePatientModalType.HIDDEN)
+
+    this.props.deleteSchedule(scheduleId, this.props.authorization.authData.userId)
+  }
+
   render () {
     const { fetchingSites, sites, patients, protocols, schedules, fetchSchedules } = this.props
 
@@ -168,6 +177,7 @@ class Calendar extends React.Component {
           patientOptions={patientOptions}
           onSubmit={this.handleSubmit.bind(this)}
           handleCloseModal={this.handleModalVisibility.bind(this, SchedulePatientModalType.HIDDEN)}
+          handleDelete={this.handleDelete.bind(this)}
           submitting={false}
           loading={false}
           selectedCellInfo={this.selectedCellInfo}
@@ -193,6 +203,7 @@ const mapDispatchToProps = {
   fetchPatients,
   fetchSchedules,
   schedulePatient,
+  deleteSchedule,
 }
 
 export default connect(

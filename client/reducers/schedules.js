@@ -4,12 +4,14 @@ import asyncActionIsFetching from 'utils/asyncActionIsFetching'
 const initialState = {
   isFetching: false,
   schedulingPatient: false,
+  isDeleting: false,
   schedules: [],
 }
 
 export default function (state = initialState, action) {
   const fetchingFunc = asyncActionIsFetching(ActionTypes.FETCH_SCHEDULES)
   const schedulingFunc = asyncActionIsFetching(ActionTypes.SCHEDULE_PATIENT)
+  const deletingFunc = asyncActionIsFetching(ActionTypes.DELETE_SCHEDULE)
 
   switch (action.type) {
     case ActionTypes.FETCH_SCHEDULES:
@@ -35,6 +37,18 @@ export default function (state = initialState, action) {
       return {
         ...state,
         schedulingPatient: schedulingFunc(state, action),
+      }
+    case ActionTypes.DELETE_SCHEDULE:
+      if (action.status === 'succeeded') {
+        return {
+          ...state,
+          isDeleting: false,
+          schedules: action.payload || []
+        }
+      }
+      return {
+        ...state,
+        isDeleting: deletingFunc(state, action),
       }
   }
 

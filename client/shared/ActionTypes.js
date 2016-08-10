@@ -87,6 +87,7 @@ export const ActionTypes = keymirror({
   LEAVE_TWILIO_CHAT: null,
   SCHEDULE_PATIENT: null,
   FETCH_SCHEDULES: null,
+  DELETE_SCHEDULE: null,
 
   FETCH_PROTOCOLS: null,
 })
