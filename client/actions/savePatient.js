@@ -1,5 +1,6 @@
 import { ActionTypes } from 'ActionTypes'
 import { createEntity, updateEntity } from 'utils/entityReadWrite'
+import _ from 'lodash'
 import asyncAction from 'utils/asyncAction'
 
 export default function savePatient (patientId, patientData) {
@@ -8,16 +9,17 @@ export default function savePatient (patientId, patientData) {
   return asyncAction(actionType, { patientId, patientData }, (cb, dispatch) => {
 
     function afterSave (err, payload) {
-      patientData.id = payload.id
       cb(err, payload)
       dispatch({
         type: ActionTypes.FINISH_SAVE_PATIENT,
-        patientData
+        patientData: payload
       })
     }
 
     if (patientId) {
-      dispatch(updateEntity('/patients/' + patientId, patientData, afterSave))
+      const payload = _.assign({ id: patientId }, patientData)
+      dispatch(createEntity('/patients/update_with_category', payload, afterSave))
+      //dispatch(updateEntity('/patients/' + patientId, patientData, afterSave))
     } else {
       dispatch(createEntity('/patients', patientData, afterSave))
     }
