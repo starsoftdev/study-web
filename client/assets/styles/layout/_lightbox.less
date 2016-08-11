@@ -1,0 +1,236 @@
+/* lightbox */
+
+.lightbox {
+	top: 0;
+	left: 0;
+	opacity: 0;
+	.size(100%);
+	z-index: 8001;
+	position: fixed;
+	overflow-y: auto;
+	overflow-x: hidden;
+	visibility: hidden;
+	transition: all 0.75s ease;
+	
+	&.lightbox-active {
+		opacity: 1;
+		visibility: visible;
+	}
+	
+	.overlay {
+		top: 0;
+		left: 0;
+		z-index: 2;
+		.size(100%);
+		position: fixed;
+		background: rgba(0,0,0,0.5);
+	}
+	
+	.lightbox-holder {
+		.size(100%);
+		display: table;
+		table-layout: fixed;
+	}
+	
+	.lightbox-frame {
+		display: table-cell;
+		vertical-align: middle;
+	}
+	
+	.lightbox-content {
+		z-index: 3;
+		margin:0 auto;
+		max-width: 560px;
+		background: #fff;
+		position: relative;
+		border: #f78e1e solid 2px;
+		border-radius: 2px 2px 3px 3px;
+	}
+	
+	
+	.head {
+		color: #fff;
+		position: relative;
+		background: #f78e1e;
+		padding: 15px 50px 15px 15px;
+	}
+	
+	.title {
+		.font(21px);
+		display: block;
+		font-weight: 900;
+		text-transform: uppercase;
+	}
+	
+	.close {
+		top: 50%;
+		opacity: 1;
+		right: 10px;
+		color: #fff;
+		.font(26px,1);
+		text-shadow: none;
+		position: absolute;
+		.transform(translate(0,-50%));
+		
+		i {
+			display: block;
+			transition: all 0.25s;
+		}
+		
+		&:hover {
+			color: #fff;
+			
+			i {
+				margin: 5px 0 0 0;
+				.transform(rotate(180deg));
+			}
+		}
+	}
+}
+	
+.form-lightbox {
+	padding: 15px;
+	
+	.field-row {
+		.font(0,0);
+		.clearfix;
+		margin: 0 0 15px;
+		position: relative;
+		
+		> * {
+			.align(@align: middle);
+		}
+	}
+	
+	.label {
+		width: 35%;
+		color: #101010;
+		margin: -1px 0;
+		text-align: left;
+		.font(18px, 22px);
+		padding: 0 5px 0 0;
+		text-transform: uppercase;
+	}
+	
+	.field {
+		width: 65%;
+	}
+	
+	.col  {
+		width: 48%;
+	}
+	
+	.btn-primary {
+		padding: 5px;
+		min-width: 100px;
+	}
+	
+	.jcf-select {
+		.jcf-select-text {
+			min-height: 36px;
+			
+			span {
+				transform: none;
+			}
+		}
+	}
+	
+	.jcf-select-year,
+	.jcf-select-month {
+		.jcf-select-text {
+			.font(0,0);
+			
+			span {
+				&:before {
+					.font(18px, 36px);
+				}
+			}
+		}
+	}
+	
+	.jcf-select-month {
+		.jcf-select-text {
+			span {
+				&:before {
+					content: 'Select Month';
+				}
+			}
+		}
+	}
+	
+	.jcf-select-year {
+		.jcf-select-text {
+			span {
+				&:before {
+					content: 'Select Year';
+				}
+			}
+		}
+	}
+	
+	.select-selected {
+		.jcf-select-text {
+			.font(18px,36px);
+			
+			span:before { display: none !important; }
+		}
+	}
+}
+
+input:focus {
+	+ .error-text {
+		opacity: 1;
+		margin: 0 0 0 9px;
+		visibility: visible;
+	}
+}
+
+.error-text {
+	top: 50%;
+	left: 100%;
+	opacity: 0;
+	color: #fff;
+	.font(14px);
+	font-weight: 600;
+	padding: 7px 10px;
+	margin: 0 0 0 30px;
+	position: absolute;
+	text-align: center;
+	border-radius: 3px;
+	visibility: visible;
+	background: #00afef;
+	transition: all 0.25s;
+	text-transform: uppercase;
+	.transform(translate(0,-50%));
+	
+	span {
+		display: block;
+		overflow: hidden;
+		max-width: 150px;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+	
+	.has-error & {
+		
+	}
+	
+	&:before {
+		top: 50%;
+		right: 100%;
+		margin: -6px 0 0;
+		.arrow(6px 6px 6px 0);
+		border-right-color: #00afef;
+	}
+}
+
+#popup-remover {
+	.lightbox-content {
+		padding: 30px 20px;
+	}
+	
+	.btn {
+		min-width: 80px;
+		margin: 0 7px;
+	}
+}
