@@ -20,7 +20,7 @@ const menuItemsGroupB = [
   { text: 'Badges', link: '/replace_me', icon: 'icon-star' }
 ]
 
-export default class NewSideBar extends React.Component {
+export default class SideBar extends React.Component {
 
   render () {
 

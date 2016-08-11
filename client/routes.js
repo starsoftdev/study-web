@@ -38,7 +38,7 @@ export default (store) => {
       <IndexRedirect to="/dashboard" />
 
       {/* Routes requiring login */}
-      {/* <Route onEnter={requireLogin}> */}
+      <Route onEnter={requireLogin}>
         <Route path="calendar" getComponent={lazyLoadComponent(Calendar)} />
         <Route path="dashboard" getComponent={lazyLoadComponent(Dashboard)} />
         <Route path="home" getComponent={lazyLoadComponent(Home)} />
@@ -46,7 +46,7 @@ export default (store) => {
         <Route path="sites-users" getComponent={lazyLoadComponent(SitesUsers)} />
         <Route path="patient-database" getComponent={lazyLoadComponent(PatientDatabase)} />
         <Route path="order-irb-ad-creation" getComponent={lazyLoadComponent(OrderIRBAdCreation)} />
-      {/* </Route> */}
+      </Route>
 
       <Route path="clinical-trial-patient-recruitment-patient-enrollment" getComponent={lazyLoadComponent(GetReport)} />
       <Route path="listnewstudy" getComponent={lazyLoadComponent(ListStudy)} />
