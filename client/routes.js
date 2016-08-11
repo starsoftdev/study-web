@@ -35,7 +35,7 @@ export default (store) => {
   return (
     <Route path="/" component={Application}>
       {/* Home (main) route */}
-      <IndexRedirect to="/trials" />
+      <IndexRedirect to="/dashboard" />
 
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
