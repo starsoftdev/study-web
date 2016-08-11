@@ -12,7 +12,7 @@ import {
 import './styles.less'
 
 import TopBar from './TopBar'
-import BottomBar from './BottomBar'
+import SideBar from './SideBar'
 import GlobalNotifications from '../globalNotifications'
 import Dispatcher from '../../../utils/dispatcher'
 
@@ -123,16 +123,16 @@ class Application extends React.Component {
   }
 
   render () {
+    const { authorized } = this.props.authorization
     return (
       <DocumentTitle title="StudyKik Home Page">
-        <div>
+        <div id="wrapper">
           <TopBar authorization={this.props.authorization} location={this.props.location} />
+          <SideBar />
 
-          <div className="content">
+          <main id="main">
             {this.props.children}
-          </div>
-
-          <BottomBar />
+          </main>
 
           <GlobalNotifications />
         </div>
