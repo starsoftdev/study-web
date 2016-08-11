@@ -13,11 +13,7 @@ notifications:
     on_success: always
     on_failure: never
     on_start: never
-  slack:
-    rooms:
-      - studykik:nxDZXJcNFYdWoXibXQ9T0013
-    on_success: never
-    on_failure: always
+ slack: studykik:nxDZXJcNFYdWoXibXQ9T0013
 
 sudo: required
 dist: trusty
