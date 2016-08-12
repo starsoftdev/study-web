@@ -145,7 +145,7 @@ class SchedulePatientModal extends Component {
                     {...period}
                     options={periodOptions}
                     disabled={submitting || loading}
-                    onBlur={() => { period.onBlur(am) }}
+                    onBlur={() => { period.onBlur(period) }}
                   />
                 </div>
               </div>
