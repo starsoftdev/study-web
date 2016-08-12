@@ -159,7 +159,7 @@ class Calendar extends React.Component {
     const indicationOptions = [ { label:'bleeding', value:'bleeding' }, { label:'acne', value:'acne' } ]
 
     return (
-      <div className="calendar-page">
+      <div className="container-fluid">
         <FilterBar
           siteLocationOptions={siteLocationOptions}
           indicationOptions={indicationOptions}

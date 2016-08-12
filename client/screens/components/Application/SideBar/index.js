@@ -13,7 +13,7 @@ const menuItemsGroupA = [
   { text: 'Refer', link: '/replace_me', icon: 'icon-signout' }
 ]
 const menuItemsGroupB = [
-  { text: 'Calendar', link: '/replace_me', icon: 'icon-icon_calendar' },
+  { text: 'Calendar', link: '/calendar', icon: 'icon-icon_calendar' },
   { text: 'Manage Sites/Users', link: '/replace_me', icon: 'icon-icon_group' },
   { text: 'Patient Database', link: '/replace_me', icon: 'icon-icon_contacts' },
   { text: 'Rewards', link: '/replace_me', icon: 'icon-gift' },
