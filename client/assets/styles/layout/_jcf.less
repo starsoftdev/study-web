@@ -1,18 +1,35 @@
 /* custom checkbox styles */
 .jcf-checkbox {
 	.align;
-	.size(16px);
+	.size(20px);
 	cursor: default;
 	background: #fff;
 	overflow: hidden;
+	cursor: pointer;
 	position: relative;
 
 
 	span {
 		.size(100%);
+		color: #fff;
 		display: block;
+		cursor: pointer;
 		position: relative;
-		border: 1px solid @input-border;
+		border-radius: 2px;
+		transition: all 0.25s linear;
+		border: 2px solid @input-border;
+
+
+		&:before {
+			opacity: 0;
+			display: block;
+			cursor: pointer;
+			content: '\e916';
+			text-indent: -2px;
+			text-align: center;
+			font: 14px/16px 'icomoon';
+			transition: all 0.25s linear;
+		}
 	}
 
 	[type="checkbox"] {
@@ -23,9 +40,25 @@
 		margin: 0;
 		left: 0;
 		top: 0;
+		cursor: pointer;
 	}
 
-	&.jcf-checked span{ display: block; }
+	&:hover,
+	&.jcf-checked {
+		span {
+			border-color: #a0cf67;
+		}
+	}
+
+	&.jcf-checked {
+		span {
+			background: #a0cf67;
+
+			&:before {
+				opacity: 1;
+			}
+		}
+	}
 }
 
 /* custom radio styles */
@@ -69,10 +102,10 @@
 
 	&.jcf-drop-active,
 	&.jcf-focus {
-		border-color:  #66afe9;
+		border-color:  #00afef;
 
 		.jcf-select-opener:after {
-			border-top-color:  #66afe9;
+			border-top-color:  #00afef;
 		}
 
 
@@ -82,10 +115,10 @@
 	}
 
 	&:hover {
-		border-color:  #66afe9;
+		border-color:  #00afef;
 
 		.jcf-select-opener:after {
-			border-top-color:  #66afe9;
+			border-top-color:  #00afef;
 		}
 	}
 
@@ -349,9 +382,10 @@ body > .jcf-select-drop.jcf-drop-flipped {
 	bottom: 0;
 }
 .jcf-scrollbar-vertical .jcf-scrollbar-handle {
-	background: #888;
+	background: #808080;
 	height: 1px;
 	width: 6px;
+	cursor: pointer;
 	border-radius: 6px;
 	transition: opacity 0.25s;
 }
@@ -390,9 +424,20 @@ body > .jcf-select-drop.jcf-drop-flipped {
 }
 .jcf-scrollbar-horizontal .jcf-scrollbar-handle {
 	position: absolute;
-	background: #888;
+	background: #808080;
 	height: 6px;
+	cursor: pointer;
 	border-radius: 6px;
+}
+.jcf-scrollbar-horizontal,
+.jcf-scrollbar-vertical {
+	.jcf-scrollbar-handle {
+		transition: background 0.25s;
+
+		&:hover {
+			background: #999;
+		}
+	}
 }
 .jcf-scrollbar.jcf-inactive .jcf-scrollbar-handle {
 	visibility: hidden;
@@ -423,6 +468,8 @@ div.jcf-select-data-search {
 	}
 
 	.jcf-list {
+		position: relative;
+		padding: 44px 0 0;
 
 		ul {
 			padding: 0;
@@ -431,8 +478,11 @@ div.jcf-select-data-search {
 	}
 
 	.search-holder {
-		margin: 0 0 4px;
-		position: relative;
+		top: 0;
+		left: 0;
+		right: 0;
+		margin: 0;
+		position: absolute;
 
 		.icon-icon_search2 {
 			top: 2px;
@@ -450,8 +500,9 @@ div.jcf-select-data-search {
 		border-color: #ccc;
 		padding: 5px 35px 5px 14px;
 
+		&:hover,
 		&:focus {
-			border-color: #66afe9;
+			border-color: #00afef;
 		}
 	}
 }
@@ -476,4 +527,8 @@ select {
 .jcf-scrollable,
 .jcf-scrollable-wrapper {
 	width: 100% !important;
+}
+
+.jcf-select-visible-first {
+	.jcf-list ul li:first-child { display: block !important; }
 }

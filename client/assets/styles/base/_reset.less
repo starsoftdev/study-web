@@ -9,13 +9,14 @@ html {
 }
 
 body {
-	min-width: 1570px;
+	min-width: 1200px;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	
+	&.page-lightbox-active,
 	&.body-datepicker-active {
 		height: 100%;
-		overflow: hidden;
+		overflow-y: hidden;
 	}
 }
 
@@ -36,6 +37,7 @@ button,
 	border-radius: 2px;
 	border-width: 2px;
 	font-weight: 600;
+	white-space: normal;
 	transition: all 0.25s;
 	text-transform: uppercase;
 	
@@ -95,6 +97,7 @@ label {
 	padding: 0;
 	color: inherit;
 	display: inline;
+	white-space: normal;
 	font-weight: inherit;
 	.font(inherit, inherit);
 }
@@ -107,11 +110,16 @@ label {
 		color: #949ca1;
 		outline: none;
 		box-shadow: none;
+		border-color: #00afef;
 		.placeholder(#949ca1);
 	}
 	
 	&[readonly] {
 		background: #fff;
+	}
+	
+	&:hover {
+		border-color: #00afef;
 	}
 }
 
