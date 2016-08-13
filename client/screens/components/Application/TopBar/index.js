@@ -92,7 +92,7 @@ export default class TopBar extends React.Component {
           </div>
 
           <div className="emails pull-left">
-            <a href="#" className="opener">
+            <a href="#" className="opener" data-toggle="tooltip" data-placement="bottom" title="Coming Soon">
               <i className="icon-envelop" />
               <span className="counter">1</span>
             </a>
