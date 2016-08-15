@@ -47,7 +47,7 @@ class SiteItem extends Component {
         <span className="edit-assigned-user" disabled={fetchingUser} onClick={this.editAssignedUser.bind(this, item)}>
           {fetchingUser
             ? <span><ActivityIcon /></span>
-            : <span className="fa fa-pencil-square-o"></span>
+            : <span className="fa fa-pencil-square-o" />
           }
         </span>
       </div>
@@ -71,13 +71,13 @@ class SiteItem extends Component {
           <div className="toggle-assigned-users" onClick={this.toggleAssignedUsers.bind(this)}>
             <span>Assigned Users</span>
             {this.state.assignedUsersCollapsed
-              ? <span className="fa fa-plus-square-o"></span>
-              : <span className="fa fa-minus-square-o"></span>
+              ? <span className="fa fa-plus-square-o" />
+              : <span className="fa fa-minus-square-o" />
             }
           </div>
           {!this.state.assignedUsersCollapsed
             ? <div className="assigned-users-list">{assignedUsersContents}</div>
-            : <div></div>
+            : <div />
           }
         </td>
         <td className="action">

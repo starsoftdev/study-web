@@ -63,7 +63,7 @@ export default class GetReport extends React.Component {
                   </a>
                 </div>
               </div>
-              <div className="clearBox"></div>
+              <div className="clearBox" />
             </div>
           </div>
         </div>
@@ -96,8 +96,7 @@ export default class GetReport extends React.Component {
 
 
         <div className="patients-banner">
-          <div className="video-section-border">
-          </div>
+          <div className="video-section-border" />
           <div className="container">
             <div className="row">
               <h4><img src={WhatIsStudykikImg} /></h4>
@@ -127,9 +126,8 @@ export default class GetReport extends React.Component {
 
         <div className="listings">
           <div className="trial-text">
-              <h1>Each Study Listing Includes:</h1>
-              <div className="listing-bottum">
-              </div>
+            <h1>Each Study Listing Includes:</h1>
+            <div className="listing-bottum" />
           </div>
 
           <div className="block-1">
@@ -222,11 +220,10 @@ export default class GetReport extends React.Component {
               </div>
           </div>
 
-          <div className="clearBox">
-          </div>
+          <div className="clearBox" />
         </div>
 
-        <div className="price-section-border"></div>
+        <div className="price-section-border" />
 
         <div className="price-section-top">
           <h1>
