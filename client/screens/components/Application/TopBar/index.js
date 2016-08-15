@@ -64,23 +64,29 @@ export default class TopBar extends React.Component {
                 <ul className="list-unstyled">
                   <li>
                     <a href="#">
-                      <div className="img-circle"><img src={avatar1} width="43" height="43" alt="alan_walker" /></div>
-                      <p><strong>alan_walker</strong> moved Thomas Morgan from New Patient to Consented.</p>
-                      <time dateTime="2016-05-16">05/16/16 at 11:31pm</time>
+                      <div className="img-circle">
+                        <img src={avatar1} width="43" height="43" alt="alan_walker"  />
+                        <p><strong>alan_walker</strong> moved Thomas Morgan from New Patient to Consented.</p>
+                        <time dateTime="2016-05-16">05/16/16 at 11:31pm</time>
+                      </div>
                     </a>
                   </li>
                   <li>
                     <a href="#">
-                      <div className="img-circle"><img src={avatar2} width="43" height="43" alt="penny_worth" /></div>
-                      <p><strong>penny_worth</strong> listed a new Birth Control Study.</p>
-                      <time dateTime="2016-05-16">05/16/16 at 11:30pm</time>
+                      <div className="img-circle">
+                        <img src={avatar2} width="43" height="43" alt="penny_worth"  />
+                        <p><strong>penny_worth</strong> listed a new Birth Control Study.</p>
+                        <time dateTime="2016-05-16">05/16/16 at 11:30pm</time>
+                      </div>
                     </a>
                   </li>
                   <li>
                     <a href="#">
-                      <div className="img-circle"><img src={avatar3} width="43" height="43" alt="arrow_island" /></div>
-                      <p><strong>arrow_island</strong> sent a text message to Thomas Morgan</p>
-                      <time dateTime="2016-05-16">05/16/16 at 9:30pm</time>
+                      <div className="img-circle">
+                        <img src={avatar3} width="43" height="43" alt="arrow_island"  />
+                        <p><strong>arrow_island</strong> sent a text message to Thomas Morgan</p>
+                        <time dateTime="2016-05-16">05/16/16 at 9:30pm</time>
+                      </div>
                     </a>
                   </li>
                 </ul>
@@ -108,9 +114,11 @@ export default class TopBar extends React.Component {
 
           <div className="logged-user-area pull-right">
             <a className="opener" role="button" data-toggle="collapse" href="#logged-user-drop" aria-expanded="false" aria-controls="logged-user-drop">
-              <div className="img-circle"><img src={userAvatar} width="43" height="43" alt="Bruce Wayne" /></div>
-              <span className="text">Bruce Wayne</span>
-              <i className="caret" />
+              <div className="img-circle">
+                <img src={userAvatar} width="43" height="43" alt="Bruce Wayne"  />
+                <span className="text">Bruce Wayne</span>
+                <i className="caret" />
+              </div>
             </a>
             <div className="collapse" id="logged-user-drop">
               <div className="well">
