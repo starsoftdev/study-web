@@ -13,7 +13,7 @@ notifications:
     on_success: always
     on_failure: never
     on_start: never
- slack: studykik:nxDZXJcNFYdWoXibXQ9T0013
+  slack: 'studykik:nxDZXJcNFYdWoXibXQ9T0013'
 
 sudo: required
 dist: trusty
