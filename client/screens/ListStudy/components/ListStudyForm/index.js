@@ -153,7 +153,7 @@ class ListStudyForm extends React.Component {
     saveStudy: PropTypes.func
   }
 
-  source_counter = 1
+  sourceCounter = 1
 
   order = [//remove lead and sources when uncheck callTracking
     'siteLocation',
@@ -302,15 +302,15 @@ class ListStudyForm extends React.Component {
             let formOptions = _.clone(scope.state.formOptions)
             let formValues = _.clone(scope.state.formValues)
             let studyFormOptions = scope.studyFormOptions
-            let index = (scope.source_counter === 1)
-              ? scope.order.indexOf('availNumbers') : scope.order.indexOf('availNumbers_' + (scope.source_counter - 1))
+            let index = (scope.sourceCounter === 1)
+              ? scope.order.indexOf('availNumbers') : scope.order.indexOf('availNumbers_' + (scope.sourceCounter - 1))
 
-            scope.order.splice(index + 1, 0, 'leadSource_' + scope.source_counter)
-            scope.order.splice(index + 2, 0, 'availNumbers_' + scope.source_counter)
+            scope.order.splice(index + 1, 0, 'leadSource_' + scope.sourceCounter)
+            scope.order.splice(index + 2, 0, 'availNumbers_' + scope.sourceCounter)
             formOptions.order = scope.order
-            formValues['leadSource_' + scope.source_counter] = null
-            formValues['availNumbers_' + scope.source_counter] = null
-            studyFormOptions['leadSource_' + scope.source_counter] = t.enums(leadSourcehObj)
+            formValues['leadSource_' + scope.sourceCounter] = null
+            formValues['availNumbers_' + scope.sourceCounter] = null
+            studyFormOptions['leadSource_' + scope.sourceCounter] = t.enums(leadSourcehObj)
             if (scope.props.availNumbers.avail.length > 0) {
               let availOptions = {}
               let i = 0
@@ -320,19 +320,19 @@ class ListStudyForm extends React.Component {
                 i++
               }
 
-              studyFormOptions['availNumbers_' + scope.source_counter] = t.enums(availOptions)
+              studyFormOptions['availNumbers_' + scope.sourceCounter] = t.enums(availOptions)
             } else {
-              studyFormOptions['availNumbers_' + scope.source_counter] = t.enums({})
+              studyFormOptions['availNumbers_' + scope.sourceCounter] = t.enums({})
             }
-            formOptions.fields['leadSource_' + scope.source_counter] = _.cloneDeep(scope.state.formOptions.fields.leadSource)
-            formOptions.fields['availNumbers_' + scope.source_counter] = _.cloneDeep(scope.state.formOptions.fields.availNumbers)
+            formOptions.fields['leadSource_' + scope.sourceCounter] = _.cloneDeep(scope.state.formOptions.fields.leadSource)
+            formOptions.fields['availNumbers_' + scope.sourceCounter] = _.cloneDeep(scope.state.formOptions.fields.availNumbers)
             scope.setState({
               formOptions,
               formValues,
               studyForm: t.struct(studyFormOptions)
             })
 
-            scope.source_counter++
+            scope.sourceCounter++
           }
 
           return (
@@ -439,7 +439,7 @@ class ListStudyForm extends React.Component {
     }
     else {
       const { value } = validateResult
-      let sources = [], sourceCounter = this.source_counter, i
+      let sources = [], sourceCounter = this.sourceCounter, i
 
       for (i = 0; i < sourceCounter; i++) {
         if (i === 0) {
@@ -507,7 +507,7 @@ class ListStudyForm extends React.Component {
           })
         })
       } else {
-        let sourceCounter = comp.source_counter, i
+        let sourceCounter = comp.sourceCounter, i
         for (i = 0; i < sourceCounter; i++) {
           if (i === 0) {
             delete comp.studyFormOptions['leadSource']

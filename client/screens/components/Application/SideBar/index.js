@@ -33,7 +33,7 @@ export default class SideBar extends React.Component {
               {
                 menuItemsGroupA.map((item, index) =>
                   <li key={index}>
-                    <Link to={item.link} activeClassName="active"><i className={item.icon}></i>{item.text}</Link>
+                    <Link to={item.link} activeClassName="active"><i className={item.icon} />{item.text}</Link>
                   </li>
                 )
               }
@@ -42,7 +42,7 @@ export default class SideBar extends React.Component {
               {
                 menuItemsGroupB.map((item, index) =>
                   <li key={index}>
-                    <Link to={item.link} activeClassName="active"><i className={item.icon}></i>{item.text}</Link>
+                    <Link to={item.link} activeClassName="active"><i className={item.icon} />{item.text}</Link>
                   </li>
                 )
               }
@@ -57,7 +57,7 @@ export default class SideBar extends React.Component {
             </div>
             <a href="#" className="bgn-chat">
               <span className="text">CHAT NOW!</span>
-              <i className="icon-bg"></i>
+              <i className="icon-bg" />
             </a>
           </div>
 

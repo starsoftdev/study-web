@@ -1,6 +1,6 @@
-import keymirror from 'keymirror'
+import keyMirror from 'keymirror'
 
-export const ActionTypes = keymirror({
+export const ActionTypes = keyMirror({
   ROUTE_CHANGED: null,
 
   SET_AUTH_DATA: null,
