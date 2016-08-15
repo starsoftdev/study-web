@@ -9,7 +9,7 @@ import PatientColItem from './PatientColItem'
 import ChatForm from '../ChatForm'
 import BlastForm from '../BlastForm'
 
-import { fetchPatientCategories, fetchPatientsByStudy, updatePatientCategory } from 'actions'
+import { fetchPatientCategories, fetchPatientsByStudy, updatePatientCategory, fetchStudySources } from 'actions'
 
 import ActivityIcon from 'components/ActivityIcon'
 import LoadingResults from 'components/LoadingResults'
@@ -24,6 +24,10 @@ export default class PatientBoard extends Component {
     isFetchingPatientCategories: PropTypes.bool,
     fetchPatientCategories: PropTypes.func,
     patientCategories: PropTypes.array,
+
+    isFetchingStudySources: PropTypes.bool,
+    fetchStudySources: PropTypes.func,
+    studySources: PropTypes.array,
 
     isFetchingPatients: PropTypes.bool,
     fetchPatientsByStudy: PropTypes.func,
@@ -48,6 +52,7 @@ export default class PatientBoard extends Component {
     // Redux store keeps `studies` reducer, so need to clear them
     // Not sure we actually need this behavior
     this.props.fetchPatientCategories()
+    this.props.fetchStudySources(this.props.studyId)
     this.props.fetchPatientsByStudy(this.props.studyId, {
       offset: 0,
       limit: PatientBoard.patientsPerPage,
@@ -122,6 +127,9 @@ const mapStateToProps = (state) => ({
   isFetchingPatientCategories: state.fetchingPatientCategories,
   patientCategories: state.patientCategories,
 
+  isFetchingStudySources: state.fetchingStudySources,
+  studySources: state.studySources,
+
   isFetchingPatients: state.fetchingPatients,
   patientsByStudy: state.patientsByStudy,
 
@@ -129,6 +137,7 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = {
   fetchPatientCategories,
+  fetchStudySources,
   fetchPatientsByStudy,
   updatePatientCategory
 }

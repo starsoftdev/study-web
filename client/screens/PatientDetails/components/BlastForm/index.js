@@ -185,7 +185,7 @@ export default class BlastForm extends Component {
 
     _.forEach(filter.categories, (item) => {
       let filtered = _.filter(patientArr, (patient) => {
-        return patient.studyPatientCategory.patientCategoryId === item
+        return patient.studyPatientCategory.patientCategory.id === parseInt(item)
       })
       if (filtered.length > 0) {
         _.map(filtered, (el) => {
@@ -194,6 +194,18 @@ export default class BlastForm extends Component {
       }
     })
 
+    _.forEach(filter.sources, (item) => {
+      let filtered = _.filter(patientArr, (patient) => {
+        return parseInt(patient.source_id) === parseInt(item)
+      })
+      console.log(filtered)
+      if (filtered.length > 0) {
+        _.map(filtered, (el) => {
+          resultArr.push(el.id)
+        })
+      }
+    })
+    
     return resultArr
   }
 
@@ -247,7 +259,7 @@ export default class BlastForm extends Component {
   }
 
   checkFilter (value) {
-    const { leadSourceObj } = this
+    const { studySources } = this.props
     const { patientCategories } = this.props
 
     let filter = _.clone(this.state.filter)
@@ -256,7 +268,7 @@ export default class BlastForm extends Component {
     let type = splitName[0]
     let val = splitName[1]
     let fCategory = (type === 'source') ? filter.sources : filter.categories
-    let fSource = (type === 'source') ? leadSourceObj : patientCategories
+    let fSource = (type === 'source') ? studySources : patientCategories
     let ref = (type === 'source') ? this.refs.sourceAll : this.refs.categoryAll
     let ucIndex
 
@@ -273,7 +285,7 @@ export default class BlastForm extends Component {
       if (target.checked) {
         this.formData['all' + type] = true
         _.map(fSource, (item, index) => {
-          let el = (type === 'source') ? index : item.id
+          let el = item.id
           ucIndex = fCategory.indexOf(_.toString(el))
           if (ucIndex === -1) {
             fCategory.push(_.toString(el))
@@ -310,8 +322,10 @@ export default class BlastForm extends Component {
   }
 
   render () {
-    const { schema, formData, onChange, checkFilter, leadSourceObj } = this
+    const { schema, formData, onChange, checkFilter } = this
     const { patientCategories } = this.props
+    const { studySources } = this.props
+
     let filter = _.clone(this.state.filter)
     let listSources = []
     let listCategories = []
@@ -337,22 +351,22 @@ export default class BlastForm extends Component {
       )
     ))
 
-    _.map(leadSourceObj, (source, key) => {
+    _.map(studySources, (source, key) => {
       listSources.push(
         <li
           key={key}
-          className={'source-' + key}
+          className={'source-' + source.id}
         >
           <label>
             <input
-              id={'source-' + key}
-              value={source}
+              id={'source-' + source.id}
+              value={source.infoSource.type}
               type="checkbox"
-              name={'source-' + key}
+              name={'source-' + source.id}
               onChange={checkFilter.bind(this)}
-              checked={(filter.sources.indexOf(key) !== -1)}
+              checked={(filter.sources.indexOf(_.toString(source.id)) !== -1)}
             />
-            {source}
+            {source.infoSource.type}
           </label>
         </li>
       )

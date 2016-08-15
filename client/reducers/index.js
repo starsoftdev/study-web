@@ -30,6 +30,9 @@ export fetchingStudy from './fetchingStudy'
 export studies from './studies'
 export currentStudy from './currentStudy'
 
+export fetchingStudySources from './fetchingStudySources'
+export studySources from './studySources'
+
 export fetchingPatientCategories from './fetchingPatientCategories'
 export patientCategories from './patientCategories'
 export fetchingPatients from './fetchingPatients'
