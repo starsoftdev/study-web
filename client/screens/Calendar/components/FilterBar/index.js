@@ -27,11 +27,11 @@ class FilterBar extends Component {
 
     const siteLocationOptions = sites.map(s => {
       return {
-        label: s.location,
-        value: s.location,
+        label: s.name,
+        value: s.name,
       }
     })
-    const selectedSite = sites.filter(s => s.location === filter.siteLocation)[0]
+    const selectedSite = sites.filter(s => s.name === filter.siteLocation)[0]
     const protocolOptions = !selectedSite ? [] : selectedSite.studies.map(study => {
       return {
         label: study.protocolNumber,

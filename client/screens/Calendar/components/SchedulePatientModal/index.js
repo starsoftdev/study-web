@@ -175,8 +175,8 @@ class SchedulePatientModal extends Component {
 
     const siteLocationOptions = sites.map(s => {
       return {
-        label: s.location,
-        value: s.location,
+        label: s.name,
+        value: s.name,
         siteId: s.id,
       }
     })
