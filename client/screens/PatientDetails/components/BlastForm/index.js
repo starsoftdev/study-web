@@ -205,7 +205,7 @@ export default class BlastForm extends Component {
         })
       }
     })
-    
+
     return resultArr
   }
 
