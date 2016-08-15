@@ -6,7 +6,7 @@ import FilterBar from './components/FilterBar'
 
 import moment from 'moment'
 
-import { fetchSites, fetchProtocols, fetchPatients, fetchSchedules, schedulePatient, deleteSchedule } from 'actions'
+import { fetchSites, fetchPatientsByStudy, fetchSchedules, schedulePatient, deleteSchedule } from 'actions'
 
 import { SchedulePatientModalType } from 'constants'
 
@@ -17,12 +17,11 @@ class Calendar extends React.Component {
     authorization: PropTypes.object.isRequired,
     fetchingSites: PropTypes.bool.isRequired,
     sites: PropTypes.array.isRequired,
-    protocols: PropTypes.object.isRequired,
-    patients: PropTypes.array.isRequired,
+    fetchingPatientsByStudy: PropTypes.bool.isRequired,
+    patientsByStudy: PropTypes.array.isRequired,
     schedules: PropTypes.object.isRequired,
     fetchSites: PropTypes.func.isRequired,
-    fetchProtocols: PropTypes.func.isRequired,
-    fetchPatients: PropTypes.func.isRequired,
+    fetchPatientsByStudy: PropTypes.func.isRequired,
     fetchSchedules: PropTypes.func.isRequired,
     schedulePatient: PropTypes.func.isRequired,
     deleteSchedule: PropTypes.func.isRequired,
@@ -31,9 +30,9 @@ class Calendar extends React.Component {
   state = {
     filter: {
       patientName: '',
-      siteLocation: '',
-      indication: '',
-      protocol: '',
+      siteLocation: null,
+      indication: null,
+      protocol: null,
     },
     modalType: SchedulePatientModalType.HIDDEN,
     filteredSchedules: []
@@ -41,11 +40,9 @@ class Calendar extends React.Component {
   selectedCellInfo = {}
 
   componentWillMount () {
-    const { fetchSites, fetchProtocols, fetchPatients, fetchSchedules, authorization } = this.props
+    const { fetchSites, fetchSchedules, authorization } = this.props
 
-    // fetchSites()
-    // fetchProtocols()
-    // fetchPatients()
+    fetchSites(authorization.authData, {})
     fetchSchedules({ userId: authorization.authData.userId })
   }
 
@@ -101,15 +98,14 @@ class Calendar extends React.Component {
 
   handleSubmit (data) {
     let submitData
-
-    if (data.protocol) { // CREATE
+    console.log (data)
+    if (data.siteLocation && data.protocol) { // CREATE
       submitData = {
-        // siteLocation: data.siteLocation,
-        // indication:
-        siteLocation: 'Palmer Tech',
-        indication: 'acne',
+        siteLocation: data.siteLocation,
+        indication: data.indication,
         protocolNumber: data.protocol,
-        patientId: data.patient,
+        // patientId: data.patient,
+        patientId: 1,
         userId: this.props.authorization.authData.userId,
         time: moment(this.selectedCellInfo.selectedDate).add(data.period==='AM'?data.hour:data.hour+12, 'hours').add(data.minute, 'minutes').toDate()
       }
@@ -117,10 +113,10 @@ class Calendar extends React.Component {
     else {  // UPDATE
       let updatedDate
       if (data.date) {
-        updatedDate = moment(data.date)
+        updatedDate = moment(new Date(data.date))
       }
       else {  // React Datepicker doesn't submit its initial value
-        updatedDate = moment(this.selectedCellInfo.data.time).startOf('day')
+        updatedDate = moment(new Date(this.selectedCellInfo.data.time)).startOf('day')
       }
 
       submitData = {
@@ -141,29 +137,13 @@ class Calendar extends React.Component {
   }
 
   render () {
-    const { fetchingSites, sites, patients, protocols, schedules, fetchSchedules } = this.props
-
-    const siteLocationOptions = sites.map(s => {
-      return {
-        label: s.location,
-        value: s.location,
-      }
-    })
-    const protocolOptions = [ { label:'aa', value: 'aa' }, { label:'bb', value:'bb' } ]
-    const patientOptions = patients.map(p => {
-      return {
-        label: p.firstName + ' ' + p.lastName,
-        value: p.id,
-      }
-    })
-    const indicationOptions = [ { label:'bleeding', value:'bleeding' }, { label:'acne', value:'acne' } ]
+    const { fetchingSites, sites, fetchPatientsByStudy, fetchingPatientsByStudy, patientsByStudy, schedules, fetchSchedules } = this.props
 
     return (
       <div className="container-fluid">
         <FilterBar
-          siteLocationOptions={siteLocationOptions}
-          indicationOptions={indicationOptions}
-          protocolOptions={protocolOptions}
+          sites={sites}
+          fetchingSites={this.props.fetchingSites}
           filter={this.state.filter}
           updateFilter={this.updateFilter.bind(this)}
         />
@@ -172,17 +152,18 @@ class Calendar extends React.Component {
           handleOpenModal={this.handleModalVisibility.bind(this)}
         />
         <SchedulePatientModal
-          siteLocationOptions={siteLocationOptions}
-          protocolOptions={protocolOptions}
-          patientOptions={patientOptions}
+          sites={sites}
           onSubmit={this.handleSubmit.bind(this)}
           handleCloseModal={this.handleModalVisibility.bind(this, SchedulePatientModalType.HIDDEN)}
           handleDelete={this.handleDelete.bind(this)}
           submitting={false}
-          loading={false}
           selectedCellInfo={this.selectedCellInfo}
           modalType={this.state.modalType}
           initialValues={this.selectedCellInfo.data?this.getTimeComponents(this.selectedCellInfo.data.time):{ period: 'AM' }}
+          patientsByStudy={patientsByStudy}
+          fetchingSites={fetchingSites}
+          fetchingPatientsByStudy={fetchingPatientsByStudy}
+          fetchPatientsByStudy={fetchPatientsByStudy}
         />
       </div>
     )
@@ -193,14 +174,13 @@ const mapStateToProps = (state) => ({
   authorization: state.authorization,
   fetchingSites: state.fetchingSites,
   sites: state.sites,
-  protocols: state.protocols,
-  patients: state.patients,
+  fetchingPatientsByStudy: state.fetchingPatientsByStudy,
+  patientsByStudy: state.patientsByStudy,
   schedules: state.schedules,
 })
 const mapDispatchToProps = {
   fetchSites,
-  fetchProtocols,
-  fetchPatients,
+  fetchPatientsByStudy,
   fetchSchedules,
   schedulePatient,
   deleteSchedule,

@@ -60,7 +60,6 @@ export const ActionTypes = keyMirror({
   CLEAR_SELECTED_PATIENT: null,
   FINISH_SAVE_PATIENT: null,
 
-  FETCH_SITE_LOCATIONS: null,
   FETCH_STUDY_CATEGORIES: null,
   FETCH_STUDY_LEVELS: null,
   SUBMIT_ORDER_IRB_AD: null,
@@ -89,6 +88,4 @@ export const ActionTypes = keyMirror({
   SCHEDULE_PATIENT: null,
   FETCH_SCHEDULES: null,
   DELETE_SCHEDULE: null,
-
-  FETCH_PROTOCOLS: null,
 })
