@@ -6,7 +6,7 @@ export default function fetchSites (currentUser, searchParams) {
   return asyncAction(ActionTypes.FETCH_SITES, (cb, dispatch) => {
 
     let filterObj = {
-      include: 'users',
+      include: [ 'users', 'studies' ],
       where: {}
     }
 

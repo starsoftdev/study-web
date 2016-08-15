@@ -6,26 +6,46 @@ import 'react-select/less/default.less'
 
 class FilterBar extends Component {
   static propTypes = {
-    siteLocationOptions: PropTypes.array.isRequired,
-    indicationOptions: PropTypes.array.isRequired,
-    protocolOptions: PropTypes.array.isRequired,
+    sites: PropTypes.array.isRequired,
+    fetchingSites: PropTypes.bool.isRequired,
     filter: PropTypes.object.isRequired,
     updateFilter: PropTypes.func.isRequired,
   }
 
-  handleFilterChange = (field, ev) => {
-    const newValue = ev ? ev.value : ''
+  handleFilterChange = (field, option) => {
+    const newValue = option ? option.value : ''
 
     this.props.updateFilter (field, newValue)
   }
 
   render () {
     const {
-      siteLocationOptions,
-      indicationOptions,
-      protocolOptions,
+      sites,
+      fetchingSites,
       filter,
     } = this.props
+
+    const siteLocationOptions = sites.map(s => {
+      return {
+        label: s.location,
+        value: s.location,
+      }
+    })
+    const selectedSite = sites.filter(s => s.location === filter.siteLocation)[0]
+    const protocolOptions = !selectedSite ? [] : selectedSite.studies.map(study => {
+      return {
+        label: study.protocolNumber,
+        value: study.protocolNumber
+      }
+    })
+    const indications = !selectedSite ? [] : selectedSite.studies.map(study => {
+      return {
+        label: study.indication,
+        value: study.indication
+      }
+    })
+
+    const indicationOptions = _.uniqBy(indications, 'value')
 
     return (
       <div className="filter-bar row">
@@ -35,9 +55,10 @@ class FilterBar extends Component {
         <div className="col-sm-3">
           <Select
             value={filter.siteLocation}
+            disabled={fetchingSites}
             options={siteLocationOptions}
             placeholder="--Select Site Location--"
-            onChange={(ev) => this.handleFilterChange('siteLocation', ev)}
+            onChange={(option) => this.handleFilterChange('siteLocation', option)}
           />
         </div>
         <div className="col-sm-3">
@@ -45,7 +66,7 @@ class FilterBar extends Component {
             value={filter.indication}
             options={indicationOptions}
             placeholder="--Select Indication--"
-            onChange={(ev) => this.handleFilterChange('indication', ev)}
+            onChange={(option) => this.handleFilterChange('indication', option)}
           />
         </div>
         <div className="col-sm-3">
@@ -53,7 +74,7 @@ class FilterBar extends Component {
             value={filter.protocol}
             options={protocolOptions}
             placeholder="--Select Protocol--"
-            onChange={(ev) => this.handleFilterChange('protocol', ev)}
+            onChange={(option) => this.handleFilterChange('protocol', option)}
           />
         </div>
       </div>
