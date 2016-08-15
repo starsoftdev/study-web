@@ -33,6 +33,7 @@ export currentStudy from './currentStudy'
 export fetchingPatientCategories from './fetchingPatientCategories'
 export patientCategories from './patientCategories'
 export fetchingPatients from './fetchingPatients'
+export fetchingPatientsByStudy from './fetchingPatientsByStudy'
 export patients from './patients'
 export patientsByStudy from './patientsByStudy'
 export fetchingPatient from './fetchingPatient'
@@ -61,5 +62,3 @@ export twilioMessages from './twilioMessages'
 export savingTwilioMessage from './savingTwilioMessage'
 
 export schedules from './schedules'
-
-export protocols from './protocols'

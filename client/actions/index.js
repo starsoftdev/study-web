@@ -53,8 +53,6 @@ export setActiveBlastForm from './setActiveBlastForm'
 export unsetActiveBlastForm from './unsetActiveBlastForm'
 export * from './twilioChat'
 
-export fetchProtocols from './fetchProtocols'
-
 export * from './notificationActions'
 export * from './notification'
 export * from './schedules'
