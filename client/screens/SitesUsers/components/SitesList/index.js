@@ -100,8 +100,6 @@ export default class SitesList extends Component {
                     <th>PRINCIPAL INVESTIGATOR</th>
                     <th>SITE PHONE</th>
                     <th>SITE ADDRESS</th>
-                    <th></th>
-                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -130,7 +128,11 @@ export default class SitesList extends Component {
         </div>
       )
     } else {
-      return <div><h3>No matching sites found!</h3></div>
+      return (
+        <div>
+          <h3>No matching sites found!</h3>
+        </div>
+      )
     }
   }
 }

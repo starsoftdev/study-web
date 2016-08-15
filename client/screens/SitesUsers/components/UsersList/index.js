@@ -82,7 +82,6 @@ export default class UsersList extends Component {
                     <th>NAME</th>
                     <th>EMAIL</th>
                     <th>ACCESS</th>
-                    <th></th>
                   </tr>
                 </thead>
                 <tbody>

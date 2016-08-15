@@ -115,7 +115,6 @@ export default class PatientsList extends Component {
                     <th>BMI</th>
                     <th>STATUS</th>
                     <th>SOURCE</th>
-                    <th></th>
                   </tr>
                 </thead>
                 <tbody>

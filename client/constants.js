@@ -1,6 +1,6 @@
-import keymirror from 'keymirror'
+import keyMirror from 'keymirror'
 
-export const Indications = keymirror({
+export const Indications = keyMirror({
   'Other Study Type': null,
   'Abnormal bleeding': null,
   'Acid Reflux':null,
@@ -15,7 +15,7 @@ export const ExposureLevels = {
   'Bronze': 'Bronze: $59',
 }
 
-export const CampaignLengths = keymirror({
+export const CampaignLengths = keyMirror({
   'One Week': null,
   'Two Weeks': null,
   'One Month': null,
@@ -41,13 +41,13 @@ export const StudyTypes = {
   '353': 'Actinic Keratosis',
 }
 
-export const ContactCompanyTypes = keymirror({
+export const ContactCompanyTypes = keyMirror({
   'Site': null,
   'Sponsor': null,
   'CRO': null,
 })
 
-export const SchedulePatientModalType = keymirror({
+export const SchedulePatientModalType = keyMirror({
   CREATE: null,
   UPDATE: null,
   HIDDEN: null,
