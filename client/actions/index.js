@@ -28,6 +28,7 @@ export fetchInfoSources from './fetchInfoSources'
 export fetchStudies from './fetchStudies'
 export fetchStudy from './fetchStudy'
 export clearStudies from './clearStudies'
+export fetchStudySources from './fetchStudySources'
 
 export fetchPatientCategories from './fetchPatientCategories'
 export fetchPatients from './fetchPatients'
