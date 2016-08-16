@@ -15,6 +15,9 @@ export default function fetchPatients (searchParams) {
         and: [],
       }
     }
+
+    searchParams = searchParams || {}
+
     if (searchParams.name) {
       filterObj.where.and.push({
         or: [
