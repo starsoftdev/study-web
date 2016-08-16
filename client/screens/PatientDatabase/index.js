@@ -19,8 +19,20 @@ export default class PatientDatabase extends Component {
         <div className="patient-database-page">
           <div className="container">
             <div className="row form-group">
-              <div className="col-sm-12">
+              <div className="col-sm-6">
                 <h1>Patient Database</h1>
+              </div>
+              <div className="col-sm-6">
+                <div className="additional-actions pull-right">
+                  <button type="button" className="btn btn-default btn-import">
+                    <i className="fa fa-upload" aria-hidden="true"></i>
+                    <span>Import</span>
+                  </button>
+                  <button type="button" className="btn btn-default btn-download">
+                    <i className="fa fa-download" aria-hidden="true"></i>
+                    <span>Download</span>
+                  </button>
+                </div>
               </div>
             </div>
             <div className="row form-group">
