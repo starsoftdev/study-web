@@ -93,7 +93,7 @@ export default class SitesUsers extends Component {
   render () {
     const { fetchingSites, savingSite, fetchingUsers, savingUser, sites } = this.props
     let siteOptions = _.map(sites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id }))
-    siteOptions.push({ label: 'All', value: 0 })
+    siteOptions.unshift({ label: 'All', value: 0 })
 
     return (
       <div className="sites-users-page">
