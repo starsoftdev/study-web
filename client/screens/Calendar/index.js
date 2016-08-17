@@ -80,7 +80,7 @@ class Calendar extends React.Component {
 
   getTimeComponents (strTime) {
     return {
-      hour: moment(strTime).hour() % 12 + 1,
+      hour: (moment(strTime).hour()+11) % 12 + 1,
       minute: moment(strTime).minute(),
       period: moment(strTime).hour() >= 12 ? 'PM' : 'AM'
     }
@@ -98,16 +98,16 @@ class Calendar extends React.Component {
 
   handleSubmit (data) {
     let submitData
-    console.log (data)
+
     if (data.siteLocation && data.protocol) { // CREATE
       submitData = {
         siteLocation: data.siteLocation,
         indication: data.indication,
         protocolNumber: data.protocol,
-        // patientId: data.patient,
+        patientId: data.patient,
         patientId: 1,
         userId: this.props.authorization.authData.userId,
-        time: moment(this.selectedCellInfo.selectedDate).add(data.period==='AM'?data.hour:data.hour+12, 'hours').add(data.minute, 'minutes').toDate()
+        time: moment(this.selectedCellInfo.selectedDate).add(data.period==='AM'?data.hour%12:data.hour%12+12, 'hours').add(data.minute, 'minutes').utc().format()
       }
     }
     else {  // UPDATE
@@ -121,7 +121,7 @@ class Calendar extends React.Component {
 
       submitData = {
         id: this.selectedCellInfo.data.id,
-        time: updatedDate.add(data.period==='AM'?data.hour:data.hour+12, 'hours').add(data.minute, 'minutes').toDate()
+        time: updatedDate.add(data.period==='AM'?data.hour%12:data.hour%12+12, 'hours').add(data.minute, 'minutes').utc().format()
       }
     }
 
