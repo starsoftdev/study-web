@@ -45,6 +45,7 @@ export submitOrderIRBAd from './submitOrderIRBAd'
 
 export submitGetTrialNotificationForm from './submitGetTrialNotificationForm'
 export saveReferralForm from './saveReferralForm'
+export fetchSiteLocations from './fetchSiteLocations'
 export fetchAvailNumbers from './fetchAvailNumbers'
 export fetchTwilioMessages from './fetchTwilioMessages'
 export saveTwilioMessage from './saveTwilioMessage'
