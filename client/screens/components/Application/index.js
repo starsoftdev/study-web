@@ -51,6 +51,8 @@ class Application extends React.Component {
     switch (this.props.location.pathname) {
       case '/dashboard':
         return 'create-study'
+      case '/studies/-100/patient-details':
+        return 'twilio-message'
       default:
         return null
     }
@@ -87,7 +89,7 @@ class Application extends React.Component {
     const event = this.getEventType()
 
     this.connect(props, 'nsp', () => {
-      if (props.location.pathname === '/dashboard') {
+      if (props.location.pathname === '/dashboard' || props.location.pathname === '/studies/-100/patient-details') {
         props.subscribe(this.io, event,
           { pathname: props.location.pathname }, (err, data, cb) => {
             cb(err, data)
