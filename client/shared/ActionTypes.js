@@ -72,6 +72,8 @@ export const ActionTypes = keyMirror({
   NOTIFICATION_ARRIVED: null,
   FETCH_PATIENT_SIGN_UPS: null,
 
+  FETCH_SITE_LOCATIONS: null,
+
   SAVE_REFERRAL_FORM: null,
   SUBSCRIBE_REQUEST: null,
   UNSUBSCRIBE_REQUEST: null,

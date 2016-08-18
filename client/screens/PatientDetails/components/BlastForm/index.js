@@ -323,8 +323,7 @@ export default class BlastForm extends Component {
 
   render () {
     const { schema, formData, onChange, checkFilter } = this
-    const { patientCategories } = this.props
-    const { studySources } = this.props
+    const { patientCategories, studySources } = this.props
 
     let filter = _.clone(this.state.filter)
     let listSources = []
