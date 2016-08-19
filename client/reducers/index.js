@@ -55,6 +55,7 @@ export savedStudy from './savedStudy'
 
 export submittingOrderIRBAd from './submittingOrderIRBAd'
 
+export socket from './socket'
 export notification from './notification'
 export submittingGetTrialNotificationForm from './submittingGetTrialNotificationForm'
 export savingReferralForm from './savingReferralForm'
