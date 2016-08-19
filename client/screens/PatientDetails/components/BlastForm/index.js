@@ -62,6 +62,7 @@ const options = {
 
 export default class BlastForm extends Component {
   static propTypes = {
+    socket: PropTypes.any,
     authorization: PropTypes.any,
     activeBlastForm: PropTypes.object,
     setActiveBlastForm: PropTypes.func,
@@ -95,33 +96,12 @@ export default class BlastForm extends Component {
     }
   }
 
-  connect (nameSpace, cb) {
-    let authData = this.props.authorization.authData
-    //console.log(authData)
-    if (authData) {
-      if (!this.io) {
-        this.io = io(`${HOST_URL}/${nameSpace}`)
-        this.io.on('connect', () => {
-          cb()
-        })
-      } else {
-        cb()
-      }
-    } else {
-      if (this.io) {
-        this.io.disconnect()
-        this.io = null
-      }
-    }
-  }
-
   componentDidMount () {
     let scope = this
     this.appDispatcher.register(function (payload) {
       if (payload.actionType === 'setActiveBlastForm') {
         if (payload.data.blastType === 'text') {
           scope.open(payload)
-          scope.connect(scope.namespace, () => {})
         }
       }
     })
@@ -243,11 +223,15 @@ export default class BlastForm extends Component {
           studyId: this.props.studyId,
           patients: this.getPatientObj(value.toPatients)
         }
-        saveTwilioMessage(this.io, options, (err, data, cb) => {
-          this.formData.message = ''
-          this.setState({})
-          cb(err, data)
-        })
+        if (!_.isEmpty(this.props.socket)) {
+          saveTwilioMessage(this.props.socket, options, (err, data, cb) => {
+            this.formData.message = ''
+            this.setState({})
+            cb(err, data)
+          })
+        } else {
+          console.error('problem with  socket connection')
+        }
       } else {
         console.error('has empty fields')
       }
@@ -323,8 +307,7 @@ export default class BlastForm extends Component {
 
   render () {
     const { schema, formData, onChange, checkFilter } = this
-    const { patientCategories } = this.props
-    const { studySources } = this.props
+    const { patientCategories, studySources } = this.props
 
     let filter = _.clone(this.state.filter)
     let listSources = []
@@ -491,6 +474,7 @@ export default class BlastForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  socket: state.socket,
   authorization: state.authorization,
   activeBlastForm: state.activeBlastForm
 })

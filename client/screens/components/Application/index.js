@@ -2,11 +2,14 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import DocumentTitle from 'react-document-title'
 
+import _ from 'lodash'
+
 import {
   notificationArrived,
   subscribe,
   unsubscribeFromAll,
-  displayNotification
+  displayNotification,
+  setSocket
 } from 'actions'
 
 import './styles.less'
@@ -19,38 +22,23 @@ import Dispatcher from '../../../utils/dispatcher'
 class Application extends React.Component {
   static propTypes = {
     authorization: PropTypes.any,
+    socket: PropTypes.any,
     location: PropTypes.any,
     children: PropTypes.any,
     subscribe: PropTypes.func,
+    setSocket: PropTypes.func,
     unsubscribeFromAll: PropTypes.func,
     unsubscribeCurrent: PropTypes.func,
     notificationArrived: PropTypes.func,
     displayNotification: PropTypes.func
   }
 
-  connect (props, nameSpace, cb) {
-    let authData = props.authorization.authData
-
-    if (authData) {
-      if (!this.io) {
-        this.io = io(`${HOST_URL}/${nameSpace}`)
-        this.io.on('connect', () => {
-          cb()
-        })
-      }
-    }
-    else {
-      if (this.io) {
-        this.io.disconnect()
-        this.io = null
-      }
-    }
-  }
-
   getEventType () {
     switch (this.props.location.pathname) {
       case '/dashboard':
         return 'create-study'
+      case '/studies/-100/patient-details':
+        return 'twilio-message'
       default:
         return null
     }
@@ -59,19 +47,16 @@ class Application extends React.Component {
   componentDidMount () {
     const scope = this
     this.appDispatcher = new Dispatcher()
-    this.configureSocket(this.props)// comes here when loading from direct url change
     this.subscribe(this.props)
 
     this.appDispatcher.register(function (payload) {
       if (payload.actionType === 'changePathname') {
 
-        scope.props.unsubscribeFromAll(scope.io, { pathname: scope.props.location.pathname }, (err, data, cb) => {
+        scope.props.unsubscribeFromAll(this.props.socket, { pathname: scope.props.location.pathname }, (err, data, cb) => {
           cb(err, data)
 
-          scope.io.disconnect()
-          scope.io = null
-
-          scope.configureSocket(scope.props)
+          scope.props.socket.disconnect()
+          //scope.props.socket = null
           scope.subscribe(scope.props)
         })
       }
@@ -79,47 +64,31 @@ class Application extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    this.configureSocket(nextProps)
-    this.subscribe(nextProps)
+    const event = this.getEventType()
+    console.log('componentWillReceiveProps')
+    //this.subscribe(nextProps)
+
+    if (!_.isEmpty(nextProps.socket)) {
+      nextProps.socket.on('connect', () => {
+        if (nextProps.location.pathname === '/dashboard' || nextProps.location.pathname === '/studies/-100/patient-details') {
+          nextProps.subscribe(this.props.socket, event,
+            { pathname: nextProps.location.pathname }, (err, data, cb) => {
+              cb(err, data)
+
+              nextProps.socket.on('notification', (notification) => {
+                nextProps.displayNotification(notification)
+              })
+            })
+        }
+      })
+    } else {
+      console.error('problem with socket connection')
+    }
   }
 
   subscribe (props) {
-    const event = this.getEventType()
-
-    this.connect(props, 'nsp', () => {
-      if (props.location.pathname === '/dashboard') {
-        props.subscribe(this.io, event,
-          { pathname: props.location.pathname }, (err, data, cb) => {
-            cb(err, data)
-
-            this.io.on('notification', (notification) => {
-              props.displayNotification(notification)
-            })
-          })
-      }
-    })
-  }
-
-  configureSocket = (props) => {
-    if (props.authorization.authData) {
-      if (!this.socket) {
-        this.socket = io(`${HOST_URL}/notifications`)
-
-        this.socket.on('connect', () => {
-          this.socket.emit('newUser', props.authorization.authData.userId)
-        })
-
-        this.socket.on('notification', (notification) => {
-          props.notificationArrived(notification)
-        })
-      }
-    }
-    else {
-      if (this.socket) {
-        this.socket.disconnect()
-        this.socket = null
-      }
-    }
+    const { setSocket } = this.props
+    setSocket(props, 'nsp')
   }
 
   render () {
@@ -143,13 +112,15 @@ class Application extends React.Component {
 
 const mapStateToProps = (state) => ({
   authorization: state.authorization,
-  location: state.location
+  location: state.location,
+  socket: state.socket
 })
 const mapDispatchToProps = {
   notificationArrived,
   subscribe,
   unsubscribeFromAll,
-  displayNotification
+  displayNotification,
+  setSocket
 }
 
 export default connect(

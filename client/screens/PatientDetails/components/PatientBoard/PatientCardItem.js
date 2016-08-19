@@ -13,7 +13,7 @@ export default class PatientCardItem extends Component {
     const appDispatcher = new Dispatcher()
     const { item } = this.props
     let params = {
-      studyId: item.studyPatientCategory.studyId,
+      studyId: item.studyPatientCategory.study_id,
       patientId: item.id,
       firstName: item.firstName,
       lastName: item.lastName,
