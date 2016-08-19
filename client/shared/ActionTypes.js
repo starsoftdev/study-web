@@ -90,4 +90,5 @@ export const ActionTypes = keyMirror({
   SCHEDULE_PATIENT: null,
   FETCH_SCHEDULES: null,
   DELETE_SCHEDULE: null,
+  SET_SOCKET: null
 })
