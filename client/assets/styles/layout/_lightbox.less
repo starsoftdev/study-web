@@ -40,11 +40,10 @@
 	.lightbox-content {
 		z-index: 3;
 		margin:0 auto;
-		max-width: 560px;
+		max-width: 590px;
 		background: #fff;
 		position: relative;
 		border: #f78e1e solid 2px;
-		border-radius: 2px 2px 3px 3px;
 	}
 	
 	
@@ -90,7 +89,7 @@
 }
 	
 .form-lightbox {
-	padding: 15px;
+	padding: 25px;
 	
 	.field-row {
 		.font(0,0);
@@ -100,6 +99,7 @@
 		
 		> * {
 			.align(@align: middle);
+			.font(@font-size-base);
 		}
 	}
 	
@@ -115,10 +115,21 @@
 	
 	.field {
 		width: 65%;
+		position: relative;
+	}
+	
+	.row {
+		margin: 0 -6px;
+	}
+	
+	.col-small {
+		padding: 0 6px;
+		width: 33.3333%;
 	}
 	
 	.col  {
-		width: 48%;
+		width: 50%;
+		padding: 0 6px;
 	}
 	
 	.btn-primary {
@@ -176,6 +187,57 @@
 			span:before { display: none !important; }
 		}
 	}
+	
+	.jcf-checkbox {
+		margin: 0 6px 0 0;
+		vertical-align: middle;
+		
+		+ label {
+			vertical-align: middle;
+		}
+	}
+	
+	.select-indication-slide {
+		opacity: 0;
+		visibility: hidden;
+		
+		&.active {
+			opacity: 1;
+			visibility: visible;
+		}
+		
+		.search-holder {
+			margin: 0 0 3px;
+			position: relative;
+			
+			.form-control {
+				padding: 6px 35px 6px 15px;
+			}
+		
+			label {
+				top: 50%;
+				right: 10px;
+				position: absolute;
+				.font(15px, 36px);
+				.transform(translate(0,-50%));
+			}
+		}
+	}
+	
+	.catogery-list {
+		
+		&:empty:before {
+			content: 'Add Indication';
+		}
+	}
+}
+
+.bipolar-link {
+	color: #101010;
+	
+	a:hover {
+		color: #999;
+	}
 }
 
 input:focus {
@@ -227,12 +289,16 @@ input:focus {
 
 #popup-remover {
 	.lightbox-content {
-		padding: 30px 20px;
+		padding: 19px 20px 25px;
+	}
+	
+	.btn-block {
+		.font(0,0);
 	}
 	
 	.btn {
 		min-width: 80px;
-		margin: 0 7px;
+		margin: 0 6px;
 	}
 }
 
@@ -259,34 +325,36 @@ input:focus {
 		padding: 0 10px;
 		line-height: 36px;
 		min-height: 40px;
-		min-width: 112px;
+		min-width: 108px;
 		margin: 0 0 0 6px;
 	}
 }
 
 /* date-range */
 #date-range {
-	min-width: 1150px;
 	overflow: auto;
+	//min-width: 1020px;
 	
 	.lightbox-content {
-		max-width: 1150px;
+		max-width: 1095px;
+		
+		
 	}
 	
 	.holder {
-		height: 520px;
+		height: 526px;
 		overflow: hidden;
 	}
 	
 	.date-range-area {
 		height: 100%;
+		padding: 25px;
 		overflow-y: auto;
 		overflow-x: hidden;
-		padding: 20px 48px;
 	}
 	
 	.calendars {
-		margin: 0 0 19px;
+		margin: 0 0 15px;
 	}
 	
 	.datepicker {
@@ -300,10 +368,35 @@ input:focus {
 	
 	.calendar {
 		margin: 0;
+		width: 100%;
 	}
 	
 	.btn-block {
-		padding: 0 0 20px;
+		padding: 0;
+	}
+	
+	.select-end-date,
+	.select-start-date {
+		max-width: 410px;
+		width: 50%;
+	}
+	
+	@media screen and (max-width: 1180px) {
+		.lightbox-content {
+			margin: 15px;
+		}
+		
+		.select-end-date,
+		.select-start-date {
+			width: 100%;
+			max-width: none;
+			margin: 0 0 15px;
+		}
+		
+		.select-end-date {
+			margin: 0;
+		}
+		
 	}
 }
 
