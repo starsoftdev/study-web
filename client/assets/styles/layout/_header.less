@@ -3,28 +3,27 @@
 	top: 0;
 	right: 0;
 	left: 0;
-	z-index: 1000;
 	position: fixed;
 	min-width: 970px;
 	padding: 0 0 0 261px;
 	//box-shadow: 0 -1px 2px -1px rgba(0,0,0, 0.3);
-	
+
 	.container-fluid {
 		padding: 0;
 		background: #00afef;
 	}
-	
+
 	.logo {
 		top: 20px;
 		left: 15px;
 		width: 234px;
 		position: absolute;
 		margin: 0 0 0 0;
-		
+
 		a {
 			display: block;
 		}
-		
+
 		img {
 			.img;
 		}
@@ -34,7 +33,7 @@
 .emails,
 .notifications {
 	margin: 0;
-	
+
 	.opener {
 		color: #fff;
 		display: block;
@@ -42,18 +41,18 @@
 		.font(20px, 71px);
 		position: relative;
 		text-align: center;
-		
+
 		&:hover,
 		&:focus {
 			outline: none;
 		}
 	}
-	
+
 	.opener:hover,
 	&.active .opener {
 		background: #76daff;
 	}
-	
+
 	.counter {
 		top: 19px;
 		right: 21px;
@@ -66,7 +65,7 @@
 		background: #f78e1e;
 		border-radius: 100%;
 	}
-	
+
 	.icon-envelop {
 		top: -3px;
 		font-size: 16px;
@@ -82,7 +81,7 @@
 	.icon-bell {
 		&:before { content: "\e91c"; }
 	}
-	
+
 }
 
 .emails {
@@ -91,12 +90,12 @@
 		right: 15px;
 		display: none;
 	}
-	
+
 	.icon-envelop {
 		top: 6px;
 		font-size: 32px;
 		position: relative;
-		
+
 		&:before { content: "\e91d"; }
 	}
 }
@@ -112,7 +111,7 @@
 	left: 0;
 	width: 438px;
 	position: absolute;
-	
+
 	.well {
 		padding: 0;
 		margin: 0;
@@ -122,7 +121,7 @@
 		box-shadow: none;
 		border: solid 2px #ccc;
 	}
-	
+
 	.title {
 		color: #354052;
 		display: block;
@@ -132,48 +131,48 @@
 		text-transform: uppercase;
 		border-bottom: #ccc solid 2px;
 	}
-	
-	
+
+
 	ul {
 		margin: 0;
 		padding: 3px;
 		height: 205px;
 		.font(16px, 19px);
-		
-		
-		
+
+
+
 		a {
 			display: block;
 			color: #354052;
 			min-height: 65px;
 			position: relative;
 			padding: 14px 5px 14px 69px;
-			
+
 			&:hover {
 				background: #00afef;
-				
+
 				color: #fff;
-				
+
 				time {
 					color: #fff;
 				}
 			}
 		}
-		
+
 		li {
 			&:first-child {
 				a {
 					padding: 3px 10px 5px 69px;
 				}
 			}
-			
+
 			&:nth-child(3) {
 				a {
 					padding: 6px 5px 7px 69px;
 				}
 			}
 		}
-		
+
 		time {
 			.font(14px);
 			display: block;
@@ -181,7 +180,7 @@
 			font-weight: 600;
 			transition: all 0.25s;
 		}
-		
+
 		.img-circle {
 			top: 50%;
 			left: 11px;
@@ -190,28 +189,28 @@
 			overflow: hidden;
 			position: absolute;
 			border-radius: 100%;
-			
+
 			img {
 				.img;
 				border-radius: 100%;
 			}
 		}
 	}
-	
+
 	p {
 		margin: 0;
 		transition: all 0.25s;
-		
+
 		strong {
 			text-transform: capitalize;
 		}
 	}
-	
+
 	.btn-block {
 		.font(16px);
 		padding: 6px 10px;
 		border-top: #ccc solid 2px;
-		
+
 		a {
 			.color(#00afef);
 		}
@@ -227,7 +226,7 @@
 	margin: 0 24px 0 0;
 	text-align: center;
 	min-height: 71px;
-	
+
 	&:hover {
 		color: #fff;
 		background: #76daff;
@@ -239,17 +238,17 @@
 	color: #101010;
 	padding: 15px 0 0;
 	line-height: 30px;
-	
+
 	> * {
 		.align(@align: middle);
 	}
-	
+
 	.icon-credit {
 		color: #fff;
 		.font(20px, 30px);
 		padding: 5px 10px 0 6px;
 	}
-	
+
 	.btn-default {
 		.bg(#76daff);
 		color: #fff;
@@ -261,7 +260,7 @@
 		border-radius: 2px;
 		margin: 2px 0 -2px 7px;
 		border: solid 2px #fff;
-		
+
 		&:focus,
 		&:active:focus,
 		&:hover {
@@ -273,45 +272,45 @@
 /* logged-user-area */
 .logged-user-area {
 	position: relative;
-	
+
 	.opener {
 		.font(18px);
 		color: #101010;
 		display: block;
 		padding: 12px 20px 16px 19px;
-		
+
 		> * {
 			.align(@align: middle);
 		}
-		
+
 		.caret {
 			margin: 4px 0 0 15px;
 			border-width: 7px 5px 0;
 			border-style: solid dashed;
 			border-color: #fff transparent transparent;
 		}
-		
+
 		&:focus { outline: none; }
 	}
-	
+
 	&.active .opener,
 	.opener:hover {
-		
+
 		background: #76daff;
 	}
-	
+
 	.img-circle {
 		.size(43px);
 		overflow: hidden;
 		margin: 0 13px 0 0;
 		border-radius: 100%;
-		
+
 		img {
 			.img;
 			border-radius: 100%;
 		}
 	}
-	
+
 	.logged-user-drop {
 		top: 100%;
 		right: 0;
@@ -322,7 +321,7 @@
 		position: absolute;
 		box-shadow: none;
 	}
-	
+
 	.well {
 		padding: 3px;
 		margin: 0;
@@ -331,53 +330,53 @@
 		box-shadow: none;
 		border-radius: 0;
 		border: solid 2px #ccc;
-		
-		
+
+
 		ul {
 			margin: 0;
 			height: 160px;
-			
+
 			a {
 				color: #354052;
 				display: block;
 				padding: 9px 8px;
 				text-transform: capitalize;
-				
+
 				&:hover {
 					color: @white;
 					background: #00afef;
 				}
 			}
-			
-			
+
+
 		}
 	}
 }
 
 @media screen and (max-width: @psd) {
-	
+
 	#header {
 		padding: 0 0 0 220px;
-		
+
 		.logo {
 			width: 192px;
 		}
 	}
-	
+
 	.logged-user-area {
 		font-size: 16px;
-		
+
 		.opener {
 			padding: 12px 10px 16px;
-		
+
 			.caret {
 				margin-left: 5px;
 			}
 		}
-		
+
 		.img-circle {
 			margin: 0 5px 0 0;
 		}
 	}
-	
+
 }
