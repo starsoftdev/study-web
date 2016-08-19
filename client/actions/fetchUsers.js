@@ -10,6 +10,8 @@ export default function fetchUsers (currentUser, searchParams) {
       where: {}
     }
 
+    searchParams = searchParams || {}
+
     if (searchParams.name) {
       filterObj.where = {
         name: {

@@ -1,10 +1,26 @@
-import React, { PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import SearchStudiesFormPanel from './components/SearchStudiesFormPanel'
 
-class Dashboard extends React.Component {
+import './styles.less'
+
+export default class Dashboard extends Component {
+
+  constructor (props) {
+    super(props)
+  }
+
   render () {
     return (
-      <div>Dashboard Page For Authenticated Users</div>
+      <div className="dashboard">
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-10">
+              <SearchStudiesFormPanel />
+            </div>
+          </div>
+        </div>
+      </div>
     )
   }
 }
