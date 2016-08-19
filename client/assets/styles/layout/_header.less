@@ -2,24 +2,24 @@
 #header {
 	top: 0;
 	right: 0;
-	z-index: 1000;
-	left: 267px;
+	left: 0;
+	z-index: 8000;
 	position: fixed;
-	background: #00afef;
-	min-width: 880px;
-	padding: 0;
+	min-width: 970px;
+	padding: 0 0 0 261px;
 	//box-shadow: 0 -1px 2px -1px rgba(0,0,0, 0.3);
 	
 	.container-fluid {
 		padding: 0;
+		background: #00afef;
 	}
 	
 	.logo {
 		top: 20px;
-		left: -274px;
+		left: 15px;
 		width: 234px;
 		position: absolute;
-		margin: 0 0 0 25px;
+		margin: 0 0 0 0;
 		
 		a {
 			display: block;
@@ -78,6 +78,11 @@
 .notifications {
 	position: relative;
 	margin: 0;
+
+	.icon-bell {
+		&:before { content: "\e91c"; }
+	}
+	
 }
 
 .emails {
@@ -85,6 +90,14 @@
 		top: 20px;
 		right: 15px;
 		display: none;
+	}
+	
+	.icon-envelop {
+		top: 6px;
+		font-size: 32px;
+		position: relative;
+		
+		&:before { content: "\e91d"; }
 	}
 }
 
@@ -233,7 +246,7 @@
 	
 	.icon-credit {
 		color: #fff;
-		.font(23px, 30px);
+		.font(20px, 30px);
 		padding: 5px 10px 0 6px;
 	}
 	
@@ -339,4 +352,32 @@
 			
 		}
 	}
+}
+
+@media screen and (max-width: @psd) {
+	
+	#header {
+		padding: 0 0 0 220px;
+		
+		.logo {
+			width: 192px;
+		}
+	}
+	
+	.logged-user-area {
+		font-size: 16px;
+		
+		.opener {
+			padding: 12px 10px 16px;
+		
+			.caret {
+				margin-left: 5px;
+			}
+		}
+		
+		.img-circle {
+			margin: 0 5px 0 0;
+		}
+	}
+	
 }
