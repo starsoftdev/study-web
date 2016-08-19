@@ -5,8 +5,8 @@ import { searchEntities } from 'utils/entityReadWrite'
 import history from 'utils/history'
 import asyncAction from 'utils/asyncAction'
 
-export default function fetchStudyLevels () {
-  return asyncAction(ActionTypes.FETCH_STUDY_LEVELS, (cb, dispatch, getState) => {
-    dispatch(searchEntities('/levels', {}, cb))
+export default function fetchSiteLocations () {
+  return asyncAction(ActionTypes.FETCH_SITE_LOCATIONS, (cb, dispatch, getState) => {
+    dispatch(searchEntities('/sites', {}, cb))
   })
 }

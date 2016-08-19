@@ -65,6 +65,7 @@ class ChatForm extends React.Component {
 
   static propTypes = {
     authorization: PropTypes.any,
+    socket: PropTypes.any,
     isSaving: PropTypes.bool,
     showModal: PropTypes.bool,
     activeChat: PropTypes.object,
@@ -77,26 +78,6 @@ class ChatForm extends React.Component {
     saveTwilioMessage: PropTypes.func,
     fetchingTwilioMessages: PropTypes.bool,
     savingTwilioMessage: PropTypes.bool
-  }
-
-  connect (nameSpace, cb) {
-    let authData = this.props.authorization.authData
-    //console.log(authData);
-    if (authData) {
-      if (!this.io) {
-        this.io = io(`${HOST_URL}/${nameSpace}`)
-        this.io.on('connect', () => {
-          cb()
-        })
-      } else {
-        cb()
-      }
-    } else {
-      if (this.io) {
-        this.io.disconnect()
-        this.io = null
-      }
-    }
   }
 
   scrollMessContainer () {
@@ -124,20 +105,21 @@ class ChatForm extends React.Component {
 
   componentDidMount () {
     let scope = this
-    const { setActiveChat, fetchTwilioMessages, joinTwilioChat } = this.props
+    const { setActiveChat, fetchTwilioMessages, joinTwilioChat, socket } = this.props
     this.appDispatcher.register(function (payload) {
       if (payload.actionType === 'setActiveChat') {
-        scope.connect(scope.namespace, () => {
+
+        setActiveChat(scope.props.socket, payload.data, (err, data, cb) => {
+          if (!err) {
+            scope.open()
+          }
+
           /*joinTwilioChat(scope.io, payload.data, (err, data, cb) => {
-            cb(err, data)
-          })*/
+           cb(err, data)
+           })*/
 
-          setActiveChat(scope.io, payload.data, (err, data, cb) => {
-            if (!err) {
-              scope.open()
-            }
-
-            scope.io.on('notifyMessage', () => {
+          if (!_.isEmpty(scope.props.socket)) {
+            scope.props.socket.on('notifyMessage', () => {
               fetchTwilioMessages(scope.io, {
                 studyId: payload.data.studyId,
                 patientId: payload.data.patientId
@@ -146,9 +128,11 @@ class ChatForm extends React.Component {
                 cb(err, data)
               })
             })
+          } else {
+            console.error('problem with  socket connection')
+          }
 
-            cb(err, data)
-          })
+          cb(err, data)
         })
       }
     })
@@ -169,7 +153,7 @@ class ChatForm extends React.Component {
 
   handleSubmit (ev) {
     ev.preventDefault()
-    const { activeChat, saveTwilioMessage, fetchTwilioMessages } = this.props
+    const { activeChat, saveTwilioMessage, fetchTwilioMessages, socket } = this.props
     const value = this.refs.form.getValue()
     let options = {
       body: value.message,
@@ -179,9 +163,9 @@ class ChatForm extends React.Component {
     }
 
     if (value) {
-      saveTwilioMessage(this.io, options, (err, data, cb) => {
+      saveTwilioMessage(socket, options, (err, data, cb) => {
         if (!err) {
-          fetchTwilioMessages(this.io, {
+          fetchTwilioMessages(socket, {
             studyId: data.studyId,
             patientId: data.patientId
           }, (err, data, cb) => {
@@ -256,7 +240,8 @@ const mapStateToProps = (state) => ({
   activeChat: state.activeChat,
   twilioMessages: state.twilioMessages,
   fetchingTwilioMessages: state.fetchingTwilioMessages,
-  savingTwilioMessage: state.savingTwilioMessage
+  savingTwilioMessage: state.savingTwilioMessage,
+  socket: state.socket
 })
 
 const mapDispatchToProps = {

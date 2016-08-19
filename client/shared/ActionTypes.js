@@ -72,6 +72,8 @@ export const ActionTypes = keyMirror({
   NOTIFICATION_ARRIVED: null,
   FETCH_PATIENT_SIGN_UPS: null,
 
+  FETCH_SITE_LOCATIONS: null,
+
   SAVE_REFERRAL_FORM: null,
   SUBSCRIBE_REQUEST: null,
   UNSUBSCRIBE_REQUEST: null,
@@ -88,4 +90,5 @@ export const ActionTypes = keyMirror({
   SCHEDULE_PATIENT: null,
   FETCH_SCHEDULES: null,
   DELETE_SCHEDULE: null,
+  SET_SOCKET: null
 })

@@ -69,6 +69,16 @@ class SchedulePatientModal extends Component {
         optionStep: 0,
       })
     }
+
+    const patientOptions = _.flatten(this.props.patientsByStudy.map(pBS => pBS.patients.map(p => {
+      return {
+        label: p.firstName + ' ' + p.lastName,
+        value: p.id,
+      }
+    })))
+    this.setState({
+      patientOptions
+    })
   }
 
   handleUpdateDateChange (date) {
@@ -93,14 +103,13 @@ class SchedulePatientModal extends Component {
       })
       this.setState({
         optionStep: 1,
-        siteLocation: siteLocationOption.value,
         protocolOptions,
       })
+      this.props.fields.protocol.onChange(null)
     }
     else {
       this.setState({
         optionStep: 0,
-        siteLocation: null,
         protocolOptions: [],
         patientOptions: [],
       })
@@ -111,30 +120,20 @@ class SchedulePatientModal extends Component {
 
   handleProtocolChoose (protocolOption) {
     if (protocolOption) {
-      /*
       this.props.fetchPatientsByStudy(protocolOption.studyId, {
         offset: 0,
         limit: -1,
         category: '*'
       })
-      */
-      const patientOptions = this.props.patientsByStudy.map(p => {
-        return {
-          label: p.firstName + ' ' + p.lastName,
-          value: p.id,
-        }
-      })
       this.setState({
         optionStep: 2,
-        protocol: protocolOption.value,
-        patientOptions
       })
       this.props.fields.indication.onChange(protocolOption.indication)
+      this.props.fields.patient.onChange(null)
     }
     else {
       this.setState({
         optionStep: 1,
-        protocol: null,
         patientOptions: [],
       })
     }
@@ -146,13 +145,11 @@ class SchedulePatientModal extends Component {
     if (patientOption) {
       this.setState({
         optionStep: 3,
-        patient: patientOption.value
       })
     }
     else {
       this.setState({
         optionStep: 2,
-        patient: null
       })
     }
 
@@ -235,7 +232,7 @@ class SchedulePatientModal extends Component {
                   <input {...indication} style={{ display: 'none' }} />
                 </div>
               }
-              {optionStep === 2 &&
+              {optionStep === 3 &&
                 <div>
                   <div className="form-group">
                     <div className="col-sm-4">
@@ -324,7 +321,7 @@ class SchedulePatientModal extends Component {
                     {...period}
                     options={periodOptions}
                     disabled={submitting}
-                    onBlur={() => { period.onBlur(am) }}
+                    onBlur={() => { period.onBlur(period) }}
                   />
                 </div>
               </div>
