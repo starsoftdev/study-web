@@ -24,7 +24,6 @@ class UserItem extends Component {
 
   render () {
     const { isFetching } = this.props
-    const isSuperAdmin = (this.props.name === 'Super Admin')
     let accessStr = ''
     const isSuperAdmin = (this.props.name === 'Super Admin')
 
