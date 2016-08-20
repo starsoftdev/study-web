@@ -52,7 +52,7 @@ class Application extends React.Component {
     this.appDispatcher.register(function (payload) {
       if (payload.actionType === 'changePathname') {
 
-        scope.props.unsubscribeFromAll(this.props.socket, { pathname: scope.props.location.pathname }, (err, data, cb) => {
+        scope.props.unsubscribeFromAll(scope.props.socket, { pathname: scope.props.location.pathname }, (err, data, cb) => {
           cb(err, data)
 
           scope.props.socket.disconnect()
