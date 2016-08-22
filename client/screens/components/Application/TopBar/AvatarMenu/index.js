@@ -22,7 +22,7 @@ class AvatarMenu extends React.Component {
     })
   }
 
-  handleClickOutside() {
+  handleClickOutside () {
     this.setState({ avatarMenuOpen: false })
   }
 
