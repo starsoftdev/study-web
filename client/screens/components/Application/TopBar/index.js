@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { Modal } from 'react-bootstrap'
+import AddCreditsForm from 'forms/AddCredits'
 import { Link } from 'react-router'
 import { Nav, Navbar, NavItem } from 'react-bootstrap'
 
@@ -42,8 +44,28 @@ export default class TopBar extends React.Component {
     }
   }
 
+  state = {
+    addCreditsModalOpen: false,
+  }
+
+  openAddCreditsModal () {
+    this.setState({ addCreditsModalOpen: true })
+  }
+
+  closeAddCreditsModal () {
+    this.setState({ addCreditsModalOpen: false })
+  }
+
+  addCredits () {
+    console.log('Add credits!!!')
+    this.closeAddCreditsModal()
+  }
+
   render () {
     const { authorized } = this.props.authorization
+    const creditCardOptions = [{ label: 'Credit Card 1', value: 'Credit Card 1' }, { label: 'Credit Card 2', value: 'Credit Card 2' }]
+    const credits = 100
+    const price = 77
 
     return (
       <header id="header">
@@ -109,7 +131,15 @@ export default class TopBar extends React.Component {
           <div className="get-credits pull-left">
             <i className="icon-credit" />
             <span>100 Credits</span>
-            <a href="#" className="btn btn-default">+ ADD CREDITS</a>
+            <button className="btn btn-default" onClick={this.openAddCreditsModal.bind(this)}>+ ADD CREDITS</button>
+            <Modal className="add-credits" bsSize="large" show={this.state.addCreditsModalOpen} onHide={this.closeAddCreditsModal.bind(this)}>
+              <Modal.Header closeButton>
+                <Modal.Title>Add Credits</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <AddCreditsForm credits={credits} price={price} creditCardOptions={creditCardOptions} onSubmit={this.addCredits.bind(this)}  />
+              </Modal.Body>
+            </Modal>
           </div>
 
           <div className="logged-user-area pull-right">
