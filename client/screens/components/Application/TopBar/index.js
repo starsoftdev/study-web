@@ -63,7 +63,7 @@ export default class TopBar extends React.Component {
 
   render () {
     const { authorized } = this.props.authorization
-    const creditCardOptions = [{ label: 'Credit Card 1', value: 'Credit Card 1' }, { label: 'Credit Card 2', value: 'Credit Card 2' }]
+    const creditCardOptions = [ { label: 'Credit Card 1', value: 'Credit Card 1' }, { label: 'Credit Card 2', value: 'Credit Card 2' } ]
     const credits = 100
     const price = 77
 
