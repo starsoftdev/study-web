@@ -29,8 +29,10 @@ export default class SitesUsers extends Component {
   constructor (props) {
     super(props)
 
-    this.props.fetchSites(this.props.currentUser, {})
-    this.props.fetchUsers(this.props.currentUser, {})
+    if (this.props.currentUser.userInfo.roleForClient) {
+      this.props.fetchSites(this.props.currentUser, {})
+      this.props.fetchUsers(this.props.currentUser, {})
+    }
   }
 
   componentWillUnmount () {
@@ -91,9 +93,24 @@ export default class SitesUsers extends Component {
   }
 
   render () {
+    const isCurrentUserAdmin = (this.props.currentUser.userInfo.roleForClient !== undefined)
     const { fetchingSites, savingSite, fetchingUsers, savingUser, sites } = this.props
     let siteOptions = _.map(sites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id }))
     siteOptions.unshift({ label: 'All', value: 0 })
+
+    if (!isCurrentUserAdmin) {
+      return (
+        <div className="sites-users-page">
+          <div className="container">
+            <div className="row">
+              <div className="col-sm-12">
+                <h4>You don't have permission to manage sites and users</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
 
     return (
       <div className="sites-users-page">
