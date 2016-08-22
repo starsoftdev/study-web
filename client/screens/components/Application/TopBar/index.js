@@ -24,6 +24,10 @@ export default class TopBar extends React.Component {
     logoutRequest: PropTypes.func.isRequired,
   }
 
+  state = {
+    avatarMenuOpen: false
+  }
+
   componentDidMount () {
     this.clearSessionWhenExpired()
   }
@@ -42,8 +46,15 @@ export default class TopBar extends React.Component {
     }
   }
 
+  toggleAvatarMenuHandle () {
+    this.setState ({
+      avatarMenuOpen: !this.state.avatarMenuOpen
+    })
+  }
+
   render () {
     const { authorized } = this.props.authorization
+    const avatarMenuClassName = this.state.avatarMenuOpen ? 'avatar-menu-open' : 'avatar-menu-close'
 
     return (
       <header id="header">
@@ -113,14 +124,14 @@ export default class TopBar extends React.Component {
           </div>
 
           <div className="logged-user-area pull-right">
-            <a className="opener" role="button" data-toggle="collapse" href="#logged-user-drop" aria-expanded="false" aria-controls="logged-user-drop">
+            <a className="opener" role="button" onClick={this.toggleAvatarMenuHandle.bind(this)}>
               <div className="img-circle">
                 <img src={userAvatar} width="43" height="43" alt="Bruce Wayne"  />
               </div>
               <span className="text">Bruce Wayne</span>
               <i className="caret" />
             </a>
-            <div className="collapse" id="logged-user-drop">
+            <div className={`avatar-menu ${avatarMenuClassName}`}>
               <div className="well">
                 <ul className="list-unstyled">
                   <li><a href="#">Profile</a></li>
