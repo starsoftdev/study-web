@@ -7,6 +7,7 @@ import { logout } from 'actions'
 import isSessionExpired from 'utils/isSessionExpired'
 import history from 'utils/history'
 
+import AvatarMenu from './AvatarMenu'
 import NotificationBox from './NotificationBox'
 
 import './styles.less'
@@ -15,7 +16,6 @@ import studykikLogo from 'assets/images/new_version/logo.svg'
 import avatar1 from 'assets/images/new_version/img2.png'
 import avatar2 from 'assets/images/new_version/img3.png'
 import avatar3 from 'assets/images/new_version/img4.png'
-import userAvatar from 'assets/images/new_version/img-logged-user.png'
 
 export default class TopBar extends React.Component {
   static propTypes = {
@@ -112,28 +112,7 @@ export default class TopBar extends React.Component {
             <a href="#" className="btn btn-default">+ ADD CREDITS</a>
           </div>
 
-          <div className="logged-user-area pull-right">
-            <a className="opener" role="button" data-toggle="collapse" href="#logged-user-drop" aria-expanded="false" aria-controls="logged-user-drop">
-              <div className="img-circle">
-                <img src={userAvatar} width="43" height="43" alt="Bruce Wayne"  />
-              </div>
-              <span className="text">Bruce Wayne</span>
-              <i className="caret" />
-            </a>
-            <div className="collapse" id="logged-user-drop">
-              <div className="well">
-                <ul className="list-unstyled">
-                  <li><a href="#">Profile</a></li>
-                  <li><a href="#">Payment Information</a></li>
-                  <li><a href="#">Reciepts</a></li>
-                  <Link to="/logout"
-                    onClick={this.handleLogoutClick.bind(this)}
-                  >Logout</Link>
-                </ul>
-              </div>
-            </div>
-          </div>
-
+          <AvatarMenu handleLogoutClick={this.handleLogoutClick.bind(this)} />
         </div>
       </header>
     )
