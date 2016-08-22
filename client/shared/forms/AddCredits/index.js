@@ -46,7 +46,7 @@ class AddCreditsForm extends Component {
                   <span>CREDITS</span>
                 </label>
                 <div className="col-sm-9">
-                  <input type="text" className="form-control" value={credits} readonly="readonly" />
+                  <input type="text" className="form-control" value={credits} readOnly="readonly" />
                 </div>
               </div>
               <div className="row form-group">
@@ -54,7 +54,7 @@ class AddCreditsForm extends Component {
                   <span>PRICE</span>
                 </label>
                 <div className="col-sm-9">
-                  <input type="text" className="form-control" value={price} readonly="readonly" />
+                  <input type="text" className="form-control" value={price} readOnly="readonly" />
                 </div>
               </div>
             </div>
