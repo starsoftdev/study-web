@@ -35,7 +35,7 @@ class AvatarMenu extends React.Component {
           <div className="img-circle">
             <img src={userAvatar} width="43" height="43" alt="Bruce Wayne" />
           </div>
-          <span className="text">Bruce Wayne</span>
+          <span className="text margin-left-5px margin-right-5px">Bruce Wayne</span>
           <i className="caret" />
         </a>
         <div className={`avatar-menu ${avatarMenuClassName}`}>

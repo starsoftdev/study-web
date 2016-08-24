@@ -107,8 +107,8 @@ export default class TopBar extends React.Component {
           <a href="#" className="link-help pull-left">?</a>
 
           <div className="get-credits pull-left">
-            <i className="icon-credit" />
-            <span>100 Credits</span>
+            <i className="icon-credit margin-right-5px" />
+            <span className="margin-right-5px">100 Credits</span>
             <a href="#" className="btn btn-default">+ ADD CREDITS</a>
           </div>
 
