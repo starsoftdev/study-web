@@ -1,6 +1,6 @@
-import keykey from 'keykey'
+import KeyKey from 'keykey'
 
-export const ActionTypes = keykey(
+export const ActionTypes = KeyKey(
   'ROUTE_CHANGED',
 
   'SET_AUTH_DATA',
