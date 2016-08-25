@@ -1,6 +1,6 @@
-import keykey from 'keykey'
+import KeyKey from 'keykey'
 
-export const Indications = keykey(
+export const Indications = KeyKey(
   'Other Study Type',
   'Abnormal bleeding',
   'Acid Reflux',
@@ -15,7 +15,7 @@ export const ExposureLevels = {
   'Bronze': 'Bronze: $59',
 }
 
-export const CampaignLengths = keykey(
+export const CampaignLengths = KeyKey(
   'One Week',
   'Two Weeks',
   'One Month',
@@ -41,13 +41,13 @@ export const StudyTypes = {
   '353': 'Actinic Keratosis',
 }
 
-export const ContactCompanyTypes = keykey(
+export const ContactCompanyTypes = KeyKey(
   'Site',
   'Sponsor',
   'CRO',
 )
 
-export const SchedulePatientModalType = keykey(
+export const SchedulePatientModalType = KeyKey(
   'CREATE',
   'UPDATE',
   'HIDDEN',
