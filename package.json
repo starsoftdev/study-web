@@ -14,7 +14,7 @@
     "pre-commit": "PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:./node_modules/.bin eslint .",
     "pretest": "npm run lint",
     "start": "npm run build && node server/index.js",
-    "test": "",
+    "test": "npm run unit",
     "unit": "BABEL_ENV=test karma start",
     "unit-debug": "BABEL_ENV=test karma start karma.conf.js --browsers=Chrome --single-run=false --debug"
   },
@@ -34,7 +34,7 @@
     "font-awesome": "^4.6.1",
     "font-awesome-webpack": "0.0.4",
     "history": "^2.1.1",
-    "keymirror": "^0.1.1",
+    "keykey": "^2.1.1",
     "lodash": "https://registry.npmjs.org/lodash/-/lodash-4.12.0.tgz",
     "moment": "^2.13.0",
     "object-assign": "^4.1.0",
