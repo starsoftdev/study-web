@@ -17,7 +17,7 @@ import avatar1 from 'assets/images/new_version/img2.png'
 import avatar2 from 'assets/images/new_version/img3.png'
 import avatar3 from 'assets/images/new_version/img4.png'
 
-export default class TopBar extends React.Component {
+class TopBar extends React.Component {
   static propTypes = {
     authorization: PropTypes.any,
     location: PropTypes.any,

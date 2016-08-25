@@ -4,7 +4,7 @@ import SearchStudiesFormPanel from './components/SearchStudiesFormPanel'
 
 import './styles.less'
 
-export default class Dashboard extends Component {
+class Dashboard extends Component {
 
   constructor (props) {
     super(props)
