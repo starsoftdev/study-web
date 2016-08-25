@@ -1,3 +1,5 @@
+import 'babel-polyfill'
+
 import 'whatwg-fetch'
 import 'font-awesome-webpack'
 import 'assets/styles/index.less'
