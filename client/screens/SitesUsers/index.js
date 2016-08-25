@@ -9,7 +9,7 @@ import UsersList from './components/UsersList'
 import SitesList from './components/SitesList'
 import './styles.less'
 
-export default class SitesUsers extends Component {
+class SitesUsers extends Component {
 
   static propTypes = {
     currentUser: PropTypes.object,
