@@ -1,11 +1,11 @@
-import keyMirror from 'keymirror'
+import keykey from 'keykey'
 
-export const Indications = keyMirror({
-  'Other Study Type': null,
-  'Abnormal bleeding': null,
-  'Acid Reflux':null,
-  'Acne': null,
-})
+export const Indications = keykey(
+  'Other Study Type',
+  'Abnormal bleeding',
+  'Acid Reflux',
+  'Acne',
+)
 
 export const ExposureLevels = {
   'Diamond': 'Diamond: $3059',
@@ -15,13 +15,13 @@ export const ExposureLevels = {
   'Bronze': 'Bronze: $59',
 }
 
-export const CampaignLengths = keyMirror({
-  'One Week': null,
-  'Two Weeks': null,
-  'One Month': null,
-  'Two Months': null,
-  'Three Months': null,
-})
+export const CampaignLengths = keykey(
+  'One Week',
+  'Two Weeks',
+  'One Month',
+  'Two Months',
+  'Three Months',
+)
 
 export const DistanceOptions = [
   { value: '8000', text: 'Distance' },
@@ -41,14 +41,14 @@ export const StudyTypes = {
   '353': 'Actinic Keratosis',
 }
 
-export const ContactCompanyTypes = keyMirror({
-  'Site': null,
-  'Sponsor': null,
-  'CRO': null,
-})
+export const ContactCompanyTypes = keykey(
+  'Site',
+  'Sponsor',
+  'CRO',
+)
 
-export const SchedulePatientModalType = keyMirror({
-  CREATE: null,
-  UPDATE: null,
-  HIDDEN: null,
-})
+export const SchedulePatientModalType = keykey(
+  'CREATE',
+  'UPDATE',
+  'HIDDEN',
+)
