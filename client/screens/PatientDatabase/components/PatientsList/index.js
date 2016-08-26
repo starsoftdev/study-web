@@ -8,7 +8,7 @@ import PatientItem from './PatientItem'
 import _ from 'lodash'
 import './styles.less'
 
-export default class PatientsList extends Component {
+class PatientsList extends Component {
 
   static propTypes = {
     patients: PropTypes.array,

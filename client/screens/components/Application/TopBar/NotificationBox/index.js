@@ -8,7 +8,7 @@ import NotificationList from '../../../NotificationList'
 
 import './styles.less'
 
-export default class NotificationBox extends React.Component {
+class NotificationBox extends React.Component {
   static propTypes = {
     authorization: PropTypes.any,
     notification: PropTypes.object,

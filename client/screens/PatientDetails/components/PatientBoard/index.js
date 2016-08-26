@@ -18,7 +18,7 @@ import _ from 'lodash'
 
 import './styles.less'
 
-export default class PatientBoard extends Component {
+class PatientBoard extends Component {
 
   static propTypes = {
     isFetchingPatientCategories: PropTypes.bool,

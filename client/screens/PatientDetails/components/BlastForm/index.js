@@ -60,7 +60,7 @@ const options = {
   }
 }
 
-export default class BlastForm extends Component {
+class BlastForm extends Component {
   static propTypes = {
     socket: PropTypes.any,
     authorization: PropTypes.any,
