@@ -7,7 +7,7 @@ import PatientsList from './components/PatientsList'
 
 import './styles.less'
 
-export default class PatientDatabase extends Component {
+class PatientDatabase extends Component {
 
   constructor (props) {
     super(props)

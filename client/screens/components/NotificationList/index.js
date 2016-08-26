@@ -8,7 +8,7 @@ import NotificationItem from './notificationItem'
 
 import './styles.less'
 
-export default class NotificationList extends React.Component {
+class NotificationList extends React.Component {
   static propTypes = {
     authorization: PropTypes.any,
     notification: PropTypes.object,
