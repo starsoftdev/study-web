@@ -24,11 +24,8 @@ describe('fetchStudies action creator', () => {
 
     expect(searchEntities.type).toEqual('EFFECT_COMPOSE')
     expect(searchEntities.payload.type).toEqual('EFFECT_FETCH')
-    expect(searchEntities.payload.url).toEqual(`${API_URL}/studies?distance=8000`)
-    expect(searchEntities.payload.url).toContain('distance=8000')
-    expect(searchEntities.payload.params.method).toEqual('get')
-    expect(searchEntities.payload.params.body).toEqual(null)
-
-    expect(body).toContain('distance=8000')
+    expect(searchEntities.payload.url).toEqual(`${API_URL}/studies/search`)
+    expect(searchEntities.payload.params.method).toEqual('post')
+    expect(searchEntities.payload.params.body).toContain('{"distance":8000}')
   })
 })

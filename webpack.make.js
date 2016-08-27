@@ -100,7 +100,7 @@ module.exports = function createWebpackConfig (env) {
     },
 
     module: {
-      noParse: [ /moment.js/ ],
+      // noParse: [ /moment.js/ ],
       loaders: [
         {
           test: /\.less$/,

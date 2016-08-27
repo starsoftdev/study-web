@@ -1,0 +1,16 @@
+.avatar-menu {
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+
+  &.avatar-menu-close {
+    max-height: 0;
+    -webkit-transition: max-height 0.5s;
+    transition: max-height 0.5s;
+  }
+  &.avatar-menu-open {
+    max-height: 250px;
+    -webkit-transition: max-height 0.5s;
+    transition: max-height 0.5s;
+  }
+}

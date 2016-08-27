@@ -7,6 +7,6 @@ import asyncAction from 'utils/asyncAction'
 
 export default function fetchSiteLocations () {
   return asyncAction(ActionTypes.FETCH_SITE_LOCATIONS, (cb, dispatch, getState) => {
-    dispatch(searchEntities('/studies/siteLocations', {}, cb))
+    dispatch(searchEntities('/sites', {}, cb))
   })
 }

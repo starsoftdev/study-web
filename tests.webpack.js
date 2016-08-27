@@ -1,6 +1,4 @@
 'use strict'
 
-require('tests-globals')
-
-let context = require.context('./client', true, /-test\.jsx?$/)
+let context = require.context('./client', true, /-test\.js?$/)
 context.keys().forEach(context)
