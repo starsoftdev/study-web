@@ -3,6 +3,8 @@ import DocumentTitle from 'react-document-title'
 
 import PatientBoard from './components/PatientBoard'
 
+import './styles.less'
+
 export default class PatientDetails extends React.Component {
   static propTypes = {
     params: PropTypes.object,

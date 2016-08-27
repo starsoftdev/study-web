@@ -7,62 +7,17 @@ import { logout } from 'actions'
 import isSessionExpired from 'utils/isSessionExpired'
 import history from 'utils/history'
 
+import AvatarMenu from './AvatarMenu'
 import NotificationBox from './NotificationBox'
 
 import './styles.less'
 
-import logoImg from 'assets/images/logo.png'
-import hfbImg from 'assets/images/social/hfb.png'
-import hlkImg from 'assets/images/social/hlk.png'
-import hgpImg from 'assets/images/social/hgp.png'
-import httImg from 'assets/images/social/htt.png'
-import hinImg from 'assets/images/social/hin.png'
-import htpImg from 'assets/images/social/htp.png'
+import studykikLogo from 'assets/images/new_version/logo.svg'
+import avatar1 from 'assets/images/new_version/img2.png'
+import avatar2 from 'assets/images/new_version/img3.png'
+import avatar3 from 'assets/images/new_version/img4.png'
 
-const menuItems = [ {
-  text: 'Trial Search',
-  link: '/trials' // Need to define exactly since it'll have 'active' class always
-}, {
-  text: 'List Your Trials',
-  link: '/clinical-trial-patient-recruitment-patient-enrollment'
-}, {
-  text: 'Blog',
-  link: '/blog'
-}, {
-  text: 'About Us',
-  link: '/about'
-}, {
-  text: 'Contact',
-  link: '/contact'
-} ]
-
-const socialShares = [ {
-  name: 'facebook',
-  image: hfbImg,
-  link: 'https://www.facebook.com/sharer/sharer.php?=www.studykik.com&amp;u=https://studykik.com'
-}, {
-  name: 'linkedin',
-  image: hlkImg,
-  link: 'https://www.linkedin.com/shareArticle?mini=true&amp;url=https://studykik.com/&amp;title=Find%20Clinical%20Trials%20Near%20You&amp;summary=&amp;source='
-}, {
-  name: 'google',
-  image: hgpImg,
-  link: 'https://plus.google.com/share?url=[https://studykik.com]'
-}, {
-  name: 'twitter',
-  image: httImg,
-  link: 'https://twitter.com/home?status=[Find Clinical Trials Near You]+[https://studykik.com]'
-}, {
-  name: 'instagram',
-  image: hinImg,
-  link: 'https://instagram.com/studykik/#'
-}, {
-  name: 'pinterest',
-  image: htpImg,
-  link: 'https://pinterest.com/pin/create/bookmarklet/?media=https://studykik.com/wp-content/themes/twentythirteen/images/logo.png&amp;url=https://studykik.com&amp;is_video=false&amp;description=Find Clinical Trials Near You'
-} ]
-
-export default class TopBar extends React.Component {
+class TopBar extends React.Component {
   static propTypes = {
     authorization: PropTypes.any,
     location: PropTypes.any,
@@ -91,58 +46,75 @@ export default class TopBar extends React.Component {
     const { authorized } = this.props.authorization
 
     return (
-      <Navbar className="navbar-studykik">
+      <header id="header">
+        <div className="container-fluid">
 
-        <Navbar.Header>
-          <Navbar.Brand>
-            <Link to="/" className="logo-link">
-              <img src={logoImg} />
-            </Link>
-          </Navbar.Brand>
-          <Navbar.Toggle />
-        </Navbar.Header>
+          <h1 className="logo pull-left"><a href="#"><img src={studykikLogo} width="214" height="31" alt="logo" /></a></h1>
 
-        <Navbar.Collapse>
-          <Nav>
-            {menuItems.map((item, index) =>
-              <li className="nav-item" key={index}>
-                <Link to={item.link} activeClassName="active">{item.text}</Link>
-              </li>
-            )}
-          </Nav>
+          <div className="notifications pull-left">
+            <a className="opener" role="button" data-toggle="collapse" href="#notifications-drop" aria-expanded="false" aria-controls="notifications-drop">
+              <i className="icon-bell" />
+              <span className="counter">1</span>
+            </a>
+            {/*authorized &&
+              <NotificationBox authorization={this.props.authorization} />*/}
+            <div className="collapse" id="notifications-drop">
+              <div className="well">
+                <strong className="title">NOTIFICATIONS</strong>
+                <ul className="list-unstyled">
+                  <li>
+                    <a href="#">
+                      <div className="img-circle">
+                        <img src={avatar1} width="43" height="43" alt="alan_walker"  />
+                      </div>
+                      <p><strong>alan_walker</strong> moved Thomas Morgan from New Patient to Consented.</p>
+                      <time dateTime="2016-05-16">05/16/16 at 11:31pm</time>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <div className="img-circle">
+                        <img src={avatar2} width="43" height="43" alt="penny_worth"  />
+                      </div>
+                      <p><strong>penny_worth</strong> listed a new Birth Control Study.</p>
+                      <time dateTime="2016-05-16">05/16/16 at 11:30pm</time>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <div className="img-circle">
+                        <img src={avatar3} width="43" height="43" alt="arrow_island"  />
+                      </div>
+                      <p><strong>arrow_island</strong> sent a text message to Thomas Morgan</p>
+                      <time dateTime="2016-05-16">05/16/16 at 9:30pm</time>
+                    </a>
+                  </li>
+                </ul>
+                <div className="btn-block text-center">
+                  <a href="#">See All</a>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <Nav pullRight>
-            <li className="blue-color nav-item">
-              {!authorized &&
-                <Link to="/login">Login</Link>
-              }
-              {authorized &&
-                <Link to="/logout"
-                  onClick={this.handleLogoutClick.bind(this)}
-                >
-                  Logout
-                </Link>
-              }
-            </li>
-          </Nav>
+          <div className="emails pull-left">
+            <a href="#" className="opener" data-toggle="tooltip" data-placement="bottom" title="Coming Soon">
+              <i className="icon-envelop" />
+              <span className="counter">1</span>
+            </a>
+          </div>
 
-          <ul className="social-share nav navbar-nav navbar-right">
-            {socialShares.map((item, index) =>
-              <li key={index}>
-                <a target="_blank" href={item.link}>
-                  <img src={item.image} alt="" height="32" width="32" />
-                </a>
-              </li>
-            )}
-          </ul>
+          <a href="#" className="link-help pull-left">?</a>
 
-          <ul className="nav navbar-nav navbar-right">
-            {authorized &&
-              <NotificationBox authorization={this.props.authorization} />}
-          </ul>
+          <div className="get-credits pull-left">
+            <i className="icon-credit margin-right-5px" />
+            <span className="margin-right-5px">100 Credits</span>
+            <a href="#" className="btn btn-default">+ ADD CREDITS</a>
+          </div>
 
-        </Navbar.Collapse>
-      </Navbar>
+          <AvatarMenu handleLogoutClick={this.handleLogoutClick.bind(this)} />
+        </div>
+      </header>
     )
   }
 

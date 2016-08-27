@@ -8,7 +8,7 @@ Create a file named `.env` at the root of this project that includes the followi
 ```
 NODE_ENV=development
 PORT=8080
-API_URL=http://localhost:3000/api
+API_URL=http://localhost:3000/api/v1
 HOST_URL=http://localhost:3000
 ```
 
@@ -26,6 +26,9 @@ API_URL=https://studykik.com/api
 ```
 npm install
 ```
+for correct installation of package 'git-validate' it may be necessary
+to manually create a pre-commit file in ./.git/hooks directory and change
+the rights for it.
 
 ### Running the app:
 ```

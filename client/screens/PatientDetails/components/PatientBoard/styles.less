@@ -1,6 +1,5 @@
 @import '~assets/styles/variables.less';
 
-
 .patient-board{
 	width: 100%;
 	display: inline-flex;
@@ -54,7 +53,36 @@
 						font-size: 14px;
 						color: @black;
 					}
+
+					&.ui-parts{
+						float: right;
+
+						span{
+							margin: 0 10px 0 0;
+							cursor: pointer;
+
+							&:hover{
+								color: black;
+							}
+						}
+					}
 				}
+			}
+		}
+	}
+}
+
+.controls{
+	margin: 0 0 10px;
+	overflow: hidden;
+
+	button[type='submit']{
+		float: right;
+
+		span{
+
+			&.glyphicon{
+				margin: 0 5px 0 0;
 			}
 		}
 	}

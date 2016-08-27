@@ -14,7 +14,7 @@ export default function (state = initialState, action) {
       if (action.status === 'succeeded') {
         return {
           isFetching: false,
-          siteLocations: action.payload.siteLocations || []
+          siteLocations: action.payload || []
         }
       }
       return {

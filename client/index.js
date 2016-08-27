@@ -1,6 +1,9 @@
+import 'babel-polyfill'
+
 import 'whatwg-fetch'
 import 'font-awesome-webpack'
 import 'assets/styles/index.less'
+import 'react-select2-wrapper/css/select2.css'
 
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
@@ -10,6 +13,7 @@ import { Router, Route, IndexRedirect, IndexRoute } from 'react-router'
 
 import { routeChange, setAuthData } from 'actions'
 import history from 'utils/history'
+import Dispatcher from 'utils/dispatcher'
 import DevTools from 'components/DevTools'
 
 import getRoutes from './routes'
@@ -18,6 +22,7 @@ import persistAuthData from './persistAuthData'
 
 
 const store = createStore()
+const appDispatcher = new Dispatcher()
 store.subscribe(persistAuthData(store))
 
 let authData = null
@@ -33,6 +38,11 @@ if (authData) {
 }
 
 history.listen(location => {
+  appDispatcher.dispatch({
+    actionType: 'changePathname',
+    data: location
+  })
+
   store.dispatch(routeChange({ location }))
 })
 

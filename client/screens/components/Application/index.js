@@ -2,62 +2,108 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import DocumentTitle from 'react-document-title'
 
-import { notificationArrived } from 'actions'
+import _ from 'lodash'
+
+import {
+  notificationArrived,
+  subscribe,
+  unsubscribeFromAll,
+  displayNotification,
+  setSocket
+} from 'actions'
 
 import './styles.less'
 
 import TopBar from './TopBar'
-import BottomBar from './BottomBar'
+import SideBar from './SideBar'
+import GlobalNotifications from '../globalNotifications'
+import Dispatcher from '../../../utils/dispatcher'
 
 class Application extends React.Component {
   static propTypes = {
     authorization: PropTypes.any,
+    socket: PropTypes.any,
     location: PropTypes.any,
     children: PropTypes.any,
-    notificationArrived: PropTypes.func
+    subscribe: PropTypes.func,
+    setSocket: PropTypes.func,
+    unsubscribeFromAll: PropTypes.func,
+    unsubscribeCurrent: PropTypes.func,
+    notificationArrived: PropTypes.func,
+    displayNotification: PropTypes.func
+  }
+
+  getEventType () {
+    switch (this.props.location.pathname) {
+      case '/dashboard':
+        return 'create-study'
+      case '/studies/-100/patient-details':
+        return 'twilio-message'
+      default:
+        return null
+    }
   }
 
   componentDidMount () {
-    this.configureSocket (this.props)     // comes here when loading from direct url change
+    const scope = this
+    this.appDispatcher = new Dispatcher()
+    this.subscribe(this.props)
+
+    this.appDispatcher.register(function (payload) {
+      if (payload.actionType === 'changePathname') {
+
+        scope.props.unsubscribeFromAll(scope.props.socket, { pathname: scope.props.location.pathname }, (err, data, cb) => {
+          cb(err, data)
+
+          scope.props.socket.disconnect()
+          //scope.props.socket = null
+          scope.subscribe(scope.props)
+        })
+      }
+    })
   }
 
   componentWillReceiveProps (nextProps) {
-    this.configureSocket (nextProps)
+    const event = this.getEventType()
+    console.log('componentWillReceiveProps')
+    //this.subscribe(nextProps)
+
+    if (!_.isEmpty(nextProps.socket)) {
+      nextProps.socket.on('connect', () => {
+        if (nextProps.location.pathname === '/dashboard' || nextProps.location.pathname === '/studies/-100/patient-details') {
+          nextProps.subscribe(this.props.socket, event,
+            { pathname: nextProps.location.pathname }, (err, data, cb) => {
+              cb(err, data)
+
+              nextProps.socket.on('notification', (notification) => {
+                nextProps.displayNotification(notification)
+              })
+            })
+        }
+      })
+    } else {
+      console.error('problem with socket connection')
+    }
   }
 
-  configureSocket = (props) => {
-    if (props.authorization.authData) {
-      if (!this.socket) {
-        this.socket = io(`${HOST_URL}/notifications`)
-
-        this.socket.on('connect', () => {
-          this.socket.emit('newUser', props.authorization.authData.userId)
-        })
-
-        this.socket.on('notification', (notification) => {
-          props.notificationArrived (notification)
-        })
-      }
-    }
-    else {
-      if (this.socket) {
-        this.socket.disconnect()
-        this.socket = null
-      }
-    }
+  subscribe (props) {
+    const { setSocket } = this.props
+    setSocket(props, 'nsp')
   }
 
   render () {
+    const { authorized } = this.props.authorization
     return (
       <DocumentTitle title="StudyKik Home Page">
-        <div>
+        <div id="wrapper">
           <TopBar authorization={this.props.authorization} location={this.props.location} />
+          <SideBar />
 
-          <div className="content">
+          <main id="main">
             {this.props.children}
-          </div>
+          </main>
 
-          <BottomBar />
+          <GlobalNotifications />
         </div>
       </DocumentTitle>
     )
@@ -66,10 +112,15 @@ class Application extends React.Component {
 
 const mapStateToProps = (state) => ({
   authorization: state.authorization,
-  location: state.location
+  location: state.location,
+  socket: state.socket
 })
 const mapDispatchToProps = {
-  notificationArrived
+  notificationArrived,
+  subscribe,
+  unsubscribeFromAll,
+  displayNotification,
+  setSocket
 }
 
 export default connect(

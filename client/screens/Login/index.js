@@ -103,8 +103,8 @@ class Login extends React.Component {
   render () {
     let authorization = this.props.authorization
     return (
+      <div className="container-fluid">
       <div className="login-page-wrapper">
-      <div className="container">
         <div className="row">
           <div className="col-md-4 col-md-push-4">
           <div className="login-block">
@@ -152,5 +152,5 @@ const mapDispatchToProps = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Login)

@@ -7,7 +7,7 @@ module.exports = function (config) {
     browsers: [
       'Chrome'
     ],
-    singleRun: !process.env.TEST_WATCH,
+    singleRun: true,
     frameworks: [
       'mocha', 'sinon'
     ],

@@ -7,7 +7,7 @@ export default function stubComponent (module, componentName) {
 
   module.__Rewire__(componentName, class extends React.Component {
     render () {
-      return <div {...this.props}></div>
+      return <div {...this.props} />
     }
   })
   rewires.push({ module, componentName })

@@ -8,13 +8,17 @@ import Dashboard from './screens/Dashboard'
 import GetProposal from './screens/GetProposal'
 import GetReferral from './screens/GetReferral'
 import GetReport from './screens/GetReport'
+import ListStudy from './screens/ListStudy'
 import Home from './screens/Home'
 import Login from './screens/Login'
 import Study from './screens/Study'
+import SitesUsers from './screens/SitesUsers'
+import PatientDatabase from './screens/PatientDatabase'
 import TrialListing from './screens/TrialListing'
 import PatientDetails from './screens/PatientDetails'
 import OrderIRBAdCreation from './screens/OrderIRBAdCreation'
 import Notifications from './screens/Notifications'
+import Calendar from './screens/Calendar'
 
 import isSessionExpired from 'utils/isSessionExpired'
 
@@ -31,17 +35,21 @@ export default (store) => {
   return (
     <Route path="/" component={Application}>
       {/* Home (main) route */}
-      <IndexRedirect to="/trials" />
+      <IndexRedirect to="/dashboard" />
 
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
+        <Route path="calendar" getComponent={lazyLoadComponent(Calendar)} />
         <Route path="dashboard" getComponent={lazyLoadComponent(Dashboard)} />
         <Route path="home" getComponent={lazyLoadComponent(Home)} />
         <Route path="notifications" getComponent={lazyLoadComponent(Notifications)} />
+        <Route path="sites-users" getComponent={lazyLoadComponent(SitesUsers)} />
+        <Route path="patient-database" getComponent={lazyLoadComponent(PatientDatabase)} />
         <Route path="order-irb-ad-creation" getComponent={lazyLoadComponent(OrderIRBAdCreation)} />
       </Route>
 
       <Route path="clinical-trial-patient-recruitment-patient-enrollment" getComponent={lazyLoadComponent(GetReport)} />
+      <Route path="listnewstudy" getComponent={lazyLoadComponent(ListStudy)} />
       <Route path="getproposal" getComponent={lazyLoadComponent(GetProposal)} />
       <Route path="login" getComponent={lazyLoadComponent(Login)} />
       <Route path="studies/:id" getComponent={lazyLoadComponent(Study)} />
