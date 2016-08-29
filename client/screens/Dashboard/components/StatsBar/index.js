@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import { fetchPatientSignUps, fetchPatientMessages, fetchStudyListingsCount, fetchRewardsCount } from 'actions'
+import { fetchPatientSignUps, fetchPatientMessages, fetchRewardsCount } from 'actions'
 
 import StatsItem from './StatsItem'
 
@@ -12,7 +12,6 @@ class StatsBar extends React.Component {
     notification: PropTypes.object,
     fetchPatientSignUps: PropTypes.func,
     fetchPatientMessages: PropTypes.func,
-    fetchStudyListingsCount: PropTypes.func,
     fetchRewardsCount: PropTypes.func,
   }
 
@@ -26,7 +25,7 @@ class StatsBar extends React.Component {
 
   render () {
     const { notification } = this.props
-
+    console.log (notification)
     const patientSignUps = {
       headerLabel: 'PATIENT SIGN UPS',
       headerValue: notification.patientSignUps.today + notification.patientSignUps.yesterday,
@@ -43,14 +42,6 @@ class StatsBar extends React.Component {
       secondLabel: 'Unread Emails',
       secondValue: notification.patientMessages.unreadEmails,
     }
-    const studyListings = {
-      headerLabel: 'STUDY LISTINGS',
-      headerValue: notification.studyListings.active + notification.studyListings.inactive,
-      firstLabel: 'Active',
-      firstValue: notification.studyListings.active,
-      secondLabel: 'Inactive',
-      secondValue: notification.studyListings.inactive,
-    }
     const rewards = {
       headerLabel: 'REWARDS',
       headerValue: notification.rewards.total,
@@ -62,12 +53,9 @@ class StatsBar extends React.Component {
 
     return (
       <div className="stats-bar">
-        <div className="row">
-          <StatsItem data={patientSignUps} />
-          <StatsItem data={patientMessages} />
-          <StatsItem data={studyListings} />
-          <StatsItem data={rewards} handleRedeemClick={() => this.handleRedeemClick()} />
-        </div>
+        <StatsItem data={patientSignUps} />
+        <StatsItem data={patientMessages} />
+        <StatsItem data={rewards} handleRedeemClick={() => this.handleRedeemClick()} />
       </div>
     )
   }
@@ -79,7 +67,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   fetchPatientSignUps,
   fetchPatientMessages,
-  fetchStudyListingsCount,
   fetchRewardsCount,
 }
 
