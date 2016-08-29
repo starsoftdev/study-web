@@ -14,10 +14,6 @@ const initialState = {
     unreadTexts: 0,
     unreadEmails: 0,
   },
-  studyListings: {
-    active: 0,
-    inactive: 0,
-  },
   rewards: {
     total: 0
   },
@@ -118,19 +114,6 @@ export default function (state = initialState, action) {
           patientMessages: {
             unreadTexts: action.payload.patientMessages.unreadTexts,
             unreadEmails: action.payload.patientMessages.unreadEmails,
-          },
-        }
-      }
-
-      return state
-
-    case ActionTypes.FETCH_STUDY_LISTINGS_COUNT:
-      if (action.status === 'succeeded') {
-        return {
-          ...state,
-          studyListings: {
-            active: action.payload.studyListings.active,
-            inactive: action.payload.studyListings.inactive,
           },
         }
       }
