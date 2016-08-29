@@ -7,7 +7,7 @@ module.exports = function (config) {
     browsers: [
       'Chrome'
     ],
-    singleRun: true,
+    singleRun: !process.env.TEST_WATCH,
     frameworks: [
       'mocha', 'sinon'
     ],
@@ -21,7 +21,7 @@ module.exports = function (config) {
       ]
     },
     reporters: [
-      'dots'
+      'mocha'
     ],
     webpack: createWebpackConfig('test'),
     webpackServer: {
