@@ -162,6 +162,11 @@ module.exports = function createWebpackConfig (env) {
 
       ].filter(id)
     },
+    externals: {
+      'react/lib/ExecutionEnvironment': true,
+      'react/lib/ReactContext': true,
+      'react/addons': true
+    },
 
     cssnext: {
       browsers: 'last 2 versions'

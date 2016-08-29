@@ -3,12 +3,14 @@ import { connect } from 'react-redux'
 import { Glyphicon, Modal, Button } from 'react-bootstrap'
 
 import Dispatcher from 'utils/dispatcher'
-import { setActiveBlastForm, unsetActiveBlastForm, saveTwilioMessage } from 'actions'
-
+import saveTwilioMessage from '../../../../actions/saveTwilioMessage'
+import setActiveBlastForm from '../../../../actions/setActiveBlastForm'
+import unsetActiveBlastForm from '../../../../actions/unsetActiveBlastForm'
 
 import _ from 'lodash'
 import t from 'tcomb-form'
 import Select2 from 'react-select2-wrapper'
+import $ from 'jquery'//need to remove from project
 import './styles.less'
 
 const TCombForm = t.form.Form
@@ -39,7 +41,7 @@ const select2Template = t.form.Form.templates.select.clone({
 
 const options = {
   order: [
-    'toPatients',
+    /*'toPatients',*/
     'message'
   ],
   auto: 'none',
@@ -51,12 +53,12 @@ const options = {
         autoFocus: true,
         rows: 12
       }
-    },
+    }/*,
     toPatients: {
       factory: t.form.Select,
       required: '',
       template: select2Template
-    }
+    }*/
   }
 }
 
@@ -71,6 +73,7 @@ class BlastForm extends Component {
   }
 
   constructor (props) {
+    //console.log('constructor', props)
     super(props)
     this.namespace = 'nsp'
     this.appDispatcher = new Dispatcher()
@@ -108,8 +111,10 @@ class BlastForm extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    //console.log('componentWillReceiveProps', nextProps)
     const { patientsByStudy } = nextProps
     let patienstArr = []
+    this.patienstArr = []
 
     _.forEach(patientsByStudy, (pbs) => {
       _.map(pbs.patients, (patient) => {
@@ -117,11 +122,15 @@ class BlastForm extends Component {
       })
     })
 
+    for (let item of patienstArr) {
+      this.patienstArr.push({ text: item['firstName'] + ' ' + item['lastName'], id: item['id'] })
+    }
+
     this.formData.toPatients = this.select2Format(patienstArr)
     let toPatients = t.enums(this.select2Format(patienstArr), 'toPatients')
     this.schema = t.struct({
-      message: t.maybe(t.String),
-      toPatients: t.list(toPatients)
+      message: t.maybe(t.String)/*,
+      toPatients: t.list(toPatients)*/
     })
   }
 
@@ -178,7 +187,7 @@ class BlastForm extends Component {
       let filtered = _.filter(patientArr, (patient) => {
         return parseInt(patient.source_id) === parseInt(item)
       })
-      console.log(filtered)
+
       if (filtered.length > 0) {
         _.map(filtered, (el) => {
           resultArr.push(el.id)
@@ -217,6 +226,8 @@ class BlastForm extends Component {
       }
     } else {
       const { value } = validateResult
+      //console.log(this.refs.form)
+      //console.log(validateResult)
       if (value.message && value.toPatients.length > 0) {
         let options = {
           body: value.message,
@@ -243,6 +254,7 @@ class BlastForm extends Component {
   }
 
   checkFilter (value) {
+    //console.log('checkFilter', value.target)
     const { studySources } = this.props
     const { patientCategories } = this.props
 
@@ -291,21 +303,29 @@ class BlastForm extends Component {
       ref.checked = true
     }
 
+    //console.log(filter)
     this.setState({ filter }, () => {
       let filteredPatientsId = this.getFilteredPatientsId(filter)
-      this.refs.form.refs.input.refs.toPatients.refs.patients.el.val(filteredPatientsId).trigger('change')
+      if (this.refs.patients) {
+        this.refs.patients.el.val(filteredPatientsId).trigger('change')
+      } else {
+        $('.select2.form-control').val(filteredPatientsId).trigger('change')
+      }
     })
   }
 
   componentDidUpdate (prevProps, prevState) {
     const { filter } = this.state
     let filteredPatientsId = this.getFilteredPatientsId(filter)
-    if (this.refs.form) {
-      this.refs.form.refs.input.refs.toPatients.refs.patients.el.val(filteredPatientsId).trigger('change')
+    if (this.refs.patients) {
+      this.refs.patients.el.val(filteredPatientsId).trigger('change')
+    } else {
+      $('.select2.form-control').val(filteredPatientsId).trigger('change')
     }
   }
 
   render () {
+    let scope = this
     const { schema, formData, onChange, checkFilter } = this
     const { patientCategories, studySources } = this.props
 
@@ -356,7 +376,7 @@ class BlastForm extends Component {
     })
 
     return (
-      <div className="">
+      <div className="blast-form">
         <Modal show={this.state.showModal} onHide={this.close.bind(this)}
                dialogClassName="blast-modal">
           <Modal.Body>
@@ -378,7 +398,7 @@ class BlastForm extends Component {
                       id="category-all"
                       value="all"
                       name="category-all"
-                      onChange={checkFilter.bind(this)}
+                      onChange={this.checkFilter.bind(this)}
                       checked={formData.allcategory}
                     />
                     All
@@ -419,6 +439,24 @@ class BlastForm extends Component {
               >
                 <div className="row">
                   <div className="col-md-12">
+                    <fieldset className="fieldset">
+                      <div className="form-group form-group-toPatients">
+                        <Select2
+                          multiple
+                          data={this.patienstArr}
+                          className="select2 form-control"
+                          ref="patients"
+                          options={{ placeholder: 'To' }}
+                          onChange={function (ev) {
+                            let options = []
+                            _.map(ev.target.selectedOptions, (option) => {
+                              options.push(option.value)
+                            })
+                            scope.onChange(options)
+                          }}
+                        />
+                      </div>
+                    </fieldset>
                     <TCombForm
                       ref="form"
                       type={schema}
@@ -484,7 +522,14 @@ const mapDispatchToProps = {
   saveTwilioMessage
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(BlastForm)
+let exportUnit
+if (process.env.NODE_ENV) {
+  exportUnit = BlastForm
+} else {
+  exportUnit = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(BlastForm)
+}
+
+export default exportUnit
