@@ -1,8 +1,0 @@
-webpack.*
-server/*
-scripts/*
-dist/*
-node_modules/*
-tests/*
-*/**/*.md
-client/shared/components/MySortable/index.js
