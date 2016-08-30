@@ -8,6 +8,7 @@ import isSessionExpired from 'utils/isSessionExpired'
 import history from 'utils/history'
 
 import AvatarMenu from './AvatarMenu'
+import HelpMenu from './HelpMenu'
 import NotificationBox from './NotificationBox'
 
 import './styles.less'
@@ -104,7 +105,7 @@ class TopBar extends React.Component {
             </a>
           </div>
 
-          <a href="#" className="link-help pull-left">?</a>
+          <HelpMenu />
 
           <div className="get-credits pull-left">
             <i className="icon-credit margin-right-5px" />
