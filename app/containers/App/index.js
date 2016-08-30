@@ -13,6 +13,8 @@
 
 import React from 'react';
 
+import SideBar from 'components/SideBar';
+
 import './styles.less';
 
 export default class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -23,8 +25,12 @@ export default class App extends React.Component { // eslint-disable-line react/
 
   render() {
     return (
-      <div className="container">
-        {React.Children.toArray(this.props.children)}
+      <div id="wrapper">
+        <SideBar />
+
+        <main id="main">
+          {React.Children.toArray(this.props.children)}
+        </main>
       </div>
     );
   }
