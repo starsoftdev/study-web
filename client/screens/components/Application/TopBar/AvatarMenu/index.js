@@ -41,12 +41,12 @@ class AvatarMenu extends React.Component {
         <div className={`avatar-menu ${avatarMenuClassName}`}>
           <div className="well">
             <ul className="list-unstyled">
-              <li><a href="#">Profile</a></li>
-              <li><a href="#">Payment Information</a></li>
-              <li><a href="#">Reciepts</a></li>
+              <li><a href="#">PROFILE</a></li>
+              <li><a href="#">PAYMENT INFORMATION</a></li>
+              <li><a href="#">RECEIPTS</a></li>
               <Link to="/logout"
                 onClick={this.handleLogoutClick}
-              >Logout</Link>
+              >LOG OUT</Link>
             </ul>
           </div>
         </div>
