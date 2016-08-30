@@ -16,6 +16,7 @@ import 'file?name=[name].[ext]!./.htaccess';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import ReduxToastr from 'react-redux-toastr';
 import { applyRouterMiddleware, Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import useScroll from 'react-router-scroll';
@@ -23,6 +24,7 @@ import configureStore from './store';
 
 // Import the CSS reset, which HtmlWebpackPlugin transfers to the build folder
 import 'sanitize.css/sanitize.css';
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
 import 'assets/less/main.less';
 
@@ -48,15 +50,22 @@ const rootRoute = {
 const render = () => {
   ReactDOM.render(
     <Provider store={store}>
-      <Router
-        history={history}
-        routes={rootRoute}
-        render={
-          // Scroll to top when going to a new page, imitating default browser
-          // behaviour
-          applyRouterMiddleware(useScroll())
-        }
-      />
+      <div>
+        <Router
+          history={history}
+          routes={rootRoute}
+          render={
+            // Scroll to top when going to a new page, imitating default browser
+            // behaviour
+            applyRouterMiddleware(useScroll())
+          }
+        />
+        <ReduxToastr
+          timeOut={10000}
+          newestOnTop={false}
+          position="top-right"
+        />
+      </div>
     </Provider>,
     document.getElementById('app')
   );
