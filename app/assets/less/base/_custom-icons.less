@@ -24,6 +24,15 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* react-redux-toastr has icon conflicts!!! */
+#wrapper {
+    [class^="icon-"], [class*=" icon-"] {
+        &:before {
+            font-family: 'icomoon' !important;
+        }
+    }
+}
+
 .icon-envelope:before { content: "\e91d"; }
 .icon-email:before { content: "\e91d"; }
 .icon-mail:before { content: "\e91d"; }
