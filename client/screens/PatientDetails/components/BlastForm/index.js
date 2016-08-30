@@ -88,7 +88,8 @@ class BlastForm extends Component {
       allcategory: false,
       allsource: false,
       message: '',
-      toPatients: null
+      toPatients: null,
+      selectedCat: []
     }
     this.state = {
       showModal: false,
@@ -226,13 +227,11 @@ class BlastForm extends Component {
       }
     } else {
       const { value } = validateResult
-      //console.log(this.refs.form)
-      //console.log(validateResult)
-      if (value.message && value.toPatients.length > 0) {
+      if (value.message && this.formData.selectedCat.length > 0) {
         let options = {
           body: value.message,
           studyId: this.props.studyId,
-          patients: this.getPatientObj(value.toPatients)
+          patients: this.getPatientObj(this.formData.selectedCat)
         }
         if (!_.isEmpty(this.props.socket)) {
           saveTwilioMessage(this.props.socket, options, (err, data, cb) => {
@@ -250,6 +249,15 @@ class BlastForm extends Component {
   }
 
   onChange (value) {
+    if (value.selectedCat) {
+      if (value.selectedCat.length > 0) {
+        this.formData.selectedCat = value.selectedCat
+      } else {
+        if (this.formData.selectedCat.length > 0) {
+          this.formData.selectedCat = []
+        }
+      }
+    }
     this.formData.message = value.message
   }
 
@@ -452,7 +460,7 @@ class BlastForm extends Component {
                             _.map(ev.target.selectedOptions, (option) => {
                               options.push(option.value)
                             })
-                            scope.onChange(options)
+                            scope.onChange({ 'selectedCat' : options })
                           }}
                         />
                       </div>
@@ -516,20 +524,14 @@ const mapStateToProps = (state) => ({
   authorization: state.authorization,
   activeBlastForm: state.activeBlastForm
 })
+
 const mapDispatchToProps = {
   setActiveBlastForm,
   unsetActiveBlastForm,
   saveTwilioMessage
 }
 
-let exportUnit
-if (process.env.NODE_ENV) {
-  exportUnit = BlastForm
-} else {
-  exportUnit = connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(BlastForm)
-}
-
-export default exportUnit
+export default connect(
+ mapStateToProps,
+ mapDispatchToProps,
+)(BlastForm)
