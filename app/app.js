@@ -19,11 +19,7 @@ import { Provider } from 'react-redux';
 import { applyRouterMiddleware, Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import useScroll from 'react-router-scroll';
-import LanguageProvider from 'containers/LanguageProvider';
 import configureStore from './store';
-
-// Import i18n messages
-import { translationMessages } from './i18n';
 
 // Import the CSS reset, which HtmlWebpackPlugin transfers to the build folder
 import 'sanitize.css/sanitize.css';
@@ -47,20 +43,18 @@ const rootRoute = {
 };
 
 
-const render = (translatedMessages) => {
+const render = () => {
   ReactDOM.render(
     <Provider store={store}>
-      <LanguageProvider messages={translatedMessages}>
-        <Router
-          history={history}
-          routes={rootRoute}
-          render={
-            // Scroll to top when going to a new page, imitating default browser
-            // behaviour
-            applyRouterMiddleware(useScroll())
-          }
-        />
-      </LanguageProvider>
+      <Router
+        history={history}
+        routes={rootRoute}
+        render={
+          // Scroll to top when going to a new page, imitating default browser
+          // behaviour
+          applyRouterMiddleware(useScroll())
+        }
+      />
     </Provider>,
     document.getElementById('app')
   );
@@ -72,7 +66,7 @@ if (module.hot) {
   // modules.hot.accept does not accept dynamic dependencies,
   // have to be constants at compile-time
   module.hot.accept('./i18n', () => {
-    render(translationMessages);
+    render();
   });
 }
 
@@ -81,9 +75,9 @@ if (!window.Intl) {
   Promise.all([
     System.import('intl'),
     System.import('intl/locale-data/jsonp/en.js'),
-  ]).then(() => render(translationMessages));
+  ]).then(() => render());
 } else {
-  render(translationMessages);
+  render();
 }
 
 // Install ServiceWorker and AppCache in the end since
