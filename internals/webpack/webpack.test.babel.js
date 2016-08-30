@@ -16,6 +16,9 @@ module.exports = {
       presets: ['es2015', 'react', 'stage-0'],
     },
   },
+  babelQuery: {
+    plugins: ['transform-decorators-legacy'],
+  },
   module: {
     // Some libraries don't like being run through babel.
     // If they gripe, put them here.

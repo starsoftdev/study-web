@@ -17,6 +17,10 @@ module.exports = require('./webpack.base.babel')({
     chunkFilename: '[name].[chunkhash].chunk.js',
   },
 
+  babelQuery: {
+    plugins: ['transform-decorators-legacy'],
+  },
+
   // We use ExtractTextPlugin so we get a seperate CSS file instead
   // of the CSS being in the JS and injected as a style tag
   lessLoaders: ExtractTextPlugin.extract(
