@@ -24,7 +24,7 @@ const initialState = {
   }
 }
 
-export default function (state = initialState, action) {
+export default function (state = initialState, action) {  
   const statusFunc = asyncActionIsFetching(ActionTypes.FETCH_NOTIFICATIONS)
 
   switch (action.type) {
@@ -122,7 +122,7 @@ export default function (state = initialState, action) {
         unreadNotificationsCount: state.unreadNotificationsCount + 1,
         newNotification: action.payload
       }
-      console.log ('******* receive_message ', action.payload)
+
       switch (action.payload.event) {
         case 'patient new':
           newState = {
