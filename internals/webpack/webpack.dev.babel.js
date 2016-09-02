@@ -38,7 +38,9 @@ module.exports = require('./webpack.base.babel')({
   plugins: dependencyHandlers().concat(plugins), // eslint-disable-line no-use-before-define
 
   // Load the CSS in a style tag in development
-  lessLoaders: 'style-loader!css-loader?sourceMap!less-loader?sourceMap',
+  // We can restore css-loader?sourceMap
+  // once style-loader fixes background image issue
+  lessLoaders: 'style-loader!css-loader!less-loader',
 
   // Tell babel that we want to hot-reload
   babelQuery: {

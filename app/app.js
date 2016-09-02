@@ -61,7 +61,7 @@ const render = () => {
           }
         />
         <ReduxToastr
-          timeOut={10000}
+          timeOut={6000}
           newestOnTop={false}
           position="top-right"
         />

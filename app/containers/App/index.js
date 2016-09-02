@@ -13,7 +13,8 @@
 
 import React from 'react';
 
-import SideBar from 'components/SideBar';
+import SideNavBar from 'components/SideNavBar';
+import TopHeaderBar from 'components/TopHeaderBar';
 
 import './styles.less';
 
@@ -26,7 +27,8 @@ export default class App extends React.Component { // eslint-disable-line react/
   render() {
     return (
       <div id="wrapper">
-        <SideBar />
+        <TopHeaderBar />
+        <SideNavBar />
 
         <main id="main">
           {React.Children.toArray(this.props.children)}
