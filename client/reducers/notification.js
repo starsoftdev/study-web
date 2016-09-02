@@ -14,13 +14,14 @@ const initialState = {
     unreadTexts: 0,
     unreadEmails: 0,
   },
-  studyListings: {
-    active: 0,
-    inactive: 0,
-  },
   rewards: {
     total: 0
   },
+  newNotification: {
+    event: '',
+    event_params: '',
+    entity_ref: null
+  }
 }
 
 export default function (state = initialState, action) {
@@ -76,28 +77,6 @@ export default function (state = initialState, action) {
 
       return state
 
-    case ActionTypes.NOTIFICATION_ARRIVED:
-      let newState = {
-        ...state,
-        notifications: [ action.data, ...state.notifications ],
-        unreadNotificationsCount: state.unreadNotificationsCount + 1,
-      }
-
-      switch (action.data.notification.type) {
-        case 'PATIENT_SIGN_UP':
-          newState = {
-            ...newState,
-            patientSignUps: {
-              today: newState.patientSignUps.today + 1,
-              yesterday: newState.patientSignUps.yesterday,
-            },
-          }
-
-          break
-      }
-
-      return newState
-
     case ActionTypes.FETCH_PATIENT_SIGN_UPS:
       if (action.status === 'succeeded') {
         return {
@@ -109,6 +88,56 @@ export default function (state = initialState, action) {
         }
       }
 
+      return state
+
+    case ActionTypes.FETCH_PATIENT_MESSAGES:
+      if (action.status === 'succeeded') {
+        return {
+          ...state,
+          patientMessages: {
+            unreadTexts: action.payload.patientMessages.unreadTexts,
+            unreadEmails: action.payload.patientMessages.unreadEmails,
+          },
+        }
+      }
+
+      return state
+
+    case ActionTypes.FETCH_REWARDS_COUNT:
+      if (action.status === 'succeeded') {
+        return {
+          ...state,
+          rewards: {
+            total: action.payload.rewards.total,
+          },
+        }
+      }
+
+      return state
+
+    case ActionTypes.RECEIVE_MESSAGE:
+      let newState = {
+        ...state,
+        notifications: [ action.payload, ...state.notifications ],
+        unreadNotificationsCount: state.unreadNotificationsCount + 1,
+        newNotification: action.payload
+      }
+
+      switch (action.payload.event) {
+        case 'create-patient':
+          newState = {
+            ...newState,
+            patientSignUps: {
+              today: newState.patientSignUps.today + 1,
+              yesterday: newState.patientSignUps.yesterday,
+            },
+          }
+
+          break
+      }
+      return newState
+
+    default:
       return state
   }
 
