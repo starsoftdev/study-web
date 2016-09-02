@@ -362,7 +362,7 @@ class BlastForm extends Component {
       )
     ))
 
-    _.map(studySources, (source, key) => {
+    /*_.map(studySources, (source, key) => {
       listSources.push(
         <li
           key={key}
@@ -381,7 +381,7 @@ class BlastForm extends Component {
           </label>
         </li>
       )
-    })
+    })*/
 
     return (
       <div className="blast-form">

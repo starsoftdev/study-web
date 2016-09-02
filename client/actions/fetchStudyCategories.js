@@ -7,6 +7,6 @@ import asyncAction from 'utils/asyncAction'
 
 export default function fetchStudyCategories () {
   return asyncAction(ActionTypes.FETCH_STUDY_CATEGORIES, (cb, dispatch, getState) => {
-    dispatch(searchEntities('/studyCategories', {}, cb))
+    dispatch(searchEntities('/indications', {}, cb))
   })
 }
