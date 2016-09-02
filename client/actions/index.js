@@ -56,6 +56,5 @@ export unsetActiveBlastForm from './unsetActiveBlastForm'
 export setSocket from './setSocket'
 
 export * from './twilioChat'
-export * from './notificationActions'
 export * from './notification'
 export * from './schedules'

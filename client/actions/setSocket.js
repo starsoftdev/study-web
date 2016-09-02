@@ -2,7 +2,7 @@ import { ActionTypes } from 'ActionTypes'
 import asyncAction from 'utils/asyncAction'
 import _ from 'lodash'
 
-export default function setSocket (props, nameSpace) {
+export default function setSocket (props, nameSpace, next) {
   const user = props.authorization.authData
   let nsp = props.socket
 
@@ -13,6 +13,7 @@ export default function setSocket (props, nameSpace) {
       nsp.setToken = () => {
 
       }
+      next (nsp)
 
       return {
         type: ActionTypes.SET_SOCKET,
@@ -23,6 +24,8 @@ export default function setSocket (props, nameSpace) {
     if (!_.isEmpty(nsp)) {
       nsp.disconnect()
       nsp = {}
+
+      next (nsp)
 
       return {
         type: ActionTypes.SET_SOCKET,
