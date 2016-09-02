@@ -72,24 +72,7 @@ const render = () => {
 };
 
 
-// Hot reloadable translation json files
-if (module.hot) {
-  // modules.hot.accept does not accept dynamic dependencies,
-  // have to be constants at compile-time
-  module.hot.accept('./i18n', () => {
-    render();
-  });
-}
-
-// Chunked polyfill for browsers without Intl support
-if (!window.Intl) {
-  Promise.all([
-    System.import('intl'),
-    System.import('intl/locale-data/jsonp/en.js'),
-  ]).then(() => render());
-} else {
-  render();
-}
+render();
 
 // Install ServiceWorker and AppCache in the end since
 // it's not most important operation and if main code fails,
