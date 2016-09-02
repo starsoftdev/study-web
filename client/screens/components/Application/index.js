@@ -61,7 +61,7 @@ class Application extends React.Component {
 
           scope.props.socket.disconnect()
           //scope.props.socket = null
-          scope.subscribe(scope.props)
+          // scope.subscribe(scope.props)
         })
       }
     })
@@ -78,10 +78,6 @@ class Application extends React.Component {
           nextProps.subscribe(this.props.socket, event,
             { pathname: nextProps.location.pathname }, (err, data, cb) => {
               cb(err, data)
-
-              nextProps.socket.on('notification', (notification) => {
-                nextProps.displayNotification(notification)
-              })
             })
         }
       })
@@ -92,7 +88,13 @@ class Application extends React.Component {
 
   subscribe (props) {
     const { setSocket } = this.props
-    setSocket(props, 'nsp')
+    setSocket(props, 'nsp', (socket) => {
+      if (socket) {
+        socket.on('notification', (notification) => {
+          props.displayNotification(notification)
+        })
+      }
+    })
   }
 
   render () {
