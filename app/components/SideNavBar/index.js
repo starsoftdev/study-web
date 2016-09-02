@@ -8,7 +8,7 @@ const menuItemsGroupA = [
   { text: 'List New Study', link: '/replace_me', icon: 'icon-screen' },
   { text: 'Order IRB Ad Creation', link: '/replace_me', icon: 'icon-irb' },
   { text: 'Request Proposal', link: '/replace_me', icon: 'icon-doller' },
-  { text: 'Refer', link: '/replace_me', icon: 'icon-signout' },
+  { text: 'Refer', link: '/refer', icon: 'icon-signout' },
 ];
 const menuItemsGroupB = [
   { text: 'Calendar', link: '/calendar', icon: 'icon-icon_calendar' },
@@ -18,7 +18,7 @@ const menuItemsGroupB = [
   { text: 'Badges', link: '/replace_me', icon: 'icon-star' },
 ];
 
-function SideBar() {
+function SideNavBar() {
   return (
     <aside id="sidebar">
       <div className="sidebar-holder">
@@ -61,4 +61,4 @@ function SideBar() {
   );
 }
 
-export default SideBar;
+export default SideNavBar;
