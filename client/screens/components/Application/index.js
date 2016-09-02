@@ -33,14 +33,19 @@ class Application extends React.Component {
     displayNotification: PropTypes.func
   }
 
-  getEventType () {
+  getEventTypes () {
     switch (this.props.location.pathname) {
       case '/dashboard':
-        return 'create-study'
+        return [
+          'create-study',
+          'create-patient',
+        ]
       case '/studies/-100/patient-details':
-        return 'twilio-message'
+        return [
+          'twilio-message',
+        ]
       default:
-        return null
+        return []
     }
   }
 
@@ -51,7 +56,6 @@ class Application extends React.Component {
 
     this.appDispatcher.register(function (payload) {
       if (payload.actionType === 'changePathname') {
-
         scope.props.unsubscribeFromAll(scope.props.socket, { pathname: scope.props.location.pathname }, (err, data, cb) => {
           cb(err, data)
 
@@ -64,13 +68,13 @@ class Application extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const event = this.getEventType()
+    const events = this.getEventTypes()
     console.log('componentWillReceiveProps')
     //this.subscribe(nextProps)
 
     if (!_.isEmpty(nextProps.socket)) {
       nextProps.socket.on('connect', () => {
-        if (nextProps.location.pathname === '/dashboard' || nextProps.location.pathname === '/studies/-100/patient-details') {
+        for (const event of events) {
           nextProps.subscribe(this.props.socket, event,
             { pathname: nextProps.location.pathname }, (err, data, cb) => {
               cb(err, data)
