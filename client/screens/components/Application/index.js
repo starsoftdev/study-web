@@ -59,7 +59,7 @@ class Application extends React.Component {
         scope.props.unsubscribeFromAll(scope.props.socket, { pathname: scope.props.location.pathname }, (err, data, cb) => {
           cb(err, data)
 
-          scope.initSocketConnection()
+          scope.subscribeToPageEvents()
         })
       }
     })
