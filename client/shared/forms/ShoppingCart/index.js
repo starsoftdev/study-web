@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { reduxForm } from 'redux-form'
+import { fetchCoupon } from 'actions'
 import Select from 'react-select'
 import 'react-select/less/default.less'
 import ActivityIcon from 'components/ActivityIcon'
@@ -10,10 +11,11 @@ export const fields = [ 'coupon', 'creditCard' ]
 class ShoppingCartForm extends Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
-    calculateCoupon: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     addOns: PropTypes.array.isRequired,
     creditCardOptions: PropTypes.array.isRequired,
+    fetchedCoupon: PropTypes.object,
+    fetchCoupon: PropTypes.func,
   }
 
   constructor (props) {
@@ -23,11 +25,11 @@ class ShoppingCartForm extends Component {
   render () {
     const {
       fields: { coupon, creditCard },
-      calculateCoupon,
       handleSubmit,
       addOns,
       creditCardOptions,
-      discounts,
+      fetchedCoupon,
+      fetchCoupon,
       } = this.props
 
     const addOnsContent = addOns.map((item, index) => (
@@ -39,6 +41,15 @@ class ShoppingCartForm extends Component {
       </tr>
     ))
     const addOnsTotalAmount = _.sum(addOns, addOnIterator => addOnIterator.total)
+    let discounts = 0
+    if (fetchedCoupon) {
+      if (fetchedCoupon.amount_off) {
+        discounts = fetchedCoupon.amount_off
+      } else if (fetchedCoupon.percent_off) {
+        discounts = addOnsTotalAmount * fetchedCoupon.percent_off
+      }
+    }
+
 
     return (
       <form className="form-shopping-cart" onSubmit={handleSubmit}>
@@ -64,7 +75,7 @@ class ShoppingCartForm extends Component {
               <input type="text" className="form-control" {...coupon} />
             </div>
             <div className="col-sm-3">
-              <button type="button" className="btn btn-default" onClick={() => { calculateCoupon(coupon.value) }}>APPLY</button>
+              <button type="button" className="btn btn-default" onClick={() => { fetchCoupon(coupon.value) }}>APPLY</button>
             </div>
           </div>
           <div className="form-group">
@@ -97,5 +108,7 @@ export default reduxForm({
   form: 'shoppingCart',
   fields
 }, state => ({ // mapStateToProps
-  discounts: state.discounts // will pull state
-}))(ShoppingCartForm)
+  fetchedCoupon: state.coupon // will pull state
+}), {
+  fetchCoupon,  // mapDispatchToProps
+})(ShoppingCartForm)
