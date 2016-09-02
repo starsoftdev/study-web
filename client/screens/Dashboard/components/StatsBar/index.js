@@ -25,7 +25,7 @@ class StatsBar extends React.Component {
 
   render () {
     const { notification } = this.props
-    console.log (notification)
+
     const patientSignUps = {
       headerLabel: 'PATIENT SIGN UPS',
       headerValue: notification.patientSignUps.today + notification.patientSignUps.yesterday,
@@ -53,9 +53,11 @@ class StatsBar extends React.Component {
 
     return (
       <div className="stats-bar">
-        <StatsItem data={patientSignUps} />
-        <StatsItem data={patientMessages} />
-        <StatsItem data={rewards} handleRedeemClick={() => this.handleRedeemClick()} />
+        <div className="row">
+          <StatsItem data={patientSignUps} />
+          <StatsItem data={patientMessages} />
+          <StatsItem data={rewards} handleRedeemClick={() => this.handleRedeemClick()} />
+        </div>
       </div>
     )
   }

@@ -24,7 +24,7 @@ const initialState = {
   }
 }
 
-export default function (state = initialState, action) {  
+export default function (state = initialState, action) {
   const statusFunc = asyncActionIsFetching(ActionTypes.FETCH_NOTIFICATIONS)
 
   switch (action.type) {
@@ -124,7 +124,7 @@ export default function (state = initialState, action) {
       }
 
       switch (action.payload.event) {
-        case 'patient new':
+        case 'create-patient':
           newState = {
             ...newState,
             patientSignUps: {
