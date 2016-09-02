@@ -24,9 +24,9 @@ class GlobalNotifications extends React.Component {
   componentDidMount () {}
 
   componentWillReceiveProps (nextprops) {
-    if (this.props.notification.event_params !== nextprops.notification.event_params &&
-      nextprops.notification.event_params !== '') {
-      this.addAlert(nextprops.notification)
+    if (this.props.newNotification.event_params !== nextprops.newNotification.event_params &&
+      nextprops.newNotification.event_params !== '') {
+      this.addAlert(nextprops.newNotification)
       //this.props.resetNotification()
     }
   }
@@ -56,7 +56,7 @@ class GlobalNotifications extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    notification: state.notification
+    newNotification: state.notification.newNotification
   }
 }
 
