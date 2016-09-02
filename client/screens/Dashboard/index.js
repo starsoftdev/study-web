@@ -15,9 +15,8 @@ class Dashboard extends Component {
     return (
       <div className="dashboard">
         <div className="container">
-          <div className="row">
-            {/*<StatsBar />*/}
-          </div>
+          <StatsBar />
+
           <div className="row">
             <div className="col-sm-10">
               <SearchStudiesFormPanel />
