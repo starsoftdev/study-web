@@ -19,7 +19,7 @@ import shadowImage from 'assets/images/shadow.png';
 class ReferPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     companyTypes: PropTypes.array,
-    companyTypesRequest: PropTypes.func,
+    fetchCompanyTypes: PropTypes.func,
     onSubmitForm: PropTypes.func,
   }
 
@@ -29,7 +29,7 @@ class ReferPage extends React.Component { // eslint-disable-line react/prefer-st
   }
 
   componentDidMount() {
-    this.props.companyTypesRequest();
+    this.props.fetchCompanyTypes();
   }
 
   render() {
@@ -85,7 +85,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    companyTypesRequest: () => dispatch(companyTypesRequest()),
+    fetchCompanyTypes: () => dispatch(companyTypesRequest()),
     onSubmitForm: (values) => dispatch(referFormRequest(values)),
   };
 }

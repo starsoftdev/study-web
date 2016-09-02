@@ -1,6 +1,7 @@
 
 // /* eslint-disable no-constant-condition, consistent-return */
 
+import { takeLatest } from 'redux-saga';
 import { take, call, put } from 'redux-saga/effects';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
@@ -17,17 +18,17 @@ import { REFER_FORM_REQUEST, COMPANY_TYPES_REQUEST } from 'containers/ReferPage/
 
 // Bootstrap sagas
 export default [
-  submitFormFlow,
-  getCompanyTypesWatcher,
+  formSubmitSaga,
+  companyTypesSaga,
 ];
 
-function* getCompanyTypesWatcher() {
-  while (yield take(COMPANY_TYPES_REQUEST)) {
-    yield call(getCompanyTypes);
-  }
+// Does not allow concurrent fetches of company types (for demo purpose)
+// Alternatively you may use takeEvery
+function* companyTypesSaga() {
+  yield* takeLatest(COMPANY_TYPES_REQUEST, fetchCompanyTypes);
 }
 
-function* getCompanyTypes() {
+function* fetchCompanyTypes() {
   try {
     const requestURL = `${API_URL}/companyTypes`;
     const response = yield call(request, requestURL);
@@ -38,7 +39,7 @@ function* getCompanyTypes() {
   }
 }
 
-function* submitFormFlow() {
+function* formSubmitSaga() {
   while (true) {
     // listen for the REFER_FORM_REQUEST action dispatched on form submit
     const { payload } = yield take(REFER_FORM_REQUEST); // eslint-disable-line
