@@ -9,14 +9,15 @@ import styles from './styles.less'
 
 class StatsBar extends React.Component {
   static propTypes = {
+    authorization: PropTypes.object.isRequired,
     notification: PropTypes.object,
     fetchPatientSignUps: PropTypes.func,
     fetchPatientMessages: PropTypes.func,
     fetchRewardsCount: PropTypes.func,
   }
 
-  componentWillMount () {
-    this.props.fetchPatientSignUps()
+  componentDidMount () {
+    this.props.fetchPatientSignUps(this.props.authorization.authData)
   }
 
   handleRedeemClick = () => {
@@ -64,6 +65,7 @@ class StatsBar extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  authorization: state.authorization,
   notification: state.notification
 })
 const mapDispatchToProps = {

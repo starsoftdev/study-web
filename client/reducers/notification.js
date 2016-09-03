@@ -82,8 +82,8 @@ export default function (state = initialState, action) {
         return {
           ...state,
           patientSignUps: {
-            today: action.payload.signUps.today,
-            yesterday: action.payload.signUps.yesterday,
+            today: action.payload.today,
+            yesterday: action.payload.yesterday,
           },
         }
       }
