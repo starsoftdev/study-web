@@ -8,13 +8,18 @@ import { reset } from 'redux-form';
 import { get } from 'lodash';
 
 import request from 'utils/request';
+
 import {
-  referFormSuccess,
-  referFormError,
-  companyTypesSuccess,
-  companyTypesError,
+  formSubmitted,
+  formSubmissionError,
+  companyTypesFetched,
+  companyTypesFetchingError,
 } from 'containers/ReferPage/actions';
-import { REFER_FORM_REQUEST, COMPANY_TYPES_REQUEST } from 'containers/ReferPage/constants';
+
+import {
+  SUBMIT_FORM,
+  FETCH_COMPANY_TYPES,
+} from 'containers/ReferPage/constants';
 
 // Bootstrap sagas
 export default [
@@ -25,7 +30,7 @@ export default [
 // Does not allow concurrent fetches of company types (for demo purpose)
 // Alternatively you may use takeEvery
 function* companyTypesSaga() {
-  yield* takeLatest(COMPANY_TYPES_REQUEST, fetchCompanyTypes);
+  yield* takeLatest(FETCH_COMPANY_TYPES, fetchCompanyTypes);
 }
 
 function* fetchCompanyTypes() {
@@ -33,16 +38,16 @@ function* fetchCompanyTypes() {
     const requestURL = `${API_URL}/companyTypes`;
     const response = yield call(request, requestURL);
 
-    yield put(companyTypesSuccess(response));
+    yield put(companyTypesFetched(response));
   } catch (err) {
-    yield put(companyTypesError(err));
+    yield put(companyTypesFetchingError(err));
   }
 }
 
 function* formSubmitSaga() {
   while (true) {
-    // listen for the REFER_FORM_REQUEST action dispatched on form submit
-    const { payload } = yield take(REFER_FORM_REQUEST); // eslint-disable-line
+    // listen for the SUBMIT_FORM action dispatched on form submit
+    const { payload } = yield take(SUBMIT_FORM);
 
     try {
       const requestURL = `${API_URL}/referral`;
@@ -53,14 +58,14 @@ function* formSubmitSaga() {
       const response = yield call(request, requestURL, params);
 
       yield put(toastrActions.success('Refer', 'The request has been submitted successfully'));
-      yield put(referFormSuccess(response));
+      yield put(formSubmitted(response));
 
       // Clear the form values
       yield put(reset('refer'));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));
-      yield put(referFormError(err));
+      yield put(formSubmissionError(err));
     }
   }
 }

@@ -80,7 +80,7 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
               componentClass="select"
               className="field"
             >
-              <option>Select Company Type</option>
+              <option value="">Select Company Type</option>
               {
                 companyTypes.map((type, index) => (
                   <option value={type} key={index}>{type}</option>

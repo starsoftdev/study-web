@@ -5,51 +5,51 @@
  */
 
 import {
-  REFER_FORM_REQUEST,
-  REFER_FORM_SUCCESS,
-  REFER_FORM_ERROR,
-  COMPANY_TYPES_REQUEST,
-  COMPANY_TYPES_SUCCESS,
-  COMPANY_TYPES_ERROR,
+  SUBMIT_FORM,
+  SUBMIT_FORM_SUCCESS,
+  SUBMIT_FORM_ERROR,
+  FETCH_COMPANY_TYPES,
+  FETCH_COMPANY_TYPES_SUCCESS,
+  FETCH_COMPANY_TYPES_ERROR,
 } from './constants';
 
-export function referFormRequest(payload) {
+export function submitForm(payload) {
   return {
-    type: REFER_FORM_REQUEST,
+    type: SUBMIT_FORM,
     payload,
   };
 }
 
-export function referFormSuccess(payload) {
+export function formSubmitted(payload) {
   return {
-    type: REFER_FORM_SUCCESS,
+    type: SUBMIT_FORM_SUCCESS,
     payload,
   };
 }
 
-export function referFormError(payload) {
+export function formSubmissionError(payload) {
   return {
-    type: REFER_FORM_ERROR,
+    type: SUBMIT_FORM_ERROR,
     payload,
   };
 }
 
-export function companyTypesRequest() {
+export function fetchCompanyTypes() {
   return {
-    type: COMPANY_TYPES_REQUEST,
+    type: FETCH_COMPANY_TYPES,
   };
 }
 
-export function companyTypesSuccess(payload) {
+export function companyTypesFetched(payload) {
   return {
-    type: COMPANY_TYPES_SUCCESS,
+    type: FETCH_COMPANY_TYPES_SUCCESS,
     payload,
   };
 }
 
-export function companyTypesError(payload) {
+export function companyTypesFetchingError(payload) {
   return {
-    type: COMPANY_TYPES_ERROR,
+    type: FETCH_COMPANY_TYPES_ERROR,
     payload,
   };
 }
