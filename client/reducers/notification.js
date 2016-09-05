@@ -95,8 +95,8 @@ export default function (state = initialState, action) {
         return {
           ...state,
           patientMessages: {
-            unreadTexts: action.payload.patientMessages.unreadTexts,
-            unreadEmails: action.payload.patientMessages.unreadEmails,
+            unreadTexts: action.payload.unreadTexts,
+            unreadEmails: action.payload.unreadEmails,
           },
         }
       }

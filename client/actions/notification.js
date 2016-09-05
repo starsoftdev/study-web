@@ -59,13 +59,13 @@ export function fetchPatientSignUps (currentUser) {
   })
 }
 
-export function fetchPatientMessages () {
+export function fetchPatientMessages (currentUser) {
   return asyncAction(ActionTypes.FETCH_PATIENT_MESSAGES, (cb, dispatch, getState) => {
-    dispatch(searchEntities('/patient/messages', {}, cb))
+    dispatch(searchEntities('/clients/' + currentUser.userInfo.roleForClient.client_id + '/patientMessages', {}, cb))
   })
 }
 
-export function fetchRewardsCount () {
+export function fetchRewardsCount (currentUser) {
   return asyncAction(ActionTypes.FETCH_REWARDS_COUNT, (cb, dispatch, getState) => {
     dispatch(searchEntities('/rewards', {}, cb))
   })
