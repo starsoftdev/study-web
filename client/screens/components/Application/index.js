@@ -37,8 +37,8 @@ class Application extends React.Component {
     switch (this.props.location.pathname) {
       case '/dashboard':
         return [
-          'create-study',
           'create-patient',
+          'twilio-message',
         ]
       case '/studies/-100/patient-details':
         return [
