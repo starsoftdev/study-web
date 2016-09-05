@@ -1,4 +1,5 @@
 import 'whatwg-fetch';
+import { pick } from 'lodash';
 
 /**
  * Requests a URL, returning a promise
@@ -20,7 +21,8 @@ export default function request(url, options = {}) {
     headers.authorization = jwtToken;
   }
 
-  headers.authorization = 'ltDVEqf99WNfKGxJeyl2hQnOGmXb0wUFbv4DBSVHCTKzFYZ7fxEn6Wv9Umnq8jc9';
+  // Use authorization token temporarily until we write auth module.
+  // headers.authorization = 'ltDVEqf99WNfKGxJeyl2hQnOGmXb0wUFbv4DBSVHCTKzFYZ7fxEn6Wv9Umnq8jc9';
 
   options.headers = Object.assign({}, options.headers, headers); // eslint-disable-line 
 
@@ -53,9 +55,16 @@ function parseJSON(response) {
 function checkStatus(response) {
   if (response.ok) { // response.status >= 200 && response.status < 300
     return response;
-  } else { // eslint-disable-line 
-    return response.json().then(err => {
-      throw err;
-    });
   }
+
+  // details from `whatwg-fetch`
+  const err = pick(response, ['status', 'statusText']);
+
+  return response.json()
+    .then(json => {
+      // details from actual error response
+      throw Object.assign(err, pick(json.error, ['code', 'message', 'status']));
+    }, () => {
+      throw Object.assign(err, { message: 'Failed to parse JSON' });
+    });
 }

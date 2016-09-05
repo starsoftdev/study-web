@@ -34,8 +34,8 @@ function* fetchCompanyTypes() {
     const response = yield call(request, requestURL);
 
     yield put(companyTypesSuccess(response));
-  } catch (res) {
-    yield put(companyTypesError(res.error));
+  } catch (err) {
+    yield put(companyTypesError(err));
   }
 }
 
@@ -57,10 +57,10 @@ function* formSubmitSaga() {
 
       // Clear the form values
       yield put(reset('refer'));
-    } catch (res) {
-      const error = get(res, 'error.message', 'Something went wrong while submitting your request');
-      yield put(toastrActions.error('', error));
-      yield put(referFormError(res.error));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(referFormError(err));
     }
   }
 }
