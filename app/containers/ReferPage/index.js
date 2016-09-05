@@ -11,7 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import ReferForm from 'components/ReferForm';
 
 import { selectCompanyTypes } from 'containers/ReferPage/selectors';
-import { referFormRequest, companyTypesRequest } from 'containers/ReferPage/actions';
+import { submitForm, fetchCompanyTypes } from 'containers/ReferPage/actions';
 
 import manImage from 'assets/images/man.svg';
 import shadowImage from 'assets/images/shadow.png';
@@ -85,8 +85,8 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchCompanyTypes: () => dispatch(companyTypesRequest()),
-    onSubmitForm: (values) => dispatch(referFormRequest(values)),
+    fetchCompanyTypes: () => dispatch(fetchCompanyTypes()),
+    onSubmitForm: (values) => dispatch(submitForm(values)),
   };
 }
 
