@@ -133,6 +133,14 @@ export default function (state = initialState, action) {
             },
           }
 
+        case 'twilio-message':
+          newState = {
+            ...newState,
+            patientMessages: {
+              unreadTexts: newState.patientMessages.unreadTexts + 1,
+              unreadEmails: newState.patientMessages.unreadEmails,
+            },
+          }
           break
       }
       return newState
