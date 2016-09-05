@@ -17,7 +17,9 @@ class StatsBar extends React.Component {
   }
 
   componentDidMount () {
-    this.props.fetchPatientSignUps(this.props.authorization.authData)
+    const { authData } = this.props.authorization
+    this.props.fetchPatientSignUps(authData)
+    this.props.fetchPatientMessages(authData)
   }
 
   handleRedeemClick = () => {
