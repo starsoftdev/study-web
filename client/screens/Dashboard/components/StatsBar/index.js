@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import { fetchPatientSignUps, fetchPatientMessages, fetchRewardsCount } from 'actions'
+import { fetchPatientSignUps, fetchPatientMessages, fetchRewardsPoint } from 'actions'
 
 import StatsItem from './StatsItem'
 
@@ -9,14 +9,18 @@ import styles from './styles.less'
 
 class StatsBar extends React.Component {
   static propTypes = {
+    authorization: PropTypes.object.isRequired,
     notification: PropTypes.object,
     fetchPatientSignUps: PropTypes.func,
     fetchPatientMessages: PropTypes.func,
-    fetchRewardsCount: PropTypes.func,
+    fetchRewardsPoint: PropTypes.func,
   }
 
-  componentWillMount () {
-    this.props.fetchPatientSignUps()
+  componentDidMount () {
+    const { authData } = this.props.authorization
+    this.props.fetchPatientSignUps(authData)
+    this.props.fetchPatientMessages(authData)
+    this.props.fetchRewardsPoint(authData)
   }
 
   handleRedeemClick = () => {
@@ -44,7 +48,7 @@ class StatsBar extends React.Component {
     }
     const rewards = {
       headerLabel: 'REWARDS',
-      headerValue: notification.rewards.total,
+      headerValue: notification.rewardsPoint,
       firstLabel: 'Refer Sponsor / CRO',
       firstValue: '+300 KIKs',
       secondLabel: 'Refer Site',
@@ -64,12 +68,13 @@ class StatsBar extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  authorization: state.authorization,
   notification: state.notification
 })
 const mapDispatchToProps = {
   fetchPatientSignUps,
   fetchPatientMessages,
-  fetchRewardsCount,
+  fetchRewardsPoint,
 }
 
 export default connect(
