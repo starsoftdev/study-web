@@ -3,9 +3,15 @@
  */
 
 import expect from 'expect';
-import { take, call, put, fork } from 'redux-saga/effects';
+import { take, call, put, fork, cancel } from 'redux-saga/effects';
+import { LOCATION_CHANGE } from 'react-router-redux';
 
-import { submitFormWatcher, fetchCompanyTypesWatcher, fetchCompanyTypes } from '../sagas';
+import {
+  submitFormWatcher,
+  fetchCompanyTypesWatcher,
+  fetchCompanyTypes,
+  referPageSaga,
+} from '../sagas';
 
 import {
   formSubmitted,
@@ -112,5 +118,34 @@ describe('ReferPage/sagas', () => {
       actualYield = iterator.next().value; // skip react-redux-toastr actions
       expect(actualYield).toEqual(put(formSubmissionError(error)));
     });
+  });
+
+  describe('referPageSaga', () => {
+    const mainSaga = referPageSaga();
+
+    let forkDescriptorA;
+    let forkDescriptorB;
+
+    it('should asyncronously fork 2 watchers saga', () => {
+      forkDescriptorA = mainSaga.next();
+      expect(forkDescriptorA.value).toEqual(fork(fetchCompanyTypesWatcher));
+      forkDescriptorB = mainSaga.next();
+      expect(forkDescriptorB.value).toEqual(fork(submitFormWatcher));
+    });
+
+    it('should yield until LOCATION_CHANGE action', () => {
+      const takeDescriptor = mainSaga.next();
+      expect(takeDescriptor.value).toEqual(take(LOCATION_CHANGE));
+    });
+
+    it('should finally cancel() the forked submitFormWatcher saga',
+      function* referFormSagaCancellable() {
+        // reuse open fork for more integrated approach
+        let actualYield = mainSaga.next(put(LOCATION_CHANGE)).value;
+        expect(actualYield).toEqual(cancel(forkDescriptorA));
+        actualYield = mainSaga.next().value;
+        expect(actualYield).toEqual(cancel(forkDescriptorB));
+      }
+    );
   });
 });

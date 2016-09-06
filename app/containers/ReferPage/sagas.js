@@ -2,7 +2,8 @@
 // /* eslint-disable no-constant-condition, consistent-return */
 
 import { takeLatest } from 'redux-saga';
-import { take, call, put } from 'redux-saga/effects';
+import { take, call, put, fork, cancel } from 'redux-saga/effects';
+import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
 import { get } from 'lodash';
@@ -23,8 +24,7 @@ import {
 
 // Bootstrap sagas
 export default [
-  submitFormWatcher,
-  fetchCompanyTypesWatcher,
+  referPageSaga,
 ];
 
 // Does not allow concurrent fetches of company types (for demo purpose)
@@ -68,4 +68,14 @@ export function* submitFormWatcher() {
       yield put(formSubmissionError(err));
     }
   }
+}
+
+export function* referPageSaga() {
+  const watcherA = yield fork(fetchCompanyTypesWatcher);
+  const watcherB = yield fork(submitFormWatcher);
+
+  // Suspend execution until location changes
+  yield take(LOCATION_CHANGE);
+  yield cancel(watcherA);
+  yield cancel(watcherB);
 }
