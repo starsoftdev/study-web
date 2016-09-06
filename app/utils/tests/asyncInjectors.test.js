@@ -34,7 +34,7 @@ const sagas = [
   testSaga,
 ];
 
-describe('asyncInjectors', () => {
+describe('utils/asyncInjectors', () => {
   let store;
 
   describe('getAsyncInjectors', () => {
