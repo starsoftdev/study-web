@@ -8,7 +8,7 @@ export default function fetchPatients (searchParams) {
     let filterObj = {
       include: [
         'indication',
-        'infoSource',
+        'source',
         { studyPatientCategory: 'patientCategory' }
       ],
       where: {
