@@ -65,9 +65,9 @@ export function fetchPatientMessages (currentUser) {
   })
 }
 
-export function fetchRewardsCount (currentUser) {
-  return asyncAction(ActionTypes.FETCH_REWARDS_COUNT, (cb, dispatch, getState) => {
-    dispatch(searchEntities('/rewards', {}, cb))
+export function fetchRewardsPoint (currentUser) {
+  return asyncAction(ActionTypes.FETCH_REWARDS_POINT, (cb, dispatch, getState) => {
+    dispatch(searchEntities('/clients/' + currentUser.userInfo.roleForClient.client_id, {}, cb))
   })
 }
 
