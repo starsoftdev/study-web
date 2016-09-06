@@ -17,7 +17,6 @@ import getRoutes from './routes'
 import createStore from './createStore'
 import persistAuthData from './persistAuthData'
 
-
 const store = createStore()
 const appDispatcher = new Dispatcher()
 store.subscribe(persistAuthData(store))
