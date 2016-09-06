@@ -55,7 +55,7 @@ export function notificationArrived (notification) {
 
 export function fetchPatientSignUps (currentUser) {
   return asyncAction(ActionTypes.FETCH_PATIENT_SIGN_UPS, (cb, dispatch, getState) => {
-    dispatch(searchEntities('/clients/' + currentUser.userInfo.roleForClient.client_id + '/patientSignUps', {timezoneOffset: -new Date().getTimezoneOffset()/60}, cb))
+    dispatch(searchEntities('/clients/' + currentUser.userInfo.roleForClient.client_id + '/patientSignUps', { timezoneOffset: -new Date().getTimezoneOffset()/60 }, cb))
   })
 }
 
