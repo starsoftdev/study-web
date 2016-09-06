@@ -23,17 +23,17 @@ import {
 
 // Bootstrap sagas
 export default [
-  formSubmitSaga,
-  companyTypesSaga,
+  submitFormWatcher,
+  fetchCompanyTypesWatcher,
 ];
 
 // Does not allow concurrent fetches of company types (for demo purpose)
 // Alternatively you may use takeEvery
-function* companyTypesSaga() {
+export function* fetchCompanyTypesWatcher() {
   yield* takeLatest(FETCH_COMPANY_TYPES, fetchCompanyTypes);
 }
 
-function* fetchCompanyTypes() {
+export function* fetchCompanyTypes() {
   try {
     const requestURL = `${API_URL}/companyTypes`;
     const response = yield call(request, requestURL);
@@ -44,7 +44,7 @@ function* fetchCompanyTypes() {
   }
 }
 
-function* formSubmitSaga() {
+export function* submitFormWatcher() {
   while (true) {
     // listen for the SUBMIT_FORM action dispatched on form submit
     const { payload } = yield take(SUBMIT_FORM);
