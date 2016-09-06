@@ -14,9 +14,7 @@ const initialState = {
     unreadTexts: 0,
     unreadEmails: 0,
   },
-  rewards: {
-    total: 0
-  },
+  rewardsPoint: 0,
   newNotification: {
     event: '',
     event_params: '',
@@ -103,13 +101,11 @@ export default function (state = initialState, action) {
 
       return state
 
-    case ActionTypes.FETCH_REWARDS_COUNT:
+    case ActionTypes.FETCH_REWARDS_POINT:
       if (action.status === 'succeeded') {
         return {
           ...state,
-          rewards: {
-            total: action.payload.rewards.total,
-          },
+          rewardsPoint: action.payload.rewardPoints,
         }
       }
 
@@ -140,6 +136,13 @@ export default function (state = initialState, action) {
               unreadTexts: newState.patientMessages.unreadTexts + 1,
               unreadEmails: newState.patientMessages.unreadEmails,
             },
+          }
+          break
+
+        case 'create-reward':
+          newState = {
+            ...newState,
+            rewardsPoint: newState.rewardsPoint + action.payload.event_params.points
           }
           break
       }
