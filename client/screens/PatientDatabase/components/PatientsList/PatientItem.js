@@ -16,8 +16,8 @@ class PatientItem extends Component {
     bmi: PropTypes.number,
     indication_id: PropTypes.number,
     indication: PropTypes.object,
-    info_source_id: PropTypes.number,
-    infoSource: PropTypes.object,
+    source_id: PropTypes.number,
+    source: PropTypes.object,
     study_patient_category_id: PropTypes.number,
     studyPatientCategory: PropTypes.object,
     isFetching: PropTypes.bool,
@@ -34,7 +34,7 @@ class PatientItem extends Component {
 
   render () {
     const { index, id, firstName, lastName, email, phone, age, gender, bmi, indication_id, indication,
-      info_source_id, infoSource, study_patient_category_id, studyPatientCategory, isFetching } = this.props
+      source_id, source, study_patient_category_id, studyPatientCategory, isFetching } = this.props
 
     return (
       <tr className="patient-container">
@@ -66,7 +66,7 @@ class PatientItem extends Component {
           <span>{studyPatientCategory.patientCategory.name}</span>
         </td>
         <td className="source">
-          <span>{infoSource.type}</span>
+          <span>{source.type}</span>
         </td>
         <td className="action">
           <button className="btn btn-default btn-edit-patient pull-right" onClick={this.editPatient.bind(this)} disabled={isFetching}>

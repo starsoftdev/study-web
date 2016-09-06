@@ -11,7 +11,7 @@ class EditPatientForm extends Component {
     indicationOptions: PropTypes.array.isRequired,
     genderOptions: PropTypes.array.isRequired,
     patientCategoryOptions: PropTypes.array.isRequired,
-    infoSourceOptions: PropTypes.array.isRequired,
+    sourceOptions: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -27,7 +27,7 @@ class EditPatientForm extends Component {
       indicationOptions,
       genderOptions,
       patientCategoryOptions,
-      infoSourceOptions,
+      sourceOptions,
       handleSubmit,
       submitting,
       loading,
@@ -113,7 +113,7 @@ class EditPatientForm extends Component {
           <div className="col-sm-9">
             <Select
               {...source}
-              options={infoSourceOptions}
+              options={sourceOptions}
               placeholder="--Select--"
               disabled={submitting || loading}
               onBlur={() => { source.onBlur(source) }}
