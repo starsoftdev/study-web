@@ -1,10 +1,31 @@
-// import { selectReferPageDomain } from '../selectors';
 import expect from 'expect';
 
-// const selector = selectReferPageDomain();
+import { selectReferPageDomain, selectCompanyTypes } from '../selectors';
+import { DEFAULT_COMPANY_TYPES } from '../constants';
 
-describe('selectReferPageDomain', () => {
-  it('Expect to have unit tests specified', () => {
-    expect('Test case').toEqual(false);
+describe('ReferPage/selectors', () => {
+  describe('selectReferPageDomain', () => {
+    const referPageDomainSelector = selectReferPageDomain();
+    it('should select refer page state', () => {
+      const referPageState = {
+        companyTypes: [],
+      };
+      const mockedState = {
+        referPage: referPageState,
+      };
+      expect(referPageDomainSelector(mockedState)).toEqual(referPageState);
+    });
+  });
+
+  describe('selectCompanyTypes', () => {
+    const companyTypesSelector = selectCompanyTypes();
+    it('should select company types', () => {
+      const mockedState = {
+        referPage: {
+          companyTypes: DEFAULT_COMPANY_TYPES,
+        },
+      };
+      expect(companyTypesSelector(mockedState)).toEqual(DEFAULT_COMPANY_TYPES);
+    });
   });
 });
