@@ -16,7 +16,7 @@ import { submitForm, fetchCompanyTypes } from 'containers/ReferPage/actions';
 import manImage from 'assets/images/man.svg';
 import shadowImage from 'assets/images/shadow.png';
 
-class ReferPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class ReferPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     companyTypes: PropTypes.array,
     fetchCompanyTypes: PropTypes.func,
