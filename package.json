@@ -28,7 +28,6 @@
     "node": ">= 6.2.0"
   },
   "dependencies": {
-    "babel-polyfill": "6.9.0",
     "classnames": "^2.2.5",
     "dotenv": "^2.0.0",
     "es6-promise": "^3.2.1",
@@ -71,7 +70,7 @@
   },
   "devDependencies": {
     "babel": "^6.5.2",
-    "babel-core": "6.9.0",
+    "babel-core": "6.9.1",
     "babel-eslint": "6.0.4",
     "babel-loader": "6.2.4",
     "babel-plugin-react-transform": "2.0.2",
@@ -129,9 +128,9 @@
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "watchify": "^3.7.0",
-    "webpack": "1.13.0",
+    "webpack": "1.13.2",
     "webpack-dev-middleware": "1.6.1",
-    "webpack-hot-middleware": "2.10.0",
+    "webpack-hot-middleware": "2.12.2",
     "winston": "^2.2.0"
   },
   "homepage": "https://github.com/studykik/web#readme",
