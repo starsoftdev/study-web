@@ -19,7 +19,7 @@ DEVTOOLS=true
 
 If you want to use production search indices, change your config to:
 ```
-API_URL=https://studykik.com/api
+API_URL=http://api-staging.studykik.com/api/v1
 ```
 
 ### Install packages
