@@ -53,21 +53,21 @@ export function notificationArrived (notification) {
 }
 */
 
-export function fetchPatientSignUps () {
+export function fetchPatientSignUps (currentUser) {
   return asyncAction(ActionTypes.FETCH_PATIENT_SIGN_UPS, (cb, dispatch, getState) => {
-    dispatch(searchEntities('/patients/signUps', {}, cb))
+    dispatch(searchEntities('/clients/' + currentUser.userInfo.roleForClient.client_id + '/patientSignUps', {timezoneOffset: -new Date().getTimezoneOffset()/60}, cb))
   })
 }
 
-export function fetchPatientMessages () {
+export function fetchPatientMessages (currentUser) {
   return asyncAction(ActionTypes.FETCH_PATIENT_MESSAGES, (cb, dispatch, getState) => {
-    dispatch(searchEntities('/patient/messages', {}, cb))
+    dispatch(searchEntities('/clients/' + currentUser.userInfo.roleForClient.client_id + '/patientMessages', {}, cb))
   })
 }
 
-export function fetchRewardsCount () {
-  return asyncAction(ActionTypes.FETCH_REWARDS_COUNT, (cb, dispatch, getState) => {
-    dispatch(searchEntities('/rewards', {}, cb))
+export function fetchRewardsPoint (currentUser) {
+  return asyncAction(ActionTypes.FETCH_REWARDS_POINT, (cb, dispatch, getState) => {
+    dispatch(searchEntities('/clients/' + currentUser.userInfo.roleForClient.client_id, {}, cb))
   })
 }
 
