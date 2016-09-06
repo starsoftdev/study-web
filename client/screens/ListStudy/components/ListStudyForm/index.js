@@ -105,18 +105,18 @@ const leadSourcehObj = {
 }
 
 const campaignLengthObj = {
-  '1': '1 Month',
-  '2': '2 Months',
-  '3': '3 Months',
-  '4': '4 Months',
-  '5': '5 Months',
-  '6': '6 Months',
-  '7': '7 Months',
-  '8': '8 Months',
-  '9': '9 Months',
-  '10': '10 Months',
-  '11': '11 Months',
-  '12': '12 Months'
+  '1 Month': '1 Month',
+  '2 Month': '2 Months',
+  '3 Month': '3 Months',
+  '4 Month': '4 Months',
+  '5 Month': '5 Months',
+  '6 Month': '6 Months',
+  '7 Month': '7 Months',
+  '8 Month': '8 Months',
+  '9 Month': '9 Months',
+  '10 Month': '10 Months',
+  '11 Month': '11 Months',
+  '12 Month': '12 Months'
 }
 
 function objectFromArray (arr, key, value) {
@@ -156,9 +156,11 @@ class ListStudyForm extends React.Component {
   sourceCounter = 1
 
   order = [//remove lead and sources when uncheck callTracking
+    'name',
+    'type',
     'siteLocation',
     'recruitmentPhone',
-    'indication',
+    'indication_id',
     'uploadStudyAd',
     'protocolNumber',
     'sponsorName',
@@ -179,9 +181,11 @@ class ListStudyForm extends React.Component {
   ]
 
   studyValues = {//remove lead and sources when uncheck callTracking
+    name: null,
+    type: null,
     site_id: null,
     recruitment_phone: null,
-    indication: null,
+    indication_id: null,
     protocol_number: null,
     sponsor_name: null,
     sponsor_email: null,
@@ -210,9 +214,15 @@ class ListStudyForm extends React.Component {
       }
     },
     fields: {
+      name: {
+        label: 'NAME *'
+      },
+      type: {
+        label: 'TYPE *'
+      },
       siteLocation: {
         label: 'SITE LOCATION *',
-        template: select2Template,
+        //template: select2Template,
         nullOption: {
           value: '',
           text: 'Select Site Location'
@@ -221,7 +231,7 @@ class ListStudyForm extends React.Component {
       recruitmentPhone: {
         label: 'RECRUITMENT PHONE *'
       },
-      indication: {
+      indication_id: {
         label: 'INDICATION *',
         nullOption: {
           value: '',
@@ -391,9 +401,11 @@ class ListStudyForm extends React.Component {
       const studyLevelsObj = objectFromStudyLevels(studyLevels.studyLevels, 'id')
 
       let options = this.studyFormOptions || {
+        name: t.Str,
+        type: t.Str,
         siteLocation: t.enums(siteLocationsObj),
         recruitmentPhone: t.Str,
-        indication: t.enums(studyCategoriesObj),
+        indication_id: t.enums(studyCategoriesObj),
         uploadStudyAd: t.maybe(t.form.File),
         protocolNumber: t.Str,
         sponsorName: t.Str,
@@ -458,9 +470,11 @@ class ListStudyForm extends React.Component {
       }
 
       const options = {
+        name: value.name,
+        type: value.type,
         siteLocation: value.siteLocation,
         recruitmentPhone: value.recruitmentPhone,
-        indication: value.indication,
+        indication_id: value.indication_id,
         protocolNumber: value.protocolNumber,
         sponsorName: value.sponsorName,
         sponsorEmail: value.sponsorEmail,
@@ -502,8 +516,7 @@ class ListStudyForm extends React.Component {
         comp.setStudyForm(comp.studyFormOptions, () => {
           fetchAvailNumbers({
             country: 'US',
-            areaCode: '510',
-            contains: '151055****'
+            areaCode: '510'
           })
         })
       } else {
