@@ -14,9 +14,7 @@ const initialState = {
     unreadTexts: 0,
     unreadEmails: 0,
   },
-  rewards: {
-    total: 0
-  },
+  rewardsPoint: 0,
   newNotification: {
     event: '',
     event_params: '',
@@ -82,8 +80,8 @@ export default function (state = initialState, action) {
         return {
           ...state,
           patientSignUps: {
-            today: action.payload.signUps.today,
-            yesterday: action.payload.signUps.yesterday,
+            today: action.payload.today,
+            yesterday: action.payload.yesterday,
           },
         }
       }
@@ -95,21 +93,19 @@ export default function (state = initialState, action) {
         return {
           ...state,
           patientMessages: {
-            unreadTexts: action.payload.patientMessages.unreadTexts,
-            unreadEmails: action.payload.patientMessages.unreadEmails,
+            unreadTexts: action.payload.unreadTexts,
+            unreadEmails: action.payload.unreadEmails,
           },
         }
       }
 
       return state
 
-    case ActionTypes.FETCH_REWARDS_COUNT:
+    case ActionTypes.FETCH_REWARDS_POINT:
       if (action.status === 'succeeded') {
         return {
           ...state,
-          rewards: {
-            total: action.payload.rewards.total,
-          },
+          rewardsPoint: action.payload.rewardPoints,
         }
       }
 
@@ -133,6 +129,21 @@ export default function (state = initialState, action) {
             },
           }
 
+        case 'twilio-message':
+          newState = {
+            ...newState,
+            patientMessages: {
+              unreadTexts: newState.patientMessages.unreadTexts + 1,
+              unreadEmails: newState.patientMessages.unreadEmails,
+            },
+          }
+          break
+
+        case 'create-reward':
+          newState = {
+            ...newState,
+            rewardsPoint: newState.rewardsPoint + action.payload.event_params.points
+          }
           break
       }
       return newState
