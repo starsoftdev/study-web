@@ -60,7 +60,7 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
-      API_URL: JSON.stringify(process.env.API_URL),
+      API_URL: JSON.stringify('TEST_API_URL'),
     })],
 
   // Some node_modules pull in Node-specific dependencies.
