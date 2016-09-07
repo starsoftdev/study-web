@@ -11,6 +11,10 @@ PORT=8080
 API_URL=http://localhost:3000/api/v1
 HOST_URL=http://localhost:3000
 ```
+If you like inline source maps, and debugging anywhere in the app with Chrome Dev Tools, enter this line into the .env file as well:
+```
+SOURCEMAP=true
+```
 
 If you want to develop with Redux Dev Tools, then have this value in the .env as well:
 ```
@@ -19,7 +23,7 @@ DEVTOOLS=true
 
 If you want to use production search indices, change your config to:
 ```
-API_URL=https://studykik.com/api
+API_URL=http://api-staging.studykik.com/api/v1
 ```
 
 ### Install packages
