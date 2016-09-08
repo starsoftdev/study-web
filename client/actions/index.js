@@ -43,6 +43,9 @@ export fetchStudyCategories from './fetchStudyCategories'
 export fetchStudyLevels from './fetchStudyLevels'
 export submitOrderIRBAd from './submitOrderIRBAd'
 
+export fetchCoupon from './fetchCoupon'
+export clearCoupon from './clearCoupon'
+
 export submitGetTrialNotificationForm from './submitGetTrialNotificationForm'
 export saveReferralForm from './saveReferralForm'
 export fetchSiteLocations from './fetchSiteLocations'

@@ -47,6 +47,8 @@ export updatingPatientCategory from './updatingPatientCategory'
 export studyCategories from './studyCategories'
 export studyLevels from './studyLevels'
 
+export coupon from './coupon'
+
 export siteLocations from './siteLocations'
 
 export submittingListStudy from './submittingListStudy'
