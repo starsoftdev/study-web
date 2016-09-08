@@ -98,7 +98,7 @@ class OrderIRBAdCreation extends React.Component {
     formValues: irbAdValues,
   }
 
-  componentWillMount () {
+  componentDidMount () {
     const { fetchSites, fetchStudyCategories } = this.props
 
     fetchSites()

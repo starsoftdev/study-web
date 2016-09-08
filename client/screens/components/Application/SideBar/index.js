@@ -8,7 +8,7 @@ import sideNavLogo from 'assets/images/new_version/logo2.png'
 const menuItemsGroupA = [
   { text: 'Home', link: '/dashboard', icon: 'icon-icon_house_alt' },
   { text: 'List New Study', link: '/replace_me', icon: 'icon-screen' },
-  { text: 'Order IRB Ad Creation', link: '/replace_me', icon: 'icon-irb' },
+  { text: 'Order IRB Ad Creation', link: '/order-irb-ad-creation', icon: 'icon-irb' },
   { text: 'Request Proposal', link: '/replace_me', icon: 'icon-doller' },
   { text: 'Refer', link: '/replace_me', icon: 'icon-signout' }
 ]
