@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
 import { clearSelectedPatient, savePatient, fetchPatients, clearPatients,
-  fetchIndications, fetchPatientCategories, fetchInfoSources } from 'actions'
+  fetchIndications, fetchPatientCategories, fetchSources } from 'actions'
 import EditPatientForm from 'forms/EditPatient'
 import PatientItem from './PatientItem'
 import _ from 'lodash'
@@ -20,13 +20,13 @@ class PatientsList extends Component {
     savePatient: PropTypes.func,
     fetchIndications: PropTypes.func,
     fetchPatientCategories: PropTypes.func,
-    fetchInfoSources: PropTypes.func,
+    fetchSources: PropTypes.func,
     indications: PropTypes.array,
     patientCategories: PropTypes.array,
-    infoSources: PropTypes.array,
+    sources: PropTypes.array,
     fetchingIndications: PropTypes.bool,
     fetchingPatientCategories: PropTypes.bool,
-    fetchingInfoSources: PropTypes.bool,
+    fetchingSources: PropTypes.bool,
   }
 
   constructor (props) {
@@ -34,7 +34,7 @@ class PatientsList extends Component {
     this.props.fetchPatients({})
     this.props.fetchIndications({})
     this.props.fetchPatientCategories({})
-    this.props.fetchInfoSources({})
+    this.props.fetchSources({})
   }
 
   componentWillUnmount () {
@@ -51,25 +51,30 @@ class PatientsList extends Component {
 
   updatePatient (patientData) {
     let payload = _.omit(patientData, [ 'indication', 'status', 'source' ])
-    payload.indication_id = patientData.indication
-    payload.info_source_id = patientData.source
+    payload.indications = _.map(patientData.indication, indicationIterator => indicationIterator.value)
+    payload.source_id = patientData.source
     payload.patient_category_id = patientData.status
 
     this.props.savePatient(this.props.selectedPatient.id, payload)
   }
 
   render () {
-    const { indications, patientCategories, infoSources,
-      fetchingIndications, fetchingPatientCategories, fetchingInfoSources,
+    const { indications, patientCategories, sources,
+      fetchingIndications, fetchingPatientCategories, fetchingSources,
       patients, selectedPatient, savingPatient } = this.props
     let selectedPatientInput = {}
 
     if (selectedPatient) {
-      selectedPatientInput = _.omit(selectedPatient, [ 'created', 'indication_id', 'indication', 'info_source_id', 'infoSource', 'lastAction', 'study_patient_category_id', 'studyPatientCategory' ])
+      selectedPatientInput = _.omit(selectedPatient, [ 'created', 'indications', 'source_id', 'source', 'lastAction', 'study_patient_category_id', 'studyPatientCategory' ])
       _.assign(selectedPatientInput, {
-        indication: selectedPatient.indication_id,
+        indication: _.map(selectedPatient.indications, indicationIterator => {
+          return {
+            label: indicationIterator.name,
+            value: indicationIterator.id,
+          }
+        }),
         status: parseInt(selectedPatient.studyPatientCategory.patient_category_id),
-        source: selectedPatient.info_source_id,
+        source: selectedPatient.source_id,
       })
     }
 
@@ -85,10 +90,10 @@ class PatientsList extends Component {
         value: patientCategoryIterator.id,
       }
     })
-    const infoSourceOptions = _.map(infoSources, infoSourceIterator => {
+    const sourceOptions = _.map(sources, sourceIterator => {
       return {
-        label: infoSourceIterator.type,
-        value: infoSourceIterator.id,
+        label: sourceIterator.type,
+        value: sourceIterator.id,
       }
     })
     const genderOptions = [ { label: 'Male', value: 'Male' }, { label: 'Female', value: 'Female' } ]
@@ -100,9 +105,9 @@ class PatientsList extends Component {
       return (
         <div className="row">
           <div className="col-sm-12">
-            <h4>Total Patients Count: {patients.length}</h4>
             <div className="table-responsive">
-              <table className="table table-striped">
+              <table className="table">
+                <caption>Total Patients Count: {patients.length}</caption>
                 <thead>
                   <tr>
                     <th>#</th>
@@ -115,6 +120,7 @@ class PatientsList extends Component {
                     <th>BMI</th>
                     <th>STATUS</th>
                     <th>SOURCE</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -127,9 +133,9 @@ class PatientsList extends Component {
                 <Modal.Title>Edit Patient</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <EditPatientForm loading={fetchingIndications || fetchingPatientCategories || fetchingInfoSources}
+                <EditPatientForm loading={fetchingIndications || fetchingPatientCategories || fetchingSources}
                                  submitting={savingPatient} indicationOptions={indicationOptions} genderOptions={genderOptions}
-                                 patientCategoryOptions={patientCategoryOptions} infoSourceOptions={infoSourceOptions}
+                                 patientCategoryOptions={patientCategoryOptions} sourceOptions={sourceOptions}
                                  initialValues={selectedPatientInput} onSubmit={this.updatePatient.bind(this)} />
               </Modal.Body>
             </Modal>
@@ -148,10 +154,10 @@ const mapStateToProps = (state) => ({
   savingPatient: state.savingPatient,
   indications: state.indications,
   patientCategories: state.patientCategories,
-  infoSources: state.infoSources,
+  sources: state.sources,
   fetchingIndications: state.fetchingIndications,
   fetchingPatientCategories: state.fetchingPatientCategories,
-  fetchingInfoSources: state.fetchingInfoSources,
+  fetchingSources: state.fetchingSources,
 })
 const mapDispatchToProps = {
   clearSelectedPatient,
@@ -160,7 +166,7 @@ const mapDispatchToProps = {
   clearPatients,
   fetchIndications,
   fetchPatientCategories,
-  fetchInfoSources
+  fetchSources
 }
 
 export default connect(

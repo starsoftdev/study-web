@@ -22,8 +22,8 @@ export clientRoles from './users'
 
 export fetchingIndications from './fetchingIndications'
 export indications from './indications'
-export fetchingInfoSources from './fetchingInfoSources'
-export infoSources from './infoSources'
+export fetchingSources from './fetchingSources'
+export sources from './sources'
 
 export fetchingStudies from './fetchingStudies'
 export fetchingStudy from './fetchingStudy'

@@ -42,7 +42,7 @@ export const ActionTypes = KeyKey(
   'FINISH_DELETE_CLIENT_ROLE',
 
   'FETCH_INDICATIONS',
-  'FETCH_INFO_SOURCES',
+  'FETCH_SOURCES',
 
   'FETCH_STUDIES',
   'FETCH_STUDY',
