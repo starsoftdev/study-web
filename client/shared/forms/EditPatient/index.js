@@ -66,7 +66,9 @@ class EditPatientForm extends Component {
             <Select
               {...indication}
               options={indicationOptions}
-              placeholder="--Select--"
+              placeholder="Search..."
+              multi
+              joinValues
               disabled={submitting || loading}
               onBlur={() => { indication.onBlur(indication) }}
               />
