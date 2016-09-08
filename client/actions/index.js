@@ -23,7 +23,7 @@ export removeUser from './removeUser'
 export removeClientRole from './removeClientRole'
 
 export fetchIndications from './fetchIndications'
-export fetchInfoSources from './fetchInfoSources'
+export fetchSources from './fetchSources'
 
 export fetchStudies from './fetchStudies'
 export fetchStudy from './fetchStudy'
