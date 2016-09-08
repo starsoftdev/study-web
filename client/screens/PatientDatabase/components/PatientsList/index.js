@@ -105,9 +105,9 @@ class PatientsList extends Component {
       return (
         <div className="row">
           <div className="col-sm-12">
-            <h4>Total Patients Count: {patients.length}</h4>
             <div className="table-responsive">
-              <table className="table table-striped">
+              <table className="table">
+                <caption>Total Patients Count: {patients.length}</caption>
                 <thead>
                   <tr>
                     <th>#</th>
@@ -120,6 +120,7 @@ class PatientsList extends Component {
                     <th>BMI</th>
                     <th>STATUS</th>
                     <th>SOURCE</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>

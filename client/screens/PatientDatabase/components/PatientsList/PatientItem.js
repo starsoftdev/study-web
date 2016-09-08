@@ -69,7 +69,7 @@ class PatientItem extends Component {
           <span>{source.type}</span>
         </td>
         <td className="action">
-          <button className="btn btn-default btn-edit-patient pull-right" onClick={this.editPatient.bind(this)} disabled={isFetching}>
+          <button className="btn btn-primary btn-edit-patient pull-right" onClick={this.editPatient.bind(this)} disabled={isFetching}>
             {isFetching
               ? <span><ActivityIcon /></span>
               : <span>Edit</span>

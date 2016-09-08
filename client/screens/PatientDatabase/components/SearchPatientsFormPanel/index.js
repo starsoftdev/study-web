@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { fetchPatients, fetchIndications, fetchPatientCategories, fetchSources } from 'actions'
 import SearchPatientsForm from 'forms/SearchPatients'
 import ActivityIcon from 'components/ActivityIcon'
-import './styles.less'
 
 class SearchPatientsFormPanel extends React.Component {
   static propTypes = {
@@ -68,7 +67,7 @@ class SearchPatientsFormPanel extends React.Component {
       <div className="panel panel-default">
         <div className="panel-body">
           <div className="patients-search">
-            <div className="search-form">
+            <div className="form-search">
               <SearchPatientsForm loading={fetchingIndications || fetchingPatientCategories || fetchingSources}
                                   submitting={fetchingPatients} indicationOptions={indicationOptions} genderOptions={genderOptions}
                                   statusOptions={patientCategoryOptions} sourceOptions={sourceOptions}

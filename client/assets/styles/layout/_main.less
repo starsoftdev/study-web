@@ -13,8 +13,6 @@
 	}
 
 	.btn-primary {
-		top: 0;
-		right: 0;
 		color: #00afef;
 		min-width: 203px;
 		font-weight: 600;
@@ -22,7 +20,6 @@
 		background: #fff;
 		.font(18px, 24px);
 		border-width: 2px;
-		position: absolute;
 		border-radius: 2px;
 		border-color: #00afef;
 		text-transform: uppercase;
@@ -1817,8 +1814,26 @@
 /**********************/
 /*	patient-database */
 /**********************/
+.modal {
+  &.edit-patient {
+    .modal-content {
+      .modal-header {
+        background-color: #f78e1e;
+        color: #fff;
+
+        .modal-title {
+          font-size: 21px;
+          font-weight: 700;
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+}
 .patient-database {
 
+  background-image: none;
+  background-color: transparent;
 
 	.btns {
 		.font(0,0);
@@ -1840,12 +1855,16 @@
 				min-width: 224px;
 			}
 		}
+
+    .fa {
+      margin-right: 5px;
+    }
 	}
 
 
 
 	.form-search {
-		margin: 0 -12px 18px 0;
+		margin: 0;
 
 		.fields-holder {
 			margin: 0;
@@ -1906,32 +1925,41 @@
 	}
 
 	.table {
+    border: 1px solid #f78e1e;
+    background-color: #fff;
+
+    caption {
+      background-color: #f78e1e;
+      color: #fff;
+      padding: 12px;
+      text-transform: uppercase;
+      font-size: 21px;
+      font-weight: 700;
+    }
 
 		td,
 		th {
 			&:nth-child(1) { width: 4.0%; }
 			&:nth-child(2) { width: 12.5%; }
 			&:nth-child(3) {
-				width: 16.7%;
+				width: 12.5%;
 				word-break: break-all;
 			}
 			&:nth-child(4) { width: 11.5%; }
-			&:nth-child(5) { width: 9.8%; }
+			&:nth-child(5) { width: 16.5%; }
 			&:nth-child(6) { width: 5.5%; }
 			&:nth-child(7) { width: 8.0%; }
-			&:nth-child(8) { width: 4.9%; }
-			&:nth-child(9) { width: 11.8%; }
-			&:nth-child(10) {
-				width: auto;
-				padding-left: 0;
-			}
+			&:nth-child(8) { width: 4.5%; }
+			&:nth-child(9) { width: 11.5%; }
+			&:nth-child(10) {	width: 8.5%; }
+      &:nth-child(11) {	width: auto; }
 		}
 
 		> tbody {
 			counter-reset: item;
 			> tr {
 				> td {
-					padding: 16px 0 20px 13px;
+					padding: 16px 12px;
 
 					&:first-child {
 						&:before {
@@ -1959,10 +1987,6 @@
 		}
 
 		.btn {
-			top: 0;
-			right: 0;
-			position: absolute;
-
 			i {
 				display: none;
 			}
@@ -2797,4 +2821,10 @@
 		z-index: 2;
 		opacity: 0.65;
 	}
+}
+
+.Select-control {
+  border-width: 2px !important;
+  border-color: #636363 !important;
+  height: 40px !important;
 }
