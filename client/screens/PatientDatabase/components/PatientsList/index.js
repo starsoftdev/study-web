@@ -51,7 +51,7 @@ class PatientsList extends Component {
 
   updatePatient (patientData) {
     let payload = _.omit(patientData, [ 'indication', 'status', 'source' ])
-    payload.indication_id = patientData.indication
+    payload.indications = _.map(patientData.indication, indicationIterator => indicationIterator.value)
     payload.source_id = patientData.source
     payload.patient_category_id = patientData.status
 
@@ -65,9 +65,14 @@ class PatientsList extends Component {
     let selectedPatientInput = {}
 
     if (selectedPatient) {
-      selectedPatientInput = _.omit(selectedPatient, [ 'created', 'indication_id', 'indication', 'source_id', 'source', 'lastAction', 'study_patient_category_id', 'studyPatientCategory' ])
+      selectedPatientInput = _.omit(selectedPatient, [ 'created', 'indications', 'source_id', 'source', 'lastAction', 'study_patient_category_id', 'studyPatientCategory' ])
       _.assign(selectedPatientInput, {
-        indication: selectedPatient.indication_id,
+        indication: _.map(selectedPatient.indications, indicationIterator => {
+          return {
+            label: indicationIterator.name,
+            value: indicationIterator.id,
+          }
+        }),
         status: parseInt(selectedPatient.studyPatientCategory.patient_category_id),
         source: selectedPatient.source_id,
       })

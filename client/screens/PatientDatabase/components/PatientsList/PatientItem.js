@@ -14,8 +14,7 @@ class PatientItem extends Component {
     age: PropTypes.number,
     gender: PropTypes.string,
     bmi: PropTypes.number,
-    indication_id: PropTypes.number,
-    indication: PropTypes.object,
+    indications: PropTypes.array,
     source_id: PropTypes.number,
     source: PropTypes.object,
     study_patient_category_id: PropTypes.number,
@@ -33,8 +32,9 @@ class PatientItem extends Component {
   }
 
   render () {
-    const { index, id, firstName, lastName, email, phone, age, gender, bmi, indication_id, indication,
+    const { index, id, firstName, lastName, email, phone, age, gender, bmi, indications,
       source_id, source, study_patient_category_id, studyPatientCategory, isFetching } = this.props
+    const indicationNames = _.map(indications, indicationIterator => indicationIterator.name).join(', ')
 
     return (
       <tr className="patient-container">
@@ -51,7 +51,7 @@ class PatientItem extends Component {
           <span>{phone}</span>
         </td>
         <td className="indication">
-          <span>{indication.name}</span>
+          <span>{indicationNames}</span>
         </td>
         <td className="age">
           <span>{age}</span>
