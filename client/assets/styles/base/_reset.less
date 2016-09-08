@@ -12,7 +12,7 @@ body {
 	min-width: 1200px;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	
+
 	&.page-lightbox-active,
 	&.body-datepicker-active {
 		height: 100%;
@@ -40,15 +40,15 @@ button,
 	white-space: normal;
 	transition: all 0.25s;
 	text-transform: uppercase;
-	
-	
+
+
 	&:focus,
 	&:active:focus,
 	&:hover {
 		outline: none;
 		box-shadow: none;
 	}
-	
+
 	&.btn-default {
 		&:focus,
 		&:active:focus,
@@ -57,7 +57,7 @@ button,
 			border-color: #76daff;
 		}
 	}
-	
+
 	&.btn-primary {
 		&:focus,
 		&:active:focus,
@@ -67,21 +67,21 @@ button,
 			border-color: @btn-primary-color;
 		}
 	}
-	
+
 	&.btn-gray {
 		color: #fff;
 		background: darken(#999, 10%);
-		
+
 		&:hover {
 			background: #999;
 		}
 	}
-	
+
 	&.btn-gray-outline {
 		background: #fff;
 		color: darken(#999, 10%);
 		border: darken(#999, 10%) solid 2px;
-		
+
 		&:hover,
 		&:focus,
 		&:active:focus {
@@ -105,7 +105,7 @@ label {
 .form-control {
 	border-width: 2px;
 	padding: 6px 15px;
-	
+
 	&:focus {
 		color: #949ca1;
 		outline: none;
@@ -113,11 +113,11 @@ label {
 		border-color: #00afef;
 		.placeholder(#949ca1);
 	}
-	
+
 	&[readonly] {
 		background: #fff;
 	}
-	
+
 	&:hover {
 		border-color: #00afef;
 	}
@@ -133,7 +133,7 @@ label {
 
 input[type=number] {
 	-moz-appearance: textfield;
-	
+
 	&::-webkit-inner-spin-button,
 	&::-webkit-outer-spin-button {
 		-webkit-appearance: none;
@@ -148,14 +148,14 @@ input[type=number] {
 	overflow: hidden;
 	position: relative;
 	padding: 102px 0 0 261px;
-	
+
 	.home-page & {
 		padding-top: 101px;
 	}
 }
 
 @media screen and (max-width: @psd) {
-	
+
 	#wrapper {
 		padding-left: 220px;
 	}

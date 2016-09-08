@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { reduxForm } from 'redux-form'
 import Select from 'react-select'
 import 'react-select/less/default.less'
-import './styles.less'
 export const fields = [ 'firstName', 'lastName', 'email', 'phone', 'indication', 'age', 'gender', 'bmi', 'status', 'source' ]
 
 class EditPatientForm extends Component {
