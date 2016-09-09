@@ -362,7 +362,7 @@ class BlastForm extends Component {
       )
     ))
 
-    /*_.map(studySources, (source, key) => {
+    _.map(studySources, (source, key) => {
       listSources.push(
         <li
           key={key}
@@ -371,17 +371,17 @@ class BlastForm extends Component {
           <label>
             <input
               id={'source-' + source.id}
-              value={source.infoSource.type}
+              value={source.type}
               type="checkbox"
               name={'source-' + source.id}
               onChange={checkFilter.bind(this)}
               checked={(filter.sources.indexOf(_.toString(source.id)) !== -1)}
             />
-            {source.infoSource.type}
+            {source.type}
           </label>
         </li>
       )
-    })*/
+    })
 
     return (
       <div className="blast-form">
