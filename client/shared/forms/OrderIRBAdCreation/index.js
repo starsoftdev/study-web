@@ -5,51 +5,27 @@ import Select from 'react-select'
 import 'react-select/less/default.less'
 
 import { submitOrderIRBAd, fetchSites, fetchStudyCategories } from 'actions'
-import { isValidCurrency, strToFloat } from 'utils/number'
+import { isValidCurrency } from 'utils/number'
 import './styles.less'
 
 export const fields = [ 'siteLocation', 'indication', 'irbName', 'irbEmail', 'compensationAmount', 'clinicaltrialsGovLink', 'notes' ]
 
-/*
-const Currency = t.refinement(t.Str, (str) => {
-  return isValidCurrency(str)
-})
-Currency.getValidationErrorMessage = (value, path, context) => {
-  return 'Enter a valid currency format.'
-}
-
-function objectFromArray (arr, key, value) {
-  let obj = {}
-  for (let item of arr) {
-    obj[item[key]] = item[value]
-  }
-
-  return obj
-}
-*/
-
 const validate = values => {
   const errors = {}
 
-  /*
-  if (!values.username) {
-    errors.username = 'Required'
-  } else if (values.username.length > 15) {
-    errors.username = 'Must be 15 characters or less'
+  if (!values.siteLocation) {
+    errors.siteLocation = 'Required'
   }
-  if (!values.email) {
-    errors.email = 'Required'
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address'
+  if (!values.indication) {
+    errors.indication = 'Required'
   }
-  if (!values.age) {
-    errors.age = 'Required'
-  } else if (isNaN(Number(values.age))) {
-    errors.age = 'Must be a number'
-  } else if (Number(values.age) < 18) {
-    errors.age = 'Sorry, you must be at least 18 years old'
+  if (values.irbEmail && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.irbEmail)) {
+    errors.irbEmail = 'Invalid email address'
   }
-  */
+  if (values.compensationAmount!==undefined && !isValidCurrency(values.compensationAmount)) {
+    errors.compensationAmount = 'Invalid current format'
+  }
+
   return errors
 }
 
@@ -146,7 +122,7 @@ class OrderIRBAdCreationForm extends React.Component {
 						</div>
 
 						<div className="field-row">
-							<strong className="label"><label htmlFor="upload-blinded-protpcol">UPLOAD BLINDED<br/> PROTOCOL</label></strong>
+							<strong className="label"><label htmlFor="upload-blinded-protpcol">UPLOAD BLINDED<br /> PROTOCOL</label></strong>
 							<div className="field">
 								<label htmlFor="upload-blinded-protpcol" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn" ></label>
 								<input type="file" id="upload-blinded-protpcol" />
@@ -170,7 +146,14 @@ class OrderIRBAdCreationForm extends React.Component {
 				</div>
 
 				<div className="fixed-block">
-          Shopping Cart
+          <div className="fixed-block-holder">
+						<div className="order-summery">
+							<div className="head">
+								<h3>ORDER SUMMARY</h3>
+							</div>
+              <input type="submit" className="btn btn-default" value="submit" />
+            </div>
+          </div>
 				</div>
 			</form>
     )

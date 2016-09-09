@@ -9,6 +9,8 @@ import { submitOrderIRBAd, fetchSites, fetchStudyCategories } from 'actions'
 
 import './styles.less'
 
+import { strToFloat } from 'utils/number'
+
 class OrderIRBAdCreation extends React.Component {
   static propTypes = {
     authorization: PropTypes.object,
@@ -28,39 +30,14 @@ class OrderIRBAdCreation extends React.Component {
     fetchStudyCategories()
   }
 
-  handleSubmit (ev) {
-    ev.preventDefault()
-    /*
-    const validateResult = this.refs.form.validate()
-    let newFormOptions = _.cloneDeep(irbAdOptions)
-
-    if (validateResult.errors.length > 0) {
-      for (let err of validateResult.errors) {
-        _.set(newFormOptions, `fields.${err.path[0]}.attrs.data-tip`, err.message)
-      }
-    }
-    else {
-      const { value } = validateResult
-
-      const newValue = {
-        irb_name: value.irbName,
-        irb_email: value.irbEmail,
-        compensation_amount: strToFloat(value.compensationAmount),
-        clinicaltrials_gov_link: value.clinicaltrialsGovLink,
-        notes: value.notes,
-        studyaddress_id: value.siteLocation,
-        study_category_id: value.indication,
-        user_id: this.props.authorization.authData.userId,
-      }
-
-      this.props.submitOrderIRBAd(newValue)
+  handleSubmit (value) {
+    const newValue = {
+      ...value,
+      compensationAmount: strToFloat(value.compensationAmount),
+      stripeId: 1      // hard-coded for now
     }
 
-    this.setState({
-      formOptions: newFormOptions,
-      formValues: validateResult.value
-    })
-    */
+    this.props.submitOrderIRBAd(newValue)
   }
 
   render () {
@@ -79,7 +56,7 @@ class OrderIRBAdCreation extends React.Component {
             isSaving ?
             <LoadingResults /> :
             <OrderIRBAdCreationForm
-              onSubmit={this.handleSubmit}
+              onSubmit={this.handleSubmit.bind(this)}
               fetchingSites={fetchingSites}
               sites={sites}
               studyCategories={studyCategories} />
