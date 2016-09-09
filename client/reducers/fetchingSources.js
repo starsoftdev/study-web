@@ -1,4 +1,4 @@
 import { ActionTypes } from 'ActionTypes'
 import asyncActionIsFetching from 'utils/asyncActionIsFetching'
 
-export default asyncActionIsFetching(ActionTypes.FETCH_INFO_SOURCES)
+export default asyncActionIsFetching(ActionTypes.FETCH_SOURCES)
