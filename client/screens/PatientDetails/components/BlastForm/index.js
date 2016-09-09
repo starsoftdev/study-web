@@ -124,7 +124,7 @@ class BlastForm extends Component {
     })
 
     for (let item of patienstArr) {
-      this.patienstArr.push({ text: item['firstName'] + ' ' + item['lastName'], id: item['id'] })
+      this.patienstArr.push({ text: item['firstName'] + (item['lastName'] ? ' ' + item['lastName'] : ''), id: item['id'] })
     }
 
     this.formData.toPatients = this.select2Format(patienstArr)

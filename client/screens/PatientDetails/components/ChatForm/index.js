@@ -187,7 +187,7 @@ class ChatForm extends React.Component {
       <Modal show={this.state.showModal} onHide={this.close.bind(this)}>
         <Modal.Header closeButton>
           <Modal.Title>
-            Chat with {this.props.activeChat.data.firstName + ' ' + this.props.activeChat.data.lastName}
+            Chat with {this.props.activeChat.data.firstName + (this.props.activeChat.data.lastName ? ' ' + this.props.activeChat.data.lastName : '')}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
