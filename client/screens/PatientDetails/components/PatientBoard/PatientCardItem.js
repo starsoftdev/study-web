@@ -32,7 +32,7 @@ class PatientCardItem extends Component {
     return (
       <li data-id={item.id} id={item.id}>
         <div>
-          <strong>{item.firstName + ' ' + item.lastName}</strong>
+          <strong>{item.firstName + (item.lastName ? ' ' + item.lastName : '')}</strong>
         </div>
         <div>{item.email}</div>
         <div>{item.phone}</div>
