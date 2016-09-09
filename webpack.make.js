@@ -21,17 +21,19 @@ module.exports = function createWebpackConfig (env) {
 
   return {
     devtool: ({
-      development: 'cheap-module-eval-source-map',
+      development: process.env.SOURCEMAP ? 'inline-source-map': 'cheap-module-eval-source-map',
       test: 'inline-source-map'
     })[env],
 
     entry: ({
-      development: [
-        './client/shared/components/DevTools/index.js',
-        'webpack-hot-middleware/client',
-        './client/index.js',
-        './client/assets/styles/index.less'
-      ],
+      development: {
+        app: [
+          './client/shared/components/DevTools/index.js',
+          'webpack-hot-middleware/client',
+          './client/index.js',
+          './client/assets/styles/index.less'
+        ]
+      },
       production: {
         app: [
           './client/index.js',

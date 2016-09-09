@@ -5,10 +5,46 @@ import asyncAction from 'utils/asyncAction'
 export default function fetchPatients (searchParams) {
   return asyncAction(ActionTypes.FETCH_PATIENTS, (cb, dispatch) => {
 
+    function postFilter (err, patients) {
+      if (err) {
+        return cb(err)
+      }
+
+      if (searchParams.includeIndication) {
+        const includeIndications = searchParams.includeIndication.split(',')
+        patients = _.filter(patients, patientIterator => {
+          const foundIndications = _.filter(includeIndications, includeIterator => {
+            const foundIndex = _.findIndex(patientIterator.indications, { id: parseInt(includeIterator) })
+            return (foundIndex > -1)
+          })
+          return foundIndications.length
+        })
+      }
+
+      if (searchParams.excludeIndication) {
+        const excludeIndications = searchParams.excludeIndication.split(',')
+        patients = _.filter(patients, patientIterator => {
+          const foundIndications = _.filter(excludeIndications, excludeIterator => {
+            const foundIndex = _.findIndex(patientIterator.indications, { id: parseInt(excludeIterator) })
+            return (foundIndex > -1)
+          })
+          return !foundIndications.length
+        })
+      }
+
+      if (searchParams.status) {
+        patients = _.filter(patients, patientIterator => {
+          return (patientIterator.studyPatientCategory.patient_category_id === searchParams.status)
+        })
+      }
+
+      cb(null, patients)
+    }
+
     let filterObj = {
       include: [
-        'indication',
-        'infoSource',
+        'indications',
+        'source',
         { studyPatientCategory: 'patientCategory' }
       ],
       where: {
@@ -71,17 +107,9 @@ export default function fetchPatients (searchParams) {
         }
       })
     }
-    if (searchParams.includeIndication) {
+    if (searchParams.source) {
       filterObj.where.and.push({
-        indication_id: {
-          inq: searchParams.includeIndication.split(',')
-        }
-      })
-    } else if (searchParams.excludeIndication) {
-      filterObj.where.and.push({
-        indication_id: {
-          nin: searchParams.excludeIndication.split(',')
-        }
+        source_id: searchParams.source
       })
     }
     if (searchParams.gender && searchParams.gender !== 'All') {
@@ -94,6 +122,6 @@ export default function fetchPatients (searchParams) {
       filter: JSON.stringify(filterObj)
     }
 
-    dispatch(searchEntities('/patients', queryParams, cb))
+    dispatch(searchEntities('/patients', queryParams, postFilter))
   })
 }
