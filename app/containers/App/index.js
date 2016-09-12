@@ -12,28 +12,61 @@
  */
 
 import React from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import SideNavBar from 'components/SideNavBar';
 import TopHeaderBar from 'components/TopHeaderBar';
+import { fetchMeFromToken } from './actions';
+import { selectAuthState } from './selectors';
 
 import './styles.less';
 
-export default class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     children: React.PropTypes.node,
+    isLoggedIn: React.PropTypes.bool,
+    fetchMeFromToken: React.PropTypes.func,
   };
 
-  render() {
-    return (
-      <div id="wrapper">
-        <TopHeaderBar />
-        <SideNavBar />
+  componentWillMount() {
+    // Always load user details from the localStorage Token
+    this.props.fetchMeFromToken();
+  }
 
-        <main id="main">
-          {React.Children.toArray(this.props.children)}
-        </main>
+  render() {
+    const { isLoggedIn } = this.props;
+
+    if (isLoggedIn) {
+      return (
+        <div id="wrapper">
+          <TopHeaderBar />
+          <SideNavBar />
+
+          <main id="main">
+            {React.Children.toArray(this.props.children)}
+          </main>
+        </div>
+      );
+    }
+
+    return (
+      <div className="container-fluid">
+        {React.Children.toArray(this.props.children)}
       </div>
     );
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  isLoggedIn: selectAuthState(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchMeFromToken: () => dispatch(fetchMeFromToken()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

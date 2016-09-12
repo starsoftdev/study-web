@@ -7,6 +7,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import Helmet from 'react-helmet';
 
 import ReferForm from 'components/ReferForm';
 
@@ -37,6 +38,7 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
 
     return (
       <div className="container-fluid">
+        <Helmet title="Refer - StudyKIK" />
         <section className="study-portal">
 
           <h2 className="main-heading">REFER</h2>

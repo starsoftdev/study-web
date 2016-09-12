@@ -2,7 +2,7 @@ import { conformsTo, isEmpty, isFunction, isObject, isString } from 'lodash';
 import invariant from 'invariant';
 import warning from 'warning';
 import createReducer from 'reducers';
-import { selectCurrentUser } from 'containers/App/selectors';
+import { selectAuthState } from 'containers/App/selectors';
 
 /**
  * Validate the shape of redux store
@@ -62,7 +62,7 @@ export function injectAsyncSagas(store, isValid) {
 
 function redirectToLogin(store) {
   return (nextState, replace) => {
-    if (!selectCurrentUser(store.getState())) {
+    if (!selectAuthState()(store.getState())) {
       replace({
         pathname: '/login',
         state: { nextPathname: nextState.location.pathname },
@@ -73,7 +73,7 @@ function redirectToLogin(store) {
 
 function redirectToDashboard(store) {
   return (nextState, replace) => {
-    if (selectCurrentUser(store.getState())) {
+    if (selectAuthState()(store.getState())) {
       replace('/dashboard');
     }
   };

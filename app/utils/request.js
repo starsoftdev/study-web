@@ -1,6 +1,8 @@
 import 'whatwg-fetch';
 import { pick } from 'lodash';
 
+import { getItem } from 'utils/localStorage';
+
 /**
  * Requests a URL, returning a promise
  *
@@ -10,15 +12,15 @@ import { pick } from 'lodash';
  * @return {object}           An object containing either "data" or "err"
  */
 export default function request(url, options = {}) {
-  const jwtToken = localStorage.getItem('jwtToken');
+  const authToken = getItem('auth_token');
 
   const headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   };
 
-  if (jwtToken) {
-    headers.authorization = jwtToken;
+  if (authToken) {
+    headers.authorization = authToken;
   }
 
   // Use authorization token temporarily until we write auth module.

@@ -14,7 +14,12 @@ const loadModule = (cb) => (componentModule) => {
 
 export default function createRoutes(store) {
   // Create reusable async injectors using getAsyncInjectors factory
-  const { injectReducer, injectSagas } = getAsyncInjectors(store); // eslint-disable-line no-unused-vars
+  const {
+    injectReducer,
+    injectSagas,
+    redirectToDashboard,
+    redirectToLogin,
+  } = getAsyncInjectors(store); // eslint-disable-line no-unused-vars
 
   return [
     {
@@ -34,6 +39,16 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToDashboard,
+      path: '/login',
+      name: 'loginPage',
+      getComponent(nextState, cb) {
+        System.import('containers/LoginPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/refer',
       name: 'referPage',
       getComponent(nextState, cb) {
