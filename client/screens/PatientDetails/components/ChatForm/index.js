@@ -164,9 +164,9 @@ class ChatForm extends React.Component {
           }, (err, data, cb) => {
             cb(err, data)
           })
+        } else {
+          cb(err, data)
         }
-
-        cb(err, data)
       })
     }
   }
@@ -229,7 +229,7 @@ class ChatForm extends React.Component {
 
 const mapStateToProps = (state) => ({
   authorization: state.authorization,
-  isSaving: state.savingTwilioMessage || state.fetchingTwilioMessages,
+  isSaving: state.fetchingTwilioMessages,
   activeChat: state.activeChat,
   twilioMessages: state.twilioMessages,
   fetchingTwilioMessages: state.fetchingTwilioMessages,
