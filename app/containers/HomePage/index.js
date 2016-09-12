@@ -10,14 +10,22 @@
  */
 
 import React from 'react';
+import { Link } from 'react-router';
+import Helmet from 'react-helmet';
 
 export default class HomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   render() {
     return (
-      <h1>
-        This is HomePage components !
-      </h1>
+      <div className="text-center">
+        <Helmet title="Home Page - StudyKIK" />
+        <h1>
+          StudyKIK homepage
+        </h1>
+        <span>
+          Please log in <Link to="/login">here</Link>
+        </span>
+      </div>
     );
   }
 }
