@@ -1,11 +1,13 @@
+import { getItem } from 'utils/localStorage';
+
 import {
-  SET_AUTH_DATA,
+  SET_AUTH_STATE,
   SET_USER_DATA,
 } from './constants';
 
 const initialState = {
-  authData: false,
-  currentUser: false,
+  loggedIn: !!getItem('auth_token'),
+  userData: false,
 };
 
 export default function appReducer(state = initialState, action) {
@@ -13,16 +15,16 @@ export default function appReducer(state = initialState, action) {
 
   switch (action.type) {
 
-    case SET_AUTH_DATA:
+    case SET_AUTH_STATE:
       return {
         ...state,
-        authData: payload.authData,
+        loggedIn: payload.newAuthState,
       };
 
     case SET_USER_DATA:
       return {
         ...state,
-        currentUser: payload.currentUser,
+        userData: payload.userData,
       };
 
     default:

@@ -3,16 +3,20 @@ import { createSelector } from 'reselect';
 /**
  * Direct selector to the app state domain
  */
-function selectGlobal(state) {
-  return state.global;
-}
+const selectGlobal = () => state => state.global;
 
-const selectCurrentUser = createSelector(
-  selectGlobal,
-  (substate) => substate.currentUser
+const selectAuthState = () => createSelector(
+  selectGlobal(),
+  (substate) => substate.loggedIn
+);
+
+const selectCurrentUser = () => createSelector(
+  selectGlobal(),
+  (substate) => substate.userData
 );
 
 export {
   selectGlobal,
+  selectAuthState,
   selectCurrentUser,
 };
