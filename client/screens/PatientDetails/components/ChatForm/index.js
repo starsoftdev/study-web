@@ -113,7 +113,7 @@ class ChatForm extends React.Component {
 
           if (!_.isEmpty(scope.props.socket)) {
             scope.props.socket.on('notifyMessage', () => {
-              fetchTwilioMessages(scope.io, {
+              fetchTwilioMessages(scope.props.socket, {
                 studyId: payload.data.studyId,
                 patientId: payload.data.patientId
               }, (err, data, cb) => {
@@ -122,7 +122,7 @@ class ChatForm extends React.Component {
               })
             })
           } else {
-            console.error('problem with  socket connection')
+            console.error('problem with socket connection')
           }
 
           cb(err, data)
