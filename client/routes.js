@@ -9,7 +9,6 @@ import GetProposal from './screens/GetProposal'
 import GetReferral from './screens/GetReferral'
 import GetReport from './screens/GetReport'
 import ListStudy from './screens/ListStudy'
-import Home from './screens/Home'
 import Login from './screens/Login'
 import Study from './screens/Study'
 import SitesUsers from './screens/SitesUsers'
@@ -41,7 +40,6 @@ export default (store) => {
       <Route onEnter={requireLogin}>
         <Route path="calendar" getComponent={lazyLoadComponent(Calendar)} />
         <Route path="dashboard" getComponent={lazyLoadComponent(Dashboard)} />
-        <Route path="home" getComponent={lazyLoadComponent(Home)} />
         <Route path="notifications" getComponent={lazyLoadComponent(Notifications)} />
         <Route path="sites-users" getComponent={lazyLoadComponent(SitesUsers)} />
         <Route path="patient-database" getComponent={lazyLoadComponent(PatientDatabase)} />

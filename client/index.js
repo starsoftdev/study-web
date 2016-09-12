@@ -1,6 +1,5 @@
 import 'whatwg-fetch'
 import 'font-awesome-webpack'
-import 'assets/styles/index.less'
 import 'react-select2-wrapper/css/select2.css'
 
 import React, { PropTypes } from 'react'
@@ -17,7 +16,6 @@ import DevTools from 'components/DevTools'
 import getRoutes from './routes'
 import createStore from './createStore'
 import persistAuthData from './persistAuthData'
-
 
 const store = createStore()
 const appDispatcher = new Dispatcher()

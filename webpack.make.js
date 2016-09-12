@@ -10,38 +10,44 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 // matching screens/*.js or screens/SOMETHING/*.js
 // screens/components/**/*.js will be ignored
 
-// var routeComponentRegex = /screens\/([^\/]+\/?[^\/]+).js/
 var routeComponentRegex = /screens\/([^\/]+\/?)index.js/ // preferrably index.js
 
 module.exports = function createWebpackConfig (env) {
   assert([
-    'development',
-    'test',
-    'production'
-  ].indexOf(env) !== -1, 'Invalid environment specified: ' + env)
+      'development',
+      'test',
+      'production'
+    ].indexOf(env) !== -1, 'Invalid environment specified: ' + env)
 
   return {
     devtool: ({
-      development: 'cheap-module-eval-source-map',
+      development: process.env.SOURCEMAP ? 'inline-source-map': 'cheap-module-eval-source-map',
       test: 'inline-source-map'
     })[env],
 
     entry: ({
-      development: [
-        'webpack-hot-middleware/client',
-        './client/index'
-      ],
+      development: {
+        app: [
+          './client/shared/components/DevTools/index.js',
+          'webpack-hot-middleware/client',
+          './client/index.js',
+          './client/assets/styles/index.less'
+        ]
+      },
       production: {
-        app: './client/index.js'
+        app: [
+          './client/index.js',
+          './client/assets/styles/index.less'
+        ]
       }
     })[env],
 
     output: ({
       development: {
-          filename: 'app.js',
-          path: path.join(__dirname, 'dist'),
-          chunkFilename: '[id].chunk.js',
-          publicPath: '/'
+        filename: 'app.js',
+        path: path.join(__dirname, 'dist'),
+        chunkFilename: '[id].chunk.js',
+        publicPath: '/'
       },
       production: {
         filename: '[name].[hash].min.js',
@@ -52,37 +58,40 @@ module.exports = function createWebpackConfig (env) {
     })[env],
 
     plugins: [
-        new webpack.DefinePlugin({
-          'process.env': {
-            'NODE_ENV': JSON.stringify(env)
-          },
-          '__DEVTOOLS__': env === 'production' ? 'false' : JSON.stringify(JSON.parse(process.env.DEVTOOLS || 'false')),
-          '__LOGGER__': env === 'production' ? 'false' : 'true',
-          'API_URL': JSON.stringify(process.env.API_URL),
-          'HOST_URL': JSON.stringify(process.env.HOST_URL),
-        }),
-        env === 'development' && new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin(),
-        new ExtractTextPlugin('[name].[hash].min.css', {
-            allChunks: true,
-            disable: env !== 'production'
-        }),
-        env === 'production' && new webpack.optimize.UglifyJsPlugin({
-          compressor: {
-            warnings: false
-          },
-          sourceMap: false
-        }),
-        new HtmlWebpackPlugin({
-            title: 'StudyKiK',
-            filename: 'index.html',
-            template: 'server/views/index.template.html'
-        }),
-        new HtmlWebpackPlugin({
-            title: 'StudyKiK - Error',
-            filename: '404.html',
-            template: 'server/views/404.template.html'
-        })
+      new webpack.PrefetchPlugin('lodash'),
+      env === 'development' && new webpack.PrefetchPlugin('redux-devtools-log-monitor'),
+      new webpack.PrefetchPlugin('redux-form'),
+      new webpack.DefinePlugin({
+        'process.env': {
+          'NODE_ENV': JSON.stringify(env)
+        },
+        '__DEVTOOLS__': env === 'production' ? 'false' : JSON.stringify(JSON.parse(process.env.DEVTOOLS || 'false')),
+        '__LOGGER__': env === 'production' ? 'false' : 'true',
+        'API_URL': JSON.stringify(process.env.API_URL),
+        'HOST_URL': JSON.stringify(process.env.HOST_URL),
+      }),
+      env === 'development' && new webpack.HotModuleReplacementPlugin(),
+      new webpack.NoErrorsPlugin(),
+      new ExtractTextPlugin('[name].[hash].min.css', {
+        allChunks: true,
+        disable: env !== 'production'
+      }),
+      env === 'production' && new webpack.optimize.UglifyJsPlugin({
+        compressor: {
+          warnings: false
+        },
+        sourceMap: false
+      }),
+      new HtmlWebpackPlugin({
+        title: 'StudyKiK',
+        filename: 'index.html',
+        template: 'server/views/index.template.html'
+      }),
+      new HtmlWebpackPlugin({
+        title: 'StudyKiK - Error',
+        filename: '404.html',
+        template: 'server/views/404.template.html'
+      })
     ].filter(id),
 
     resolve: {
@@ -110,7 +119,8 @@ module.exports = function createWebpackConfig (env) {
               'css!less' :
               'css?sourceMap!less?sourceMap'
           )
-        }, {
+        },
+        {
           // make sure to exclude route components here
           test: /\.js$/,
           exclude: routeComponentRegex,
@@ -120,21 +130,26 @@ module.exports = function createWebpackConfig (env) {
             cacheDirectory: true,
             presets: [ 'es2015', 'stage-0', 'react' ]
           },
-        }, {
+        },
+        {
           // lazy load route components
           test: routeComponentRegex,
           include: path.resolve(__dirname, 'client'),
           loaders: ['bundle?lazy', 'babel?cacheDirectory=ture,presets[]=es2015,presets[]=stage-0,presets[]=react']
-        }, {
+        },
+        {
           test: /\.json$/,
           loader: 'json'
-        }, {
+        },
+        {
           test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
           loader: 'url-loader?limit=10000&mimetype=application/font-woff'
-        }, {
+        },
+        {
           test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
           loader: 'file-loader'
-        }, {
+        },
+        {
           test: /\.css$/,
           loader: ExtractTextPlugin.extract(
             'style',
@@ -142,7 +157,8 @@ module.exports = function createWebpackConfig (env) {
               'css!cssnext' :
               'css?sourceMap!cssnext?sourceMap'
           )
-        }, {
+        },
+        {
           test: /\.png$/,
           loader: env === 'production' ?
             'url-loader?limit=10240' :
@@ -150,7 +166,8 @@ module.exports = function createWebpackConfig (env) {
           query: {
             mimetype: 'image/png'
           }
-        }, {
+        },
+        {
           test: /\.jpg$/,
           loader: env === 'production' ?
             'url-loader?limit=10240' :
@@ -161,6 +178,11 @@ module.exports = function createWebpackConfig (env) {
         }
 
       ].filter(id)
+    },
+    externals: {
+      'react/lib/ExecutionEnvironment': true,
+      'react/lib/ReactContext': true,
+      'react/addons': true
     },
 
     cssnext: {

@@ -6,7 +6,7 @@ import { clearSelectedUser, saveUser, removeClientRole } from 'actions'
 import UserItem from './UserItem'
 import './styles.less'
 
-export default class UsersList extends Component {
+class UsersList extends Component {
 
   static propTypes = {
     currentUser: PropTypes.object,

@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import SearchStudiesFormPanel from './components/SearchStudiesFormPanel'
+import StatsBar from './components/StatsBar'
 
 import './styles.less'
 
-export default class Dashboard extends Component {
+class Dashboard extends Component {
 
   constructor (props) {
     super(props)
@@ -13,7 +14,9 @@ export default class Dashboard extends Component {
   render () {
     return (
       <div className="dashboard">
-        <div className="container">
+        <div className="container-fluid">
+          <StatsBar />
+
           <div className="row">
             <div className="col-sm-10">
               <SearchStudiesFormPanel />

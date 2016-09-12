@@ -14,13 +14,12 @@ const initialState = {
     unreadTexts: 0,
     unreadEmails: 0,
   },
-  studyListings: {
-    active: 0,
-    inactive: 0,
-  },
-  rewards: {
-    total: 0
-  },
+  rewardsPoint: 0,
+  newNotification: {
+    event: '',
+    event_params: '',
+    entity_ref: null
+  }
 }
 
 export default function (state = initialState, action) {
@@ -76,15 +75,52 @@ export default function (state = initialState, action) {
 
       return state
 
-    case ActionTypes.NOTIFICATION_ARRIVED:
-      let newState = {
-        ...state,
-        notifications: [ action.data, ...state.notifications ],
-        unreadNotificationsCount: state.unreadNotificationsCount + 1,
+    case ActionTypes.FETCH_PATIENT_SIGN_UPS:
+      if (action.status === 'succeeded') {
+        return {
+          ...state,
+          patientSignUps: {
+            today: action.payload.today,
+            yesterday: action.payload.yesterday,
+          },
+        }
       }
 
-      switch (action.data.notification.type) {
-        case 'PATIENT_SIGN_UP':
+      return state
+
+    case ActionTypes.FETCH_PATIENT_MESSAGES:
+      if (action.status === 'succeeded') {
+        return {
+          ...state,
+          patientMessages: {
+            unreadTexts: action.payload.unreadTexts,
+            unreadEmails: action.payload.unreadEmails,
+          },
+        }
+      }
+
+      return state
+
+    case ActionTypes.FETCH_REWARDS_POINT:
+      if (action.status === 'succeeded') {
+        return {
+          ...state,
+          rewardsPoint: action.payload.rewardPoints,
+        }
+      }
+
+      return state
+
+    case ActionTypes.RECEIVE_MESSAGE:
+      let newState = {
+        ...state,
+        notifications: [ action.payload, ...state.notifications ],
+        unreadNotificationsCount: state.unreadNotificationsCount + 1,
+        newNotification: action.payload
+      }
+
+      switch (action.payload.event) {
+        case 'create-patient':
           newState = {
             ...newState,
             patientSignUps: {
@@ -93,22 +129,26 @@ export default function (state = initialState, action) {
             },
           }
 
+        case 'twilio-message':
+          newState = {
+            ...newState,
+            patientMessages: {
+              unreadTexts: newState.patientMessages.unreadTexts + 1,
+              unreadEmails: newState.patientMessages.unreadEmails,
+            },
+          }
+          break
+
+        case 'create-reward':
+          newState = {
+            ...newState,
+            rewardsPoint: newState.rewardsPoint + action.payload.event_params.points
+          }
           break
       }
-
       return newState
 
-    case ActionTypes.FETCH_PATIENT_SIGN_UPS:
-      if (action.status === 'succeeded') {
-        return {
-          ...state,
-          patientSignUps: {
-            today: action.payload.signUps.today,
-            yesterday: action.payload.signUps.yesterday,
-          },
-        }
-      }
-
+    default:
       return state
   }
 

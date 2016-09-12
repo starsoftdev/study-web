@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { reduxForm } from 'redux-form'
 import Select from 'react-select'
 import 'react-select/less/default.less'
-import './styles.less'
 export const fields = [ 'firstName', 'lastName', 'email', 'phone', 'indication', 'age', 'gender', 'bmi', 'status', 'source' ]
 
 class EditPatientForm extends Component {
@@ -11,7 +10,7 @@ class EditPatientForm extends Component {
     indicationOptions: PropTypes.array.isRequired,
     genderOptions: PropTypes.array.isRequired,
     patientCategoryOptions: PropTypes.array.isRequired,
-    infoSourceOptions: PropTypes.array.isRequired,
+    sourceOptions: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -27,7 +26,7 @@ class EditPatientForm extends Component {
       indicationOptions,
       genderOptions,
       patientCategoryOptions,
-      infoSourceOptions,
+      sourceOptions,
       handleSubmit,
       submitting,
       loading,
@@ -66,7 +65,9 @@ class EditPatientForm extends Component {
             <Select
               {...indication}
               options={indicationOptions}
-              placeholder="--Select--"
+              placeholder="Search..."
+              multi
+              joinValues
               disabled={submitting || loading}
               onBlur={() => { indication.onBlur(indication) }}
               />
@@ -113,7 +114,7 @@ class EditPatientForm extends Component {
           <div className="col-sm-9">
             <Select
               {...source}
-              options={infoSourceOptions}
+              options={sourceOptions}
               placeholder="--Select--"
               disabled={submitting || loading}
               onBlur={() => { source.onBlur(source) }}

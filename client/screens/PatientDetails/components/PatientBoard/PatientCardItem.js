@@ -4,7 +4,7 @@ import { Glyphicon } from 'react-bootstrap'
 import Dispatcher from 'utils/dispatcher'
 import ReactDOM from 'react-dom'
 
-export default class PatientCardItem extends Component {
+class PatientCardItem extends Component {
   static propTypes = {
     item: PropTypes.object
   }

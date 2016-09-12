@@ -23,7 +23,7 @@ export removeUser from './removeUser'
 export removeClientRole from './removeClientRole'
 
 export fetchIndications from './fetchIndications'
-export fetchInfoSources from './fetchInfoSources'
+export fetchSources from './fetchSources'
 
 export fetchStudies from './fetchStudies'
 export fetchStudy from './fetchStudy'
@@ -43,6 +43,9 @@ export fetchStudyCategories from './fetchStudyCategories'
 export fetchStudyLevels from './fetchStudyLevels'
 export submitOrderIRBAd from './submitOrderIRBAd'
 
+export fetchCoupon from './fetchCoupon'
+export clearCoupon from './clearCoupon'
+
 export submitGetTrialNotificationForm from './submitGetTrialNotificationForm'
 export saveReferralForm from './saveReferralForm'
 export fetchSiteLocations from './fetchSiteLocations'
@@ -56,6 +59,5 @@ export unsetActiveBlastForm from './unsetActiveBlastForm'
 export setSocket from './setSocket'
 
 export * from './twilioChat'
-export * from './notificationActions'
 export * from './notification'
 export * from './schedules'

@@ -1,9 +1,9 @@
 import { ActionTypes } from 'ActionTypes'
 import _ from 'lodash'
 
-export default function infoSources (state=[], action) {
+export default function sources (state=[], action) {
   switch (action.type) {
-    case ActionTypes.FETCH_INFO_SOURCES:
+    case ActionTypes.FETCH_SOURCES:
       if (action.status === 'succeeded') {
         return action.payload
       }
