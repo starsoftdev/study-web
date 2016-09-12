@@ -21,7 +21,7 @@ module.exports = function (config) {
       ]
     },
     reporters: [
-      'dots'
+      'mocha'
     ],
     webpack: createWebpackConfig('test'),
     webpackServer: {

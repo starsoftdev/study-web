@@ -5,7 +5,7 @@ import TrialCardItem from './TrialCardItem'
 
 import './styles.less'
 
-export default class TrialList extends Component {
+class TrialList extends Component {
 
   static propTypes = {
     studies: PropTypes.array,

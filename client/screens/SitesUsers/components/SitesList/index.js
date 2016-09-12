@@ -7,7 +7,7 @@ import { clearSelectedSite, clearSelectedUser, saveSite, saveUser, removeUser } 
 import SiteItem from './SiteItem'
 import './styles.less'
 
-export default class SitesList extends Component {
+class SitesList extends Component {
 
   static propTypes = {
     currentUser: PropTypes.object,

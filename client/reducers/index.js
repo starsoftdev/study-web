@@ -22,8 +22,8 @@ export clientRoles from './users'
 
 export fetchingIndications from './fetchingIndications'
 export indications from './indications'
-export fetchingInfoSources from './fetchingInfoSources'
-export infoSources from './infoSources'
+export fetchingSources from './fetchingSources'
+export sources from './sources'
 
 export fetchingStudies from './fetchingStudies'
 export fetchingStudy from './fetchingStudy'
@@ -47,6 +47,8 @@ export updatingPatientCategory from './updatingPatientCategory'
 export studyCategories from './studyCategories'
 export studyLevels from './studyLevels'
 
+export coupon from './coupon'
+
 export siteLocations from './siteLocations'
 
 export submittingListStudy from './submittingListStudy'
@@ -59,7 +61,6 @@ export socket from './socket'
 export notification from './notification'
 export submittingGetTrialNotificationForm from './submittingGetTrialNotificationForm'
 export savingReferralForm from './savingReferralForm'
-export notification from './notificationReducer'
 export availNumbers from './availNumbers'
 export activeChat from './activeChat'
 export activeBlastForm from './activeBlastForm'

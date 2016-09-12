@@ -33,62 +33,61 @@ class Application extends React.Component {
     displayNotification: PropTypes.func
   }
 
-  getEventType () {
+  getEventTypes () {
     switch (this.props.location.pathname) {
       case '/dashboard':
-        return 'create-study'
+        return [
+          'create-patient',
+          'twilio-message',
+          'create-reward',
+        ]
       case '/studies/-100/patient-details':
-        return 'twilio-message'
+        return [
+          'twilio-message',
+        ]
       default:
-        return null
+        return []
     }
   }
 
   componentDidMount () {
     const scope = this
     this.appDispatcher = new Dispatcher()
-    this.subscribe(this.props)
+    this.initSocketConnection(this.props)
 
     this.appDispatcher.register(function (payload) {
       if (payload.actionType === 'changePathname') {
-
         scope.props.unsubscribeFromAll(scope.props.socket, { pathname: scope.props.location.pathname }, (err, data, cb) => {
           cb(err, data)
 
-          scope.props.socket.disconnect()
-          //scope.props.socket = null
-          scope.subscribe(scope.props)
+          scope.subscribeToPageEvents()
         })
       }
     })
   }
 
-  componentWillReceiveProps (nextProps) {
-    const event = this.getEventType()
-    console.log('componentWillReceiveProps')
-    //this.subscribe(nextProps)
-
-    if (!_.isEmpty(nextProps.socket)) {
-      nextProps.socket.on('connect', () => {
-        if (nextProps.location.pathname === '/dashboard' || nextProps.location.pathname === '/studies/-100/patient-details') {
-          nextProps.subscribe(this.props.socket, event,
-            { pathname: nextProps.location.pathname }, (err, data, cb) => {
-              cb(err, data)
-
-              nextProps.socket.on('notification', (notification) => {
-                nextProps.displayNotification(notification)
-              })
-            })
-        }
-      })
-    } else {
-      console.error('problem with socket connection')
-    }
+  initSocketConnection (props) {
+    const { setSocket } = this.props
+    setSocket(props, 'nsp', (socket) => {
+      if (socket) {
+        socket.on('notification', (notification) => {
+          props.displayNotification(notification)
+        })
+        socket.on('connect', () => {
+          this.subscribeToPageEvents()
+        })
+      }
+    })
   }
 
-  subscribe (props) {
-    const { setSocket } = this.props
-    setSocket(props, 'nsp')
+  subscribeToPageEvents () {
+    const events = this.getEventTypes()
+    for (const event of events) {
+      this.props.subscribe(this.props.socket, event,
+        { pathname: this.props.location.pathname }, (err, data, cb) => {
+          cb(err, data)
+        })
+    }
   }
 
   render () {

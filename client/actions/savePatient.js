@@ -19,7 +19,7 @@ export default function savePatient (patientId, patientData) {
     if (patientId) {
       if (patientData.patient_category_id) {
         const payload = _.assign({ id: patientId }, patientData)
-        dispatch(createEntity('/patients/update_with_category', payload, afterSave))
+        dispatch(createEntity('/patients/update_with_relations', payload, afterSave))
       } else {
         dispatch(updateEntity('/patients/' + patientId, patientData, afterSave))
       }

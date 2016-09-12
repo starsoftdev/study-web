@@ -16,7 +16,6 @@ import Dispatcher from 'utils/dispatcher'
 
 import _ from 'lodash'
 import t from 'tcomb-form'
-import $ from 'jquery'
 import './styles.less'
 
 const TCombForm = t.form.Form
@@ -80,13 +79,7 @@ class ChatForm extends React.Component {
     savingTwilioMessage: PropTypes.bool
   }
 
-  scrollMessContainer () {
-    //console.log(ReactDOM.findDOMNode(this))
-    let messContainer = $('#mess-container')
-    if (messContainer.length > 0) {
-      messContainer.scrollTop(messContainer[0].scrollHeight)
-    }
-  }
+  scrollMessContainer () {}
 
   close () {
     let scope = this

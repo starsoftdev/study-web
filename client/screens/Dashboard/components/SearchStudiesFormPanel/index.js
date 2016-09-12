@@ -19,7 +19,9 @@ class SearchStudiesFormPanel extends React.Component {
   constructor (props) {
     super(props)
 
-    this.props.fetchSites(this.props.currentUser, {})
+    if (this.props.currentUser.userInfo.roleForClient) {
+      this.props.fetchSites(this.props.currentUser, {})
+    }
   }
 
   handleSubmit (searchFilter) {
