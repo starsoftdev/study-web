@@ -12,7 +12,7 @@ import Input from 'components/Input';
 import referFormValidator from './validator';
 
 @reduxForm({ form: 'refer', validate: referFormValidator })
-export class ReferForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class ReferForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     error: React.PropTypes.object,
     handleSubmit: React.PropTypes.func.isRequired,
