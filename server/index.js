@@ -1,3 +1,6 @@
+// enable new relic monitoring
+require('newrelic')
+
 var path = require('path')
 var express = require('express')
 var logger = require('winston')
