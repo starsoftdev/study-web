@@ -8,7 +8,7 @@ function loginRequest (credentials, cb) {
 
 function getCurrentUserInfo (authData, cb) {
   const queryString = encodeURIComponent('filter') + '=' +
-    encodeURIComponent('{"include":"roleForClient"}') + '&access_token=' + authData.id
+    encodeURIComponent('{"include": {"relation":"roleForClient", "scope":{"include":"client"}}}') + '&access_token=' + authData.id
   return apiCall('/users/' + authData.userId + '?' + queryString, { method: 'get' }, cb)
 }
 

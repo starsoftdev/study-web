@@ -45,6 +45,8 @@ export submitOrderIRBAd from './submitOrderIRBAd'
 
 export fetchCoupon from './fetchCoupon'
 export clearCoupon from './clearCoupon'
+export fetchCredits from './fetchCredits'
+export fetchCards from './fetchCards'
 
 export submitGetTrialNotificationForm from './submitGetTrialNotificationForm'
 export saveReferralForm from './saveReferralForm'
