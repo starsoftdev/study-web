@@ -4,6 +4,7 @@ import asyncAction from 'utils/asyncAction'
 
 export default function fetchCoupon (id) {
   return asyncAction(ActionTypes.FETCH_COUPON, (cb, dispatch) => {
-    dispatch(searchEntities('/clients/retrieveCoupon/' + id, {}, cb))
+    const encodedCouponId = encodeURIComponent(id)
+    dispatch(searchEntities('/clients/retrieveCoupon/' + encodedCouponId, {}, cb))
   })
 }
