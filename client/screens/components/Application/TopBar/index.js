@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
-import AddCreditsForm from 'forms/AddCredits'
 import { Link } from 'react-router'
 import { Nav, Navbar, NavItem } from 'react-bootstrap'
 
@@ -9,6 +8,7 @@ import { logout } from 'actions'
 import isSessionExpired from 'utils/isSessionExpired'
 import history from 'utils/history'
 
+import AddCreditsPanel from './AddCredits'
 import AvatarMenu from './AvatarMenu'
 import HelpMenu from './HelpMenu'
 import NotificationBox from './NotificationBox'
@@ -57,16 +57,8 @@ class TopBar extends React.Component {
     this.setState({ addCreditsModalOpen: false })
   }
 
-  addCredits () {
-    console.log('Add credits!!!')
-    this.closeAddCreditsModal()
-  }
-
   render () {
     const { authorized } = this.props.authorization
-    const creditCardOptions = [ { label: 'Credit Card 1', value: 'Credit Card 1' }, { label: 'Credit Card 2', value: 'Credit Card 2' } ]
-    const credits = 100
-    const price = 77
 
     return (
       <header id="header">
@@ -138,7 +130,7 @@ class TopBar extends React.Component {
                 <Modal.Title>Add Credits</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <AddCreditsForm credits={credits} price={price} creditCardOptions={creditCardOptions} onSubmit={this.addCredits.bind(this)}  />
+                <AddCreditsPanel />
               </Modal.Body>
             </Modal>
           </div>

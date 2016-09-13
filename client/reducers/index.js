@@ -47,7 +47,12 @@ export updatingPatientCategory from './updatingPatientCategory'
 export studyCategories from './studyCategories'
 export studyLevels from './studyLevels'
 
+export fetchingCoupon from './fetchingCoupon'
 export coupon from './coupon'
+export fetchingCredits from './fetchingCredits'
+export credits from './credits'
+export fetchingCards from './fetchingCards'
+export cards from './cards'
 
 export siteLocations from './siteLocations'
 

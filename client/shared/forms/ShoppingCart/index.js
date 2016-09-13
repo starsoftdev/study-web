@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { reduxForm } from 'redux-form'
-import { fetchCoupon } from 'actions'
+import { fetchCoupon, fetchCards } from 'actions'
 import Select from 'react-select'
 import 'react-select/less/default.less'
 import ActivityIcon from 'components/ActivityIcon'
@@ -11,15 +11,20 @@ export const fields = [ 'coupon', 'creditCard' ]
 class ShoppingCartForm extends Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
+    currentUser: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     addOns: PropTypes.array.isRequired,
-    creditCardOptions: PropTypes.array.isRequired,
+    fetchingCoupon: PropTypes.bool,
     fetchedCoupon: PropTypes.object,
     fetchCoupon: PropTypes.func,
+    fetchingCards: PropTypes.bool,
+    fetchedCards: PropTypes.object,
+    fetchCards: PropTypes.func,
   }
 
   constructor (props) {
     super(props)
+    this.props.fetchCards(this.props.currentUser.userInfo.roleForClient.client.stripeCustomerId)
   }
 
   render () {
@@ -27,9 +32,11 @@ class ShoppingCartForm extends Component {
       fields: { coupon, creditCard },
       handleSubmit,
       addOns,
-      creditCardOptions,
+      fetchingCoupon,
       fetchedCoupon,
       fetchCoupon,
+      fetchingCards,
+      fetchedCards,
       } = this.props
 
     const addOnsContent = addOns.map((item, index) => (
@@ -49,7 +56,12 @@ class ShoppingCartForm extends Component {
         discounts = addOnsTotalAmount * fetchedCoupon.percent_off
       }
     }
-
+    const creditCardOptions = _.map(fetchedCards.data, cardIterator => {
+      return {
+        label: 'xxxx xxxx xxxx ' + cardIterator.last4,
+        value: cardIterator.id,
+      }
+    })
 
     return (
       <form className="form-shopping-cart" onSubmit={handleSubmit}>
@@ -72,10 +84,15 @@ class ShoppingCartForm extends Component {
           </div>
           <div className="row form-group">
             <div className="col-sm-9">
-              <input type="text" className="form-control" {...coupon} />
+              <input type="text" className="form-control" disabled={fetchingCoupon} {...coupon} />
             </div>
             <div className="col-sm-3">
-              <button type="button" className="btn btn-default" onClick={() => { fetchCoupon(coupon.value) }}>APPLY</button>
+              <button type="button" className="btn btn-default" onClick={() => { fetchCoupon(coupon.value) }}>
+                {fetchingCoupon
+                  ? <span><ActivityIcon /></span>
+                  : <span>APPLY</span>
+                }
+              </button>
             </div>
           </div>
           <div className="form-group">
@@ -90,6 +107,7 @@ class ShoppingCartForm extends Component {
           <div className="form-group">
             <Select
               {...creditCard}
+              disabled={fetchingCards}
               options={creditCardOptions}
               placeholder="Select Credit Card"
               onBlur={() => { creditCard.onBlur(creditCard) }}
@@ -108,7 +126,12 @@ export default reduxForm({
   form: 'shoppingCart',
   fields
 }, state => ({ // mapStateToProps
-  fetchedCoupon: state.coupon // will pull state
-}), {
-  fetchCoupon,  // mapDispatchToProps
+  currentUser: state.authorization.authData,
+  fetchingCoupon: state.fetchingCoupon,
+  fetchedCoupon: state.coupon,
+  fetchingCards: state.fetchingCards,
+  fetchedCards: state.cards,
+}), {         // mapDispatchToProps
+  fetchCoupon,
+  fetchCards,
 })(ShoppingCartForm)
