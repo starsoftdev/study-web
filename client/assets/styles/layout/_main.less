@@ -3232,3 +3232,28 @@
 		opacity: 0.65;
 	}
 }
+
+.Select {
+  .Select-control {
+    border-width: 2px !important;
+    border-color: #636363 !important;
+    height: 40px !important;
+  }
+
+  .Select-control:hover {
+    border-color: #00afef !important;
+  }
+
+  &.is-open {
+    .Select-control {
+      border-color: #00afef !important;
+    }
+  }
+
+  .Select-option {
+    &.is-focused {
+      background-color: #00afef !important;
+      color: #fff;
+    }
+  }
+}
