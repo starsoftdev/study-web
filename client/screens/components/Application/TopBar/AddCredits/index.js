@@ -17,8 +17,8 @@ class AddCreditsPanel extends Component {
     this.props.fetchCredits()
   }
 
-  checkoutCredits (coupon, creditCard) {
-    console.log(coupon, ' ', creditCard)
+  checkoutCredits (params) {
+
   }
 
   render () {

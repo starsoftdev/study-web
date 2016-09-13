@@ -47,21 +47,28 @@ class ShoppingCartForm extends Component {
         <td>${item.total}</td>
       </tr>
     ))
-    const addOnsTotalAmount = _.sum(addOns, addOnIterator => addOnIterator.total)
+    const addOnsTotalAmount = _.sumBy(addOns, addOnIterator => addOnIterator.total)
     let discounts = 0
     if (fetchedCoupon) {
       if (fetchedCoupon.amount_off) {
         discounts = fetchedCoupon.amount_off
       } else if (fetchedCoupon.percent_off) {
-        discounts = addOnsTotalAmount * fetchedCoupon.percent_off
+        discounts = addOnsTotalAmount * (fetchedCoupon.percent_off / 100)
       }
     }
-    const creditCardOptions = _.map(fetchedCards.data, cardIterator => {
-      return {
-        label: 'xxxx xxxx xxxx ' + cardIterator.last4,
-        value: cardIterator.id,
-      }
-    })
+    let creditCardOptions = [ {
+      label: 'Add New Card',
+      value: 0,
+    } ]
+    if (fetchedCards) {
+      let options = _.map(fetchedCards.data, cardIterator => {
+        return {
+          label: 'xxxx xxxx xxxx ' + cardIterator.last4,
+          value: cardIterator.id,
+        }
+      })
+      creditCardOptions = _.concat(options, creditCardOptions)
+    }
 
     return (
       <form className="form-shopping-cart" onSubmit={handleSubmit}>
