@@ -40,15 +40,7 @@ class SearchStudiesFormPanel extends React.Component {
     const statusOptions = [ { label: 'All', value: 'All' }, { label: 'Active', value: 'Active' }, { label: 'Inactive', value: 'Inactive' } ]
 
     return (
-      <div className="panel panel-default">
-        <div className="panel-body">
-          <div className="studies-search">
-            <div className="search-form">
-              <SearchStudiesForm loading={fetchingSites} submitting={fetchingStudies} siteOptions={siteOptions} statusOptions={statusOptions} onSubmit={this.handleSubmit.bind(this)} />
-            </div>
-          </div>
-        </div>
-      </div>
+      <SearchStudiesForm loading={fetchingSites} submitting={fetchingStudies} siteOptions={siteOptions} statusOptions={statusOptions} onSubmit={this.handleSubmit.bind(this)} />
     )
   }
 }
