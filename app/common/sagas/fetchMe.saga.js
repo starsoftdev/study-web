@@ -22,14 +22,15 @@ export default function* fetchMeSaga() {
 export function* fetchMeFromToken() {
   const userId = getItem('user_id');
   const authToken = getItem('auth_token');
-  const miscParam = encodeURIComponent('{"include":"roleForClient"}');
+  // const miscParam = encodeURIComponent('{"include":"roleForClient"}');
 
   if (!authToken) {
     return;
   }
 
   try {
-    const requestURL = `${API_URL}/users/${userId}?access_token=${authToken}&filter=${miscParam}`;
+    // const requestURL = `${API_URL}/users/${userId}?access_token=${authToken}&filter=${miscParam}`;
+    const requestURL = `${API_URL}/users/${userId}?access_token=${authToken}`;
     const response = yield call(request, requestURL);
 
     yield put(setUserData(response));
