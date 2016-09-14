@@ -17,11 +17,7 @@ class Dashboard extends Component {
         <div className="container-fluid">
           <StatsBar />
 
-          <div className="row">
-            <div className="col-sm-10">
-              <SearchStudiesFormPanel />
-            </div>
-          </div>
+          <SearchStudiesFormPanel />
         </div>
       </div>
     )

@@ -30,33 +30,32 @@ class SearchStudiesForm extends Component {
       } = this.props
 
     return (
-      <form onSubmit={handleSubmit}>
-        <div className="search-studies">
-          <div className="row">
-            <div className="col-sm-3">
-              <input className="form-control search-name" type="text" disabled={submitting || loading} placeholder="Search Name" {...name} />
+      <form className="form-search clearfix" onSubmit={handleSubmit}>
+        <button type="submit" className="btn btn-primary pull-right">+ List New Study</button>
+        <div className="fields-holder">
+          <div className="search-area pull-left">
+            <div className="field">
+              <input type="search" id="search" className="form-control keyword-search" placeholder="Search" />
+              <label htmlFor="search"><i className="icon-icon_search2"></i></label>
             </div>
-            <div className="col-sm-3">
-              <Select
-                {...site}
-                options={siteOptions}
-                placeholder="Select..."
-                disabled={submitting || loading}
-                onBlur={() => { site.onBlur(site) }}
-                />
-            </div>
-            <div className="col-sm-3">
-              <Select
-                {...status}
-                options={statusOptions}
-                placeholder="Select..."
-                disabled={submitting || loading}
-                onBlur={() => { status.onBlur(status) }}
-                />
-            </div>
-            <div className="col-sm-3">
-              <button type="submit" className="btn btn-success btn-search">Search</button>
-            </div>
+          </div>
+          <div className="pull-left custom-select">
+            <Select
+              {...site}
+              options={siteOptions}
+              placeholder="Select Site Location"
+              disabled={submitting || loading}
+              onBlur={() => { site.onBlur(site) }}
+              />
+          </div>
+          <div className="pull-left custom-select">
+            <Select
+              {...status}
+              options={statusOptions}
+              placeholder="Select Study Status"
+              disabled={submitting || loading}
+              onBlur={() => { status.onBlur(status) }}
+              />
           </div>
         </div>
       </form>
