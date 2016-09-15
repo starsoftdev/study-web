@@ -47,6 +47,7 @@ export fetchCoupon from './fetchCoupon'
 export clearCoupon from './clearCoupon'
 export fetchCredits from './fetchCredits'
 export fetchCards from './fetchCards'
+export checkoutCredits from './checkoutCredits'
 
 export submitGetTrialNotificationForm from './submitGetTrialNotificationForm'
 export saveReferralForm from './saveReferralForm'
