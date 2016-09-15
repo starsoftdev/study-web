@@ -25,6 +25,7 @@ class TopBar extends React.Component {
     authorization: PropTypes.any,
     location: PropTypes.any,
     logoutRequest: PropTypes.func.isRequired,
+    charge: PropTypes.object,
   }
 
   componentDidMount () {
@@ -147,12 +148,15 @@ class TopBar extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  charge: state.charge,
+})
 
 const mapDispatchToProps = {
   logoutRequest: logout,
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(TopBar)
