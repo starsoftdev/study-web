@@ -21,6 +21,9 @@ app.use(require('webpack-dev-middleware')(compiler, {
 
 app.use(require('webpack-hot-middleware')(compiler))
 
+// static assets served from public folder
+app.use(express.static(path.join(__dirname, '/../public/')))
+
 logger.level = process.env.LOGGER_LEVEL || (process.env.NODE_ENV === 'development'? 'debug': 'info')
 
 app.get('*', (req, res) => {
