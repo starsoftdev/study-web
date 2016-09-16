@@ -5,7 +5,7 @@ const creatingPatient = asyncActionIsFetching(ActionTypes.CREATE_PATIENT)
 const updatingPatient = asyncActionIsFetching(ActionTypes.UPDATE_PATIENT)
 
 export default function savingPatient (state = false, action) {
-  state = creatingPatient(state, action)
-  state = updatingPatient(state, action)
-  return state
+  const newState = creatingPatient(state, action) || updatingPatient(state, action)
+
+  return newState
 }

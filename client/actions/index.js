@@ -49,6 +49,8 @@ export fetchCredits from './fetchCredits'
 export fetchCards from './fetchCards'
 export checkoutCredits from './checkoutCredits'
 
+export saveCard from './saveCard'
+
 export submitGetTrialNotificationForm from './submitGetTrialNotificationForm'
 export saveReferralForm from './saveReferralForm'
 export fetchSiteLocations from './fetchSiteLocations'
