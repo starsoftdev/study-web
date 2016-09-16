@@ -1,35 +1,72 @@
 import React, { Component, PropTypes } from 'react'
 import { reduxForm } from 'redux-form'
-import { fetchCoupon } from 'actions'
+import { fetchCoupon, clearCoupon, fetchCards } from 'actions'
+import { Modal } from 'react-bootstrap'
+import AddNewCardPanel from '../../../screens/components/AddNewCard'
 import Select from 'react-select'
 import 'react-select/less/default.less'
 import ActivityIcon from 'components/ActivityIcon'
 import _ from 'lodash'
 import './styles.less'
-export const fields = [ 'coupon', 'creditCard' ]
+export const fields = [ 'couponId', 'creditCard' ]
 
 class ShoppingCartForm extends Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
+    currentUser: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     addOns: PropTypes.array.isRequired,
-    creditCardOptions: PropTypes.array.isRequired,
-    fetchedCoupon: PropTypes.object,
+    fetchingCoupon: PropTypes.bool,
+    coupon: PropTypes.object,
     fetchCoupon: PropTypes.func,
+    clearCoupon: PropTypes.func,
+    fetchingCards: PropTypes.bool,
+    cards: PropTypes.object,
+    fetchCards: PropTypes.func,
+    checkingOut: PropTypes.bool,
   }
 
   constructor (props) {
     super(props)
+    this.props.fetchCards(this.props.currentUser.userInfo.roleForClient.client.stripeCustomerId)
+  }
+
+  componentWillUnmount () {
+    this.props.clearCoupon()
+  }
+
+  state = {
+    addNewCardModalOpen: false,
+  }
+
+  openAddNewCardModal () {
+    this.setState({ addNewCardModalOpen: true })
+  }
+
+  closeAddNewCardModal () {
+    this.setState({ addNewCardModalOpen: false })
+    this.props.fetchCards(this.props.currentUser.userInfo.roleForClient.client.stripeCustomerId)
+  }
+
+  onCreditCardSelectionChanged (selection) {
+    if (selection.value === 0) {
+      this.openAddNewCardModal()
+    } else {
+      this.setState({ addNewCardModalOpen: false })
+    }
   }
 
   render () {
     const {
-      fields: { coupon, creditCard },
+      fields: { couponId, creditCard },
       handleSubmit,
       addOns,
-      creditCardOptions,
-      fetchedCoupon,
+      fetchingCoupon,
+      coupon,
       fetchCoupon,
+      fetchingCards,
+      cards,
+      checkingOut,
       } = this.props
 
     const addOnsContent = addOns.map((item, index) => (
@@ -40,16 +77,29 @@ class ShoppingCartForm extends Component {
         <td>${item.total}</td>
       </tr>
     ))
-    const addOnsTotalAmount = _.sum(addOns, addOnIterator => addOnIterator.total)
+    const addOnsTotalAmount = _.sumBy(addOns, addOnIterator => addOnIterator.total)
     let discounts = 0
-    if (fetchedCoupon) {
-      if (fetchedCoupon.amount_off) {
-        discounts = fetchedCoupon.amount_off
-      } else if (fetchedCoupon.percent_off) {
-        discounts = addOnsTotalAmount * fetchedCoupon.percent_off
+    if (coupon) {
+      if (coupon.amount_off) {
+        discounts = coupon.amount_off
+      } else if (coupon.percent_off) {
+        discounts = addOnsTotalAmount * (coupon.percent_off / 100)
       }
     }
-
+    const totalAmount = parseFloat((addOnsTotalAmount - discounts).toFixed(2))
+    let creditCardOptions = [ {
+      label: 'Add New Card',
+      value: 0,
+    } ]
+    if (cards) {
+      let options = _.map(cards.data, cardIterator => {
+        return {
+          label: 'xxxx xxxx xxxx ' + cardIterator.last4,
+          value: cardIterator.id,
+        }
+      })
+      creditCardOptions = _.concat(options, creditCardOptions)
+    }
 
     return (
       <form className="form-shopping-cart" onSubmit={handleSubmit}>
@@ -72,10 +122,15 @@ class ShoppingCartForm extends Component {
           </div>
           <div className="row form-group">
             <div className="col-sm-9">
-              <input type="text" className="form-control" {...coupon} />
+              <input type="text" className="form-control" disabled={fetchingCoupon || checkingOut} {...couponId} />
             </div>
             <div className="col-sm-3">
-              <button type="button" className="btn btn-default" onClick={() => { fetchCoupon(coupon.value) }}>APPLY</button>
+              <button type="button" className="btn btn-default" disabled={fetchingCoupon || checkingOut} onClick={() => { fetchCoupon(couponId.value) }}>
+                {fetchingCoupon
+                  ? <span><ActivityIcon /></span>
+                  : <span>APPLY</span>
+                }
+              </button>
             </div>
           </div>
           <div className="form-group">
@@ -83,20 +138,43 @@ class ShoppingCartForm extends Component {
               <strong>Total</strong>
             </div>
             <div className="pull-right">
-              <strong>${addOnsTotalAmount - discounts}</strong>
+              <strong>${totalAmount}</strong>
             </div>
             <div className="clearfix"></div>
           </div>
-          <div className="form-group">
-            <Select
-              {...creditCard}
-              options={creditCardOptions}
-              placeholder="Select Credit Card"
-              onBlur={() => { creditCard.onBlur(creditCard) }}
-              />
+          <div className="row form-group">
+            <div className="col-sm-9">
+              <Select
+                {...creditCard}
+                disabled={fetchingCards || checkingOut}
+                options={creditCardOptions}
+                placeholder="Select Credit Card"
+                onChange={(selection) => { this.onCreditCardSelectionChanged(selection); creditCard.onChange(creditCard.value) }}
+                onBlur={() => { creditCard.onBlur(creditCard) }}
+                />
+              <Modal className="add-new-card" bsSize="large" show={this.state.addNewCardModalOpen} onHide={this.closeAddNewCardModal.bind(this)}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Add New Card</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <AddNewCardPanel closeModal={this.closeAddNewCardModal.bind(this)} />
+                </Modal.Body>
+              </Modal>
+            </div>
+            <div className="col-sm-3">
+              {fetchingCards
+                ? <span><ActivityIcon /></span>
+                : null
+              }
+            </div>
           </div>
           <div className="form-group">
-            <button type="submit" className="btn btn-success">SUBMIT</button>
+            <button type="submit" className="btn btn-success" disabled={checkingOut}>
+              {checkingOut
+                ? <span><ActivityIcon /></span>
+                : <span>SUBMIT</span>
+              }
+            </button>
           </div>
         </div>
       </form>
@@ -108,7 +186,14 @@ export default reduxForm({
   form: 'shoppingCart',
   fields
 }, state => ({ // mapStateToProps
-  fetchedCoupon: state.coupon // will pull state
-}), {
-  fetchCoupon,  // mapDispatchToProps
+  currentUser: state.authorization.authData,
+  fetchingCoupon: state.fetchingCoupon,
+  coupon: state.coupon,
+  fetchingCards: state.fetchingCards,
+  cards: state.cards,
+  checkingOut: state.checkingOut,
+}), {         // mapDispatchToProps
+  fetchCoupon,
+  clearCoupon,
+  fetchCards,
 })(ShoppingCartForm)

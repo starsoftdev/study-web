@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { Modal } from 'react-bootstrap'
 import { Link } from 'react-router'
 import { Nav, Navbar, NavItem } from 'react-bootstrap'
 
@@ -7,6 +8,7 @@ import { logout } from 'actions'
 import isSessionExpired from 'utils/isSessionExpired'
 import history from 'utils/history'
 
+import AddCreditsPanel from './AddCredits'
 import AvatarMenu from './AvatarMenu'
 import HelpMenu from './HelpMenu'
 import NotificationBox from './NotificationBox'
@@ -23,6 +25,7 @@ class TopBar extends React.Component {
     authorization: PropTypes.any,
     location: PropTypes.any,
     logoutRequest: PropTypes.func.isRequired,
+    charge: PropTypes.object,
   }
 
   componentDidMount () {
@@ -41,6 +44,18 @@ class TopBar extends React.Component {
         this.props.logoutRequest()
       }
     }
+  }
+
+  state = {
+    addCreditsModalOpen: false,
+  }
+
+  openAddCreditsModal () {
+    this.setState({ addCreditsModalOpen: true })
+  }
+
+  closeAddCreditsModal () {
+    this.setState({ addCreditsModalOpen: false })
   }
 
   render () {
@@ -108,11 +123,18 @@ class TopBar extends React.Component {
           <HelpMenu />
 
           <div className="get-credits pull-left">
-            <i className="icon-credit margin-right-5px" />
-            <span className="margin-right-5px">100 Credits</span>
-            <a href="#" className="btn btn-default">+ ADD CREDITS</a>
+            <i className="icon-credit" />
+            <span>100 Credits</span>
+            <button className="btn btn-default" onClick={this.openAddCreditsModal.bind(this)}>+ ADD CREDITS</button>
+            <Modal className="add-credits" bsSize="large" show={this.state.addCreditsModalOpen} onHide={this.closeAddCreditsModal.bind(this)}>
+              <Modal.Header closeButton>
+                <Modal.Title>Add Credits</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <AddCreditsPanel closeModal={this.closeAddCreditsModal.bind(this)} />
+              </Modal.Body>
+            </Modal>
           </div>
-
           <AvatarMenu handleLogoutClick={this.handleLogoutClick.bind(this)} />
         </div>
       </header>
@@ -126,12 +148,15 @@ class TopBar extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  charge: state.charge,
+})
 
 const mapDispatchToProps = {
   logoutRequest: logout,
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(TopBar)
