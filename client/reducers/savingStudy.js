@@ -6,14 +6,13 @@ const initialState = {
   savedStudy: []
 }
 
-const creatingSite = asyncActionIsFetching(ActionTypes.CREATE_STUDY)
-const updatingSite = asyncActionIsFetching(ActionTypes.UPDATE_STUDY)
+const creatingStudy = asyncActionIsFetching(ActionTypes.CREATE_STUDY)
+const updatingStudy = asyncActionIsFetching(ActionTypes.UPDATE_STUDY)
 
 export function savingStudy (state = false, action) {
-  let newStudy = false
-  newStudy = creatingSite(state, action)
-  newStudy = updatingSite(state, action)
-  return newStudy
+  const newState = creatingStudy(state, action) || updatingStudy(state, action)
+
+  return newState
 }
 
 export function listStudy (state = initialState, action) {

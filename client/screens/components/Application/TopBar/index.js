@@ -131,7 +131,7 @@ class TopBar extends React.Component {
                 <Modal.Title>Add Credits</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <AddCreditsPanel />
+                <AddCreditsPanel closeModal={this.closeAddCreditsModal.bind(this)} />
               </Modal.Body>
             </Modal>
           </div>

@@ -12,6 +12,8 @@ class AddCreditsPanel extends Component {
     fetchCredits: PropTypes.func,
     credits: PropTypes.object,
     coupon: PropTypes.object,
+    checkoutCredits: PropTypes.func,
+    closeModal: PropTypes.func,
   }
 
   constructor (props) {
@@ -45,6 +47,7 @@ class AddCreditsPanel extends Component {
     const totalAmount = parseFloat((addOnsTotalAmount - discounts).toFixed(2))
     const cardId = params.creditCard
     this.props.checkoutCredits(customerId, cardId, totalAmount)
+    this.props.closeModal()
   }
 
   render () {

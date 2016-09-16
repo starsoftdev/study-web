@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { reduxForm } from 'redux-form'
 import { fetchCoupon, clearCoupon, fetchCards } from 'actions'
+import { Modal } from 'react-bootstrap'
+import AddNewCardPanel from '../../../screens/components/AddNewCard'
 import Select from 'react-select'
 import 'react-select/less/default.less'
 import ActivityIcon from 'components/ActivityIcon'
@@ -31,6 +33,27 @@ class ShoppingCartForm extends Component {
 
   componentWillUnmount () {
     this.props.clearCoupon()
+  }
+
+  state = {
+    addNewCardModalOpen: false,
+  }
+
+  openAddNewCardModal () {
+    this.setState({ addNewCardModalOpen: true })
+  }
+
+  closeAddNewCardModal () {
+    this.setState({ addNewCardModalOpen: false })
+    this.props.fetchCards(this.props.currentUser.userInfo.roleForClient.client.stripeCustomerId)
+  }
+
+  onCreditCardSelectionChanged (selection) {
+    if (selection.value === 0) {
+      this.openAddNewCardModal()
+    } else {
+      this.setState({ addNewCardModalOpen: false })
+    }
   }
 
   render () {
@@ -119,14 +142,31 @@ class ShoppingCartForm extends Component {
             </div>
             <div className="clearfix"></div>
           </div>
-          <div className="form-group">
-            <Select
-              {...creditCard}
-              disabled={fetchingCards || checkingOut}
-              options={creditCardOptions}
-              placeholder="Select Credit Card"
-              onBlur={() => { creditCard.onBlur(creditCard) }}
-              />
+          <div className="row form-group">
+            <div className="col-sm-9">
+              <Select
+                {...creditCard}
+                disabled={fetchingCards || checkingOut}
+                options={creditCardOptions}
+                placeholder="Select Credit Card"
+                onChange={(selection) => { this.onCreditCardSelectionChanged(selection); creditCard.onChange(creditCard.value) }}
+                onBlur={() => { creditCard.onBlur(creditCard) }}
+                />
+              <Modal className="add-new-card" bsSize="large" show={this.state.addNewCardModalOpen} onHide={this.closeAddNewCardModal.bind(this)}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Add New Card</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <AddNewCardPanel closeModal={this.closeAddNewCardModal.bind(this)} />
+                </Modal.Body>
+              </Modal>
+            </div>
+            <div className="col-sm-3">
+              {fetchingCards
+                ? <span><ActivityIcon /></span>
+                : null
+              }
+            </div>
           </div>
           <div className="form-group">
             <button type="submit" className="btn btn-success" disabled={checkingOut}>
