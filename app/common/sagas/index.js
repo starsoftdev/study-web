@@ -1,5 +1,6 @@
 import { fork } from 'redux-saga/effects';
 
+import baseDataSaga from './baseData.saga';
 import fetchMeSaga from './fetchMe.saga';
 import loginSaga from './login.saga';
 
@@ -8,15 +9,9 @@ import loginSaga from './login.saga';
 // exporting array of individual sagas doesn't work
 // middleware run only accepts one saga
 export default function* globalSagas() {
-  yield fork(fetchMeSaga);
-  yield fork(loginSaga);
+  yield fork(baseDataSaga);
 
-  /*
-  const watcherA = yield fork(fetchMeSaga);
-  const watcherB = yield fork(loginSaga);
-  // Suspend execution until location changes
-  yield take(LOCATION_CHANGE);
-  yield cancel(watcherA);
-  yield cancel(watcherB);
-  */
+  yield fork(fetchMeSaga);
+
+  yield fork(loginSaga);
 }
