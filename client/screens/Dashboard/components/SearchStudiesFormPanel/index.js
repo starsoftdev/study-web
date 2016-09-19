@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { fetchStudies, fetchSites } from 'actions'
 import SearchStudiesForm from 'forms/SearchStudies'
+import StudyStatusPanel from '../StudyStatusPanel'
 import ActivityIcon from 'components/ActivityIcon'
 import './styles.less'
 
@@ -29,7 +30,7 @@ class SearchStudiesFormPanel extends React.Component {
   }
 
   render () {
-    const { sites, fetchingStudies, fetchingSites } = this.props
+    const { sites, studies, fetchingStudies, fetchingSites } = this.props
     let siteOptions = _.map(sites, siteIterator => {
       return {
         label: siteIterator.name,
@@ -40,7 +41,10 @@ class SearchStudiesFormPanel extends React.Component {
     const statusOptions = [ { label: 'All', value: 'All' }, { label: 'Active', value: 'Active' }, { label: 'Inactive', value: 'Inactive' } ]
 
     return (
-      <SearchStudiesForm loading={fetchingSites} submitting={fetchingStudies} siteOptions={siteOptions} statusOptions={statusOptions} onSubmit={this.handleSubmit.bind(this)} />
+      <div>
+        <SearchStudiesForm loading={fetchingSites} submitting={fetchingStudies} siteOptions={siteOptions} statusOptions={statusOptions} onSubmit={this.handleSubmit.bind(this)} />
+        <StudyStatusPanel loading={fetchingSites} submitting={fetchingStudies} studies={studies} />
+      </div>
     )
   }
 }
@@ -50,6 +54,7 @@ const mapStateToProps = (state) => ({
   fetchingStudies: state.fetchingStudies,
   fetchingSites: state.fetchingSites,
   sites: state.sites,
+  studies: state.studies,
 })
 const mapDispatchToProps = {
   fetchStudies,
