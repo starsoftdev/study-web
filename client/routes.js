@@ -44,14 +44,14 @@ export default (store) => {
         <Route path="sites-users" getComponent={lazyLoadComponent(SitesUsers)} />
         <Route path="patient-database" getComponent={lazyLoadComponent(PatientDatabase)} />
         <Route path="order-irb-ad-creation" getComponent={lazyLoadComponent(OrderIRBAdCreation)} />
+        <Route path="studies/:id" getComponent={lazyLoadComponent(Study)} />
+        <Route path="studies/:id/patient-details" getComponent={lazyLoadComponent(PatientDetails)} />
       </Route>
 
       <Route path="clinical-trial-patient-recruitment-patient-enrollment" getComponent={lazyLoadComponent(GetReport)} />
       <Route path="listnewstudy" getComponent={lazyLoadComponent(ListStudy)} />
       <Route path="getproposal" getComponent={lazyLoadComponent(GetProposal)} />
       <Route path="login" getComponent={lazyLoadComponent(Login)} />
-      <Route path="studies/:id" getComponent={lazyLoadComponent(Study)} />
-      <Route path="studies/:id/patient-details" getComponent={lazyLoadComponent(PatientDetails)} />
       <Route path="trials" getComponent={lazyLoadComponent(TrialListing)} />
       <Route path="get-referral" getComponent={lazyLoadComponent(GetReferral)} />
 
