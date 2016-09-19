@@ -7,6 +7,15 @@ export default function saveCard (customerId, cardData) {
   const actionType = cardData.id ? ActionTypes.UPDATE_CARD : ActionTypes.CREATE_CARD
 
   return asyncAction(actionType, { customerId, cardData }, (cb, dispatch) => {
-    dispatch(createEntity('/clients/save_card/' + customerId, cardData, cb))
+
+    function afterSave (err, payload) {
+      cb(err, payload)
+      dispatch({
+        type: ActionTypes.FINISH_SAVE_CARD,
+        cardData: payload,
+      })
+    }
+
+    dispatch(createEntity('/clients/save_card/' + customerId, cardData, afterSave))
   })
 }
