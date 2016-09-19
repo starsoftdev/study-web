@@ -45,15 +45,6 @@ class ShoppingCartForm extends Component {
 
   closeAddNewCardModal () {
     this.setState({ addNewCardModalOpen: false })
-    this.props.fetchCards(this.props.currentUser.userInfo.roleForClient.client.stripeCustomerId)
-  }
-
-  onCreditCardSelectionChanged (selection) {
-    if (selection.value === 0) {
-      this.openAddNewCardModal()
-    } else {
-      this.setState({ addNewCardModalOpen: false })
-    }
   }
 
   render () {
@@ -87,18 +78,14 @@ class ShoppingCartForm extends Component {
       }
     }
     const totalAmount = parseFloat((addOnsTotalAmount - discounts).toFixed(2))
-    let creditCardOptions = [ {
-      label: 'Add New Card',
-      value: 0,
-    } ]
+    let creditCardOptions = []
     if (cards) {
-      let options = _.map(cards.data, cardIterator => {
+      creditCardOptions = _.map(cards.data, cardIterator => {
         return {
           label: 'xxxx xxxx xxxx ' + cardIterator.last4,
           value: cardIterator.id,
         }
       })
-      creditCardOptions = _.concat(options, creditCardOptions)
     }
 
     return (
@@ -143,15 +130,20 @@ class ShoppingCartForm extends Component {
             <div className="clearfix"></div>
           </div>
           <div className="row form-group">
-            <div className="col-sm-9">
+            <div className="col-sm-8">
               <Select
                 {...creditCard}
                 disabled={fetchingCards || checkingOut}
                 options={creditCardOptions}
                 placeholder="Select Credit Card"
-                onChange={(selection) => { this.onCreditCardSelectionChanged(selection); creditCard.onChange(creditCard.value) }}
+                value={creditCard.value || ''}
                 onBlur={() => { creditCard.onBlur(creditCard) }}
                 />
+            </div>
+            <div className="col-sm-1">
+              <a href="#" className="link-add-new-card" onClick={this.openAddNewCardModal.bind(this)}>
+                <i className="fa fa-plus" aria-hidden="true"></i>
+              </a>
               <Modal className="add-new-card" bsSize="large" show={this.state.addNewCardModalOpen} onHide={this.closeAddNewCardModal.bind(this)}>
                 <Modal.Header closeButton>
                   <Modal.Title>Add New Card</Modal.Title>
