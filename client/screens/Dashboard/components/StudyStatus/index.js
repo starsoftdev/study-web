@@ -6,14 +6,14 @@
 
 import classNames from 'classnames'
 
-import React from "react"
+import React from 'react'
 
 class StudyStatus extends React.Component {
   static propTypes = {
     study: React.PropTypes.object.isRequired
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.state = {
       mouseOver: false
     }
@@ -21,23 +21,23 @@ class StudyStatus extends React.Component {
     this.onBlur = this.onBlur.bind(this)
   }
 
-  onFocus() {
+  onFocus () {
     this.setState({
       mouseOver: true
     })
   }
 
-  onBlur() {
+  onBlur () {
     this.setState({
       mouseOver: false
     })
   }
 
 
-  render() {
-    const {study} = this.props
+  render () {
+    const { study } = this.props
     return (
-      <tr className={classNames({"tr-active": true})} onFocus={this.onFocus} onBlur={this.onBlur}>
+      <tr className={classNames({ 'tr-active': true })} onFocus={this.onFocus} onBlur={this.onBlur}>
         <td>{study.id}</td>
         <td>{study.name}</td>
         <td>Long Beach, CA </td>
@@ -50,7 +50,7 @@ class StudyStatus extends React.Component {
         <td>
           <div className="btns-slide">
             <div className="btns">
-              <a href="/studies/1" className="btn btn-default">View Patients</a>
+              <a href={`/studies/${study.id}`} className="btn btn-default">View Patients</a>
               <a href="#renew-study" className="btn btn-primary lightbox-opener">Renew</a>
               <a href="#upgrade-study" className="btn btn-danger lightbox-opener">Upgrade</a>
               <a href="#edit-info" className="btn btn-info lightbox-opener">Edit</a>

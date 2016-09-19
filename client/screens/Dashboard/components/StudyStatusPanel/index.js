@@ -63,7 +63,7 @@ class StudyStatusPanel extends React.Component {
             <td>
               <div className="btns-slide">
                 <div className="btns">
-                  <a href="" className="btn btn-default">View Patients</a>
+                  <a href="/studies/1" className="btn btn-default">View Patients</a>
                   <a href="#renew-study" className="btn btn-primary lightbox-opener">Renew</a>
                   <a href="#upgrade-study" className="btn btn-danger lightbox-opener">Upgrade</a>
                   <a href="#edit-info" className="btn btn-info lightbox-opener">Edit</a>
@@ -78,4 +78,4 @@ class StudyStatusPanel extends React.Component {
   }
   }
 
-  export default StudyStatusPanel
+export default StudyStatusPanel
