@@ -28,4 +28,5 @@ export default selectProfilePage;
 export {
   selectProfilePageDomain,
   selectChangePasswordResult,
+  selectProfilePage,
 };

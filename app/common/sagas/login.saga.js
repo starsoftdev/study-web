@@ -104,7 +104,10 @@ export function* authorize(data) {
 export function* logout() {
   try {
     const requestURL = `${API_URL}/users/logout`;
-    yield call(request, requestURL);
+    const params = {
+      method: 'POST',
+    };
+    yield call(request, requestURL, params);
 
     yield call(removeItem, 'auth_token');
     yield call(removeItem, 'user_id');
