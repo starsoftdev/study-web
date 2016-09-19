@@ -9,6 +9,7 @@ import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 import { Modal } from 'react-bootstrap';
 import Input from 'components/Input';
 import ChangePasswordForm from 'components/ChangePasswordForm';
+import defaultImage from 'assets/images/Default-User-Img.png';
 import './styles.less';
 
 @reduxForm({ form: 'profile' })
@@ -58,7 +59,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
             <div className="profile-image">
               <label htmlFor="profile-img" className="image">
                 <span>
-                  <img src={this.props.currentUser.profileImageURL} alt="" /><br />
+                  <img src={this.props.currentUser.profileImageURL || defaultImage} alt="" /><br />
                 </span>
               </label>
             </div>
