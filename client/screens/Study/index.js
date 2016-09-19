@@ -8,30 +8,19 @@ import './styles.less'
 
 class Study extends React.Component {
   static propTypes = {
-    details: PropTypes.object,
+    study: PropTypes.object,
   }
 
   render () {
-    const { details } = this.props
-    const pageTitle = `${details.name} - Study Details`
-
-    const content = Object.keys(details).map((key, index) => (
-      <div className="row" key={index}>
-        <div className="col-md-2">
-          <span className="label">{key}:</span>
-        </div>
-        <div className="col-md-4">
-          <span className="value">{details[key]}</span>
-        </div>
-      </div>
-    ))
+    const { study } = this.props
+    const pageTitle = `${study.name} - StudyKIK`
 
     return (
       <DocumentTitle title={pageTitle}>
         <div className="container-fluid">
           <section className="individual-study">
             <header className="main-head">
-              <h2 className="main-heading">BIPOLAR STUDY</h2>
+              <h2 className="main-heading">{study.name}</h2>
               <p>
                 <span className="info-cell">Location: Seattle, WA</span>
                 <span className="info-cell">Sponsor: Motang</span>
@@ -962,7 +951,7 @@ class WithStudy extends React.Component {
     const studyId = parseInt(this.props.params.id, 10)
     return (
       <StudyFetcher studyId={studyId}>
-        {(study) => <Study details={study} {...this.props} />}
+        {(study) => <Study study={study} {...this.props} />}
       </StudyFetcher>
     )
   }
