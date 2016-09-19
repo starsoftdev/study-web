@@ -69,6 +69,7 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
       path: '/request-proposal',
       name: 'requestProposalPage',
       getComponent(nextState, cb) {
@@ -89,6 +90,7 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
       path: '/profile',
       name: 'profilePage',
       getComponent(nextState, cb) {
