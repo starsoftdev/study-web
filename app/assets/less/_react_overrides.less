@@ -1,0 +1,9 @@
+
+/* react-redux-toastr has icon conflicts!!! */
+#wrapper {
+    [class^="icon-"], [class*=" icon-"] {
+        &:before {
+            font-family: 'icomoon' !important;
+        }
+    }
+}
