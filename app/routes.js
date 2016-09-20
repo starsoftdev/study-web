@@ -69,6 +69,7 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
       path: '/request-proposal',
       name: 'requestProposalPage',
       getComponent(nextState, cb) {
@@ -82,6 +83,27 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('requestProposalPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/profile',
+      name: 'profilePage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/ProfilePage/reducer'),
+          System.import('containers/ProfilePage/sagas'),
+          System.import('containers/ProfilePage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('profilePage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });

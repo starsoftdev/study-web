@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import studykikLogo from 'assets/images/logo.svg';
 import userAvatar from 'assets/images/img-logged-user.png';
@@ -85,11 +86,11 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
           </div>
 
           <div className="logged-user-area open-close pull-right">
-            <a className="opener" href="#">
+            <Link to="/profile" className="opener">
               <div className="img-circle"><img src={userAvatar} width="43" height="43" alt="Bruce Wayne" /></div>
               <span className="text">Bruce Wayne</span>
               <i className="caret" />
-            </a>
+            </Link>
           </div>
 
         </div>
