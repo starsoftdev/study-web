@@ -11,7 +11,6 @@ import { Router, Route, IndexRedirect, IndexRoute } from 'react-router'
 import { routeChange, setAuthData } from 'actions'
 import history from 'utils/history'
 import Dispatcher from 'utils/dispatcher'
-import DevTools from 'components/DevTools'
 
 import getRoutes from './routes'
 import createStore from './createStore'
@@ -59,7 +58,3 @@ class Root extends React.Component {
 ReactDOM.render(<Provider store={store}>
   <Root history={history} />
 </Provider>, document.getElementById('app'))
-
-if (__DEVTOOLS__) {
-  ReactDOM.render(<DevTools store={store} />, document.getElementById('debug-panel'))
-}

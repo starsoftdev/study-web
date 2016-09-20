@@ -28,7 +28,6 @@ module.exports = function createWebpackConfig (env) {
     entry: ({
       development: {
         app: [
-          './client/shared/components/DevTools/index.js',
           'webpack-hot-middleware/client',
           './client/index.js',
           './client/assets/styles/index.less'

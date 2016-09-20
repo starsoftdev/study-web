@@ -8,8 +8,6 @@ import fetchEffect from './effects/fetch'
 
 import appReducer from './appReducer'
 
-import DevTools from 'components/DevTools'
-
 let enhancers = []
 let middleware = []
 
@@ -66,10 +64,9 @@ enhancers.push(applyMiddleware(...middleware))
 
 if (__DEVTOOLS__) {
   const { persistState } = require('redux-devtools')
-  console.log(DevTools.instrument)
 
   enhancers.push(
-    DevTools.instrument(),
+    window.devToolsExtension && window.devToolsExtension(),
     persistState(getDebugSessionKey())
   )
 
