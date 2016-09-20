@@ -1,6 +1,7 @@
 import { ActionTypes } from 'ActionTypes'
 import { searchEntities } from 'utils/entityReadWrite'
 import asyncAction from 'utils/asyncAction'
+import _ from 'lodash'
 
 export default function fetchPatients (searchParams) {
   return asyncAction(ActionTypes.FETCH_PATIENTS, (cb, dispatch) => {

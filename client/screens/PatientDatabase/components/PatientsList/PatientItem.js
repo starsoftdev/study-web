@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { fetchPatient } from 'actions'
 import ActivityIcon from 'components/ActivityIcon'
+import _ from 'lodash'
 
 class PatientItem extends Component {
   static propTypes = {

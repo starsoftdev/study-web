@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
-import { Modal } from 'react-bootstrap'
+import _ from 'lodash'
 import EditSiteForm from 'forms/EditSite'
 import EditUserForm from 'forms/EditUser'
-import { clearSelectedSite, clearSelectedUser, saveSite, saveUser, removeUser } from 'actions'
 import SiteItem from './SiteItem'
+import { connect } from 'react-redux'
+import { Modal } from 'react-bootstrap'
+import { clearSelectedSite, clearSelectedUser, saveSite, saveUser, removeUser } from 'actions'
 import './styles.less'
 
 class SitesList extends Component {
