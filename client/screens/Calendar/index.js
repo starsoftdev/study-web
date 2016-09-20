@@ -87,13 +87,12 @@ class Calendar extends React.Component {
   }
 
   handleModalVisibility (modalType, data) {
-    this.setState({
-      modalType,
-    })
-
     if (modalType!==SchedulePatientModalType.HIDDEN) {
       this.selectedCellInfo = data
     }
+    this.setState({
+      modalType,
+    })
   }
 
   handleSubmit (data) {
