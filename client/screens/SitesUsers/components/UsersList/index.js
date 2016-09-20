@@ -4,6 +4,7 @@ import { Modal } from 'react-bootstrap'
 import EditUserForm from 'forms/EditUser'
 import { clearSelectedUser, saveUser, removeClientRole } from 'actions'
 import UserItem from './UserItem'
+import _ from 'lodash'
 import './styles.less'
 
 class UsersList extends Component {

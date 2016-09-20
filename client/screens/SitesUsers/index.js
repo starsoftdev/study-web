@@ -7,6 +7,7 @@ import EditUserForm from 'forms/EditUser'
 import SearchByNameForm from 'forms/SearchByName'
 import UsersList from './components/UsersList'
 import SitesList from './components/SitesList'
+import _ from 'lodash'
 import './styles.less'
 
 class SitesUsers extends Component {

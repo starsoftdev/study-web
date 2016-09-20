@@ -22,7 +22,12 @@
   "globals": {
     "__DEVTOOLS__": true,
     "__LOGGER__": true,
-    "API_URL": true
+    "API_URL": true,
+    "HOST_URL": true,
+    "describe": true,
+    "it": true,
+    "beforeEach": true,
+    "afterEach": true
   },
   // "extends": ["eslint:recommended", "plugin:react/recommended"],
   "rules": {
@@ -58,7 +63,7 @@
 
     // Variables
     "no-use-before-define": [2, "nofunc"],
-    "no-undef": 1,
+    "no-undef": 2,
 
     // ECMAScript 6
     "no-var": 2,

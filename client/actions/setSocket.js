@@ -1,6 +1,7 @@
 import { ActionTypes } from 'ActionTypes'
 import asyncAction from 'utils/asyncAction'
 import _ from 'lodash'
+import io from 'socket.io-client'
 
 export default function setSocket (props, nameSpace, next) {
   const user = props.authorization.authData
