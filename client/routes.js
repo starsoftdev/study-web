@@ -18,6 +18,7 @@ import PatientDetails from './screens/PatientDetails'
 import OrderIRBAdCreation from './screens/OrderIRBAdCreation'
 import Notifications from './screens/Notifications'
 import Calendar from './screens/Calendar'
+import PaymentInformation from './screens/PaymentInformation'
 
 import isSessionExpired from 'utils/isSessionExpired'
 
@@ -44,6 +45,7 @@ export default (store) => {
         <Route path="sites-users" getComponent={lazyLoadComponent(SitesUsers)} />
         <Route path="patient-database" getComponent={lazyLoadComponent(PatientDatabase)} />
         <Route path="order-irb-ad-creation" getComponent={lazyLoadComponent(OrderIRBAdCreation)} />
+        <Route path="payment-information" getComponent={lazyLoadComponent(PaymentInformation)} />
       </Route>
 
       <Route path="clinical-trial-patient-recruitment-patient-enrollment" getComponent={lazyLoadComponent(GetReport)} />

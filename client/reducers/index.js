@@ -53,6 +53,8 @@ export fetchingCredits from './fetchingCredits'
 export credits from './credits'
 export fetchingCards from './fetchingCards'
 export cards from './cards'
+export removingCard from './removingCard'
+export savingCard from './savingCard'
 export checkingOut from './checkingOut'
 export charge from './charge'
 
