@@ -69,6 +69,26 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      path: '/request-proposal',
+      name: 'requestProposalPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/RequestProposalPage/reducer'),
+          System.import('containers/RequestProposalPage/sagas'),
+          System.import('containers/RequestProposalPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('requestProposalPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {
