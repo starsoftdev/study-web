@@ -18,6 +18,10 @@ import {
   LOGOUT_REQUEST,
 } from 'containers/LoginPage/constants';
 
+import {
+  RESET_PASSWORD_REQUEST,
+} from 'containers/ResetPasswordPage/constants';
+
 import { loginError } from 'containers/LoginPage/actions';
 import { fetchMeFromToken, setAuthState, setUserData } from 'containers/App/actions';
 import { selectNextPathname } from 'common/selectors/router.selector';
@@ -112,5 +116,12 @@ export function* logout() {
     yield put(setUserData(false));
   } catch (err) {
     // yield put()
+  }
+}
+
+export function* resetPassword() {
+  while (true) {
+    const { payload } = yield take(RESET_PASSWORD_REQUEST);
+    console.log(payload);
   }
 }

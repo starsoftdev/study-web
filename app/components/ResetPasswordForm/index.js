@@ -1,17 +1,20 @@
+/**
+*
+* ResetPasswordForm
+*
+*/
+
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import Col from 'react-bootstrap/lib/Col';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
-import { Link } from 'react-router';
-
 import Input from 'components/Input';
-import loginFormValidator from './validator';
+import resetPasswordFormValidator from './validator';
+import { FormGroup, Col } from 'react-bootstrap';
 
 @reduxForm({
   form: 'login',
-  validate: loginFormValidator,
+  validate: resetPasswordFormValidator,
 })
-class LoginForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class ResetPasswordForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     handleSubmit: React.PropTypes.func.isRequired,
@@ -31,29 +34,14 @@ class LoginForm extends React.Component { // eslint-disable-line react/prefer-st
             name="email"
             type="text"
             component={Input}
-            placeholder="Username or email"
-            className="col-sm-12"
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <Field
-            name="password"
-            type="password"
-            component={Input}
-            placeholder="Password"
+            placeholder="Email"
             className="col-sm-12"
           />
         </FormGroup>
 
         <FormGroup>
 
-          <Col sm={6}>
-            <Link to="/reset-password">
-              Forgot password ?
-            </Link>
-          </Col>
-          <Col sm={6}>
+          <Col sm={6} smPush={6}>
             <button
               type="submit"
               disabled={submitting}
@@ -65,9 +53,10 @@ class LoginForm extends React.Component { // eslint-disable-line react/prefer-st
 
 
         </FormGroup>
+
       </form>
     );
   }
 }
 
-export default LoginForm;
+export default ResetPasswordForm;
