@@ -141,30 +141,34 @@ class Calendar extends React.Component {
 
     return (
       <div className="container-fluid">
-        <FilterBar
-          sites={sites}
-          fetchingSites={this.props.fetchingSites}
-          filter={this.state.filter}
-          updateFilter={this.updateFilter.bind(this)}
-        />
-        <CalendarWidget
-          schedules={this.state.filteredSchedules}
-          handleOpenModal={this.handleModalVisibility.bind(this)}
-        />
-        <SchedulePatientModal
-          sites={sites}
-          onSubmit={this.handleSubmit.bind(this)}
-          handleCloseModal={this.handleModalVisibility.bind(this, SchedulePatientModalType.HIDDEN)}
-          handleDelete={this.handleDelete.bind(this)}
-          submitting={false}
-          selectedCellInfo={this.selectedCellInfo}
-          modalType={this.state.modalType}
-          initialValues={this.selectedCellInfo.data?this.getTimeComponents(this.selectedCellInfo.data.time):{ period: 'AM' }}
-          patientsByStudy={patientsByStudy}
-          fetchingSites={fetchingSites}
-          fetchingPatientsByStudy={fetchingPatientsByStudy}
-          fetchPatientsByStudy={fetchPatientsByStudy}
-        />
+        <section className="calendar-section">
+					<h2 className="main-heading">CALENDAR</h2>
+					<div className="btn-block"><a href="#" className="btn btn-primary">Today</a></div>
+          <FilterBar
+            sites={sites}
+            fetchingSites={this.props.fetchingSites}
+            filter={this.state.filter}
+            updateFilter={this.updateFilter.bind(this)}
+          />
+          <CalendarWidget
+            schedules={this.state.filteredSchedules}
+            handleOpenModal={this.handleModalVisibility.bind(this)}
+          />
+          <SchedulePatientModal
+            sites={sites}
+            onSubmit={this.handleSubmit.bind(this)}
+            handleCloseModal={this.handleModalVisibility.bind(this, SchedulePatientModalType.HIDDEN)}
+            handleDelete={this.handleDelete.bind(this)}
+            submitting={false}
+            selectedCellInfo={this.selectedCellInfo}
+            modalType={this.state.modalType}
+            initialValues={this.selectedCellInfo.data?this.getTimeComponents(this.selectedCellInfo.data.time):{ period: 'AM' }}
+            patientsByStudy={patientsByStudy}
+            fetchingSites={fetchingSites}
+            fetchingPatientsByStudy={fetchingPatientsByStudy}
+            fetchPatientsByStudy={fetchPatientsByStudy}
+          />
+        </section>
       </div>
     )
   }
