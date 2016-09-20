@@ -5,7 +5,9 @@
 import React, { Component, PropTypes } from 'react'
 import { reduxForm } from 'redux-form'
 import Select from 'react-select'
+import sanitizeProps from '../../../utils/sanitizeProps'
 import 'react-select/less/default.less'
+
 export const fields = [ 'name', 'campaign', 'source' ]
 
 class FilterStudyPatientsForm extends Component {
@@ -18,8 +20,9 @@ class FilterStudyPatientsForm extends Component {
     loading: PropTypes.bool.isRequired,
   }
 
-  constructor (props) {
-    super(props)
+  static defaultProps = {
+    submitting: false,
+    loading: false
   }
 
   render () {
@@ -29,15 +32,16 @@ class FilterStudyPatientsForm extends Component {
       sourceOptions,
       handleSubmit,
       submitting,
-      loading,
+      loading
     } = this.props
+    const nameProp = sanitizeProps(name)
 
     return (
       <form className="form-search clearfix" onSubmit={handleSubmit}>
         <div className="fields-holder">
           <div className="search-area pull-left">
             <div className="field">
-              <input type="search" id="search" className="form-control keyword-search" placeholder="Search" {...name} />
+              <input type="search" id="search" className="form-control keyword-search" placeholder="Search" {...nameProp} />
               <label htmlFor="search"><i className="icon-icon_search2" /></label>
             </div>
           </div>
