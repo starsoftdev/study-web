@@ -19,10 +19,13 @@ class SearchStudiesFormPanel extends React.Component {
 
   constructor (props) {
     super(props)
-
     if (this.props.currentUser.userInfo.roleForClient) {
       this.props.fetchSites(this.props.currentUser, {})
     }
+  }
+
+  componentDidMount () {
+    this.handleSubmit.bind(this)
   }
 
   handleSubmit (searchFilter) {
@@ -38,11 +41,24 @@ class SearchStudiesFormPanel extends React.Component {
       }
     })
     siteOptions.unshift({ label: 'All', value: 0 })
-    const statusOptions = [ { label: 'All', value: 'All' }, { label: 'Active', value: 'Active' }, { label: 'Inactive', value: 'Inactive' } ]
+    const statusOptions = [
+      {
+        label: 'All',
+        value: 'All'
+      },
+      {
+        label: 'Active',
+        value: 'Active'
+      },
+      {
+        label: 'Inactive',
+        value: 'Inactive'
+      }
+    ]
 
     return (
       <div>
-        <SearchStudiesForm loading={fetchingSites} submitting={fetchingStudies} siteOptions={siteOptions} statusOptions={statusOptions} onSubmit={this.handleSubmit.bind(this)} />
+        <SearchStudiesForm loading={fetchingSites} submitting={fetchingStudies} siteOptions={siteOptions} statusOptions={statusOptions} onSubmit={this.handleSubmit} />
         <StudyStatusPanel loading={fetchingSites} submitting={fetchingStudies} studies={studies} />
       </div>
     )

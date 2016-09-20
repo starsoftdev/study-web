@@ -1,19 +1,47 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import DocumentTitle from 'react-document-title'
-
 import StudyFetcher from './components/StudyFetcher'
+import FilterStudyPatients from '../../shared/forms/FilterStudyPatients'
 
 import './styles.less'
 
 class Study extends React.Component {
   static propTypes = {
+    campaigns: PropTypes.array,
+    fetchingPatients: PropTypes.bool,
+    fetchStudyPatients: PropTypes.func,
+    patients: PropTypes.array,
+    sources: PropTypes.array,
     study: PropTypes.object,
   }
 
+  componentDidMount() {
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  handleSubmit (searchFilter) {
+    this.props.fetchStudyPatients(searchFilter)
+  }
+
   render () {
-    const { study } = this.props
+    const { fetchingPatients, patients, campaigns, sources, study } = this.props
     const pageTitle = `${study.name} - StudyKIK`
+
+    let campaignOptions = _.map(campaigns, campaign => {
+      return {
+        label: campaign.name,
+        value: campaign.id,
+      }
+    })
+    campaignOptions.unshift({ label: 'All', value: 0 })
+    let sourceOptions = _.map(sources, source => {
+      return {
+        label: source.name,
+        value: source.id,
+      }
+    })
+    sourceOptions.unshift({ label: 'All', value: 0 })
 
     return (
       <DocumentTitle title={pageTitle}>
@@ -27,61 +55,7 @@ class Study extends React.Component {
                 <span className="info-cell">Protocol: YM12345</span>
               </p>
             </header>
-            <form action="#" className="form-search clearfix">
-              <div className="btns pull-right">
-                <div className="btn-email pull-left">
-                  <a className="btn btn-primary email lightbox-opener" href="#text-email-blast"><i
-                    className="icon-icon_chat_alt" /> TEXT / EMAIL BLAST</a>
-                </div>
-
-                <div className="btn-import pull-left">
-                  <a className="btn btn-primary import lightbox-opener" href="#import-info"><i
-                    className="icon-icon_upload" /> Import</a>
-                </div>
-                <div className="btn-download pull-left">
-                  <a className="btn btn-primary download" href="#"><i className="icon-icon_download" /> Download</a>
-                </div>
-              </div>
-              <div className="search-area pull-left">
-                <div className="field">
-                  <input type="search" placeholder="Search" className="form-control keyword-search" id="search" />
-                  <label htmlFor="search">
-                    <i className="icon-icon_search2" />
-                  </label>
-                </div>
-              </div>
-              <div className="select pull-left">
-                <div className="field">
-                  <select className="data-search jcf-hidden">
-                    <option>Select Campaign</option>
-                    <option>option 1</option>
-                    <option>option 2</option>
-                    <option>option 3</option>
-                    <option>option 4</option>
-                    <option>option 5</option>
-                  </select><span className="jcf-select jcf-unselectable jcf-select-data-search">
-                  <span className="jcf-select-text">
-                    <span className="">Select Campaign</span>
-                  </span>
-                  <span className="jcf-select-opener" />
-                </span>
-                </div>
-              </div>
-              <div className="select pull-left">
-                <div className="field">
-                  <select className="data-search jcf-hidden">
-                    <option>Select Source</option>
-                    <option>option 1</option>
-                    <option>option 2</option>
-                    <option>option 3</option>
-                    <option>option 4</option>
-                    <option>option 5</option>
-                  </select><span className="jcf-select jcf-unselectable jcf-select-data-search"><span
-                  className="jcf-select-text"><span className="">Select Source</span></span><span
-                  className="jcf-select-opener"></span></span>
-                </div>
-              </div>
-            </form>
+            <FilterStudyPatients campaignOptions={campaignOptions} sourceOptions={sourceOptions} handleSubmit={this.handleSubmit} />
             <div className="stats open-close-open active">
               <div className="head">
                 <h2>STATS</h2>
