@@ -42,7 +42,7 @@ class AvatarMenu extends React.Component {
           <div className="well">
             <ul className="list-unstyled">
               <li><a href="#">PROFILE</a></li>
-              <li><a href="#">PAYMENT INFORMATION</a></li>
+              <li><a href="/payment-information">PAYMENT INFORMATION</a></li>
               <li><a href="#">RECEIPTS</a></li>
               <Link to="/logout"
                 onClick={this.handleLogoutClick}

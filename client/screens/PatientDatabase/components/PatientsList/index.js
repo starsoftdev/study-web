@@ -5,6 +5,7 @@ import { clearSelectedPatient, savePatient, fetchPatients, clearPatients,
   fetchIndications, fetchPatientCategories, fetchSources } from 'actions'
 import EditPatientForm from 'forms/EditPatient'
 import PatientItem from './PatientItem'
+import ActivityIcon from 'components/ActivityIcon'
 import _ from 'lodash'
 import './styles.less'
 
@@ -24,6 +25,7 @@ class PatientsList extends Component {
     indications: PropTypes.array,
     patientCategories: PropTypes.array,
     sources: PropTypes.array,
+    fetchingPatients: PropTypes.bool,
     fetchingIndications: PropTypes.bool,
     fetchingPatientCategories: PropTypes.bool,
     fetchingSources: PropTypes.bool,
@@ -59,10 +61,14 @@ class PatientsList extends Component {
   }
 
   render () {
-    const { indications, patientCategories, sources,
+    const { indications, patientCategories, sources, fetchingPatients,
       fetchingIndications, fetchingPatientCategories, fetchingSources,
       patients, selectedPatient, savingPatient } = this.props
     let selectedPatientInput = {}
+
+    if (fetchingPatients) {
+      return <div><ActivityIcon /></div>
+    }
 
     if (selectedPatient) {
       selectedPatientInput = _.omit(selectedPatient, [ 'created', 'indications', 'source_id', 'source', 'lastAction', 'study_patient_category_id', 'studyPatientCategory' ])
@@ -155,6 +161,7 @@ const mapStateToProps = (state) => ({
   indications: state.indications,
   patientCategories: state.patientCategories,
   sources: state.sources,
+  fetchingPatients: state.fetchingPatients,
   fetchingIndications: state.fetchingIndications,
   fetchingPatientCategories: state.fetchingPatientCategories,
   fetchingSources: state.fetchingSources,

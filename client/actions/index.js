@@ -50,6 +50,7 @@ export fetchCards from './fetchCards'
 export checkoutCredits from './checkoutCredits'
 
 export saveCard from './saveCard'
+export removeCard from './removeCard'
 
 export submitGetTrialNotificationForm from './submitGetTrialNotificationForm'
 export saveReferralForm from './saveReferralForm'
