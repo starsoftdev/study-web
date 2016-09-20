@@ -48,6 +48,15 @@ export default function createRoutes(store) {
           .catch(errorLoading);
       },
     }, {
+      onEnter: redirectToDashboard,
+      path: '/reset-password',
+      name: 'resetPasswordPage',
+      getComponent(nextState, cb) {
+        System.import('containers/ResetPasswordPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
       onEnter: redirectToLogin,
       path: '/refer',
       name: 'referPage',
