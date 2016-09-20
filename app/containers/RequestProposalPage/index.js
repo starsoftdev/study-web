@@ -7,6 +7,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { StickyContainer, Sticky } from 'react-sticky';
 import Helmet from 'react-helmet';
 
 import RequestProposalForm from 'components/RequestProposalForm';
@@ -51,7 +52,7 @@ export class RequestProposalPage extends Component {
     const { siteLocations, indications, studyLevels } = this.props;
 
     return (
-      <div className="container-fluid">
+      <StickyContainer className="container-fluid">
         <Helmet title="Request Proposal - StudyKIK" />
         <section className="study-portal">
 
@@ -69,13 +70,17 @@ export class RequestProposalPage extends Component {
 
             <div className="fixed-block">
               <div className="fixed-block-holder">
-                <RequestProposalCart onSubmit={this.onSubmitForm} />
+                <Sticky className="sticky-shopping-cart">
+                {/* this will be replaced with a new shopping cart component */}
+                  <RequestProposalCart onSubmit={this.onSubmitForm} />
+
+                </Sticky>
               </div>
             </div>
 
           </div>
         </section>
-      </div>
+      </StickyContainer>
     );
   }
 }
