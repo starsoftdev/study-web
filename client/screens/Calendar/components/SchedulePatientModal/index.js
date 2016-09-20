@@ -185,23 +185,23 @@ class SchedulePatientModal extends Component {
         {modalType===SchedulePatientModalType.CREATE &&
           <div id="add-scedule" className="lightbox lightbox-active fixed-popup">
             <div className="lightbox-holder">
-      				<div className="lightbox-frame">
-      					<div className="lightbox-content">
-      						<div className="head">
-      							<strong className="title">SCHEDULE PATIENT</strong>
-      							<a className="lightbox-close close" href="#" onClick={handleCloseModal}><i className="icon-icon_close"></i></a>
-      						</div>
-      						<div className="scroll-holder jcf--scrollable">
-      							<form action="#" className="form-lightbox form-add-schedule show-on-select" data-validation-false="no-action" onSubmit={handleSubmit}>
-      								<div className="field-row">
-      									<strong className="label">* When</strong>
-      									<div className="field">
-      										<input type="text" className="form-control add-date scheduleTime" readOnly value={selectedCellInfo.selectedDate && moment(selectedCellInfo.selectedDate).format('MM/DD/YY')} />
-      									</div>
-      								</div>
-      								<div className="field-row">
-      									<strong className="label required"><label htmlFor="popup-site-location">Site Location</label></strong>
-      									<div className="field site-location">
+              <div className="lightbox-frame">
+                <div className="lightbox-content">
+                  <div className="head">
+                    <strong className="title">SCHEDULE PATIENT</strong>
+                    <a className="lightbox-close close" href="#" onClick={handleCloseModal}><i className="icon-icon_close"></i></a>
+                  </div>
+                  <div className="scroll-holder jcf--scrollable">
+                    <form action="#" className="form-lightbox form-add-schedule show-on-select" data-validation-false="no-action" onSubmit={handleSubmit}>
+                      <div className="field-row">
+                        <strong className="label">* When</strong>
+                        <div className="field">
+                          <input type="text" className="form-control add-date scheduleTime" readOnly value={selectedCellInfo.selectedDate && moment(selectedCellInfo.selectedDate).format('MM/DD/YY')} />
+                        </div>
+                      </div>
+                      <div className="field-row">
+                        <strong className="label required"><label htmlFor="popup-site-location">Site Location</label></strong>
+                        <div className="field site-location">
                           <Select
                             {...siteLocation}
                             id="popup-site-location"
@@ -212,13 +212,13 @@ class SchedulePatientModal extends Component {
                             onBlur={() => { siteLocation.onBlur(siteLocation) }}
                             onChange={this.handleSiteLocationChoose.bind(this)}
                           />
-      									</div>
-      								</div>
+                        </div>
+                      </div>
 
                       {optionStep >= 1 &&
-        								<div className="field-row">
-        									<strong className="label required"><label htmlFor="popup-protocol">protocol</label></strong>
-        									<div className="field protocol">
+                        <div className="field-row">
+                          <strong className="label required"><label htmlFor="popup-protocol">protocol</label></strong>
+                          <div className="field protocol">
                             <Select
                               {...protocol}
                               className="data-search"
@@ -229,13 +229,13 @@ class SchedulePatientModal extends Component {
                               onBlur={() => { protocol.onBlur(protocol) }}
                               onChange={this.handleProtocolChoose.bind(this)}
                             />
-        									</div>
-        								</div>
+                          </div>
+                        </div>
                       }
                       {optionStep >= 2 &&
-        								<div className="field-row patient-name">
-        									<strong className="label required"><label htmlFor="patient">Patient</label></strong>
-        									<div className="field">
+                        <div className="field-row patient-name">
+                          <strong className="label required"><label htmlFor="patient">Patient</label></strong>
+                          <div className="field">
                             <Select
                               {...patient}
                               className="data-search"
@@ -248,14 +248,14 @@ class SchedulePatientModal extends Component {
                             />
                           </div>
                           <input {...indication} style={{ display: 'none' }} />
-        								</div>
+                        </div>
                       }
                       {optionStep === 3 &&
-        								<div className="field-row">
-        									<strong className="label required"><label htmlFor="patient-time">Time</label></strong>
-        									<div className="field">
-        										<div className="col-holder row">
-        											<div className="col pull-left hours">
+                        <div className="field-row">
+                          <strong className="label required"><label htmlFor="patient-time">Time</label></strong>
+                          <div className="field">
+                            <div className="col-holder row">
+                              <div className="col pull-left hours">
                                 <Select
                                   {...hour}
                                   id="patient-time"
@@ -265,8 +265,8 @@ class SchedulePatientModal extends Component {
                                   disabled={submitting}
                                   onBlur={() => { hour.onBlur(hour) }}
                                 />
-        											</div>
-        											<div className="col pull-left minutes">
+                              </div>
+                              <div className="col pull-left minutes">
                                 <Select
                                   {...minute}
                                   id="minutes"
@@ -276,8 +276,8 @@ class SchedulePatientModal extends Component {
                                   disabled={submitting}
                                   onBlur={() => { minute.onBlur(minute) }}
                                 />
-        											</div>
-        											<div className="col pull-left time-mode">
+                              </div>
+                              <div className="col pull-left time-mode">
                                 <Select
                                   {...period}
                                   id="time-period"
@@ -286,51 +286,51 @@ class SchedulePatientModal extends Component {
                                   disabled={submitting}
                                   onBlur={() => { period.onBlur(period) }}
                                 />
-        											</div>
-        										</div>
-        									</div>
-        								</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       }
-      								<div className="text-right">
-      									<input type="reset" className="btn btn-gray-outline hidden" value="reset" />
-      									<input type="submit" className="btn btn-default" value="Submit" disabled={submitting} />
-      								</div>
-      							</form>
-      						</div>
-      					</div>
-      				</div>
-      			</div>
-      		</div>
+                      <div className="text-right">
+                        <input type="reset" className="btn btn-gray-outline hidden" value="reset" />
+                        <input type="submit" className="btn btn-default" value="Submit" disabled={submitting} />
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         }
 
         {modalType===SchedulePatientModalType.UPDATE &&
           <div id="edit-scedule" className="lightbox lightbox-active fixed-popup">
-      			<div className="lightbox-holder">
-      				<div className="lightbox-frame">
-      					<div className="lightbox-content">
-      						<div className="head">
-      							<strong className="title">EDIT SCHEDULE</strong>
-      							<a className="close lightbox-close" href="#" onClick={handleCloseModal}><i className="icon-icon_close"></i></a>
-      						</div>
-      						<div className="scroll-holder">
-      							<form action="#" className="form-lightbox form-edit-schedule" onSubmit={handleSubmit}>
-      								<strong className="name">{`${selectedCellInfo.data.patient.firstName} ${selectedCellInfo.data.patient.lastName}`}</strong>
-      								<span className="site-location">{selectedCellInfo.data.siteLocation}</span>
-      								<span className="protocol">{selectedCellInfo.data.protocolNumber}</span>
-      								<div className="field-row">
-      									<strong className="label">* When</strong>
-      									<div className="field append-calendar">
+            <div className="lightbox-holder">
+              <div className="lightbox-frame">
+                <div className="lightbox-content">
+                  <div className="head">
+                    <strong className="title">EDIT SCHEDULE</strong>
+                    <a className="close lightbox-close" href="#" onClick={handleCloseModal}><i className="icon-icon_close"></i></a>
+                  </div>
+                  <div className="scroll-holder">
+                    <form action="#" className="form-lightbox form-edit-schedule" onSubmit={handleSubmit}>
+                      <strong className="name">{`${selectedCellInfo.data.patient.firstName} ${selectedCellInfo.data.patient.lastName}`}</strong>
+                      <span className="site-location">{selectedCellInfo.data.siteLocation}</span>
+                      <span className="protocol">{selectedCellInfo.data.protocolNumber}</span>
+                      <div className="field-row">
+                        <strong className="label">* When</strong>
+                        <div className="field append-calendar">
                           <DatePicker {...date} id="start-date" className="form-control datepicker-input" selected={this.state.selectedUpdateDate} onChange={this.handleUpdateDateChange.bind(this)} />
-      										{/*
+                          {/*
                             <input data-placeholder="mm/dd/yy" id="start-date" class="form-control datepicker-input" type="text" data-datepicker="" data-title="Choose Date" data-href="www.google.com" data-required="true">
                           */}
-      									</div>
-      								</div>
-      								<div className="field-row">
-      									<strong className="label required"><label htmlFor="patient-time-edit">Time</label></strong>
-      									<div className="field">
-      										<div className="col-holder row">
-      											<div className="col pull-left hours">
+                        </div>
+                      </div>
+                      <div className="field-row">
+                        <strong className="label required"><label htmlFor="patient-time-edit">Time</label></strong>
+                        <div className="field">
+                          <div className="col-holder row">
+                            <div className="col pull-left hours">
                               <Select
                                 {...hour}
                                 id="patient-time-edit"
@@ -340,8 +340,8 @@ class SchedulePatientModal extends Component {
                                 disabled={submitting}
                                 onBlur={() => { hour.onBlur(hour) }}
                               />
-      											</div>
-      											<div className="col pull-left minutes">
+                            </div>
+                            <div className="col pull-left minutes">
                               <Select
                                 {...minute}
                                 id="minutes2"
@@ -351,8 +351,8 @@ class SchedulePatientModal extends Component {
                                 disabled={submitting}
                                 onBlur={() => { minute.onBlur(minute) }}
                               />
-      											</div>
-      											<div className="col pull-left time-mode">
+                            </div>
+                            <div className="col pull-left time-mode">
                               <Select
                                 {...period}
                                 id="time-period2"
@@ -361,28 +361,28 @@ class SchedulePatientModal extends Component {
                                 disabled={submitting}
                                 onBlur={() => { period.onBlur(period) }}
                               />
-      											</div>
-      										</div>
-      									</div>
-      								</div>
-      								<div className="btn-block text-right">
-      									<a href="#popup-remover" className="btn btn-gray-outline lightbox-opener" disabled={submitting} onClick={() => handleDelete(selectedCellInfo.data.id)}>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="btn-block text-right">
+                        <a href="#popup-remover" className="btn btn-gray-outline lightbox-opener" disabled={submitting} onClick={() => handleDelete(selectedCellInfo.data.id)}>
                           {submitting ?
                             'deleting...' : 'delete'
                           }
                         </a>
-      									<a href="#" className="btn btn-default btn-update">
+                        <a href="#" className="btn btn-default btn-update">
                           {submitting ?
                             'updating...' : 'update'
                           }
                         </a>
-      								</div>
-      							</form>
-      						</div>
-      					</div>
-      				</div>
-      			</div>
-      		</div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         }
       </Modal>
     )
