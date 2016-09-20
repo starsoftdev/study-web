@@ -7,7 +7,7 @@ const menuItemsGroupA = [
   { text: 'Home', link: '/dashboard', icon: 'icon-icon_house_alt' },
   { text: 'List New Study', link: '/replace_me', icon: 'icon-screen' },
   { text: 'Order IRB Ad Creation', link: '/replace_me', icon: 'icon-irb' },
-  { text: 'Request Proposal', link: '/replace_me', icon: 'icon-doller' },
+  { text: 'Request Proposal', link: '/request-proposal', icon: 'icon-doller' },
   { text: 'Refer', link: '/refer', icon: 'icon-signout' },
 ];
 const menuItemsGroupB = [
