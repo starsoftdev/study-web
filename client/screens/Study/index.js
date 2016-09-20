@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import DocumentTitle from 'react-document-title'
 import StudyFetcher from './components/StudyFetcher'
 import FilterStudyPatients from '../../shared/forms/FilterStudyPatients'
+import StudyStats from './components/StudyStats'
 
 import './styles.less'
 
@@ -56,52 +57,7 @@ class Study extends React.Component {
               </p>
             </header>
             <FilterStudyPatients campaignOptions={campaignOptions} sourceOptions={sourceOptions} handleSubmit={this.handleSubmit} />
-            <div className="stats open-close-open active">
-              <div className="head">
-                <h2>STATS</h2>
-                <a href="#" className="opener"></a>
-              </div>
-              <div className="infoarea slide">
-                <div className="row">
-                  <div className="col-xs-4">
-                    <div className="box same-height-left" style={{ height: '103px' }}>
-                      <i className="icon-open-eye" />
-                      <strong className="number">3,450</strong>
-                      <h3>TOTAL STUDY VIEWS</h3>
-                    </div>
-                    <div className="box same-height-left" style={{ height: '103px' }}>
-                      <i className="icon-user-in" />
-                      <strong className="number">685</strong>
-                      <h3>TOTAL PATIENT REFERRALS</h3>
-                    </div>
-                  </div>
-                  <div className="col-xs-4 green">
-                    <div className="box" style={{ height: '103px' }}>
-                      <i className="icon-phone" />
-                      <strong className="number">948</strong>
-                      <h3>CALLS PLACED</h3>
-                    </div>
-                    <div className="box" style={{ height: '103px' }}>
-                      <i className="icon-icon_clock_alt" />
-                      <strong className="number">32:41:15</strong>
-                      <h3>CALLS DURATION</h3>
-                    </div>
-                  </div>
-                  <div className="col-xs-4 orange">
-                    <div className="box same-height-right" style={{ height: '103px' }}>
-                      <i className="icon-chat-up" />
-                      <strong className="number">52,711</strong>
-                      <h3>TEXTS SENT</h3>
-                    </div>
-                    <div className="box same-height-right" style={{ height: '103px' }}>
-                      <i className="icon-chat-down" />
-                      <strong className="number">18,374</strong>
-                      <h3>TEXTS RECEIVED</h3>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <StudyStats />
             <div className="clearfix patients-list-area-holder">
               <div className="patients-list-area">
                 <nav className="nav-status">
