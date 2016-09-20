@@ -3,17 +3,17 @@
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
-import { logout } from 'containers/LoginPage/actions';
+import { get } from 'lodash';
 
 import request from 'utils/request';
 
+import { logout } from 'containers/LoginPage/actions';
 import {
   passwordChanged,
   passwordChangingError,
   imageChanged,
   imageChangingError,
 } from 'containers/ProfilePage/actions';
-
 import {
   CHANGE_PASSWORD,
   CHANGE_IMAGE,
@@ -41,8 +41,9 @@ export function* changePassword() {
 
       yield put(logout());
     } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      yield put(toastrActions.error('', errorMessage));
       yield put(passwordChangingError(err));
-      yield put(toastrActions.error('Error!'));
     }
   }
 }

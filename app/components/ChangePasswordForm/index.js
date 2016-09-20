@@ -39,7 +39,7 @@ class ChangePasswordForm extends React.Component { // eslint-disable-line react/
             name="old_password"
             component={Input}
             disabled="true"
-            type="text"
+            type="password"
             placeholder=""
             className="field"
           />
@@ -51,7 +51,7 @@ class ChangePasswordForm extends React.Component { // eslint-disable-line react/
             name="new_password"
             component={Input}
             disabled="true"
-            type="text"
+            type="password"
             placeholder=""
             className="field"
           />
@@ -63,7 +63,7 @@ class ChangePasswordForm extends React.Component { // eslint-disable-line react/
             name="new_password_confirm"
             component={Input}
             disabled="true"
-            type="text"
+            type="password"
             placeholder=""
             className="field"
           />
