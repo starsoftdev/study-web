@@ -41,7 +41,7 @@ class FilterStudyPatientsForm extends Component {
         <div className="fields-holder">
           <div className="search-area pull-left">
             <div className="field">
-              <input type="search" id="search" className="form-control keyword-search" placeholder="Search" {...nameProp} />
+              <input type="search" id="search" className="form-control keyword-search" placeholder="Search Patients" {...nameProp} />
               <label htmlFor="search"><i className="icon-icon_search2" /></label>
             </div>
           </div>
