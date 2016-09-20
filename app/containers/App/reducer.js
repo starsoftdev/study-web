@@ -9,6 +9,10 @@ import {
   FETCH_LEVELS_SUCCESS,
 } from './constants';
 
+import {
+  CHANGE_IMAGE_SUCCESS,
+} from 'containers/ProfilePage/constants';
+
 const initialState = {
   loggedIn: !!getItem('auth_token'),
   userData: false,
@@ -34,6 +38,11 @@ export default function appReducer(state = initialState, action) {
       return {
         ...state,
         userData: payload.userData,
+      };
+    case CHANGE_IMAGE_SUCCESS:
+      return {
+        ...state,
+        userData: { ...state.userData, profileImageURL: payload.profileImageURL },
       };
 
     case FETCH_SITES_SUCCESS:

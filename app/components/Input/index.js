@@ -23,6 +23,7 @@ function Input({
   className,
   meta: { touched, error, active },
   children,
+  isDisabled,
 }) {
   const hasError = touched && error && !active;
   const errorClass = hasError ? 'has-error' : '';
@@ -39,6 +40,7 @@ function Input({
     <FormControl
       {...input}
       type={type}
+      disabled={isDisabled}
       placeholder={placeholder}
       componentClass={componentClass} // Default value is `input`
     >
@@ -73,6 +75,7 @@ Input.propTypes = {
   componentClass: PropTypes.string,
   className: PropTypes.string,
   children: PropTypes.array,
+  isDisabled: PropTypes.string,
 };
 
 export default Input;

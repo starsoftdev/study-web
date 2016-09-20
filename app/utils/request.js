@@ -26,8 +26,10 @@ export default function request(url, options = {}) {
   // Use authorization token temporarily until we write auth module.
   // headers.authorization = 'ltDVEqf99WNfKGxJeyl2hQnOGmXb0wUFbv4DBSVHCTKzFYZ7fxEn6Wv9Umnq8jc9';
 
-  options.headers = Object.assign({}, options.headers, headers); // eslint-disable-line 
-
+  if (options.useDefaultContentType) {
+    delete headers['Content-Type'];
+  }
+  options.headers = Object.assign({}, headers, options.headers ); // eslint-disable-line
   return fetch(url, options)
     .then(checkStatus)
     .then(parseJSON)
