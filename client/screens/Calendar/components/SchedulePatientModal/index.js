@@ -10,6 +10,8 @@ import { SchedulePatientModalType } from 'constants'
 
 import 'react-datepicker/dist/react-datepicker.css'
 import 'react-select/less/default.less'
+import './styles.less'
+
 export const fields = [ 'siteLocation', 'protocol', 'indication', 'patient', 'date', 'hour', 'minute', 'period' ]
 
 function numberSequenceCreator (start, end) {
@@ -179,172 +181,208 @@ class SchedulePatientModal extends Component {
     })
 
     return (
-      <Modal className="modal-schedule-patient" show={modalType!==SchedulePatientModalType.HIDDEN} onHide={handleCloseModal}>
+      <Modal show={modalType!==SchedulePatientModalType.HIDDEN} onHide={handleCloseModal}>
         {modalType===SchedulePatientModalType.CREATE &&
-          <form className="form-schedule-patient form-horizontal" onSubmit={handleSubmit}>
-            <Modal.Header closeButton>
-              <Modal.Title>SCHEDULE PATIENT</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div className="form-group">
-                <label className="col-sm-3 control-label">SITE LOCATION *</label>
-                <div className="col-sm-9">
-                  <Select
-                    {...siteLocation}
-                    options={siteLocationOptions}
-                    placeholder="--Select Site Location--"
-                    disabled={submitting || this.props.fetchingSites}
-                    onBlur={() => { siteLocation.onBlur(siteLocation) }}
-                    onChange={this.handleSiteLocationChoose.bind(this)}
-                  />
-                </div>
-              </div>
-              {optionStep >= 1 &&
-                <div className="form-group">
-                  <label className="col-sm-3 control-label">PROTOCOL *</label>
-                  <div className="col-sm-9">
-                    <Select
-                      {...protocol}
-                      options={protocolOptions}
-                      placeholder="--Select Protocol--"
-                      disabled={submitting}
-                      onBlur={() => { protocol.onBlur(protocol) }}
-                      onChange={this.handleProtocolChoose.bind(this)}
-                    />
+          <div id="add-scedule" className="lightbox lightbox-active fixed-popup">
+            <div className="lightbox-holder">
+              <div className="lightbox-frame">
+                <div className="lightbox-content">
+                  <div className="head">
+                    <strong className="title">SCHEDULE PATIENT</strong>
+                    <a className="lightbox-close close" href="#" onClick={handleCloseModal}><i className="icon-icon_close"></i></a>
                   </div>
-                </div>
-              }
-              {optionStep >= 2 &&
-                <div>
-                  <div className="form-group">
-                    <label className="col-sm-3 control-label">PATIENT *</label>
-                    <div className="col-sm-9">
-                      <Select
-                        {...patient}
-                        options={patientOptions}
-                        placeholder="--Select Patient--"
-                        disabled={submitting || this.props.fetchingPatientsByStudy}
-                        onBlur={() => { patient.onBlur(patient) }}
-                        onChange={this.handlePatientChoose.bind(this)}
-                      />
-                    </div>
-                  </div>
-                  <input {...indication} style={{ display: 'none' }} />
-                </div>
-              }
-              {optionStep === 3 &&
-                <div>
-                  <div className="form-group">
-                    <div className="col-sm-4">
-                      <Select
-                        {...hour}
-                        options={hourOptions}
-                        placeholder="--Hours--"
-                        disabled={submitting}
-                        onBlur={() => { hour.onBlur(hour) }}
-                      />
-                    </div>
-                    <div className="col-sm-4">
-                      <Select
-                        {...minute}
-                        options={minuteOptions}
-                        placeholder="--Minutes--"
-                        disabled={submitting}
-                        onBlur={() => { minute.onBlur(minute) }}
-                      />
-                    </div>
-                    <div className="col-sm-4">
-                      <Select
-                        {...period}
-                        options={periodOptions}
-                        disabled={submitting}
-                        onBlur={() => { period.onBlur(period) }}
-                      />
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <div className="col-sm-12">
-                      <button type="submit" className="btn btn-default pull-right" disabled={submitting}>
-                        {submitting
-                          ? <span>SUBMITTING...</span>
-                          : <span>SUBMIT</span>
-                        }
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              }
-            </Modal.Body>
-          </form>
-        }
-        {modalType===SchedulePatientModalType.UPDATE &&
-          <form className="form-schedule-patient form-horizontal" onSubmit={handleSubmit}>
-            <Modal.Header closeButton>
-              <Modal.Title>EDIT SCHEDULE</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div className="form-group">
-                <label className="col-sm-12">{`${selectedCellInfo.data.patient.firstName} ${selectedCellInfo.data.patient.lastName}`}</label>
-                <span className="col-sm-12">{selectedCellInfo.data.siteLocation}</span>
-                <span className="col-sm-12">{selectedCellInfo.data.protocolNumber}</span>
-              </div>
-              <hr />
-              <div className="form-group">
-                <label className="col-sm-3">WHEN *</label>
-                <div className="col-sm-9">
-                  <DatePicker {...date} selected={this.state.selectedUpdateDate} onChange={this.handleUpdateDateChange.bind(this)} />
-                </div>
-              </div>
+                  <div className="scroll-holder jcf--scrollable">
+                    <form action="#" className="form-lightbox form-add-schedule show-on-select" data-validation-false="no-action" onSubmit={handleSubmit}>
+                      <div className="field-row">
+                        <strong className="label">* When</strong>
+                        <div className="field">
+                          <input type="text" className="form-control add-date scheduleTime" readOnly value={selectedCellInfo.selectedDate && moment(selectedCellInfo.selectedDate).format('MM/DD/YY')} />
+                        </div>
+                      </div>
+                      <div className="field-row">
+                        <strong className="label required"><label htmlFor="popup-site-location">Site Location</label></strong>
+                        <div className="field site-location">
+                          <Select
+                            {...siteLocation}
+                            id="popup-site-location"
+                            className="data-search"
+                            options={siteLocationOptions}
+                            placeholder="--Select Site Location--"
+                            disabled={submitting || this.props.fetchingSites}
+                            onBlur={() => { siteLocation.onBlur(siteLocation) }}
+                            onChange={this.handleSiteLocationChoose.bind(this)}
+                          />
+                        </div>
+                      </div>
 
-              <div className="form-group">
-                <label className="col-sm-3">TIME *</label>
-                <div className="col-sm-3">
-                  <Select
-                    {...hour}
-                    options={hourOptions}
-                    placeholder="--Hours--"
-                    disabled={submitting}
-                    onBlur={() => { hour.onBlur(hour) }}
-                  />
-                </div>
-                <div className="col-sm-3">
-                  <Select
-                    {...minute}
-                    options={minuteOptions}
-                    placeholder="--Minutes--"
-                    disabled={submitting}
-                    onBlur={() => { minute.onBlur(minute) }}
-                  />
-                </div>
-                <div className="col-sm-3">
-                  <Select
-                    {...period}
-                    options={periodOptions}
-                    disabled={submitting}
-                    onBlur={() => { period.onBlur(period) }}
-                  />
-                </div>
-              </div>
-              <div className="form-group">
-                <div className="col-sm-offset-4 col-sm-3">
-                  <div type="button" className="btn btn-default pull-right" disabled={submitting} onClick={() => handleDelete(selectedCellInfo.data.id)}>
-                    {submitting
-                      ? <span>DELETING...</span>
-                      : <span>DELETE</span>
-                    }
+                      {optionStep >= 1 &&
+                        <div className="field-row">
+                          <strong className="label required"><label htmlFor="popup-protocol">protocol</label></strong>
+                          <div className="field protocol">
+                            <Select
+                              {...protocol}
+                              className="data-search"
+                              id="popup-protocol"
+                              options={protocolOptions}
+                              placeholder="--Select Protocol--"
+                              disabled={submitting}
+                              onBlur={() => { protocol.onBlur(protocol) }}
+                              onChange={this.handleProtocolChoose.bind(this)}
+                            />
+                          </div>
+                        </div>
+                      }
+                      {optionStep >= 2 &&
+                        <div className="field-row patient-name">
+                          <strong className="label required"><label htmlFor="patient">Patient</label></strong>
+                          <div className="field">
+                            <Select
+                              {...patient}
+                              className="data-search"
+                              id="patient"
+                              options={patientOptions}
+                              placeholder="--Select Patient--"
+                              disabled={submitting || this.props.fetchingPatientsByStudy}
+                              onBlur={() => { patient.onBlur(patient) }}
+                              onChange={this.handlePatientChoose.bind(this)}
+                            />
+                          </div>
+                          <input {...indication} style={{ display: 'none' }} />
+                        </div>
+                      }
+                      {optionStep === 3 &&
+                        <div className="field-row">
+                          <strong className="label required"><label htmlFor="patient-time">Time</label></strong>
+                          <div className="field">
+                            <div className="col-holder row">
+                              <div className="col pull-left hours">
+                                <Select
+                                  {...hour}
+                                  id="patient-time"
+                                  className="visible-first-del min-height"
+                                  options={hourOptions}
+                                  placeholder="--Hours--"
+                                  disabled={submitting}
+                                  onBlur={() => { hour.onBlur(hour) }}
+                                />
+                              </div>
+                              <div className="col pull-left minutes">
+                                <Select
+                                  {...minute}
+                                  id="minutes"
+                                  className="visible-first-del min-height"
+                                  options={minuteOptions}
+                                  placeholder="--Minutes--"
+                                  disabled={submitting}
+                                  onBlur={() => { minute.onBlur(minute) }}
+                                />
+                              </div>
+                              <div className="col pull-left time-mode">
+                                <Select
+                                  {...period}
+                                  id="time-period"
+                                  className="visible-first"
+                                  options={periodOptions}
+                                  disabled={submitting}
+                                  onBlur={() => { period.onBlur(period) }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                      <div className="text-right">
+                        <input type="reset" className="btn btn-gray-outline hidden" value="reset" />
+                        <input type="submit" className="btn btn-default" value="Submit" disabled={submitting} />
+                      </div>
+                    </form>
                   </div>
                 </div>
-                <div className="col-sm-3">
-                  <button type="submit" className="btn btn-default pull-right" disabled={submitting}>
-                    {submitting
-                      ? <span>UPDATING...</span>
-                      : <span>UPDATE</span>
-                    }
-                  </button>
+              </div>
+            </div>
+          </div>
+        }
+
+        {modalType===SchedulePatientModalType.UPDATE &&
+          <div id="edit-scedule" className="lightbox lightbox-active fixed-popup">
+            <div className="lightbox-holder">
+              <div className="lightbox-frame">
+                <div className="lightbox-content">
+                  <div className="head">
+                    <strong className="title">EDIT SCHEDULE</strong>
+                    <a className="close lightbox-close" href="#" onClick={handleCloseModal}><i className="icon-icon_close"></i></a>
+                  </div>
+                  <div className="scroll-holder">
+                    <form action="#" className="form-lightbox form-edit-schedule" onSubmit={handleSubmit}>
+                      <strong className="name">{`${selectedCellInfo.data.patient.firstName} ${selectedCellInfo.data.patient.lastName}`}</strong>
+                      <span className="site-location">{selectedCellInfo.data.siteLocation}</span>
+                      <span className="protocol">{selectedCellInfo.data.protocolNumber}</span>
+                      <div className="field-row">
+                        <strong className="label">* When</strong>
+                        <div className="field append-calendar">
+                          <DatePicker {...date} id="start-date" className="form-control datepicker-input" selected={this.state.selectedUpdateDate} onChange={this.handleUpdateDateChange.bind(this)} />
+                          {/*
+                            <input data-placeholder="mm/dd/yy" id="start-date" class="form-control datepicker-input" type="text" data-datepicker="" data-title="Choose Date" data-href="www.google.com" data-required="true">
+                          */}
+                        </div>
+                      </div>
+                      <div className="field-row">
+                        <strong className="label required"><label htmlFor="patient-time-edit">Time</label></strong>
+                        <div className="field">
+                          <div className="col-holder row">
+                            <div className="col pull-left hours">
+                              <Select
+                                {...hour}
+                                id="patient-time-edit"
+                                className="visible-first-del min-height"
+                                options={hourOptions}
+                                placeholder="--Hours--"
+                                disabled={submitting}
+                                onBlur={() => { hour.onBlur(hour) }}
+                              />
+                            </div>
+                            <div className="col pull-left minutes">
+                              <Select
+                                {...minute}
+                                id="minutes2"
+                                className="visible-first-del min-height"
+                                options={minuteOptions}
+                                placeholder="--Minutes--"
+                                disabled={submitting}
+                                onBlur={() => { minute.onBlur(minute) }}
+                              />
+                            </div>
+                            <div className="col pull-left time-mode">
+                              <Select
+                                {...period}
+                                id="time-period2"
+                                className="visible-first"
+                                options={periodOptions}
+                                disabled={submitting}
+                                onBlur={() => { period.onBlur(period) }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="btn-block text-right">
+                        <a href="#popup-remover" className="btn btn-gray-outline lightbox-opener" disabled={submitting} onClick={() => handleDelete(selectedCellInfo.data.id)}>
+                          {submitting ?
+                            'deleting...' : 'delete'
+                          }
+                        </a>
+                        <a href="#" className="btn btn-default btn-update">
+                          {submitting ?
+                            'updating...' : 'update'
+                          }
+                        </a>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </div>
-            </Modal.Body>
-          </form>
+            </div>
+          </div>
         }
       </Modal>
     )

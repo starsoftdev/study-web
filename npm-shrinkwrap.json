@@ -5634,23 +5634,6 @@
       "from": "react-addons-update@>=15.3.1 <16.0.0",
       "resolved": "https://registry.npmjs.org/react-addons-update/-/react-addons-update-15.3.1.tgz"
     },
-    "react-big-calendar": {
-      "version": "0.10.3",
-      "from": "git+https://github.com/studykik/kik-react-big-calendar.git",
-      "resolved": "git+https://github.com/studykik/kik-react-big-calendar.git#78bcf8f6591015d01304714f61ddb3c47188fb7e",
-      "dependencies": {
-        "lodash": {
-          "version": "3.10.1",
-          "from": "lodash@>=3.10.1 <4.0.0",
-          "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz"
-        },
-        "react-prop-types": {
-          "version": "0.2.2",
-          "from": "react-prop-types@>=0.2.1 <0.3.0",
-          "resolved": "https://registry.npmjs.org/react-prop-types/-/react-prop-types-0.2.2.tgz"
-        }
-      }
-    },
     "react-bootstrap": {
       "version": "0.30.3",
       "from": "react-bootstrap@latest",

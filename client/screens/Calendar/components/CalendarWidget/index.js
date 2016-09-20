@@ -40,10 +40,6 @@ class CalendarWidget extends React.Component {
           }}
           eventPropGetter={(event, start, end, isSelected)=>{
             return {
-              style: {
-                color: 'gray',
-                backgroundColor: '#f3f3f3'
-              }
             }
           }}
           onSelectSlot={({ start, end, slots })=>{
