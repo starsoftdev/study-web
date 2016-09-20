@@ -30,11 +30,7 @@ const mapStateToProps = createStructuredSelector({
 @connect(mapStateToProps)
 class RequestProposalForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    error: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
-    reset: PropTypes.func.isRequired,
-    pristine: PropTypes.bool.isRequired,
-    submitting: PropTypes.bool.isRequired,
     siteLocations: PropTypes.array,
     indications: PropTypes.array,
     studyLevels: PropTypes.array,
@@ -50,7 +46,6 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
   }
 
   render() {
-    const { error, pristine, reset, submitting } = this.props; // eslint-disable-line
     const { siteLocations, indications, studyLevels } = this.props;
     const { callTracking } = this.props;
 
