@@ -17,9 +17,9 @@ import {
   CALL_TRACKING_PRICE,
 } from 'common/constants';
 import {
-  selectRequestProposalForm,
-  selectRequestProposalFormError,
-} from 'common/selectors/form.selector';
+  selectProposalFormValues,
+  selectProposalFormError,
+} from 'components/RequestProposalForm/selectors';
 import {
   selectLevels,
 } from 'containers/App/selectors';
@@ -219,10 +219,10 @@ export class RequestProposalCart extends Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  levels: selectLevels(),
-  formValues: selectRequestProposalForm(),
   coupon: selectCoupon(),
-  hasError: selectRequestProposalFormError(),
+  levels: selectLevels(),
+  hasError: selectProposalFormError(),
+  formValues: selectProposalFormValues(),
 });
 
 function mapDispatchToProps(dispatch) {
