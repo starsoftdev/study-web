@@ -55,7 +55,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
     const { callTracking } = this.props;
 
     return (
-      <form onSubmit={() => {}} className="form-study">
+      <div className="form-study">
         <div className="form-fields">
           <div className="field-row">
             <strong className="label required"><label>Site Location</label></strong>
@@ -207,7 +207,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           </div>
 
         </div>
-      </form>
+      </div>
     );
   }
 }
