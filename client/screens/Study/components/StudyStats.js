@@ -9,10 +9,14 @@ import Collapse from 'react-bootstrap/lib/Collapse'
 import classNames from 'classnames'
 
 class StudyStats extends React.Component {
-  componentDidMount () {
+  constructor (props) {
+    super(props)
     this.state = {
       open: true
     }
+  }
+
+  componentDidMount () {
     this.onToggle = this.onToggle.bind(this)
   }
 
@@ -23,7 +27,7 @@ class StudyStats extends React.Component {
     })
   }
 
-  render() {
+  render () {
     return (
       <div className={classNames('stats', { 'active': this.state.open })}>
         <div className="head">
