@@ -17,6 +17,12 @@ export default function cards (state=null, action) {
     }
 
     return newState
+  } else if (action.type === ActionTypes.FINISH_DELETE_CARD) {
+    if (action.cardData) {
+      _.remove(newState.data, { id: action.cardData.id })
+    }
+
+    return newState
   } else {
     return state
   }

@@ -16,6 +16,6 @@ export default function saveCard (customerId, cardData) {
       })
     }
 
-    dispatch(createEntity('/clients/save_card/' + customerId, cardData, afterSave))
+    dispatch(createEntity('/clients/stripe_customer/' + customerId + '/save_card', cardData, afterSave))
   })
 }
