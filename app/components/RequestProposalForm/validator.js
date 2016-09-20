@@ -9,6 +9,7 @@ const schema = {
   irbEmail: { email: true },
   level_id: { presence: { message: '^You need to select exposure level' } },
   campaignLength: { presence: { message: '^You need to select campaign length' } },
+  startDate: { presence: true },
 };
 
 export default validatorFactory(schema);
