@@ -20,6 +20,8 @@ If you want to develop with Redux Dev Tools, then have this value in the .env as
 ```
 DEVTOOLS=true
 ```
+You will also need to install the associated Chrome extension for Redux Dev Tools to use it.
+https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
 
 If you want to use production search indices, change your config to:
 ```
