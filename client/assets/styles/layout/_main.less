@@ -4,24 +4,25 @@
 }
 
 .form-search {
-	margin: 0 0 30px;
+	clear: both;
+	margin: 0 -6px 30px;
 	position: relative;
 
+	.btns-area {
+		margin: 0 0 0 50px;
+	}
+
 	.fields-holder {
-		margin: 0 300px 0 0;
+		overflow: hidden;
 	}
 
 	.btn-primary {
-		top: 0;
-		right: 0;
 		color: #00afef;
-		min-width: 203px;
 		font-weight: 600;
-		padding: 6px 8px;
+		padding: 6px 12px;
 		background: #fff;
 		.font(18px, 24px);
 		border-width: 2px;
-		position: absolute;
 		border-radius: 2px;
 		border-color: #00afef;
 		text-transform: uppercase;
@@ -34,9 +35,13 @@
 		}
 	}
 
+	.col {
+		padding: 0 6px;
+	}
+
 	.search-area {
-		width: 33.8%;
-		margin: 0 12px 0 0;
+		width: 33.33%;
+		padding: 0 6px;
 		position: relative;
 
 		.form-control {
@@ -68,8 +73,8 @@
 	}
 
 	.custom-select {
-		width: 25.833%;
-		margin: 0 12px 0 0;
+		width: 33.333%;
+		padding: 0 6px;
 	}
 
 	.field {
@@ -83,11 +88,11 @@
 		}
 
 		.search-area {
-			width: 25.7%;
+			width: 25%;
 		}
 
 		.custom-select {
-			width: 19.7%;
+			width: 25%;
 		}
 
 		.btn-gray-outline {
@@ -119,38 +124,13 @@
 	}
 
 	@media screen and (max-width: @psd) {
-		margin: 0 -6px;
-
-		.fields-holder {
-			margin: 0;
-			.clearfix;
-			padding: 70px 0 0;
-		}
+		margin-bottom: 0;
 
 		.custom-select,
 		.search-area {
 			margin: 0;
-			width: 50%;
+			width: 33.333%;
 			padding: 0 6px 30px;
-		}
-
-		.btn-primary {
-			right: 6px;
-		}
-
-		&.alt {
-			margin: 0 -6px 14px;
-
-			.search-area,
-			.custom-select {
-				width: 40.1%;
-			}
-
-			.btn.btn-gray-outline {
-				width: 18.3%;
-				float: right;
-				margin: 0 8px 16px;
-			}
 		}
 
 	}
@@ -1452,8 +1432,30 @@
 		margin: 0 0 30px;
 
 		.btn {
-			min-width: 139px;
 			padding: 5px 12px;
+		}
+	}
+
+	.form-search {
+		.search-area,
+		.custom-select {
+			width: 50%;
+		}
+
+		&.alt {
+			.search-area,
+			.custom-select {
+				width: 25%;
+			}
+		}
+	}
+
+	&.receipts {
+		.form-search {
+			.search-area,
+			.custom-select {
+				width: 40%;
+			}
 		}
 	}
 
@@ -1510,52 +1512,33 @@
 		}
 	}
 
-	&.receipts {
-
-	}
-
 	@media screen and (max-width: @psd) {
 
 		.form-search {
-			margin-bottom: 18px;
+			margin-bottom: 0;
 
 
 
-			.search-area,
+			/*.search-area,
 			.custom-select {
 				width: 50%;
-			}
+			}*/
 		}
 
 		.table {
 			font-size: 15px;
+
+			.jcf-checkbox,
+			> thead > tr .jcf-checkbox {
+					margin: 0 7px 0 0;
+			}
 		}
 
 		&.receipts {
 			.form-search {
-				//margin-bottom: 4px;
-
-				.search-area,
-				.custom-select {
-					width: 50%;
-				}
 
 				.btn.btn-gray-outline {
 					margin-left: 0;
-				}
-
-
-
-				.fields-holder {
-					padding: 74px 217px 0 0;
-				}
-				.btn.btn-gray-outline {
-					right: 6px;
-					margin: 0;
-					bottom: 12px;
-					width: 203px;
-					position: absolute;
-					padding: 5px 11px 6px;
 				}
 			}
 		}
@@ -1634,7 +1617,7 @@
 
 .slider {
 	position: relative;
-	padding: 0 150px 0 0;
+	padding: 0 152px 0 0;
 }
 
 .scheduled-patients {
