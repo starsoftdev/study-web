@@ -48,36 +48,45 @@ class FilterBar extends Component {
     const indicationOptions = _.uniqBy(indications, 'value')
 
     return (
-      <div className="filter-bar row">
-        <div className="col-sm-3">
-          <input className="search-box" type="text" placeholder="Search" onChange={(ev) => this.handleFilterChange('patientName', ev.target)} />
-        </div>
-        <div className="col-sm-3">
-          <Select
-            value={filter.siteLocation}
-            disabled={fetchingSites}
-            options={siteLocationOptions}
-            placeholder="--Select Site Location--"
-            onChange={(option) => this.handleFilterChange('siteLocation', option)}
-          />
-        </div>
-        <div className="col-sm-3">
-          <Select
-            value={filter.indication}
-            options={indicationOptions}
-            placeholder="--Select Indication--"
-            onChange={(option) => this.handleFilterChange('indication', option)}
-          />
-        </div>
-        <div className="col-sm-3">
-          <Select
-            value={filter.protocol}
-            options={protocolOptions}
-            placeholder="--Select Protocol--"
-            onChange={(option) => this.handleFilterChange('protocol', option)}
-          />
-        </div>
-      </div>
+			<form action="#" className="form-search clearfix alt">
+				<div className="fields-holder">
+					<div className="search-area pull-left">
+						<div className="field">
+              <input type="search" id="search" className="form-control keyword-search" placeholder="Search"
+                onChange={(ev) => this.handleFilterChange('patientName', ev.target)} />
+              <label htmlFor="search"><i className="icon-icon_search2"></i></label>
+						</div>
+					</div>
+					<div className="pull-left custom-select">
+            <Select
+              className="data-search"
+              value={filter.siteLocation}
+              disabled={fetchingSites}
+              options={siteLocationOptions}
+              placeholder="--Select Site Location--"
+              onChange={(option) => this.handleFilterChange('siteLocation', option)}
+            />
+					</div>
+					<div className="pull-left custom-select">
+            <Select
+              className="data-search"
+              value={filter.indication}
+              options={indicationOptions}
+              placeholder="--Select Indication--"
+              onChange={(option) => this.handleFilterChange('indication', option)}
+            />
+					</div>
+					<div className="pull-left custom-select">
+            <Select
+              className="data-search"
+              value={filter.protocol}
+              options={protocolOptions}
+              placeholder="--Select Protocol--"
+              onChange={(option) => this.handleFilterChange('protocol', option)}
+            />
+					</div>
+				</div>
+			</form>
     )
   }
 }
