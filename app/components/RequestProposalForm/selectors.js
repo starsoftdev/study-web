@@ -9,12 +9,15 @@ const selectFormDomain = () => state => state.form;
 /**
  * RequestProposalForm -> all values
  */
-const selectRequestProposalForm = () => createSelector(
+const selectProposalFormValues = () => createSelector(
   selectFormDomain(),
   (substate) => get(substate, 'requestProposal.values', {})
 );
 
-const selectRequestProposalFormError = () => createSelector(
+/**
+ * RequestProposalForm -> checking validation error
+ */
+const selectProposalFormError = () => createSelector(
   selectFormDomain(),
   (substate) => {
     const errors = get(substate, 'requestProposal.syncErrors', {});
@@ -43,8 +46,8 @@ const selectLeadsCount = () => createSelector(
 
 export default selectFormDomain;
 export {
-  selectRequestProposalForm,
-  selectRequestProposalFormError,
+  selectProposalFormValues,
+  selectProposalFormError,
   selectCallTracking,
   selectLeadsCount,
 };

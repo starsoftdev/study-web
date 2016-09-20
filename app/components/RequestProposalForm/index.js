@@ -18,7 +18,7 @@ import { CAMPAIGN_LENGTH_LIST } from 'common/constants';
 import {
   selectCallTracking,
   selectLeadsCount,
-} from 'common/selectors/form.selector';
+} from './selectors';
 import formValidator from './validator';
 
 const mapStateToProps = createStructuredSelector({
