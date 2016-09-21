@@ -30,7 +30,7 @@ export function* fetchMeFromToken() {
 
   try {
     // const requestURL = `${API_URL}/users/${userId}?access_token=${authToken}&filter=${miscParam}`;
-    const requestURL = `${API_URL}/users/${userId}?access_token=${authToken}`;
+    const requestURL = `${API_URL}/users/${userId}/get-full-user-info?access_token=${authToken}`;
     const response = yield call(request, requestURL);
 
     yield put(setUserData(response));
