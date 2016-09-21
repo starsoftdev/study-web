@@ -101,6 +101,17 @@ export function* authorize(data) {
   }
 }
 
+export function* logoutSaga() {
+  while (true) {
+    yield take(LOGOUT_REQUEST);
+    yield put(setAuthState(false));
+    yield put(setUserData(false));
+
+    yield call(logout);
+    yield put(push('/'));
+  }
+}
+
 export function* logout() {
   try {
     const requestURL = `${API_URL}/users/logout`;
@@ -111,8 +122,6 @@ export function* logout() {
 
     yield call(removeItem, 'auth_token');
     yield call(removeItem, 'user_id');
-    yield put(setAuthState(false));
-    yield put(setUserData(false));
   } catch (err) {
     // yield put()
   }
