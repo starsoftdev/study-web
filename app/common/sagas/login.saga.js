@@ -9,6 +9,7 @@ import {
 } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
+import { get } from 'lodash';
 
 import request from 'utils/request';
 import { setItem, removeItem } from 'utils/localStorage';
@@ -17,6 +18,10 @@ import {
   LOGIN_ERROR,
   LOGOUT_REQUEST,
 } from 'containers/LoginPage/constants';
+
+import {
+  RESET_PASSWORD_REQUEST,
+} from 'containers/ResetPasswordPage/constants';
 
 import { loginError } from 'containers/LoginPage/actions';
 import { fetchMeFromToken, setAuthState, setUserData } from 'containers/App/actions';
@@ -124,5 +129,23 @@ export function* logout() {
     yield call(removeItem, 'user_id');
   } catch (err) {
     // yield put()
+  }
+}
+
+export function* resetPassword() {
+  while (true) {
+    try {
+      const { payload } = yield take(RESET_PASSWORD_REQUEST);
+      const params = {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      };
+      const requestURL = `${API_URL}/users/reset`;
+      yield call(request, requestURL, params);
+      yield put(toastrActions.success('Reset password', 'The request has been submitted successfully'));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      yield put(toastrActions.error('', errorMessage));
+    }
   }
 }
