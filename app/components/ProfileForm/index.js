@@ -40,7 +40,9 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
   }
 
   uploadFile(e) {
-    this.props.changeImage({ file: e.target.files[0], user_id: this.props.currentUser.id });
+    if (e.target.files[0]) {
+      this.props.changeImage({ file: e.target.files[0], user_id: this.props.currentUser.id });
+    }
   }
 
   render() {
