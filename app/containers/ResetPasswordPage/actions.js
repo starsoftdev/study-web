@@ -11,7 +11,6 @@ import {
 } from './constants';
 
 export function resetPasswordRequest(payload) {
-  console.log(1);
   return {
     type: RESET_PASSWORD_REQUEST,
     payload,

@@ -43,7 +43,10 @@ export default function request(url, options = {}) {
  * @return {object}          The parsed JSON from the request
  */
 function parseJSON(response) {
-  return response.json();
+  if (response.status !== 204) { // do not try to parse empty response
+    return response.json();
+  }
+  return true;
 }
 
 /**
