@@ -79,6 +79,27 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/payment-information',
+      name: 'paymentInformationPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/paymentInformationPage/reducer'),
+          System.import('containers/paymentInformationPage/sagas'),
+          System.import('containers/paymentInformationPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('paymentInformationPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/request-proposal',
       name: 'requestProposalPage',
       getComponent(nextState, cb) {
