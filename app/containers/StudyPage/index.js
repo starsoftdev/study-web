@@ -1,0 +1,70 @@
+/*
+ *
+ * StudyPage
+ *
+ */
+
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+
+import DocumentTitle from 'react-document-title'
+import StudyFetcher from './components/StudyFetcher'
+import FilterStudyPatients from '../../components/FilterStudyPatients'
+import StudyStats from '../../components/StudyStats'
+import StudyPatients from '../../components/StudyPatients'
+import { selectCurrentUser } from 'containers/App/selectors';
+import { fetchStudy, fetchStudyPatients } from 'containers/StudyPage/actions';
+import { createStructuredSelector } from 'reselect';
+
+export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  static propTypes = {
+    campaigns: PropTypes.array,
+    currentUser: PropTypes.any,
+    fetchStudy: PropTypes.func,
+    fetchStudyPatients: PropTypes.func,
+    patients: PropTypes.array,
+    sources: PropTypes.array,
+    study: PropTypes.object,
+  }
+
+  constructor(props) {
+    super(props);
+    this.fetchStudy = this.props.fetchStudy.bind(this);
+    this.fetchStudyPatients = this.props.fetchStudyPatients.bind(this);
+  }
+
+  render() {
+    return (
+      <DocumentTitle title={pageTitle}>
+        <div className="container-fluid">
+          <section className="individual-study">
+            <header className="main-head">
+              <h2 className="main-heading">{study.name}</h2>
+              <p>
+                <span className="info-cell">Location: Seattle, WA</span>
+                <span className="info-cell">Sponsor: Motang</span>
+                <span className="info-cell">Protocol: YM12345</span>
+              </p>
+            </header>
+            <FilterStudyPatients campaignOptions={campaignOptions} sourceOptions={sourceOptions} handleSubmit={this.handleSubmit} />
+            <StudyStats />
+            <StudyPatients patients={patients} />
+          </section>
+        </div>
+      </DocumentTitle>
+    );
+  }
+}
+
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchStudy: (values) => dispatch(fetchStudy(values)),
+    fetchStudyPatients: (values) => dispatch(fetchStudyPatients(values)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StudyPage);

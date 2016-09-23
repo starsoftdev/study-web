@@ -1,39 +1,44 @@
-// enable new relic monitoring
-require('newrelic')
+/* eslint consistent-return:0 */
+require('dotenv').load();
 
-var path = require('path')
-var express = require('express')
-var logger = require('winston')
-var webpack = require('webpack')
-var config = require('../webpack.config')
+const express = require('express');
+const logger = require('./logger');
 
-var app = express()
-var PORT = process.env.PORT || 8080
-var compiler = webpack(config)
+const argv = require('minimist')(process.argv.slice(2));
+const setup = require('./middlewares/frontendMiddleware');
+const isDev = process.env.NODE_ENV !== 'production';
+const ngrok = (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false;
+const resolve = require('path').resolve;
+const app = express();
 
-app.use(require('webpack-dev-middleware')(compiler, {
-  contentBase: path.join(__dirname, '/../dist/'),
-  publicPath: config.output.publicPath,
-  stats: {
-    colors: true
-  }
-}))
+// If you need a backend, e.g. an API, add your custom backend-specific middleware here
+// app.use('/api', myApi);
 
-app.use(require('webpack-hot-middleware')(compiler))
+// In production we need to pass these values in instead of relying on webpack
+setup(app, {
+  outputPath: resolve(process.cwd(), 'build'),
+  publicPath: '/',
+});
 
-// static assets served from public folder
-app.use(express.static(path.join(__dirname, '/../public/')))
+// get the intended port number, use port 5000 if not provided
+const port = argv.port || process.env.PORT || 5000;
 
-logger.level = process.env.LOGGER_LEVEL || (process.env.NODE_ENV === 'development'? 'debug': 'info')
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '/../dist/', 'index.html'))
-})
-
-app.listen(PORT, (err) => {
+// Start your app.
+app.listen(port, (err) => {
   if (err) {
-    logger.error(err)
-  } else {
-    logger.info('==> 🌎  Listening on PORT %s. Open up http://localhost:%s/ in your browser.', PORT, PORT)
+    return logger.error(err.message);
   }
-})
+
+  // Connect to ngrok in dev mode
+  if (ngrok) {
+    ngrok.connect(port, (innerErr, url) => {
+      if (innerErr) {
+        return logger.error(innerErr);
+      }
+
+      logger.appStarted(port, url);
+    });
+  } else {
+    logger.appStarted(port);
+  }
+});
