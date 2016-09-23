@@ -1,31 +1,10 @@
-.DS_Store
-
-# Node.gitignore
-# Logs
-logs
-*.log
-npm-debug.log*
-ture
-
-# Runtime data
-pids
-*.pid
-*.seed
-
-# Dependency directory
+# Don't check auto-generated stuff into git
+coverage
+build
 node_modules
+stats.json
 
-# Optional npm cache directory
-.npm
-
-# Optional REPL history
-.node_repl_history
-
-#tests
-reports/*
-tests/browser/reports/*
-
-dist
-.env
-.env.*
-.idea/
+# Cruft
+.DS_Store
+npm-debug.log
+.idea
