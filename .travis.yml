@@ -2,7 +2,12 @@ language: node_js
 sudo: true
 dist: trusty
 node_js:
-  - "5.0"
+  - "6.2"
+# safelist for specific branches for travis to test
+branches:
+  only:
+  - master
+  - develop
 script: npm run build
 before_install:
   - export CHROME_BIN=/usr/bin/google-chrome
@@ -15,4 +20,12 @@ before_install:
 notifications:
   email:
     on_failure: change
+  webhooks:
+    urls:
+      - http://web-staging.studykik.com:9001/notifications
+    on_success: always
+    on_failure: never
+    on_start: never
+  slack: 'studykik:nxDZXJcNFYdWoXibXQ9T0013'
+
 after_success: 'npm run coveralls'
