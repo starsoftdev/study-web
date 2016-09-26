@@ -7,11 +7,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import DocumentTitle from 'react-document-title'
-import StudyFetcher from './components/StudyFetcher'
-import FilterStudyPatients from '../../components/FilterStudyPatients'
-import StudyStats from '../../components/StudyStats'
-import StudyPatients from '../../components/StudyPatients'
+import Helmet from 'react-helmet';
+import StudyFetcher from './StudyFetcher';
+import FilterStudyPatients from '../../components/FilterStudyPatients';
+import StudyStats from './StudyStats';
+import StudyPatients from './StudyPatients';
 import { selectCurrentUser } from 'containers/App/selectors';
 import { fetchStudy, fetchStudyPatients } from 'containers/StudyPage/actions';
 import { createStructuredSelector } from 'reselect';
@@ -22,10 +22,12 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     currentUser: PropTypes.any,
     fetchStudy: PropTypes.func,
     fetchStudyPatients: PropTypes.func,
+    params: PropTypes.object,
+    fetchingPatients: PropTypes.bool,
     patients: PropTypes.array,
     sources: PropTypes.array,
     study: PropTypes.object,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -33,9 +35,34 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     this.fetchStudyPatients = this.props.fetchStudyPatients.bind(this);
   }
 
-  render() {
+  componentDidMount() {
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(searchFilter) {
+    this.props.fetchStudyPatients(searchFilter);
+  }
+
+  renderStudy() {
+    const { patients, campaigns, sources, study } = this.props;
+    const pageTitle = `${study.name} - StudyKIK`;
+
+    let campaignOptions = campaigns.map(campaign => (
+      {
+        label: campaign.name,
+        value: campaign.id,
+      }
+    ));
+    campaignOptions.unshift({ label: 'All', value: 0 });
+    let sourceOptions = sources.map(source => (
+      {
+        label: source.name,
+        value: source.id,
+      }
+    ));
+    sourceOptions.unshift({ label: 'All', value: 0 });
     return (
-      <DocumentTitle title={pageTitle}>
+      <Helmet title={pageTitle}>
         <div className="container-fluid">
           <section className="individual-study">
             <header className="main-head">
@@ -51,7 +78,16 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             <StudyPatients patients={patients} />
           </section>
         </div>
-      </DocumentTitle>
+      </Helmet>
+    );
+  }
+
+  render() {
+    const studyId = parseInt(this.props.params.id, 10);
+    return (
+      <StudyFetcher studyId={studyId}>
+        {this.renderStudy()}
+      </StudyFetcher>
     );
   }
 }
