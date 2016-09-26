@@ -9,7 +9,7 @@ import 'react-select/dist/react-select.min.css';
 class FilterBar extends Component {
   static propTypes = {
     sites: PropTypes.array.isRequired,
-    fetchingSites: PropTypes.bool.isRequired,
+    fetchingSites: PropTypes.bool,
     filter: PropTypes.object.isRequired,
     updateFilter: PropTypes.func.isRequired,
   }

@@ -49,7 +49,7 @@ class SchedulePatientModal extends Component {
     selectedCellInfo: PropTypes.object.isRequired,
     patientsByStudy: PropTypes.object.isRequired,
     fetchPatientsByStudy: PropTypes.func.isRequired,
-    fetchingSites: PropTypes.bool.isRequired,
+    fetchingSites: PropTypes.bool,
     fetchingPatientsByStudy: PropTypes.bool.isRequired,
   }
 
