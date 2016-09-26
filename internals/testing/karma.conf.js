@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = (config) => {
   config.set({
     frameworks: ['mocha'],
-    reporters: ['coverage', 'mocha'],
+    reporters: ['coverage', 'mocha', 'junit'],
     browsers: process.env.TRAVIS // eslint-disable-line no-nested-ternary
       ? ['ChromeTravis']
       : process.env.APPVEYOR
@@ -56,6 +56,9 @@ module.exports = (config) => {
         { type: 'text-summary' },
       ],
     },
+    junitReporter = {
+    outputFile: 'test-results.xml'
+    };
 
   });
 };
