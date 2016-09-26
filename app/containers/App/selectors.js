@@ -57,6 +57,16 @@ const selectStudyLevels = () => createSelector(
   }
 );
 
+const selectCoupon = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.coupon', {})
+);
+
+const selectCards = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.cards', {})
+);
+
 export {
   selectGlobal,
   selectAuthState,
@@ -67,4 +77,6 @@ export {
   selectIndications,
   selectLevels,
   selectStudyLevels,
+  selectCoupon,
+  selectCards,
 };

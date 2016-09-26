@@ -7,6 +7,14 @@ import {
   FETCH_SITES_SUCCESS,
   FETCH_INDICATIONS_SUCCESS,
   FETCH_LEVELS_SUCCESS,
+
+  FETCH_COUPON,
+  FETCH_COUPON_SUCCESS,
+  FETCH_COUPON_ERROR,
+
+  FETCH_CARDS,
+  FETCH_CARDS_SUCCESS,
+  FETCH_CARDS_ERROR,
 } from './constants';
 
 import {
@@ -15,11 +23,21 @@ import {
 
 const initialState = {
   loggedIn: !!getItem('auth_token'),
-  userData: false,
+  userData: null,
   baseData: {
     sites: [],
     indications: [],
     levels: [],
+    coupon: {
+      details: null,
+      fetching: false,
+      error: null,
+    },
+    cards: {
+      details: null,
+      fetching: false,
+      error: null,
+    },
   },
 };
 
@@ -67,6 +85,78 @@ export default function appReducer(state = initialState, action) {
         baseData: {
           ...state.baseData,
           levels: action.payload,
+        },
+      };
+    case FETCH_COUPON:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          coupon: {
+            details: null,
+            fetching: true,
+            error: null,
+          },
+        },
+      };
+    case FETCH_COUPON_SUCCESS:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          coupon: {
+            details: action.payload,
+            fetching: false,
+            error: null,
+          },
+        },
+      };
+    case FETCH_COUPON_ERROR:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          coupon: {
+            details: null,
+            fetching: false,
+            error: action.payload,
+          },
+        },
+      };
+    case FETCH_CARDS:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          cards: {
+            details: null,
+            fetching: true,
+            error: null,
+          },
+        },
+      };
+    case FETCH_CARDS_SUCCESS:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          cards: {
+            details: action.payload,
+            fetching: false,
+            error: null,
+          },
+        },
+      };
+    case FETCH_CARDS_ERROR:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          cards: {
+            details: null,
+            fetching: false,
+            error: action.payload,
+          },
         },
       };
     default:

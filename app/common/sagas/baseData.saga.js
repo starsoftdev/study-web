@@ -8,6 +8,8 @@ import {
   FETCH_SITES,
   FETCH_INDICATIONS,
   FETCH_LEVELS,
+  FETCH_COUPON,
+  FETCH_CARDS,
 } from 'containers/App/constants';
 
 import {
@@ -17,13 +19,18 @@ import {
   indicationsFetchingError,
   levelsFetched,
   levelsFetchingError,
+  couponFetched,
+  couponFetchingError,
+  cardsFetched,
+  cardsFetchingError,
 } from 'containers/App/actions';
-
 
 export default function* baseDataSaga() {
   yield fork(fetchSitesWatcher);
   yield fork(fetchIndicationsWatcher);
   yield fork(fetchLevelsWatcher);
+  yield fork(fetchCouponWatcher);
+  yield fork(fetchCardsWatcher);
 }
 
 export function* fetchSitesWatcher() {
@@ -67,6 +74,37 @@ export function* fetchLevelsWatcher() {
       yield put(levelsFetched(response));
     } catch (e) {
       yield put(levelsFetchingError(e));
+    }
+  }
+}
+
+export function* fetchCouponWatcher() {
+  while (true) {
+    const { couponId } = yield take(FETCH_COUPON);
+    const encodedCouponId = encodeURIComponent(couponId);
+
+    try {
+      const requestURL = `${API_URL}/clients/retrieve_coupon/${encodedCouponId}`;
+      const response = yield call(request, requestURL);
+
+      yield put(couponFetched(response));
+    } catch (err) {
+      yield put(couponFetchingError(err));
+    }
+  }
+}
+
+export function* fetchCardsWatcher() {
+  while (true) {
+    const { customerId } = yield take(FETCH_CARDS);
+
+    try {
+      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/retrieve_cardsList`;
+      const response = yield call(request, requestURL);
+
+      yield put(cardsFetched(response));
+    } catch (err) {
+      yield put(cardsFetchingError(err));
     }
   }
 }
