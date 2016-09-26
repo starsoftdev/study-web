@@ -86,13 +86,18 @@ export default function createRoutes(store) {
           System.import('containers/RequestProposalPage/reducer'),
           System.import('containers/RequestProposalPage/sagas'),
           System.import('containers/RequestProposalPage'),
+          System.import('containers/GlobalNotifications/reducer'),
+          System.import('containers/GlobalNotifications/sagas'),
+          System.import('containers/GlobalNotifications'),
         ]);
 
         const renderRoute = loadModule(cb);
 
-        importModules.then(([reducer, sagas, component]) => {
+        importModules.then(([reducer, sagas, component, GlobalNotificationsReducer, GlobalNotificationsSagas,]) => {
           injectReducer('requestProposalPage', reducer.default);
+          injectReducer('globalNotifications', GlobalNotificationsReducer.default);
           injectSagas(sagas.default);
+          injectSagas(GlobalNotificationsSagas.default);
           renderRoute(component);
         });
 
@@ -113,6 +118,26 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('profilePage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      path: '/notification',
+      name: 'globalNotifications',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/GlobalNotifications/reducer'),
+          System.import('containers/GlobalNotifications/sagas'),
+          System.import('containers/GlobalNotifications'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('globalNotifications', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });

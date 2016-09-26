@@ -12,6 +12,7 @@ import Helmet from 'react-helmet';
 
 import RequestProposalForm from 'components/RequestProposalForm';
 import RequestProposalCart from 'components/RequestProposalCart';
+import GlobalNotifications from 'containers/GlobalNotifications';
 
 import {
   fetchSites,
@@ -80,6 +81,7 @@ export class RequestProposalPage extends Component {
 
           </div>
         </section>
+        {/*<GlobalNotifications {...this.props} />*/}
       </StickyContainer>
     );
   }

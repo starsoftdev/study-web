@@ -20,6 +20,7 @@
   },
   "globals": {
     "API_URL": true,
+    "SOCKET_URL": true
   },
   "rules": {
     "arrow-body-style": [
