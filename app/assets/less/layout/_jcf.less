@@ -7,8 +7,8 @@
 	overflow: hidden;
 	cursor: pointer;
 	position: relative;
-	
-	
+
+
 	span {
 		.size(100%);
 		color: #fff;
@@ -18,8 +18,8 @@
 		border-radius: 2px;
 		transition: all 0.25s linear;
 		border: 2px solid @input-border;
-		
-		
+
+
 		&:before {
 			opacity: 0;
 			display: block;
@@ -31,7 +31,7 @@
 			transition: all 0.25s linear;
 		}
 	}
-	
+
 	[type="checkbox"] {
 		position: absolute;
 		width: 100%;
@@ -42,32 +42,25 @@
 		top: 0;
 		cursor: pointer;
 	}
-	
+
 	&:hover,
 	&.jcf-checked {
 		span {
 			border-color: #a0cf67;
 		}
 	}
-	
+
 	&.jcf-checked {
 		span {
 			background: #a0cf67;
-			
+
 			&:before {
 				opacity: 1;
 			}
 		}
-		
-		&:hover {
-			span {
-				background: #c0e890;
-				border-color: #c0e890;
-			}
-		}
 	}
 }
-	
+
 /* custom radio styles */
 .jcf-radio {
 	.align;
@@ -77,13 +70,13 @@
 	overflow: hidden;
 	position: relative;
 	border: 1px solid @input-border;
-	
+
 	.jcf-radio span{
 		.size(100%);
 		display: block;
 		position: relative;
 	}
-	
+
 	[type="radio"] {
 		position: absolute;
 		height: 100%;
@@ -93,11 +86,11 @@
 		left: 0;
 		top: 0;
 	}
-	
+
 	&.jcf-checked span {display:block;}
 }
 
-	
+
 /* custom select styles */
 .jcf-select {
 	display: block;
@@ -106,36 +99,36 @@
 	position: relative;
 	border: 2px solid @input-border;
 	border-radius: @input-border-radius;
-	
+
 	&.jcf-drop-active,
 	&.jcf-focus {
 		border-color:  #00afef;
-		
+
 		.jcf-select-opener:after {
 			border-top-color:  #00afef;
 		}
-		
-		
+
+
 		.jcf-select-text {
 			color: #00afef;
 		}
 	}
-	
+
 	&:hover {
 		border-color:  #00afef;
-		
+
 		.jcf-select-opener:after {
 			border-top-color:  #00afef;
 		}
 	}
 
-	
+
 	select {
 		z-index: 1;
 		left: 0;
 		top: 0;
 	}
-	
+
 	.jcf-select-text {
 		display: block;
 		cursor: pointer;
@@ -146,7 +139,7 @@
 		text-overflow:ellipsis;
 		margin: 0 35px 0 13px;
 	}
-	
+
 	.jcf-select-opener {
 		position: absolute;
 		text-align: center;
@@ -155,7 +148,7 @@
 		bottom: 0;
 		right: 0;
 		top: 0;
-		
+
 		&:after {
 			left: 0;
 			top: 50%;
@@ -166,7 +159,7 @@
 	}
 }
 
-	
+
 body > .jcf-select-drop {
 	position: absolute;
 	margin: 0;
@@ -220,7 +213,7 @@ body > .jcf-select-drop.jcf-drop-flipped {
 .jcf-list ul li {
 	overflow: hidden;
 	display: block;
-	
+
 	&:first-child { display: none !important; }
 }
 .jcf-list .jcf-overflow {
@@ -259,7 +252,7 @@ body > .jcf-select-drop.jcf-drop-flipped {
 	display: block;
 	border: 1px solid #b8c3c9;
 	position: relative;
-	
+
 	.jcf-scrollable-wrapper {
 		width: 100% !important;
 	}
@@ -286,7 +279,7 @@ body > .jcf-select-drop.jcf-drop-flipped {
 	bottom: 0;
 	right: 0;
 	.size(24px);
-	background: url('~assets/images/resizer.png') no-repeat 50% 50%; 
+	background: url('~assets/images/resizer.png') no-repeat 50% 50%;
 }
 /* custom file input styles */
 .jcf-file {
@@ -297,19 +290,19 @@ body > .jcf-select-drop.jcf-drop-flipped {
 	position: relative;
 	white-space: nowrap;
 	//padding: 0 0 0 233px;
-	
+
 	&.jcf-focus,
 	&:hover {
 		.jcf-upload-button {
 			background: darken(#999, 10%);
 		}
-		
+
 		.jcf-fake-input {
 			color: #000;
 			border-color: #66afe9;
 		}
 	}
-	
+
 	&[class^="jcf-extension-"],
 	&[class*=" jcf-extension-"] {
 
@@ -317,7 +310,7 @@ body > .jcf-select-drop.jcf-drop-flipped {
 			display: block;
 		}
 	}
-	
+
 }
 .jcf-file .jcf-real-element {
 	position: absolute;
@@ -356,7 +349,7 @@ body > .jcf-select-drop.jcf-drop-flipped {
 	color: @input-color;
 	text-overflow: ellipsis;
 	border: 2px solid @input-border;
-	
+
 	.jcf-button-content {
 		display: block;
 		white-space: nowrap;
@@ -440,7 +433,7 @@ body > .jcf-select-drop.jcf-drop-flipped {
 .jcf-scrollbar-vertical {
 	.jcf-scrollbar-handle {
 		transition: background 0.25s;
-		
+
 		&:hover {
 			background: #999;
 		}
@@ -449,7 +442,7 @@ body > .jcf-select-drop.jcf-drop-flipped {
 .jcf-scrollbar.jcf-inactive .jcf-scrollbar-handle {
 	visibility: hidden;
 }
-.jcf-scrollbar.jcf-inactive .jcf-scrollbar-dec, 
+.jcf-scrollbar.jcf-inactive .jcf-scrollbar-dec,
 .jcf-scrollbar.jcf-inactive .jcf-scrollbar-inc {
 	background: #e3e3e3;
 }
@@ -457,40 +450,40 @@ body > .jcf-select-drop.jcf-drop-flipped {
 .jcf-scrollbar-vertical {
 	.jcf-scrollbar-dec,
 	.jcf-scrollbar-inc {
-		.size(100%, 3px);
+		.size(0);
 		opacity: 0;
 	}
 }
 
 div.jcf-select-data-search {
-	
+
 	min-width: 251px;
-	
-	
-	
+
+
+
 	.jcf-select-drop-content {
 		padding: 3px;
 		background: #fff;
 		border-radius: 2px;
 	}
-	
+
 	.jcf-list {
 		position: relative;
 		padding: 44px 0 0;
-		
+
 		ul {
 			padding: 0;
 		}
-		
+
 	}
-	
+
 	.search-holder {
 		top: 0;
 		left: 0;
 		right: 0;
 		margin: 0;
 		position: absolute;
-		
+
 		.icon-icon_search2 {
 			top: 2px;
 			right: 2px;
@@ -502,16 +495,11 @@ div.jcf-select-data-search {
 			text-align: center;
 		}
 	}
-	
-	
-}
 
-.select-indication-slide,
-div.jcf-select-data-search {
 	.form-control {
 		border-color: #ccc;
 		padding: 5px 35px 5px 14px;
-		
+
 		&:hover,
 		&:focus {
 			border-color: #00afef;
@@ -543,87 +531,4 @@ select {
 
 .jcf-select-visible-first {
 	.jcf-list ul li:first-child { display: block !important; }
-}
-
-div.jcf-select-min-width {
-	min-width: 150px;
-}
-
-
-/* custom number input styles */
-.jcf-number {
-	display: block;
-	position: relative;
-	
-	.form-control {
-		padding-right: 50px;
-	}
-	
-	input {-moz-appearance: textfield;}
-	input::-webkit-inner-spin-button,
-	input::-webkit-outer-spin-button {-webkit-appearance: none;}
-	
-	.jcf-btn-dec,
-	.jcf-btn-inc {
-		position: absolute;
-		background: #ccc;
-		width: 20px;
-		height: 15px;
-		right: 5px;
-		top: 5px;
-		cursor: pointer;
-		
-		&:hover {
-			background: #e6e6e6;
-		}
-		
-		&.none {
-			pointer-events: none;
-		}
-	}
-
-	.jcf-btn-dec {
-		top: auto;
-		bottom: 5px;
-	}
-}
-
-
-
-
-
-.jcf-number.jcf-disabled .jcf-btn-dec:hover,
-.jcf-number.jcf-disabled .jcf-btn-inc:hover {
-	background: #aaa;
-}
-
-.jcf-number .jcf-btn-dec:before,
-.jcf-number .jcf-btn-inc:before {
-	position: absolute;
-	content: '';
-	width: 0;
-	height: 0;
-	top: 50%;
-	left: 50%;
-	margin: -6px 0 0 -4px;
-	border: 4px solid #aaa;
-	border-color: transparent transparent #000 transparent;
-}
-.jcf-number .jcf-btn-dec:before {
-	margin: -1px 0 0 -4px;
-	border-color: #000 transparent transparent transparent;	
-}
-.jcf-number.jcf-disabled .jcf-btn-dec:before,
-.jcf-number.jcf-disabled .jcf-btn-inc:before,
-.jcf-number .jcf-btn-dec.jcf-disabled:before,
-.jcf-number .jcf-btn-inc.jcf-disabled:before {
-	opacity: 0.3;
-}
-
-.jcf-number .jcf-btn-dec.jcf-disabled,
-.jcf-number .jcf-btn-inc.jcf-disabled {
-	cursor: text;
-}
-.jcf-number.jcf-disabled input {
-	background: #ddd;
 }
