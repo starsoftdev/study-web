@@ -1,8 +1,7 @@
 /* eslint-disable prefer-template, react/jsx-no-bind */
 
 import React, { Component, PropTypes } from 'react';
-import { reduxForm } from 'redux-form';
-import Select from 'react-select';
+import { Field, reduxForm } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import _ from 'lodash';
@@ -10,11 +9,12 @@ import moment from 'moment';
 
 import { SchedulePatientModalType } from 'common/constants';
 
+import Input from 'components/Input';
+import ReactSelect from 'components/Input/ReactSelect';
+
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-select/dist/react-select.min.css';
 import './styles.less';
-
-export const fields = ['siteLocation', 'protocol', 'indication', 'patient', 'date', 'hour', 'minute', 'period'];
 
 function numberSequenceCreator(start, end) {
   return _.range(start, end).map(n => {
@@ -37,9 +37,9 @@ const periodOptions = [
   { label: 'PM', value: 'PM' },
 ];
 
-class SchedulePatientModal extends Component {
+@reduxForm({ form: 'schedulePatient' })
+export default class SchedulePatientModal extends Component {
   static propTypes = {
-    fields: PropTypes.object.isRequired,
     sites: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     handleCloseModal: PropTypes.func.isRequired,
@@ -105,7 +105,8 @@ class SchedulePatientModal extends Component {
         optionStep: 1,
         protocolOptions,
       });
-      this.props.fields.protocol.onChange(null);
+
+      // this.props.fields.protocol.onChange(null);
     } else {
       this.setState({
         optionStep: 0,
@@ -114,7 +115,7 @@ class SchedulePatientModal extends Component {
       });
     }
 
-    this.props.fields.siteLocation.onChange(siteLocationOption);
+    // this.props.fields.siteLocation.onChange(siteLocationOption);
   }
 
   handleProtocolChoose(protocolOption) {
@@ -127,8 +128,8 @@ class SchedulePatientModal extends Component {
       this.setState({
         optionStep: 2,
       });
-      this.props.fields.indication.onChange(protocolOption.indication);
-      this.props.fields.patient.onChange(null);
+      // this.props.fields.indication.onChange(protocolOption.indication);
+      // this.props.fields.patient.onChange(null);
     } else {
       this.setState({
         optionStep: 1,
@@ -136,7 +137,7 @@ class SchedulePatientModal extends Component {
       });
     }
 
-    this.props.fields.protocol.onChange(protocolOption);
+    // this.props.fields.protocol.onChange(protocolOption);
   }
 
   handlePatientChoose(patientOption) {
@@ -150,12 +151,11 @@ class SchedulePatientModal extends Component {
       });
     }
 
-    this.props.fields.patient.onChange(patientOption);
+    // this.props.fields.patient.onChange(patientOption);
   }
 
   render() {
     const {
-      fields: { siteLocation, protocol, indication, patient, date, hour, minute, period },
       sites,
       handleCloseModal,
       handleDelete,
@@ -195,14 +195,13 @@ class SchedulePatientModal extends Component {
                       <div className="field-row">
                         <strong className="label required"><label htmlFor="popup-site-location">Site Location</label></strong>
                         <div className="field site-location">
-                          <Select
-                            {...siteLocation}
-                            id="popup-site-location"
-                            className="data-search"
-                            options={siteLocationOptions}
+                          <Field
+                            name="siteLocation"
+                            component={ReactSelect}
                             placeholder="--Select Site Location--"
+                            options={siteLocationOptions}
+                            className="data-search"
                             disabled={submitting || this.props.fetchingSites}
-                            onBlur={() => { siteLocation.onBlur(siteLocation); }}
                             onChange={this.handleSiteLocationChoose.bind(this)}
                           />
                         </div>
@@ -212,14 +211,14 @@ class SchedulePatientModal extends Component {
                         <div className="field-row">
                           <strong className="label required"><label htmlFor="popup-protocol">protocol</label></strong>
                           <div className="field protocol">
-                            <Select
-                              {...protocol}
-                              className="data-search"
+                            <Field
                               id="popup-protocol"
-                              options={protocolOptions}
+                              name="protocol"
+                              component={ReactSelect}
                               placeholder="--Select Protocol--"
+                              options={protocolOptions}
+                              className="data-search"
                               disabled={submitting}
-                              onBlur={() => { protocol.onBlur(protocol); }}
                               onChange={this.handleProtocolChoose.bind(this)}
                             />
                           </div>
@@ -229,18 +228,18 @@ class SchedulePatientModal extends Component {
                         <div className="field-row patient-name">
                           <strong className="label required"><label htmlFor="patient">Patient</label></strong>
                           <div className="field">
-                            <Select
-                              {...patient}
-                              className="data-search"
+                            <Field
                               id="patient"
-                              options={patientOptions}
+                              name="patient"
+                              component={ReactSelect}
                               placeholder="--Select Patient--"
+                              options={patientOptions}
+                              className="data-search"
                               disabled={submitting || this.props.fetchingPatientsByStudy}
-                              onBlur={() => { patient.onBlur(patient); }}
                               onChange={this.handlePatientChoose.bind(this)}
                             />
                           </div>
-                          <input {...indication} style={{ display: 'none' }} />
+                          <Field name="indication" component={Input} style={{ display: 'none' }} />
                         </div>
                       }
                       {optionStep === 3 &&
@@ -249,35 +248,36 @@ class SchedulePatientModal extends Component {
                           <div className="field">
                             <div className="col-holder row">
                               <div className="col pull-left hours">
-                                <Select
-                                  {...hour}
+                                <Field
                                   id="patient-time"
-                                  className="visible-first-del min-height"
-                                  options={hourOptions}
+                                  name="hour"
+                                  component={ReactSelect}
                                   placeholder="--Hours--"
+                                  options={hourOptions}
+                                  className="visible-first-del min-height"
                                   disabled={submitting}
-                                  onBlur={() => { hour.onBlur(hour); }}
                                 />
                               </div>
                               <div className="col pull-left minutes">
-                                <Select
-                                  {...minute}
+                                <Field
                                   id="minutes"
-                                  className="visible-first-del min-height"
-                                  options={minuteOptions}
+                                  name="minute"
+                                  component={ReactSelect}
                                   placeholder="--Minutes--"
+                                  options={minuteOptions}
+                                  className="visible-first-del min-height"
                                   disabled={submitting}
-                                  onBlur={() => { minute.onBlur(minute); }}
                                 />
                               </div>
                               <div className="col pull-left time-mode">
-                                <Select
-                                  {...period}
+                                <Field
                                   id="time-period"
-                                  className="visible-first"
+                                  name="period"
+                                  component={ReactSelect}
+                                  placeholder="--Minutes--"
                                   options={periodOptions}
+                                  className="visible-first"
                                   disabled={submitting}
-                                  onBlur={() => { period.onBlur(period); }}
                                 />
                               </div>
                             </div>
@@ -313,10 +313,14 @@ class SchedulePatientModal extends Component {
                       <div className="field-row">
                         <strong className="label">* When</strong>
                         <div className="field append-calendar">
-                          <DatePicker {...date} id="start-date" className="form-control datepicker-input" selected={this.state.selectedUpdateDate} onChange={this.handleUpdateDateChange.bind(this)} />
-                          {/*
-                            <input data-placeholder="mm/dd/yy" id="start-date" class="form-control datepicker-input" type="text" data-datepicker="" data-title="Choose Date" data-href="www.google.com" data-required="true">
-                          */}
+                          <Field
+                            id="start-date"
+                            name="date"
+                            component={DatePicker}
+                            className="form-control datepicker-input"
+                            selected={this.state.selectedUpdateDate}
+                            onChange={this.handleUpdateDateChange.bind(this)}
+                          />
                         </div>
                       </div>
                       <div className="field-row">
@@ -324,35 +328,36 @@ class SchedulePatientModal extends Component {
                         <div className="field">
                           <div className="col-holder row">
                             <div className="col pull-left hours">
-                              <Select
-                                {...hour}
+                              <Field
                                 id="patient-time-edit"
-                                className="visible-first-del min-height"
-                                options={hourOptions}
+                                name="hour"
+                                component={ReactSelect}
                                 placeholder="--Hours--"
+                                options={hourOptions}
+                                className="visible-first-del min-height"
                                 disabled={submitting}
-                                onBlur={() => { hour.onBlur(hour); }}
                               />
                             </div>
                             <div className="col pull-left minutes">
-                              <Select
-                                {...minute}
+                              <Field
                                 id="minutes2"
-                                className="visible-first-del min-height"
-                                options={minuteOptions}
+                                name="minute"
+                                component={ReactSelect}
                                 placeholder="--Minutes--"
+                                options={minuteOptions}
+                                className="visible-first-del min-height"
                                 disabled={submitting}
-                                onBlur={() => { minute.onBlur(minute); }}
                               />
                             </div>
                             <div className="col pull-left time-mode">
-                              <Select
-                                {...period}
+                              <Field
                                 id="time-period2"
-                                className="visible-first"
+                                name="period"
+                                component={ReactSelect}
+                                placeholder="--Minutes--"
                                 options={periodOptions}
+                                className="visible-first"
                                 disabled={submitting}
-                                onBlur={() => { period.onBlur(period); }}
                               />
                             </div>
                           </div>
@@ -381,8 +386,3 @@ class SchedulePatientModal extends Component {
     );
   }
 }
-
-export default reduxForm({
-  form: 'schedulePatient',
-  fields,
-})(SchedulePatientModal);
