@@ -11,7 +11,7 @@ import { selectCurrentUser } from 'containers/App/selectors';
 import { selectCreditCards } from 'containers/PaymentInformationPage/selectors';
 import PaymentMethodsForm from 'components/PaymentMethodsForm';
 import AddNewCardButton from 'components/AddNewCardButton';
-import { fetchCreditCards, deleteCreditCard } from 'containers/PaymentInformationPage/actions';
+import { fetchCreditCards, deleteCreditCard, addCreditCard } from 'containers/PaymentInformationPage/actions';
 
 export class PaymentInformationPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -19,12 +19,14 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
     fetchCreditCards: PropTypes.func,
     creditCards: PropTypes.array,
     deleteCreditCard: PropTypes.func,
-    currentUser: PropTypes.object,
+    currentUser: PropTypes.any,
+    addCreditCard: PropTypes.func,
   }
 
   constructor(props) {
     super(props);
     this.deleteCreditCard = this.props.deleteCreditCard.bind(this);
+    this.addCreditCard = this.props.addCreditCard.bind(this);
   }
 
   componentWillReceiveProps(props) {
@@ -41,7 +43,7 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
       <div className="container-fluid">
         <section className="payment-information">
           <h2 className="main-heading">PAYMENT INFORMATION</h2>
-          <AddNewCardButton />
+          <AddNewCardButton addCreditCard={this.addCreditCard} customerId={customerId} />
           <PaymentMethodsForm
             creditCards={this.props.creditCards || []}
             deleteCreditCard={this.deleteCreditCard}
@@ -62,6 +64,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchCreditCards: (payload) => dispatch(fetchCreditCards(payload)),
     deleteCreditCard: (payload) => dispatch(deleteCreditCard(payload)),
+    addCreditCard: (payload) => dispatch(addCreditCard(payload)),
   };
 }
 

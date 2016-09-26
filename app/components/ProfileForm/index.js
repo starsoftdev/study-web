@@ -118,7 +118,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         </div>
 
 
-        <Modal className="profile-page-modal" show={this.state.passwordResetModalOpen} onHide={this.closeResetPasswordModal}>
+        <Modal className="custom-modal" show={this.state.passwordResetModalOpen} onHide={this.closeResetPasswordModal}>
           <Modal.Header>
             <Modal.Title>CHANGE PASSWORD</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeResetPasswordModal}>
