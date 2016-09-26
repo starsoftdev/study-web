@@ -8,12 +8,10 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import Helmet from 'react-helmet';
-import StudyFetcher from './StudyFetcher';
 import FilterStudyPatients from '../../components/FilterStudyPatients';
 import StudyStats from './StudyStats';
 import StudyPatients from './StudyPatients';
 import { selectCurrentUser } from 'containers/App/selectors';
-import { fetchStudy, fetchStudyPatients } from 'containers/StudyPage/actions';
 import { createStructuredSelector } from 'reselect';
 
 export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -43,7 +41,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     this.props.fetchStudyPatients(searchFilter);
   }
 
-  renderStudy() {
+  render() {
     const { patients, campaigns, sources, study } = this.props;
     const pageTitle = `${study.name} - StudyKIK`;
 
@@ -79,15 +77,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           </section>
         </div>
       </Helmet>
-    );
-  }
-
-  render() {
-    const studyId = parseInt(this.props.params.id, 10);
-    return (
-      <StudyFetcher studyId={studyId}>
-        {this.renderStudy()}
-      </StudyFetcher>
     );
   }
 }

@@ -6,7 +6,6 @@
 
 /* eslint-disable no-multi-spaces */
 
-export const FETCH_STUDY          = 'StudyPage/FETCH_STUDY';
 export const FETCH_STUDY_SUCCESS  = 'StudyPage/FETCH_STUDY_SUCCESS';
 export const FETCH_STUDY_ERROR    = 'StudyPage/FETCH_STUDY_ERROR';
 

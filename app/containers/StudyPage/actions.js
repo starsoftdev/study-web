@@ -5,17 +5,10 @@
  */
 
 import {
-  FETCH_STUDY,
   FETCH_STUDY_SUCCESS,
   FETCH_STUDY_ERROR,
   FETCH_STUDY_PATIENTS,
 } from './constants';
-
-export function fetchStudy() {
-  return {
-    type: FETCH_STUDY,
-  };
-}
 
 export function studyFetched(payload) {
   return {

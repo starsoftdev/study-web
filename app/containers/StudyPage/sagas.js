@@ -6,17 +6,22 @@ import { take, call, put } from 'redux-saga/effects';
 
 import request from 'utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
-import { FETCH_STUDY } from './constants';
 import { studyFetched } from './actions';
 
-export default function* fetchStudySaga() {
-  yield take(FETCH_STUDY);
+// Bootstrap sagas
+export default [
+  fetchStudySaga,
+];
+
+export function* fetchStudySaga() {
   yield call(fetchStudyDetails);
 }
 
 export function* fetchStudyDetails() {
   const studyId = getItem('study_id');
   const authToken = getItem('auth_token');
+  console.log('test');
+  console.log(authToken);
 
   if (!authToken) {
     return;
