@@ -6,8 +6,8 @@ import { take, call, put } from 'redux-saga/effects';
 
 import request from 'utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
-import { FETCH_STUDY } from 'containers/App/constants';
-import { studyFetched } from 'containers/App/actions';
+import { FETCH_STUDY } from './constants';
+import { studyFetched } from './actions';
 
 export default function* fetchStudySaga() {
   yield take(FETCH_STUDY);
