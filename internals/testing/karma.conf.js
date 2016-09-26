@@ -6,17 +6,18 @@ module.exports = (config) => {
   config.set({
     frameworks: ['mocha'],
     reporters: ['coverage', 'mocha', 'junit'],
-    browsers: process.env.TRAVIS // eslint-disable-line no-nested-ternary
-      ? ['ChromeTravis']
-      : process.env.APPVEYOR
-        ? ['IE'] : ['Chrome'],
-     plugins : {
+    plugins : {
         'karma-junit-reporter'
      },
       junitReporter: {
         outputFile: 'test-results-karma.xml',
         suite: ''
     },
+    browsers: process.env.TRAVIS // eslint-disable-line no-nested-ternary
+      ? ['ChromeTravis']
+      : process.env.APPVEYOR
+        ? ['IE'] : ['Chrome'],
+
     autoWatch: false,
     singleRun: true,
 
