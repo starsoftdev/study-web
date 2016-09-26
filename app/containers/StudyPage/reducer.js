@@ -5,18 +5,25 @@
  */
 
 import {
-  FETCH_STUDY,
+  FETCH_STUDY_SUCCESS,
+  FETCH_STUDY_ERROR,
   FETCH_STUDY_PATIENTS,
-} from 'containers/StudyPage/constants';
+} from './constants';
 
 const initialState = {
 };
 
 function studyPageReducer(state = initialState, action) {
   switch (action.type) {
-    case FETCH_STUDY:
+    case FETCH_STUDY_SUCCESS:
       return {
         ...state,
+        study: action.payload,
+      };
+    case FETCH_STUDY_ERROR:
+      return {
+        ...state,
+        study: false,
       };
     case FETCH_STUDY_PATIENTS:
       return {
