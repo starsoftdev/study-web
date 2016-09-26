@@ -5,11 +5,52 @@
  */
 
 import {
-  DEFAULT_ACTION,
+  FETCH_CREDIT_CARDS,
+  FETCH_CREDIT_CARDS_SUCCESS,
+  FETCH_CREDIT_CARDS_ERROR,
+  DELETE_CREDIT_CARD,
+  DELETE_CREDIT_CARD_SUCCESS,
+  DELETE_CREDIT_CARD_ERROR,
 } from './constants';
 
-export function defaultAction() {
+export function fetchCreditCards(payload) {
   return {
-    type: DEFAULT_ACTION,
+    type: FETCH_CREDIT_CARDS,
+    client_id: payload,
+  };
+}
+
+export function creditCardsFetched(payload) {
+  return {
+    type: FETCH_CREDIT_CARDS_SUCCESS,
+    payload,
+  };
+}
+
+export function creditCardsFetchingError(payload) {
+  return {
+    type: FETCH_CREDIT_CARDS_ERROR,
+    payload,
+  };
+}
+
+export function deleteCreditCard(payload) {
+  return {
+    type: DELETE_CREDIT_CARD,
+    payload,
+  };
+}
+
+export function creditCardsDeleted(payload) {
+  return {
+    type: DELETE_CREDIT_CARD_SUCCESS,
+    payload,
+  };
+}
+
+export function creditCardDeletingError(payload) {
+  return {
+    type: DELETE_CREDIT_CARD_ERROR,
+    payload,
   };
 }

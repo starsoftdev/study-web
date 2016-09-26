@@ -83,9 +83,9 @@ export default function createRoutes(store) {
       name: 'paymentInformationPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/paymentInformationPage/reducer'),
-          System.import('containers/paymentInformationPage/sagas'),
-          System.import('containers/paymentInformationPage'),
+          System.import('containers/PaymentInformationPage/reducer'),
+          System.import('containers/PaymentInformationPage/sagas'),
+          System.import('containers/PaymentInformationPage'),
         ]);
 
         const renderRoute = loadModule(cb);
