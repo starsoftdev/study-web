@@ -58,7 +58,7 @@ module.exports = (config) => {
     },
     junitReporter = {
     outputFile: 'test-results.xml'
-    };
+    },
 
   });
 };
