@@ -18,9 +18,8 @@ module.exports = (options) => ({
       exclude: /node_modules/,
       query: options.babelQuery,
     }, {
-      // Transform our own .css files with PostCSS and CSS-modules
+      // Transform our own .less files with LESS loader modules
       test: /\.less$/,
-      exclude: /node_modules/,
       loader: options.lessLoaders,
     }, {
       // Do not transform vendor's CSS with CSS-modules
