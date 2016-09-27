@@ -1,7 +1,3 @@
-/* eslint-disable new-cap */
-
-import KeyKey from 'keykey';
-
 export const LEAD_SOURCE_LIST = [
   { value: 1, label: 'TV' },
   { value: 2, label: 'Radio' },
@@ -34,8 +30,8 @@ export const Currencies = {
 export const MESSAGING_SUITE_PRICE = 247;
 export const CALL_TRACKING_PRICE = 247;
 
-export const SchedulePatientModalType = KeyKey(
-  'CREATE',
-  'UPDATE',
-  'HIDDEN',
-);
+export const SchedulePatientModalType = {
+  CREATE: 'CREATE',
+  UPDATED: 'UPDATE',
+  HIDDEN: 'HIDDEN',
+};
