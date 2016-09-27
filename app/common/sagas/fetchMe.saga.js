@@ -43,7 +43,7 @@ export function* fetchMeFromToken() {
     }
   } catch (e) {
     yield put(setAuthState(false));
-    yield put(setUserData(false));
+    yield put(setUserData(null));
 
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

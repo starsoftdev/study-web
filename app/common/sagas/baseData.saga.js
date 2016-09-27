@@ -8,6 +8,10 @@ import {
   FETCH_SITES,
   FETCH_INDICATIONS,
   FETCH_LEVELS,
+  FETCH_COUPON,
+  FETCH_CARDS,
+  SAVE_CARD,
+  DELETE_CARD,
 } from 'containers/App/constants';
 
 import {
@@ -17,13 +21,24 @@ import {
   indicationsFetchingError,
   levelsFetched,
   levelsFetchingError,
+  couponFetched,
+  couponFetchingError,
+  cardsFetched,
+  cardsFetchingError,
+  cardSaved,
+  cardSavingError,
+  cardDeleted,
+  cardDeletingError,
 } from 'containers/App/actions';
-
 
 export default function* baseDataSaga() {
   yield fork(fetchSitesWatcher);
   yield fork(fetchIndicationsWatcher);
   yield fork(fetchLevelsWatcher);
+  yield fork(fetchCouponWatcher);
+  yield fork(fetchCardsWatcher);
+  yield fork(saveCardWatcher);
+  yield fork(deleteCardWatcher);
 }
 
 export function* fetchSitesWatcher() {
@@ -67,6 +82,74 @@ export function* fetchLevelsWatcher() {
       yield put(levelsFetched(response));
     } catch (e) {
       yield put(levelsFetchingError(e));
+    }
+  }
+}
+
+export function* fetchCouponWatcher() {
+  while (true) {
+    const { couponId } = yield take(FETCH_COUPON);
+    const encodedCouponId = encodeURIComponent(couponId);
+
+    try {
+      const requestURL = `${API_URL}/clients/retrieve_coupon/${encodedCouponId}`;
+      const response = yield call(request, requestURL);
+
+      yield put(couponFetched(response));
+    } catch (err) {
+      yield put(couponFetchingError(err));
+    }
+  }
+}
+
+export function* fetchCardsWatcher() {
+  while (true) {
+    const { customerId } = yield take(FETCH_CARDS);
+
+    try {
+      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/retrieve_cardsList`;
+      const response = yield call(request, requestURL);
+
+      yield put(cardsFetched(response));
+    } catch (err) {
+      yield put(cardsFetchingError(err));
+    }
+  }
+}
+
+export function* saveCardWatcher() {
+  while (true) {
+    const { customerId, cardData } = yield take(SAVE_CARD);
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(cardData),
+    };
+
+    try {
+      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/save_card`;
+      const response = yield call(request, requestURL, options);
+
+      yield put(cardSaved(response));
+    } catch (err) {
+      yield put(cardSavingError(err));
+    }
+  }
+}
+
+export function* deleteCardWatcher() {
+  while (true) {
+    const { customerId, cardId } = yield take(DELETE_CARD);
+    const options = {
+      method: 'DELETE',
+    };
+
+    try {
+      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/delete_card/${cardId}`;
+      const response = yield call(request, requestURL, options);
+
+      yield put(cardDeleted(response));
+    } catch (err) {
+      yield put(cardDeletingError(err));
     }
   }
 }
