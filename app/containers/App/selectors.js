@@ -16,6 +16,11 @@ const selectCurrentUser = () => createSelector(
   (substate) => substate.userData
 );
 
+const selectCurrentUserStripeCustomerId = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'userData.roleForClient.client.stripeCustomerId', null)
+);
+
 // ///////////////////////////////////////////
 // base data used across pages
 // ///////////////////////////////////////////
@@ -67,10 +72,21 @@ const selectCards = () => createSelector(
   (substate) => get(substate, 'baseData.cards', {})
 );
 
+const selectSaveCard = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.saveCard', {})
+);
+
+const selectDeleteCard = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.deleteCard', {})
+);
+
 export {
   selectGlobal,
   selectAuthState,
   selectCurrentUser,
+  selectCurrentUserStripeCustomerId,
 
   selectSites,
   selectSiteLocations,
@@ -79,4 +95,6 @@ export {
   selectStudyLevels,
   selectCoupon,
   selectCards,
+  selectSaveCard,
+  selectDeleteCard,
 };

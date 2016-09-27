@@ -9,22 +9,25 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { sumBy, map } from 'lodash';
 import { Field, reduxForm } from 'redux-form';
+import { Modal } from 'react-bootstrap';
 
 import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
+import AddNewCardForm from 'components/AddNewCardForm';
 import { selectCouponId, selectShoppingCartFormError } from './selectors';
-import { selectCoupon, selectCards, selectCurrentUser } from 'containers/App/selectors';
+import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSaveCard } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 import Money from 'components/Money';
-import { fetchCoupon, fetchCards } from 'containers/App/actions';
+import { fetchCoupon, fetchCards, saveCard } from 'containers/App/actions';
 import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   couponId: selectCouponId(),
   coupon: selectCoupon(),
   cards: selectCards(),
-  currentUser: selectCurrentUser(),
+  currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
+  saveCardOperation: selectSaveCard(),
   hasError: selectShoppingCartFormError(),
 });
 
@@ -32,6 +35,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchCoupon: (id) => dispatch(fetchCoupon(id)),
     fetchCards: (customerId) => dispatch(fetchCards(customerId)),
+    saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
   };
 }
 
@@ -41,21 +45,60 @@ function mapDispatchToProps(dispatch) {
 class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    currentUser: PropTypes.object.isRequired,
+    currentUserStripeCustomerId: PropTypes.string,
+    title: PropTypes.string,
     addOns: PropTypes.array.isRequired,
     couponId: PropTypes.string,
     coupon: PropTypes.object,
+    showCards: PropTypes.bool,
     cards: PropTypes.object,
+    saveCardOperation: PropTypes.object,
     hasError: PropTypes.bool,
+    submitting: PropTypes.bool,
     fetchCoupon: PropTypes.func,
     fetchCards: PropTypes.func,
+    saveCard: PropTypes.func,
     handleSubmit: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
+
     this.onFetchCoupon = this.onFetchCoupon.bind(this);
-    this.props.fetchCards(this.props.currentUser.roleForClient.client.stripeCustomerId);
+    this.onSaveCard = this.onSaveCard.bind(this);
+    this.openAddNewCardModal = this.openAddNewCardModal.bind(this);
+    this.closeAddNewCardModal = this.closeAddNewCardModal.bind(this);
+    this.state = {
+      addNewCardModalOpen: false,
+    };
+  }
+
+  componentWillMount() {
+    if (this.props.showCards) {
+      this.props.fetchCards(this.props.currentUserStripeCustomerId);
+    }
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!this.props.showCards) {
+      return;
+    }
+
+    if (!newProps.saveCardOperation.saving && this.props.saveCardOperation.saving) {
+      this.closeAddNewCardModal();
+
+      if (newProps.saveCardOperation.error) {
+        // TODO: alert error about adding new card
+        console.log('----Error while adding new card----\n');
+      } else {
+        // TODO: alert success about adding new card
+        console.log('----Successfully added new card-----\n');
+      }
+    }
+  }
+
+  onSaveCard(params) {
+    this.props.saveCard(this.props.currentUserStripeCustomerId, params);
   }
 
   onFetchCoupon() {
@@ -78,8 +121,17 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     return { subTotal, discount, total };
   }
 
+  openAddNewCardModal() {
+    this.setState({ addNewCardModalOpen: true });
+  }
+
+  closeAddNewCardModal() {
+    this.setState({ addNewCardModalOpen: false });
+  }
+
   render() {
-    const { addOns, coupon, cards, hasError, handleSubmit } = this.props;
+    const title = this.props.title || 'Order Summary';
+    const { addOns, coupon, showCards, cards, hasError, submitting, handleSubmit } = this.props;
     const { subTotal, discount, total } = this.calculateTotal();
     let addOnsContent = null;
     if (addOns) {
@@ -93,18 +145,51 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
       ));
     }
     let creditCardOptions = [];
-    if (cards) {
-      creditCardOptions = map(cards.data, cardIterator => ({
+    if (cards.details) {
+      creditCardOptions = map(cards.details.data, cardIterator => ({
         label: `xxxx xxxx xxxx ${cardIterator.last4}`,
         value: cardIterator.id,
       }));
     }
 
+    let cardsPanelContent = null;
+    if (showCards) {
+      cardsPanelContent = (
+        <div className="card-selection">
+          <div className="row">
+            <div className="col-sm-10">
+              <Field
+                name="creditCard"
+                component={ReactSelect}
+                placeholder="Select Credit Card"
+                options={creditCardOptions}
+                disabled={cards.fetching || submitting}
+              />
+              <Modal className="modal-add-new-card" show={this.state.addNewCardModalOpen} onHide={this.closeAddNewCardModal}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Add New Card</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <AddNewCardForm onSubmit={this.onSaveCard} />
+                </Modal.Body>
+              </Modal>
+            </div>
+            <div className="col-sm-2">
+              {cards.fetching
+                ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-cards" /></span>
+                : <a href="#" className="link-add-new-card" onClick={this.openAddNewCardModal}>+</a>
+              }
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <form className="form-shopping-cart" onSubmit={handleSubmit}>
-        <div className="shopping-cart">
+        <div className="shopping-cart order-summary">
           <div className="head">
-            <h3>Order Summary</h3>
+            <h3>{title}</h3>
           </div>
 
           <div className="scroll jcf--scrollabel">
@@ -137,12 +222,12 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                   component={Input}
                   type="text"
                   placeholder="Coupon"
-                  className="field"
+                  disabled={coupon.fetching || submitting}
                 />
                 <button
                   className="btn btn-primary coupon-btn"
                   onClick={this.onFetchCoupon}
-                  disabled={coupon.fetching}
+                  disabled={coupon.fetching || submitting}
                 />
               </div>
 
@@ -166,17 +251,14 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                 <Money value={total} className="price total-price" />
               </div>
 
-              <div className="card-selection">
-                <Field
-                  name="creditCard"
-                  component={ReactSelect}
-                  placeholder="Select Credit Card"
-                  options={creditCardOptions}
-                  className="field"
-                />
-              </div>
+              {cardsPanelContent}
 
-              <button type="submit" className="btn btn-default" disabled={hasError}>Submit</button>
+              <button type="submit" className="btn btn-default" disabled={hasError || coupon.fetching || cards.fetching || submitting}>
+                {submitting
+                  ? <span><LoadingSpinner showOnlyIcon size={20} className="submitting-shopping-cart" /></span>
+                  : <span>Submit</span>
+                }
+              </button>
             </div>
           </div>
         </div>
