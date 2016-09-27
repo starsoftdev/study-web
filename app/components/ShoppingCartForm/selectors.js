@@ -33,9 +33,18 @@ const selectCouponId = () => createSelector(
   (substate) => get(substate, 'shoppingCart.values.couponId')
 );
 
+/**
+ * ShoppingCartForm -> `total`
+ */
+const selectTotal = () => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, 'shoppingCart.values.total')
+);
+
 export default selectFormDomain;
 export {
   selectShoppingCartFormValues,
   selectShoppingCartFormError,
   selectCouponId,
+  selectTotal,
 };
