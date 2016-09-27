@@ -8,22 +8,23 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { sumBy, map } from 'lodash';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 
 import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
 import AddNewCardForm from 'components/AddNewCardForm';
-import { selectCouponId, selectShoppingCartFormError } from './selectors';
+import { selectCouponId, selectTotal, selectShoppingCartFormError } from './selectors';
 import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSaveCard } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 import Money from 'components/Money';
-import { fetchCoupon, fetchCards, saveCard } from 'containers/App/actions';
+import { fetchCoupon, clearCoupon, fetchCards, saveCard } from 'containers/App/actions';
 import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   couponId: selectCouponId(),
+  total: selectTotal(),
   coupon: selectCoupon(),
   cards: selectCards(),
   currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
@@ -34,6 +35,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchCoupon: (id) => dispatch(fetchCoupon(id)),
+    clearCoupon: () => dispatch(clearCoupon()),
     fetchCards: (customerId) => dispatch(fetchCards(customerId)),
     saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
   };
@@ -49,6 +51,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     title: PropTypes.string,
     addOns: PropTypes.array.isRequired,
     couponId: PropTypes.string,
+    total: PropTypes.string,
     coupon: PropTypes.object,
     showCards: PropTypes.bool,
     cards: PropTypes.object,
@@ -56,6 +59,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     hasError: PropTypes.bool,
     submitting: PropTypes.bool,
     fetchCoupon: PropTypes.func,
+    clearCoupon: PropTypes.func,
     fetchCards: PropTypes.func,
     saveCard: PropTypes.func,
     handleSubmit: PropTypes.func,
@@ -80,21 +84,19 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   componentWillReceiveProps(newProps) {
+    this.changeHiddenTotal();
+
     if (!this.props.showCards) {
       return;
     }
 
     if (!newProps.saveCardOperation.saving && this.props.saveCardOperation.saving) {
       this.closeAddNewCardModal();
-
-      if (newProps.saveCardOperation.error) {
-        // TODO: alert error about adding new card
-        console.log('----Error while adding new card----\n');
-      } else {
-        // TODO: alert success about adding new card
-        console.log('----Successfully added new card-----\n');
-      }
     }
+  }
+
+  componentWillUnmount() {
+    this.props.clearCoupon();
   }
 
   onSaveCard(params) {
@@ -103,6 +105,11 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
 
   onFetchCoupon() {
     this.props.fetchCoupon(this.props.couponId);
+  }
+
+  changeHiddenTotal() {
+    const total = this.calculateTotal().total;
+    this.props.dispatch(change('shoppingCart', 'total', total.toString()));
   }
 
   calculateTotal() {
@@ -249,6 +256,14 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
               <div className="total grand-total clearfix">
                 <strong className="heading">Total</strong>
                 <Money value={total} className="price total-price" />
+              </div>
+
+              <div className="total hidden-value">
+                <Field
+                  name="total"
+                  component={Input}
+                  type="hidden"
+                />
               </div>
 
               {cardsPanelContent}
