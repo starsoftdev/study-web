@@ -1,4 +1,5 @@
 import { getItem } from 'utils/localStorage';
+import { cloneDeep, remove } from 'lodash';
 
 import {
   SET_AUTH_STATE,
@@ -15,6 +16,14 @@ import {
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
+
+  SAVE_CARD,
+  SAVE_CARD_SUCCESS,
+  SAVE_CARD_ERROR,
+
+  DELETE_CARD,
+  DELETE_CARD_SUCCESS,
+  DELETE_CARD_ERROR,
 } from './constants';
 
 import {
@@ -38,11 +47,22 @@ const initialState = {
       fetching: false,
       error: null,
     },
+    saveCard: {
+      details: null,
+      saving: false,
+      error: null,
+    },
+    deleteCard: {
+      details: null,
+      deleting: false,
+      error: null,
+    },
   },
 };
 
 export default function appReducer(state = initialState, action) {
   const { payload } = action;
+  const cardsCollection = cloneDeep(state.baseData.cards.details);
 
   switch (action.type) {
 
@@ -68,7 +88,7 @@ export default function appReducer(state = initialState, action) {
         ...state,
         baseData: {
           ...state.baseData,
-          sites: action.payload,
+          sites: payload,
         },
       };
     case FETCH_INDICATIONS_SUCCESS:
@@ -76,7 +96,7 @@ export default function appReducer(state = initialState, action) {
         ...state,
         baseData: {
           ...state.baseData,
-          indications: action.payload,
+          indications: payload,
         },
       };
     case FETCH_LEVELS_SUCCESS:
@@ -84,7 +104,7 @@ export default function appReducer(state = initialState, action) {
         ...state,
         baseData: {
           ...state.baseData,
-          levels: action.payload,
+          levels: payload,
         },
       };
     case FETCH_COUPON:
@@ -105,7 +125,7 @@ export default function appReducer(state = initialState, action) {
         baseData: {
           ...state.baseData,
           coupon: {
-            details: action.payload,
+            details: payload,
             fetching: false,
             error: null,
           },
@@ -119,7 +139,7 @@ export default function appReducer(state = initialState, action) {
           coupon: {
             details: null,
             fetching: false,
-            error: action.payload,
+            error: payload,
           },
         },
       };
@@ -141,7 +161,7 @@ export default function appReducer(state = initialState, action) {
         baseData: {
           ...state.baseData,
           cards: {
-            details: action.payload,
+            details: payload,
             fetching: false,
             error: null,
           },
@@ -155,10 +175,97 @@ export default function appReducer(state = initialState, action) {
           cards: {
             details: null,
             fetching: false,
-            error: action.payload,
+            error: payload,
           },
         },
       };
+    case SAVE_CARD:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          saveCard: {
+            details: null,
+            saving: true,
+            error: null,
+          },
+        },
+      };
+    case SAVE_CARD_SUCCESS:
+      cardsCollection.data.push(payload);
+
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          cards: {
+            details: cardsCollection,
+            fetching: false,
+            error: null,
+          },
+          saveCard: {
+            details: payload,
+            saving: false,
+            error: null,
+          },
+        },
+      };
+    case SAVE_CARD_ERROR:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          saveCard: {
+            details: null,
+            saving: false,
+            error: payload,
+          },
+        },
+      };
+    case DELETE_CARD:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          deleteCard: {
+            details: null,
+            deleting: true,
+            error: null,
+          },
+        },
+      };
+    case DELETE_CARD_SUCCESS:
+      remove(cardsCollection.data, { id: payload.id });
+
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          cards: {
+            details: cardsCollection,
+            fetching: false,
+            error: null,
+          },
+          deleteCard: {
+            details: payload,
+            deleting: false,
+            error: null,
+          },
+        },
+      };
+    case DELETE_CARD_ERROR:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          deleteCard: {
+            details: null,
+            deleting: false,
+            error: payload,
+          },
+        },
+      };
+
     default:
       return state;
   }

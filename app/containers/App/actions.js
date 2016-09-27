@@ -22,6 +22,14 @@ import {
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
+
+  SAVE_CARD,
+  SAVE_CARD_SUCCESS,
+  SAVE_CARD_ERROR,
+
+  DELETE_CARD,
+  DELETE_CARD_SUCCESS,
+  DELETE_CARD_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -121,7 +129,7 @@ export function levelsFetchingError(payload) {
 }
 
 // ///////////////////////////////////////////
-// coupon
+// fetch coupon
 // ///////////////////////////////////////////
 export function fetchCoupon(couponId) {
   return {
@@ -145,7 +153,7 @@ export function couponFetchingError(payload) {
 }
 
 // ///////////////////////////////////////////
-// cards
+// fetch cards
 // ///////////////////////////////////////////
 export function fetchCards(customerId) {
   return {
@@ -164,6 +172,56 @@ export function cardsFetched(payload) {
 export function cardsFetchingError(payload) {
   return {
     type: FETCH_CARDS_ERROR,
+    payload,
+  };
+}
+
+// ///////////////////////////////////////////
+// save card
+// ///////////////////////////////////////////
+export function saveCard(customerId, cardData) {
+  return {
+    type: SAVE_CARD,
+    customerId,
+    cardData,
+  };
+}
+
+export function cardSaved(payload) {
+  return {
+    type: SAVE_CARD_SUCCESS,
+    payload,
+  };
+}
+
+export function cardSavingError(payload) {
+  return {
+    type: SAVE_CARD_ERROR,
+    payload,
+  };
+}
+
+// ///////////////////////////////////////////
+// delete card
+// ///////////////////////////////////////////
+export function deleteCard(customerId, cardId) {
+  return {
+    type: DELETE_CARD,
+    customerId,
+    cardId,
+  };
+}
+
+export function cardDeleted(payload) {
+  return {
+    type: DELETE_CARD_SUCCESS,
+    payload,
+  };
+}
+
+export function cardDeletingError(payload) {
+  return {
+    type: DELETE_CARD_ERROR,
     payload,
   };
 }
