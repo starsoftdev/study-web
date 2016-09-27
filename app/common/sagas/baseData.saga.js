@@ -10,6 +10,8 @@ import {
   FETCH_LEVELS,
   FETCH_COUPON,
   FETCH_CARDS,
+  SAVE_CARD,
+  DELETE_CARD,
 } from 'containers/App/constants';
 
 import {
@@ -23,6 +25,10 @@ import {
   couponFetchingError,
   cardsFetched,
   cardsFetchingError,
+  cardSaved,
+  cardSavingError,
+  cardDeleted,
+  cardDeletingError,
 } from 'containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -31,6 +37,8 @@ export default function* baseDataSaga() {
   yield fork(fetchLevelsWatcher);
   yield fork(fetchCouponWatcher);
   yield fork(fetchCardsWatcher);
+  yield fork(saveCardWatcher);
+  yield fork(deleteCardWatcher);
 }
 
 export function* fetchSitesWatcher() {
@@ -105,6 +113,43 @@ export function* fetchCardsWatcher() {
       yield put(cardsFetched(response));
     } catch (err) {
       yield put(cardsFetchingError(err));
+    }
+  }
+}
+
+export function* saveCardWatcher() {
+  while (true) {
+    const { customerId, cardData } = yield take(SAVE_CARD);
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(cardData),
+    };
+
+    try {
+      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/save_card`;
+      const response = yield call(request, requestURL, options);
+
+      yield put(cardSaved(response));
+    } catch (err) {
+      yield put(cardSavingError(err));
+    }
+  }
+}
+
+export function* deleteCardWatcher() {
+  while (true) {
+    const { customerId, cardId } = yield take(DELETE_CARD);
+    const options = {
+      method: 'DELETE',
+    };
+
+    try {
+      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/delete_card/${cardId}`;
+      const response = yield call(request, requestURL, options);
+
+      yield put(cardDeleted(response));
+    } catch (err) {
+      yield put(cardDeletingError(err));
     }
   }
 }
