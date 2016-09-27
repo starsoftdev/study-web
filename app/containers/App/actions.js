@@ -19,6 +19,8 @@ import {
   FETCH_COUPON_SUCCESS,
   FETCH_COUPON_ERROR,
 
+  CLEAR_COUPON,
+
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
@@ -149,6 +151,15 @@ export function couponFetchingError(payload) {
   return {
     type: FETCH_COUPON_ERROR,
     payload,
+  };
+}
+
+// ///////////////////////////////////////////
+// clear coupon
+// ///////////////////////////////////////////
+export function clearCoupon() {
+  return {
+    type: CLEAR_COUPON,
   };
 }
 

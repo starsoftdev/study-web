@@ -13,6 +13,8 @@ import {
   FETCH_COUPON_SUCCESS,
   FETCH_COUPON_ERROR,
 
+  CLEAR_COUPON,
+
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
@@ -140,6 +142,18 @@ export default function appReducer(state = initialState, action) {
             details: null,
             fetching: false,
             error: payload,
+          },
+        },
+      };
+    case CLEAR_COUPON:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          coupon: {
+            details: null,
+            fetching: false,
+            error: null,
           },
         },
       };
