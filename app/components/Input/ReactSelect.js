@@ -18,7 +18,9 @@ function ReactSelect({
   placeholder,
   options,
   className,
+  onChange,
   meta: { touched, error, active },
+  ...rest,
 }) {
   const hasError = touched && error && !active;
   const errorClass = hasError ? 'has-error' : '';
@@ -37,12 +39,13 @@ function ReactSelect({
   let inputComponent = (
     <Select
       value={input.value}
-      onChange={input.onChange}
+      onChange={onChange || input.onChange}
       onBlur={() => input.onBlur(input.value)}
       options={optionsToRender}
       placeholder={placeholder}
       className="form-control"
       simpleValue
+      {...rest}
     />
   );
 
@@ -71,6 +74,7 @@ ReactSelect.propTypes = {
   options: PropTypes.array,
   meta: PropTypes.object.isRequired,
   className: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 export default ReactSelect;
