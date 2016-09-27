@@ -14,6 +14,22 @@ import {
   FETCH_LEVELS,
   FETCH_LEVELS_SUCCESS,
   FETCH_LEVELS_ERROR,
+
+  FETCH_COUPON,
+  FETCH_COUPON_SUCCESS,
+  FETCH_COUPON_ERROR,
+
+  FETCH_CARDS,
+  FETCH_CARDS_SUCCESS,
+  FETCH_CARDS_ERROR,
+
+  SAVE_CARD,
+  SAVE_CARD_SUCCESS,
+  SAVE_CARD_ERROR,
+
+  DELETE_CARD,
+  DELETE_CARD_SUCCESS,
+  DELETE_CARD_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -108,6 +124,104 @@ export function levelsFetched(payload) {
 export function levelsFetchingError(payload) {
   return {
     type: FETCH_LEVELS_ERROR,
+    payload,
+  };
+}
+
+// ///////////////////////////////////////////
+// fetch coupon
+// ///////////////////////////////////////////
+export function fetchCoupon(couponId) {
+  return {
+    type: FETCH_COUPON,
+    couponId,
+  };
+}
+
+export function couponFetched(payload) {
+  return {
+    type: FETCH_COUPON_SUCCESS,
+    payload,
+  };
+}
+
+export function couponFetchingError(payload) {
+  return {
+    type: FETCH_COUPON_ERROR,
+    payload,
+  };
+}
+
+// ///////////////////////////////////////////
+// fetch cards
+// ///////////////////////////////////////////
+export function fetchCards(customerId) {
+  return {
+    type: FETCH_CARDS,
+    customerId,
+  };
+}
+
+export function cardsFetched(payload) {
+  return {
+    type: FETCH_CARDS_SUCCESS,
+    payload,
+  };
+}
+
+export function cardsFetchingError(payload) {
+  return {
+    type: FETCH_CARDS_ERROR,
+    payload,
+  };
+}
+
+// ///////////////////////////////////////////
+// save card
+// ///////////////////////////////////////////
+export function saveCard(customerId, cardData) {
+  return {
+    type: SAVE_CARD,
+    customerId,
+    cardData,
+  };
+}
+
+export function cardSaved(payload) {
+  return {
+    type: SAVE_CARD_SUCCESS,
+    payload,
+  };
+}
+
+export function cardSavingError(payload) {
+  return {
+    type: SAVE_CARD_ERROR,
+    payload,
+  };
+}
+
+// ///////////////////////////////////////////
+// delete card
+// ///////////////////////////////////////////
+export function deleteCard(customerId, cardId) {
+  return {
+    type: DELETE_CARD,
+    customerId,
+    cardId,
+  };
+}
+
+export function cardDeleted(payload) {
+  return {
+    type: DELETE_CARD_SUCCESS,
+    payload,
+  };
+}
+
+export function cardDeletingError(payload) {
+  return {
+    type: DELETE_CARD_ERROR,
     payload,
   };
 }
