@@ -7,37 +7,40 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser } from 'containers/App/selectors';
-import { selectCreditCards } from 'containers/PaymentInformationPage/selectors';
+import { selectCurrentUser, selectCards } from 'containers/App/selectors';
 import PaymentMethodsForm from 'components/PaymentMethodsForm';
 import AddNewCardButton from 'components/AddNewCardButton';
-import { fetchCreditCards, deleteCreditCard, addCreditCard } from 'containers/PaymentInformationPage/actions';
+import { addCreditCard } from 'containers/PaymentInformationPage/actions';
+import { fetchCards, deleteCard } from 'containers/App/actions';
 
 export class PaymentInformationPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    fetchCreditCards: PropTypes.func,
-    creditCards: PropTypes.array,
-    deleteCreditCard: PropTypes.func,
+    creditCards: PropTypes.object,
+    deleteCard: PropTypes.func,
     currentUser: PropTypes.any,
     addCreditCard: PropTypes.func,
+    fetchCards: PropTypes.func,
   }
 
   constructor(props) {
     super(props);
-    this.deleteCreditCard = this.props.deleteCreditCard.bind(this);
+    this.deleteCard = this.props.deleteCard.bind(this);
     this.addCreditCard = this.props.addCreditCard.bind(this);
   }
 
-  componentWillReceiveProps(props) {
-    if (!this.props.currentUser && props.currentUser && props.currentUser.roleForClient) {
-      this.props.fetchCreditCards(props.currentUser.roleForClient.client_id);
-    }
+  componentDidMount() {
+    this.props.fetchCards(this.props.currentUser.roleForClient.client_id);
   }
+
   render() {
     let customerId = false;
     if (this.props.currentUser && this.props.currentUser.roleForClient) {
       customerId = this.props.currentUser.roleForClient.client_id;
+    }
+    let creditCards = [];
+    if (this.props.creditCards.details && this.props.creditCards.details.data) {
+      creditCards = this.props.creditCards.details.data;
     }
     return (
       <div className="container-fluid">
@@ -45,8 +48,8 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
           <h2 className="main-heading">PAYMENT INFORMATION</h2>
           <AddNewCardButton addCreditCard={this.addCreditCard} customerId={customerId} />
           <PaymentMethodsForm
-            creditCards={this.props.creditCards || []}
-            deleteCreditCard={this.deleteCreditCard}
+            creditCards={creditCards}
+            deleteCreditCard={this.deleteCard}
             customerId={customerId}
           />
         </section>
@@ -57,13 +60,13 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
-  creditCards: selectCreditCards(),
+  creditCards: selectCards(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchCreditCards: (payload) => dispatch(fetchCreditCards(payload)),
-    deleteCreditCard: (payload) => dispatch(deleteCreditCard(payload)),
+    fetchCards: (customerId) => dispatch(fetchCards(customerId)),
+    deleteCard: (customerId, cardId) => dispatch(deleteCard(customerId, cardId)),
     addCreditCard: (payload) => dispatch(addCreditCard(payload)),
   };
 }

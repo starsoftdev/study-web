@@ -1,10 +1,15 @@
-// import { selectPaymentInformationPageDomain } from '../selectors';
+import { selectPaymentInformationPageDomain } from '../selectors';
 import expect from 'expect';
 
 // const selector = selectPaymentInformationPageDomain();
 
 describe('selectPaymentInformationPageDomain', () => {
-  it('Expect to have unit tests specified', () => {
-    expect('Test case').toEqual(false);
+  const paymentInformationPageDomainSelector = selectPaymentInformationPageDomain();
+  it('should select Payment Information page state', () => {
+    const state = {};
+    const mockedState = {
+      paymentInformationPage: state,
+    };
+    expect(paymentInformationPageDomainSelector(mockedState)).toEqual(state);
   });
 });

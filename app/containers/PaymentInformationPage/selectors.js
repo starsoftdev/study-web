@@ -19,13 +19,7 @@ const selectPaymentInformationPage = () => createSelector(
   (substate) => substate
 );
 
-const selectCreditCards = () => createSelector(
-  selectPaymentInformationPageDomain(),
-  (substate) => substate.creditCards
-);
-
 export default selectPaymentInformationPage;
 export {
   selectPaymentInformationPageDomain,
-  selectCreditCards,
 };

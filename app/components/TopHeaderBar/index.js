@@ -7,6 +7,7 @@ import userAvatar from 'assets/images/img-logged-user.png';
 import avatar1 from 'assets/images/img2.png';
 import avatar2 from 'assets/images/img3.png';
 import avatar3 from 'assets/images/img4.png';
+import AddCreditsModal from 'components/AddCreditsModal';
 
 const mapDispatchToProps = {
 };
@@ -14,6 +15,24 @@ const mapDispatchToProps = {
 @connect(null, mapDispatchToProps)
 class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+  }
+
+  constructor(props) {
+    super(props);
+    this.showAddCreditsModal = this.showAddCreditsModal.bind(this);
+    this.closeAddCreditsModal = this.closeAddCreditsModal.bind(this);
+
+    this.state = {
+      showAddCreditsModal: false,
+    };
+  }
+
+  showAddCreditsModal() {
+    this.setState({ showAddCreditsModal: true });
+  }
+
+  closeAddCreditsModal() {
+    this.setState({ showAddCreditsModal: false });
   }
 
   render() {
@@ -82,7 +101,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
           <div className="get-credits pull-left">
             <i className="icon-credit margin-right-5px" />
             <span className="margin-right-5px">100 Credits</span>
-            <a href="#" className="btn btn-default">+ ADD CREDITS</a>
+            <a href="#" className="btn btn-default" onClick={this.showAddCreditsModal}>+ ADD CREDITS</a>
           </div>
 
           <div className="logged-user-area open-close pull-right">
@@ -94,6 +113,10 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
           </div>
 
         </div>
+        <AddCreditsModal
+          showModal={this.state.showAddCreditsModal}
+          closeModal={this.closeAddCreditsModal}
+        />
       </header>
     );
   }

@@ -3,13 +3,113 @@
  */
 
 import expect from 'expect';
-// import { take, call, put, select } from 'redux-saga/effects';
-// import { defaultSaga } from '../sagas';
+import { take, put, fork, cancel } from 'redux-saga/effects';
+import { LOCATION_CHANGE } from 'react-router-redux';
 
-// const generator = defaultSaga();
+import {
+  deleteCreditCardWatcher,
+  addCreditCardWatcher,
+  paymentInformationPageSaga,
+} from '../sagas';
 
-describe('defaultSaga Saga', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+import {
+  creditCardsDeleted,
+  creditCardDeletingError,
+  creditCardsAdded,
+  creditCardAddingError,
+} from 'containers/PaymentInformationPage/actions';
+
+import {
+  DELETE_CREDIT_CARD,
+  ADD_CREDIT_CARD,
+} from 'containers/PaymentInformationPage/constants';
+
+describe('PaymentInformationPage Saga', () => {
+  describe('deleteCreditCardWatcher Saga', () => {
+    let iterator;
+    let actualYield;
+    const values = {
+      id: '1',
+    };
+
+    beforeEach(() => {
+      iterator = deleteCreditCardWatcher();
+
+      actualYield = iterator.next().value;
+      expect(actualYield).toEqual(take(DELETE_CREDIT_CARD));
+
+      actualYield = iterator.next({ payload: values }).value; // optionally passing a value
+    });
+
+    it('should dispatch the formSubmitted action if it gets successful response', () => {
+      const response = values;
+      actualYield = iterator.next(response).value;
+      expect(actualYield).toEqual(put(creditCardsDeleted(response)));
+    });
+
+    it('should call the formSubmissionError action if the response errors', () => {
+      const error = { message: 'Something went wrong!' };
+      actualYield = iterator.throw(error).value;
+      actualYield = iterator.next().value; // skip react-redux-toastr actions
+      expect(actualYield).toEqual(put(creditCardDeletingError(error)));
+    });
+  });
+
+  describe('addCreditCardWatcher Saga', () => {
+    let iterator;
+    let actualYield;
+    const values = {
+      id: '1',
+    };
+
+    beforeEach(() => {
+      iterator = addCreditCardWatcher();
+
+      actualYield = iterator.next().value;
+      expect(actualYield).toEqual(take(ADD_CREDIT_CARD));
+      actualYield = iterator.next({ payload: values }).value; // optionally passing a value
+    });
+
+    it('should dispatch the formSubmitted action if it gets successful response', () => {
+      const response = values;
+      actualYield = iterator.next(response).value;
+      expect(actualYield).toEqual(put(creditCardsAdded(response)));
+    });
+
+    it('should call the formSubmissionError action if the response errors', () => {
+      const error = { message: 'Something went wrong!' };
+      actualYield = iterator.throw(error).value;
+      actualYield = iterator.next().value; // skip react-redux-toastr actions
+      expect(actualYield).toEqual(put(creditCardAddingError(error)));
+    });
+  });
+
+  describe('paymentInformationPageSaga', () => {
+    const mainSaga = paymentInformationPageSaga();
+
+    let forkDescriptorA;
+    let forkDescriptorB;
+
+    it('should asyncronously fork 2 watchers saga', () => {
+      forkDescriptorA = mainSaga.next();
+      expect(forkDescriptorA.value).toEqual(fork(deleteCreditCardWatcher));
+      forkDescriptorB = mainSaga.next();
+      expect(forkDescriptorB.value).toEqual(fork(addCreditCardWatcher));
+    });
+
+    it('should yield until LOCATION_CHANGE action', () => {
+      const takeDescriptor = mainSaga.next();
+      expect(takeDescriptor.value).toEqual(take(LOCATION_CHANGE));
+    });
+
+    it('should finally cancel() the forked submitFormWatcher saga',
+      function* referFormSagaCancellable() {
+        // reuse open fork for more integrated approach
+        let actualYield = mainSaga.next(put(LOCATION_CHANGE)).value;
+        expect(actualYield).toEqual(cancel(forkDescriptorA));
+        actualYield = mainSaga.next().value;
+        expect(actualYield).toEqual(cancel(forkDescriptorB));
+      }
+    );
   });
 });

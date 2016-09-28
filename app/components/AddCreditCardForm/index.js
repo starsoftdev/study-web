@@ -23,8 +23,6 @@ class AddCreditCardForm extends React.Component { // eslint-disable-line react/p
 
   render() {
     const { error, handleSubmit, pristine, reset, submitting } = this.props; // eslint-disable-line
-    console.log(pristine);
-    console.log(handleSubmit);
 
     const monthOptions = [
       { label: 'Jan', value: 1 },
@@ -39,9 +37,9 @@ class AddCreditCardForm extends React.Component { // eslint-disable-line react/p
       { label: 'Oct', value: 10 },
       { label: 'Nov', value: 11 },
       { label: 'Dec', value: 12 },
-    ]
+    ];
 
-    const todayYear = new Date().getFullYear()
+    const todayYear = new Date().getFullYear();
     const yearOptions = [
       { label: todayYear.toString(), value: todayYear },
       { label: (todayYear + 1).toString(), value: todayYear + 1 },
@@ -143,11 +141,13 @@ class AddCreditCardForm extends React.Component { // eslint-disable-line react/p
         </div>
 
         <div className="btn-block text-right">
-          <input
+          <button
             type="submit"
             value="ADD"
             className="btn btn-default btn-add-row"
-          />
+            disabled={pristine || submitting}
+          >ADD
+          </button>
         </div>
 
       </form>

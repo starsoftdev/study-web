@@ -142,7 +142,8 @@ export function* deleteCardWatcher() {
     const options = {
       method: 'DELETE',
     };
-
+    console.log(customerId);
+    console.log(cardId);
     try {
       const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/delete_card/${cardId}`;
       const response = yield call(request, requestURL, options);

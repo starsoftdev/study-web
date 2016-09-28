@@ -141,6 +141,27 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
+      path: '/order-irb-ad-creation',
+      name: 'IrbAdCreationPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/IrbAdCreationPage/reducer'),
+          System.import('containers/IrbAdCreationPage/sagas'),
+          System.import('containers/IrbAdCreationPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('IrbAdCreationPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {
