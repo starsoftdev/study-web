@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = (config) => {
   config.set({
     frameworks: ['mocha'],
-    reporters: ['coverage', 'mocha'],
+    reporters: ['coverage', 'mocha', 'junit'],
     browsers: process.env.TRAVIS // eslint-disable-line no-nested-ternary
       ? ['ChromeTravis']
       : process.env.APPVEYOR
@@ -55,6 +55,11 @@ module.exports = (config) => {
         { type: 'html', subdir: 'html' },
         { type: 'text-summary' },
       ],
+    },
+
+    junitReporter: {
+      outputDir: '../../coverage/karma-reports',
+      outputFile: 'test-results.xml',
     },
 
   });

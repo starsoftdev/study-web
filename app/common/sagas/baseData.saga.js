@@ -2,6 +2,8 @@
  *  saga to load auth user details from the just token
  */
 import { take, call, put, fork } from 'redux-saga/effects';
+import { actions as toastrActions } from 'react-redux-toastr';
+import { get } from 'lodash';
 
 import request from 'utils/request';
 import {
@@ -120,17 +122,20 @@ export function* fetchCardsWatcher() {
 export function* saveCardWatcher() {
   while (true) {
     const { customerId, cardData } = yield take(SAVE_CARD);
-    const options = {
-      method: 'POST',
-      body: JSON.stringify(cardData),
-    };
 
     try {
       const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/save_card`;
+      const options = {
+        method: 'POST',
+        body: JSON.stringify(cardData),
+      };
       const response = yield call(request, requestURL, options);
 
+      yield put(toastrActions.success('AddNewCard', 'Card saved successfully!'));
       yield put(cardSaved(response));
     } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      yield put(toastrActions.error('', errorMessage));
       yield put(cardSavingError(err));
     }
   }
