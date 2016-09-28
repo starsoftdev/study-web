@@ -27,11 +27,12 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
     subscribeToChatEvent: PropTypes.func,
     socket: PropTypes.any,
     currentUser: PropTypes.any,
+    events: React.PropTypes.array,
   };
 
   constructor (props) {
     super(props)
-    this.subscribeToEvent = this.subscribeToEvent.bind(this);
+    this.subscribeToPageEvents = this.subscribeToPageEvents.bind(this);
     this.unsubscribeCurrent = this.unsubscribeCurrent.bind(this);
     this.unsubscribeAll = this.unsubscribeAll.bind(this);
     this.subscribeToChat = this.subscribeToChat.bind(this);
@@ -41,16 +42,21 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
     //..
   }
 
-  subscribeToEvent() {
-    const events = this.getEventTypes()
-    //this.setState({});
-    
-    this.props.subscribeToPageEvent({
-      events,
-      raw: { pathname: this.props.location.pathname },
-      cb: (err, data) => {
-        console.log(err, data)
-      }
+  subscribeToPageEvents() {
+    this.props.events.forEach(event => {
+      this.props.subscribeToPageEvent({
+        events: event.events,
+        raw: event.raw,
+        cb: (err, data) => {
+          if (!err) {
+            this.props.socket.on(data.event[0] + data.sid, (payload) => {
+              event.cb(null, payload)
+            })
+          } else {
+            event.cb(err, null)
+          }
+        }
+      })
     })
   }
 
@@ -111,7 +117,7 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
               console.log(notification)
             })
             socket.on('connect', () => {
-              this.subscribeToEvent()
+              this.subscribeToPageEvents()
             })
           } else {
             console.error(err)
@@ -123,7 +129,7 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
   
   render() {
     const layout = <div>
-      <div onClick={this.subscribeToEvent}>subscribe to twilio-message</div>
+      <div onClick={this.subscribeToPageEvents}>subscribe to twilio-message</div>
       <div onClick={this.subscribeToChat}>subscribe to chat</div>
       <div onClick={this.unsubscribeCurrent}>unsubscribe from twilio-message</div>
       <div onClick={this.unsubscribeAll}>unsubscribe from all</div>
