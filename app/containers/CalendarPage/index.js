@@ -113,7 +113,7 @@ class Calendar extends React.Component {
 
   handleSubmit = (data) => {
     let submitData;
-
+    console.log ('-------', data);
     if (data.siteLocation && data.protocol) { // CREATE
       submitData = {
         siteLocation: data.siteLocation,

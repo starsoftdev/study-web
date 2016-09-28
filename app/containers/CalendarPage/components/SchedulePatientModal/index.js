@@ -74,13 +74,15 @@ export default class SchedulePatientModal extends Component {
       });
     }
 
-    const patientOptions = _.flatten(this.props.patientsByStudy.data.map(pBS => pBS.patients.map(p => ({
-      label: p.firstName + ' ' + p.lastName,
-      value: p.id,
-    }))));
-    this.setState({
-      patientOptions,
-    });
+    if (!nextProps.fetchingPatientsByStudy && nextProps.patientsByStudy !== this.props.patientsByStudy) {
+      const patientOptions = _.flatten(nextProps.patientsByStudy.data.map(pBS => pBS.patients.map(p => ({
+        label: p.firstName + ' ' + p.lastName,
+        value: p.id,
+      }))));
+      this.setState({
+        patientOptions,
+      });
+    }
   }
 
   handleUpdateDateChange(date) {
@@ -104,19 +106,18 @@ export default class SchedulePatientModal extends Component {
       }));
       this.setState({
         optionStep: 1,
+        siteLocation: siteLocationOption,
+        protocol: null,
         protocolOptions,
       });
-
-      // this.props.fields.protocol.onChange(null);
     } else {
       this.setState({
         optionStep: 0,
+        siteLocation: null,
         protocolOptions: [],
         patientOptions: [],
       });
     }
-
-    // this.props.fields.siteLocation.onChange(siteLocationOption);
   }
 
   handleProtocolChoose(protocolOption) {
@@ -128,31 +129,30 @@ export default class SchedulePatientModal extends Component {
       });
       this.setState({
         optionStep: 2,
+        protocol: protocolOption,
+        patient: null,
       });
-      // this.props.fields.indication.onChange(protocolOption.indication);
-      // this.props.fields.patient.onChange(null);
     } else {
       this.setState({
         optionStep: 1,
+        protocol: null,
         patientOptions: [],
       });
     }
-
-    // this.props.fields.protocol.onChange(protocolOption);
   }
 
   handlePatientChoose(patientOption) {
     if (patientOption) {
       this.setState({
         optionStep: 3,
+        patient: patientOption,
       });
     } else {
       this.setState({
         optionStep: 2,
+        patient: null,
       });
     }
-
-    // this.props.fields.patient.onChange(patientOption);
   }
 
   render() {
@@ -205,6 +205,7 @@ export default class SchedulePatientModal extends Component {
                             disabled={submitting || this.props.fetchingSites}
                             objectValue
                             onChange={this.handleSiteLocationChoose.bind(this)}
+                            selectedValue={this.state.siteLocation}
                           />
                         </div>
                       </div>
@@ -221,7 +222,9 @@ export default class SchedulePatientModal extends Component {
                               options={protocolOptions}
                               className="data-search"
                               disabled={submitting}
+                              objectValue
                               onChange={this.handleProtocolChoose.bind(this)}
+                              selectedValue={this.state.protocol}
                             />
                           </div>
                         </div>
@@ -238,10 +241,11 @@ export default class SchedulePatientModal extends Component {
                               options={patientOptions}
                               className="data-search"
                               disabled={submitting || this.props.fetchingPatientsByStudy}
+                              objectValue
                               onChange={this.handlePatientChoose.bind(this)}
+                              selectedValue={this.state.patient}
                             />
                           </div>
-                          <Field name="indication" component={Input} style={{ display: 'none' }} />
                         </div>
                       }
                       {optionStep === 3 &&

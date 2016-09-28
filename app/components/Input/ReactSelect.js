@@ -18,7 +18,7 @@ function ReactSelect({
   placeholder,
   options,
   className,
-  onChange,
+  selectedValue,
   objectValue,
   meta: { touched, error, active },
   ...rest,
@@ -37,10 +37,11 @@ function ReactSelect({
       {error}
     </Tooltip>
   );
+
   let inputComponent = (
     <Select
-      value={input.value}
-      onChange={onChange || input.onChange}
+      value={selectedValue || input.value}
+      onChange={input.onChange}
       onBlur={() => input.onBlur(input.value)}
       options={optionsToRender}
       placeholder={placeholder}
@@ -75,7 +76,7 @@ ReactSelect.propTypes = {
   options: PropTypes.array,
   meta: PropTypes.object.isRequired,
   className: PropTypes.string,
-  onChange: PropTypes.func,
+  selectedValue: PropTypes.any,
   objectValue: PropTypes.bool,
 };
 
