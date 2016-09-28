@@ -95,6 +95,7 @@ export default class SchedulePatientModal extends Component {
       if (selectedSite === null) {
         throw new Error('SiteLocation options are not properly populated.');
       }
+
       const protocolOptions = selectedSite.studies.map(study => ({
         label: study.protocolNumber,
         value: study.protocolNumber,
@@ -202,6 +203,7 @@ export default class SchedulePatientModal extends Component {
                             options={siteLocationOptions}
                             className="data-search"
                             disabled={submitting || this.props.fetchingSites}
+                            objectValue
                             onChange={this.handleSiteLocationChoose.bind(this)}
                           />
                         </div>

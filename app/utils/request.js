@@ -39,6 +39,7 @@ export default function request(url, options = {}) {
   if (options.useDefaultContentType) {
     delete headers['Content-Type'];
   }
+
   options.headers = Object.assign({}, headers, options.headers ); // eslint-disable-line
   return fetch(newUrl, options)
     .then(checkStatus)
@@ -88,7 +89,7 @@ function checkStatus(response) {
 
 function serializeParams(obj) {
   const str = [];
-  Object.keys().forEach(p => {
+  Object.keys(obj).forEach(p => {
     if (obj.hasOwnProperty(p) && obj[p] !== undefined && obj[p] !== null) {  // we need to pass 0 and empty string
       str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
     }

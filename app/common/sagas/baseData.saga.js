@@ -28,11 +28,30 @@ export default function* baseDataSaga() {
 
 export function* fetchSitesWatcher() {
   while (true) {
-    yield take(FETCH_SITES);
+    const action = yield take(FETCH_SITES);
 
     try {
       const requestURL = `${API_URL}/sites`;
-      const response = yield call(request, requestURL);
+
+      const filterObj = {
+        include: ['users', 'studies'],
+      };
+
+      const searchParams = action.payload || {};
+
+      if (searchParams.name) {
+        filterObj.where = {
+          name: {
+            like: `%${searchParams.name}%`,
+          },
+        };
+      }
+
+      const queryParams = {
+        filter: JSON.stringify(filterObj),
+      };
+
+      const response = yield call(request, requestURL, { query: queryParams });
 
       yield put(sitesFetched(response));
     } catch (e) {
