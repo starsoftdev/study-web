@@ -90,7 +90,7 @@ export default function calendarPageReducer(state = initialState, action) {
       return update(state, {
         schedules: {
           isSubmitting: { $set: false },
-          schedules: { $set: payload },
+          data: { $set: payload },
         }
       });
     case SUBMIT_SCHEDULE_ERROR:
@@ -110,7 +110,7 @@ export default function calendarPageReducer(state = initialState, action) {
       return update(state, {
         schedules: {
           isDeleting: { $set: false },
-          schedules: { $set: payload },
+          data: { $set: payload },
         }
       });
     case DELETE_SCHEDULE_ERROR:

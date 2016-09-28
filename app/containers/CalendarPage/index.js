@@ -26,19 +26,29 @@ import {
   submitSchedule,
   deleteSchedule,
 } from './actions';
-import { selectSchedules, selectPatientsByStudy, getFilteredSchedules } from './selectors';
+import { selectSchedules, selectPatientsByStudy } from './selectors';
 
 import { SchedulePatientModalType } from 'common/constants';
 
 import './styles.less';
 
+const getFilteredSchedules = (schedules, filter) =>
+  schedules.filter(s =>
+    `${s.patient.firstName} ${s.patient.lastName}`.toLowerCase().indexOf(filter.patientName.toLowerCase()) > -1 &&
+      (!filter.siteLocation || s.siteLocation === filter.siteLocation) &&
+      (!filter.indication || s.indication === filter.indication) &&
+      (!filter.protocol || s.protocolNumber === filter.protocol)
+  );
+
 class Calendar extends React.Component {
   static propTypes = {
     currentUser: PropTypes.any,
     sites: PropTypes.array.isRequired,
+    indications: PropTypes.array.isRequired,
     patientsByStudy: PropTypes.object.isRequired,
     schedules: PropTypes.object.isRequired,
     fetchSites: PropTypes.func.isRequired,
+    fetchIndications: PropTypes.func.isRequired,
     fetchPatientsByStudy: PropTypes.func.isRequired,
     fetchSchedules: PropTypes.func.isRequired,
     submitSchedule: PropTypes.func.isRequired,
@@ -68,6 +78,7 @@ class Calendar extends React.Component {
     const { currentUser } = this.props;
 
     this.props.fetchSites();
+    this.props.fetchIndications();
     this.props.fetchSchedules({ userId: currentUser.id });
   }
 
@@ -113,21 +124,21 @@ class Calendar extends React.Component {
 
   handleSubmit = (data) => {
     let submitData;
-    console.log ('-------', data);
+
     if (data.siteLocation && data.protocol) { // CREATE
       submitData = {
-        siteLocation: data.siteLocation,
-        indication: data.indication,
-        protocolNumber: data.protocol,
-        patientId: data.patient,
-        // patientId: 1,
-        userId: this.props.currentUser.userId,
+        siteLocation: data.siteLocation.label,
+        indication: data.protocol.indication.name,
+        protocolNumber: data.protocol.label,
+        patientId: data.patient.value,
+        userId: this.props.currentUser.id,
         time: moment(this.selectedCellInfo.selectedDate).add(data.period === 'AM' ?
           data.hour % 12 :
           (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').utc().format(),
       };
     } else { // UPDATE
       let updatedDate;
+      console.log(this.selectedCellInfo, data);
       if (data.date) {
         updatedDate = moment(new Date(data.date));
       } else {  // React Datepicker doesn't submit its initial value
@@ -154,7 +165,7 @@ class Calendar extends React.Component {
   }
 
   render() {
-    const { sites, patientsByStudy, schedules } = this.props;
+    const { sites, indications, patientsByStudy, schedules } = this.props;
     const fetchingSites = sites.isFetching;
     const fetchingPatientsByStudy = patientsByStudy.isFetching;
 
@@ -165,6 +176,8 @@ class Calendar extends React.Component {
           <div className="btn-block"><a href="#" className="btn btn-primary">Today</a></div>
           <FilterBar
             sites={sites}
+            indications={indications}
+            schedules={schedules.data}
             fetchingSites={fetchingSites}
             filter={this.state.filter}
             updateFilter={this.updateFilter}
@@ -175,6 +188,7 @@ class Calendar extends React.Component {
           />
           <SchedulePatientModal
             sites={sites}
+            indications={indications}
             onSubmit={this.handleSubmit}
             handleCloseModal={this.handleCloseModal}
             handleDelete={this.handleDelete}
@@ -196,12 +210,14 @@ class Calendar extends React.Component {
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   sites: selectSites(),
+  indications: selectIndications(),
   schedules: selectSchedules(),
   patientsByStudy: selectPatientsByStudy(),
 });
 
 const mapDispatchToProps = {
   fetchSites,
+  fetchIndications,
   fetchPatientsByStudy,
   fetchSchedules,
   submitSchedule,

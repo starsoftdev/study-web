@@ -9,6 +9,8 @@ import 'react-select/dist/react-select.min.css';
 class FilterBar extends Component {
   static propTypes = {
     sites: PropTypes.array.isRequired,
+    indications: PropTypes.array.isRequired,
+    schedules: PropTypes.array.isRequired,
     fetchingSites: PropTypes.bool,
     filter: PropTypes.object.isRequired,
     updateFilter: PropTypes.func.isRequired,
@@ -23,6 +25,8 @@ class FilterBar extends Component {
   render() {
     const {
       sites,
+      indications,
+      schedules,
       fetchingSites,
       filter,
     } = this.props;
@@ -31,17 +35,18 @@ class FilterBar extends Component {
       label: s.name,
       value: s.name,
     }));
-    const selectedSite = sites.filter(s => s.name === filter.siteLocation)[0];
-    const protocolOptions = !selectedSite ? [] : selectedSite.studies.map(study => ({
-      label: study.protocolNumber,
-      value: study.protocolNumber,
-    }));
-    const indications = !selectedSite ? [] : selectedSite.studies.map(study => ({
-      label: study.indication,
-      value: study.indication,
+
+    const protocols = _.uniq(schedules.map(s => s.protocolNumber));
+
+    const protocolOptions = protocols.map(p => ({
+      label: p,
+      value: p,
     }));
 
-    const indicationOptions = _.uniqBy(indications, 'value');
+    const indicationOptions = indications.map(i => ({
+      label: i.name,
+      value: i.name,
+    }));
 
     return (
       <form action="#" className="form-search clearfix alt">

@@ -42,7 +42,7 @@ function ReactSelect({
     <Select
       value={selectedValue || input.value}
       onChange={input.onChange}
-      onBlur={() => input.onBlur(input.value)}
+      onBlur={() => input.onBlur(selectedValue || input.value)}
       options={optionsToRender}
       placeholder={placeholder}
       className="form-control"
