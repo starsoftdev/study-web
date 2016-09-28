@@ -51,6 +51,26 @@ export class RequestProposalPage extends Component {
 
   render() {
     const { siteLocations, indications, studyLevels } = this.props;
+    const events = [
+      {
+        events: [
+          'twilio-message'
+        ],
+        raw: { pathname: this.props.location.pathname },
+        cb: (err, data) => {
+          console.log('received', err, data)
+        }
+      },
+      {
+        events: [
+          'create-patient',
+        ],
+        raw: { pathname: this.props.location.pathname },
+        cb: (err, data) => {
+          console.log('received', err, data)
+        }
+      }
+    ]
 
     return (
       <StickyContainer className="container-fluid">
@@ -81,7 +101,7 @@ export class RequestProposalPage extends Component {
 
           </div>
         </section>
-        {/*<GlobalNotifications {...this.props} />*/}
+        {<GlobalNotifications {...this.props} events={events} />}
       </StickyContainer>
     );
   }
