@@ -1,11 +1,33 @@
 // import PaymentInformationPage from '../index';
 
 import expect from 'expect';
-// import { shallow } from 'enzyme';
-// import React from 'react';
+import { shallow } from 'enzyme';
+import PaymentInformationPage from 'containers/PaymentInformationPage';
+import React from 'react';
+import AddNewCardButton from 'components/AddNewCardButton';
 
 describe('<PaymentInformationPage />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+  let setup;
+
+  beforeEach(() => {
+    setup = () => {
+      const props = {
+        deleteCreditCard: expect.createSpy(),
+        addCreditCard: expect.createSpy(),
+      };
+
+      const shallowWrapper = shallow(<PaymentInformationPage {...props} />);
+
+      return {
+        props,
+        shallowWrapper,
+      };
+    };
+  });
+
+  it('should render the AddNewCardButton', () => {
+    const { shallowWrapper } = setup();
+
+    expect(shallowWrapper.contains(<AddNewCardButton />)).toEqual(true);
   });
 });

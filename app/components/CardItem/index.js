@@ -28,12 +28,11 @@ class CardItem extends React.Component { // eslint-disable-line react/prefer-sta
   }
 
   removeItem() {
-    this.props.deleteCreditCard(
-      {
-        customerId: this.props.customerId,
-        id: this.props.id,
-      }
-    );
+    const customerId = this.props.customerId;
+    const cardId = this.props.id;
+    
+    this.props.deleteCreditCard(customerId, cardId);
+    
   }
 
   render() {

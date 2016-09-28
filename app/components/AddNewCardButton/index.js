@@ -14,32 +14,32 @@ class AddNewCardButton extends React.Component { // eslint-disable-line react/pr
     addCreditCard: PropTypes.func,
     customerId: PropTypes.any,
   }
-  
+
   constructor(props) {
     super(props);
     this.showCreditCardModal = this.showCreditCardModal.bind(this);
     this.closeAddCredtCardModal = this.closeAddCredtCardModal.bind(this);
 
     this.state = {
-      showAddCreditCardModalModal: false,
+      showAddCreditCardModal: false,
     };
   }
 
   showCreditCardModal() {
-    this.setState({ showAddCreditCardModalModal: true });
+    this.setState({ showAddCreditCardModal: true });
   }
 
   closeAddCredtCardModal() {
-    this.setState({ showAddCreditCardModalModal: false });
+    this.setState({ showAddCreditCardModal: false });
   }
 
   render() {
     return (
       <div>
         <div className="btn-block text-right">
-          <a href="#add-new-card-info" onClick={this.showCreditCardModal} className="btn btn-primary lightbox-opener">+   ADD  NEW CARD</a>
+          <a className="btn btn-primary lightbox-opener" onClick={this.showCreditCardModal}>+   ADD  NEW CARD</a>
         </div>
-        <AddCreditCardModal addCreditCard={this.props.addCreditCard} customerId={this.props.customerId} showModal={this.state.showAddCreditCardModalModal} closeModal={this.closeAddCredtCardModal} />
+        <AddCreditCardModal addCreditCard={this.props.addCreditCard} customerId={this.props.customerId} showModal={this.state.showAddCreditCardModal} closeModal={this.closeAddCredtCardModal} />
       </div>
     );
   }
