@@ -9,7 +9,6 @@ import moment from 'moment';
 
 import { SchedulePatientModalType } from 'common/constants';
 
-import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -41,6 +40,7 @@ const periodOptions = [
 export default class SchedulePatientModal extends Component {
   static propTypes = {
     sites: PropTypes.array.isRequired,
+    indications: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     handleCloseModal: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
@@ -63,11 +63,6 @@ export default class SchedulePatientModal extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedCellInfo.data) {
-      this.setState({
-        selectedUpdateDate: moment(nextProps.selectedCellInfo.data.time),
-      });
-    }
     if (nextProps.modalType === SchedulePatientModalType.HIDDEN) {
       this.setState({
         optionStep: 0,
@@ -85,23 +80,16 @@ export default class SchedulePatientModal extends Component {
     }
   }
 
-  handleUpdateDateChange(date) {
-    this.setState({
-      selectedUpdateDate: date,
-    });
-  }
-
   handleSiteLocationChoose(siteLocationOption) {
     if (siteLocationOption) {
       const selectedSite = this.props.sites.filter(s => s.id === siteLocationOption.siteId)[0];
       if (selectedSite === null) {
         throw new Error('SiteLocation options are not properly populated.');
       }
-
       const protocolOptions = selectedSite.studies.map(study => ({
         label: study.protocolNumber,
         value: study.protocolNumber,
-        indication: study.indication,
+        indication: this.props.indications[study.indication_id],
         studyId: study.id,
       }));
       this.setState({
@@ -324,8 +312,7 @@ export default class SchedulePatientModal extends Component {
                             name="date"
                             component={DatePicker}
                             className="form-control datepicker-input"
-                            selected={this.state.selectedUpdateDate}
-                            onChange={this.handleUpdateDateChange.bind(this)}
+                            startDate={moment(this.props.selectedCellInfo.data.time)}
                           />
                         </div>
                       </div>
@@ -370,16 +357,18 @@ export default class SchedulePatientModal extends Component {
                         </div>
                       </div>
                       <div className="btn-block text-right">
-                        <a href="#popup-remover" className="btn btn-gray-outline lightbox-opener" disabled={submitting} onClick={() => handleDelete(selectedCellInfo.data.id)}>
-                          {submitting ?
-                            'deleting...' : 'delete'
-                          }
-                        </a>
-                        <a href="#" className="btn btn-default btn-update">
-                          {submitting ?
-                            'updating...' : 'update'
-                          }
-                        </a>
+                        <input
+                          type="button"
+                          className="btn btn-gray-outline lightbox-opener"
+                          disabled={submitting}
+                          value={submitting ? 'deleting...' : 'delete'}
+                          onClick={() => handleDelete(selectedCellInfo.data.id)}
+                        />
+                        <input
+                          type="submit"
+                          className="btn btn-default btn-update"
+                          value={submitting ? 'updating...' : 'update'}
+                        />
                       </div>
                     </form>
                   </div>
