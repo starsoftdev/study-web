@@ -40,7 +40,7 @@ const getFilteredSchedules = (schedules, filter) =>
       (!filter.protocol || s.protocolNumber === filter.protocol)
   );
 
-class Calendar extends React.Component {
+class CalendarPage extends React.Component {
   static propTypes = {
     currentUser: PropTypes.any,
     sites: PropTypes.array.isRequired,
@@ -227,4 +227,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Calendar);
+)(CalendarPage);
