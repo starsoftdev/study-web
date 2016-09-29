@@ -64,9 +64,10 @@ export function setUserData(userData) {
 // ///////////////////////////////////////////
 // site locations
 // ///////////////////////////////////////////
-export function fetchSites() {
+export function fetchSites(payload) {
   return {
     type: FETCH_SITES,
+    payload,
   };
 }
 
