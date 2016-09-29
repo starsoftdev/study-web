@@ -1,70 +1,67 @@
-import { take, put, fork, cancel, call } from 'redux-saga/effects';
-import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
-import _, { get } from 'lodash';
-import request from 'utils/request';
+import { take, put, fork, cancel } from 'redux-saga/effects'
+import { LOCATION_CHANGE } from 'react-router-redux'
+import { actions as toastrActions } from 'react-redux-toastr'
+import { get } from 'lodash'
 
 import {
   connectionEstablished,
-  disconnectSocket,
-  connectionError,
-} from 'containers/GlobalNotifications/actions';
+} from 'containers/GlobalNotifications/actions'
 import {
   SET_SOCKET_CONNECTION,
   SUBSCRIBE_TO_PAGE_EVENT,
   UNSUBSCRIBE_FROM_PAGE_EVENT,
   UNSUBSCRIBE_FROM_ALL,
   SUBSCRIBE_TO_CHAT_EVENT,
-} from 'containers/GlobalNotifications/constants';
+} from 'containers/GlobalNotifications/constants'
 
 let props = null
 let socket = null
 
 // Individual exports for testing
 export function* GlobalNotificationsSaga() {
-  const watcherA = yield fork(setSocketConnection);
-  const watcherB = yield fork(subscribeToPageEvent);
-  const watcherC = yield fork(unsubscribeFromPageEvent);
-  const watcherD = yield fork(unsubscribeFromAllEvents);
-  const watcherE = yield fork(subscribeToChatEvent);
+  const watcherA = yield fork(setSocketConnection)
+  const watcherB = yield fork(subscribeToPageEvent)
+  const watcherC = yield fork(unsubscribeFromPageEvent)
+  const watcherD = yield fork(unsubscribeFromAllEvents)
+  const watcherE = yield fork(subscribeToChatEvent)
 
   // Suspend execution until location changes
-  yield take(LOCATION_CHANGE);
-  yield cancel(watcherA);
-  yield cancel(watcherB);
-  yield cancel(watcherC);
-  yield cancel(watcherD);
-  yield cancel(watcherE);
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcherA)
+  yield cancel(watcherB)
+  yield cancel(watcherC)
+  yield cancel(watcherD)
+  yield cancel(watcherE)
 }
 
 function connect(payload) {
-  const requestURL = `${SOCKET_URL}/${payload.nsp}`;
+  const requestURL = `${SOCKET_URL}/${payload.nsp}`
   const nsp = io(requestURL)
   return new Promise(resolve => {
     nsp.on('connect', () => {
-      resolve(nsp);
-    });
-  });
+      resolve(nsp)
+    })
+  })
 }
 
 export function* setSocketConnection() {
   while (true) {
-    const { payload } = yield take(SET_SOCKET_CONNECTION);
+    const { payload } = yield take(SET_SOCKET_CONNECTION)
     props = (payload) ? payload.props : null
     try {
       if (!socket) {
-        const requestURL = `${SOCKET_URL}/${payload.nsp}`;
+        const requestURL = `${SOCKET_URL}/${payload.nsp}`
         const nsp = io(requestURL)
         socket = nsp
-        //const socket = yield call(connect.bind(this, payload));
-        yield put(connectionEstablished(nsp));
-        yield put(toastrActions.success('', 'Connected to socket.'));
-        payload.cb(null, socket);
+        //const socket = yield call(connect.bind(this, payload))
+        yield put(connectionEstablished(nsp))
+        yield put(toastrActions.success('', 'Connected to socket.'))
+        payload.cb(null, socket)
       }
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
-      payload.cb(err, null);
+      const errorMessage = get(err, 'message', 'Something went wrong!')
+      yield put(toastrActions.error('', errorMessage))
+      payload.cb(err, null)
     }
   }
 }
@@ -72,7 +69,7 @@ export function* setSocketConnection() {
 export function* subscribeToPageEvent() {
 
   while (true) {
-    const { payload } = yield take(SUBSCRIBE_TO_PAGE_EVENT);
+    const { payload } = yield take(SUBSCRIBE_TO_PAGE_EVENT)
     try {
       //console.log('subscribeToPageEvent', payload)
       socket.emit('subscribeToPageEvent', {
@@ -82,8 +79,8 @@ export function* subscribeToPageEvent() {
         }
       )
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      const errorMessage = get(err, 'message', 'Something went wrong!')
+      yield put(toastrActions.error('', errorMessage))
     }
   }
 }
@@ -91,7 +88,7 @@ export function* subscribeToPageEvent() {
 export function* subscribeToChatEvent() {
 
   while (true) {
-    const { payload } = yield take(SUBSCRIBE_TO_CHAT_EVENT);
+    const { payload } = yield take(SUBSCRIBE_TO_CHAT_EVENT)
     try {
       socket.emit('subscribeToChatEvent', {
           user: props.currentUser, events: payload.events, params: payload.raw
@@ -99,8 +96,8 @@ export function* subscribeToChatEvent() {
         payload.cb(err, data)
       })
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      const errorMessage = get(err, 'message', 'Something went wrong!')
+      yield put(toastrActions.error('', errorMessage))
     }
   }
 }
@@ -108,15 +105,15 @@ export function* subscribeToChatEvent() {
 export function* unsubscribeFromPageEvent() {
 
   while (true) {
-    const { payload } = yield take(UNSUBSCRIBE_FROM_PAGE_EVENT);
+    const { payload } = yield take(UNSUBSCRIBE_FROM_PAGE_EVENT)
     try {
       //console.log('unsubscribeFromPageEvent', payload)
       socket.emit('unsubscribeCurrent', { events: payload.events, params: payload.raw }, (err, data) => {
         payload.cb(err, data)
       })
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      const errorMessage = get(err, 'message', 'Something went wrong!')
+      yield put(toastrActions.error('', errorMessage))
     }
   }
 }
@@ -124,15 +121,15 @@ export function* unsubscribeFromPageEvent() {
 export function* unsubscribeFromAllEvents() {
 
   while (true) {
-    const { payload } = yield take(UNSUBSCRIBE_FROM_ALL);
+    const { payload } = yield take(UNSUBSCRIBE_FROM_ALL)
     try {
       //console.log('unsubscribeFromAllEvents', payload)
       socket.emit('unsubscribeFromAll', { events: payload.events }, (err, data) => {
         payload.cb(err, data)
       })
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      const errorMessage = get(err, 'message', 'Something went wrong!')
+      yield put(toastrActions.error('', errorMessage))
     }
   }
 }
@@ -140,4 +137,4 @@ export function* unsubscribeFromAllEvents() {
 // All sagas to be loaded
 export default [
   GlobalNotificationsSaga,
-];
+]

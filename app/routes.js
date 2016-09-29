@@ -115,7 +115,7 @@ export default function createRoutes(store) {
 
         const renderRoute = loadModule(cb);
 
-        importModules.then(([reducer, sagas, component, GlobalNotificationsReducer, GlobalNotificationsSagas,]) => {
+        importModules.then(([reducer, sagas, component, GlobalNotificationsReducer, GlobalNotificationsSagas]) => {
           injectReducer('requestProposalPage', reducer.default);
           injectReducer('globalNotifications', GlobalNotificationsReducer.default);
           injectSagas(sagas.default);
