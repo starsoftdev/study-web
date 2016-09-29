@@ -1,18 +1,19 @@
 import { createSelector } from 'reselect';
 
-export const selectCalendarPageDomain = (state) => state.calendarPage;
+const selectCalendarPageDomain = (state) => state.calendarPage;
 
-const selectPatientsByStudy = () => createSelector(
+const selectPatientsByStudy = createSelector(
   selectCalendarPageDomain,
   (substate) => substate.patientsByStudy,
 );
 
-const selectSchedules = () => createSelector(
+const selectSchedules = createSelector(
   selectCalendarPageDomain,
   (substate) => substate.schedules,
 );
 
 export {
+  selectCalendarPageDomain,
   selectPatientsByStudy,
   selectSchedules,
 };
