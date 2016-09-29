@@ -1,14 +1,14 @@
 import { createSelector } from 'reselect';
 
-const selectCalendarPageState = (state) => state.calendarPage;
+export const selectCalendarPageDomain = (state) => state.calendarPage;
 
 const selectPatientsByStudy = () => createSelector(
-  selectCalendarPageState,
+  selectCalendarPageDomain,
   (substate) => substate.patientsByStudy,
 );
 
 const selectSchedules = () => createSelector(
-  selectCalendarPageState,
+  selectCalendarPageDomain,
   (substate) => substate.schedules,
 );
 

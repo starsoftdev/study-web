@@ -32,11 +32,11 @@ export default [
   CalendarPageSaga,
 ];
 
-function* fetchPatientsByStudyWatcher() {
+export function* fetchPatientsByStudyWatcher() {
   yield* takeLatest(FETCH_PATIENTS_BY_STUDY, fetchPatientsByStudyWorker);
 }
 
-function* fetchPatientsByStudyWorker(action) {
+export function* fetchPatientsByStudyWorker(action) {
   try {
     const requestURL = `${API_URL}/studies/${action.studyId}/patient-categories`;
     const params = {
@@ -53,11 +53,11 @@ function* fetchPatientsByStudyWorker(action) {
   }
 }
 
-function* fetchSchedulesWatcher() {
+export function* fetchSchedulesWatcher() {
   yield* takeLatest(FETCH_SCHEDULES, fetchSchedulesWorker);
 }
 
-function* fetchSchedulesWorker(action) {
+export function* fetchSchedulesWorker(action) {
   try {
     const requestURL = `${API_URL}/callReminders/getSchedules`;
     const params = {
@@ -73,11 +73,11 @@ function* fetchSchedulesWorker(action) {
   }
 }
 
-function* submitSchedulesWatcher() {
+export function* submitSchedulesWatcher() {
   yield* takeLatest(SUBMIT_SCHEDULE, submitSchedulesWorker);
 }
 
-function* submitSchedulesWorker(action) {
+export function* submitSchedulesWorker(action) {
   try {
     const requestURL = `${API_URL}/callReminders/upsertSchedule`;
     const params = {
@@ -94,11 +94,11 @@ function* submitSchedulesWorker(action) {
   }
 }
 
-function* deleteSchedulesWatcher() {
+export function* deleteSchedulesWatcher() {
   yield* takeLatest(DELETE_SCHEDULE, deleteSchedulesWorker);
 }
 
-function* deleteSchedulesWorker(action) {
+export function* deleteSchedulesWorker(action) {
   try {
     const requestURL = `${API_URL}/callReminders/${action.scheduleId}/deleteSchedule`;
     const params = {
