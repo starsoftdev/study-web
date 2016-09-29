@@ -60,7 +60,7 @@ export class RequestProposalPage extends Component {
         raw: { pathname: this.props.location.pathname },
         cb: (err, data) => {
           console.log('received', err, data);
-        }
+        },
       },
       {
         events: [
@@ -69,9 +69,9 @@ export class RequestProposalPage extends Component {
         raw: { pathname: this.props.location.pathname },
         cb: (err, data) => {
           console.log('received', err, data);
-        }
-      }
-    ]
+        },
+      },
+    ];
 
     return (
       <StickyContainer className="container-fluid">
