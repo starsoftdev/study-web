@@ -35,7 +35,8 @@ export class RequestProposalPage extends Component {
     fetchSites: PropTypes.func,
     fetchIndications: PropTypes.func,
     fetchLevels: PropTypes.func,
-    onSubmitForm: PropTypes.func.isRequired, location: PropTypes.any,
+    onSubmitForm: PropTypes.func.isRequired,
+    location: PropTypes.any,
   }
 
   constructor(props) {
@@ -58,7 +59,7 @@ export class RequestProposalPage extends Component {
         ],
         raw: { pathname: this.props.location.pathname },
         cb: (err, data) => {
-          console.log('received', err, data)
+          console.log('received', err, data);
         }
       },
       {
@@ -67,7 +68,7 @@ export class RequestProposalPage extends Component {
         ],
         raw: { pathname: this.props.location.pathname },
         cb: (err, data) => {
-          console.log('received', err, data)
+          console.log('received', err, data);
         }
       }
     ]
