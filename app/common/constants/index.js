@@ -51,3 +51,9 @@ export const YEAR_OPTIONS = [
   { label: (thisYear + 1).toString(), value: thisYear + 1 },
   { label: (thisYear + 2).toString(), value: thisYear + 2 },
 ];
+
+export const SchedulePatientModalType = {
+  CREATE: 'CREATE',
+  UPDATED: 'UPDATE',
+  HIDDEN: 'HIDDEN',
+};

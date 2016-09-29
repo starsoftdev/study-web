@@ -18,12 +18,15 @@ function ReactSelect({
   placeholder,
   options,
   className,
+  selectedValue,
+  objectValue,
   meta: { touched, error, active },
+  ...rest,
 }) {
   const hasError = touched && error && !active;
   const errorClass = hasError ? 'has-error' : '';
   const optionsToRender = options.map(o => (
-    { value: (o.value || o.id), label: (o.label || o.name) }
+    { ...o, value: (o.value || o.id), label: (o.label || o.name) }
   ));
 
   const tooltip = (
@@ -34,15 +37,17 @@ function ReactSelect({
       {error}
     </Tooltip>
   );
+
   let inputComponent = (
     <Select
-      value={input.value}
+      value={selectedValue || input.value}
       onChange={input.onChange}
-      onBlur={() => input.onBlur(input.value)}
+      onBlur={() => input.onBlur(selectedValue || input.value)}
       options={optionsToRender}
       placeholder={placeholder}
       className="form-control"
-      simpleValue
+      simpleValue={!objectValue}
+      {...rest}
     />
   );
 
@@ -71,6 +76,8 @@ ReactSelect.propTypes = {
   options: PropTypes.array,
   meta: PropTypes.object.isRequired,
   className: PropTypes.string,
+  selectedValue: PropTypes.any,
+  objectValue: PropTypes.bool,
 };
 
 export default ReactSelect;

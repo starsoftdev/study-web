@@ -1,0 +1,17 @@
+/* eslint-disable no-multi-spaces */
+
+export const FETCH_PATIENTS_BY_STUDY          = 'Calendar/FETCH_PATIENTS_BY_STUDY';
+export const FETCH_PATIENTS_BY_STUDY_SUCCESS  = 'Calendar/FETCH_PATIENTS_BY_STUDY_SUCCESS';
+export const FETCH_PATIENTS_BY_STUDY_ERROR    = 'Calendar/FETCH_PATIENTS_BY_STUDY_ERROR';
+
+export const FETCH_SCHEDULES          = 'Calendar/FETCH_SCHEDULES';
+export const FETCH_SCHEDULES_SUCCESS  = 'Calendar/FETCH_SCHEDULES_SUCCESS';
+export const FETCH_SCHEDULES_ERROR    = 'Calendar/FETCH_SCHEDULES_ERROR';
+
+export const SUBMIT_SCHEDULE         = 'Calendar/SUBMIT_SCHEDULE';
+export const SUBMIT_SCHEDULE_SUCCESS = 'Calendar/SUBMIT_SCHEDULE_SUCCESS';
+export const SUBMIT_SCHEDULE_ERROR   = 'Calendar/SUBMIT_SCHEDULE_ERROR';
+
+export const DELETE_SCHEDULE         = 'Calendar/DELETE_SCHEDULE';
+export const DELETE_SCHEDULE_SUCCESS = 'Calendar/DELETE_SCHEDULE_SUCCESS';
+export const DELETE_SCHEDULE_ERROR   = 'Calendar/DELETE_SCHEDULE_ERROR';

@@ -1,3 +1,5 @@
+/* eslint-disable no-prototype-builtins, prefer-template */
+
 import 'whatwg-fetch';
 import { pick } from 'lodash';
 
@@ -13,6 +15,7 @@ import { getItem } from 'utils/localStorage';
  */
 export default function request(url, options = {}) {
   const authToken = getItem('auth_token');
+  let newUrl = url;
 
   const headers = {
     Accept: 'application/json',
@@ -23,14 +26,22 @@ export default function request(url, options = {}) {
     headers.authorization = authToken;
   }
 
+  if (!options.method || options.method === 'GET') {
+    if (options.query) {
+      const queryString = serializeParams(options.query);
+      newUrl = `${url}?${queryString}`;
+    }
+  }
+
   // Use authorization token temporarily until we write auth module.
   // headers.authorization = 'ltDVEqf99WNfKGxJeyl2hQnOGmXb0wUFbv4DBSVHCTKzFYZ7fxEn6Wv9Umnq8jc9';
 
   if (options.useDefaultContentType) {
     delete headers['Content-Type'];
   }
+
   options.headers = Object.assign({}, headers, options.headers ); // eslint-disable-line
-  return fetch(url, options)
+  return fetch(newUrl, options)
     .then(checkStatus)
     .then(parseJSON)
     .then((data) => data);
@@ -74,4 +85,14 @@ function checkStatus(response) {
     }, () => {
       throw Object.assign(err, { message: 'Failed to parse JSON' });
     });
+}
+
+function serializeParams(obj) {
+  const str = [];
+  Object.keys(obj).forEach(p => {
+    if (obj.hasOwnProperty(p) && obj[p] !== undefined && obj[p] !== null) {  // we need to pass 0 and empty string
+      str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+    }
+  });
+  return str.join('&');
 }
