@@ -29,7 +29,7 @@ import {
 
 // Bootstrap sagas
 export default [
-  CalendarPageSaga,
+  calendarPageSaga,
 ];
 
 export function* fetchPatientsByStudyWatcher() {
@@ -48,8 +48,8 @@ export function* fetchPatientsByStudyWorker(action) {
     yield put(fetchPatientsByStudySucceeded(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
-    yield put(toastrActions.error('', errorMessage));
     yield put(fetchPatientsByStudyFailed(err));
+    yield put(toastrActions.error('', errorMessage));
   }
 }
 
@@ -115,7 +115,7 @@ export function* deleteSchedulesWorker(action) {
   }
 }
 
-export function* CalendarPageSaga() {
+export function* calendarPageSaga() {
   const watcherA = yield fork(fetchPatientsByStudyWatcher);
   const watcherB = yield fork(fetchSchedulesWatcher);
   const watcherC = yield fork(submitSchedulesWatcher);
