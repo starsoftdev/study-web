@@ -41,7 +41,7 @@ export function* setSocketConnection() {
     try {
       if (!socket) {
         const requestURL = `${SOCKET_URL}/${payload.nsp}`;
-        const nsp = io(requestURL);
+        const nsp = window.io(requestURL);
         socket = nsp;
         // const socket = yield call(connect.bind(this, payload))
         yield put(connectionEstablished(nsp));
