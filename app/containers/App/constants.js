@@ -15,3 +15,21 @@ export const FETCH_INDICATIONS_ERROR    = 'App/FETCH_INDICATIONS_ERROR';
 export const FETCH_LEVELS          = 'App/FETCH_LEVELS';
 export const FETCH_LEVELS_SUCCESS  = 'App/FETCH_LEVELS_SUCCESS';
 export const FETCH_LEVELS_ERROR    = 'App/FETCH_LEVELS_ERROR';
+
+export const FETCH_COUPON         = 'App/FETCH_COUPON';
+export const FETCH_COUPON_SUCCESS = 'App/FETCH_COUPON_SUCCESS';
+export const FETCH_COUPON_ERROR   = 'App/FETCH_COUPON_ERROR';
+
+export const CLEAR_COUPON         = 'App/CLEAR_COUPON';
+
+export const FETCH_CARDS          = 'App/FETCH_CARDS';
+export const FETCH_CARDS_SUCCESS  = 'App/FETCH_CARDS_SUCCESS';
+export const FETCH_CARDS_ERROR    = 'App/FETCH_CARDS_ERROR';
+
+export const SAVE_CARD            = 'App/SAVE_CARD';
+export const SAVE_CARD_SUCCESS    = 'App/SAVE_CARD_SUCCESS';
+export const SAVE_CARD_ERROR      = 'App/SAVE_CARD_ERROR';
+
+export const DELETE_CARD            = 'App/DELETE_CARD';
+export const DELETE_CARD_SUCCESS    = 'App/DELETE_CARD_SUCCESS';
+export const DELETE_CARD_ERROR      = 'App/DELETE_CARD_ERROR';

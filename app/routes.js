@@ -23,6 +23,28 @@ export default function createRoutes(store) {
 
   return [
     {
+      onEnter: redirectToLogin,
+      path: '/calendar',
+      name: 'calendarPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/CalendarPage/reducer'),
+          System.import('containers/CalendarPage/sagas'),
+          System.import('containers/CalendarPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('calendarPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    },
+    {
       path: '/',
       name: 'home',
       getComponent(nextState, cb) {
