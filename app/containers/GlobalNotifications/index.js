@@ -4,19 +4,18 @@
  *
  */
 
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser } from 'containers/App/selectors';
-import selectSocket from 'containers/GlobalNotifications/selectors';
-import { 
-  setSocketConnection, 
-  connectionEstablished, 
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { selectCurrentUser } from 'containers/App/selectors'
+import selectSocket from 'containers/GlobalNotifications/selectors'
+import {
+  setSocketConnection,
   subscribeToPageEvent,
   unsubscribeFromPageEvent,
   unsubscribeFromAll,
   subscribeToChatEvent,
-} from 'containers/GlobalNotifications/actions';
+} from 'containers/GlobalNotifications/actions'
 
 export class GlobalNotifications extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -28,15 +27,15 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
     socket: PropTypes.any,
     currentUser: PropTypes.any,
     events: React.PropTypes.array,
-  };
+  }
 
-  constructor (props) {
+  constructor(props) {
     super(props)
-    this.subscribeToPageEvents = this.subscribeToPageEvents.bind(this);
-    this.unsubscribeCurrent = this.unsubscribeCurrent.bind(this);
-    this.unsubscribeAll = this.unsubscribeAll.bind(this);
-    this.subscribeToChat = this.subscribeToChat.bind(this);
-  };
+    this.subscribeToPageEvents = this.subscribeToPageEvents.bind(this)
+    this.unsubscribeCurrent = this.unsubscribeCurrent.bind(this)
+    this.unsubscribeAll = this.unsubscribeAll.bind(this)
+    this.subscribeToChat = this.subscribeToChat.bind(this)
+  }
 
   componentDidMount() {
     //..
@@ -102,7 +101,7 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
       default:
         return [
           'twilio-message'
-        ];
+        ]
     }
   }
 
@@ -133,16 +132,16 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
       <div onClick={this.subscribeToChat}>subscribe to chat</div>
       <div onClick={this.unsubscribeCurrent}>unsubscribe from twilio-message</div>
       <div onClick={this.unsubscribeAll}>unsubscribe from all</div>
-    </div>;
+    </div>
 
-    return null;
+    return null
   }
 }
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   socket: selectSocket(),
-});
+})
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -151,7 +150,7 @@ function mapDispatchToProps(dispatch) {
     unsubscribeFromPageEvent: (values) => dispatch(unsubscribeFromPageEvent(values)),
     unsubscribeFromAll: (values) => dispatch(unsubscribeFromAll(values)),
     subscribeToChatEvent: (values) => dispatch(subscribeToChatEvent(values))
-  };
+  }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(GlobalNotifications);
+export default connect(mapStateToProps, mapDispatchToProps)(GlobalNotifications)

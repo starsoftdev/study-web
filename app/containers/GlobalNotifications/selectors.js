@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { get, map, pick } from 'lodash';
 
 /**
  * Direct selector to the globalNotifications state domain
