@@ -211,8 +211,8 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   sites: selectSites(),
   indications: selectIndications(),
-  schedules: selectSchedules(),
-  patientsByStudy: selectPatientsByStudy(),
+  schedules: selectSchedules,
+  patientsByStudy: selectPatientsByStudy,
 });
 
 const mapDispatchToProps = {

@@ -4,7 +4,7 @@ import { selectCalendarPageDomain, selectSchedules } from '../selectors';
 
 describe('CalendarPage/selectors', () => {
   describe('selectCalendarPageDomain', () => {
-    const calendarPageDomainSelector = selectCalendarPageDomain();
+    const calendarPageDomainSelector = selectCalendarPageDomain;
     it('should select calendarPage state', () => {
       const calendarPageState = {
         patientsByStudy: [],
@@ -18,7 +18,7 @@ describe('CalendarPage/selectors', () => {
   });
 
   describe('selectSchedules', () => {
-    const selectSchedulesSelector = selectSchedules();
+    const selectSchedulesSelector = selectSchedules;
     it('should select schedules', () => {
       const mockedState = {
         calendarPage: {
