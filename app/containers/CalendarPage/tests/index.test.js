@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import React from 'react';
 
 import configureStore from 'store';
-import CalendarPage from 'containers/CalendarPage';
+import { CalendarPage } from 'containers/CalendarPage';
 import FilterBar from 'containers/CalendarPage/components/FilterBar';
 import CalendarWidget from 'containers/CalendarPage/components/CalendarWidget';
 import SchedulePatientModal from 'containers/CalendarPage/components/SchedulePatientModal';
@@ -40,9 +40,9 @@ describe('CalendarPage/index component', () => {
   it('should render the FilterBar, CalendarWidget, SchedulePatientModal', () => {
     const { shallowWrapper } = setup();
 
-    expect(shallowWrapper.contains(<FilterBar />)).toEqual(true);
-    expect(shallowWrapper.contains(<CalendarWidget />)).toEqual(true);
-    expect(shallowWrapper.contains(<SchedulePatientModal />)).toEqual(true);
+    expect(shallowWrapper.find(FilterBar)).to.have.length(1);
+    expect(shallowWrapper.find(CalendarWidget)).to.have.length(1);
+    expect(shallowWrapper.find(SchedulePatientModal)).to.have.length(1);
   });
 
   it('should pass correct props to the Filter component', () => {

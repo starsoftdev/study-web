@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 /**
  * Test  sagas
  */
@@ -12,16 +10,21 @@ import {
   fetchPatientsByStudyWatcher,
   fetchPatientsByStudyWorker,
   fetchSchedulesWatcher,
+  fetchSchedulesWorker,
   submitSchedulesWatcher,
   deleteSchedulesWatcher,
+  calendarPageSaga,
 } from '../sagas';
 
 import {
-} from 'containers/ReferPage/actions';
+  fetchPatientsByStudySucceeded,
+  fetchPatientsByStudyFailed,
+} from '../actions';
 
 import {
   FETCH_PATIENTS_BY_STUDY,
-} from 'containers/ReferPage/constants';
+  FETCH_SCHEDULES,
+} from '../constants';
 
 import request from 'utils/request';
 
@@ -49,86 +52,77 @@ describe('CalendarPage/sagas', () => {
       // expect(actualYield).toEqual(expectedYield);
     });
   });
-/*
-  describe('fetchCompanyTypes Saga', () => {
+
+  describe('fetchPatientsByStudyWorker Saga', () => {
     let iterator;
 
     beforeEach(() => {
-      iterator = fetchCompanyTypes();
+      const action = { studyId: 1, searchParams: {} };
+      iterator = fetchPatientsByStudyWorker(action);
 
-      const requestURL = `${API_URL}/companyTypes`;
+      const requestURL = `${API_URL}/studies/${action.studyId}/patient-categories`;
+      const params = {
+        method: 'GET',
+        query: action.searchParams,
+      };
       const actualYield = iterator.next().value;
-      expect(actualYield).toEqual(call(request, requestURL));
+      expect(actualYield).toEqual(call(request, requestURL, params));
     });
 
-    it('should dispatch the companyTypesFetched action if it gets successful response', () => {
-      const response = [
-        { id: 1, type: 'Site' },
-        { id: 1, type: 'Sponsor' },
-        { id: 1, type: 'CRO' },
-      ];
+    it('should dispatch the fetchPatientsByStudySucceeded action if it gets successful response', () => {
+      const response = [];
       const actualYield = iterator.next(response).value;
-      expect(actualYield).toEqual(put(companyTypesFetched(response)));
+      expect(actualYield).toEqual(put(fetchPatientsByStudySucceeded(response)));
     });
 
-    it('should call the companyTypesFetchingError action if the response errors', () => {
+    it('should call the fetchPatientsByStudyFailed action if the response errors', () => {
       const error = { message: 'Something went wrong!' };
       const actualYield = iterator.throw(error).value;
-      expect(actualYield).toEqual(put(companyTypesFetchingError(error)));
+      expect(actualYield).toEqual(put(fetchPatientsByStudyFailed(error)));
     });
   });
 
-  describe('submitFormWatcher Saga', () => {
-    let iterator;
+  describe('fetchSchedulesWatcher Saga', () => {
+    const iterator = fetchSchedulesWatcher();
     let actualYield;
     let expectedYield;
-    const values = {
-      email: 'test.user@example.com',
-      name: 'Test User',
-    };
 
-    beforeEach(() => {
-      iterator = submitFormWatcher();
-
+    it('should watch for FETCH_SCHEDULES action', () => {
       actualYield = iterator.next().value;
-      expect(actualYield).toEqual(take(SUBMIT_FORM));
-
-      const requestURL = `${API_URL}/referral`;
-      const params = {
-        method: 'POST',
-        body: JSON.stringify(values),
-      };
-      actualYield = iterator.next({ payload: values }).value; // optionally passing a value
-      expectedYield = call(request, requestURL, params);
+      expectedYield = take(FETCH_SCHEDULES);
       expect(actualYield).toEqual(expectedYield);
     });
 
-    it('should dispatch the formSubmitted action if it gets successful response', () => {
-      const response = values;
-      actualYield = iterator.next(response).value;
-      actualYield = iterator.next().value; // skip react-redux-toastr actions
-      expect(actualYield).toEqual(put(formSubmitted(response)));
-    });
+    it('should invoke fetchSchedulesWorker saga on actions', () => {
+      // @ref http://yelouafi.github.io/redux-saga/docs/advanced/Concurrency.html
+      actualYield = iterator.next(put(FETCH_SCHEDULES)).value;
+      expectedYield = fork(fetchSchedulesWorker, put(FETCH_SCHEDULES));
+      expect(actualYield).toEqual(expectedYield);
 
-    it('should call the formSubmissionError action if the response errors', () => {
-      const error = { message: 'Something went wrong!' };
-      actualYield = iterator.throw(error).value;
-      actualYield = iterator.next().value; // skip react-redux-toastr actions
-      expect(actualYield).toEqual(put(formSubmissionError(error)));
+      // @ref https://jsfiddle.net/npbee/Lqreq12b/2/
+      // actualYield = iterator.next().value;
+      // expectedYield = take(FETCH_COMPANY_TYPES);
+      // expect(actualYield).toEqual(expectedYield);
     });
   });
 
-  describe('referPageSaga', () => {
-    const mainSaga = referPageSaga();
+  describe('calendarPageSaga', () => {
+    const mainSaga = calendarPageSaga();
 
     let forkDescriptorA;
     let forkDescriptorB;
+    let forkDescriptorC;
+    let forkDescriptorD;
 
-    it('should asyncronously fork 2 watchers saga', () => {
+    it('should asyncronously fork 4 watchers saga', () => {
       forkDescriptorA = mainSaga.next();
-      expect(forkDescriptorA.value).toEqual(fork(fetchCompanyTypesWatcher));
+      expect(forkDescriptorA.value).toEqual(fork(fetchPatientsByStudyWatcher));
       forkDescriptorB = mainSaga.next();
-      expect(forkDescriptorB.value).toEqual(fork(submitFormWatcher));
+      expect(forkDescriptorB.value).toEqual(fork(fetchSchedulesWatcher));
+      forkDescriptorC = mainSaga.next();
+      expect(forkDescriptorC.value).toEqual(fork(submitSchedulesWatcher));
+      forkDescriptorD = mainSaga.next();
+      expect(forkDescriptorD.value).toEqual(fork(deleteSchedulesWatcher));
     });
 
     it('should yield until LOCATION_CHANGE action', () => {
@@ -136,15 +130,16 @@ describe('CalendarPage/sagas', () => {
       expect(takeDescriptor.value).toEqual(take(LOCATION_CHANGE));
     });
 
-    it('should finally cancel() the forked submitFormWatcher saga',
-      function* referFormSagaCancellable() {
-        // reuse open fork for more integrated approach
-        let actualYield = mainSaga.next(put(LOCATION_CHANGE)).value;
-        expect(actualYield).toEqual(cancel(forkDescriptorA));
-        actualYield = mainSaga.next().value;
-        expect(actualYield).toEqual(cancel(forkDescriptorB));
-      }
-    );
+    it('should finally cancel() the forked sagas', function* forkedSagasCancellable() {
+      // reuse open fork for more integrated approach
+      let actualYield = mainSaga.next().value;
+      expect(actualYield).toEqual(cancel(forkDescriptorA.value));
+      actualYield = mainSaga.next().value;
+      expect(actualYield).toEqual(cancel(forkDescriptorB.value));
+      actualYield = mainSaga.next().value;
+      expect(actualYield).toEqual(cancel(forkDescriptorC.value));
+      actualYield = mainSaga.next().value;
+      expect(actualYield).toEqual(cancel(forkDescriptorD.value));
+    });
   });
-  */
 });
