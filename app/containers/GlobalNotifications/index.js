@@ -42,6 +42,27 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
     // ..
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.socket && nextProps.currentUser) {
+      nextProps.setSocketConnection({
+        nsp: 'nsp',
+        props: nextProps,
+        cb: (err, socket) => {
+          if (!err) {
+            socket.on('notification', (notification) => {
+              console.log(notification);
+            });
+            socket.on('connect', () => {
+              this.subscribeToPageEvents();
+            });
+          } else {
+            console.error(err);
+          }
+        },
+      });
+    }
+  }
+
   getEventTypes() {
     switch (this.props.location.pathname) {
       default:
@@ -106,34 +127,13 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.socket && nextProps.currentUser) {
-      nextProps.setSocketConnection({
-        nsp: 'nsp',
-        props: nextProps,
-        cb: (err, socket) => {
-          if (!err) {
-            socket.on('notification', (notification) => {
-              console.log(notification);
-            });
-            socket.on('connect', () => {
-              this.subscribeToPageEvents();
-            });
-          } else {
-            console.error(err);
-          }
-        },
-      });
-    }
-  }
-
   render() {
-    /*const layout = (<div>
+    /* const layout = (<div>
       <div onClick={this.subscribeToPageEvents}>subscribe to twilio-message</div>
       <div onClick={this.subscribeToChat}>subscribe to chat</div>
       <div onClick={this.unsubscribeCurrent}>unsubscribe from twilio-message</div>
       <div onClick={this.unsubscribeAll}>unsubscribe from all</div>
-    </div>);*/
+    </div>); */
 
     return null;
   }
