@@ -10,8 +10,9 @@
  */
 
 import React from 'react';
-import { Link } from 'react-router';
 import Helmet from 'react-helmet';
+
+import Dashboard from './Dashboard';
 
 export default class HomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -19,12 +20,11 @@ export default class HomePage extends React.Component { // eslint-disable-line r
     return (
       <div className="text-center">
         <Helmet title="Home Page - StudyKIK" />
-        <h1>
-          StudyKIK homepage
-        </h1>
-        <span>
-          Please log in <Link to="/login">here</Link>
-        </span>
+        <div className="dashboard">
+          <div className="container-fluid">
+            <Dashboard />
+          </div>
+        </div>
       </div>
     );
   }
