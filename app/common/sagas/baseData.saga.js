@@ -14,6 +14,7 @@ import {
   FETCH_CARDS,
   SAVE_CARD,
   DELETE_CARD,
+  ADD_CREDITS,
 } from 'containers/App/constants';
 
 import {
@@ -31,6 +32,8 @@ import {
   cardSavingError,
   cardDeleted,
   cardDeletingError,
+  creditsAdded,
+  creditsAddingError,
 } from 'containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -41,6 +44,7 @@ export default function* baseDataSaga() {
   yield fork(fetchCardsWatcher);
   yield fork(saveCardWatcher);
   yield fork(deleteCardWatcher);
+  yield fork(addCreditsWatcher);
 }
 
 export function* fetchSitesWatcher() {
@@ -174,6 +178,28 @@ export function* deleteCardWatcher() {
       yield put(cardDeleted(response));
     } catch (err) {
       yield put(cardDeletingError(err));
+    }
+  }
+}
+
+export function* addCreditsWatcher() {
+  while (true) {
+    const { customerId, data } = yield take(ADD_CREDITS);
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(data),
+    };
+
+    try {
+      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/checkout_credits`;
+      const response = yield call(request, requestURL, options);
+
+      yield put(toastrActions.success('Add Credits', 'Credits added successfully!'));
+      yield put(creditsAdded(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(creditsAddingError(err));
     }
   }
 }

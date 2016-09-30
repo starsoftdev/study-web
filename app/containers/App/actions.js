@@ -32,6 +32,10 @@ import {
   DELETE_CARD,
   DELETE_CARD_SUCCESS,
   DELETE_CARD_ERROR,
+
+  ADD_CREDITS,
+  ADD_CREDITS_SUCCESS,
+  ADD_CREDITS_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -234,6 +238,31 @@ export function cardDeleted(payload) {
 export function cardDeletingError(payload) {
   return {
     type: DELETE_CARD_ERROR,
+    payload,
+  };
+}
+
+// ///////////////////////////////////////////
+// add credits
+// ///////////////////////////////////////////
+export function addCredits(customerId, data) {
+  return {
+    type: ADD_CREDITS,
+    customerId,
+    data,
+  };
+}
+
+export function creditsAdded(payload) {
+  return {
+    type: ADD_CREDITS_SUCCESS,
+    payload,
+  };
+}
+
+export function creditsAddingError(payload) {
+  return {
+    type: ADD_CREDITS_ERROR,
     payload,
   };
 }
