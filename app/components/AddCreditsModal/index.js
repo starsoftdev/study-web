@@ -7,13 +7,20 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import ShoppingCartForm from 'components/ShoppingCartForm';
-
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { addCredits } from 'containers/App/actions';
+import { selectCurrentUser, selectAddCredits } from 'containers/App/selectors';
+import './styles.less';
 
 class AddCreditsModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     showModal: React.PropTypes.bool,
     closeModal: React.PropTypes.func,
+    addCredits: React.PropTypes.func,
+    currentUser: React.PropTypes.object,
+    addCreditsOperation: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -27,6 +34,12 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
       credits: 100,
       price: `$ ${77}`,
     };
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!newProps.addCreditsOperation.adding && this.props.addCreditsOperation.adding) {
+      this.props.closeModal();
+    }
   }
 
   incQuantity() {
@@ -49,8 +62,12 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
     }
   }
 
-  addCreditsSubmit(payload) {
-    console.log(payload);
+  addCreditsSubmit(cartValues) {
+    const data = {
+      totalAmount: cartValues.total,
+      cardId: cartValues.creditCard,
+    };
+    this.props.addCredits(this.props.currentUser.roleForClient.client.stripeCustomerId, data);
   }
 
 
@@ -110,9 +127,8 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
                   </div>
                 </div>
 
-
                 <div className="pull-left col">
-                  <ShoppingCartForm addOns={products} handleSubmit={this.addCreditsSubmit} />
+                  <ShoppingCartForm showCards onSubmit={this.addCreditsSubmit} addOns={products} />
                 </div>
               </div>
 
@@ -124,4 +140,15 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
   }
 }
 
-export default AddCreditsModal;
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
+  addCreditsOperation: selectAddCredits(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    addCredits: (customerId, data) => dispatch(addCredits(customerId, data)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddCreditsModal);

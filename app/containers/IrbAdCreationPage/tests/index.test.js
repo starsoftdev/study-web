@@ -6,8 +6,9 @@ import { shallow, mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import React from 'react';
 import configureStore from 'store';
-import { ReduxForm } from 'redux-form';
+// import { ReduxForm } from 'redux-form';
 import { IrbAdCreationPage } from 'containers/IrbAdCreationPage';
+// import IrbAdCreationForm from 'components/IrbAdCreationForm';
 // import { shallow } from 'enzyme';
 // import React from 'react';
 
@@ -21,7 +22,7 @@ describe('<IrbAdCreationPage />', () => {
         indications: [],
         fetchSites: expect.createSpy(),
         fetchIndications: expect.createSpy(),
-        onSubmitForm: expect.createSpy(),
+        submitForm: expect.createSpy(),
       };
 
       const shallowWrapper = shallow(<IrbAdCreationPage {...props} />);
@@ -31,22 +32,6 @@ describe('<IrbAdCreationPage />', () => {
         shallowWrapper,
       };
     };
-  });
-
-  it('should render the IrbAdCreation form', () => {
-    const { shallowWrapper } = setup();
-
-    expect(shallowWrapper.contains(<ReduxForm />)).toEqual(true);
-  });
-
-  it('should pass correct props to the IrbAdCreation form', () => {
-    const { shallowWrapper, props } = setup();
-
-    const formProps = shallowWrapper.find('ReduxForm').props();
-
-    expect(formProps).toContain({ siteLocations: props.siteLocations });
-    expect(formProps).toContain({ indications: props.indications });
-    expect(formProps.onSubmit).toBeA('function');
   });
 
   it('should call fetchSites and fetchIndications on load', () => {

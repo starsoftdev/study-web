@@ -51,7 +51,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
           </div>
 
           <div className="field-row">
-            <strong className="label"><label htmlFor="name">IRB NAME</label></strong>
+            <strong className="label required"><label htmlFor="name">IRB NAME</label></strong>
             <div className="field">
               <Field
                 name="irbName"
@@ -61,7 +61,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
           </div>
 
           <div className="field-row">
-            <strong className="label"><label htmlFor="email">IRB EMAIL</label></strong>
+            <strong className="label required"><label htmlFor="email">IRB EMAIL</label></strong>
             <div className="field">
               <Field
                 name="irbEmail"
@@ -71,7 +71,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
           </div>
 
           <div className="field-row">
-            <strong className="label"><label htmlFor="compensationAmount">COMPENSATION AMOUNT</label></strong>
+            <strong className="label required"><label htmlFor="compensationAmount">COMPENSATION AMOUNT</label></strong>
             <div className="field">
               <Field
                 name="compensationAmount"
@@ -109,14 +109,6 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
             </div>
           </div>
 
-          <div className="field-row">
-            <input
-              type="submit"
-              value="SUBMIT"
-              className="btn btn-default"
-            />
-          </div>
-
         </div>
       </form>
     );
@@ -124,3 +116,4 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
 }
 
 export default IrbAdCreationForm;
+

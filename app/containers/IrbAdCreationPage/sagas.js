@@ -18,12 +18,16 @@ import {
 export function* submitFormWatcher() {
   while (true) {
     // listen for the SUBMIT_FORM action dispatched on form submit
-    const { payload } = yield take(SUBMIT_FORM);
+    // cartValues
+    const { formValues } = yield take(SUBMIT_FORM);
+    // TODO:get stripeProductId from API
+    formValues.stripeProductId = 1;
+
     try {
       const requestURL = `${API_URL}/irbAdCreations`;
       const params = {
         method: 'POST',
-        body: JSON.stringify(payload),
+        body: JSON.stringify(formValues),
       };
       const response = yield call(request, requestURL, params);
 
