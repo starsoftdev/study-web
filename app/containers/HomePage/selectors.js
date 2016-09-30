@@ -18,6 +18,7 @@ const selectRewardsPoint = createSelector(
 );
 
 export {
+  selectHomePageDomain,
   selectPatientSignUps,
   selectPatientMessages,
   selectRewardsPoint,
