@@ -532,3 +532,86 @@ select {
 .jcf-select-visible-first {
 	.jcf-list ul li:first-child { display: block !important; }
 }
+
+div.jcf-select-min-width {
+	min-width: 150px;
+}
+
+
+/* custom number input styles */
+.jcf-number {
+	display: block;
+	position: relative;
+
+	.form-control {
+		padding-right: 50px;
+	}
+
+	input {-moz-appearance: textfield;}
+	input::-webkit-inner-spin-button,
+	input::-webkit-outer-spin-button {-webkit-appearance: none;}
+
+	.jcf-btn-dec,
+	.jcf-btn-inc {
+		position: absolute;
+		background: #ccc;
+		width: 20px;
+		height: 15px;
+		right: 5px;
+		top: 5px;
+		cursor: pointer;
+
+		&:hover {
+			background: #e6e6e6;
+		}
+
+		&.none {
+			pointer-events: none;
+		}
+	}
+
+	.jcf-btn-dec {
+		top: auto;
+		bottom: 5px;
+	}
+}
+
+
+
+
+
+.jcf-number.jcf-disabled .jcf-btn-dec:hover,
+.jcf-number.jcf-disabled .jcf-btn-inc:hover {
+	background: #aaa;
+}
+
+.jcf-number .jcf-btn-dec:before,
+.jcf-number .jcf-btn-inc:before {
+	position: absolute;
+	content: '';
+	width: 0;
+	height: 0;
+	top: 50%;
+	left: 50%;
+	margin: -6px 0 0 -4px;
+	border: 4px solid #aaa;
+	border-color: transparent transparent #000 transparent;
+}
+.jcf-number .jcf-btn-dec:before {
+	margin: -1px 0 0 -4px;
+	border-color: #000 transparent transparent transparent;
+}
+.jcf-number.jcf-disabled .jcf-btn-dec:before,
+.jcf-number.jcf-disabled .jcf-btn-inc:before,
+.jcf-number .jcf-btn-dec.jcf-disabled:before,
+.jcf-number .jcf-btn-inc.jcf-disabled:before {
+	opacity: 0.3;
+}
+
+.jcf-number .jcf-btn-dec.jcf-disabled,
+.jcf-number .jcf-btn-inc.jcf-disabled {
+	cursor: text;
+}
+.jcf-number.jcf-disabled input {
+	background: #ddd;
+}

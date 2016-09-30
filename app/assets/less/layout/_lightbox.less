@@ -425,3 +425,367 @@ input:focus {
 		background: #00afef;
 	}
 }
+
+#all-patients {
+
+  &.no-patient {
+    .list-head {
+      opacity: 0.5;
+      filter: blur(2px);
+    }
+  }
+
+  .list-holder {
+    &:empty:before {
+      padding: 0 12px;
+      content: 'Patient list is empty';
+    }
+  }
+
+  .list-head {
+    .font(0,0);
+    color: #354052;
+    font-weight: 700;
+    padding: 19px 12px 20px;
+
+    > * {
+      .font(14px);
+    }
+
+    .time {
+      &:before {
+        content: '\e91f';
+        margin: 0 10px 0 0;
+        font-weight: 400;
+        font-family: 'icomoon';
+      }
+    }
+  }
+
+  .btn-gray-outline,
+  .list-head {
+    > * {
+      .align(@align: middle);
+    }
+  }
+
+  .patient-list {
+    padding: 0;
+    min-height: 45px;
+
+    .btn-gray-outline {
+      .font(0,0);
+      display: block;
+      color: #354052;
+      border-width: 0;
+      text-align: left;
+      overflow: hidden;
+      font-weight: 400;
+      border-radius: 0;
+      padding: 15px 12px;
+      position: relative;
+      text-transform: capitalize;
+
+      &:focus,
+      &:active,
+      &:active:focus,
+      &:hover {
+        background: #f1f1f1;
+      }
+
+      > * {
+        .font(14px);
+      }
+    }
+
+    .btn-primary {
+      width: 11%;
+    }
+  }
+
+  .patient-name {
+    width: 26%;
+  }
+
+  .site-location {
+    width: 26%;
+  }
+
+  .protocol {
+    width: 22%;
+  }
+
+  .time {
+    width: 15%;
+  }
+}
+
+/*	renew-study and upgrade-study */
+#add-credits,
+#upgrade-study,
+#renew-study {
+
+  .lightbox-content {
+    max-width: 1100px;
+  }
+
+  .form-study {
+
+    .order-summery .scroll-holder {
+      max-height: none;
+
+      [type="submit"] {
+        margin: 0;
+      }
+    }
+
+    > .col {
+      width: 50%;
+      max-height: 75vh;
+    }
+
+    .field-row {
+      margin: 0 0 15px;
+
+      &.add-more {
+        margin: -8px 0 9px;
+      }
+    }
+
+    .tracking-source {
+
+      &.active {
+        margin: 0 0 15px;
+      }
+
+      .label {
+        width: 35.3%;
+      }
+
+      .custom-select,
+      .field {
+        width: 62.3%;
+      }
+
+      label.call-tracking {
+        margin: 0 0 0 -4px;
+      }
+    }
+
+    .label {
+      width: 34.4%;
+    }
+
+    .custom-select,
+    .field {
+      width: 62.2%;
+    }
+
+    .link-delete {
+      margin: 0 0 0 -5px;
+    }
+  }
+
+  .scroll {
+    max-height: 75vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .holder-inner {
+    padding: 25px;
+  }
+
+  .form-study {
+    &:before {
+      content: '';
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      position: absolute;
+      background: #f78e1e;
+    }
+  }
+}
+
+/*	edit-info	*/
+#edit-info {
+
+  .label-top {
+    .label {
+      vertical-align: top;
+    }
+  }
+
+  .img-preview {
+    padding: 5px;
+    margin: 0 0 15px;
+    border-radius: 3px;
+    border: solid 2px #636363;
+
+    img {
+      display: block;
+      max-width: 100%;
+      cursor: pointer;
+    }
+  }
+
+  .upload-btn {
+    float: left;
+    min-width: 137px;
+    margin: 0 8px 0 0;
+  }
+
+  .jcf-file[class^="jcf-extension-"],
+  .jcf-file[class*=" jcf-extension-"] {
+    display: block;
+    overflow: hidden;
+  }
+}
+
+.emails-list-holder {
+  .font(18px, 24px);
+  overflow: hidden;
+  border-radius: 3px;
+  border: solid #636363 2px;
+
+  .btn-primary {
+    display: block;
+    border-width: 0;
+    border-radius: 0;
+  }
+
+  .heading-area {
+    position: relative;
+    padding: 8px 7px 8px 40px;
+    border-bottom: solid #636363 2px;
+  }
+
+  .jcf-checkbox {
+    top: 9px;
+    left: 7px;
+    position: absolute;
+  }
+
+  .btn-holder {
+    padding: 9px 10px;
+    .font(18px, 22px);
+    text-align: center;
+    border-top: 2px solid #636363;
+
+    a {
+      color: #00afef;
+
+      &:hover {
+        color: #76daff;
+      }
+    }
+  }
+
+  strong.email { font-weight: 400; }
+}
+
+.list-emails {
+  margin: 0;
+
+
+  li {
+    position: relative;
+    padding: 8px 7px 8px 40px;
+
+    &:hover {
+      font-weight: 700;
+      background: #f1f1f1;
+    }
+  }
+
+}
+
+[src="images/error.png"] {
+  margin: 0 auto;
+}
+
+#image-perview {
+
+  .img-holder {
+    padding: 25px;
+    min-height: 150px;
+
+    img {
+      display: block;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+  }
+}
+
+#manage-edit-user,
+#manage-add-user {
+
+  .switchers-area {
+    width: 100%;
+    top: -9999px;
+    left: -9999px;
+    position: absolute;
+  }
+
+  [data-form="all"] {
+    .switchers-area {
+      top: auto;
+      left: auto;
+      width: auto;
+      position: relative;
+    }
+  }
+
+  [data-form="new-location"] {
+    .new-site-location {
+      top: auto;
+      left: auto;
+      width: auto;
+      position: relative;
+    }
+  }
+
+
+  .btn-block {
+    .btn {
+      margin: 0 0 0 8px;
+    }
+  }
+}
+
+#add-credits {
+
+  .sign {
+    top: 7px;
+    left: 15px;
+    position: absolute;
+    pointer-events: none;
+    transition: all 0.25s;
+  }
+
+  input#price,
+  input#quantity {
+    padding-left: 25px;
+    transition: color 0.25s, border 0.25s;
+
+    &:focus {
+      + .sign {
+        color: #949ca1;
+      }
+    }
+  }
+
+  .jcf-focus {
+    + .sign {
+      color: #949ca1;
+    }
+  }
+
+  .value-plus {
+    .jcf-number #quantity.form-control { padding-left: 15px; }
+    .sign { display: none; }
+  }
+}

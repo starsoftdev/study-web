@@ -193,8 +193,8 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     }
 
     return (
-      <form className="form-shopping-cart" onSubmit={handleSubmit}>
-        <div className="shopping-cart order-summary">
+      <form className="form-study form-shopping-cart" onSubmit={handleSubmit}>
+        <div className="shopping-cart order-summary order-summery">
           <div className="head">
             <h3>{title}</h3>
           </div>
