@@ -26,6 +26,10 @@ import {
   DELETE_CARD,
   DELETE_CARD_SUCCESS,
   DELETE_CARD_ERROR,
+
+  ADD_CREDITS,
+  ADD_CREDITS_SUCCESS,
+  ADD_CREDITS_ERROR,
 } from './constants';
 
 import {
@@ -57,6 +61,11 @@ const initialState = {
     deleteCard: {
       details: null,
       deleting: false,
+      error: null,
+    },
+    addCredits: {
+      details: null,
+      adding: false,
       error: null,
     },
   },
@@ -275,6 +284,44 @@ export default function appReducer(state = initialState, action) {
           deleteCard: {
             details: null,
             deleting: false,
+            error: payload,
+          },
+        },
+      };
+    case ADD_CREDITS:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          addCredits: {
+            details: null,
+            adding: true,
+            error: null,
+          },
+        },
+      };
+    case ADD_CREDITS_SUCCESS:
+      cardsCollection.data.push(payload);
+
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          addCredits: {
+            details: payload,
+            adding: false,
+            error: null,
+          },
+        },
+      };
+    case ADD_CREDITS_ERROR:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          addCredits: {
+            details: null,
+            adding: false,
             error: payload,
           },
         },

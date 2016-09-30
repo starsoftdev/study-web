@@ -33,3 +33,7 @@ export const SAVE_CARD_ERROR      = 'App/SAVE_CARD_ERROR';
 export const DELETE_CARD            = 'App/DELETE_CARD';
 export const DELETE_CARD_SUCCESS    = 'App/DELETE_CARD_SUCCESS';
 export const DELETE_CARD_ERROR      = 'App/DELETE_CARD_ERROR';
+
+export const ADD_CREDITS            = 'App/ADD_CREDITS';
+export const ADD_CREDITS_SUCCESS    = 'App/ADD_CREDITS_SUCCESS';
+export const ADD_CREDITS_ERROR      = 'App/ADD_CREDITS_ERROR';

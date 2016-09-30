@@ -1,10 +1,21 @@
 // import { selectProfilePageDomain } from '../selectors';
 import expect from 'expect';
-
-// const selector = selectProfilePageDomain();
+import { selectProfilePageDomain } from '../selectors';
 
 describe('selectProfilePageDomain', () => {
-  it('Expect to have unit tests specified', () => {
-    expect('Test case').toEqual(false);
+  describe('selectProfilePageDomain', () => {
+    const profilePageDomainSelector = selectProfilePageDomain();
+    it('should select profile page state', () => {
+      const profilePageState = {
+        changePasswordResult: {
+          success: '',
+          info: '',
+        },
+      };
+      const mockedState = {
+        profilePage: profilePageState,
+      };
+      expect(profilePageDomainSelector(mockedState)).toEqual(profilePageState);
+    });
   });
 });
