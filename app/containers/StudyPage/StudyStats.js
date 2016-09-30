@@ -4,6 +4,8 @@
 
 import React from 'react';
 import Collapse from 'react-bootstrap/lib/Collapse';
+import Col from 'react-bootstrap/lib/Col';
+import Row from 'react-bootstrap/lib/Row';
 import classNames from 'classnames';
 
 class StudyStats extends React.Component {
@@ -33,8 +35,8 @@ class StudyStats extends React.Component {
           <span className="opener" onClick={this.onToggle}></span>
         </div>
         <Collapse className="infoarea" in={this.state.open}>
-          <div className="row">
-            <div className="col-xs-4">
+          <Row>
+            <Col xs={4}>
               <div className="box same-height-left" style={{ height: '103px' }}>
                 <i className="icon-open-eye" />
                 <strong className="number">3,450</strong>
@@ -45,8 +47,8 @@ class StudyStats extends React.Component {
                 <strong className="number">685</strong>
                 <h3>TOTAL PATIENT REFERRALS</h3>
               </div>
-            </div>
-            <div className="col-xs-4 green">
+            </Col>
+            <Col xs={4} className="green">
               <div className="box" style={{ height: '103px' }}>
                 <i className="icon-phone" />
                 <strong className="number">948</strong>
@@ -57,8 +59,8 @@ class StudyStats extends React.Component {
                 <strong className="number">32:41:15</strong>
                 <h3>CALLS DURATION</h3>
               </div>
-            </div>
-            <div className="col-xs-4 orange">
+            </Col>
+            <Col xs={4} className="orange">
               <div className="box same-height-right" style={{ height: '103px' }}>
                 <i className="icon-chat-up" />
                 <strong className="number">52,711</strong>
@@ -69,8 +71,8 @@ class StudyStats extends React.Component {
                 <strong className="number">18,374</strong>
                 <h3>TEXTS RECEIVED</h3>
               </div>
-            </div>
-          </div>
+            </Col>
+          </Row>
         </Collapse>
       </div>
     );
