@@ -16,15 +16,15 @@ describe('IrbAdCreationPage actions', () => {
   describe('actions for form submission', () => {
     describe('submitForm Action', () => {
       it('should return the correct type with form values', () => {
-        const values = {
-          irbEmail: 'test.user@example.com',
-          irbName: 'Test User',
-        };
+        const cartValues = {};
+        const formValues = {};
+
         const expected = {
           type: SUBMIT_FORM,
-          payload: values,
+          cartValues: {},
+          formValues: {},
         };
-        expect(submitForm(values)).toEqual(expected);
+        expect(submitForm(cartValues, formValues)).toEqual(expected);
       });
     });
 

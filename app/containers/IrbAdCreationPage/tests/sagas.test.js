@@ -3,7 +3,7 @@
  */
 
 import expect from 'expect';
-import { take, call, put, fork, cancel } from 'redux-saga/effects';
+import { take, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 
 import {
@@ -20,17 +20,13 @@ import {
   SUBMIT_FORM,
 } from 'containers/IrbAdCreationPage/constants';
 
-import request from 'utils/request';
-
-describe('defaultSaga Saga', () => {
+describe('IrbAdCreationPage Saga', () => {
   describe('submitFormWatcher Saga', () => {
     let iterator;
     let actualYield;
-    let expectedYield;
-    const values = {
-      irbEmail: 'test.user@example.com',
-      irbname: 'Test User',
-    };
+    const cartValues = {};
+    const formValues = {};
+    const values = { cartValues, formValues };
 
     beforeEach(() => {
       iterator = submitFormWatcher();
@@ -38,14 +34,7 @@ describe('defaultSaga Saga', () => {
       actualYield = iterator.next().value;
       expect(actualYield).toEqual(take(SUBMIT_FORM));
 
-      const requestURL = `${API_URL}/irbAdCreations`;
-      const params = {
-        method: 'POST',
-        body: JSON.stringify(values),
-      };
-      actualYield = iterator.next({ payload: values }).value; // optionally passing a value
-      expectedYield = call(request, requestURL, params);
-      expect(actualYield).toEqual(expectedYield);
+      actualYield = iterator.next(values).value; // optionally passing a value
     });
 
     it('should dispatch the formSubmitted action if it gets successful response', () => {

@@ -6,7 +6,6 @@
 
 import React from 'react';
 import { Modal } from 'react-bootstrap';
-import AddCreditCardForm from 'components/AddCreditCardForm';
 import AddNewCardForm from 'components/AddNewCardForm';
 
 class AddCreditCardModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -15,16 +14,9 @@ class AddCreditCardModal extends React.Component { // eslint-disable-line react/
     showModal: React.PropTypes.bool,
     closeModal: React.PropTypes.func,
     addCreditCard: React.PropTypes.func,
-    customerId: React.PropTypes.any,
   };
 
   render() {
-    const initialValues = {
-      initialValues: {
-        customerId: this.props.customerId,
-      },
-    };
-
     return (
       <div>
         <Modal className="custom-modal" show={this.props.showModal} onHide={this.props.closeModal}>
@@ -35,7 +27,7 @@ class AddCreditCardModal extends React.Component { // eslint-disable-line react/
             </a>
           </Modal.Header>
           <Modal.Body>
-            <AddNewCardForm {...initialValues} onSubmit={this.props.addCreditCard} />
+            <AddNewCardForm onSubmit={this.props.addCreditCard} />
           </Modal.Body>
         </Modal>
       </div>

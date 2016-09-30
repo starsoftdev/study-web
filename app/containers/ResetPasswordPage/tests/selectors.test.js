@@ -1,10 +1,18 @@
 // import { selectResetPasswordPageDomain } from '../selectors';
 import expect from 'expect';
+import { selectResetPasswordPageDomain } from '../selectors';
 
 // const selector = selectResetPasswordPageDomain();
 
 describe('selectResetPasswordPageDomain', () => {
-  it('Expect to have unit tests specified', () => {
-    expect('Test case').toEqual(false);
+  describe('selectResetPasswordPageDomain', () => {
+    const resetPasswordPageDomainSelector = selectResetPasswordPageDomain();
+    it('should select reset password page state', () => {
+      const referPageState = {};
+      const mockedState = {
+        resetPasswordPage: {},
+      };
+      expect(resetPasswordPageDomainSelector(mockedState)).toEqual(referPageState);
+    });
   });
 });

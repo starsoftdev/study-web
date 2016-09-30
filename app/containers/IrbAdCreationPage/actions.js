@@ -10,10 +10,11 @@ import {
   SUBMIT_FORM_ERROR,
 } from 'containers/IrbAdCreationPage/constants';
 
-export function submitForm(payload) {
+export function submitForm(cartValues, formValues) {
   return {
     type: SUBMIT_FORM,
-    payload,
+    cartValues,
+    formValues,
   };
 }
 

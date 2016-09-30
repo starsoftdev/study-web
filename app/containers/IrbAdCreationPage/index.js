@@ -10,7 +10,7 @@ import { StickyContainer, Sticky } from 'react-sticky';
 import { createStructuredSelector } from 'reselect';
 import IrbAdCreationForm from 'components/IrbAdCreationForm';
 import ShoppingCartForm from 'components/ShoppingCartForm';
-
+import { selectIrbAdCreationFormValues, selectIrbAdCreationFormError } from 'components/IrbAdCreationForm/selectors';
 import { submitForm } from 'containers/IrbAdCreationPage/actions';
 
 import {
@@ -28,14 +28,16 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
   static propTypes = {
     siteLocations: PropTypes.array,
     indications: PropTypes.array,
-    onSubmitForm: PropTypes.func.isRequired,
+    submitForm: PropTypes.func.isRequired,
     fetchSites: PropTypes.func,
     fetchIndications: PropTypes.func,
+    formValues: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
-    this.onSubmitForm = this.props.onSubmitForm.bind(this);
+    this.submitForm = this.props.submitForm.bind(this);
+    this.onSubmitForm = this.onSubmitForm.bind(this);
   }
 
   componentDidMount() {
@@ -43,8 +45,19 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     this.props.fetchIndications();
   }
 
+  onSubmitForm(params) {
+    this.submitForm(params, this.props.formValues);
+  }
+
   render() {
     const { siteLocations, indications } = this.props;
+
+    const addOns = [{
+      title: 'IRB Ad Creation',
+      price: 177,
+      quantity: 1,
+      total: 177,
+    }];
 
     return (
       <StickyContainer className="container-fluid">
@@ -53,7 +66,6 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
           <div className="form-study row">
             <div className="col-xs-6 form-holder">
               <IrbAdCreationForm
-                onSubmit={this.onSubmitForm}
                 siteLocations={siteLocations}
                 indications={indications}
               />
@@ -63,7 +75,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
               <div className="fixed-block-holder">
                 <Sticky className="sticky-shopping-cart">
 
-                  <ShoppingCartForm />
+                  <ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} />
 
                 </Sticky>
               </div>
@@ -79,13 +91,15 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
 const mapStateToProps = createStructuredSelector({
   siteLocations : selectSiteLocations(),
   indications   : selectIndications(),
+  formValues: selectIrbAdCreationFormValues(),
+  hasError: selectIrbAdCreationFormError(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchSites:       () => dispatch(fetchSites()),
     fetchIndications: () => dispatch(fetchIndications()),
-    onSubmitForm:     (values) => dispatch(submitForm(values)),
+    submitForm:     (cartValues, formValues) => dispatch(submitForm(cartValues, formValues)),
   };
 }
 

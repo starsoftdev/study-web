@@ -82,6 +82,11 @@ const selectDeleteCard = () => createSelector(
   (substate) => get(substate, 'baseData.deleteCard', {})
 );
 
+const selectAddCredits = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.addCredits', {})
+);
+
 export {
   selectGlobal,
   selectAuthState,
@@ -97,4 +102,5 @@ export {
   selectCards,
   selectSaveCard,
   selectDeleteCard,
+  selectAddCredits,
 };

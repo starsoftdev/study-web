@@ -7,11 +7,10 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser, selectCards } from 'containers/App/selectors';
+import { selectCurrentUser, selectCards, selectSaveCard } from 'containers/App/selectors';
 import PaymentMethodsForm from 'components/PaymentMethodsForm';
-import AddNewCardButton from 'components/AddNewCardButton';
-import { addCreditCard } from 'containers/PaymentInformationPage/actions';
-import { fetchCards, deleteCard } from 'containers/App/actions';
+import AddCreditCardModal from 'components/AddCreditCardModal';
+import { fetchCards, deleteCard, saveCard } from 'containers/App/actions';
 
 export class PaymentInformationPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -19,24 +18,51 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
     creditCards: PropTypes.object,
     deleteCard: PropTypes.func,
     currentUser: PropTypes.any,
-    addCreditCard: PropTypes.func,
+    saveCard: PropTypes.func,
     fetchCards: PropTypes.func,
+    saveCardOperation: PropTypes.object,
   }
 
   constructor(props) {
     super(props);
     this.deleteCard = this.props.deleteCard.bind(this);
-    this.addCreditCard = this.props.addCreditCard.bind(this);
+    this.saveCard = this.props.saveCard.bind(this);
+    this.onSaveCard = this.onSaveCard.bind(this);
+
+    this.showCreditCardModal = this.showCreditCardModal.bind(this);
+    this.closeAddCredtCardModal = this.closeAddCredtCardModal.bind(this);
+
+    this.state = {
+      showAddCreditCardModal: false,
+    };
   }
 
   componentDidMount() {
-    this.props.fetchCards(this.props.currentUser.roleForClient.client_id);
+    this.props.fetchCards(this.props.currentUser.roleForClient.client.stripeCustomerId);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!newProps.saveCardOperation.saving && this.props.saveCardOperation.saving) {
+      this.closeAddCredtCardModal();
+    }
+  }
+
+  onSaveCard(params) {
+    this.props.saveCard(this.props.currentUser.roleForClient.client.stripeCustomerId, params);
+  }
+
+  closeAddCredtCardModal() {
+    this.setState({ showAddCreditCardModal: false });
+  }
+
+  showCreditCardModal() {
+    this.setState({ showAddCreditCardModal: true });
   }
 
   render() {
     let customerId = false;
     if (this.props.currentUser && this.props.currentUser.roleForClient) {
-      customerId = this.props.currentUser.roleForClient.client_id;
+      customerId = parseInt(this.props.currentUser.roleForClient.client.stripeCustomerId, 10);
     }
     let creditCards = [];
     if (this.props.creditCards.details && this.props.creditCards.details.data) {
@@ -46,7 +72,14 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
       <div className="container-fluid">
         <section className="payment-information">
           <h2 className="main-heading">PAYMENT INFORMATION</h2>
-          <AddNewCardButton addCreditCard={this.addCreditCard} customerId={customerId} />
+
+          <div>
+            <div className="btn-block text-right">
+              <a className="btn btn-primary lightbox-opener" onClick={this.showCreditCardModal}>+   ADD  NEW CARD</a>
+            </div>
+            <AddCreditCardModal addCreditCard={this.onSaveCard} showModal={this.state.showAddCreditCardModal} closeModal={this.closeAddCredtCardModal} />
+          </div>
+
           <PaymentMethodsForm
             creditCards={creditCards}
             deleteCreditCard={this.deleteCard}
@@ -61,13 +94,14 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   creditCards: selectCards(),
+  saveCardOperation: selectSaveCard(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchCards: (customerId) => dispatch(fetchCards(customerId)),
     deleteCard: (customerId, cardId) => dispatch(deleteCard(customerId, cardId)),
-    addCreditCard: (payload) => dispatch(addCreditCard(payload)),
+    saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
   };
 }
 
