@@ -39,14 +39,20 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
   }
 
   componentDidMount() {
-    // ..
+    const props = this.props;
+
+    if (props.socket && props.currentUser) {
+      this.subscribeToPageEvents();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.socket && nextProps.currentUser) {
-      nextProps.setSocketConnection({
+    const props = nextProps;
+
+    if (!props.socket && props.currentUser) {
+      props.setSocketConnection({
         nsp: 'nsp',
-        props: nextProps,
+        props,
         cb: (err, socket) => {
           if (!err) {
             socket.on('notification', (notification) => {
@@ -61,6 +67,10 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
         },
       });
     }
+  }
+
+  componentWillUnmount() {
+    // this.unsubscribeCurrent();
   }
 
   getEventTypes() {
