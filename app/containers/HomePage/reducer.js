@@ -4,6 +4,7 @@ import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
   FETCH_PATIENT_MESSAGES_SUCCEESS,
   FETCH_REWARDS_POINT_SUCCEESS,
+  RECEIVE_MESSAGE,
 } from './constants';
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
 
 export default function homePageReducer(state = initialState, action) {
   const { payload } = action;
+  let newState;
 
   switch (action.type) {
     case FETCH_PATIENT_SIGN_UPS_SUCCEESS:
@@ -43,6 +45,37 @@ export default function homePageReducer(state = initialState, action) {
         ...state,
         rewardsPoint: action.payload.rewardPoints,
       };
+    case RECEIVE_MESSAGE:
+      newState = state;
+      switch (action.payload.event) {
+        case 'create-patient':
+          newState = {
+            ...state,
+            patientSignUps: {
+              today: newState.patientSignUps.today + 1,
+              yesterday: newState.patientSignUps.yesterday,
+            },
+          };
+          break;
+        case 'twilio-message':
+          newState = {
+            ...state,
+            patientMessages: {
+              unreadTexts: newState.patientMessages.unreadTexts + 1,
+              unreadEmails: newState.patientMessages.unreadEmails,
+            },
+          };
+          break;
+        case 'create-reward':
+          newState = {
+            ...state,
+            rewardsPoint: newState.rewardsPoint + action.payload.event_params.points
+          };
+          break;
+        default:
+          break;
+      }
+      return newState;
     default:
       return state;
   }
