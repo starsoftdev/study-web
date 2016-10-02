@@ -8,31 +8,35 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import Helmet from 'react-helmet';
+import { createStructuredSelector } from 'reselect';
+import { selectCurrentUser } from 'containers/App/selectors';
+import { setItem } from 'utils/localStorage';
 import FilterStudyPatients from '../../components/FilterStudyPatients';
 import StudyStats from './StudyStats';
 import StudyPatients from './StudyPatients';
-import { selectCurrentUser } from 'containers/App/selectors';
-import { createStructuredSelector } from 'reselect';
-import { setItem } from 'utils/localStorage';
 import * as Selector from './selectors';
 
 export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     campaigns: PropTypes.array,
     currentUser: PropTypes.any,
-    fetchStudy: PropTypes.func,
     fetchStudyPatients: PropTypes.func,
     params: PropTypes.object,
-    fetchingPatients: PropTypes.bool,
+    fetchingPatients: PropTypes.bool.isRequired,
     patients: PropTypes.array,
     sources: PropTypes.array,
+    fetchingStudy: PropTypes.bool.isRequired,
     study: PropTypes.object,
+  };
+
+  static defaultProps = {
+    fetchingStudy: true,
+    fetchingPatients: true,
   };
 
   constructor(props) {
     super(props);
     setItem('study_id', this.props.params.id);
-    this.fetchStudy = this.props.fetchStudy.bind(this);
     this.fetchStudyPatients = this.props.fetchStudyPatients.bind(this);
   }
 
@@ -45,11 +49,11 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { patients, campaigns, sources, study } = this.props;
+    const { patients, campaigns, sources, study, studyLoading } = this.props;
     if (study && campaigns && sources) {
       const pageTitle = `${study.name} - StudyKIK`;
 
-      let campaignOptions = campaigns.map(campaign => (
+      const campaignOptions = campaigns.map(campaign => (
         {
           label: campaign.name,
           value: campaign.id,
@@ -78,7 +82,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
               <FilterStudyPatients
                 campaignOptions={campaignOptions}
                 sourceOptions={sourceOptions}
-                handleSubmit={this.handleSubmit} />
+                handleSubmit={this.handleSubmit}
+              />
               <StudyStats />
               <StudyPatients patients={patients} />
             </section>
@@ -107,7 +112,6 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchStudy: (values) => dispatch(fetchStudy(values)),
     fetchStudyPatients: (values) => dispatch(fetchStudyPatients(values)),
   };
 }
