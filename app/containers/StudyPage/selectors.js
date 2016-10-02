@@ -23,10 +23,16 @@ export const selectPatientCategories = () => createSelector(
 );
 
 export const selectPatients = (id) => createSelector(
-  selectPatientCategories(),
-  (subState) => subState.filter(patientCategory => (
-    patientCategory.id === id
-  ))
+  selectStudyPageDomain(),
+  (subState) => {
+    if (subState.patientCategories) {
+      const filteredPatientCategory = subState.patientCategories.filter(patientCategory => (
+        patientCategory.id === id
+      ))[0];
+      return filteredPatientCategory.patients;
+    }
+    return [];
+  }
 );
 
 export const selectSources = () => createSelector(
