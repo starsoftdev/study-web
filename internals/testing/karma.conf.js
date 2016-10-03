@@ -60,9 +60,6 @@ module.exports = (config) => {
     junitReporter: {
       outputFile: 'test-results.xml',
     },
-    jenkinsReporter: {
-      outputFile: 'testjenkins-results.xml',
-    },
 
   });
 };
