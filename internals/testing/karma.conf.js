@@ -62,9 +62,9 @@ module.exports = (config) => {
       outputFile: 'test-results.xml',
     },
     
-     jenkinsReporter: {
+    jenkinsReporter: {
       outputFile: 'testjenkins-results.xml',
-      suite: 'unit',                 // this will be mapped to the package 
+      suite: 'unit',
       classnameSuffix: 'browser-test'
     },
 
