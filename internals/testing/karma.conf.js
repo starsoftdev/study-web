@@ -58,13 +58,10 @@ module.exports = (config) => {
     },
 
     junitReporter: {
-      outputDir: '../../coverage/karma-reports',
       outputFile: 'test-results.xml',
     },
     jenkinsReporter: {
       outputFile: 'testjenkins-results.xml',
-      suite: 'unit',
-      classnameSuffix: 'browser-test',
     },
 
   });
