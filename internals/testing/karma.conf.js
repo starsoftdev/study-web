@@ -65,7 +65,7 @@ module.exports = (config) => {
     jenkinsReporter: {
       outputFile: 'testjenkins-results.xml',
       suite: 'unit',
-      classnameSuffix: 'browser-test'
+      classnameSuffix: 'browser-test',
     },
 
   });
