@@ -50,9 +50,10 @@ class StudyPatients extends React.Component {
                           data-addclass="form-active"
                           data-parentbox=".patients-list-area"
                         >
-                          <strong className="name"><span className="first-name">Alan</span><br /> <span
-                            className="last-name"
-                          >Jensen</span></strong>
+                          <strong className="name">
+                            <span className="first-name">Alan</span>
+                            <span> </span>
+                            <span className="last-name">Jensen</span></strong>
                           <span className="email">alan_jensen@email.com</span>
                           <span className="phone" data-phone="5242999123456">(524) 999-123456</span>
                         </a>
@@ -82,9 +83,10 @@ class StudyPatients extends React.Component {
                           data-addclass="form-active"
                           data-parentbox=".patients-list-area"
                         >
-                          <strong className="name"><span className="first-name">Eugene</span><br /> <span
-                            className="last-name"
-                          >Simpson</span></strong>
+                          <strong className="name">
+                            <span className="first-name">Eugene</span>
+                            <span> </span>
+                            <span className="last-name">Simpson</span></strong>
                           <span className="email">eugene_simpson@email.com</span>
                           <span className="phone" data-phone="52421117777">(524) 111-7777</span>
                         </a>
@@ -119,7 +121,7 @@ class StudyPatients extends React.Component {
                 </span>
               </li>
               <li>
-                <span className="opener"><strong className="number">1</strong> <span className="text">NOT QUALIFIED /<br />NOT INTERESTED</span></span>
+                <span className="opener"><strong className="number">1</strong> <span className="text">NOT QUALIFIED / NOT INTERESTED</span></span>
                 <div className="slide">
                   <div className="slide-holder">
                     <ul className="list-unstyled">
@@ -132,7 +134,7 @@ class StudyPatients extends React.Component {
                         >
                           <strong className="name">
                             <span className="first-name">Katy</span>
-                            <br />
+                            <span> </span>
                             <span className="last-name">Perry</span>
                           </strong>
                           <span className="email">katy_perry@email.com</span>
@@ -185,8 +187,9 @@ class StudyPatients extends React.Component {
                         >
                           <strong className="name">
                             <span className="first-name">Hamish</span>
-                            <br />
-                            <span className="last-name">Labatt</span></strong>
+                            <span> </span>
+                            <span className="last-name">Labatt</span>
+                          </strong>
                           <span className="email">hamish_labatt@email.com</span>
                           <span className="phone" data-phone="5243339999">(524) 333-9999</span>
                         </a>
@@ -231,7 +234,7 @@ class StudyPatients extends React.Component {
                         >
                           <strong className="name">
                             <span className="first-name">Thomas</span>
-                            <br />
+                            <span> </span>
                             <span className="last-name">Morgan</span>
                           </strong>
                           <span className="email">sample@email.com</span>
