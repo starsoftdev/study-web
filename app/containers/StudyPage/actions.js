@@ -11,6 +11,8 @@ import {
   FETCH_PATIENTS_ERROR,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_PATIENT_CATEGORIES_ERROR,
+  FETCH_SITES_SUCCESS,
+  FETCH_SITES_ERROR,
   FETCH_SOURCES_SUCCESS,
   FETCH_SOURCES_ERROR,
   FETCH_STUDY_SUCCESS,
@@ -55,6 +57,20 @@ export function patientCategoriesFetched(payload) {
 export function patientCategoriesFetchingError(payload) {
   return {
     type: FETCH_PATIENT_CATEGORIES_ERROR,
+    payload,
+  };
+}
+
+export function sitesFetched(payload) {
+  return {
+    type: FETCH_SITES_SUCCESS,
+    payload,
+  };
+}
+
+export function sitesFetchingError(payload) {
+  return {
+    type: FETCH_SITES_ERROR,
     payload,
   };
 }
