@@ -1,0 +1,81 @@
+.sm-mixin {
+  margin: 0 13px 0 0;
+  display: inline-block;
+  vertical-align: top;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+
+.input-mixin {
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  display: block;
+  cursor: pointer;
+  position: relative;
+  border-radius: 2px;
+  transition: all 0.25s linear;
+  border: 2px solid #636363;
+
+  input {
+    display: none;
+  }
+
+  &:hover{
+    cursor: pointer;
+    border-color: #a0cf67;
+  }
+
+  &:before {
+    opacity: 0;
+    display: block;
+    cursor: pointer;
+    content: '\e916';
+    text-indent: -2px;
+    text-align: center;
+    font: 14px/16px 'icomoon';
+    transition: all 0.25s linear;
+  }
+
+}
+
+.calendar-section {
+
+  .table {
+    thead {
+      tr {
+        th:first-child {
+          padding-left: 11px;
+
+          span.sm-container{
+            .sm-mixin;
+
+            span.input-style{
+              .input-mixin;
+            }
+          }
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        td:first-child {
+          padding-left: 11px;
+
+          span.sm-container{
+            .sm-mixin;
+
+            span.input-style{
+              .input-mixin;
+            }
+          }
+        }
+      }
+    }
+  }
+}
