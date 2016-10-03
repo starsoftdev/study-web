@@ -61,7 +61,6 @@ module.exports = (config) => {
       outputDir: '../../coverage/karma-reports',
       outputFile: 'test-results.xml',
     },
-    
     jenkinsReporter: {
       outputFile: 'testjenkins-results.xml',
       suite: 'unit',
