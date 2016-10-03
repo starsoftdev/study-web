@@ -88,6 +88,7 @@
     "react-addons-update": "15.3.0",
     "react-big-calendar": "git+https://github.com/studykik/kik-react-big-calendar.git",
     "react-bootstrap": "^0.30.3",
+    "react-date-range": "^0.2.4",
     "react-datepicker": "^0.29.0",
     "react-dom": "15.3.0",
     "react-helmet": "3.1.0",
