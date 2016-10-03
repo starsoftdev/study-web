@@ -5,27 +5,30 @@
  */
 
 import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
-
 import Helmet from 'react-helmet';
+import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from 'containers/App/selectors';
 import { setItem } from 'utils/localStorage';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from '../../components/FilterStudyPatients';
 import StudyStats from './StudyStats';
 import StudyPatients from './StudyPatients';
 import * as Selector from './selectors';
+
+import './styles.less';
 
 export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     campaigns: PropTypes.array,
     currentUser: PropTypes.any,
     fetchStudyPatients: PropTypes.func,
-    params: PropTypes.object,
     fetchingPatients: PropTypes.bool.isRequired,
+    fetchingStudy: PropTypes.bool.isRequired,
+    params: PropTypes.object,
     patients: PropTypes.array,
     sources: PropTypes.array,
-    fetchingStudy: PropTypes.bool.isRequired,
+    sites: PropTypes.array,
     study: PropTypes.object,
   };
 
@@ -49,63 +52,70 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { patients, campaigns, sources, study, studyLoading } = this.props;
-    if (study && campaigns && sources) {
+    const { fetchingStudy, campaigns, patients, sites, sources, study } = this.props;
+    if (fetchingStudy) {
+      return (
+        <LoadingSpinner />
+      )
+    } else if (study === false) {
+      return (
+        <div>A problem occurred trying to load the page. Please refreshing the page.</div>
+      )
+    } else {
       const pageTitle = `${study.name} - StudyKIK`;
 
       const campaignOptions = campaigns.map(campaign => (
-        {
-          label: campaign.name,
-          value: campaign.id,
-        }
+      {
+        label: campaign.name,
+        value: campaign.id,
+      }
       ));
       campaignOptions.unshift({ label: 'All', value: 0 });
-      let sourceOptions = sources.map(source => (
-        {
-          label: source.name,
-          value: source.id,
-        }
+      const sourceOptions = sources.map(source => (
+      {
+        label: source.name,
+        value: source.id,
+      }
       ));
       sourceOptions.unshift({ label: 'All', value: 0 });
+      const siteLocation = sites[0].location;
+      let sponsor = 'None';
+      if (study.sponsor) {
+        sponsor = study.sponsor.name;
+      }
       return (
-        <Helmet title={pageTitle}>
-          <div className="container-fluid">
-            <section className="individual-study">
-              <header className="main-head">
-                <h2 className="main-heading">{study.name}</h2>
-                <p>
-                  <span className="info-cell">Location: Seattle, WA</span>
-                  <span className="info-cell">Sponsor: Motang</span>
-                  <span className="info-cell">Protocol: YM12345</span>
-                </p>
-              </header>
-              <FilterStudyPatients
-                campaignOptions={campaignOptions}
-                sourceOptions={sourceOptions}
-                handleSubmit={this.handleSubmit}
-              />
-              <StudyStats />
-              <StudyPatients patients={patients} />
-            </section>
-          </div>
-        </Helmet>
+        <div className="container-fluid">
+          <Helmet title={pageTitle} />
+          <section className="individual-study">
+            <header className="main-head">
+              <h2 className="main-heading">{study.name}</h2>
+              <p>
+                <span className="info-cell">Location: {siteLocation}</span>
+                <span className="info-cell">Sponsor: {sponsor}</span>
+                <span className="info-cell">Protocol: {study.protocolNumber}</span>
+              </p>
+            </header>
+            <FilterStudyPatients
+              campaignOptions={campaignOptions}
+              sourceOptions={sourceOptions}
+              handleSubmit={this.handleSubmit}
+            />
+            <StudyStats />
+            <StudyPatients patients={patients} />
+          </section>
+        </div>
       );
-    } else if (studyLoading) {
-      return (
-        <div />
-      );
-    } else {
-      return (
-        <div />
-      )
     }
   }
 }
 
 const mapStateToProps = createStructuredSelector({
   campaigns: Selector.selectCampaigns(),
+  fetchingStudy: Selector.selectFetchingStudy(),
+  fetchingPatients: Selector.selectFetchingPatients(),
   patients: Selector.selectPatients(),
   sources: Selector.selectSources(),
+  sites: Selector.selectSites(),
   study: Selector.selectStudy(),
   currentUser: selectCurrentUser(),
 });

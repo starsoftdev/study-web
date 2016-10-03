@@ -12,6 +12,7 @@ export const selectStudyPageDomain = () => state => state.studyPage;
 /**
  * Other selectors
  */
+
 export const selectCampaigns = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.campaigns
@@ -35,6 +36,11 @@ export const selectPatients = (id) => createSelector(
   }
 );
 
+export const selectSites = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.sites
+);
+
 export const selectSources = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.sources
@@ -43,4 +49,14 @@ export const selectSources = () => createSelector(
 export const selectStudy = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.study
+);
+
+export const selectFetchingStudy = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.fetchingStudy
+);
+
+export const selectFetchingPatients = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.fetchingPatients
 );

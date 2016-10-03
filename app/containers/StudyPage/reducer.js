@@ -11,6 +11,8 @@ import {
   FETCH_PATIENTS_ERROR,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_PATIENT_CATEGORIES_ERROR,
+  FETCH_SITES_SUCCESS,
+  FETCH_SITES_ERROR,
   FETCH_SOURCES_SUCCESS,
   FETCH_SOURCES_ERROR,
   FETCH_STUDY_SUCCESS,
@@ -40,6 +42,7 @@ function studyPageReducer(state = initialState, action) {
           patientCategoryTemp.patients = action.payload;
           return patientCategoryTemp;
         }),
+        fetchingPatients: false,
       };
     case FETCH_PATIENTS_ERROR:
       return {
@@ -49,6 +52,7 @@ function studyPageReducer(state = initialState, action) {
           delete patientCategoryTemp.patients;
           return patientCategoryTemp;
         }),
+        fetchingPatients: false,
       };
     case FETCH_PATIENT_CATEGORIES_SUCCESS:
       return {
@@ -59,6 +63,16 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         patientCategories: false,
+      };
+    case FETCH_SITES_SUCCESS:
+      return {
+        ...state,
+        sites: action.payload,
+      };
+    case FETCH_SITES_ERROR:
+      return {
+        ...state,
+        sites: false,
       };
     case FETCH_SOURCES_SUCCESS:
       return {
@@ -74,11 +88,13 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         study: action.payload,
+        fetchingStudy: false,
       };
     case FETCH_STUDY_ERROR:
       return {
         ...state,
         study: false,
+        fetchingStudy: false
       };
     default:
       return state;
