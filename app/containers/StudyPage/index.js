@@ -11,7 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from 'containers/App/selectors';
 import { setItem } from 'utils/localStorage';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import FilterStudyPatients from '../../components/FilterStudyPatients';
+import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
 import StudyPatients from './StudyPatients';
 import * as Selector from './selectors';

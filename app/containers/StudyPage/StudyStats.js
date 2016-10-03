@@ -14,9 +14,6 @@ class StudyStats extends React.Component {
     this.state = {
       open: true,
     };
-  }
-
-  componentDidMount() {
     this.onToggle = this.onToggle.bind(this);
   }
 

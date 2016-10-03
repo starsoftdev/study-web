@@ -31,7 +31,7 @@ function* fetchStudyDetails() {
   yield put(sitesFetched(response.sites));
   delete response.campaigns;
   delete response.sources;
-  delete response.sites
+  delete response.sites;
   // put in the study in the state
   yield put(studyFetched(response));
 }
