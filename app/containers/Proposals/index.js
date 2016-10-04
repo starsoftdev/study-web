@@ -11,17 +11,24 @@ import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { selectProposals } from './selectors';
 import { selectCurrentUser } from 'containers/App/selectors';
-import { DateRange } from 'react-date-range';
 
 import {
   getProposals,
 } from 'containers/Proposals/actions';
+import {
+  fetchSites,
+} from 'containers/App/actions';
+import {
+  selectSiteLocations,
+} from 'containers/App/selectors';
 
 import ProposalsTable from 'components/ProposalsTable';
 import ProposalsForm from 'components/ProposalsForm';
 
 export class Proposals extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    siteLocations: PropTypes.array,
+    fetchSites: PropTypes.func,
     getProposals: PropTypes.func,
     location: PropTypes.any,
     proposals: PropTypes.any,
@@ -29,15 +36,12 @@ export class Proposals extends React.Component { // eslint-disable-line react/pr
   }
 
   componentDidMount() {
+    this.props.fetchSites();
     this.props.getProposals({test: true});
   }
 
   componentWillReceiveProps(nextProps) {
     //console.log('componentWillReceiveProps', nextProps);
-  }
-
-  handleSelect(range){
-    //console.log('range', range);
   }
 
   render() {
@@ -48,13 +52,6 @@ export class Proposals extends React.Component { // eslint-disable-line react/pr
           <h2 className="main-heading">PROPOSALS</h2>
           <ProposalsForm {...this.props}/>
           <ProposalsTable {...this.props}/>
-
-          <div id="date-range" className="lightbox fixed-popup">
-            <DateRange
-              onInit={this.handleSelect}
-              onChange={this.handleSelect}
-            />
-          </div>
         </section>
       </StickyContainer>
     );
@@ -62,12 +59,14 @@ export class Proposals extends React.Component { // eslint-disable-line react/pr
 }
 
 const mapStateToProps = createStructuredSelector({
+  siteLocations : selectSiteLocations(),
   currentUser: selectCurrentUser(),
   proposals: selectProposals(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchSites: () => dispatch(fetchSites()),
     getProposals: (values) => dispatch(getProposals(values)),
   };
 }

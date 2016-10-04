@@ -9,34 +9,198 @@ import _ from 'lodash'
 import moment from 'moment'
 import './styles.less';
 
+const headers = [
+  {
+    text: 'Date',
+    sort: 'date'
+  },
+  {
+    text: 'Site name',
+    sort: 'site'
+  },
+  {
+    text: 'Proposal number',
+    sort: 'proposal'
+  },
+  {
+    text: 'Protocol number',
+    sort: 'protocol'
+  },
+  {
+    text: 'Total',
+    sort: 'total'
+  }
+];
+
 class ProposalsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {};
 
+  state = {
+    checkAll: false,
+    proposals: false,
+    activeSort: null,
+    activeDirection: null
+  }
+
+  constructor(props) {
+    super(props);
+  }
+
   componentWillReceiveProps(nextProps) {
-    //console.log('componentWillReceiveProps', nextProps);
+    if(nextProps.proposals){
+      nextProps.proposals.forEach(proposal => {
+        proposal.selected = false
+      })
+      this.setState({proposals: nextProps.proposals});
+    }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    //console.log(this.refs);
+  componentDidUpdate(prevProps, prevState) {}
+
+  onClickCurrent(ev) {
+    ev.preventDefault();
+    let scope = this
+    let proposals = this.state.proposals;
+    proposals.forEach((proposal, key) => {
+      if (key === parseInt(ev.currentTarget.firstChild.name)) {
+        proposal.selected = (!proposal.selected);
+      }
+    })
+
+    this.setState({proposals: proposals}, () => {
+      let all = true
+      this.state.proposals.forEach((proposal) => {
+        if (!proposal.selected) {
+          all = false
+        }
+      })
+
+      if (scope.state.checkAll && !all) {
+        this.setState({checkAll: false});
+      } else if (!scope.state.checkAll && all) {
+        this.setState({checkAll: true});
+      }
+    });
   }
 
-  onClick(ev) {
-    console.log('onClick', ev);
+  onClickAll(ev) {
+    ev.preventDefault();
+    let proposals = this.state.proposals;
+    proposals.forEach((proposal) => {
+      proposal.selected = (!this.state.checkAll);
+    })
+    this.setState({checkAll: (!this.state.checkAll), proposals: proposals});
   }
 
-  render() {
-    let proposals = []
+  sortBy(ev) {//need to refactor
+    ev.preventDefault();
+    let sort = ev.currentTarget.dataset.sort
+    let direction = 'down'
 
-    _.map(this.props.proposals, (source, key) => {
+    if (ev.currentTarget.className && ev.currentTarget.className === 'down') {
+      direction = 'up'
+    }
+
+    const proposalsArr = this.state.proposals
+    const directionUnits = (direction === 'up') ? {
+      more: 1,
+      less: -1
+    } :  {
+      more: -1,
+      less: 1
+    }
+
+    switch(sort){
+      case 'date':
+        proposalsArr.sort((a, b) => {
+          let aDate = new Date(a.created).getTime()
+          let bDate = new Date(b.created).getTime()
+          if (aDate > bDate) {
+            return directionUnits.more;
+          }
+          if (aDate < bDate) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      case 'site':
+        proposalsArr.sort((a, b) => {
+          if (a.site > b.site) {
+            return directionUnits.more;
+          }
+          if (a.site < b.site) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      case 'proposal':
+        proposalsArr.sort((a, b) => {
+          if (a.proposalNumber > b.proposalNumber) {
+            return directionUnits.more;
+          }
+          if (a.proposalNumber < b.proposalNumber) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      case 'protocol':
+        proposalsArr.sort((a, b) => {
+          if (parseInt(a.protocol) > b.protocol) {
+            return directionUnits.more;
+          }
+          if (a.protocol < b.protocol) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      case 'total':
+        proposalsArr.sort((a, b) => {
+          if (a.total > b.total) {
+            return directionUnits.more;
+          }
+          if (a.total < b.total) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      default:
+        break;
+    }
+
+    this.setState({proposals: proposalsArr, activeSort: sort, activeDirection: direction});
+  }
+
+  mapHeaders(raw, state, result) {
+    _.map(raw, (header, key) => {
+      result.push(
+        <th
+          key={key}
+          data-sort={header.sort}
+          onClick={this.sortBy.bind(this)}
+          className={(state.activeSort === header.sort) ? state.activeDirection : ''}
+        >
+          {header.text} <i className="caret-arrow" />
+        </th>
+      );
+    })
+  }
+
+  mapProposals(raw, result) {
+    _.map(raw, (source, key) => {
       let date = new Date(source.created);
       let dateWrapper = moment(date);
-      proposals.push(
+      result.push(
         <tr key={key}>
           <td>
-            <span className="sm-container">
+            <span className={(source.selected) ? "sm-container checked" : "sm-container"}>
               <span
                 className="input-style"
-                onClick={this.onClick}
+                onClick={this.onClickCurrent.bind(this)}
               >
                 <input
                   type="checkbox"
@@ -50,10 +214,20 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           <td>{source.site}</td>
           <td>{source.proposalNumber}</td>
           <td>{source.protocol}</td>
-          <td>{source.total}</td>
+          <td>${source.total}</td>
         </tr>
       )
     })
+  }
+
+  render() {
+    const state = this.state;
+    const proposalsArr = state.proposals;
+    let proposals = [];
+    let heads = [];
+
+    this.mapHeaders(headers, state, heads)
+    this.mapProposals(proposalsArr, proposals)
 
     return (
       <div className="table-holder">
@@ -69,18 +243,14 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           <thead>
             <tr>
               <th>
-                <span className="sm-container">
-                  <span className="input-style" onClick={this.onClick}>
-                    <input id="test" type="checkbox" data-check-pattern="[name^='some-key']" />
+                <span className={(this.state.checkAll) ? "sm-container checked" : "sm-container"}>
+                  <span className="input-style" onClick={this.onClickAll.bind(this)}>
+                    <input name="all" type="checkbox" ref={"input-all"} />
                   </span>
-                  <span>#</span><i className="caret-arrow" />
                 </span>
+                <span>#</span><i className="caret-arrow" />
               </th>
-              <th>DATE <i className="caret-arrow" /></th>
-              <th>SITE NAME <i className="caret-arrow" /></th>
-              <th>Proposal NUMBER <i className="caret-arrow" /></th>
-              <th>PROTOCOL NUMBER <i className="caret-arrow" /></th>
-              <th>TOTAL <i className="caret-arrow" /></th>
+              {heads}
             </tr>
           </thead>
           <tbody>

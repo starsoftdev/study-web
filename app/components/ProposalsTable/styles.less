@@ -48,14 +48,69 @@
   .table {
     thead {
       tr {
-        th:first-child {
-          padding-left: 11px;
+        th{
+          transition: all 0.25s linear;
 
-          span.sm-container{
-            .sm-mixin;
+          &:hover{
+            cursor: pointer;
+            color: #999;
+          }
 
-            span.input-style{
-              .input-mixin;
+          &.up{
+            .caret-arrow{
+              &:before {
+                border-width: 0 4px 4px;
+              }
+            }
+          }
+
+          &.down{
+            .caret-arrow{
+              &:before {
+                border-width: 4px 4px 0;
+                border-color: #354052 transparent transparent;
+              }
+            }
+          }
+
+          &:first-child {
+            padding-left: 11px;
+
+            span.sm-container{
+              .sm-mixin;
+
+              &.checked{
+                span.input-style{
+                  background: #a0cf67;
+                  border-color: #a0cf67;
+
+                  &:before {
+                    opacity: 1;
+                  }
+                }
+              }
+
+              span.input-style{
+                .input-mixin;
+              }
+            }
+          }
+
+          .caret-arrow{
+            font-size: 0;
+            line-height: 0;
+            margin: 0 0 0 2px;
+            display: inline-block;
+            vertical-align: middle;
+
+            &:before {
+              content: '';
+              position: absolute;
+              border: solid transparent;
+              border-width: 0 4px;
+              margin: -3px 0 0;
+              border-bottom-color: #354052;
+              transition: border 0.25s ease;
             }
           }
         }
@@ -69,6 +124,17 @@
 
           span.sm-container{
             .sm-mixin;
+
+            &.checked{
+              span.input-style{
+                background: #a0cf67;
+                border-color: #a0cf67;
+
+                &:before {
+                  opacity: 1;
+                }
+              }
+            }
 
             span.input-style{
               .input-mixin;
