@@ -78,7 +78,7 @@ class FilterStudyPatientsForm extends Component {
           <div className="field">
             <Field component="input" type="search" name="search" className="form-control keyword-search" placeholder="Search Patients" />
             <label htmlFor="search">
-              <i className="icon-icon_search2" />
+              <i className="icomoon-icon_search2" />
             </label>
           </div>
         </div>

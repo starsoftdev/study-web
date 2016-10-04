@@ -4,14 +4,23 @@
 
 import React from 'react';
 import ImportPatientsModal from './ImportPatientsModal';
+import TextEmailBlastModal from './TextEmailBlastModal';
 
 class StudyActionButtons extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showImportPatientsModal: false,
+      showTextEmailBlastModal: false,
     };
     this.toggleImportPatientsModal = this.toggleImportPatientsModal.bind(this);
+    this.toggleTextEmailBlastModal = this.toggleTextEmailBlastModal.bind(this);
+  }
+
+  toggleTextEmailBlastModal() {
+    this.setState({
+      showTextEmailBlastModal: !this.state.showTextEmailBlastModal,
+    });
   }
 
   toggleImportPatientsModal() {
@@ -24,23 +33,18 @@ class StudyActionButtons extends React.Component {
     return (
       <div className="btns pull-right">
         <div className="btn-email pull-left">
-          <span className="btn btn-primary email">
-            <i className="icon-icon_chat_alt" />
-            <span>TEXT / EMAIL BLAST</span>
+          <span className="btn btn-primary email" onClick={this.toggleTextEmailBlastModal}>
+            <i className="icomoon-icon_chat_alt" />
+            <span>Text / Email Blast</span>
+            <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} />
           </span>
         </div>
         <div className="btn-import pull-left">
           <span className="btn btn-primary import" onClick={this.toggleImportPatientsModal}>
-            <i className="icon-icon_upload" />
+            <i className="icomoon-icon_upload" />
             <span>Import</span>
           </span>
           <ImportPatientsModal show={this.state.showImportPatientsModal} onHide={this.toggleImportPatientsModal} />
-        </div>
-        <div className="btn-download pull-left">
-          <span className="btn btn-primary download">
-            <i className="icon-icon_download" />
-            <span>Download</span>
-          </span>
         </div>
       </div>
     );

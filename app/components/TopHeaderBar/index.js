@@ -25,7 +25,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
           <div className="notifications pull-left">
             <a className="opener" role="button" data-toggle="collapse" href="#notifications-drop" aria-expanded="false" aria-controls="notifications-drop">
-              <i className="icon-bell" />
+              <i className="icomoon-bell" />
               <span className="counter">1</span>
             </a>
             <div className="collapse" id="notifications-drop">
@@ -69,7 +69,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
           <div className="emails pull-left">
             <a href="#" className="opener" data-toggle="tooltip" data-placement="bottom" title="Coming Soon">
-              <i className="icon-envelop" />
+              <i className="icomoon-envelope" />
               <span className="counter">1</span>
             </a>
           </div>
@@ -80,7 +80,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
 
           <div className="get-credits pull-left">
-            <i className="icon-credit margin-right-5px" />
+            <i className="icomoon-credit margin-right-5px" />
             <span className="margin-right-5px">100 Credits</span>
             <a href="#" className="btn btn-default">+ ADD CREDITS</a>
           </div>
