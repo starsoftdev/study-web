@@ -294,7 +294,7 @@ class StudyPatients extends React.Component {
                     data-parentbox=".patients-list-area"
                     data-classremove="form-active"
                   ><i
-                    className="glyphicon glyphicon-menu-right"
+                    className="glyphicon glyphicomoon-menu-right"
                   /></a>
                 </div>
                 <form action="#" className="form-lightbox form-patients-list" data-formvalidationd="">
@@ -380,7 +380,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;1&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
 
                               </div>
@@ -401,7 +401,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;1-1&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
                               </div>
                               <strong className="email">Bruce Wayne</strong>
@@ -423,7 +423,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;2&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
                               </div>
                               <strong className="email">Penny Worth</strong>
@@ -443,7 +443,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;2-2&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
                               </div>
                               <strong className="email">Bruce Wayne</strong>
@@ -464,7 +464,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;3&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
                               </div>
                               <strong className="email">Alan Walker</strong>
@@ -484,7 +484,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;3-2&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
                               </div>
                               <strong className="email">Bruce Wayne</strong>
@@ -506,7 +506,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;4&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
                               </div>
                               <strong className="email">Penny Worth</strong>
@@ -527,7 +527,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;4-2&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
                               </div>
                               <strong className="email">Bruce Wayne</strong>
@@ -557,7 +557,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;notes1&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
                               </div>
                               <strong className="email patient-name">
@@ -580,7 +580,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;notes1-1&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
                               </div>
                               <strong className="email">Bruce Wayne</strong>
@@ -606,7 +606,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;notes2&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
                               </div>
                               <strong className="email patient-name">
@@ -628,7 +628,7 @@ class StudyPatients extends React.Component {
                                   className="btn-trash"
                                   href="#"
                                   data-remove="[data-post=&quot;notes2-2&quot;]"
-                                ><i className="icon-icon_trash" /></a>
+                                ><i className="icomoon-icon_trash" /></a>
                               </div>
                               <strong className="email">Bruce Wayne</strong>
                               <time dateTime="2016-07-28">07/28/16 at 10:25 AM</time>
@@ -649,7 +649,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;notes3&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
                               </div>
                               <strong className="email patient-name">
@@ -672,7 +672,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;notes3-2&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
                               </div>
                               <strong className="email">Bruce Wayne</strong>
@@ -694,7 +694,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;notes4&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
                               </div>
                               <strong className="email patient-name">
@@ -717,7 +717,7 @@ class StudyPatients extends React.Component {
                                   href="#"
                                   data-remove="[data-post=&quot;notes4-2&quot;]"
                                 >
-                                  <i className="icon-icon_trash" />
+                                  <i className="icomoon-icon_trash" />
                                 </a>
                               </div>
                               <strong className="email">Bruce Wayne</strong>
@@ -914,7 +914,7 @@ class StudyPatients extends React.Component {
                                   <div className="catogery">
                                     <span className="bipolar-link">
                                       <span className="text">Bipolar</span>
-                                      <a href="#" data-remove=".catogery" className="icon-icon_trash" />
+                                      <a href="#" data-remove=".catogery" className="icomoon-icon_trash" />
                                     </span>
                                   </div>
                                 </div>
@@ -932,7 +932,7 @@ class StudyPatients extends React.Component {
                                           className="form-control keyword-search"
                                           id="search10"
                                         />
-                                        <label htmlFor="search10" className="icon-icon_search2" />
+                                        <label htmlFor="search10" className="icomoon-icon_search2" />
                                       </div>
                                       <div className="jcf--scrollable">
                                         <ul className="list-unstyled list select-indication">

@@ -122,7 +122,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
           <Modal.Header>
             <Modal.Title>CHANGE PASSWORD</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeResetPasswordModal}>
-              <i className="icon-icon_close"></i>
+              <i className="icomoon-close"></i>
             </a>
           </Modal.Header>
           <Modal.Body>

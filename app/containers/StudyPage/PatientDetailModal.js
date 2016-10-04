@@ -17,12 +17,12 @@ class PatientDetailModal extends React.Component {
             <div className="form-area">
               <div className="form-head">
                 <strong className="title">NEW PATIENT</strong>
-                <a href="#individual-study-patient-schedule" className="lightbox-opener">
+                <a href="#individual-study-patient-schedule">
                   <span className="date" />
                   <span className="time" />
                 </a>
                 <a href="#" data-addclassName="form-active" data-parentbox=".patients-list-area" data-classremove="form-active" className="btn-close">
-                  <i className="glyphicon glyphicon-menu-right" />
+                  <i className="glyphicon glyphicomoon-menu-right" />
                 </a>
               </div>
               <form action="#" className="form-lightbox form-patients-list">
@@ -90,7 +90,7 @@ class PatientDetailModal extends React.Component {
                             <div className="post-content">
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet.</p>
                               <a className="btn-trash" href="#" data-remove="[data-post=&quot;1&quot;]">
-                                <i className="icon-icon_trash" />
+                                <i className="icomoon-icon_trash" />
                               </a>
                             </div>
                             <strong className="email">Alan Walker</strong>
@@ -103,7 +103,7 @@ class PatientDetailModal extends React.Component {
                             <div className="post-content">
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
                               <a className="btn-trash" href="#" data-remove="[data-post=&quot;1-1&quot;]">
-                                <i className="icon-icon_trash" />
+                                <i className="icomoon-icon_trash" />
                               </a>
                             </div>
                             <strong className="email">Bruce Wayne</strong>
@@ -118,7 +118,7 @@ class PatientDetailModal extends React.Component {
                             <div className="post-content">
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet.</p>
                               <a className="btn-trash" href="#" data-remove="[data-post=&quot;2&quot;]">
-                                <i className="icon-icon_trash" />
+                                <i className="icomoon-icon_trash" />
                               </a>
                             </div>
                             <strong className="email">Penny Worth</strong>
@@ -131,7 +131,7 @@ class PatientDetailModal extends React.Component {
                             <div className="post-content">
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
                               <a className="btn-trash" href="#" data-remove="[data-post=&quot;2-2&quot;]">
-                                <i className="icon-icon_trash" />
+                                <i className="icomoon-icon_trash" />
                               </a>
                             </div>
                             <strong className="email">Bruce Wayne</strong>
@@ -145,7 +145,7 @@ class PatientDetailModal extends React.Component {
                             </div>
                             <div className="post-content">
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet.</p>
-                              <a className="btn-trash" href="#" data-remove="[data-post=&quot;3&quot;]"><i className="icon-icon_trash"></i></a>
+                              <a className="btn-trash" href="#" data-remove="[data-post=&quot;3&quot;]"><i className="icomoon-icon_trash"></i></a>
                             </div>
                             <strong className="email">Alan Walker</strong>
                             <time dateTime="2016-07-28">07/28/16 at 10:38 AM</time>
@@ -156,7 +156,7 @@ class PatientDetailModal extends React.Component {
                             </div>
                             <div className="post-content">
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-                              <a className="btn-trash" href="#" data-remove="[data-post=&quot;3-2&quot;]"><i className="icon-icon_trash"></i></a>
+                              <a className="btn-trash" href="#" data-remove="[data-post=&quot;3-2&quot;]"><i className="icomoon-icon_trash"></i></a>
                             </div>
                             <strong className="email">Bruce Wayne</strong>
                             <time dateTime="2016-07-28">07/28/16 at 10:42 AM</time>
@@ -169,7 +169,7 @@ class PatientDetailModal extends React.Component {
                             </div>
                             <div className="post-content">
                               <p>consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet.</p>
-                              <a className="btn-trash" href="#" data-remove="[data-post=&quot;4&quot;]"><i className="icon-icon_trash"></i></a>
+                              <a className="btn-trash" href="#" data-remove="[data-post=&quot;4&quot;]"><i className="icomoon-icon_trash"></i></a>
                             </div>
                             <strong className="email">Penny Worth</strong>
                             <time dateTime="2016-07-28">07/28/16 at 10:50 AM</time>
@@ -180,7 +180,7 @@ class PatientDetailModal extends React.Component {
                             </div>
                             <div className="post-content">
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-                              <a className="btn-trash" href="#" data-remove="[data-post=&quot;4-2&quot;]"><i className="icon-icon_trash"></i></a>
+                              <a className="btn-trash" href="#" data-remove="[data-post=&quot;4-2&quot;]"><i className="icomoon-icon_trash"></i></a>
                             </div>
                             <strong className="email">Bruce Wayne</strong>
                             <time dateTime="2016-07-28">07/28/16 at 10:56 AM</time>
@@ -201,7 +201,7 @@ class PatientDetailModal extends React.Component {
                             </div>
                             <div className="post-content">
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet.</p>
-                              <a className="btn-trash" href="#" data-remove="[data-post=&quot;notes1&quot;]"><i className="icon-icon_trash"></i></a>
+                              <a className="btn-trash" href="#" data-remove="[data-post=&quot;notes1&quot;]"><i className="icomoon-icon_trash"></i></a>
                             </div>
                             <strong className="email patient-name">
                               <span className="first-name">Alan</span>
@@ -216,7 +216,7 @@ class PatientDetailModal extends React.Component {
                             <div className="post-content">
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
                               <a className="btn-trash" href="#" data-remove="[data-post=&quot;notes1-1&quot;]">
-                                <i className="icon-icon_trash"></i></a>
+                                <i className="icomoon-icon_trash"></i></a>
                             </div>
                             <strong className="email">Bruce Wayne</strong>
                             <time dateTime="2016-07-28">07/28/16 at 09:38 AM</time>
@@ -230,7 +230,7 @@ class PatientDetailModal extends React.Component {
                             <div className="post-content">
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet.</p>
                               <a className="btn-trash" href="#" data-remove="[data-post=&quot;notes2&quot;]">
-                                <i className="icon-icon_trash" />
+                                <i className="icomoon-icon_trash" />
                               </a>
                             </div>
                             <strong className="email patient-name">
@@ -246,7 +246,7 @@ class PatientDetailModal extends React.Component {
                             <div className="post-content">
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
                               <a className="btn-trash" href="#" data-remove="[data-post=&quot;notes2-2&quot;]">
-                                <i className="icon-icon_trash" />
+                                <i className="icomoon-icon_trash" />
                               </a>
                             </div>
                             <strong className="email">Bruce Wayne</strong>
@@ -261,7 +261,7 @@ class PatientDetailModal extends React.Component {
                             <div className="post-content">
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet.</p>
                               <a className="btn-trash" href="#" data-remove="[data-post=&quot;notes3&quot;]">
-                                <i className="icon-icon_trash" />
+                                <i className="icomoon-icon_trash" />
                               </a>
                             </div>
                             <strong className="email patient-name">
@@ -277,7 +277,7 @@ class PatientDetailModal extends React.Component {
                             <div className="post-content">
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
                               <a className="btn-trash" href="#" data-remove="[data-post=&quot;notes3-2&quot;]">
-                                <i className="icon-icon_trash" />
+                                <i className="icomoon-icon_trash" />
                               </a>
                             </div>
                             <strong className="email">Bruce Wayne</strong>
@@ -292,7 +292,7 @@ class PatientDetailModal extends React.Component {
                             <div className="post-content">
                               <p>consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet.</p>
                               <a className="btn-trash" href="#" data-remove="[data-post=&quot;notes4&quot;]">
-                                <i className="icon-icon_trash" />
+                                <i className="icomoon-icon_trash" />
                               </a>
                             </div>
                             <strong className="email patient-name">
@@ -308,7 +308,7 @@ class PatientDetailModal extends React.Component {
                             <div className="post-content">
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
                               <a className="btn-trash" href="#" data-remove="[data-post=&quot;notes4-2&quot;]">
-                                <i className="icon-icon_trash" />
+                                <i className="icomoon-icon_trash" />
                               </a>
                             </div>
                             <strong className="email">Bruce Wayne</strong>
@@ -433,7 +433,7 @@ class PatientDetailModal extends React.Component {
                                 <div className="catogery">
                                   <span className="bipolar-link">
                                     <span className="text">Bipolar</span>
-                                    <a href="#" data-remove=".catogery" className="icon-icon_trash" />
+                                    <a href="#" data-remove=".catogery" className="icomoon-icon_trash" />
                                   </span>
                                 </div>
                               </div>
@@ -447,7 +447,7 @@ class PatientDetailModal extends React.Component {
                                   <div className="well custom-select-drop">
                                     <div className="search-holder">
                                       <input type="search" className="form-control keyword-search" id="search10" />
-                                      <label htmlFor="search10" className="icon-icon_search2" />
+                                      <label htmlFor="search10" className="icomoon-icon_search2" />
                                     </div>
                                     <div className="jcf--scrollable">
                                       <ul className="list-unstyled list select-indication">

@@ -31,7 +31,7 @@ const RenderLeads = ({ fields }) => (
             className="field"
           />
           <button className="link-delete" onClick={() => fields.remove(index)}>
-            <i className="icon-icon_trash" />
+            <i className="icomoon-icon_trash" />
           </button>
         </div>
 
@@ -53,7 +53,7 @@ const RenderLeads = ({ fields }) => (
           className="add-new-source"
           onClick={() => fields.push({})}
         >
-          <i className="icon-icon_close"></i> Add Lead Source
+          <i className="icomoon-close"></i> Add Lead Source
         </button>
       </div>
     </div>

@@ -199,28 +199,28 @@
     margin: 0 0 12px;
     position: relative;
   }
-  .box [class^="icon-"],
-  .box [class*=" icon-"] {
+  .box [class^="icomoon-"],
+  .box [class*=" icomoon-"] {
     top: 20px;
     right: 20px;
     font-size: 30px;
     position: absolute;
   }
-  .box .icon-phone {
+  .box .icomoon-phone {
     font-size: 34px;
   }
-  .box .icon-chat-up {
+  .box .icomoon-chat-up {
     top: 21px;
     font-size: 36px;
   }
-  .box .icon-user-in {
+  .box .icomoon-user-in {
     font-size: 29px;
   }
-  .box .icon-icon_clock_alt {
+  .box .icomoon-icon_clock_alt {
     top: 19px;
     font-size: 35px;
   }
-  .box .icon-chat-down {
+  .box .icomoon-chat-down {
     top: 21px;
     font-size: 38px;
   }
@@ -576,16 +576,6 @@
       padding: 0 6px 12px;
     }
 
-    .btn-primary {
-      top: auto;
-      left: auto;
-      right: auto;
-      display: block;
-      padding: 6px 4px;
-      position: relative;
-      min-width: inherit;
-    }
-
     .search-area {
       width: 304px;
     }
@@ -659,7 +649,7 @@
     margin: 0 0 12px;
     position: relative;
 
-    [class^="icon-"], [class*=" icon-"] {
+    [class^="icomoon-"], [class*=" icomoon-"] {
       top: 20px;
       right: 20px;
       font-size: 35px;
@@ -716,40 +706,6 @@
   margin: 0;
 }
 
-.modal-frame {
-  width: 100%;
-  height: 100%;
-  display: table;
-}
-
-.modal-dialog {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.modal-header {
-  color: #fff;
-  background: #f78e1e;
-  .modal-title {
-    font-size: 21px;
-    line-height: 1.25;
-    display: block;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-}
-
-.modal-content {
-  max-width: 590px;
-  margin: 0 auto;
-  background: #fff;
-  border: #f78e1e solid 2px;
-}
-
-.modal-body {
-  padding: 0;
-}
-
 #import-info .upload-patient-info label {
   cursor: pointer;
 }
@@ -776,7 +732,7 @@
 #import-info .parent-active .table-cell {
   padding: 3px 10px 20px;
 }
-#import-info .parent-active .icon-arrow_up_alt {
+#import-info .parent-active .icomoon-alt-arrow-up {
   width: 40px;
   height: 40px;
   color: #fff;
@@ -788,11 +744,11 @@
   border-radius: 100%;
   background: #00afef;
 }
-#import-info .parent-active .icon-arrow_up_alt:before {
+#import-info .parent-active .icomoon-alt-arrow-up:before {
   content: '\e916';
   display: inline;
 }
-#import-info .parent-active:hover .icon-arrow_up_alt {
+#import-info .parent-active:hover .icomoon-alt-arrow-up {
   color: #00afef;
   background: #fff;
 }
@@ -840,7 +796,7 @@
   margin: -20px 0 0 -20px;
   text-transform: uppercase;
 }
-#text-email-blast .lightbox-opener,
+#text-email-blast .modal-opener,
 .add-patient-info-import,
 .upload-patient-info {
   padding: 3px;
@@ -853,40 +809,40 @@
   text-align: center;
   text-transform: uppercase;
 }
-#text-email-blast .lightbox-opener:hover,
+#text-email-blast .modal-opener:hover,
 .add-patient-info-import:hover,
 .upload-patient-info:hover {
   color: #fff;
 }
-#text-email-blast .lightbox-opener:hover .table,
+#text-email-blast .modal-opener:hover .table,
 .add-patient-info-import:hover .table,
 .upload-patient-info:hover .table {
   background: #00afef;
 }
-#text-email-blast .lightbox-opener [class^="icon-"],
-.add-patient-info-import [class^="icon-"],
-.upload-patient-info [class^="icon-"],
-#text-email-blast .lightbox-opener [class*=" icon-"],
-.add-patient-info-import [class*=" icon-"],
-.upload-patient-info [class*=" icon-"] {
+#text-email-blast .modal-opener [class^="icomoon-"],
+.add-patient-info-import [class^="icomoon-"],
+.upload-patient-info [class^="icomoon-"],
+#text-email-blast .modal-opener [class*=" icomoon-"],
+.add-patient-info-import [class*=" icomoon-"],
+.upload-patient-info [class*=" icomoon-"] {
   display: block;
   font-size: 40px;
   margin: 0 0 10px;
 }
-#text-email-blast .lightbox-opener [class^="icon-"].icon-envelop,
-.add-patient-info-import [class^="icon-"].icon-envelop,
-.upload-patient-info [class^="icon-"].icon-envelop,
-#text-email-blast .lightbox-opener [class*=" icon-"].icon-envelop,
-.add-patient-info-import [class*=" icon-"].icon-envelop,
-.upload-patient-info [class*=" icon-"].icon-envelop {
+#text-email-blast .modal-opener [class^="icomoon-"].icomoon-alt-envelope,
+.add-patient-info-import [class^="icomoon-"].icomoon-alt-envelope,
+.upload-patient-info [class^="icomoon-"].icomoon-alt-envelope,
+#text-email-blast .modal-opener [class*=" icomoon-"].icomoon-alt-envelope,
+.add-patient-info-import [class*=" icomoon-"].icomoon-alt-envelope,
+.upload-patient-info [class*=" icomoon-"].icomoon-alt-envelope {
   font-size: 34px;
 }
-#text-email-blast .lightbox-opener .text,
+#text-email-blast .modal-opener .text,
 .add-patient-info-import .text,
 .upload-patient-info .text {
   display: block;
 }
-#text-email-blast .lightbox-opener .table,
+#text-email-blast .modal-opener .table,
 .add-patient-info-import .table,
 .upload-patient-info .table {
   width: 100%;
@@ -897,7 +853,7 @@
   table-layout: fixed;
   transition: all 0.25s ease;
 }
-#text-email-blast .lightbox-opener .table-cell,
+#text-email-blast .modal-opener .table-cell,
 .add-patient-info-import .table-cell,
 .upload-patient-info .table-cell {
   padding: 10px;
@@ -910,17 +866,14 @@
 .upload-patient-info {
   padding-bottom: 4px;
 }
-#text-email-blast .lightbox-opener {
+#text-email-blast .modal-opener {
   padding: 3px 3px 4px;
 }
-#text-email-blast .lightbox-opener ~ .lightbox-opener {
+#text-email-blast .modal-opener ~ .modal-opener {
   padding: 4px 3px 3px;
 }
-#text-email-blast .scroll-holder {
-  position: relative;
-}
-#email-blast-popup .lightbox-content,
-#text-blast-popup .lightbox-content {
+#email-blast-popup .modal-content,
+#text-blast-popup .modal-content {
   max-width: 1024px;
   background: #fff;
 }
@@ -1037,7 +990,7 @@
   max-height: 147px;
   border-width: 2px;
 }
-.text-email-blast-form .custom-select-drop .icon-icon_search2 {
+.text-email-blast-form .custom-select-drop .icomoon-icon_search2 {
   top: 50%;
   right: 10px;
   font-size: 16px;
