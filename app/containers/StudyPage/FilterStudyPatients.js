@@ -5,7 +5,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import Select from 'react-select';
-import StudyActionButtons from './StudyActionButtons'
+import StudyActionButtons from './StudyActionButtons';
 import sanitizeProps from '../../utils/sanitizeProps';
 
 import 'react-select/less/default.less';
@@ -36,7 +36,7 @@ class FilterStudyPatientsForm extends Component {
       submitting,
       loading,
     } = this.props;
-    const campaignProps = sanitizeProps(campaign)
+    const campaignProps = sanitizeProps(campaign);
     return (
       <Select
         {...campaignProps}
@@ -45,7 +45,7 @@ class FilterStudyPatientsForm extends Component {
         disabled={submitting || loading}
         onBlur={campaign.onBlur}
       />
-    )
+    );
   }
 
   renderSelectSource(source) {
@@ -53,7 +53,7 @@ class FilterStudyPatientsForm extends Component {
       submitting,
       loading,
     } = this.props;
-    const sourceProps = sanitizeProps(source)
+    const sourceProps = sanitizeProps(source);
     return (
       <Select
         {...sourceProps}
@@ -62,14 +62,14 @@ class FilterStudyPatientsForm extends Component {
         disabled={submitting || loading}
         onBlur={source.onBlur}
       />
-    )
+    );
   }
 
   render() {
     const {
       campaignOptions,
       sourceOptions,
-      handleSubmit
+      handleSubmit,
     } = this.props;
     return (
       <form className="form-search clearfix" onSubmit={handleSubmit}>
@@ -86,7 +86,7 @@ class FilterStudyPatientsForm extends Component {
           <Field component={this.renderSelectCampaign} data={campaignOptions} name="campaign" />
         </div>
         <div className="select pull-left">
-         <Field component={this.renderSelectSource} data={sourceOptions} name="source" />
+          <Field component={this.renderSelectSource} data={sourceOptions} name="source" />
         </div>
       </form>
     );

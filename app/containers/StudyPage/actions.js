@@ -16,7 +16,7 @@ import {
   FETCH_SOURCES_SUCCESS,
   FETCH_SOURCES_ERROR,
   FETCH_STUDY_SUCCESS,
-  FETCH_STUDY_ERROR
+  FETCH_STUDY_ERROR,
 } from './constants';
 
 export function campaignsFetched(payload) {
