@@ -2,7 +2,7 @@
  * Created by mike on 9/23/16.
  */
 
-import { call, fork, put} from 'redux-saga/effects';
+import { call, fork, put } from 'redux-saga/effects';
 
 import request from 'utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
@@ -40,15 +40,15 @@ function* fetchPatientCategories() {
   const authToken = getItem('auth_token');
 
   const filter = JSON.stringify({
-    fields: "name"
-  })
+    fields: 'name',
+  });
   const requestURL = `${API_URL}/patientCategories?access_token=${authToken}&filter=${filter}`;
   const response = yield call(request, requestURL, {
     method: 'GET',
   });
-  let patientCategories = response.map(patientCategory => (
+  const patientCategories = response.map(patientCategory => (
     patientCategory.name
-  ))
+  ));
     // populate the patient categories
   yield put(patientCategoriesFetched(patientCategories));
 }

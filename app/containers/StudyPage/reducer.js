@@ -94,7 +94,7 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         study: false,
-        fetchingStudy: false
+        fetchingStudy: false,
       };
     default:
       return state;

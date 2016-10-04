@@ -4,22 +4,20 @@
 
 import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
-import Button from 'react-bootstrap/lib/Button';
 
 class ImportPatientsModal extends React.Component {
   static propTypes = {
     show: React.PropTypes.bool.isRequired,
-    toggleModal: React.PropTypes.bool.isRequired
+    onHide: React.PropTypes.func.isRequired,
   };
 
   componentDidMount() {
   }
-  
+
   render() {
     return (
       <Modal
         {...this.props}
-        onHide={this.props.toggleModal}
         bsStyle="medium"
         id="import-info"
         backdrop
@@ -64,9 +62,9 @@ class ImportPatientsModal extends React.Component {
           </div>
         </Modal.Body>
       </Modal>
-    )
+    );
   }
 }
 
-export default ImportPatientsModal
+export default ImportPatientsModal;
 
