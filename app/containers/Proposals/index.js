@@ -38,12 +38,11 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     currentUser: PropTypes.any,
   }
 
-  get selectedProposal() {
-    return this.SelectedProposal;
-  }
+  constructor(props, context) {
+    super(props, context);
 
-  set selectedProposal(value) {
-    this.SelectedProposal = value;
+    this.createPdf = this.createPdf.bind(this);
+    this.selectCurrent = this.selectCurrent.bind(this);
   }
 
   componentDidMount() {
@@ -77,6 +76,14 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     // console.log('componentWillReceiveProps', nextProps);
   }
 
+  get selectedProposal() {
+    return this.SelectedProposal;
+  }
+
+  set selectedProposal(value) {
+    this.SelectedProposal = value;
+  }
+
   selectCurrent(proposal) {
     this.selectedProposal = proposal;
   }
@@ -92,8 +99,8 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
         <Helmet title="Proposals - StudyKIK" />
         <section className="calendar-section receipts">
           <h2 className="main-heading">PROPOSALS</h2>
-          <ProposalsForm createPdf={this.createPdf.bind(this)} {...this.props} />
-          <ProposalsTable selectCurrent={this.selectCurrent.bind(this)} {...this.props} />
+          <ProposalsForm createPdf={this.createPdf} {...this.props} />
+          <ProposalsTable selectCurrent={this.selectCurrent} {...this.props} />
         </section>
       </StickyContainer>
     );

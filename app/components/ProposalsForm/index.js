@@ -25,6 +25,11 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
   constructor(props, context) {
     super(props, context);
 
+    this.createPdf = this.createPdf.bind(this);
+    this.showPopup = this.showPopup.bind(this);
+    this.hidePopup = this.hidePopup.bind(this);
+    this.handleChange = this.handleChange.bind(this, 'predefined');
+
     this.state = {
       showPopup: false,
       rangePicker : {},
@@ -72,7 +77,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
             <button
               type="submit"
               className="btn btn-primary pull-right"
-              onClick={this.createPdf.bind(this)}
+              onClick={this.createPdf}
             >
               <i className="icon-icon_download" /> DOWNLOAD
             </button>
@@ -82,7 +87,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
             <a
               href="#date-range"
               className="btn btn-primary lightbox-opener"
-              onClick={this.showPopup.bind(this)}
+              onClick={this.showPopup}
             >
               <i className="icon-icon_calendar" /> DATE RANGE
             </a>
@@ -113,7 +118,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
               <div className="lightbox-content">
                 <div className="head">
                   <strong className="title">DATE RANGE</strong>
-                  <a className="lightbox-close close" href="#" onClick={this.hidePopup.bind(this)}><i className="icon-icon_close" /></a>
+                  <a className="lightbox-close close" href="#" onClick={this.hidePopup}><i className="icon-icon_close" /></a>
                 </div>
                 <div className="holder">
                   <div className="date-range-holder">
@@ -123,8 +128,8 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
                           <DateRange
                             linkedCalendars={true}
                             ranges={defaultRanges}
-                            onInit={this.handleChange.bind(this, 'predefined')}
-                            onChange={this.handleChange.bind(this, 'predefined')}
+                            onInit={this.handleChange}
+                            onChange={this.handleChange}
                           />
                           <div>
                             <span>{ predefined.startDate && predefined.startDate.format(format).toString() }</span>
@@ -141,7 +146,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
               </div>
             </div>
           </div>
-          <a href="#" className="overlay lightbox-close" onClick={this.hidePopup.bind(this)} />
+          <a href="#" className="overlay lightbox-close" onClick={this.hidePopup} />
         </div>
       </form>
     );

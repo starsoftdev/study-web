@@ -40,6 +40,10 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   constructor(props) {
     super(props);
 
+    this.onClickAll = this.onClickAll.bind(this);
+    this.onClickCurrent = this.onClickCurrent.bind(this);
+    this.sortBy = this.sortBy.bind(this);
+
     this.state = {
       checkAll: false,
       proposals: false,
@@ -188,7 +192,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         <th
           key={key}
           data-sort={header.sort}
-          onClick={this.sortBy.bind(this)}
+          onClick={this.sortBy}
           className={(state.activeSort === header.sort) ? state.activeDirection : ''}
         >
           {header.text} <i className="caret-arrow" />
@@ -207,7 +211,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
             <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
               <span
                 className="input-style"
-                onClick={this.onClickCurrent.bind(this)}
+                onClick={this.onClickCurrent}
               >
                 <input
                   type="checkbox"
@@ -251,7 +255,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
             <tr>
               <th>
                 <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
-                  <span className="input-style" onClick={this.onClickAll.bind(this)}>
+                  <span className="input-style" onClick={this.onClickAll}>
                     <input name="all" type="checkbox" ref="input-all" />
                   </span>
                 </span>
