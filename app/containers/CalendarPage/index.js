@@ -138,7 +138,7 @@ export class CalendarPage extends React.Component {
       };
     } else { // UPDATE
       let updatedDate;
-      console.log(this.selectedCellInfo, data);
+
       if (data.date) {
         updatedDate = moment(new Date(data.date));
       } else {  // React Datepicker doesn't submit its initial value
