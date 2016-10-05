@@ -1,18 +1,20 @@
 import expect from 'expect';
 import {
-  defaultAction,
+  submitForm,
 } from '../actions';
 import {
-  DEFAULT_ACTION,
+  SUBMIT_FORM,
 } from '../constants';
 
 describe('RequestProposalPage actions', () => {
-  describe('Default Action', () => {
-    it('has a type of DEFAULT_ACTION', () => {
+  describe('submitForm', () => {
+    it('should return the correct type with form values', () => {
+      const data = {};
       const expected = {
-        type: DEFAULT_ACTION,
+        type: SUBMIT_FORM,
+        payload: data,
       };
-      expect(defaultAction()).toEqual(expected);
+      expect(submitForm(data)).toEqual(expected);
     });
   });
 });
