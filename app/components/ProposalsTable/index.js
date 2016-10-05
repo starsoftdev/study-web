@@ -54,9 +54,9 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.proposals) {
-      nextProps.proposals.forEach(proposal => {
+      for (var proposal of nextProps.proposals) {
         proposal.selected = false;
-      });
+      }
       this.setState({ proposals: nextProps.proposals });
     }
   }
@@ -67,14 +67,16 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     ev.preventDefault();
     const scope = this;
     let selected = null;
+    let key = 0;
     const proposals = this.state.proposals;
 
-    proposals.forEach((proposal, key) => {
+    for (let proposal of proposals) {
       if (key === parseInt(ev.currentTarget.firstChild.name, 10)) {
         proposal.selected = (!proposal.selected);
         selected = (proposal.selected) ? proposal : null;
       }
-    });
+      key++
+    }
 
     this.props.selectCurrent(selected);
 
@@ -97,9 +99,9 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   onClickAll(ev) {
     ev.preventDefault();
     const proposals = this.state.proposals;
-    proposals.forEach((proposal) => {
+    for (let proposal of proposals) {
       proposal.selected = (!this.state.checkAll);
-    });
+    }
     this.setState({ checkAll: (!this.state.checkAll), proposals });
   }
 
