@@ -35,7 +35,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
     };
   }
 
-  componentWillReceiveProps(newProps) {}
+  componentWillReceiveProps() {}
 
   handleChange(which, payload) {
     this.setState({
@@ -48,7 +48,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
     this.setState({ showPopup: true });
   }
 
-  hidePopup(ev){
+  hidePopup(ev) {
     ev.preventDefault();
     this.setState({ showPopup: false });
   }

@@ -29,7 +29,7 @@ const headers = [
   {
     text: 'Total',
     sort: 'total',
-  }
+  },
 ];
 
 class ProposalsTable extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -53,7 +53,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       nextProps.proposals.forEach(proposal => {
         proposal.selected = false;
       });
-      this.setState({proposals: nextProps.proposals});
+      this.setState({ proposals: nextProps.proposals });
     }
   }
 
@@ -112,7 +112,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     const directionUnits = (direction === 'up') ? {
       more: 1,
       less: -1,
-    } :  {
+    } : {
       more: -1,
       less: 1,
     };
@@ -250,9 +250,9 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           <thead>
             <tr>
               <th>
-                <span className={(this.state.checkAll) ? "sm-container checked" : "sm-container"}>
+                <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
                   <span className="input-style" onClick={this.onClickAll.bind(this)}>
-                    <input name="all" type="checkbox" ref={"input-all"} />
+                    <input name="all" type="checkbox" ref="input-all" />
                   </span>
                 </span>
                 <span>#</span><i className="caret-arrow" />
