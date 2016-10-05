@@ -70,7 +70,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     const proposals = this.state.proposals;
 
     proposals.forEach((proposal, key) => {
-      if (key === parseInt(ev.currentTarget.firstChild.name)) {
+      if (key === parseInt(ev.currentTarget.firstChild.name, 10)) {
         proposal.selected = (!proposal.selected);
         selected = (proposal.selected) ? proposal : null;
       }
@@ -159,7 +159,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         break;
       case 'protocol':
         proposalsArr.sort((a, b) => {
-          if (parseInt(a.protocol) > b.protocol) {
+          if (a.protocol > b.protocol) {
             return directionUnits.more;
           }
           if (a.protocol < b.protocol) {
@@ -216,7 +216,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
                 <input
                   type="checkbox"
                   name={key}
-                  ref={'input-' + key}
                 />
               </span>
             </span>
@@ -256,7 +255,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
               <th>
                 <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
                   <span className="input-style" onClick={this.onClickAll}>
-                    <input name="all" type="checkbox" ref="input-all" />
+                    <input name="all" type="checkbox" />
                   </span>
                 </span>
                 <span>#</span><i className="caret-arrow" />
