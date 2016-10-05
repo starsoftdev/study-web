@@ -58,7 +58,6 @@ module.exports = (config) => {
     },
 
     junitReporter: {
-      outputDir: '../../coverage/karma-reports',
       outputFile: 'test-results.xml',
     },
 

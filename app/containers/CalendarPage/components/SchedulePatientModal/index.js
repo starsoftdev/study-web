@@ -3,13 +3,13 @@
 import React, { Component, PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Modal } from 'react-bootstrap';
-import DatePicker from 'react-datepicker';
 import _ from 'lodash';
 import moment from 'moment';
 
 import { SchedulePatientModalType } from 'common/constants';
 
 import ReactSelect from 'components/Input/ReactSelect';
+import DatePicker from 'components/Input/DatePicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-select/dist/react-select.min.css';
@@ -312,7 +312,7 @@ export default class SchedulePatientModal extends Component {
                             name="date"
                             component={DatePicker}
                             className="form-control datepicker-input"
-                            startDate={moment(this.props.selectedCellInfo.data.time)}
+                            initialDate={moment(this.props.selectedCellInfo.data.time)}
                           />
                         </div>
                       </div>
