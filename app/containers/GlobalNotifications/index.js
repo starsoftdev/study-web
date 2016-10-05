@@ -39,11 +39,11 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
   }
 
   componentDidMount() {
-    const props = this.props
+    const props = this.props;
     if (!props.socket && props.currentUser) {
       props.setSocketConnection({
         nsp: 'nsp',
-        props: props,
+        props,
         cb: (err, socket) => {
           if (!err) {
             socket.on('notification', (notification) => {
@@ -60,9 +60,7 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    //..
-  }
+  componentWillReceiveProps() {}
 
   getEventTypes() {
     switch (this.props.location.pathname) {

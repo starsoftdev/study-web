@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
-import { StickyContainer, Sticky } from 'react-sticky';
+import { StickyContainer } from 'react-sticky';
 
 import {
   getProposals,
@@ -20,14 +20,14 @@ import {
 import {
   selectSiteLocations,
   selectCurrentUser,
-  selectEvents
+  selectEvents,
 } from 'containers/App/selectors';
 import { selectProposals } from './selectors';
 
 import ProposalsTable from 'components/ProposalsTable';
 import ProposalsForm from 'components/ProposalsForm';
 
-export class Proposals extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class Proposals extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
     fetchSites: PropTypes.func,
@@ -42,15 +42,15 @@ export class Proposals extends React.Component { // eslint-disable-line react/pr
     super(props, context);
   }
 
-  get selectedProposal () {
-    return this._selectedProposal
+  get selectedProposal() {
+    return this._selectedProposal;
   }
 
   set selectedProposal (value) {
-    this._selectedProposal = value
+    this._selectedProposal = value;
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const events = [
       {
         events: [
@@ -77,15 +77,15 @@ export class Proposals extends React.Component { // eslint-disable-line react/pr
     this.props.fetchEvents(events);
   }
 
-  componentWillReceiveProps (nextProps) {
-    //console.log('componentWillReceiveProps', nextProps);
+  componentWillReceiveProps() {
+    // console.log('componentWillReceiveProps', nextProps);
   }
 
-  selectCurrent (proposal) {
-    this.selectedProposal = proposal
+  selectCurrent(proposal) {
+    this.selectedProposal = proposal;
   }
 
-  createPdf(){
+  createPdf() {
     console.log('createPdf');
     console.log('proposal', this.selectedProposal);
   }
@@ -96,8 +96,8 @@ export class Proposals extends React.Component { // eslint-disable-line react/pr
         <Helmet title="Proposals - StudyKIK" />
         <section className="calendar-section receipts">
           <h2 className="main-heading">PROPOSALS</h2>
-          <ProposalsForm createPdf={this.createPdf.bind(this)} {...this.props}/>
-          <ProposalsTable selectCurrent={this.selectCurrent.bind(this)} {...this.props}/>
+          <ProposalsForm createPdf={this.createPdf.bind(this)} {...this.props} />
+          <ProposalsTable selectCurrent={this.selectCurrent.bind(this)} {...this.props} />
         </section>
       </StickyContainer>
     );

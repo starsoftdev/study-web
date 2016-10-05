@@ -7,8 +7,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, FieldArray, reduxForm, change } from 'redux-form';
-import { defaultRanges, Calendar, DateRange } from 'react-date-range';
+import { Field, reduxForm } from 'redux-form';
+import { defaultRanges, DateRange } from 'react-date-range';
 import ReactSelect from 'components/Input/ReactSelect';
 import './styles.less';
 
@@ -19,7 +19,7 @@ const mapStateToProps = createStructuredSelector({});
 class ProposalsForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
-    createPdf:  PropTypes.func
+    createPdf:  PropTypes.func,
   };
 
   constructor(props, context) {
@@ -32,41 +32,37 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
       datePicker : null,
       firstDayOfWeek : null,
       predefined : {},
-    }
-  }
-
-  handleChange(which, payload) {
-    this.setState({
-      [which] : payload
-    });
+    };
   }
 
   componentWillReceiveProps(newProps) {}
 
-  handleSelect(range){
-    //console.log('range', range);
+  handleChange(which, payload) {
+    this.setState({
+      [which] : payload,
+    });
   }
 
-  showPopup(ev){
+  showPopup(ev) {
     ev.preventDefault();
-    this.setState({showPopup: true});
+    this.setState({ showPopup: true });
   }
 
   hidePopup(ev){
     ev.preventDefault();
-    this.setState({showPopup: false});
+    this.setState({ showPopup: false });
   }
 
-  createPdf(ev){
+  createPdf(ev) {
     ev.preventDefault();
     this.props.createPdf();
   }
 
   render() {
-    const { rangePicker, linked, datePicker, firstDayOfWeek, predefined} = this.state;
+    const { predefined } = this.state;
     const format = 'dddd, D MMMM YYYY';
     const { siteLocations } = this.props;
-    let state = this.state;
+    const state = this.state;
 
     return (
       <form action="#" className="form-search clearfix">
@@ -111,7 +107,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
           </div>
         </div>
 
-        <div id="date-range" className={(state.showPopup) ? "lightbox fixed-popup lightbox-active" : "lightbox fixed-popup"}>
+        <div id="date-range" className={(state.showPopup) ? 'lightbox fixed-popup lightbox-active' : 'lightbox fixed-popup'}>
           <div className="lightbox-holder">
             <div className="lightbox-frame">
               <div className="lightbox-content">
@@ -125,14 +121,14 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
                       <div className="date-range-area">
                         <div className="calendars clearfix">
                           <DateRange
-                            linkedCalendars={ true }
-                            ranges={ defaultRanges }
+                            linkedCalendars={true}
+                            ranges={defaultRanges}
                             onInit={this.handleChange.bind(this, 'predefined')}
                             onChange={this.handleChange.bind(this, 'predefined')}
                           />
                           <div>
-                            <span>{ predefined['startDate'] && predefined['startDate'].format(format).toString() }</span>
-                            <span>{ predefined['endDate'] && predefined['endDate'].format(format).toString() }</span>
+                            <span>{ predefined.startDate && predefined.startDate.format(format).toString() }</span>
+                            <span>{ predefined.endDate && predefined.endDate.format(format).toString() }</span>
                           </div>
                         </div>
                         <div className="btn-block text-right">
