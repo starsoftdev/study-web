@@ -74,7 +74,7 @@ function redirectToLogin(store) {
 function redirectToDashboard(store) {
   return (nextState, replace) => {
     if (selectAuthState()(store.getState())) {
-      replace('/dashboard');
+      replace('/home');
     }
   };
 }

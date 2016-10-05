@@ -45,20 +45,25 @@ export default function createRoutes(store) {
       },
     },
     {
-      path: '/',
+      path: '/home',
       name: 'home',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           System.import('containers/HomePage/reducer'),
           System.import('containers/HomePage/sagas'),
           System.import('containers/HomePage'),
+          System.import('containers/GlobalNotifications/reducer'),
+          System.import('containers/GlobalNotifications/sagas'),
+          System.import('containers/GlobalNotifications'),
         ]);
 
         const renderRoute = loadModule(cb);
 
-        importModules.then(([reducer, sagas, component]) => {
+        importModules.then(([reducer, sagas, component, GlobalNotificationsReducer, GlobalNotificationsSagas]) => {
           injectReducer('homePage', reducer.default);
+          injectReducer('globalNotifications', GlobalNotificationsReducer.default);
           injectSagas(sagas.default);
+          injectSagas(GlobalNotificationsSagas.default);
           renderRoute(component);
         });
 

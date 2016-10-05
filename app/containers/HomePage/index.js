@@ -9,12 +9,15 @@
  * the linting exception.
  */
 
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 
 import Dashboard from './Dashboard';
 
 export default class HomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  static propTypes = {
+    location: PropTypes.any,
+  }
 
   render() {
     return (
@@ -22,7 +25,7 @@ export default class HomePage extends React.Component { // eslint-disable-line r
         <Helmet title="Home Page - StudyKIK" />
         <div className="dashboard">
           <div className="container-fluid">
-            <Dashboard />
+            <Dashboard location={this.props.location} />
           </div>
         </div>
       </div>
