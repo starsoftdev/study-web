@@ -36,6 +36,7 @@ import {
   ADD_CREDITS,
   ADD_CREDITS_SUCCESS,
   ADD_CREDITS_ERROR,
+  FETCH_EVENTS,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -263,6 +264,13 @@ export function creditsAdded(payload) {
 export function creditsAddingError(payload) {
   return {
     type: ADD_CREDITS_ERROR,
+    payload,
+  };
+}
+
+export function fetchEvents(payload) {
+  return {
+    type: FETCH_EVENTS,
     payload,
   };
 }

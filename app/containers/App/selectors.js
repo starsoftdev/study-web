@@ -16,6 +16,11 @@ const selectCurrentUser = () => createSelector(
   (substate) => substate.userData
 );
 
+const selectEvents = () => createSelector(
+  selectGlobal(),
+  (substate) => substate.pageEvents
+);
+
 const selectCurrentUserStripeCustomerId = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'userData.roleForClient.client.stripeCustomerId', null)
@@ -90,6 +95,7 @@ const selectAddCredits = () => createSelector(
 export {
   selectGlobal,
   selectAuthState,
+  selectEvents,
   selectCurrentUser,
   selectCurrentUserStripeCustomerId,
 

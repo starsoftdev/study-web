@@ -33,7 +33,9 @@ const headers = [
 ];
 
 class ProposalsTable extends Component { // eslint-disable-line react/prefer-stateless-function
-  static propTypes = {};
+  static propTypes = {
+    selectCurrent:  PropTypes.func
+  };
 
   state = {
     checkAll: false,
@@ -44,6 +46,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
   constructor(props) {
     super(props);
+    //console.log(props);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -59,13 +62,18 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
   onClickCurrent(ev) {
     ev.preventDefault();
-    let scope = this
+    let scope = this;
+    let selected = null;
     let proposals = this.state.proposals;
+
     proposals.forEach((proposal, key) => {
       if (key === parseInt(ev.currentTarget.firstChild.name)) {
         proposal.selected = (!proposal.selected);
+        selected = (proposal.selected) ? proposal : null;
       }
     })
+
+    this.props.selectCurrent(selected);
 
     this.setState({proposals: proposals}, () => {
       let all = true

@@ -18,8 +18,9 @@ import { createStructuredSelector } from 'reselect';
 import SideNavBar from 'components/SideNavBar';
 import TopHeaderBar from 'components/TopHeaderBar';
 import LoadingSpinner from 'components/LoadingSpinner';
+import GlobalNotifications from 'containers/GlobalNotifications';
 import { fetchMeFromToken } from './actions';
-import { selectAuthState, selectCurrentUser } from './selectors';
+import { selectAuthState, selectCurrentUser, selectEvents } from './selectors';
 
 import './styles.less';
 
@@ -29,8 +30,13 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     children: React.PropTypes.node,
     isLoggedIn: React.PropTypes.bool,
     userDataFetched: React.PropTypes.object,
+    pageEvents: React.PropTypes.any,
     fetchMeFromToken: React.PropTypes.func,
   };
+
+  componentWillReceiveProps (nextProps) {
+    //..
+  }
 
   componentWillMount() {
     // Always load user details from the localStorage Token
@@ -38,7 +44,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
   }
 
   render() {
-    const { isLoggedIn, userDataFetched } = this.props;
+    const { isLoggedIn, userDataFetched, pageEvents } = this.props;
 
     if (!isLoggedIn) {
       return (
@@ -64,6 +70,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         <main id="main">
           {React.Children.toArray(this.props.children)}
         </main>
+        {<GlobalNotifications {...this.props} events={pageEvents} />}
       </div>
     );
   }
@@ -72,6 +79,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 const mapStateToProps = createStructuredSelector({
   isLoggedIn: selectAuthState(),
   userDataFetched: selectCurrentUser(),
+  pageEvents: selectEvents(),
 });
 
 function mapDispatchToProps(dispatch) {

@@ -12,7 +12,6 @@ import Helmet from 'react-helmet';
 
 import RequestProposalForm from 'components/RequestProposalForm';
 import RequestProposalCart from 'components/RequestProposalCart';
-import GlobalNotifications from 'containers/GlobalNotifications';
 
 import {
   fetchSites,
@@ -52,26 +51,6 @@ export class RequestProposalPage extends Component {
 
   render() {
     const { siteLocations, indications, studyLevels } = this.props;
-    const events = [
-      {
-        events: [
-          'twilio-message',
-        ],
-        raw: { pathname: this.props.location.pathname },
-        cb: (err, data) => {
-          console.log('received', err, data);
-        },
-      },
-      {
-        events: [
-          'create-patient',
-        ],
-        raw: { pathname: this.props.location.pathname },
-        cb: (err, data) => {
-          console.log('received', err, data);
-        },
-      },
-    ];
 
     return (
       <StickyContainer className="container-fluid">
@@ -95,14 +74,12 @@ export class RequestProposalPage extends Component {
                 <Sticky className="sticky-shopping-cart">
                 {/* this will be replaced with a new shopping cart component */}
                   <RequestProposalCart onSubmit={this.onSubmitForm} />
-
                 </Sticky>
               </div>
             </div>
 
           </div>
         </section>
-        {<GlobalNotifications {...this.props} events={events} />}
       </StickyContainer>
     );
   }

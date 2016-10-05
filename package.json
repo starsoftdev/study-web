@@ -79,6 +79,7 @@
     "express": "4.14.0",
     "fontfaceobserver": "2.0.1",
     "history": "3.0.0",
+    "html-to-pdf": "^0.1.11",
     "intl": "1.2.4",
     "invariant": "2.2.1",
     "ip": "1.1.3",

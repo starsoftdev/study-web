@@ -28,7 +28,7 @@ export function* getProposals() {
       const response = yield call(request, requestURL);
 
       yield put(proposalsReceived(response));
-      yield put(toastrActions.success('', 'Success! Proposals received.'));
+      yield put(toastrActions.success('', 'Proposals received.'));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
