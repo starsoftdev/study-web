@@ -22,5 +22,5 @@ const selectProposals = () => createSelector(
 export default selectProposals;
 export {
   selectProposalsDomain,
-  selectProposals
+  selectProposals,
 };

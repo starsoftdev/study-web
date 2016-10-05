@@ -34,9 +34,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     fetchMeFromToken: React.PropTypes.func,
   };
 
-  componentWillReceiveProps (nextProps) {
-    //..
-  }
+  componentWillReceiveProps () {}
 
   componentWillMount() {
     // Always load user details from the localStorage Token

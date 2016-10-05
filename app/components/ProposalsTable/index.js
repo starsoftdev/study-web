@@ -5,124 +5,123 @@
 */
 
 import React, { Component, PropTypes } from 'react';
-import _ from 'lodash'
-import moment from 'moment'
+import _ from 'lodash';
+import moment from 'moment';
 import './styles.less';
 
 const headers = [
   {
     text: 'Date',
-    sort: 'date'
+    sort: 'date',
   },
   {
     text: 'Site name',
-    sort: 'site'
+    sort: 'site',
   },
   {
     text: 'Proposal number',
-    sort: 'proposal'
+    sort: 'proposal',
   },
   {
     text: 'Protocol number',
-    sort: 'protocol'
+    sort: 'protocol',
   },
   {
     text: 'Total',
-    sort: 'total'
+    sort: 'total',
   }
 ];
 
 class ProposalsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    selectCurrent:  PropTypes.func
+    selectCurrent:  PropTypes.func,
   };
-
-  state = {
-    checkAll: false,
-    proposals: false,
-    activeSort: null,
-    activeDirection: null
-  }
 
   constructor(props) {
     super(props);
-    //console.log(props);
+
+    this.state = {
+      checkAll: false,
+      proposals: false,
+      activeSort: null,
+      activeDirection: null,
+    };
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.proposals){
+    if (nextProps.proposals) {
       nextProps.proposals.forEach(proposal => {
-        proposal.selected = false
-      })
+        proposal.selected = false;
+      });
       this.setState({proposals: nextProps.proposals});
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {}
+  componentDidUpdate() {}
 
   onClickCurrent(ev) {
     ev.preventDefault();
-    let scope = this;
+    const scope = this;
     let selected = null;
-    let proposals = this.state.proposals;
+    const proposals = this.state.proposals;
 
     proposals.forEach((proposal, key) => {
       if (key === parseInt(ev.currentTarget.firstChild.name)) {
         proposal.selected = (!proposal.selected);
         selected = (proposal.selected) ? proposal : null;
       }
-    })
+    });
 
     this.props.selectCurrent(selected);
 
-    this.setState({proposals: proposals}, () => {
-      let all = true
+    this.setState({ proposals }, () => {
+      let all = true;
       this.state.proposals.forEach((proposal) => {
         if (!proposal.selected) {
-          all = false
+          all = false;
         }
-      })
+      });
 
       if (scope.state.checkAll && !all) {
-        this.setState({checkAll: false});
+        this.setState({ checkAll: false });
       } else if (!scope.state.checkAll && all) {
-        this.setState({checkAll: true});
+        this.setState({ checkAll: true });
       }
     });
   }
 
   onClickAll(ev) {
     ev.preventDefault();
-    let proposals = this.state.proposals;
+    const proposals = this.state.proposals;
     proposals.forEach((proposal) => {
       proposal.selected = (!this.state.checkAll);
-    })
-    this.setState({checkAll: (!this.state.checkAll), proposals: proposals});
+    });
+    this.setState({ checkAll: (!this.state.checkAll), proposals });
   }
 
-  sortBy(ev) {//need to refactor
+  sortBy(ev) {
     ev.preventDefault();
-    let sort = ev.currentTarget.dataset.sort
-    let direction = 'down'
+    const sort = ev.currentTarget.dataset.sort;
+    let direction = 'down';
 
     if (ev.currentTarget.className && ev.currentTarget.className === 'down') {
-      direction = 'up'
+      direction = 'up';
     }
 
-    const proposalsArr = this.state.proposals
+    const proposalsArr = this.state.proposals;
     const directionUnits = (direction === 'up') ? {
       more: 1,
-      less: -1
+      less: -1,
     } :  {
       more: -1,
-      less: 1
-    }
+      less: 1,
+    };
 
-    switch(sort){
+    switch (sort) {
       case 'date':
         proposalsArr.sort((a, b) => {
-          let aDate = new Date(a.created).getTime()
-          let bDate = new Date(b.created).getTime()
+          const aDate = new Date(a.created).getTime();
+          const bDate = new Date(b.created).getTime();
           if (aDate > bDate) {
             return directionUnits.more;
           }
@@ -180,7 +179,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         break;
     }
 
-    this.setState({proposals: proposalsArr, activeSort: sort, activeDirection: direction});
+    this.setState({ proposals: proposalsArr, activeSort: sort, activeDirection: direction });
   }
 
   mapHeaders(raw, state, result) {
@@ -195,17 +194,17 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           {header.text} <i className="caret-arrow" />
         </th>
       );
-    })
+    });
   }
 
   mapProposals(raw, result) {
     _.map(raw, (source, key) => {
-      let date = new Date(source.created);
-      let dateWrapper = moment(date);
+      const date = new Date(source.created);
+      const dateWrapper = moment(date);
       result.push(
         <tr key={key}>
           <td>
-            <span className={(source.selected) ? "sm-container checked" : "sm-container"}>
+            <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
               <span
                 className="input-style"
                 onClick={this.onClickCurrent.bind(this)}
@@ -213,7 +212,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
                 <input
                   type="checkbox"
                   name={key}
-                  ref={"input-"+key}
+                  ref={'input-' + key}
                 />
               </span>
             </span>
@@ -224,8 +223,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           <td>{source.protocol}</td>
           <td>${source.total}</td>
         </tr>
-      )
-    })
+      );
+    });
   }
 
   render() {
@@ -234,19 +233,19 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     let proposals = [];
     let heads = [];
 
-    this.mapHeaders(headers, state, heads)
-    this.mapProposals(proposalsArr, proposals)
+    this.mapHeaders(headers, state, heads);
+    this.mapProposals(proposalsArr, proposals);
 
     return (
       <div className="table-holder">
         <table className="table">
           <colgroup>
-            <col style={{ width: "9%" }} />
-            <col style={{ width: "11%" }} />
-            <col style={{ width: "24%" }} />
-            <col style={{ width: "25%" }} />
-            <col style={{ width: "20%" }} />
-            <col style={{ width: "auto" }} />
+            <col style={{ width: '9%' }} />
+            <col style={{ width: '11%' }} />
+            <col style={{ width: '24%' }} />
+            <col style={{ width: '25%' }} />
+            <col style={{ width: '20%' }} />
+            <col style={{ width: 'auto' }} />
           </colgroup>
           <thead>
             <tr>
