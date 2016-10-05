@@ -126,7 +126,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
                       <div className="date-range-area">
                         <div className="calendars clearfix">
                           <DateRange
-                            linkedCalendars={true}
+                            linkedCalendars
                             ranges={defaultRanges}
                             onInit={this.handleChange}
                             onChange={this.handleChange}
