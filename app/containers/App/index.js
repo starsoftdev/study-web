@@ -34,12 +34,12 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     fetchMeFromToken: React.PropTypes.func,
   };
 
-  componentWillReceiveProps () {}
-
   componentWillMount() {
     // Always load user details from the localStorage Token
     this.props.fetchMeFromToken();
   }
+
+  componentWillReceiveProps() {}
 
   render() {
     const { isLoggedIn, userDataFetched, pageEvents } = this.props;

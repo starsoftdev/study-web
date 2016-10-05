@@ -38,16 +38,12 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     currentUser: PropTypes.any,
   }
 
-  constructor(props, context) {
-    super(props, context);
-  }
-
   get selectedProposal() {
-    return this._selectedProposal;
+    return this.SelectedProposal;
   }
 
-  set selectedProposal (value) {
-    this._selectedProposal = value;
+  set selectedProposal(value) {
+    this.SelectedProposal = value;
   }
 
   componentDidMount() {
