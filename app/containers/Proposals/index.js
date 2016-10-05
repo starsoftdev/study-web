@@ -9,18 +9,20 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
-import { selectProposals } from './selectors';
-import { selectCurrentUser } from 'containers/App/selectors';
 
 import {
   getProposals,
 } from 'containers/Proposals/actions';
 import {
   fetchSites,
+  fetchEvents,
 } from 'containers/App/actions';
 import {
   selectSiteLocations,
+  selectCurrentUser,
+  selectEvents
 } from 'containers/App/selectors';
+import { selectProposals } from './selectors';
 
 import ProposalsTable from 'components/ProposalsTable';
 import ProposalsForm from 'components/ProposalsForm';
@@ -29,19 +31,63 @@ export class Proposals extends React.Component { // eslint-disable-line react/pr
   static propTypes = {
     siteLocations: PropTypes.array,
     fetchSites: PropTypes.func,
+    fetchEvents: PropTypes.func,
     getProposals: PropTypes.func,
     location: PropTypes.any,
     proposals: PropTypes.any,
     currentUser: PropTypes.any,
   }
 
-  componentDidMount() {
-    this.props.fetchSites();
-    this.props.getProposals({test: true});
+  constructor(props, context) {
+    super(props, context);
   }
 
-  componentWillReceiveProps(nextProps) {
+  get selectedProposal () {
+    return this._selectedProposal
+  }
+
+  set selectedProposal (value) {
+    this._selectedProposal = value
+  }
+
+  componentDidMount () {
+    const events = [
+      {
+        events: [
+          'twilio-message',
+        ],
+        raw: { pathname: this.props.location.pathname },
+        cb: (err, data) => {
+          console.log('received', err, data);
+        },
+      },
+      {
+        events: [
+          'create-patient',
+        ],
+        raw: { pathname: this.props.location.pathname },
+        cb: (err, data) => {
+          console.log('received', err, data);
+        },
+      },
+    ];
+
+    this.props.fetchSites();
+    this.props.getProposals();
+    this.props.fetchEvents(events);
+  }
+
+  componentWillReceiveProps (nextProps) {
     //console.log('componentWillReceiveProps', nextProps);
+  }
+
+  selectCurrent (proposal) {
+    this.selectedProposal = proposal
+  }
+
+  createPdf(){
+    console.log('createPdf');
+    console.log('proposal', this.selectedProposal);
   }
 
   render() {
@@ -50,8 +96,8 @@ export class Proposals extends React.Component { // eslint-disable-line react/pr
         <Helmet title="Proposals - StudyKIK" />
         <section className="calendar-section receipts">
           <h2 className="main-heading">PROPOSALS</h2>
-          <ProposalsForm {...this.props}/>
-          <ProposalsTable {...this.props}/>
+          <ProposalsForm createPdf={this.createPdf.bind(this)} {...this.props}/>
+          <ProposalsTable selectCurrent={this.selectCurrent.bind(this)} {...this.props}/>
         </section>
       </StickyContainer>
     );
@@ -62,10 +108,12 @@ const mapStateToProps = createStructuredSelector({
   siteLocations : selectSiteLocations(),
   currentUser: selectCurrentUser(),
   proposals: selectProposals(),
+  pageEvents: selectEvents(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchEvents: (values) => dispatch(fetchEvents(values)),
     fetchSites: () => dispatch(fetchSites()),
     getProposals: (values) => dispatch(getProposals(values)),
   };

@@ -39,14 +39,11 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
   }
 
   componentDidMount() {
-    // ..
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.socket && nextProps.currentUser) {
-      nextProps.setSocketConnection({
+    const props = this.props
+    if (!props.socket && props.currentUser) {
+      props.setSocketConnection({
         nsp: 'nsp',
-        props: nextProps,
+        props: props,
         cb: (err, socket) => {
           if (!err) {
             socket.on('notification', (notification) => {
@@ -63,6 +60,10 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    //..
+  }
+
   getEventTypes() {
     switch (this.props.location.pathname) {
       default:
@@ -73,21 +74,23 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
   }
 
   subscribeToPageEvents() {
-    this.props.events.forEach(event => {
-      this.props.subscribeToPageEvent({
-        events: event.events,
-        raw: event.raw,
-        cb: (err, data) => {
-          if (!err) {
-            this.props.socket.on(data.event[0] + data.sid, (payload) => {
-              event.cb(null, payload);
-            });
-          } else {
-            event.cb(err, null);
-          }
-        },
+    if (this.props.events) {
+      this.props.events.forEach(event => {
+        this.props.subscribeToPageEvent({
+          events: event.events,
+          raw: event.raw,
+          cb: (err, data) => {
+            if (!err) {
+              this.props.socket.on(data.event[0] + data.sid, (payload) => {
+                event.cb(null, payload);
+              });
+            } else {
+              event.cb(err, null);
+            }
+          },
+        });
       });
-    });
+    }
   }
 
   subscribeToChat() {

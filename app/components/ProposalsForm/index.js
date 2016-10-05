@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, FieldArray, reduxForm, change } from 'redux-form';
-import { DateRange } from 'react-date-range';
+import { defaultRanges, Calendar, DateRange } from 'react-date-range';
 import ReactSelect from 'components/Input/ReactSelect';
 import './styles.less';
 
@@ -18,11 +18,27 @@ const mapStateToProps = createStructuredSelector({});
 @connect(mapStateToProps)
 class ProposalsForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    siteLocations: PropTypes.array
+    siteLocations: PropTypes.array,
+    createPdf:  PropTypes.func
   };
 
-  state = {
-    showPopup: false,
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      showPopup: false,
+      rangePicker : {},
+      linked : {},
+      datePicker : null,
+      firstDayOfWeek : null,
+      predefined : {},
+    }
+  }
+
+  handleChange(which, payload) {
+    this.setState({
+      [which] : payload
+    });
   }
 
   componentWillReceiveProps(newProps) {}
@@ -41,7 +57,14 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
     this.setState({showPopup: false});
   }
 
+  createPdf(ev){
+    ev.preventDefault();
+    this.props.createPdf();
+  }
+
   render() {
+    const { rangePicker, linked, datePicker, firstDayOfWeek, predefined} = this.state;
+    const format = 'dddd, D MMMM YYYY';
     const { siteLocations } = this.props;
     let state = this.state;
 
@@ -50,11 +73,23 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
 
         <div className="btns-area pull-right">
           <div className="col pull-right">
-            <button type="submit" className="btn btn-primary pull-right"><i className="icon-icon_download" /> DOWNLOAD</button>
+            <button
+              type="submit"
+              className="btn btn-primary pull-right"
+              onClick={this.createPdf.bind(this)}
+            >
+              <i className="icon-icon_download" /> DOWNLOAD
+            </button>
           </div>
 
           <div className="col pull-right">
-            <a href="#date-range" className="btn btn-primary lightbox-opener" onClick={this.showPopup.bind(this)}><i className="icon-icon_calendar" /> DATE RANGE</a>
+            <a
+              href="#date-range"
+              className="btn btn-primary lightbox-opener"
+              onClick={this.showPopup.bind(this)}
+            >
+              <i className="icon-icon_calendar" /> DATE RANGE
+            </a>
           </div>
         </div>
 
@@ -85,29 +120,20 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
                   <a className="lightbox-close close" href="#" onClick={this.hidePopup.bind(this)}><i className="icon-icon_close" /></a>
                 </div>
                 <div className="holder">
-                  <nav className="popup-sidenav">
-                    <div className="scroll-holder jcf--scrollable">
-                      <ul className="list-unstyled">
-                        <li><a href="#">Today</a></li>
-                        <li><a href="#">yesterday</a></li>
-                        <li><a href="#">last 7 days</a></li>
-                        <li><a href="#">last 14 days</a></li>
-                        <li className="active"><a href="#">last 30 days</a></li>
-                        <li><a href="#">last month</a></li>
-                        <li><a href="#">this month</a></li>
-                        <li><a href="#">custom</a></li>
-                      </ul>
-                    </div>
-                  </nav>
                   <div className="date-range-holder">
-
                     <div className="scroll-holder jcf--scrollable">
                       <div className="date-range-area">
                         <div className="calendars clearfix">
                           <DateRange
-                            onInit={this.handleSelect.bind(this)}
-                            onChange={this.handleSelect.bind(this)}
+                            linkedCalendars={ true }
+                            ranges={ defaultRanges }
+                            onInit={this.handleChange.bind(this, 'predefined')}
+                            onChange={this.handleChange.bind(this, 'predefined')}
                           />
+                          <div>
+                            <span>{ predefined['startDate'] && predefined['startDate'].format(format).toString() }</span>
+                            <span>{ predefined['endDate'] && predefined['endDate'].format(format).toString() }</span>
+                          </div>
                         </div>
                         <div className="btn-block text-right">
                           <a href="#" className="btn btn-default lightbox-close">submit</a>

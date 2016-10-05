@@ -30,6 +30,7 @@ import {
   ADD_CREDITS,
   ADD_CREDITS_SUCCESS,
   ADD_CREDITS_ERROR,
+  FETCH_EVENTS,
 } from './constants';
 
 import {
@@ -39,6 +40,7 @@ import {
 const initialState = {
   loggedIn: !!getItem('auth_token'),
   userData: null,
+  pageEvents: null,
   baseData: {
     sites: [],
     indications: [],
@@ -325,6 +327,11 @@ export default function appReducer(state = initialState, action) {
             error: payload,
           },
         },
+      };
+    case FETCH_EVENTS:
+      return {
+        ...state,
+        pageEvents: payload,
       };
 
     default:

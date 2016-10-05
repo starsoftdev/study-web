@@ -39,6 +39,7 @@ export function* setSocketConnection() {
     const { payload } = yield take(SET_SOCKET_CONNECTION);
     props = (payload) ? payload.props : null;
     try {
+      console.log('socket', socket);
       if (!socket) {
         const requestURL = `${SOCKET_URL}/${payload.nsp}`;
         const nsp = window.io(requestURL);

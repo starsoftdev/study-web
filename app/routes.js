@@ -135,7 +135,6 @@ export default function createRoutes(store) {
           System.import('containers/RequestProposalPage'),
           System.import('containers/GlobalNotifications/reducer'),
           System.import('containers/GlobalNotifications/sagas'),
-          System.import('containers/GlobalNotifications'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -220,13 +219,17 @@ export default function createRoutes(store) {
           System.import('containers/Proposals/reducer'),
           System.import('containers/Proposals/sagas'),
           System.import('containers/Proposals'),
+          System.import('containers/GlobalNotifications/reducer'),
+          System.import('containers/GlobalNotifications/sagas'),
         ]);
 
         const renderRoute = loadModule(cb);
 
-        importModules.then(([reducer, sagas, component]) => {
+        importModules.then(([reducer, sagas, component, GlobalNotificationsReducer, GlobalNotificationsSagas]) => {
           injectReducer('proposals', reducer.default);
+          injectReducer('globalNotifications', GlobalNotificationsReducer.default);
           injectSagas(sagas.default);
+          injectSagas(GlobalNotificationsSagas.default);
           renderRoute(component);
         });
 
