@@ -12,6 +12,7 @@ class CenteredModal extends React.Component {
     /**
      * A css class to apply to the Modal dialog DOM node.
      */
+    bsClass: React.PropTypes.string.isRequired,
     className: React.PropTypes.string,
     children: React.PropTypes.array.isRequired,
     dialogClassName: React.PropTypes.string,
@@ -22,17 +23,16 @@ class CenteredModal extends React.Component {
   }
 
   render() {
-    const { dialogClassName, className, style, children, ...props } =
+    const { bsClass, dialogClassName, className, style, children, ...props } =
       this.props;
-
     return (
       <div
         {...props}
         tabIndex="-1"
         style={style}
-        className={classNames(className, 'modal modal-frame')}
+        className={classNames(className, bsClass, 'modal-frame')}
       >
-        <div className={classNames(dialogClassName, 'modal-medium modal-dialog')}>
+        <div className={classNames(dialogClassName, 'modal-dialog')}>
           <div className="modal-content" role="document">
             {children}
           </div>

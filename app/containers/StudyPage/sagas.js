@@ -7,7 +7,7 @@ import { call, fork, put } from 'redux-saga/effects';
 import request from 'utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
 
-import { campaignsFetched, patientCategoriesFetched, sitesFetched, sourcesFetched, studyFetched } from './actions';
+import { campaignsFetched, patientCategoriesFetched, patientsFetched, sitesFetched, sourcesFetched, studyFetched } from './actions';
 
 // Bootstrap sagas
 export default [
@@ -49,8 +49,39 @@ function* fetchPatientCategories() {
   const patientCategories = response.map(patientCategory => (
     patientCategory.name
   ));
-    // populate the patient categories
+  // populate the patient categories
   yield put(patientCategoriesFetched(patientCategories));
+}
+
+export function* fetchStudyPatients() {
+  const authToken = getItem('auth_token');
+  const studyId = getItem('study_id');
+  const siteId = getItem('site_id');
+  const campaignId = getItem('campaign_id');
+  const sourceId = getItem('source_id');
+  if (!authToken) {
+    return;
+  }
+
+  try {
+    let requestURL = `${API_URL}/studies/${studyId}/patients?access_token=${authToken}&siteId=${siteId}`;
+    if (campaignId) {
+      requestURL += `&campaignId=${campaignId}`;
+    }
+    if (sourceId) {
+      requestURL += `&sourceId=${sourceId}`;
+    }
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    // populate the patients
+    yield put(patientsFetched(response));
+  } catch (e) {
+    // if returns forbidden we remove the token from local storage
+    if (e.status === 401) {
+      removeItem('auth_token');
+    }
+  }
 }
 
 export function* fetchStudySaga() {
