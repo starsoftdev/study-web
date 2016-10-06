@@ -92,6 +92,8 @@ const selectAddCredits = () => createSelector(
   (substate) => get(substate, 'baseData.addCredits', {})
 );
 
+const selectLocationState = () => state => state.routing.locationBeforeTransitions;
+
 export {
   selectGlobal,
   selectAuthState,
@@ -109,4 +111,6 @@ export {
   selectSaveCard,
   selectDeleteCard,
   selectAddCredits,
+
+  selectLocationState,
 };

@@ -7,7 +7,6 @@ import { get } from 'lodash';
 
 import request from 'utils/request';
 
-import { logout } from 'containers/LoginPage/actions';
 import {
   passwordChanged,
   passwordChangingError,
@@ -38,8 +37,6 @@ export function* changePassword() {
 
       yield put(passwordChanged(response));
       yield put(toastrActions.success('', 'Success! Check your email to confirm password change.'));
-
-      yield put(logout());
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
