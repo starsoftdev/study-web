@@ -1,5 +1,6 @@
 /* custom checkbox styles */
 @import "../base/_mixins";
+@import "../_custom";
 
 .jcf-checkbox {
   .align;
@@ -8,7 +9,7 @@
   overflow: hidden;
   cursor: pointer;
   position: relative;
-  span {
+  .checkbox {
     .size(100%);
     color: #fff;
     display: block;
@@ -17,26 +18,16 @@
     border-radius: 2px;
     transition: all 0.25s linear;
     border: 2px solid @input-border;
+    text-indent: -2px;
+    text-align: center;
+    .font(14px, 16px);
+    margin: 0;
     &:before {
       opacity: 0;
-      display: block;
-      cursor: pointer;
-      content: '\e916';
-      text-indent: -2px;
-      text-align: center;
-      font: 14px/16px 'icomoon';
-      transition: all 0.25s linear;
     }
   }
   [type="checkbox"] {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border: 0;
-    margin: 0;
-    left: 0;
-    top: 0;
-    cursor: pointer;
+    display: none;
   }
   &:hover,
   &.jcf-checked {
@@ -45,14 +36,14 @@
     }
   }
   &.jcf-checked {
-    span {
+    .checkbox {
       background: #a0cf67;
       &:before {
         opacity: 1;
       }
     }
     &:hover {
-      span {
+      .checkbox {
         background: #c0e890;
         border-color: #c0e890;
       }

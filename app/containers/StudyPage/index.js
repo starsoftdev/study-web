@@ -15,7 +15,7 @@ import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
 import StudyPatients from './StudyPatients';
 import * as Selector from './selectors';
-import { fetchStudyPatients } from './actions';
+import { fetchStudyPatients } from './sagas';
 
 import './styles.less';
 

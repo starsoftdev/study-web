@@ -5,6 +5,7 @@
 import React from 'react';
 import ImportPatientsModal from './ImportPatientsModal';
 import TextEmailBlastModal from './TextEmailBlastModal';
+import TextBlastModal from './TextBlast/TextBlastModal';
 
 class StudyActionButtons extends React.Component {
   constructor(props) {
@@ -12,9 +13,15 @@ class StudyActionButtons extends React.Component {
     this.state = {
       showImportPatientsModal: false,
       showTextEmailBlastModal: false,
+      showTextBlastModal: false,
+      showEmailBlastModal: false,
     };
     this.toggleImportPatientsModal = this.toggleImportPatientsModal.bind(this);
     this.toggleTextEmailBlastModal = this.toggleTextEmailBlastModal.bind(this);
+    this.toggleTextBlastModal = this.toggleTextBlastModal.bind(this);
+    this.closeTextBlastModal = this.closeTextBlastModal.bind(this);
+    this.toggleEmailBlastModal = this.toggleEmailBlastModal.bind(this);
+    this.closeEmailBlastModal = this.closeEmailBlastModal.bind(this);
   }
 
   toggleTextEmailBlastModal() {
@@ -29,6 +36,34 @@ class StudyActionButtons extends React.Component {
     });
   }
 
+  toggleTextBlastModal() {
+    this.setState({
+      showTextEmailBlastModal: !this.state.showTextEmailBlastModal,
+      showTextBlastModal: !this.state.showTextBlastModal,
+    });
+  }
+
+  closeTextBlastModal() {
+    this.setState({
+      showTextEmailBlastModal: false,
+      showTextBlastModal: false,
+    });
+  }
+
+  toggleEmailBlastModal() {
+    this.setState({
+      showTextEmailBlastModal: !this.state.showTextEmailBlastModal,
+      showEmailBlastModal: !this.state.showEmailBlastModal,
+    });
+  }
+
+  closeEmailBlastModal() {
+    this.setState({
+      showTextEmailBlastModal: false,
+      showEmailBlastModal: false,
+    });
+  }
+
   render() {
     return (
       <div className="btns pull-right">
@@ -36,7 +71,8 @@ class StudyActionButtons extends React.Component {
           <span className="btn btn-primary email" onClick={this.toggleTextEmailBlastModal}>
             <i className="icomoon-icon_chat_alt" />
             <span>Text / Email Blast</span>
-            <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} />
+            <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} toggleTextBlast={this.toggleTextBlastModal} />
+            <TextBlastModal show={this.state.showTextBlastModal} onClose={this.closeTextBlastModal} onHide={this.toggleTextBlastModal} />
           </span>
         </div>
         <div className="btn-import pull-left">
