@@ -93,7 +93,7 @@ export function* authorize(data) {
     if (nextPathName) {
       yield put(push(nextPathName));
     } else {
-      yield put(push('/home'));
+      yield put(push('/'));
     }
 
     // return the response from the generator task
