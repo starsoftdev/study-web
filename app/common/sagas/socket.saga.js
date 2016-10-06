@@ -1,5 +1,5 @@
 /* eslint-disable no-constant-condition, consistent-return */
-import { take, put, fork, cancel } from 'redux-saga/effects';
+import { take, put, fork } from 'redux-saga/effects';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
@@ -53,9 +53,14 @@ export function* subscribeToPageEvent() {
     const { payload } = yield take(SUBSCRIBE_TO_PAGE_EVENT);
     try {
       // console.log('subscribeToPageEvent', payload)
-      socket.emit('subscribeToPageEvent', {
-          user: props.currentUser, events: payload.events, params: payload.raw,
-        }, (err, data) => {
+      socket.emit(
+        'subscribeToPageEvent',
+        {
+          user: props.currentUser,
+          events: payload.events,
+          params: payload.raw,
+        },
+        (err, data) => {
           payload.cb(err, data);
         }
       );
@@ -101,7 +106,7 @@ export function* unsubscribeFromAllEvents() {
   while (true) {
     const { payload } = yield take(UNSUBSCRIBE_FROM_ALL);
     try {
-      console.log('unsubscribeFromAllEvents', payload)
+      // console.log('unsubscribeFromAllEvents', payload);
       socket.emit('unsubscribeFromAll', { events: payload.events }, (err, data) => {
         payload.cb(err, data);
       });

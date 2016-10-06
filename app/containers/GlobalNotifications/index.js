@@ -61,14 +61,6 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
 
   componentWillReceiveProps() {}
 
-  get eventsList() {
-    return this.EventsList;
-  }
-
-  set eventsList(value) {
-    this.EventsList = value;
-  }
-
   getEventTypes() {
     switch (this.props.location.pathname) {
       default:
@@ -76,6 +68,14 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
           'twilio-message',
         ];
     }
+  }
+
+  get eventsList() {
+    return this.EventsList;
+  }
+
+  set eventsList(value) {
+    this.EventsList = value;
   }
 
   subscribeToPageEvents() {
@@ -86,12 +86,13 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
           raw: event.raw,
           cb: (err, data) => {
             if (!err) {
-              data.count = 0
-              let eventsList = this.eventsList || [];
-              if (_.find(eventsList, data)) {
-                data.count++;
+              let event = data
+              event.count = 0;
+              const eventsList = this.eventsList || [];
+              if (_.find(eventsList, event)) {
+                event.count++;
               } else {
-                eventsList.push(data)
+                eventsList.push(event);
               }
               this.eventsList = eventsList;
               this.props.socket.on(data.event[0] + data.sid, (payload) => {

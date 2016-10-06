@@ -78,6 +78,10 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     this.props.fetchEvents(events);
   }
 
+  componentWillReceiveProps() {
+    // console.log('componentWillReceiveProps', nextProps);
+  }
+
   componentWillUnmount() {
     this.props.unsubscribeFromPageEvent({
       events: ['twilio-message'],
@@ -86,10 +90,6 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
         console.log(err, data);
       },
     });
-  }
-
-  componentWillReceiveProps() {
-    // console.log('componentWillReceiveProps', nextProps);
   }
 
   get selectedProposal() {
