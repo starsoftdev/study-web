@@ -86,13 +86,13 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
           raw: event.raw,
           cb: (err, data) => {
             if (!err) {
-              let event = data
-              event.count = 0;
+              const eventData = data;
+              eventData.count = 0;
               const eventsList = this.eventsList || [];
-              if (_.find(eventsList, event)) {
-                event.count++;
+              if (_.find(eventsList, eventData)) {
+                eventData.count++;
               } else {
-                eventsList.push(event);
+                eventsList.push(eventData);
               }
               this.eventsList = eventsList;
               this.props.socket.on(data.event[0] + data.sid, (payload) => {
