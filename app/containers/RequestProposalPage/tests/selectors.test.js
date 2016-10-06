@@ -1,10 +1,15 @@
-// import { selectRequestProposalPageDomain } from '../selectors';
 import expect from 'expect';
 
-// const selector = selectRequestProposalPageDomain();
+import { selectRequestProposalPageDomain } from '../selectors';
 
 describe('selectRequestProposalPageDomain', () => {
-  it('Expect to have unit tests specified', () => {
-    expect('Test case').toEqual(false);
+  const requestProposalPageDomainSelector = selectRequestProposalPageDomain();
+  it('should select requestProposalPage state', () => {
+    const state = {
+    };
+    const mockedState = {
+      requestProposalPage: state,
+    };
+    expect(requestProposalPageDomainSelector(mockedState)).toEqual(state);
   });
 });

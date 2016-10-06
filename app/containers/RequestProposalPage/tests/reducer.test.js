@@ -3,6 +3,13 @@ import requestProposalPageReducer from '../reducer';
 
 describe('requestProposalPageReducer', () => {
   it('returns the initial state', () => {
-    expect(requestProposalPageReducer(undefined, {})).toEqual({});
+    const initialState = {
+      coupon: {
+        details: null,
+        fetching: false,
+        error: null,
+      },
+    };
+    expect(requestProposalPageReducer(undefined, {})).toEqual(initialState);
   });
 });
