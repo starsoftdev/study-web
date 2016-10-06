@@ -121,24 +121,19 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
                   <a className="lightbox-close close" href="#" onClick={this.hidePopup}><i className="icon-icon_close" /></a>
                 </div>
                 <div className="holder">
-                  <div className="date-range-holder">
-                    <div className="scroll-holder jcf--scrollable">
-                      <div className="date-range-area">
-                        <div className="calendars clearfix">
-                          <DateRange
-                            linkedCalendars
-                            ranges={defaultRanges}
-                            onInit={this.handleChange}
-                            onChange={this.handleChange}
-                          />
-                          <div>
-                            <span>{ predefined.startDate && predefined.startDate.format(format).toString() }</span>
-                            <span>{ predefined.endDate && predefined.endDate.format(format).toString() }</span>
-                          </div>
-                        </div>
-                        <div className="btn-block text-right">
-                          <a href="#" className="btn btn-default lightbox-close">submit</a>
-                        </div>
+                  <DateRange
+                    linkedCalendars
+                    ranges={defaultRanges}
+                    onInit={this.handleChange}
+                    onChange={this.handleChange}
+                  />
+                  <div className="dateRange-helper">
+                    <div className="emit-border"></div>
+                    <div className="right-part">
+                      <span className="left">{ predefined.startDate && predefined.startDate.format(format).toString() }</span>
+                      <span className="right">{ predefined.endDate && predefined.endDate.format(format).toString() }</span>
+                      <div className="btn-block text-right">
+                        <a href="#" className="btn btn-default lightbox-close">submit</a>
                       </div>
                     </div>
                   </div>
