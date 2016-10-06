@@ -1,20 +1,21 @@
 /**
 *
-* ResetPasswordForm
+* SetNewPasswordForm
 *
 */
 
 import React from 'react';
+import setNewPasswordFormValidator from './validator';
 import { Field, reduxForm } from 'redux-form';
 import Input from 'components/Input';
-import resetPasswordFormValidator from './validator';
 import { FormGroup, Col } from 'react-bootstrap';
 
+
 @reduxForm({
-  form: 'resetPassword',
-  validate: resetPasswordFormValidator,
+  form: 'setNewPassword',
+  validate: setNewPasswordFormValidator,
 })
-class ResetPasswordForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class SetNewPasswordForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     handleSubmit: React.PropTypes.func.isRequired,
@@ -23,7 +24,6 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
 
   render() {
     const { handleSubmit, submitting } = this.props;
-
     return (
       <form
         onSubmit={handleSubmit}
@@ -31,10 +31,9 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
       >
         <FormGroup>
           <Field
-            name="email"
-            type="text"
+            name="password"
+            type="password"
             component={Input}
-            placeholder="Email"
             className="col-sm-12"
           />
         </FormGroup>
@@ -59,4 +58,4 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
   }
 }
 
-export default ResetPasswordForm;
+export default SetNewPasswordForm;
