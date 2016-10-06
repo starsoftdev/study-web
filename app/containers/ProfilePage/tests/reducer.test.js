@@ -10,6 +10,7 @@ describe('profilePageReducer', () => {
       changePasswordResult: {
         success: '',
         info: '',
+        passwordChanging: false,
       },
     };
   });
@@ -26,6 +27,7 @@ describe('profilePageReducer', () => {
       changePasswordResult: {
         ...state.changePasswordResult,
         success: true,
+        passwordChanging: false,
       },
     };
     expect(profilePageReducer(state, passwordChanged(response))).toEqual(expectedResult);
