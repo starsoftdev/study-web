@@ -18,6 +18,10 @@ import {
   fetchEvents,
 } from 'containers/App/actions';
 import {
+  unsubscribeFromAll,
+  unsubscribeFromPageEvent,
+} from 'containers/GlobalNotifications/actions';
+import {
   selectSiteLocations,
   selectCurrentUser,
   selectEvents,
@@ -30,6 +34,8 @@ import ProposalsForm from 'components/ProposalsForm';
 export class Proposals extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
+    unsubscribeFromAll: PropTypes.func,
+    unsubscribeFromPageEvent: PropTypes.func,
     fetchSites: PropTypes.func,
     fetchEvents: PropTypes.func,
     getProposals: PropTypes.func,
@@ -70,6 +76,16 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     this.props.fetchSites();
     this.props.getProposals();
     this.props.fetchEvents(events);
+  }
+
+  componentWillUnmount() {
+    this.props.unsubscribeFromPageEvent({
+      events: ['twilio-message'],
+      raw: { pathname: this.props.location.pathname },
+      cb: (err, data) => {
+        console.log(err, data);
+      },
+    });
   }
 
   componentWillReceiveProps() {
@@ -116,6 +132,8 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    unsubscribeFromAll: (values) => dispatch(unsubscribeFromAll(values)),
+    unsubscribeFromPageEvent: (values) => dispatch(unsubscribeFromPageEvent(values)),
     fetchEvents: (values) => dispatch(fetchEvents(values)),
     fetchSites: () => dispatch(fetchSites()),
     getProposals: (values) => dispatch(getProposals(values)),

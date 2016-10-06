@@ -7,6 +7,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import _ from 'lodash';
 import { selectCurrentUser } from 'containers/App/selectors';
 import selectSocket from 'containers/GlobalNotifications/selectors';
 import {
@@ -33,8 +34,6 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
   constructor(props) {
     super(props);
     this.subscribeToPageEvents = this.subscribeToPageEvents.bind(this);
-    this.unsubscribeCurrent = this.unsubscribeCurrent.bind(this);
-    this.unsubscribeAll = this.unsubscribeAll.bind(this);
     this.subscribeToChat = this.subscribeToChat.bind(this);
   }
 
@@ -62,6 +61,14 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
 
   componentWillReceiveProps() {}
 
+  get eventsList() {
+    return this.EventsList;
+  }
+
+  set eventsList(value) {
+    this.EventsList = value;
+  }
+
   getEventTypes() {
     switch (this.props.location.pathname) {
       default:
@@ -79,6 +86,14 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
           raw: event.raw,
           cb: (err, data) => {
             if (!err) {
+              data.count = 0
+              let eventsList = this.eventsList || [];
+              if (_.find(eventsList, data)) {
+                data.count++;
+              } else {
+                eventsList.push(data)
+              }
+              this.eventsList = eventsList;
               this.props.socket.on(data.event[0] + data.sid, (payload) => {
                 event.cb(null, payload);
               });
@@ -107,33 +122,10 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
     });
   }
 
-  unsubscribeCurrent() {
-    const events = this.getEventTypes();
-    this.props.unsubscribeFromPageEvent({
-      events,
-      raw: { pathname: this.props.location.pathname },
-      cb: (err, data) => {
-        console.log(err, data);
-      },
-    });
-  }
-
-  unsubscribeAll() {
-    const events = this.getEventTypes();
-    this.props.unsubscribeFromAll({
-      events,
-      cb: (err, data) => {
-        console.log(err, data);
-      },
-    });
-  }
-
   render() {
     /* const layout = (<div>
       <div onClick={this.subscribeToPageEvents}>subscribe to twilio-message</div>
       <div onClick={this.subscribeToChat}>subscribe to chat</div>
-      <div onClick={this.unsubscribeCurrent}>unsubscribe from twilio-message</div>
-      <div onClick={this.unsubscribeAll}>unsubscribe from all</div>
     </div>); */
 
     return null;
