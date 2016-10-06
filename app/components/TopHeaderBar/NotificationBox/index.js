@@ -3,8 +3,18 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { createStructuredSelector } from 'reselect';
+import enhanceWithClickOutside from 'react-click-outside';
 
-// import { fetchUnreadNotificationsCount } from 'containers/GlobalNotifications/actions';
+import {
+  fetchNotifications,
+  fetchUnreadNotificationsCount,
+} from 'containers/GlobalNotifications/actions';
+
+import {
+  selectNotifications,
+  selectUnreadNotificationsCount,
+} from 'containers/GlobalNotifications/selectors';
 
 import avatar1 from 'assets/images/img2.png';
 import avatar2 from 'assets/images/img3.png';
@@ -15,7 +25,10 @@ import './styles.less';
 class NotificationBox extends React.Component {
   static propTypes = {
     currentUser: PropTypes.any,
-    fetchUnreadNotificationsCount: PropTypes.func,
+    notifications: PropTypes.array,
+    unreadNotificationsCount: PropTypes.number,
+    fetchNotifications: PropTypes.func.isRequired,
+    fetchUnreadNotificationsCount: PropTypes.func.isRequired,
   }
 
   state = {
@@ -25,12 +38,8 @@ class NotificationBox extends React.Component {
   componentDidMount() {
     const { currentUser } = this.props;
 
-    if (!currentUser) {
-      console.error('Something is wrong with session');
-      return;
-    }
-
-    // this.props.fetchUnreadNotificationsCount(currentUser);
+    this.props.fetchUnreadNotificationsCount(currentUser.id);
+    this.props.fetchNotifications(currentUser.id);
   }
 
   handleBadgeNumberClick = () => {
@@ -39,12 +48,16 @@ class NotificationBox extends React.Component {
     });
   }
 
+  handleClickOutside = () => {
+    this.setState({ dropdownOpen: false });
+  }
+
   render() {
     return (
       <div className="notifications pull-left open-close">
         <a className="opener" href="#" onClick={() => this.handleBadgeNumberClick()}>
           <i className="icon-bell"></i>
-          <span className="counter">1</span>
+          <span className="counter">{this.props.unreadNotificationsCount}</span>
         </a>
 
         {this.state.dropdownOpen &&
@@ -96,15 +109,18 @@ class NotificationBox extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
 
+const mapStateToProps = createStructuredSelector({
+  notifications: selectNotifications,
+  unreadNotificationsCount: selectUnreadNotificationsCount,
 });
 
 const mapDispatchToProps = {
-  // fetchUnreadNotificationsCount,
+  fetchNotifications,
+  fetchUnreadNotificationsCount,
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(NotificationBox);
+)(enhanceWithClickOutside(NotificationBox));

@@ -1,10 +1,15 @@
-import { take, put, fork, cancel } from 'redux-saga/effects';
+import { takeLatest } from 'redux-saga';
+import { take, put, fork, call, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
+import request from 'utils/request';
+
 import {
   connectionEstablished,
+  fetchNotificationsSucceeded,
+  fetchUnreadNotificationsCountSucceeded,
 } from 'containers/GlobalNotifications/actions';
 import {
   SET_SOCKET_CONNECTION,
@@ -12,6 +17,8 @@ import {
   UNSUBSCRIBE_FROM_PAGE_EVENT,
   UNSUBSCRIBE_FROM_ALL,
   SUBSCRIBE_TO_CHAT_EVENT,
+  FETCH_NOTIFICATIONS,
+  FETCH_UNREAD_NOTIFICATIONS_COUNT,
 } from 'containers/GlobalNotifications/constants';
 
 let props = null;
@@ -24,6 +31,8 @@ export function* GlobalNotificationsSaga() {
   const watcherC = yield fork(unsubscribeFromPageEvent);
   const watcherD = yield fork(unsubscribeFromAllEvents);
   const watcherE = yield fork(subscribeToChatEvent);
+  const watcherF = yield fork(takeLatest, FETCH_NOTIFICATIONS, fetchNotifications);
+  const watcherG = yield fork(takeLatest, FETCH_UNREAD_NOTIFICATIONS_COUNT, fetchUnreadNotificationsCount);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -32,6 +41,8 @@ export function* GlobalNotificationsSaga() {
   yield cancel(watcherC);
   yield cancel(watcherD);
   yield cancel(watcherE);
+  yield cancel(watcherF);
+  yield cancel(watcherG);
 }
 
 export function* setSocketConnection() {
@@ -118,6 +129,34 @@ export function* unsubscribeFromAllEvents() {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
     }
+  }
+}
+
+export function* fetchNotifications(action) {
+  try {
+    const requestURL = `${API_URL}/users/${action.userId}/notifications`;
+    const params = {
+      method: 'GET',
+      query: action.searchParams,
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchNotificationsSucceeded(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching notifications');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+export function* fetchUnreadNotificationsCount(action) {
+  try {
+    const requestURL = `${API_URL}/users/${action.userId}/unreadNotificationsCount`;
+    const response = yield call(request, requestURL);
+
+    yield put(fetchUnreadNotificationsCountSucceeded(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching unreadNotificationsCount');
+    yield put(toastrActions.error('', errorMessage));
   }
 }
 

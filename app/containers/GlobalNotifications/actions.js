@@ -13,6 +13,11 @@ import {
   UNSUBSCRIBE_FROM_PAGE_EVENT,
   UNSUBSCRIBE_FROM_ALL,
   SUBSCRIBE_TO_CHAT_EVENT,
+  FETCH_NOTIFICATIONS,
+  FETCH_NOTIFICATIONS_SUCCESS,
+  FETCH_UNREAD_NOTIFICATIONS_COUNT,
+  FETCH_UNREAD_NOTIFICATIONS_COUNT_SUCCESS,
+  RECEIVE_NOTIFICATION,
 } from './constants';
 
 export function subscribeToPageEvent(payload) {
@@ -67,6 +72,42 @@ export function disconnectSocket(payload) {
 export function connectionError(payload) {
   return {
     type: SOCKET_CONNECTION_FAILED,
+    payload,
+  };
+}
+
+export function fetchNotifications(userId, searchParams) {
+  return {
+    type: FETCH_NOTIFICATIONS,
+    userId,
+    searchParams,
+  };
+}
+
+export function fetchNotificationsSucceeded(payload) {
+  return {
+    type: FETCH_NOTIFICATIONS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchUnreadNotificationsCount(userId) {
+  return {
+    type: FETCH_UNREAD_NOTIFICATIONS_COUNT,
+    userId,
+  };
+}
+
+export function fetchUnreadNotificationsCountSucceeded(payload) {
+  return {
+    type: FETCH_UNREAD_NOTIFICATIONS_COUNT_SUCCESS,
+    payload,
+  };
+}
+
+export function receiveNotification(payload) {
+  return {
+    type: RECEIVE_NOTIFICATION,
     payload,
   };
 }
