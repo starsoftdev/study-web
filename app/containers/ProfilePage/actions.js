@@ -11,6 +11,9 @@ import {
   CHANGE_IMAGE,
   CHANGE_IMAGE_SUCCESS,
   CHANGE_IMAGE_ERROR,
+  CONFIRM_CHANGE_PASSWORD_REQUEST,
+  CONFIRM_CHANGE_PASSWORD_SUCCESS,
+  CONFIRM_CHANGE_PASSWORD_ERROR,
 } from './constants';
 
 export function changePassword(payload) {
@@ -51,6 +54,26 @@ export function imageChanged(payload) {
 export function imageChangingError(payload) {
   return {
     type: CHANGE_IMAGE_ERROR,
+    payload,
+  };
+}
+
+export function confirmChangePasswordRequest() {
+  return {
+    type: CONFIRM_CHANGE_PASSWORD_REQUEST,
+  };
+}
+
+export function confirmPasswordChangeSuccess(payload) {
+  return {
+    type: CONFIRM_CHANGE_PASSWORD_SUCCESS,
+    payload,
+  };
+}
+
+export function confirmPasswordChangeError(payload) {
+  return {
+    type: CONFIRM_CHANGE_PASSWORD_ERROR,
     payload,
   };
 }

@@ -45,6 +45,7 @@ export default function createRoutes(store) {
       },
     },
     {
+      onEnter: redirectToLogin,
       path: '/home',
       name: 'home',
       getComponent(nextState, cb) {
@@ -84,6 +85,24 @@ export default function createRoutes(store) {
       name: 'resetPasswordPage',
       getComponent(nextState, cb) {
         System.import('containers/ResetPasswordPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToDashboard,
+      path: '/set-new-password',
+      name: 'setNewPasswordPage',
+      getComponent(nextState, cb) {
+        System.import('containers/SetNewPasswordPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/confirm-password-change',
+      name: 'confirmPasswordChangePage',
+      getComponent(nextState, cb) {
+        System.import('components/ConfirmPasswordChangeForm')
           .then(loadModule(cb))
           .catch(errorLoading);
       },

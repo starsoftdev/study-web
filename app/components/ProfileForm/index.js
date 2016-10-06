@@ -18,6 +18,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     currentUser: React.PropTypes.object,
     changePassword: React.PropTypes.func,
     changeImage: React.PropTypes.func,
+    changePasswordResult: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -29,6 +30,12 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     this.state = {
       passwordResetModalOpen: false,
     };
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!newProps.changePasswordResult.passwordChanging && this.props.changePasswordResult.passwordChanging) {
+      this.closeResetPasswordModal();
+    }
   }
 
   openResetPasswordModal() {
