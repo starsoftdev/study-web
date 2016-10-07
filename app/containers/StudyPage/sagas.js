@@ -40,17 +40,14 @@ function* fetchPatientCategories() {
   const authToken = getItem('auth_token');
 
   const filter = JSON.stringify({
-    fields: 'name',
+    fields: ['name', 'id'],
   });
   const requestURL = `${API_URL}/patientCategories?access_token=${authToken}&filter=${filter}`;
   const response = yield call(request, requestURL, {
     method: 'GET',
   });
-  const patientCategories = response.map(patientCategory => (
-    patientCategory.name
-  ));
   // populate the patient categories
-  yield put(patientCategoriesFetched(patientCategories));
+  yield put(patientCategoriesFetched(response));
 }
 
 export function* fetchStudyPatients() {

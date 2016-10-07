@@ -3,35 +3,94 @@
  */
 
 import React from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import Form from 'react-bootstrap/lib/Form';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
+import Category from './Category';
+import * as Selector from '../selectors';
+import { submitTextBlast } from '../sagas';
 
 class TextBlastModal extends React.Component {
   static propTypes = {
     show: React.PropTypes.bool.isRequired,
     onClose: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
+    patientCategories: React.PropTypes.array.isRequired,
+    sources: React.PropTypes.array.isRequired,
+    submitTextBlast: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       showTextBlastModal: false,
+      selectAllCategories: false,
+      categories: {},
+      selectAllSources: false,
+      sources: {},
+      patients: []
     };
-    this.selectCategories = this.selectCategories.bind(this);
+    this.selectCategory = this.selectCategory.bind(this);
+    this.selectSource = this.selectSource.bind(this);
+    for (let patientCategory of props.patientCategories) {
+      this.state.categories[patientCategory.id] = false;
+    }
+    for (let source of props.sources) {
+      this.state.sources[source.id] = false;
+    }
   }
 
   componentDidMount() {
   }
 
-  selectCategories(category) {
+  componentWillReceiveProps(nextProps) {
+    for (let patientCategory of nextProps.patientCategories) {
+      this.state.categories[patientCategory.id] = false;
+    }
+    for (let source of nextProps.sources) {
+      this.state.sources[source.id] = false;
+    }
+  }
 
+
+  selectCategory(category) {
+    const { patientCategories } = this.props;
+    let state = {
+      categories: {
+        ...this.state.categories
+      },
+    }
+    if (category === 'All') {
+      state.selectAllCategories = !this.state.selectAllCategories;
+      for (let category of patientCategories) {
+        state.categories[category.id] = state.selectAllCategories;
+      }
+    } else {
+      state.categories[category.id] = !this.state.categories[category.id];
+    }
+    this.setState(state);
+  }
+
+  selectSource(source) {
+    const { sources } = this.props;
+    let state = {
+      sources: {},
+    }
+    if (source === 'All') {
+      state.selectAllSources = !this.state.selectAllSources;
+      for (let source of sources) {
+        state.sources[source.id] = state.selectAllSources;
+      }
+    } else {
+      state.sources[source.id] = !this.state.sources[source.id];
+    }
+    this.setState(state);
   }
   
   render() {
-    const {onClose, ...props} = this.props;
-    console.log(props)
+    const { onClose, patientCategories, sources, submitTextBlast, ...props} = this.props;
     return (
       <Modal
         {...props}
@@ -74,58 +133,16 @@ class TextBlastModal extends React.Component {
                     <div className="category">
                       <strong className="heading">CATEGORY</strong>
                       <ul className="check-list list-unstyled">
-                        <li>
-                          <span className="jcf-checkbox">
-                            <span className="checkbox icomoon-icon_check" />
-                            <input type="checkbox" onClick={() => {
-                              this.selectCategories('All');
-                            }} />
-                          </span>
-                          All
-                        </li>
-                        <li>
-                          <span className="jcf-checkbox">
-                            <span className="checkbox icomoon-icon_check" />
-                            <input type="checkbox" name="category-new-patient" data-patient="patient2-new-patient" />
-                          </span>
-                          New Patient
-                        </li>
-                        <li>
-            <span className="jcf-checkbox jcf-unchecked">
-              <input type="checkbox" name="category-call-attempted" />
-              </span>
-                          Call Attempted
-                        </li>
-                        <li>
-            <span className="jcf-checkbox jcf-unchecked">
-              <input type="checkbox" name="category-no" data-patient="patient2-not-qualified" />
-              </span>
-                          Not Qualified / Not Interested
-                        </li>
-                        <li>
-            <span className="jcf-checkbox jcf-unchecked">
-              <input type="checkbox" name="category-action-needed" />
-              </span>
-                          Action Needed
-                        </li>
-                        <li>
-            <span className="jcf-checkbox jcf-unchecked">
-              <input type="checkbox" name="category-scheduled" data-patient="patient2-scheduled" />
-              </span>
-                          Scheduled
-                        </li>
-                        <li>
-              <span className="jcf-checkbox jcf-unchecked">
-              <input type="checkbox" name="category-consented" data-patient="patient2-consented" />
-              </span>
-                          Consented
-                        </li>
-                        <li>
-              <span className="jcf-checkbox jcf-unchecked">
-              <input type="checkbox" name="category-randomized" />
-              </span>
-                          Randomized
-                        </li>
+                        <Category checked={this.state.selectAllCategories} name={"All"} onClick={() => {
+                          this.selectCategory("All");
+                        }} />
+                        {patientCategories.map(patientCategory => {
+                          return (
+                            <Category key={patientCategory.id} checked={this.state.categories[patientCategory.id]} name={patientCategory.name} onClick={() => {
+                            this.selectCategory(patientCategory);
+                          }} />
+                          );
+                        })}
                       </ul>
                     </div>
                     <div className="category">
@@ -238,4 +255,15 @@ class TextBlastModal extends React.Component {
   }
 }
 
-export default TextBlastModal;
+const mapStateToProps = createStructuredSelector({
+  patientCategories: Selector.selectPatientCategories(),
+  sources: Selector.selectSources(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    submitTextBlast: (values) => dispatch(submitTextBlast(values)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TextBlastModal);

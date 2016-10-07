@@ -19,10 +19,10 @@ class Category extends React.Component {
   render() {
     const { checked, name, onClick } = this.props;
     return (
-      <li>
-        <span className="jcf-checkbox">
-          <span className={classNames("checkbox", { "icomoon-icon_check": !checked })} />
-          <input type="checkbox" name={name} onClick={onClick} />
+      <li onClick={onClick}>
+        <span className={classNames("jcf-checkbox", { "jcf-checked": checked })}>
+          <span className="checkbox icomoon-icon_check" />
+          <input type="checkbox" name={name} />
         </span>
         {name}
       </li>

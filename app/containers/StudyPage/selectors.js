@@ -30,7 +30,9 @@ export const selectPatients = (id) => createSelector(
       const filteredPatientCategory = subState.patientCategories.filter(patientCategory => (
         patientCategory.id === id
       ))[0];
-      return filteredPatientCategory.patients;
+      if (filteredPatientCategory) {
+        return filteredPatientCategory.patients;
+      }
     }
     return [];
   }
