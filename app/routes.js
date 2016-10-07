@@ -166,6 +166,27 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/sites-users',
+      name: 'sitesUsersPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/SitesUsersPage/reducer'),
+          System.import('containers/SitesUsersPage/sagas'),
+          System.import('containers/SitesUsersPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('sitesUsersPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/profile',
       name: 'profilePage',
       getComponent(nextState, cb) {

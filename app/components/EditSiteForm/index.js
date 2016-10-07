@@ -1,80 +1,72 @@
-/**
- *
- * Add New Card Form
- *
- */
-
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 
 import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
-import { selectAddNewCardFormError } from './selectors';
-import { selectsavedCard } from 'containers/App/selectors';
+import { selectEditSiteFormError } from './selectors';
+import { selectSelectedSiteDetailsForForm, selectSavedSite } from 'containers/SitesUsersPage/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
-import { MONTH_OPTIONS as monthOptions, YEAR_OPTIONS as yearOptions } from 'common/constants';
-import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
-  savedCard: selectsavedCard(),
-  hasError: selectAddNewCardFormError(),
+  initialValues: selectSelectedSiteDetailsForForm(),
+  savedSite: selectSavedSite(),
+  hasError: selectEditSiteFormError(),
 });
 
-@reduxForm({ form: 'addNewCard', validate: formValidator })
+@reduxForm({ form: 'editSite', validate: formValidator })
 @connect(mapStateToProps, null)
 
-class AddNewCardForm extends Component { // eslint-disable-line react/prefer-stateless-function
+class EditSiteForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    savedCard: PropTypes.object,
+    savedSite: PropTypes.object,
     hasError: PropTypes.bool,
     handleSubmit: PropTypes.func,
   };
 
   render() {
-    const { savedCard, hasError, handleSubmit } = this.props;
+    const { savedSite, hasError, handleSubmit } = this.props;
 
     return (
-      <form className="form-add-new-card" onSubmit={handleSubmit}>
-        <div className="add-new-card scroll-holder jcf--scrollable">
+      <form className="form-edit-site" onSubmit={handleSubmit}>
+        <div className="edit-site scroll-holder jcf--scrollable">
           <div className="row form-group">
             <strong className="required col-sm-4">
-              <label>COMPANY</label>
+              <label>SITE NAME</label>
             </strong>
             <div className="field col-sm-8">
               <Field
-                name="company"
+                name="name"
                 component={Input}
                 type="text"
-                disabled={savedCard.saving}
+                disabled={savedSite.saving}
               />
             </div>
           </div>
           <div className="row form-group">
             <strong className="required col-sm-4">
-              <label>NAME ON CARD</label>
+              <label>PRINCIPAL INVESTIGATOR</label>
             </strong>
             <div className="field col-sm-8">
               <div className="row">
                 <div className="col-sm-6">
                   <Field
-                    name="firstName"
+                    name="piFirstName"
                     component={Input}
                     type="text"
                     placeholder="First Name"
-                    disabled={savedCard.saving}
+                    disabled={savedSite.saving}
                   />
                 </div>
                 <div className="col-sm-6">
                   <Field
-                    name="lastName"
+                    name="piLastName"
                     component={Input}
                     type="text"
                     placeholder="Last Name"
-                    disabled={savedCard.saving}
+                    disabled={savedSite.saving}
                   />
                 </div>
               </div>
@@ -82,74 +74,73 @@ class AddNewCardForm extends Component { // eslint-disable-line react/prefer-sta
           </div>
           <div className="row form-group">
             <strong className="required col-sm-4">
-              <label>CARD NUMBER</label>
+              <label>SITE PHONE</label>
             </strong>
             <div className="field col-sm-8">
               <Field
-                name="number"
+                name="phone"
                 component={Input}
                 type="text"
-                disabled={savedCard.saving}
+                disabled={savedSite.saving}
               />
             </div>
           </div>
           <div className="row form-group">
             <strong className="required col-sm-4">
-              <label>EXPIRATION</label>
-            </strong>
-            <div className="field col-sm-8">
-              <div className="row">
-                <div className="col-sm-6">
-                  <Field
-                    name="expirationMonth"
-                    component={ReactSelect}
-                    placeholder="Select Month"
-                    options={monthOptions}
-                    disabled={savedCard.saving}
-                  />
-                </div>
-                <div className="col-sm-6">
-                  <Field
-                    name="expirationYear"
-                    component={ReactSelect}
-                    placeholder="Select Year"
-                    options={yearOptions}
-                    disabled={savedCard.saving}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="row form-group">
-            <strong className="col-sm-4">
-              <label>CVC</label>
+              <label>SITE ADDRESS</label>
             </strong>
             <div className="field col-sm-8">
               <Field
-                name="cvc"
+                name="address"
                 component={Input}
                 type="text"
-                disabled={savedCard.saving}
+                disabled={savedSite.saving}
               />
             </div>
           </div>
           <div className="row form-group">
             <strong className="required col-sm-4">
-              <label>BILLING POSTAL CODE</label>
+              <label>CITY</label>
             </strong>
             <div className="field col-sm-8">
               <Field
-                name="billingPostalCode"
+                name="city"
                 component={Input}
                 type="text"
-                disabled={savedCard.saving}
+                disabled={savedSite.saving}
+              />
+            </div>
+          </div>
+          <div className="row form-group">
+            <strong className="required col-sm-4">
+              <label>STATE / PROVINCE</label>
+            </strong>
+            <div className="field col-sm-8">
+              <Field
+                name="state"
+                component={Input}
+                type="text"
+                disabled={savedSite.saving}
+              />
+            </div>
+          </div>
+          <div className="row form-group">
+            <strong className="required col-sm-4">
+              <label>POSTAL CODE</label>
+            </strong>
+            <div className="field col-sm-8">
+              <Field
+                name="zip"
+                component={Input}
+                type="text"
+                disabled={savedSite.saving}
               />
             </div>
           </div>
           <div className="btn-block text-right">
-            <button type="submit" className="btn btn-default btn-add-row" disabled={hasError || savedCard.saving}>
-              {savedCard.saving
-                ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-card" /></span>
+            <button type="submit" className="btn btn-default btn-add-row" disabled={hasError || savedSite.saving}>
+              {savedSite.saving
+                ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-site" /></span>
                 : <span>Submit</span>
               }
             </button>
@@ -160,4 +151,4 @@ class AddNewCardForm extends Component { // eslint-disable-line react/prefer-sta
   }
 }
 
-export default AddNewCardForm;
+export default EditSiteForm;
