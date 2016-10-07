@@ -8,7 +8,7 @@ import { createStructuredSelector } from 'reselect';
 import Form from 'react-bootstrap/lib/Form';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
-import Category from './Category';
+import CheckboxElement from './CheckboxElement';
 import * as Selector from '../selectors';
 import { submitTextBlast } from '../sagas';
 
@@ -133,12 +133,12 @@ class TextBlastModal extends React.Component {
                     <div className="category">
                       <strong className="heading">CATEGORY</strong>
                       <ul className="check-list list-unstyled">
-                        <Category checked={this.state.selectAllCategories} name={"All"} onClick={() => {
+                        <CheckboxElement checked={this.state.selectAllCategories} name={"All"} onClick={() => {
                           this.selectCategory("All");
                         }} />
                         {patientCategories.map(patientCategory => {
                           return (
-                            <Category key={patientCategory.id} checked={this.state.categories[patientCategory.id]} name={patientCategory.name} onClick={() => {
+                            <CheckboxElement key={patientCategory.id} checked={this.state.categories[patientCategory.id]} name={patientCategory.name} onClick={() => {
                             this.selectCategory(patientCategory);
                           }} />
                           );
@@ -148,48 +148,16 @@ class TextBlastModal extends React.Component {
                     <div className="category">
                       <strong className="heading">SOURCE</strong>
                       <ul className="check-list list-unstyled">
-                        <li>
-              <span className="jcf-checkbox jcf-unchecked">
-              <input type="checkbox" data-check-pattern="[name^='source-']" />
-              </span>
-                          All
-                        </li>
-                        <li>
-              <span className="jcf-checkbox jcf-unchecked">
-              <input type="checkbox" name="source-studykik" />
-              </span>
-                          StudyKIK
-                        </li>
-                        <li>
-              <span className="jcf-checkbox jcf-unchecked">
-              <input type="checkbox" name="source-tv" />
-              </span>
-                          TV
-                        </li>
-                        <li>
-              <span className="jcf-checkbox jcf-unchecked">
-              <input type="checkbox" name="source-radio" />
-              </span>
-                          Radio
-                        </li>
-                        <li>
-              <span className="jcf-checkbox jcf-unchecked">
-              <input type="checkbox" name="source-print" />
-              </span>
-                          Print
-                        </li>
-                        <li>
-                          <span className="jcf-checkbox jcf-unchecked">
-                            <input type="checkbox" name="source-digital" />
-                          </span>
-                          Digital
-                        </li>
-                        <li>
-                          <span className="jcf-checkbox jcf-unchecked">
-                            <input type="checkbox" name="source-other" />
-                          </span>
-                          Other
-                        </li>
+                        <CheckboxElement checked={this.state.selectAllSources} name={"All"} onClick={() => {
+                          this.selectSource("All");
+                        }} />
+                        {sources.map(source => {
+                          return (
+                            <CheckboxElement key={source.id} checked={this.state.sources[source.id]} name={source.type} onClick={() => {
+                              this.selectSource(source);
+                            }} />
+                          );
+                        })}
                       </ul>
                     </div>
                     <div className="selected-patients-list"></div>

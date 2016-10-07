@@ -5,7 +5,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-class Category extends React.Component {
+class CheckboxElement extends React.Component {
 
   static propTypes = {
     checked: React.PropTypes.bool.isRequired,
@@ -30,4 +30,4 @@ class Category extends React.Component {
   }
 }
 
-export default Category;
+export default CheckboxElement;
