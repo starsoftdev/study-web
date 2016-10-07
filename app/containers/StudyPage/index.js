@@ -74,7 +74,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     campaignOptions.unshift({ label: 'All', value: 0 });
     const sourceOptions = sources.map(source => (
       {
-        label: source.name,
+        label: source.type,
         value: source.id,
       }
     ));
