@@ -4,7 +4,7 @@
 
 import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from '../../components/CenteredModal/index';
+import CenteredModal from '../../../components/CenteredModal/index';
 
 class ImportPatientsModal extends React.Component {
   static propTypes = {
