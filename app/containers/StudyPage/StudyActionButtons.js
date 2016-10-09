@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import ImportPatientsModal from './ImportPatientsModal';
+import ImportPatientsModal from './ImportPatients/ImportPatientsModal';
 import TextEmailBlastModal from './TextEmailBlastModal';
 import TextBlastModal from './TextBlast/TextBlastModal';
 
