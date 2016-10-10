@@ -22,7 +22,7 @@ class StudyPatients extends React.Component {
       selectedPatientCategory: false,
       selectedPatient: false,
       carousel: {
-        note: false,
+        note: true,
         text: false,
         email: false,
         other: false,
@@ -242,13 +242,13 @@ class StudyPatients extends React.Component {
                   data-interval="false"
                 >
                   <ol className="carousel-indicators">
-                    <li className={classNames({"active": this.state.carousel.note})}>Note</li>
-                    <li>Text</li>
-                    <li>Email</li>
-                    <li>Other</li>
+                    <li className={classNames({active: this.state.carousel.note})} onClick={this.toggleNoteSection}>Note</li>
+                    <li className={classNames({active: this.state.carousel.text})} onClick={this.toggleTextSection}>Text</li>
+                    <li className={classNames({active: this.state.carousel.email})} onClick={this.toggleEmailSection}>Email</li>
+                    <li className={classNames({active: this.state.carousel.other})} onClick={this.toggleOtherSection}>Other</li>
                   </ol>
                   <div className="carousel-inner" role="listbox">
-                    <div className="item active note">
+                    <div className={classNames("item note", {active: this.state.carousel.note})}>
                       <section className="postarea notes">
                         <article className="post-msg">
                           <div className="post-holder" data-post="1">
@@ -260,13 +260,9 @@ class StudyPatients extends React.Component {
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                                 incididunt. Lorem ipsum dolor sit amet.
                               </p>
-                              <a
-                                className="btn-trash"
-                                data-remove="[data-post=&quot;1&quot;]"
-                              >
+                              <a className="btn-trash">
                                 <i className="icomoon-icon_trash" />
                               </a>
-
                             </div>
                             <strong className="email">Alan Walker</strong>
                             <time dateTime="2016-07-28">07/28/16 at 09:35 AM</time>
@@ -419,7 +415,7 @@ class StudyPatients extends React.Component {
                         <button className="btn btn-default">Send</button>
                       </div>
                     </div>
-                    <div className="item text">
+                    <div className={classNames("item text", {active: this.state.carousel.text})}>
                       <section className="postarea notes">
                         <article className="post-msg">
                           <div className="post-holder patient" data-post="notes1">
@@ -433,7 +429,6 @@ class StudyPatients extends React.Component {
                               </p>
                               <a
                                 className="btn-trash"
-                                href="#"
                                 data-remove="[data-post=&quot;notes1&quot;]"
                               >
                                 <i className="icomoon-icon_trash" />
@@ -468,7 +463,8 @@ class StudyPatients extends React.Component {
                         </article>
                         <article className="post-msg">
                           <div className="post-holder patient" data-post="notes2">
-                            <div className="img-holder"><img role="presentation" src="images/img2.png" />
+                            <div className="img-holder">
+                              <img role="presentation" src="images/img2.png" />
                             </div>
                             <div className="post-content">
                               <p>
@@ -609,163 +605,10 @@ class StudyPatients extends React.Component {
                         <button className="btn btn-default">Send</button>
                       </div>
                     </div>
-                    <div className="item emails-info">
-                      <section className="postarea">
-                        <article className="post-email-alert">
-                          <a
-                            href="#"
-                            data-addclass="email-detail"
-                            data-parentbox=".post-email-alert, .emails-info"
-                          >
-                            <div className="img-holder">
-                              <img role="presentation" src="images/img-logged-user.png" />
-                            </div>
-                            <strong className="subject">SUBJECT</strong>
-                            <div className="email-content">
-                              <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore. Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.
-                              </p>
-                            </div>
-                            <strong className="author">Bruce Wayne</strong>
-                            <time dateTime="2016-09-02">05/15/16 at 12:30:15 PM</time>
-                          </a>
-                          <div className="btn-block back-to-emails">
-                            <a
-                              href="#"
-                              className="btn btn-gray-outline"
-                              data-addclass="email-detail"
-                              data-parentbox=".post-email-alert, .emails-info"
-                              data-classremove="email-detail"
-                            >back</a>
-                          </div>
-                        </article>
-                        <article className="post-email-alert">
-                          <span data-addclass="email-detail" data-parentbox=".post-email-alert, .emails-info">
-                            <div className="img-holder">
-                              <img role="presentation" src="images/img2.png" />
-                            </div>
-                            <strong className="subject">SUBJECT</strong>
-                            <div className="email-content">
-                              <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore.
-                              </p>
-                            </div>
-                            <strong className="author">Alan Jensen</strong>
-                            <time dateTime="2016-09-02">05/15/16 at 12:30:15 PM</time>
-                          </span>
-                          <div className="btn-block back-to-emails">
-                            <a
-                              href="#"
-                              className="btn btn-gray-outline"
-                              data-addclass="email-detail"
-                              data-parentbox=".post-email-alert, .emails-info"
-                              data-classremove="email-detail"
-                            >back</a>
-                          </div>
-                        </article>
-                        <article className="post-email-alert">
-                          <a
-                            href="#"
-                            data-addclass="email-detail"
-                            data-parentbox=".post-email-alert, .emails-info"
-                          >
-                            <div className="img-holder">
-                              <img role="presentation" src="images/img3.png" />
-                            </div>
-                            <strong className="subject">SUBJECT</strong>
-                            <div className="email-content">
-                              <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore. Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.
-                              </p>
-                            </div>
-                            <strong className="author">Penny Worth</strong>
-                            <time dateTime="2016-09-02">05/15/16 at 12:30:15 PM</time>
-                          </a>
-                          <div className="btn-block back-to-emails">
-                            <a
-                              href="#"
-                              className="btn btn-gray-outline"
-                              data-addclass="email-detail"
-                              data-parentbox=".post-email-alert, .emails-info"
-                              data-classremove="email-detail"
-                            >back</a>
-                          </div>
-                        </article>
-                        <article className="post-email-alert">
-                          <a
-                            href="#"
-                            data-addclass="email-detail"
-                            data-parentbox=".post-email-alert, .emails-info"
-                          >
-                            <div className="img-holder">
-                              <img role="presentation" src="images/img-logged-user.png" />
-                            </div>
-                            <strong className="subject">SUBJECT</strong>
-                            <div className="email-content">
-                              <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore.
-                              </p>
-                            </div>
-                            <strong className="author">Bruce Wayne</strong>
-                            <time dateTime="2016-09-02">05/15/16 at 12:30:15 PM</time>
-                          </a>
-                          <div className="btn-block back-to-emails">
-                            <a
-                              href="#"
-                              className="btn btn-gray-outline"
-                              data-addclass="email-detail"
-                              data-parentbox=".post-email-alert, .emails-info"
-                              data-classremove="email-detail"
-                            >back</a>
-                          </div>
-                        </article>
-                        <article className="post-email-alert preview">
-                          <div className="preview-holder"></div>
-                          <div className="btn-block back-to-emails">
-                            <a
-                              href="#"
-                              className="btn btn-gray-outline"
-                              data-addclass="email-detail"
-                              data-parentbox=".post-email-alert, .emails-info"
-                              data-classremove="email-detail"
-                            >back</a>
-                          </div>
-                        </article>
-                      </section>
-                      <div className="textarea">
-                        <div className="btn-block text-right">
-                          <a
-                            href="#"
-                            className="btn btn-default"
-                            data-parentbox=".emails-info"
-                            data-addclass="parent-active"
-                          >compose</a>
-                        </div>
-                      </div>
-                      <div className="compose-email">
-                        <div className="composer-holder">
-                          <input type="text" className="form-control subject" placeholder="Subject" />
-                          <textarea className="form-control" placeholder="Type a message..." />
-                        </div>
-                        <div className="textarea">
-                          <a
-                            href="#"
-                            className="btn btn-gray-outline pull-left"
-                            data-addclass="parent-active"
-                            data-parentbox=".emails-info"
-                            data-classremove="parent-active"
-                          >back</a>
-                          <input type="submit" value="Send" className="btn btn-default pull-right" />
-                        </div>
-                      </div>
+                    <div className={classNames("item emails-info", {active: this.state.carousel.email})}>
+                      Coming soon
                     </div>
-                    <div className="item others">
+                    <div className={classNames("item others", {active: this.state.carousel.other})}>
                       <div className="item-holder">
                         <div className="dates">
                           <strong className="title">Dates</strong>
@@ -781,9 +624,7 @@ class StudyPatients extends React.Component {
                           </ul>
                         </div>
                         <form
-                          action="#"
                           className="sub-holder form-lightbox"
-                          data-formvalidation=""
                           noValidate="novalidate"
                         >
                           <div className="field-row full remove-bipolar">
