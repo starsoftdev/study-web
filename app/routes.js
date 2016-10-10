@@ -166,6 +166,27 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/list-new-study',
+      name: 'listNewStudyPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/ListNewStudyPage/reducer'),
+          System.import('containers/ListNewStudyPage/sagas'),
+          System.import('containers/ListNewStudyPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('listNewStudyPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/profile',
       name: 'profilePage',
       getComponent(nextState, cb) {
