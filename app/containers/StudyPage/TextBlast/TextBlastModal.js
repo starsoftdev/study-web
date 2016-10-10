@@ -120,7 +120,7 @@ class TextBlastModal extends React.Component {
                     <div className="custom-select-drop">
                       <div className="search-holder">
                         <input type="search" className="form-control keyword-search" />
-                        <i className="icon-icon_search2" />
+                        <i className="icomoon-icon_search2" />
                         <ul className="list list-unstyled">
                           <li>Alan Jensen</li>
                           <li>Eugene Simpson</li>
@@ -165,27 +165,27 @@ class TextBlastModal extends React.Component {
                       <div data-patient="patient2-new-patient">
                         <span className="name">Alan Jensen</span>
                         <a href="#" className="btn-remove">
-                          <i className="icon-icon_trash" /></a>
+                          <i className="icomoon-icon_trash" /></a>
                       </div>
                       <div data-patient="patient2-new-patient">
                         <span className="name">Eugene Simpson</span>
                         <a href="#" className="btn-remove">
-                          <i className="icon-icon_trash" /></a>
+                          <i className="icomoon-icon_trash" /></a>
                       </div>
                       <div data-patient="patient2-not-qualified">
                         <span className="name">Katy Perry</span>
                         <a href="#" className="btn-remove">
-                          <i className="icon-icon_trash" /></a>
+                          <i className="icomoon-icon_trash" /></a>
                       </div>
                       <div data-patient="patient2-scheduled">
                         <span className="name">Hamish Labatt</span>
                         <a href="#" className="btn-remove">
-                          <i className="icon-icon_trash" /></a>
+                          <i className="icomoon-icon_trash" /></a>
                       </div>
                       <div data-patient="patient2-consented">
                         <span className="name">Thomas Morgan</span>
                         <a href="#" className="btn-remove">
-                          <i className="icon-icon_trash" /></a>
+                          <i className="icomoon-icon_trash" /></a>
                       </div>
                     </div>
                   </div>
@@ -200,16 +200,16 @@ class TextBlastModal extends React.Component {
               <span className="counter">0</span>
               <span className="text">Patients</span>
               <a href="#" className="btn-close">
-              <i className="icon-close" />
+              <i className="icomoon-close" />
               </a>
               </span>
                     </div>
                     <textarea placeholder="Type a message..." className="form-control" data-required="true" />
                     <div className="footer">
                       <a href="#" className="btn btn-gray-outline pull-left">
-                        <i className="icon-icon_book_alt" /> Select Template</a>
+                        <i className="icomoon-icon_book_alt" /> Select Template</a>
                       <a href="#" className="btn btn-gray-outline pull-left">
-                        <i className="icon-icon_floppy_alt" /> Save Template</a>
+                        <i className="icomoon-icon_floppy_alt" /> Save Template</a>
                       <input type="submit" value="submit" className="btn btn-default pull-right" />
                     </div>
                   </div>
