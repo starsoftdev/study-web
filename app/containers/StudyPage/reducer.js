@@ -18,6 +18,7 @@ import {
   FETCH_STUDY_SUCCESS,
   FETCH_STUDY_ERROR,
 } from './constants';
+import _ from 'lodash';
 
 const initialState = {
 };
@@ -38,9 +39,14 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         patientCategories: state.patientCategories.map(patientCategory => {
-          const patientCategoryTemp = Object.assign({}, patientCategory);
-          patientCategoryTemp.patients = action.payload;
-          return patientCategoryTemp;
+          const tempCategory = _.find(action.payload, category => {
+            return category.id === patientCategory.id
+          })
+          if (tempCategory) {
+            return tempCategory;
+          }
+          patientCategory.patients = [];
+          return patientCategory;
         }),
         fetchingPatients: false,
       };
@@ -57,7 +63,11 @@ function studyPageReducer(state = initialState, action) {
     case FETCH_PATIENT_CATEGORIES_SUCCESS:
       return {
         ...state,
-        patientCategories: action.payload,
+        patientCategories: action.payload.map(patientCategory => {
+          const patientCategoryTemp = Object.assign({}, patientCategory);
+          patientCategoryTemp.patients = [];
+          return patientCategoryTemp;
+        }),
       };
     case FETCH_PATIENT_CATEGORIES_ERROR:
       return {

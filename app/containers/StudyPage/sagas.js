@@ -2,10 +2,10 @@
  * Created by mike on 9/23/16.
  */
 
-import { call, fork, put } from 'redux-saga/effects';
-
+import { call, fork, put, take } from 'redux-saga/effects';
 import request from 'utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
+import { FETCH_PATIENTS } from './constants';
 
 import { campaignsFetched, patientCategoriesFetched, patientsFetched, sitesFetched, sourcesFetched, studyFetched } from './actions';
 
@@ -50,15 +50,15 @@ function* fetchPatientCategories() {
   yield put(patientCategoriesFetched(response));
 }
 
-export function* fetchStudyPatients() {
+export function* fetchPatients(filter) {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
   const studyId = getItem('study_id');
   const siteId = getItem('site_id');
   const campaignId = getItem('campaign_id');
   const sourceId = getItem('source_id');
-  if (!authToken) {
-    return;
-  }
 
   try {
     let requestURL = `${API_URL}/studies/${studyId}/patients?access_token=${authToken}&siteId=${siteId}`;
@@ -81,6 +81,14 @@ export function* fetchStudyPatients() {
   }
 }
 
+export function* fetchPatientsWithFilter() {
+  while(true) {
+    // listen for the FETCH_PATIENTS action
+    const { filter } = yield take(FETCH_PATIENTS);
+    yield call(fetchPatients(filter));
+  }
+}
+
 export function* fetchStudySaga() {
   const authToken = getItem('auth_token');
   if (!authToken) {
@@ -89,7 +97,9 @@ export function* fetchStudySaga() {
 
   try {
     yield fork(fetchStudyDetails);
-    yield fork(fetchPatientCategories);
+    yield call(fetchPatientCategories);
+    yield fork(fetchPatients);
+    yield fork(fetchPatientsWithFilter);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

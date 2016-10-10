@@ -4,22 +4,24 @@
 
 import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
+import Form from 'react-bootstrap/lib/Form';
 import CenteredModal from '../../../components/CenteredModal/index';
 
 class ImportPatientsModal extends React.Component {
   static propTypes = {
     show: React.PropTypes.bool.isRequired,
     onHide: React.PropTypes.func.isRequired,
+    toggleAddPatient: React.PropTypes.func.isRequired,
   };
 
   componentDidMount() {
   }
 
   render() {
-    const { onHide } = this.props;
+    const { onHide, toggleAddPatient, ...props } = this.props;
     return (
       <Modal
-        {...this.props}
+        {...props}
         id="import-info"
         dialogComponentClass={CenteredModal}
         backdrop
@@ -27,18 +29,18 @@ class ImportPatientsModal extends React.Component {
       >
         <Modal.Header>
           <Modal.Title>
-            <strong>IMPORT</strong>
+            <strong>Import</strong>
           </Modal.Title>
           <a className="close" onClick={onHide}>
             <i className="icomoon-close" />
           </a>
         </Modal.Header>
         <Modal.Body>
-          <form className="upload-patient-info">
+          <Form className="upload-patient-info">
             <div className="table">
               <label className="table-cell" htmlFor="upload-patient">
                 <i className="icomoon-alt-arrow-up" />
-                <span className="text">UPLOAD PATIENTS</span>
+                <span className="text">Upload Patients</span>
                 <span className="jcf-file">
                   <span className="jcf-fake-input">No file chosen</span>
                   <span className="jcf-upload-button">
@@ -48,11 +50,11 @@ class ImportPatientsModal extends React.Component {
                 </span>
               </label>
             </div>
-          </form>
+          </Form>
           <span className="or">
             <span>or</span>
           </span>
-          <a href="#add-patient-info-import" className="add-patient-info-import">
+          <a className="add-patient-info-import" onClick={toggleAddPatient}>
             <div className="table">
               <div className="table-cell">
                 <i className="icomoon-alt-plus" />
