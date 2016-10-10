@@ -3,9 +3,12 @@
  */
 
 import React from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import CenteredModal from '../../../components/CenteredModal/index';
+
 
 class AddPatient extends React.Component {
   static propTypes = {
@@ -53,19 +56,23 @@ class AddPatient extends React.Component {
                 </div>
               </div>
               <div className="field-row">
-                <strong className="label required"><label htmlFor="import-patient-email">PATIENT EMAIL </label></strong>
+                <strong className="label required">
+                  <label htmlFor="import-patient-email"> Patient Email </label>
+                </strong>
                 <div className="field">
                   <input type="email" id="import-patient-email" className="form-control" required />
                 </div>
               </div>
               <div className="field-row">
-                <strong className="label required"><label htmlFor="import-patient-phone"> PATIENT PHONE </label></strong>
+                <strong className="label required">
+                  <label htmlFor="import-patient-phone"> Patient Phone </label>
+                </strong>
                 <div className="field">
-                  <input type="text" data-type="number" id="import-patient-phone" className="form-control" required />
+                  <input type="text" id="import-patient-phone" className="form-control" required />
                 </div>
               </div>
               <div className="text-right">
-                <input type="submit" value="submit" className="btn btn-default" />
+                <input type="submit" value="submit" className="btn btn-default" onClick={this.submit} />
               </div>
             </Form>
           </div>
@@ -75,4 +82,13 @@ class AddPatient extends React.Component {
   }
 }
 
-export default AddPatient;
+const mapStateToProps = createStructuredSelector({
+
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddPatient);
