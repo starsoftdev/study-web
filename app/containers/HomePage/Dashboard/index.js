@@ -5,7 +5,7 @@ import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from 'containers/App/selectors';
 import GlobalNotifications from 'containers/GlobalNotifications';
 
-import { fetchPatientSignUps, fetchPatientMessages, fetchRewardsPoint, receiveNotification } from '../actions';
+import { fetchPatientSignUps, fetchPatientMessages, fetchRewardsPoint } from '../actions';
 import { selectPatientSignUps, selectPatientMessages, selectRewardsPoint } from '../selectors';
 
 import './styles.less';
@@ -21,7 +21,6 @@ export class Dashboard extends React.Component {
     fetchPatientSignUps: PropTypes.func,
     fetchPatientMessages: PropTypes.func,
     fetchRewardsPoint: PropTypes.func,
-    receiveNotification: PropTypes.func,
     location: PropTypes.any,
   }
 
@@ -47,7 +46,6 @@ export class Dashboard extends React.Component {
         raw: { pathname: '/' },
         cb: (err, data) => {
           console.log('received', err, data);
-          this.props.receiveNotification(data);
         },
       },
     ];
@@ -132,7 +130,6 @@ const mapDispatchToProps = {
   fetchPatientSignUps,
   fetchPatientMessages,
   fetchRewardsPoint,
-  receiveNotification,
 };
 
 export default connect(
