@@ -20,6 +20,8 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
   static propTypes = {
     siteLocations: PropTypes.array,
     createPdf:  PropTypes.func,
+    changeRange:  PropTypes.func,
+    selectSite:  PropTypes.func,
   };
 
   constructor(props, context) {
@@ -28,7 +30,9 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
     this.createPdf = this.createPdf.bind(this);
     this.showPopup = this.showPopup.bind(this);
     this.hidePopup = this.hidePopup.bind(this);
+    this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this, 'predefined');
+    this.search = this.search.bind(this);
 
     this.state = {
       showPopup: false,
@@ -43,6 +47,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
   componentWillReceiveProps() {}
 
   handleChange(which, payload) {
+    console.log('handleChange', which, payload);
     this.setState({
       [which] : payload,
     });
@@ -54,7 +59,9 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   hidePopup(ev) {
-    ev.preventDefault();
+    if (ev) {
+      ev.preventDefault();
+    }
     this.setState({ showPopup: false });
   }
 
@@ -63,10 +70,22 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
     this.props.createPdf();
   }
 
+  changeRange(ev) {
+    ev.preventDefault();
+    const range  = this.state.predefined
+    this.props.changeRange(range);
+    this.hidePopup()
+  }
+
+  search(ev) {
+    ev.preventDefault();
+    // console.log('searchInput', this.refs.searchInput.value);
+  }
+
   render() {
     const { predefined } = this.state;
     const format = 'dddd, D MMMM YYYY';
-    const { siteLocations } = this.props;
+    const { siteLocations, selectSite } = this.props;
     const state = this.state;
 
     return (
@@ -97,8 +116,19 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
         <div className="fields-holder">
           <div className="search-area pull-left">
             <div className="field">
-              <input type="search" id="search" className="form-control keyword-search" placeholder="Search" />
-              <label htmlFor="search"><i className="icon-icon_search2" /></label>
+              <input
+                type="search"
+                id="search"
+                className="form-control keyword-search"
+                placeholder="Search"
+                ref="searchInput"
+              />
+              <label htmlFor="search">
+                <i
+                  className="icon-icon_search2"
+                  onClick={this.search}
+                />
+              </label>
             </div>
           </div>
           <div className="pull-left custom-select">
@@ -108,6 +138,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
               placeholder="Select Site Location"
               options={siteLocations}
               className="field"
+              onChange={selectSite}
             />
           </div>
         </div>
@@ -133,7 +164,13 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
                       <span className="left">{ predefined.startDate && predefined.startDate.format(format).toString() }</span>
                       <span className="right">{ predefined.endDate && predefined.endDate.format(format).toString() }</span>
                       <div className="btn-block text-right">
-                        <a href="#" className="btn btn-default lightbox-close">submit</a>
+                        <a
+                          href="#"
+                          className="btn btn-default lightbox-close"
+                          onClick={this.changeRange}
+                        >
+                          submit
+                        </a>
                       </div>
                     </div>
                   </div>

@@ -12,6 +12,7 @@ import { StickyContainer } from 'react-sticky';
 
 import {
   getProposals,
+  createPDF,
 } from 'containers/Proposals/actions';
 import {
   fetchSites,
@@ -39,6 +40,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     fetchSites: PropTypes.func,
     fetchEvents: PropTypes.func,
     getProposals: PropTypes.func,
+    createPDF: PropTypes.func,
     location: PropTypes.any,
     proposals: PropTypes.any,
     currentUser: PropTypes.any,
@@ -48,7 +50,15 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     super(props, context);
 
     this.createPdf = this.createPdf.bind(this);
+    this.changeRange = this.changeRange.bind(this);
     this.selectCurrent = this.selectCurrent.bind(this);
+    this.selectAll = this.selectAll.bind(this);
+    this.selectSite = this.selectSite.bind(this);
+
+    this.state = {
+      range: null,
+      site: null,
+    };
   }
 
   componentDidMount() {
@@ -104,9 +114,28 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     this.selectedProposal = proposal;
   }
 
+  selectAll(proposals) {
+    this.selectedProposal = proposals;
+  }
+
+  changeRange(payload) {
+    this.setState({
+      range : payload,
+    });
+  }
+
+  selectSite(val) {
+    const { siteLocations } = this.props;
+    const site  = siteLocations[val-1]
+    this.setState({
+      site
+    });
+  }
+
   createPdf() {
-    console.log('createPdf');
-    console.log('proposal', this.selectedProposal);
+    if (this.selectedProposal) {
+      this.props.createPDF(this.selectedProposal)
+    }
   }
 
   render() {
@@ -115,8 +144,19 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
         <Helmet title="Proposals - StudyKIK" />
         <section className="calendar-section receipts">
           <h2 className="main-heading">PROPOSALS</h2>
-          <ProposalsForm createPdf={this.createPdf} {...this.props} />
-          <ProposalsTable selectCurrent={this.selectCurrent} {...this.props} />
+          <ProposalsForm
+            changeRange={this.changeRange}
+            selectSite={this.selectSite}
+            createPdf={this.createPdf}
+            {...this.props}
+          />
+          <ProposalsTable
+            selectCurrent={this.selectCurrent}
+            selectAll={this.selectAll}
+            range={this.state.range}
+            site={this.state.site}
+            {...this.props}
+          />
         </section>
       </StickyContainer>
     );
@@ -137,6 +177,7 @@ function mapDispatchToProps(dispatch) {
     fetchEvents: (values) => dispatch(fetchEvents(values)),
     fetchSites: () => dispatch(fetchSites()),
     getProposals: (values) => dispatch(getProposals(values)),
+    createPDF: (values) => dispatch(createPDF(values)),
   };
 }
 
