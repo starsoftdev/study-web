@@ -21,6 +21,11 @@ const selectEvents = () => createSelector(
   (substate) => substate.pageEvents
 );
 
+const selectCurrentUserClientId = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'userData.roleForClient.client.id', null)
+);
+
 const selectCurrentUserStripeCustomerId = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'userData.roleForClient.client.stripeCustomerId', null)
@@ -79,14 +84,14 @@ const selectCards = () => createSelector(
   (substate) => get(substate, 'baseData.cards', {})
 );
 
-const selectSaveCard = () => createSelector(
+const selectSavedCard = () => createSelector(
   selectGlobal(),
-  (substate) => get(substate, 'baseData.saveCard', {})
+  (substate) => get(substate, 'baseData.savedCard', {})
 );
 
-const selectDeleteCard = () => createSelector(
+const selectDeletedCard = () => createSelector(
   selectGlobal(),
-  (substate) => get(substate, 'baseData.deleteCard', {})
+  (substate) => get(substate, 'baseData.deletedCard', {})
 );
 
 const selectAddCredits = () => createSelector(
@@ -101,6 +106,7 @@ export {
   selectAuthState,
   selectEvents,
   selectCurrentUser,
+  selectCurrentUserClientId,
   selectCurrentUserStripeCustomerId,
 
   selectSites,
@@ -110,8 +116,8 @@ export {
   selectStudyLevels,
   selectCoupon,
   selectCards,
-  selectSaveCard,
-  selectDeleteCard,
+  selectSavedCard,
+  selectDeletedCard,
   selectAddCredits,
 
   selectLocationState,

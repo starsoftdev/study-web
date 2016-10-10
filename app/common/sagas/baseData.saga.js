@@ -154,7 +154,7 @@ export function* saveCardWatcher() {
       };
       const response = yield call(request, requestURL, options);
 
-      yield put(toastrActions.success('AddNewCard', 'Card saved successfully!'));
+      yield put(toastrActions.success('Add New Card', 'Card saved successfully!'));
       yield put(cardSaved(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');

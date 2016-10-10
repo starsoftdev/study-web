@@ -46,7 +46,7 @@ export default function createRoutes(store) {
     },
     {
       onEnter: redirectToLogin,
-      path: '/home',
+      path: '/',
       name: 'home',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -158,6 +158,27 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('requestProposalPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/sites-users',
+      name: 'sitesUsersPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/SitesUsersPage/reducer'),
+          System.import('containers/SitesUsersPage/sagas'),
+          System.import('containers/SitesUsersPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('sitesUsersPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });

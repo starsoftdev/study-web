@@ -55,12 +55,12 @@ const initialState = {
       fetching: false,
       error: null,
     },
-    saveCard: {
+    savedCard: {
       details: null,
       saving: false,
       error: null,
     },
-    deleteCard: {
+    deletedCard: {
       details: null,
       deleting: false,
       error: null,
@@ -209,7 +209,7 @@ export default function appReducer(state = initialState, action) {
         ...state,
         baseData: {
           ...state.baseData,
-          saveCard: {
+          savedCard: {
             details: null,
             saving: true,
             error: null,
@@ -228,7 +228,7 @@ export default function appReducer(state = initialState, action) {
             fetching: false,
             error: null,
           },
-          saveCard: {
+          savedCard: {
             details: payload,
             saving: false,
             error: null,
@@ -240,7 +240,7 @@ export default function appReducer(state = initialState, action) {
         ...state,
         baseData: {
           ...state.baseData,
-          saveCard: {
+          savedCard: {
             details: null,
             saving: false,
             error: payload,
@@ -252,7 +252,7 @@ export default function appReducer(state = initialState, action) {
         ...state,
         baseData: {
           ...state.baseData,
-          deleteCard: {
+          deletedCard: {
             details: null,
             deleting: true,
             error: null,
@@ -271,7 +271,7 @@ export default function appReducer(state = initialState, action) {
             fetching: false,
             error: null,
           },
-          deleteCard: {
+          deletedCard: {
             details: payload,
             deleting: false,
             error: null,
@@ -283,7 +283,7 @@ export default function appReducer(state = initialState, action) {
         ...state,
         baseData: {
           ...state.baseData,
-          deleteCard: {
+          deletedCard: {
             details: null,
             deleting: false,
             error: payload,
