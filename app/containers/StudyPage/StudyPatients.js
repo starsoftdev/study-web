@@ -4,11 +4,14 @@
 
 import React from 'react';
 import Collapse from 'react-bootstrap/lib/Collapse';
-// import classNames from 'classnames';
+import libPhoneNumber from 'google-libphonenumber';
+
+const PNF = libPhoneNumber.PhoneNumberFormat;
+const phoneUtil = libPhoneNumber.PhoneNumberUtil.getInstance();
 
 class StudyPatients extends React.Component {
   static propTypes = {
-    patients: React.PropTypes.array,
+    patientCategories: React.PropTypes.array.isRequired,
   };
 
   constructor(props) {
@@ -16,10 +19,10 @@ class StudyPatients extends React.Component {
     this.state = {
       openPatientModal: false,
     };
-  }
-
-  componentDidMount() {
     this.onPatientClick = this.onPatientClick.bind(this);
+    this.renderPatientCategory = this.renderPatientCategory.bind(this);
+    this.renderPatient = this.renderPatient.bind(this);
+
   }
 
   onPatientClick(event) {
@@ -29,253 +32,70 @@ class StudyPatients extends React.Component {
     });
   }
 
+  renderPatient(patient) {
+    let patientPhone
+    const phoneNumber = phoneUtil.parse(patient.phone, '');
+    const countryCode = phoneNumber.getCountryCode();
+    if (countryCode === 1) {
+      patientPhone = phoneUtil.format(phoneNumber, PNF.NATIONAL);
+    } else {
+      patientPhone = phoneUtil.format(phoneNumber, PNF.INTERNATIONAL);
+    }
+    return (
+      <li key={patient.id}>
+        <a className="top">
+          <strong className="name">
+            <span className="first-name">{patient.firstName}</span>
+            <span> </span>
+            <span className="last-name">{patient.lastName}</span>
+          </strong>
+          <span className="email">{patient.email}</span>
+          <span className="phone">{patientPhone}</span>
+        </a>
+        <a className="bottom hidden">
+          <div className="msg-alert">
+            <div className="msg">
+              <p>Hi, how are you Lorem ipsum dolor sit amet</p>
+            </div>
+            <div className="time">
+              <span className="counter-circle">2</span>
+              <time dateTime="2016-05-16">08/12/15 at 5:30 PM</time>
+            </div>
+          </div>
+        </a>
+      </li>
+    );
+  }
+
+  renderPatientCategory(category) {
+    return (
+      <li key={category.id}>
+        <span className="opener">
+          <strong className="number">{category.patients.length}</strong>
+          <span className="text">{category.name}</span>
+        </span>
+        <div className="slide">
+          <div className="slide-holder">
+            <ul className="list-unstyled">
+              {category.patients.map(patient => {
+                return this.renderPatient(patient);
+              })}
+            </ul>
+          </div>
+        </div>
+      </li>
+    );
+  }
   render() {
+    const { patientCategories } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className="patients-list-area">
           <nav className="nav-status">
             <ul className="list-inline">
-              <li>
-                <span className="opener">
-                  <strong className="number">99</strong>
-                  <span className="text">NEW PATIENT</span>
-                </span>
-                <div className="slide">
-                  <div className="slide-holder">
-                    <ul className="list-unstyled">
-                      <li>
-                        <a
-                          href="#"
-                          className="top"
-                          data-addclass="form-active"
-                          data-parentbox=".patients-list-area"
-                        >
-                          <strong className="name">
-                            <span className="first-name">Alan</span>
-                            <span> </span>
-                            <span className="last-name">Jensen</span></strong>
-                          <span className="email">alan_jensen@email.com</span>
-                          <span className="phone" data-phone="5242999123456">(524) 999-123456</span>
-                        </a>
-                        <a
-                          href="#"
-                          className="bottom hidden"
-                          data-addclass="form-active"
-                          data-parentbox=".patients-list-area"
-                        >
-                          <div className="msg-alert ">
-                            <div className="msg">
-                              <p>Hi, how are you Lorem ipsum dolor sit amet</p>
-                            </div>
-                            <div className="time">
-                              <span className="counter-circle">2</span>
-                              <time dateTime="2016-05-16">05/16/16 at 9:30 PM</time>
-                            </div>
-                          </div>
-                        </a>
-                        <div className="img-holder hidden"><img src="images/patient1.jpg" alt="Alan Jensen" />
-                        </div>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          className="top"
-                          data-addclass="form-active"
-                          data-parentbox=".patients-list-area"
-                        >
-                          <strong className="name">
-                            <span className="first-name">Eugene</span>
-                            <span> </span>
-                            <span className="last-name">Simpson</span></strong>
-                          <span className="email">eugene_simpson@email.com</span>
-                          <span className="phone" data-phone="52421117777">(524) 111-7777</span>
-                        </a>
-                        <a
-                          href="#"
-                          className="bottom"
-                          data-addclass="form-active"
-                          data-parentbox=".patients-list-area"
-                        >
-                          <div className="msg-alert">
-                            <div className="msg">
-                              <p>Hi, how are you Lorem ipsum dolor sit amet</p>
-                            </div>
-                            <div className="time">
-                              <span className="counter-circle">2</span>
-                              <time dateTime="2016-05-16">08/12/15 at 5:30 PM</time>
-                            </div>
-                          </div>
-                        </a>
-                        <div className="img-holder hidden"><img src="images/patient3.jpg" alt="Eugene Simpson" />
-                        </div>
-                      </li>
-                    </ul>
-
-                  </div>
-                </div>
-              </li>
-              <li>
-                <span className="opener">
-                  <strong className="number">0</strong>
-                  <span className="text">CALL ATTEMPTED</span>
-                </span>
-              </li>
-              <li>
-                <span className="opener"><strong className="number">1</strong> <span className="text">NOT QUALIFIED / NOT INTERESTED</span></span>
-                <div className="slide">
-                  <div className="slide-holder">
-                    <ul className="list-unstyled">
-                      <li>
-                        <a
-                          href="#"
-                          className="top"
-                          data-addclass="form-active"
-                          data-parentbox=".patients-list-area"
-                        >
-                          <strong className="name">
-                            <span className="first-name">Katy</span>
-                            <span> </span>
-                            <span className="last-name">Perry</span>
-                          </strong>
-                          <span className="email">katy_perry@email.com</span>
-                          <span className="phone" data-phone="5242224444">(524) 222-4444</span>
-                        </a>
-                        <a
-                          href="#"
-                          className="bottom hidden"
-                          data-addclass="form-active"
-                          data-parentbox=".patients-list-area"
-                        >
-                          <div className="msg-alert">
-                            <div className="msg">
-                              <p>Hi, how are you Lorem ipsum dolor sit amet</p>
-                            </div>
-                            <div className="time">
-                              <span className="counter-circle">1</span>
-                              <time dateTime="2016-05-16">08/16/16 at 4:15 PM</time>
-                            </div>
-                          </div>
-                        </a>
-                        <div className="img-holder hidden"><img src="images/patient2.jpg" alt="Katy Perry" /></div>
-                      </li>
-                    </ul>
-
-                  </div>
-                </div>
-              </li>
-              <li>
-                <span className="opener">
-                  <strong className="number">0</strong>
-                  <span className="text">ACTION NEEDED</span>
-                </span>
-              </li>
-              <li>
-                <span className="opener">
-                  <strong className="number">1</strong>
-                  <span className="text">SCHEDULED</span></span>
-                <div className="slide">
-                  <div className="slide-holder">
-                    <ul className="list-unstyled">
-                      <li>
-                        <a
-                          href="#"
-                          className="scheduled-patient-trigger top"
-                          data-addclass="form-active"
-                          data-parentbox=".patients-list-area"
-                          data-time="11:30 PM"
-                          data-date="05/08/16"
-                        >
-                          <strong className="name">
-                            <span className="first-name">Hamish</span>
-                            <span> </span>
-                            <span className="last-name">Labatt</span>
-                          </strong>
-                          <span className="email">hamish_labatt@email.com</span>
-                          <span className="phone" data-phone="5243339999">(524) 333-9999</span>
-                        </a>
-                        <a
-                          href="#"
-                          className="bottom"
-                          data-addclass="form-active"
-                          data-parentbox=".patients-list-area"
-                        >
-                          <div className="msg-alert">
-                            <div className="msg">
-                              <p>Hi, how are you Lorem ipsum dolor sit amet</p>
-                            </div>
-                            <div className="time">
-                              <span className="counter-circle">1</span>
-                              <time dateTime="2016-05-16">02/16/16 at 11:30 PM</time>
-                            </div>
-                          </div>
-                        </a>
-                        <div className="img-holder hidden"><img src="images/patient4.jpg" alt="Hamish Labatt" />
-                        </div>
-                      </li>
-                    </ul>
-
-                  </div>
-                </div>
-              </li>
-              <li>
-                <span className="opener">
-                  <strong className="number">1</strong>
-                  <span className="text">CONSENTED</span>
-                </span>
-                <div className="slide">
-                  <div className="slide-holder">
-                    <ul className="list-unstyled">
-                      <li>
-                        <a
-                          href="#"
-                          className="top"
-                          data-addclass="form-active"
-                          data-parentbox=".patients-list-area"
-                        >
-                          <strong className="name">
-                            <span className="first-name">Thomas</span>
-                            <span> </span>
-                            <span className="last-name">Morgan</span>
-                          </strong>
-                          <span className="email">sample@email.com</span>
-                          <span className="phone" data-phone="5248888888">(524) 888-8888</span>
-                        </a>
-                        <a
-                          href="#"
-                          className="bottom hidden"
-                          data-addclass="form-active"
-                          data-parentbox=".patients-list-area"
-                        >
-                          <div className="msg-alert ">
-                            <div className="msg">
-                              <p>Hi, how are you Lorem ipsum dolor sit amet</p>
-                            </div>
-                            <div className="time">
-                              <span className="counter-circle">1</span>
-                              <time dateTime="2016-05-16">05/16/16 at 9:30 PM</time>
-                            </div>
-                          </div>
-                        </a>
-                        <div className="img-holder hidden"><img src="images/patient5.jpg" alt="Thomas Morgan" />
-                        </div>
-                      </li>
-                    </ul>
-
-                  </div>
-                </div>
-              </li>
-              <li>
-                <span className="opener">
-                  <strong className="number">0</strong>
-                  <span className="text">SCREEN FAILED</span>
-                </span>
-              </li>
-              <li>
-                <span className="opener">
-                  <strong className="number">0</strong>
-                  <span className="text">RANDOMIZED</span>
-                </span>
-              </li>
+              {patientCategories.map(patientCategory => {
+                return this.renderPatientCategory(patientCategory);
+              })}
             </ul>
           </nav>
           <Collapse dimension="width" in={this.state.openPatientModal} className="patients-list-form">

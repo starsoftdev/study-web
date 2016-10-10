@@ -120,7 +120,7 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
-      path: '/studies/:id',
+      path: '/studies/:id/sites/:siteId',
       name: 'studyPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([

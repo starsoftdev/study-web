@@ -7,6 +7,7 @@
 import {
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_CAMPAIGNS_ERROR,
+  FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENTS_ERROR,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
@@ -30,6 +31,13 @@ export function campaignsFetchingError(payload) {
   return {
     type: FETCH_CAMPAIGNS_ERROR,
     payload,
+  };
+}
+
+export function fetchPatients(filter) {
+  return {
+    type: FETCH_PATIENTS,
+    filter,
   };
 }
 

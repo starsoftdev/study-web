@@ -6,17 +6,21 @@ import React from 'react';
 import ImportPatientsModal from './ImportPatients/ImportPatientsModal';
 import TextEmailBlastModal from './TextEmailBlastModal';
 import TextBlastModal from './TextBlast/TextBlastModal';
+import AddPatient from './ImportPatients/AddPatient';
 
 class StudyActionButtons extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showImportPatientsModal: false,
+      showAddPatientModal: false,
       showTextEmailBlastModal: false,
       showTextBlastModal: false,
       showEmailBlastModal: false,
     };
     this.toggleImportPatientsModal = this.toggleImportPatientsModal.bind(this);
+    this.toggleAddPatientModal = this.toggleAddPatientModal.bind(this);
+    this.closeAddPatientModal = this.closeAddPatientModal.bind(this);
     this.toggleTextEmailBlastModal = this.toggleTextEmailBlastModal.bind(this);
     this.toggleTextBlastModal = this.toggleTextBlastModal.bind(this);
     this.closeTextBlastModal = this.closeTextBlastModal.bind(this);
@@ -24,15 +28,29 @@ class StudyActionButtons extends React.Component {
     this.closeEmailBlastModal = this.closeEmailBlastModal.bind(this);
   }
 
-  toggleTextEmailBlastModal() {
-    this.setState({
-      showTextEmailBlastModal: !this.state.showTextEmailBlastModal,
-    });
-  }
-
   toggleImportPatientsModal() {
     this.setState({
       showImportPatientsModal: !this.state.showImportPatientsModal,
+    });
+  }
+
+  toggleAddPatientModal() {
+    this.setState({
+      showImportPatientsModal: !this.state.showImportPatientsModal,
+      showAddPatientModal: !this.state.showAddPatientModal,
+    });
+  }
+
+  closeAddPatientModal() {
+    this.setState({
+      showImportPatientsModal: false,
+      showAddPatientModal: false,
+    });
+  }
+
+  toggleTextEmailBlastModal() {
+    this.setState({
+      showTextEmailBlastModal: !this.state.showTextEmailBlastModal,
     });
   }
 
@@ -80,7 +98,8 @@ class StudyActionButtons extends React.Component {
             <i className="icomoon-icon_upload" />
             <span>Import</span>
           </span>
-          <ImportPatientsModal show={this.state.showImportPatientsModal} onHide={this.toggleImportPatientsModal} />
+          <ImportPatientsModal show={this.state.showImportPatientsModal} onHide={this.toggleImportPatientsModal} toggleAddPatient={this.toggleAddPatientModal} />
+          <AddPatient show={this.state.showAddPatientModal} onClose={this.closeAddPatientModal} onHide={this.toggleAddPatientModal} />
         </div>
       </div>
     );
