@@ -35,6 +35,8 @@ const headers = [
 class ProposalsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     selectCurrent:  PropTypes.func,
+    selectAll:  PropTypes.func,
+    range:  PropTypes.any,
   };
 
   constructor(props) {
@@ -49,36 +51,69 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       proposals: false,
       activeSort: null,
       activeDirection: null,
+      proposalsInRange: null,
+      proposalsMatchSite: null,
     };
   }
 
   componentWillReceiveProps(nextProps) {
+    // console.log('componentWillReceiveProps', nextProps);
     if (nextProps.proposals) {
       for (const proposal of nextProps.proposals) {
         proposal.selected = false;
       }
       this.setState({ proposals: nextProps.proposals });
     }
+    if (nextProps.range) {
+      this.rangeSort(nextProps.range)
+    }
+    if (nextProps.site) {
+      this.siteSort(nextProps.site)
+    }
   }
 
   componentDidUpdate() {}
 
+  get selectedProposal() {
+    return this.SelectedProposal;
+  }
+
+  set selectedProposal(value) {
+    this.SelectedProposal = value;
+  }
+
   onClickCurrent(ev) {
     ev.preventDefault();
     const scope = this;
-    let selected = null;
+    let selectedArr = [];
     let key = 0;
     const proposals = this.state.proposals;
 
     for (const proposal of proposals) {
       if (key === parseInt(ev.currentTarget.firstChild.name, 10)) {
         proposal.selected = (!proposal.selected);
-        selected = (proposal.selected) ? proposal : null;
+
+        if (proposal.selected) {
+          if (_.isEmpty(this.selectedProposal)) {
+            this.selectedProposal = []
+            this.selectedProposal.push(proposal);
+          } else {
+            selectedArr = this.selectedProposal
+            selectedArr.push(proposal)
+
+            this.selectedProposal = selectedArr;
+          }
+        } else {
+          this.selectedProposal = _.filter(this.selectedProposal, (o) => { return o.site !== proposal.site; });
+          if (!this.selectedProposal.length) {
+            this.selectedProposal = null
+          }
+        }
       }
       key++;
     }
 
-    this.props.selectCurrent(selected);
+    this.props.selectCurrent(this.selectedProposal);
 
     this.setState({ proposals }, () => {
       let all = true;
@@ -102,7 +137,11 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     for (const proposal of proposals) {
       proposal.selected = (!this.state.checkAll);
     }
-    this.setState({ checkAll: (!this.state.checkAll), proposals });
+
+    this.setState({ checkAll: (!this.state.checkAll), proposals }, () => {
+      this.selectedProposal = (this.state.checkAll) ? proposals : null;
+      this.props.selectAll(this.selectedProposal);
+    });
   }
 
   sortBy(ev) {
@@ -114,7 +153,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       direction = 'up';
     }
 
-    const proposalsArr = this.state.proposals;
+    const proposalsArr = this.state.proposalsInRange ||this.state.proposals;
     const directionUnits = (direction === 'up') ? {
       more: 1,
       less: -1,
@@ -188,6 +227,34 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     this.setState({ proposals: proposalsArr, activeSort: sort, activeDirection: direction });
   }
 
+  rangeSort(range) {
+    let proposalsInRange = []
+    const proposalsArr = this.state.proposals;
+    for (const proposal of proposalsArr) {
+      const created = new Date(proposal.created).getTime();
+      const endDate = new Date(range.endDate).getTime();
+      const startDate = new Date(range.startDate).getTime();
+
+      if (created > startDate && created < endDate) {
+        proposalsInRange.push(proposal)
+      }
+    }
+
+    this.setState({ proposalsInRange });
+  }
+
+  siteSort(site) {
+    let proposalsMatchSite = []
+    const proposalsArr = this.state.proposals;
+    for (const proposal of proposalsArr) {
+      if (proposal.site === site.name) {
+        proposalsMatchSite.push(proposal)
+      }
+    }
+
+    this.setState({ proposalsMatchSite });
+  }
+
   mapHeaders(raw, state, result) {
     _.map(raw, (header, key) => {
       result.push(
@@ -234,7 +301,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
   render() {
     const state = this.state;
-    const proposalsArr = state.proposals;
+    const proposalsArr = state.proposalsInRange || state.proposalsMatchSite || state.proposals;
     let proposals = [];
     let heads = [];
 

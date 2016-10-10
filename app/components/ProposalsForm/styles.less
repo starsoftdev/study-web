@@ -1,18 +1,5 @@
 .holder{
-  //table-layout: fixed;
-  //display: table;
-  //border-collapse:separate;
-  //border-spacing: 25px;
   width: 100%;
-
-  .popup-sidenav{
-    //display: table-cell;
-  }
-
-  .date-range-holder{
-    //display: table-cell;
-    //vertical-align: top;
-  }
 }
 
 .form-search {
@@ -51,18 +38,25 @@
           color: #fff;
           cursor: pointer;
           background: #f78e1e;
+          transition: all 0.25s;
+          margin-top: 10px;
 
           &.left{
-            margin-right: 10px;
+            float: left;
           }
 
           &.right{
-            margin-left: 10px;
+            float: right;
+            margin-right: 3px;
+          }
+
+          &:hover{
+            cursor: inherit;
           }
         }
 
         .btn-block{
-          margin: 20px 0 0 0;
+          margin: 70px 0 0 0;
         }
       }
     }
@@ -115,7 +109,7 @@
     text-align: center;
     border-collapse: inherit;
     border: #f78e1e solid 2px;
-    width: 38% !important;
+    //width: 38% !important;
     margin: 10px 10px 0 10px !important;
 
     .rdr-MonthAndYear{
@@ -210,15 +204,30 @@
       }
     }
 
+    @cube: 52px;
+
     .rdr-WeekDays{
       color: #fff;
       background: #ffc689;
-      font-size: 18px;
-      line-height: 24px;
+      font-size: 18px !important;
+      width: 100% !important;
+
+      .rdr-WeekDay{
+        line-height: 22px !important;
+        padding: 8px !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        height: inherit !important;
+        width: @cube !important;
+        transition: all 0.25s !important;
+
+        &:hover{
+          cursor: inherit;
+        }
+      }
     }
 
     .rdr-Days{
-      @cube: 52px;
 
       .rdr-Day{
         padding: 0;
@@ -263,7 +272,7 @@
 
           &:hover{
             font-weight: inherit !important;
-            color: inherit !important;
+            color: rgb(149, 165, 166) !important;
           }
         }
 
@@ -274,6 +283,28 @@
           background: #a0cf67 !important;
         }
 
+      }
+    }
+  }
+
+  @media screen and (min-width: 801px) {
+    .rdr-Calendar {
+      width: 38% !important;
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    .rdr-Calendar {
+      width: inherit !important;
+    }
+
+    .rdr-Calendar:nth-child(3) {
+      margin-left: 21% !important;
+    }
+
+    .dateRange-helper{
+      .btn-block{
+        text-align: center;
       }
     }
   }
