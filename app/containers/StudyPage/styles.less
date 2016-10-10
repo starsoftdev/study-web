@@ -1,5 +1,7 @@
 @import "../../assets/less/base/_mixins";
 @import "../../assets/less/bootstrap/mixins/vendor-prefixes";
+@import "../../assets/less/bootstrap/mixins/clearfix";
+@import "../../assets/less/base/_mixins";
 
 /*	individual-study	*/
 .individual-study {
@@ -242,106 +244,35 @@
   }
 }
 .patients-list-area {
+  .clearfix();
   min-height: 784px;
   position: relative;
-  &:before,
-  &:after {
-    content: " ";
-    display: table;
-  }
-  &:after {
-    clear: both;
-  }
 }
 .patients-list-area-holder {
   position: relative;
   .patients-form-closer {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    .position(0);
     opacity: 0;
     z-index: 1499;
     display: none;
     position: fixed;
     visibility: hidden;
-  }
-  .patients-list-area.form-active + .patients-form-closer {
-    opacity: 1;
-    display: block;
-    visibility: visible;
-  }
-  .patients-list-area.form-active .nav-status .opener {
-    background: #ffc689;
-  }
-}
-
-/* nav-status */
-.nav-status {
-  .slide {
-    left: 0;
-    top: 100%;
-    position: absolute;
-
-    ul {
-      margin: 0;
-      background: #fff;
-      border: solid 2px #ccc;
-
-      li {
-        padding: 3px;
-      }
-
-      li + li {
-        border-top: solid 2px #ccc;
-      }
-    }
-
-    a {
-      padding: 15px;
+    &.form-active {
+      opacity: 1;
       display: block;
-      color: #181818;
-      .font(18px, 21px);
-
-      &:hover {
-        color: #fff;
-        background: #00afef;
-      }
-    }
-  }
-
-  .name {
-    display: block;
-    .font(21px, 24px);
-  }
-
-  .counter {
-    top: 10px;
-    right: 10px;
-    position: absolute;
-
-    .number {
-      top: -5px;
-      right: -5px;
-      .size(16px);
-      color: #fff;
-      .font(12px, 16px);
-      position: absolute;
-      text-align: center;
-      background: #f78e1e;
-      border-radius: 100%;
+      visibility: visible;
     }
   }
 }
 
 /* nav-status */
+
 .nav-status {
   float: left;
   width: 100%;
   z-index: 1;
   margin: 0 0 30px;
   position: relative;
-  background: #f78e1e;
   ul {
     margin: 0;
     width: 100%;
@@ -351,6 +282,7 @@
       padding: 0;
       display: table-cell;
       position: relative;
+      vertical-align: top;
     }
   }
   .opener {
@@ -367,15 +299,13 @@
     &:before {
       content: '';
       .size(1px, 28px);
-      margin: 0 0 0 -2px;
-      display: inline-block;
+      margin: 0 0 0 -4px;
       .align(@align: middle);
     }
     &.active {
       background: #ffc689;
     }
     .text {
-      display: inline-block;
       white-space: normal;
       .align(@align: middle);
     }
@@ -391,66 +321,62 @@
       border: solid 1px #fff;
     }
   }
-  li.active .opener {
-    background: #ffc689;
+  li.active {
+    .opener {
+      background: #ffc689;
+    }
+  }
+  .patients-list-area.form-active & {
+    .opener {
+      background: #ffc689;
+    }
   }
   .slide {
     background: #fff;
     margin: 0 -2px 0 0;
     border: solid 2px #ccc;
-    ul li {
-      padding: 3px;
+    ul {
+      margin: 0;
       display: block;
-      position: relative;
-    }
-    ul li + li {
-      border-top: solid 2px #ccc;
-    }
-    ul li.patient-selected a,
-    ul li:hover a {
-      color: #fff;
-    }
-    ul li.patient-selected a:before,
-    ul li:hover a:before {
-      opacity: 1;
-    }
-    ul li.patient-selected a time,
-    ul li:hover a time {
-      color: #fff;
+      li {
+        padding: 3px;
+        display: block;
+        position: relative;
+        + li {
+          border-top: solid 2px #ccc;
+        }
+        &.patient-selected,
+        &:hover {
+          a {
+            color: #fff;
+            background: #00afef;
+          }
+          .msg-alert {
+            time {
+              color: #fff;
+            }
+          }
+        }
+      }
     }
     a {
-      font-size: 16px;
-      line-height: 1.25;
+      .font(16px);
       display: block;
       color: #181818;
       padding: 11px 13px;
-    }
-    a:before {
-      opacity: 0;
-      content: '';
-      top: 3px;
-      left: 3px;
-      right: 3px;
-      bottom: 3px;
-      position: absolute;
-      background: #00afef;
-      transition: all 0.25s ease;
-    }
-    a > * {
-      z-index: 2;
-      position: relative;
-    }
-    a.patient-selected,
-    a:hover {
-      color: #fff;
-      background: #00afef;
-    }
-    a.patient-selected .msg-alert time,
-    a:hover .msg-alert time {
-      color: #fff;
-    }
-    a.bottom {
-      padding-top: 0;
+      &:before {
+        opacity: 0;
+        content: '';
+        background: #00afef;
+        transition: all 0.25s ease;
+      }
+      > * {
+        z-index: 2;
+        position: relative;
+      }
+      &.bottom {
+        padding-top: 0;
+      }
     }
     .phone,
     .email {
@@ -462,95 +388,74 @@
   }
   .name {
     display: block;
-    font-size: 18px;
-    line-height: 1.25;
+    .font(18px);
   }
   .counter {
     top: 15px;
     right: 18px;
     font-size: 22px;
     position: absolute;
-  }
-  .counter .number {
-    top: -5px;
-    right: -5px;
-    width: 16px;
-    height: 16px;
-    color: #fff;
-    font-size: 12px;
-    line-height: 16px;
-    position: absolute;
-    text-align: center;
-    background: #f78e1e;
-    border-radius: 100%;
+    .number {
+      top: -5px;
+      right: -5px;
+      .size(16px);
+      color: #fff;
+      .font(12px, 16px);
+      position: absolute;
+      text-align: center;
+      background: #f78e1e;
+      border-radius: 100%;
+    }
   }
   .msg-alert {
     font-size: 14px;
     overflow: hidden;
     padding: 11px 0 0;
     border-top: solid 2px #ccc;
+    .msg {
+      padding: 0 0 10px;
+    }
+    p {
+      margin: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .time {
+      overflow: hidden;
+    }
+    .counter-circle {
+      float: right;
+      margin: 0 0 0 5px;
+    }
+    time {
+      display: block;
+      color: #949ca1;
+      overflow: hidden;
+      text-align: left;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      transition: all 0.25s;
+    }
   }
-  .msg-alert .msg {
-    padding: 0 0 10px;
-  }
-  .msg-alert p {
-    margin: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  .msg-alert .time {
-    overflow: hidden;
-  }
-  .msg-alert time {
-    display: block;
-    color: #949ca1;
-    overflow: hidden;
-    text-align: left;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    transition: all 0.25s;
-  }
-  .msg-alert .counter-circle {
-    float: right;
-    margin: 0 0 0 5px;
-  }
-  /* counter-circle */
-  .counter-circle {
-    color: #fff;
-    min-width: 18px;
-    font-weight: 600;
-    min-height: 18px;
-    .font(11px, 18px);
-    text-align: center;
-    background: #a0cf67;
-    border-radius: 100%;
-    display: inline-block;
-    .align(@align: middle);
-  }
-}
-@media screen and (max-width: 1650px) {
-  .nav-status {
+  @media screen and (max-width: 1650px) {
     .opener {
-      font-size: 12px;
-      line-height: 1.25;
+      .font(12px);
       padding: 5px 5px 5px 31px;
-    }
-    .opener:before {
-      height: 44px;
-    }
-    .opener .text {
-      -webkit-hyphens: auto;
-      -moz-hyphens: auto;
-      -ms-hyphens: auto;
-      hyphens: auto;
-    }
-    .opener .number {
-      left: 7px;
-      width: 20px;
-      height: 20px;
-      font-size: 14px;
-      line-height: 20px;
+      &:before {
+        height: 44px;
+      }
+      .text {
+        -webkit-hyphens: auto;
+        -moz-hyphens: auto;
+        -ms-hyphens: auto;
+        hyphens: auto;
+      }
+      .number {
+        left: 7px;
+        .size(20px);
+        .font(14px, 20px);
+      }
     }
   }
 }
@@ -677,7 +582,6 @@
   left: auto;
   right: auto;
   bottom: auto;
-  position: absolute;
   position: relative;
   display: block !important;
 }
@@ -1138,5 +1042,389 @@
   color: #999;
 }
 
+.patients-list-form {
+  right: 0;
+  width: 0;
+  margin: 0 0 0 -100%;
+  position: relative;
+  float: right;
+  background: #fff;
+  outline: 2px solid #f1f1f1;
+  transition: width 0.25s linear;
+  &.in {
+    z-index: 1500;
+    width: 590px;
+  }
+  .form-area {
+    width: 590px;
+    border: solid 2px #f78e1e;
+  }
+  .btn-close {
+    top: 50%;
+    right: 15px;
+    .size(20px);
+    color: #00afef;
+    margin: -10px 0 0;
+    background: #fff;
+    .font(11px, 16px);
+    position: absolute;
+    text-align: center;
+    border: solid 2px #00afef;
+    &:hover {
+      color: #76daff;
+      border-color: #76daff;
+    }
+  }
+  .form-head {
+    padding: 15px;
+    position: relative;
+    background: #f78e1e;
+    > .title {
+      .align;
+      color: #fff;
+      font-size: 21px;
+      min-width: 194px;
+      text-transform: uppercase;
+    }
+    .lightbox-opener {
+      .align;
+      color: #fff;
+      display: none;
+      margin: 2px 0 0;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+  &.scheduled-patient-active {
+    .form-head .lightbox-opener {
+      display: inline-block;
+      color: #101010;
+      &:hover {
+        color: #808080;
+        text-decoration: underline;
+      }
+      .time {
+        &:before {
+          content: ' at ';
+        }
+      }
+    }
+  }
+  .column {
+    width: auto;
+  }
+  .column + .column {
+    padding: 0;
+    .holder-inner {
+      padding: 25px 0 0;
+    }
+    .scroll {
+      overflow: hidden;
+      max-height: none;
+    }
+  }
+  [type=reset],
+  [type=submit] {
+    padding: 5px;
+    min-width: 100px;
+    min-height: 40px;
+    margin: 0 0 0 12px;
+  }
+}
 
+.popup-slider {
+  .carousel-indicators {
+    margin: 0;
+    top: auto;
+    left: auto;
+    width: auto;
+    bottom: auto;
+    overflow: hidden;
+    position: relative;
+    border-bottom: #f78e1e solid 2px;
+    li.active, li {
+      float: left;
+      padding: 7px;
+      color: #101010;
+      border-width: 0;
+      font-weight: 700;
+      .size(25%, auto);
+      border-radius: 0;
+      margin: 0 0 -2px;
+      .font(21px, 26px);
+      text-indent: inherit;
+      text-transform: uppercase;
+    }
+    li:hover,
+    li.active {
+      color: #fff;
+      background: #f78e1e;
+    }
+  }
+  .carousel-inner {
+    height: 100%;
+  }
+  .item {
+    padding: 0 0 85px;
+  }
+  .textarea {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 7;
+    position: absolute;
+    border-top: #f78e1e solid 2px;
+    .form-control {
+      resize: none;
+      height: 85px;
+      border-width: 0;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 8px 130px 15px 25px;
+    }
+    .btn-default {
+      top: 50%;
+      right: 25px;
+      position: absolute;
+      .transform(translate(0, -50%));
+    }
+  }
+  .postarea {
+    overflow: auto;
+    max-height: 340px;
+  }
+  .notes {
+    .btn-trash {
+      right: 10px;
+      bottom: 10px;
+    }
+    .post-content {
+      padding-right: 35px;
+    }
+  }
+  .item.text {
+    .post-msg {
+      .post-content {
+        padding-right: 15px;
+      }
+      .btn-trash {
+        display: none;
+      }
+    }
+  }
+  .post {
+    color: #101010;
+    position: relative;
+    line-height: 1.22222;
+    margin: 25px 25px 15px;
+    border: solid 2px #ccc;
+    padding: 17px 50px 22px 100px;
+    &:last-child {
+      margin-bottom: 25px;
+      .btn-trash {
+        bottom: 25px;
+      }
+    }
+    p {
+      margin: 0 0 10px;
+      -webkit-hyphens: auto;
+      -moz-hyphens: auto;
+      -ms-hyphens: auto;
+      hyphens: auto;
+    }
+  }
+  .email {
+    display: block;
+    margin: 0 0 10px;
+    a {
+      color: #101010;
+      &:hover {
+        color: #76daff;
+      }
+    }
+  }
+  time {
+    color: #949ca1;
+    display: block;
+    font-size: 14px;
+  }
+  .img-holder {
+    top: 21px;
+    left: 25px;
+    width: 50px;
+    position: absolute;
+    border-radius: 100%;
+    img {
+      display: block;
+      max-width: 100%;
+      border-radius: 100%;
+    }
+  }
+  .btn-trash {
+    bottom: 25px;
+    right: 25px;
+    color: #636363;
+    position: absolute;
+    &:hover {
+      color: #999;
+    }
+  }
+  .others {
+    padding: 0;
+    .jcf-select {
+      .jcf-select-text {
+        margin: 0 20px 0 13px;
+      }
+      .jcf-select-opener {
+        width: 16px;
+      }
+    }
+  }
+  .item-holder {
+    overflow-y: auto;
+    max-height: 427px;
+    overflow-x: hidden;
+  }
+  .dates {
+    padding: 18px 25px 19px;
+    margin: 0 0 20px;
+    border-bottom: solid 2px #ccc;
+    .title {
+      display: block;
+      margin: 0 0 12px;
+      text-transform: uppercase;
+    }
+    time {
+      .font(18px, 1.42857);
+    }
+  }
+  .list-radios {
+    margin: 0 -25px;
+    li {
+      overflow: hidden;
+      padding: 0 25px;
+      + li {
+        margin: 3px 0 0;
+      }
+      &:hover {
+        color: inherit;
+        background: none;
+        font-weight: inherit;
+      }
+    }
+    .title {
+      margin: 0;
+      width: 50%;
+      float: left;
+      padding: 0 10px 0 0;
+    }
+    time {
+      display: block;
+      overflow: hidden;
+      text-align: right;
+    }
+  }
+  .sub-holder {
+    padding: 0 25px;
+  }
+  .fields-holder {
+    margin: 25px -25px 0;
+    padding: 18px 25px 10px;
+    border-top: solid 2px #ccc;
+    .title {
+      display: block;
+      margin: 0 0 19px;
+    }
+  }
+  .field-row.remove-bipolar {
+    .label {
+      padding: 0;
+      margin: 0 0 15px;
+      font-weight: 600;
+    }
+    .field {
+      margin: 0;
+    }
+  }
+  .field-row.full .field.add-indications {
+    margin: 0;
+  }
+  .catogery-list {
+    margin: -3px 0 5px;
+  }
+}
 
+.post-msg {
+  margin: 25px 25px 25px;
+  .post-holder {
+    margin: 0 0 25px;
+    position: relative;
+    padding: 0 0 0 75px;
+  }
+  .post-holder.even {
+    padding: 0 75px 0 0;
+    .img-holder {
+      right: 0;
+      left: auto;
+    }
+    .post-content {
+      color: #fff;
+      background: #00afef;
+      border-color: #76daff;
+      &:after, &:before {
+        left: 100%;
+        right: auto;
+        border-color: transparent transparent transparent #76daff;
+      }
+      &:before {
+        border-width: 10px 0 10px 10px;
+      }
+      &:after {
+        border-width: 8px 0 8px 8px;
+        border-left-color: #00afef;
+        margin: 0 0 0 -1px;
+      }
+    }
+    time,
+    .email {
+      text-align: right;
+    }
+  }
+  .email {
+    margin: 0;
+    color: #101010;
+  }
+  .patient-name {
+    color: #101010;
+  }
+  .img-holder {
+    top: 0;
+    left: 0;
+  }
+  .post-content {
+    .font(18px);
+    margin: 0 0 5px;
+    position: relative;
+    padding: 7px 15px 5px;
+    border: solid 2px #c0e890;
+    color: #fff;
+    background: #a0cf67;
+    &:after, &:before {
+      top: 11px;
+      right: 100%;
+      .arrow(10px 10px 10px 0);
+      border-right-color: #c0e890;
+    }
+    &:after {
+      top: 13px;
+      z-index: 2;
+      margin: 0 -1px 0 0;
+      border-width: 8px 8px 8px 0;
+      border-right-color: #a0cf67;
+    }
+  }
+  p {
+    margin: 0 0 10px;
+  }
+}
