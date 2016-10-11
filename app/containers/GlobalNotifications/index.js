@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import _ from 'lodash';
 import { selectCurrentUser } from 'containers/App/selectors';
-import selectSocket from 'containers/GlobalNotifications/selectors';
+import { selectSocket } from 'containers/GlobalNotifications/selectors';
 import {
   setSocketConnection,
   subscribeToPageEvent,
@@ -39,6 +39,7 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
 
   componentDidMount() {
     const props = this.props;
+
     if (!props.socket && props.currentUser) {
       props.setSocketConnection({
         nsp: 'nsp',

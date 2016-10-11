@@ -16,6 +16,7 @@ import {
 const initialState = {
   notifications: [],
   unreadNotificationsCount: 0,
+  socket: null,
 };
 
 function globalNotificationsReducer(state = initialState, action) {
@@ -27,7 +28,7 @@ function globalNotificationsReducer(state = initialState, action) {
     case SOCKET_CONNECTION_ESTABLISHED:
       return {
         ...state,
-        ...action.payload,
+        socket: action.payload,
       };
     case FETCH_NOTIFICATIONS_SUCCESS:
       newNotifications = _
