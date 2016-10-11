@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { selectCurrentUser } from 'containers/App/selectors';
-import GlobalNotifications from 'containers/GlobalNotifications';
 
 import { fetchPatientSignUps, fetchPatientMessages, fetchRewardsPoint } from '../actions';
 import { selectPatientSignUps, selectPatientMessages, selectRewardsPoint } from '../selectors';
@@ -37,22 +36,9 @@ export class Dashboard extends React.Component {
 
   render() {
     const { patientSignUps, patientMessages, rewardsPoint } = this.props;
-    const events = [
-      {
-        events: [
-          'create-patient',
-          'create-reward',
-        ],
-        raw: { pathname: '/' },
-        cb: (err, data) => {
-          console.log('received', err, data);
-        },
-      },
-    ];
 
     return (
       <section className="row infoarea text-uppercase">
-        <GlobalNotifications events={events} />
         <h2 className="hidden">Statics</h2>
         <article className="col-xs-4">
           <div className="box">
