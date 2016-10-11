@@ -2706,17 +2706,15 @@
 
 	.patients-form-closer {
 		.position(0);
-		opacity: 0;
 		z-index: 1499;
 		display: none;
-		position: fixed;
-		visibility: hidden;
+    position: fixed;
+    background: #fff;
 	}
 
 	.patients-list-area.form-active + .patients-form-closer {
-		opacity: 1;
+		opacity: 0.5;
 		display: block;
-		visibility: visible;
 	}
 }
 
@@ -2757,9 +2755,6 @@
       margin: 0 0 0 -4px;
       .align(@align: middle);
     }
-    &.active {
-      background: #ffc689;
-    }
     .text {
       white-space: normal;
       .align(@align: middle);
@@ -2774,17 +2769,6 @@
       position: absolute;
       text-align: center;
       border: solid 1px #fff;
-    }
-  }
-  li.active {
-    .opener {
-      background: #ffc689;
-    }
-  }
-  .patients-list-area.form-active & {
-    //pointer-events: none;
-    .opener {
-      background: #ffc689;
     }
   }
   .slide {
