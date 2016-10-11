@@ -3,9 +3,14 @@
  */
 
 import React from 'react';
+import { connect } from 'react-redux';
+
 import classNames from 'classnames';
-import Collapse from 'react-bootstrap/lib/Collapse';
+import moment from 'moment-timezone';
 import libPhoneNumber from 'google-libphonenumber';
+import Collapse from 'react-bootstrap/lib/Collapse';
+import { selectCurrentUser } from 'containers/App/selectors';
+import { createStructuredSelector } from 'reselect';
 
 const PNF = libPhoneNumber.PhoneNumberFormat;
 const phoneUtil = libPhoneNumber.PhoneNumberUtil.getInstance();
@@ -13,6 +18,7 @@ const phoneUtil = libPhoneNumber.PhoneNumberUtil.getInstance();
 class StudyPatients extends React.Component {
   static propTypes = {
     patientCategories: React.PropTypes.array.isRequired,
+    currentUser: React.PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -33,8 +39,9 @@ class StudyPatients extends React.Component {
     this.toggleTextSection = this.toggleTextSection.bind(this);
     this.toggleEmailSection = this.toggleEmailSection.bind(this);
     this.toggleOtherSection = this.toggleOtherSection.bind(this);
-    this.renderPatientCategory = this.renderPatientCategory.bind(this);
     this.renderPatient = this.renderPatient.bind(this);
+    this.renderPatientCategory = this.renderPatientCategory.bind(this);
+    this.renderPatientTextMessageSummary = this.renderPatientTextMessageSummary.bind(this);
     this.renderPhone = this.renderPhone.bind(this);
   }
 
@@ -106,17 +113,7 @@ class StudyPatients extends React.Component {
           <span className="email">{patient.email}</span>
           <span className="phone">{patientPhone}</span>
         </a>
-        <a className="bottom hidden">
-          <div className="msg-alert">
-            <div className="msg">
-              <p>Hi, how are you Lorem ipsum dolor sit amet</p>
-            </div>
-            <div className="time">
-              <span className="counter-circle">2</span>
-              <time dateTime="2016-05-16">08/12/15 at 5:30 PM</time>
-            </div>
-          </div>
-        </a>
+        {this.renderPatientTextMessageSummary(patient)}
       </li>
     );
   }
@@ -139,6 +136,27 @@ class StudyPatients extends React.Component {
         </div>
       </li>
     );
+  }
+
+  renderPatientTextMessageSummary(patient) {
+    const { currentUser } = this.props;
+    if (patient.lastTextMessage) {
+      return (
+        <a className="bottom">
+          <div className="msg-alert">
+            <div className="msg">
+              <p>{patient.lastTextMessage.body}</p>
+            </div>
+            <div className="time">
+              <span className="counter-circle">{patient.textMessageCount}</span>
+              <time dateTime={patient.lastTextMessage.dateUpdated}>{moment.tz(patient.lastTextMessage.dateUpdated, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+            </div>
+          </div>
+        </a>
+      );
+    } else {
+      return null;
+    }
   }
 
   renderPhone(phone) {
@@ -839,4 +857,13 @@ class StudyPatients extends React.Component {
   }
 }
 
-export default StudyPatients;
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StudyPatients);
