@@ -16,6 +16,7 @@ import {
   unsubscribeFromPageEvent,
   unsubscribeFromAll,
   subscribeToChatEvent,
+  receiveNotification,
 } from 'containers/GlobalNotifications/actions';
 
 export class GlobalNotifications extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -25,6 +26,7 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
     unsubscribeFromPageEvent: PropTypes.func,
     unsubscribeFromAll: PropTypes.func,
     subscribeToChatEvent: PropTypes.func,
+    receiveNotification: PropTypes.func,
     socket: PropTypes.any,
     location: PropTypes.any,
     currentUser: PropTypes.any,
@@ -80,8 +82,32 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
   }
 
   subscribeToPageEvents() {
-    if (this.props.events) {
-      this.props.events.forEach(event => {
+    const events = [
+      {
+        events: [
+          'twilio-message',
+        ],
+        raw: { pathname: this.props.location.pathname },
+        cb: (err, data) => {
+          console.log('received', err, data);
+        },
+      },
+      {
+        events: [
+          'create-patient',
+        ],
+        raw: { pathname: this.props.location.pathname },
+        cb: (err, data) => {
+          console.log('received', err, data);
+          if (!err) {
+            this.props.receiveNotification(data);
+          }
+        },
+      },
+    ];
+
+    if (events) {
+      events.forEach(event => {
         this.props.subscribeToPageEvent({
           events: event.events,
           raw: event.raw,
@@ -96,6 +122,7 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
                 eventsList.push(eventData);
               }
               this.eventsList = eventsList;
+              console.log(data.event[0] + data.sid);
               this.props.socket.on(data.event[0] + data.sid, (payload) => {
                 event.cb(null, payload);
               });
@@ -139,14 +166,13 @@ const mapStateToProps = createStructuredSelector({
   socket: selectSocket(),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    setSocketConnection: (values) => dispatch(setSocketConnection(values)),
-    subscribeToPageEvent: (values) => dispatch(subscribeToPageEvent(values)),
-    unsubscribeFromPageEvent: (values) => dispatch(unsubscribeFromPageEvent(values)),
-    unsubscribeFromAll: (values) => dispatch(unsubscribeFromAll(values)),
-    subscribeToChatEvent: (values) => dispatch(subscribeToChatEvent(values)),
-  };
-}
+const mapDispatchToProps = {
+  setSocketConnection,
+  subscribeToPageEvent,
+  unsubscribeFromPageEvent,
+  unsubscribeFromAll,
+  subscribeToChatEvent,
+  receiveNotification,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(GlobalNotifications);
