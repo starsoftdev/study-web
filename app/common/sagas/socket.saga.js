@@ -26,13 +26,13 @@ let socket = null;
 
 // Individual exports for testing
 export function* GlobalNotificationsSaga() {
-  fork(setSocketConnection);
-  fork(subscribeToPageEvent);
-  fork(unsubscribeFromPageEvent);
-  fork(unsubscribeFromAllEvents);
-  fork(subscribeToChatEvent);
-  fork(takeLatest, FETCH_NOTIFICATIONS, fetchNotifications);
-  fork(takeLatest, FETCH_UNREAD_NOTIFICATIONS_COUNT, fetchUnreadNotificationsCount);
+  yield fork(setSocketConnection);
+  yield fork(subscribeToPageEvent);
+  yield fork(unsubscribeFromPageEvent);
+  yield fork(unsubscribeFromAllEvents);
+  yield fork(subscribeToChatEvent);
+  yield fork(takeLatest, FETCH_NOTIFICATIONS, fetchNotifications);
+  yield fork(takeLatest, FETCH_UNREAD_NOTIFICATIONS_COUNT, fetchUnreadNotificationsCount);
 }
 
 export function* setSocketConnection() {
