@@ -49,7 +49,7 @@ class TextEmailBlastModal extends React.Component {
           <span className="modal-opener">
           <div className="table">
             <div className="table-cell">
-              <i className="icomoon-alt-envelope" />
+              <i className="icomoon-envelop" />
               <span className="text">Email Blast</span>
               <span className="text">Coming Soon</span>
             </div>

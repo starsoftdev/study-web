@@ -37,11 +37,11 @@ export function* fetchMeFromToken() {
     const currentPath = yield select(selectCurrentPath);
     const pathsToRedirect = ['/', '/login'];
     if (pathsToRedirect.indexOf(currentPath) > -1) {
-      yield put(push('/dashboard'));
+      yield put(push('/'));
     }
   } catch (e) {
     yield put(setAuthState(false));
-    yield put(setUserData(false));
+    yield put(setUserData(null));
 
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

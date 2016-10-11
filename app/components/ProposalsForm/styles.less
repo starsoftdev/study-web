@@ -1,0 +1,280 @@
+.holder{
+  //table-layout: fixed;
+  //display: table;
+  //border-collapse:separate;
+  //border-spacing: 25px;
+  width: 100%;
+
+  .popup-sidenav{
+    //display: table-cell;
+  }
+
+  .date-range-holder{
+    //display: table-cell;
+    //vertical-align: top;
+  }
+}
+
+.form-search {
+  .fields-holder {
+    overflow: visible;
+    width: 60%;
+  }
+}
+
+.lightbox-content{
+
+  .holder{
+    overflow: hidden;
+
+    .dateRange-helper{
+      position: relative;
+      overflow: hidden;
+
+      .emit-border{
+        display: inline-block;
+        height: 100%;
+        width: 20%;
+        border-right: 2px #f78e1e solid;
+        position: absolute;
+      }
+
+      .right-part{
+        width: 80%;
+        float: right;
+        padding: 0 10px 20px 10px;
+
+        span{
+          display: inline-block;
+          text-align: center;
+          padding: 10px;
+          color: #fff;
+          cursor: pointer;
+          background: #f78e1e;
+
+          &.left{
+            margin-right: 10px;
+          }
+
+          &.right{
+            margin-left: 10px;
+          }
+        }
+
+        .btn-block{
+          margin: 20px 0 0 0;
+        }
+      }
+    }
+  }
+}
+
+.rdr-DateRange{
+  position: relative;
+  overflow: hidden;
+
+  .rdr-PredefinedRanges{
+    width: 20% !important;
+    float: none !important;
+    vertical-align: top !important;
+    overflow-y: auto;
+    font-size: 18px;
+    line-height: 24px;
+    height: 100%;
+    overflow-x: hidden;
+    padding: 20px 3px;
+    text-transform: uppercase;
+    border-right: 2px #f78e1e solid;
+    position: absolute;
+
+    a{
+      font-size: inherit !important;
+      border-radius: 0 !important;
+      margin-bottom: 0 !important;
+      background: #FFFFFF !important;
+      color: #101010 !important;
+      padding: 7px 18px !important;
+      white-space: normal;
+      transition: all 0.25s;
+
+      &:hover, &.active{
+        color: #fff !important;
+        background: #00afef !important;
+      }
+    }
+  }
+
+  .rdr-Calendar:nth-child(2) {
+    margin-left: 21% !important;
+  }
+
+  .rdr-Calendar{
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    text-align: center;
+    border-collapse: inherit;
+    border: #f78e1e solid 2px;
+    width: 38% !important;
+    margin: 10px 10px 0 10px !important;
+
+    .rdr-MonthAndYear{
+
+      .rdr-MonthAndYear-innerWrapper{
+        overflow: hidden;
+        color: #fff;
+        background: #f78e1e;
+        margin: 0 !important;
+        padding: 0 !important;
+
+        .rdr-MonthAndYear-divider{
+          visibility: hidden;
+          display: none;
+        }
+
+        .rdr-MonthAndYear-month, .rdr-MonthAndYear-year{
+          padding: 6px 10px 6px 0;
+          font-size: 20px !important;
+          line-height: 25px !important;
+          font-weight: 600;
+          text-transform: uppercase;
+          display: inline-block;
+          height: 100%;
+        }
+
+        .rdr-MonthAndYear-button{
+          padding: 6px 3px !important;
+          font-size: 0;
+          line-height: 0;
+          display: inherit !important;
+          box-sizing: border-box;
+          height: auto !important;
+          width: auto !important;
+          margin: 0 !important;
+          border-radius: 0 !important;
+          background: none !important;
+
+          &:hover{
+
+            i:before{
+              color: #f78e1e !important;
+              background: #fff !important;
+            }
+          }
+
+          i{
+            display: block;
+            width: 0 !important;
+            height: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+            text-align: center;
+          }
+
+          &.prev{
+            i:before{
+              width: 28px;
+              height: 28px;
+              color: #fff;
+              margin: 0;
+              border: none;
+              display: block;
+              cursor: pointer;
+              background: #ffc689;
+              border-radius: 3px;
+              content: "\e915";
+              font: 24px/28px 'icomoon';
+              transition: all 0.25s ease;
+            }
+          }
+
+          &.next{
+            i:before{
+              float: right;
+              width: 28px;
+              height: 28px;
+              color: #fff;
+              margin: 0 0 0 auto;
+              border: none;
+              display: block;
+              cursor: pointer;
+              background: #ffc689;
+              border-radius: 3px;
+              content: "\e90c";
+              font: 24px/28px 'icomoon';
+              transition: all 0.25s ease;
+            }
+          }
+        }
+      }
+    }
+
+    .rdr-WeekDays{
+      color: #fff;
+      background: #ffc689;
+      font-size: 18px;
+      line-height: 24px;
+    }
+
+    .rdr-Days{
+      @cube: 52px;
+
+      .rdr-Day{
+        padding: 0;
+        line-height: 52px !important;
+        transition: all 0.25s !important;
+        width: @cube !important;
+        height: @cube !important;
+
+        &:hover{
+          color: #fff !important;
+          font-weight: 700;
+          background: #a0cf67 !important;
+        }
+
+        &.is-passive{
+          &:hover{
+            background: #fff !important;
+            font-weight: inherit !important;
+            color: inherit !important;
+          }
+        }
+
+        &.is-selected{
+          color: #fff !important;
+          font-weight: 700;
+          background: #a0cf67 !important;
+        }
+
+        &.is-inRange{
+          background: #ededed !important;
+
+          &:hover{
+            color: #fff !important;
+            font-weight: 700;
+            background: #a0cf67 !important;
+          }
+        }
+
+        &.is-passive.is-inRange{
+          opacity: 1 !important;
+          background: #ededed !important;
+
+          &:hover{
+            font-weight: inherit !important;
+            color: inherit !important;
+          }
+        }
+
+        &.is-passive.is-selected{
+          opacity: 1 !important;
+          color: #fff !important;
+          font-weight: 700;
+          background: #a0cf67 !important;
+        }
+
+      }
+    }
+  }
+}
