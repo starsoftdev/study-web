@@ -35,6 +35,7 @@ export class RequestProposalPage extends Component {
     fetchIndications: PropTypes.func,
     fetchLevels: PropTypes.func,
     onSubmitForm: PropTypes.func.isRequired,
+    location: PropTypes.any,
   }
 
   constructor(props) {
@@ -73,7 +74,6 @@ export class RequestProposalPage extends Component {
                 <Sticky className="sticky-shopping-cart">
                 {/* this will be replaced with a new shopping cart component */}
                   <RequestProposalCart onSubmit={this.onSubmitForm} />
-
                 </Sticky>
               </div>
             </div>
