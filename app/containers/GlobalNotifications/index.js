@@ -90,6 +90,9 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
         raw: { pathname: this.props.location.pathname },
         cb: (err, data) => {
           console.log('received', err, data);
+          if (!err) {
+            this.props.receiveNotification(data);
+          }
         },
       },
       {
