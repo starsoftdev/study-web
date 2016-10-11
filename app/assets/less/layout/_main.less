@@ -1,3 +1,4 @@
+@import "../base/_mixins";
 
 /* main part styling */
 #main {
@@ -2457,13 +2458,73 @@
 	}
 }
 
+/* counter-circle */
+.counter-circle {
+  color: #fff;
+  margin: 0 3px;
+  min-width: 18px;
+  font-weight: 600;
+  min-height: 18px;
+  .font(11px, 18px);
+  text-align: center;
+  background: #a0cf67;
+  border-radius: 100%;
+  .align(@align: middle);
+  .table & {
+    margin-top: -2px;
+  }
+}
+
+/* coming-soon */
+.coming-soon {
+  position: relative;
+  text-align: center;
+  .table-box {
+    display: table;
+    .size(100%, 79vh);
+    table-layout: fixed;
+  }
+  .table-cell {
+    padding: 10px;
+    display: table-cell;
+    vertical-align: middle;
+  }
+  .img-holder {
+    .align;
+    width: 25.9%;
+    padding: 0 0 40px;
+    position: relative;
+    margin: 30px 12px 0;
+    img {
+      .img;
+      z-index: 2;
+      position: relative;
+    }
+    .bottom {
+      left: 50%;
+      z-index: 1;
+      bottom: 0;
+      .size(100%, auto);
+      position: absolute;
+      .transform(translate(-50%, 0));
+    }
+  }
+  .msg {
+    .align;
+    .font(80px, 1);
+    .size(556px, 364px);
+    padding: 80px 50px 100px;
+    background: url('@{IMAGE_BASE_URL}/bubble2.png') no-repeat;
+    background-size: 100% 100%
+  }
+}
+
 .pp {
-	top: 0;
-	left: 0;
-	position: absolute;
-	
-	+ #wrapper {
-		z-index: 2;
-		opacity: 0.65;
-	}
+  top: 0;
+  left: 0;
+  position: absolute;
+  + #wrapper {
+    z-index: 2;
+    opacity: 0.65;
+  }
 }
