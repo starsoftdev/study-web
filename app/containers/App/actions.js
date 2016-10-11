@@ -11,6 +11,10 @@ import {
   FETCH_INDICATIONS_SUCCESS,
   FETCH_INDICATIONS_ERROR,
 
+  FETCH_SOURCES,
+  FETCH_SOURCES_SUCCESS,
+  FETCH_SOURCES_ERROR,
+
   FETCH_LEVELS,
   FETCH_LEVELS_SUCCESS,
   FETCH_LEVELS_ERROR,
@@ -109,6 +113,29 @@ export function indicationsFetched(payload) {
 export function indicationsFetchingError(payload) {
   return {
     type: FETCH_INDICATIONS_ERROR,
+    payload,
+  };
+}
+
+// ///////////////////////////////////////////
+// sources
+// ///////////////////////////////////////////
+export function fetchSources() {
+  return {
+    type: FETCH_SOURCES,
+  };
+}
+
+export function sourcesFetched(payload) {
+  return {
+    type: FETCH_SOURCES_SUCCESS,
+    payload,
+  };
+}
+
+export function sourcesFetchingError(payload) {
+  return {
+    type: FETCH_SOURCES_ERROR,
     payload,
   };
 }

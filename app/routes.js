@@ -187,6 +187,27 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/patient-database',
+      name: 'patientDatabasePage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/PatientDatabasePage/reducer'),
+          System.import('containers/PatientDatabasePage/sagas'),
+          System.import('containers/PatientDatabasePage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('patientDatabasePage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/profile',
       name: 'profilePage',
       getComponent(nextState, cb) {

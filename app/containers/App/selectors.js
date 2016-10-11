@@ -53,6 +53,11 @@ const selectIndications = () => createSelector(
   (substate) => get(substate, 'baseData.indications', [])
 );
 
+const selectSources = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.sources', [])
+);
+
 const selectLevels = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.levels', [])
@@ -110,6 +115,7 @@ export {
   selectSites,
   selectSiteLocations,
   selectIndications,
+  selectSources,
   selectLevels,
   selectStudyLevels,
   selectCoupon,
