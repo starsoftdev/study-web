@@ -57,9 +57,17 @@
       "chalk",
       "compression",
       "cross-env",
+      "dotenv",
+      "diffie-hellman",
+      "elliptic",
       "express",
+      "fs",
       "ip",
+      "html-to-pdf",
       "minimist",
+      "moment-timezone",
+      "parse-asn1",
+      "react-icons",
       "sanitize.css"
     ],
     "include": [
