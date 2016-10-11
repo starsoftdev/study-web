@@ -5,12 +5,11 @@ import { Field, reduxForm } from 'redux-form';
 
 import Input from 'components/Input';
 import { selectEditSiteFormError } from './selectors';
-import { selectSelectedSiteDetailsForForm, selectSavedSite } from 'containers/SitesUsersPage/selectors';
+import { selectSavedSite } from 'containers/SitesUsersPage/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 
 const mapStateToProps = createStructuredSelector({
-  initialValues: selectSelectedSiteDetailsForForm(),
   savedSite: selectSavedSite(),
   hasError: selectEditSiteFormError(),
 });
