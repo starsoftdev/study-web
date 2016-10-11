@@ -7,6 +7,7 @@ import {
 
   FETCH_SITES_SUCCESS,
   FETCH_INDICATIONS_SUCCESS,
+  FETCH_SOURCES_SUCCESS,
   FETCH_LEVELS_SUCCESS,
 
   FETCH_COUPON,
@@ -44,6 +45,7 @@ const initialState = {
   baseData: {
     sites: [],
     indications: [],
+    sources: [],
     levels: [],
     coupon: {
       details: null,
@@ -110,6 +112,14 @@ export default function appReducer(state = initialState, action) {
         baseData: {
           ...state.baseData,
           indications: payload,
+        },
+      };
+    case FETCH_SOURCES_SUCCESS:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          sources: payload,
         },
       };
     case FETCH_LEVELS_SUCCESS:
