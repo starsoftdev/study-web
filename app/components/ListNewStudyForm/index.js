@@ -18,6 +18,8 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import RenderLeads from 'components/RequestProposalForm/RenderLeads';
 import RenderEmailsList from './RenderEmailsList';
+import EditSiteForm from 'components/EditSiteForm';
+import { selectCurrentUserClientId } from 'containers/App/selectors';
 import {
   selectCallTracking,
   selectLeadsCount,
@@ -34,6 +36,7 @@ import './styles.less';
 const mapStateToProps = createStructuredSelector({
   callTracking: selectCallTracking(),
   leadsCount: selectLeadsCount(),
+  currentUserClientId: selectCurrentUserClientId(),
 });
 
 @reduxForm({ form: 'listNewStudy', validate: formValidator })
@@ -50,6 +53,8 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     leadsCount: PropTypes.number,
     fullSiteLocations: PropTypes.array,
     formValues: PropTypes.object,
+    saveSite: PropTypes.func,
+    currentUserClientId: PropTypes.number,
   };
 
   constructor(props) {
@@ -57,7 +62,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
 
     this.handleSiteLocationChoose = this.handleSiteLocationChoose.bind(this);
     this.closeAddSiteModal = this.closeAddSiteModal.bind(this);
-    this.selectAll = this.selectAll.bind(this);
+    this.addSite = this.addSite.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -75,7 +80,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     if (e === 'add-new-location') {
       this.props.dispatch(showSiteLocationModal());
     } else {
-      this.props.dispatch(change('listNewStudy', 'site', e));
+      this.props.dispatch(change('listNewStudy', 'siteLocation', e));
 
       const fullSiteLocation = _.find(this.props.fullSiteLocations, (o) => (o.id === e));
       if (fullSiteLocation) {
@@ -84,12 +89,10 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     }
   }
 
-  selectAll(e) {
-    if (this.props.formValues.emailNotifications) {
-      _.forEach(this.props.formValues.emailNotifications, (value, index) => {
-        this.props.dispatch(change('listNewStudy', `emailNotifications[${index}].isChecked`, e.target.checked));
-      });
-    }
+  addSite(siteData) {
+    const { currentUserClientId } = this.props;
+
+    this.props.saveSite(currentUserClientId, null, siteData);
   }
 
   render() {
@@ -102,21 +105,13 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
       });
     }
 
-    let isAllChecked = false;
-    if (this.props.formValues.emailNotifications) {
-      const checkedArr = _.filter(this.props.formValues.emailNotifications, (o) => o.isChecked);
-      if (checkedArr.length === this.props.formValues.emailNotifications.length) {
-        isAllChecked = true;
-      }
-    }
-
     return (
       <div className="form-study">
         <div className="form-fields">
           <div className="field-row">
             <strong className="label required"><label>Site Location</label></strong>
             <Field
-              name="site"
+              name="siteLocation"
               component={ReactSelect}
               placeholder="Select Site Location"
               options={siteLocations}
@@ -126,26 +121,13 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           {(() => {
-            if (this.props.formValues.site) {
+            if (this.props.formValues.siteLocation) {
               return (
                 <div className="field-row label-top">
                   <strong className="label"><label>EMAIL NOTIFICATIONS</label></strong>
                   <div className="field">
 
                     <div className="emails-list-holder">
-                      <div className="heading-area">
-                        <span className="jcf-checkbox input-checked-parent parent-active jcf-checked">
-                          <input
-                            type="checkbox"
-                            id="email-notifications"
-                            data-check-pattern="[name^='email-']"
-                            className="field-active"
-                            onChange={this.selectAll}
-                            checked={isAllChecked}
-                          />
-                        </span>
-                        <strong className="email">RECEIVE EMAIL NOTIFICATION</strong>
-                      </div>
 
                       <FieldArray
                         name="emailNotifications"
@@ -167,7 +149,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           <div className="field-row">
             <strong className="label required"><label>RECRUITMENT PHONE</label></strong>
             <Field
-              name="recruitment"
+              name="recruitmentPhone"
               component={Input}
               type="text"
               className="field"
@@ -189,14 +171,19 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             <strong className="label"><label htmlFor="clinicaltrialGovLink">UPLOAD STUDY AD</label></strong>
             <div className="field">
               <label htmlFor="study_file" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn"></label>
-              <input type="file" id="study_file" />
+              <Field
+                id="study_file"
+                name="file"
+                component={Input}
+                type="file"
+              />
             </div>
           </div>
 
           <div className="field-row">
             <strong className="label required"><label>PROTOCOL NUMBER</label></strong>
             <Field
-              name="protocol"
+              name="protocolNumber"
               component={Input}
               type="text"
               className="field"
@@ -206,7 +193,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           <div className="field-row">
             <strong className="label required"><label>SPONSOR CONTACT NAME</label></strong>
             <Field
-              name="sponsor"
+              name="sponsorName"
               component={Input}
               type="text"
               className="field"
@@ -226,7 +213,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           <div className="field-row">
             <strong className="label"><label>CRO Contact Name</label></strong>
             <Field
-              name="croName"
+              name="croContactName"
               component={Input}
               type="text"
               className="field"
@@ -236,7 +223,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           <div className="field-row">
             <strong className="label"><label>CRO Contact Email</label></strong>
             <Field
-              name="croEmail"
+              name="croContactName"
               component={Input}
               type="email"
               className="field"
@@ -266,7 +253,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           <div className="field-row">
             <strong className="label required"><label>Exposure Level</label></strong>
             <Field
-              name="level_id"
+              name="exposureLevel"
               component={ReactSelect}
               placeholder="Select Exposure Level"
               options={studyLevels}
@@ -314,7 +301,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             <strong className="label required"><label>Start Date</label></strong>
             <Field
               id="start-date"
-              name="date"
+              name="startDate"
               component={DatePicker}
               className="form-control field datepicker-input"
               initialDate={moment()}
@@ -325,7 +312,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             <strong className="label"><label htmlFor="notes">NOTES</label></strong>
             <div className="field">
               <Field
-                name="notes"
+                name="description"
                 component={Input}
                 componentClass="textarea"
               />
@@ -343,7 +330,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             </a>
           </Modal.Header>
           <Modal.Body>
-            123
+            <EditSiteForm onSubmit={this.addSite} />
           </Modal.Body>
         </Modal>
 
