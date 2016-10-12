@@ -882,11 +882,11 @@ class StudyPatients extends React.Component {
                             <div className="field-row full remove-bipolar">
                               <strong className="label">Indications</strong>
                               <div className="field">
-                                <div className="catogery-list">
-                                  <div className="catogery">
+                                <div className="category-list">
+                                  <div className="category">
                                     <span className="bipolar-link">
                                       <span className="text">Bipolar</span>
-                                      <a href="#" data-remove=".catogery" className="icomoon-icon_trash"></a>
+                                      <a href="#" data-remove=".category" className="icomoon-icon_trash"></a>
                                     </span>
                                   </div>
                                 </div>
