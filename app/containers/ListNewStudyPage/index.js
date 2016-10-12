@@ -10,11 +10,11 @@ import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
 import ShoppingCartForm from 'components/ShoppingCartForm';
 import ListNewStudyForm from 'components/ListNewStudyForm';
-import { selectListNewStudyPageDomain } from 'containers/ListNewStudyPage/selectors';
+import { selectListNewStudyPageDomain, selectAvailPhoneNumbers } from 'containers/ListNewStudyPage/selectors';
 import { selectListNewStudyFormValues, selectListNewStudyFormError } from 'components/ListNewStudyForm/selectors';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
 import _, { find } from 'lodash';
-import { submitForm } from 'containers/ListNewStudyPage/actions';
+import { submitForm, getAvailPhoneNumbers } from 'containers/ListNewStudyPage/actions';
 import { saveSite } from 'containers/SitesUsersPage/actions';
 
 import Helmet from 'react-helmet';
@@ -57,6 +57,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     this.props.fetchSites();
     this.props.fetchIndications();
     this.props.fetchLevels();
+    this.props.getAvailPhoneNumbers();
   }
 
   onSubmitForm(params) {
@@ -147,6 +148,7 @@ const mapStateToProps = createStructuredSelector({
   listNewStudyState : selectListNewStudyPageDomain(),
   formValues: selectListNewStudyFormValues(),
   hasErrors: selectListNewStudyFormError(),
+  availPhoneNumbers: selectAvailPhoneNumbers(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -156,6 +158,7 @@ function mapDispatchToProps(dispatch) {
     fetchLevels:      () => dispatch(fetchLevels()),
     submitForm:     (cartValues, formValues) => dispatch(submitForm(cartValues, formValues)),
     saveSite: (clientId, id, data) => dispatch(saveSite(clientId, id, data)),
+    getAvailPhoneNumbers: () => dispatch(getAvailPhoneNumbers()),
   };
 }
 

@@ -19,7 +19,13 @@ const selectListNewStudyPage = () => createSelector(
   (substate) => substate
 );
 
+const selectAvailPhoneNumbers = () => createSelector(
+  selectListNewStudyPageDomain(),
+  (substate) => substate.availPhoneNumbers
+);
+
 export default selectListNewStudyPage;
 export {
   selectListNewStudyPageDomain,
+  selectAvailPhoneNumbers,
 };
