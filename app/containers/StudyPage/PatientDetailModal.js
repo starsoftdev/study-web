@@ -14,8 +14,8 @@ class PatientDetailModal extends React.Component {
     currentUser: React.PropTypes.object,
     formatPhone: React.PropTypes.func.isRequired,
     openPatientModal: React.PropTypes.bool.isRequired,
-    selectedPatientCategory: React.PropTypes.object,
-    selectedPatient: React.PropTypes.object,
+    selectedPatientCategoryId: React.PropTypes.number,
+    selectedPatientId: React.PropTypes.number,
   };
 
   constructor(props) {
@@ -390,7 +390,7 @@ class PatientDetailModal extends React.Component {
                 <div className="field-row">
                   <strong className="label"><label htmlFor="patient-source5">Source</label></strong>
                   <div className="field">
-                    <input type="text" className="form-control" value={selectedPatient.source.type} disabled readOnly />
+                    <input type="text" className="form-control" value={selectedPatient.source ? selectedPatient.source.type : null} disabled readOnly />
                   </div>
                 </div>
               </div>
