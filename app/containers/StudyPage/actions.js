@@ -10,6 +10,9 @@ import {
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENTS_ERROR,
+  FETCH_PATIENT_DETAILS,
+  FETCH_PATIENT_DETAILS_SUCCESS,
+  FETCH_PATIENT_DETAILS_ERROR,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_PATIENT_CATEGORIES_ERROR,
   FETCH_SITES_SUCCESS,
@@ -51,6 +54,32 @@ export function patientsFetched(payload) {
 export function patientsFetchingError(payload) {
   return {
     type: FETCH_PATIENTS_ERROR,
+    payload,
+  };
+}
+
+export function fetchPatientDetails(categoryId, patient) {
+  return {
+    type: FETCH_PATIENT_DETAILS,
+    categoryId,
+    patient,
+  };
+}
+
+export function patientDetailsFetched(patientCategoryId, patientId, payload) {
+  return {
+    type: FETCH_PATIENT_DETAILS_SUCCESS,
+    patientCategoryId,
+    patientId,
+    payload,
+  };
+}
+
+export function patientDetailsFetchingError(patientCategoryId, patientId, payload) {
+  return {
+    type: FETCH_PATIENT_DETAILS_ERROR,
+    patientCategoryId,
+    patientId,
     payload,
   };
 }
