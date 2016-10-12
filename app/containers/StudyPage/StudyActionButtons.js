@@ -101,6 +101,12 @@ class StudyActionButtons extends React.Component {
           <ImportPatientsModal show={this.state.showImportPatientsModal} onHide={this.toggleImportPatientsModal} toggleAddPatient={this.toggleAddPatientModal} />
           <AddPatient show={this.state.showAddPatientModal} onClose={this.closeAddPatientModal} onHide={this.toggleAddPatientModal} />
         </div>
+        <div className="btn-download pull-left">
+          <a className="btn btn-primary download">
+            <i className="icomoon-icon_download" />
+            <span>Download</span>
+          </a>
+        </div>
       </div>
     );
   }

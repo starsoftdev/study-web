@@ -5,16 +5,16 @@
 @import "../../assets/less/_variables";
 
 /*	individual-study	*/
+
 .individual-study {
   position: relative;
   .main-head {
-    font-size: 21px;
-    line-height: 1.25;
+    .font(21px);
     color: #101010;
     margin: 0 0 25px;
-  }
-  .main-head p {
-    margin: 0 0 15px;
+    p {
+      margin: 0 0 15px;
+    }
   }
   .info-cell {
     font-weight: 600;
@@ -28,13 +28,13 @@
     > div {
       margin: 0;
       padding: 0 6px 30px;
-    }
-    > div.btns {
-      padding: 0;
-      width: 39.5%;
-    }
-    > div.btns > div {
-      padding: 0 6px 30px;
+      &.btns {
+        padding: 0;
+        width: 39.5%;
+        > div {
+          padding: 0 6px 30px;
+        }
+      }
     }
     .btn-primary {
       top: auto;
@@ -71,9 +71,7 @@
     border-radius: 3px;
     font-size: 18px;
   }
-}
-@media screen and (max-width: 1650px) {
-  .individual-study {
+  @media screen and (max-width: 1650px) {
     .form-search {
       > div.btns {
         width: auto;
@@ -101,8 +99,8 @@
     }
   }
 }
-/*	stats  */
 
+/*	stats  */
 .stats {
   margin: 0 0 30px;
   background: #fff;
@@ -299,7 +297,7 @@
 #import-info .parent-active .table-cell {
   padding: 3px 10px 20px;
 }
-#import-info .parent-active .icomoon-alt-arrow-up {
+#import-info .parent-active .icomoon-arrow_up_alt {
   width: 40px;
   height: 40px;
   color: #fff;
@@ -311,11 +309,11 @@
   border-radius: 100%;
   background: #00afef;
 }
-#import-info .parent-active .icomoon-alt-arrow-up:before {
+#import-info .parent-active .icomoon-arrow_up_alt:before {
   content: '\e916';
   display: inline;
 }
-#import-info .parent-active:hover .icomoon-alt-arrow-up {
+#import-info .parent-active:hover .icomoon-arrow_up_alt {
   color: #00afef;
   background: #fff;
 }

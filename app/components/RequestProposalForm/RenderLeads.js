@@ -53,7 +53,7 @@ const RenderLeads = ({ fields }) => (
           className="add-new-source"
           onClick={() => fields.push({})}
         >
-          <i className="icomoon-close"></i> Add Lead Source
+          <i className="icomoon-icon_close"></i> Add Lead Source
         </button>
       </div>
     </div>
