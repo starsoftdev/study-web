@@ -41,6 +41,7 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
   addEmailNotificationSubmit(values) {
     this.props.fields.push(values);
     this.props.dispatch(hideAddEmailModal());
+    this.props.dispatch(change('listNewStudy', 'checkAllInput', false));
   }
 
   closeAddEmailModal() {
