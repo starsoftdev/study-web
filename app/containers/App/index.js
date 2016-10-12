@@ -68,7 +68,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         <main id="main">
           {React.Children.toArray(this.props.children)}
         </main>
-        {<GlobalNotifications {...this.props} events={pageEvents} />}
+        <GlobalNotifications {...this.props} events={pageEvents} />
       </div>
     );
   }
