@@ -33,6 +33,7 @@ class PatientDetailModal extends React.Component {
     this.toggleEmailSection = this.toggleEmailSection.bind(this);
     this.toggleOtherSection = this.toggleOtherSection.bind(this);
     this.renderPatientForm = this.renderPatientForm.bind(this);
+    this.renderPatientNote = this.renderPatientNote.bind(this);
   }
 
   toggleNoteSection() {
@@ -68,8 +69,8 @@ class PatientDetailModal extends React.Component {
     });
   }
 
-toggleOtherSection() {
-  this.setState({
+  toggleOtherSection() {
+    this.setState({
       carousel: {
         note: false,
         text: false,
@@ -77,15 +78,15 @@ toggleOtherSection() {
         other: true,
       },
     });
-}
-
-renderPatientForm() {
-  const { formatPhone, selectedPatient } = this.props;
-  let patientPhone
-  if (selectedPatient) {
-    patientPhone = formatPhone(selectedPatient.phone);
   }
-  return (
+
+  renderPatientForm() {
+    const { formatPhone, selectedPatient } = this.props;
+    let patientPhone
+    if (selectedPatient) {
+      patientPhone = formatPhone(selectedPatient.phone);
+    }
+    return (
       <Form className="form-lightbox form-patients-list">
         <div className="field-row">
           <strong className="label required">
@@ -142,8 +143,55 @@ renderPatientForm() {
     );
   }
 
-render() {
-    const { openPatientModal, selectedPatientCategory, selectedPatient } = this.props;
+  renderPatientNote(note) {
+    const { currentUser } = this.props;
+    return (
+      <div className="post-msg">
+        <div className="img-holder">
+          <img role="presentation" src="images/img2.png" />
+        </div>
+        <div className="post-content">
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt. Lorem ipsum dolor sit amet.
+          </p>
+          <a className="btn-trash">
+            <i className="icomoon-icon_trash" />
+          </a>
+        </div>
+        <strong className="email">Alan Walker</strong>
+        <time dateTime="2016-07-28">07/28/16 at 09:35 AM</time>
+      </div>
+    );
+  }
+
+  renderPatientText(text) {
+    const { currentUser } = this.props;
+    return (
+      <div className="post-msg">
+        <div className="img-holder">
+          <img role="presentation" src="images/img2.png" />
+        </div>
+        <div className="post-content">
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt. Lorem ipsum dolor sit amet.
+          </p>
+          <a className="btn-trash">
+            <i className="icomoon-icon_trash" />
+          </a>
+        </div>
+        <strong className="email patient-name">
+          <span className="first-name">Alan</span>
+          <span className="last-name"> Jensen</span>
+        </strong>
+        <time dateTime="2016-07-28">07/28/16 at 09:35 AM</time>
+      </div>
+    );
+  }
+
+  render() {
+    const { currentUser, openPatientModal, selectedPatientCategory, selectedPatient } = this.props;
     return (
       <Collapse dimension="width" in={openPatientModal} timeout={250} className="patients-list-form">
         <div className="form-area">
@@ -159,12 +207,7 @@ render() {
           </div>
           {this.renderPatientForm()}
           <div className="column">
-            <div
-              id="carousel-example-generic"
-              className="carousel slide popup-slider"
-              data-ride="carousel"
-              data-interval="false"
-            >
+            <div id="carousel-example-generic" className="carousel slide popup-slider">
               <ol className="carousel-indicators">
                 <li className={classNames({active: this.state.carousel.note})} onClick={this.toggleNoteSection}>Note</li>
                 <li className={classNames({active: this.state.carousel.text})} onClick={this.toggleTextSection}>Text</li>
@@ -174,165 +217,7 @@ render() {
               <div className="carousel-inner" role="listbox">
                 <div className={classNames("item note", {active: this.state.carousel.note})}>
                   <section className="postarea notes">
-                    <article className="post-msg">
-                      <div className="post-holder" data-post="1">
-                        <div className="img-holder">
-                          <img role="presentation" src="images/img2.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt. Lorem ipsum dolor sit amet.
-                          </p>
-                          <a className="btn-trash">
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email">Alan Walker</strong>
-                        <time dateTime="2016-07-28">07/28/16 at 09:35 AM</time>
-                      </div>
-                      <div className="post-holder even" data-post="1-1">
-                        <div className="img-holder">
-                          <img role="presentation" src="images/img-logged-user.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt. Lorem ipsum dolor sit amet.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            data-remove="[data-post=&quot;1-1&quot;]"
-                          >
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email">Bruce Wayne</strong>
-                        <time dateTime="2016-07-28">07/28/16 at 09:38 AM</time>
-                      </div>
-                    </article>
-                    <article className="post-msg">
-                      <div className="post-holder" data-post="2">
-                        <div className="img-holder">
-                          <img role="presentation" src="images/img3.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt. Lorem ipsum dolor sit amet.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            data-remove="[data-post=&quot;2&quot;]"
-                          >
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email">Penny Worth</strong>
-                        <time dateTime="2016-07-28">07/28/16 at 10:13 AM</time>
-                      </div>
-                      <div className="post-holder even" data-post="2-2">
-                        <div className="img-holder">
-                          <img role="presentation" src="images/img-logged-user.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt. Lorem ipsum dolor sit amet.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            data-remove="[data-post=&quot;2-2&quot;]"
-                          >
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email">Bruce Wayne</strong>
-                        <time dateTime="2016-07-28">07/28/16 at 10:25 AM</time>
-                      </div>
-                    </article>
-                    <article className="post-msg">
-                      <div className="post-holder" data-post="3">
-                        <div className="img-holder"><img role="presentation" src="images/img2.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt. Lorem ipsum dolor sit amet.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            href="#"
-                            data-remove="[data-post=&quot;3&quot;]"
-                          >
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email">Alan Walker</strong>
-                        <time dateTime="2016-07-28">07/28/16 at 10:38 AM</time>
-                      </div>
-                      <div className="post-holder even" data-post="3-2">
-                        <div className="img-holder">
-                          <img role="presentation" src="images/img-logged-user.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            data-remove="[data-post=&quot;3-2&quot;]"
-                          >
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email">Bruce Wayne</strong>
-                        <time dateTime="2016-07-28">07/28/16 at 10:42 AM</time>
-                      </div>
-                    </article>
-                    <article className="post-msg">
-                      <div className="post-holder" data-post="4">
-                        <div className="img-holder"><img role="presentation" src="images/img3.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum
-                            dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
-                            Lorem ipsum dolor sit amet.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            data-remove="[data-post=&quot;4&quot;]"
-                          >
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email">Penny Worth</strong>
-                        <time dateTime="2016-07-28">07/28/16 at 10:50 AM</time>
-                      </div>
-                      <div className="post-holder even" data-post="4-2">
-                        <div className="img-holder">
-                          <img role="presentation" src="images/img-logged-user.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum
-                            dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
-                            Lorem ipsum dolor sit amet.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            href="#"
-                            data-remove="[data-post=&quot;4-2&quot;]"
-                          >
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email">Bruce Wayne</strong>
-                        <time dateTime="2016-07-28">07/28/16 at 10:56 AM</time>
-                      </div>
-                    </article>
+                    {this.renderPatientNote()}
                   </section>
                   <div className="textarea">
                     <textarea className="form-control" placeholder="Type a note..." />
@@ -341,188 +226,7 @@ render() {
                 </div>
                 <div className={classNames("item text", {active: this.state.carousel.text})}>
                   <section className="postarea notes">
-                    <article className="post-msg">
-                      <div className="post-holder patient" data-post="notes1">
-                        <div className="img-holder">
-                          <img role="presentation" src="images/img2.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt. Lorem ipsum dolor sit amet.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            data-remove="[data-post=&quot;notes1&quot;]"
-                          >
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email patient-name">
-                          <span className="first-name">Alan</span>
-                          <span className="last-name"> Jensen</span>
-                        </strong>
-                        <time dateTime="2016-07-28">07/28/16 at 09:35 AM</time>
-                      </div>
-                      <div className="post-holder even" data-post="notes1-1">
-                        <div className="img-holder">
-                          <img role="presentation" src="images/Default-User-Img.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            href="#"
-                            data-remove="[data-post=&quot;notes1-1&quot;]"
-                          >
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email">Bruce Wayne</strong>
-                        <time dateTime="2016-07-28">07/28/16 at 09:38 AM</time>
-                      </div>
-                    </article>
-                    <article className="post-msg">
-                      <div className="post-holder patient" data-post="notes2">
-                        <div className="img-holder">
-                          <img role="presentation" src="images/img2.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                            eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur
-                            adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet,
-                            consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor
-                            sit amet.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            href="#"
-                            data-remove="[data-post=&quot;notes2&quot;]"
-                          >
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email patient-name">
-                          <span className="first-name">Alan</span>
-                          <span className="last-name"> Jensen</span>
-                        </strong>
-                        <time dateTime="2016-07-28">07/28/16 at 10:13 AM</time>
-                      </div>
-                      <div className="post-holder even" data-post="notes2-2">
-                        <div className="img-holder">
-                          <img role="presentation" src="images/Default-User-Img.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            href="#"
-                            data-remove="[data-post=&quot;notes2-2&quot;]"
-                          ><i className="icomoon-icon_trash" /></a>
-                        </div>
-                        <strong className="email">Bruce Wayne</strong>
-                        <time dateTime="2016-07-28">07/28/16 at 10:25 AM</time>
-                      </div>
-                    </article>
-                    <article className="post-msg">
-                      <div className="post-holder patient" data-post="notes3">
-                        <div className="img-holder">
-                          <img role="presentation" src="images/img2.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt. Lorem ipsum dolor sit amet.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            href="#"
-                            data-remove="[data-post=&quot;notes3&quot;]"
-                          >
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email patient-name">
-                          <span className="first-name">Alan</span>
-                          <span className="last-name"> Jensen</span>
-                        </strong>
-                        <time dateTime="2016-07-28">07/28/16 at 10:38 AM</time>
-                      </div>
-                      <div className="post-holder even" data-post="notes3-2">
-                        <div className="img-holder">
-                          <img role="presentation" src="images/Default-User-Img.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt. Lorem ipsum dolor sit amet.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            href="#"
-                            data-remove="[data-post=&quot;notes3-2&quot;]"
-                          >
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email">Bruce Wayne</strong>
-                        <time dateTime="2016-07-28">07/28/16 at 10:42 AM</time>
-                      </div>
-                    </article>
-                    <article className="post-msg">
-                      <div className="post-holder patient" data-post="notes4">
-                        <div className="img-holder">
-                          <img role="presentation" src="images/img2.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt. Lorem ipsum dolor sit amet.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            href="#"
-                            data-remove="[data-post=&quot;notes4&quot;]"
-                          >
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email patient-name">
-                          <span className="first-name">Alan</span>
-                          <span className="last-name"> Jensen</span>
-                        </strong>
-                        <time dateTime="2016-07-28">07/28/16 at 10:50 AM</time>
-                      </div>
-                      <div className="post-holder even" data-post="4-2">
-                        <div className="img-holder">
-                          <img role="presentation" src="images/Default-User-Img.png" />
-                        </div>
-                        <div className="post-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt. Lorem ipsum dolor sit amet.
-                          </p>
-                          <a
-                            className="btn-trash"
-                            href="#"
-                            data-remove="[data-post=&quot;notes4-2&quot;]"
-                          >
-                            <i className="icomoon-icon_trash" />
-                          </a>
-                        </div>
-                        <strong className="email">Bruce Wayne</strong>
-                        <time dateTime="2016-07-28">07/28/16 at 10:56 AM</time>
-                      </div>
-                    </article>
+                    {this.renderPatientText()}
                   </section>
                   <div className="textarea">
                     <textarea className="form-control" placeholder="Type a message..." />
@@ -539,27 +243,24 @@ render() {
                       <ul className="list-unstyled list-radios">
                         <li>
                           <span className="title">Signed Up</span>
-                          <time dateTime="2016-05-03">05/03/16</time>
+                          <time dateTime={selectedPatient.createdAt}>{moment.tz(selectedPatient.createdAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
                         </li>
                         <li>
                           <span className="title">Updated</span>
-                          <time dateTime="2016-05-03">05/09/16</time>
+                          <time dateTime={selectedPatient.updatedAt}>{moment.tz(selectedPatient.updatedAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
                         </li>
                       </ul>
                     </div>
-                    <form
-                      className="sub-holder form-lightbox"
-                      noValidate="novalidate"
-                    >
+                    <Form className="sub-holder form-lightbox" noValidate="novalidate">
                       <div className="field-row full remove-bipolar">
                         <strong className="label">Indications</strong>
                         <div className="field">
-                          <div className="catogery-list">
-                            <div className="catogery">
-                                  <span className="bipolar-link">
-                                    <span className="text">Bipolar</span>
-                                    <a href="#" data-remove=".catogery" className="icomoon-icon_trash" />
-                                  </span>
+                          <div className="category-list">
+                            <div className="category">
+                              <span className="bipolar-link">
+                                <span className="text">Bipolar</span>
+                                <a className="icomoon-icon_trash" />
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -567,25 +268,21 @@ render() {
                       <div className="field-row full">
                         <div className="field add-indications">
                           <div className="indication-open-close">
-                            <a href="#" className="btn btn-primary select-indication-opener">+ Add Indication</a>
+                            <a className="btn btn-primary select-indication-opener">+ Add Indication</a>
                             <div className="select-indication-slide default-slide js-slide-hidden">
                               <div className="well custom-select-drop">
                                 <div className="search-holder">
-                                  <input
-                                    type="search"
-                                    className="form-control keyword-search"
-                                    id="search10"
-                                  />
+                                  <input type="search" className="form-control keyword-search" id="search10" />
                                   <label htmlFor="search10" className="icomoon-icon_search2" />
                                 </div>
                                 <div className="jcf--scrollable">
                                   <ul className="list-unstyled list select-indication">
-                                    <li><a href="#">Acne </a></li>
-                                    <li><a href="#">Back Pain</a></li>
-                                    <li><a href="#">Magraine </a></li>
-                                    <li><a href="#">Ring worm</a></li>
-                                    <li><a href="#">COPD</a></li>
-                                    <li><a href="#">Leg pain</a></li>
+                                    <li>Acne</li>
+                                    <li>Back Pain</li>
+                                    <li>Magraine </li>
+                                    <li>Ring worm</li>
+                                    <li>COPD</li>
+                                    <li>Leg pain</li>
                                   </ul>
                                 </div>
                               </div>
@@ -621,7 +318,7 @@ render() {
                                 </select>
                                 <span className="jcf-select jcf-unselectable jcf-select-min-width jcf-select-min-height">
                                       <span className="jcf-select-text">
-                                        <span className="">Month</span>
+                                        <span>Month</span>
                                       </span>
                                       <span className="jcf-select-opener" />
                                     </span>
@@ -663,7 +360,7 @@ render() {
                                 </select>
                                 <span className="jcf-select jcf-unselectable jcf-select-min-height">
                                       <span className="jcf-select-text">
-                                        <span className="">Day</span>
+                                        <span>Day</span>
                                       </span>
                                       <span className="jcf-select-opener" />
                                     </span>
@@ -695,11 +392,11 @@ render() {
                                   <option>2002</option>
                                 </select>
                                 <span className="jcf-select jcf-unselectable jcf-select-min-height">
-                                      <span className="jcf-select-text">
-                                        <span className="">Year</span>
-                                      </span>
-                                      <span className="jcf-select-opener" />
-                                    </span>
+                                  <span className="jcf-select-text">
+                                    <span>Year</span>
+                                  </span>
+                                  <span className="jcf-select-opener" />
+                                </span>
                               </div>
                             </div>
                           </div>
@@ -716,7 +413,7 @@ render() {
                             </select>
                             <span className="jcf-select jcf-unselectable">
                                   <span className="jcf-select-text">
-                                    <span className="">Select Gender</span>
+                                    <span>Select Gender</span>
                                   </span>
                                   <span className="jcf-select-opener" />
                                 </span>
@@ -738,17 +435,11 @@ render() {
                         <div className="field-row">
                           <strong className="label"><label htmlFor="patient-source5">Source</label></strong>
                           <div className="field">
-                            <input
-                              type="text"
-                              id="patient-source5"
-                              className="form-control"
-                              disabled=""
-                              placeholder="StudyKIK"
-                            />
+                            <input type="text" className="form-control" placeholder="StudyKIK" disabled readOnly />
                           </div>
                         </div>
                       </div>
-                    </form>
+                    </Form>
                   </div>
                 </div>
               </div>
