@@ -26,7 +26,7 @@ export function* submitFormWatcher() {
       _.forEach(formValues, (value, index) => {
         if (index === 'file') {
           data.append(index, value[0]);
-        } else if (index === 'emailNotifications') {
+        } else if (index === 'emailNotifications' || index === 'leadSource') {
           data.append(index, JSON.stringify(value));
         } else {
           data.append(index, value);

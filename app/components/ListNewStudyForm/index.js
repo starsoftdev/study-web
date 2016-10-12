@@ -96,6 +96,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
+    console.log(this.props.formValues);
     const { siteLocations, indications, studyLevels, callTracking, formValues } = this.props;
 
     if (!_.find(siteLocations, (o) => (o.id === 'add-new-location'))) {
@@ -294,7 +295,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           {callTracking &&
-            <FieldArray name="leads" component={RenderLeads} />
+            <FieldArray name="leadSource" component={RenderLeads} />
           }
 
           <div className="field-row">
