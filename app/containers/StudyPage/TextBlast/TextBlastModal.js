@@ -109,7 +109,7 @@ class TextBlastModal extends React.Component {
           <strong className="title">Text Blast</strong>
           </Modal.Title>
           <a className="close" onClick={props.onHide}>
-            <i className="icomoon-close" />
+            <i className="icomoon-icon_close" />
           </a>
         </Modal.Header>
         <Modal.Body>
@@ -200,16 +200,12 @@ class TextBlastModal extends React.Component {
               <span className="counter">0</span>
               <span className="text">Patients</span>
               <a href="#" className="btn-close">
-              <i className="icomoon-close" />
+              <i className="icomoon-icon_close" />
               </a>
               </span>
                     </div>
                     <textarea placeholder="Type a message..." className="form-control" data-required="true" />
                     <div className="footer">
-                      <a href="#" className="btn btn-gray-outline pull-left">
-                        <i className="icomoon-icon_book_alt" /> Select Template</a>
-                      <a href="#" className="btn btn-gray-outline pull-left">
-                        <i className="icomoon-icon_floppy_alt" /> Save Template</a>
                       <input type="submit" value="submit" className="btn btn-default pull-right" />
                     </div>
                   </div>

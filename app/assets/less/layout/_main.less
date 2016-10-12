@@ -10,51 +10,38 @@
 }
 
 .form-search {
-  clear: both;
-  margin: 0 -6px 30px;
+  margin: 0 0 30px;
   position: relative;
-
-  .btns-area {
-    margin: 0 0 0 50px;
-  }
-
   .fields-holder {
-    overflow: hidden;
+    margin: 0 300px 0 0;
   }
-
   .btn-primary {
+    top: 0;
+    right: 0;
     color: #00afef;
+    min-width: 203px;
     font-weight: 600;
-    padding: 6px 12px;
+    padding: 6px 8px;
     background: #fff;
     .font(18px, 24px);
     border-width: 2px;
+    position: absolute;
     border-radius: 2px;
     border-color: #00afef;
     text-transform: uppercase;
-
-    &:hover,
-    &:focus,
-    &:focus:active {
+    &:hover, &:focus, &:focus:active {
       color: #fff;
       background: #00afef;
     }
   }
-
-  .col {
-    padding: 0 6px;
-  }
-
   .search-area {
-    width: 33.33%;
-    padding: 0 6px;
+    width: 33.8%;
+    margin: 0 12px 0 0;
     position: relative;
-
     .form-control {
       padding-right: 32px;
     }
   }
-
   .search-holder > label,
   [for="search3"],
   [for="search2"],
@@ -64,80 +51,82 @@
     cursor: pointer;
     font-size: 14px;
     position: absolute;
-    .transform(translate(0,-50%));
+    .transform(translate(0, -50%));
   }
-
   .form-control {
     .font(18px);
     padding: 5px 11px;
     border-radius: 3px;
-
     &:focus {
       outline: none;
       box-shadow: none;
     }
   }
-
   .custom-select {
-    width: 33.333%;
-    padding: 0 6px;
+    width: 25.833%;
+    margin: 0 12px 0 0;
   }
-
   .field {
     position: relative;
   }
-
   &.alt {
-
     .fields-holder {
       margin: 0;
     }
-
     .search-area {
-      width: 25%;
+      width: 25.7%;
     }
-
     .custom-select {
-      width: 25%;
+      width: 19.7%;
     }
-
     .btn-gray-outline {
       padding: 5px 11px;
       color: #101010;
-
-      &:hover,
-      &:focus,
-      &:active:focus {
+      &:hover, &:focus, &:active:focus {
         color: #fff;
         background: #00afef;
         border-color: #00afef;
       }
-      .icomoon-icon_calendar {
+      .icon-icon_calendar {
         font-size: 90%;
         margin: 0 5px 0 0;
       }
     }
   }
-
   .home-page & {
     @media screen and (max-width: @psd) {
-      .search-area,
-      .custom-select {
+      .search-area, .custom-select {
         width: 33.3333%;
       }
     }
   }
-
   @media screen and (max-width: @psd) {
-    margin-bottom: 0;
-
+    margin: 0 -6px;
+    .fields-holder {
+      margin: 0;
+      .clearfix;
+      padding: 70px 0 0;
+    }
     .custom-select,
     .search-area {
       margin: 0;
-      width: 33.333%;
+      width: 50%;
       padding: 0 6px 30px;
     }
-
+    .btn-primary {
+      right: 6px;
+    }
+    &.alt {
+      margin: 0 -6px 14px;
+      .search-area, .custom-select {
+        width: 40.1%;
+      }
+      .btn.btn-gray-outline {
+        width: 18.3%;
+        float: right;
+        margin: 0 8px 16px;
+      }
+    }
   }
 }
 
@@ -556,15 +545,6 @@
         text-transform: uppercase;
       }
     }
-  }
-}
-
-.btns {
-  .font(0,0);
-
-  .btn {
-    padding: 5px 10px;
-    margin: 0 0 0 12px;
   }
 }
 
@@ -1495,13 +1475,6 @@
 
     .form-search {
       margin-bottom: 0;
-
-
-
-      /*.search-area,
-            .custom-select {
-                width: 50%;
-            }*/
     }
 
     .table {

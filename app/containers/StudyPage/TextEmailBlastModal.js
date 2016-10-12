@@ -31,7 +31,7 @@ class TextEmailBlastModal extends React.Component {
             <strong>Text / Email Blast</strong>
           </Modal.Title>
           <a className="close" onClick={props.onHide}>
-            <i className="icomoon-close" />
+            <i className="icomoon-icon_close" />
           </a>
         </Modal.Header>
         <Modal.Body>

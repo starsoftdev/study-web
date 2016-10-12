@@ -35,7 +35,7 @@ class AddPatient extends React.Component {
             <strong>Import</strong>
           </Modal.Title>
           <a className="close" onClick={onHide}>
-            <i className="icomoon-close" />
+            <i className="icomoon-icon_close" />
           </a>
         </Modal.Header>
         <Modal.Body>

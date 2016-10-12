@@ -32,14 +32,14 @@ class ImportPatientsModal extends React.Component {
             <strong>Import</strong>
           </Modal.Title>
           <a className="close" onClick={onHide}>
-            <i className="icomoon-close" />
+            <i className="icomoon-icon_close" />
           </a>
         </Modal.Header>
         <Modal.Body>
           <Form className="upload-patient-info">
             <div className="table">
               <label className="table-cell" htmlFor="upload-patient">
-                <i className="icomoon-alt-arrow-up" />
+                <i className="icomoon-arrow_up_alt" />
                 <span className="text">Upload Patients</span>
                 <span className="jcf-file">
                   <span className="jcf-fake-input">No file chosen</span>
@@ -57,7 +57,7 @@ class ImportPatientsModal extends React.Component {
           <a className="add-patient-info-import" onClick={toggleAddPatient}>
             <div className="table">
               <div className="table-cell">
-                <i className="icomoon-alt-plus" />
+                <i className="icomoon-icon_plus_alt" />
                 <span className="text">Add Patient</span>
               </div>
             </div>
