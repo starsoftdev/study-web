@@ -9,6 +9,8 @@ import {
   FETCH_CAMPAIGNS_ERROR,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENTS_ERROR,
+  FETCH_PATIENT_DETAILS_SUCCESS,
+  FETCH_PATIENT_DETAILS_ERROR,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_PATIENT_CATEGORIES_ERROR,
   FETCH_SITES_SUCCESS,
@@ -60,6 +62,12 @@ function studyPageReducer(state = initialState, action) {
         }),
         fetchingPatients: false,
       };
+    case FETCH_PATIENT_DETAILS_SUCCESS:
+    case FETCH_PATIENT_DETAILS_ERROR:
+      return {
+        ...state,
+        patientCategories: patientCategories(state.patientCategories, action),
+      };
     case FETCH_PATIENT_CATEGORIES_SUCCESS:
       return {
         ...state,
@@ -106,6 +114,53 @@ function studyPageReducer(state = initialState, action) {
         study: false,
         fetchingStudy: false,
       };
+    default:
+      return state;
+  }
+}
+
+function patientCategories(state, action) {
+  switch (action.type) {
+    case FETCH_PATIENT_DETAILS_SUCCESS:
+      return state.map(patientCategory => {
+        if (patientCategory.id === action.patientCategoryId) {
+          return {
+            ...patientCategory,
+            patients: patientCategory.patients.map(patient => {
+              if (patient.id == action.patientId) {
+                return {
+                  ...patient,
+                  ...action.payload,
+                };
+              } else {
+                return patient;
+              }
+            })
+          };
+        } else {
+          return patientCategory;
+        }
+      });
+    case FETCH_PATIENT_DETAILS_ERROR:
+      return state.map(patientCategory => {
+        if (patientCategory.id === action.patientCategoryId) {
+          return {
+            ...patientCategory,
+            patients: patientCategory.patients.map(patient => {
+              if (patient.id == action.patientId) {
+                return {
+                  ...patient,
+                  error: action.payload.error,
+                };
+              } else {
+                return patient;
+              }
+            })
+          };
+        } else {
+          return patientCategory;
+        }
+      });
     default:
       return state;
   }

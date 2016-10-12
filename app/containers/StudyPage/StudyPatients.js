@@ -8,10 +8,10 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import moment from 'moment-timezone';
 import libPhoneNumber from 'google-libphonenumber';
-import { selectCurrentUser } from 'containers/App/selectors';
 import { createStructuredSelector } from 'reselect';
-
+import { selectCurrentUser } from 'containers/App/selectors';
 import PatientDetailModal from './PatientDetailModal';
+import { fetchPatientDetails } from './actions';
 
 const PNF = libPhoneNumber.PhoneNumberFormat;
 const phoneUtil = libPhoneNumber.PhoneNumberUtil.getInstance();
@@ -20,14 +20,15 @@ class StudyPatients extends React.Component {
   static propTypes = {
     patientCategories: React.PropTypes.array.isRequired,
     currentUser: React.PropTypes.object.isRequired,
+    fetchPatientDetails: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       openPatientModal: false,
-      selectedPatientCategory: false,
-      selectedPatient: false,
+      selectedPatientCategory: null,
+      selectedPatient: null,
     };
     this.onPatientClick = this.onPatientClick.bind(this);
     this.renderPatient = this.renderPatient.bind(this);
@@ -37,7 +38,9 @@ class StudyPatients extends React.Component {
   }
 
   onPatientClick(category, patient) {
+    const { fetchPatientDetails } = this.props;
     const show = patient && (!this.state.selectedPatient || this.state.selectedPatient.id !== patient.id);
+    fetchPatientDetails(category.id, patient);
     this.setState({
       openPatientModal: show,
       selectedPatientCategory: show ? category : false,
@@ -144,6 +147,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchPatientDetails: (categoryId, patient) => dispatch(fetchPatientDetails(categoryId, patient)),
   };
 }
 

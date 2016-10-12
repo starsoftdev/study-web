@@ -5,9 +5,11 @@
 import { call, fork, put, take } from 'redux-saga/effects';
 import request from 'utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
-import { FETCH_PATIENTS } from './constants';
+import { FETCH_PATIENTS, FETCH_PATIENT_DETAILS } from './constants';
+import { actions as toastrActions } from 'react-redux-toastr';
+import { get } from 'lodash';
 
-import { campaignsFetched, patientCategoriesFetched, patientsFetched, sitesFetched, sourcesFetched, studyFetched } from './actions';
+import { campaignsFetched, patientCategoriesFetched, patientsFetched, patientDetailsFetched, sitesFetched, sourcesFetched, studyFetched } from './actions';
 
 // Bootstrap sagas
 export default [
@@ -21,19 +23,24 @@ function* fetchStudyDetails() {
   const filter = JSON.stringify({
     include: ['campaigns', 'sources', 'sites'],
   });
-  const requestURL = `${API_URL}/studies/${studyId}?access_token=${authToken}&filter=${filter}`;
-  const response = yield call(request, requestURL, {
-    method: 'GET',
-  });
-  // populate the campaigns and sources from the study
-  yield put(campaignsFetched(response.campaigns));
-  yield put(sourcesFetched(response.sources));
-  yield put(sitesFetched(response.sites));
-  delete response.campaigns;
-  delete response.sources;
-  delete response.sites;
-  // put in the study in the state
-  yield put(studyFetched(response));
+  try {
+    const requestURL = `${API_URL}/studies/${studyId}?access_token=${authToken}&filter=${filter}`;
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    // populate the campaigns and sources from the study
+    yield put(campaignsFetched(response.campaigns));
+    yield put(sourcesFetched(response.sources));
+    yield put(sitesFetched(response.sites));
+    delete response.campaigns;
+    delete response.sources;
+    delete response.sites;
+    // put in the study in the state
+    yield put(studyFetched(response));
+  } catch (e) {
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching study information. Please try again later.');
+    yield put(toastrActions.error('', errorMessage));
+  }
 }
 
 function* fetchPatientCategories() {
@@ -42,12 +49,17 @@ function* fetchPatientCategories() {
   const filter = JSON.stringify({
     fields: ['name', 'id'],
   });
-  const requestURL = `${API_URL}/patientCategories?access_token=${authToken}&filter=${filter}`;
-  const response = yield call(request, requestURL, {
-    method: 'GET',
-  });
-  // populate the patient categories
-  yield put(patientCategoriesFetched(response));
+  try {
+    const requestURL = `${API_URL}/patientCategories?access_token=${authToken}&filter=${filter}`;
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    // populate the patient categories
+    yield put(patientCategoriesFetched(response));
+  } catch (e) {
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching patient categories. Please try again later.');
+    yield put(toastrActions.error('', errorMessage));
+  }
 }
 
 export function* fetchPatients(filter) {
@@ -78,6 +90,8 @@ export function* fetchPatients(filter) {
     if (e.status === 401) {
       removeItem('auth_token');
     }
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching patients. Please try again later.');
+    yield put(toastrActions.error('', errorMessage));
   }
 }
 
@@ -86,6 +100,30 @@ export function* fetchPatientsWithFilter() {
     // listen for the FETCH_PATIENTS action
     const { filter } = yield take(FETCH_PATIENTS);
     yield call(fetchPatients(filter));
+  }
+}
+
+export function* fetchPatientDetails() {
+  while(true) {
+    // listen for the FETCH_PATIENTS action
+    const { categoryId, patient } = yield take(FETCH_PATIENT_DETAILS);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+    const filter = JSON.stringify({
+      include: ['indications', 'notes', 'source', 'textMessages'],
+    })
+    try {
+      const requestURL = `${API_URL}/patients/${patient.id}?access_token=${authToken}&filter=${filter}`;
+      const response = yield call(request, requestURL, {
+        method: 'GET',
+      });
+      yield put(patientDetailsFetched(categoryId, patient.id, response));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while fetching patient information. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+    }
   }
 }
 
@@ -100,6 +138,7 @@ export function* fetchStudySaga() {
     yield call(fetchPatientCategories);
     yield fork(fetchPatients);
     yield fork(fetchPatientsWithFilter);
+    yield fork(fetchPatientDetails);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {
