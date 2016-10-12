@@ -5,10 +5,11 @@
  */
 
 import React, { PropTypes } from 'react';
-import Input from 'components/Input';
-import { Field } from 'redux-form';
+import { Field, change } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import AddEmailNotificationForm from 'components/AddEmailNotificationForm';
+import Checkbox from 'components/Input/Checkbox';
+import _ from 'lodash';
 
 import {
   showAddEmailModal,
@@ -29,6 +30,8 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
     this.addEmailNotificationClick = this.addEmailNotificationClick.bind(this);
     this.addEmailNotificationSubmit = this.addEmailNotificationSubmit.bind(this);
     this.closeAddEmailModal = this.closeAddEmailModal.bind(this);
+    this.selectAll = this.selectAll.bind(this);
+    this.selectEmail = this.selectEmail.bind(this);
   }
 
   addEmailNotificationClick() {
@@ -44,22 +47,51 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
     this.props.dispatch(hideAddEmailModal());
   }
 
+  selectAll(e) {
+    if (this.props.formValues.emailNotifications) {
+      _.forEach(this.props.formValues.emailNotifications, (value, index) => {
+        this.props.dispatch(change('listNewStudy', `emailNotifications[${index}].isChecked`, e.target.checked));
+      });
+    }
+  }
+
+  selectEmail(e) {
+    if (this.props.formValues.checkAllInput && !e.target.checked) {
+      this.props.dispatch(change('listNewStudy', 'checkAllInput', false));
+    } else if (!this.props.formValues.checkAllInput && e.target.checked) {
+      const checkedArr = _.filter(this.props.formValues.emailNotifications, (o) => o.isChecked);
+      if ((checkedArr.length + 1) === this.props.formValues.emailNotifications.length) {
+        this.props.dispatch(change('listNewStudy', 'checkAllInput', true));
+      }
+    }
+  }
+
   render() {
     const { fields, formValues } = this.props;
     return (
       <div>
+        <div className="heading-area">
+          <Field
+            name="checkAllInput"
+            component={Checkbox}
+            type="checkbox"
+            className="field-active"
+            onChange={this.selectAll}
+          />
+          <strong className="email">RECEIVE EMAIL NOTIFICATION</strong>
+        </div>
+
         <ul className="list-unstyled list-emails">
           {
             fields.map((email, index) =>
               <li key={index}>
-                <span className="jcf-checkbox parent-active jcf-unchecked">
-                  <Field
-                    name={`${email}.isChecked`}
-                    component={Input}
-                    type="checkbox"
-                    className="field-active"
-                  />
-                </span>
+                <Field
+                  name={`${email}.isChecked`}
+                  component={Checkbox}
+                  type="checkbox"
+                  className="field-active"
+                  onChange={this.selectEmail}
+                />
                 <span className="first-name">{formValues.emailNotifications[index].firstName} </span>
                 <span className="last-name">{formValues.emailNotifications[index].lastName} </span>
               </li>

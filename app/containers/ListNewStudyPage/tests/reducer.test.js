@@ -3,6 +3,10 @@ import listNewStudyPageReducer from '../reducer';
 
 describe('listNewStudyPageReducer', () => {
   it('returns the initial state', () => {
-    expect(listNewStudyPageReducer(undefined, {})).toEqual({});
+    const initialState = {
+      showAddSiteLocationModal: false,
+      showAddEmailModal: false,
+    };
+    expect(listNewStudyPageReducer(undefined, {})).toEqual(initialState);
   });
 });

@@ -11,9 +11,11 @@ import { StickyContainer, Sticky } from 'react-sticky';
 import ShoppingCartForm from 'components/ShoppingCartForm';
 import ListNewStudyForm from 'components/ListNewStudyForm';
 import { selectListNewStudyPageDomain } from 'containers/ListNewStudyPage/selectors';
-import { selectListNewStudyFormValues } from 'components/ListNewStudyForm/selectors';
+import { selectListNewStudyFormValues, selectListNewStudyFormError } from 'components/ListNewStudyForm/selectors';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
-import { find } from 'lodash';
+import _, { find } from 'lodash';
+import { submitForm } from 'containers/ListNewStudyPage/actions';
+import { saveSite } from 'containers/SitesUsersPage/actions';
 
 import Helmet from 'react-helmet';
 import {
@@ -40,6 +42,15 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     fetchLevels: PropTypes.func,
     listNewStudyState: PropTypes.object,
     formValues: PropTypes.object,
+    submitForm: PropTypes.func,
+    saveSite: PropTypes.func,
+    hasErrors: PropTypes.bool,
+  }
+
+  constructor(props) {
+    super(props);
+    this.submitForm = this.props.submitForm.bind(this);
+    this.onSubmitForm = this.onSubmitForm.bind(this);
   }
 
   componentDidMount() {
@@ -48,15 +59,21 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     this.props.fetchLevels();
   }
 
-  onSubmitForm() {
-
+  onSubmitForm(params) {
+    const filteredEmails = [];
+    _.forEach(this.props.formValues.emailNotifications, (item) => {
+      if (item.isChecked) {
+        filteredEmails.push({ firstName: item.firstName, lastName: item.lastName, email: item.email });
+      }
+    });
+    this.submitForm(params, { ...this.props.formValues, emailNotifications: filteredEmails });
   }
 
   render() {
-    const { siteLocations, indications, studyLevels, formValues, fullSiteLocations } = this.props;
+    const { siteLocations, indications, studyLevels, formValues, fullSiteLocations, hasErrors } = this.props;
 
     const addOns = [];
-    const level = find(studyLevels, { id: formValues.level_id });
+    const level = find(studyLevels, { id: formValues.exposureLevel });
     const months = find(CAMPAIGN_LENGTH_LIST, { value: formValues.campaignLength });
 
     if (level && months) {
@@ -103,13 +120,14 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
                 indications={indications}
                 studyLevels={studyLevels}
                 listNewStudyState={this.props.listNewStudyState}
+                saveSite={this.props.saveSite}
               />
             </div>
 
             <div className="fixed-block">
               <div className="fixed-block-holder">
                 <Sticky className="sticky-shopping-cart">
-                  {<ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} />}
+                  {<ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} disableSubmit={hasErrors} />}
                 </Sticky>
               </div>
             </div>
@@ -128,6 +146,7 @@ const mapStateToProps = createStructuredSelector({
   studyLevels   : selectStudyLevels(),
   listNewStudyState : selectListNewStudyPageDomain(),
   formValues: selectListNewStudyFormValues(),
+  hasErrors: selectListNewStudyFormError(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -135,6 +154,8 @@ function mapDispatchToProps(dispatch) {
     fetchSites:       () => dispatch(fetchSites()),
     fetchIndications: () => dispatch(fetchIndications()),
     fetchLevels:      () => dispatch(fetchLevels()),
+    submitForm:     (cartValues, formValues) => dispatch(submitForm(cartValues, formValues)),
+    saveSite: (clientId, id, data) => dispatch(saveSite(clientId, id, data)),
   };
 }
 

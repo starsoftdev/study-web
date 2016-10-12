@@ -1,10 +1,14 @@
 // import { selectListNewStudyPageDomain } from '../selectors';
 import expect from 'expect';
-
-// const selector = selectListNewStudyPageDomain();
+import { selectListNewStudyPageDomain } from '../selectors';
 
 describe('selectListNewStudyPageDomain', () => {
-  it('Expect to have unit tests specified', () => {
-    expect('Test case').toEqual(false);
+  const listNewStudyPageSelector = selectListNewStudyPageDomain();
+  it('should select ListNewStudyPage page state', () => {
+    const state = {};
+    const mockedState = {
+      listNewStudyPage: state,
+    };
+    expect(listNewStudyPageSelector(mockedState)).toEqual(state);
   });
 });
