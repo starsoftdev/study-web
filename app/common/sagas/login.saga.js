@@ -10,6 +10,7 @@ import {
 import { push } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
+import { selectLocationState } from 'containers/App/selectors';
 
 import request from 'utils/request';
 import { setItem, removeItem } from 'utils/localStorage';
@@ -23,7 +24,15 @@ import {
   RESET_PASSWORD_REQUEST,
 } from 'containers/ResetPasswordPage/constants';
 
-import { loginError } from 'containers/LoginPage/actions';
+import {
+  SET_NEW_PASSWORD_REQUEST,
+} from 'containers/SetNewPasswordPage/constants';
+
+import {
+  CONFIRM_CHANGE_PASSWORD_REQUEST,
+} from 'containers/ProfilePage/constants';
+
+import { loginError, logout as logoutAction } from 'containers/LoginPage/actions';
 import { fetchMeFromToken, setAuthState, setUserData } from 'containers/App/actions';
 import { selectNextPathname } from 'common/selectors/router.selector';
 
@@ -84,7 +93,7 @@ export function* authorize(data) {
     if (nextPathName) {
       yield put(push(nextPathName));
     } else {
-      yield put(push('/home'));
+      yield put(push('/'));
     }
 
     // return the response from the generator task
@@ -143,6 +152,53 @@ export function* resetPassword() {
       const requestURL = `${API_URL}/users/reset`;
       yield call(request, requestURL, params);
       yield put(toastrActions.success('Reset password', 'The request has been submitted successfully'));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
+export function* setNewPassword() {
+  while (true) {
+    try {
+      const { payload } = yield take(SET_NEW_PASSWORD_REQUEST);
+      const state = yield select(selectLocationState());
+
+      if (state.query && state.query.token) {
+        const params = {
+          method: 'POST',
+          body: JSON.stringify(payload),
+          authToken: state.query.token,
+        };
+        const requestURL = `${API_URL}/users/reset-password`;
+        yield call(request, requestURL, params);
+        yield put(toastrActions.success('Set new password', 'The request has been submitted successfully'));
+        yield put(push('/login'));
+      } else {
+        const errorMessage = get(null, 'message', 'Can not find auth token!');
+        yield put(toastrActions.error('', errorMessage));
+      }
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
+export function* confirmPasswordChange() {
+  while (true) {
+    try {
+      const { payload } = yield take(CONFIRM_CHANGE_PASSWORD_REQUEST);
+      const params = {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      };
+      const requestURL = `${API_URL}/userPasswordChange/confirm-change-password`;
+      yield call(request, requestURL, params);
+      yield put(toastrActions.success('Change password', 'The password has been changed successfully'));
+
+      yield put(logoutAction());
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));

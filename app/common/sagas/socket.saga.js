@@ -1,10 +1,15 @@
 /* eslint-disable no-constant-condition, consistent-return */
-import { take, put, fork } from 'redux-saga/effects';
+import { take, put, fork, call } from 'redux-saga/effects';
+import { takeLatest } from 'redux-saga';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
+import request from 'utils/request';
+
 import {
   connectionEstablished,
+  fetchNotificationsSucceeded,
+  fetchUnreadNotificationsCountSucceeded,
 } from 'containers/GlobalNotifications/actions';
 import {
   SET_SOCKET_CONNECTION,
@@ -12,6 +17,8 @@ import {
   UNSUBSCRIBE_FROM_PAGE_EVENT,
   UNSUBSCRIBE_FROM_ALL,
   SUBSCRIBE_TO_CHAT_EVENT,
+  FETCH_NOTIFICATIONS,
+  FETCH_UNREAD_NOTIFICATIONS_COUNT,
 } from 'containers/GlobalNotifications/constants';
 
 let props = null;
@@ -24,6 +31,8 @@ export function* GlobalNotificationsSaga() {
   yield fork(unsubscribeFromPageEvent);
   yield fork(unsubscribeFromAllEvents);
   yield fork(subscribeToChatEvent);
+  yield fork(takeLatest, FETCH_NOTIFICATIONS, fetchNotifications);
+  yield fork(takeLatest, FETCH_UNREAD_NOTIFICATIONS_COUNT, fetchUnreadNotificationsCount);
 }
 
 export function* setSocketConnection() {
@@ -114,6 +123,34 @@ export function* unsubscribeFromAllEvents() {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
     }
+  }
+}
+
+export function* fetchNotifications(action) {
+  try {
+    const requestURL = `${API_URL}/users/${action.userId}/notifications`;
+    const params = {
+      method: 'GET',
+      query: action.searchParams,
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchNotificationsSucceeded(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching notifications');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+export function* fetchUnreadNotificationsCount(action) {
+  try {
+    const requestURL = `${API_URL}/users/${action.userId}/unreadNotificationsCount`;
+    const response = yield call(request, requestURL);
+
+    yield put(fetchUnreadNotificationsCountSucceeded(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching unreadNotificationsCount');
+    yield put(toastrActions.error('', errorMessage));
   }
 }
 

@@ -7,7 +7,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser, selectCards, selectSaveCard } from 'containers/App/selectors';
+import { selectCurrentUser, selectCards, selectSavedCard } from 'containers/App/selectors';
 import PaymentMethodsForm from 'components/PaymentMethodsForm';
 import AddCreditCardModal from 'components/AddCreditCardModal';
 import { fetchCards, deleteCard, saveCard } from 'containers/App/actions';
@@ -20,7 +20,7 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
     currentUser: PropTypes.any,
     saveCard: PropTypes.func,
     fetchCards: PropTypes.func,
-    saveCardOperation: PropTypes.object,
+    savedCard: PropTypes.object,
   }
 
   constructor(props) {
@@ -42,7 +42,7 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
   }
 
   componentWillReceiveProps(newProps) {
-    if (!newProps.saveCardOperation.saving && this.props.saveCardOperation.saving) {
+    if (!newProps.savedCard.saving && this.props.savedCard.saving) {
       this.closeAddCredtCardModal();
     }
   }
@@ -94,7 +94,7 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   creditCards: selectCards(),
-  saveCardOperation: selectSaveCard(),
+  savedCard: selectSavedCard(),
 });
 
 function mapDispatchToProps(dispatch) {

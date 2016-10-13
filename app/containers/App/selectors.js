@@ -21,6 +21,11 @@ const selectEvents = () => createSelector(
   (substate) => substate.pageEvents
 );
 
+const selectCurrentUserClientId = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'userData.roleForClient.client.id', null)
+);
+
 const selectCurrentUserStripeCustomerId = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'userData.roleForClient.client.stripeCustomerId', null)
@@ -48,6 +53,11 @@ const selectIndications = () => createSelector(
   (substate) => get(substate, 'baseData.indications', [])
 );
 
+const selectSources = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.sources', [])
+);
+
 const selectLevels = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.levels', [])
@@ -62,6 +72,8 @@ const selectStudyLevels = () => createSelector(
       {
         id: e.id,
         label: `${e.type}: $${e.price}`,
+        price: e.price,
+        type: e.type,
       }
     ));
   }
@@ -77,14 +89,14 @@ const selectCards = () => createSelector(
   (substate) => get(substate, 'baseData.cards', {})
 );
 
-const selectSaveCard = () => createSelector(
+const selectSavedCard = () => createSelector(
   selectGlobal(),
-  (substate) => get(substate, 'baseData.saveCard', {})
+  (substate) => get(substate, 'baseData.savedCard', {})
 );
 
-const selectDeleteCard = () => createSelector(
+const selectDeletedCard = () => createSelector(
   selectGlobal(),
-  (substate) => get(substate, 'baseData.deleteCard', {})
+  (substate) => get(substate, 'baseData.deletedCard', {})
 );
 
 const selectAddCredits = () => createSelector(
@@ -92,21 +104,27 @@ const selectAddCredits = () => createSelector(
   (substate) => get(substate, 'baseData.addCredits', {})
 );
 
+const selectLocationState = () => state => state.routing.locationBeforeTransitions;
+
 export {
   selectGlobal,
   selectAuthState,
   selectEvents,
   selectCurrentUser,
+  selectCurrentUserClientId,
   selectCurrentUserStripeCustomerId,
 
   selectSites,
   selectSiteLocations,
   selectIndications,
+  selectSources,
   selectLevels,
   selectStudyLevels,
   selectCoupon,
   selectCards,
-  selectSaveCard,
-  selectDeleteCard,
+  selectSavedCard,
+  selectDeletedCard,
   selectAddCredits,
+
+  selectLocationState,
 };

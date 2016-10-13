@@ -5,7 +5,6 @@ import {
   FETCH_PATIENT_MESSAGES_SUCCEESS,
   FETCH_REWARDS_POINT,
   FETCH_REWARDS_POINT_SUCCEESS,
-  RECEIVE_MESSAGE,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser) {
@@ -47,16 +46,5 @@ export function fetchRewardsPointSucceeded(payload) {
   return {
     type: FETCH_REWARDS_POINT_SUCCEESS,
     payload,
-  };
-}
-
-export function receiveNotification(notification) {
-  return {
-    type: RECEIVE_MESSAGE,
-    payload: {
-      event: notification.event,
-      event_params: notification.event_params,
-      entity_ref: notification.entity_ref,
-    },
   };
 }

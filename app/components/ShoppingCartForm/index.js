@@ -15,7 +15,7 @@ import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
 import AddNewCardForm from 'components/AddNewCardForm';
 import { selectCouponId, selectTotal, selectShoppingCartFormError } from './selectors';
-import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSaveCard } from 'containers/App/selectors';
+import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSavedCard } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 import Money from 'components/Money';
@@ -28,7 +28,7 @@ const mapStateToProps = createStructuredSelector({
   coupon: selectCoupon(),
   cards: selectCards(),
   currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
-  saveCardOperation: selectSaveCard(),
+  savedCard: selectSavedCard(),
   hasError: selectShoppingCartFormError(),
 });
 
@@ -55,7 +55,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     coupon: PropTypes.object,
     showCards: PropTypes.bool,
     cards: PropTypes.object,
-    saveCardOperation: PropTypes.object,
+    savedCard: PropTypes.object,
     hasError: PropTypes.bool,
     submitting: PropTypes.bool,
     fetchCoupon: PropTypes.func,
@@ -63,6 +63,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     fetchCards: PropTypes.func,
     saveCard: PropTypes.func,
     handleSubmit: PropTypes.func,
+    disableSubmit: PropTypes.bool,
   };
 
   constructor(props) {
@@ -90,7 +91,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
       return;
     }
 
-    if (!newProps.saveCardOperation.saving && this.props.saveCardOperation.saving) {
+    if (!newProps.savedCard.saving && this.props.savedCard.saving) {
       this.closeAddNewCardModal();
     }
   }
@@ -138,7 +139,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
 
   render() {
     const title = this.props.title || 'Order Summary';
-    const { addOns, coupon, showCards, cards, hasError, submitting, handleSubmit } = this.props;
+    const { addOns, coupon, showCards, cards, hasError, submitting, handleSubmit, disableSubmit } = this.props;
     const { subTotal, discount, total } = this.calculateTotal();
     let addOnsContent = null;
     if (addOns) {
@@ -268,7 +269,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
 
               {cardsPanelContent}
 
-              <button type="submit" className="btn btn-default" disabled={hasError || coupon.fetching || cards.fetching || submitting}>
+              <button type="submit" className="btn btn-default" disabled={hasError || coupon.fetching || cards.fetching || submitting || disableSubmit}>
                 {submitting
                   ? <span><LoadingSpinner showOnlyIcon size={20} className="submitting-shopping-cart" /></span>
                   : <span>Submit</span>

@@ -11,7 +11,7 @@ import resetPasswordFormValidator from './validator';
 import { FormGroup, Col } from 'react-bootstrap';
 
 @reduxForm({
-  form: 'login',
+  form: 'resetPassword',
   validate: resetPasswordFormValidator,
 })
 class ResetPasswordForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -47,7 +47,7 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
               disabled={submitting}
               className="btn btn-default pull-right"
             >
-              Log In
+              Submit
             </button>
           </Col>
 

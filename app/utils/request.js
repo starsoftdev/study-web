@@ -24,6 +24,8 @@ export default function request(url, options = {}) {
 
   if (authToken) {
     headers.authorization = authToken;
+  } else if (options.authToken) {
+    headers.authorization = options.authToken;
   }
 
   if (!options.method || options.method === 'GET') {

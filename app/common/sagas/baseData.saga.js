@@ -9,6 +9,7 @@ import request from 'utils/request';
 import {
   FETCH_SITES,
   FETCH_INDICATIONS,
+  FETCH_SOURCES,
   FETCH_LEVELS,
   FETCH_COUPON,
   FETCH_CARDS,
@@ -22,6 +23,8 @@ import {
   sitesFetchingError,
   indicationsFetched,
   indicationsFetchingError,
+  sourcesFetched,
+  sourcesFetchingError,
   levelsFetched,
   levelsFetchingError,
   couponFetched,
@@ -39,6 +42,7 @@ import {
 export default function* baseDataSaga() {
   yield fork(fetchSitesWatcher);
   yield fork(fetchIndicationsWatcher);
+  yield fork(fetchSourcesWatcher);
   yield fork(fetchLevelsWatcher);
   yield fork(fetchCouponWatcher);
   yield fork(fetchCardsWatcher);
@@ -92,6 +96,21 @@ export function* fetchIndicationsWatcher() {
       yield put(indicationsFetched(response));
     } catch (e) {
       yield put(indicationsFetchingError(e));
+    }
+  }
+}
+
+export function* fetchSourcesWatcher() {
+  while (true) {
+    yield take(FETCH_SOURCES);
+
+    try {
+      const requestURL = `${API_URL}/sources`;
+      const response = yield call(request, requestURL);
+
+      yield put(sourcesFetched(response));
+    } catch (e) {
+      yield put(sourcesFetchingError(e));
     }
   }
 }
@@ -154,7 +173,7 @@ export function* saveCardWatcher() {
       };
       const response = yield call(request, requestURL, options);
 
-      yield put(toastrActions.success('AddNewCard', 'Card saved successfully!'));
+      yield put(toastrActions.success('Add New Card', 'Card saved successfully!'));
       yield put(cardSaved(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
