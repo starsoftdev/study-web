@@ -50,7 +50,7 @@ function globalNotificationsReducer(state = initialState, action) {
     case RECEIVE_NOTIFICATION:
       return {
         ...state,
-        notifications: [action.payload, ...state.notifications],
+        notifications: [{ read: false, event_log: action.payload }, ...state.notifications],
         unreadNotificationsCount: state.unreadNotificationsCount + 1,
       };
     default:

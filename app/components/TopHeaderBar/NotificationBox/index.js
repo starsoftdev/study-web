@@ -6,6 +6,9 @@ import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import enhanceWithClickOutside from 'react-click-outside';
 
+import moment from 'moment';
+import _ from 'lodash';
+
 import {
   fetchNotifications,
   fetchUnreadNotificationsCount,
@@ -42,6 +45,10 @@ class NotificationBox extends React.Component {
     this.props.fetchNotifications(currentUser.id);
   }
 
+  getLocalTime(utc) {
+    return moment.utc(utc).local();
+  }
+
   handleBadgeNumberClick = () => {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen,
@@ -66,6 +73,7 @@ class NotificationBox extends React.Component {
               <strong className="title">NOTIFICATIONS</strong>
               <div className="jcf-scrollable">
                 <ul className="list-unstyled">
+                  {/*
                   <li>
                     <a href="#">
                       <div className="img-circle"><img src={avatar1} width="43" height="43" alt="Alan walker" /></div>
@@ -73,27 +81,18 @@ class NotificationBox extends React.Component {
                       <time dateTime="2016-05-16">05/16/16 at 11:31 PM</time>
                     </a>
                   </li>
-                  <li>
-                    <a href="#">
-                      <div className="img-circle"><img src={avatar2} width="43" height="43" alt="penny_worth" /></div>
-                      <p><strong>penny worth</strong> listed a new Birth Control Study.</p>
-                      <time dateTime="2016-05-16">05/16/16 at 11:30 PM</time>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div className="img-circle"><img src={avatar3} width="43" height="43" alt="arrow_island" /></div>
-                      <p><strong>Oliver Queen</strong> sent a text message to Thomas Morgan</p>
-                      <time dateTime="2016-05-16">05/16/16 at 9:30 PM</time>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div className="img-circle"><img src={avatar3} width="43" height="43" alt="Alan walker" /></div>
-                      <p><strong>alan walker</strong> moved Thomas Morgan from New Patient to Consented.</p>
-                      <time dateTime="2016-05-16">05/16/16 at 11:31 PM</time>
-                    </a>
-                  </li>
+                  */}
+                  {
+                    _.take(this.props.notifications, 3).map(n => (
+                      <li key={n.id}>
+                        <a href="#">
+                          <div className="img-circle"><img src={avatar1} width="43" height="43" alt="Alan walker" /></div>
+                          <p>{n.event_log.eventData}</p>
+                          <time>{`${this.getLocalTime(n.event_log.created).format('MM/DD/YY')} at ${this.getLocalTime(n.event_log.created).format('h:mm A')}`}</time>
+                        </a>
+                      </li>
+                    ))
+                  }
                 </ul>
               </div>
               <div className="btn-block text-center">
