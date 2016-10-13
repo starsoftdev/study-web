@@ -17,7 +17,7 @@ import {
 
 import './styles.less';
 
-const RenderLeads = ({ fields }) => (
+const RenderLeads = ({ fields, availPhoneNumbers }) => (
   <div className="leads-list">
     {fields.map((lead, index) =>
       <div className="lead-item" key={index}>
@@ -34,6 +34,24 @@ const RenderLeads = ({ fields }) => (
             <i className="icomoon-icon_trash" />
           </button>
         </div>
+
+        {(() => {
+          if (availPhoneNumbers) {
+            return (
+              <div className="field-row">
+                <strong className="label required"><label>Phone number</label></strong>
+                <Field
+                  name={`${lead}.source_phone`}
+                  component={ReactSelect}
+                  placeholder="Select Lead Source"
+                  options={availPhoneNumbers}
+                  className="field"
+                />
+              </div>
+            );
+          }
+          return false;
+        })()}
 
         <div className="field-row">
           <strong className="label required"><label>Source Name</label></strong>
@@ -62,6 +80,7 @@ const RenderLeads = ({ fields }) => (
 
 RenderLeads.propTypes = {
   fields: PropTypes.object,
+  availPhoneNumbers: PropTypes.array,
 };
 
 export default RenderLeads;

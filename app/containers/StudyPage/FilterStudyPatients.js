@@ -8,8 +8,6 @@ import Select from 'react-select';
 import StudyActionButtons from './StudyActionButtons';
 import sanitizeProps from '../../utils/sanitizeProps';
 
-import 'react-select/less/default.less';
-
 class FilterStudyPatientsForm extends Component {
   static propTypes = {
     campaignOptions: PropTypes.array.isRequired,

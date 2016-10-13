@@ -5,7 +5,7 @@ import sideNavLogo from 'assets/images/logo2.png';
 
 const menuItemsGroupA = [
   { text: 'Home', link: '/', icon: 'icomoon-icon_house_alt' },
-  { text: 'List New Study', link: '/replace_me', icon: 'icomoon-screen' },
+  { text: 'List New Study', link: '/list-new-study', icon: 'icomoon-screen' },
   { text: 'Order IRB Ad Creation', link: '/order-irb-ad-creation', icon: 'icomoon-irb' },
   { text: 'Request Proposal', link: '/request-proposal', icon: 'icomoon-doller' },
   { text: 'Refer', link: '/refer', icon: 'icomoon-signout' },

@@ -32,6 +32,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     fetchSites: PropTypes.func,
     fetchIndications: PropTypes.func,
     formValues: PropTypes.object,
+    hasError: PropTypes.bool,
   };
 
   constructor(props) {
@@ -50,7 +51,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
   }
 
   render() {
-    const { siteLocations, indications } = this.props;
+    const { siteLocations, indications, hasError } = this.props;
 
     const addOns = [{
       title: 'IRB Ad Creation',
@@ -75,7 +76,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
               <div className="fixed-block-holder">
                 <Sticky className="sticky-shopping-cart">
 
-                  <ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} />
+                  <ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} disableSubmit={hasError} />
 
                 </Sticky>
               </div>

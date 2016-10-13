@@ -10,8 +10,10 @@ import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer } from 'react-sticky';
 
+import LoadingSpinner from 'components/LoadingSpinner';
 import {
   getProposals,
+  createPDF,
 } from 'containers/Proposals/actions';
 import {
   fetchSites,
@@ -30,6 +32,7 @@ import { selectProposals } from './selectors';
 
 import ProposalsTable from 'components/ProposalsTable';
 import ProposalsForm from 'components/ProposalsForm';
+import './styles.less';
 
 export class Proposals extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -39,6 +42,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     fetchSites: PropTypes.func,
     fetchEvents: PropTypes.func,
     getProposals: PropTypes.func,
+    createPDF: PropTypes.func,
     location: PropTypes.any,
     proposals: PropTypes.any,
     currentUser: PropTypes.any,
@@ -48,7 +52,20 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     super(props, context);
 
     this.createPdf = this.createPdf.bind(this);
+    this.changeRange = this.changeRange.bind(this);
     this.selectCurrent = this.selectCurrent.bind(this);
+    this.selectAll = this.selectAll.bind(this);
+    this.selectSite = this.selectSite.bind(this);
+    this.search = this.search.bind(this);
+
+    this.state = {
+      range: null,
+      site: null,
+      searchBy: null,
+      processPDF: false,
+      proposals: null,
+      filteredProposals: null,
+    };
   }
 
   componentDidMount() {
@@ -78,8 +95,17 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     this.props.fetchEvents(events);
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(nextProps) {
     // console.log('componentWillReceiveProps', nextProps);
+
+    if (nextProps.proposals) {
+      for (const proposal of nextProps.proposals) {
+        proposal.selected = false;
+      }
+      this.setState({
+        proposals: nextProps.proposals,
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -104,19 +130,78 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     this.selectedProposal = proposal;
   }
 
+  selectAll(proposals) {
+    this.selectedProposal = proposals;
+  }
+
+  changeRange(payload) {
+    this.setState({
+      site : null,
+      searchBy : null,
+      range : payload,
+    }, () => {
+      //console.log('state', this.state);
+    });
+  }
+
+  selectSite(val) {
+    const { siteLocations } = this.props;
+    const site  = siteLocations[val-1]
+    this.setState({
+      range : null,
+      searchBy : null,
+      site
+    });
+  }
+
+  search(value) {
+    const searchBy = (value.length) ? value : null
+    this.setState({
+      site : null,
+      range : null,
+      searchBy
+    });
+  }
+
   createPdf() {
-    console.log('createPdf');
-    console.log('proposal', this.selectedProposal);
+    if (this.selectedProposal) {
+      this.props.createPDF(this.selectedProposal)
+    }
   }
 
   render() {
+    const { processPDF } = this.state
     return (
       <StickyContainer className="container-fluid">
         <Helmet title="Proposals - StudyKIK" />
         <section className="calendar-section receipts">
           <h2 className="main-heading">PROPOSALS</h2>
-          <ProposalsForm createPdf={this.createPdf} {...this.props} />
-          <ProposalsTable selectCurrent={this.selectCurrent} {...this.props} />
+          <ProposalsForm
+            changeRange={this.changeRange}
+            selectSite={this.selectSite}
+            search={this.search}
+            createPdf={this.createPdf}
+            {...this.props}
+          />
+          <ProposalsTable
+            selectCurrent={this.selectCurrent}
+            selectAll={this.selectAll}
+            range={this.state.range}
+            site={this.state.site}
+            searchBy={this.state.searchBy}
+            proposals={this.state.proposals}
+            {...this.props}
+          />
+          {processPDF
+            ?
+            <div>
+              <div className="loading-bacground"></div>
+              <div className="loading-container">
+                <LoadingSpinner showOnlyIcon size={20} className="saving-card" />
+              </div>
+            </div>
+            : null
+          }
         </section>
       </StickyContainer>
     );
@@ -137,6 +222,7 @@ function mapDispatchToProps(dispatch) {
     fetchEvents: (values) => dispatch(fetchEvents(values)),
     fetchSites: () => dispatch(fetchSites()),
     getProposals: (values) => dispatch(getProposals(values)),
+    createPDF: (values) => dispatch(createPDF(values)),
   };
 }
 
