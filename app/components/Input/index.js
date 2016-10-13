@@ -18,6 +18,7 @@ function Input({
   input,
   name,
   type,
+  id,
   placeholder,
   componentClass,
   className,
@@ -40,6 +41,7 @@ function Input({
     <FormControl
       {...input}
       type={type}
+      id={id}
       disabled={isDisabled}
       placeholder={placeholder}
       componentClass={componentClass} // Default value is `input`
@@ -76,6 +78,7 @@ Input.propTypes = {
   className: PropTypes.string,
   children: PropTypes.array,
   isDisabled: PropTypes.string,
+  id: PropTypes.string,
 };
 
 export default Input;

@@ -35,6 +35,10 @@ const headers = [
 class ProposalsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     selectCurrent:  PropTypes.func,
+    selectAll:  PropTypes.func,
+    range:  PropTypes.any,
+    searchBy:  PropTypes.any,
+    /*selected:  PropTypes.any,*/
   };
 
   constructor(props) {
@@ -47,42 +51,84 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     this.state = {
       checkAll: false,
       proposals: false,
+      filteredProposals: null,
       activeSort: null,
       activeDirection: null,
     };
   }
 
   componentWillReceiveProps(nextProps) {
+    // console.log('componentWillReceiveProps', nextProps);
     if (nextProps.proposals) {
-      for (const proposal of nextProps.proposals) {
-        proposal.selected = false;
+      /*for (const proposal of nextProps.proposals) {
+        proposal.selected = _.find(this.props.selected, proposal);
       }
-      this.setState({ proposals: nextProps.proposals });
+      this.setState({
+        proposals: nextProps.proposals,
+        filteredProposals: null,
+      });*/
+      this.setState({
+        filteredProposals: null,
+      });
+    }
+
+    if (nextProps.range) {
+      this.rangeSort(nextProps.range)
+    }
+    if (nextProps.site) {
+      this.siteSort(nextProps.site)
+    }
+    if (nextProps.searchBy) {
+      this.searchSort(nextProps.searchBy)
     }
   }
 
   componentDidUpdate() {}
 
+  get selectedProposal() {
+    return this.SelectedProposal;
+  }
+
+  set selectedProposal(value) {
+    this.SelectedProposal = value;
+  }
+
   onClickCurrent(ev) {
     ev.preventDefault();
     const scope = this;
-    let selected = null;
+    let selectedArr = [];
     let key = 0;
-    const proposals = this.state.proposals;
+    const proposals = this.props.proposals;
 
     for (const proposal of proposals) {
       if (key === parseInt(ev.currentTarget.firstChild.name, 10)) {
         proposal.selected = (!proposal.selected);
-        selected = (proposal.selected) ? proposal : null;
+
+        if (proposal.selected) {
+          if (_.isEmpty(this.selectedProposal)) {
+            this.selectedProposal = []
+            this.selectedProposal.push(proposal);
+          } else {
+            selectedArr = this.selectedProposal
+            selectedArr.push(proposal)
+
+            this.selectedProposal = selectedArr;
+          }
+        } else {
+          this.selectedProposal = _.filter(this.selectedProposal, (o) => { return o.site !== proposal.site; });
+          if (!this.selectedProposal.length) {
+            this.selectedProposal = null
+          }
+        }
       }
       key++;
     }
 
-    this.props.selectCurrent(selected);
+    this.props.selectCurrent(this.selectedProposal);
 
     this.setState({ proposals }, () => {
       let all = true;
-      this.state.proposals.forEach((proposal) => {
+      this.props.proposals.forEach((proposal) => {
         if (!proposal.selected) {
           all = false;
         }
@@ -98,11 +144,15 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
   onClickAll(ev) {
     ev.preventDefault();
-    const proposals = this.state.proposals;
+    const proposals = this.props.proposals;
     for (const proposal of proposals) {
       proposal.selected = (!this.state.checkAll);
     }
-    this.setState({ checkAll: (!this.state.checkAll), proposals });
+
+    this.setState({ checkAll: (!this.state.checkAll), proposals }, () => {
+      this.selectedProposal = (this.state.checkAll) ? proposals : null;
+      this.props.selectAll(this.selectedProposal);
+    });
   }
 
   sortBy(ev) {
@@ -114,7 +164,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       direction = 'up';
     }
 
-    const proposalsArr = this.state.proposals;
+    const proposalsArr = this.state.filteredProposals || this.props.proposals;
     const directionUnits = (direction === 'up') ? {
       more: 1,
       less: -1,
@@ -185,7 +235,55 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         break;
     }
 
-    this.setState({ proposals: proposalsArr, activeSort: sort, activeDirection: direction });
+    this.setState({ filteredProposals: proposalsArr, activeSort: sort, activeDirection: direction });
+  }
+
+  rangeSort(range) {
+    //console.log('rangeSort');
+    let proposalsInRange = []
+    const proposalsArr = this.state.proposals;
+    for (const proposal of proposalsArr) {
+      const created = new Date(proposal.created).getTime();
+      const endDate = new Date(range.endDate).getTime();
+      const startDate = new Date(range.startDate).getTime();
+
+      if (created > startDate && created < endDate) {
+        proposalsInRange.push(proposal);
+      }
+    }
+
+    this.setState({ filteredProposals: proposalsInRange });
+  }
+
+  siteSort(site) {
+    let proposalsMatchSite = []
+    const proposalsArr = this.state.proposals;
+    for (const proposal of proposalsArr) {
+      if (proposal.site === site.name) {
+        proposalsMatchSite.push(proposal);
+      }
+    }
+
+    this.setState({ filteredProposals: proposalsMatchSite })
+  }
+
+  searchSort(searchBy) {
+    let proposalsMatchSearch = []
+    const proposalsArr = this.state.proposals;
+    for (const proposal of proposalsArr) {
+      const number = parseInt(searchBy, 10)
+      if (!_.isNaN(number)) {
+        if (number === proposal.proposalNumber || number === proposal.protocol) {
+          proposalsMatchSearch.push(proposal);
+        }
+      } else {
+        if (searchBy === proposal.site ) {
+          proposalsMatchSearch.push(proposal);
+        }
+      }
+    }
+
+    this.setState({ filteredProposals: proposalsMatchSearch })
   }
 
   mapHeaders(raw, state, result) {
@@ -234,7 +332,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
   render() {
     const state = this.state;
-    const proposalsArr = state.proposals;
+    const proposalsArr =  this.props.proposals || state.filteredProposals;
     let proposals = [];
     let heads = [];
 

@@ -83,6 +83,10 @@ module.exports = (options) => ({
       'jsnext:main',
     ],
   },
+  /*node: {
+    fs: true,
+    child_process: "empty"
+  },*/
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window
   stats: false, // Don't show stats in the console

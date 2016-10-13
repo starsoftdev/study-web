@@ -72,6 +72,8 @@ const selectStudyLevels = () => createSelector(
       {
         id: e.id,
         label: `${e.type}: $${e.price}`,
+        price: e.price,
+        type: e.type,
       }
     ));
   }
