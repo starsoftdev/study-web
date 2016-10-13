@@ -10,6 +10,7 @@ import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer } from 'react-sticky';
 
+import LoadingSpinner from 'components/LoadingSpinner';
 import {
   getProposals,
   createPDF,
@@ -31,6 +32,7 @@ import { selectProposals } from './selectors';
 
 import ProposalsTable from 'components/ProposalsTable';
 import ProposalsForm from 'components/ProposalsForm';
+import './styles.less';
 
 export class Proposals extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -54,10 +56,15 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     this.selectCurrent = this.selectCurrent.bind(this);
     this.selectAll = this.selectAll.bind(this);
     this.selectSite = this.selectSite.bind(this);
+    this.search = this.search.bind(this);
 
     this.state = {
       range: null,
       site: null,
+      searchBy: null,
+      processPDF: false,
+      proposals: null,
+      filteredProposals: null,
     };
   }
 
@@ -88,8 +95,17 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     this.props.fetchEvents(events);
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(nextProps) {
     // console.log('componentWillReceiveProps', nextProps);
+
+    if (nextProps.proposals) {
+      for (const proposal of nextProps.proposals) {
+        proposal.selected = false;
+      }
+      this.setState({
+        proposals: nextProps.proposals,
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -120,7 +136,11 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
 
   changeRange(payload) {
     this.setState({
+      site : null,
+      searchBy : null,
       range : payload,
+    }, () => {
+      //console.log('state', this.state);
     });
   }
 
@@ -128,7 +148,18 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     const { siteLocations } = this.props;
     const site  = siteLocations[val-1]
     this.setState({
+      range : null,
+      searchBy : null,
       site
+    });
+  }
+
+  search(value) {
+    const searchBy = (value.length) ? value : null
+    this.setState({
+      site : null,
+      range : null,
+      searchBy
     });
   }
 
@@ -139,6 +170,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
   }
 
   render() {
+    const { processPDF } = this.state
     return (
       <StickyContainer className="container-fluid">
         <Helmet title="Proposals - StudyKIK" />
@@ -147,6 +179,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
           <ProposalsForm
             changeRange={this.changeRange}
             selectSite={this.selectSite}
+            search={this.search}
             createPdf={this.createPdf}
             {...this.props}
           />
@@ -155,8 +188,20 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
             selectAll={this.selectAll}
             range={this.state.range}
             site={this.state.site}
+            searchBy={this.state.searchBy}
+            proposals={this.state.proposals}
             {...this.props}
           />
+          {processPDF
+            ?
+            <div>
+              <div className="loading-bacground"></div>
+              <div className="loading-container">
+                <LoadingSpinner showOnlyIcon size={20} className="saving-card" />
+              </div>
+            </div>
+            : null
+          }
         </section>
       </StickyContainer>
     );
