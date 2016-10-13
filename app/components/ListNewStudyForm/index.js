@@ -55,6 +55,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     formValues: PropTypes.object,
     saveSite: PropTypes.func,
     currentUserClientId: PropTypes.number,
+    availPhoneNumbers: PropTypes.array,
   };
 
   constructor(props) {
@@ -294,7 +295,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           {callTracking &&
-            <FieldArray name="leadSource" component={RenderLeads} />
+            <FieldArray name="leadSource" component={RenderLeads} availPhoneNumbers={this.props.availPhoneNumbers} />
           }
 
           <div className="field-row">

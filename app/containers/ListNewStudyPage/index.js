@@ -45,6 +45,8 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     submitForm: PropTypes.func,
     saveSite: PropTypes.func,
     hasErrors: PropTypes.bool,
+    availPhoneNumbers: PropTypes.array,
+    getAvailPhoneNumbers: PropTypes.func,
   }
 
   constructor(props) {
@@ -122,6 +124,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
                 studyLevels={studyLevels}
                 listNewStudyState={this.props.listNewStudyState}
                 saveSite={this.props.saveSite}
+                availPhoneNumbers={this.props.availPhoneNumbers}
               />
             </div>
 

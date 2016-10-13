@@ -12,6 +12,8 @@ import {
   GET_AVAIL_PHONE_NUMBERS_SUCCESS,
 } from './constants';
 
+import _ from 'lodash';
+
 const initialState = {
   showAddSiteLocationModal: false,
   showAddEmailModal: false,
@@ -43,7 +45,7 @@ function listNewStudyPageReducer(state = initialState, action) {
     case GET_AVAIL_PHONE_NUMBERS_SUCCESS:
       return {
         ...state,
-        availPhoneNumbers: action.payload.avail,
+        availPhoneNumbers: _.map(action.payload.avail, (value) => ({ ...value, value:value.phoneNumber, label: value.friendlyName })),
       };
     default:
       return state;
