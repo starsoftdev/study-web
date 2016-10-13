@@ -8,6 +8,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
+import Select from 'react-select';
 import { defaultRanges, DateRange } from 'react-date-range';
 import ReactSelect from 'components/Input/ReactSelect';
 import './styles.less';
@@ -22,6 +23,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
     createPdf:  PropTypes.func,
     changeRange:  PropTypes.func,
     selectSite:  PropTypes.func,
+    search:  PropTypes.func,
   };
 
   constructor(props, context) {
@@ -47,7 +49,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
   componentWillReceiveProps() {}
 
   handleChange(which, payload) {
-    console.log('handleChange', which, payload);
+    //console.log('handleChange', which, payload);
     this.setState({
       [which] : payload,
     });
@@ -79,7 +81,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
 
   search(ev) {
     ev.preventDefault();
-    // console.log('searchInput', this.refs.searchInput.value);
+    this.props.search(this.refs.searchInput.value);
   }
 
   render() {
@@ -138,8 +140,8 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
               placeholder="Select Site Location"
               options={siteLocations}
               className="field"
-              onChange={selectSite}
             />
+            {/*onChange={selectSite}*/}
           </div>
         </div>
 

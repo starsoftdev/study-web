@@ -1,3 +1,4 @@
+import React from 'react';
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
@@ -13,6 +14,17 @@ import {
   CREATE_PDF,
   GET_PDF,
 } from 'containers/Proposals/constants';
+import { getItem } from 'utils/localStorage';
+
+const serializeParams = (obj) => {
+  const str = [];
+  Object.keys(obj).forEach(p => {
+    if (obj.hasOwnProperty(p) && obj[p] !== undefined && obj[p] !== null) {  // we need to pass 0 and empty string
+      str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+    }
+  });
+  return str.join('&');
+}
 
 // Individual exports for testing
 export function* proposalSaga() {
@@ -51,7 +63,7 @@ export function* createPdf() {
       const requestURL = `${API_URL}/proposals/createPDF`;
       const params = {
         method: 'POST',
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       };
 
       const response = yield call(request, requestURL, params);
@@ -70,33 +82,20 @@ export function* getPdf() {
     const { payload } = yield take(GET_PDF);
     try {
       const requestURL = `${API_URL}/proposals/getPDF`;
-      const fileName = (payload.length === 1) ? payload[0].fileName : null
-      let archiveName = null
-      if (payload.length > 1) {
-        archiveName = 'proposals'
-        for (const file of payload) {
-          archiveName += '-' + file.proposal.id
-        }
+      const fileName = (payload.data.files.length === 1) ? payload.data.files[0].fileName : null;
+      const authToken = getItem('auth_token');
+      let archiveName = payload.data.archive;
+      let params = {
+        access_token: authToken,
       }
-      let query = {
-        access_token: 'UFnxNZ1qnvzRRgXzRre2lc8ijpO9RwchwTXH41elUZO7RJSwnjxdWLRFDwCVAYFj'
-      }
+
       if (fileName) {
-        query.fileName = fileName;
+        params.fileName = fileName;
       }
       if (archiveName) {
-        query.archiveName = archiveName;
+        params.archiveName = archiveName;
       }
-
-      let params = "";
-      for (const key in query) {
-        if (params != "") {
-          params += "&";
-        }
-        params += key + "=" + query[key];
-      }
-
-      location.replace(requestURL + '?' + params);
+      location.replace(requestURL + '?' + serializeParams(params));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
