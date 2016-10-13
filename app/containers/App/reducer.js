@@ -7,6 +7,7 @@ import {
 
   FETCH_SITES_SUCCESS,
   FETCH_INDICATIONS_SUCCESS,
+  FETCH_SOURCES_SUCCESS,
   FETCH_LEVELS_SUCCESS,
 
   FETCH_COUPON,
@@ -44,6 +45,7 @@ const initialState = {
   baseData: {
     sites: [],
     indications: [],
+    sources: [],
     levels: [],
     coupon: {
       details: null,
@@ -55,12 +57,12 @@ const initialState = {
       fetching: false,
       error: null,
     },
-    saveCard: {
+    savedCard: {
       details: null,
       saving: false,
       error: null,
     },
-    deleteCard: {
+    deletedCard: {
       details: null,
       deleting: false,
       error: null,
@@ -110,6 +112,14 @@ export default function appReducer(state = initialState, action) {
         baseData: {
           ...state.baseData,
           indications: payload,
+        },
+      };
+    case FETCH_SOURCES_SUCCESS:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          sources: payload,
         },
       };
     case FETCH_LEVELS_SUCCESS:
@@ -209,7 +219,7 @@ export default function appReducer(state = initialState, action) {
         ...state,
         baseData: {
           ...state.baseData,
-          saveCard: {
+          savedCard: {
             details: null,
             saving: true,
             error: null,
@@ -228,7 +238,7 @@ export default function appReducer(state = initialState, action) {
             fetching: false,
             error: null,
           },
-          saveCard: {
+          savedCard: {
             details: payload,
             saving: false,
             error: null,
@@ -240,7 +250,7 @@ export default function appReducer(state = initialState, action) {
         ...state,
         baseData: {
           ...state.baseData,
-          saveCard: {
+          savedCard: {
             details: null,
             saving: false,
             error: payload,
@@ -252,7 +262,7 @@ export default function appReducer(state = initialState, action) {
         ...state,
         baseData: {
           ...state.baseData,
-          deleteCard: {
+          deletedCard: {
             details: null,
             deleting: true,
             error: null,
@@ -271,7 +281,7 @@ export default function appReducer(state = initialState, action) {
             fetching: false,
             error: null,
           },
-          deleteCard: {
+          deletedCard: {
             details: payload,
             deleting: false,
             error: null,
@@ -283,7 +293,7 @@ export default function appReducer(state = initialState, action) {
         ...state,
         baseData: {
           ...state.baseData,
-          deleteCard: {
+          deletedCard: {
             details: null,
             deleting: false,
             error: payload,

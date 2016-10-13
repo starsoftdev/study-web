@@ -12,14 +12,14 @@ import { Field, reduxForm } from 'redux-form';
 import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
 import { selectAddNewCardFormError } from './selectors';
-import { selectSaveCard } from 'containers/App/selectors';
+import { selectSavedCard } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { MONTH_OPTIONS as monthOptions, YEAR_OPTIONS as yearOptions } from 'common/constants';
 import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
-  saveCardOperation: selectSaveCard(),
+  savedCard: selectSavedCard(),
   hasError: selectAddNewCardFormError(),
 });
 
@@ -29,13 +29,13 @@ const mapStateToProps = createStructuredSelector({
 class AddNewCardForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    saveCardOperation: PropTypes.object,
+    savedCard: PropTypes.object,
     hasError: PropTypes.bool,
     handleSubmit: PropTypes.func,
   };
 
   render() {
-    const { saveCardOperation, hasError, handleSubmit } = this.props;
+    const { savedCard, hasError, handleSubmit } = this.props;
 
     return (
       <form className="form-add-new-card" onSubmit={handleSubmit}>
@@ -49,7 +49,7 @@ class AddNewCardForm extends Component { // eslint-disable-line react/prefer-sta
                 name="company"
                 component={Input}
                 type="text"
-                disabled={saveCardOperation.saving}
+                disabled={savedCard.saving}
               />
             </div>
           </div>
@@ -65,7 +65,7 @@ class AddNewCardForm extends Component { // eslint-disable-line react/prefer-sta
                     component={Input}
                     type="text"
                     placeholder="First Name"
-                    disabled={saveCardOperation.saving}
+                    disabled={savedCard.saving}
                   />
                 </div>
                 <div className="col-sm-6">
@@ -74,7 +74,7 @@ class AddNewCardForm extends Component { // eslint-disable-line react/prefer-sta
                     component={Input}
                     type="text"
                     placeholder="Last Name"
-                    disabled={saveCardOperation.saving}
+                    disabled={savedCard.saving}
                   />
                 </div>
               </div>
@@ -89,7 +89,7 @@ class AddNewCardForm extends Component { // eslint-disable-line react/prefer-sta
                 name="number"
                 component={Input}
                 type="text"
-                disabled={saveCardOperation.saving}
+                disabled={savedCard.saving}
               />
             </div>
           </div>
@@ -105,7 +105,7 @@ class AddNewCardForm extends Component { // eslint-disable-line react/prefer-sta
                     component={ReactSelect}
                     placeholder="Select Month"
                     options={monthOptions}
-                    disabled={saveCardOperation.saving}
+                    disabled={savedCard.saving}
                   />
                 </div>
                 <div className="col-sm-6">
@@ -114,7 +114,7 @@ class AddNewCardForm extends Component { // eslint-disable-line react/prefer-sta
                     component={ReactSelect}
                     placeholder="Select Year"
                     options={yearOptions}
-                    disabled={saveCardOperation.saving}
+                    disabled={savedCard.saving}
                   />
                 </div>
               </div>
@@ -129,7 +129,7 @@ class AddNewCardForm extends Component { // eslint-disable-line react/prefer-sta
                 name="cvc"
                 component={Input}
                 type="text"
-                disabled={saveCardOperation.saving}
+                disabled={savedCard.saving}
               />
             </div>
           </div>
@@ -142,13 +142,13 @@ class AddNewCardForm extends Component { // eslint-disable-line react/prefer-sta
                 name="billingPostalCode"
                 component={Input}
                 type="text"
-                disabled={saveCardOperation.saving}
+                disabled={savedCard.saving}
               />
             </div>
           </div>
           <div className="btn-block text-right">
-            <button type="submit" className="btn btn-default btn-add-row" disabled={hasError || saveCardOperation.saving}>
-              {saveCardOperation.saving
+            <button type="submit" className="btn btn-default btn-add-row" disabled={hasError || savedCard.saving}>
+              {savedCard.saving
                 ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-card" /></span>
                 : <span>Submit</span>
               }

@@ -45,7 +45,8 @@ export default function createRoutes(store) {
       },
     },
     {
-      path: '/home',
+      onEnter: redirectToLogin,
+      path: '/',
       name: 'home',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -79,6 +80,24 @@ export default function createRoutes(store) {
       name: 'resetPasswordPage',
       getComponent(nextState, cb) {
         System.import('containers/ResetPasswordPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToDashboard,
+      path: '/set-new-password',
+      name: 'setNewPasswordPage',
+      getComponent(nextState, cb) {
+        System.import('containers/SetNewPasswordPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/confirm-password-change',
+      name: 'confirmPasswordChangePage',
+      getComponent(nextState, cb) {
+        System.import('components/ConfirmPasswordChangeForm')
           .then(loadModule(cb))
           .catch(errorLoading);
       },
@@ -139,6 +158,69 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('requestProposalPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/sites-users',
+      name: 'sitesUsersPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/SitesUsersPage/reducer'),
+          System.import('containers/SitesUsersPage/sagas'),
+          System.import('containers/SitesUsersPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('sitesUsersPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/patient-database',
+      name: 'patientDatabasePage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/PatientDatabasePage/reducer'),
+          System.import('containers/PatientDatabasePage/sagas'),
+          System.import('containers/PatientDatabasePage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('patientDatabasePage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/list-new-study',
+      name: 'listNewStudyPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/ListNewStudyPage/reducer'),
+          System.import('containers/ListNewStudyPage/sagas'),
+          System.import('containers/ListNewStudyPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('listNewStudyPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });

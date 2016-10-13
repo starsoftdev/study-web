@@ -4,8 +4,11 @@ import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
   FETCH_PATIENT_MESSAGES_SUCCEESS,
   FETCH_REWARDS_POINT_SUCCEESS,
-  RECEIVE_MESSAGE,
 } from './constants';
+
+import {
+  RECEIVE_NOTIFICATION,
+} from 'containers/GlobalNotifications/constants';
 
 const initialState = {
   patientSignUps: {
@@ -45,7 +48,7 @@ export default function homePageReducer(state = initialState, action) {
         ...state,
         rewardsPoint: action.payload.rewardPoints,
       };
-    case RECEIVE_MESSAGE:
+    case RECEIVE_NOTIFICATION:
       newState = state;
       switch (action.payload.event) {
         case 'create-patient':
