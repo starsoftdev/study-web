@@ -24,17 +24,15 @@ export function* getAvailPhoneNumbersWatcher() {
 
     try {
       const requestURL = `${API_URL}/sources/getAvailPhoneNumbers`;
-      const  params = {
+      const params = {
         query: {
           country: 'US',
           areaCode: '510',
-        }
-      }
+        },
+      };
       const response = yield call(request, requestURL, params);
-      console.log(response);
       yield put(getAvailPhoneNumbersSuccess(response));
     } catch (e) {
-      console.log(e);
       yield put(getAvailPhoneNumbersError(e));
     }
   }
