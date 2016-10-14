@@ -22,6 +22,8 @@ import {
   SET_CURRENT_PATIENT_CATEGORY_ID,
   SUBMIT_PATIENT_UPDATE,
   UPDATE_PATIENT_SUCCESS,
+  ADD_PATIENT_NOTE_SUCCESS,
+  ADD_PATIENT_TEXT_SUCCESS,
   SUBMIT_TEXT_BLAST,
   SUBMIT_PATIENT_IMPORT,
   SUBMIT_ADD_PATIENT,
@@ -52,19 +54,16 @@ export function patientsFetched(payload) {
   };
 }
 
-export function fetchPatientDetails(categoryId, patient) {
+export function fetchPatientDetails(patientId) {
   return {
     type: FETCH_PATIENT_DETAILS,
-    categoryId,
-    patient,
+    patientId,
   };
 }
 
-export function patientDetailsFetched(patientCategoryId, patientId, payload) {
+export function patientDetailsFetched(payload) {
   return {
     type: FETCH_PATIENT_DETAILS_SUCCESS,
-    patientCategoryId,
-    patientId,
     payload,
   };
 }
@@ -152,6 +151,20 @@ export function submitPatientUpdate(id, fields) {
 export function updatePatientSuccess(payload) {
   return {
     type: UPDATE_PATIENT_SUCCESS,
+    payload,
+  };
+}
+
+export function addPatientNoteSuccess(payload) {
+  return {
+    type: ADD_PATIENT_NOTE_SUCCESS,
+    payload,
+  };
+}
+
+export function addPatientTextSuccess(payload) {
+  return {
+    type: ADD_PATIENT_TEXT_SUCCESS,
     payload,
   };
 }

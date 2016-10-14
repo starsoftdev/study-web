@@ -47,9 +47,10 @@ function studyPageReducer(state = initialState, action) {
         fetchingPatients: false,
       };
     case FETCH_PATIENT_DETAILS_SUCCESS:
+    case UPDATE_PATIENT_SUCCESS:
       return {
         ...state,
-        patientCategories: patientCategories(state.patientCategories, action.patientCategoryId, action),
+        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, action),
       };
     case FETCH_PATIENT_CATEGORIES_SUCCESS:
       return {
@@ -102,25 +103,21 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         currentPatientCategoryId: action.id,
       };
-    case UPDATE_PATIENT_SUCCESS:
-      return {
-        ...state,
-        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, action),
-      };
     default:
       return state;
   }
 }
 
-function patientCategories(state, patientCategoryId, action) {
+// additional reducer specifically for patient categories
+function patientCategories(state, currentPatientCategoryId, action) {
   switch (action.type) {
     case FETCH_PATIENT_DETAILS_SUCCESS:
       return state.map(patientCategory => {
-        if (patientCategory.id === patientCategoryId) {
+        if (patientCategory.id === currentPatientCategoryId) {
           return {
             ...patientCategory,
             patients: patientCategory.patients.map(patient => {
-              if (patient.id == action.patientId) {
+              if (patient.id == action.currentPatientId) {
                 return {
                   ...patient,
                   ...action.payload,
@@ -136,7 +133,7 @@ function patientCategories(state, patientCategoryId, action) {
       });
     case UPDATE_PATIENT_SUCCESS:
       return state.map(patientCategory => {
-        if (patientCategory.id === patientCategoryId) {
+        if (patientCategory.id === currentPatientCategoryId) {
           return {
             ...patientCategory,
             patients: patientCategory.patients.map(patient => {

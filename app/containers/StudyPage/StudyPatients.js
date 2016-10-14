@@ -10,7 +10,7 @@ import moment from 'moment-timezone';
 import libPhoneNumber from 'google-libphonenumber';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from 'containers/App/selectors';
-import PatientDetailModal from './PatientDetailModal';
+import PatientDetailModal from './PatientDetail/PatientDetailModal';
 import * as Selector from './selectors';
 import { fetchPatientDetails, setCurrentPatientCategoryId, setCurrentPatientId } from './actions';
 
@@ -21,8 +21,6 @@ class StudyPatients extends React.Component {
   static propTypes = {
     patientCategories: React.PropTypes.array.isRequired,
     currentUser: React.PropTypes.object.isRequired,
-    currentPatient: React.PropTypes.object,
-    currentPatientCategory: React.PropTypes.object,
     fetchPatientDetails: React.PropTypes.func.isRequired,
     setCurrentPatientCategoryId: React.PropTypes.func.isRequired,
     setCurrentPatientId: React.PropTypes.func.isRequired,
@@ -43,9 +41,9 @@ class StudyPatients extends React.Component {
   onPatientClick(category, patient) {
     const { fetchPatientDetails, setCurrentPatientCategoryId, setCurrentPatientId } = this.props;
     const show = patient && (this.state.selectedPatientId !== patient.id);
-    fetchPatientDetails(category.id, patient);
     setCurrentPatientCategoryId(show ? category.id : false);
     setCurrentPatientId(show ? patient.id : false);
+    fetchPatientDetails(patient.id);
     this.setState({
       openPatientModal: show,
     });
@@ -125,7 +123,7 @@ class StudyPatients extends React.Component {
   }
 
   render() {
-    const { currentPatient, currentPatientCategory, currentUser, patientCategories } = this.props;
+    const { currentUser, patientCategories } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames("patients-list-area", {"form-active": this.state.openPatientModal})}>
@@ -136,7 +134,7 @@ class StudyPatients extends React.Component {
               })}
             </ul>
           </nav>
-          <PatientDetailModal currentUser={currentUser} formatPhone={this.formatPhone} openPatientModal={this.state.openPatientModal} currentPatient={currentPatient} currentPatientCategory={currentPatientCategory} />
+          <PatientDetailModal currentUser={currentUser} formatPhone={this.formatPhone} openPatientModal={this.state.openPatientModal} />
         </div>
         <div className="patients-form-closer" onClick={this.onPatientClick} />
       </div>
@@ -145,8 +143,6 @@ class StudyPatients extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentPatient: Selector.selectCurrentPatient(),
-  currentPatientCategory: Selector.selectCurrentPatientCategory(),
   currentUser: selectCurrentUser(),
 });
 
