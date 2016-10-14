@@ -23,24 +23,49 @@ export const selectPatientCategories = () => createSelector(
   (subState) => subState.patientCategories
 );
 
-export const selectPatients = (id) => createSelector(
+export const selectCurrentPatientCategoryId = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.currentPatientCategoryId
+);
+
+export const selectCurrentPatientId = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.currentPatientId
+);
+
+export const selectCurrentPatientCategory = () => createSelector(
   selectStudyPageDomain(),
   (subState) => {
     if (subState.patientCategories) {
       const filteredPatientCategory = subState.patientCategories.filter(patientCategory => (
-        patientCategory.id === id
+        patientCategory.id === subState.currentPatientCategoryId
       ))[0];
-      if (filteredPatientCategory) {
-        return filteredPatientCategory.patients;
-      }
+      return filteredPatientCategory;
     }
-    return [];
+    return null;
   }
 );
 
-export const selectSites = () => createSelector(
+export const selectCurrentPatient = () => createSelector(
   selectStudyPageDomain(),
-  (subState) => subState.sites
+  (subState) => {
+    if (subState.patientCategories) {
+      const filteredPatientCategory = subState.patientCategories.filter(patientCategory => (
+        patientCategory.id === subState.currentPatientCategoryId
+      ))[0];
+      if (filteredPatientCategory && filteredPatientCategory.patients) {
+        return filteredPatientCategory.patients.filter(patient => (
+          patient.id === subState.currentPatientId
+        ))[0];
+      }
+    }
+    return null;
+  }
+);
+
+export const selectSite = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.site
 );
 
 export const selectSources = () => createSelector(

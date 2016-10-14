@@ -4,18 +4,25 @@
 
 import React from 'react';
 import Form from 'react-bootstrap/lib/Form';
+import { Field, reduxForm } from 'redux-form';
 import Collapse from 'react-bootstrap/lib/Collapse';
-
 import classNames from 'classnames';
 import moment from 'moment-timezone';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import * as Selector from './selectors';
+import { submitPatientUpdate } from './actions';
 
+@reduxForm({ form: 'patientDetailModal' })
 class PatientDetailModal extends React.Component {
   static propTypes = {
+    currentPatientCategory: React.PropTypes.object,
+    currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     formatPhone: React.PropTypes.func.isRequired,
+    submitting: React.PropTypes.bool.isRequired,
     openPatientModal: React.PropTypes.bool.isRequired,
-    selectedPatientCategoryId: React.PropTypes.number,
-    selectedPatientId: React.PropTypes.number,
+    submitPatientUpdate: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -32,6 +39,12 @@ class PatientDetailModal extends React.Component {
     this.toggleTextSection = this.toggleTextSection.bind(this);
     this.toggleEmailSection = this.toggleEmailSection.bind(this);
     this.toggleOtherSection = this.toggleOtherSection.bind(this);
+    this.changePatientFirstName = this.changePatientFirstName.bind(this);
+    this.changePatientLastName = this.changePatientLastName.bind(this);
+    this.changePatientEmail = this.changePatientEmail.bind(this);
+    this.changePatientPhone = this.changePatientPhone.bind(this);
+    this.changePatientUnsubscribe = this.changePatientUnsubscribe.bind(this);
+    this.renderFakeCheckbox = this.renderFakeCheckbox.bind(this);
     this.renderPatientForm = this.renderPatientForm.bind(this);
     this.renderPatientNote = this.renderPatientNote.bind(this);
     this.renderPatientText = this.renderPatientText.bind(this);
@@ -82,11 +95,52 @@ class PatientDetailModal extends React.Component {
     });
   }
 
+  changePatientFirstName(value) {
+    const { submitPatientUpdate } = this.props;
+    submitPatientUpdate({
+      firstName: value,
+    });
+  }
+
+  changePatientLastName(value) {
+    const { submitPatientUpdate } = this.props;
+    submitPatientUpdate({
+      lastName: value,
+    });
+  }
+
+  changePatientEmail(value) {
+    const { submitPatientUpdate } = this.props;
+    submitPatientUpdate({
+      email: value,
+    });
+  }
+
+  changePatientPhone(value) {
+    const { submitPatientUpdate } = this.props;
+    submitPatientUpdate({
+      phone: value,
+    });
+  }
+
+  changePatientUnsubscribe(value) {
+    const { submitPatientUpdate } = this.props;
+    submitPatientUpdate({
+      unsubscribed: value,
+    });
+  }
+
+  renderFakeCheckbox() {
+    return (
+      <span className="checkbox" />
+    );
+  }
+
   renderPatientForm() {
-    const { formatPhone, selectedPatient } = this.props;
+    const { currentPatient, formatPhone, submitting } = this.props;
     let patientPhone
-    if (selectedPatient) {
-      patientPhone = formatPhone(selectedPatient.phone);
+    if (currentPatient) {
+      patientPhone = formatPhone(currentPatient.phone);
       return (
         <Form className="form-lightbox form-patients-list">
           <div className="field-row">
@@ -96,23 +150,25 @@ class PatientDetailModal extends React.Component {
             <div className="field">
               <div className="row">
                 <div className="col pull-left">
-                  <input
+                  <Field
                     type="text"
-                    className="form-control"
                     required
                     id="new-patient-first-name"
                     placeholder="First Name"
-                    value={selectedPatient.firstName}
+                    disabled={submitting}
+                    value={currentPatient.firstName}
+                    onChange={this.changePatientFirstName}
                   />
                 </div>
                 <div className="col pull-right">
-                  <input
+                  <Field
                     type="text"
-                    className="form-control"
                     required
                     id="new-patient-last-name"
                     placeholder="Last Name"
-                    value={selectedPatient.lastName}
+                    disabled={submitting}
+                    value={currentPatient.lastName}
+                    onChange={this.changePatientLastName}
                   />
                 </div>
               </div>
@@ -121,7 +177,7 @@ class PatientDetailModal extends React.Component {
           <div className="field-row">
             <strong className="label required"><label htmlFor="new-patient-email">email</label></strong>
             <div className="field">
-              <input type="email" className="form-control" id="new-patient-email" value={selectedPatient.email} />
+              <input type="email" className="form-control" id="new-patient-email" value={currentPatient.email} />
             </div>
           </div>
           <div className="field-row">
@@ -133,8 +189,8 @@ class PatientDetailModal extends React.Component {
           <div className="field-row">
             <strong className="label">&nbsp;</strong>
             <div className="field">
-              <span className="jcf-checkbox jcf-unchecked">
-                <span className="checkbox" />
+              <span className={classNames("jcf-checkbox", { "jcf-unchecked": !currentPatient.unsubscribed, "jcf-checked": currentPatient.unsubscribed })}>
+                <Field name="unsubscribe" component={this.renderFakeCheckbox} onChange={this.changePatientUnsubscribe} />
                 <input type="checkbox" id="unsubscribe" />
               </span>
               <label htmlFor="unsubscribe">Unsubscribe</label>
@@ -195,8 +251,8 @@ class PatientDetailModal extends React.Component {
   }
 
   renderOtherSection() {
-    const{ currentUser, selectedPatient } = this.props;
-    if (selectedPatient) {
+    const{ currentUser, currentPatient } = this.props;
+    if (currentPatient) {
       return (
         <div className={classNames("item others", {active: this.state.carousel.other})}>
           <div className="item-holder">
@@ -205,11 +261,11 @@ class PatientDetailModal extends React.Component {
               <ul className="list-unstyled list-radios">
                 <li>
                   <span className="title">Signed Up</span>
-                  <time dateTime={selectedPatient.createdAt}>{moment.tz(selectedPatient.createdAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+                  <time dateTime={currentPatient.createdAt}>{moment.tz(currentPatient.createdAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
                 </li>
                 <li>
                   <span className="title">Updated</span>
-                  <time dateTime={selectedPatient.updatedAt}>{moment.tz(selectedPatient.updatedAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+                  <time dateTime={currentPatient.updatedAt}>{moment.tz(currentPatient.updatedAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
                 </li>
               </ul>
             </div>
@@ -384,13 +440,13 @@ class PatientDetailModal extends React.Component {
                 <div className="field-row">
                   <strong className="label"><label htmlFor="patient-bmi">BMI </label></strong>
                   <div className="field">
-                    <input type="text" className="form-control" id="patient-bmi" required defaultValue={selectedPatient.bmi} />
+                    <input type="text" className="form-control" id="patient-bmi" required defaultValue={currentPatient.bmi} />
                   </div>
                 </div>
                 <div className="field-row">
                   <strong className="label"><label htmlFor="patient-source5">Source</label></strong>
                   <div className="field">
-                    <input type="text" className="form-control" value={selectedPatient.source ? selectedPatient.source.type : null} disabled readOnly />
+                    <input type="text" className="form-control" value={currentPatient.source ? currentPatient.source.type : null} disabled readOnly />
                   </div>
                 </div>
               </div>
@@ -404,12 +460,12 @@ class PatientDetailModal extends React.Component {
   }
 
   render() {
-    const { currentUser, openPatientModal, selectedPatientCategory, selectedPatient } = this.props;
+    const { currentUser, openPatientModal, currentPatientCategory, currentPatient } = this.props;
     return (
       <Collapse dimension="width" in={openPatientModal} timeout={250} className="patients-list-form">
         <div className="form-area">
           <div className="form-head">
-            <strong className="title">{selectedPatientCategory ? selectedPatientCategory.name : null}</strong>
+            <strong className="title">{currentPatientCategory ? currentPatientCategory.name : null}</strong>
             <a className="lightbox-opener">
               <span className="date" />
               <span className="time" />
@@ -460,3 +516,14 @@ class PatientDetailModal extends React.Component {
 }
 
 export default PatientDetailModal;
+
+const mapStateToProps = createStructuredSelector({
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    submitPatientUpdate: (fields) => dispatch(submitPatientUpdate(fields)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PatientDetailModal);

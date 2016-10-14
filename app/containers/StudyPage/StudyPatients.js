@@ -12,7 +12,7 @@ import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from 'containers/App/selectors';
 import PatientDetailModal from './PatientDetailModal';
 import * as Selector from './selectors';
-import { fetchPatientDetails } from './actions';
+import { fetchPatientDetails, setCurrentPatientCategoryId, setCurrentPatientId } from './actions';
 
 const PNF = libPhoneNumber.PhoneNumberFormat;
 const phoneUtil = libPhoneNumber.PhoneNumberUtil.getInstance();
@@ -24,14 +24,14 @@ class StudyPatients extends React.Component {
     currentPatient: React.PropTypes.object,
     currentPatientCategory: React.PropTypes.object,
     fetchPatientDetails: React.PropTypes.func.isRequired,
+    setCurrentPatientCategoryId: React.PropTypes.func.isRequired,
+    setCurrentPatientId: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       openPatientModal: false,
-      selectedPatientCategoryId: null,
-      selectedPatientId: null,
     };
     this.onPatientClick = this.onPatientClick.bind(this);
     this.renderPatient = this.renderPatient.bind(this);
@@ -41,13 +41,13 @@ class StudyPatients extends React.Component {
   }
 
   onPatientClick(category, patient) {
-    const { fetchPatientDetails } = this.props;
+    const { fetchPatientDetails, setCurrentPatientCategoryId, setCurrentPatientId } = this.props;
     const show = patient && (this.state.selectedPatientId !== patient.id);
     fetchPatientDetails(category.id, patient);
+    setCurrentPatientCategoryId(show ? category.id : false);
+    setCurrentPatientId(show ? patient.id : false);
     this.setState({
       openPatientModal: show,
-      selectedPatientCategoryId: show ? category.id : false,
-      selectedPatientId: show ? patient : false,
     });
   }
 
@@ -125,7 +125,7 @@ class StudyPatients extends React.Component {
   }
 
   render() {
-    const { currentUser, patientCategories } = this.props;
+    const { currentPatient, currentPatientCategory, currentUser, patientCategories } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames("patients-list-area", {"form-active": this.state.openPatientModal})}>
@@ -136,7 +136,7 @@ class StudyPatients extends React.Component {
               })}
             </ul>
           </nav>
-          <PatientDetailModal currentUser={currentUser} formatPhone={this.formatPhone} openPatientModal={this.state.openPatientModal} selectedPatientId={this.state.selectedPatient} selectedPatientCategoryId={this.state.selectedPatientCategoryId} />
+          <PatientDetailModal currentUser={currentUser} formatPhone={this.formatPhone} openPatientModal={this.state.openPatientModal} currentPatient={currentPatient} currentPatientCategory={currentPatientCategory} />
         </div>
         <div className="patients-form-closer" onClick={this.onPatientClick} />
       </div>
@@ -145,14 +145,16 @@ class StudyPatients extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser(),
   currentPatient: Selector.selectCurrentPatient(),
   currentPatientCategory: Selector.selectCurrentPatientCategory(),
+  currentUser: selectCurrentUser(),
 });
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
     fetchPatientDetails: (categoryId, patient) => dispatch(fetchPatientDetails(categoryId, patient)),
+    setCurrentPatientId: (id) => dispatch(setCurrentPatientId(id)),
+    setCurrentPatientCategoryId: (id) => dispatch(setCurrentPatientCategoryId(id)),
   };
 }
 

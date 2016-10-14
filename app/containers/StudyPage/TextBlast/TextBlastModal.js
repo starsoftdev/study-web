@@ -10,7 +10,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import CheckboxElement from './CheckboxElement';
 import * as Selector from '../selectors';
-import { submitTextBlast } from '../sagas';
+import { submitTextBlast } from '../actions';
 
 class TextBlastModal extends React.Component {
   static propTypes = {
@@ -113,7 +113,7 @@ class TextBlastModal extends React.Component {
           </a>
         </Modal.Header>
         <Modal.Body>
-            <Form className="text-email-blast-form" data-formvalidation="" noValidate="novalidate">
+            <Form className="text-email-blast-form" noValidate="novalidate">
               <div className="sidebar pull-left">
                 <div className="scroll-holder jcf--scrollable">
                   <div className="sub-holder">
@@ -131,7 +131,7 @@ class TextBlastModal extends React.Component {
                       </div>
                     </div>
                     <div className="category">
-                      <strong className="heading">CATEGORY</strong>
+                      <strong className="heading">Category</strong>
                       <ul className="check-list list-unstyled">
                         <CheckboxElement checked={this.state.selectAllCategories} name={"All"} onClick={() => {
                           this.selectCategory("All");
@@ -161,11 +161,12 @@ class TextBlastModal extends React.Component {
                       </ul>
                     </div>
                     <div className="selected-patients-list"></div>
-                    <div className="dynimic-patients-list hidden">
-                      <div data-patient="patient2-new-patient">
+                    <div>
+                      <div>
                         <span className="name">Alan Jensen</span>
-                        <a href="#" className="btn-remove">
-                          <i className="icomoon-icon_trash" /></a>
+                        <a className="btn-remove">
+                          <i className="icomoon-icon_trash" />
+                        </a>
                       </div>
                       <div data-patient="patient2-new-patient">
                         <span className="name">Eugene Simpson</span>
@@ -226,7 +227,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    submitTextBlast: (values) => dispatch(submitTextBlast(values)),
+    submitTextBlast: (patients, onClose) => dispatch(submitTextBlast(patients, onClose)),
   };
 }
 
