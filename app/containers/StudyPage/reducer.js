@@ -10,6 +10,8 @@ import {
   FETCH_PATIENT_DETAILS_SUCCESS,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_SITE_SUCCESS,
+  FETCH_STUDY_VIEWS_SUCCESS,
+  FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
   SET_CURRENT_PATIENT_ID,
@@ -19,6 +21,7 @@ import {
 import _ from 'lodash';
 
 const initialState = {
+  stats: {}
 };
 
 function studyPageReducer(state = initialState, action) {
@@ -72,6 +75,22 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         study: action.payload,
         fetchingStudy: false,
+      };
+    case FETCH_STUDY_VIEWS_SUCCESS:
+      return {
+        ...state,
+        stats: {
+          ...state.stats,
+          views: action.payload,
+        },
+      };
+    case FETCH_STUDY_PATIENT_REFERRALS_SUCCESS:
+      return {
+        ...state,
+        stats: {
+          ...state.stats,
+          referrals: action.payload,
+        },
       };
     case SET_CURRENT_PATIENT_ID:
       return {

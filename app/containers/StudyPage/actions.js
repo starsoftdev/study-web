@@ -13,6 +13,8 @@ import {
   FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_STUDY,
+  FETCH_STUDY_VIEWS_SUCCESS,
+  FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
   FETCH_SITE_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
@@ -110,6 +112,21 @@ export function studyFetched(payload) {
     payload,
   };
 }
+
+export function studyViewsStatFetched(payload) {
+  return {
+    type: FETCH_STUDY_VIEWS_SUCCESS,
+    payload,
+  };
+}
+
+export function patientReferralStatFetched(payload) {
+  return {
+    type: FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
+    payload,
+  };
+}
+
 export function setCurrentPatientId(id) {
   return {
     type: SET_CURRENT_PATIENT_ID,

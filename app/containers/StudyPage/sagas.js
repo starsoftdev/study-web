@@ -9,7 +9,7 @@ import { FETCH_PATIENTS, FETCH_PATIENT_DETAILS, FETCH_PATIENT_CATEGORIES, FETCH_
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
-import { campaignsFetched, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, updatePatientSuccess, submitTextBlastSuccess } from './actions';
+import { campaignsFetched, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, updatePatientSuccess } from './actions';
 
 // Bootstrap sagas
 export default [
@@ -56,6 +56,42 @@ function* fetchStudyDetails() {
     yield put(studyFetched(response));
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching study information. Please try again later.');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+function* fetchStudyViewsStat() {
+  const authToken = getItem('auth_token');
+
+  // listen for the FETCH_STUDY action
+  const { studyId } = yield take(FETCH_STUDY);
+
+  try {
+    const requestURL = `${API_URL}/studies/${studyId}/landingPageViews?access_token=${authToken}`;
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    yield put(studyViewsStatFetched(response));
+  } catch (e) {
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+function* fetchPatientReferralStat() {
+  const authToken = getItem('auth_token');
+
+  // listen for the FETCH_STUDY action
+  const { studyId } = yield take(FETCH_STUDY);
+
+  try {
+    const requestURL = `${API_URL}/studies/${studyId}/patients/count?access_token=${authToken}`;
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    yield put(patientReferralStatFetched(response));
+  } catch (e) {
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching patient referral stats. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
   }
 }
@@ -129,8 +165,29 @@ function* fetchPatientDetails() {
       return;
     }
     const filter = JSON.stringify({
-      include: ['indications', 'notes', 'source', 'textMessages'],
+      include: [
+        {
+          relation: 'indications',
+        },
+        {
+          relation: 'notes',
+          include: {
+            relation: 'user',
+            scope: {
+              fields: ['firstName', 'lastName', 'profileImageURL'],
+            }
+          }
+        },
+        {
+          relation: 'source',
+        },
+        {
+          relation: 'textMessages',
+        },
+      ]
     })
+    console.log('test');
+    console.log(filter);
     try {
       const requestURL = `${API_URL}/patients/${patient.id}?access_token=${authToken}&filter=${filter}`;
       const response = yield call(request, requestURL, {
@@ -243,6 +300,8 @@ export function* fetchStudySaga() {
 
   try {
     yield fork(fetchStudyDetails);
+    yield fork(fetchStudyViewsStat);
+    yield fork(fetchPatientReferralStat);
     yield call(fetchPatientCategories);
     yield fork(fetchPatientsSaga);
     yield fork(fetchPatientDetails);

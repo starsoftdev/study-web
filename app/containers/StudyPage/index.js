@@ -34,6 +34,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     sources: PropTypes.array,
     site: PropTypes.object,
     study: PropTypes.object,
+    stats: PropTypes.object,
   };
 
   static defaultProps = {
@@ -54,12 +55,12 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { fetchingStudy, campaigns, patientCategories, site, sources, study } = this.props;
+    const { fetchingStudy, campaigns, patientCategories, site, sources, study, stats } = this.props;
     if (fetchingStudy) {
       return (
         <LoadingSpinner />
       );
-    } else if (study === false) {
+    } else if (!study) {
       return (
         <div>A problem occurred trying to load the page. Please refreshing the page.</div>
       );
@@ -102,7 +103,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             sourceOptions={sourceOptions}
             handleSubmit={this.handleSubmit}
           />
-          <StudyStats />
+          <StudyStats stats={stats} />
           <StudyPatients patientCategories={patientCategories} />
         </section>
       </div>
@@ -118,6 +119,7 @@ const mapStateToProps = createStructuredSelector({
   sources: Selector.selectSources(),
   site: Selector.selectSite(),
   study: Selector.selectStudy(),
+  stats: Selector.selectStudyStats(),
   currentUser: selectCurrentUser(),
 });
 
