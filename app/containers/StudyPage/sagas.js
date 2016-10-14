@@ -5,11 +5,11 @@
 import { call, fork, put, take } from 'redux-saga/effects';
 import request from 'utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
-import { FETCH_PATIENTS, FETCH_PATIENT_DETAILS, FETCH_PATIENT_CATEGORIES, FETCH_STUDY, SUBMIT_PATIENT_UPDATE, SUBMIT_TEXT_BLAST, SUBMIT_PATIENT_IMPORT, SUBMIT_ADD_PATIENT } from './constants';
+import { FETCH_PATIENTS, FETCH_PATIENT_DETAILS, FETCH_PATIENT_CATEGORIES, FETCH_STUDY, SUBMIT_PATIENT_UPDATE, SUBMIT_TEXT_BLAST, SUBMIT_PATIENT_IMPORT, SUBMIT_ADD_PATIENT, SUBMIT_PATIENT_NOTE, SUBMIT_PATIENT_TEXT } from './constants';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
-import { campaignsFetched, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, updatePatientSuccess } from './actions';
+import { campaignsFetched, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, updatePatientSuccess, addPatientNoteSuccess, addPatientTextSuccess } from './actions';
 
 // Bootstrap sagas
 export default [
@@ -159,7 +159,7 @@ function* fetchPatients(studyId, siteId, text, campaignId, sourceId) {
 function* fetchPatientDetails() {
   while(true) {
     // listen for the FETCH_PATIENT_DETAILS action
-    const { categoryId, patient } = yield take(FETCH_PATIENT_DETAILS);
+    const { categoryId, patientId } = yield take(FETCH_PATIENT_DETAILS);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -174,7 +174,7 @@ function* fetchPatientDetails() {
           include: {
             relation: 'user',
             scope: {
-              fields: ['firstName', 'lastName', 'profileImageURL'],
+              fields: ['id', 'firstName', 'lastName', 'profileImageURL'],
             }
           }
         },
@@ -183,17 +183,23 @@ function* fetchPatientDetails() {
         },
         {
           relation: 'textMessages',
+          include: {
+            relation: 'twilioTextMessage'
+          }
         },
       ]
     })
-    console.log('test');
-    console.log(filter);
     try {
-      const requestURL = `${API_URL}/patients/${patient.id}?access_token=${authToken}&filter=${filter}`;
+      const requestURL = `${API_URL}/patients/${patientId}?access_token=${authToken}&filter=${filter}`;
       const response = yield call(request, requestURL, {
         method: 'GET',
       });
-      yield put(patientDetailsFetched(categoryId, patient.id, response));
+      let parsedResponse = Object.assign({}, response);
+      delete parsedResponse.textMessages;
+      parsedResponse.textMessages = response.textMessages.map(textMessage => {
+        return textMessage.twilioTextMessage;
+      })
+      yield put(patientDetailsFetched(parsedResponse));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while fetching patient information. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -218,6 +224,56 @@ function* submitPatientUpdate() {
       yield put(updatePatientSuccess(response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while updating patient information. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
+function* submitPatientNote() {
+  while(true) {
+    // listen for the SUBMIT_PATIENT_NOTE action
+    const { id, studyId, note } = yield take(SUBMIT_PATIENT_NOTE);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+    try {
+      const requestURL = `${API_URL}/patients/${id}/notes?access_token=${authToken}`;
+      const response = yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          study_id: studyId,
+          note
+        })
+      });
+      yield put(addPatientNoteSuccess(response));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while adding a patient note. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
+function* submitPatientText() {
+  while(true) {
+    // listen for the SUBMIT_PATIENT_TEXT action
+    const { id, studyId, message } = yield take(SUBMIT_PATIENT_TEXT);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+    try {
+      const requestURL = `${API_URL}/patients/${id}/textMessages?access_token=${authToken}`;
+      const response = yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          study_id: studyId,
+          message
+        })
+      });
+      yield put(addPatientTextSuccess(response));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while sending a patient text. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
     }
   }
@@ -309,6 +365,8 @@ export function* fetchStudySaga() {
     yield fork(submitTextBlast);
     yield fork(submitPatientImport);
     yield fork(submitAddPatient);
+    yield fork(submitPatientNote);
+    yield fork(submitPatientText);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

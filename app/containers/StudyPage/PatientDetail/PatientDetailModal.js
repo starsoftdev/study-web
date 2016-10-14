@@ -10,8 +10,13 @@ import classNames from 'classnames';
 import moment from 'moment-timezone';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import * as Selector from './selectors';
-import { submitPatientUpdate } from './actions';
+
+import * as Selector from '../selectors';
+import { submitPatientUpdate } from '../actions';
+import Checkbox from '../../../components/Input/Checkbox';
+import Input from '../../../components/Input/index';
+import PatientText from './PatientText';
+import NotesSection from './NotesSection';
 
 @reduxForm({ form: 'patientDetailModal' })
 class PatientDetailModal extends React.Component {
@@ -23,6 +28,7 @@ class PatientDetailModal extends React.Component {
     submitting: React.PropTypes.bool.isRequired,
     openPatientModal: React.PropTypes.bool.isRequired,
     submitPatientUpdate: React.PropTypes.func.isRequired,
+    submitPatientNote: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -46,8 +52,6 @@ class PatientDetailModal extends React.Component {
     this.changePatientUnsubscribe = this.changePatientUnsubscribe.bind(this);
     this.renderFakeCheckbox = this.renderFakeCheckbox.bind(this);
     this.renderPatientForm = this.renderPatientForm.bind(this);
-    this.renderPatientNote = this.renderPatientNote.bind(this);
-    this.renderPatientText = this.renderPatientText.bind(this);
     this.renderOtherSection = this.renderOtherSection.bind(this);
   }
 
@@ -152,23 +156,23 @@ class PatientDetailModal extends React.Component {
                 <div className="col pull-left">
                   <Field
                     type="text"
-                    required
+                    name="firstName"
+                    component={Input}
                     id="new-patient-first-name"
                     placeholder="First Name"
-                    disabled={submitting}
-                    value={currentPatient.firstName}
-                    onChange={this.changePatientFirstName}
+                    isDisabled={submitting}
+                    input={{required: true, value: currentPatient.firstName, onChange: this.changePatientFirstName}}
                   />
                 </div>
                 <div className="col pull-right">
                   <Field
                     type="text"
-                    required
+                    name="lastName"
+                    component={Input}
                     id="new-patient-last-name"
                     placeholder="Last Name"
-                    disabled={submitting}
-                    value={currentPatient.lastName}
-                    onChange={this.changePatientLastName}
+                    isDisabled={submitting}
+                    input={{required: true, value: currentPatient.lastName, onChange: this.changePatientLastName}}
                   />
                 </div>
               </div>
@@ -177,22 +181,19 @@ class PatientDetailModal extends React.Component {
           <div className="field-row">
             <strong className="label required"><label htmlFor="new-patient-email">email</label></strong>
             <div className="field">
-              <input type="email" className="form-control" id="new-patient-email" value={currentPatient.email} />
+              <Field type="email" name="email" component={Input} id="new-patient-email" input={{value: currentPatient.email, onChange: this.changePatientEmail}} />
             </div>
           </div>
           <div className="field-row">
             <strong className="label required"><label htmlFor="new-patient-phone">Phone</label></strong>
             <div className="field">
-              <input type="tel" className="form-control" id="new-patient-phone" value={patientPhone} />
+              <Field type="tel" name="phone" component={Input} id="new-patient-phone" input={{value: patientPhone, onChange: this.changePatientPhone}} />
             </div>
           </div>
           <div className="field-row">
             <strong className="label">&nbsp;</strong>
             <div className="field">
-              <span className={classNames("jcf-checkbox", { "jcf-unchecked": !currentPatient.unsubscribed, "jcf-checked": currentPatient.unsubscribed })}>
-                <Field name="unsubscribe" component={this.renderFakeCheckbox} onChange={this.changePatientUnsubscribe} />
-                <input type="checkbox" id="unsubscribe" />
-              </span>
+              <Field name="unsubscribe" type="checkbox" component={Checkbox} className="pull-left" input={{value: currentPatient.unsubscribed, checked: currentPatient.unsubscribed}} onChange={this.changePatientUnsubscribe} />
               <label htmlFor="unsubscribe">Unsubscribe</label>
             </div>
           </div>
@@ -201,53 +202,6 @@ class PatientDetailModal extends React.Component {
     } else {
       return null;
     }
-  }
-
-  renderPatientNote(note) {
-    const { currentUser } = this.props;
-    return (
-      <div className="post-msg">
-        <div className="img-holder">
-          <img role="presentation" src="images/img2.png" />
-        </div>
-        <div className="post-content">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt. Lorem ipsum dolor sit amet.
-          </p>
-          <a className="btn-trash">
-            <i className="icomoon-icon_trash" />
-          </a>
-        </div>
-        <strong className="email">Alan Walker</strong>
-        <time dateTime="2016-07-28">07/28/16 at 09:35 AM</time>
-      </div>
-    );
-  }
-
-  renderPatientText(text) {
-    const { currentUser } = this.props;
-    return (
-      <div className="post-msg">
-        <div className="img-holder">
-          <img role="presentation" src="images/img2.png" />
-        </div>
-        <div className="post-content">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt. Lorem ipsum dolor sit amet.
-          </p>
-          <a className="btn-trash">
-            <i className="icomoon-icon_trash" />
-          </a>
-        </div>
-        <strong className="email patient-name">
-          <span className="first-name">Alan</span>
-          <span className="last-name"> Jensen</span>
-        </strong>
-        <time dateTime="2016-07-28">07/28/16 at 09:35 AM</time>
-      </div>
-    );
   }
 
   renderOtherSection() {
@@ -290,7 +244,7 @@ class PatientDetailModal extends React.Component {
                     <div className="select-indication-slide default-slide js-slide-hidden">
                       <div className="well custom-select-drop">
                         <div className="search-holder">
-                          <input type="search" className="form-control keyword-search" id="search10" />
+                          <input type="search" className="form-control keyword-search" id="search10" value="" />
                           <label htmlFor="search10" className="icomoon-icon_search2" />
                         </div>
                         <div className="jcf--scrollable">
@@ -440,7 +394,7 @@ class PatientDetailModal extends React.Component {
                 <div className="field-row">
                   <strong className="label"><label htmlFor="patient-bmi">BMI </label></strong>
                   <div className="field">
-                    <input type="text" className="form-control" id="patient-bmi" required defaultValue={currentPatient.bmi} />
+                    <input type="text" className="form-control" id="patient-bmi" required value={currentPatient.bmi} />
                   </div>
                 </div>
                 <div className="field-row">
@@ -484,18 +438,12 @@ class PatientDetailModal extends React.Component {
                 <li className={classNames({active: this.state.carousel.other})} onClick={this.toggleOtherSection}>Other</li>
               </ol>
               <div className="carousel-inner" role="listbox">
-                <div className={classNames("item note", {active: this.state.carousel.note})}>
-                  <section className="postarea notes">
-                    {this.renderPatientNote()}
-                  </section>
-                  <div className="textarea">
-                    <textarea className="form-control" placeholder="Type a note..." />
-                    <button className="btn btn-default">Send</button>
-                  </div>
-                </div>
+                <NotesSection active={this.state.carousel.note} currentUser={currentUser} currentPatient={currentPatient} />
                 <div className={classNames("item text", {active: this.state.carousel.text})}>
-                  <section className="postarea notes">
-                    {this.renderPatientText()}
+                  <section className="postarea text">
+                    {currentPatient && currentPatient.textMessages ? currentPatient.textMessages.map(textMessage => (
+                      <PatientText currentPatient={currentPatient} currentUser={currentUser} textMessage={textMessage} />
+                    )): null}
                   </section>
                   <div className="textarea">
                     <textarea className="form-control" placeholder="Type a message..." />
@@ -518,11 +466,14 @@ class PatientDetailModal extends React.Component {
 export default PatientDetailModal;
 
 const mapStateToProps = createStructuredSelector({
+  currentPatient: Selector.selectCurrentPatient(),
+  currentPatientCategory: Selector.selectCurrentPatientCategory(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     submitPatientUpdate: (fields) => dispatch(submitPatientUpdate(fields)),
+    submitPatientNote: (note) => dispatch(submitPatientNote(note)),
   };
 }
 

@@ -77,7 +77,7 @@ Input.propTypes = {
   componentClass: PropTypes.string,
   className: PropTypes.string,
   children: PropTypes.array,
-  isDisabled: PropTypes.string,
+  isDisabled: PropTypes.bool,
   id: PropTypes.string,
 };
 
