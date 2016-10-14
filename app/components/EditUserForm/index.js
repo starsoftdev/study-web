@@ -7,7 +7,7 @@ import Input from 'components/Input';
 import Toggle from 'components/Input/Toggle';
 import ReactSelect from 'components/Input/ReactSelect';
 import { selectEditUserFormError, selectEditUserFormSiteValue } from './selectors';
-import { selectSavedUser } from 'containers/SitesUsersPage/selectors';
+import { selectSavedUser } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 
