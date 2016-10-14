@@ -6,19 +6,15 @@
 
 import {
   FETCH_CAMPAIGNS_SUCCESS,
-  FETCH_CAMPAIGNS_ERROR,
   FETCH_PATIENTS_SUCCESS,
-  FETCH_PATIENTS_ERROR,
   FETCH_PATIENT_DETAILS_SUCCESS,
-  FETCH_PATIENT_DETAILS_ERROR,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
-  FETCH_PATIENT_CATEGORIES_ERROR,
-  FETCH_SITES_SUCCESS,
-  FETCH_SITES_ERROR,
+  FETCH_SITE_SUCCESS,
   FETCH_SOURCES_SUCCESS,
-  FETCH_SOURCES_ERROR,
   FETCH_STUDY_SUCCESS,
-  FETCH_STUDY_ERROR,
+  SET_CURRENT_PATIENT_ID,
+  SET_CURRENT_PATIENT_CATEGORY_ID,
+  UPDATE_PATIENT_SUCCESS,
 } from './constants';
 import _ from 'lodash';
 
@@ -31,11 +27,6 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         campaigns: action.payload,
-      };
-    case FETCH_CAMPAIGNS_ERROR:
-      return {
-        ...state,
-        campaigns: false,
       };
     case FETCH_PATIENTS_SUCCESS:
       return {
@@ -52,21 +43,10 @@ function studyPageReducer(state = initialState, action) {
         }),
         fetchingPatients: false,
       };
-    case FETCH_PATIENTS_ERROR:
-      return {
-        ...state,
-        patientCategories: state.patientCategories.map(patientCategory => {
-          const patientCategoryTemp = Object.assign({}, patientCategory);
-          delete patientCategoryTemp.patients;
-          return patientCategoryTemp;
-        }),
-        fetchingPatients: false,
-      };
     case FETCH_PATIENT_DETAILS_SUCCESS:
-    case FETCH_PATIENT_DETAILS_ERROR:
       return {
         ...state,
-        patientCategories: patientCategories(state.patientCategories, action),
+        patientCategories: patientCategories(state.patientCategories, action.patientCategoryId, action),
       };
     case FETCH_PATIENT_CATEGORIES_SUCCESS:
       return {
@@ -77,30 +57,15 @@ function studyPageReducer(state = initialState, action) {
           return patientCategoryTemp;
         }),
       };
-    case FETCH_PATIENT_CATEGORIES_ERROR:
+    case FETCH_SITE_SUCCESS:
       return {
         ...state,
-        patientCategories: false,
-      };
-    case FETCH_SITES_SUCCESS:
-      return {
-        ...state,
-        sites: action.payload,
-      };
-    case FETCH_SITES_ERROR:
-      return {
-        ...state,
-        sites: false,
+        site: action.payload,
       };
     case FETCH_SOURCES_SUCCESS:
       return {
         ...state,
         sources: action.payload,
-      };
-    case FETCH_SOURCES_ERROR:
-      return {
-        ...state,
-        sources: false,
       };
     case FETCH_STUDY_SUCCESS:
       return {
@@ -108,22 +73,31 @@ function studyPageReducer(state = initialState, action) {
         study: action.payload,
         fetchingStudy: false,
       };
-    case FETCH_STUDY_ERROR:
+    case SET_CURRENT_PATIENT_ID:
       return {
         ...state,
-        study: false,
-        fetchingStudy: false,
+        currentPatientId: action.id,
+      };
+    case SET_CURRENT_PATIENT_CATEGORY_ID:
+      return {
+        ...state,
+        currentPatientCategoryId: action.id,
+      };
+    case UPDATE_PATIENT_SUCCESS:
+      return {
+        ...state,
+        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, action),
       };
     default:
       return state;
   }
 }
 
-function patientCategories(state, action) {
+function patientCategories(state, patientCategoryId, action) {
   switch (action.type) {
     case FETCH_PATIENT_DETAILS_SUCCESS:
       return state.map(patientCategory => {
-        if (patientCategory.id === action.patientCategoryId) {
+        if (patientCategory.id === patientCategoryId) {
           return {
             ...patientCategory,
             patients: patientCategory.patients.map(patient => {
@@ -141,16 +115,16 @@ function patientCategories(state, action) {
           return patientCategory;
         }
       });
-    case FETCH_PATIENT_DETAILS_ERROR:
+    case UPDATE_PATIENT_SUCCESS:
       return state.map(patientCategory => {
-        if (patientCategory.id === action.patientCategoryId) {
+        if (patientCategory.id === patientCategoryId) {
           return {
             ...patientCategory,
             patients: patientCategory.patients.map(patient => {
-              if (patient.id == action.patientId) {
+              if (patient.id == action.currentPatientId) {
                 return {
                   ...patient,
-                  error: action.payload.error,
+                  ...action.payload,
                 };
               } else {
                 return patient;

@@ -15,7 +15,7 @@ import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
 import StudyPatients from './StudyPatients';
 import * as Selector from './selectors';
-import { fetchPatients } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy } from './actions';
 
 import './styles.less';
 
@@ -24,13 +24,15 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     campaigns: PropTypes.array,
     currentUser: PropTypes.any,
     fetchPatients: PropTypes.func.isRequired,
+    fetchPatientCategories: PropTypes.func.isRequired,
     fetchingPatients: PropTypes.bool.isRequired,
+    fetchStudy: PropTypes.func.isRequired,
     fetchingStudy: PropTypes.bool.isRequired,
     patientCategories: PropTypes.array,
     params: PropTypes.object,
     patients: PropTypes.array,
     sources: PropTypes.array,
-    sites: PropTypes.array,
+    site: PropTypes.object,
     study: PropTypes.object,
   };
 
@@ -41,17 +43,18 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 
   constructor(props) {
     super(props);
-    setItem('study_id', props.params.id);
-    setItem('site_id', props.params.siteId);
+    props.fetchStudy(props.params.id, props.params.siteId);
+    props.fetchPatientCategories(props.params.id, props.params.siteId);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(searchFilter) {
-    this.props.fetchPatients(searchFilter);
+    const { params: { id, siteId } } = this.props;
+    this.props.fetchPatients(id, siteId, searchFilter.text, searchFilter.campaignId, searchFilter.sourceId);
   }
 
   render() {
-    const { fetchingStudy, campaigns, patientCategories, sites, sources, study } = this.props;
+    const { fetchingStudy, campaigns, patientCategories, site, sources, study } = this.props;
     if (fetchingStudy) {
       return (
         <LoadingSpinner />
@@ -77,7 +80,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       }
     ));
     sourceOptions.unshift({ label: 'All', value: 0 });
-    const siteLocation = sites[0].location;
+    const siteLocation = site.location;
     let sponsor = 'None';
     if (study.sponsor) {
       sponsor = study.sponsor.name;
@@ -113,14 +116,16 @@ const mapStateToProps = createStructuredSelector({
   fetchingStudy: Selector.selectFetchingStudy(),
   patientCategories: Selector.selectPatientCategories(),
   sources: Selector.selectSources(),
-  sites: Selector.selectSites(),
+  site: Selector.selectSite(),
   study: Selector.selectStudy(),
   currentUser: selectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchPatients: (filter) => dispatch(fetchPatients(filter)),
+    fetchPatients: (studyId, siteId, text, campaignId, sourceId) => dispatch(fetchPatients(studyId, siteId, text, campaignId, sourceId)),
+    fetchPatientCategories: (studyId, siteId) => dispatch(fetchPatientCategories(studyId, siteId)),
+    fetchStudy: (studyId, siteId) => dispatch(fetchStudy(studyId, siteId)),
   };
 }
 

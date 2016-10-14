@@ -6,21 +6,23 @@
 
 import {
   FETCH_CAMPAIGNS_SUCCESS,
-  FETCH_CAMPAIGNS_ERROR,
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
-  FETCH_PATIENTS_ERROR,
   FETCH_PATIENT_DETAILS,
   FETCH_PATIENT_DETAILS_SUCCESS,
-  FETCH_PATIENT_DETAILS_ERROR,
+  FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
-  FETCH_PATIENT_CATEGORIES_ERROR,
-  FETCH_SITES_SUCCESS,
-  FETCH_SITES_ERROR,
+  FETCH_STUDY,
+  FETCH_SITE_SUCCESS,
   FETCH_SOURCES_SUCCESS,
-  FETCH_SOURCES_ERROR,
   FETCH_STUDY_SUCCESS,
-  FETCH_STUDY_ERROR,
+  SET_CURRENT_PATIENT_ID,
+  SET_CURRENT_PATIENT_CATEGORY_ID,
+  SUBMIT_PATIENT_UPDATE,
+  UPDATE_PATIENT_SUCCESS,
+  SUBMIT_TEXT_BLAST,
+  SUBMIT_PATIENT_IMPORT,
+  SUBMIT_ADD_PATIENT,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -30,30 +32,20 @@ export function campaignsFetched(payload) {
   };
 }
 
-export function campaignsFetchingError(payload) {
-  return {
-    type: FETCH_CAMPAIGNS_ERROR,
-    payload,
-  };
-}
-
-export function fetchPatients(filter) {
+export function fetchPatients(studyId, siteId, text, campaignId, sourceId) {
   return {
     type: FETCH_PATIENTS,
-    filter,
+    studyId,
+    siteId,
+    text,
+    campaignId,
+    sourceId,
   };
 }
 
 export function patientsFetched(payload) {
   return {
     type: FETCH_PATIENTS_SUCCESS,
-    payload,
-  };
-}
-
-export function patientsFetchingError(payload) {
-  return {
-    type: FETCH_PATIENTS_ERROR,
     payload,
   };
 }
@@ -75,12 +67,11 @@ export function patientDetailsFetched(patientCategoryId, patientId, payload) {
   };
 }
 
-export function patientDetailsFetchingError(patientCategoryId, patientId, payload) {
+export function fetchPatientCategories(studyId, siteId) {
   return {
-    type: FETCH_PATIENT_DETAILS_ERROR,
-    patientCategoryId,
-    patientId,
-    payload,
+    type: FETCH_PATIENT_CATEGORIES,
+    studyId,
+    siteId,
   };
 }
 
@@ -91,23 +82,17 @@ export function patientCategoriesFetched(payload) {
   };
 }
 
-export function patientCategoriesFetchingError(payload) {
+export function fetchStudy(studyId, siteId) {
   return {
-    type: FETCH_PATIENT_CATEGORIES_ERROR,
-    payload,
+    type: FETCH_STUDY,
+    studyId,
+    siteId,
   };
 }
 
-export function sitesFetched(payload) {
+export function siteFetched(payload) {
   return {
-    type: FETCH_SITES_SUCCESS,
-    payload,
-  };
-}
-
-export function sitesFetchingError(payload) {
-  return {
-    type: FETCH_SITES_ERROR,
+    type: FETCH_SITE_SUCCESS,
     payload,
   };
 }
@@ -119,23 +104,61 @@ export function sourcesFetched(payload) {
   };
 }
 
-export function sourcesFetchingError(payload) {
-  return {
-    type: FETCH_SOURCES_ERROR,
-    payload,
-  };
-}
-
 export function studyFetched(payload) {
   return {
     type: FETCH_STUDY_SUCCESS,
     payload,
   };
 }
-
-export function studyFetchingError(payload) {
+export function setCurrentPatientId(id) {
   return {
-    type: FETCH_STUDY_ERROR,
+    type: SET_CURRENT_PATIENT_ID,
+    id,
+  };
+}
+
+export function setCurrentPatientCategoryId(id) {
+  return {
+    type: SET_CURRENT_PATIENT_CATEGORY_ID,
+    id,
+  };
+}
+
+export function submitPatientUpdate(id, fields) {
+  return {
+    type: SUBMIT_PATIENT_UPDATE,
+    id,
+    fields,
+  };
+}
+
+export function updatePatientSuccess(payload) {
+  return {
+    type: UPDATE_PATIENT_SUCCESS,
     payload,
+  };
+}
+
+export function submitTextBlast(patients, onClose) {
+  return {
+    type: SUBMIT_TEXT_BLAST,
+    patients,
+    onClose
+  };
+}
+
+export function submitPatientImport(file, onClose) {
+  return {
+    type: SUBMIT_PATIENT_IMPORT,
+    file,
+    onClose
+  };
+}
+
+export function submitAddPatient(patient, onClose) {
+  return {
+    type: SUBMIT_ADD_PATIENT,
+    patient,
+    onClose
   };
 }
