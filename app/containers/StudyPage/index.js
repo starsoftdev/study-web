@@ -13,7 +13,7 @@ import { setItem } from 'utils/localStorage';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
-import StudyPatients from './StudyPatients';
+import StudyPatients from './PatientPanel/StudyPatients';
 import * as Selector from './selectors';
 import { fetchPatients, fetchPatientCategories, fetchStudy } from './actions';
 

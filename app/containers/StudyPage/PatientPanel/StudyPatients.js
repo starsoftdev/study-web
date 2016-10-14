@@ -4,24 +4,28 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-
+import HTML5Backend from 'react-dnd-html5-backend';
+import { DragDropContext } from 'react-dnd';
 import classNames from 'classnames';
 import moment from 'moment-timezone';
 import libPhoneNumber from 'google-libphonenumber';
 import { createStructuredSelector } from 'reselect';
+import * as Selector from '../selectors';
 import { selectCurrentUser } from 'containers/App/selectors';
-import PatientDetailModal from './PatientDetail/PatientDetailModal';
-import * as Selector from './selectors';
-import { fetchPatientDetails, setCurrentPatientCategoryId, setCurrentPatientId } from './actions';
+
+import Patient from './Patient';
+import PatientDetailModal from '../PatientDetail/PatientDetailModal';
+import { fetchPatientDetails, setCurrentPatientCategoryId, setCurrentPatientId } from '../actions';
 
 const PNF = libPhoneNumber.PhoneNumberFormat;
 const phoneUtil = libPhoneNumber.PhoneNumberUtil.getInstance();
 
 class StudyPatients extends React.Component {
   static propTypes = {
-    patientCategories: React.PropTypes.array.isRequired,
     currentUser: React.PropTypes.object.isRequired,
+    currentPatientId: React.PropTypes.number,
     fetchPatientDetails: React.PropTypes.func.isRequired,
+    patientCategories: React.PropTypes.array.isRequired,
     setCurrentPatientCategoryId: React.PropTypes.func.isRequired,
     setCurrentPatientId: React.PropTypes.func.isRequired,
   };
@@ -32,7 +36,6 @@ class StudyPatients extends React.Component {
       openPatientModal: false,
     };
     this.onPatientClick = this.onPatientClick.bind(this);
-    this.renderPatient = this.renderPatient.bind(this);
     this.renderPatientCategory = this.renderPatientCategory.bind(this);
     this.renderPatientTextMessageSummary = this.renderPatientTextMessageSummary.bind(this);
     this.formatPhone = this.formatPhone.bind(this);
@@ -61,27 +64,8 @@ class StudyPatients extends React.Component {
     return patientPhone;
   }
 
-  renderPatient(category, patient) {
-    const patientPhone = this.formatPhone(patient.phone);
-    return (
-      <li key={patient.id} className={classNames({"patient-selected": patient.id === this.state.selectedPatientId})} onClick={() => {
-        this.onPatientClick(category, patient);
-      }}>
-        <a className="top">
-          <strong className="name">
-            <span className="first-name">{patient.firstName}</span>
-            <span> </span>
-            <span className="last-name">{patient.lastName}</span>
-          </strong>
-          <span className="email">{patient.email}</span>
-          <span className="phone">{patientPhone}</span>
-        </a>
-        {this.renderPatientTextMessageSummary(patient)}
-      </li>
-    );
-  }
-
   renderPatientCategory(category) {
+    const { currentPatientId } = this.props;
     return (
       <li key={category.id}>
         <span className="opener">
@@ -91,9 +75,9 @@ class StudyPatients extends React.Component {
         <div className="slide">
           <div className="slide-holder">
             <ul className="list-unstyled">
-              {category.patients.map(patient => {
-                return this.renderPatient(category, patient);
-              })}
+              {category.patients.map(patient => (
+                <Patient formatPhone={this.formatPhone} category={category} currentPatientId={currentPatientId} patient={patient} />
+              ))}
             </ul>
           </div>
         </div>
@@ -144,6 +128,7 @@ class StudyPatients extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
+  currentPatientId: Selector.selectCurrentPatientId(),
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -154,4 +139,5 @@ const mapDispatchToProps = (dispatch) => {
   };
 }
 
+StudyPatients = DragDropContext(HTML5Backend)(StudyPatients);
 export default connect(mapStateToProps, mapDispatchToProps)(StudyPatients);
