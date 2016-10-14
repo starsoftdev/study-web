@@ -9,6 +9,10 @@ import Row from 'react-bootstrap/lib/Row';
 import classNames from 'classnames';
 
 class StudyStats extends React.Component {
+  static propTypes = {
+    stats: React.PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -25,6 +29,7 @@ class StudyStats extends React.Component {
   }
 
   render() {
+    const { stats } = this.props;
     return (
       <div className={classNames('stats', { active: this.state.open })}>
         <div className="head">
@@ -36,12 +41,12 @@ class StudyStats extends React.Component {
             <Col xs={4}>
               <div className="box same-height-left" style={{ height: '103px' }}>
                 <i className="icomoon-open-eye" />
-                <strong className="number">3,450</strong>
+                <strong className="number">{stats.views}</strong>
                 <h3>TOTAL STUDY VIEWS</h3>
               </div>
               <div className="box same-height-left" style={{ height: '103px' }}>
                 <i className="icomoon-user-in" />
-                <strong className="number">685</strong>
+                <strong className="number">{stats.referrals}</strong>
                 <h3>TOTAL PATIENT REFERRALS</h3>
               </div>
             </Col>

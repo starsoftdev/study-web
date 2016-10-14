@@ -7,7 +7,7 @@ import { createSelector } from 'reselect';
 /**
  * Direct selector to the studyPage state domain
  */
-export const selectStudyPageDomain = () => state => state.studyPage;
+const selectStudyPageDomain = () => state => state.studyPage;
 
 /**
  * Other selectors
@@ -76,6 +76,11 @@ export const selectSources = () => createSelector(
 export const selectStudy = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.study
+);
+
+export const selectStudyStats = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.stats
 );
 
 export const selectFetchingStudy = () => createSelector(
