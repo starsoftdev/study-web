@@ -87,7 +87,7 @@ class NotificationBox extends React.Component {
                       <li key={n.id}>
                         <a href="#">
                           <div className="img-circle"><img src={avatar1} width="43" height="43" alt="Alan walker" /></div>
-                          <p>{n.event_log.eventData}</p>
+                          <p dangerouslySetInnerHTML={{ __html: n.event_log.eventMessage }} />
                           <time>{`${this.getLocalTime(n.event_log.created).format('MM/DD/YY')} at ${this.getLocalTime(n.event_log.created).format('h:mm A')}`}</time>
                         </a>
                       </li>
