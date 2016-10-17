@@ -4,24 +4,29 @@
 
 import React from 'react';
 import moment from 'moment-timezone';
+import classNames from 'classnames';
 
 class PatientNote extends React.Component {
   static propTypes = {
+    currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object.isRequired,
     note: React.PropTypes.object.isRequired,
+    submitDeleteNote: React.PropTypes.func.isRequired,
   };
   
 
   render() {
-    const { currentUser, note } = this.props;
+    const { currentPatient, currentUser, note, submitDeleteNote } = this.props;
     return (
-      <div className="post-msg">
+      <div className={classNames("post-msg", {reply: note.user.id === currentUser.id})}>
         <div className="img-holder">
           <img role="presentation" src={note.user.profileImageURL} />
         </div>
         <div className="post-content">
           <p>{note.note}</p>
-          <a className="btn-trash">
+          <a className="btn-trash" onClick={() => {
+            submitDeleteNote(currentPatient.id, note.id);
+          }}>
             <i className="icomoon-icon_trash" />
           </a>
         </div>

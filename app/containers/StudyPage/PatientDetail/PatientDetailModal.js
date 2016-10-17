@@ -4,7 +4,6 @@
 
 import React from 'react';
 import Form from 'react-bootstrap/lib/Form';
-import { Field, reduxForm } from 'redux-form';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import classNames from 'classnames';
 import moment from 'moment-timezone';
@@ -12,23 +11,18 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import * as Selector from '../selectors';
-import { submitPatientUpdate } from '../actions';
-import Checkbox from '../../../components/Input/Checkbox';
-import Input from '../../../components/Input/index';
-import PatientText from './PatientText';
+import PatientDetailSection from './PatientDetailSection';
 import NotesSection from './NotesSection';
+import PatientText from './PatientText';
 
-@reduxForm({ form: 'patientDetailModal' })
 class PatientDetailModal extends React.Component {
   static propTypes = {
     currentPatientCategory: React.PropTypes.object,
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
-    formatPhone: React.PropTypes.func.isRequired,
-    submitting: React.PropTypes.bool.isRequired,
     openPatientModal: React.PropTypes.bool.isRequired,
-    submitPatientUpdate: React.PropTypes.func.isRequired,
-    submitPatientNote: React.PropTypes.func.isRequired,
+    studyId: React.PropTypes.number.isRequired,
+    siteId: React.PropTypes.number.isRequired,
   };
 
   constructor(props) {
@@ -45,13 +39,6 @@ class PatientDetailModal extends React.Component {
     this.toggleTextSection = this.toggleTextSection.bind(this);
     this.toggleEmailSection = this.toggleEmailSection.bind(this);
     this.toggleOtherSection = this.toggleOtherSection.bind(this);
-    this.changePatientFirstName = this.changePatientFirstName.bind(this);
-    this.changePatientLastName = this.changePatientLastName.bind(this);
-    this.changePatientEmail = this.changePatientEmail.bind(this);
-    this.changePatientPhone = this.changePatientPhone.bind(this);
-    this.changePatientUnsubscribe = this.changePatientUnsubscribe.bind(this);
-    this.renderFakeCheckbox = this.renderFakeCheckbox.bind(this);
-    this.renderPatientForm = this.renderPatientForm.bind(this);
     this.renderOtherSection = this.renderOtherSection.bind(this);
   }
 
@@ -97,111 +84,6 @@ class PatientDetailModal extends React.Component {
         other: true,
       },
     });
-  }
-
-  changePatientFirstName(value) {
-    const { submitPatientUpdate } = this.props;
-    submitPatientUpdate({
-      firstName: value,
-    });
-  }
-
-  changePatientLastName(value) {
-    const { submitPatientUpdate } = this.props;
-    submitPatientUpdate({
-      lastName: value,
-    });
-  }
-
-  changePatientEmail(value) {
-    const { submitPatientUpdate } = this.props;
-    submitPatientUpdate({
-      email: value,
-    });
-  }
-
-  changePatientPhone(value) {
-    const { submitPatientUpdate } = this.props;
-    submitPatientUpdate({
-      phone: value,
-    });
-  }
-
-  changePatientUnsubscribe(value) {
-    const { submitPatientUpdate } = this.props;
-    submitPatientUpdate({
-      unsubscribed: value,
-    });
-  }
-
-  renderFakeCheckbox() {
-    return (
-      <span className="checkbox" />
-    );
-  }
-
-  renderPatientForm() {
-    const { currentPatient, formatPhone, submitting } = this.props;
-    let patientPhone
-    if (currentPatient) {
-      patientPhone = formatPhone(currentPatient.phone);
-      return (
-        <Form className="form-lightbox form-patients-list">
-          <div className="field-row">
-            <strong className="label required">
-              <label htmlFor="new-patient-first-name">Name</label>
-            </strong>
-            <div className="field">
-              <div className="row">
-                <div className="col pull-left">
-                  <Field
-                    type="text"
-                    name="firstName"
-                    component={Input}
-                    id="new-patient-first-name"
-                    placeholder="First Name"
-                    isDisabled={submitting}
-                    input={{required: true, value: currentPatient.firstName, onChange: this.changePatientFirstName}}
-                  />
-                </div>
-                <div className="col pull-right">
-                  <Field
-                    type="text"
-                    name="lastName"
-                    component={Input}
-                    id="new-patient-last-name"
-                    placeholder="Last Name"
-                    isDisabled={submitting}
-                    input={{required: true, value: currentPatient.lastName, onChange: this.changePatientLastName}}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label required"><label htmlFor="new-patient-email">email</label></strong>
-            <div className="field">
-              <Field type="email" name="email" component={Input} id="new-patient-email" input={{value: currentPatient.email, onChange: this.changePatientEmail}} />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label required"><label htmlFor="new-patient-phone">Phone</label></strong>
-            <div className="field">
-              <Field type="tel" name="phone" component={Input} id="new-patient-phone" input={{value: patientPhone, onChange: this.changePatientPhone}} />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">&nbsp;</strong>
-            <div className="field">
-              <Field name="unsubscribe" type="checkbox" component={Checkbox} className="pull-left" input={{value: currentPatient.unsubscribed, checked: currentPatient.unsubscribed}} onChange={this.changePatientUnsubscribe} />
-              <label htmlFor="unsubscribe">Unsubscribe</label>
-            </div>
-          </div>
-        </Form>
-      );
-    } else {
-      return null;
-    }
   }
 
   renderOtherSection() {
@@ -414,7 +296,7 @@ class PatientDetailModal extends React.Component {
   }
 
   render() {
-    const { currentUser, openPatientModal, currentPatientCategory, currentPatient } = this.props;
+    const { currentUser, openPatientModal, currentPatientCategory, currentPatient, studyId, submitPatientNote } = this.props;
     return (
       <Collapse dimension="width" in={openPatientModal} timeout={250} className="patients-list-form">
         <div className="form-area">
@@ -428,7 +310,7 @@ class PatientDetailModal extends React.Component {
               <i className="glyphicon glyphicon-menu-right" />
             </a>
           </div>
-          {this.renderPatientForm()}
+          <PatientDetailSection currentPatient={currentPatient} />
           <div className="column">
             <div id="carousel-example-generic" className="carousel slide popup-slider">
               <ol className="carousel-indicators">
@@ -438,7 +320,7 @@ class PatientDetailModal extends React.Component {
                 <li className={classNames({active: this.state.carousel.other})} onClick={this.toggleOtherSection}>Other</li>
               </ol>
               <div className="carousel-inner" role="listbox">
-                <NotesSection active={this.state.carousel.note} currentUser={currentUser} currentPatient={currentPatient} />
+                <NotesSection active={this.state.carousel.note} currentUser={currentUser} currentPatient={currentPatient} studyId={studyId} submit={submitPatientNote} />
                 <div className={classNames("item text", {active: this.state.carousel.text})}>
                   <section className="postarea text">
                     {currentPatient && currentPatient.textMessages ? currentPatient.textMessages.map(textMessage => (
@@ -463,17 +345,15 @@ class PatientDetailModal extends React.Component {
   }
 }
 
-export default PatientDetailModal;
-
 const mapStateToProps = createStructuredSelector({
   currentPatient: Selector.selectCurrentPatient(),
   currentPatientCategory: Selector.selectCurrentPatientCategory(),
+  studyId: Selector.selectStudyId(),
+  siteId: Selector.selectSiteId(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    submitPatientUpdate: (fields) => dispatch(submitPatientUpdate(fields)),
-    submitPatientNote: (note) => dispatch(submitPatientNote(note)),
   };
 }
 

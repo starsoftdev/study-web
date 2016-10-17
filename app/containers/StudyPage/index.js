@@ -15,7 +15,7 @@ import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
 import StudyPatients from './PatientPanel/StudyPatients';
 import * as Selector from './selectors';
-import { fetchPatients, fetchPatientCategories, fetchStudy } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId } from './actions';
 
 import './styles.less';
 
@@ -31,6 +31,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     patientCategories: PropTypes.array,
     params: PropTypes.object,
     patients: PropTypes.array,
+    setStudyId: PropTypes.func.isRequired,
+    setSiteId: PropTypes.func.isRequired,
     sources: PropTypes.array,
     site: PropTypes.object,
     study: PropTypes.object,
@@ -48,6 +50,13 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     props.fetchPatientCategories(props.params.id, props.params.siteId);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  componentWillMount() {
+    const { params, setStudyId, setSiteId } = this.props;
+    setStudyId(parseInt(params.id));
+    setSiteId(parseInt(params.siteId));
+  }
+
 
   handleSubmit(searchFilter) {
     const { params: { id, siteId } } = this.props;
@@ -128,6 +137,8 @@ function mapDispatchToProps(dispatch) {
     fetchPatients: (studyId, siteId, text, campaignId, sourceId) => dispatch(fetchPatients(studyId, siteId, text, campaignId, sourceId)),
     fetchPatientCategories: (studyId, siteId) => dispatch(fetchPatientCategories(studyId, siteId)),
     fetchStudy: (studyId, siteId) => dispatch(fetchStudy(studyId, siteId)),
+    setStudyId: (id) => dispatch(setStudyId(id)),
+    setSiteId: (id) => dispatch(setSiteId(id)),
   };
 }
 

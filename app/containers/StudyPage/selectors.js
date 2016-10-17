@@ -63,6 +63,16 @@ export const selectCurrentPatient = () => createSelector(
   }
 );
 
+export const selectStudyId = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.studyId
+);
+
+export const selectSiteId = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.siteId
+);
+
 export const selectSite = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.site
