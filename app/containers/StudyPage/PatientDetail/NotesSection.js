@@ -4,18 +4,27 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, formValueSelector } from 'redux-form';
+import { Field, formValueSelector, reduxForm, reset } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import classNames from 'classnames';
 
+import { submitPatientNote, submitDeleteNote } from '../actions';
 import Input from '../../../components/Input/index';
+import PatientNote from './PatientNote';
 
+const formName = 'PatientDetailModal.Notes';
+
+@reduxForm({ form: formName })
 class NotesSection extends React.Component {
   static propTypes = {
     active: React.PropTypes.bool.isRequired,
     currentUser: React.PropTypes.object.isRequired,
     currentPatient: React.PropTypes.object,
+    studyId: React.PropTypes.number.isRequired,
     note: React.PropTypes.string,
+    resetForm: React.PropTypes.func.isRequired,
+    submitPatientNote: React.PropTypes.func.isRequired,
+    submitDeleteNote: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -25,15 +34,16 @@ class NotesSection extends React.Component {
   }
 
   onClick() {
-    const { note } = this.props;
-    console.log(note);
+    const { currentPatient, currentUser, note, resetForm, studyId, submitPatientNote } = this.props;
+    submitPatientNote(studyId, currentPatient.id, currentUser, note);
+    resetForm();
   }
 
   renderNotes() {
-    const { currentUser, currentPatient } = this.props;
+    const { currentUser, currentPatient, submitDeleteNote } = this.props;
     if (currentPatient && currentPatient.notes) {
       return currentPatient.notes.map(note => (
-        <PatientNote currentUser={currentUser} note={note} />
+        <PatientNote key={note.id} currentUser={currentUser} note={note} currentPatient={currentPatient} submitDeleteNote={submitDeleteNote} />
       ));
     } else {
       return null;
@@ -56,16 +66,19 @@ class NotesSection extends React.Component {
   }
 }
 
-const selector = formValueSelector('patientDetailModal')
+const selector = formValueSelector(formName)
 
 const mapStateToProps = state => {
   return {
-    note: selector(state, "note"),
+    note: selector(state, 'note'),
   }
 };
 
 function mapDispatchToProps(dispatch) {
   return {
+    submitPatientNote: (studyId, patientId, currentUser, note) => dispatch(submitPatientNote(studyId, patientId, currentUser, note)),
+    submitDeleteNote: (patientId, noteId) => dispatch(submitDeleteNote(patientId, noteId)),
+    resetForm: () => dispatch(reset(formName)),
   };
 }
 

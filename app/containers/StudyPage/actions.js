@@ -18,9 +18,15 @@ import {
   FETCH_SITE_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
+  SET_STUDY_ID,
+  SET_SITE_ID,
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
   SUBMIT_PATIENT_UPDATE,
+  SUBMIT_PATIENT_NOTE,
+  SUBMIT_DELETE_NOTE,
+  SUBMIT_DELETE_NOTE_SUCCESS,
+  SUBMIT_PATIENT_TEXT,
   UPDATE_PATIENT_SUCCESS,
   ADD_PATIENT_NOTE_SUCCESS,
   ADD_PATIENT_TEXT_SUCCESS,
@@ -44,6 +50,20 @@ export function fetchPatients(studyId, siteId, text, campaignId, sourceId) {
     text,
     campaignId,
     sourceId,
+  };
+}
+
+export function setStudyId(id) {
+  return {
+    type: SET_STUDY_ID,
+    id,
+  };
+}
+
+export function setSiteId(id) {
+  return {
+    type: SET_SITE_ID,
+    id,
   };
 }
 
@@ -140,10 +160,10 @@ export function setCurrentPatientCategoryId(id) {
   };
 }
 
-export function submitPatientUpdate(id, fields) {
+export function submitPatientUpdate(patientId, fields) {
   return {
     type: SUBMIT_PATIENT_UPDATE,
-    id,
+    patientId,
     fields,
   };
 }
@@ -155,9 +175,10 @@ export function updatePatientSuccess(payload) {
   };
 }
 
-export function addPatientNoteSuccess(payload) {
+export function addPatientNoteSuccess(currentUser, payload) {
   return {
     type: ADD_PATIENT_NOTE_SUCCESS,
+    currentUser,
     payload,
   };
 }
@@ -174,6 +195,40 @@ export function submitTextBlast(patients, onClose) {
     type: SUBMIT_TEXT_BLAST,
     patients,
     onClose
+  };
+}
+
+export function submitPatientNote(studyId, patientId, currentUser, note) {
+  return {
+    type: SUBMIT_PATIENT_NOTE,
+    studyId,
+    patientId,
+    currentUser,
+    note
+  };
+}
+
+export function submitDeleteNote(patientId, noteId) {
+  return {
+    type: SUBMIT_DELETE_NOTE,
+    patientId,
+    noteId,
+  };
+}
+
+export function deletePatientNoteSuccess(noteId) {
+  return {
+    type: SUBMIT_DELETE_NOTE_SUCCESS,
+    noteId,
+  };
+}
+
+export function submitPatientText(studyId, patientId, text) {
+  return {
+    type: SUBMIT_PATIENT_TEXT,
+    studyId,
+    patientId,
+    text
   };
 }
 

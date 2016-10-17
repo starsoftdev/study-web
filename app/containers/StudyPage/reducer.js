@@ -5,6 +5,7 @@
  */
 
 import {
+  ADD_PATIENT_NOTE_SUCCESS,
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENT_DETAILS_SUCCESS,
@@ -14,8 +15,11 @@ import {
   FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
+  SET_STUDY_ID,
+  SET_SITE_ID,
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
+  SUBMIT_DELETE_NOTE_SUCCESS,
   UPDATE_PATIENT_SUCCESS,
 } from './constants';
 import _ from 'lodash';
@@ -46,11 +50,13 @@ function studyPageReducer(state = initialState, action) {
         }),
         fetchingPatients: false,
       };
+    case ADD_PATIENT_NOTE_SUCCESS:
     case FETCH_PATIENT_DETAILS_SUCCESS:
+    case SUBMIT_DELETE_NOTE_SUCCESS:
     case UPDATE_PATIENT_SUCCESS:
       return {
         ...state,
-        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, action),
+        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),
       };
     case FETCH_PATIENT_CATEGORIES_SUCCESS:
       return {
@@ -93,6 +99,16 @@ function studyPageReducer(state = initialState, action) {
           referrals: action.payload,
         },
       };
+    case SET_STUDY_ID:
+      return {
+        ...state,
+        studyId: action.id,
+      };
+    case SET_SITE_ID:
+      return {
+        ...state,
+        siteId: action.id,
+      };
     case SET_CURRENT_PATIENT_ID:
       return {
         ...state,
@@ -109,15 +125,27 @@ function studyPageReducer(state = initialState, action) {
 }
 
 // additional reducer specifically for patient categories
-function patientCategories(state, currentPatientCategoryId, action) {
+function patientCategories(state, currentPatientCategoryId, currentPatientId, action) {
   switch (action.type) {
+    case ADD_PATIENT_NOTE_SUCCESS:
+    case SUBMIT_DELETE_NOTE_SUCCESS:
+      return state.map(patientCategory => {
+        if (patientCategory.id === currentPatientCategoryId) {
+          return {
+            ...patientCategory,
+            patients: patients(patientCategory.patients, currentPatientId, action),
+          };
+        } else {
+          return patientCategory;
+        }
+      });
     case FETCH_PATIENT_DETAILS_SUCCESS:
       return state.map(patientCategory => {
         if (patientCategory.id === currentPatientCategoryId) {
           return {
             ...patientCategory,
             patients: patientCategory.patients.map(patient => {
-              if (patient.id == action.currentPatientId) {
+              if (patient.id == currentPatientId) {
                 return {
                   ...patient,
                   ...action.payload,
@@ -137,7 +165,7 @@ function patientCategories(state, currentPatientCategoryId, action) {
           return {
             ...patientCategory,
             patients: patientCategory.patients.map(patient => {
-              if (patient.id == action.currentPatientId) {
+              if (patient.id == currentPatientId) {
                 return {
                   ...patient,
                   ...action.payload,
@@ -149,6 +177,43 @@ function patientCategories(state, currentPatientCategoryId, action) {
           };
         } else {
           return patientCategory;
+        }
+      });
+    default:
+      return state;
+  }
+}
+
+function patients(state, currentPatientId, action) {
+  switch (action.type) {
+    case ADD_PATIENT_NOTE_SUCCESS:
+      return state.map(patient => {
+        if (patient.id == currentPatientId) {
+          return {
+            ...patient,
+            notes: [
+              ...patient.notes,
+              {
+                ...action.payload,
+                user: action.currentUser,
+              }
+            ],
+          };
+        } else {
+          return patient;
+        }
+      });
+    case SUBMIT_DELETE_NOTE_SUCCESS:
+      return state.map(patient => {
+        if (patient.id == currentPatientId) {
+          return {
+            ...patient,
+            notes: patient.notes.filter(note => (
+              note.id !== action.noteId
+            )),
+          };
+        } else {
+          return patient;
         }
       });
     default:

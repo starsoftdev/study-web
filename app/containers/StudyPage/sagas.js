@@ -5,11 +5,22 @@
 import { call, fork, put, take } from 'redux-saga/effects';
 import request from 'utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
-import { FETCH_PATIENTS, FETCH_PATIENT_DETAILS, FETCH_PATIENT_CATEGORIES, FETCH_STUDY, SUBMIT_PATIENT_UPDATE, SUBMIT_TEXT_BLAST, SUBMIT_PATIENT_IMPORT, SUBMIT_ADD_PATIENT, SUBMIT_PATIENT_NOTE, SUBMIT_PATIENT_TEXT } from './constants';
+import { FETCH_PATIENTS,
+  FETCH_PATIENT_DETAILS,
+  FETCH_PATIENT_CATEGORIES,
+  FETCH_STUDY,
+  SUBMIT_PATIENT_UPDATE,
+  SUBMIT_TEXT_BLAST,
+  SUBMIT_PATIENT_IMPORT,
+  SUBMIT_ADD_PATIENT,
+  SUBMIT_PATIENT_NOTE,
+  SUBMIT_DELETE_NOTE,
+  SUBMIT_PATIENT_TEXT,
+} from './constants';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
-import { campaignsFetched, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, updatePatientSuccess, addPatientNoteSuccess, addPatientTextSuccess } from './actions';
+import { campaignsFetched, deletePatientNoteSuccess, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, updatePatientSuccess, addPatientNoteSuccess, addPatientTextSuccess } from './actions';
 
 // Bootstrap sagas
 export default [
@@ -171,21 +182,31 @@ function* fetchPatientDetails() {
         },
         {
           relation: 'notes',
-          include: {
-            relation: 'user',
-            scope: {
-              fields: ['id', 'firstName', 'lastName', 'profileImageURL'],
-            }
-          }
+          scope: {
+            fields: ['id', 'note', 'createdAt', 'user_id'],
+            include: [
+              {
+                relation: 'user',
+                scope: {
+                  fields: ['id', 'firstName', 'lastName', 'profileImageURL'],
+                }
+              },
+            ],
+          },
         },
         {
           relation: 'source',
         },
         {
           relation: 'textMessages',
-          include: {
-            relation: 'twilioTextMessage'
-          }
+          scope: {
+            fields: ['id', 'note', 'createdAt', 'user_id'],
+            include: [
+              {
+                relation: 'twilioTextMessage'
+              }
+            ],
+          },
         },
       ]
     })
@@ -210,13 +231,13 @@ function* fetchPatientDetails() {
 function* submitPatientUpdate() {
   while(true) {
     // listen for the SUBMIT_PATIENT_UPDATE action
-    const { id, fields } = yield take(SUBMIT_PATIENT_UPDATE);
+    const { patientId, fields } = yield take(SUBMIT_PATIENT_UPDATE);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
     }
     try {
-      const requestURL = `${API_URL}/patients/${id}?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patients/${patientId}?access_token=${authToken}`;
       const response = yield call(request, requestURL, {
         method: 'PUT',
         body: JSON.stringify(fields)
@@ -232,13 +253,13 @@ function* submitPatientUpdate() {
 function* submitPatientNote() {
   while(true) {
     // listen for the SUBMIT_PATIENT_NOTE action
-    const { id, studyId, note } = yield take(SUBMIT_PATIENT_NOTE);
+    const { patientId, studyId, currentUser, note } = yield take(SUBMIT_PATIENT_NOTE);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
     }
     try {
-      const requestURL = `${API_URL}/patients/${id}/notes?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patients/${patientId}/notes?access_token=${authToken}`;
       const response = yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
@@ -246,7 +267,28 @@ function* submitPatientNote() {
           note
         })
       });
-      yield put(addPatientNoteSuccess(response));
+      yield put(addPatientNoteSuccess(currentUser, response));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while adding a patient note. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
+function* submitDeleteNote() {
+  while(true) {
+    // listen for the SUBMIT_DELETE_NOTE action
+    const { patientId, noteId } = yield take(SUBMIT_DELETE_NOTE);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+    try {
+      const requestURL = `${API_URL}/patients/${patientId}/notes/${noteId}?access_token=${authToken}`;
+      yield call(request, requestURL, {
+        method: 'DELETE',
+      });
+      yield put(deletePatientNoteSuccess(noteId));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding a patient note. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -366,6 +408,7 @@ export function* fetchStudySaga() {
     yield fork(submitPatientImport);
     yield fork(submitAddPatient);
     yield fork(submitPatientNote);
+    yield fork(submitDeleteNote);
     yield fork(submitPatientText);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
