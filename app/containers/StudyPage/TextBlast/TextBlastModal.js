@@ -4,14 +4,21 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { Field, formValueSelector, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import Form from 'react-bootstrap/lib/Form';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
-import CheckboxElement from './CheckboxElement';
+import Checkbox from '../../../components/Input/Checkbox';
+import Input from '../../../components/Input/index';
 import * as Selector from '../selectors';
 import { submitTextBlast } from '../actions';
 
+const formName = 'TextBlastModal';
+
+@reduxForm({
+  form: formName,
+})
 class TextBlastModal extends React.Component {
   static propTypes = {
     show: React.PropTypes.bool.isRequired,
@@ -30,10 +37,12 @@ class TextBlastModal extends React.Component {
       categories: {},
       selectAllSources: false,
       sources: {},
+      addPatients: [],
       patients: []
     };
     this.selectCategory = this.selectCategory.bind(this);
     this.selectSource = this.selectSource.bind(this);
+    this.renderPatient = this.renderPatient.bind(this);
     for (let patientCategory of props.patientCategories) {
       this.state.categories[patientCategory.id] = false;
     }
@@ -88,12 +97,28 @@ class TextBlastModal extends React.Component {
     }
     this.setState(state);
   }
+
+  renderPatient() {
+    return (
+      <div className="patient">
+        <span className="name">Alan Jensen</span>
+        <a className="btn-remove">
+          <i className="icomoon-icon_trash" />
+        </a>
+      </div>
+    );
+  }
   
   render() {
     const { onClose, patientCategories, sources, submitTextBlast, ...props} = this.props;
     return (
       <Modal
-        {...props}
+        show={props.show}
+        role={props.role}
+        bsClass={props.bsClass}
+        dialogClassName={props.dialogClassName}
+        className={props.className}
+        style={props.style}
         id="text-blast"
         dialogComponentClass={CenteredModal}
         backdrop
@@ -133,14 +158,22 @@ class TextBlastModal extends React.Component {
                     <div className="category">
                       <strong className="heading">Category</strong>
                       <ul className="check-list list-unstyled">
-                        <CheckboxElement checked={this.state.selectAllCategories} name={"All"} onClick={() => {
+                        <li>
+                          <Field name="category" type="checkbox" component={Checkbox} className="pull-left" input={{defaultValue: this.state.selectAllCategories, checked: this.state.selectAllCategories}} onChange={() => {
                           this.selectCategory("All");
-                        }} />
+                        }}
+                          />
+                          All
+                        </li>
                         {patientCategories.map(patientCategory => {
                           return (
-                            <CheckboxElement key={patientCategory.id} checked={this.state.categories[patientCategory.id]} name={patientCategory.name} onClick={() => {
-                            this.selectCategory(patientCategory);
-                          }} />
+                            <li>
+                              <Field key={patientCategory.id} name="category" type="checkbox" component={Checkbox} className="pull-left" input={{defaultValue: this.state.categories[patientCategory.id], checked: this.state.categories[patientCategory.id]}} onChange={() => {
+                              this.selectCategory(patientCategory);
+                            }}
+                              />
+                              {patientCategory.name}
+                            </li>
                           );
                         })}
                       </ul>
@@ -148,46 +181,28 @@ class TextBlastModal extends React.Component {
                     <div className="category">
                       <strong className="heading">SOURCE</strong>
                       <ul className="check-list list-unstyled">
-                        <CheckboxElement checked={this.state.selectAllSources} name={"All"} onClick={() => {
+                        <li>
+                          <Field name="source" type="checkbox" component={Checkbox} className="pull-left" input={{defaultValue: this.state.selectAllSources, checked: this.state.selectAllSources}} onChange={() => {
                           this.selectSource("All");
-                        }} />
+                        }}
+                          />
+                          All
+                        </li>
                         {sources.map(source => {
                           return (
-                            <CheckboxElement key={source.id} checked={this.state.sources[source.id]} name={source.type} onClick={() => {
+                            <li>
+                              <Field key={source.id} name="source" type="checkbox" component={Checkbox} className="pull-left" input={{defaultValue: this.state.sources[source.id], checked: this.state.sources[source.id]}} onChange={() => {
                               this.selectSource(source);
-                            }} />
+                            }}
+                              />
+                              {source.type}
+                            </li>
                           );
                         })}
                       </ul>
                     </div>
-                    <div className="selected-patients-list"></div>
-                    <div>
-                      <div>
-                        <span className="name">Alan Jensen</span>
-                        <a className="btn-remove">
-                          <i className="icomoon-icon_trash" />
-                        </a>
-                      </div>
-                      <div data-patient="patient2-new-patient">
-                        <span className="name">Eugene Simpson</span>
-                        <a href="#" className="btn-remove">
-                          <i className="icomoon-icon_trash" /></a>
-                      </div>
-                      <div data-patient="patient2-not-qualified">
-                        <span className="name">Katy Perry</span>
-                        <a href="#" className="btn-remove">
-                          <i className="icomoon-icon_trash" /></a>
-                      </div>
-                      <div data-patient="patient2-scheduled">
-                        <span className="name">Hamish Labatt</span>
-                        <a href="#" className="btn-remove">
-                          <i className="icomoon-icon_trash" /></a>
-                      </div>
-                      <div data-patient="patient2-consented">
-                        <span className="name">Thomas Morgan</span>
-                        <a href="#" className="btn-remove">
-                          <i className="icomoon-icon_trash" /></a>
-                      </div>
+                    <div className="selected-patients-list">
+                      {this.renderPatient()}
                     </div>
                   </div>
                 </div>
@@ -196,16 +211,16 @@ class TextBlastModal extends React.Component {
                 <div className="scroll-holder jcf--scrollable">
                   <div className="sub-holder">
                     <div className="subject-field">
-                      <input type="text" className="form-control recivers" placeholder="To" disabled="" />
-                      <span className="emails-counter" data-emails-counter2="">
-              <span className="counter">0</span>
-              <span className="text">Patients</span>
-              <a href="#" className="btn-close">
-              <i className="icomoon-icon_close" />
-              </a>
-              </span>
+                      <input type="text" className="form-control recivers" placeholder="To" disabled />
+                      <span className="emails-counter">
+                        <span className="counter">0</span>
+                        <span className="text">Patients</span>
+                        <a className="btn-close">
+                          <i className="icomoon-icon_close" />
+                        </a>
+                      </span>
                     </div>
-                    <textarea placeholder="Type a message..." className="form-control" data-required="true" />
+                    <textarea placeholder="Type a message..." className="form-control" required />
                     <div className="footer">
                       <input type="submit" value="submit" className="btn btn-default pull-right" />
                     </div>
