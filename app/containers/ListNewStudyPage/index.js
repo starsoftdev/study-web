@@ -15,13 +15,13 @@ import { selectListNewStudyFormValues, selectListNewStudyFormError } from 'compo
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
 import _, { find } from 'lodash';
 import { submitForm, getAvailPhoneNumbers } from 'containers/ListNewStudyPage/actions';
-import { saveSite } from 'containers/SitesUsersPage/actions';
 
 import Helmet from 'react-helmet';
 import {
   fetchSites,
   fetchIndications,
   fetchLevels,
+  saveSite,
 } from 'containers/App/actions';
 import {
   selectSiteLocations,
