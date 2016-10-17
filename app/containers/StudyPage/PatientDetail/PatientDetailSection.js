@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, formValueSelector, reduxForm } from 'redux-form';
+import { change, Field, formValueSelector, reduxForm } from 'redux-form';
 
 import Form from 'react-bootstrap/lib/Form';
 import Checkbox from '../../../components/Input/Checkbox';
@@ -45,11 +45,13 @@ const validate = values => {
 })
 class PatientDetailSection extends React.Component {
   static propTypes = {
+    change: React.PropTypes.func.isRequired,
     currentPatient: React.PropTypes.object,
     email: React.PropTypes.object,
     phone: React.PropTypes.object,
     submitting: React.PropTypes.bool.isRequired,
     submitPatientUpdate: React.PropTypes.func.isRequired,
+    unsubscribed: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -77,7 +79,6 @@ class PatientDetailSection extends React.Component {
 
   changePatientEmail(event) {
     const { currentPatient, email, submitPatientUpdate } = this.props;
-    console.log(email);
     if (!email.error) {
       submitPatientUpdate(currentPatient.id, {
         email: event.target.value,
@@ -94,10 +95,12 @@ class PatientDetailSection extends React.Component {
     }
   }
 
-  changePatientUnsubscribe(event) {
-    const { currentPatient, submitPatientUpdate } = this.props;
+  changePatientUnsubscribe() {
+    const { change, currentPatient, submitPatientUpdate, unsubscribed } = this.props;
+    console.log(unsubscribed);
+    change('unsubscribed', !unsubscribed);
     submitPatientUpdate(currentPatient.id, {
-      unsubscribed: event.target.value,
+      unsubscribed: !unsubscribed,
     });
   }
 
@@ -154,8 +157,8 @@ class PatientDetailSection extends React.Component {
           <div className="field-row">
             <strong className="label">&nbsp;</strong>
             <div className="field">
-              <Field name="unsubscribe" type="checkbox" component={Checkbox} className="pull-left" input={{defaultValue: currentPatient.unsubscribed, checked: currentPatient.unsubscribed}} onChange={this.changePatientUnsubscribe} />
-              <label htmlFor="unsubscribe">Unsubscribe</label>
+              <Field name="unsubscribed" id="unsubscribed" type="checkbox" component={Checkbox} className="pull-left" input={{defaultValue: currentPatient.unsubscribed, checked: currentPatient.unsubscribed}} onChange={this.changePatientUnsubscribe} />
+              <label htmlFor="unsubscribed">Unsubscribe</label>
             </div>
           </div>
         </Form>
@@ -172,12 +175,14 @@ const mapStateToProps = state => {
   return {
     email: selector(state, 'email'),
     phone: selector(state, 'phone'),
+    unsubscribed: selector(state, 'unsubscribed'),
   }
 };
 
 function mapDispatchToProps(dispatch) {
   return {
     submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),
+    change: (field, value) => dispatch(change(formName, field, value)),
   };
 }
 

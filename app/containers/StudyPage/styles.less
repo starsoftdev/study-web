@@ -660,36 +660,26 @@
 .selected-patients-list {
   margin: 0 -25px;
   position: relative;
-}
-[data-patient^='patient2-'],
-[data-patient^='patient-'] {
-  display: none;
-  position: relative;
-  background: #f1f1f1;
-  border: solid #808080;
-  border-width: 0 0 1px;
-  padding: 15px 50px 15px 25px;
-}
-[data-patient^='patient2-']:first-child,
-[data-patient^='patient-']:first-child {
-  border-width: 1px 0;
-}
-[data-patient^='patient2-'].active,
-[data-patient^='patient-'].active {
-  display: block;
-}
-[data-patient^='patient2-'] .btn-remove,
-[data-patient^='patient-'] .btn-remove {
-  top: 50%;
-  right: 15px;
-  color: #636363;
-  position: absolute;
-  transform: translate(0, -50%);
-  -ms-transform: translate(0, -50%);
-}
-[data-patient^='patient2-'] .btn-remove:hover,
-[data-patient^='patient-'] .btn-remove:hover {
-  color: #999;
+  .patient {
+    position: relative;
+    background: #f1f1f1;
+    border: solid #808080;
+    border-width: 0 0 1px;
+    padding: 15px 50px 15px 25px;
+    &:first-child {
+      border-width: 1px 0;
+    }
+    .btn-remove {
+      top: 50%;
+      right: 15px;
+      color: #636363;
+      position: absolute;
+      .transform(translate(0, -50%));
+      &:hover {
+        color: #999;
+      }
+    }
+  }
 }
 
 .patients-list-form {
