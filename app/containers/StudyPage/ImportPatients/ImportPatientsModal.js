@@ -106,7 +106,7 @@ const mapStateToProps = (state) => (
 
 function mapDispatchToProps(dispatch) {
   return {
-    submitPatientImport: (file, onClose) => dispatch(submitPatientImport(file, onClose)),
+    submitPatientImport: (studyId, file, onClose) => dispatch(submitPatientImport(studyId, file, onClose)),
   };
 }
 
