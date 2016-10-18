@@ -9,7 +9,6 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from 'containers/App/selectors';
-import { setItem } from 'utils/localStorage';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';

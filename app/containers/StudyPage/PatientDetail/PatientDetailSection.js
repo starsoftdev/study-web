@@ -65,12 +65,10 @@ class PatientDetailSection extends React.Component {
   }
 
   changePatientPhone(event) {
-    const { currentPatient, phone, submitPatientUpdate, error } = this.props;
-    if (!error) {
-      submitPatientUpdate(currentPatient.id, {
-        phone: event.target.value,
-      });
-    }
+    const { currentPatient, submitPatientUpdate } = this.props;
+    submitPatientUpdate(currentPatient.id, {
+      phone: event.target.value,
+    });
   }
 
   changePatientUnsubscribe() {
@@ -82,8 +80,7 @@ class PatientDetailSection extends React.Component {
   }
 
   render() {
-    const { currentPatient, submitting, error } = this.props;
-    console.log(error);
+    const { currentPatient, submitting } = this.props;
     let patientPhone;
     if (currentPatient) {
       patientPhone = formatPhone(currentPatient.phone);
@@ -143,21 +140,20 @@ class PatientDetailSection extends React.Component {
           </div>
         </Form>
       );
-    } else {
-      return null;
     }
+    return null;
   }
 }
 
 const selector = formValueSelector(formName);
 
-const mapStateToProps = state => {
-  return {
+const mapStateToProps = state => (
+  {
     email: selector(state, 'email'),
     phone: selector(state, 'phone'),
     unsubscribed: selector(state, 'unsubscribed'),
-  };
-};
+  }
+);
 
 function mapDispatchToProps(dispatch) {
   return {

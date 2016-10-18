@@ -23,10 +23,6 @@ class FilterStudyPatientsForm extends Component {
     loading: false,
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {
       campaignOptions,
@@ -40,7 +36,8 @@ class FilterStudyPatientsForm extends Component {
         <StudyActionButtons />
         <div className="search-area pull-left">
           <div className="field">
-            <Field component={Input}
+            <Field
+              component={Input}
               type="search"
               name="search"
               className="keyword-search"
@@ -52,8 +49,9 @@ class FilterStudyPatientsForm extends Component {
           </div>
         </div>
         <div className="select pull-left">
-          <Field component={ReactSelect}
+          <Field
             name="campaign"
+            component={ReactSelect}
             className="field"
             options={campaignOptions}
             disabled={submitting || loading}
@@ -61,8 +59,9 @@ class FilterStudyPatientsForm extends Component {
           />
         </div>
         <div className="select pull-left">
-          <Field component={ReactSelect}
+          <Field
             name="source"
+            component={ReactSelect}
             className="field"
             options={sourceOptions}
             disabled={submitting || loading}

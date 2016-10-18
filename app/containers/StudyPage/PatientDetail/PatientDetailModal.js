@@ -290,13 +290,12 @@ class PatientDetailModal extends React.Component {
           </div>
         </div>
       );
-    } else {
-      return null;
     }
+    return null;
   }
 
   render() {
-    const { currentUser, openPatientModal, currentPatientCategory, currentPatient, studyId, submitPatientNote } = this.props;
+    const { currentUser, openPatientModal, currentPatientCategory, currentPatient, studyId } = this.props;
     return (
       <Collapse dimension="width" in={openPatientModal} timeout={250} className="patients-list-form">
         <div className="form-area">
@@ -320,7 +319,7 @@ class PatientDetailModal extends React.Component {
                 <li className={classNames({ active: this.state.carousel.other })} onClick={this.toggleOtherSection}>Other</li>
               </ol>
               <div className="carousel-inner" role="listbox">
-                <NotesSection active={this.state.carousel.note} currentUser={currentUser} currentPatient={currentPatient} studyId={studyId} submit={submitPatientNote} />
+                <NotesSection active={this.state.carousel.note} currentUser={currentUser} currentPatient={currentPatient} studyId={studyId} />
                 <div className={classNames('item text', { active: this.state.carousel.text })}>
                   <section className="postarea text">
                     {currentPatient && currentPatient.textMessages ? currentPatient.textMessages.map(textMessage => (
@@ -352,9 +351,9 @@ const mapStateToProps = createStructuredSelector({
   siteId: Selector.selectSiteId(),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-  };
-}
+const mapDispatchToProps = () => (
+  {
+  }
+);
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientDetailModal);

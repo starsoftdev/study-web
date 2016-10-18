@@ -14,6 +14,8 @@ class PatientNote extends React.Component {
     submitDeleteNote: React.PropTypes.func.isRequired,
   };
 
+  componentDidMount() {
+  }
 
   render() {
     const { currentPatient, currentUser, note, submitDeleteNote } = this.props;
@@ -24,9 +26,12 @@ class PatientNote extends React.Component {
         </div>
         <div className="post-content">
           <p>{note.note}</p>
-          <a className="btn-trash" onClick={() => {
-            submitDeleteNote(currentPatient.id, note.id);
-          }}>
+          <a
+            className="btn-trash"
+            onClick={() => {
+              submitDeleteNote(currentPatient.id, note.id);
+            }}
+          >
             <i className="icomoon-icon_trash" />
           </a>
         </div>

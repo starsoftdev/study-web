@@ -39,14 +39,17 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         patientCategories: state.patientCategories.map(patientCategory => {
-          const tempCategory = _.find(action.payload, category => {
-            return category.id === patientCategory.id;
-          });
-          if (tempCategory) {
-            return tempCategory;
+          // try to find the category in the payload
+          let tempCategory = _.find(action.payload, category => (
+            category.id === patientCategory.id
+          ));
+          // if it's not found, clear the patient list
+          if (!tempCategory) {
+            tempCategory = patientCategory;
+            tempCategory.patients = [];
           }
-          patientCategory.patients = [];
-          return patientCategory;
+          // return the payload as the mapping
+          return tempCategory;
         }),
         fetchingPatients: false,
       };
@@ -135,9 +138,8 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
             ...patientCategory,
             patients: patients(patientCategory.patients, currentPatientId, action),
           };
-        } else {
-          return patientCategory;
         }
+        return patientCategory;
       });
     case FETCH_PATIENT_DETAILS_SUCCESS:
       return state.map(patientCategory => {
@@ -145,19 +147,17 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
           return {
             ...patientCategory,
             patients: patientCategory.patients.map(patient => {
-              if (patient.id == currentPatientId) {
+              if (patient.id === currentPatientId) {
                 return {
                   ...patient,
                   ...action.payload,
                 };
-              } else {
-                return patient;
               }
+              return patient;
             }),
           };
-        } else {
-          return patientCategory;
         }
+        return patientCategory;
       });
     case UPDATE_PATIENT_SUCCESS:
       return state.map(patientCategory => {
@@ -165,19 +165,17 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
           return {
             ...patientCategory,
             patients: patientCategory.patients.map(patient => {
-              if (patient.id == currentPatientId) {
+              if (patient.id === currentPatientId) {
                 return {
                   ...patient,
                   ...action.payload,
                 };
-              } else {
-                return patient;
               }
+              return patient;
             }),
           };
-        } else {
-          return patientCategory;
         }
+        return patientCategory;
       });
     default:
       return state;
@@ -188,7 +186,7 @@ function patients(state, currentPatientId, action) {
   switch (action.type) {
     case ADD_PATIENT_NOTE_SUCCESS:
       return state.map(patient => {
-        if (patient.id == currentPatientId) {
+        if (patient.id === currentPatientId) {
           return {
             ...patient,
             notes: [
@@ -199,22 +197,20 @@ function patients(state, currentPatientId, action) {
               },
             ],
           };
-        } else {
-          return patient;
         }
+        return patient;
       });
     case SUBMIT_DELETE_NOTE_SUCCESS:
       return state.map(patient => {
-        if (patient.id == currentPatientId) {
+        if (patient.id === currentPatientId) {
           return {
             ...patient,
             notes: patient.notes.filter(note => (
               note.id !== action.noteId
             )),
           };
-        } else {
-          return patient;
         }
+        return patient;
       });
     default:
       return state;

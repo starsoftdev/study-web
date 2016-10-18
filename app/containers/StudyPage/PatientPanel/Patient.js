@@ -40,18 +40,20 @@ class Patient extends React.Component {
           </div>
         </a>
       );
-    } else {
-      return null;
     }
+    return null;
   }
 
   render() {
     const { isDragging, connectDragSource, category, currentPatientId, onPatientClick, patient } = this.props;
     const patientPhone = formatPhone(patient.phone);
     return (
-      <li className={classNames({ 'patient-selected': patient.id === currentPatientId })} onClick={() => {
-        onPatientClick(category, patient);
-      }}>
+      <li
+        className={classNames({ 'patient-selected': patient.id === currentPatientId })}
+        onClick={() => {
+          onPatientClick(category, patient);
+        }}
+      >
         <a className="top">
           <strong className="name">
             <span className="first-name">{patient.firstName}</span>

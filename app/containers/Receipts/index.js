@@ -4,13 +4,12 @@
  *
  */
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer } from 'react-sticky';
 
-// import LoadingSpinner from 'components/LoadingSpinner';
 import {
   getReceipts,
   createPDF,
@@ -24,13 +23,10 @@ import {
   selectCurrentUser,
   selectEvents,
 } from 'containers/App/selectors';
-
-// import selectReceipts from './selectors';
-// import ProposalsTable from 'components/ProposalsTable';
 import ProposalsForm from 'components/ProposalsForm';
 import './styles.less';
 
-export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class Receipts extends React.Component {
   static propTypes = {
     siteLocations: PropTypes.array,
     unsubscribeFromAll: PropTypes.func,
@@ -41,7 +37,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     location: PropTypes.any,
     proposals: PropTypes.any,
     currentUser: PropTypes.any,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
