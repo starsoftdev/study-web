@@ -4,7 +4,6 @@
 
 import { call, fork, put, take } from 'redux-saga/effects';
 import request from 'utils/request';
-import upLoadRequest from 'utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
 import { FETCH_PATIENTS,
   FETCH_PATIENT_DETAILS,
@@ -171,7 +170,7 @@ function* fetchPatients(studyId, siteId, text, campaignId, sourceId) {
 function* fetchPatientDetails() {
   while (true) {
     // listen for the FETCH_PATIENT_DETAILS action
-    const { categoryId, patientId } = yield take(FETCH_PATIENT_DETAILS);
+    const { patientId } = yield take(FETCH_PATIENT_DETAILS);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -218,9 +217,9 @@ function* fetchPatientDetails() {
       });
       const parsedResponse = Object.assign({}, response);
       delete parsedResponse.textMessages;
-      parsedResponse.textMessages = response.textMessages.map(textMessage => {
-        return textMessage.twilioTextMessage;
-      });
+      parsedResponse.textMessages = response.textMessages.map(textMessage => (
+        textMessage.twilioTextMessage
+      ));
       yield put(patientDetailsFetched(parsedResponse));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while fetching patient information. Please try again later.');

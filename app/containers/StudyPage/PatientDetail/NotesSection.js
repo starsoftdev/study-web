@@ -45,9 +45,8 @@ class NotesSection extends React.Component {
       return currentPatient.notes.map(note => (
         <PatientNote key={note.id} currentUser={currentUser} note={note} currentPatient={currentPatient} submitDeleteNote={submitDeleteNote} />
       ));
-    } else {
-      return null;
     }
+    return null;
   }
 
   render() {
@@ -68,11 +67,11 @@ class NotesSection extends React.Component {
 
 const selector = formValueSelector(formName);
 
-const mapStateToProps = state => {
-  return {
+const mapStateToProps = state => (
+  {
     note: selector(state, 'note'),
-  };
-};
+  }
+);
 
 function mapDispatchToProps(dispatch) {
   return {

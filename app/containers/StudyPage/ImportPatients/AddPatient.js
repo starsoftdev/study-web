@@ -86,9 +86,9 @@ const mapStateToProps = createStructuredSelector({
 
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-  };
-}
+const mapDispatchToProps = (dispatch) => (
+  {
+  }
+);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddPatient);

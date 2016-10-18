@@ -13,10 +13,6 @@ import { submitPatientImport } from '../actions';
 
 @reduxForm({ form: 'importPatients' })
 class ImportPatientsModal extends React.Component {
-  constructor(props) {
-    super(props);
-    this.uploadFile = this.uploadFile.bind(this);
-  }
   static propTypes = {
     show: React.PropTypes.bool.isRequired,
     onHide: React.PropTypes.func.isRequired,
@@ -25,13 +21,18 @@ class ImportPatientsModal extends React.Component {
     submitPatientImport: React.PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.uploadFile = this.uploadFile.bind(this);
+  }
+
   componentDidMount() {
   }
 
   uploadFile(event) {
     const { onHide, submitPatientImport, studyId } = this.props;
     // if the file is a csv
-    if (event.target.files[0].type == 'text/csv') {
+    if (event.target.files[0].type === 'text/csv') {
       const file = event.target.files[0];
       submitPatientImport(studyId, file, onHide);
     } else {
@@ -97,11 +98,11 @@ class ImportPatientsModal extends React.Component {
     );
   }
 }
-const mapStateToProps = (state) => {
-  return {
+const mapStateToProps = (state) => (
+  {
     studyId: state.studyPage.studyId,
-  };
-};
+  }
+);
 
 function mapDispatchToProps(dispatch) {
   return {
