@@ -17,10 +17,12 @@ import {
   selectChat
 } from 'containers/PatientDatabasePage/selectors';
 import {
-  selectSocket
+  selectSocket,
+  selectProcessingStatus
 } from 'containers/GlobalNotifications/selectors';
 import {
   fetchStudyPatientMessages,
+  setProcessingStatus,
 } from 'containers/GlobalNotifications/actions';
 
 import './styles.less';
@@ -32,6 +34,7 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
     isSaving: PropTypes.any,
     handleSubmit: PropTypes.func,
     fetchStudyPatientMessages: PropTypes.func,
+    setProcessingStatus: PropTypes.func,
     socket: PropTypes.any,
   };
 
@@ -50,27 +53,36 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
   }
 
   fetchStudyPatientMessages(props) {
+    const scrollable = this.refs.scrollable;
+    const inputContainer = this.refs.inputContainer;
     this.props.fetchStudyPatientMessages({
       studyId: props.chat.details.study_id,
       patientId:  props.chat.details.id,
       cb: (err, data) => {
         if (!err) {
           if (this.state.twilioMessages !== data.messages) {
-            this.setState({ twilioMessages: data.messages });
+            this.setState({ twilioMessages: data.messages }, () =>{
+              scrollable.scrollTop = scrollable.scrollHeight;
+              inputContainer.childNodes[0].childNodes[0].value = '';
+            });
           }
         } else {
           console.log(err);
         }
+        this.props.setProcessingStatus({status: false});
       }
     })
   }
 
   componentWillReceiveProps(newProps) {
-    // console.log('componentWillReceiveProps', newProps);
+    console.log('componentWillReceiveProps', newProps);
     this.props.socket.on('notifyMessage', () => {
       console.log('notifyMessage');
       this.fetchStudyPatientMessages(newProps);
     })
+  }
+
+  componentDidUpdate() {
   }
 
   render() {
@@ -94,11 +106,11 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
           <fieldset>
             <div className="row">
               <div className="col-md-12">
-                <div className="form-group messages" id="mess-container">
+                <div className="form-group messages" id="mess-container" ref="scrollable">
                   {listMessages}
                 </div>
                 <div className="row form-group">
-                  <div className="field col-sm-12">
+                  <div className="field col-sm-12" ref="inputContainer">
                     <Field
                       name="body"
                       component={Input}
@@ -127,11 +139,13 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
 const mapStateToProps = createStructuredSelector({
   chat: selectChat(),
   socket: selectSocket(),
+  isSaving: selectProcessingStatus(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchStudyPatientMessages: (payload) => dispatch(fetchStudyPatientMessages(payload)),
+    setProcessingStatus: (payload) => dispatch(setProcessingStatus(payload)),
   };
 }
 

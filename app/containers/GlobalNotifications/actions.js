@@ -20,6 +20,7 @@ import {
   RECEIVE_NOTIFICATION,
   FETCH_STUDY_PATIENT_MESSAGES,
   SEND_STUDY_PATIENT_MESSAGES,
+  SET_PROCESSING_STATUS,
 } from './constants';
 
 export function subscribeToPageEvent(payload) {
@@ -69,6 +70,13 @@ export function sendStudyPatientMessages(payload, cb) {
     type: SEND_STUDY_PATIENT_MESSAGES,
     payload,
     cb,
+  };
+}
+
+export function setProcessingStatus(payload) {
+  return {
+    type: SET_PROCESSING_STATUS,
+    payload,
   };
 }
 

@@ -103,7 +103,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
           </button>
         </td>
         <td className="open-chat">
-          <i className="fa fa-envelope" aria-hidden="true" onClick={this.openChat} />
+          <i className="fa fa-comments" aria-hidden="true" onClick={this.openChat} />
         </td>
       </tr>
     );
