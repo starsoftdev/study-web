@@ -232,9 +232,10 @@ export function submitPatientText(studyId, patientId, text) {
   };
 }
 
-export function submitPatientImport(file, onClose) {
+export function submitPatientImport(studyId, file, onClose) {
   return {
     type: SUBMIT_PATIENT_IMPORT,
+    studyId,
     file,
     onClose
   };
