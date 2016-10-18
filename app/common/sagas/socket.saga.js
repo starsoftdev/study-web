@@ -17,6 +17,8 @@ import {
   UNSUBSCRIBE_FROM_PAGE_EVENT,
   UNSUBSCRIBE_FROM_ALL,
   SUBSCRIBE_TO_CHAT_EVENT,
+  FETCH_STUDY_PATIENT_MESSAGES,
+  SEND_STUDY_PATIENT_MESSAGES,
   FETCH_NOTIFICATIONS,
   FETCH_UNREAD_NOTIFICATIONS_COUNT,
 } from 'containers/GlobalNotifications/constants';
@@ -31,6 +33,8 @@ export function* GlobalNotificationsSaga() {
   yield fork(unsubscribeFromPageEvent);
   yield fork(unsubscribeFromAllEvents);
   yield fork(subscribeToChatEvent);
+  yield fork(fetchStudyPatientMessages);
+  yield fork(sendStudyPatientMessages);
   yield fork(takeLatest, FETCH_NOTIFICATIONS, fetchNotifications);
   yield fork(takeLatest, FETCH_UNREAD_NOTIFICATIONS_COUNT, fetchUnreadNotificationsCount);
 }
@@ -118,6 +122,34 @@ export function* unsubscribeFromAllEvents() {
       // console.log('unsubscribeFromAllEvents', payload);
       socket.emit('unsubscribeFromAll', { events: payload.events }, (err, data) => {
         payload.cb(err, data);
+      });
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
+export function* fetchStudyPatientMessages() {
+  while (true) {
+    const { payload } = yield take(FETCH_STUDY_PATIENT_MESSAGES);
+    try {
+      socket.emit('getStudyPatientMessages', { studyId: payload.studyId, patientId: payload.patientId }, (err, data) => {
+        payload.cb(err, data);
+      });
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
+export function* sendStudyPatientMessages() {
+  while (true) {
+    const { payload, cb } = yield take(SEND_STUDY_PATIENT_MESSAGES);
+    try {
+      socket.emit('saveTwilioTextMessages', payload, (err, data) => {
+        cb(err, data);
       });
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');

@@ -60,13 +60,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   componentWillReceiveProps(nextProps) {
     // console.log('componentWillReceiveProps', nextProps);
     if (nextProps.proposals) {
-      /*for (const proposal of nextProps.proposals) {
-        proposal.selected = _.find(this.props.selected, proposal);
-      }
-      this.setState({
-        proposals: nextProps.proposals,
-        filteredProposals: null,
-      });*/
       this.setState({
         filteredProposals: null,
       });
@@ -239,9 +232,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   }
 
   rangeSort(range) {
-    //console.log('rangeSort');
     let proposalsInRange = []
-    const proposalsArr = this.state.proposals;
+    const proposalsArr = this.props.proposals;
     for (const proposal of proposalsArr) {
       const created = new Date(proposal.created).getTime();
       const endDate = new Date(range.endDate).getTime();
@@ -332,7 +324,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
   render() {
     const state = this.state;
-    const proposalsArr =  this.props.proposals || state.filteredProposals;
+    const proposalsArr = state.filteredProposals || this.props.proposals;
     let proposals = [];
     let heads = [];
 

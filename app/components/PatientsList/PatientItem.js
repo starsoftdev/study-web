@@ -25,16 +25,30 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     studyPatientCategory: PropTypes.object,
     selectedPatient: PropTypes.object,
     fetchPatient: PropTypes.func,
+    openChat: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
 
     this.editPatient = this.editPatient.bind(this);
+    this.openChat = this.openChat.bind(this);
   }
 
   editPatient() {
     this.props.fetchPatient(this.props.id);
+  }
+
+  openChat() {
+    const props = this.props;
+    props.openChat({
+      id: props.id,
+      source_id: props.source_id,
+      phone: props.phone,
+      study_id: props.studyPatientCategory.study_id,
+      firstName: props.firstName,
+      lastName: props.lastName,
+    });
   }
 
   currentPatientIsBeingFetched() {
@@ -87,6 +101,9 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
               : <span>Edit</span>
             }
           </button>
+        </td>
+        <td className="open-chat">
+          <i className="fa fa-envelope" aria-hidden="true" onClick={this.openChat} />
         </td>
       </tr>
     );

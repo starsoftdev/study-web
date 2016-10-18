@@ -23,3 +23,6 @@ export const CLEAR_SELECTED_PATIENT             = 'PatientDatabasePage/CLEAR_SEL
 export const SAVE_PATIENT                       = 'PatientDatabasePage/SAVE_PATIENT';
 export const SAVE_PATIENT_SUCCESS               = 'PatientDatabasePage/SAVE_PATIENT_SUCCESS';
 export const SAVE_PATIENT_ERROR                 = 'PatientDatabasePage/SAVE_PATIENT_ERROR';
+
+export const INIT_CHAT                          = 'PatientDatabasePage/INIT_CHAT';
+export const DISABLE_CHAT                       = 'PatientDatabasePage/DISABLE_CHAT';
