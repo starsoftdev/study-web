@@ -10,6 +10,7 @@ import {
   connectionEstablished,
   fetchNotificationsSucceeded,
   fetchUnreadNotificationsCountSucceeded,
+  setProcessingStatus,
 } from 'containers/GlobalNotifications/actions';
 import {
   SET_SOCKET_CONNECTION,
@@ -48,7 +49,6 @@ export function* setSocketConnection() {
         const requestURL = `${SOCKET_URL}/${payload.nsp}`;
         const nsp = window.io(requestURL);
         socket = nsp;
-        // const socket = yield call(connect.bind(this, payload))
         yield put(connectionEstablished(nsp));
         yield put(toastrActions.success('', 'Connected to socket.'));
         payload.cb(null, socket);
@@ -65,7 +65,6 @@ export function* subscribeToPageEvent() {
   while (true) {
     const { payload } = yield take(SUBSCRIBE_TO_PAGE_EVENT);
     try {
-      // console.log('subscribeToPageEvent', payload)
       socket.emit(
         'subscribeToPageEvent',
         {
@@ -104,7 +103,6 @@ export function* unsubscribeFromPageEvent() {
   while (true) {
     const { payload } = yield take(UNSUBSCRIBE_FROM_PAGE_EVENT);
     try {
-      // console.log('unsubscribeFromPageEvent', payload)
       socket.emit('unsubscribeCurrent', { events: payload.events, params: payload.raw }, (err, data) => {
         payload.cb(err, data);
       });
@@ -119,7 +117,6 @@ export function* unsubscribeFromAllEvents() {
   while (true) {
     const { payload } = yield take(UNSUBSCRIBE_FROM_ALL);
     try {
-      // console.log('unsubscribeFromAllEvents', payload);
       socket.emit('unsubscribeFromAll', { events: payload.events }, (err, data) => {
         payload.cb(err, data);
       });
@@ -134,6 +131,7 @@ export function* fetchStudyPatientMessages() {
   while (true) {
     const { payload } = yield take(FETCH_STUDY_PATIENT_MESSAGES);
     try {
+      yield put(setProcessingStatus({status: true}));
       socket.emit('getStudyPatientMessages', { studyId: payload.studyId, patientId: payload.patientId }, (err, data) => {
         payload.cb(err, data);
       });
@@ -148,6 +146,7 @@ export function* sendStudyPatientMessages() {
   while (true) {
     const { payload, cb } = yield take(SEND_STUDY_PATIENT_MESSAGES);
     try {
+      yield put(setProcessingStatus({status: true}));
       socket.emit('saveTwilioTextMessages', payload, (err, data) => {
         cb(err, data);
       });
