@@ -23,7 +23,7 @@ class TextBlastModal extends React.Component {
   static propTypes = {
     onClose: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
-    patientCategories: React.PropTypes.array.isRequired,
+    patientCategories: React.PropTypes.array,
     show: React.PropTypes.bool.isRequired,
     sources: React.PropTypes.array.isRequired,
     submitTextBlast: React.PropTypes.func.isRequired,
