@@ -3,23 +3,23 @@
  */
 
 import React from 'react';
+import classNames from 'classnames';
 import moment from 'moment-timezone';
 
 class PatientText extends React.Component {
   static propTypes = {
-    currentPatient: React.PropTypes.object.isRequired,
     currentUser: React.PropTypes.object.isRequired,
-    textMessage: React.PropTypes.object.isRequired,
+    textMessage: React.PropTypes.object,
   };
 
   componentDidMount() {
   }
 
   render() {
-    const { currentUser, currentPatient, textMessage } = this.props;
+    const { currentUser, textMessage } = this.props;
     if (textMessage) {
       return (
-        <div className="post-msg">
+        <div className={classNames('post-msg', { reply: !textMessage.user })}>
           <div className="img-holder">
             <img role="presentation" />
           </div>
