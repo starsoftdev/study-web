@@ -87,10 +87,10 @@ class PatientDetailModal extends React.Component {
   }
 
   renderOtherSection() {
-    const{ currentUser, currentPatient } = this.props;
+    const { currentUser, currentPatient } = this.props;
     if (currentPatient) {
       return (
-        <div className={classNames("item others", {active: this.state.carousel.other})}>
+        <div className={classNames('item others', { active: this.state.carousel.other })}>
           <div className="item-holder">
             <div className="dates">
               <strong className="title">Dates</strong>
@@ -314,25 +314,25 @@ class PatientDetailModal extends React.Component {
           <div className="column">
             <div id="carousel-example-generic" className="carousel slide popup-slider">
               <ol className="carousel-indicators">
-                <li className={classNames({active: this.state.carousel.note})} onClick={this.toggleNoteSection}>Note</li>
-                <li className={classNames({active: this.state.carousel.text})} onClick={this.toggleTextSection}>Text</li>
-                <li className={classNames({active: this.state.carousel.email})} onClick={this.toggleEmailSection}>Email</li>
-                <li className={classNames({active: this.state.carousel.other})} onClick={this.toggleOtherSection}>Other</li>
+                <li className={classNames({ active: this.state.carousel.note })} onClick={this.toggleNoteSection}>Note</li>
+                <li className={classNames({ active: this.state.carousel.text })} onClick={this.toggleTextSection}>Text</li>
+                <li className={classNames({ active: this.state.carousel.email })} onClick={this.toggleEmailSection}>Email</li>
+                <li className={classNames({ active: this.state.carousel.other })} onClick={this.toggleOtherSection}>Other</li>
               </ol>
               <div className="carousel-inner" role="listbox">
                 <NotesSection active={this.state.carousel.note} currentUser={currentUser} currentPatient={currentPatient} studyId={studyId} submit={submitPatientNote} />
-                <div className={classNames("item text", {active: this.state.carousel.text})}>
+                <div className={classNames('item text', { active: this.state.carousel.text })}>
                   <section className="postarea text">
                     {currentPatient && currentPatient.textMessages ? currentPatient.textMessages.map(textMessage => (
                       <PatientText currentPatient={currentPatient} currentUser={currentUser} textMessage={textMessage} />
-                    )): null}
+                    )) : null}
                   </section>
                   <div className="textarea">
                     <textarea className="form-control" placeholder="Type a message..." />
                     <button className="btn btn-default">Send</button>
                   </div>
                 </div>
-                <div className={classNames("item emails-info", {active: this.state.carousel.email})}>
+                <div className={classNames('item emails-info', { active: this.state.carousel.email })}>
                   Coming soon
                 </div>
                 {this.renderOtherSection()}

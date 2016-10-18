@@ -7,7 +7,7 @@ const PNF = libPhoneNumber.PhoneNumberFormat;
 const phoneUtil = libPhoneNumber.PhoneNumberUtil.getInstance();
 
 export function formatPhone(phone) {
-  let patientPhone
+  let patientPhone;
   const phoneNumber = phoneUtil.parse(phone, '');
   const countryCode = phoneNumber.getCountryCode();
   if (countryCode === 1) {

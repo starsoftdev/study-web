@@ -194,7 +194,7 @@ export function submitTextBlast(patients, onClose) {
   return {
     type: SUBMIT_TEXT_BLAST,
     patients,
-    onClose
+    onClose,
   };
 }
 
@@ -204,7 +204,7 @@ export function submitPatientNote(studyId, patientId, currentUser, note) {
     studyId,
     patientId,
     currentUser,
-    note
+    note,
   };
 }
 
@@ -228,7 +228,7 @@ export function submitPatientText(studyId, patientId, text) {
     type: SUBMIT_PATIENT_TEXT,
     studyId,
     patientId,
-    text
+    text,
   };
 }
 
@@ -237,7 +237,7 @@ export function submitPatientImport(studyId, file, onClose) {
     type: SUBMIT_PATIENT_IMPORT,
     studyId,
     file,
-    onClose
+    onClose,
   };
 }
 
@@ -245,6 +245,6 @@ export function submitAddPatient(patient, onClose) {
   return {
     type: SUBMIT_ADD_PATIENT,
     patient,
-    onClose
+    onClose,
   };
 }

@@ -41,10 +41,10 @@ class FilterStudyPatientsForm extends Component {
         <div className="search-area pull-left">
           <div className="field">
             <Field component={Input}
-                   type="search"
-                   name="search"
-                   className="keyword-search"
-                   placeholder="Search Patients"
+              type="search"
+              name="search"
+              className="keyword-search"
+              placeholder="Search Patients"
             />
             <label htmlFor="search">
               <i className="icomoon-icon_search2" />
@@ -53,20 +53,20 @@ class FilterStudyPatientsForm extends Component {
         </div>
         <div className="select pull-left">
           <Field component={ReactSelect}
-                 name="campaign"
-                 className="field"
-                 options={campaignOptions}
-                 disabled={submitting || loading}
-                 placeholder="Select Campaign"
+            name="campaign"
+            className="field"
+            options={campaignOptions}
+            disabled={submitting || loading}
+            placeholder="Select Campaign"
           />
         </div>
         <div className="select pull-left">
           <Field component={ReactSelect}
-                 name="source"
-                 className="field"
-                 options={sourceOptions}
-                 disabled={submitting || loading}
-                 placeholder="Select Source"
+            name="source"
+            className="field"
+            options={sourceOptions}
+            disabled={submitting || loading}
+            placeholder="Select Source"
           />
         </div>
       </form>

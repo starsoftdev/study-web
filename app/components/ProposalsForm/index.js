@@ -49,7 +49,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
   componentWillReceiveProps() {}
 
   handleChange(which, payload) {
-    //console.log('handleChange', which, payload);
+    // console.log('handleChange', which, payload);
     this.setState({
       [which] : payload,
     });
@@ -74,9 +74,9 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
 
   changeRange(ev) {
     ev.preventDefault();
-    const range  = this.state.predefined
+    const range = this.state.predefined;
     this.props.changeRange(range);
-    this.hidePopup()
+    this.hidePopup();
   }
 
   search(ev) {
@@ -141,7 +141,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
               options={siteLocations}
               className="field"
             />
-            {/*onChange={selectSite}*/}
+            {/* onChange={selectSite}*/}
           </div>
         </div>
 

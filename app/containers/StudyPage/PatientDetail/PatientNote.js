@@ -13,12 +13,12 @@ class PatientNote extends React.Component {
     note: React.PropTypes.object.isRequired,
     submitDeleteNote: React.PropTypes.func.isRequired,
   };
-  
+
 
   render() {
     const { currentPatient, currentUser, note, submitDeleteNote } = this.props;
     return (
-      <div className={classNames("post-msg", {reply: note.user.id === currentUser.id})}>
+      <div className={classNames('post-msg', { reply: note.user.id === currentUser.id })}>
         <div className="img-holder">
           <img role="presentation" src={note.user.profileImageURL} />
         </div>

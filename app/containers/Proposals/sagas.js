@@ -24,7 +24,7 @@ const serializeParams = (obj) => {
     }
   });
   return str.join('&');
-}
+};
 
 // Individual exports for testing
 export function* proposalSaga() {
@@ -84,10 +84,10 @@ export function* getPdf() {
       const requestURL = `${API_URL}/proposals/getPDF`;
       const fileName = (payload.data.files.length === 1) ? payload.data.files[0].fileName : null;
       const authToken = getItem('auth_token');
-      let archiveName = payload.data.archive;
-      let params = {
+      const archiveName = payload.data.archive;
+      const params = {
         access_token: authToken,
-      }
+      };
 
       if (fileName) {
         params.fileName = fileName;

@@ -255,18 +255,18 @@ export default function createRoutes(store) {
       name: 'requestProposalPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-        System.import('containers/RequestProposalPage/reducer'),
-        System.import('containers/RequestProposalPage/sagas'),
-        System.import('containers/RequestProposalPage'),
+          System.import('containers/RequestProposalPage/reducer'),
+          System.import('containers/RequestProposalPage/sagas'),
+          System.import('containers/RequestProposalPage'),
         ]);
 
         const renderRoute = loadModule(cb);
 
         importModules.then(([reducer, sagas, component]) => {
-        injectReducer('requestProposalPage', reducer.default);
-        injectSagas(sagas.default);
-        renderRoute(component);
-      });
+          injectReducer('requestProposalPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
 
         importModules.catch(errorLoading);
       },
