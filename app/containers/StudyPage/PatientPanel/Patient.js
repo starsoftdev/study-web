@@ -49,7 +49,7 @@ class Patient extends React.Component {
     const { isDragging, connectDragSource, category, currentPatientId, onPatientClick, patient } = this.props;
     const patientPhone = formatPhone(patient.phone);
     return (
-      <li className={classNames({"patient-selected": patient.id === currentPatientId})} onClick={() => {
+      <li className={classNames({ 'patient-selected': patient.id === currentPatientId })} onClick={() => {
         onPatientClick(category, patient);
       }}>
         <a className="top">

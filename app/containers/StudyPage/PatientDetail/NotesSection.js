@@ -53,7 +53,7 @@ class NotesSection extends React.Component {
   render() {
     const { active } = this.props;
     return (
-      <div className={classNames("item note", {active: active})}>
+      <div className={classNames('item note', { active })}>
         <section className="postarea notes">
           {this.renderNotes()}
         </section>
@@ -66,12 +66,12 @@ class NotesSection extends React.Component {
   }
 }
 
-const selector = formValueSelector(formName)
+const selector = formValueSelector(formName);
 
 const mapStateToProps = state => {
   return {
     note: selector(state, 'note'),
-  }
+  };
 };
 
 function mapDispatchToProps(dispatch) {

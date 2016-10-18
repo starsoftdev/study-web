@@ -140,37 +140,37 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
       searchBy : null,
       range : payload,
     }, () => {
-      //console.log('state', this.state);
+      // console.log('state', this.state);
     });
   }
 
   selectSite(val) {
     const { siteLocations } = this.props;
-    const site  = siteLocations[val-1]
+    const site = siteLocations[val - 1];
     this.setState({
       range : null,
       searchBy : null,
-      site
+      site,
     });
   }
 
   search(value) {
-    const searchBy = (value.length) ? value : null
+    const searchBy = (value.length) ? value : null;
     this.setState({
       site : null,
       range : null,
-      searchBy
+      searchBy,
     });
   }
 
   createPdf() {
     if (this.selectedProposal) {
-      this.props.createPDF(this.selectedProposal)
+      this.props.createPDF(this.selectedProposal);
     }
   }
 
   render() {
-    const { processPDF } = this.state
+    const { processPDF } = this.state;
     return (
       <StickyContainer className="container-fluid">
         <Helmet title="Proposals - StudyKIK" />

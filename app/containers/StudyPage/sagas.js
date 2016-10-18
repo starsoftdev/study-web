@@ -47,8 +47,8 @@ function* fetchStudyDetails() {
         scope: {
           where: {
             id: siteId,
-          }
-        }
+          },
+        },
       },
     ],
   });
@@ -151,7 +151,7 @@ function* fetchPatients(studyId, siteId, text, campaignId, sourceId) {
       requestURL += `&sourceId=${sourceId}`;
     }
     if (text) {
-      requestURL += `&text=${encodeURIComponent(text)}`
+      requestURL += `&text=${encodeURIComponent(text)}`;
     }
     const response = yield call(request, requestURL, {
       method: 'GET',
@@ -169,7 +169,7 @@ function* fetchPatients(studyId, siteId, text, campaignId, sourceId) {
 }
 
 function* fetchPatientDetails() {
-  while(true) {
+  while (true) {
     // listen for the FETCH_PATIENT_DETAILS action
     const { categoryId, patientId } = yield take(FETCH_PATIENT_DETAILS);
     const authToken = getItem('auth_token');
@@ -190,7 +190,7 @@ function* fetchPatientDetails() {
                 relation: 'user',
                 scope: {
                   fields: ['id', 'firstName', 'lastName', 'profileImageURL'],
-                }
+                },
               },
             ],
           },
@@ -204,23 +204,23 @@ function* fetchPatientDetails() {
             fields: ['id', 'note', 'createdAt', 'user_id'],
             include: [
               {
-                relation: 'twilioTextMessage'
-              }
+                relation: 'twilioTextMessage',
+              },
             ],
           },
         },
-      ]
-    })
+      ],
+    });
     try {
       const requestURL = `${API_URL}/patients/${patientId}?access_token=${authToken}&filter=${filter}`;
       const response = yield call(request, requestURL, {
         method: 'GET',
       });
-      let parsedResponse = Object.assign({}, response);
+      const parsedResponse = Object.assign({}, response);
       delete parsedResponse.textMessages;
       parsedResponse.textMessages = response.textMessages.map(textMessage => {
         return textMessage.twilioTextMessage;
-      })
+      });
       yield put(patientDetailsFetched(parsedResponse));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while fetching patient information. Please try again later.');
@@ -230,7 +230,7 @@ function* fetchPatientDetails() {
 }
 
 function* submitPatientUpdate() {
-  while(true) {
+  while (true) {
     // listen for the SUBMIT_PATIENT_UPDATE action
     const { patientId, fields } = yield take(SUBMIT_PATIENT_UPDATE);
     const authToken = getItem('auth_token');
@@ -241,7 +241,7 @@ function* submitPatientUpdate() {
       const requestURL = `${API_URL}/patients/${patientId}?access_token=${authToken}`;
       const response = yield call(request, requestURL, {
         method: 'PUT',
-        body: JSON.stringify(fields)
+        body: JSON.stringify(fields),
       });
       yield put(updatePatientSuccess(response));
     } catch (e) {
@@ -252,7 +252,7 @@ function* submitPatientUpdate() {
 }
 
 function* submitPatientNote() {
-  while(true) {
+  while (true) {
     // listen for the SUBMIT_PATIENT_NOTE action
     const { patientId, studyId, currentUser, note } = yield take(SUBMIT_PATIENT_NOTE);
     const authToken = getItem('auth_token');
@@ -265,8 +265,8 @@ function* submitPatientNote() {
         method: 'POST',
         body: JSON.stringify({
           study_id: studyId,
-          note
-        })
+          note,
+        }),
       });
       yield put(addPatientNoteSuccess(currentUser, response));
     } catch (e) {
@@ -277,7 +277,7 @@ function* submitPatientNote() {
 }
 
 function* submitDeleteNote() {
-  while(true) {
+  while (true) {
     // listen for the SUBMIT_DELETE_NOTE action
     const { patientId, noteId } = yield take(SUBMIT_DELETE_NOTE);
     const authToken = getItem('auth_token');
@@ -298,7 +298,7 @@ function* submitDeleteNote() {
 }
 
 function* submitPatientText() {
-  while(true) {
+  while (true) {
     // listen for the SUBMIT_PATIENT_TEXT action
     const { id, studyId, message } = yield take(SUBMIT_PATIENT_TEXT);
     const authToken = getItem('auth_token');
@@ -311,8 +311,8 @@ function* submitPatientText() {
         method: 'POST',
         body: JSON.stringify({
           study_id: studyId,
-          message
-        })
+          message,
+        }),
       });
       yield put(addPatientTextSuccess(response));
     } catch (e) {
@@ -323,7 +323,7 @@ function* submitPatientText() {
 }
 
 function* submitTextBlast() {
-  while(true) {
+  while (true) {
     // listen for the SUBMIT_TEXT_BLAST action
     const { patients, onClose } = yield take(SUBMIT_TEXT_BLAST);
     const authToken = getItem('auth_token');
@@ -334,7 +334,7 @@ function* submitTextBlast() {
       const requestURL = `${API_URL}/textMessages?access_token=${authToken}`;
       yield call(request, requestURL, {
         method: 'POST',
-        body: JSON.stringify(patients)
+        body: JSON.stringify(patients),
       });
       onClose();
       yield put(toastrActions.success('Text Blast', 'Text blast submitted successfully!'));
@@ -346,7 +346,7 @@ function* submitTextBlast() {
 }
 
 function* submitPatientImport() {
-  while(true) {
+  while (true) {
     // listen for the SUBMIT_PATIENT_IMPORT action
     const { studyId, file, onClose } = yield take(SUBMIT_PATIENT_IMPORT);
     const authToken = getItem('auth_token');
@@ -360,7 +360,7 @@ function* submitPatientImport() {
       yield call(request, requestURL, {
         useDefaultContentType: "multipart/form-data",
         method: 'POST',
-        body: formData
+        body: formData,
       });
       onClose();
       yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
@@ -372,7 +372,7 @@ function* submitPatientImport() {
 }
 
 function* submitAddPatient() {
-  while(true) {
+  while (true) {
     // listen for the SUBMIT_ADD_PATIENT action
     const { studyId, file, onClose } = yield take(SUBMIT_ADD_PATIENT);
     const authToken = getItem('auth_token');
@@ -383,7 +383,7 @@ function* submitAddPatient() {
       const requestURL = `${API_URL}/studies/${studyId}/patients?access_token=${authToken}`;
       yield call(request, requestURL, {
         method: 'POST',
-        body: JSON.stringify(file)
+        body: JSON.stringify(file),
       });
       onClose();
       yield put(toastrActions.success('Add Patient', 'Patient added successfully!'));

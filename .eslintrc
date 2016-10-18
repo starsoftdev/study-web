@@ -53,6 +53,8 @@
     "no-constant-condition": 0,
     "no-console": 1,
     "no-use-before-define": 0,
+    "no-useless-escape": 0,
+    "no-shadow": 0,
     "prefer-template": 2,
     "react/jsx-filename-extension": 0,
     "react/jsx-no-target-blank": 0,

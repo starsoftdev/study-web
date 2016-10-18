@@ -38,15 +38,15 @@ class TextBlastModal extends React.Component {
       selectAllSources: false,
       sources: {},
       addPatients: [],
-      patients: []
+      patients: [],
     };
     this.selectCategory = this.selectCategory.bind(this);
     this.selectSource = this.selectSource.bind(this);
     this.renderPatient = this.renderPatient.bind(this);
-    for (let patientCategory of props.patientCategories) {
+    for (const patientCategory of props.patientCategories) {
       this.state.categories[patientCategory.id] = false;
     }
-    for (let source of props.sources) {
+    for (const source of props.sources) {
       this.state.sources[source.id] = false;
     }
   }
@@ -55,10 +55,10 @@ class TextBlastModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    for (let patientCategory of nextProps.patientCategories) {
+    for (const patientCategory of nextProps.patientCategories) {
       this.state.categories[patientCategory.id] = false;
     }
-    for (let source of nextProps.sources) {
+    for (const source of nextProps.sources) {
       this.state.sources[source.id] = false;
     }
   }
@@ -66,14 +66,14 @@ class TextBlastModal extends React.Component {
 
   selectCategory(category) {
     const { patientCategories } = this.props;
-    let state = {
+    const state = {
       categories: {
-        ...this.state.categories
+        ...this.state.categories,
       },
-    }
+    };
     if (category === 'All') {
       state.selectAllCategories = !this.state.selectAllCategories;
-      for (let category of patientCategories) {
+      for (const category of patientCategories) {
         state.categories[category.id] = state.selectAllCategories;
       }
     } else {
@@ -84,12 +84,12 @@ class TextBlastModal extends React.Component {
 
   selectSource(source) {
     const { sources } = this.props;
-    let state = {
+    const state = {
       sources: {},
-    }
+    };
     if (source === 'All') {
       state.selectAllSources = !this.state.selectAllSources;
-      for (let source of sources) {
+      for (const source of sources) {
         state.sources[source.id] = state.selectAllSources;
       }
     } else {
@@ -108,9 +108,9 @@ class TextBlastModal extends React.Component {
       </div>
     );
   }
-  
+
   render() {
-    const { onClose, patientCategories, sources, submitTextBlast, ...props} = this.props;
+    const { onClose, patientCategories, sources, submitTextBlast, ...props } = this.props;
     return (
       <Modal
         show={props.show}
@@ -159,19 +159,17 @@ class TextBlastModal extends React.Component {
                       <strong className="heading">Category</strong>
                       <ul className="check-list list-unstyled">
                         <li>
-                          <Field name="category" type="checkbox" component={Checkbox} className="pull-left" input={{defaultValue: this.state.selectAllCategories, checked: this.state.selectAllCategories}} onChange={() => {
-                          this.selectCategory("All");
-                        }}
-                          />
+                          <Field name="category" type="checkbox" component={Checkbox} className="pull-left" input={{ defaultValue: this.state.selectAllCategories, checked: this.state.selectAllCategories }} onChange={() => {
+                            this.selectCategory('All');
+                          }} />
                           All
                         </li>
                         {patientCategories.map(patientCategory => {
                           return (
                             <li>
-                              <Field key={patientCategory.id} name="category" type="checkbox" component={Checkbox} className="pull-left" input={{defaultValue: this.state.categories[patientCategory.id], checked: this.state.categories[patientCategory.id]}} onChange={() => {
-                              this.selectCategory(patientCategory);
-                            }}
-                              />
+                              <Field key={patientCategory.id} name="category" type="checkbox" component={Checkbox} className="pull-left" input={{ defaultValue: this.state.categories[patientCategory.id], checked: this.state.categories[patientCategory.id] }} onChange={() => {
+                                this.selectCategory(patientCategory);
+                              }} />
                               {patientCategory.name}
                             </li>
                           );
@@ -182,19 +180,17 @@ class TextBlastModal extends React.Component {
                       <strong className="heading">SOURCE</strong>
                       <ul className="check-list list-unstyled">
                         <li>
-                          <Field name="source" type="checkbox" component={Checkbox} className="pull-left" input={{defaultValue: this.state.selectAllSources, checked: this.state.selectAllSources}} onChange={() => {
-                          this.selectSource("All");
-                        }}
-                          />
+                          <Field name="source" type="checkbox" component={Checkbox} className="pull-left" input={{ defaultValue: this.state.selectAllSources, checked: this.state.selectAllSources }} onChange={() => {
+                            this.selectSource('All');
+                          }} />
                           All
                         </li>
                         {sources.map(source => {
                           return (
                             <li>
-                              <Field key={source.id} name="source" type="checkbox" component={Checkbox} className="pull-left" input={{defaultValue: this.state.sources[source.id], checked: this.state.sources[source.id]}} onChange={() => {
-                              this.selectSource(source);
-                            }}
-                              />
+                              <Field key={source.id} name="source" type="checkbox" component={Checkbox} className="pull-left" input={{ defaultValue: this.state.sources[source.id], checked: this.state.sources[source.id] }} onChange={() => {
+                                this.selectSource(source);
+                              }} />
                               {source.type}
                             </li>
                           );

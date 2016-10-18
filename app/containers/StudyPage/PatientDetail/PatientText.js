@@ -10,7 +10,7 @@ class PatientText extends React.Component {
     currentUser: React.PropTypes.object.isRequired,
     textMessage: React.PropTypes.object.isRequired,
   };
-  
+
 
   render() {
     const { currentUser, currentPatient, textMessage } = this.props;

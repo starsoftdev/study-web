@@ -25,7 +25,7 @@ import {
 import _ from 'lodash';
 
 const initialState = {
-  stats: {}
+  stats: {},
 };
 
 function studyPageReducer(state = initialState, action) {
@@ -40,8 +40,8 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         patientCategories: state.patientCategories.map(patientCategory => {
           const tempCategory = _.find(action.payload, category => {
-            return category.id === patientCategory.id
-          })
+            return category.id === patientCategory.id;
+          });
           if (tempCategory) {
             return tempCategory;
           }
@@ -153,7 +153,7 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
               } else {
                 return patient;
               }
-            })
+            }),
           };
         } else {
           return patientCategory;
@@ -173,7 +173,7 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
               } else {
                 return patient;
               }
-            })
+            }),
           };
         } else {
           return patientCategory;
@@ -196,7 +196,7 @@ function patients(state, currentPatientId, action) {
               {
                 ...action.payload,
                 user: action.currentUser,
-              }
+              },
             ],
           };
         } else {

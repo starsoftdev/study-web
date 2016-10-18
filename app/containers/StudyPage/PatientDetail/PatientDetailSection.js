@@ -7,41 +7,19 @@ import { connect } from 'react-redux';
 import { change, Field, formValueSelector, reduxForm } from 'redux-form';
 
 import Form from 'react-bootstrap/lib/Form';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
 import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/index';
 import { submitPatientUpdate } from '../actions';
 import { formatPhone } from '../helper/functions';
+import formValidator from './validator';
 
 const formName = 'PatientDetailModal.Detail';
 
-const validate = values => {
-  const errors = {}
-  if (!values.firstName) {
-    errors.firstName = 'Required'
-  } else if (values.firstName.length > 0) {
-    errors.firstName = 'First name is required.'
-  }
-  if (!values.lastName) {
-    errors.lastName = 'Required'
-  } else if (values.lastName.length > 0) {
-    errors.lastName = 'First name is required.'
-  }
-  if (!values.phone) {
-    errors.phone = 'Required'
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.phone)) {
-    errors.phone = 'Invalid phone number'
-  }
-  if (!values.email) {
-    errors.email = 'Required'
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address'
-  }
-  return errors
-}
 
 @reduxForm({
   form: formName,
-  validate
+  validate: formValidator,
 })
 class PatientDetailSection extends React.Component {
   static propTypes = {
@@ -87,8 +65,8 @@ class PatientDetailSection extends React.Component {
   }
 
   changePatientPhone(event) {
-    const { currentPatient, phone, submitPatientUpdate } = this.props;
-    if (!phone.error) {
+    const { currentPatient, phone, submitPatientUpdate, error } = this.props;
+    if (!error) {
       submitPatientUpdate(currentPatient.id, {
         phone: event.target.value,
       });
@@ -97,7 +75,6 @@ class PatientDetailSection extends React.Component {
 
   changePatientUnsubscribe() {
     const { change, currentPatient, submitPatientUpdate, unsubscribed } = this.props;
-    console.log(unsubscribed);
     change('unsubscribed', !unsubscribed);
     submitPatientUpdate(currentPatient.id, {
       unsubscribed: !unsubscribed,
@@ -105,8 +82,9 @@ class PatientDetailSection extends React.Component {
   }
 
   render() {
-    const { currentPatient, submitting } = this.props;
-    let patientPhone
+    const { currentPatient, submitting, error } = this.props;
+    console.log(error);
+    let patientPhone;
     if (currentPatient) {
       patientPhone = formatPhone(currentPatient.phone);
       return (
@@ -125,7 +103,7 @@ class PatientDetailSection extends React.Component {
                     id="new-patient-first-name"
                     placeholder="First Name"
                     isDisabled={submitting}
-                    input={{required: true, defaultValue: currentPatient.firstName, onChange: this.changePatientFirstName}}
+                    input={{ required: true, defaultValue: currentPatient.firstName, onChange: this.changePatientFirstName }}
                   />
                 </div>
                 <div className="col pull-right">
@@ -136,28 +114,30 @@ class PatientDetailSection extends React.Component {
                     id="new-patient-last-name"
                     placeholder="Last Name"
                     isDisabled={submitting}
-                    input={{required: true, defaultValue: currentPatient.lastName, onChange: this.changePatientLastName}}
+                    input={{ required: true, defaultValue: currentPatient.lastName, onChange: this.changePatientLastName }}
                   />
                 </div>
               </div>
             </div>
           </div>
           <div className="field-row">
-            <strong className="label required"><label htmlFor="new-patient-email">email</label></strong>
+            <strong className="label"><label htmlFor="new-patient-email">email</label></strong>
             <div className="field">
-              <Field type="email" name="email" component={Input} id="new-patient-email" input={{defaultValue: currentPatient.email, onChange: this.changePatientEmail}} />
+              <Field type="email" name="email" component={Input} id="email" input={{ defaultValue: currentPatient.email, onChange: this.changePatientEmail }} />
             </div>
           </div>
           <div className="field-row">
             <strong className="label required"><label htmlFor="new-patient-phone">Phone</label></strong>
             <div className="field">
-              <Field type="tel" name="phone" component={Input} id="new-patient-phone" input={{defaultValue: patientPhone, onChange: this.changePatientPhone}} />
+              <FormGroup >
+                <Field type="tel" name="phone" component={Input} id="phone" input={{ defaultValue: patientPhone, onChange: this.changePatientPhone }} />
+              </FormGroup>
             </div>
           </div>
           <div className="field-row">
             <strong className="label">&nbsp;</strong>
             <div className="field">
-              <Field name="unsubscribed" id="unsubscribed" type="checkbox" component={Checkbox} className="pull-left" input={{defaultValue: currentPatient.unsubscribed, checked: currentPatient.unsubscribed}} onChange={this.changePatientUnsubscribe} />
+              <Field name="unsubscribed" id="unsubscribed" type="checkbox" component={Checkbox} className="pull-left" input={{ defaultValue: currentPatient.unsubscribed, checked: currentPatient.unsubscribed }} onChange={this.changePatientUnsubscribe} />
               <label htmlFor="unsubscribed">Unsubscribe</label>
             </div>
           </div>
@@ -169,14 +149,14 @@ class PatientDetailSection extends React.Component {
   }
 }
 
-const selector = formValueSelector(formName)
+const selector = formValueSelector(formName);
 
 const mapStateToProps = state => {
   return {
     email: selector(state, 'email'),
     phone: selector(state, 'phone'),
     unsubscribed: selector(state, 'unsubscribed'),
-  }
+  };
 };
 
 function mapDispatchToProps(dispatch) {

@@ -75,7 +75,7 @@ class StudyPatients extends React.Component {
     const { currentUser, patientCategories } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
-        <div className={classNames("patients-list-area", {"form-active": this.state.openPatientModal})}>
+        <div className={classNames('patients-list-area', { 'form-active': this.state.openPatientModal })}>
           <nav className="nav-status">
             <ul className="list-inline">
               {patientCategories.map(patientCategory => {
@@ -102,7 +102,7 @@ const mapDispatchToProps = (dispatch) => {
     setCurrentPatientId: (id) => dispatch(setCurrentPatientId(id)),
     setCurrentPatientCategoryId: (id) => dispatch(setCurrentPatientCategoryId(id)),
   };
-}
+};
 
 // StudyPatients = DragDropContext(HTML5Backend)(StudyPatients);
 export default connect(mapStateToProps, mapDispatchToProps)(StudyPatients);

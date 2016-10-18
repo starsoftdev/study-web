@@ -28,7 +28,6 @@ function Input({
 }) {
   const hasError = touched && error && !active;
   const errorClass = hasError ? 'has-error' : '';
-
   const tooltip = (
     <Tooltip
       id={`${name}-tooltip`}
