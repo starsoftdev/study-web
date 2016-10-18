@@ -3,22 +3,44 @@
  */
 
 import React from 'react';
+import { connect } from 'react-redux';
+import {Field, reduxForm} from "redux-form"
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import CenteredModal from '../../../components/CenteredModal/index';
+import Input from '../../../components/Input/index';
+import { submitPatientImport } from '../actions';
 
+@reduxForm({ form: 'importPatients' })
 class ImportPatientsModal extends React.Component {
+  constructor (props) {
+    super (props)
+    this.uploadFile = this.uploadFile.bind(this)
+  }
   static propTypes = {
     show: React.PropTypes.bool.isRequired,
     onHide: React.PropTypes.func.isRequired,
     toggleAddPatient: React.PropTypes.func.isRequired,
+    studyId: React.PropTypes.number,
+    submitPatientImport: React.PropTypes.func.isRequired
   };
 
   componentDidMount() {
   }
 
+  uploadFile (event) {
+    const {onHide, submitPatientImport, studyId} = this.props
+    //if the file is a csv
+    if (event.target.files[0].type == "text/csv") {
+      const file = event.target.files[0]
+      submitPatientImport(studyId, file, onHide)
+    } else {
+      //return error
+    }
+  }
   render() {
     const { onHide, toggleAddPatient, ...props } = this.props;
+
     return (
       <Modal
         {...props}
@@ -39,6 +61,7 @@ class ImportPatientsModal extends React.Component {
           <Form className="upload-patient-info">
             <div className="table">
               <label className="table-cell" htmlFor="upload-patient">
+
                 <i className="icomoon-arrow_up_alt" />
                 <span className="text">Upload Patients</span>
                 <span className="jcf-file">
@@ -46,7 +69,14 @@ class ImportPatientsModal extends React.Component {
                   <span className="jcf-upload-button">
                     <span className="jcf-button-content">Choose file</span>
                   </span>
-                  <input type="file" id="upload-patient" className="jcf-real-element" />
+                  <Field
+                    type="file"
+                    name="uploadFile"
+                    component={Input}
+                    className="jcf-real-element"
+                    id="upload-patient"
+                    input={{required: false,  onChange: this.uploadFile}}
+                  />
                 </span>
               </label>
             </div>
@@ -67,6 +97,16 @@ class ImportPatientsModal extends React.Component {
     );
   }
 }
+const mapStateToProps =(state) => {
+  return {
+    studyId: state.studyPage.studyId
+  }
+}
 
-export default ImportPatientsModal;
+function mapDispatchToProps(dispatch) {
+  return {
+    submitPatientImport: (file, onClose) => dispatch(submitPatientImport(file, onClose)),
+  };
+}
 
+export default connect(mapStateToProps, mapDispatchToProps)(ImportPatientsModal);

@@ -4,6 +4,7 @@
 
 import { call, fork, put, take } from 'redux-saga/effects';
 import request from 'utils/request';
+import upLoadRequest from 'utils/request'
 import { getItem, removeItem } from 'utils/localStorage';
 import { FETCH_PATIENTS,
   FETCH_PATIENT_DETAILS,
@@ -349,14 +350,17 @@ function* submitPatientImport() {
     // listen for the SUBMIT_PATIENT_IMPORT action
     const { studyId, file, onClose } = yield take(SUBMIT_PATIENT_IMPORT);
     const authToken = getItem('auth_token');
+    const formData = new FormData()
+    formData.append("file", file)
     if (!authToken) {
       return;
     }
     try {
-      const requestURL = `${API_URL}/studies/${studyId}/patients?access_token=${authToken}`;
+      const requestURL = `${API_URL}/studies/${studyId}/importPatients?access_token=${authToken}`;
       yield call(request, requestURL, {
+        useDefaultContentType: "multipart/form-data",
         method: 'POST',
-        body: JSON.stringify(file)
+        body: formData
       });
       onClose();
       yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
