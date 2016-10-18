@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { get, map, pick } from 'lodash';
+import { get, map, pick, findIndex } from 'lodash';
 
 /**
  * Direct selector to the app state domain
@@ -104,6 +104,83 @@ const selectAddCredits = () => createSelector(
   (substate) => get(substate, 'baseData.addCredits', {})
 );
 
+// sites and users
+const selectClientSites = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.clientSites', {})
+);
+
+const selectClientRoles = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.clientRoles', {})
+);
+
+const selectSelectedSite = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.selectedSite', {})
+);
+
+const selectSelectedSiteDetailsForForm = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.selectedSite.details', {})
+);
+
+const selectSelectedUser = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.selectedUser', {})
+);
+
+const selectSelectedUserDetailsForForm = () => createSelector(
+  selectGlobal(),
+  (substate) => {
+    const selectedUserInput = {};
+    const selectedUserDetails = get(substate, 'baseData.selectedUser.details', {});
+    const clientSitesDetails = get(substate, 'baseData.clientSites.details', []);
+
+    if (selectedUserDetails) {
+      selectedUserInput.firstName = selectedUserDetails.firstName;
+      selectedUserInput.lastName = selectedUserDetails.lastName;
+      selectedUserInput.email = selectedUserDetails.email;
+
+      if (!selectedUserDetails.roleForClient) {
+        const foundSiteIndex = findIndex(clientSitesDetails, (siteIterator) => (findIndex(siteIterator.users, { id: selectedUserDetails.id }) > -1));
+        if (foundSiteIndex > -1) {
+          selectedUserInput.site = clientSitesDetails[foundSiteIndex].id.toString();
+        } else {
+          selectedUserInput.site = null;
+        }
+      } else {
+        selectedUserInput.site = '0';
+        selectedUserInput.purchase = selectedUserDetails.roleForClient.purchase;
+        selectedUserInput.reward = selectedUserDetails.roleForClient.reward;
+      }
+    }
+
+    return selectedUserInput;
+  }
+);
+
+const selectDeletedUser = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.deletedUser', {})
+);
+
+const selectDeletedClientRole = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.deletedClientRole', {})
+);
+
+const selectSavedSite = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.savedSite', {})
+);
+
+const selectSavedUser = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.savedUser', {})
+);
+// end
+
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
 
 export {
@@ -125,6 +202,17 @@ export {
   selectSavedCard,
   selectDeletedCard,
   selectAddCredits,
+
+  selectClientSites,
+  selectClientRoles,
+  selectSelectedSite,
+  selectSelectedSiteDetailsForForm,
+  selectSelectedUser,
+  selectSelectedUserDetailsForForm,
+  selectDeletedUser,
+  selectDeletedClientRole,
+  selectSavedSite,
+  selectSavedUser,
 
   selectLocationState,
 };
