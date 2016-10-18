@@ -5,8 +5,23 @@ import { Modal } from 'react-bootstrap';
 import { map, omit } from 'lodash';
 
 import EditPatientForm from 'components/EditPatientForm';
-import { selectPatients, selectSelectedPatient, selectSelectedPatientDetailsForForm, selectSavedPatient } from 'containers/PatientDatabasePage/selectors';
-import { clearSelectedPatient, savePatient } from 'containers/PatientDatabasePage/actions';
+import ChatForm from 'components/ChatForm';
+import {
+  selectPatients,
+  selectSelectedPatient,
+  selectSelectedPatientDetailsForForm,
+  selectSavedPatient,
+  selectChat,
+} from 'containers/PatientDatabasePage/selectors';
+import {
+  clearSelectedPatient,
+  savePatient,
+  initChat,
+  disableChat,
+} from 'containers/PatientDatabasePage/actions';
+import {
+  sendStudyPatientMessages,
+} from 'containers/GlobalNotifications/actions';
 import PatientItem from './PatientItem';
 import './styles.less';
 
@@ -18,6 +33,9 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     savedPatient: PropTypes.object,
     clearSelectedPatient: PropTypes.func,
     savePatient: PropTypes.func,
+    initChat: PropTypes.func,
+    disableChat: PropTypes.func,
+    sendStudyPatientMessages: PropTypes.func,
   };
 
   constructor(props) {
@@ -25,6 +43,9 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
 
     this.closeEditPatientModal = this.closeEditPatientModal.bind(this);
     this.updatePatient = this.updatePatient.bind(this);
+    this.openChat = this.openChat.bind(this);
+    this.closeChat = this.closeChat.bind(this);
+    this.sendMessage = this.sendMessage.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -54,12 +75,44 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     this.props.savePatient(selectedPatient.details.id, payload);
   }
 
+  sendMessage(message) {
+    const { chat } = this.props;
+    const options = {
+      body: message.body,
+      studyId: chat.details.study_id,
+      patientId: chat.details.id,
+      to: chat.details.phone,
+    };
+
+    this.props.sendStudyPatientMessages(options, (err, data) => {
+      if (!err) {
+        console.log('data', data);
+      } else {
+        console.log(err);
+      }
+    });
+  }
+
+  chatModalShouldBeShown() {
+    return this.props.chat.active;
+  }
+
+  openChat(payload) {
+    this.props.initChat(payload);
+  }
+
+  closeChat() {
+    this.props.disableChat();
+  }
+
   render() {
     const { patients, selectedPatientDetailsForForm } = this.props;
+    const chat = this.props.chat.active ? this.props.chat.details : null;
     const patientsListContents = patients.details.map((item, index) => (
-      <PatientItem {...item} key={index} index={index} />
+      <PatientItem {...item} key={index} index={index} openChat={this.openChat} />
     ));
     const editPatientModalShown = this.editPatientModalShouldBeShown();
+    const chatModalShown = this.chatModalShouldBeShown();
 
     if (patients.details.length > 0) {
       return (
@@ -81,6 +134,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
                     <th>STATUS</th>
                     <th>SOURCE</th>
                     <th></th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -99,6 +153,18 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
                 />
               </Modal.Body>
             </Modal>
+            {(chat)
+            ?
+            <Modal className="chat-patient" show={chatModalShown} onHide={this.closeChat}>
+              <Modal.Header closeButton>
+                <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <ChatForm onSubmit={this.sendMessage} />
+              </Modal.Body>
+            </Modal>
+            : ''
+            }
           </div>
         </div>
       );
@@ -116,12 +182,16 @@ const mapStateToProps = createStructuredSelector({
   selectedPatient: selectSelectedPatient(),
   selectedPatientDetailsForForm: selectSelectedPatientDetailsForForm(),
   savedPatient: selectSavedPatient(),
+  chat: selectChat(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     clearSelectedPatient: () => dispatch(clearSelectedPatient()),
     savePatient: (id, data) => dispatch(savePatient(id, data)),
+    initChat: (payload) => dispatch(initChat(payload)),
+    disableChat: (payload) => dispatch(disableChat(payload)),
+    sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
   };
 }
 

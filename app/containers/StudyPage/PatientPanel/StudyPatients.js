@@ -78,9 +78,9 @@ class StudyPatients extends React.Component {
         <div className={classNames('patients-list-area', { 'form-active': this.state.openPatientModal })}>
           <nav className="nav-status">
             <ul className="list-inline">
-              {patientCategories.map(patientCategory => {
-                return this.renderPatientCategory(patientCategory);
-              })}
+              {patientCategories.map(patientCategory => (
+                this.renderPatientCategory(patientCategory)
+              ))}
             </ul>
           </nav>
           <PatientDetailModal currentUser={currentUser} openPatientModal={this.state.openPatientModal} />
@@ -96,13 +96,13 @@ const mapStateToProps = createStructuredSelector({
   currentPatientId: Selector.selectCurrentPatientId(),
 });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
+const mapDispatchToProps = (dispatch) => (
+  {
     fetchPatientDetails: (categoryId, patient) => dispatch(fetchPatientDetails(categoryId, patient)),
     setCurrentPatientId: (id) => dispatch(setCurrentPatientId(id)),
     setCurrentPatientCategoryId: (id) => dispatch(setCurrentPatientCategoryId(id)),
-  };
-};
+  }
+);
 
 // StudyPatients = DragDropContext(HTML5Backend)(StudyPatients);
 export default connect(mapStateToProps, mapDispatchToProps)(StudyPatients);

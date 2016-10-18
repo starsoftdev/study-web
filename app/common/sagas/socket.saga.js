@@ -10,6 +10,7 @@ import {
   connectionEstablished,
   fetchNotificationsSucceeded,
   fetchUnreadNotificationsCountSucceeded,
+  setProcessingStatus,
 } from 'containers/GlobalNotifications/actions';
 import {
   SET_SOCKET_CONNECTION,
@@ -17,6 +18,8 @@ import {
   UNSUBSCRIBE_FROM_PAGE_EVENT,
   UNSUBSCRIBE_FROM_ALL,
   SUBSCRIBE_TO_CHAT_EVENT,
+  FETCH_STUDY_PATIENT_MESSAGES,
+  SEND_STUDY_PATIENT_MESSAGES,
   FETCH_NOTIFICATIONS,
   FETCH_UNREAD_NOTIFICATIONS_COUNT,
 } from 'containers/GlobalNotifications/constants';
@@ -31,6 +34,8 @@ export function* GlobalNotificationsSaga() {
   yield fork(unsubscribeFromPageEvent);
   yield fork(unsubscribeFromAllEvents);
   yield fork(subscribeToChatEvent);
+  yield fork(fetchStudyPatientMessages);
+  yield fork(sendStudyPatientMessages);
   yield fork(takeLatest, FETCH_NOTIFICATIONS, fetchNotifications);
   yield fork(takeLatest, FETCH_UNREAD_NOTIFICATIONS_COUNT, fetchUnreadNotificationsCount);
 }
@@ -44,7 +49,6 @@ export function* setSocketConnection() {
         const requestURL = `${SOCKET_URL}/${payload.nsp}`;
         const nsp = window.io(requestURL);
         socket = nsp;
-        // const socket = yield call(connect.bind(this, payload))
         yield put(connectionEstablished(nsp));
         yield put(toastrActions.success('', 'Connected to socket.'));
         payload.cb(null, socket);
@@ -61,7 +65,6 @@ export function* subscribeToPageEvent() {
   while (true) {
     const { payload } = yield take(SUBSCRIBE_TO_PAGE_EVENT);
     try {
-      // console.log('subscribeToPageEvent', payload)
       socket.emit(
         'subscribeToPageEvent',
         {
@@ -100,7 +103,6 @@ export function* unsubscribeFromPageEvent() {
   while (true) {
     const { payload } = yield take(UNSUBSCRIBE_FROM_PAGE_EVENT);
     try {
-      // console.log('unsubscribeFromPageEvent', payload)
       socket.emit('unsubscribeCurrent', { events: payload.events, params: payload.raw }, (err, data) => {
         payload.cb(err, data);
       });
@@ -115,9 +117,38 @@ export function* unsubscribeFromAllEvents() {
   while (true) {
     const { payload } = yield take(UNSUBSCRIBE_FROM_ALL);
     try {
-      // console.log('unsubscribeFromAllEvents', payload);
       socket.emit('unsubscribeFromAll', { events: payload.events }, (err, data) => {
         payload.cb(err, data);
+      });
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
+export function* fetchStudyPatientMessages() {
+  while (true) {
+    const { payload } = yield take(FETCH_STUDY_PATIENT_MESSAGES);
+    try {
+      yield put(setProcessingStatus({ status: true }));
+      socket.emit('getStudyPatientMessages', { studyId: payload.studyId, patientId: payload.patientId }, (err, data) => {
+        payload.cb(err, data);
+      });
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
+export function* sendStudyPatientMessages() {
+  while (true) {
+    const { payload, cb } = yield take(SEND_STUDY_PATIENT_MESSAGES);
+    try {
+      yield put(setProcessingStatus({ status: true }));
+      socket.emit('saveTwilioTextMessages', payload, (err, data) => {
+        cb(err, data);
       });
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');

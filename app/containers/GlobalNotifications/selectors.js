@@ -35,11 +35,17 @@ const selectNotifications = createSelector(
   (substate) => substate.notifications,
 );
 
+const selectProcessingStatus = () => createSelector(
+  selectGlobalNotificationsDomain(),
+  (substate) => substate.processing,
+);
+
 export default selectGlobalNotifications;
 export {
   selectGlobalNotificationsDomain,
   selectGlobalNotifications,
   selectSocket,
+  selectProcessingStatus,
   selectUnreadNotificationsCount,
   selectNotifications,
 };
