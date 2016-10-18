@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import {Field, reduxForm} from "redux-form"
+import { Field, reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import CenteredModal from '../../../components/CenteredModal/index';
@@ -13,29 +13,29 @@ import { submitPatientImport } from '../actions';
 
 @reduxForm({ form: 'importPatients' })
 class ImportPatientsModal extends React.Component {
-  constructor (props) {
-    super (props)
-    this.uploadFile = this.uploadFile.bind(this)
+  constructor(props) {
+    super(props);
+    this.uploadFile = this.uploadFile.bind(this);
   }
   static propTypes = {
     show: React.PropTypes.bool.isRequired,
     onHide: React.PropTypes.func.isRequired,
     toggleAddPatient: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number,
-    submitPatientImport: React.PropTypes.func.isRequired
+    submitPatientImport: React.PropTypes.func.isRequired,
   };
 
   componentDidMount() {
   }
 
-  uploadFile (event) {
-    const {onHide, submitPatientImport, studyId} = this.props
-    //if the file is a csv
-    if (event.target.files[0].type == "text/csv") {
-      const file = event.target.files[0]
-      submitPatientImport(studyId, file, onHide)
+  uploadFile(event) {
+    const { onHide, submitPatientImport, studyId } = this.props;
+    // if the file is a csv
+    if (event.target.files[0].type == 'text/csv') {
+      const file = event.target.files[0];
+      submitPatientImport(studyId, file, onHide);
     } else {
-      //return error
+      // return error
     }
   }
   render() {
@@ -75,7 +75,7 @@ class ImportPatientsModal extends React.Component {
                     component={Input}
                     className="jcf-real-element"
                     id="upload-patient"
-                    input={{required: false,  onChange: this.uploadFile}}
+                    input={{ required: false, onChange: this.uploadFile }}
                   />
                 </span>
               </label>
@@ -97,11 +97,11 @@ class ImportPatientsModal extends React.Component {
     );
   }
 }
-const mapStateToProps =(state) => {
+const mapStateToProps = (state) => {
   return {
-    studyId: state.studyPage.studyId
-  }
-}
+    studyId: state.studyPage.studyId,
+  };
+};
 
 function mapDispatchToProps(dispatch) {
   return {
