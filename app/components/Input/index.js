@@ -22,6 +22,7 @@ function Input({
   placeholder,
   componentClass,
   className,
+  onChange,
   meta: { touched, error, active },
   children,
   isDisabled,
@@ -43,6 +44,7 @@ function Input({
       id={id}
       disabled={isDisabled}
       placeholder={placeholder}
+      onChange={onChange}
       componentClass={componentClass} // Default value is `input`
     >
       {children}
@@ -78,6 +80,7 @@ Input.propTypes = {
   children: PropTypes.array,
   isDisabled: PropTypes.bool,
   id: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 export default Input;
