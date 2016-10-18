@@ -21,12 +21,17 @@ const formName = 'TextBlastModal';
 })
 class TextBlastModal extends React.Component {
   static propTypes = {
-    show: React.PropTypes.bool.isRequired,
     onClose: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
     patientCategories: React.PropTypes.array.isRequired,
+    show: React.PropTypes.bool.isRequired,
     sources: React.PropTypes.array.isRequired,
     submitTextBlast: React.PropTypes.func.isRequired,
+    role: React.PropTypes.string,
+    bsClass: React.PropTypes.string,
+    dialogClassName: React.PropTypes.string,
+    className: React.PropTypes.any,
+    style: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -110,15 +115,15 @@ class TextBlastModal extends React.Component {
   }
 
   render() {
-    const { onClose, patientCategories, sources, submitTextBlast, ...props } = this.props;
+    const { onClose, patientCategories, sources, submitTextBlast, show, role, bsClass, dialogClassName, className, style, onHide } = this.props;
     return (
       <Modal
-        show={props.show}
-        role={props.role}
-        bsClass={props.bsClass}
-        dialogClassName={props.dialogClassName}
-        className={props.className}
-        style={props.style}
+        show={show}
+        role={role}
+        bsClass={bsClass}
+        dialogClassName={dialogClassName}
+        className={className}
+        style={style}
         id="text-blast"
         dialogComponentClass={CenteredModal}
         backdrop
@@ -133,7 +138,7 @@ class TextBlastModal extends React.Component {
           <Modal.Title>
             <strong className="title">Text Blast</strong>
           </Modal.Title>
-          <a className="close" onClick={props.onHide}>
+          <a className="close" onClick={onHide}>
             <i className="icomoon-icon_close" />
           </a>
         </Modal.Header>

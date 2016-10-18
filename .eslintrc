@@ -23,6 +23,7 @@
     "SOCKET_URL": true
   },
   "rules": {
+    "class-methods-use-this": 0,
     "comma-dangle": [
       2,
       "always-multiline"
@@ -40,12 +41,12 @@
         "SwitchCase": 1
       }
     ],
-    "radix": 0,
     "jsx-a11y/aria-props": 2,
     "jsx-a11y/heading-has-content": 0,
     "jsx-a11y/href-no-hash": 0,
     "jsx-a11y/label-has-for": 0,
     "jsx-a11y/mouse-events-have-key-events": 2,
+    "jsx-a11y/no-static-element-interactions": 0,
     "jsx-a11y/role-has-required-aria-props": 2,
     "jsx-a11y/role-supports-aria-props": 2,
     "key-spacing": 0,
@@ -57,6 +58,8 @@
     "no-useless-escape": 0,
     "no-shadow": 0,
     "prefer-template": 2,
+    "radix": 0,
+    "react/forbid-prop-types": 0,
     "react/jsx-filename-extension": 0,
     "react/jsx-no-target-blank": 0,
     "react/require-extension": 0,
