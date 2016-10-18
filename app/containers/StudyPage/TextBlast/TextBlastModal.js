@@ -150,6 +150,7 @@ class TextBlastModal extends React.Component {
                   <div className="custom-select-drop">
                     <div className="search-holder">
                       <Field
+                        name="search"
                         type="search"
                         component={Input}
                         className="keyword-search"
@@ -181,9 +182,8 @@ class TextBlastModal extends React.Component {
                         All
                       </li>
                       {patientCategories.map(patientCategory => (
-                        <li>
+                        <li key={patientCategory.id}>
                           <Field
-                            key={patientCategory.id}
                             name="category"
                             type="checkbox"
                             component={Checkbox}
@@ -214,9 +214,8 @@ class TextBlastModal extends React.Component {
                         All
                       </li>
                       {sources.map(source => (
-                        <li>
+                        <li key={source.id}>
                           <Field
-                            key={source.id}
                             name="source"
                             type="checkbox"
                             component={Checkbox}
