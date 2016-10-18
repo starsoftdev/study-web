@@ -58,6 +58,12 @@ const selectSavedPatient = () => createSelector(
   (substate) => substate.savedPatient
 );
 
+
+const selectChat = () => createSelector(
+  selectPatientDatabasePageDomain(),
+  (substate) => substate.chat
+);
+
 export default selectPatientDatabasePage;
 export {
   selectPatientDatabasePageDomain,
@@ -66,4 +72,5 @@ export {
   selectSelectedPatient,
   selectSelectedPatientDetailsForForm,
   selectSavedPatient,
+  selectChat,
 };

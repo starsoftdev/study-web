@@ -24,6 +24,9 @@ import {
   SAVE_PATIENT,
   SAVE_PATIENT_SUCCESS,
   SAVE_PATIENT_ERROR,
+
+  INIT_CHAT,
+  DISABLE_CHAT,
 } from './constants';
 
 export function fetchPatients(searchParams = {}) {
@@ -141,5 +144,18 @@ export function patientSavingError(payload) {
   return {
     type: SAVE_PATIENT_ERROR,
     payload,
+  };
+}
+
+export function initChat(payload) {
+  return {
+    type: INIT_CHAT,
+    payload,
+  };
+}
+
+export function disableChat() {
+  return {
+    type: DISABLE_CHAT,
   };
 }

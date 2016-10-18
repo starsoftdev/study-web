@@ -6,11 +6,11 @@ import { map } from 'lodash';
 
 import EditSiteForm from 'components/EditSiteForm';
 import EditUserForm from 'components/EditUserForm';
-import { selectCurrentUserClientId } from 'containers/App/selectors';
-import { selectClientSites, selectSelectedSite, selectSelectedSiteDetailsForForm, selectSelectedUser,
-  selectSelectedUserDetailsForForm, selectDeletedUser, selectSavedSite, selectSavedUser } from 'containers/SitesUsersPage/selectors';
+import { selectCurrentUserClientId, selectClientSites, selectSelectedSite,
+  selectSelectedSiteDetailsForForm, selectSelectedUser, selectSelectedUserDetailsForForm,
+  selectDeletedUser, selectSavedSite, selectSavedUser } from 'containers/App/selectors';
 import { clearSelectedSite, clearSelectedUser,
-  deleteUser, saveSite, saveUser } from 'containers/SitesUsersPage/actions';
+  deleteUser, saveSite, saveUser } from 'containers/App/actions';
 import ClientSiteItem from './ClientSiteItem';
 import './styles.less';
 

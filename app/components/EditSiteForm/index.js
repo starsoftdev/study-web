@@ -5,7 +5,7 @@ import { Field, reduxForm } from 'redux-form';
 
 import Input from 'components/Input';
 import { selectEditSiteFormError } from './selectors';
-import { selectSavedSite } from 'containers/SitesUsersPage/selectors';
+import { selectSavedSite } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 

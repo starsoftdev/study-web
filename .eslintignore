@@ -1,6 +1,7 @@
-build/*.js
-docs/*.js
-dist/*.js
-internals/*.js
-ture/*.js
+build/*
+docs/*
+dist/*
+internals/*
+ture/*
+node_modules/*
 .gitignore

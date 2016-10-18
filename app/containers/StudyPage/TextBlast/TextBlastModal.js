@@ -131,101 +131,130 @@ class TextBlastModal extends React.Component {
             </Modal.Title>
           </div>
           <Modal.Title>
-          <strong className="title">Text Blast</strong>
+            <strong className="title">Text Blast</strong>
           </Modal.Title>
           <a className="close" onClick={props.onHide}>
             <i className="icomoon-icon_close" />
           </a>
         </Modal.Header>
         <Modal.Body>
-            <Form className="text-email-blast-form" noValidate="novalidate">
-              <div className="sidebar pull-left">
-                <div className="scroll-holder jcf--scrollable">
-                  <div className="sub-holder">
-                    <div className="custom-select-drop">
-                      <div className="search-holder">
-                        <input type="search" className="form-control keyword-search" />
-                        <i className="icomoon-icon_search2" />
-                        <ul className="list list-unstyled">
-                          <li>Alan Jensen</li>
-                          <li>Eugene Simpson</li>
-                          <li>katy Perry</li>
-                          <li>Hamish Labatt</li>
-                          <li>Thomas Morgan</li>
-                        </ul>
-                      </div>
+          <Form className="text-email-blast-form" noValidate="novalidate">
+            <div className="sidebar pull-left">
+              <div className="scroll-holder jcf--scrollable">
+                <div className="sub-holder">
+                  <div className="custom-select-drop">
+                    <div className="search-holder">
+                      <Field
+                        type="search"
+                        component={Input}
+                        className="keyword-search"
+                      />
+                      <i className="icomoon-icon_search2" />
+                      <ul className="list list-unstyled">
+                        <li>Alan Jensen</li>
+                        <li>Eugene Simpson</li>
+                        <li>katy Perry</li>
+                        <li>Hamish Labatt</li>
+                        <li>Thomas Morgan</li>
+                      </ul>
                     </div>
-                    <div className="category">
-                      <strong className="heading">Category</strong>
-                      <ul className="check-list list-unstyled">
-                        <li>
-                          <Field name="category" type="checkbox" component={Checkbox} className="pull-left" input={{ defaultValue: this.state.selectAllCategories, checked: this.state.selectAllCategories }} onChange={() => {
+                  </div>
+                  <div className="category">
+                    <strong className="heading">Category</strong>
+                    <ul className="check-list list-unstyled">
+                      <li>
+                        <Field
+                          name="category"
+                          type="checkbox"
+                          component={Checkbox}
+                          className="pull-left"
+                          input={{ defaultValue: this.state.selectAllCategories, checked: this.state.selectAllCategories }}
+                          onChange={() => {
                             this.selectCategory('All');
-                          }} />
-                          All
-                        </li>
-                        {patientCategories.map(patientCategory => {
-                          return (
-                            <li>
-                              <Field key={patientCategory.id} name="category" type="checkbox" component={Checkbox} className="pull-left" input={{ defaultValue: this.state.categories[patientCategory.id], checked: this.state.categories[patientCategory.id] }} onChange={() => {
-                                this.selectCategory(patientCategory);
-                              }} />
-                              {patientCategory.name}
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                    <div className="category">
-                      <strong className="heading">SOURCE</strong>
-                      <ul className="check-list list-unstyled">
+                          }}
+                        />
+                        All
+                      </li>
+                      {patientCategories.map(patientCategory => (
                         <li>
-                          <Field name="source" type="checkbox" component={Checkbox} className="pull-left" input={{ defaultValue: this.state.selectAllSources, checked: this.state.selectAllSources }} onChange={() => {
-                            this.selectSource('All');
-                          }} />
-                          All
+                          <Field
+                            key={patientCategory.id}
+                            name="category"
+                            type="checkbox"
+                            component={Checkbox}
+                            className="pull-left"
+                            input={{ defaultValue: this.state.categories[patientCategory.id], checked: this.state.categories[patientCategory.id] }}
+                            onChange={() => {
+                              this.selectCategory(patientCategory);
+                            }}
+                          />
+                          {patientCategory.name}
                         </li>
-                        {sources.map(source => {
-                          return (
-                            <li>
-                              <Field key={source.id} name="source" type="checkbox" component={Checkbox} className="pull-left" input={{ defaultValue: this.state.sources[source.id], checked: this.state.sources[source.id] }} onChange={() => {
-                                this.selectSource(source);
-                              }} />
-                              {source.type}
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                    <div className="selected-patients-list">
-                      {this.renderPatient()}
-                    </div>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="category">
+                    <strong className="heading">SOURCE</strong>
+                    <ul className="check-list list-unstyled">
+                      <li>
+                        <Field
+                          name="source"
+                          type="checkbox"
+                          component={Checkbox}
+                          className="pull-left"
+                          input={{ defaultValue: this.state.selectAllSources, checked: this.state.selectAllSources }} onChange={() => {
+                            this.selectSource('All');
+                          }}
+                        />
+                        All
+                      </li>
+                      {sources.map(source => (
+                        <li>
+                          <Field
+                            key={source.id}
+                            name="source"
+                            type="checkbox"
+                            component={Checkbox}
+                            className="pull-left"
+                            input={{ defaultValue: this.state.sources[source.id], checked: this.state.sources[source.id] }}
+                            onChange={() => {
+                              this.selectSource(source);
+                            }}
+                          />
+                          {source.type}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="selected-patients-list">
+                    {this.renderPatient()}
                   </div>
                 </div>
               </div>
-              <div className="form-holder">
-                <div className="scroll-holder jcf--scrollable">
-                  <div className="sub-holder">
-                    <div className="subject-field">
-                      <input type="text" className="form-control recivers" placeholder="To" disabled />
-                      <span className="emails-counter">
-                        <span className="counter">0</span>
-                        <span className="text">Patients</span>
-                        <a className="btn-close">
-                          <i className="icomoon-icon_close" />
-                        </a>
-                      </span>
-                    </div>
-                    <textarea placeholder="Type a message..." className="form-control" required />
-                    <div className="footer">
-                      <input type="submit" value="submit" className="btn btn-default pull-right" />
-                    </div>
+            </div>
+            <div className="form-holder">
+              <div className="scroll-holder jcf--scrollable">
+                <div className="sub-holder">
+                  <div className="subject-field">
+                    <input type="text" className="form-control recivers" placeholder="To" disabled />
+                    <span className="emails-counter">
+                      <span className="counter">0</span>
+                      <span className="text">Patients</span>
+                      <a className="btn-close">
+                        <i className="icomoon-icon_close" />
+                      </a>
+                    </span>
+                  </div>
+                  <textarea placeholder="Type a message..." className="form-control" required />
+                  <div className="footer">
+                    <input type="submit" value="submit" className="btn btn-default pull-right" />
                   </div>
                 </div>
               </div>
-              <input type="reset" className="hidden btn btn-gray-outline" value="reset" />
-            </Form>
-          </Modal.Body>
+            </div>
+            <input type="reset" className="hidden btn btn-gray-outline" value="reset" />
+          </Form>
+        </Modal.Body>
       </Modal>
     );
   }

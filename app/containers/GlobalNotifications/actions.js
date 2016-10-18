@@ -18,6 +18,9 @@ import {
   FETCH_UNREAD_NOTIFICATIONS_COUNT,
   FETCH_UNREAD_NOTIFICATIONS_COUNT_SUCCESS,
   RECEIVE_NOTIFICATION,
+  FETCH_STUDY_PATIENT_MESSAGES,
+  SEND_STUDY_PATIENT_MESSAGES,
+  SET_PROCESSING_STATUS,
 } from './constants';
 
 export function subscribeToPageEvent(payload) {
@@ -51,6 +54,28 @@ export function unsubscribeFromAll(payload) {
 export function setSocketConnection(payload) {
   return {
     type: SET_SOCKET_CONNECTION,
+    payload,
+  };
+}
+
+export function fetchStudyPatientMessages(payload) {
+  return {
+    type: FETCH_STUDY_PATIENT_MESSAGES,
+    payload,
+  };
+}
+
+export function sendStudyPatientMessages(payload, cb) {
+  return {
+    type: SEND_STUDY_PATIENT_MESSAGES,
+    payload,
+    cb,
+  };
+}
+
+export function setProcessingStatus(payload) {
+  return {
+    type: SET_PROCESSING_STATUS,
     payload,
   };
 }

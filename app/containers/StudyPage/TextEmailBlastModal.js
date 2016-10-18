@@ -35,26 +35,26 @@ class TextEmailBlastModal extends React.Component {
           </a>
         </Modal.Header>
         <Modal.Body>
-        <span className="modal-opener" onClick={toggleTextBlast}>
-          <div className="table">
-            <div className="table-cell">
-              <i className="icomoon-icon_comment_alt" />
-              <span className="text">Text Blast</span>
+          <span className="modal-opener" onClick={toggleTextBlast}>
+            <div className="table">
+              <div className="table-cell">
+                <i className="icomoon-icon_comment_alt" />
+                <span className="text">Text Blast</span>
+              </div>
             </div>
-          </div>
-        </span>
+          </span>
           <span className="or">
-          <span className="text">OR</span>
-        </span>
+            <span className="text">OR</span>
+          </span>
           <span className="modal-opener">
-          <div className="table">
-            <div className="table-cell">
-              <i className="icomoon-envelop" />
-              <span className="text">Email Blast</span>
-              <span className="text">Coming Soon</span>
+            <div className="table">
+              <div className="table-cell">
+                <i className="icomoon-envelop" />
+                <span className="text">Email Blast</span>
+                <span className="text">Coming Soon</span>
+              </div>
             </div>
-          </div>
-        </span>
+          </span>
         </Modal.Body>
       </Modal>
     );
