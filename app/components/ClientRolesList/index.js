@@ -5,10 +5,9 @@ import { Modal } from 'react-bootstrap';
 import { map } from 'lodash';
 
 import EditUserForm from 'components/EditUserForm';
-import { selectCurrentUserClientId } from 'containers/App/selectors';
-import { selectClientSites, selectClientRoles, selectSelectedUser,
-  selectDeletedClientRole, selectSavedUser, selectSelectedUserDetailsForForm } from 'containers/SitesUsersPage/selectors';
-import { clearSelectedUser, deleteClientRole, saveUser } from 'containers/SitesUsersPage/actions';
+import { selectCurrentUserClientId, selectClientSites, selectClientRoles, selectSelectedUser,
+  selectDeletedClientRole, selectSavedUser, selectSelectedUserDetailsForForm } from 'containers/App/selectors';
+import { clearSelectedUser, deleteClientRole, saveUser } from 'containers/App/actions';
 import ClientRoleItem from './ClientRoleItem';
 import './styles.less';
 

@@ -50,6 +50,7 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
           if (!err) {
             socket.on('notification', (notification) => {
               console.log(notification);
+              this.props.receiveNotification(notification);
             });
             socket.on('connect', () => {
               this.subscribeToPageEvents();
@@ -88,24 +89,18 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
           'twilio-message',
         ],
         raw: { pathname: this.props.location.pathname },
-        cb: (err, data) => {
-          console.log('received', err, data);
-          if (!err) {
-            this.props.receiveNotification(data);
-          }
-        },
       },
       {
         events: [
           'create-patient',
         ],
         raw: { pathname: this.props.location.pathname },
-        cb: (err, data) => {
-          console.log('received', err, data);
-          if (!err) {
-            this.props.receiveNotification(data);
-          }
-        },
+      },
+      {
+        events: [
+          'create-irb_ad_creation',
+        ],
+        raw: { pathname: this.props.location.pathname },
       },
     ];
 
@@ -125,12 +120,8 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
                 eventsList.push(eventData);
               }
               this.eventsList = eventsList;
-              console.log(data.event[0] + data.sid);
-              this.props.socket.on(data.event[0] + data.sid, (payload) => {
-                event.cb(null, payload);
-              });
             } else {
-              event.cb(err, null);
+              console.error(err);
             }
           },
         });
