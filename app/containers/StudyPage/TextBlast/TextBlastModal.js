@@ -47,6 +47,7 @@ class TextBlastModal extends React.Component {
     };
     this.selectCategory = this.selectCategory.bind(this);
     this.selectSource = this.selectSource.bind(this);
+    this.removePatient = this.removePatient.bind(this);
     this.renderPatient = this.renderPatient.bind(this);
     for (const patientCategory of props.patientCategories) {
       this.state.categories[patientCategory.id] = false;
@@ -103,11 +104,15 @@ class TextBlastModal extends React.Component {
     this.setState(state);
   }
 
+  removePatient() {
+
+  }
+
   renderPatient() {
     return (
       <div className="patient">
         <span className="name">Alan Jensen</span>
-        <a className="btn-remove">
+        <a className="btn-remove" onClick={this.removePatient}>
           <i className="icomoon-icon_trash" />
         </a>
       </div>
