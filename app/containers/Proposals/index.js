@@ -97,7 +97,6 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
 
   componentWillReceiveProps(nextProps) {
     // console.log('componentWillReceiveProps', nextProps);
-
     if (nextProps.proposals) {
       for (const proposal of nextProps.proposals) {
         proposal.selected = false;
@@ -139,8 +138,6 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
       site : null,
       searchBy : null,
       range : payload,
-    }, () => {
-      //console.log('state', this.state);
     });
   }
 

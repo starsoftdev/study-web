@@ -18,6 +18,9 @@ import {
   SAVE_PATIENT,
   SAVE_PATIENT_SUCCESS,
   SAVE_PATIENT_ERROR,
+
+  INIT_CHAT,
+  DISABLE_CHAT,
 } from './constants';
 
 const initialState = {
@@ -39,6 +42,11 @@ const initialState = {
   savedPatient: {
     details: null,
     saving: false,
+    error: null,
+  },
+  chat: {
+    details: null,
+    active: false,
     error: null,
   },
 };
@@ -184,6 +192,24 @@ export default function patientDatabasePageReducer(state = initialState, action)
         selectedPatient: {
           details: null,
           fetching: false,
+          error: null,
+        },
+      };
+    case INIT_CHAT:
+      return {
+        ...state,
+        chat: {
+          details: payload,
+          active: true,
+          error: null,
+        },
+      };
+    case DISABLE_CHAT:
+      return {
+        ...state,
+        chat: {
+          details: null,
+          active: false,
           error: null,
         },
       };

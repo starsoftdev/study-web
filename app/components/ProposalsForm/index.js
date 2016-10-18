@@ -49,7 +49,6 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
   componentWillReceiveProps() {}
 
   handleChange(which, payload) {
-    //console.log('handleChange', which, payload);
     this.setState({
       [which] : payload,
     });
