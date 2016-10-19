@@ -91,7 +91,7 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
       (this.state.twilioMessages.length) ? this.state.twilioMessages.map((item, index) => (
         <span
           key={item.twilioTextMessage.sid}
-          className={'message ' + item.twilioTextMessage.direction}
+          className={`message ${item.twilioTextMessage.direction}`}
         >
         {item.twilioTextMessage.body}
       </span>

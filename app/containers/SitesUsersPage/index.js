@@ -133,7 +133,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
       );
     }
 
-    let siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
+    const siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
 
     return (
