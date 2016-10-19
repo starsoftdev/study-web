@@ -131,7 +131,7 @@ export function* fetchStudyPatientMessages() {
   while (true) {
     const { payload } = yield take(FETCH_STUDY_PATIENT_MESSAGES);
     try {
-      yield put(setProcessingStatus({status: true}));
+      yield put(setProcessingStatus({ status: true }));
       socket.emit('getStudyPatientMessages', { studyId: payload.studyId, patientId: payload.patientId }, (err, data) => {
         payload.cb(err, data);
       });
@@ -146,7 +146,7 @@ export function* sendStudyPatientMessages() {
   while (true) {
     const { payload, cb } = yield take(SEND_STUDY_PATIENT_MESSAGES);
     try {
-      yield put(setProcessingStatus({status: true}));
+      yield put(setProcessingStatus({ status: true }));
       socket.emit('saveTwilioTextMessages', payload, (err, data) => {
         cb(err, data);
       });
