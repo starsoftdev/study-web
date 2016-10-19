@@ -99,7 +99,7 @@ class PatientDetailModal extends React.Component {
               <i className="glyphicon glyphicon-menu-right" />
             </a>
           </div>
-          <PatientDetailSection currentPatient={currentPatient} />
+          <PatientDetailSection initialValues={currentPatient} />
           <div className="column">
             <div id="carousel-example-generic" className="carousel slide popup-slider">
               <ol className="carousel-indicators">
@@ -112,7 +112,7 @@ class PatientDetailModal extends React.Component {
                 <NotesSection active={this.state.carousel.note} currentUser={currentUser} currentPatient={currentPatient} studyId={studyId} />
                 <TextSection active={this.state.carousel.text} currentUser={currentUser} currentPatient={currentPatient} />
                 <EmailSection active={this.state.carousel.email} />
-                <OtherSection currentPatient={currentPatient} currentUser={currentUser} active={this.state.carousel.other} />
+                {/* <OtherSection active={this.state.carousel.other} currentPatient={currentPatient} currentUser={currentUser} />*/}
               </div>
             </div>
           </div>

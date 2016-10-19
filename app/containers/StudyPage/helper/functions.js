@@ -17,3 +17,25 @@ export function formatPhone(phone) {
   }
   return patientPhone;
 }
+
+export function normalizePhone(value) {
+  if (!value) {
+    return value;
+  }
+  const onlyNums = value.replace(/[^\d]+/g, '');
+  if (onlyNums.length <= 10) {
+    return `+1${onlyNums}`;
+  }
+  return `+${onlyNums}`;
+}
+
+export function normalizePhoneDisplay(value) {
+  if (!value) {
+    return value;
+  }
+  const onlyNums = value.replace(/[^\d]+/g, '');
+  if (onlyNums.length <= 10) {
+    return `(${onlyNums.slice(0, 3)}) ${onlyNums.slice(3, 6)}-${onlyNums.slice(6, 10)}`;
+  }
+  return `+${onlyNums}`;
+}

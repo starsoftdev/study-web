@@ -76,7 +76,7 @@ class ImportPatientsModal extends React.Component {
                     component={Input}
                     className="jcf-real-element"
                     id="upload-patient"
-                    input={{ required: false, onChange: this.uploadFile }}
+                    onChange={this.uploadFile}
                   />
                 </span>
               </label>

@@ -324,8 +324,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   render() {
     const state = this.state;
     const proposalsArr = state.filteredProposals || this.props.proposals;
-    let proposals = [];
-    let heads = [];
+    const proposals = [];
+    const heads = [];
 
     this.mapHeaders(headers, state, heads);
     this.mapProposals(proposalsArr, proposals);

@@ -9,7 +9,7 @@ import ReactSelect from '../../components/Input/ReactSelect';
 import StudyActionButtons from './StudyActionButtons';
 
 @reduxForm({ form: 'filterStudyPatients' })
-class FilterStudyPatientsForm extends Component {
+class FilterStudyPatients extends Component {
   static propTypes = {
     campaignOptions: PropTypes.array.isRequired,
     sourceOptions: PropTypes.array.isRequired,
@@ -73,4 +73,4 @@ class FilterStudyPatientsForm extends Component {
   }
 }
 
-export default FilterStudyPatientsForm;
+export default FilterStudyPatients;
