@@ -37,8 +37,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     selectCurrent:  PropTypes.func,
     selectAll:  PropTypes.func,
     range:  PropTypes.any,
-    searchBy:  PropTypes.any, proposals:  PropTypes.any,
-    /* selected:  PropTypes.any, */
+    searchBy:  PropTypes.any,
+    proposals:  PropTypes.any
   };
 
   constructor(props) {
@@ -100,7 +100,9 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
             this.selectedProposal = selectedArr;
           }
         } else {
-          this.selectedProposal = _.filter(this.selectedProposal, (o) => { return o.site !== proposal.site; });
+          this.selectedProposal = _.filter(this.selectedProposal, (o) => {
+            return o.site !== proposal.site;
+          });
           if (!this.selectedProposal.length) {
             this.selectedProposal = null;
           }
@@ -268,10 +270,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         if (number === proposal.proposalNumber || number === proposal.protocol) {
           proposalsMatchSearch.push(proposal);
         }
-      } else {
-        if (searchBy === proposal.site) {
-          proposalsMatchSearch.push(proposal);
-        }
+      } else if (searchBy === proposal.site) {
+        proposalsMatchSearch.push(proposal);
       }
     }
 

@@ -80,7 +80,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
 
   search(ev) {
     ev.preventDefault();
-    this.props.search(this.refs.searchInput.value);
+    this.props.search(this.searchInput.value);
   }
 
   render() {
@@ -122,7 +122,9 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
                 id="search"
                 className="form-control keyword-search"
                 placeholder="Search"
-                ref="searchInput"
+                ref={(searchInput) => {
+                  this.searchInput = searchInput;
+                }}
               />
               <label htmlFor="search">
                 <i
