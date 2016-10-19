@@ -13,9 +13,10 @@ import StudyActionButtons from './StudyActionButtons';
 import { fetchPatients } from './actions';
 
 @reduxForm({ form: 'filterStudyPatients' })
-
+  
 
 class FilterStudyPatientsForm extends Component {
+
   static propTypes = {
     campaignOptions: PropTypes.array.isRequired,
     sourceOptions: PropTypes.array.isRequired,
@@ -117,4 +118,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
+
 export default connect(mapStateToProps, mapDispatchToProps)(FilterStudyPatientsForm);
+
