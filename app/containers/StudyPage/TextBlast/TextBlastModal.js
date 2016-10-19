@@ -179,7 +179,7 @@ class TextBlastModal extends React.Component {
                           type="checkbox"
                           component={Checkbox}
                           className="pull-left"
-                          input={{ defaultValue: this.state.selectAllCategories, checked: this.state.selectAllCategories }}
+                          input={{ defaultValue: this.state.selectAllCategories }}
                           onChange={() => {
                             this.selectCategory('All');
                           }}
@@ -189,11 +189,11 @@ class TextBlastModal extends React.Component {
                       {patientCategories.map(patientCategory => (
                         <li key={patientCategory.id}>
                           <Field
-                            name="category"
+                            name={`category-${patientCategory.id}`}
                             type="checkbox"
                             component={Checkbox}
                             className="pull-left"
-                            input={{ defaultValue: this.state.categories[patientCategory.id], checked: this.state.categories[patientCategory.id] }}
+                            input={{ defaultValue: this.state.categories[patientCategory.id] }}
                             onChange={() => {
                               this.selectCategory(patientCategory);
                             }}
@@ -212,7 +212,8 @@ class TextBlastModal extends React.Component {
                           type="checkbox"
                           component={Checkbox}
                           className="pull-left"
-                          input={{ defaultValue: this.state.selectAllSources, checked: this.state.selectAllSources }} onChange={() => {
+                          input={{ defaultValue: this.state.selectAllSources }}
+                          onChange={() => {
                             this.selectSource('All');
                           }}
                         />
@@ -221,11 +222,11 @@ class TextBlastModal extends React.Component {
                       {sources.map(source => (
                         <li key={source.id}>
                           <Field
-                            name="source"
+                            name={`source-${source.id}`}
                             type="checkbox"
                             component={Checkbox}
                             className="pull-left"
-                            input={{ defaultValue: this.state.sources[source.id], checked: this.state.sources[source.id] }}
+                            input={{ defaultValue: this.state.sources[source.id] }}
                             onChange={() => {
                               this.selectSource(source);
                             }}

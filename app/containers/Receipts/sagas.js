@@ -17,7 +17,7 @@ const serializeParams = (obj) => {
   const str = [];
   Object.keys(obj).forEach(p => {
     if (obj.hasOwnProperty(p) && obj[p] !== undefined && obj[p] !== null) {  // we need to pass 0 and empty string
-      str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+      str.push(`${encodeURIComponent(p)}=${encodeURIComponent(obj[p])}`);
     }
   });
   return str.join('&');

@@ -22,7 +22,10 @@ function Input({
   placeholder,
   componentClass,
   className,
+  tooltipDisabled,
+  onBlur,
   onChange,
+  required,
   meta: { touched, error, active },
   children,
   isDisabled,
@@ -44,14 +47,21 @@ function Input({
       id={id}
       disabled={isDisabled}
       placeholder={placeholder}
-      onChange={onChange}
+      required={required}
       componentClass={componentClass} // Default value is `input`
+      onChange={onChange || input.onChange}
+      onBlur={(event) => {
+        input.onBlur(event);
+        if (onBlur) {
+          onBlur(event);
+        }
+      }}
     >
       {children}
     </FormControl>
   );
 
-  if (hasError) {
+  if (hasError && !tooltipDisabled) {
     inputComponent = (
       <OverlayTrigger
         placement="right"
@@ -63,24 +73,27 @@ function Input({
   }
 
   return (
-    <div className={classNames([className, errorClass].join(' '))}>
+    <div className={classNames(className, errorClass)}>
       {inputComponent}
     </div>
   );
 }
 
 Input.propTypes = {
-  input: PropTypes.object.isRequired,
-  name: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  meta: PropTypes.object.isRequired,
-  type: PropTypes.string,
   componentClass: PropTypes.string,
   className: PropTypes.string,
   children: PropTypes.array,
   isDisabled: PropTypes.bool,
   id: PropTypes.string,
+  input: PropTypes.object.isRequired,
+  onBlur: PropTypes.func,
   onChange: PropTypes.func,
+  name: PropTypes.string.isRequired,
+  meta: PropTypes.object.isRequired,
+  placeholder: PropTypes.string,
+  required: PropTypes.bool,
+  tooltipDisabled: PropTypes.bool,
+  type: PropTypes.string,
 };
 
 export default Input;

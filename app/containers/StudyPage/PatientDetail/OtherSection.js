@@ -4,8 +4,10 @@
 
 import React from 'react';
 import Form from 'react-bootstrap/lib/Form';
+import { Field } from 'redux-form';
 import classNames from 'classnames';
 import moment from 'moment-timezone';
+import ReactSelect from 'react-select';
 
 class OtherSection extends React.Component {
   static propTypes = {
@@ -20,8 +22,33 @@ class OtherSection extends React.Component {
   render() {
     const { active, currentUser, currentPatient } = this.props;
     if (currentPatient) {
+      const now = moment();
+      const months = moment.months();
+      const monthOptions = now.months();
+      for (let i = 0; i < monthOptions.length; i++) {
+        const month = months[i];
+        const monthOption = monthOptions[i];
+        monthOptions[i] = {
+          label: month,
+          value: monthOption,
+        };
+      }
+      const dates = now.dates().map(date => (
+        {
+          label: date,
+          value: date,
+        }
+      ));
+      const nowYear = now.year();
+      const years = [];
+      for (let year = nowYear; year > 1900; year--) {
+        years.push({
+          label: year,
+          value: year,
+        });
+      }
       return (
-        <div className={classNames('item others', { active: active })}>
+        <div className={classNames('item others', { active })}>
           <div className="item-holder">
             <div className="dates">
               <strong className="title">Dates</strong>
@@ -82,111 +109,31 @@ class OtherSection extends React.Component {
                   <div className="field">
                     <div className="row">
                       <div className="col-small pull-left">
-                        {/*<Field*/}
-                          {/*name="dob-month"*/}
-                          {/*component={ReactSelect}*/}
-                          {/*className="min-width min-height"*/}
-                          {/*options={}*/}
-                          {/*placeholder="Month"*/}
-                        {/*/>*/}
-                        <select
-                          className=" jcf-hidden"
-                        >
-                          <option>Month</option>
-                          <option>January</option>
-                          <option>February</option>
-                          <option>March</option>
-                          <option>April</option>
-                          <option>May</option>
-                          <option>June</option>
-                          <option>July</option>
-                          <option>August</option>
-                          <option>September</option>
-                          <option>October</option>
-                          <option>November</option>
-                          <option>December</option>
-                        </select>
-                        <span className="jcf-select jcf-unselectable jcf-select-min-width jcf-select-min-height">
-                          <span className="jcf-select-text">
-                            <span>Month</span>
-                          </span>
-                          <span className="jcf-select-opener" />
-                        </span>
+                        <Field
+                          name="dob-month"
+                          component={ReactSelect}
+                          className="min-height"
+                          options={monthOptions}
+                          placeholder="Month"
+                        />
                       </div>
                       <div className="col-small pull-left">
-                        <select required className="min-height jcf-hidden">
-                          <option>Day</option>
-                          <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                          <option>6</option>
-                          <option>7</option>
-                          <option>8</option>
-                          <option>9</option>
-                          <option>10</option>
-                          <option>11</option>
-                          <option>12</option>
-                          <option>13</option>
-                          <option>14</option>
-                          <option>15</option>
-                          <option>16</option>
-                          <option>17</option>
-                          <option>18</option>
-                          <option>19</option>
-                          <option>20</option>
-                          <option>21</option>
-                          <option>22</option>
-                          <option>23</option>
-                          <option>24</option>
-                          <option>25</option>
-                          <option>26</option>
-                          <option>27</option>
-                          <option>28</option>
-                          <option>29</option>
-                          <option>30</option>
-                          <option>31</option>
-                        </select>
-                        <span className="jcf-select jcf-unselectable jcf-select-min-height">
-                          <span className="jcf-select-text">
-                            <span>Day</span>
-                          </span>
-                          <span className="jcf-select-opener" />
-                        </span>
+                        <Field
+                          name="dob-date"
+                          component={ReactSelect}
+                          className="min-height"
+                          options={dates}
+                          placeholder="Day"
+                        />
                       </div>
                       <div className="col-small pull-left patient-age">
-                        <select required className="min-height jcf-hidden">
-                          <option>Year</option>
-                          <option>1981</option>
-                          <option>1982</option>
-                          <option>1983</option>
-                          <option>1984</option>
-                          <option>1985</option>
-                          <option>1986</option>
-                          <option>1987</option>
-                          <option>1988</option>
-                          <option>1989</option>
-                          <option>1990</option>
-                          <option>1991</option>
-                          <option>1992</option>
-                          <option>1993</option>
-                          <option>1994</option>
-                          <option>1995</option>
-                          <option>1996</option>
-                          <option>1997</option>
-                          <option>1998</option>
-                          <option>1999</option>
-                          <option>2000</option>
-                          <option>2001</option>
-                          <option>2002</option>
-                        </select>
-                        <span className="jcf-select jcf-unselectable jcf-select-min-height">
-                          <span className="jcf-select-text">
-                            <span>Year</span>
-                          </span>
-                          <span className="jcf-select-opener" />
-                        </span>
+                        <Field
+                          name="dob-year"
+                          component={ReactSelect}
+                          className="min-height"
+                          options={years}
+                          placeholder="Year"
+                        />
                       </div>
                     </div>
                   </div>

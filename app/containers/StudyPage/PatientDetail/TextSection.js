@@ -24,18 +24,32 @@ class TextSection extends React.Component {
     submitPatientText: React.PropTypes.func.isRequired,
   };
 
+  constructor (props) {
+    super(props);
+    this.renderText = this.renderText.bind(this);
+  }
+
   componentDidMount() {
   }
 
+  renderText() {
+    const { currentUser, currentPatient } = this.props;
+    if (currentPatient && currentPatient.textMessages) {
+      return (
+        <section className="postarea text">
+          {currentPatient.textMessages.map(textMessage => (
+            <PatientText key={textMessage.id} currentPatient={currentPatient} currentUser={currentUser} textMessage={textMessage} />
+          ))}
+        </section>
+      );
+    }
+  }
+
   render() {
-    const { active, currentUser, currentPatient, submitPatientText } = this.props;
+    const { active } = this.props;
     return (
       <div className={classNames('item text', { active })}>
-        <section className="postarea text">
-          {currentPatient && currentPatient.textMessages ? currentPatient.textMessages.map(textMessage => (
-            <PatientText key={textMessage.id} currentPatient={currentPatient} currentUser={currentUser} textMessage={textMessage} />
-          )) : null}
-        </section>
+        {this.renderText()}
         <div className="textarea">
           <textarea className="form-control" placeholder="Type a message..." />
           <Button onClick={this.submitText}>Send</Button>
