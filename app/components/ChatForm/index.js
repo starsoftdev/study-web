@@ -63,8 +63,8 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
   componentDidUpdate() {}
 
   fetchStudyPatientMessages(props) {
-    const scrollable = this.refs.scrollable;
-    const inputContainer = this.refs.inputContainer;
+    const scrollable = this.scrollable;
+    const inputContainer = this.inputContainer;
     this.props.fetchStudyPatientMessages({
       studyId: props.chat.details.study_id,
       patientId:  props.chat.details.id,
@@ -105,11 +105,22 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
           <fieldset>
             <div className="row">
               <div className="col-md-12">
-                <div className="form-group messages" id="mess-container" ref="scrollable">
+                <div
+                  className="form-group messages"
+                  id="mess-container"
+                  ref={(scrollable) => {
+                    this.scrollable = scrollable;
+                  }}
+                >
                   {listMessages}
                 </div>
                 <div className="row form-group">
-                  <div className="field col-sm-12" ref="inputContainer">
+                  <div
+                    className="field col-sm-12"
+                    ref={(inputContainer) => {
+                      this.inputContainer = inputContainer;
+                    }}
+                  >
                     <Field
                       name="body"
                       component={Input}
@@ -148,6 +159,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-//export default ChatForm;
+// export default ChatForm;
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatForm);

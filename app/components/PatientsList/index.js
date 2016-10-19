@@ -87,9 +87,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
 
     this.props.sendStudyPatientMessages(options, (err, data) => {
       if (!err) {
-        // console.log('data', data);
-      } else {
-        // console.log(err);
+        console.log('data', data);
       }
     });
   }
@@ -161,7 +159,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
                   <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <ChatForm  onSubmit={this.sendMessage} />
+                  <ChatForm onSubmit={this.sendMessage} />
                 </Modal.Body>
               </Modal>
             : ''
