@@ -38,7 +38,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     selectAll:  PropTypes.func,
     range:  PropTypes.any,
     searchBy:  PropTypes.any,
-    proposals:  PropTypes.any
+    proposals:  PropTypes.any,
   };
 
   constructor(props) {
@@ -100,9 +100,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
             this.selectedProposal = selectedArr;
           }
         } else {
-          this.selectedProposal = _.filter(this.selectedProposal, (o) => {
-            return o.site !== proposal.site;
-          });
+          this.selectedProposal = _.filter(this.selectedProposal, (o) => o.site !== proposal.site);
           if (!this.selectedProposal.length) {
             this.selectedProposal = null;
           }
