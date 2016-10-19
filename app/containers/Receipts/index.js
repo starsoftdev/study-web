@@ -10,7 +10,7 @@ import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer } from 'react-sticky';
 
-//import LoadingSpinner from 'components/LoadingSpinner';
+// import LoadingSpinner from 'components/LoadingSpinner';
 import {
   getReceipts,
   createPDF,
@@ -25,12 +25,12 @@ import {
   selectEvents,
 } from 'containers/App/selectors';
 
-//import selectReceipts from './selectors';
-//import ProposalsTable from 'components/ProposalsTable';
+// import selectReceipts from './selectors';
+// import ProposalsTable from 'components/ProposalsTable';
 import ProposalsForm from 'components/ProposalsForm';
 import './styles.less';
 
-export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class Receipts extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
     unsubscribeFromAll: PropTypes.func,
@@ -76,26 +76,26 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
 
   selectSite(val) {
     const { siteLocations } = this.props;
-    const site  = siteLocations[val-1]
+    const site = siteLocations[val - 1];
     this.setState({
       range : null,
       searchBy : null,
-      site
+      site,
     });
   }
 
   search(value) {
-    const searchBy = (value.length) ? value : null
+    const searchBy = (value.length) ? value : null;
     this.setState({
       site : null,
       range : null,
-      searchBy
+      searchBy,
     });
   }
 
   createPdf() {
     if (this.selectedProposal) {
-      this.props.createPDF(this.selectedProposal)
+      this.props.createPDF(this.selectedProposal);
     }
   }
 

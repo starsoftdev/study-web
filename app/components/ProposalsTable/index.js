@@ -37,8 +37,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     selectCurrent:  PropTypes.func,
     selectAll:  PropTypes.func,
     range:  PropTypes.any,
-    searchBy:  PropTypes.any,
-    /*selected:  PropTypes.any,*/
+    searchBy:  PropTypes.any, proposals:  PropTypes.any,
+    /* selected:  PropTypes.any, */
   };
 
   constructor(props) {
@@ -66,25 +66,17 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     }
 
     if (nextProps.range) {
-      this.rangeSort(nextProps.range)
+      this.rangeSort(nextProps.range);
     }
     if (nextProps.site) {
-      this.siteSort(nextProps.site)
+      this.siteSort(nextProps.site);
     }
     if (nextProps.searchBy) {
-      this.searchSort(nextProps.searchBy)
+      this.searchSort(nextProps.searchBy);
     }
   }
 
   componentDidUpdate() {}
-
-  get selectedProposal() {
-    return this.SelectedProposal;
-  }
-
-  set selectedProposal(value) {
-    this.SelectedProposal = value;
-  }
 
   onClickCurrent(ev) {
     ev.preventDefault();
@@ -99,18 +91,18 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
         if (proposal.selected) {
           if (_.isEmpty(this.selectedProposal)) {
-            this.selectedProposal = []
+            this.selectedProposal = [];
             this.selectedProposal.push(proposal);
           } else {
-            selectedArr = this.selectedProposal
-            selectedArr.push(proposal)
+            selectedArr = this.selectedProposal;
+            selectedArr.push(proposal);
 
             this.selectedProposal = selectedArr;
           }
         } else {
           this.selectedProposal = _.filter(this.selectedProposal, (o) => { return o.site !== proposal.site; });
           if (!this.selectedProposal.length) {
-            this.selectedProposal = null
+            this.selectedProposal = null;
           }
         }
       }
@@ -146,6 +138,14 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       this.selectedProposal = (this.state.checkAll) ? proposals : null;
       this.props.selectAll(this.selectedProposal);
     });
+  }
+
+  get selectedProposal() {
+    return this.SelectedProposal;
+  }
+
+  set selectedProposal(value) {
+    this.SelectedProposal = value;
   }
 
   sortBy(ev) {
@@ -232,7 +232,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   }
 
   rangeSort(range) {
-    let proposalsInRange = []
+    const proposalsInRange = [];
     const proposalsArr = this.props.proposals;
     for (const proposal of proposalsArr) {
       const created = new Date(proposal.created).getTime();
@@ -248,7 +248,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   }
 
   siteSort(site) {
-    let proposalsMatchSite = []
+    const proposalsMatchSite = [];
     const proposalsArr = this.state.proposals;
     for (const proposal of proposalsArr) {
       if (proposal.site === site.name) {
@@ -256,26 +256,26 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       }
     }
 
-    this.setState({ filteredProposals: proposalsMatchSite })
+    this.setState({ filteredProposals: proposalsMatchSite });
   }
 
   searchSort(searchBy) {
-    let proposalsMatchSearch = []
+    const proposalsMatchSearch = [];
     const proposalsArr = this.state.proposals;
     for (const proposal of proposalsArr) {
-      const number = parseInt(searchBy, 10)
+      const number = parseInt(searchBy, 10);
       if (!_.isNaN(number)) {
         if (number === proposal.proposalNumber || number === proposal.protocol) {
           proposalsMatchSearch.push(proposal);
         }
       } else {
-        if (searchBy === proposal.site ) {
+        if (searchBy === proposal.site) {
           proposalsMatchSearch.push(proposal);
         }
       }
     }
 
-    this.setState({ filteredProposals: proposalsMatchSearch })
+    this.setState({ filteredProposals: proposalsMatchSearch });
   }
 
   mapHeaders(raw, state, result) {

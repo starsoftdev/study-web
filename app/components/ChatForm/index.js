@@ -14,11 +14,11 @@ import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 
 import {
-  selectChat
+  selectChat,
 } from 'containers/PatientDatabasePage/selectors';
 import {
   selectSocket,
-  selectProcessingStatus
+  selectProcessingStatus,
 } from 'containers/GlobalNotifications/selectors';
 import {
   fetchStudyPatientMessages,
@@ -52,6 +52,16 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
     this.fetchStudyPatientMessages(this.props);
   }
 
+  componentWillReceiveProps(newProps) {
+    // console.log('componentWillReceiveProps', newProps);
+    this.props.socket.on('notifyMessage', () => {
+      // console.log('notifyMessage');
+      this.fetchStudyPatientMessages(newProps);
+    });
+  }
+
+  componentDidUpdate() {}
+
   fetchStudyPatientMessages(props) {
     const scrollable = this.refs.scrollable;
     const inputContainer = this.refs.inputContainer;
@@ -61,41 +71,30 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
       cb: (err, data) => {
         if (!err) {
           if (this.state.twilioMessages !== data.messages) {
-            this.setState({ twilioMessages: data.messages }, () =>{
+            this.setState({ twilioMessages: data.messages }, () => {
               scrollable.scrollTop = scrollable.scrollHeight;
               inputContainer.childNodes[0].childNodes[0].value = '';
             });
           }
         } else {
-          console.log(err);
+          // console.log(err);
         }
-        this.props.setProcessingStatus({status: false});
-      }
-    })
-  }
-
-  componentWillReceiveProps(newProps) {
-    console.log('componentWillReceiveProps', newProps);
-    this.props.socket.on('notifyMessage', () => {
-      console.log('notifyMessage');
-      this.fetchStudyPatientMessages(newProps);
-    })
-  }
-
-  componentDidUpdate() {
+        this.props.setProcessingStatus({ status: false });
+      },
+    });
   }
 
   render() {
     const { isSaving, handleSubmit } = this.props;
     const listMessages =
-      (this.state.twilioMessages.length) ? this.state.twilioMessages.map((item, index) => (
+      (this.state.twilioMessages.length) ? this.state.twilioMessages.map((item) => (
         <span
           key={item.twilioTextMessage.sid}
-          className={'message ' + item.twilioTextMessage.direction}
+          className={`message ${item.twilioTextMessage.direction}`}
         >
-        {item.twilioTextMessage.body}
-      </span>
-      )) : 'in this chat, are no posts'
+          {item.twilioTextMessage.body}
+        </span>
+      )) : 'in this chat, are no posts';
 
     return (
       <div className="">

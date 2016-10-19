@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
@@ -20,11 +20,11 @@ const serializeParams = (obj) => {
   const str = [];
   Object.keys(obj).forEach(p => {
     if (obj.hasOwnProperty(p) && obj[p] !== undefined && obj[p] !== null) {  // we need to pass 0 and empty string
-      str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+      str.push(`${encodeURIComponent(p)}=${encodeURIComponent(obj[p])}`);
     }
   });
   return str.join('&');
-}
+};
 
 // Individual exports for testing
 export function* proposalSaga() {
@@ -84,10 +84,10 @@ export function* getPdf() {
       const requestURL = `${API_URL}/proposals/getPDF`;
       const fileName = (payload.data.files.length === 1) ? payload.data.files[0].fileName : null;
       const authToken = getItem('auth_token');
-      let archiveName = payload.data.archive;
-      let params = {
+      const archiveName = payload.data.archive;
+      const params = {
         access_token: authToken,
-      }
+      };
 
       if (fileName) {
         params.fileName = fileName;
@@ -95,7 +95,7 @@ export function* getPdf() {
       if (archiveName) {
         params.archiveName = archiveName;
       }
-      location.replace(requestURL + '?' + serializeParams(params));
+      location.replace(`${requestURL}?${serializeParams(params)}`);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));

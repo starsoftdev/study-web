@@ -11,13 +11,13 @@ import {
   selectSelectedPatient,
   selectSelectedPatientDetailsForForm,
   selectSavedPatient,
-  selectChat
+  selectChat,
 } from 'containers/PatientDatabasePage/selectors';
 import {
   clearSelectedPatient,
   savePatient,
-  initChat ,
-  disableChat
+  initChat,
+  disableChat,
 } from 'containers/PatientDatabasePage/actions';
 import {
   sendStudyPatientMessages,
@@ -31,6 +31,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     selectedPatient: PropTypes.object,
     selectedPatientDetailsForForm: PropTypes.object,
     savedPatient: PropTypes.object,
+    chat: PropTypes.object,
     clearSelectedPatient: PropTypes.func,
     savePatient: PropTypes.func,
     initChat: PropTypes.func,
@@ -76,19 +77,19 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   }
 
   sendMessage(message) {
-    const { chat } = this.props
-    let options = {
+    const { chat } = this.props;
+    const options = {
       body: message.body,
       studyId: chat.details.study_id,
       patientId: chat.details.id,
-      to: chat.details.phone
+      to: chat.details.phone,
     };
 
     this.props.sendStudyPatientMessages(options, (err, data) => {
       if (!err) {
-        console.log('data', data);
+        // console.log('data', data);
       } else {
-        console.log(err);
+        // console.log(err);
       }
     });
   }
@@ -155,14 +156,14 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
             </Modal>
             {(chat)
             ?
-            <Modal className="chat-patient" show={chatModalShown} onHide={this.closeChat}>
-              <Modal.Header closeButton>
-                <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <ChatForm  onSubmit={this.sendMessage}/>
-              </Modal.Body>
-            </Modal>
+              <Modal className="chat-patient" show={chatModalShown} onHide={this.closeChat}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <ChatForm  onSubmit={this.sendMessage} />
+                </Modal.Body>
+              </Modal>
             : ''
             }
           </div>
