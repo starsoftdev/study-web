@@ -61,7 +61,7 @@ class PatientDetailSection extends React.Component {
   }
 
   changePatientPhone(event) {
-    const { initialValues, submitPatientUpdate } = this.props;
+    const { blur, initialValues, submitPatientUpdate } = this.props;
     const phoneNumber = normalizePhone(event.target.value);
     const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
     blur('phone', formattedPhoneNumber);
@@ -161,7 +161,7 @@ class PatientDetailSection extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = () => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
