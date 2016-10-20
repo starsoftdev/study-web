@@ -20,8 +20,10 @@ import {
 import {
   selectSiteLocations,
   selectIndications,
+  selectCurrentUser,
 } from 'containers/App/selectors';
 
+import _ from 'lodash';
 
 export class IrbAdCreationPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -33,6 +35,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     fetchIndications: PropTypes.func,
     formValues: PropTypes.object,
     hasError: PropTypes.bool,
+    currentUser: PropTypes.object,
   };
 
   constructor(props) {
@@ -47,7 +50,12 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
   }
 
   onSubmitForm(params) {
-    this.submitForm(params, this.props.formValues);
+    const siteLocation = _.find(this.props.siteLocations, { id: this.props.formValues.siteLocation });
+    this.submitForm(params, {
+      ...this.props.formValues,
+      siteLocationName: siteLocation.name,
+      user_id: this.props.currentUser.id,
+    });
   }
 
   render() {
@@ -94,6 +102,7 @@ const mapStateToProps = createStructuredSelector({
   indications   : selectIndications(),
   formValues: selectIrbAdCreationFormValues(),
   hasError: selectIrbAdCreationFormError(),
+  currentUser: selectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {
