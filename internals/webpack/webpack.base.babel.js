@@ -84,7 +84,7 @@ module.exports = (options) => ({
       'jsnext:main',
     ],
   },
-  /*node: {
+  /* node: {
     fs: true,
     child_process: "empty"
   },*/
