@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, formValueSelector, reduxForm } from 'redux-form';
+import { getFormSyncErrors, Field, formValueSelector, reduxForm } from 'redux-form';
 
 import Form from 'react-bootstrap/lib/Form';
 import Checkbox from '../../../components/Input/Checkbox';
@@ -23,6 +23,7 @@ const formName = 'PatientDetailModal.Detail';
 class PatientDetailSection extends React.Component {
   static propTypes = {
     initialValues: React.PropTypes.object,
+    error: React.PropTypes.any,
     submitting: React.PropTypes.bool.isRequired,
     submitPatientUpdate: React.PropTypes.func.isRequired,
     unsubscribed: React.PropTypes.bool,
@@ -52,7 +53,7 @@ class PatientDetailSection extends React.Component {
   }
 
   changePatientEmail(event) {
-    const { initialValues, email, submitPatientUpdate } = this.props;
+    const { initialValues, error, invalid, submitPatientUpdate } = this.props;
 //    if (!email.error) {
 //      submitPatientUpdate(initialValues.id, {
 //        email: event.target.value,
@@ -77,7 +78,7 @@ class PatientDetailSection extends React.Component {
   }
 
   render() {
-    const { initialValues, submitting } = this.props;
+    const { submitting } = this.props;
     return (
       <Form className="form-lightbox form-patients-list">
         <div className="field-row">
@@ -94,6 +95,7 @@ class PatientDetailSection extends React.Component {
                   placeholder="First Name"
                   isDisabled={submitting}
                   required
+                  tooltipDisabled
                   onBlur={this.changePatientFirstName}
                 />
               </div>
@@ -105,6 +107,7 @@ class PatientDetailSection extends React.Component {
                   placeholder="Last Name"
                   isDisabled={submitting}
                   required
+                  tooltipDisabled
                   onBlur={this.changePatientLastName}
                 />
               </div>
@@ -112,7 +115,9 @@ class PatientDetailSection extends React.Component {
           </div>
         </div>
         <div className="field-row">
-          <strong className="label"><label htmlFor="new-patient-email">email</label></strong>
+          <strong className="label">
+            <label htmlFor="new-patient-email">Email</label>
+          </strong>
           <div className="field">
             <Field
               type="email"
@@ -124,18 +129,22 @@ class PatientDetailSection extends React.Component {
           </div>
         </div>
         <div className="field-row">
-          <strong className="label required"><label htmlFor="new-patient-phone">Phone</label></strong>
+          <strong className="label required">
+            <label htmlFor="new-patient-phone">Phone</label>
+          </strong>
           <div className="field">
             <Field
               type="tel"
               name="phone"
               component={Input}
+              required
+              tooltipDisabled
               onBlur={this.changePatientPhone}
             />
           </div>
         </div>
         <div className="field-row">
-          <strong className="label">&nbsp;</strong>
+          <strong className="label" />
           <div className="field">
             <Field
               name="unsubscribed"
@@ -154,17 +163,13 @@ class PatientDetailSection extends React.Component {
 
 const getFormValues = formValueSelector(formName);
 
-const mapStateToProps = state => (
-  {
-    unsubscribed: getFormValues(state, 'unsubscribed'),
-    syncErrors: getFormSyncErrors(formName)(state),
-  }
-);
+const mapStateToProps = state => ({
+  unsubscribed: getFormValues(state, 'unsubscribed'),
+  syncErrors: getFormSyncErrors(formName)(state),
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),
-  };
-}
+const mapDispatchToProps = (dispatch) => ({
+  submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientDetailSection);
