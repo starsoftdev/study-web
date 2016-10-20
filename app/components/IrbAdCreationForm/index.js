@@ -42,7 +42,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
             <strong className="label required"><label htmlFor="indication">INDICATION</label></strong>
             <div className="field">
               <Field
-                name="indication"
+                name="indication_id"
                 component={ReactSelect}
                 placeholder="Select Indication"
                 options={indications}
