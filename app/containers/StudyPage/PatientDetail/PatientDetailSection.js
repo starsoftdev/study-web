@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { getFormSyncErrors, Field, formValueSelector, reduxForm } from 'redux-form';
+import { blur, Field, reduxForm } from 'redux-form';
 
 import Form from 'react-bootstrap/lib/Form';
 import Checkbox from '../../../components/Input/Checkbox';
@@ -15,15 +15,14 @@ import { normalizePhone, normalizePhoneDisplay } from '../helper/functions';
 
 const formName = 'PatientDetailModal.Detail';
 
-
 @reduxForm({
   form: formName,
   validate: formValidator,
 })
 class PatientDetailSection extends React.Component {
   static propTypes = {
+    blur: React.PropTypes.func,
     initialValues: React.PropTypes.object,
-    error: React.PropTypes.any,
     submitting: React.PropTypes.bool.isRequired,
     submitPatientUpdate: React.PropTypes.func.isRequired,
     unsubscribed: React.PropTypes.bool,
@@ -53,27 +52,28 @@ class PatientDetailSection extends React.Component {
   }
 
   changePatientEmail(event) {
-    const { initialValues, error, invalid, submitPatientUpdate } = this.props;
-//    if (!email.error) {
-//      submitPatientUpdate(initialValues.id, {
-//        email: event.target.value,
-//      });
-//    }
+    const { initialValues, submitPatientUpdate } = this.props;
+    // if (\\.test(event.target.value)) {
+     submitPatientUpdate(initialValues.id, {
+       email: event.target.value,
+     });
+   // }
   }
 
   changePatientPhone(event) {
     const { initialValues, submitPatientUpdate } = this.props;
     const phoneNumber = normalizePhone(event.target.value);
     const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur('phone', formattedPhoneNumber);
     submitPatientUpdate(initialValues.id, {
       phone: phoneNumber,
     });
   }
 
-  changePatientUnsubscribe() {
-    const { initialValues, submitPatientUpdate, unsubscribed } = this.props;
+  changePatientUnsubscribe(value) {
+    const { initialValues, submitPatientUpdate } = this.props;
     submitPatientUpdate(initialValues.id, {
-      unsubscribed: !unsubscribed,
+      unsubscribed: value,
     });
   }
 
@@ -161,15 +161,12 @@ class PatientDetailSection extends React.Component {
   }
 }
 
-const getFormValues = formValueSelector(formName);
-
 const mapStateToProps = state => ({
-  unsubscribed: getFormValues(state, 'unsubscribed'),
-  syncErrors: getFormSyncErrors(formName)(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),
+  blur: (field, value) => dispatch(blur(formName, field, value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientDetailSection);
