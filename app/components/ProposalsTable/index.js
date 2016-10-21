@@ -68,12 +68,12 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     if (nextProps.range) {
       this.rangeSort(nextProps.range);
     }
-    if (nextProps.site) {
+    /* if (nextProps.site) {
       this.siteSort(nextProps.site);
     }
     if (nextProps.searchBy) {
       this.searchSort(nextProps.searchBy);
-    }
+    } */
   }
 
   componentDidUpdate() {}
@@ -295,6 +295,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     _.map(raw, (source, key) => {
       const date = new Date(source.created);
       const dateWrapper = moment(date);
+      const sub = ((source.total % 100) === 0) ? '.00' : false;
       result.push(
         <tr key={key}>
           <td>
@@ -314,7 +315,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           <td>{source.site}</td>
           <td>{source.proposalNumber}</td>
           <td>{source.protocol}</td>
-          <td>${source.total}</td>
+          <td>${(sub) ? `${(source.total / 100)}${sub}` : `${(source.total / 100).toFixed(2)}` }</td>
         </tr>
       );
     });
