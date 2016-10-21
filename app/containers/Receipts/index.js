@@ -25,8 +25,8 @@ import {
   selectEvents,
 } from 'containers/App/selectors';
 
-// import selectReceipts from './selectors';
-// import ProposalsTable from 'components/ProposalsTable';
+import selectReceipts from './selectors';
+import ReceiptsTable from 'components/ReceiptsTable';
 import ProposalsForm from 'components/ProposalsForm';
 import './styles.less';
 
@@ -39,7 +39,7 @@ export class Receipts extends Component { // eslint-disable-line react/prefer-st
     getReceipts: PropTypes.func,
     createPDF: PropTypes.func,
     location: PropTypes.any,
-    proposals: PropTypes.any,
+    receipts: PropTypes.any,
     currentUser: PropTypes.any,
   }
 
@@ -50,20 +50,50 @@ export class Receipts extends Component { // eslint-disable-line react/prefer-st
     this.changeRange = this.changeRange.bind(this);
     this.selectSite = this.selectSite.bind(this);
     this.search = this.search.bind(this);
+    this.selectCurrent = this.selectCurrent.bind(this);
+    this.selectAll = this.selectAll.bind(this);
 
     this.state = {
       range: null,
       site: null,
       searchBy: null,
       processPDF: false,
-      proposals: null,
-      filteredProposals: null,
+      receipts: null,
+      filteredReceipts: null,
     };
   }
 
   componentDidMount() {
     this.props.fetchSites();
     this.props.getReceipts();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // console.log('componentWillReceiveProps', nextProps);
+    if (nextProps.receipts) {
+      for (const receipt of nextProps.receipts) {
+        receipt.selected = false;
+      }
+      this.setState({
+        receipts: nextProps.receipts,
+      });
+    }
+  }
+
+  get selectedReceipts() {
+    return this.SelectedReceipts;
+  }
+
+  set selectedReceipts(value) {
+    this.SelectedReceipts = value;
+  }
+
+  selectCurrent(receipt) {
+    this.selectedReceipts = receipt;
+  }
+
+  selectAll(receipt) {
+    this.selectedReceipts = receipt;
   }
 
   changeRange(payload) {
@@ -94,8 +124,8 @@ export class Receipts extends Component { // eslint-disable-line react/prefer-st
   }
 
   createPdf() {
-    if (this.selectedProposal) {
-      this.props.createPDF(this.selectedProposal);
+    if (this.selectedReceipts) {
+      this.props.createPDF(this.selectedReceipts);
     }
   }
 
@@ -112,6 +142,13 @@ export class Receipts extends Component { // eslint-disable-line react/prefer-st
             createPdf={this.createPdf}
             {...this.props}
           />
+          <ReceiptsTable
+            selectCurrent={this.selectCurrent}
+            selectAll={this.selectAll}
+            range={this.state.range}
+            receipts={this.state.receipts}
+            {...this.props}
+          />
         </section>
       </StickyContainer>
     );
@@ -121,6 +158,7 @@ export class Receipts extends Component { // eslint-disable-line react/prefer-st
 const mapStateToProps = createStructuredSelector({
   siteLocations : selectSiteLocations(),
   currentUser: selectCurrentUser(),
+  receipts: selectReceipts(),
   pageEvents: selectEvents(),
 });
 

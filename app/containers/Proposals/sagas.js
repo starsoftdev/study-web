@@ -4,6 +4,7 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import request from 'utils/request';
 import { get } from 'lodash';
+import composeQueryString from 'utils/composeQueryString';
 
 import {
   proposalsReceived,
@@ -43,7 +44,9 @@ export function* getProposals() {
   while (true) {
     const { payload } = yield take(GET_PROPOSALS);
     try {
-      const requestURL = `${API_URL}/proposals`;
+      const queryParams = { filter: '{"include": [ "level", "indication" ]}' };
+      const queryString = composeQueryString(queryParams);
+      const requestURL = `${API_URL}/proposals/?${queryString}`;
       const response = yield call(request, requestURL);
 
       yield put(proposalsReceived(response));
