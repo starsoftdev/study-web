@@ -14,6 +14,7 @@ import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
 import StudyPatients from './PatientPanel/StudyPatients';
 import * as Selector from './selectors';
+import moment from 'moment';
 import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId } from './actions';
 
 import './styles.less';
@@ -74,21 +75,20 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       );
     }
     const pageTitle = `${study.name} - StudyKIK`;
-
     const campaignOptions = campaigns.map(campaign => (
       {
-        label: campaign.name,
+        label: moment(campaign.dateFrom).format('MMMM Do YYYY') + ' -  ' + moment(campaign.dateTo).format('MMMM Do YYYY'),
         value: campaign.id,
       }
     ));
-    campaignOptions.unshift({ label: 'All', value: 0 });
+    campaignOptions.unshift({ label: 'All', value: -1 });
     const sourceOptions = sources.map(source => (
       {
         label: source.type,
         value: source.id,
       }
     ));
-    sourceOptions.unshift({ label: 'All', value: 0 });
+    sourceOptions.unshift({ label: 'All', value: -1 });
     const siteLocation = site.location;
     let sponsor = 'None';
     if (study.sponsor) {
