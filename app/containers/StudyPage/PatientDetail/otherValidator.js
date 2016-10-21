@@ -3,7 +3,6 @@ import { validatorFactory } from '../../../utils/reduxForm';
 const schema = {
   bmi: {
     numericality: {
-      noStrings: true,
       greaterThan: 0,
     },
   },
