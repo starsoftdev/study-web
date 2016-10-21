@@ -6,4 +6,4 @@
 // if they have the same string type.
 export default {
   PATIENT: 'patient',
-}
+};

@@ -13,8 +13,6 @@ import StudyActionButtons from './StudyActionButtons';
 import { fetchPatients } from './actions';
 
 @reduxForm({ form: 'filterStudyPatients' })
-  
-
 class FilterStudyPatientsForm extends Component {
 
   static propTypes = {
@@ -97,20 +95,18 @@ class FilterStudyPatientsForm extends Component {
 }
 const selector = formValueSelector('filterStudyPatients');
 
-const mapStateToProps = (state) => (
-  {
-    campaignOptions: state.studyPage.campaigns.map(campaign => {
-      const returnObj = {};
-      returnObj.value = campaign.id;
-      returnObj.label = moment(campaign.dateFrom).format('MMMM Do YYYY');
-      return returnObj;
-    }),
-    campaign: selector(state, 'campaign'),
-    source: selector(state, 'source'),
-    studyId: state.studyPage.studyId,
-    siteId: state.studyPage.siteId,
-  }
-);
+const mapStateToProps = (state) => ({
+  campaignOptions: state.studyPage.campaigns.map(campaign => {
+    const returnObj = {};
+    returnObj.value = campaign.id;
+    returnObj.label = moment(campaign.dateFrom).format('MMMM Do YYYY');
+    return returnObj;
+  }),
+  campaign: selector(state, 'campaign'),
+  source: selector(state, 'source'),
+  studyId: state.studyPage.studyId,
+  siteId: state.studyPage.siteId,
+});
 
 function mapDispatchToProps(dispatch) {
   return {

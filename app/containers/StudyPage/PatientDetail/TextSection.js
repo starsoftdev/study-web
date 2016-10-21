@@ -24,7 +24,7 @@ class TextSection extends React.Component {
     submitPatientText: React.PropTypes.func.isRequired,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.renderText = this.renderText.bind(this);
   }
@@ -59,14 +59,11 @@ class TextSection extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => (
-  {
-  }
-);
-const mapDispatchToProps = (dispatch) => (
-  {
-    submitPatientText: (text) => dispatch(submitPatientText(text)),
-  }
-);
+const mapStateToProps = () => ({
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  submitPatientText: (text) => dispatch(submitPatientText(text)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextSection);

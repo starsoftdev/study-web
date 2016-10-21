@@ -82,7 +82,7 @@ const patientSource = {
     // appearance dragged:
     return monitor.getItem().id === props.patient.id;
   },
-  beginDrag(props, monitor, component) {
+  beginDrag(props) {
     // Return the data describing the dragged item
     const item = { id: props.patient.id };
     return item;
