@@ -53,24 +53,24 @@ class StudyStats extends React.Component {
             <Col xs={4} className="green">
               <div className="box" style={{ height: '103px' }}>
                 <i className="icomoon-phone" />
-                <strong className="number">948</strong>
+                <strong className="number">{stats.calls}</strong>
                 <h3>CALLS PLACED</h3>
               </div>
               <div className="box" style={{ height: '103px' }}>
                 <i className="icomoon-icon_clock_alt" />
-                <strong className="number">32:41:15</strong>
+                <strong className="number">{stats.callsDuration}</strong>
                 <h3>CALLS DURATION</h3>
               </div>
             </Col>
             <Col xs={4} className="orange">
               <div className="box same-height-right" style={{ height: '103px' }}>
                 <i className="icomoon-chat-up" />
-                <strong className="number">52,711</strong>
+                <strong className="number">{stats.texts}</strong>
                 <h3>TEXTS SENT</h3>
               </div>
               <div className="box same-height-right" style={{ height: '103px' }}>
                 <i className="icomoon-chat-down" />
-                <strong className="number">18,374</strong>
+                <strong className="number">{stats.textsReceived}</strong>
                 <h3>TEXTS RECEIVED</h3>
               </div>
             </Col>

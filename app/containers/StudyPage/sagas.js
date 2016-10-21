@@ -20,7 +20,7 @@ import { FETCH_PATIENTS,
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
-import { campaignsFetched, deletePatientNoteSuccess, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, updatePatientSuccess, addPatientNoteSuccess, addPatientTextSuccess } from './actions';
+import { campaignsFetched, deletePatientNoteSuccess, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, callStatsFetched, textStatsFetched, updatePatientSuccess, addPatientNoteSuccess, addPatientTextSuccess } from './actions';
 
 // Bootstrap sagas
 export default [
@@ -103,6 +103,42 @@ function* fetchPatientReferralStat() {
     yield put(patientReferralStatFetched(response));
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching patient referral stats. Please try again later.');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+function* fetchStudyCallStats() {
+  const authToken = getItem('auth_token');
+
+  // listen for the FETCH_STUDY action
+  const { studyId } = yield take(FETCH_STUDY);
+
+  try {
+    const requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}?access_token=${authToken}`;
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    yield put(callStatsFetched(response));
+  } catch (e) {
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching call stats. Please try again later.');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+function* fetchStudyTextStats() {
+  const authToken = getItem('auth_token');
+
+  // listen for the FETCH_STUDY action
+  const { studyId } = yield take(FETCH_STUDY);
+
+  try {
+    const requestURL = `${API_URL}/textMessages/countStudyMessages/${studyId}?access_token=${authToken}`;
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    yield put(textStatsFetched(response));
+  } catch (e) {
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
   }
 }
@@ -403,6 +439,8 @@ export function* fetchStudySaga() {
     yield fork(fetchStudyDetails);
     yield fork(fetchStudyViewsStat);
     yield fork(fetchPatientReferralStat);
+    yield fork(fetchStudyCallStats);
+    yield fork(fetchStudyTextStats);
     yield call(fetchPatientCategories);
     yield fork(fetchPatientsSaga);
     yield fork(fetchPatientDetails);

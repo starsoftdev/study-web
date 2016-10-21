@@ -15,6 +15,8 @@ import {
   FETCH_STUDY,
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
+  FETCH_STUDY_CALLS_SUCCESS,
+  FETCH_STUDY_TEXTS_SUCCESS,
   FETCH_SITE_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
@@ -142,6 +144,20 @@ export function studyViewsStatFetched(payload) {
 export function patientReferralStatFetched(payload) {
   return {
     type: FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
+    payload,
+  };
+}
+
+export function callStatsFetched(payload) {
+  return {
+    type: FETCH_STUDY_CALLS_SUCCESS,
+    payload,
+  };
+}
+
+export function textStatsFetched(payload) {
+  return {
+    type: FETCH_STUDY_TEXTS_SUCCESS,
     payload,
   };
 }

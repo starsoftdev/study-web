@@ -13,6 +13,8 @@ import {
   FETCH_SITE_SUCCESS,
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
+  FETCH_STUDY_CALLS_SUCCESS,
+  FETCH_STUDY_TEXTS_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
   SET_STUDY_ID,
@@ -100,6 +102,25 @@ function studyPageReducer(state = initialState, action) {
         stats: {
           ...state.stats,
           referrals: action.payload,
+        },
+      };
+    case FETCH_STUDY_CALLS_SUCCESS:
+      return {
+        ...state,
+        stats: {
+          ...state.stats,
+          calls: action.payload.count,
+          callsDuration: action.payload.totalDuration,
+        },
+      };
+    case FETCH_STUDY_TEXTS_SUCCESS:
+      return {
+        ...state,
+        stats: {
+          ...state.stats,
+          texts: action.payload.total,
+          textsSent: action.payload.sent,
+          textsReceived: action.payload.received,
         },
       };
     case SET_STUDY_ID:
