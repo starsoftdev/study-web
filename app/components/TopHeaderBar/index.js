@@ -1,13 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 
 import studykikLogo from 'assets/images/logo.svg';
-import userAvatar from 'assets/images/img-logged-user.png';
 import AddCreditsModal from 'components/AddCreditsModal';
 
 import NotificationBox from './NotificationBox';
+import AvatarMenu from './AvatarMenu';
 
 import {
   selectCurrentUser,
@@ -53,6 +52,10 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     this.setState({ showAddCreditsModal: false });
   }
 
+  handleLogoutClick = () => {
+    console.log('logout');
+  }
+
   render() {
     return (
       <header id="header">
@@ -80,13 +83,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             <a href="#" className="btn btn-default" onClick={this.showAddCreditsModal}>+ ADD CREDITS</a>
           </div>
 
-          <div className="logged-user-area open-close pull-right">
-            <Link to="/profile" className="opener">
-              <div className="img-circle"><img src={userAvatar} width="43" height="43" alt="Bruce Wayne" /></div>
-              <span className="text">Bruce Wayne</span>
-              <i className="caret" />
-            </Link>
-          </div>
+          <AvatarMenu handleLogoutClick={this.handleLogoutClick} />
 
         </div>
         <AddCreditsModal
