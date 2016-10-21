@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import Overlay from 'react-bootstrap/lib/Overlay';
-import { Field, reduxForm } from 'redux-form';
+import { change, Field, reduxForm } from 'redux-form';
 import classNames from 'classnames';
 import moment from 'moment-timezone';
 import ReactSelect from 'react-select';
@@ -31,6 +31,7 @@ const formName = 'PatientDetailModal.Other';
 class OtherSection extends React.Component {
   static propTypes = {
     active: React.PropTypes.bool.isRequired,
+    change: React.PropTypes.func.isRequired,
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     fetchIndications: React.PropTypes.func.isRequired,
@@ -70,23 +71,34 @@ class OtherSection extends React.Component {
   }
 
   changePatientDobMonth(event) {
-
+    const { formValues: { dobMonth, dobDay, dobYear }, submitPatientUpdate } = this.props;
   }
 
   changePatientDobDay(event) {
+    const { formValues: { dobMonth, dobDay, dobYear }, submitPatientUpdate } = this.props;
 
   }
 
   changePatientDobYear(event) {
+    const { formValues: { dobMonth, dobDay, dobYear }, submitPatientUpdate } = this.props;
 
   }
 
   changeBMI(event) {
-
+    const { formSyncErrors, initialValues, submitPatientUpdate } = this.props;
+    if (!formSyncErrors.bmi) {
+      submitPatientUpdate(initialValues.id, {
+        bmi: parseFloat(event.target.value),
+      });
+    }
   }
 
-  changeGender(event) {
-
+  changeGender(option) {
+    const { change, initialValues, submitPatientUpdate } = this.props;
+    change('gender', option.value);
+    submitPatientUpdate(initialValues.id, {
+      gender: option.value,
+    });
   }
 
   deleteIndication(indication) {
@@ -221,7 +233,7 @@ class OtherSection extends React.Component {
                     <div className="row">
                       <div className="col-small pull-left">
                         <Field
-                          name="dob-month"
+                          name="dobMonth"
                           component={ReactSelect}
                           className="form-control min-height"
                           options={monthOptions}
@@ -230,7 +242,7 @@ class OtherSection extends React.Component {
                       </div>
                       <div className="col-small pull-left">
                         <Field
-                          name="dob-date"
+                          name="dobDate"
                           component={ReactSelect}
                           className="form-control min-height"
                           options={dayOptions}
@@ -239,7 +251,7 @@ class OtherSection extends React.Component {
                       </div>
                       <div className="col-small pull-left">
                         <Field
-                          name="dob-year"
+                          name="dobYear"
                           component={ReactSelect}
                           className="form-control min-height"
                           options={yearOptions}
@@ -259,7 +271,7 @@ class OtherSection extends React.Component {
                       type="text"
                       name="bmi"
                       component={Input}
-                      onChange={this.changeBMI}
+                      onBlur={this.changeBMI}
                     />
                   </div>
                 </div>
@@ -288,6 +300,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  change: (field, value) => dispatch(change(formName, field, value)),
   submitAddPatientIndication: (patientId, indication) => dispatch(submitAddPatientIndication(patientId, indication)),
   submitRemovePatientIndication: (patientId, indicationId) => dispatch(submitRemovePatientIndication(patientId, indicationId)),
   submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),
