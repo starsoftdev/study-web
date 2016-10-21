@@ -11,19 +11,6 @@ describe('<ListNewStudyPage />', () => {
 
   beforeEach(() => {
     setup = () => {
-      /*  const props = {
-       siteLocations: [],
-       fullSiteLocations: [],
-       indications: [],
-       studyLevels: [],
-       fetchSites: expect.createSpy(),
-       fetchIndications: expect.createSpy(),
-       fetchLevels: expect.createSpy(),
-       submitForm: expect.createSpy(),
-       listNewStudyState: {},
-       formValues: {},
-       saveSite: expect.createSpy(),
-       }; */
       const props = {
         siteLocations: [],
         indications: [],
@@ -34,6 +21,7 @@ describe('<ListNewStudyPage />', () => {
         submitForm: expect.createSpy(),
         formValues: {},
         listNewStudyState: {},
+        getAvailPhoneNumbers: expect.createSpy(),
       };
 
       const shallowWrapper = shallow(<ListNewStudyPage {...props} />);
