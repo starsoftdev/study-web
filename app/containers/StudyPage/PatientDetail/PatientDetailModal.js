@@ -22,6 +22,7 @@ class PatientDetailModal extends React.Component {
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     openPatientModal: React.PropTypes.bool.isRequired,
+    onClose: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number.isRequired,
   };
 
@@ -96,10 +97,11 @@ class PatientDetailModal extends React.Component {
         <PatientDetailSection initialValues={formattedPatient} />
       );
     }
+    return null;
   }
 
   render() {
-    const { currentUser, openPatientModal, currentPatientCategory, currentPatient, studyId } = this.props;
+    const { currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId } = this.props;
     return (
       <Collapse dimension="width" in={openPatientModal} timeout={250} className="patients-list-form">
         <div className="form-area">
@@ -109,7 +111,7 @@ class PatientDetailModal extends React.Component {
               <span className="date" />
               <span className="time" />
             </a>
-            <a className="btn-close" onClick={this.onPatientClick}>
+            <a className="btn-close" onClick={onClose}>
               <i className="glyphicon glyphicon-menu-right" />
             </a>
           </div>
