@@ -42,18 +42,30 @@ class FilterStudyPatientsForm extends Component {
 
   searchPatient(event, type) {
     const { fetchPatients, siteId, studyId, campaign, source, search } = this.props;
-
+    let newCampaign = campaign
+    let newSource = source
+    /* nulling the values if all is selected */
+    if (campaign === -1) {
+      newCampaign = null;
+    }
+    if (source === -1) {
+      newSource = null;
+    }
     if (type === 'search') {
-      fetchPatients(studyId, siteId, event.target.value, campaign, source);
+      fetchPatients(studyId, siteId, event.target.value, newCampaign, newSource);
     } else if (type === 'source') {
-      if (event === 6) {
-        /* nulling the change */
-        fetchPatients(studyId, siteId, search, campaign, null);
+      /* -1 means all was selected */
+      if (event === -1) {
+        fetchPatients(studyId, siteId, search, newCampaign, null);
       } else {
-        fetchPatients(studyId, siteId, search, campaign, event);
+        fetchPatients(studyId, siteId, search, newCampaign, event);
       }
     } else {
-      fetchPatients(studyId, siteId, search, event, source);
+      /* -1 means all was selected */
+      if (event === -1) {
+        fetchPatients(studyId, siteId, search, null, newSource);
+      }
+      fetchPatients(studyId, siteId, search, event, newSource);
     }
   }
   render() {
@@ -65,14 +77,6 @@ class FilterStudyPatientsForm extends Component {
       loading,
     } = this.props;
     /* changing the source for display purposes only */
-    const newSourceOptions = sourceOptions.map(source => {
-      if (source.value === 0) {
-        source.value = 6;
-        return source;
-      } else {
-        return source;
-      }
-    })
     return (
       <form className="form-search clearfix" onSubmit={handleSubmit}>
         <StudyActionButtons />
@@ -107,7 +111,7 @@ class FilterStudyPatientsForm extends Component {
             name="source"
             component={ReactSelect}
             className="field"
-            options={newSourceOptions}
+            options={sourceOptions}
             disabled={submitting || loading}
             placeholder="Select Source"
             onChange={event => this.searchPatient(event, 'source')}
@@ -120,12 +124,6 @@ class FilterStudyPatientsForm extends Component {
 const selector = formValueSelector('filterStudyPatients');
 
 const mapStateToProps = (state) => ({
-  campaignOptions: state.studyPage.campaigns.map(campaign => {
-    const returnObj = {};
-    returnObj.value = campaign.id;
-    returnObj.label = moment(campaign.dateFrom).format('MMMM Do YYYY') + ' -  ' + moment(campaign.dateTo).format('MMMM Do YYYY');
-    return returnObj;
-  }),
   campaign: selector(state, 'campaign'),
   source: selector(state, 'source'),
   search: selector(state, 'search'),
