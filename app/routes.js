@@ -286,6 +286,26 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      path: '/manage-transfer-number',
+      name: 'manageTransferNumberPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/ManageTransferNumberPage/reducer'),
+          System.import('containers/ManageTransferNumberPage/sagas'),
+          System.import('containers/ManageTransferNumberPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('manageTransferNumberPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: 'receipts',
       name: 'receipts',
       getComponent(nextState, cb) {
