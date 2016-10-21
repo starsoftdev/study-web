@@ -49,7 +49,12 @@ function Input({
       placeholder={placeholder}
       required={required}
       componentClass={componentClass} // Default value is `input`
-      onChange={onChange || input.onChange}
+      onChange={(event) => {
+        input.onChange(event);
+        if (onChange) {
+          onChange(event);
+        }
+      }}
       onBlur={(event) => {
         input.onBlur(event);
         if (onBlur) {
