@@ -23,6 +23,7 @@ class FilterStudyPatientsForm extends Component {
     loading: PropTypes.bool.isRequired,
     fetchPatients: PropTypes.func.isRequired,
     campaign: PropTypes.number,
+    search: PropTypes.string,
     source: PropTypes.number,
     siteId: PropTypes.number.isRequired,
     studyId: PropTypes.number.isRequired,
@@ -39,9 +40,20 @@ class FilterStudyPatientsForm extends Component {
 
   }
 
-  searchPatient(event) {
-    const { fetchPatients, siteId, studyId, campaign, source } = this.props;
-    fetchPatients(studyId, siteId, event.target.value, campaign, source);
+  searchPatient(event, type) {
+    const { fetchPatients, siteId, studyId, campaign, source, search } = this.props;
+
+    if (type === 'search') {
+      fetchPatients(studyId, siteId, event.target.value, campaign, source);
+    } else if (type === 'source') {
+      if (event === 6) {
+        /* nulling the change */
+        event = undefined;
+      }
+      fetchPatients(studyId, siteId, search, campaign, event);
+    } else {
+      fetchPatients(studyId, siteId, search, event, source);
+    }
   }
   render() {
     const {
@@ -51,6 +63,15 @@ class FilterStudyPatientsForm extends Component {
       submitting,
       loading,
     } = this.props;
+    /* changing the source for display purposes only */
+    const newSourceOptions = sourceOptions.map(source => {
+      if (source.value === 0) {
+        source.value = 6;
+        return source;
+      } else {
+        return source;
+      }
+    })
     return (
       <form className="form-search clearfix" onSubmit={handleSubmit}>
         <StudyActionButtons />
@@ -62,7 +83,7 @@ class FilterStudyPatientsForm extends Component {
               name="search"
               className="keyword-search"
               placeholder="Search Patients"
-              onChange={this.searchPatient}
+              onChange={(event) => this.searchPatient(event, 'search')}
             />
             <label htmlFor="search">
               <i className="icomoon-icon_search2" />
@@ -77,6 +98,7 @@ class FilterStudyPatientsForm extends Component {
             options={campaignOptions}
             disabled={submitting || loading}
             placeholder="Select Campaign"
+            onChange={(event) => this.searchPatient(event)}
           />
         </div>
         <div className="select pull-left">
@@ -84,9 +106,10 @@ class FilterStudyPatientsForm extends Component {
             name="source"
             component={ReactSelect}
             className="field"
-            options={sourceOptions}
+            options={newSourceOptions}
             disabled={submitting || loading}
             placeholder="Select Source"
+            onChange={event => this.searchPatient(event, 'source')}
           />
         </div>
       </form>
@@ -104,6 +127,7 @@ const mapStateToProps = (state) => ({
   }),
   campaign: selector(state, 'campaign'),
   source: selector(state, 'source'),
+  search: selector(state, 'search'),
   studyId: state.studyPage.studyId,
   siteId: state.studyPage.siteId,
 });
