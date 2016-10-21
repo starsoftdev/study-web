@@ -35,8 +35,8 @@ class StudyPatients extends React.Component {
   }
 
   onPatientClick(category, patient) {
-    const { fetchPatientDetails, setCurrentPatientCategoryId, setCurrentPatientId } = this.props;
-    const show = patient && this.state.selectedPatientId !== patient.id;
+    const { fetchPatientDetails, currentPatientId, setCurrentPatientCategoryId, setCurrentPatientId } = this.props;
+    const show = patient && currentPatientId !== patient.id;
     if (show) {
       setCurrentPatientCategoryId(category.id);
       setCurrentPatientId(patient.id);
@@ -83,7 +83,7 @@ class StudyPatients extends React.Component {
               ))}
             </ul>
           </nav>
-          <PatientDetailModal currentUser={currentUser} openPatientModal={this.state.openPatientModal} />
+          <PatientDetailModal currentUser={currentUser} openPatientModal={this.state.openPatientModal} onClose={this.onPatientClick} />
         </div>
         <div className="patients-form-closer" onClick={this.onPatientClick} />
       </div>

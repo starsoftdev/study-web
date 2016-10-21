@@ -27,7 +27,7 @@ class PatientDetailSection extends React.Component {
     submitting: React.PropTypes.bool.isRequired,
     submitPatientUpdate: React.PropTypes.func.isRequired,
     unsubscribed: React.PropTypes.bool,
-    formErrors: React.PropTypes.object,
+    formSyncErrors: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -54,8 +54,8 @@ class PatientDetailSection extends React.Component {
   }
 
   changePatientEmail(event) {
-    const { initialValues, submitPatientUpdate, formErrors } = this.props;
-    if (!formErrors.email) {
+    const { initialValues, submitPatientUpdate, formSyncErrors } = this.props;
+    if (!formSyncErrors.email) {
       submitPatientUpdate(initialValues.id, {
         email: event.target.value,
       });
@@ -64,12 +64,15 @@ class PatientDetailSection extends React.Component {
 
   changePatientPhone(event) {
     const { blur, initialValues, submitPatientUpdate } = this.props;
-    const phoneNumber = normalizePhone(event.target.value);
     const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
     blur('phone', formattedPhoneNumber);
-    submitPatientUpdate(initialValues.id, {
-      phone: phoneNumber,
-    });
+    const { formSyncErrors } = this.props;
+    if (!formSyncErrors.phone) {
+      const phoneNumber = normalizePhone(event.target.value);
+      submitPatientUpdate(initialValues.id, {
+        phone: phoneNumber,
+      });
+    }
   }
 
   changePatientUnsubscribe(value) {
@@ -164,7 +167,7 @@ class PatientDetailSection extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  formErrors: selectSyncErrors(formName),
+  formSyncErrors: selectSyncErrors(formName),
 });
 
 const mapDispatchToProps = (dispatch) => ({
