@@ -76,12 +76,10 @@ class OtherSection extends React.Component {
 
   changePatientDobDay(event) {
     const { formValues: { dobMonth, dobDay, dobYear }, submitPatientUpdate } = this.props;
-
   }
 
   changePatientDobYear(event) {
     const { formValues: { dobMonth, dobDay, dobYear }, submitPatientUpdate } = this.props;
-
   }
 
   changeBMI(event) {

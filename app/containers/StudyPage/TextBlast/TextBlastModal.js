@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, formValueSelector, reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import Form from 'react-bootstrap/lib/Form';
 import Modal from 'react-bootstrap/lib/Modal';
@@ -48,6 +48,7 @@ class TextBlastModal extends React.Component {
     this.selectCategory = this.selectCategory.bind(this);
     this.selectSource = this.selectSource.bind(this);
     this.removePatient = this.removePatient.bind(this);
+    this.submitTextBlast = this.submitTextBlast.bind(this);
     this.renderPatient = this.renderPatient.bind(this);
     for (const patientCategory of props.patientCategories) {
       this.state.categories[patientCategory.id] = false;
@@ -108,6 +109,10 @@ class TextBlastModal extends React.Component {
 
   }
 
+  submitTextBlast(patients) {
+
+  }
+
   renderPatient() {
     return (
       <div className="patient">
@@ -120,7 +125,7 @@ class TextBlastModal extends React.Component {
   }
 
   render() {
-    const { onClose, patientCategories, sources, submitTextBlast, show, role, bsClass, dialogClassName, className, style, onHide } = this.props;
+    const { patientCategories, sources, show, role, bsClass, dialogClassName, className, style, onHide } = this.props;
     return (
       <Modal
         show={show}
