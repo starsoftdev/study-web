@@ -5,6 +5,7 @@
  */
 
 import {
+  ADD_PATIENT_INDICATION_SUCCESS,
   ADD_PATIENT_NOTE_SUCCESS,
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_PATIENTS_SUCCESS,
@@ -17,6 +18,7 @@ import {
   FETCH_STUDY_TEXTS_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
+  REMOVE_PATIENT_INDICATION_SUCCESS,
   SET_STUDY_ID,
   SET_SITE_ID,
   SET_CURRENT_PATIENT_ID,
@@ -55,8 +57,10 @@ function studyPageReducer(state = initialState, action) {
         }),
         fetchingPatients: false,
       };
+    case ADD_PATIENT_INDICATION_SUCCESS:
     case ADD_PATIENT_NOTE_SUCCESS:
     case FETCH_PATIENT_DETAILS_SUCCESS:
+    case REMOVE_PATIENT_INDICATION_SUCCESS:
     case SUBMIT_DELETE_NOTE_SUCCESS:
     case UPDATE_PATIENT_SUCCESS:
       return {
@@ -152,6 +156,8 @@ function studyPageReducer(state = initialState, action) {
 function patientCategories(state, currentPatientCategoryId, currentPatientId, action) {
   switch (action.type) {
     case ADD_PATIENT_NOTE_SUCCESS:
+    case ADD_PATIENT_INDICATION_SUCCESS:
+    case REMOVE_PATIENT_INDICATION_SUCCESS:
     case SUBMIT_DELETE_NOTE_SUCCESS:
       return state.map(patientCategory => {
         if (patientCategory.id === currentPatientCategoryId) {
@@ -188,6 +194,19 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
 
 function patients(state, currentPatientId, action) {
   switch (action.type) {
+    case ADD_PATIENT_INDICATION_SUCCESS:
+      return state.map(patient => {
+        if (patient.id === currentPatientId) {
+          return {
+            ...patient,
+            indications: [
+              ...patient.indications,
+              action.indication,
+            ],
+          };
+        }
+        return patient;
+      });
     case ADD_PATIENT_NOTE_SUCCESS:
       return state.map(patient => {
         if (patient.id === currentPatientId) {
@@ -200,6 +219,18 @@ function patients(state, currentPatientId, action) {
                 user: action.currentUser,
               },
             ],
+          };
+        }
+        return patient;
+      });
+    case REMOVE_PATIENT_INDICATION_SUCCESS:
+      return state.map(patient => {
+        if (patient.id === currentPatientId) {
+          return {
+            ...patient,
+            indications: patient.indications.filter(indication => (
+              indication.id !== action.indicationId
+            )),
           };
         }
         return patient;

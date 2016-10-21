@@ -3,12 +3,14 @@
  */
 
 import { call, fork, put, take } from 'redux-saga/effects';
-import request from 'utils/request';
+import request from '../../utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
 import { FETCH_PATIENTS,
   FETCH_PATIENT_DETAILS,
   FETCH_PATIENT_CATEGORIES,
   FETCH_STUDY,
+  SUBMIT_ADD_PATIENT_INDICATION,
+  SUBMIT_REMOVE_PATIENT_INDICATION,
   SUBMIT_PATIENT_UPDATE,
   SUBMIT_TEXT_BLAST,
   SUBMIT_PATIENT_IMPORT,
@@ -20,7 +22,7 @@ import { FETCH_PATIENTS,
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
-import { campaignsFetched, deletePatientNoteSuccess, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, callStatsFetched, textStatsFetched, updatePatientSuccess, addPatientNoteSuccess, addPatientTextSuccess } from './actions';
+import { campaignsFetched, deletePatientNoteSuccess, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, callStatsFetched, textStatsFetched, addPatientIndicationSuccess, removePatientIndicationSuccess, updatePatientSuccess, addPatientNoteSuccess, addPatientTextSuccess } from './actions';
 
 // Bootstrap sagas
 export default [
@@ -264,6 +266,48 @@ function* fetchPatientDetails() {
   }
 }
 
+function* submitAddPatientIndication() {
+  while (true) {
+    // listen for the SUBMIT_ADD_PATIENT_INDICATION action
+    const { patientId, indication } = yield take(SUBMIT_ADD_PATIENT_INDICATION);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+    try {
+      const requestURL = `${API_URL}/patients/${patientId}/indications/rel/${indication.id}?access_token=${authToken}`;
+      yield call(request, requestURL, {
+        method: 'PUT',
+      });
+      yield put(addPatientIndicationSuccess(patientId, indication));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
+function* submitRemovePatientIndication() {
+  while (true) {
+    // listen for the SUBMIT_REMOVE_PATIENT_INDICATION action
+    const { patientId, indicationId } = yield take(SUBMIT_REMOVE_PATIENT_INDICATION);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+    try {
+      const requestURL = `${API_URL}/patients/${patientId}/indications/rel/${indicationId}?access_token=${authToken}`;
+      yield call(request, requestURL, {
+        method: 'DELETE',
+      });
+      yield put(removePatientIndicationSuccess(patientId, indicationId));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while removing the patient indication. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
 function* submitPatientUpdate() {
   while (true) {
     // listen for the SUBMIT_PATIENT_UPDATE action
@@ -444,6 +488,8 @@ export function* fetchStudySaga() {
     yield call(fetchPatientCategories);
     yield fork(fetchPatientsSaga);
     yield fork(fetchPatientDetails);
+    yield fork(submitAddPatientIndication);
+    yield fork(submitRemovePatientIndication);
     yield fork(submitPatientUpdate);
     yield fork(submitTextBlast);
     yield fork(submitPatientImport);

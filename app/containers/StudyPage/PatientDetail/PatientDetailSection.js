@@ -10,10 +10,11 @@ import Form from 'react-bootstrap/lib/Form';
 import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/index';
 import { submitPatientUpdate } from '../actions';
-import formValidator from './validator';
+import formValidator from './detailValidator';
 import { normalizePhone, normalizePhoneDisplay } from '../helper/functions';
 import { selectSyncErrors } from '../../../common/selectors/form.selector';
 import { createStructuredSelector } from 'reselect';
+
 const formName = 'PatientDetailModal.Detail';
 
 @reduxForm({
@@ -73,7 +74,6 @@ class PatientDetailSection extends React.Component {
     const { formSyncErrors } = this.props;
     if (!formSyncErrors.phone) {
       const phoneNumber = normalizePhone(event.target.value);
-      console.log(phoneNumber);
       submitPatientUpdate(initialValues.id, {
         phone: phoneNumber,
       });
