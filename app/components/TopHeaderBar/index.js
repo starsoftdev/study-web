@@ -76,10 +76,13 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             <a href="#" className="link-help pull-left opener">?</a>
           </div>
 
+          <a href="#chat-popup" className="lightbox-opener pull-left btn-chat-popup">
+            <span className="counter">3</span>
+            <i className="icon-credit"></i>
+          </a>
 
           <div className="get-credits pull-left">
-            <i className="icon-credit margin-right-5px" />
-            <span className="margin-right-5px">100 Credits</span>
+            <span style={{ marginRight: '5px' }}>100 Credits</span>
             <a href="#" className="btn btn-default" onClick={this.showAddCreditsModal}>+ ADD CREDITS</a>
           </div>
 
