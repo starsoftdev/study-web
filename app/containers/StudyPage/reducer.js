@@ -163,23 +163,6 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
         return patientCategory;
       });
     case FETCH_PATIENT_DETAILS_SUCCESS:
-      return state.map(patientCategory => {
-        if (patientCategory.id === currentPatientCategoryId) {
-          return {
-            ...patientCategory,
-            patients: patientCategory.patients.map(patient => {
-              if (patient.id === currentPatientId) {
-                return {
-                  ...patient,
-                  ...action.payload,
-                };
-              }
-              return patient;
-            }),
-          };
-        }
-        return patientCategory;
-      });
     case UPDATE_PATIENT_SUCCESS:
       return state.map(patientCategory => {
         if (patientCategory.id === currentPatientCategoryId) {
