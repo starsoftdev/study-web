@@ -91,10 +91,10 @@ class PatientDetailModal extends React.Component {
     const { currentPatient } = this.props;
 
     if (currentPatient) {
-      const formattedPatient = Object.assign(currentPatient, {});
+      const formattedPatient = Object.assign({}, currentPatient);
       formattedPatient.phone = normalizePhoneDisplay(currentPatient.phone);
       return (
-        <PatientDetailSection initialValues={formattedPatient} />
+        <PatientDetailSection initialValues={formattedPatient} enableReinitialize />
       );
     }
     return null;
@@ -128,7 +128,7 @@ class PatientDetailModal extends React.Component {
                 <NotesSection active={this.state.carousel.note} currentUser={currentUser} currentPatient={currentPatient} studyId={studyId} />
                 <TextSection active={this.state.carousel.text} currentUser={currentUser} currentPatient={currentPatient} />
                 <EmailSection active={this.state.carousel.email} />
-                {/* <OtherSection active={this.state.carousel.other} currentPatient={currentPatient} currentUser={currentUser} />*/}
+                <OtherSection active={this.state.carousel.other} initialValues={currentPatient} currentUser={currentUser} />
               </div>
             </div>
           </div>
@@ -144,9 +144,7 @@ const mapStateToProps = createStructuredSelector({
   studyId: Selector.selectStudyId(),
 });
 
-const mapDispatchToProps = () => (
-  {
-  }
-);
+const mapDispatchToProps = () => ({
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientDetailModal);

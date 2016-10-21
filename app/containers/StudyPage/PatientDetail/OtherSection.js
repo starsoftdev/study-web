@@ -3,46 +3,145 @@
  */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
+import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
-import { Field } from 'redux-form';
+import FormControl from 'react-bootstrap/lib/FormControl';
+import Overlay from 'react-bootstrap/lib/Overlay';
+import { Field, reduxForm } from 'redux-form';
 import classNames from 'classnames';
 import moment from 'moment-timezone';
 import ReactSelect from 'react-select';
+import Input from '../../../components/Input/index';
+import { fetchIndications } from '../../App/actions';
+import IndicationOverlay from './IndicationOverlay';
 
+const formName = 'PatientDetailModal.Other';
+
+@reduxForm({ form: formName })
 class OtherSection extends React.Component {
   static propTypes = {
     active: React.PropTypes.bool.isRequired,
-    currentPatient: React.PropTypes.object,
+    initialValues: React.PropTypes.object,
     currentUser: React.PropTypes.object,
+    fetchIndications: React.PropTypes.func,
   };
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showIndicationPopover: false,
+    };
+    this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
+    this.changeBMI = this.changeBMI.bind(this);
+    this.changeGender = this.changeGender.bind(this);
+    this.deleteIndication = this.deleteIndication.bind(this);
+    this.renderGender = this.renderGender.bind(this);
+    this.renderIndications = this.renderIndications.bind(this);
+  }
+
+  componentWillMount() {
+    this.props.fetchIndications();
+  }
+
+  toggleIndicationPopover() {
+    this.setState({
+      showIndicationPopover: !this.state.showIndicationPopover,
+    });
+  }
+
+  changeBMI(event) {
+
+  }
+
+  changeGender(event) {
+
+  }
+
+  deleteIndication(indication) {
+
+  }
+
+  renderGender() {
+    const { initialValues } = this.props;
+    const genderOptions = [{
+      label: 'N/A',
+      value: 'N/A',
+    }, {
+      label: 'Male',
+      value: 'Male',
+    }, {
+      label: 'Female',
+      value: 'Female',
+    }];
+    return (
+      <div className="field-row">
+        <strong className="label">
+          <label htmlFor="patient-gender">Gender</label>
+        </strong>
+        <div className="field patient-gender">
+          <Field
+            name="gender"
+            component={ReactSelect}
+            options={genderOptions}
+            className="form-control"
+            placeholder="Select Gender"
+            selectedValue={initialValues.gender}
+            onChange={this.changeGender}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  renderIndications() {
+    const { initialValues } = this.props;
+    if (initialValues.indications) {
+      return (
+        <div className="category-list">
+          {initialValues.indications.map(indication => (
+            <div key={indication.id} className="category">
+              <span className="link">
+                <span className="text">{indication.name}</span>
+                <span
+                  className="icomoon-icon_trash"
+                  onClick={() => {
+                    this.deleteIndication(indication);
+                  }}
+                />
+              </span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return null;
   }
 
   render() {
-    const { active, currentUser, currentPatient } = this.props;
-    if (currentPatient) {
+    const { active, currentUser, initialValues } = this.props;
+    if (initialValues) {
       const now = moment();
-      const months = moment.months();
-      const monthOptions = now.months();
-      for (let i = 0; i < monthOptions.length; i++) {
-        const month = months[i];
-        const monthOption = monthOptions[i];
-        monthOptions[i] = {
+      const monthOptions = moment.monthsShort();
+      for (let index = 0; index < 12; index++) {
+        const month = monthOptions[index];
+        monthOptions[index] = {
           label: month,
-          value: monthOption,
+          value: index,
         };
       }
-      const dates = now.dates().map(date => (
-        {
-          label: date,
-          value: date,
-        }
-      ));
+      const dayOptions = [];
+      for (let day = 1; day < 31; day++) {
+        dayOptions.push({
+          label: day,
+          value: day,
+        });
+      }
       const nowYear = now.year();
-      const years = [];
+      const yearOptions = [];
       for (let year = nowYear; year > 1900; year--) {
-        years.push({
+        yearOptions.push({
           label: year,
           value: year,
         });
@@ -55,51 +154,33 @@ class OtherSection extends React.Component {
               <ul className="list-unstyled list-radios">
                 <li>
                   <span className="title">Signed Up</span>
-                  <time dateTime={currentPatient.createdAt}>{moment.tz(currentPatient.createdAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+                  <time dateTime={initialValues.createdAt}>{moment.tz(initialValues.createdAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
                 </li>
                 <li>
                   <span className="title">Updated</span>
-                  <time dateTime={currentPatient.updatedAt}>{moment.tz(currentPatient.updatedAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+                  <time dateTime={initialValues.updatedAt}>{moment.tz(initialValues.updatedAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
                 </li>
               </ul>
             </div>
             <Form className="sub-holder form-lightbox" noValidate="novalidate">
-              <div className="field-row full remove-bipolar">
+              <div className="field-row full remove-indication">
                 <strong className="label">Indications</strong>
                 <div className="field">
-                  <div className="category-list">
-                    <div className="category">
-                      <span className="bipolar-link">
-                        <span className="text">Bipolar</span>
-                        <a className="icomoon-icon_trash" />
-                      </span>
-                    </div>
-                  </div>
+                  {this.renderIndications()}
                 </div>
               </div>
               <div className="field-row full">
-                <div className="field add-indications">
-                  <div className="indication-open-close">
-                    <a className="btn btn-primary select-indication-opener">+ Add Indication</a>
-                    <div className="select-indication-slide default-slide js-slide-hidden">
-                      <div className="well custom-select-drop">
-                        <div className="search-holder">
-                          <input type="search" className="form-control keyword-search" id="search10" value="" />
-                          <label htmlFor="search10" className="icomoon-icon_search2" />
-                        </div>
-                        <div className="jcf--scrollable">
-                          <ul className="list-unstyled list select-indication">
-                            <li>Acne</li>
-                            <li>Back Pain</li>
-                            <li>Magraine </li>
-                            <li>Ring worm</li>
-                            <li>COPD</li>
-                            <li>Leg pain</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div className="field add-indications" ref="parent">
+                  <Button bsStyle="primary" ref="target" onClick={this.toggleIndicationPopover}>+ Add Indication</Button>
+                  <Overlay
+                    show={this.state.showIndicationPopover}
+                    onHide={this.toggleIndicationPopover}
+                    placement="bottom"
+                    container={ReactDOM.findDOMNode(this.refs.parent)}
+                    target={() => ReactDOM.findDOMNode(this.refs.target)}
+                  >
+                    <IndicationOverlay />
+                  </Overlay>
                 </div>
               </div>
               <div className="fields-holder">
@@ -112,7 +193,7 @@ class OtherSection extends React.Component {
                         <Field
                           name="dob-month"
                           component={ReactSelect}
-                          className="min-height"
+                          className="form-control min-height"
                           options={monthOptions}
                           placeholder="Month"
                         />
@@ -121,51 +202,43 @@ class OtherSection extends React.Component {
                         <Field
                           name="dob-date"
                           component={ReactSelect}
-                          className="min-height"
-                          options={dates}
+                          className="form-control min-height"
+                          options={dayOptions}
                           placeholder="Day"
                         />
                       </div>
-                      <div className="col-small pull-left patient-age">
+                      <div className="col-small pull-left">
                         <Field
                           name="dob-year"
                           component={ReactSelect}
-                          className="min-height"
-                          options={years}
+                          className="form-control min-height"
+                          options={yearOptions}
                           placeholder="Year"
                         />
                       </div>
                     </div>
                   </div>
                 </div>
-
+                {this.renderGender()}
                 <div className="field-row">
-                  <strong className="label"><label htmlFor="patient-gender">Gender </label></strong>
-                  <div className="field patient-gender">
-                    <select id="patient-gender" required className="jcf-hidden">
-                      <option>Select Gender</option>
-                      <option>N/A</option>
-                      <option>Male</option>
-                      <option>Female</option>
-                    </select>
-                    <span className="jcf-select jcf-unselectable">
-                      <span className="jcf-select-text">
-                        <span>Select Gender</span>
-                      </span>
-                      <span className="jcf-select-opener" />
-                    </span>
+                  <strong className="label">
+                    <label htmlFor="patient-bmi">BMI</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="text"
+                      name="bmi"
+                      component={Input}
+                      onChange={this.changeBMI}
+                    />
                   </div>
                 </div>
                 <div className="field-row">
-                  <strong className="label"><label htmlFor="patient-bmi">BMI </label></strong>
+                  <strong className="label">
+                    <label htmlFor="patient-source5">Source</label>
+                  </strong>
                   <div className="field">
-                    <input type="text" className="form-control" id="patient-bmi" required value={currentPatient.bmi} />
-                  </div>
-                </div>
-                <div className="field-row">
-                  <strong className="label"><label htmlFor="patient-source5">Source</label></strong>
-                  <div className="field">
-                    <input type="text" className="form-control" value={currentPatient.source ? currentPatient.source.type : null} disabled readOnly />
+                    <FormControl type="text" value={initialValues.source ? initialValues.source.type : null} disabled readOnly />
                   </div>
                 </div>
               </div>
@@ -178,4 +251,12 @@ class OtherSection extends React.Component {
   }
 }
 
-export default OtherSection;
+const mapStateToProps = () => ({
+
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchIndications: () => dispatch(fetchIndications()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(OtherSection);

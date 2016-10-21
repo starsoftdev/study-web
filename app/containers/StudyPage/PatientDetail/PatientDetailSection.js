@@ -40,17 +40,21 @@ class PatientDetailSection extends React.Component {
   }
 
   changePatientFirstName(event) {
-    const { initialValues, submitPatientUpdate } = this.props;
-    submitPatientUpdate(initialValues.id, {
-      firstName: event.target.value,
-    });
+    const { initialValues, submitPatientUpdate, formSyncErrors } = this.props;
+    if (!formSyncErrors.firstName) {
+      submitPatientUpdate(initialValues.id, {
+        firstName: event.target.value,
+      });
+    }
   }
 
   changePatientLastName(event) {
-    const { initialValues, submitPatientUpdate } = this.props;
-    submitPatientUpdate(initialValues.id, {
-      lastName: event.target.value,
-    });
+    const { initialValues, submitPatientUpdate, formSyncErrors } = this.props;
+    if (!formSyncErrors.lastName) {
+      submitPatientUpdate(initialValues.id, {
+        lastName: event.target.value,
+      });
+    }
   }
 
   changePatientEmail(event) {
@@ -69,6 +73,7 @@ class PatientDetailSection extends React.Component {
     const { formSyncErrors } = this.props;
     if (!formSyncErrors.phone) {
       const phoneNumber = normalizePhone(event.target.value);
+      console.log(phoneNumber);
       submitPatientUpdate(initialValues.id, {
         phone: phoneNumber,
       });
