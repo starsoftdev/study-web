@@ -104,5 +104,5 @@ const mapDispatchToProps = (dispatch) => (
   }
 );
 
-// StudyPatients = DragDropContext(HTML5Backend)(StudyPatients);
+StudyPatients = DragDropContext(HTML5Backend)(StudyPatients);
 export default connect(mapStateToProps, mapDispatchToProps)(StudyPatients);
