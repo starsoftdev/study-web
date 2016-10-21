@@ -48,9 +48,10 @@ class FilterStudyPatientsForm extends Component {
     } else if (type === 'source') {
       if (event === 6) {
         /* nulling the change */
-        event = undefined;
+        fetchPatients(studyId, siteId, search, campaign, null);
+      } else {
+        fetchPatients(studyId, siteId, search, campaign, event);
       }
-      fetchPatients(studyId, siteId, search, campaign, event);
     } else {
       fetchPatients(studyId, siteId, search, event, source);
     }
@@ -122,7 +123,7 @@ const mapStateToProps = (state) => ({
   campaignOptions: state.studyPage.campaigns.map(campaign => {
     const returnObj = {};
     returnObj.value = campaign.id;
-    returnObj.label = moment(campaign.dateFrom).format('MMMM Do YYYY');
+    returnObj.label = moment(campaign.dateFrom).format('MMMM Do YYYY') + ' -  ' + moment(campaign.dateTo).format('MMMM Do YYYY');
     return returnObj;
   }),
   campaign: selector(state, 'campaign'),
