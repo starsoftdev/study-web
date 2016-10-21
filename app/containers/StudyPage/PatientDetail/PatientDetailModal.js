@@ -14,6 +14,7 @@ import NotesSection from './NotesSection';
 import TextSection from './TextSection';
 import EmailSection from './EmailSection';
 import OtherSection from './OtherSection';
+import { normalizePhoneDisplay } from '../helper/functions';
 
 class PatientDetailModal extends React.Component {
   static propTypes = {
@@ -38,6 +39,7 @@ class PatientDetailModal extends React.Component {
     this.toggleTextSection = this.toggleTextSection.bind(this);
     this.toggleEmailSection = this.toggleEmailSection.bind(this);
     this.toggleOtherSection = this.toggleOtherSection.bind(this);
+    this.renderPatientDetail = this.renderPatientDetail.bind(this);
   }
 
   toggleNoteSection() {
@@ -84,6 +86,18 @@ class PatientDetailModal extends React.Component {
     });
   }
 
+  renderPatientDetail() {
+    const { currentPatient } = this.props;
+
+    if (currentPatient) {
+      const formattedPatient = Object.assign(currentPatient, {});
+      formattedPatient.phone = normalizePhoneDisplay(currentPatient.phone);
+      return (
+        <PatientDetailSection initialValues={formattedPatient} />
+      );
+    }
+  }
+
   render() {
     const { currentUser, openPatientModal, currentPatientCategory, currentPatient, studyId } = this.props;
     return (
@@ -99,7 +113,7 @@ class PatientDetailModal extends React.Component {
               <i className="glyphicon glyphicon-menu-right" />
             </a>
           </div>
-          <PatientDetailSection initialValues={currentPatient} />
+          {this.renderPatientDetail()}
           <div className="column">
             <div id="carousel-example-generic" className="carousel slide popup-slider">
               <ol className="carousel-indicators">

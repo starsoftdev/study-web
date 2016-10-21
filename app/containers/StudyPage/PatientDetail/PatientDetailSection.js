@@ -12,7 +12,8 @@ import Input from '../../../components/Input/index';
 import { submitPatientUpdate } from '../actions';
 import formValidator from './validator';
 import { normalizePhone, normalizePhoneDisplay } from '../helper/functions';
-
+import { selectSyncErrors } from '../../../common/selectors/form.selector';
+import { createStructuredSelector } from 'reselect';
 const formName = 'PatientDetailModal.Detail';
 
 @reduxForm({
@@ -26,6 +27,7 @@ class PatientDetailSection extends React.Component {
     submitting: React.PropTypes.bool.isRequired,
     submitPatientUpdate: React.PropTypes.func.isRequired,
     unsubscribed: React.PropTypes.bool,
+    formErrors: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -52,12 +54,12 @@ class PatientDetailSection extends React.Component {
   }
 
   changePatientEmail(event) {
-    const { initialValues, submitPatientUpdate } = this.props;
-    // if (\\.test(event.target.value)) {
-     submitPatientUpdate(initialValues.id, {
-       email: event.target.value,
-     });
-   // }
+    const { initialValues, submitPatientUpdate, formErrors } = this.props;
+    if (!formErrors.email) {
+      submitPatientUpdate(initialValues.id, {
+        email: event.target.value,
+      });
+    }
   }
 
   changePatientPhone(event) {
@@ -161,7 +163,8 @@ class PatientDetailSection extends React.Component {
   }
 }
 
-const mapStateToProps = () => ({
+const mapStateToProps = createStructuredSelector({
+  formErrors: selectSyncErrors(formName),
 });
 
 const mapDispatchToProps = (dispatch) => ({
