@@ -40,6 +40,7 @@ class PatientDetailModal extends React.Component {
     this.toggleTextSection = this.toggleTextSection.bind(this);
     this.toggleEmailSection = this.toggleEmailSection.bind(this);
     this.toggleOtherSection = this.toggleOtherSection.bind(this);
+    this.renderOtherSection = this.renderOtherSection.bind(this);
     this.renderPatientDetail = this.renderPatientDetail.bind(this);
   }
 
@@ -87,6 +88,13 @@ class PatientDetailModal extends React.Component {
     });
   }
 
+  renderOtherSection() {
+    const { currentPatient, currentUser } = this.props;
+    return (
+      <OtherSection active={this.state.carousel.other} initialValues={currentPatient} currentPatient={currentPatient} currentUser={currentUser} />
+    );
+  }
+
   renderPatientDetail() {
     const { currentPatient } = this.props;
 
@@ -128,7 +136,7 @@ class PatientDetailModal extends React.Component {
                 <NotesSection active={this.state.carousel.note} currentUser={currentUser} currentPatient={currentPatient} studyId={studyId} />
                 <TextSection active={this.state.carousel.text} currentUser={currentUser} currentPatient={currentPatient} />
                 <EmailSection active={this.state.carousel.email} />
-                <OtherSection active={this.state.carousel.other} initialValues={currentPatient} currentUser={currentUser} />
+                {this.renderOtherSection()}
               </div>
             </div>
           </div>

@@ -24,11 +24,15 @@ import {
   SET_SITE_ID,
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
+  SUBMIT_ADD_PATIENT_INDICATION,
+  SUBMIT_REMOVE_PATIENT_INDICATION,
   SUBMIT_PATIENT_UPDATE,
   SUBMIT_PATIENT_NOTE,
   SUBMIT_DELETE_NOTE,
   SUBMIT_DELETE_NOTE_SUCCESS,
   SUBMIT_PATIENT_TEXT,
+  ADD_PATIENT_INDICATION_SUCCESS,
+  REMOVE_PATIENT_INDICATION_SUCCESS,
   UPDATE_PATIENT_SUCCESS,
   ADD_PATIENT_NOTE_SUCCESS,
   ADD_PATIENT_TEXT_SUCCESS,
@@ -176,11 +180,43 @@ export function setCurrentPatientCategoryId(id) {
   };
 }
 
+export function submitAddPatientIndication(patientId, indication) {
+  return {
+    type: SUBMIT_ADD_PATIENT_INDICATION,
+    patientId,
+    indication,
+  };
+}
+
+export function submitRemovePatientIndication(patientId, indicationId) {
+  return {
+    type: SUBMIT_REMOVE_PATIENT_INDICATION,
+    patientId,
+    indicationId,
+  };
+}
+
 export function submitPatientUpdate(patientId, fields) {
   return {
     type: SUBMIT_PATIENT_UPDATE,
     patientId,
     fields,
+  };
+}
+
+export function addPatientIndicationSuccess(patientId, indication) {
+  return {
+    type: ADD_PATIENT_INDICATION_SUCCESS,
+    patientId,
+    indication,
+  };
+}
+
+export function removePatientIndicationSuccess(patientId, indicationId) {
+  return {
+    type: REMOVE_PATIENT_INDICATION_SUCCESS,
+    patientId,
+    indicationId,
   };
 }
 

@@ -15,17 +15,32 @@ import moment from 'moment-timezone';
 import ReactSelect from 'react-select';
 import Input from '../../../components/Input/index';
 import { fetchIndications } from '../../App/actions';
+import { selectIndications } from '../../App/selectors';
+import { createStructuredSelector } from 'reselect';
+import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
+import { submitAddPatientIndication, submitRemovePatientIndication, submitPatientUpdate } from '../actions';
 import IndicationOverlay from './IndicationOverlay';
+import formValidator from './otherValidator';
 
 const formName = 'PatientDetailModal.Other';
 
-@reduxForm({ form: formName })
+@reduxForm({
+  form: formName,
+  validate: formValidator,
+})
 class OtherSection extends React.Component {
   static propTypes = {
     active: React.PropTypes.bool.isRequired,
-    initialValues: React.PropTypes.object,
+    currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
-    fetchIndications: React.PropTypes.func,
+    fetchIndications: React.PropTypes.func.isRequired,
+    formSyncErrors: React.PropTypes.object,
+    formValues: React.PropTypes.object,
+    indications: React.PropTypes.array,
+    initialValues: React.PropTypes.object,
+    submitAddPatientIndication: React.PropTypes.func.isRequired,
+    submitRemovePatientIndication: React.PropTypes.func.isRequired,
+    submitPatientUpdate: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -34,6 +49,9 @@ class OtherSection extends React.Component {
       showIndicationPopover: false,
     };
     this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
+    this.changePatientDobMonth = this.changePatientDobMonth.bind(this);
+    this.changePatientDobDay = this.changePatientDobDay.bind(this);
+    this.changePatientDobYear = this.changePatientDobYear.bind(this);
     this.changeBMI = this.changeBMI.bind(this);
     this.changeGender = this.changeGender.bind(this);
     this.deleteIndication = this.deleteIndication.bind(this);
@@ -51,6 +69,18 @@ class OtherSection extends React.Component {
     });
   }
 
+  changePatientDobMonth(event) {
+
+  }
+
+  changePatientDobDay(event) {
+
+  }
+
+  changePatientDobYear(event) {
+
+  }
+
   changeBMI(event) {
 
   }
@@ -60,7 +90,8 @@ class OtherSection extends React.Component {
   }
 
   deleteIndication(indication) {
-
+    const { initialValues, submitRemovePatientIndication } = this.props;
+    submitRemovePatientIndication(initialValues.id, indication.id);
   }
 
   renderGender() {
@@ -96,11 +127,11 @@ class OtherSection extends React.Component {
   }
 
   renderIndications() {
-    const { initialValues } = this.props;
-    if (initialValues.indications) {
+    const { currentPatient } = this.props;
+    if (currentPatient.indications) {
       return (
         <div className="category-list">
-          {initialValues.indications.map(indication => (
+          {currentPatient.indications.map(indication => (
             <div key={indication.id} className="category">
               <span className="link">
                 <span className="text">{indication.name}</span>
@@ -120,7 +151,7 @@ class OtherSection extends React.Component {
   }
 
   render() {
-    const { active, currentUser, initialValues } = this.props;
+    const { active, currentUser, indications, initialValues, submitAddPatientIndication } = this.props;
     if (initialValues) {
       const now = moment();
       const monthOptions = moment.monthsShort();
@@ -174,12 +205,11 @@ class OtherSection extends React.Component {
                   <Button bsStyle="primary" ref="target" onClick={this.toggleIndicationPopover}>+ Add Indication</Button>
                   <Overlay
                     show={this.state.showIndicationPopover}
-                    onHide={this.toggleIndicationPopover}
                     placement="bottom"
                     container={ReactDOM.findDOMNode(this.refs.parent)}
                     target={() => ReactDOM.findDOMNode(this.refs.target)}
                   >
-                    <IndicationOverlay />
+                    <IndicationOverlay indications={indications} onClose={this.toggleIndicationPopover} submitAddIndication={submitAddPatientIndication} patient={initialValues} />
                   </Overlay>
                 </div>
               </div>
@@ -238,7 +268,7 @@ class OtherSection extends React.Component {
                     <label htmlFor="patient-source5">Source</label>
                   </strong>
                   <div className="field">
-                    <FormControl type="text" value={initialValues.source ? initialValues.source.type : null} disabled readOnly />
+                    <FormControl type="text" value={initialValues.source ? initialValues.source.type : ''} disabled readOnly />
                   </div>
                 </div>
               </div>
@@ -251,11 +281,16 @@ class OtherSection extends React.Component {
   }
 }
 
-const mapStateToProps = () => ({
-
+const mapStateToProps = createStructuredSelector({
+  formSyncErrors: selectSyncErrors(formName),
+  formValues: selectValues(formName),
+  indications: selectIndications(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  submitAddPatientIndication: (patientId, indication) => dispatch(submitAddPatientIndication(patientId, indication)),
+  submitRemovePatientIndication: (patientId, indicationId) => dispatch(submitRemovePatientIndication(patientId, indicationId)),
+  submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),
   fetchIndications: () => dispatch(fetchIndications()),
 });
 

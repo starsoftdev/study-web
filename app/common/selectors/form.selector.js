@@ -13,6 +13,11 @@ const selectFormDomain = () => state => state.form;
 /**
  * Other specific selectors
  */
+export const selectValues = (formName) => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, `${formName}.values`, {})
+);
+
 export const selectSyncErrors = (formName) => createSelector(
   selectFormDomain(),
   (substate) => get(substate, `${formName}.syncErrors`, {})
