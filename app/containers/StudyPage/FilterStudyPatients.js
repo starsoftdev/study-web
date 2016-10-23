@@ -42,8 +42,8 @@ class FilterStudyPatientsForm extends Component {
 
   searchPatient(event, type) {
     const { fetchPatients, siteId, studyId, campaign, source, search } = this.props;
-    let newCampaign = campaign
-    let newSource = source
+    let newCampaign = campaign;
+    let newSource = source;
     /* nulling the values if all is selected */
     if (campaign === -1) {
       newCampaign = null;
