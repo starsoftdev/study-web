@@ -66,12 +66,13 @@ class IndicationOverlay extends React.Component {
             <Field
               type="search"
               name="search"
+              id="indication-filter"
               component={Input}
               className="keyword-search"
               placeholder="Search"
               onChange={this.setIndicationFilter}
             />
-            <label htmlFor="search10" className="icomoon-icon_search2" />
+            <label htmlFor="indication-filter" className="icomoon-icon_search2" />
           </div>
           <div className="jcf-overflow">
             <ul className="list-unstyled list select-indication">

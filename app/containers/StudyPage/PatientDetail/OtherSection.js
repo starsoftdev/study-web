@@ -4,15 +4,15 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactSelect from '../../../components/Input/ReactSelect';
 import { connect } from 'react-redux';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import Overlay from 'react-bootstrap/lib/Overlay';
-import { change, Field, reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import classNames from 'classnames';
 import moment from 'moment-timezone';
-import ReactSelect from 'react-select';
 import Input from '../../../components/Input/index';
 import { fetchIndications } from '../../App/actions';
 import { selectIndications } from '../../App/selectors';
@@ -21,6 +21,7 @@ import { selectValues, selectSyncErrors } from '../../../common/selectors/form.s
 import { submitAddPatientIndication, submitRemovePatientIndication, submitPatientUpdate } from '../actions';
 import IndicationOverlay from './IndicationOverlay';
 import formValidator from './otherValidator';
+import DateOfBirthPicker from './DateOfBirthPicker';
 
 const formName = 'PatientDetailModal.Other';
 
@@ -51,9 +52,6 @@ class OtherSection extends React.Component {
       showIndicationPopover: false,
     };
     this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
-    this.changePatientDobMonth = this.changePatientDobMonth.bind(this);
-    this.changePatientDobDay = this.changePatientDobDay.bind(this);
-    this.changePatientDobYear = this.changePatientDobYear.bind(this);
     this.changeBMI = this.changeBMI.bind(this);
     this.changeGender = this.changeGender.bind(this);
     this.deleteIndication = this.deleteIndication.bind(this);
@@ -71,18 +69,6 @@ class OtherSection extends React.Component {
     });
   }
 
-  changePatientDobMonth(event) {
-    const { formValues: { dobMonth, dobDay, dobYear }, submitPatientUpdate } = this.props;
-  }
-
-  changePatientDobDay(event) {
-    const { formValues: { dobMonth, dobDay, dobYear }, submitPatientUpdate } = this.props;
-  }
-
-  changePatientDobYear(event) {
-    const { formValues: { dobMonth, dobDay, dobYear }, submitPatientUpdate } = this.props;
-  }
-
   changeBMI(event) {
     const { formSyncErrors, initialValues, submitPatientUpdate } = this.props;
     if (!formSyncErrors.bmi) {
@@ -92,10 +78,10 @@ class OtherSection extends React.Component {
     }
   }
 
-  changeGender(option) {
-    const { change, initialValues, submitPatientUpdate } = this.props;
+  changeGender(value) {
+    const { initialValues, submitPatientUpdate } = this.props;
     submitPatientUpdate(initialValues.id, {
-      gender: option.value,
+      gender: value,
     });
   }
 
@@ -105,7 +91,7 @@ class OtherSection extends React.Component {
   }
 
   renderGender() {
-    const { initialValues, loading, submitting } = this.props;
+    const { loading, submitting } = this.props;
     const genderOptions = [{
       label: 'N/A',
       value: 'N/A',
@@ -125,7 +111,6 @@ class OtherSection extends React.Component {
           <Field
             name="gender"
             component={ReactSelect}
-            className="form-control"
             options={genderOptions}
             disabled={submitting || loading}
             placeholder="Select Gender"
@@ -161,7 +146,7 @@ class OtherSection extends React.Component {
   }
 
   render() {
-    const { active, currentUser, indications, initialValues, loading, submitting, submitAddPatientIndication } = this.props;
+    const { active, currentUser, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, loading, submitting, submitAddPatientIndication, submitPatientUpdate } = this.props;
     if (initialValues) {
       const now = moment();
       const monthOptions = moment.monthsShort();
@@ -224,47 +209,19 @@ class OtherSection extends React.Component {
                 </div>
               </div>
               <div className="fields-holder">
-                <strong className="title">OTHER INFORMATION</strong>
-                <div className="field-row">
-                  <strong className="label"><label htmlFor="patient-dob">Date of Birth</label></strong>
-                  <div className="field">
-                    <div className="row">
-                      <div className="col-small pull-left">
-                        <Field
-                          name="dobMonth"
-                          component={ReactSelect}
-                          className="form-control min-height"
-                          options={monthOptions}
-                          disabled={submitting || loading}
-                          placeholder="Month"
-                          onChange={this.changePatientDobMonth}
-                        />
-                      </div>
-                      <div className="col-small pull-left">
-                        <Field
-                          name="dobDate"
-                          component={ReactSelect}
-                          className="form-control min-height"
-                          options={dayOptions}
-                          disabled={submitting || loading}
-                          placeholder="Day"
-                          onChange={this.changePatientDobDay}
-                        />
-                      </div>
-                      <div className="col-small pull-left">
-                        <Field
-                          name="dobYear"
-                          component={ReactSelect}
-                          className="form-control min-height"
-                          disabled={submitting || loading}
-                          options={yearOptions}
-                          placeholder="Year"
-                          onChange={this.changePatientDobYear}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <strong className="title">Other Information</strong>
+                <DateOfBirthPicker
+                  dayOptions={dayOptions}
+                  monthOptions={monthOptions}
+                  yearOptions={yearOptions}
+                  loading={loading}
+                  submitting={submitting}
+                  initialValues={initialValues}
+                  dobDay={dobDay}
+                  dobMonth={dobMonth}
+                  dobYear={dobYear}
+                  submitPatientUpdate={submitPatientUpdate}
+                />
                 {this.renderGender()}
                 <div className="field-row">
                   <strong className="label">
@@ -304,7 +261,6 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  change: (field, value) => dispatch(change(formName, field, value)),
   submitAddPatientIndication: (patientId, indication) => dispatch(submitAddPatientIndication(patientId, indication)),
   submitRemovePatientIndication: (patientId, indicationId) => dispatch(submitRemovePatientIndication(patientId, indicationId)),
   submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),

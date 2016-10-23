@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import moment from 'moment';
 import classNames from 'classnames';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import { connect } from 'react-redux';
@@ -91,8 +92,15 @@ class PatientDetailModal extends React.Component {
   renderOtherSection() {
     const { currentPatient, currentUser } = this.props;
     if (currentPatient) {
+      const formattedPatient = Object.assign({}, currentPatient);
+      if (currentPatient.dob) {
+        const dob = moment(currentPatient.dob);
+        formattedPatient.dobMonth = dob.month();
+        formattedPatient.dobDay = dob.day();
+        formattedPatient.dobYear = dob.year();
+      }
       return (
-        <OtherSection active={this.state.carousel.other} initialValues={currentPatient} currentUser={currentUser} enableReinitialize />
+        <OtherSection active={this.state.carousel.other} initialValues={formattedPatient} currentUser={currentUser} enableReinitialize />
       );
     }
     return null;
