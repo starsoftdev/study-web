@@ -238,10 +238,16 @@ function* fetchPatientDetails() {
         {
           relation: 'textMessages',
           scope: {
-            fields: ['id', 'note', 'createdAt', 'user_id'],
+            fields: ['id', 'note', 'createdAt', 'text_message_id', 'user_id'],
             include: [
               {
                 relation: 'twilioTextMessage',
+              },
+              {
+                relation: 'user',
+                scope: {
+                  fields: ['id', 'firstName', 'lastName', 'profileImageURL'],
+                },
               },
             ],
           },
@@ -253,12 +259,17 @@ function* fetchPatientDetails() {
       const response = yield call(request, requestURL, {
         method: 'GET',
       });
-      const parsedResponse = Object.assign({}, response);
-      delete parsedResponse.textMessages;
-      parsedResponse.textMessages = response.textMessages.map(textMessage => (
-        textMessage.twilioTextMessage
-      ));
-      yield put(patientDetailsFetched(parsedResponse));
+      response.textMessages = response.textMessages.map(textMessage => {
+        const mappedTextMessage = {
+          ...textMessage,
+          ...textMessage.twilioTextMessage,
+        };
+        delete mappedTextMessage.twilioTextMessage;
+        delete mappedTextMessage.text_message_id;
+        delete mappedTextMessage.user_id;
+        return mappedTextMessage;
+      });
+      yield put(patientDetailsFetched(response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while fetching patient information. Please try again later.');
       yield put(toastrActions.error('', errorMessage));

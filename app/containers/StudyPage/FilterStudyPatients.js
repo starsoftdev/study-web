@@ -4,7 +4,6 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
@@ -36,8 +35,8 @@ class FilterStudyPatientsForm extends Component {
     super(props);
     this.searchPatient = this.searchPatient.bind(this);
   }
-  componentWillMount() {
 
+  componentWillMount() {
   }
 
   searchPatient(event, type) {
@@ -68,6 +67,7 @@ class FilterStudyPatientsForm extends Component {
       fetchPatients(studyId, siteId, search, event, newSource);
     }
   }
+
   render() {
     const {
       campaignOptions,
@@ -103,7 +103,7 @@ class FilterStudyPatientsForm extends Component {
             options={campaignOptions}
             disabled={submitting || loading}
             placeholder="Select Campaign"
-            onChange={(event) => this.searchPatient(event)}
+            onChange={(event) => this.searchPatient(event, 'campaign')}
           />
         </div>
         <div className="select pull-left">

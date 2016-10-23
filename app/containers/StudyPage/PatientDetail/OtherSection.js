@@ -32,13 +32,14 @@ class OtherSection extends React.Component {
   static propTypes = {
     active: React.PropTypes.bool.isRequired,
     change: React.PropTypes.func.isRequired,
-    currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     fetchIndications: React.PropTypes.func.isRequired,
     formSyncErrors: React.PropTypes.object,
     formValues: React.PropTypes.object,
     indications: React.PropTypes.array,
     initialValues: React.PropTypes.object,
+    loading: React.PropTypes.bool,
+    submitting: React.PropTypes.bool,
     submitAddPatientIndication: React.PropTypes.func.isRequired,
     submitRemovePatientIndication: React.PropTypes.func.isRequired,
     submitPatientUpdate: React.PropTypes.func.isRequired,
@@ -93,7 +94,6 @@ class OtherSection extends React.Component {
 
   changeGender(option) {
     const { change, initialValues, submitPatientUpdate } = this.props;
-    change('gender', option.value);
     submitPatientUpdate(initialValues.id, {
       gender: option.value,
     });
@@ -105,7 +105,7 @@ class OtherSection extends React.Component {
   }
 
   renderGender() {
-    const { initialValues } = this.props;
+    const { initialValues, loading, submitting } = this.props;
     const genderOptions = [{
       label: 'N/A',
       value: 'N/A',
@@ -125,10 +125,10 @@ class OtherSection extends React.Component {
           <Field
             name="gender"
             component={ReactSelect}
-            options={genderOptions}
             className="form-control"
+            options={genderOptions}
+            disabled={submitting || loading}
             placeholder="Select Gender"
-            selectedValue={initialValues.gender}
             onChange={this.changeGender}
           />
         </div>
@@ -137,11 +137,11 @@ class OtherSection extends React.Component {
   }
 
   renderIndications() {
-    const { currentPatient } = this.props;
-    if (currentPatient.indications) {
+    const { initialValues } = this.props;
+    if (initialValues.indications) {
       return (
         <div className="category-list">
-          {currentPatient.indications.map(indication => (
+          {initialValues.indications.map(indication => (
             <div key={indication.id} className="category">
               <span className="link">
                 <span className="text">{indication.name}</span>
@@ -161,15 +161,15 @@ class OtherSection extends React.Component {
   }
 
   render() {
-    const { active, currentUser, indications, initialValues, submitAddPatientIndication } = this.props;
+    const { active, currentUser, indications, initialValues, loading, submitting, submitAddPatientIndication } = this.props;
     if (initialValues) {
       const now = moment();
       const monthOptions = moment.monthsShort();
-      for (let index = 1; index < 13; index++) {
+      for (let index = 0; index < 12; index++) {
         const month = monthOptions[index];
         monthOptions[index] = {
           label: month,
-          value: index,
+          value: index + 1,
         };
       }
       const dayOptions = [];
@@ -219,7 +219,7 @@ class OtherSection extends React.Component {
                     container={ReactDOM.findDOMNode(this.refs.parent)}
                     target={() => ReactDOM.findDOMNode(this.refs.target)}
                   >
-                    <IndicationOverlay indications={indications} onClose={this.toggleIndicationPopover} submitAddIndication={submitAddPatientIndication} patient={initialValues} />
+                    <IndicationOverlay indications={indications} submitAddIndication={submitAddPatientIndication} patient={initialValues} onClose={this.toggleIndicationPopover} />
                   </Overlay>
                 </div>
               </div>
@@ -235,7 +235,9 @@ class OtherSection extends React.Component {
                           component={ReactSelect}
                           className="form-control min-height"
                           options={monthOptions}
+                          disabled={submitting || loading}
                           placeholder="Month"
+                          onChange={this.changePatientDobMonth}
                         />
                       </div>
                       <div className="col-small pull-left">
@@ -244,7 +246,9 @@ class OtherSection extends React.Component {
                           component={ReactSelect}
                           className="form-control min-height"
                           options={dayOptions}
+                          disabled={submitting || loading}
                           placeholder="Day"
+                          onChange={this.changePatientDobDay}
                         />
                       </div>
                       <div className="col-small pull-left">
@@ -252,8 +256,10 @@ class OtherSection extends React.Component {
                           name="dobYear"
                           component={ReactSelect}
                           className="form-control min-height"
+                          disabled={submitting || loading}
                           options={yearOptions}
                           placeholder="Year"
+                          onChange={this.changePatientDobYear}
                         />
                       </div>
                     </div>

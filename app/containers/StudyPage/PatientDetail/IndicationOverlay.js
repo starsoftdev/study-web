@@ -3,6 +3,9 @@
  */
 
 import React from 'react';
+import _ from 'lodash';
+import { Field } from 'redux-form';
+import Input from '../../../components/Input/index';
 
 class IndicationOverlay extends React.Component {
   static propTypes = {
@@ -14,7 +17,12 @@ class IndicationOverlay extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      indicationFilter: '',
+    };
     this.onClick = this.onClick.bind(this);
+    this.setIndicationFilter = this.setIndicationFilter.bind(this);
+    this.compareIndication = this.compareIndication.bind(this);
   }
 
   onClick(indication) {
@@ -23,18 +31,51 @@ class IndicationOverlay extends React.Component {
     onClose();
   }
 
+  setIndicationFilter(event) {
+    this.setState({
+      indicationFilter: event.target.value,
+    });
+  }
+
+  compareIndication(indication) {
+    const { patient: { indications } } = this.props;
+    const { indicationFilter } = this.state;
+
+    if (indicationFilter !== '') {
+      const indicationName = _.toLower(indication.name);
+      const lowerIndicationFilter = _.toLower(indicationFilter);
+      if (!_.startsWith(indicationName, lowerIndicationFilter)) {
+        return false;
+      }
+    }
+    for (const currentIndication of indications) {
+      if (indication.id === currentIndication.id) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   render() {
     const { indications } = this.props;
+    const filteredIndications = indications.filter(this.compareIndication);
     return (
       <div className="select-indication-slide default-slide active">
         <div className="well jcf-list">
           <div className="search-holder">
-            <input type="search" className="form-control keyword-search" id="search10" />
+            <Field
+              type="search"
+              name="search"
+              component={Input}
+              className="keyword-search"
+              placeholder="Search"
+              onChange={this.setIndicationFilter}
+            />
             <label htmlFor="search10" className="icomoon-icon_search2" />
           </div>
           <div className="jcf-overflow">
             <ul className="list-unstyled list select-indication">
-              {indications.map(indication => (
+              {filteredIndications.map(indication => (
                 <li
                   key={indication.id}
                   onClick={() => {
