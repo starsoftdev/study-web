@@ -90,9 +90,12 @@ class PatientDetailModal extends React.Component {
 
   renderOtherSection() {
     const { currentPatient, currentUser } = this.props;
-    return (
-      <OtherSection active={this.state.carousel.other} initialValues={currentPatient} currentPatient={currentPatient} currentUser={currentUser} />
-    );
+    if (currentPatient) {
+      return (
+        <OtherSection active={this.state.carousel.other} initialValues={currentPatient} currentUser={currentUser} enableReinitialize />
+      );
+    }
+    return null;
   }
 
   renderPatientDetail() {

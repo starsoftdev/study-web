@@ -35,10 +35,7 @@ class PatientNote extends React.Component {
             <i className="icomoon-icon_trash" />
           </a>
         </div>
-        <strong className="email patient-name">
-          <span className="first-name">{note.user.firstName}</span>
-          <span className="last-name"> {note.user.lastName}</span>
-        </strong>
+        <strong className="name">{note.user.firstName} {note.user.lastName}</strong>
         <time dateTime={note.createdAt}>{moment.tz(note.createdAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
       </div>
     );
