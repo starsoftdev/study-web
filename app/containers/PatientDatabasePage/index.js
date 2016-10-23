@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { map, omit, omitBy, isUndefined } from 'lodash';
 
-import SearchPatientsForm from 'components/SearchPatientsForm';
-import PatientsList from 'components/PatientsList';
+import SearchPatientsForm from 'containers/PatientDatabasePage/SearchPatientsForm';
+import PatientsList from 'containers/PatientDatabasePage/PatientsList';
 import { fetchIndications, fetchSources } from 'containers/App/actions';
 import { fetchPatientCategories, fetchPatients } from './actions';
 import './styles.less';
@@ -83,8 +83,8 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchIndications: () => dispatch(fetchIndications()),
     fetchSources: () => dispatch(fetchSources()),
-    fetchPatientCategories: (searchParams) => dispatch(fetchPatientCategories(searchParams)),
-    fetchPatients: (searchParams) => dispatch(fetchPatients(searchParams)),
+    fetchPatientCategories: searchParams => dispatch(fetchPatientCategories(searchParams)),
+    fetchPatients: searchParams => dispatch(fetchPatients(searchParams)),
   };
 }
 

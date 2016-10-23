@@ -1,25 +1,37 @@
 import { createSelector } from 'reselect';
 
-const selectHomePageDomain = (state) => state.homePage;
+const selectHomePageDomain = () => state => state.homePage;
 
-const selectPatientSignUps = createSelector(
-  selectHomePageDomain,
-  (substate) => substate.patientSignUps,
+const selectHomePage = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate
 );
 
-const selectPatientMessages = createSelector(
-  selectHomePageDomain,
-  (substate) => substate.patientMessages,
+const selectPatientSignUps = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.patientSignUps
 );
 
-const selectRewardsPoint = createSelector(
-  selectHomePageDomain,
-  (substate) => substate.rewardsPoint,
+const selectPatientMessages = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.patientMessages
 );
 
+const selectRewardsPoint = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.rewardsPoint
+);
+
+const selectStudies = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.studies
+);
+
+export default selectHomePage;
 export {
   selectHomePageDomain,
   selectPatientSignUps,
   selectPatientMessages,
   selectRewardsPoint,
+  selectStudies,
 };
