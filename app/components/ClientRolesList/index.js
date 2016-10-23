@@ -80,38 +80,40 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
 
     if (clientRoles.details.length > 0) {
       return (
-        <div className="row">
-          <div className="col-sm-12">
-            <div className="table-responsive">
-              <table className="table table-striped">
-                <caption>ADMINS</caption>
-                <thead>
-                  <tr>
-                    <th>NAME</th>
-                    <th>EMAIL</th>
-                    <th>ACCESS</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {clientRolesListContents}
-                </tbody>
-              </table>
+        <div className="client-roles">
+          <div className="row">
+            <div className="col-sm-12">
+              <div className="table-responsive">
+                <table className="table table-striped">
+                  <caption>ADMINS</caption>
+                  <thead>
+                    <tr>
+                      <th>NAME</th>
+                      <th>EMAIL</th>
+                      <th>ACCESS</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {clientRolesListContents}
+                  </tbody>
+                </table>
+              </div>
+              <Modal className="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Edit User</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <EditUserForm
+                    initialValues={selectedUserDetailsForForm}
+                    siteOptions={siteOptions}
+                    deleting={deletedClientRole.deleting}
+                    onDelete={this.deleteClientRole}
+                    onSubmit={this.updateUser}
+                  />
+                </Modal.Body>
+              </Modal>
             </div>
-            <Modal className="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
-              <Modal.Header closeButton>
-                <Modal.Title>Edit User</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <EditUserForm
-                  initialValues={selectedUserDetailsForForm}
-                  siteOptions={siteOptions}
-                  deleting={deletedClientRole.deleting}
-                  onDelete={this.deleteClientRole}
-                  onSubmit={this.updateUser}
-                />
-              </Modal.Body>
-            </Modal>
           </div>
         </div>
       );
