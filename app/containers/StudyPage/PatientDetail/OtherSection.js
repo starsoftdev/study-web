@@ -165,7 +165,7 @@ class OtherSection extends React.Component {
     if (initialValues) {
       const now = moment();
       const monthOptions = moment.monthsShort();
-      for (let index = 0; index < 12; index++) {
+      for (let index = 1; index < 13; index++) {
         const month = monthOptions[index];
         monthOptions[index] = {
           label: month,
@@ -173,7 +173,7 @@ class OtherSection extends React.Component {
         };
       }
       const dayOptions = [];
-      for (let day = 1; day < 31; day++) {
+      for (let day = 1; day < 32; day++) {
         dayOptions.push({
           label: day,
           value: day,
