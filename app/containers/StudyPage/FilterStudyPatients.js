@@ -86,6 +86,7 @@ class FilterStudyPatientsForm extends Component {
               component={Input}
               type="search"
               name="search"
+              id="search"
               className="keyword-search"
               placeholder="Search Patients"
               onChange={(event) => this.searchPatient(event, 'search')}
