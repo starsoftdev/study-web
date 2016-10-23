@@ -11,7 +11,7 @@ const selectFormDomain = () => state => state.form;
  */
 const selectEditPatientFormValues = () => createSelector(
   selectFormDomain(),
-  (substate) => get(substate, 'editPatient.values', {})
+  substate => get(substate, 'editPatient.values', {})
 );
 
 /**

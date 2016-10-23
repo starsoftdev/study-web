@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
 import { map, omit } from 'lodash';
 
-import EditPatientForm from 'components/EditPatientForm';
+import EditPatientForm from 'containers/PatientDatabasePage/EditPatientForm';
 import { selectPatients, selectSelectedPatient, selectSelectedPatientDetailsForForm, selectSavedPatient } from 'containers/PatientDatabasePage/selectors';
 import { clearSelectedPatient, savePatient } from 'containers/PatientDatabasePage/actions';
 import PatientItem from './PatientItem';
