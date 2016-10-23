@@ -13,9 +13,9 @@ function Checkbox({ input, className, children, onChange }) {
       <span className={`jcf-checkbox ${input.checked ? 'jcf-checked' : 'jcf-unchecked'}`}>
         <span
           onClick={() => {
-            input.onChange(!input.value);
+            input.onChange(!input.checked);
             if (onChange) {
-              onChange(!input.value);
+              onChange(!input.checked);
             }
           }}
         />
@@ -23,12 +23,6 @@ function Checkbox({ input, className, children, onChange }) {
           {...input}
           checked={input.checked}
           type="checkbox"
-          onChange={(event) => {
-            input.onChange(event);
-            if (onChange) {
-              onChange(event);
-            }
-          }}
         />
         {children}
       </span>

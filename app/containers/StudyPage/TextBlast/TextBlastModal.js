@@ -184,10 +184,7 @@ class TextBlastModal extends React.Component {
                           type="checkbox"
                           component={Checkbox}
                           className="pull-left"
-                          input={{ defaultValue: this.state.selectAllCategories }}
-                          onChange={() => {
-                            this.selectCategory('All');
-                          }}
+                          onChange={this.selectCategory}
                         />
                         All
                       </li>
@@ -198,10 +195,7 @@ class TextBlastModal extends React.Component {
                             type="checkbox"
                             component={Checkbox}
                             className="pull-left"
-                            input={{ defaultValue: this.state.categories[patientCategory.id] }}
-                            onChange={() => {
-                              this.selectCategory(patientCategory);
-                            }}
+                            onChange={this.selectCategory}
                           />
                           {patientCategory.name}
                         </li>
@@ -217,10 +211,7 @@ class TextBlastModal extends React.Component {
                           type="checkbox"
                           component={Checkbox}
                           className="pull-left"
-                          input={{ defaultValue: this.state.selectAllSources }}
-                          onChange={() => {
-                            this.selectSource('All');
-                          }}
+                          onChange={this.selectSource}
                         />
                         All
                       </li>
@@ -231,10 +222,7 @@ class TextBlastModal extends React.Component {
                             type="checkbox"
                             component={Checkbox}
                             className="pull-left"
-                            input={{ defaultValue: this.state.sources[source.id] }}
-                            onChange={() => {
-                              this.selectSource(source);
-                            }}
+                            onChange={this.selectSource}
                           />
                           {source.type}
                         </li>
