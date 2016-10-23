@@ -11,7 +11,7 @@ const selectFormDomain = () => state => state.form;
  */
 const selectSearchPatientsFormValues = () => createSelector(
   selectFormDomain(),
-  (substate) => get(substate, 'searchPatients.values', {})
+  substate => get(substate, 'searchPatients.values', {})
 );
 
 /**

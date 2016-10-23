@@ -19,9 +19,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     gender: PropTypes.string,
     bmi: PropTypes.number,
     indications: PropTypes.array,
-    source_id: PropTypes.number,
     source: PropTypes.object,
-    study_patient_category_id: PropTypes.number,
     studyPatientCategory: PropTypes.object,
     selectedPatient: PropTypes.object,
     fetchPatient: PropTypes.func,
@@ -99,7 +97,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchPatient: (id) => dispatch(fetchPatient(id)),
+    fetchPatient: id => dispatch(fetchPatient(id)),
   };
 }
 

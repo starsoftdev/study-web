@@ -8,7 +8,7 @@ const errorLoading = (err) => {
   console.error('Dynamic page loading failed', err); // eslint-disable-line no-console
 };
 
-const loadModule = (cb) => (componentModule) => {
+const loadModule = cb => (componentModule) => {
   cb(null, componentModule.default);
 };
 
@@ -47,7 +47,7 @@ export default function createRoutes(store) {
     {
       onEnter: redirectToLogin,
       path: '/',
-      name: 'home',
+      name: 'homePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           System.import('containers/HomePage/reducer'),
