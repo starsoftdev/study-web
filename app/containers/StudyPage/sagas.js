@@ -464,16 +464,16 @@ function* submitPatientImport() {
 function* submitAddPatient() {
   while (true) {
     // listen for the SUBMIT_ADD_PATIENT action
-    const { studyId, file, onClose } = yield take(SUBMIT_ADD_PATIENT);
+    const { studyId, patient, onClose } = yield take(SUBMIT_ADD_PATIENT);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
     }
     try {
-      const requestURL = `${API_URL}/studies/${studyId}/patients?access_token=${authToken}`;
+      const requestURL = `${API_URL}/studies/${studyId}/addPatient?access_token=${authToken}`;
       yield call(request, requestURL, {
         method: 'POST',
-        body: JSON.stringify(file),
+        body: JSON.stringify(patient),
       });
       onClose();
       yield put(toastrActions.success('Add Patient', 'Patient added successfully!'));

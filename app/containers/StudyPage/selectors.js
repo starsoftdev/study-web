@@ -102,3 +102,4 @@ export const selectFetchingPatients = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.fetchingPatients
 );
+
