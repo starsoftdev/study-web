@@ -8,7 +8,7 @@ const errorLoading = (err) => {
   console.error('Dynamic page loading failed', err); // eslint-disable-line no-console
 };
 
-const loadModule = (cb) => (componentModule) => {
+const loadModule = cb => (componentModule) => {
   cb(null, componentModule.default);
 };
 
@@ -25,7 +25,7 @@ export default function createRoutes(store) {
     {
       onEnter: redirectToLogin,
       path: '/',
-      name: 'home',
+      name: 'homePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           System.import('containers/HomePage/reducer'),
@@ -320,6 +320,26 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('studyPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      path: '/manage-transfer-number',
+      name: 'manageTransferNumberPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/ManageTransferNumberPage/reducer'),
+          System.import('containers/ManageTransferNumberPage/sagas'),
+          System.import('containers/ManageTransferNumberPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('manageTransferNumberPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });

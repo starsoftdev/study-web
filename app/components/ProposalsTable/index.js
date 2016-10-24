@@ -38,7 +38,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     selectAll:  PropTypes.func,
     range:  PropTypes.any,
     searchBy:  PropTypes.any,
-    /*selected:  PropTypes.any,*/
+    proposals:  PropTypes.any,
   };
 
   constructor(props) {
@@ -67,23 +67,9 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     if (nextProps.range) {
       this.rangeSort(nextProps.range);
     }
-    if (nextProps.site) {
-      this.siteSort(nextProps.site);
-    }
-    if (nextProps.searchBy) {
-      this.searchSort(nextProps.searchBy);
-    }
   }
 
   componentDidUpdate() {}
-
-  get selectedProposal() {
-    return this.SelectedProposal;
-  }
-
-  set selectedProposal(value) {
-    this.SelectedProposal = value;
-  }
 
   onClickCurrent(ev) {
     ev.preventDefault();
@@ -107,7 +93,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
             this.selectedProposal = selectedArr;
           }
         } else {
-          this.selectedProposal = _.filter(this.selectedProposal, (o) => { return o.site !== proposal.site; });
+          this.selectedProposal = _.filter(this.selectedProposal, (o) => o.site !== proposal.site);
           if (!this.selectedProposal.length) {
             this.selectedProposal = null;
           }
@@ -145,6 +131,14 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       this.selectedProposal = (this.state.checkAll) ? proposals : null;
       this.props.selectAll(this.selectedProposal);
     });
+  }
+
+  get selectedProposal() {
+    return this.SelectedProposal;
+  }
+
+  set selectedProposal(value) {
+    this.SelectedProposal = value;
   }
 
   sortBy(ev) {
@@ -267,10 +261,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         if (number === proposal.proposalNumber || number === proposal.protocol) {
           proposalsMatchSearch.push(proposal);
         }
-      } else {
-        if (searchBy === proposal.site) {
-          proposalsMatchSearch.push(proposal);
-        }
+      } else if (searchBy === proposal.site) {
+        proposalsMatchSearch.push(proposal);
       }
     }
 
@@ -296,6 +288,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     _.map(raw, (source, key) => {
       const date = new Date(source.created);
       const dateWrapper = moment(date);
+      const sub = ((source.total % 100) === 0) ? '.00' : false;
       result.push(
         <tr key={key}>
           <td>
@@ -315,7 +308,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           <td>{source.site}</td>
           <td>{source.proposalNumber}</td>
           <td>{source.protocol}</td>
-          <td>${source.total}</td>
+          <td>${(sub) ? `${(source.total / 100)}${sub}` : `${(source.total / 100).toFixed(2)}` }</td>
         </tr>
       );
     });
