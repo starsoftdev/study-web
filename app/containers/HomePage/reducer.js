@@ -1,4 +1,4 @@
-/* eslint-disable comma-dangle */
+/* eslint-disable comma-dangle, no-case-declarations */
 import { forEach, map } from 'lodash';
 
 import {
