@@ -1,4 +1,3 @@
-
 // /* eslint-disable no-constant-condition, consistent-return */
 
 import { takeLatest } from 'redux-saga';
@@ -8,18 +7,21 @@ import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
 import request from 'utils/request';
+import composeQueryString from 'utils/composeQueryString';
+import {
+  FETCH_PATIENT_SIGN_UPS,
+  FETCH_PATIENT_MESSAGES,
+  FETCH_REWARDS_POINT,
+  FETCH_STUDIES,
+} from './constants';
 
 import {
   fetchPatientSignUpsSucceeded,
   fetchPatientMessagesSucceeded,
   fetchRewardsPointSucceeded,
+  studiesFetched,
+  studiesFetchingError,
 } from './actions';
-
-import {
-  FETCH_PATIENT_SIGN_UPS,
-  FETCH_PATIENT_MESSAGES,
-  FETCH_REWARDS_POINT,
-} from './constants';
 
 // Bootstrap sagas
 export default [
@@ -80,10 +82,33 @@ export function* fetchRewardsPointWorker(action) {
   }
 }
 
+export function* fetchStudiesWatcher() {
+  yield* takeLatest(FETCH_STUDIES, fetchStudiesWorker);
+}
+
+export function* fetchStudiesWorker(action) {
+  try {
+    let queryString;
+    let requestURL;
+    if (action.searchParams) {
+      queryString = composeQueryString(action.searchParams);
+      requestURL = `${API_URL}/studies/get_filtered_studies?${queryString}`;
+    } else {
+      requestURL = `${API_URL}/studies/get_filtered_studies`;
+    }
+    const response = yield call(request, requestURL);
+
+    yield put(studiesFetched(response));
+  } catch (err) {
+    yield put(studiesFetchingError(err));
+  }
+}
+
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   const watcherB = yield fork(fetchPatientMessagesWatcher);
   const watcherC = yield fork(fetchRewardsPointWatcher);
+  const watcherD = yield fork(fetchStudiesWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -91,4 +116,5 @@ export function* homePageSaga() {
   yield cancel(watcherA);
   yield cancel(watcherB);
   yield cancel(watcherC);
+  yield cancel(watcherD);
 }

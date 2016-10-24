@@ -20,7 +20,6 @@ export class Dashboard extends React.Component {
     fetchPatientSignUps: PropTypes.func,
     fetchPatientMessages: PropTypes.func,
     fetchRewardsPoint: PropTypes.func,
-    location: PropTypes.any,
   }
 
   componentDidMount() {
@@ -108,9 +107,9 @@ export class Dashboard extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
-  patientSignUps: selectPatientSignUps,
-  patientMessages: selectPatientMessages,
-  rewardsPoint: selectRewardsPoint,
+  patientSignUps: selectPatientSignUps(),
+  patientMessages: selectPatientMessages(),
+  rewardsPoint: selectRewardsPoint(),
 });
 const mapDispatchToProps = {
   fetchPatientSignUps,

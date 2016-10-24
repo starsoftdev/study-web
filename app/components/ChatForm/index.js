@@ -52,9 +52,19 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
     this.fetchStudyPatientMessages(this.props);
   }
 
+  componentWillReceiveProps(newProps) {
+    // console.log('componentWillReceiveProps', newProps);
+    this.props.socket.on('notifyMessage', () => {
+      // console.log('notifyMessage');
+      this.fetchStudyPatientMessages(newProps);
+    });
+  }
+
+  componentDidUpdate() {}
+
   fetchStudyPatientMessages(props) {
-    const scrollable = this.refs.scrollable;
-    const inputContainer = this.refs.inputContainer;
+    const scrollable = this.scrollable;
+    const inputContainer = this.inputContainer;
     this.props.fetchStudyPatientMessages({
       studyId: props.chat.details.study_id,
       patientId:  props.chat.details.id,
@@ -67,34 +77,23 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
             });
           }
         } else {
-          console.log(err);
+          // console.log(err);
         }
         this.props.setProcessingStatus({ status: false });
       },
     });
   }
 
-  componentWillReceiveProps(newProps) {
-    console.log('componentWillReceiveProps', newProps);
-    this.props.socket.on('notifyMessage', () => {
-      console.log('notifyMessage');
-      this.fetchStudyPatientMessages(newProps);
-    });
-  }
-
-  componentDidUpdate() {
-  }
-
   render() {
     const { isSaving, handleSubmit } = this.props;
     const listMessages =
-      (this.state.twilioMessages.length) ? this.state.twilioMessages.map((item, index) => (
+      (this.state.twilioMessages.length) ? this.state.twilioMessages.map((item) => (
         <span
           key={item.twilioTextMessage.sid}
           className={`message ${item.twilioTextMessage.direction}`}
         >
-        {item.twilioTextMessage.body}
-      </span>
+          {item.twilioTextMessage.body}
+        </span>
       )) : 'in this chat, are no posts';
 
     return (
@@ -106,11 +105,22 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
           <fieldset>
             <div className="row">
               <div className="col-md-12">
-                <div className="form-group messages" id="mess-container" ref="scrollable">
+                <div
+                  className="form-group messages"
+                  id="mess-container"
+                  ref={(scrollable) => {
+                    this.scrollable = scrollable;
+                  }}
+                >
                   {listMessages}
                 </div>
                 <div className="row form-group">
-                  <div className="field col-sm-12" ref="inputContainer">
+                  <div
+                    className="field col-sm-12"
+                    ref={(inputContainer) => {
+                      this.inputContainer = inputContainer;
+                    }}
+                  >
                     <Field
                       name="body"
                       component={Input}

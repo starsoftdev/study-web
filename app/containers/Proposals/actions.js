@@ -10,7 +10,6 @@ import {
   PROPOSALS_RECEIVED,
   GET_PDF,
   CREATE_PDF,
-  PDF_CREATED,
 } from './constants';
 
 export function defaultAction() {

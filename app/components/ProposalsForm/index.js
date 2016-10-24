@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import Select from 'react-select';
+
 import { defaultRanges, DateRange } from 'react-date-range';
 import ReactSelect from 'components/Input/ReactSelect';
 import './styles.less';
@@ -20,10 +20,10 @@ const mapStateToProps = createStructuredSelector({});
 class ProposalsForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
-    createPdf:  PropTypes.func,
-    changeRange:  PropTypes.func,
-    selectSite:  PropTypes.func,
-    search:  PropTypes.func,
+    createPdf: PropTypes.func,
+    changeRange: PropTypes.func,
+    selectSite: PropTypes.func,
+    search: PropTypes.func,
   };
 
   constructor(props, context) {
@@ -80,13 +80,13 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
 
   search(ev) {
     ev.preventDefault();
-    this.props.search(this.refs.searchInput.value);
+    this.props.search(this.searchInput.value);
   }
 
   render() {
     const { predefined } = this.state;
     const format = 'dddd, D MMMM YYYY';
-    const { siteLocations, selectSite } = this.props;
+    const { siteLocations } = this.props;
     const state = this.state;
 
     return (
@@ -122,7 +122,9 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
                 id="search"
                 className="form-control keyword-search"
                 placeholder="Search"
-                ref="searchInput"
+                ref={(searchInput) => {
+                  this.searchInput = searchInput;
+                }}
               />
               <label htmlFor="search">
                 <i
@@ -140,7 +142,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
               options={siteLocations}
               className="field"
             />
-            {/* onChange={selectSite}*/}
+            {/* onChange={selectSite} */}
           </div>
         </div>
 

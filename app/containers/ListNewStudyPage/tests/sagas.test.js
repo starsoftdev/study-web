@@ -8,6 +8,7 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 
 import {
   submitFormWatcher,
+  getAvailPhoneNumbersWatcher,
   listNewStudyPageSaga,
 } from '../sagas';
 
@@ -56,10 +57,13 @@ describe('ListNewStudyPage Saga', () => {
     const mainSaga = listNewStudyPageSaga();
 
     let forkDescriptorA;
+    let forkDescriptorB;
 
     it('should asyncronously fork submit form watcher saga', () => {
       forkDescriptorA = mainSaga.next();
       expect(forkDescriptorA.value).toEqual(fork(submitFormWatcher));
+      forkDescriptorB = mainSaga.next();
+      expect(forkDescriptorB.value).toEqual(fork(getAvailPhoneNumbersWatcher));
     });
 
     it('should yield until LOCATION_CHANGE action', () => {

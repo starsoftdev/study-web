@@ -3,6 +3,7 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import request from 'utils/request';
 import { get } from 'lodash';
+import composeQueryString from 'utils/composeQueryString';
 
 import {
   proposalsReceived,
@@ -18,7 +19,7 @@ import { getItem } from 'utils/localStorage';
 const serializeParams = (obj) => {
   const str = [];
   Object.keys(obj).forEach(p => {
-    if (obj[p] && obj[p] !== undefined && obj[p] !== null) {  // we need to pass 0 and empty string
+    if ({}.hasOwnProperty.call(obj, p) && obj[p] !== undefined && obj[p] !== null) {  // we need to pass 0 and empty string
       str.push(`${encodeURIComponent(p)}=${encodeURIComponent(obj[p])}`);
     }
   });
@@ -42,7 +43,9 @@ export function* getProposals() {
   while (true) {
     const { payload } = yield take(GET_PROPOSALS);
     try {
-      const requestURL = `${API_URL}/proposals`;
+      const queryParams = { filter: '{"include": [ "level", "indication" ]}' };
+      const queryString = composeQueryString(queryParams);
+      const requestURL = `${API_URL}/proposals/?${queryString}`;
       const response = yield call(request, requestURL);
 
       yield put(proposalsReceived(response));
