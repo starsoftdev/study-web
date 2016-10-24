@@ -27,6 +27,7 @@ function Input({
   onChange,
   required,
   meta: { touched, error, active },
+  maxLength,
   children,
   isDisabled,
 }) {
@@ -48,6 +49,7 @@ function Input({
       disabled={isDisabled}
       placeholder={placeholder}
       required={required}
+      maxLength={maxLength}
       componentClass={componentClass} // Default value is `input`
       onChange={(event) => {
         input.onChange(event);
@@ -94,6 +96,7 @@ Input.propTypes = {
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
   name: PropTypes.string.isRequired,
+  maxLength: PropTypes.string,
   meta: PropTypes.object.isRequired,
   placeholder: PropTypes.string,
   required: PropTypes.bool,

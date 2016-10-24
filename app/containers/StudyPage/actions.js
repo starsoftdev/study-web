@@ -293,9 +293,10 @@ export function submitPatientImport(studyId, file, onClose) {
   };
 }
 
-export function submitAddPatient(patient, onClose) {
+export function submitAddPatient(studyId, patient, onClose) {
   return {
     type: SUBMIT_ADD_PATIENT,
+    studyId,
     patient,
     onClose,
   };
