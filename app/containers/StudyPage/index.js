@@ -77,7 +77,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     const pageTitle = `${study.name} - StudyKIK`;
     const campaignOptions = campaigns.map(campaign => (
       {
-        label: moment(campaign.dateFrom).format('MMMM Do YYYY') + ' -  ' + moment(campaign.dateTo).format('MMMM Do YYYY'),
+        label: `${moment(campaign.dateFrom).format('MMMM Do YYYY')} - ${moment(campaign.dateTo).format('MMMM Do YYYY')}`,
         value: campaign.id,
       }
     ));
