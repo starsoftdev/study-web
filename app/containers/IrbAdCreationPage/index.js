@@ -11,7 +11,8 @@ import { createStructuredSelector } from 'reselect';
 import IrbAdCreationForm from 'components/IrbAdCreationForm';
 import ShoppingCartForm from 'components/ShoppingCartForm';
 import { selectIrbAdCreationFormValues, selectIrbAdCreationFormError } from 'components/IrbAdCreationForm/selectors';
-import { submitForm } from 'containers/IrbAdCreationPage/actions';
+import { selectIrbProductList } from 'containers/IrbAdCreationPage/selectors';
+import { submitForm, fetchIrbProductList } from 'containers/IrbAdCreationPage/actions';
 
 import {
   fetchSites,
@@ -36,6 +37,8 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     formValues: PropTypes.object,
     hasError: PropTypes.bool,
     currentUser: PropTypes.object,
+    productList: PropTypes.array,
+    fetchProductList: PropTypes.func,
   };
 
   constructor(props) {
@@ -47,6 +50,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
   componentDidMount() {
     this.props.fetchSites();
     this.props.fetchIndications();
+    this.props.fetchProductList();
   }
 
   onSubmitForm(params) {
@@ -55,45 +59,49 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
       ...this.props.formValues,
       siteLocationName: siteLocation.name,
       user_id: this.props.currentUser.id,
+      stripeProductId: this.props.productList[0].stripeProductId,
     });
   }
 
   render() {
-    const { siteLocations, indications, hasError } = this.props;
+    const { siteLocations, indications, hasError, productList } = this.props;
 
-    const addOns = [{
-      title: 'IRB Ad Creation',
-      price: 177,
-      quantity: 1,
-      total: 177,
-    }];
+    if (productList[0]) {
+      const addOns = [{
+        title: productList[0].name,
+        price: productList[0].price,
+        quantity: 1,
+        total: productList[0].price,
+      }];
 
-    return (
-      <StickyContainer className="container-fluid">
-        <section className="study-portal">
-          <h2 className="main-heading">ORDER IRB AD CREATION</h2>
-          <div className="form-study row">
-            <div className="col-xs-6 form-holder">
-              <IrbAdCreationForm
-                siteLocations={siteLocations}
-                indications={indications}
-              />
-            </div>
-
-            <div className="fixed-block">
-              <div className="fixed-block-holder">
-                <Sticky className="sticky-shopping-cart">
-
-                  <ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} disableSubmit={hasError} />
-
-                </Sticky>
+      return (
+        <StickyContainer className="container-fluid">
+          <section className="study-portal">
+            <h2 className="main-heading">ORDER IRB AD CREATION</h2>
+            <div className="form-study row">
+              <div className="col-xs-6 form-holder">
+                <IrbAdCreationForm
+                  siteLocations={siteLocations}
+                  indications={indications}
+                />
               </div>
-            </div>
 
-          </div>
-        </section>
-      </StickyContainer>
-    );
+              <div className="fixed-block">
+                <div className="fixed-block-holder">
+                  <Sticky className="sticky-shopping-cart">
+
+                    <ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} disableSubmit={hasError} />
+
+                  </Sticky>
+                </div>
+              </div>
+
+            </div>
+          </section>
+        </StickyContainer>
+      );
+    }
+    return <div></div>;
   }
 }
 
@@ -103,12 +111,14 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectIrbAdCreationFormValues(),
   hasError: selectIrbAdCreationFormError(),
   currentUser: selectCurrentUser(),
+  productList: selectIrbProductList(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchSites:       () => dispatch(fetchSites()),
     fetchIndications: () => dispatch(fetchIndications()),
+    fetchProductList: () => dispatch(fetchIrbProductList()),
     submitForm:     (cartValues, formValues) => dispatch(submitForm(cartValues, formValues)),
   };
 }
