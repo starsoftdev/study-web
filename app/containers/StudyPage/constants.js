@@ -6,6 +6,7 @@
 
 /* eslint-disable no-multi-spaces */
 
+export const FIND_PATIENTS_TEXT_BLAST = 'StudyPage/FIND_PATIENTS_TEXT_BLAST';
 export const FETCH_CAMPAIGNS_SUCCESS  = 'StudyPage/FETCH_CAMPAIGNS_SUCCESS';
 export const FETCH_PATIENTS = 'StudyPage/FETCH_PATIENTS';
 export const FETCH_PATIENTS_SUCCESS  = 'StudyPage/FETCH_PATIENTS_SUCCESS';
