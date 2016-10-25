@@ -38,11 +38,11 @@ const headers = [
 
 class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    selectCurrent:  PropTypes.func,
-    selectAll:  PropTypes.func,
-    range:  PropTypes.any,
-    searchBy:  PropTypes.any,
-    receipts:  PropTypes.any,
+    selectCurrent: PropTypes.func,
+    selectAll: PropTypes.func,
+    range: PropTypes.any,
+    searchBy: PropTypes.any,
+    receipts: PropTypes.any,
   };
 
   constructor(props) {
@@ -50,6 +50,8 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
     this.onClickAll = this.onClickAll.bind(this);
     this.onClickCurrent = this.onClickCurrent.bind(this);
+    this.sortBy = this.sortBy.bind(this);
+    this.sort = this.sort.bind(this);
 
     this.state = {
       checkAll: false,
@@ -61,6 +63,8 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   }
 
   componentWillReceiveProps(nextProps) {
+    //  console.log('componentWillReceiveProps', nextProps);
+
     if (nextProps.proposals) {
       this.setState({
         filteredReceipts: null,
@@ -70,9 +74,67 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     if (nextProps.range) {
       this.rangeSort(nextProps.range);
     }
+
+    if (nextProps.site || nextProps.searchBy) {
+      this.sort(nextProps.site, nextProps.searchBy);
+    } else {
+      this.setState({
+        filteredReceipts: null,
+      });
+    }
   }
 
   componentDidUpdate() {}
+
+  sort(site, searchBy) {
+    const receiptsMatch = [];
+    const receiptsArr = this.props.receipts;
+
+    switch(true){
+      case site !== null && searchBy !== null:
+
+        const number = parseInt(searchBy, 10);
+        for (const receipt of receiptsArr) {
+          if (receipt.invoiceDetails[0].campaign.site.name === site.name) {
+            if (!_.isNaN(number)) {
+              if (number === receipt.id) {
+                receiptsMatch.push(receipt);
+              }
+            } else if (searchBy === receipt.invoiceDetails[0].campaign.site.name) {
+              receiptsMatch.push(receipt);
+            } else if (searchBy === receipt.invoiceDetails[0].campaign.study.protocolNumber) {
+              receiptsMatch.push(receipt);
+            }
+          }
+        }
+        break;
+      case searchBy !== null:
+        for (const receipt of receiptsArr) {
+          const number = parseInt(searchBy, 10);
+          if (!_.isNaN(number)) {
+            if (number === receipt.id) {
+              receiptsMatch.push(receipt);
+            }
+          } else if (searchBy === receipt.invoiceDetails[0].campaign.site.name) {
+            receiptsMatch.push(receipt);
+          } else if (searchBy === receipt.invoiceDetails[0].campaign.study.protocolNumber) {
+            receiptsMatch.push(receipt);
+          }
+        }
+        break;
+      case site !== null:
+        for (const receipt of receiptsArr) {
+          if (receipt.invoiceDetails[0].campaign.site.name === site.name) {
+            receiptsMatch.push(receipt);
+          }
+        }
+        break;
+      default:
+        break;
+    }
+
+    this.setState({ filteredReceipts: receiptsMatch });
+  }
 
   onClickCurrent(ev) {
     ev.preventDefault();
@@ -142,6 +204,103 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
   set selectedReceipts(value) {
     this.SelectedReceipts = value;
+  }
+
+  sortBy(ev) {
+    ev.preventDefault();
+    const sort = ev.currentTarget.dataset.sort;
+    let direction = 'down';
+
+    if (ev.currentTarget.className && ev.currentTarget.className === 'down') {
+      direction = 'up';
+    }
+
+    const receiptsArr = this.state.filteredReceipts || this.props.receipts;
+    const directionUnits = (direction === 'up') ? {
+      more: 1,
+      less: -1,
+    } : {
+      more: -1,
+      less: 1,
+    };
+
+    switch (sort) {
+      case 'date':
+        receiptsArr.sort((a, b) => {
+          const aDate = new Date(a.created).getTime();
+          const bDate = new Date(b.created).getTime();
+
+          if (aDate > bDate) {
+            return directionUnits.more;
+          }
+          if (aDate < bDate) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      case 'site':
+        receiptsArr.sort((a, b) => {
+          if (a.site > b.site) {
+            return directionUnits.more;
+          }
+          if (a.site < b.site) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      case 'payment':
+        receiptsArr.sort((a, b) => {
+          if ((a.payment_method_id !== null && b.payment_method_id !== null)
+            && a.paymentMethod.nickname > b.paymentMethod.nickname) {
+            return directionUnits.more;
+          }
+          if ((a.payment_method_id !== null && b.payment_method_id !== null)
+            && a.paymentMethod.nickname < b.paymentMethod.nickname) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      case 'protocol':
+        receiptsArr.sort((a, b) => {
+          if (a.invoiceDetails[0].campaign.study.protocolNumber > b.invoiceDetails[0].campaign.study.protocolNumber) {
+            return directionUnits.more;
+          }
+          if (a.invoiceDetails[0].campaign.study.protocolNumber < b.invoiceDetails[0].campaign.study.protocolNumber) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      case 'total':
+        receiptsArr.sort((a, b) => {
+          if (a.total > b.total) {
+            return directionUnits.more;
+          }
+          if (a.total < b.total) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      case 'invoice':
+        receiptsArr.sort((a, b) => {
+          if (a.id > b.id) {
+            return directionUnits.more;
+          }
+          if (a.id < b.id) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      default:
+        break;
+    }
+
+    this.setState({ filteredReceipts: receiptsArr, activeSort: sort, activeDirection: direction });
   }
 
   rangeSort(range) {
