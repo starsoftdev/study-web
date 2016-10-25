@@ -28,7 +28,7 @@ class AddPatient extends React.Component {
     onHide: React.PropTypes.func.isRequired,
   };
   constructor(props) {
-    super(props)
+    super(props);
     this.addPatient = this.addPatient.bind(this);
   }
   componentDidMount() {

@@ -25,6 +25,13 @@ import {
   SET_SITE_ID,
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
+  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
+  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
+  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
+  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
+  SUBMIT_TEXT_BLAST,
+  SUBMIT_PATIENT_IMPORT,
+  SUBMIT_ADD_PATIENT,
   SUBMIT_ADD_PATIENT_INDICATION,
   SUBMIT_REMOVE_PATIENT_INDICATION,
   SUBMIT_PATIENT_UPDATE,
@@ -37,9 +44,6 @@ import {
   UPDATE_PATIENT_SUCCESS,
   ADD_PATIENT_NOTE_SUCCESS,
   ADD_PATIENT_TEXT_SUCCESS,
-  SUBMIT_TEXT_BLAST,
-  SUBMIT_PATIENT_IMPORT,
-  SUBMIT_ADD_PATIENT,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -248,6 +252,37 @@ export function addPatientTextSuccess(payload) {
   return {
     type: ADD_PATIENT_TEXT_SUCCESS,
     payload,
+  };
+}
+
+export function submitMovePatientBetweenCategories(studyId, fromCategoryId, toCategoryId, patientId) {
+  return {
+    type: SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
+    studyId,
+    fromCategoryId,
+    toCategoryId,
+    patientId,
+  };
+}
+
+export function submitMovePatientBetweenCategoriesLoading() {
+  return {
+    type: SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
+  };
+}
+
+export function movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, patientId) {
+  return {
+    type: SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
+    fromCategoryId,
+    toCategoryId,
+    patientId,
+  };
+}
+
+export function movePatientBetweenCategoriesFailed() {
+  return {
+    type: SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
   };
 }
 

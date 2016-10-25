@@ -12,7 +12,7 @@ import { selectCurrentUser } from 'containers/App/selectors';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
-import StudyPatients from './PatientPanel/StudyPatients';
+import PatientBoard from './PatientBoard/index';
 import * as Selector from './selectors';
 import moment from 'moment';
 import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId } from './actions';
@@ -112,7 +112,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             handleSubmit={this.handleSubmit}
           />
           <StudyStats stats={stats} />
-          <StudyPatients patientCategories={patientCategories} />
+          <PatientBoard patientCategories={patientCategories} />
         </section>
       </div>
     );
