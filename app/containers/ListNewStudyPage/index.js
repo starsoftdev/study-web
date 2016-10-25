@@ -10,11 +10,13 @@ import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
 import ShoppingCartForm from 'components/ShoppingCartForm';
 import ListNewStudyForm from 'components/ListNewStudyForm';
-import { selectListNewStudyPageDomain, selectAvailPhoneNumbers } from 'containers/ListNewStudyPage/selectors';
+import { selectListNewStudyPageDomain, selectAvailPhoneNumbers, selectFormSubmissionStatus, selectShowSubmitFormModal } from 'containers/ListNewStudyPage/selectors';
 import { selectListNewStudyFormValues, selectListNewStudyFormError } from 'components/ListNewStudyForm/selectors';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
 import _, { find } from 'lodash';
-import { submitForm, getAvailPhoneNumbers } from 'containers/ListNewStudyPage/actions';
+import { submitForm, getAvailPhoneNumbers, hideSubmitFormModal } from 'containers/ListNewStudyPage/actions';
+import { Modal } from 'react-bootstrap';
+import LoadingSpinner from 'components/LoadingSpinner';
 
 import Helmet from 'react-helmet';
 import {
@@ -28,6 +30,7 @@ import {
   selectIndications,
   selectStudyLevels,
   selectSites,
+  selectCurrentUser,
 } from 'containers/App/selectors';
 
 export class ListNewStudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -47,12 +50,17 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     hasErrors: PropTypes.bool,
     availPhoneNumbers: PropTypes.array,
     getAvailPhoneNumbers: PropTypes.func,
+    currentUser: PropTypes.object,
+    formSubmissionStatus: PropTypes.object,
+    showSubmitFormModal: PropTypes.bool,
+    hideSubmitFormModal: PropTypes.func,
   }
 
   constructor(props) {
     super(props);
     this.submitForm = this.props.submitForm.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
+    this.closeSubmitFormModal = this.closeSubmitFormModal.bind(this);
   }
 
   componentDidMount() {
@@ -62,6 +70,12 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     this.props.getAvailPhoneNumbers();
   }
 
+  componentWillReceiveProps(newProps) {
+    if (!newProps.formSubmissionStatus.submitting && this.props.formSubmissionStatus.submitting) {
+      // this.closeAddCredtCardModal();
+    }
+  }
+
   onSubmitForm(params) {
     const filteredEmails = [];
     _.forEach(this.props.formValues.emailNotifications, (item) => {
@@ -69,8 +83,13 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
         filteredEmails.push({ firstName: item.firstName, lastName: item.lastName, email: item.email });
       }
     });
-    console.log(params);
-    this.submitForm(params, { ...this.props.formValues, emailNotifications: filteredEmails });
+
+    this.submitForm(params, { ...this.props.formValues, emailNotifications: filteredEmails, stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId });
+  }
+
+  closeSubmitFormModal() {
+    console.log('close');
+    this.props.hideSubmitFormModal();
   }
 
   render() {
@@ -139,6 +158,34 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
           </div>
         </section>
+        <Modal className="custom-modal" show={this.props.showSubmitFormModal} onHide={this.closeSubmitFormModal}>
+          <Modal.Header>
+            <Modal.Title>Create New Study Result</Modal.Title>
+            <a className="lightbox-close close" onClick={this.closeSubmitFormModal}>
+              <i className="icon-icon_close"></i>
+            </a>
+          </Modal.Header>
+          <Modal.Body>
+            {(() => {
+              if (this.props.formSubmissionStatus.submitting) {
+                return (
+                  <div className="text-center"><span><LoadingSpinner showOnlyIcon size={20} /></span></div>
+                );
+              }
+              if (this.props.formSubmissionStatus.response) {
+                return (
+                  <div className="text-center">Success</div>
+                );
+              }
+              if (this.props.formSubmissionStatus.response) {
+                return (
+                  <div className="text-center"><span>Error</span></div>
+                );
+              }
+              return false;
+            })()}
+          </Modal.Body>
+        </Modal>
       </StickyContainer>
     );
   }
@@ -153,6 +200,9 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectListNewStudyFormValues(),
   hasErrors: selectListNewStudyFormError(),
   availPhoneNumbers: selectAvailPhoneNumbers(),
+  currentUser: selectCurrentUser(),
+  formSubmissionStatus: selectFormSubmissionStatus(),
+  showSubmitFormModal: selectShowSubmitFormModal(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -163,6 +213,7 @@ function mapDispatchToProps(dispatch) {
     submitForm:     (cartValues, formValues) => dispatch(submitForm(cartValues, formValues)),
     saveSite: (clientId, id, data) => dispatch(saveSite(clientId, id, data)),
     getAvailPhoneNumbers: () => dispatch(getAvailPhoneNumbers()),
+    hideSubmitFormModal:  () => dispatch(hideSubmitFormModal()),
   };
 }
 
