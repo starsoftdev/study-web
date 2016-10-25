@@ -5,6 +5,7 @@
  */
 
 import {
+  FIND_PATIENTS_TEXT_BLAST,
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
@@ -47,7 +48,15 @@ export function campaignsFetched(payload) {
     payload,
   };
 }
-
+export function findPatientsForTextBlast(studyId, text, categoryIds, sourceIds) {
+  return {
+    type: FIND_PATIENTS_TEXT_BLAST,
+    studyId,
+    text,
+    categoryIds,
+    sourceIds,
+  };
+}
 export function fetchPatients(studyId, siteId, text, campaignId, sourceId) {
   return {
     type: FETCH_PATIENTS,

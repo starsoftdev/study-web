@@ -14,7 +14,7 @@ import { submitAddPatient } from '../actions';
 import { selectStudyId } from '../selectors';
 import { selectSyncErrors, selectValues } from '../../../common/selectors/form.selector';
 import { createStructuredSelector } from 'reselect';
-import { normalizePhone } from "../helper/functions";
+import { normalizePhone } from '../helper/functions';
 
 @reduxForm({ form: 'addPatient', validate: formValidator })
 class AddPatient extends React.Component {
@@ -110,7 +110,7 @@ class AddPatient extends React.Component {
                 <Field
                   name="phone"
                   component={Input}
-                  type="text"
+                  type="tel"
                   maxLength="11"
                   className="field"
                   id="import-patient-phone"

@@ -50,6 +50,7 @@ class TextBlastModal extends React.Component {
     this.removePatient = this.removePatient.bind(this);
     this.submitTextBlast = this.submitTextBlast.bind(this);
     this.renderPatient = this.renderPatient.bind(this);
+    this.findPatients = this.findPatients.bind(this);
     for (const patientCategory of props.patientCategories) {
       this.state.categories[patientCategory.id] = false;
     }
@@ -105,6 +106,9 @@ class TextBlastModal extends React.Component {
     this.setState(state);
   }
 
+  findPatients(event) {
+    const {} = this.props 
+  }
   removePatient() {
 
   }
@@ -163,6 +167,7 @@ class TextBlastModal extends React.Component {
                         name="search"
                         type="search"
                         component={Input}
+                        onChange={this.findPatients}
                         className="keyword-search"
                       />
                       <i className="icomoon-icon_search2" />

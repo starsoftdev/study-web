@@ -5,7 +5,8 @@
 import { call, fork, put, take } from 'redux-saga/effects';
 import request from '../../utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
-import { FETCH_PATIENTS,
+import { FIND_PATIENTS_TEXT_BLAST,
+  FETCH_PATIENTS,
   FETCH_PATIENT_DETAILS,
   FETCH_PATIENT_CATEGORIES,
   FETCH_STUDY,
@@ -28,6 +29,24 @@ import { campaignsFetched, deletePatientNoteSuccess, patientCategoriesFetched, p
 export default [
   fetchStudySaga,
 ];
+
+function* findPatients() {
+  const authToken = getItem('auth_token');
+
+  // listen for the FETCH_STUDY action
+  const { studyId, text, categoryIds, sourceIds } = yield take(FIND_PATIENTS_TEXT_BLAST);
+  const filter = { studyId, text, categoryIds, sourceIds }
+  try {
+    const requestURL = `${API_URL}/studies/${studyId}/findPatient/${filter}?access_token=${authToken}`;
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    yield put(studyViewsStatFetched(response));
+  } catch (e) {
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
 
 function* fetchStudyDetails() {
   const authToken = getItem('auth_token');
