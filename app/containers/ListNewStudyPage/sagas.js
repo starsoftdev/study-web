@@ -40,8 +40,7 @@ export function* getAvailPhoneNumbersWatcher() {
 
 export function* submitFormWatcher() {
   while (true) {
-    const { formValues } = yield take(SUBMIT_FORM);
-
+    const { cartValues, formValues } = yield take(SUBMIT_FORM);
     try {
       const requestURL = `${API_URL}/studies`;
 
@@ -55,6 +54,7 @@ export function* submitFormWatcher() {
           data.append(index, value);
         }
       });
+      data.append('cartValues', JSON.stringify(cartValues));
 
       const params = {
         method: 'POST',
