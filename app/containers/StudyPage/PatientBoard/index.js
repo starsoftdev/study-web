@@ -11,11 +11,12 @@ import { createStructuredSelector } from 'reselect';
 import * as Selector from '../selectors';
 import { selectCurrentUser } from 'containers/App/selectors';
 
-import Patient from './Patient';
+import PatientCategory from './PatientCategory';
 import PatientDetailModal from '../PatientDetail/PatientDetailModal';
 import { fetchPatientDetails, setCurrentPatientCategoryId, setCurrentPatientId } from '../actions';
 
-class StudyPatients extends React.Component {
+@DragDropContext(HTML5Backend)
+class PatientBoard extends React.Component {
   static propTypes = {
     currentUser: React.PropTypes.object.isRequired,
     currentPatientId: React.PropTypes.number,
@@ -31,7 +32,6 @@ class StudyPatients extends React.Component {
       openPatientModal: false,
     };
     this.onPatientClick = this.onPatientClick.bind(this);
-    this.renderPatientCategory = this.renderPatientCategory.bind(this);
   }
 
   onPatientClick(category, patient) {
@@ -50,36 +50,15 @@ class StudyPatients extends React.Component {
     });
   }
 
-  renderPatientCategory(category) {
-    const { currentPatientId, currentUser } = this.props;
-    return (
-      <li key={category.id}>
-        <span className="opener">
-          <strong className="number">{category.patients.length}</strong>
-          <span className="text">{category.name}</span>
-        </span>
-        <div className="slide">
-          <div className="slide-holder">
-            <ul className="list-unstyled">
-              {category.patients.map(patient => (
-                <Patient key={patient.id} category={category} currentPatientId={currentPatientId} patient={patient} currentUser={currentUser} onPatientClick={this.onPatientClick} />
-              ))}
-            </ul>
-          </div>
-        </div>
-      </li>
-    );
-  }
-
   render() {
-    const { currentUser, patientCategories } = this.props;
+    const { currentPatientId, currentUser, patientCategories } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': this.state.openPatientModal })}>
           <nav className="nav-status">
             <ul className="list-inline">
               {patientCategories.map(patientCategory => (
-                this.renderPatientCategory(patientCategory)
+                <PatientCategory key={patientCategory.id} category={patientCategory} currentUser={currentUser} currentPatientId={currentPatientId} onPatientClick={this.onPatientClick} />
               ))}
             </ul>
           </nav>
@@ -104,5 +83,4 @@ const mapDispatchToProps = (dispatch) => (
   }
 );
 
-StudyPatients = DragDropContext(HTML5Backend)(StudyPatients);
-export default connect(mapStateToProps, mapDispatchToProps)(StudyPatients);
+export default connect(mapStateToProps, mapDispatchToProps)(PatientBoard);

@@ -19,11 +19,12 @@ import { FIND_PATIENTS_TEXT_BLAST,
   SUBMIT_PATIENT_NOTE,
   SUBMIT_DELETE_NOTE,
   SUBMIT_PATIENT_TEXT,
+  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
 } from './constants';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
-import { campaignsFetched, deletePatientNoteSuccess, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, callStatsFetched, textStatsFetched, addPatientIndicationSuccess, removePatientIndicationSuccess, updatePatientSuccess, addPatientNoteSuccess, addPatientTextSuccess } from './actions';
+import { campaignsFetched, deletePatientNoteSuccess, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, callStatsFetched, textStatsFetched, addPatientIndicationSuccess, removePatientIndicationSuccess, updatePatientSuccess, addPatientNoteSuccess, addPatientTextSuccess, movePatientBetweenCategoriesLoading, movePatientBetweenCategoriesSuccess, movePatientBetweenCategoriesFailed } from './actions';
 
 // Bootstrap sagas
 export default [
@@ -317,6 +318,34 @@ function* submitAddPatientIndication() {
   }
 }
 
+function* submitMovePatientBetweenCategories() {
+  while (true) {
+    // listen for the SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES action
+    const { studyId, fromCategoryId, toCategoryId, patientId } = yield take(SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+    try {
+      yield put(movePatientBetweenCategoriesLoading());
+      const requestURL = `${API_URL}/patients/update_category?access_token=${authToken}`;
+      yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          study_id: studyId,
+          patient_id: patientId,
+          patient_category_id: toCategoryId,
+        }),
+      });
+      yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, patientId));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(movePatientBetweenCategoriesFailed());
+    }
+  }
+}
+
 function* submitRemovePatientIndication() {
   while (true) {
     // listen for the SUBMIT_REMOVE_PATIENT_INDICATION action
@@ -518,6 +547,7 @@ export function* fetchStudySaga() {
     yield call(fetchPatientCategories);
     yield fork(fetchPatientsSaga);
     yield fork(fetchPatientDetails);
+    yield fork(submitMovePatientBetweenCategories);
     yield fork(submitAddPatientIndication);
     yield fork(submitRemovePatientIndication);
     yield fork(submitPatientUpdate);

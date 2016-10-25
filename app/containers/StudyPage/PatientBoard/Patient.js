@@ -84,7 +84,10 @@ const patientSource = {
   },
   beginDrag(props) {
     // Return the data describing the dragged item
-    const item = { id: props.patient.id };
+    const item = {
+      id: props.patient.id,
+      patientCategoryId: props.category.id,
+    };
     return item;
   },
 };
