@@ -15,6 +15,7 @@ import {
   GET_AVAIL_PHONE_NUMBERS,
   GET_AVAIL_PHONE_NUMBERS_SUCCESS,
   GET_AVAIL_PHONE_NUMBERS_ERROR,
+  HIDE_SUBMIT_FORM_MODAL,
 } from './constants';
 
 export function showSiteLocationModal() {
@@ -80,5 +81,11 @@ export function getAvailPhoneNumbersError(payload) {
   return {
     type: GET_AVAIL_PHONE_NUMBERS_ERROR,
     payload,
+  };
+}
+
+export function hideSubmitFormModal() {
+  return {
+    type: HIDE_SUBMIT_FORM_MODAL,
   };
 }
