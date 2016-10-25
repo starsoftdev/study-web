@@ -71,9 +71,10 @@ const selectStudyLevels = () => createSelector(
     return map(levels, e => (
       {
         id: e.id,
-        label: `${e.type}: $${e.price}`,
-        price: e.price,
-        type: e.type,
+        label: `${e.name}: $${100}`,
+        price: 100,
+        type: e.name,
+        stripeProductId: e.stripe_product_id,
       }
     ));
   }

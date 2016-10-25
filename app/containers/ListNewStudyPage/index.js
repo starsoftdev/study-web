@@ -69,6 +69,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
         filteredEmails.push({ firstName: item.firstName, lastName: item.lastName, email: item.email });
       }
     });
+    console.log(params);
     this.submitForm(params, { ...this.props.formValues, emailNotifications: filteredEmails });
   }
 
