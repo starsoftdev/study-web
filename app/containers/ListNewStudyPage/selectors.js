@@ -34,10 +34,16 @@ const selectShowSubmitFormModal = () => createSelector(
   (substate) => substate.showSubmitFormModal
 );
 
+const selectIndicationLevelPrice = () => createSelector(
+  selectListNewStudyPageDomain(),
+  (substate) => substate.indicationLevelPrice
+);
+
 export default selectListNewStudyPage;
 export {
   selectListNewStudyPageDomain,
   selectAvailPhoneNumbers,
   selectFormSubmissionStatus,
   selectShowSubmitFormModal,
+  selectIndicationLevelPrice,
 };
