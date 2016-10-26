@@ -36,6 +36,8 @@ export default function homePageReducer(state = initialState, action) {
   let newState;
   let entity;
   let entitiesCollection;
+  let startDateStr = '';
+  let endDateStr = '';
 
   switch (action.type) {
     case FETCH_PATIENT_SIGN_UPS_SUCCEESS:
@@ -100,8 +102,6 @@ export default function homePageReducer(state = initialState, action) {
         },
       };
     case FETCH_STUDIES_SUCCESS:
-      let startDateStr = '';
-      let endDateStr = '';
       entitiesCollection = [];
 
       forEach(payload, (studyIterator) => {
