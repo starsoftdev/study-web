@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 
 import studykikLogo from 'assets/images/logo.svg';
 import AddCreditsModal from 'components/AddCreditsModal';
+import GlobalPMSModal from 'components/GlobalPMSModal';
 
 import NotificationBox from './NotificationBox';
 import AvatarMenu from './AvatarMenu';
@@ -29,9 +30,12 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     super(props);
     this.showAddCreditsModal = this.showAddCreditsModal.bind(this);
     this.closeAddCreditsModal = this.closeAddCreditsModal.bind(this);
+    this.showGlobalPMSModal = this.showGlobalPMSModal.bind(this);
+    this.closeGlobalPMSModal = this.closeGlobalPMSModal.bind(this);
 
     this.state = {
       showAddCreditsModal: false,
+      showGlobalPMSModal: false,
     };
   }
 
@@ -56,6 +60,14 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     console.log('logout');
   }
 
+  showGlobalPMSModal() {
+    this.setState({ showGlobalPMSModal: true });
+  }
+
+  closeGlobalPMSModal() {
+    this.setState({ showGlobalPMSModal: false });
+  }
+
   render() {
     return (
       <header id="header">
@@ -76,13 +88,13 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             <a href="#" className="link-help pull-left opener">?</a>
           </div>
 
-          <a href="#chat-popup" className="lightbox-opener pull-left btn-chat-popup">
+          <a href="#chat-popup" className="lightbox-opener pull-left btn-chat-popup" onClick={this.showGlobalPMSModal}>
             <span className="counter">3</span>
             <i className="icon-credit"></i>
           </a>
 
           <div className="get-credits pull-left">
-            <span style={{ marginRight: '5px' }}>100 Credits</span>
+            <span className="margin-right-5px">100 Credits</span>
             <a href="#" className="btn btn-default" onClick={this.showAddCreditsModal}>+ ADD CREDITS</a>
           </div>
 
@@ -90,8 +102,13 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
         </div>
         <AddCreditsModal
+          currentUser={this.props.currentUser}
           showModal={this.state.showAddCreditsModal}
           closeModal={this.closeAddCreditsModal}
+        />
+        <GlobalPMSModal
+          showModal={this.state.showGlobalPMSModal}
+          closeModal={this.closeGlobalPMSModal}
         />
       </header>
     );
