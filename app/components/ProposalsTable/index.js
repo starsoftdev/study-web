@@ -58,7 +58,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log('componentWillReceiveProps', nextProps);
     if (nextProps.proposals) {
       this.setState({
         filteredProposals: null,
@@ -68,12 +67,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     if (nextProps.range) {
       this.rangeSort(nextProps.range);
     }
-    /* if (nextProps.site) {
-      this.siteSort(nextProps.site);
-    }
-    if (nextProps.searchBy) {
-      this.searchSort(nextProps.searchBy);
-    } */
   }
 
   componentDidUpdate() {}
@@ -324,8 +317,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   render() {
     const state = this.state;
     const proposalsArr = state.filteredProposals || this.props.proposals;
-    let proposals = [];
-    let heads = [];
+    const proposals = [];
+    const heads = [];
 
     this.mapHeaders(headers, state, heads);
     this.mapProposals(proposalsArr, proposals);

@@ -20,6 +20,7 @@ function ReactSelect({
   className,
   selectedValue,
   objectValue,
+  onChange,
   meta: { touched, error, active },
   ...rest,
 }) {
@@ -41,7 +42,12 @@ function ReactSelect({
   let inputComponent = (
     <Select
       value={selectedValue || input.value}
-      onChange={input.onChange}
+      onChange={(event) => {
+        input.onChange(event);
+        if (onChange) {
+          onChange(event);
+        }
+      }}
       onBlur={() => input.onBlur(selectedValue || input.value)}
       options={optionsToRender}
       placeholder={placeholder}
@@ -73,6 +79,7 @@ ReactSelect.propTypes = {
   input: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
+  onChange: PropTypes.func,
   options: PropTypes.array,
   meta: PropTypes.object.isRequired,
   className: PropTypes.string,

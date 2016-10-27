@@ -5,7 +5,7 @@ import fetchMeSaga from './fetchMe.saga';
 import loginSaga, { logoutSaga, resetPassword, setNewPassword, confirmPasswordChange } from './login.saga';
 import { GlobalNotificationsSaga } from './socket.saga';
 
-// ALl sagas to be loaded
+// All sagas to be loaded
 // @ref: https://github.com/mxstbr/react-boilerplate/issues/537
 // exporting array of individual sagas doesn't work
 // middleware run only accepts one saga
