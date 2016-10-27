@@ -26,9 +26,9 @@ import {
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
   SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
-  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
-  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
-  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
+  MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
+  MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
+  MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
   SUBMIT_TEXT_BLAST,
   SUBMIT_PATIENT_IMPORT,
   SUBMIT_ADD_PATIENT,
@@ -265,15 +265,15 @@ export function submitMovePatientBetweenCategories(studyId, fromCategoryId, toCa
   };
 }
 
-export function submitMovePatientBetweenCategoriesLoading() {
+export function movePatientBetweenCategoriesLoading() {
   return {
-    type: SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
+    type: MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   };
 }
 
 export function movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, patientId) {
   return {
-    type: SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
+    type: MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
     fromCategoryId,
     toCategoryId,
     patientId,
@@ -282,7 +282,7 @@ export function movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId
 
 export function movePatientBetweenCategoriesFailed() {
   return {
-    type: SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
+    type: MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
   };
 }
 

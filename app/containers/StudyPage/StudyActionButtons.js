@@ -5,7 +5,7 @@
 import React from 'react';
 import ImportPatientsModal from './ImportPatients/ImportPatientsModal';
 import TextEmailBlastModal from './TextEmailBlastModal';
-import TextBlastModal from './TextBlast/TextBlastModal';
+import TextBlastModal from './TextBlast/index';
 import AddPatient from './ImportPatients/AddPatient';
 
 class StudyActionButtons extends React.Component {
