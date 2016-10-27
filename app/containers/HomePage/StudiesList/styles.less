@@ -77,3 +77,41 @@
     }
   }
 }
+
+.modal {
+  &.renew-study-modal {
+    .modal-lg {
+      width: 1000px !important;
+
+      .modal-content {
+        .modal-body {
+          padding-top: 0;
+          padding-bottom: 0;
+
+          & > .row {
+            height: 100%;
+
+            .left-panel,
+            .right-panel {
+              height: 100%;
+              padding-top: 15px;
+              padding-bottom: 15px;
+            }
+          }
+        }
+      }
+
+      .left-panel {
+        .form-renew-study {
+          margin-top: 10px;
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+      }
+
+      .right-panel {
+        border-left: 2px solid #f78e1e;
+      }
+    }
+  }
+}

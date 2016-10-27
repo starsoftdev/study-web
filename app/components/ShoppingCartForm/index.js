@@ -49,6 +49,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     dispatch: PropTypes.func.isRequired,
     currentUserStripeCustomerId: PropTypes.string,
     title: PropTypes.string,
+    noBorder: PropTypes.bool,
     addOns: PropTypes.array.isRequired,
     couponId: PropTypes.string,
     total: PropTypes.string,
@@ -139,6 +140,8 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
 
   render() {
     const title = this.props.title || 'Order Summary';
+    const noBorderClassName = (this.props.noBorder) ? 'no-border' : '';
+    const formClassName = `form-study form-shopping-cart ${noBorderClassName}`;
     const { addOns, coupon, showCards, cards, hasError, submitting, handleSubmit, disableSubmit } = this.props;
     const { subTotal, discount, total } = this.calculateTotal();
     let addOnsContent = null;
@@ -194,7 +197,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     }
 
     return (
-      <form className="form-study form-shopping-cart" onSubmit={handleSubmit}>
+      <form className={formClassName} onSubmit={handleSubmit}>
         <div className="shopping-cart order-summary order-summery">
           <div className="head">
             <h3>{title}</h3>
