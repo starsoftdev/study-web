@@ -184,10 +184,10 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
               </div>
             </div>
           </section>
-          <section className="client-roles form-group">
+          <section className="form-group">
             <ClientRolesList />
           </section>
-          <section className="client-sites form-group">
+          <section className="form-group">
             <ClientSitesList />
           </section>
         </div>

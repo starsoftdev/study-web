@@ -10,6 +10,7 @@ import { selectSearchStudiesFormError } from './selectors';
 import { selectClientSites } from 'containers/App/selectors';
 import { selectStudies } from 'containers/HomePage/selectors';
 import formValidator from './validator';
+import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from 'containers/HomePage/constants';
 import LoadingSpinner from 'components/LoadingSpinner';
 import './styles.less';
 
@@ -36,7 +37,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
       label: siteIterator.name,
       value: siteIterator.id,
     }));
-    const statusOptions = [{ label: 'All', value: 'All' }, { label: 'Active', value: 'Active' }, { label: 'Inactive', value: 'Inactive' }];
+    const statusOptions = [{ label: 'Active', value: ACTIVE_STATUS_VALUE }, { label: 'Inactive', value: INACTIVE_STATUS_VALUE }];
 
     return (
       <form className="form-search-studies" onSubmit={handleSubmit}>

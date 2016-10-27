@@ -60,6 +60,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
       siteLocationName: siteLocation.name,
       user_id: this.props.currentUser.id,
       stripeProductId: this.props.productList[0].stripeProductId,
+      stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
     });
   }
 
