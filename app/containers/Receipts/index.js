@@ -4,13 +4,12 @@
  *
  */
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer } from 'react-sticky';
 
-// import LoadingSpinner from 'components/LoadingSpinner';
 import {
   getReceipts,
   createPDF,
@@ -30,7 +29,7 @@ import ReceiptsTable from 'components/ReceiptsTable';
 import ProposalsForm from 'components/ProposalsForm';
 import './styles.less';
 
-export class Receipts extends Component { // eslint-disable-line react/prefer-stateless-function
+export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
     unsubscribeFromAll: PropTypes.func,
@@ -41,7 +40,7 @@ export class Receipts extends Component { // eslint-disable-line react/prefer-st
     location: PropTypes.any,
     receipts: PropTypes.any,
     currentUser: PropTypes.any,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
