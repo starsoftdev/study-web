@@ -63,7 +63,7 @@ class NotificationBox extends React.Component {
     return (
       <div className="notifications pull-left open-close">
         <a className="opener" href="#" onClick={() => this.handleBadgeNumberClick()}>
-          <i className="icon-bell"></i>
+          <i className="icomoon-bell"></i>
           <span className="counter">{this.props.unreadNotificationsCount}</span>
         </a>
 
