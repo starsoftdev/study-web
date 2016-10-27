@@ -24,9 +24,9 @@ import {
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
   SUBMIT_DELETE_NOTE_SUCCESS,
-  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
-  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
-  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
+  MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
+  MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
+  MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
   UPDATE_PATIENT_SUCCESS,
 } from './constants';
 import _ from 'lodash';
@@ -70,7 +70,7 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),
       };
-    case SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS:
+    case MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS:
       return {
         ...state,
         patientBoardLoading: false,
@@ -155,12 +155,12 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         currentPatientCategoryId: action.id,
       };
-    case SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING:
+    case MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING:
       return {
         ...state,
         patientBoardLoading: true,
       };
-    case SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED:
+    case MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED:
       return {
         ...state,
         patientBoardLoading: false,

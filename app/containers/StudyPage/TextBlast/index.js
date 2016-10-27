@@ -4,15 +4,17 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
+import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/index';
 import * as Selector from '../selectors';
-import { submitTextBlast } from '../actions';
+import { findPatientsForTextBlast, submitTextBlast } from '../actions';
+import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
 
 const formName = 'TextBlastModal';
 
@@ -21,93 +23,114 @@ const formName = 'TextBlastModal';
 })
 class TextBlastModal extends React.Component {
   static propTypes = {
+    bsClass: React.PropTypes.string,
+    change: React.PropTypes.func.isRequired,
+    className: React.PropTypes.any,
+    dialogClassName: React.PropTypes.string,
+    findPatientsForTextBlast: React.PropTypes.func.isRequired,
+    formValues: React.PropTypes.object,
+    formSyncErrors: React.PropTypes.object,
     onClose: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
     patientCategories: React.PropTypes.array,
+    role: React.PropTypes.string,
     show: React.PropTypes.bool.isRequired,
     sources: React.PropTypes.array.isRequired,
-    submitTextBlast: React.PropTypes.func.isRequired,
-    role: React.PropTypes.string,
-    bsClass: React.PropTypes.string,
-    dialogClassName: React.PropTypes.string,
-    className: React.PropTypes.any,
+    studyId: React.PropTypes.number,
     style: React.PropTypes.object,
+    submitTextBlast: React.PropTypes.func.isRequired,
   };
+
+  static defaultProps = {
+    initialValues: {
+      category: false,
+      source: false,
+    },
+  };
+
 
   constructor(props) {
     super(props);
-    this.state = {
-      showTextBlastModal: false,
-      selectAllCategories: false,
-      categories: {},
-      selectAllSources: false,
-      sources: {},
-      addPatients: [],
-      patients: [],
-    };
     this.selectCategory = this.selectCategory.bind(this);
     this.selectSource = this.selectSource.bind(this);
     this.removePatient = this.removePatient.bind(this);
     this.submitTextBlast = this.submitTextBlast.bind(this);
     this.renderPatient = this.renderPatient.bind(this);
     this.findPatients = this.findPatients.bind(this);
-    for (const patientCategory of props.patientCategories) {
-      this.state.categories[patientCategory.id] = false;
-    }
-    for (const source of props.sources) {
-      this.state.sources[source.id] = false;
-    }
   }
 
   componentDidMount() {
   }
 
-  componentWillReceiveProps(nextProps) {
-    for (const patientCategory of nextProps.patientCategories) {
-      this.state.categories[patientCategory.id] = false;
-    }
-    for (const source of nextProps.sources) {
-      this.state.sources[source.id] = false;
-    }
-  }
-
-
-  selectCategory(category) {
-    const { patientCategories } = this.props;
-    const state = {
-      categories: {
-        ...this.state.categories,
-      },
-    };
-    if (category === 'All') {
-      state.selectAllCategories = !this.state.selectAllCategories;
+  selectCategory(categoryId) {
+    const { change, findPatientsForTextBlast, formValues, patientCategories, sources, studyId } = this.props;
+    if (categoryId === 0) {
       for (const category of patientCategories) {
-        state.categories[category.id] = state.selectAllCategories;
+        change(`category-${category.id}`, !formValues.category);
       }
     } else {
-      state.categories[category.id] = !this.state.categories[category.id];
+      change('category', false);
+      change(`category-${categoryId}`, !formValues[`category-${categoryId}`]);
     }
-    this.setState(state);
+    // // find patients for text blast
+    // let sourceIds = null;
+    // if (!formValues.source) {
+    //   sourceIds = [];
+    //   for (const source of sources) {
+    //     if (formValues[`source-${source.id}`]) {
+    //       sourceIds.push(source.id);
+    //     }
+    //   }
+    // }
+    // if (formValues.category) {
+    //   findPatientsForTextBlast(studyId, null, null, sourceIds);
+    // } else {
+    //   const categoryIds = [];
+    //   for (const category of patientCategories) {
+    //     if (formValues[`category-${category.id}`]) {
+    //       categoryIds.push(category.id);
+    //     }
+    //   }
+    //   findPatientsForTextBlast(studyId, null, categoryIds, sourceIds);
+    // }
   }
 
-  selectSource(source) {
-    const { sources } = this.props;
-    const state = {
-      sources: {},
-    };
-    if (source === 'All') {
-      state.selectAllSources = !this.state.selectAllSources;
+  selectSource(sourceId) {
+    const { change, findPatientsForTextBlast, formValues, patientCategories, sources, studyId } = this.props;
+    if (sourceId === 0) {
       for (const source of sources) {
-        state.sources[source.id] = state.selectAllSources;
+        change(`source-${source.id}`, !formValues.source);
       }
     } else {
-      state.sources[source.id] = !this.state.sources[source.id];
+      change('source', false);
+      change(`source-${sourceId}`, !formValues[`source-${sourceId}`]);
     }
-    this.setState(state);
+    // // find patients for text blast
+    // let categoryIds = null;
+    // if (!formValues.category) {
+    //   categoryIds = [];
+    //   for (const category of patientCategories) {
+    //     if (formValues[`category-${category.id}`]) {
+    //       categoryIds.push(category.id);
+    //     }
+    //   }
+    // }
+    // if (formValues.source.value) {
+    //   findPatientsForTextBlast(studyId, null, categoryIds, null);
+    // } else {
+    //   const sourceIds = [];
+    //   for (const source of sources) {
+    //     if (formValues[`source-${source.id}`]) {
+    //       sourceIds.push(source.id);
+    //     }
+    //   }
+    //   findPatientsForTextBlast(studyId, null, categoryIds, sourceIds);
+    // }
   }
 
-  findPatients() {
-//    const { } = this.props;
+  findPatients(text) {
+    const { findPatientsForTextBlast, studyId } = this.props;
+    findPatientsForTextBlast(studyId, text);
   }
 
   removePatient() {
@@ -158,7 +181,7 @@ class TextBlastModal extends React.Component {
           </a>
         </Modal.Header>
         <Modal.Body>
-          <Form className="text-email-blast-form" noValidate="novalidate">
+          <Form className="text-email-blast-form">
             <div className="sidebar pull-left">
               <div className="scroll-holder jcf--scrollable">
                 <div className="sub-holder">
@@ -190,7 +213,9 @@ class TextBlastModal extends React.Component {
                           type="checkbox"
                           component={Checkbox}
                           className="pull-left"
-                          onChange={this.selectCategory}
+                          onChange={() => {
+                            this.selectCategory(0);
+                          }}
                         />
                         All
                       </li>
@@ -201,7 +226,9 @@ class TextBlastModal extends React.Component {
                             type="checkbox"
                             component={Checkbox}
                             className="pull-left"
-                            onChange={this.selectCategory}
+                            onChange={() => {
+                              this.selectCategory(patientCategory.id);
+                            }}
                           />
                           {patientCategory.name}
                         </li>
@@ -217,7 +244,9 @@ class TextBlastModal extends React.Component {
                           type="checkbox"
                           component={Checkbox}
                           className="pull-left"
-                          onChange={this.selectSource}
+                          onChange={() => {
+                            this.selectSource(0);
+                          }}
                         />
                         All
                       </li>
@@ -228,7 +257,9 @@ class TextBlastModal extends React.Component {
                             type="checkbox"
                             component={Checkbox}
                             className="pull-left"
-                            onChange={this.selectSource}
+                            onChange={() => {
+                              this.selectSource(source.id);
+                            }}
                           />
                           {source.type}
                         </li>
@@ -256,7 +287,7 @@ class TextBlastModal extends React.Component {
                   </div>
                   <textarea placeholder="Type a message..." className="form-control" required />
                   <div className="footer">
-                    <input type="submit" value="submit" className="btn btn-default pull-right" />
+                    <Button type="submit" value="submit" className="pull-right" />
                   </div>
                 </div>
               </div>
@@ -270,12 +301,17 @@ class TextBlastModal extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
+  formValues: selectValues(formName),
+  formSyncErrors: selectSyncErrors(formName),
   patientCategories: Selector.selectPatientCategories(),
   sources: Selector.selectSources(),
+  studyId: Selector.selectStudyId(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
+    change: (field, value) => dispatch(change(formName, field, value)),
+    findPatientsForTextBlast: (studyId, text, categoryIds, sourceIds) => dispatch(findPatientsForTextBlast(studyId, text, categoryIds, sourceIds)),
     submitTextBlast: (patients, onClose) => dispatch(submitTextBlast(patients, onClose)),
   };
 }
