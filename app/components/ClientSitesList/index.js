@@ -107,51 +107,53 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
 
     if (clientSites.details.length > 0) {
       return (
-        <div className="row">
-          <div className="col-sm-12">
-            <div className="table-responsive">
-              <table className="table table-striped">
-                <caption>SITE LOCATIONS</caption>
-                <thead>
-                  <tr>
-                    <th>SITE NAME</th>
-                    <th>PRINCIPAL INVESTIGATOR</th>
-                    <th>SITE PHONE</th>
-                    <th>SITE ADDRESS</th>
-                    <th></th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {clientSitesListContents}
-                </tbody>
-              </table>
+        <div className="client-sites">
+          <div className="row">
+            <div className="col-sm-12">
+              <div className="table-responsive">
+                <table className="table table-striped">
+                  <caption>SITE LOCATIONS</caption>
+                  <thead>
+                    <tr>
+                      <th>SITE NAME</th>
+                      <th>PRINCIPAL INVESTIGATOR</th>
+                      <th>SITE PHONE</th>
+                      <th>SITE ADDRESS</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {clientSitesListContents}
+                  </tbody>
+                </table>
+              </div>
+              <Modal className="edit-site" show={editSiteModalShown} onHide={this.closeEditSiteModal}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Edit Site</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <EditSiteForm
+                    initialValues={selectedSiteDetailsForForm}
+                    onSubmit={this.updateSite}
+                  />
+                </Modal.Body>
+              </Modal>
+              <Modal className="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Edit User</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <EditUserForm
+                    initialValues={selectedUserDetailsForForm}
+                    siteOptions={siteOptions}
+                    deleting={deletedUser.deleting}
+                    onDelete={this.deleteUser}
+                    onSubmit={this.updateUser}
+                  />
+                </Modal.Body>
+              </Modal>
             </div>
-            <Modal className="edit-site" show={editSiteModalShown} onHide={this.closeEditSiteModal}>
-              <Modal.Header closeButton>
-                <Modal.Title>Edit Site</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <EditSiteForm
-                  initialValues={selectedSiteDetailsForForm}
-                  onSubmit={this.updateSite}
-                />
-              </Modal.Body>
-            </Modal>
-            <Modal className="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
-              <Modal.Header closeButton>
-                <Modal.Title>Edit User</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <EditUserForm
-                  initialValues={selectedUserDetailsForForm}
-                  siteOptions={siteOptions}
-                  deleting={deletedUser.deleting}
-                  onDelete={this.deleteUser}
-                  onSubmit={this.updateUser}
-                />
-              </Modal.Body>
-            </Modal>
           </div>
         </div>
       );

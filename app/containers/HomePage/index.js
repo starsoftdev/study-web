@@ -39,7 +39,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     const { currentUserClientId } = this.props;
     if (currentUserClientId) {
       this.props.fetchClientSites(currentUserClientId, {});
-      this.props.fetchStudies();
+      setTimeout(this.props.fetchStudies, 0);
     }
   }
 
@@ -61,7 +61,16 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
             <Dashboard location={this.props.location} />
           </div>
           <div className="search-studies-panel form-group">
-            <SearchStudiesForm onSubmit={this.searchStudies} />
+            <div className="row">
+              <div className="col-sm-10">
+                <SearchStudiesForm onSubmit={this.searchStudies} />
+              </div>
+              <div className="col-sm-2">
+                <div className="pull-right">
+                  <a href="/list-new-study" className="btn btn-primary btn-list-new-study">List New Study</a>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="studies-list form-group">
             <StudiesList />
