@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 class StudyItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     index: PropTypes.number,
+    studyId: PropTypes.number,
     indication: PropTypes.string,
     location: PropTypes.string,
     sponsor: PropTypes.string,
@@ -11,6 +12,9 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     status: PropTypes.string,
     startDate: PropTypes.string,
     endDate: PropTypes.string,
+    onRenew: PropTypes.func,
+    onUpgrade: PropTypes.func,
+    onEdit: PropTypes.func,
   };
 
   constructor(props) {
@@ -22,6 +26,9 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 
     this.showButtons = this.showButtons.bind(this);
     this.hideButtons = this.hideButtons.bind(this);
+    this.onRenewClick = this.onRenewClick.bind(this);
+    this.onUpgradeClick = this.onUpgradeClick.bind(this);
+    this.onEditClick = this.onEditClick.bind(this);
   }
 
   showButtons() {
@@ -30,6 +37,18 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 
   hideButtons() {
     this.setState({ buttonsShown: false });
+  }
+
+  onRenewClick() {
+    this.props.onRenew(this.props.studyId);
+  }
+
+  onUpgradeClick() {
+    this.props.onUpgrade(this.props.studyId);
+  }
+
+  onEditClick() {
+    this.props.onEdit(this.props.studyId);
   }
 
   render() {
@@ -61,9 +80,9 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           </td>
           <td colSpan="3" className="actions">
             <a href="/patient-database" className="btn btn-primary btn-view-patients">View Patients</a>
-            <button className="btn btn-primary btn-renew">Renew</button>
-            <button className="btn btn-primary btn-upgrade">Upgrade</button>
-            <button className="btn btn-primary btn-edit">Edit</button>
+            <button className="btn btn-primary btn-renew" onClick={this.onRenewClick}>Renew</button>
+            <button className="btn btn-primary btn-upgrade" onClick={this.onUpgradeClick}>Upgrade</button>
+            <button className="btn btn-primary btn-edit" onClick={this.onEditClick}>Edit</button>
           </td>
         </tr>
       );
