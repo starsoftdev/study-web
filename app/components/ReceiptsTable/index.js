@@ -151,9 +151,10 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   sort(site, searchBy) {
     const receiptsMatch = [];
     const receiptsArr = this.props.receipts;
+    const fullServing = site !== null && searchBy !== null
 
     switch (true) {
-      case site !== null && searchBy !== null:
+      case fullServing:
         const number = parseInt(searchBy, 10);
         for (const receipt of receiptsArr) {
           const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
@@ -363,16 +364,10 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
           <tr key={key}>
             <td>
               <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
-              <span
-                className="input-style"
-                onClick={this.onClickCurrent}
-              >
-                <input
-                  type="checkbox"
-                  name={key}
-                />
+                <span className="input-style" onClick={this.onClickCurrent}>
+                  <input type="checkbox" name={key} />
+                </span>
               </span>
-            </span>
             </td>
             <td>{dateWrapper}</td>
             <td>{site}</td>
