@@ -6,28 +6,26 @@
 
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-import './checkbox.less';
 
 function Checkbox({ input, className, children, onChange }) {
   return (
     <div className={classNames(className)}>
-      <div className="ck-checkbox">
-        <span className={`jcf-checkbox jcf-focus parent-active jcf-pressed ${input.checked ? 'jcf-checked' : 'jcf-unchecked'}`}>
-          <span></span>
-          <input
-            {...input}
-            type="checkbox"
-            onChange={(e) => {
-              input.onChange(e);
-              if (onChange) {
-                onChange(e);
-              }
-            }}
-          >
-          </input>
-          {children}
-        </span>
-      </div>
+      <span className={`jcf-checkbox ${input.checked ? 'jcf-checked' : 'jcf-unchecked'}`}>
+        <span
+          onClick={() => {
+            input.onChange(!input.checked);
+            if (onChange) {
+              onChange(!input.checked);
+            }
+          }}
+        />
+        <input
+          {...input}
+          checked={input.checked}
+          type="checkbox"
+        />
+        {children}
+      </span>
     </div>
   );
 }
@@ -36,7 +34,8 @@ Checkbox.propTypes = {
   input: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
   className: PropTypes.string,
-  children: PropTypes.array,
+  children: PropTypes.any,
+  checked: PropTypes.bool,
   onChange: PropTypes.func,
 };
 

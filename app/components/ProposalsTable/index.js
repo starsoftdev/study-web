@@ -58,7 +58,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log('componentWillReceiveProps', nextProps);
     if (nextProps.proposals) {
       this.setState({
         filteredProposals: null,
@@ -67,12 +66,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
     if (nextProps.range) {
       this.rangeSort(nextProps.range);
-    }
-    if (nextProps.site) {
-      this.siteSort(nextProps.site);
-    }
-    if (nextProps.searchBy) {
-      this.searchSort(nextProps.searchBy);
     }
   }
 
@@ -295,6 +288,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     _.map(raw, (source, key) => {
       const date = new Date(source.created);
       const dateWrapper = moment(date);
+      const sub = ((source.total % 100) === 0) ? '.00' : false;
       result.push(
         <tr key={key}>
           <td>
@@ -314,7 +308,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           <td>{source.site}</td>
           <td>{source.proposalNumber}</td>
           <td>{source.protocol}</td>
-          <td>${source.total}</td>
+          <td>${(sub) ? `${(source.total / 100)}${sub}` : `${(source.total / 100).toFixed(2)}` }</td>
         </tr>
       );
     });
@@ -323,8 +317,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   render() {
     const state = this.state;
     const proposalsArr = state.filteredProposals || this.props.proposals;
-    let proposals = [];
-    let heads = [];
+    const proposals = [];
+    const heads = [];
 
     this.mapHeaders(headers, state, heads);
     this.mapProposals(proposalsArr, proposals);

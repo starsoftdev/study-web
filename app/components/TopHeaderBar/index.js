@@ -1,13 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 
 import studykikLogo from 'assets/images/logo.svg';
-import userAvatar from 'assets/images/img-logged-user.png';
 import AddCreditsModal from 'components/AddCreditsModal';
 
 import NotificationBox from './NotificationBox';
+import AvatarMenu from './AvatarMenu';
 
 import {
   selectCurrentUser,
@@ -53,41 +52,34 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     this.setState({ showAddCreditsModal: false });
   }
 
+  handleLogoutClick = () => {
+    console.log('logout');
+  }
+
   render() {
     return (
       <header id="header">
         <div className="container-fluid">
-
           <h1 className="logo pull-left"><a href="#"><img src={studykikLogo} width="214" height="31" alt="logo" /></a></h1>
-
           <NotificationBox currentUser={this.props.currentUser} />
-
           <div className="emails pull-left">
             <a href="#" className="opener" data-toggle="tooltip" data-placement="bottom" title="Coming Soon">
-              <i className="icon-envelop" />
+              <i className="icomoon-envelope" />
               <span className="counter">1</span>
             </a>
           </div>
-
           <div className="open-close help-drop pull-left">
             <a href="#" className="link-help pull-left opener">?</a>
           </div>
-
-
+          <a href="#chat-popup" className="lightbox-opener pull-left btn-chat-popup">
+            <span className="counter">3</span>
+            <i className="icon-credit"></i>
+          </a>
           <div className="get-credits pull-left">
-            <i className="icon-credit margin-right-5px" />
-            <span className="margin-right-5px">100 Credits</span>
+            <span style={{ marginRight: '5px' }}>100 Credits</span>
             <a href="#" className="btn btn-default" onClick={this.showAddCreditsModal}>+ ADD CREDITS</a>
           </div>
-
-          <div className="logged-user-area open-close pull-right">
-            <Link to="/profile" className="opener">
-              <div className="img-circle"><img src={userAvatar} width="43" height="43" alt="Bruce Wayne" /></div>
-              <span className="text">Bruce Wayne</span>
-              <i className="caret" />
-            </Link>
-          </div>
-
+          <AvatarMenu handleLogoutClick={this.handleLogoutClick} />
         </div>
         <AddCreditsModal
           showModal={this.state.showAddCreditsModal}

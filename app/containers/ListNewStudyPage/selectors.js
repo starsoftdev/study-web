@@ -24,8 +24,26 @@ const selectAvailPhoneNumbers = () => createSelector(
   (substate) => substate.availPhoneNumbers
 );
 
+const selectFormSubmissionStatus = () => createSelector(
+  selectListNewStudyPageDomain(),
+  (substate) => substate.formSubmissionStatus
+);
+
+const selectShowSubmitFormModal = () => createSelector(
+  selectListNewStudyPageDomain(),
+  (substate) => substate.showSubmitFormModal
+);
+
+const selectIndicationLevelPrice = () => createSelector(
+  selectListNewStudyPageDomain(),
+  (substate) => substate.indicationLevelPrice
+);
+
 export default selectListNewStudyPage;
 export {
   selectListNewStudyPageDomain,
   selectAvailPhoneNumbers,
+  selectFormSubmissionStatus,
+  selectShowSubmitFormModal,
+  selectIndicationLevelPrice,
 };
