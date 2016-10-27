@@ -92,17 +92,18 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
     switch(true){
       case site !== null && searchBy !== null:
-
         const number = parseInt(searchBy, 10);
         for (const receipt of receiptsArr) {
-          if (receipt.invoiceDetails[0].campaign.site.name === site.name) {
+          const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
+          const protocol = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.study.protocolNumber : '-';
+          if (name === site.name) {
             if (!_.isNaN(number)) {
               if (number === receipt.id) {
                 receiptsMatch.push(receipt);
               }
-            } else if (searchBy === receipt.invoiceDetails[0].campaign.site.name) {
+            } else if (searchBy === name) {
               receiptsMatch.push(receipt);
-            } else if (searchBy === receipt.invoiceDetails[0].campaign.study.protocolNumber) {
+            } else if (searchBy === protocol) {
               receiptsMatch.push(receipt);
             }
           }
@@ -111,20 +112,23 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
       case searchBy !== null:
         for (const receipt of receiptsArr) {
           const number = parseInt(searchBy, 10);
+          const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
+          const protocol = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.study.protocolNumber : '-';
           if (!_.isNaN(number)) {
             if (number === receipt.id) {
               receiptsMatch.push(receipt);
             }
-          } else if (searchBy === receipt.invoiceDetails[0].campaign.site.name) {
+          } else if (searchBy === name) {
             receiptsMatch.push(receipt);
-          } else if (searchBy === receipt.invoiceDetails[0].campaign.study.protocolNumber) {
+          } else if (searchBy === protocol) {
             receiptsMatch.push(receipt);
           }
         }
         break;
       case site !== null:
         for (const receipt of receiptsArr) {
-          if (receipt.invoiceDetails[0].campaign.site.name === site.name) {
+          const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
+          if (name === site.name) {
             receiptsMatch.push(receipt);
           }
         }
@@ -241,10 +245,13 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
         break;
       case 'site':
         receiptsArr.sort((a, b) => {
-          if (a.site > b.site) {
+          let siteNameA = (a.invoiceDetails[0].campaign) ? a.invoiceDetails[0].campaign.site.name : a.sites.name;
+          let siteNameB = (b.invoiceDetails[0].campaign) ? b.invoiceDetails[0].campaign.site.name : b.sites.name;
+
+          if (siteNameA > siteNameB) {
             return directionUnits.more;
           }
-          if (a.site < b.site) {
+          if (siteNameA < siteNameB) {
             return directionUnits.less;
           }
           return 0;
@@ -265,10 +272,13 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
         break;
       case 'protocol':
         receiptsArr.sort((a, b) => {
-          if (a.invoiceDetails[0].campaign.study.protocolNumber > b.invoiceDetails[0].campaign.study.protocolNumber) {
+          let protocolNumberA = (a.invoiceDetails[0].campaign) ? a.invoiceDetails[0].campaign.study.protocolNumber : '-';
+          let protocolNumberB = (b.invoiceDetails[0].campaign) ? b.invoiceDetails[0].campaign.study.protocolNumber : '-';
+
+          if (protocolNumberA > protocolNumberB) {
             return directionUnits.more;
           }
-          if (a.invoiceDetails[0].campaign.study.protocolNumber < b.invoiceDetails[0].campaign.study.protocolNumber) {
+          if (protocolNumberA < protocolNumberB) {
             return directionUnits.less;
           }
           return 0;
@@ -308,8 +318,8 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     const receiptsArr = this.props.receipts;
     for (const receipt of receiptsArr) {
       const created = new Date(receipt.created).getTime();
-      const endDate = new Date(range.endDate).getTime();
       const startDate = new Date(range.startDate).getTime();
+      const endDate = new Date(range.endDate).getTime();
 
       if (created > startDate && created < endDate) {
         receiptsInRange.push(receipt);
@@ -337,11 +347,21 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   mapProposals(raw, result) {
     _.map(raw, (source, key) => {
       const date = new Date(source.created);
-      const dateWrapper = moment(date);
+      const dateWrapper = moment(date).format('YYYY/MM/DD');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
-      result.push(
-        <tr key={key}>
-          <td>
+
+      if (source.invoiceDetails.length) {
+        let site = '-';
+        const protocol = (source.invoiceDetails[0].campaign) ? source.invoiceDetails[0].campaign.study.protocolNumber : '-';
+        if (source.invoiceDetails[0].campaign) {
+          site = source.invoiceDetails[0].campaign.site.name;
+        } else if(source.sites) {
+          site = source.sites.name;
+        }
+
+        result.push(
+          <tr key={key}>
+            <td>
             <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
               <span
                 className="input-style"
@@ -353,15 +373,16 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
                 />
               </span>
             </span>
-          </td>
-          <td>{dateWrapper.calendar()}</td>
-          <td>{source.invoiceDetails[0].campaign.site.name}</td>
-          <td>{source.invoiceDetails[0].invoice_id}</td>
-          <td>{source.invoiceDetails[0].campaign.study.protocolNumber}</td>
-          <td>{(source.paymentMethod) ? source.paymentMethod.nickname : '-'}</td>
-          <td>${(sub) ? `${(source.total / 100)}${sub}` : `${(source.total / 100).toFixed(2)}` }</td>
-        </tr>
-      );
+            </td>
+            <td>{dateWrapper}</td>
+            <td>{site}</td>
+            <td>{source.invoiceDetails[0].invoice_id}</td>
+            <td>{protocol}</td>
+            <td>card</td>
+            <td>${(sub) ? `${(source.total / 100)}${sub}` : `${(source.total / 100).toFixed(2)}` }</td>
+          </tr>
+        );
+      }
     });
   }
 
