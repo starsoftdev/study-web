@@ -80,52 +80,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
   componentDidUpdate() {}
 
-  sort(site, searchBy) {
-    const proposalsMatch = [];
-    const proposalsArr = this.props.proposals;
-
-    switch(true){
-      case site !== null && searchBy !== null:
-
-        const number = parseInt(searchBy, 10);
-        for (const proposal of proposalsArr) {
-          if (proposal.site === site.name) {
-            if (!_.isNaN(number)) {
-              if (number === proposal.id) {
-                proposalsMatch.push(proposal);
-              }
-            } else if (number === proposal.proposalNumber || number === proposal.protocol) {
-              proposalsMatch.push(proposal);
-            }
-          }
-        }
-        break;
-      case searchBy !== null:
-        for (const proposal of proposalsArr) {
-          const number = parseInt(searchBy, 10);
-          if (!_.isNaN(number)) {
-            if (number === proposal.id) {
-              proposalsMatch.push(proposal);
-            }
-          } else if (number === proposal.proposalNumber || number === proposal.protocol) {
-            proposalsMatch.push(proposal);
-          }
-        }
-        break;
-      case site !== null:
-        for (const proposal of proposalsArr) {
-          if (proposal.site === site.name) {
-            proposalsMatch.push(proposal);
-          }
-        }
-        break;
-      default:
-        break;
-    }
-
-    this.setState({ filteredProposals: proposalsMatch });
-  }
-
   onClickCurrent(ev) {
     ev.preventDefault();
     const scope = this;
@@ -186,6 +140,52 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       this.selectedProposal = (this.state.checkAll) ? proposals : null;
       this.props.selectAll(this.selectedProposal);
     });
+  }
+
+  sort(site, searchBy) {
+    const proposalsMatch = [];
+    const proposalsArr = this.props.proposals;
+
+    switch (true) {
+      case site !== null && searchBy !== null:
+
+        const number = parseInt(searchBy, 10);
+        for (const proposal of proposalsArr) {
+          if (proposal.site === site.name) {
+            if (!_.isNaN(number)) {
+              if (number === proposal.id) {
+                proposalsMatch.push(proposal);
+              }
+            } else if (number === proposal.proposalNumber || number === proposal.protocol) {
+              proposalsMatch.push(proposal);
+            }
+          }
+        }
+        break;
+      case searchBy !== null:
+        for (const proposal of proposalsArr) {
+          const number = parseInt(searchBy, 10);
+          if (!_.isNaN(number)) {
+            if (number === proposal.id) {
+              proposalsMatch.push(proposal);
+            }
+          } else if (number === proposal.proposalNumber || number === proposal.protocol) {
+            proposalsMatch.push(proposal);
+          }
+        }
+        break;
+      case site !== null:
+        for (const proposal of proposalsArr) {
+          if (proposal.site === site.name) {
+            proposalsMatch.push(proposal);
+          }
+        }
+        break;
+      default:
+        break;
+    }
+
+    this.setState({ filteredProposals: proposalsMatch });
   }
 
   get selectedProposal() {

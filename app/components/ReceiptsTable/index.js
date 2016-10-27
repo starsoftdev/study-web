@@ -86,60 +86,6 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
   componentDidUpdate() {}
 
-  sort(site, searchBy) {
-    const receiptsMatch = [];
-    const receiptsArr = this.props.receipts;
-
-    switch(true){
-      case site !== null && searchBy !== null:
-        const number = parseInt(searchBy, 10);
-        for (const receipt of receiptsArr) {
-          const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
-          const protocol = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.study.protocolNumber : '-';
-          if (name === site.name) {
-            if (!_.isNaN(number)) {
-              if (number === receipt.id) {
-                receiptsMatch.push(receipt);
-              }
-            } else if (searchBy === name) {
-              receiptsMatch.push(receipt);
-            } else if (searchBy === protocol) {
-              receiptsMatch.push(receipt);
-            }
-          }
-        }
-        break;
-      case searchBy !== null:
-        for (const receipt of receiptsArr) {
-          const number = parseInt(searchBy, 10);
-          const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
-          const protocol = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.study.protocolNumber : '-';
-          if (!_.isNaN(number)) {
-            if (number === receipt.id) {
-              receiptsMatch.push(receipt);
-            }
-          } else if (searchBy === name) {
-            receiptsMatch.push(receipt);
-          } else if (searchBy === protocol) {
-            receiptsMatch.push(receipt);
-          }
-        }
-        break;
-      case site !== null:
-        for (const receipt of receiptsArr) {
-          const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
-          if (name === site.name) {
-            receiptsMatch.push(receipt);
-          }
-        }
-        break;
-      default:
-        break;
-    }
-
-    this.setState({ filteredReceipts: receiptsMatch });
-  }
-
   onClickCurrent(ev) {
     ev.preventDefault();
     const scope = this;
@@ -202,6 +148,60 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     });
   }
 
+  sort(site, searchBy) {
+    const receiptsMatch = [];
+    const receiptsArr = this.props.receipts;
+
+    switch (true) {
+      case site !== null && searchBy !== null:
+        const number = parseInt(searchBy, 10);
+        for (const receipt of receiptsArr) {
+          const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
+          const protocol = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.study.protocolNumber : '-';
+          if (name === site.name) {
+            if (!_.isNaN(number)) {
+              if (number === receipt.id) {
+                receiptsMatch.push(receipt);
+              }
+            } else if (searchBy === name) {
+              receiptsMatch.push(receipt);
+            } else if (searchBy === protocol) {
+              receiptsMatch.push(receipt);
+            }
+          }
+        }
+        break;
+      case searchBy !== null:
+        for (const receipt of receiptsArr) {
+          const number = parseInt(searchBy, 10);
+          const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
+          const protocol = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.study.protocolNumber : '-';
+          if (!_.isNaN(number)) {
+            if (number === receipt.id) {
+              receiptsMatch.push(receipt);
+            }
+          } else if (searchBy === name) {
+            receiptsMatch.push(receipt);
+          } else if (searchBy === protocol) {
+            receiptsMatch.push(receipt);
+          }
+        }
+        break;
+      case site !== null:
+        for (const receipt of receiptsArr) {
+          const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
+          if (name === site.name) {
+            receiptsMatch.push(receipt);
+          }
+        }
+        break;
+      default:
+        break;
+    }
+
+    this.setState({ filteredReceipts: receiptsMatch });
+  }
+
   get selectedReceipts() {
     return this.SelectedReceipts;
   }
@@ -245,8 +245,8 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
         break;
       case 'site':
         receiptsArr.sort((a, b) => {
-          let siteNameA = (a.invoiceDetails[0].campaign) ? a.invoiceDetails[0].campaign.site.name : a.sites.name;
-          let siteNameB = (b.invoiceDetails[0].campaign) ? b.invoiceDetails[0].campaign.site.name : b.sites.name;
+          const siteNameA = (a.invoiceDetails[0].campaign) ? a.invoiceDetails[0].campaign.site.name : a.sites.name;
+          const siteNameB = (b.invoiceDetails[0].campaign) ? b.invoiceDetails[0].campaign.site.name : b.sites.name;
 
           if (siteNameA > siteNameB) {
             return directionUnits.more;
@@ -272,8 +272,8 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
         break;
       case 'protocol':
         receiptsArr.sort((a, b) => {
-          let protocolNumberA = (a.invoiceDetails[0].campaign) ? a.invoiceDetails[0].campaign.study.protocolNumber : '-';
-          let protocolNumberB = (b.invoiceDetails[0].campaign) ? b.invoiceDetails[0].campaign.study.protocolNumber : '-';
+          const protocolNumberA = (a.invoiceDetails[0].campaign) ? a.invoiceDetails[0].campaign.study.protocolNumber : '-';
+          const protocolNumberB = (b.invoiceDetails[0].campaign) ? b.invoiceDetails[0].campaign.study.protocolNumber : '-';
 
           if (protocolNumberA > protocolNumberB) {
             return directionUnits.more;
@@ -355,14 +355,14 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
         const protocol = (source.invoiceDetails[0].campaign) ? source.invoiceDetails[0].campaign.study.protocolNumber : '-';
         if (source.invoiceDetails[0].campaign) {
           site = source.invoiceDetails[0].campaign.site.name;
-        } else if(source.sites) {
+        } else if (source.sites) {
           site = source.sites.name;
         }
 
         result.push(
           <tr key={key}>
             <td>
-            <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
+              <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
               <span
                 className="input-style"
                 onClick={this.onClickCurrent}
