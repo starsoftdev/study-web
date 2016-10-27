@@ -151,7 +151,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   sort(site, searchBy) {
     const receiptsMatch = [];
     const receiptsArr = this.props.receipts;
-    const fullServing = site !== null && searchBy !== null
+    const fullServing = (site !== null && searchBy !== null);
 
     switch (true) {
       case fullServing:

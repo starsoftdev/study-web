@@ -145,7 +145,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   sort(site, searchBy) {
     const proposalsMatch = [];
     const proposalsArr = this.props.proposals;
-    const fullServing = site !== null && searchBy !== null
+    const fullServing = (site !== null && searchBy !== null);
 
     switch (true) {
       case fullServing:
