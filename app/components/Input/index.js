@@ -22,13 +22,17 @@ function Input({
   placeholder,
   componentClass,
   className,
+  tooltipDisabled,
+  onBlur,
+  onChange,
+  required,
   meta: { touched, error, active },
+  maxLength,
   children,
   isDisabled,
 }) {
   const hasError = touched && error && !active;
   const errorClass = hasError ? 'has-error' : '';
-
   const tooltip = (
     <Tooltip
       id={`${name}-tooltip`}
@@ -44,13 +48,27 @@ function Input({
       id={id}
       disabled={isDisabled}
       placeholder={placeholder}
+      required={required}
+      maxLength={maxLength}
       componentClass={componentClass} // Default value is `input`
+      onChange={(event) => {
+        input.onChange(event);
+        if (onChange) {
+          onChange(event);
+        }
+      }}
+      onBlur={(event) => {
+        input.onBlur(event);
+        if (onBlur) {
+          onBlur(event);
+        }
+      }}
     >
       {children}
     </FormControl>
   );
 
-  if (hasError) {
+  if (hasError && !tooltipDisabled) {
     inputComponent = (
       <OverlayTrigger
         placement="right"
@@ -62,23 +80,28 @@ function Input({
   }
 
   return (
-    <div className={classNames([className, errorClass].join(' '))}>
+    <div className={classNames(className, errorClass)}>
       {inputComponent}
     </div>
   );
 }
 
 Input.propTypes = {
-  input: PropTypes.object.isRequired,
-  name: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  meta: PropTypes.object.isRequired,
-  type: PropTypes.string,
   componentClass: PropTypes.string,
   className: PropTypes.string,
   children: PropTypes.array,
-  isDisabled: PropTypes.string,
+  isDisabled: PropTypes.bool,
   id: PropTypes.string,
+  input: PropTypes.object.isRequired,
+  onBlur: PropTypes.func,
+  onChange: PropTypes.func,
+  name: PropTypes.string.isRequired,
+  maxLength: PropTypes.string,
+  meta: PropTypes.object.isRequired,
+  placeholder: PropTypes.string,
+  required: PropTypes.bool,
+  tooltipDisabled: PropTypes.bool,
+  type: PropTypes.string,
 };
 
 export default Input;
