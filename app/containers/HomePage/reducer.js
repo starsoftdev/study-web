@@ -106,6 +106,7 @@ export default function homePageReducer(state = initialState, action) {
 
       forEach(payload, (studyIterator) => {
         entity = {
+          studyId: studyIterator.id,
           indication: (studyIterator.indication) ? studyIterator.indication.name : '',
           location: '',
           sponsor: '',
