@@ -14,6 +14,9 @@ import {
   SUBMIT_FORM_SUCCESS,
   SUBMIT_FORM_ERROR,
   HIDE_SUBMIT_FORM_MODAL,
+  FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+  FETCH_INDICATION_LEVEL_PRICE,
+  CLEAR_FORM_SUBMISSION_DATA,
 } from './constants';
 
 import _ from 'lodash';
@@ -23,6 +26,7 @@ const initialState = {
   showAddEmailModal: false,
   showSubmitFormModal: false,
   availPhoneNumbers: [],
+  indicationLevelPrice: null,
   formSubmissionStatus: {
     submitting: false,
     error: null,
@@ -89,6 +93,25 @@ function listNewStudyPageReducer(state = initialState, action) {
       return {
         ...state,
         showSubmitFormModal: false,
+      };
+    case FETCH_INDICATION_LEVEL_PRICE_SUCCESS:
+      return {
+        ...state,
+        indicationLevelPrice: action.payload.price,
+      };
+    case FETCH_INDICATION_LEVEL_PRICE:
+      return {
+        ...state,
+        indicationLevelPrice: null,
+      };
+    case CLEAR_FORM_SUBMISSION_DATA:
+      return {
+        ...state,
+        formSubmissionStatus: {
+          submitting: false,
+          error: null,
+          response: null,
+        },
       };
     default:
       return state;

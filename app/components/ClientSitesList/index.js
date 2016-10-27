@@ -99,7 +99,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
     const clientSitesListContents = clientSites.details.map((item, index) => (
       <ClientSiteItem {...item} key={index} />
     ));
-    let siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
+    const siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
 
     const editSiteModalShown = this.editSiteModalShouldBeShown();
