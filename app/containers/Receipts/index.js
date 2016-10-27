@@ -47,7 +47,6 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
 
     this.createPdf = this.createPdf.bind(this);
     this.changeRange = this.changeRange.bind(this);
-    this.selectSite = this.selectSite.bind(this);
     this.search = this.search.bind(this);
     this.selectCurrent = this.selectCurrent.bind(this);
     this.selectAll = this.selectAll.bind(this);
@@ -103,20 +102,13 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     });
   }
 
-  selectSite(val) {
-    const { siteLocations } = this.props;
-    const site = siteLocations[val - 1];
-    this.setState({
-      range : null,
-      searchBy : null,
-      site,
-    });
-  }
-
   search(value) {
-    const searchBy = (value.length) ? value : null;
+    const { siteLocations } = this.props;
+    const site = siteLocations[value.site - 1] || null;
+    const searchBy = value.search || null;
+
     this.setState({
-      site : null,
+      site,
       range : null,
       searchBy,
     });
@@ -136,7 +128,6 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
           <h2 className="main-heading">RECEIPTS</h2>
           <ProposalsForm
             changeRange={this.changeRange}
-            selectSite={this.selectSite}
             search={this.search}
             createPdf={this.createPdf}
             {...this.props}
@@ -145,6 +136,8 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
             selectCurrent={this.selectCurrent}
             selectAll={this.selectAll}
             range={this.state.range}
+            site={this.state.site}
+            searchBy={this.state.searchBy}
             receipts={this.state.receipts}
             {...this.props}
           />

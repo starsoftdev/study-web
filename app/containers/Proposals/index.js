@@ -55,7 +55,6 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     this.changeRange = this.changeRange.bind(this);
     this.selectCurrent = this.selectCurrent.bind(this);
     this.selectAll = this.selectAll.bind(this);
-    this.selectSite = this.selectSite.bind(this);
     this.search = this.search.bind(this);
 
     this.state = {
@@ -141,23 +140,19 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     });
   }
 
-  selectSite(val) {
-    const { siteLocations } = this.props;
-    const site = siteLocations[val - 1];
-    this.setState({
-      range : null,
-      searchBy : null,
-      site,
-    });
-  }
-
   search(value) {
-    const searchBy = (value.length) ? value : null;
-    this.setState({
-      site : null,
-      range : null,
-      searchBy,
-    });
+    const { siteLocations } = this.props;
+
+    if (value.search || value.site) {
+      const searchBy = (value.search.length) ? value.search : null;
+      const site = siteLocations[value.site - 1] || null;
+
+      this.setState({
+        site,
+        range : null,
+        searchBy,
+      });
+    }
   }
 
   createPdf() {
@@ -175,7 +170,6 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
           <h2 className="main-heading">PROPOSALS</h2>
           <ProposalsForm
             changeRange={this.changeRange}
-            selectSite={this.selectSite}
             search={this.search}
             createPdf={this.createPdf}
             {...this.props}

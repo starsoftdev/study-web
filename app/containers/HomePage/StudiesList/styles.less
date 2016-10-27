@@ -1,4 +1,117 @@
 .studies {
+  table {
+    .inner-info {
+      margin-left: 15px;
+
+      .info-value {
+        margin-left: 10px;
+        color: #030303;
+      }
+    }
+  }
   .study-container {
+    .index {
+      width: 8%;
+    }
+    .indication {
+      width: 14%;
+    }
+    .location {
+      width: 13%;
+    }
+    .sponsor {
+      width: 14%;
+    }
+    .protocol {
+      width: 10%;
+    }
+    .patient-messaging-suite {
+      width: 8%;
+    }
+    .status {
+      width: 11%;
+    }
+    .start-date {
+      width: 11%;
+    }
+    .end-date {
+      width: 11%;
+    }
+    .actions {
+      width: 33%;
+      padding: 12px 15px;
+
+      .btn {
+        margin-right: 10px;
+      }
+
+      .btn-renew {
+        border-color: #9c6;
+        color: #9c6;
+
+        &:hover {
+          background-color: #9c6;
+          color: #fff;
+        }
+      }
+
+      .btn-upgrade {
+        border-color: #f93;
+        color: #f93;
+
+        &:hover {
+          background-color: #f93;
+          color: #fff;
+        }
+      }
+
+      .btn-edit {
+        border-color: #999;
+        color: #999;
+
+        &:hover {
+          background-color: #999;
+          color: #fff;
+        }
+      }
+    }
+  }
+}
+
+.modal {
+  &.renew-study-modal {
+    .modal-lg {
+      width: 1000px !important;
+
+      .modal-content {
+        .modal-body {
+          padding-top: 0;
+          padding-bottom: 0;
+
+          & > .row {
+            height: 100%;
+
+            .left-panel,
+            .right-panel {
+              height: 100%;
+              padding-top: 15px;
+              padding-bottom: 15px;
+            }
+          }
+        }
+      }
+
+      .left-panel {
+        .form-renew-study {
+          margin-top: 10px;
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+      }
+
+      .right-panel {
+        border-left: 2px solid #f78e1e;
+      }
+    }
   }
 }

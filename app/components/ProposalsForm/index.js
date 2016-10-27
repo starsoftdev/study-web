@@ -10,6 +10,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 
 import { defaultRanges, DateRange } from 'react-date-range';
+import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
 import './styles.less';
 
@@ -22,7 +23,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
     siteLocations: PropTypes.array,
     createPdf: PropTypes.func,
     changeRange: PropTypes.func,
-    selectSite: PropTypes.func,
+    handleSubmit: PropTypes.func,
     search: PropTypes.func,
   };
 
@@ -34,7 +35,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
     this.hidePopup = this.hidePopup.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this, 'predefined');
-    this.search = this.search.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
       showPopup: false,
@@ -78,20 +79,21 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
     this.hidePopup();
   }
 
-  search(ev) {
-    ev.preventDefault();
-    this.props.search(this.searchInput.value);
+  handleSubmit(form) {
+    this.props.search(form);
   }
 
   render() {
     const { predefined } = this.state;
     const format = 'dddd, D MMMM YYYY';
-    const { siteLocations } = this.props;
+    const { siteLocations, handleSubmit } = this.props;
     const state = this.state;
 
     return (
-      <form action="#" className="form-search clearfix">
-
+      <form
+        className="form-search clearfix"
+        onSubmit={handleSubmit(this.handleSubmit)}
+      >
         <div className="btns-area pull-right">
           <div className="col pull-right">
             <button
@@ -117,21 +119,19 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
         <div className="fields-holder">
           <div className="search-area pull-left">
             <div className="field">
-              <input
+              <Field
                 type="search"
+                component={Input}
                 id="search"
-                className="form-control keyword-search"
+                name="search"
                 placeholder="Search"
                 ref={(searchInput) => {
                   this.searchInput = searchInput;
                 }}
               />
-              <label htmlFor="search">
-                <i
-                  className="icon-icon_search2"
-                  onClick={this.search}
-                />
-              </label>
+              {/* <label htmlFor="search">
+                <span className="Select-clear">×</span>
+              </label> */}
             </div>
           </div>
           <div className="pull-left custom-select">
@@ -142,8 +142,11 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
               options={siteLocations}
               className="field"
             />
-            {/* onChange={selectSite} */}
           </div>
+
+          <button type="submit" className="btn btn-default btn-add-row">
+            <i className="fa fa-search" aria-hidden="true" />
+          </button>
         </div>
 
         <div id="date-range" className={(state.showPopup) ? 'lightbox fixed-popup lightbox-active' : 'lightbox fixed-popup'}>
