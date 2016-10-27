@@ -93,7 +93,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const inactiveCount = countResult[INACTIVE_STATUS_VALUE] || 0;
     const totalCount = studies.details.length;
     const studiesListContents = studies.details.map((item, index) => (
-      <StudyItem {...item}
+      <StudyItem
+        {...item}
         key={index}
         index={index}
         onRenew={this.openRenewModal}
