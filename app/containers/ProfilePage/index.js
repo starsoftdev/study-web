@@ -19,7 +19,7 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
     changePassword: PropTypes.func,
     changeImage: PropTypes.func,
     currentUser: PropTypes.any,
-  }
+  };
 
   constructor(props) {
     super(props);

@@ -8,7 +8,9 @@ branches:
   only:
   - master
   - develop
-script: npm run build
+script:
+  - npm run build
+  - npm test
 before_install:
   - export CHROME_BIN=/usr/bin/google-chrome
   - export DISPLAY=:99.0

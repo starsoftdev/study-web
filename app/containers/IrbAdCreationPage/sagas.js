@@ -2,7 +2,7 @@ import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
-import { get } from 'lodash';
+import _, { get } from 'lodash';
 
 import request from 'utils/request';
 
@@ -23,15 +23,22 @@ export function* submitFormWatcher() {
     // listen for the SUBMIT_FORM action dispatched on form submit
     // cartValues
     const { cartValues, formValues } = yield take(SUBMIT_FORM);
-    const requestParams = {
-      ...formValues,
-      ...cartValues,
-    };
+
     try {
       const requestURL = `${API_URL}/irbAdCreations`;
+      const data = new FormData();
+      _.forEach(formValues, (value, index) => {
+        if (index === 'file') {
+          data.append(index, value[0]);
+        } else {
+          data.append(index, value);
+        }
+      });
+      data.append('cartValues', JSON.stringify(cartValues));
       const params = {
         method: 'POST',
-        body: JSON.stringify(requestParams),
+        body: data,
+        useDefaultContentType: true,
       };
       const response = yield call(request, requestURL, params);
 

@@ -368,8 +368,8 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   render() {
     const state = this.state;
     const receiptsArr = state.filteredReceipts || this.props.receipts;
-    let receipts = [];
-    let heads = [];
+    const receipts = [];
+    const heads = [];
 
     this.mapHeaders(headers, state, heads);
     this.mapProposals(receiptsArr, receipts);
