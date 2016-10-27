@@ -24,19 +24,11 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
       buttonsShown: false,
     };
 
-    this.showButtons = this.showButtons.bind(this);
-    this.hideButtons = this.hideButtons.bind(this);
     this.onRenewClick = this.onRenewClick.bind(this);
     this.onUpgradeClick = this.onUpgradeClick.bind(this);
     this.onEditClick = this.onEditClick.bind(this);
-  }
-
-  showButtons() {
-    this.setState({ buttonsShown: true });
-  }
-
-  hideButtons() {
-    this.setState({ buttonsShown: false });
+    this.showButtons = this.showButtons.bind(this);
+    this.hideButtons = this.hideButtons.bind(this);
   }
 
   onRenewClick() {
@@ -49,6 +41,14 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 
   onEditClick() {
     this.props.onEdit(this.props.studyId);
+  }
+
+  showButtons() {
+    this.setState({ buttonsShown: true });
+  }
+
+  hideButtons() {
+    this.setState({ buttonsShown: false });
   }
 
   render() {

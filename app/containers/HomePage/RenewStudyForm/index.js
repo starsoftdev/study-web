@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import { map } from 'lodash';
 import moment from 'moment';
 
 import Input from 'components/Input';
@@ -18,7 +17,6 @@ import { selectRenewStudyFormError,
   selectRenewStudyFormNotesValue,
 } from './selectors';
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
 import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
