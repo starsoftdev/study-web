@@ -170,7 +170,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           proposalsMatch.push(proposal);
         }
       }
-    } else if(site !== null) {
+    } else if (site !== null) {
       for (const proposal of proposalsArr) {
         if (proposal.site === site.name) {
           proposalsMatch.push(proposal);

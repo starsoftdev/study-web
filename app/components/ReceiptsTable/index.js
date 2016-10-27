@@ -184,7 +184,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
           receiptsMatch.push(receipt);
         }
       }
-    } else if(site !== null) {
+    } else if (site !== null) {
       for (const receipt of receiptsArr) {
         const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
         if (name === site.name) {
