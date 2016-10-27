@@ -45,7 +45,7 @@ export function* getReceipts() {
     const { payload } = yield take(GET_RECEIPT);
     try {
       const queryParams = {
-        filter: '{"include": ["sites", "paymentMethod", {"invoiceDetails": ["indication", {"campaign": ["study", "site", "level"]}]}]}'
+        filter: '{"include": ["sites", "paymentMethod", {"invoiceDetails": ["indication", {"campaign": ["study", "site", "level"]}]}]}',
       };
       const queryString = composeQueryString(queryParams);
       const requestURL = `${API_URL}/invoices/?${queryString}`;
