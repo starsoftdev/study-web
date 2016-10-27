@@ -151,32 +151,13 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   sort(site, searchBy) {
     const receiptsMatch = [];
     const receiptsArr = this.props.receipts;
-    const fullServing = (site !== null && searchBy !== null);
 
-    switch (true) {
-      case fullServing:
-        const number = parseInt(searchBy, 10);
-        for (const receipt of receiptsArr) {
-          const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
-          const protocol = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.study.protocolNumber : '-';
-          if (name === site.name) {
-            if (!_.isNaN(number)) {
-              if (number === receipt.id) {
-                receiptsMatch.push(receipt);
-              }
-            } else if (searchBy === name) {
-              receiptsMatch.push(receipt);
-            } else if (searchBy === protocol) {
-              receiptsMatch.push(receipt);
-            }
-          }
-        }
-        break;
-      case searchBy !== null:
-        for (const receipt of receiptsArr) {
-          const number = parseInt(searchBy, 10);
-          const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
-          const protocol = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.study.protocolNumber : '-';
+    if (site !== null && searchBy !== null) {
+      const number = parseInt(searchBy, 10);
+      for (const receipt of receiptsArr) {
+        const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
+        const protocol = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.study.protocolNumber : '-';
+        if (name === site.name) {
           if (!_.isNaN(number)) {
             if (number === receipt.id) {
               receiptsMatch.push(receipt);
@@ -187,17 +168,29 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
             receiptsMatch.push(receipt);
           }
         }
-        break;
-      case site !== null:
-        for (const receipt of receiptsArr) {
-          const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
-          if (name === site.name) {
+      }
+    } else if (searchBy !== null) {
+      for (const receipt of receiptsArr) {
+        const number = parseInt(searchBy, 10);
+        const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
+        const protocol = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.study.protocolNumber : '-';
+        if (!_.isNaN(number)) {
+          if (number === receipt.id) {
             receiptsMatch.push(receipt);
           }
+        } else if (searchBy === name) {
+          receiptsMatch.push(receipt);
+        } else if (searchBy === protocol) {
+          receiptsMatch.push(receipt);
         }
-        break;
-      default:
-        break;
+      }
+    } else if(site !== null) {
+      for (const receipt of receiptsArr) {
+        const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
+        if (name === site.name) {
+          receiptsMatch.push(receipt);
+        }
+      }
     }
 
     this.setState({ filteredReceipts: receiptsMatch });

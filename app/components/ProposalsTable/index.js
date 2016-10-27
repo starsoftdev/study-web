@@ -145,27 +145,11 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   sort(site, searchBy) {
     const proposalsMatch = [];
     const proposalsArr = this.props.proposals;
-    const fullServing = (site !== null && searchBy !== null);
 
-    switch (true) {
-      case fullServing:
-
-        const number = parseInt(searchBy, 10);
-        for (const proposal of proposalsArr) {
-          if (proposal.site === site.name) {
-            if (!_.isNaN(number)) {
-              if (number === proposal.id) {
-                proposalsMatch.push(proposal);
-              }
-            } else if (number === proposal.proposalNumber || number === proposal.protocol) {
-              proposalsMatch.push(proposal);
-            }
-          }
-        }
-        break;
-      case searchBy !== null:
-        for (const proposal of proposalsArr) {
-          const number = parseInt(searchBy, 10);
+    if (site !== null && searchBy !== null) {
+      const number = parseInt(searchBy, 10);
+      for (const proposal of proposalsArr) {
+        if (proposal.site === site.name) {
           if (!_.isNaN(number)) {
             if (number === proposal.id) {
               proposalsMatch.push(proposal);
@@ -174,16 +158,24 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
             proposalsMatch.push(proposal);
           }
         }
-        break;
-      case site !== null:
-        for (const proposal of proposalsArr) {
-          if (proposal.site === site.name) {
+      }
+    } else if (searchBy !== null) {
+      for (const proposal of proposalsArr) {
+        const number = parseInt(searchBy, 10);
+        if (!_.isNaN(number)) {
+          if (number === proposal.id) {
             proposalsMatch.push(proposal);
           }
+        } else if (number === proposal.proposalNumber || number === proposal.protocol) {
+          proposalsMatch.push(proposal);
         }
-        break;
-      default:
-        break;
+      }
+    } else if(site !== null) {
+      for (const proposal of proposalsArr) {
+        if (proposal.site === site.name) {
+          proposalsMatch.push(proposal);
+        }
+      }
     }
 
     this.setState({ filteredProposals: proposalsMatch });
