@@ -230,7 +230,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/profile',
+      path: '/:userId/profile',
       name: 'profilePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
