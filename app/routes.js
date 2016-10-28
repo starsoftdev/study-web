@@ -147,7 +147,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/profile',
+      path: '/:userId/profile',
       name: 'profilePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -222,27 +222,6 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('listNewStudyPage', reducer.default);
-          injectSagas(sagas.default);
-          renderRoute(component);
-        });
-
-        importModules.catch(errorLoading);
-      },
-    }, {
-      onEnter: redirectToLogin,
-      path: '/:userId/profile',
-      name: 'profilePage',
-      getComponent(nextState, cb) {
-        const importModules = Promise.all([
-          System.import('containers/RequestProposalPage/reducer'),
-          System.import('containers/RequestProposalPage/sagas'),
-          System.import('containers/RequestProposalPage'),
-        ]);
-
-        const renderRoute = loadModule(cb);
-
-        importModules.then(([reducer, sagas, component]) => {
-          injectReducer('requestProposalPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });
