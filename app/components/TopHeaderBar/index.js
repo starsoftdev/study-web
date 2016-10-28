@@ -60,26 +60,34 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     return (
       <header id="header">
         <div className="container-fluid">
+
           <h1 className="logo pull-left"><a href="#"><img src={studykikLogo} width="214" height="31" alt="logo" /></a></h1>
+
           <NotificationBox currentUser={this.props.currentUser} />
+
           <div className="emails pull-left">
             <a href="#" className="opener" data-toggle="tooltip" data-placement="bottom" title="Coming Soon">
-              <i className="icomoon-envelope" />
+              <i className="icon-envelop" />
               <span className="counter">1</span>
             </a>
           </div>
+
           <div className="open-close help-drop pull-left">
             <a href="#" className="link-help pull-left opener">?</a>
           </div>
+
           <a href="#chat-popup" className="lightbox-opener pull-left btn-chat-popup">
             <span className="counter">3</span>
             <i className="icon-credit"></i>
           </a>
+
           <div className="get-credits pull-left">
             <span style={{ marginRight: '5px' }}>100 Credits</span>
             <a href="#" className="btn btn-default" onClick={this.showAddCreditsModal}>+ ADD CREDITS</a>
           </div>
+
           <AvatarMenu handleLogoutClick={this.handleLogoutClick} />
+
         </div>
         <AddCreditsModal
           showModal={this.state.showAddCreditsModal}
