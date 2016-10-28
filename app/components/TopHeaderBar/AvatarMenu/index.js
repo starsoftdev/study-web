@@ -37,7 +37,7 @@ class AvatarMenu extends React.Component {
           <span className="text margin-left-5px margin-right-5px">Bruce Wayne</span>
           <i className="caret" />
         </a>
-        <div className={`avatar-menu ${avatarMenuClassName}`}>
+        <div className={`logged-user-drop avatar-menu ${avatarMenuClassName}`}>
           <div className="well">
             <ul className="list-unstyled">
               <li><Link to="/me/profile" onClick={() => this.handleClickOutside()}>PROFILE</Link></li>
