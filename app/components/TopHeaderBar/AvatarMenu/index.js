@@ -40,7 +40,7 @@ class AvatarMenu extends React.Component {
         <div className={`avatar-menu ${avatarMenuClassName}`}>
           <div className="well">
             <ul className="list-unstyled">
-              <li><Link to="/profile" onClick={() => this.handleClickOutside()}>PROFILE</Link></li>
+              <li><Link to="/me/profile" onClick={() => this.handleClickOutside()}>PROFILE</Link></li>
               <li><Link to="/payment-information" onClick={() => this.handleClickOutside()}>PAYMENT INFORMATION</Link></li>
               <li><Link to="#" onClick={() => this.handleClickOutside()}>RECEIPTS</Link></li>
               <li><Link to="#" onClick={() => this.handleClickOutside()}>PROPOSALS</Link></li>
