@@ -4,18 +4,18 @@ import { Link } from 'react-router';
 import sideNavLogo from 'assets/images/logo2.png';
 
 const menuItemsGroupA = [
-  { text: 'Home', link: '/', icon: 'icomoon-icon_house_alt' },
-  { text: 'List New Study', link: '/list-new-study', icon: 'icomoon-screen' },
-  { text: 'Order IRB Ad Creation', link: '/order-irb-ad-creation', icon: 'icomoon-irb' },
-  { text: 'Request Proposal', link: '/request-proposal', icon: 'icomoon-doller' },
-  { text: 'Refer', link: '/refer', icon: 'icomoon-signout' },
+  { text: 'Home', link: '/', icon: 'icon-icon_house_alt' },
+  { text: 'List New Study', link: '/list-new-study', icon: 'icon-screen' },
+  { text: 'Order IRB Ad Creation', link: '/order-irb-ad-creation', icon: 'icon-irb' },
+  { text: 'Request Proposal', link: '/request-proposal', icon: 'icon-doller' },
+  { text: 'Refer', link: '/refer', icon: 'icon-signout' },
 ];
 const menuItemsGroupB = [
-  { text: 'Calendar', link: '/calendar', icon: 'icomoon-icon_calendar' },
-  { text: 'Manage Sites/Users', link: '/sites-users', icon: 'icomoon-icon_group' },
-  { text: 'Patient Database', link: '/patient-database', icon: 'icomoon-icon_contacts' },
-  { text: 'Rewards', link: '/replace_me', icon: 'icomoon-gift' },
-  { text: 'Badges', link: '/replace_me', icon: 'icomoon-star' },
+  { text: 'Calendar', link: '/calendar', icon: 'icon-icon_calendar' },
+  { text: 'Manage Sites/Users', link: '/sites-users', icon: 'icon-icon_group' },
+  { text: 'Patient Database', link: '/patient-database', icon: 'icon-icon_contacts' },
+  { text: 'Rewards', link: '/replace_me', icon: 'icon-gift' },
+  { text: 'Badges', link: '/replace_me', icon: 'icon-star' },
 ];
 
 function SideNavBar() {
