@@ -12,10 +12,13 @@ import {
   passwordChangingError,
   imageChanged,
   imageChangingError,
+  fetchOtherUserSuccess,
+  fetchOtherUserError,
 } from 'containers/ProfilePage/actions';
 import {
   CHANGE_PASSWORD,
   CHANGE_IMAGE,
+  FETCH_OTHER_USER_REQUEST,
 } from 'containers/ProfilePage/constants';
 
 // Bootstrap sagas
@@ -70,12 +73,30 @@ export function* changeImage() {
   }
 }
 
+export function* fetchOtherUserWorker() {
+  while (true) {
+    const { payload } = yield take(FETCH_OTHER_USER_REQUEST);
+    try {
+      const requestURL = `${API_URL}/users/${payload.userId}`;
+      const response = yield call(request, requestURL);
+
+      yield put(fetchOtherUserSuccess(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(fetchOtherUserError(err));
+    }
+  }
+}
+
 export function* profilePageSaga() {
   const watcherA = yield fork(changePassword);
   const watcherB = yield fork(changeImage);
+  const watcherC = yield fork(fetchOtherUserWorker);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
   yield cancel(watcherA);
   yield cancel(watcherB);
+  yield cancel(watcherC);
 }
