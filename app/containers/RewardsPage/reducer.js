@@ -7,20 +7,20 @@
 import { map } from 'lodash';
 
 import {
-  DEFAULT_SITE_LOCATIONS,
-  FETCH_SITE_LOCATIONS_SUCCESS,
+  DEFAULT_SITES,
+  FETCH_SITES_SUCCESS,
 } from 'containers/RewardsPage/constants';
 
 const initialState = {
-  siteLocations: DEFAULT_SITE_LOCATIONS,
+  sites: DEFAULT_SITES,
 };
 
 function RewardsPageReducer(state = initialState, action) {
   switch (action.type) {
-    case FETCH_SITE_LOCATIONS_SUCCESS:
+    case FETCH_SITES_SUCCESS:
       return {
         ...state,
-        siteLocations: map(action.payload, 'type'),
+        sites: map(action.payload, 'type'),
       };
     default:
       return state;

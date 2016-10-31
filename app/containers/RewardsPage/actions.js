@@ -8,9 +8,9 @@ import {
   SUBMIT_FORM,
   SUBMIT_FORM_SUCCESS,
   SUBMIT_FORM_ERROR,
-  FETCH_SITE_LOCATIONS,
-  FETCH_SITE_LOCATIONS_SUCCESS,
-  FETCH_SITE_LOCATIONS_ERROR,
+  FETCH_SITES,
+  FETCH_SITES_SUCCESS,
+  FETCH_SITES_ERROR,
 } from './constants';
 
 export function submitForm(payload) {
@@ -34,22 +34,22 @@ export function formSubmissionError(payload) {
   };
 }
 
-export function fetchSiteLocations() {
+export function fetchSites() {
   return {
-    type: FETCH_SITE_LOCATIONS,
+    type: FETCH_SITES,
   };
 }
 
-export function siteLocationsFetched(payload) {
+export function sitesFetched(payload) {
   return {
-    type: FETCH_SITE_LOCATIONS_SUCCESS,
+    type: FETCH_SITES_SUCCESS,
     payload,
   };
 }
 
-export function siteLocationsFetchingError(payload) {
+export function sitesFetchingError(payload) {
   return {
-    type: FETCH_SITE_LOCATIONS_ERROR,
+    type: FETCH_SITES_ERROR,
     payload,
   };
 }

@@ -13,13 +13,13 @@ import request from 'utils/request';
 import {
   formSubmitted,
   formSubmissionError,
-  siteLocationsFetched,
-  siteLocationsFetchingError,
+  sitesFetched,
+  sitesFetchingError,
 } from 'containers/RewardsPage/actions';
 
 import {
   SUBMIT_FORM,
-  FETCH_SITE_LOCATIONS,
+  FETCH_SITES,
 } from 'containers/RewardsPage/constants';
 
 // Bootstrap sagas
@@ -29,17 +29,17 @@ export default [
 
 // Does not allow concurrent fetches of site locations (for demo purpose)
 // Alternatively you may use takeEvery
-export function* fetchSiteLocationsWatcher() {
-  yield* takeLatest(FETCH_SITE_LOCATIONS, fetchSiteLocations);
+export function* fetchSitesWatcher() {
+  yield* takeLatest(FETCH_SITES, fetchSites);
 }
 
-export function* fetchSiteLocations() {
+export function* fetchSites() {
   try {
     const requestURL = `${API_URL}/sites`;
     const response = yield call(request, requestURL);
-    yield put(siteLocationsFetched(response));
+    yield put(sitesFetched(response));
   } catch (err) {
-    yield put(siteLocationsFetchingError(err));
+    yield put(sitesFetchingError(err));
   }
 }
 
@@ -70,7 +70,7 @@ export function* submitFormWatcher() {
 }
 
 export function* RewardsPageSaga() {
-  const watcherA = yield fork(fetchSiteLocationsWatcher);
+  const watcherA = yield fork(fetchSitesWatcher);
   const watcherB = yield fork(submitFormWatcher);
 
   // Suspend execution until location changes
