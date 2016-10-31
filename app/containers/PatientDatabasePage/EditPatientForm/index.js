@@ -125,6 +125,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
                 options={indicationOptions}
                 multi
                 joinValues
+                objectValue={true}
                 disabled={savedPatient.saving}
               />
             </div>
