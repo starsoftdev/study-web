@@ -91,7 +91,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                   options={indicationOptions}
                   multi
                   joinValues
-                  objectValue={true}
+                  objectValue
                   disabled={patients.fetching}
                 />
               </div>
@@ -108,7 +108,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                   options={indicationOptions}
                   multi
                   joinValues
-                  objectValue={true}
+                  objectValue
                   disabled={patients.fetching}
                 />
               </div>
