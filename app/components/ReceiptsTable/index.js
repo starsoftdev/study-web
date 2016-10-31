@@ -38,11 +38,11 @@ const headers = [
 
 class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    selectCurrent:  PropTypes.func,
-    selectAll:  PropTypes.func,
-    range:  PropTypes.any,
-    searchBy:  PropTypes.any,
-    receipts:  PropTypes.any,
+    selectCurrent: PropTypes.func,
+    selectAll: PropTypes.func,
+    range: PropTypes.any,
+    searchBy: PropTypes.any,
+    receipts: PropTypes.any,
   };
 
   constructor(props) {
@@ -50,6 +50,8 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
     this.onClickAll = this.onClickAll.bind(this);
     this.onClickCurrent = this.onClickCurrent.bind(this);
+    this.sortBy = this.sortBy.bind(this);
+    this.sort = this.sort.bind(this);
 
     this.state = {
       checkAll: false,
@@ -61,6 +63,8 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   }
 
   componentWillReceiveProps(nextProps) {
+    //  console.log('componentWillReceiveProps', nextProps);
+
     if (nextProps.proposals) {
       this.setState({
         filteredReceipts: null,
@@ -69,6 +73,14 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
     if (nextProps.range) {
       this.rangeSort(nextProps.range);
+    }
+
+    if (nextProps.site || nextProps.searchBy) {
+      this.sort(nextProps.site, nextProps.searchBy);
+    } else {
+      this.setState({
+        filteredReceipts: null,
+      });
     }
   }
 
@@ -136,6 +148,54 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     });
   }
 
+  sort(site, searchBy) {
+    const receiptsMatch = [];
+    const receiptsArr = this.props.receipts;
+
+    if (site !== null && searchBy !== null) {
+      const number = parseInt(searchBy, 10);
+      for (const receipt of receiptsArr) {
+        const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
+        const protocol = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.study.protocolNumber : '-';
+        if (name === site.name) {
+          if (!_.isNaN(number)) {
+            if (number === receipt.id) {
+              receiptsMatch.push(receipt);
+            }
+          } else if (searchBy === name) {
+            receiptsMatch.push(receipt);
+          } else if (searchBy === protocol) {
+            receiptsMatch.push(receipt);
+          }
+        }
+      }
+    } else if (searchBy !== null) {
+      for (const receipt of receiptsArr) {
+        const number = parseInt(searchBy, 10);
+        const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
+        const protocol = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.study.protocolNumber : '-';
+        if (!_.isNaN(number)) {
+          if (number === receipt.id) {
+            receiptsMatch.push(receipt);
+          }
+        } else if (searchBy === name) {
+          receiptsMatch.push(receipt);
+        } else if (searchBy === protocol) {
+          receiptsMatch.push(receipt);
+        }
+      }
+    } else if (site !== null) {
+      for (const receipt of receiptsArr) {
+        const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
+        if (name === site.name) {
+          receiptsMatch.push(receipt);
+        }
+      }
+    }
+
+    this.setState({ filteredReceipts: receiptsMatch });
+  }
+
   get selectedReceipts() {
     return this.SelectedReceipts;
   }
@@ -144,13 +204,116 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     this.SelectedReceipts = value;
   }
 
+  sortBy(ev) {
+    ev.preventDefault();
+    const sort = ev.currentTarget.dataset.sort;
+    let direction = 'down';
+
+    if (ev.currentTarget.className && ev.currentTarget.className === 'down') {
+      direction = 'up';
+    }
+
+    const receiptsArr = this.state.filteredReceipts || this.props.receipts;
+    const directionUnits = (direction === 'up') ? {
+      more: 1,
+      less: -1,
+    } : {
+      more: -1,
+      less: 1,
+    };
+
+    switch (sort) {
+      case 'date':
+        receiptsArr.sort((a, b) => {
+          const aDate = new Date(a.created).getTime();
+          const bDate = new Date(b.created).getTime();
+
+          if (aDate > bDate) {
+            return directionUnits.more;
+          }
+          if (aDate < bDate) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      case 'site':
+        receiptsArr.sort((a, b) => {
+          const siteNameA = (a.invoiceDetails[0].campaign) ? a.invoiceDetails[0].campaign.site.name : a.sites.name;
+          const siteNameB = (b.invoiceDetails[0].campaign) ? b.invoiceDetails[0].campaign.site.name : b.sites.name;
+
+          if (siteNameA > siteNameB) {
+            return directionUnits.more;
+          }
+          if (siteNameA < siteNameB) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      case 'payment':
+        receiptsArr.sort((a, b) => {
+          if ((a.payment_method_id !== null && b.payment_method_id !== null)
+            && a.paymentMethod.nickname > b.paymentMethod.nickname) {
+            return directionUnits.more;
+          }
+          if ((a.payment_method_id !== null && b.payment_method_id !== null)
+            && a.paymentMethod.nickname < b.paymentMethod.nickname) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      case 'protocol':
+        receiptsArr.sort((a, b) => {
+          const protocolNumberA = (a.invoiceDetails[0].campaign) ? a.invoiceDetails[0].campaign.study.protocolNumber : '-';
+          const protocolNumberB = (b.invoiceDetails[0].campaign) ? b.invoiceDetails[0].campaign.study.protocolNumber : '-';
+
+          if (protocolNumberA > protocolNumberB) {
+            return directionUnits.more;
+          }
+          if (protocolNumberA < protocolNumberB) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      case 'total':
+        receiptsArr.sort((a, b) => {
+          if (a.total > b.total) {
+            return directionUnits.more;
+          }
+          if (a.total < b.total) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      case 'invoice':
+        receiptsArr.sort((a, b) => {
+          if (a.id > b.id) {
+            return directionUnits.more;
+          }
+          if (a.id < b.id) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
+      default:
+        break;
+    }
+
+    this.setState({ filteredReceipts: receiptsArr, activeSort: sort, activeDirection: direction });
+  }
+
   rangeSort(range) {
     const receiptsInRange = [];
     const receiptsArr = this.props.receipts;
     for (const receipt of receiptsArr) {
       const created = new Date(receipt.created).getTime();
-      const endDate = new Date(range.endDate).getTime();
       const startDate = new Date(range.startDate).getTime();
+      const endDate = new Date(range.endDate).getTime();
 
       if (created > startDate && created < endDate) {
         receiptsInRange.push(receipt);
@@ -178,39 +341,44 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   mapProposals(raw, result) {
     _.map(raw, (source, key) => {
       const date = new Date(source.created);
-      const dateWrapper = moment(date);
+      const dateWrapper = moment(date).format('YYYY/MM/DD');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
-      result.push(
-        <tr key={key}>
-          <td>
-            <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
-              <span
-                className="input-style"
-                onClick={this.onClickCurrent}
-              >
-                <input
-                  type="checkbox"
-                  name={key}
-                />
+
+      if (source.invoiceDetails.length) {
+        let site = '-';
+        const protocol = (source.invoiceDetails[0].campaign) ? source.invoiceDetails[0].campaign.study.protocolNumber : '-';
+        if (source.invoiceDetails[0].campaign) {
+          site = source.invoiceDetails[0].campaign.site.name;
+        } else if (source.sites) {
+          site = source.sites.name;
+        }
+
+        result.push(
+          <tr key={key}>
+            <td>
+              <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
+                <span className="input-style" onClick={this.onClickCurrent}>
+                  <input type="checkbox" name={key} />
+                </span>
               </span>
-            </span>
-          </td>
-          <td>{dateWrapper.calendar()}</td>
-          <td>{source.invoiceDetails[0].campaign.site.name}</td>
-          <td>{source.invoiceDetails[0].invoice_id}</td>
-          <td>{source.invoiceDetails[0].campaign.study.protocolNumber}</td>
-          <td>{(source.paymentMethod) ? source.paymentMethod.nickname : '-'}</td>
-          <td>${(sub) ? `${(source.total / 100)}${sub}` : `${(source.total / 100).toFixed(2)}` }</td>
-        </tr>
-      );
+            </td>
+            <td>{dateWrapper}</td>
+            <td>{site}</td>
+            <td>{source.invoiceDetails[0].invoice_id}</td>
+            <td>{protocol}</td>
+            <td>card</td>
+            <td>${(sub) ? `${(source.total / 100)}${sub}` : `${(source.total / 100).toFixed(2)}` }</td>
+          </tr>
+        );
+      }
     });
   }
 
   render() {
     const state = this.state;
     const receiptsArr = state.filteredReceipts || this.props.receipts;
-    let receipts = [];
-    let heads = [];
+    const receipts = [];
+    const heads = [];
 
     this.mapHeaders(headers, state, heads);
     this.mapProposals(receiptsArr, receipts);

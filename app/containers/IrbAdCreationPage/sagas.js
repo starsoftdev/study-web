@@ -2,32 +2,43 @@ import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
-import { get } from 'lodash';
+import _, { get } from 'lodash';
 
 import request from 'utils/request';
 
 import {
   formSubmitted,
   formSubmissionError,
+  fetchIrbProductListSuccess,
+  fetchIrbProductListError,
 } from 'containers/IrbAdCreationPage/actions';
 
 import {
   SUBMIT_FORM,
+  FETCH_IRB_PRODUCT_LIST,
 } from 'containers/IrbAdCreationPage/constants';
 
 export function* submitFormWatcher() {
   while (true) {
     // listen for the SUBMIT_FORM action dispatched on form submit
     // cartValues
-    const { formValues } = yield take(SUBMIT_FORM);
-    // TODO:get stripeProductId from API
-    formValues.stripeProductId = 1;
+    const { cartValues, formValues } = yield take(SUBMIT_FORM);
 
     try {
       const requestURL = `${API_URL}/irbAdCreations`;
+      const data = new FormData();
+      _.forEach(formValues, (value, index) => {
+        if (index === 'file') {
+          data.append(index, value[0]);
+        } else {
+          data.append(index, value);
+        }
+      });
+      data.append('cartValues', JSON.stringify(cartValues));
       const params = {
         method: 'POST',
-        body: JSON.stringify(formValues),
+        body: data,
+        useDefaultContentType: true,
       };
       const response = yield call(request, requestURL, params);
 
@@ -44,12 +55,31 @@ export function* submitFormWatcher() {
   }
 }
 
+export function* fetchIrbProductListWatcher() {
+  while (true) {
+    yield take(FETCH_IRB_PRODUCT_LIST);
+
+    try {
+      const requestURL = `${API_URL}/irbAdProductList`;
+      const response = yield call(request, requestURL);
+
+      yield put(fetchIrbProductListSuccess(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Can not fetch IrbAd Product List');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(fetchIrbProductListError(err));
+    }
+  }
+}
+
 export function* irbAdCreationPageSaga() {
   const watcherA = yield fork(submitFormWatcher);
+  const watcherB = yield fork(fetchIrbProductListWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
   yield cancel(watcherA);
+  yield cancel(watcherB);
 }
 
 // All sagas to be loaded
