@@ -113,55 +113,57 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
 
     if (patients.details.length > 0) {
       return (
-        <div className="row">
-          <div className="col-sm-12">
-            <div className="table-responsive">
-              <table className="table table-striped">
-                <caption>Total Patients Count: {patients.details.length}</caption>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>NAME</th>
-                    <th>EMAIL</th>
-                    <th>PHONE</th>
-                    <th>INDICATIONS</th>
-                    <th>AGE</th>
-                    <th>GENDER</th>
-                    <th>BMI</th>
-                    <th>STATUS</th>
-                    <th>SOURCE</th>
-                    <th></th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {patientsListContents}
-                </tbody>
-              </table>
-            </div>
-            <Modal className="edit-patient" show={editPatientModalShown} onHide={this.closeEditPatientModal}>
-              <Modal.Header closeButton>
-                <Modal.Title>Edit Patient</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <EditPatientForm
-                  initialValues={selectedPatientDetailsForForm}
-                  onSubmit={this.updatePatient}
-                />
-              </Modal.Body>
-            </Modal>
-            {(chat)
-            ?
-              <Modal className="chat-patient" show={chatModalShown} onHide={this.closeChat}>
+        <div className="patients">
+          <div className="row">
+            <div className="col-sm-12">
+              <div className="table-responsive">
+                <table className="table table-striped">
+                  <caption>Total Patients Count: {patients.details.length}</caption>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>NAME</th>
+                      <th>EMAIL</th>
+                      <th>PHONE</th>
+                      <th>INDICATIONS</th>
+                      <th>AGE</th>
+                      <th>GENDER</th>
+                      <th>BMI</th>
+                      <th>STATUS</th>
+                      <th>SOURCE</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {patientsListContents}
+                  </tbody>
+                </table>
+              </div>
+              <Modal className="edit-patient" show={editPatientModalShown} onHide={this.closeEditPatientModal}>
                 <Modal.Header closeButton>
-                  <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
+                  <Modal.Title>Edit Patient</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <ChatForm onSubmit={this.sendMessage} />
+                  <EditPatientForm
+                    initialValues={selectedPatientDetailsForForm}
+                    onSubmit={this.updatePatient}
+                  />
                 </Modal.Body>
               </Modal>
-            : ''
-            }
+              {(chat)
+                ?
+                <Modal className="chat-patient" show={chatModalShown} onHide={this.closeChat}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <ChatForm onSubmit={this.sendMessage} />
+                  </Modal.Body>
+                </Modal>
+                : ''
+              }
+            </div>
           </div>
         </div>
       );

@@ -49,6 +49,17 @@ class NotificationBox extends React.Component {
     return moment.utc(utc).local();
   }
 
+  getRedirectionUrl = (notification) => {
+    let data;
+    switch (notification.event_log.eventType) {
+      case 'create-user':
+        data = JSON.parse(notification.event_log.eventData);
+        return `/${data.user_id}/profile`;
+      default:
+        return '/';
+    }
+  }
+
   handleBadgeNumberClick = () => {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen,
@@ -63,7 +74,7 @@ class NotificationBox extends React.Component {
     return (
       <div className="notifications pull-left open-close">
         <a className="opener" href="#" onClick={() => this.handleBadgeNumberClick()}>
-          <i className="icomoon-bell"></i>
+          <i className="icon-bell"></i>
           <span className="counter">{this.props.unreadNotificationsCount}</span>
         </a>
 
@@ -85,7 +96,7 @@ class NotificationBox extends React.Component {
                   {
                     _.take(this.props.notifications, 3).map(n => (
                       <li key={n.id}>
-                        <a href="#">
+                        <a href={this.getRedirectionUrl(n)}>
                           <div className="img-circle"><img src={avatar1} width="43" height="43" alt="Alan walker" /></div>
                           <p dangerouslySetInnerHTML={{ __html: n.event_log.eventMessage }} />
                           <time>{`${this.getLocalTime(n.event_log.created).format('MM/DD/YY')} at ${this.getLocalTime(n.event_log.created).format('h:mm A')}`}</time>

@@ -1,4 +1,4 @@
-/* eslint-disable comma-dangle */
+/* eslint-disable comma-dangle, no-case-declarations */
 import { forEach, map } from 'lodash';
 
 import {
@@ -106,6 +106,7 @@ export default function homePageReducer(state = initialState, action) {
 
       forEach(payload, (studyIterator) => {
         entity = {
+          studyId: studyIterator.id,
           indication: (studyIterator.indication) ? studyIterator.indication.name : '',
           location: '',
           sponsor: '',

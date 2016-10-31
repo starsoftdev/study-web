@@ -19,6 +19,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     changePassword: React.PropTypes.func,
     changeImage: React.PropTypes.func,
     changePasswordResult: React.PropTypes.object,
+    me: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -53,6 +54,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
   }
 
   render() {
+    const { me } = this.props;
     const initialValues = {
       initialValues: {
         user_id: this.props.currentUser.id,
@@ -78,7 +80,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         <div className="field-row">
           <strong className="label"></strong>
           <div className="field">
-            <label htmlFor="image_file" className="btn btn-grey" >UPDATE PROFILE IMAGE</label>
+            <label htmlFor="image_file" className="btn btn-grey" disabled={!me}>UPDATE PROFILE IMAGE</label>
             <input type="file" id="image_file" onChange={this.uploadFile} />
           </div>
         </div>
@@ -121,7 +123,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
 
         <div className="field-row">
           <strong className="label"><label>PASSWORD</label></strong>
-          <a className="btn btn-primary lightbox-opener" onClick={this.openResetPasswordModal}>EDIT</a>
+          <a className="btn btn-primary lightbox-opener" onClick={this.openResetPasswordModal} disabled={!me}>EDIT</a>
         </div>
 
 

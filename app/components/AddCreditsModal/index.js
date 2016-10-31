@@ -111,7 +111,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
 
                         <div className="field-row">
                           <strong className="label"><label htmlFor="credits">CREDITS</label></strong>
-                          <div className="field">
+                          <div c lassName="field">
                             <input className="form-control" value={this.state.credits} type="text" name="credits" disabled />
                           </div>
                         </div>
