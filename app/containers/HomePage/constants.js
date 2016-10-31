@@ -10,3 +10,6 @@ export const FETCH_REWARDS_POINT_SUCCEESS     = 'HomePage/Dashboard/FETCH_REWARD
 export const FETCH_STUDIES                    = 'HomePage/Viewport/FETCH_STUDIES';
 export const FETCH_STUDIES_SUCCESS            = 'HomePage/Viewport/FETCH_STUDIES_SUCCESS';
 export const FETCH_STUDIES_ERROR              = 'HomePage/Viewport/FETCH_STUDIES_ERROR';
+
+export const ACTIVE_STATUS_VALUE              = 'Active';
+export const INACTIVE_STATUS_VALUE            = 'Inactive';

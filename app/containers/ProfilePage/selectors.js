@@ -24,9 +24,15 @@ const selectChangePasswordResult = () => createSelector(
   (substate) => substate.changePasswordResult
 );
 
+const selectOtherUser = () => createSelector(
+  selectProfilePageDomain(),
+  (substate) => substate.otherUser
+);
+
 export default selectProfilePage;
 export {
   selectProfilePageDomain,
   selectChangePasswordResult,
   selectProfilePage,
+  selectOtherUser,
 };

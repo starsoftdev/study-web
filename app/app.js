@@ -4,6 +4,7 @@
  * This is the entry file for the application, only setup and boilerplate
  * code.
  */
+import 'babel-polyfill';
 
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
