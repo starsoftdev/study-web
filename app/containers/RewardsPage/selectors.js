@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 /**
  * Direct selector to the RewardsPage state domain
  */
-const selectRewardsPageDomain = () => state => state.RewardsPage;
+const selectRewardsPageDomain = () => state => state.rewardsPage;
 
 /**
  * Other specific selectors
@@ -19,14 +19,14 @@ const selectRewardsPage = () => createSelector(
   (substate) => substate
 );
 
-const selectSiteLocations = () => createSelector(
+const selectSites = () => createSelector(
   selectRewardsPageDomain(),
-  (substate) => substate.siteLocations
+  (substate) => substate.sites
 );
 
 
 export default selectRewardsPage;
 export {
   selectRewardsPageDomain,
-  selectSiteLocations,
+  selectSites,
 };

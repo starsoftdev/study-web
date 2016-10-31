@@ -7,13 +7,19 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectSiteLocations } from 'containers/RewardsPage/selectors';
-import { submitForm, fetchSiteLocations } from 'containers/RewardsPage/actions';
+import { selectSites } from 'containers/RewardsPage/selectors';
+import { submitForm, fetchSites } from 'containers/RewardsPage/actions';
 
+import cardStudykik from 'assets/images/img6.png';
+import cardAmazon from 'assets/images/img7.png';
+import cardStarbucks from 'assets/images/img8.png';
+import diamond from 'assets/images/diamond.svg';
+import platinum from 'assets/images/platinum.svg';
+import gold from 'assets/images/gold.svg';
 export class RewardsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    siteLocations: PropTypes.array,
-    fetchSiteLocations: PropTypes.func,
+    sites: PropTypes.array,
+    fetchSites: PropTypes.func,
     onSubmitForm: PropTypes.func,
   }
 
@@ -23,7 +29,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
   }
 
   componentDidMount() {
-    this.props.fetchSiteLocations();
+    this.props.fetchSites();
   }
 
   render() {
@@ -53,13 +59,13 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
           <div className="row images-area">
             <div className="col-xs-4 pull-left">
-              <a href="#popup-rewards" className="lightbox-opener option3" data-for="radio-option3"><img alt="" src="images/img6.png" /></a>
+              <a href="#popup-rewards" className="lightbox-opener option3" data-for="radio-option3"><img alt="" src={cardStudykik} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a href="#popup-rewards" className="lightbox-opener option1" data-for="radio-option1"><img alt="" src="images/img7.png" /></a>
+              <a href="#popup-rewards" className="lightbox-opener option1" data-for="radio-option1"><img alt="" src={cardStarbucks} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a href="#popup-rewards" className="lightbox-opener option2" data-for="radio-option2"><img alt="" src="images/img8.png" /></a>
+              <a href="#popup-rewards" className="lightbox-opener option2" data-for="radio-option2"><img alt="" src={cardAmazon} /></a>
             </div>
           </div>
 
@@ -107,7 +113,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                       </div>
                     </div>
                   </div>
-                  <div className="package-img diamond"><img src="images/diamond.svg" alt="DIAMOND LISTING" width="115" height="102" /></div>
+                  <div className="package-img diamond"><img src={diamond} alt="DIAMOND LISTING" width="115" height="102" /></div>
                 </div>
 
                 <div className="col-sm-4 msg-info">
@@ -126,7 +132,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                       </div>
                     </div>
                   </div>
-                  <div className="package-img platinum"><img src="images/platinum.svg" alt="PLATINUM LISTING" width="108" height="115" /></div>
+                  <div className="package-img platinum"><img src={platinum} alt="PLATINUM LISTING" width="108" height="115" /></div>
                 </div>
 
                 <div className="col-sm-4 rewards-info">
@@ -145,7 +151,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                       </div>
                     </div>
                   </div>
-                  <div className="package-img gold"><img src="images/gold.svg" alt="GOLD LISTING" width="98" height="108" /></div>
+                  <div className="package-img gold"><img src={gold} alt="GOLD LISTING" width="98" height="108" /></div>
                 </div>
 
               </div>
@@ -180,11 +186,11 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
             </header>
             <table className="table">
               <colgroup>
-                <col style="width: 48%" />
-                <col style="width: 13.2%" />
-                <col style="width: 14.5%" />
-                <col style="width: 14.2%" />
-                <col style="width: auto" />
+                <col style={{ width: '48%' }} />
+                <col style={{ width: '13.2%' }} />
+                <col style={{ width: '14.5%' }} />
+                <col style={{ width: '14.2%' }} />
+                <col style={{ width: 'auto' }} />
               </colgroup>
               <thead>
                 <tr>
@@ -256,12 +262,12 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 }
 
 const mapStateToProps = createStructuredSelector({
-  siteLocations: selectSiteLocations(),
+  sites: selectSites(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSiteLocations: () => dispatch(fetchSiteLocations()),
+    fetchSites: () => dispatch(fetchSites()),
     onSubmitForm: (values) => dispatch(submitForm(values)),
   };
 }
