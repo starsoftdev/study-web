@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 import { selectCurrentUserClientId } from 'containers/App/selectors';
-import { fetchClientSites } from 'containers/App/actions';
+import { fetchClientSites, fetchLevels } from 'containers/App/actions';
 import { fetchStudies } from './actions';
 
 import Dashboard from './Dashboard';
@@ -26,6 +26,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     location: PropTypes.any,
     currentUserClientId: PropTypes.number,
     fetchClientSites: PropTypes.func,
+    fetchLevels: PropTypes.func,
     fetchStudies: PropTypes.func,
   };
 
@@ -39,6 +40,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     const { currentUserClientId } = this.props;
     if (currentUserClientId) {
       this.props.fetchClientSites(currentUserClientId, {});
+      this.props.fetchLevels();
       setTimeout(this.props.fetchStudies, 0);
     }
   }
@@ -88,6 +90,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
+    fetchLevels: () => dispatch(fetchLevels()),
     fetchStudies: searchParams => dispatch(fetchStudies(searchParams)),
   };
 }

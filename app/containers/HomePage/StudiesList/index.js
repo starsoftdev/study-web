@@ -24,6 +24,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       upgradeModalOpen: false,
       editModalOpen: false,
       selectedStudyId: null,
+      renewData: null,
     };
 
     this.openRenewModal = this.openRenewModal.bind(this);
@@ -61,6 +62,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.setState({
       renewModalOpen: false,
       selectedStudyId: null,
+      renewData: null,
     });
   }
 
@@ -79,7 +81,9 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   handleRenewStudyRequestValues(requestValues) {
-    console.log(requestValues);
+    this.setState({
+      renewData: requestValues,
+    });
   }
 
   handleRenewStudyFormSubmit() {
@@ -163,7 +167,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                   <div className="row">
                     <div className="left-panel col-sm-6">
                       <RenewStudyForm
-                        onSubmit={this.handleRenewStudyRequestValues}
+                        onSubmitValues={this.handleRenewStudyRequestValues}
                       />
                     </div>
                     <div className="right-panel col-sm-6">
