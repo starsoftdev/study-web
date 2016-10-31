@@ -34,11 +34,11 @@ const headers = [
 
 class ProposalsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    selectCurrent:  PropTypes.func,
-    selectAll:  PropTypes.func,
-    range:  PropTypes.any,
-    searchBy:  PropTypes.any,
-    proposals:  PropTypes.any,
+    selectCurrent: PropTypes.func,
+    selectAll: PropTypes.func,
+    range: PropTypes.any,
+    searchBy: PropTypes.any,
+    proposals: PropTypes.any,
   };
 
   constructor(props) {
@@ -47,6 +47,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     this.onClickAll = this.onClickAll.bind(this);
     this.onClickCurrent = this.onClickCurrent.bind(this);
     this.sortBy = this.sortBy.bind(this);
+    this.sort = this.sort.bind(this);
 
     this.state = {
       checkAll: false,
@@ -58,7 +59,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log('componentWillReceiveProps', nextProps);
     if (nextProps.proposals) {
       this.setState({
         filteredProposals: null,
@@ -68,12 +68,14 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     if (nextProps.range) {
       this.rangeSort(nextProps.range);
     }
-    /* if (nextProps.site) {
-      this.siteSort(nextProps.site);
+
+    if (nextProps.site || nextProps.searchBy) {
+      this.sort(nextProps.site, nextProps.searchBy);
+    } else {
+      this.setState({
+        filteredProposals: null,
+      });
     }
-    if (nextProps.searchBy) {
-      this.searchSort(nextProps.searchBy);
-    } */
   }
 
   componentDidUpdate() {}
@@ -138,6 +140,45 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       this.selectedProposal = (this.state.checkAll) ? proposals : null;
       this.props.selectAll(this.selectedProposal);
     });
+  }
+
+  sort(site, searchBy) {
+    const proposalsMatch = [];
+    const proposalsArr = this.props.proposals;
+
+    if (site !== null && searchBy !== null) {
+      const number = parseInt(searchBy, 10);
+      for (const proposal of proposalsArr) {
+        if (proposal.site === site.name) {
+          if (!_.isNaN(number)) {
+            if (number === proposal.id) {
+              proposalsMatch.push(proposal);
+            }
+          } else if (number === proposal.proposalNumber || number === proposal.protocol) {
+            proposalsMatch.push(proposal);
+          }
+        }
+      }
+    } else if (searchBy !== null) {
+      for (const proposal of proposalsArr) {
+        const number = parseInt(searchBy, 10);
+        if (!_.isNaN(number)) {
+          if (number === proposal.id) {
+            proposalsMatch.push(proposal);
+          }
+        } else if (number === proposal.proposalNumber || number === proposal.protocol) {
+          proposalsMatch.push(proposal);
+        }
+      }
+    } else if (site !== null) {
+      for (const proposal of proposalsArr) {
+        if (proposal.site === site.name) {
+          proposalsMatch.push(proposal);
+        }
+      }
+    }
+
+    this.setState({ filteredProposals: proposalsMatch });
   }
 
   get selectedProposal() {
@@ -247,35 +288,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     this.setState({ filteredProposals: proposalsInRange });
   }
 
-  siteSort(site) {
-    const proposalsMatchSite = [];
-    const proposalsArr = this.state.proposals;
-    for (const proposal of proposalsArr) {
-      if (proposal.site === site.name) {
-        proposalsMatchSite.push(proposal);
-      }
-    }
-
-    this.setState({ filteredProposals: proposalsMatchSite });
-  }
-
-  searchSort(searchBy) {
-    const proposalsMatchSearch = [];
-    const proposalsArr = this.state.proposals;
-    for (const proposal of proposalsArr) {
-      const number = parseInt(searchBy, 10);
-      if (!_.isNaN(number)) {
-        if (number === proposal.proposalNumber || number === proposal.protocol) {
-          proposalsMatchSearch.push(proposal);
-        }
-      } else if (searchBy === proposal.site) {
-        proposalsMatchSearch.push(proposal);
-      }
-    }
-
-    this.setState({ filteredProposals: proposalsMatchSearch });
-  }
-
   mapHeaders(raw, state, result) {
     _.map(raw, (header, key) => {
       result.push(
@@ -324,8 +336,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   render() {
     const state = this.state;
     const proposalsArr = state.filteredProposals || this.props.proposals;
-    let proposals = [];
-    let heads = [];
+    const proposals = [];
+    const heads = [];
 
     this.mapHeaders(headers, state, heads);
     this.mapProposals(proposalsArr, proposals);

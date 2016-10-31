@@ -4,13 +4,12 @@
  *
  */
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer } from 'react-sticky';
 
-// import LoadingSpinner from 'components/LoadingSpinner';
 import {
   getReceipts,
   createPDF,
@@ -30,7 +29,7 @@ import ReceiptsTable from 'components/ReceiptsTable';
 import ProposalsForm from 'components/ProposalsForm';
 import './styles.less';
 
-export class Receipts extends Component { // eslint-disable-line react/prefer-stateless-function
+export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
     unsubscribeFromAll: PropTypes.func,
@@ -41,14 +40,13 @@ export class Receipts extends Component { // eslint-disable-line react/prefer-st
     location: PropTypes.any,
     receipts: PropTypes.any,
     currentUser: PropTypes.any,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
 
     this.createPdf = this.createPdf.bind(this);
     this.changeRange = this.changeRange.bind(this);
-    this.selectSite = this.selectSite.bind(this);
     this.search = this.search.bind(this);
     this.selectCurrent = this.selectCurrent.bind(this);
     this.selectAll = this.selectAll.bind(this);
@@ -104,20 +102,13 @@ export class Receipts extends Component { // eslint-disable-line react/prefer-st
     });
   }
 
-  selectSite(val) {
-    const { siteLocations } = this.props;
-    const site = siteLocations[val - 1];
-    this.setState({
-      range : null,
-      searchBy : null,
-      site,
-    });
-  }
-
   search(value) {
-    const searchBy = (value.length) ? value : null;
+    const { siteLocations } = this.props;
+    const site = siteLocations[value.site - 1] || null;
+    const searchBy = value.search || null;
+
     this.setState({
-      site : null,
+      site,
       range : null,
       searchBy,
     });
@@ -137,7 +128,6 @@ export class Receipts extends Component { // eslint-disable-line react/prefer-st
           <h2 className="main-heading">RECEIPTS</h2>
           <ProposalsForm
             changeRange={this.changeRange}
-            selectSite={this.selectSite}
             search={this.search}
             createPdf={this.createPdf}
             {...this.props}
@@ -146,6 +136,8 @@ export class Receipts extends Component { // eslint-disable-line react/prefer-st
             selectCurrent={this.selectCurrent}
             selectAll={this.selectAll}
             range={this.state.range}
+            site={this.state.site}
+            searchBy={this.state.searchBy}
             receipts={this.state.receipts}
             {...this.props}
           />

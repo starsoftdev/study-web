@@ -11,11 +11,14 @@ import {
   formSubmissionError,
   getAvailPhoneNumbersSuccess,
   getAvailPhoneNumbersError,
+  fetchIndicationLevelPriceSuccess,
+  fetchIndicationLevelPriceError,
 } from 'containers/ListNewStudyPage/actions';
 
 import {
   SUBMIT_FORM,
   GET_AVAIL_PHONE_NUMBERS,
+  FETCH_INDICATION_LEVEL_PRICE,
 } from 'containers/ListNewStudyPage/constants';
 
 export function* getAvailPhoneNumbersWatcher() {
@@ -38,10 +41,31 @@ export function* getAvailPhoneNumbersWatcher() {
   }
 }
 
+export function* fetchIndicationLevelPriceWatcher() {
+  while (true) {
+    const { indicationId, levelId } = yield take(FETCH_INDICATION_LEVEL_PRICE);
+
+    try {
+      const requestURL = `${API_URL}/indicationLevelSkus/getPrice`;
+      const params = {
+        query: {
+          levelId,
+          indicationId,
+        },
+      };
+      const response = yield call(request, requestURL, params);
+      yield put(fetchIndicationLevelPriceSuccess(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(fetchIndicationLevelPriceError(err));
+    }
+  }
+}
+
 export function* submitFormWatcher() {
   while (true) {
-    const { formValues } = yield take(SUBMIT_FORM);
-
+    const { cartValues, formValues } = yield take(SUBMIT_FORM);
     try {
       const requestURL = `${API_URL}/studies`;
 
@@ -55,6 +79,7 @@ export function* submitFormWatcher() {
           data.append(index, value);
         }
       });
+      data.append('cartValues', JSON.stringify(cartValues));
 
       const params = {
         method: 'POST',
@@ -79,11 +104,13 @@ export function* submitFormWatcher() {
 export function* listNewStudyPageSaga() {
   const watcherA = yield fork(submitFormWatcher);
   const watcherB = yield fork(getAvailPhoneNumbersWatcher);
+  const watcherC = yield fork(fetchIndicationLevelPriceWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
   yield cancel(watcherA);
   yield cancel(watcherB);
+  yield cancel(watcherC);
 }
 
 // All sagas to be loaded

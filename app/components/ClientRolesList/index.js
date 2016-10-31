@@ -73,7 +73,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     const clientRolesListContents = clientRoles.details.map((item, index) => (
       <ClientRoleItem {...item} key={index} />
     ));
-    let siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
+    const siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
 
     const editUserModalShown = this.editUserModalShouldBeShown();

@@ -15,6 +15,11 @@ import {
   GET_AVAIL_PHONE_NUMBERS,
   GET_AVAIL_PHONE_NUMBERS_SUCCESS,
   GET_AVAIL_PHONE_NUMBERS_ERROR,
+  HIDE_SUBMIT_FORM_MODAL,
+  FETCH_INDICATION_LEVEL_PRICE,
+  FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+  FETCH_INDICATION_LEVEL_PRICE_ERROR,
+  CLEAR_FORM_SUBMISSION_DATA,
 } from './constants';
 
 export function showSiteLocationModal() {
@@ -82,3 +87,38 @@ export function getAvailPhoneNumbersError(payload) {
     payload,
   };
 }
+
+export function hideSubmitFormModal() {
+  return {
+    type: HIDE_SUBMIT_FORM_MODAL,
+  };
+}
+
+export function fetchIndicationLevelPrice(indicationId, levelId) {
+  return {
+    type: FETCH_INDICATION_LEVEL_PRICE,
+    indicationId,
+    levelId,
+  };
+}
+
+export function fetchIndicationLevelPriceSuccess(payload) {
+  return {
+    type: FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchIndicationLevelPriceError(payload) {
+  return {
+    type: FETCH_INDICATION_LEVEL_PRICE_ERROR,
+    payload,
+  };
+}
+
+export function clearFormSubmissionData() {
+  return {
+    type: CLEAR_FORM_SUBMISSION_DATA,
+  };
+}
+
