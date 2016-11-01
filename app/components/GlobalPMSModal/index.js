@@ -63,7 +63,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         }
       });
     }
-    console.log('newProps', newProps);
     if (newProps.showModal === true && newProps.sitePatients.details.length > 0 && this.state.selectedPatient.id === 0) {
       this.selectPatient(newProps.sitePatients.details[0]);
     }
