@@ -101,7 +101,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
               className="btn btn-primary pull-right"
               onClick={this.createPdf}
             >
-              <i className="icon-icon_download" /> DOWNLOAD
+              <i className="icomoon-icon_download" /> DOWNLOAD
             </button>
           </div>
 
@@ -111,7 +111,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
               className="btn btn-primary lightbox-opener"
               onClick={this.showPopup}
             >
-              <i className="icon-icon_calendar" /> DATE RANGE
+              <i className="icomoon-icon_calendar" /> DATE RANGE
             </a>
           </div>
         </div>
@@ -155,7 +155,7 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
               <div className="lightbox-content">
                 <div className="head">
                   <strong className="title">DATE RANGE</strong>
-                  <a className="lightbox-close close" href="#" onClick={this.hidePopup}><i className="icon-icon_close" /></a>
+                  <a className="lightbox-close close" href="#" onClick={this.hidePopup}><i className="icomoon-icon_close" /></a>
                 </div>
                 <div className="holder">
                   <DateRange

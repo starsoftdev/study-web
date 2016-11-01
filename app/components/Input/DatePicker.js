@@ -70,7 +70,7 @@ export default class DatePicker extends Component {
                 <div className="modal-header head">
                   <strong className="title">Choose Date</strong>
                   <a className="lightbox-close close" onClick={() => { this.toggleModal(false); }}>
-                    <i className="icon-icon_close"></i>
+                    <i className="icomoon-icon_close"></i>
                   </a>
                 </div>
                 <div className="scroll-holder jcf--scrollable modal-body holder">

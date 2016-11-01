@@ -81,7 +81,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
           <div className="emails pull-left">
             <a href="#" className="opener" data-toggle="tooltip" data-placement="bottom" title="Coming Soon">
-              <i className="icon-envelop" />
+              <i className="icomoon-envelop" />
               <span className="counter">1</span>
             </a>
           </div>
@@ -95,7 +95,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
               ? <span className="counter">{unreadMessagesCount}</span>
               : ''
             }
-            <i className="icon-credit"></i>
+            <i className="icomoon-credit"></i>
           </a>
 
           <div className="get-credits pull-left">
