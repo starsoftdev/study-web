@@ -32,14 +32,14 @@ class PatientText extends React.Component {
   }
 
   renderTextMessageOriginUser() {
-    const { currentPatient, textMessage } = this.props;
-    if (textMessage.user) {
+    const { currentPatient, textMessage, currentUser } = this.props;
+    if (textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound') {
       return (
-        <strong className="name">{textMessage.user.firstName} {textMessage.user.lastName}</strong>
+        <strong className="name">{currentUser.firstName} {currentUser.lastName}</strong>
       );
     }
     return (
-      <strong className="name">{currentPatient.firstName} {currentPatient.lastName}</strong>
+        <strong className="name">{currentPatient.firstName} {currentPatient.lastName}</strong>
     );
   }
 
@@ -59,8 +59,8 @@ class PatientText extends React.Component {
             </a>
           </div>
           {this.renderTextMessageOriginUser()}
-          <time dateTime={textMessage.createdAt}>
-            {moment.tz(textMessage.createdAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}
+          <time dateTime={textMessage.dateCreated}>
+            {moment.tz(textMessage.dateCreated, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}
           </time>
         </div>
       );
