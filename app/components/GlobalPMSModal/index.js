@@ -62,7 +62,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         }
       });
     }
-    console.log(newProps);
+    console.log('newProps', newProps);
     if (newProps.showModal === true && newProps.sitePatients.details.length > 0 && this.state.selectedPatient.id === 0) {
       this.selectPatient(newProps.sitePatients.details[0]);
     }
@@ -87,6 +87,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     this.props.sendStudyPatientMessages(options, (err, data) => {
       if (!err) {
         console.log('data', data);
+        if (this.state.selectPatient && this.state.selectPatient.study_id) {
+          this.props.fetchSitePatients(this.props.currentUser.id);
+          this.props.fetchPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
+        }
       }
     });
   }
