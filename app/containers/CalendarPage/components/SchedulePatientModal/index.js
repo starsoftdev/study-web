@@ -169,7 +169,7 @@ export default class SchedulePatientModal extends Component {
                 <div className="lightbox-content">
                   <div className="head">
                     <strong className="title">SCHEDULE PATIENT</strong>
-                    <a className="lightbox-close close" href="#" onClick={handleCloseModal}><i className="icon-icon_close"></i></a>
+                    <a className="lightbox-close close" href="#" onClick={handleCloseModal}><i className="icomoon-icon_close"></i></a>
                   </div>
                   <div className="scroll-holder jcf--scrollable">
                     <form action="#" className="form-lightbox form-add-schedule show-on-select" data-validation-false="no-action" onSubmit={handleSubmit}>
@@ -295,7 +295,7 @@ export default class SchedulePatientModal extends Component {
                 <div className="lightbox-content">
                   <div className="head">
                     <strong className="title">EDIT SCHEDULE</strong>
-                    <a className="close lightbox-close" href="#" onClick={handleCloseModal}><i className="icon-icon_close"></i></a>
+                    <a className="close lightbox-close" href="#" onClick={handleCloseModal}><i className="icomoon-icon_close"></i></a>
                   </div>
                   <div className="scroll-holder">
                     <form action="#" className="form-lightbox form-edit-schedule" onSubmit={handleSubmit}>

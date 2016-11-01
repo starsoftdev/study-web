@@ -119,7 +119,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
           <Modal.Header>
             <Modal.Title>PATIENT MESSAGING SUITE</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closeModal}>
-              <i className="icon-icon_close"></i>
+              <i className="icomoon-icon_close"></i>
             </a>
           </Modal.Header>
           <Modal.Body>
@@ -129,7 +129,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                   <div className="custom-select-drop">
                     <div className="search-holder">
                       <input className="form-control keyword-search" type="search" placeholder="Search" />
-                      <i className="icon-icon_search2"></i>
+                      <i className="icomoon-icon_search2"></i>
                     </div>
                   </div>
                   <ul className="tabset list-unstyled">

@@ -86,7 +86,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
           <Modal.Header>
             <Modal.Title>ADD CREDITS</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closeModal}>
-              <i className="icon-icon_close"></i>
+              <i className="icomoon-icon_close"></i>
             </a>
           </Modal.Header>
           <Modal.Body>

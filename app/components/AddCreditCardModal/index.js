@@ -23,7 +23,7 @@ class AddCreditCardModal extends React.Component { // eslint-disable-line react/
           <Modal.Header>
             <Modal.Title>ADD NEW CARD</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closeModal}>
-              <i className="icon-icon_close"></i>
+              <i className="icomoon-icon_close"></i>
             </a>
           </Modal.Header>
           <Modal.Body>
