@@ -21,11 +21,19 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
     let containerClassName = 'post-holder';
     let senderImage = defaultUserImageGirl;
 
+    let senderName = 'Anonymous';
+
     if (messageData.twilioTextMessage.direction === 'outbound-api') {
       containerClassName = 'post-holder even';
       senderImage = defaultUserImageDoctor;
+      if (messageData.user) {
+        senderName = messageData.user.firstName.concat(' '.concat(messageData.user.lastName));
+      }
     } else if (messageData.patient.gender === 'Male') {
       senderImage = defaultUserImage;
+      if (messageData.patient) {
+        senderName = messageData.patient.firstName.concat(' '.concat(messageData.patient.lastName));
+      }
     }
 
     return (
@@ -34,7 +42,7 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
         <div className="post-content">
           <p>{messageData.twilioTextMessage.body}</p>
         </div>
-        <strong className="email">{messageData.patient.firstName} {messageData.patient.lastName}</strong>
+        <strong className="email">{senderName}</strong>
         <time >{cdate}</time>
       </div>
     );
