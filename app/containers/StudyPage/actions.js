@@ -6,6 +6,10 @@
 
 import {
   FIND_PATIENTS_TEXT_BLAST,
+  FIND_PATIENTS_TEXT_BLAST_SUCCESS,
+  FILTER_PATIENTS_TEXT_BLAST,
+  ADD_PATIENT_TO_TEXT_BLAST,
+  REMOVE_PATIENT_FROM_TEXT_BLAST,
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
@@ -52,6 +56,7 @@ export function campaignsFetched(payload) {
     payload,
   };
 }
+
 export function findPatientsForTextBlast(studyId, text, categoryIds, sourceIds) {
   return {
     type: FIND_PATIENTS_TEXT_BLAST,
@@ -61,6 +66,36 @@ export function findPatientsForTextBlast(studyId, text, categoryIds, sourceIds) 
     sourceIds,
   };
 }
+
+export function findPatientsForTextBlastSuccess(payload) {
+  return {
+    type: FIND_PATIENTS_TEXT_BLAST_SUCCESS,
+    payload,
+  };
+}
+
+export function filterPatientsForTextBlast(text) {
+  return {
+    type: FILTER_PATIENTS_TEXT_BLAST,
+    text,
+  };
+}
+
+export function addPatientToTextBlast(patient) {
+  return {
+    type: ADD_PATIENT_TO_TEXT_BLAST,
+    patient,
+  };
+}
+
+export function removePatientFromTextBlast(patient) {
+  return {
+    type: REMOVE_PATIENT_FROM_TEXT_BLAST,
+    patient,
+  };
+}
+
+
 export function fetchPatients(studyId, siteId, text, campaignId, sourceId) {
   return {
     type: FETCH_PATIENTS,
@@ -286,10 +321,11 @@ export function movePatientBetweenCategoriesFailed() {
   };
 }
 
-export function submitTextBlast(patients, onClose) {
+export function submitTextBlast(patients, message, onClose) {
   return {
     type: SUBMIT_TEXT_BLAST,
     patients,
+    message,
     onClose,
   };
 }

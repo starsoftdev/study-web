@@ -42,7 +42,6 @@ class PatientCategory extends React.Component {
   static propTypes = {
     studyId: React.PropTypes.number.isRequired,
     category: React.PropTypes.object.isRequired,
-    newPatient: React.PropTypes.object.isRequired,
     connectDropTarget: React.PropTypes.func.isRequired,
     currentPatientId: React.PropTypes.number,
     currentUser: React.PropTypes.object.isRequired,
