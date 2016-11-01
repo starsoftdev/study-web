@@ -24,9 +24,9 @@ import {
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
   SUBMIT_DELETE_NOTE_SUCCESS,
-  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
-  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
-  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
+  MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
+  MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
+  MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
   UPDATE_PATIENT_SUCCESS,
 } from './constants';
 import _ from 'lodash';
@@ -46,17 +46,22 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         patientCategories: state.patientCategories.map(patientCategory => {
-          // try to find the category in the payload
-          let tempCategory = _.find(action.payload, category => (
+          const tempCategory = _.find(action.payload, category => (
             category.id === patientCategory.id
           ));
+          // try to find the category in the payload
           // if it's not found, clear the patient list
-          if (!tempCategory) {
-            tempCategory = patientCategory;
-            tempCategory.patients = [];
+          if (tempCategory) {
+            // return the payload as the mapping
+            return {
+              ...patientCategory,
+              patients: tempCategory.patients,
+            };
           }
-          // return the payload as the mapping
-          return tempCategory;
+          return {
+            ...patientCategory,
+            patients: [],
+          };
         }),
         fetchingPatients: false,
       };
@@ -70,10 +75,11 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),
       };
-    case SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS:
+    case MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS:
       return {
         ...state,
         patientBoardLoading: false,
+        patientCategories: patientCategories(state.patientCategories, null, action.patientId, action),
       };
     case FETCH_PATIENT_CATEGORIES_SUCCESS:
       return {
@@ -155,12 +161,12 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         currentPatientCategoryId: action.id,
       };
-    case SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING:
+    case MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING:
       return {
         ...state,
         patientBoardLoading: true,
       };
-    case SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED:
+    case MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED:
       return {
         ...state,
         patientBoardLoading: false,
@@ -205,6 +211,34 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
         }
         return patientCategory;
       });
+    case MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS: {
+      if (action.fromCategoryId !== action.toCategoryId) {
+        const fromPatientCategory = _.find(state, { id: action.fromCategoryId });
+        const toPatientCategory = _.find(state, { id: action.toCategoryId });
+        const patient = _.find(fromPatientCategory.patients, { id: currentPatientId });
+        return state.map(patientCategory => {
+          if (patientCategory.id === fromPatientCategory.id) {
+            return {
+              ...patientCategory,
+              patients: patientCategory.patients.filter(patient => (
+                patient.id !== currentPatientId
+              )),
+            };
+          }
+          if (patientCategory.id === toPatientCategory.id) {
+            return {
+              ...patientCategory,
+              patients: [
+                patient,
+                ...patientCategory.patients,
+              ],
+            };
+          }
+          return patientCategory;
+        });
+      }
+      return state;
+    }
     default:
       return state;
   }

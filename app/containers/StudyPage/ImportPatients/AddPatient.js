@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import formValidator from './validator';
@@ -16,7 +17,9 @@ import { selectSyncErrors, selectValues } from '../../../common/selectors/form.s
 import { createStructuredSelector } from 'reselect';
 import { normalizePhone } from '../helper/functions';
 
-@reduxForm({ form: 'addPatient', validate: formValidator })
+const formName = 'addPatient';
+
+@reduxForm({ form: formName, validate: formValidator })
 class AddPatient extends React.Component {
   static propTypes = {
     errorList: React.PropTypes.object.isRequired,
@@ -31,8 +34,7 @@ class AddPatient extends React.Component {
     super(props);
     this.addPatient = this.addPatient.bind(this);
   }
-  componentDidMount() {
-  }
+
   addPatient(event) {
     event.preventDefault();
     const { submitAddPatient, onClose, newPatient, studyId, errorList } = this.props;
@@ -43,6 +45,7 @@ class AddPatient extends React.Component {
       submitAddPatient(studyId, newPatient, onClose);
     }
   }
+
   render() {
     const { onHide, ...props } = this.props;
     return (
@@ -118,7 +121,7 @@ class AddPatient extends React.Component {
                 />
               </div>
               <div className="text-right">
-                <input type="submit" value="submit" className="btn btn-default" onClick={(event) => this.addPatient(event)} />
+                <Button type="submit" onClick={(event) => this.addPatient(event)} />
               </div>
             </Form>
           </div>
@@ -130,9 +133,9 @@ class AddPatient extends React.Component {
 
 
 const mapStateToProps = createStructuredSelector({
-  newPatient: selectValues('addPatient'),
+  newPatient: selectValues(formName),
+  errorList: selectSyncErrors(formName),
   studyId: selectStudyId(),
-  errorList: selectSyncErrors('addPatient'),
 });
 
 function mapDispatchToProps(dispatch) {
