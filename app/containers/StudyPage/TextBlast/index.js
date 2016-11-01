@@ -3,18 +3,20 @@
  */
 
 import React from 'react';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { Field, reduxForm, change } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
+import FormControl from 'react-bootstrap/lib/FormControl';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/index';
 import * as Selector from '../selectors';
-import { findPatientsForTextBlast, submitTextBlast } from '../actions';
-import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
+import { addPatientToTextBlast, findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, submitTextBlast } from '../actions';
+import { selectActiveField, selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
 
 const formName = 'TextBlastModal';
 
@@ -23,16 +25,20 @@ const formName = 'TextBlastModal';
 })
 class TextBlastModal extends React.Component {
   static propTypes = {
+    activeField: React.PropTypes.any,
+    addPatient: React.PropTypes.func.isRequired,
     bsClass: React.PropTypes.string,
     change: React.PropTypes.func.isRequired,
     className: React.PropTypes.any,
     dialogClassName: React.PropTypes.string,
-    findPatientsForTextBlast: React.PropTypes.func.isRequired,
+    findPatients: React.PropTypes.func.isRequired,
+    filterPatients: React.PropTypes.func.isRequired,
     formValues: React.PropTypes.object,
     formSyncErrors: React.PropTypes.object,
     onClose: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
     patientCategories: React.PropTypes.array,
+    removePatient: React.PropTypes.func.isRequired,
     role: React.PropTypes.string,
     show: React.PropTypes.bool.isRequired,
     sources: React.PropTypes.array.isRequired,
@@ -41,119 +47,149 @@ class TextBlastModal extends React.Component {
     submitTextBlast: React.PropTypes.func.isRequired,
   };
 
-  static defaultProps = {
-    initialValues: {
-      category: false,
-      source: false,
-    },
-  };
-
-
   constructor(props) {
     super(props);
     this.selectCategory = this.selectCategory.bind(this);
     this.selectSource = this.selectSource.bind(this);
-    this.removePatient = this.removePatient.bind(this);
+    this.filterPatients = this.filterPatients.bind(this);
     this.submitTextBlast = this.submitTextBlast.bind(this);
-    this.renderPatient = this.renderPatient.bind(this);
-    this.findPatients = this.findPatients.bind(this);
+    this.renderPatientSearchList = this.renderPatientSearchList.bind(this);
+    this.renderPatients = this.renderPatients.bind(this);
   }
 
-  componentDidMount() {
+  componentWillUpdate(nextProps) {
+    if (nextProps.show && !nextProps.dirty && nextProps.formValues.category && nextProps.formValues.source) {
+      // load the find patients lazily on initial load and show boolean
+      nextProps.findPatients(nextProps.studyId, null, null, null);
+    }
   }
 
-  selectCategory(categoryId) {
-    const { change, findPatientsForTextBlast, formValues, patientCategories, sources, studyId } = this.props;
+  selectCategory(checked, categoryId) {
+    const { change, findPatients, formValues, patientCategories, sources, studyId } = this.props;
+    // find patients for text blast
+    let sourceIds = null;
+    if (!formValues.source) {
+      sourceIds = [];
+      for (const source of sources) {
+        if (formValues[`source-${source.id}`]) {
+          sourceIds.push(source.id);
+        }
+      }
+    }
     if (categoryId === 0) {
       for (const category of patientCategories) {
-        change(`category-${category.id}`, !formValues.category);
+        change(`category-${category.id}`, checked);
       }
+      findPatients(studyId, null, null, sourceIds);
     } else {
+      // change the all option to unchecked
       change('category', false);
-      change(`category-${categoryId}`, !formValues[`category-${categoryId}`]);
+      const categoryIds = [];
+      if (checked) {
+        categoryIds.push(categoryId);
+      }
+      for (const category of patientCategories) {
+        if (categoryId !== category.id && formValues[`category-${category.id}`]) {
+          categoryIds.push(category.id);
+        }
+      }
+      findPatients(studyId, null, categoryIds, sourceIds);
     }
-    // // find patients for text blast
-    // let sourceIds = null;
-    // if (!formValues.source) {
-    //   sourceIds = [];
-    //   for (const source of sources) {
-    //     if (formValues[`source-${source.id}`]) {
-    //       sourceIds.push(source.id);
-    //     }
-    //   }
-    // }
-    // if (formValues.category) {
-    //   findPatientsForTextBlast(studyId, null, null, sourceIds);
-    // } else {
-    //   const categoryIds = [];
-    //   for (const category of patientCategories) {
-    //     if (formValues[`category-${category.id}`]) {
-    //       categoryIds.push(category.id);
-    //     }
-    //   }
-    //   findPatientsForTextBlast(studyId, null, categoryIds, sourceIds);
-    // }
   }
 
-  selectSource(sourceId) {
-    const { change, findPatientsForTextBlast, formValues, patientCategories, sources, studyId } = this.props;
+  selectSource(checked, sourceId) {
+    const { change, findPatients, formValues, patientCategories, sources, studyId } = this.props;
+    // find patients for text blast
+    let categoryIds = null;
+    if (!formValues.category) {
+      categoryIds = [];
+      for (const category of patientCategories) {
+        if (formValues[`category-${category.id}`]) {
+          categoryIds.push(category.id);
+        }
+      }
+    }
     if (sourceId === 0) {
       for (const source of sources) {
-        change(`source-${source.id}`, !formValues.source);
+        change(`source-${source.id}`, checked);
       }
+      findPatients(studyId, null, categoryIds, null);
     } else {
+      // change the all option to unchecked
       change('source', false);
-      change(`source-${sourceId}`, !formValues[`source-${sourceId}`]);
+      const sourceIds = [];
+      if (checked) {
+        sourceIds.push(sourceId);
+      }
+      for (const source of sources) {
+        if (sourceId !== source.id && formValues[`source-${source.id}`]) {
+          sourceIds.push(source.id);
+        }
+      }
+      findPatients(studyId, null, categoryIds, sourceIds);
     }
-    // // find patients for text blast
-    // let categoryIds = null;
-    // if (!formValues.category) {
-    //   categoryIds = [];
-    //   for (const category of patientCategories) {
-    //     if (formValues[`category-${category.id}`]) {
-    //       categoryIds.push(category.id);
-    //     }
-    //   }
-    // }
-    // if (formValues.source.value) {
-    //   findPatientsForTextBlast(studyId, null, categoryIds, null);
-    // } else {
-    //   const sourceIds = [];
-    //   for (const source of sources) {
-    //     if (formValues[`source-${source.id}`]) {
-    //       sourceIds.push(source.id);
-    //     }
-    //   }
-    //   findPatientsForTextBlast(studyId, null, categoryIds, sourceIds);
-    // }
   }
 
-  findPatients(text) {
-    const { findPatientsForTextBlast, studyId } = this.props;
-    findPatientsForTextBlast(studyId, text);
+  filterPatients(event) {
+    const { formValues, filterPatients } = this.props;
+    if (formValues.patientSearchValues) {
+      filterPatients(event.target.value);
+    }
   }
 
-  removePatient() {
-
+  submitTextBlast(event) {
+    event.preventDefault();
+    const { formValues, submitTextBlast, onClose } = this.props;
+    submitTextBlast(formValues.patients, formValues.message, onClose);
   }
 
-  submitTextBlast() {
-
+  renderPatientSearchList() {
+    const { activeField, addPatient, formValues } = this.props;
+    if (formValues.filteredPatientSearchValues) {
+      return (
+        <ul className={classNames('list list-unstyled', { active: activeField === 'search' })}>
+          {formValues.filteredPatientSearchValues.map(patient => (
+            <li
+              key={patient.id}
+              onClick={() => {
+                addPatient(patient);
+              }}
+            >
+              {patient.firstName} {patient.lastName}
+            </li>
+          ))}
+        </ul>
+      );
+    }
+    return null;
   }
 
-  renderPatient() {
-    return (
-      <div className="patient">
-        <span className="name">Alan Jensen</span>
-        <a className="btn-remove" onClick={this.removePatient}>
-          <i className="icomoon-icon_trash" />
-        </a>
-      </div>
-    );
+  renderPatients() {
+    const { formValues, removePatient } = this.props;
+    if (formValues.patients) {
+      return (
+        <div className="selected-patients-list">
+          {formValues.patients.map(patient => (
+            <div className="patient" key={patient.id}>
+              <span className="name">{patient.firstName} {patient.lastName}</span>
+              <a
+                className="btn-remove"
+                onClick={() => {
+                  removePatient(patient);
+                }}
+              >
+                <i className="icomoon-icon_trash" />
+              </a>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return null;
   }
 
   render() {
-    const { patientCategories, sources, show, role, bsClass, dialogClassName, className, style, onHide } = this.props;
+    const { patientCategories, sources, show, role, bsClass, dialogClassName, className, formValues, style, onHide } = this.props;
     return (
       <Modal
         show={show}
@@ -191,17 +227,11 @@ class TextBlastModal extends React.Component {
                         name="search"
                         type="search"
                         component={Input}
-                        onChange={this.findPatients}
+                        onChange={this.filterPatients}
                         className="keyword-search"
                       />
                       <i className="icomoon-icon_search2" />
-                      <ul className="list list-unstyled">
-                        <li>Alan Jensen</li>
-                        <li>Eugene Simpson</li>
-                        <li>katy Perry</li>
-                        <li>Hamish Labatt</li>
-                        <li>Thomas Morgan</li>
-                      </ul>
+                      {this.renderPatientSearchList()}
                     </div>
                   </div>
                   <div className="category">
@@ -213,8 +243,8 @@ class TextBlastModal extends React.Component {
                           type="checkbox"
                           component={Checkbox}
                           className="pull-left"
-                          onChange={() => {
-                            this.selectCategory(0);
+                          onChange={(checked) => {
+                            this.selectCategory(checked, 0);
                           }}
                         />
                         All
@@ -226,8 +256,8 @@ class TextBlastModal extends React.Component {
                             type="checkbox"
                             component={Checkbox}
                             className="pull-left"
-                            onChange={() => {
-                              this.selectCategory(patientCategory.id);
+                            onChange={(checked) => {
+                              this.selectCategory(checked, patientCategory.id);
                             }}
                           />
                           {patientCategory.name}
@@ -244,8 +274,8 @@ class TextBlastModal extends React.Component {
                           type="checkbox"
                           component={Checkbox}
                           className="pull-left"
-                          onChange={() => {
-                            this.selectSource(0);
+                          onChange={(checked) => {
+                            this.selectSource(checked, 0);
                           }}
                         />
                         All
@@ -257,8 +287,8 @@ class TextBlastModal extends React.Component {
                             type="checkbox"
                             component={Checkbox}
                             className="pull-left"
-                            onChange={() => {
-                              this.selectSource(source.id);
+                            onChange={(checked) => {
+                              this.selectSource(checked, source.id);
                             }}
                           />
                           {source.type}
@@ -266,9 +296,7 @@ class TextBlastModal extends React.Component {
                       ))}
                     </ul>
                   </div>
-                  <div className="selected-patients-list">
-                    {this.renderPatient()}
-                  </div>
+                  {this.renderPatients()}
                 </div>
               </div>
             </div>
@@ -276,18 +304,18 @@ class TextBlastModal extends React.Component {
               <div className="scroll-holder jcf--scrollable">
                 <div className="sub-holder">
                   <div className="subject-field">
-                    <input type="text" className="form-control recivers" placeholder="To" disabled />
+                    <FormControl type="text" className="recievers" placeholder="To" disabled />
                     <span className="emails-counter">
-                      <span className="counter">0</span>
-                      <span className="text">Patients</span>
+                      <span className="counter">{formValues.patients ? formValues.patients.length : 0}</span>
+                      <span className="text"> Patients</span>
                       <a className="btn-close">
                         <i className="icomoon-icon_close" />
                       </a>
                     </span>
                   </div>
-                  <textarea placeholder="Type a message..." className="form-control" required />
+                  <Field name="message" placeholder="Type a message..." component="textarea" className="form-control" required />
                   <div className="footer">
-                    <Button type="submit" value="submit" className="pull-right" />
+                    <Button type="submit" className="pull-right" onClick={this.submitTextBlast}>Submit</Button>
                   </div>
                 </div>
               </div>
@@ -301,6 +329,7 @@ class TextBlastModal extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
+  activeField: selectActiveField(formName),
   formValues: selectValues(formName),
   formSyncErrors: selectSyncErrors(formName),
   patientCategories: Selector.selectPatientCategories(),
@@ -310,9 +339,12 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    addPatient: (patient) => dispatch(addPatientToTextBlast(patient)),
     change: (field, value) => dispatch(change(formName, field, value)),
-    findPatientsForTextBlast: (studyId, text, categoryIds, sourceIds) => dispatch(findPatientsForTextBlast(studyId, text, categoryIds, sourceIds)),
-    submitTextBlast: (patients, onClose) => dispatch(submitTextBlast(patients, onClose)),
+    findPatients: (studyId, text, categoryIds, sourceIds) => dispatch(findPatientsForTextBlast(studyId, text, categoryIds, sourceIds)),
+    filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
+    removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
+    submitTextBlast: (patients, message, onClose) => dispatch(submitTextBlast(patients, message, onClose)),
   };
 }
 

@@ -46,17 +46,22 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         patientCategories: state.patientCategories.map(patientCategory => {
-          // try to find the category in the payload
-          let tempCategory = _.find(action.payload, category => (
+          const tempCategory = _.find(action.payload, category => (
             category.id === patientCategory.id
           ));
+          // try to find the category in the payload
           // if it's not found, clear the patient list
-          if (!tempCategory) {
-            tempCategory = patientCategory;
-            tempCategory.patients = [];
+          if (tempCategory) {
+            // return the payload as the mapping
+            return {
+              ...patientCategory,
+              patients: tempCategory.patients,
+            };
           }
-          // return the payload as the mapping
-          return tempCategory;
+          return {
+            ...patientCategory,
+            patients: [],
+          };
         }),
         fetchingPatients: false,
       };
@@ -208,9 +213,9 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
       });
     case MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS: {
       if (action.fromCategoryId !== action.toCategoryId) {
-        const fromPatientCategory = _.find(state, {id: action.fromCategoryId});
-        const toPatientCategory = _.find(state, {id: action.toCategoryId});
-        const patient = _.find(fromPatientCategory.patients, {id: currentPatientId});
+        const fromPatientCategory = _.find(state, { id: action.fromCategoryId });
+        const toPatientCategory = _.find(state, { id: action.toCategoryId });
+        const patient = _.find(fromPatientCategory.patients, { id: currentPatientId });
         return state.map(patientCategory => {
           if (patientCategory.id === fromPatientCategory.id) {
             return {

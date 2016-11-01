@@ -90,7 +90,15 @@ class StudyActionButtons extends React.Component {
             <i className="icomoon-icon_chat_alt" />
             <span>Text / Email Blast</span>
             <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} toggleTextBlast={this.toggleTextBlastModal} />
-            <TextBlastModal show={this.state.showTextBlastModal} onClose={this.closeTextBlastModal} onHide={this.toggleTextBlastModal} />
+            <TextBlastModal
+              show={this.state.showTextBlastModal}
+              onClose={this.closeTextBlastModal}
+              onHide={this.toggleTextBlastModal}
+              initialValues={{
+                category: true,
+                source: true,
+              }}
+            />
           </span>
         </div>
         <div className="btn-import pull-left">
