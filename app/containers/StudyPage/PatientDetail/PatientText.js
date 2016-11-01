@@ -39,7 +39,7 @@ class PatientText extends React.Component {
       );
     }
     return (
-        <strong className="name">{currentPatient.firstName} {currentPatient.lastName}</strong>
+      <strong className="name">{currentPatient.firstName} {currentPatient.lastName}</strong>
     );
   }
 
