@@ -9,11 +9,21 @@ import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from 'containers/HomePage/
 import StudyItem from './StudyItem';
 import RenewStudyForm from 'containers/HomePage/RenewStudyForm';
 import ShoppingCartForm from 'components/ShoppingCartForm';
+import {
+  fetchLevels,
+} from 'containers/App/actions';
+import {
+  selectStudyLevels,
+  selectCurrentUser,
+} from 'containers/App/selectors';
 import './styles.less';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     studies: PropTypes.object,
+    studyLevels: PropTypes.array,
+    fetchLevels: PropTypes.func,
+    currentUser: PropTypes.object,
   };
 
   constructor(props) {
@@ -34,6 +44,14 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.closeEditModal = this.closeEditModal.bind(this);
     this.handleRenewStudyRequestValues = this.handleRenewStudyRequestValues.bind(this);
     this.handleRenewStudyFormSubmit = this.handleRenewStudyFormSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.fetchLevels();
+  }
+
+  componentWillReceiveProps(newProps) {
+    // indication cahnge
   }
 
   openRenewModal(studyId) {
@@ -82,8 +100,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     console.log(requestValues);
   }
 
-  handleRenewStudyFormSubmit() {
-
+  handleRenewStudyFormSubmit(requestValues) {
+    console.log(requestValues);
   }
 
   render() {
@@ -192,6 +210,14 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
 const mapStateToProps = createStructuredSelector({
   studies: selectStudies(),
+  studyLevels : selectStudyLevels(),
+  currentUser: selectCurrentUser(),
 });
 
-export default connect(mapStateToProps, null)(StudiesList);
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchLevels: () => dispatch(fetchLevels()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StudiesList);
