@@ -90,7 +90,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             <a href="#" className="link-help pull-left opener">?</a>
           </div>
 
-          <a href="#chat-popup" className="lightbox-opener pull-left btn-chat-popup" onClick={this.showGlobalPMSModal}>
+          <a href="#" className="lightbox-opener pull-left btn-chat-popup" onClick={this.showGlobalPMSModal}>
             {unreadMessagesCount > 0
               ? <span className="counter">{unreadMessagesCount}</span>
               : ''
