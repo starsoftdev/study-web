@@ -81,10 +81,10 @@ class TextSection extends React.Component {
   }
 
   scrollElement() {
-    var _this = this;
-    window.requestAnimationFrame(() =>{
-      const scrollable = _this.scrollable;
-      if (scrollable && _this.props.active) {
+    const scope = this;
+    window.requestAnimationFrame(() => {
+      const scrollable = scope.scrollable;
+      if (scrollable && scope.props.active) {
         scrollable.scrollTop = scrollable.scrollHeight;
       }
     });
@@ -99,7 +99,7 @@ class TextSection extends React.Component {
       to: this.props.currentPatient.phone,
     };
 
-    this.props.sendStudyPatientMessages(options, (err, data) => {
+    this.props.sendStudyPatientMessages(options, (err) => {
       if (!err) {
         textarea.value = '';
       }
@@ -133,7 +133,7 @@ class TextSection extends React.Component {
 
   render() {
     const { active } = this.props;
-    this.scrollElement()
+    this.scrollElement();
     return (
       <div className={classNames('item text', { active })}>
         {this.renderText()}
