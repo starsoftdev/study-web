@@ -46,6 +46,16 @@ import {
   FETCH_CLIENT_SITES_SUCCESS,
   FETCH_CLIENT_SITES_ERROR,
 
+  FETCH_SITE_PATIENTS,
+  FETCH_SITE_PATIENTS_SUCCESS,
+  FETCH_SITE_PATIENTS_ERROR,
+
+  FETCH_PATIENT_MESSAGES,
+  FETCH_PATIENT_MESSAGES_SUCCESS,
+  FETCH_PATIENT_MESSAGES_ERROR,
+
+  MARK_AS_READ_PATIENT_MESSAGES,
+
   FETCH_CLIENT_ROLES,
   FETCH_CLIENT_ROLES_SUCCESS,
   FETCH_CLIENT_ROLES_ERROR,
@@ -76,6 +86,7 @@ import {
   SAVE_USER,
   SAVE_USER_SUCCESS,
   SAVE_USER_ERROR,
+
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -358,6 +369,57 @@ export function clientSitesFetched(payload) {
 export function clientSitesFetchingError(payload) {
   return {
     type: FETCH_CLIENT_SITES_ERROR,
+    payload,
+  };
+}
+
+export function fetchSitePatients(userId) {
+  return {
+    type: FETCH_SITE_PATIENTS,
+    userId,
+  };
+}
+
+export function sitePatientsFetched(payload) {
+  return {
+    type: FETCH_SITE_PATIENTS_SUCCESS,
+    payload,
+  };
+}
+
+export function sitePatientsFetchingError(payload) {
+  return {
+    type: FETCH_SITE_PATIENTS_ERROR,
+    payload,
+  };
+}
+
+export function fetchPatientMessages(patientId, studyId) {
+  return {
+    type: FETCH_PATIENT_MESSAGES,
+    patientId,
+    studyId,
+  };
+}
+
+export function markAsReadPatientMessages(patientId, studyId) {
+  return {
+    type: MARK_AS_READ_PATIENT_MESSAGES,
+    patientId,
+    studyId,
+  };
+}
+
+export function patientMessagesFetched(payload) {
+  return {
+    type: FETCH_PATIENT_MESSAGES_SUCCESS,
+    payload,
+  };
+}
+
+export function patientMessagesFetchingError(payload) {
+  return {
+    type: FETCH_PATIENT_MESSAGES_ERROR,
     payload,
   };
 }

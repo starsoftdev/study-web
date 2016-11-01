@@ -9,21 +9,20 @@ import GlobalPMSModal from 'components/GlobalPMSModal';
 import NotificationBox from './NotificationBox';
 import AvatarMenu from './AvatarMenu';
 
+import { fetchSitePatients } from 'containers/App/actions';
+
 import {
   selectCurrentUser,
+  selectSitePatients,
 } from 'containers/App/selectors';
 
-const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser(),
-});
+import { sumBy } from 'lodash';
 
-const mapDispatchToProps = {
-};
-
-@connect(mapStateToProps, mapDispatchToProps)
 class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUser: PropTypes.any,
+    sitePatients: React.PropTypes.object,
+    fetchSitePatients: React.PropTypes.func,
   }
 
   constructor(props) {
@@ -46,6 +45,8 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
       console.error('Something is wrong with session');
       return;
     }
+    console.log(currentUser);
+    this.props.fetchSitePatients(currentUser.id);
   }
 
   showAddCreditsModal() {
@@ -69,6 +70,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
   }
 
   render() {
+    const unreadMessagesCount = sumBy(this.props.sitePatients.details, (item) => parseInt(item.count_unread ? item.count_unread : 0));
     return (
       <header id="header">
         <div className="container-fluid">
@@ -89,8 +91,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
           </div>
 
           <a href="#chat-popup" className="lightbox-opener pull-left btn-chat-popup" onClick={this.showGlobalPMSModal}>
-            <span className="counter">3</span>
-            <i className="icon-credit"></i>
+            <span className="counter">{unreadMessagesCount}</span><i className="icon-credit"></i>
           </a>
 
           <div className="get-credits pull-left">
@@ -115,4 +116,15 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
   }
 }
 
-export default TopHeaderBar;
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
+  sitePatients: selectSitePatients(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchSitePatients: (siteId) => dispatch(fetchSitePatients(siteId)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopHeaderBar);
