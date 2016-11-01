@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import Button from 'react-bootstrap/lib/Button';
 
 import studykikLogo from 'assets/images/logo.svg';
 import AddCreditsModal from 'components/AddCreditsModal';
@@ -80,7 +81,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
           <NotificationBox currentUser={this.props.currentUser} />
 
           <div className="emails pull-left">
-            <a href="#" className="opener" data-toggle="tooltip" data-placement="bottom" title="Coming Soon">
+            <a className="opener" data-toggle="tooltip" data-placement="bottom" title="Coming Soon">
               <i className="icomoon-envelop" />
               <span className="counter">1</span>
             </a>
@@ -90,17 +91,17 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             <a href="#" className="link-help pull-left opener">?</a>
           </div>
 
-          <a href="#" className="lightbox-opener pull-left btn-chat-popup" onClick={this.showGlobalPMSModal}>
+          <a className="lightbox-opener pull-left btn-chat-popup" onClick={this.showGlobalPMSModal}>
             {unreadMessagesCount > 0
               ? <span className="counter">{unreadMessagesCount}</span>
               : ''
             }
-            <i className="icomoon-credit"></i>
+            <i className="icomoon-credit" />
           </a>
 
           <div className="get-credits pull-left">
-            <span className="margin-right-5px">100 Credits</span>
-            <a href="#" className="btn btn-default" onClick={this.showAddCreditsModal}>+ ADD CREDITS</a>
+            <span>100 Credits</span>
+            <Button onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
           </div>
 
           <AvatarMenu handleLogoutClick={this.handleLogoutClick} />

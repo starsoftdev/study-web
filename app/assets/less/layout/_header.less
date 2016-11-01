@@ -263,37 +263,30 @@
 
 /* get-credit */
 .get-credits {
-	color: #101010;
-	padding: 17px 0 0;
-	line-height: 30px;
-
-	> * {
-		.align(@align: middle);
-	}
-
-	.icomoon-credit {
-		color: #fff;
-		.font(20px, 30px);
-		padding: 5px 10px 0 6px;
-	}
-
-	.btn-default {
-		.bg(#76daff);
-		color: #fff;
-		padding: 0 12px;
-		border-width: 0;
-		font-weight: 600;
-		line-height: 26px;
-		border-radius: 2px;
-		margin: 2px 0 -2px 7px;
-		border: solid 2px #fff;
-
-		&:focus,
-		&:active:focus,
-		&:hover {
-			border-color:#fff;
-		}
-	}
+  color: #101010;
+  padding: 17px 0 0;
+  line-height: 30px;
+  > * {
+    .align(@align: middle);
+  }
+  .icomoon-credit {
+    color: #fff;
+    .font(20px, 30px);
+    padding: 5px 10px 0 6px;
+  }
+  .btn-default {
+    .bg(#76daff);
+    color: #fff;
+    padding: 0 12px;
+    font-weight: 600;
+    line-height: 26px;
+    border-radius: 2px;
+    margin: 2px 0 -2px 7px;
+    border: solid 2px #fff;
+    &:focus, &:active:focus, &:hover {
+      border-color: #fff;
+    }
+  }
 }
 
 .btn-chat-popup {
@@ -411,79 +404,47 @@
 }
 
 @media screen and (max-width: @psd) {
-
-	#header {
-		padding: 0 0 0 220px;
-
-		.logo {
-			width: 192px;
-		}
-	}
-
-	.notifications-drop  {
-
-		.title {
-			font-size: 15px;
-		}
-
-		ul {
-			.font(15px);
-
-			time {
-				font-size: 12px;
-			}
-		}
-
-		.btn-block {
-			font-size: 15px;
-		}
-	}
-
-	.get-credits {
-		.btn-default {
-			margin-left: 2px;
-		}
-
-		.icomoon-credit {
-			padding: 5px 3px 0 0;
-		}
-	}
-
-	.help-drop {
-
-		.default-slide {
-			.font(15px);
-		}
-	}
-
-	.logged-user-area {
-		.logged-user-drop {
-			.font(15px);
-		}
-
-		.well {
-			ul {
-				max-height: 184px;
-			}
-		}
-	}
-
-	/*
-	.logged-user-area {
-		font-size: 16px;
-
-		.opener {
-			padding: 12px 10px 16px;
-
-			.caret {
-				margin-left: 5px;
-			}
-		}
-
-		.img-circle {
-			margin: 0 5px 0 0;
-		}
-	}
-	*/
-
+  #header {
+    padding: 0 0 0 220px;
+    .logo {
+      width: 192px;
+    }
+  }
+  .notifications-drop {
+    .title {
+      font-size: 15px;
+    }
+    ul {
+      .font(15px);
+      time {
+        font-size: 12px;
+      }
+    }
+    .btn-block {
+      font-size: 15px;
+    }
+  }
+  .get-credits {
+    .btn-default {
+      margin-left: 2px;
+    }
+    .icomoon-credit {
+      padding: 5px 3px 0 0;
+    }
+  }
+  .help-drop {
+    .default-slide {
+      .font(15px);
+    }
+  }
+  .logged-user-area {
+    .logged-user-drop {
+      .font(15px);
+    }
+    .well {
+      ul {
+        max-height: 184px;
+      }
+    }
+  }
 }
