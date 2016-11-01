@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
+import Button from 'react-bootstrap/lib/Button';
 import { map } from 'lodash';
 
 import Input from 'components/Input';
@@ -218,12 +219,12 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
           </div>
           <div className="row">
             <div className="col-sm-12">
-              <button type="submit" className="btn btn-primary btn-search" disabled={patients.fetching || hasError}>
+              <Button type="submit" bsStyle="primary" className="btn-search" disabled={patients.fetching || hasError}>
                 {(patients.fetching)
                   ? <LoadingSpinner showOnlyIcon size={20} className="fetching-patients" />
                   : <span>Search</span>
                 }
-              </button>
+              </Button>
             </div>
           </div>
         </div>

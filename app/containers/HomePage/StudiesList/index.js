@@ -135,7 +135,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
           <div className="row">
             <div className="col-sm-12">
               <div className="table-responsive">
-                <table className="table table-striped">
+                <table className="table">
                   <caption>
                     <span className="pull-left">Study/Site Status</span>
                     <span className="pull-right">
@@ -161,7 +161,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                       <th>SPONSOR</th>
                       <th>PROTOCOL</th>
                       <th>
-                        <span className="icon-credit" data-original-title="Patient Messaging Suite"></span>
+                        <span className="icomoon-credit" data-original-title="Patient Messaging Suite"></span>
                       </th>
                       <th>STATUS</th>
                       <th>START DATE</th>

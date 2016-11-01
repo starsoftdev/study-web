@@ -1,20 +1,25 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import classNames from 'classnames';
+import Button from 'react-bootstrap/lib/Button';
+import { push } from 'react-router-redux';
+import { connect } from 'react-redux';
 
-class StudyItem extends Component { // eslint-disable-line react/prefer-stateless-function
+class StudyItem extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    index: PropTypes.number,
-    studyId: PropTypes.number,
-    indication: PropTypes.string,
-    location: PropTypes.string,
-    sponsor: PropTypes.string,
-    protocol: PropTypes.string,
-    patientMessagingSuite: PropTypes.string,
-    status: PropTypes.string,
-    startDate: PropTypes.string,
-    endDate: PropTypes.string,
-    onRenew: PropTypes.func,
-    onUpgrade: PropTypes.func,
-    onEdit: PropTypes.func,
+    index: React.PropTypes.number,
+    studyId: React.PropTypes.number,
+    indication: React.PropTypes.string,
+    location: React.PropTypes.string,
+    sponsor: React.PropTypes.string,
+    protocol: React.PropTypes.string,
+    patientMessagingSuite: React.PropTypes.string,
+    status: React.PropTypes.string,
+    startDate: React.PropTypes.string,
+    endDate: React.PropTypes.string,
+    onRenew: React.PropTypes.func,
+    onUpgrade: React.PropTypes.func,
+    onEdit: React.PropTypes.func,
+    push: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -24,11 +29,17 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
       buttonsShown: false,
     };
 
+    this.onViewClick = this.onViewClick.bind(this);
     this.onRenewClick = this.onRenewClick.bind(this);
     this.onUpgradeClick = this.onUpgradeClick.bind(this);
     this.onEditClick = this.onEditClick.bind(this);
     this.showButtons = this.showButtons.bind(this);
     this.hideButtons = this.hideButtons.bind(this);
+  }
+
+  onViewClick() {
+    const { push, studyId } = this.props;
+    push(`/studies/${studyId}/sites/1`);
   }
 
   onRenewClick() {
@@ -56,10 +67,9 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
       startDate, endDate } = this.props;
     const buttonsShown = this.state.buttonsShown;
     let content = null;
-
     if (buttonsShown) {
       content = (
-        <tr className="study-container" onMouseEnter={this.showButtons} onMouseLeave={this.hideButtons}>
+        <tr className={classNames('study-container', { 'tr-active': buttonsShown })} onMouseEnter={this.showButtons} onMouseLeave={this.hideButtons}>
           <td className="index">
             <span>{index + 1}</span>
           </td>
@@ -78,17 +88,30 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <td className="patient-messaging-suite">
             <span>{patientMessagingSuite}</span>
           </td>
-          <td colSpan="3" className="actions">
-            <a href="/patient-database" className="btn btn-primary btn-view-patients">View Patients</a>
-            <button className="btn btn-primary btn-renew" onClick={this.onRenewClick}>Renew</button>
-            <button className="btn btn-primary btn-upgrade" onClick={this.onUpgradeClick}>Upgrade</button>
-            <button className="btn btn-primary btn-edit" onClick={this.onEditClick}>Edit</button>
+          <td className="status">
+            <span>{status}</span>
+          </td>
+          <td className="start-date">
+            <span>{startDate}</span>
+          </td>
+          <td className="end-date">
+            <span>{endDate}</span>
+          </td>
+          <td className="actions">
+            <div className="btns-slide">
+              <div className="btns">
+                <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>
+                <Button bsStyle="primary" className="btn-renew" onClick={this.onRenewClick}>Renew</Button>
+                <Button bsStyle="danger" className="btn-upgrade" onClick={this.onUpgradeClick}>Upgrade</Button>
+                <Button bsStyle="info" className="btn-edit" onClick={this.onEditClick}>Edit</Button>
+              </div>
+            </div>
           </td>
         </tr>
       );
     } else {
       content = (
-        <tr className="study-container" onMouseEnter={this.showButtons} onMouseLeave={this.hideButtons}>
+        <tr className={classNames('study-container', { 'tr-active': buttonsShown })} onMouseEnter={this.showButtons} onMouseLeave={this.hideButtons}>
           <td className="index">
             <span>{index + 1}</span>
           </td>
@@ -124,4 +147,11 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 }
 
-export default StudyItem;
+const mapStateToProps = () => ({
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  push: (path) => dispatch(push(path)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(StudyItem);
