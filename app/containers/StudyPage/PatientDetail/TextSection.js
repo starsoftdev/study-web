@@ -80,6 +80,16 @@ class TextSection extends React.Component {
     });
   }
 
+  scrollElement() {
+    var _this = this;
+    window.requestAnimationFrame(function() {
+      const scrollable = _this.scrollable;
+      if(scrollable && _this.props.active){
+        scrollable.scrollTop = scrollable.scrollHeight;
+      }
+    });
+  }
+
   submitText() {
     const textarea = this.textarea;
     const options = {
@@ -91,7 +101,7 @@ class TextSection extends React.Component {
 
     this.props.sendStudyPatientMessages(options, (err, data) => {
       if (!err) {
-        console.log('data', data);
+        textarea.value = '';
       }
     });
   }
@@ -101,7 +111,12 @@ class TextSection extends React.Component {
     const { twilioMessages } = this.state;
     if (currentPatient && twilioMessages.length) {
       return (
-        <section className="postarea text">
+        <section
+          className="postarea text"
+          ref={(scrollable) => {
+            this.scrollable = scrollable;
+          }}
+        >
           {twilioMessages.map(twilioMessage => (
             <PatientText
               key={twilioMessage.id}
@@ -118,6 +133,7 @@ class TextSection extends React.Component {
 
   render() {
     const { active } = this.props;
+    this.scrollElement()
     return (
       <div className={classNames('item text', { active })}>
         {this.renderText()}
