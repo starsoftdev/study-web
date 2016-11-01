@@ -82,9 +82,9 @@ class TextSection extends React.Component {
 
   scrollElement() {
     var _this = this;
-    window.requestAnimationFrame(function() {
+    window.requestAnimationFrame(() =>{
       const scrollable = _this.scrollable;
-      if(scrollable && _this.props.active){
+      if (scrollable && _this.props.active) {
         scrollable.scrollTop = scrollable.scrollHeight;
       }
     });
