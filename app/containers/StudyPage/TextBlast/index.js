@@ -58,7 +58,6 @@ class TextBlastModal extends React.Component {
     this.selectCategory = this.selectCategory.bind(this);
     this.selectSource = this.selectSource.bind(this);
     this.filterPatients = this.filterPatients.bind(this);
-    this.removePatients = this.removePatients.bind(this);
     this.submitTextBlast = this.submitTextBlast.bind(this);
     this.renderPatientSearchList = this.renderPatientSearchList.bind(this);
     this.renderPatients = this.renderPatients.bind(this);
@@ -158,10 +157,6 @@ class TextBlastModal extends React.Component {
     }
   }
 
-  removePatients() {
-    const { removePatients } = this.props;
-  }
-
   renderPatientSearchList() {
     const { activeField, addPatients, formValues } = this.props;
     if (formValues.filteredPatientSearchValues) {
@@ -224,7 +219,7 @@ class TextBlastModal extends React.Component {
   }
 
   render() {
-    const { patientCategories, sources, show, role, bsClass, dialogClassName, className, formValues, style, onHide } = this.props;
+    const { patientCategories, sources, show, role, bsClass, dialogClassName, className, style, onHide } = this.props;
     return (
       <Modal
         show={show}
