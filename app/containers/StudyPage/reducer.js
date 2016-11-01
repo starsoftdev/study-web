@@ -74,6 +74,7 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         patientBoardLoading: false,
+        patientCategories: patientCategories(state.patientCategories, null, action.patientId, action),
       };
     case FETCH_PATIENT_CATEGORIES_SUCCESS:
       return {
@@ -205,6 +206,34 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
         }
         return patientCategory;
       });
+    case MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS: {
+      if (action.fromCategoryId !== action.toCategoryId) {
+        const fromPatientCategory = _.find(state, {id: action.fromCategoryId});
+        const toPatientCategory = _.find(state, {id: action.toCategoryId});
+        const patient = _.find(fromPatientCategory.patients, {id: currentPatientId});
+        return state.map(patientCategory => {
+          if (patientCategory.id === fromPatientCategory.id) {
+            return {
+              ...patientCategory,
+              patients: patientCategory.patients.filter(patient => (
+                patient.id !== currentPatientId
+              )),
+            };
+          }
+          if (patientCategory.id === toPatientCategory.id) {
+            return {
+              ...patientCategory,
+              patients: [
+                patient,
+                ...patientCategory.patients,
+              ],
+            };
+          }
+          return patientCategory;
+        });
+      }
+      return state;
+    }
     default:
       return state;
   }
