@@ -93,6 +93,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                   joinValues
                   objectValue
                   disabled={patients.fetching}
+                  className="multiSelectWrap"
                 />
               </div>
             </div>
@@ -110,6 +111,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                   joinValues
                   objectValue
                   disabled={patients.fetching}
+                  className="multiSelectWrap"
                 />
               </div>
             </div>
