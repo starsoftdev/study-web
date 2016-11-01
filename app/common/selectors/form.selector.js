@@ -13,6 +13,11 @@ const selectFormDomain = () => state => state.form;
 /**
  * Other specific selectors
  */
+export const selectActiveField = (formName) => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, `${formName}.active`, {})
+);
+
 export const selectValues = (formName) => createSelector(
   selectFormDomain(),
   (substate) => get(substate, `${formName}.values`, {})

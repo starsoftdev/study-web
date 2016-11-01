@@ -7,6 +7,7 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 import { reducer as toastrReducer } from 'react-redux-toastr';
+import { default as textBlastModalReducer } from 'containers/StudyPage/TextBlast/reducer';
 import appReducer from 'containers/App/reducer';
 import globalNotificationsReducer from 'containers/GlobalNotifications/reducer';
 
@@ -16,7 +17,9 @@ import globalNotificationsReducer from 'containers/GlobalNotifications/reducer';
 export default function createReducer(asyncReducers) {
   return combineReducers({
     routing: routerReducer,
-    form: formReducer,
+    form: formReducer.plugin({
+      TextBlastModal: textBlastModalReducer,
+    }),
     toastr: toastrReducer,
     globalNotifications: globalNotificationsReducer,
     global: appReducer,
