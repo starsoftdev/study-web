@@ -8,31 +8,111 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser } from 'containers/App/selectors';
-import defaultUserImage from 'assets/images/Default-User-Img.png';
-import defaultUserImageGirl from 'assets/images/Default-User-Img-Girl.png';
-import defaultDoctorImage from 'assets/images/Default-User-Img-Dr.png';
+
+import { selectCurrentUser, selectSitePatients, selectPatientMessages } from 'containers/App/selectors';
+
+import MessageItem from './MessageItem';
+import PatientItem from './PatientItem';
+
+import ChatForm from './ChatForm';
+
+import { fetchSitePatients, fetchPatientMessages, markAsReadPatientMessages } from 'containers/App/actions';
+import {
+  selectSocket,
+} from 'containers/GlobalNotifications/selectors';
+
+import {
+  sendStudyPatientMessages,
+} from 'containers/GlobalNotifications/actions';
+
 import './styles.less';
 
 class GlobalPMSModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     currentUser: React.PropTypes.object,
+    sitePatients: React.PropTypes.object,
+    patientMessages: React.PropTypes.object,
     showModal: React.PropTypes.bool,
     closeModal: React.PropTypes.func,
+    socket: React.PropTypes.any,
+    fetchSitePatients: React.PropTypes.func,
+    fetchPatientMessages: React.PropTypes.func,
+    sendStudyPatientMessages: React.PropTypes.func,
+    markAsReadPatientMessages: React.PropTypes.func,
   };
 
   constructor(props) {
     super(props);
 
+    this.selectPatient = this.selectPatient.bind(this);
+    this.sendMessage = this.sendMessage.bind(this);
     this.state = {
-      quantity: 1,
-      credits: 100,
-      price: `$ ${77}`,
+      selectedPatient: { id: 0 },
     };
   }
 
+  componentWillReceiveProps(newProps) {
+    if (this.props.socket) {
+      this.props.socket.on('notifyMessage', () => {
+        console.log('notifyMessage');
+        if (this.state.selectPatient.study_id) {
+          this.props.fetchSitePatients(this.props.currentUser.id);
+          this.props.fetchPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
+        }
+      });
+    }
+    console.log(newProps);
+    if (newProps.showModal === true && newProps.sitePatients.details.length > 0 && this.state.selectedPatient.id === 0) {
+      this.selectPatient(newProps.sitePatients.details[0]);
+    }
+  }
+
+  selectPatient(item) {
+    if (item.id !== this.state.selectedPatient.id) {
+      this.setState({ selectedPatient: item });
+      this.props.fetchPatientMessages(item.id, item.study_id);
+      this.props.markAsReadPatientMessages(item.id, item.study_id);
+    }
+  }
+
+  sendMessage(message) {
+    const options = {
+      body: message.body,
+      studyId: this.state.selectedPatient.study_id,
+      patientId: this.state.selectedPatient.id,
+      to: this.state.selectedPatient.phone,
+    };
+
+    this.props.sendStudyPatientMessages(options, (err, data) => {
+      if (!err) {
+        console.log('data', data);
+      }
+    });
+  }
+
+
   render() {
+    const { sitePatients, patientMessages } = this.props;
+    const sitePatientsListContents = sitePatients.details.map((item, index) => (
+      <PatientItem
+        patientData={item}
+        key={index}
+        onSelectPatient={this.selectPatient}
+        patientSelected={this.state.selectedPatient.id === item.id}
+      />
+    ));
+    const patientMessageListContents = patientMessages.details.map((item, index) => (
+      <MessageItem
+        messageData={item}
+        key={index}
+      />
+    ));
+
+    let protocolNumber = '';
+    if (this.state.selectedPatient.protocol_number) {
+      protocolNumber = 'Protocol: '.concat(this.state.selectedPatient.protocol_number);
+    }
     return (
       <div>
         <Modal className="custom-modal global-pms" id="chart-popup" show={this.props.showModal} onHide={this.props.closeModal}>
@@ -53,158 +133,25 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                     </div>
                   </div>
                   <ul className="tabset list-unstyled">
-                    <li className="active">
-                      <a href="#chat-room1" className="tab-opener">
-                        <div className="user-img">
-                          <img src={defaultUserImage} alt="" />
-                        </div>
-                        <strong className="name">alan walker</strong>
-                        <p>moved Thomas Morgan from New Patient to Consented.</p>
-                        <time>05/16/16 at 11:31 PM <span className="counter-circle">2</span></time>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#chat-room2" className="tab-opener">
-                        <div className="user-img"><img src={defaultUserImageGirl} alt="" /></div>
-                        <strong className="name">penny worth</strong>
-                        <p>listed a new Birth Control Study.</p>
-                        <time>05/16/16 at 11:30 PM <span className="counter-circle">4</span></time>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#chat-room3" className="tab-opener">
-                        <div className="user-img"><img src={defaultUserImage} alt="" /></div>
-                        <strong className="name">Oliver Queen </strong>
-                        <p>sent a text message to Thomas Morgan</p>
-                        <time>05/16/16 at 9:30 PM <span className="counter-circle">1</span></time>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#chat-room4" className="tab-opener">
-                        <div className="user-img"><img src={defaultUserImage} alt="" /></div>
-                        <strong className="name">Alan Jensen</strong>
-                        <p>moved Thomas Morgan from New Patient to Consented.</p>
-                        <time>05/16/16 at 11:31 PM <span className="counter-circle"></span></time>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#chat-room5" className="tab-opener">
-                        <div className="user-img"><img src={defaultUserImage} alt="" /></div>
-                        <strong className="name">Eugene Simpson</strong>
-                        <p>listed a new Birth Control Study.</p>
-                        <time>05/16/16 at 11:30 PM <span className="counter-circle">2</span></time>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#chat-room6" className="tab-opener">
-                        <div className="user-img"><img src={defaultUserImageGirl} alt="" /></div>
-                        <strong className="name">Katy Perry</strong>
-                        <p>listed a new Birth Control Study.</p>
-                        <time>05/16/16 at 11:30 PM <span className="counter-circle">2</span></time>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#chat-room7" className="tab-opener">
-                        <div className="user-img"><img src={defaultUserImage} alt="" /></div>
-                        <strong className="name">Hamish  Labatt</strong>
-                        <p>listed a new Birth Control Study.</p>
-                        <time>05/16/16 at 11:30 PM <span className="counter-circle">2</span></time>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#chat-room8" className="tab-opener">
-                        <div className="user-img"><img src={defaultUserImage} alt="" /></div>
-                        <strong className="name">Thomas Morgan</strong>
-                        <p>listed a new Birth Control Study.</p>
-                        <time>05/16/16 at 11:30 PM <span className="counter-circle">2</span></time>
-                      </a>
-                    </li>
+                    {sitePatientsListContents}
                   </ul>
                 </div>
               </aside>
               <div className="chatroom">
                 <section className="chat-area" id="chat-room1">
                   <header>
-                    <strong className="name">alan walker</strong>
-                    <a href="#"><span className="protocol">protocol: YM12345</span></a>
+                    <strong className="name">{this.state.selectedPatient.first_name} {this.state.selectedPatient.last_name}</strong>
+                    <a href="#">
+                      <span className="protocol">{protocolNumber}</span>
+                    </a>
                   </header>
                   <div className="scroll-holder">
                     <article className="post-msg">
-                      <div className="post-holder" data-post="1">
-                        <div className="img-holder"><img alt="" src={defaultUserImage} /></div>
-                        <div className="post-content">
-                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet.</p>
-                        </div>
-                        <strong className="email">Alan Walker</strong>
-                        <time >07/28/16 at 09:35 AM</time>
-                      </div>
-                      <div className="post-holder even" data-post="1-1">
-                        <div className="img-holder"><img alt="" src={this.props.currentUser.profileImageURL || defaultDoctorImage} /></div>
-                        <div className="post-content">
-                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-                        </div>
-                        <strong className="email">Bruce Wayne</strong>
-                        <time >07/28/16 at 09:38 AM</time>
-                      </div>
-                    </article>
-                    <article className="post-msg">
-                      <div className="post-holder" data-post="2">
-                        <div className="img-holder"><img alt="" src={defaultUserImage} /></div>
-                        <div className="post-content">
-                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet.</p>
-                        </div>
-                        <strong className="email">Alan Walker</strong>
-                        <time >07/28/16 at 10:13 AM</time>
-                      </div>
-                      <div className="post-holder even" data-post="2-2">
-                        <div className="img-holder"><img alt="" src={this.props.currentUser.profileImageURL || defaultDoctorImage} /></div>
-                        <div className="post-content">
-                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-                        </div>
-                        <strong className="email">Bruce Wayne</strong>
-                        <time >07/28/16 at 10:25 AM</time>
-                      </div>
-                    </article>
-                    <article className="post-msg">
-                      <div className="post-holder" data-post="3">
-                        <div className="img-holder"><img alt="" src={defaultUserImage} /></div>
-                        <div className="post-content">
-                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet.</p>
-                        </div>
-                        <strong className="email">Alan Walker</strong>
-                        <time >07/28/16 at 10:38 AM</time>
-                      </div>
-                      <div className="post-holder even" data-post="3-2">
-                        <div className="img-holder"><img alt="" src={this.props.currentUser.profileImageURL || defaultDoctorImage} /></div>
-                        <div className="post-content">
-                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-                        </div>
-                        <strong className="email">Bruce Wayne</strong>
-                        <time >07/28/16 at 10:42 AM</time>
-                      </div>
-                    </article>
-                    <article className="post-msg">
-                      <div className="post-holder" data-post="4">
-                        <div className="img-holder"><img alt="" src={defaultUserImage} /></div>
-                        <div className="post-content">
-                          <p>consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet.</p>
-                        </div>
-                        <strong className="email">Alan Walker</strong>
-                        <time >07/28/16 at 10:50 AM</time>
-                      </div>
-                      <div className="post-holder even" data-post="4-2">
-                        <div className="img-holder"><img alt="" src={this.props.currentUser.profileImageURL || defaultDoctorImage} /></div>
-                        <div className="post-content">
-                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-                        </div>
-                        <strong className="email">Bruce Wayne</strong>
-                        <time >07/28/16 at 10:56 AM</time>
-                      </div>
+                      {patientMessageListContents}
                     </article>
                   </div>
                   <footer>
-                    <textarea className="form-control" placeholder="Type a message..."></textarea>
-                    <button type="button" className="btn btn-default">Send</button>
+                    <ChatForm onSubmit={this.sendMessage} />
                   </footer>
                 </section>
               </div>
@@ -218,12 +165,18 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
+  sitePatients: selectSitePatients(),
+  patientMessages: selectPatientMessages(),
+  socket: selectSocket(),
 });
 
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     // addCredits: (customerId, data) => dispatch(addCredits(customerId, data)),
-//   };
-// }
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchSitePatients: (siteId) => dispatch(fetchSitePatients(siteId)),
+    fetchPatientMessages: (patientId, studyId) => dispatch(fetchPatientMessages(patientId, studyId)),
+    markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
+    sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
+  };
+}
 
-export default connect(mapStateToProps)(GlobalPMSModal);
+export default connect(mapStateToProps, mapDispatchToProps)(GlobalPMSModal);
