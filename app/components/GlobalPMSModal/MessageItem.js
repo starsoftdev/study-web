@@ -29,8 +29,10 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
       if (messageData.user) {
         senderName = messageData.user.firstName.concat(' '.concat(messageData.user.lastName));
       }
-    } else if (messageData.patient.gender === 'Male') {
-      senderImage = defaultUserImage;
+    } else {
+      if (messageData.patient.gender === 'Male') {
+        senderImage = defaultUserImage;
+      }
       if (messageData.patient) {
         senderName = messageData.patient.firstName.concat(' '.concat(messageData.patient.lastName));
       }
