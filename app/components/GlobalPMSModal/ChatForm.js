@@ -29,7 +29,7 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
   };
 
   render() {
-    const { isSaving, handleSubmit } = this.props;
+    const { handleSubmit } = this.props;
     return (
       <form
         onSubmit={handleSubmit}
@@ -41,9 +41,7 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
             componentClass="textarea"
             // disabled={isSaving}
           />
-          <button type="submit" className="btn btn-default" 
-          // disabled={isSaving}
-          >
+          <button type="submit" className="btn btn-default">
             Send
           </button>
         </fieldset>
