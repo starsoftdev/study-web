@@ -46,9 +46,10 @@ class PatientText extends React.Component {
 
   render() {
     const { currentUser, textMessage } = this.props;
+    const messageStyle = (textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound') ? '' : 'reply';
     if (textMessage) {
       return (
-        <div className={classNames('post-msg', { reply: textMessage.user })}>
+        <div className={`post-msg ${messageStyle}`}>
           <div className="img-holder">
             {this.renderProfileImage()}
           </div>

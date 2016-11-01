@@ -17,6 +17,10 @@ import EmailSection from './EmailSection';
 import OtherSection from './OtherSection';
 import { normalizePhoneDisplay } from '../helper/functions';
 
+import {
+  selectSocket,
+} from 'containers/GlobalNotifications/selectors';
+
 class PatientDetailModal extends React.Component {
   static propTypes = {
     currentPatientCategory: React.PropTypes.object,
@@ -25,6 +29,7 @@ class PatientDetailModal extends React.Component {
     openPatientModal: React.PropTypes.bool.isRequired,
     onClose: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number.isRequired,
+    socket: React.PropTypes.any,
   };
 
   constructor(props) {
@@ -107,7 +112,7 @@ class PatientDetailModal extends React.Component {
   }
 
   renderPatientDetail() {
-    const { currentPatient } = this.props;
+    const { currentPatient} = this.props;
 
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
@@ -120,7 +125,7 @@ class PatientDetailModal extends React.Component {
   }
 
   render() {
-    const { currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId } = this.props;
+    const { currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket } = this.props;
     return (
       <Collapse dimension="width" in={openPatientModal} timeout={250} className="patients-list-form">
         <div className="form-area">
@@ -145,7 +150,7 @@ class PatientDetailModal extends React.Component {
               </ol>
               <div className="carousel-inner" role="listbox">
                 <NotesSection active={this.state.carousel.note} currentUser={currentUser} currentPatient={currentPatient} studyId={studyId} />
-                <TextSection active={this.state.carousel.text} currentUser={currentUser} currentPatient={currentPatient} />
+                <TextSection active={this.state.carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={currentPatient} />
                 <EmailSection active={this.state.carousel.email} />
                 {this.renderOtherSection()}
               </div>
@@ -158,6 +163,7 @@ class PatientDetailModal extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
+  socket: selectSocket(),
   currentPatient: Selector.selectCurrentPatient(),
   currentPatientCategory: Selector.selectCurrentPatientCategory(),
   studyId: Selector.selectStudyId(),
