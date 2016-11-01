@@ -11,8 +11,8 @@ import { Field, reduxForm } from 'redux-form';
 import Input from 'components/Input';
 
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
 
+import { setProcessingStatus } from 'containers/GlobalNotifications/actions';
 import {
   selectProcessingStatus,
 } from 'containers/GlobalNotifications/selectors';

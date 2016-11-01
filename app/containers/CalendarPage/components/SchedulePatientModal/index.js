@@ -11,7 +11,6 @@ import { SchedulePatientModalType } from 'common/constants';
 import ReactSelect from 'components/Input/ReactSelect';
 import DatePicker from 'components/Input/DatePicker';
 
-import 'react-select/dist/react-select.min.css';
 import './styles.less';
 
 function numberSequenceCreator(start, end) {
