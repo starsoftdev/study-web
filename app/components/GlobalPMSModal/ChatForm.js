@@ -39,9 +39,11 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
             name="body"
             component={Input}
             componentClass="textarea"
-            disabled={isSaving}
+            // disabled={isSaving}
           />
-          <button type="submit" className="btn btn-default" disabled={isSaving}>
+          <button type="submit" className="btn btn-default" 
+          // disabled={isSaving}
+          >
             Send
           </button>
         </fieldset>
