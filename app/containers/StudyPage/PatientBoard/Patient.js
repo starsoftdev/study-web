@@ -9,6 +9,36 @@ import { DragSource } from 'react-dnd';
 import { formatPhone } from '../helper/functions';
 import DragTypes from './dragSourceTypes';
 
+/**
+ * Specifies the drag source contract.
+ * Only `beginDrag` function is required.
+ */
+const patientSource = {
+  isDragging(props, monitor) {
+    // If your component gets unmounted while dragged
+    // you can implement something like this to keep its
+    // appearance dragged:
+    return monitor.getItem().id === props.patient.id;
+  },
+  beginDrag(props) {
+    // Return the data describing the dragged item
+    const item = {
+      id: props.patient.id,
+      patientCategoryId: props.category.id,
+    };
+    return item;
+  },
+};
+
+const collect = (connect, monitor) => ({
+  // Call this function inside render()
+  // to let React DnD handle the drag events:
+  connectDragSource: connect.dragSource(),
+  // You can ask the monitor about the current drag state:
+  isDragging: monitor.isDragging(),
+});
+
+@DragSource(DragTypes.PATIENT, patientSource, collect)
 class Patient extends React.Component {
 
   static propTypes = {
@@ -71,33 +101,4 @@ class Patient extends React.Component {
   }
 }
 
-/**
- * Specifies the drag source contract.
- * Only `beginDrag` function is required.
- */
-const patientSource = {
-  isDragging(props, monitor) {
-    // If your component gets unmounted while dragged
-    // you can implement something like this to keep its
-    // appearance dragged:
-    return monitor.getItem().id === props.patient.id;
-  },
-  beginDrag(props) {
-    // Return the data describing the dragged item
-    const item = {
-      id: props.patient.id,
-      patientCategoryId: props.category.id,
-    };
-    return item;
-  },
-};
-
-const collect = (connect, monitor) => ({
-  // Call this function inside render()
-  // to let React DnD handle the drag events:
-  connectDragSource: connect.dragSource(),
-  // You can ask the monitor about the current drag state:
-  isDragging: monitor.isDragging(),
-});
-
-export default DragSource(DragTypes.PATIENT, patientSource, collect)(Patient);
+export default Patient;
