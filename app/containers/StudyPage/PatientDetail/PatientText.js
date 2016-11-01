@@ -3,7 +3,6 @@
  */
 
 import React from 'react';
-import classNames from 'classnames';
 import moment from 'moment-timezone';
 
 class PatientText extends React.Component {

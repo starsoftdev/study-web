@@ -50,7 +50,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.props.fetchLevels();
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     // indication cahnge
   }
 

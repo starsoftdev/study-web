@@ -10,10 +10,6 @@ import Button from 'react-bootstrap/lib/Button';
 import { submitPatientText } from '../actions';
 
 import {
-  selectSocket,
-  selectProcessingStatus,
-} from 'containers/GlobalNotifications/selectors';
-import {
   sendStudyPatientMessages,
   fetchStudyPatientMessages,
   setProcessingStatus,
@@ -36,6 +32,7 @@ class TextSection extends React.Component {
     sendStudyPatientMessages: React.PropTypes.func,
     setProcessingStatus: React.PropTypes.func,
     socket: React.PropTypes.any,
+    studyId: React.PropTypes.any,
   };
 
   constructor(props) {
