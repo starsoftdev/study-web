@@ -10,9 +10,9 @@
  */
 
 import React, { PropTypes, Component } from 'react';
+import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import Helmet from 'react-helmet';
 import { selectCurrentUserClientId } from 'containers/App/selectors';
 import { fetchClientSites } from 'containers/App/actions';
 import { fetchStudies } from './actions';
@@ -72,7 +72,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
               </div>
             </div>
           </div>
-          <div className="studies-list form-group">
+          <div className="table-holder form-group">
             <StudiesList />
           </div>
         </div>
