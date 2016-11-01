@@ -36,7 +36,13 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
           </div>
           <strong className="name">{patientData.first_name} {patientData.last_name}</strong>
           <p>{patientData.last_message_body ? patientData.last_message_body : 'No message yet'}</p>
-          <time>{lastDate}<span className="counter-circle">{patientData.count_unread ? patientData.count_unread : 0}</span></time>
+          <time>
+            {lastDate}
+            {patientData.count_unread > 0
+              ? <span className="counter-circle">{patientData.count_unread}</span>
+              : ''
+            }
+          </time>
         </a>
       </li>
     );
