@@ -815,33 +815,6 @@ export default function appReducer(state = initialState, action) {
         },
       };
       break;
-    case FETCH_SITE_PATIENTS:
-      baseDataInnerState = {
-        sitePatients: {
-          details: [],
-          fetching: true,
-          error: null,
-        },
-      };
-      break;
-    case FETCH_SITE_PATIENTS_SUCCESS:
-      baseDataInnerState = {
-        sitePatients: {
-          details: payload,
-          fetching: false,
-          error: null,
-        },
-      };
-      break;
-    case FETCH_SITE_PATIENTS_ERROR:
-      baseDataInnerState = {
-        sitePatients: {
-          details: [],
-          fetching: false,
-          error: payload,
-        },
-      };
-      break;
     default:
       return state;
   }
