@@ -110,6 +110,16 @@ const selectClientSites = () => createSelector(
   (substate) => get(substate, 'baseData.clientSites', {})
 );
 
+const selectSitePatients = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.sitePatients', {})
+);
+
+const selectPatientMessages = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.patientMessages', {})
+);
+
 const selectClientRoles = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.clientRoles', {})
@@ -179,6 +189,7 @@ const selectSavedUser = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.savedUser', {})
 );
+
 // end
 
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
@@ -204,6 +215,8 @@ export {
   selectAddCredits,
 
   selectClientSites,
+  selectSitePatients,
+  selectPatientMessages,
   selectClientRoles,
   selectSelectedSite,
   selectSelectedSiteDetailsForForm,
