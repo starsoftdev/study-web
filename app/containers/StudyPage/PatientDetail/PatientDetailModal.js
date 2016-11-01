@@ -112,7 +112,7 @@ class PatientDetailModal extends React.Component {
   }
 
   renderPatientDetail() {
-    const { currentPatient} = this.props;
+    const { currentPatient } = this.props;
 
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
