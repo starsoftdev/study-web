@@ -8,8 +8,9 @@ import {
   FIND_PATIENTS_TEXT_BLAST,
   FIND_PATIENTS_TEXT_BLAST_SUCCESS,
   FILTER_PATIENTS_TEXT_BLAST,
-  ADD_PATIENT_TO_TEXT_BLAST,
+  ADD_PATIENTS_TO_TEXT_BLAST,
   REMOVE_PATIENT_FROM_TEXT_BLAST,
+  REMOVE_PATIENTS_FROM_TEXT_BLAST,
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
@@ -81,10 +82,10 @@ export function filterPatientsForTextBlast(text) {
   };
 }
 
-export function addPatientToTextBlast(patient) {
+export function addPatientsToTextBlast(patients) {
   return {
-    type: ADD_PATIENT_TO_TEXT_BLAST,
-    patient,
+    type: ADD_PATIENTS_TO_TEXT_BLAST,
+    patients,
   };
 }
 
@@ -95,6 +96,11 @@ export function removePatientFromTextBlast(patient) {
   };
 }
 
+export function removePatientsFromTextBlast() {
+  return {
+    type: REMOVE_PATIENTS_FROM_TEXT_BLAST,
+  };
+}
 
 export function fetchPatients(studyId, siteId, text, campaignId, sourceId) {
   return {

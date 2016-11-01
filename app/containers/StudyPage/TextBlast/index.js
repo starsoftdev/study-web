@@ -11,26 +11,31 @@ import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import Modal from 'react-bootstrap/lib/Modal';
+import formValidator from './validator';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/index';
 import * as Selector from '../selectors';
-import { addPatientToTextBlast, findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, submitTextBlast } from '../actions';
+import { addPatientsToTextBlast, findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitTextBlast } from '../actions';
 import { selectActiveField, selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
+import { actions as toastrActions } from 'react-redux-toastr';
 
 const formName = 'TextBlastModal';
 
+
 @reduxForm({
   form: formName,
+  validate: formValidator,
 })
 class TextBlastModal extends React.Component {
   static propTypes = {
     activeField: React.PropTypes.any,
-    addPatient: React.PropTypes.func.isRequired,
+    addPatients: React.PropTypes.func.isRequired,
     bsClass: React.PropTypes.string,
     change: React.PropTypes.func.isRequired,
     className: React.PropTypes.any,
     dialogClassName: React.PropTypes.string,
+    displayToastrError: React.PropTypes.func.isRequired,
     findPatients: React.PropTypes.func.isRequired,
     filterPatients: React.PropTypes.func.isRequired,
     formValues: React.PropTypes.object,
@@ -39,6 +44,7 @@ class TextBlastModal extends React.Component {
     onHide: React.PropTypes.func.isRequired,
     patientCategories: React.PropTypes.array,
     removePatient: React.PropTypes.func.isRequired,
+    removePatients: React.PropTypes.func.isRequired,
     role: React.PropTypes.string,
     show: React.PropTypes.bool.isRequired,
     sources: React.PropTypes.array.isRequired,
@@ -52,16 +58,11 @@ class TextBlastModal extends React.Component {
     this.selectCategory = this.selectCategory.bind(this);
     this.selectSource = this.selectSource.bind(this);
     this.filterPatients = this.filterPatients.bind(this);
+    this.removePatients = this.removePatients.bind(this);
     this.submitTextBlast = this.submitTextBlast.bind(this);
     this.renderPatientSearchList = this.renderPatientSearchList.bind(this);
     this.renderPatients = this.renderPatients.bind(this);
-  }
-
-  componentWillUpdate(nextProps) {
-    if (nextProps.show && !nextProps.dirty && nextProps.formValues.category && nextProps.formValues.source) {
-      // load the find patients lazily on initial load and show boolean
-      nextProps.findPatients(nextProps.studyId, null, null, null);
-    }
+    this.renderPatientCount = this.renderPatientCount.bind(this);
   }
 
   selectCategory(checked, categoryId) {
@@ -80,7 +81,9 @@ class TextBlastModal extends React.Component {
       for (const category of patientCategories) {
         change(`category-${category.id}`, checked);
       }
-      findPatients(studyId, null, null, sourceIds);
+      if (checked) {
+        findPatients(studyId, null, null, sourceIds);
+      }
     } else {
       // change the all option to unchecked
       change('category', false);
@@ -93,7 +96,9 @@ class TextBlastModal extends React.Component {
           categoryIds.push(category.id);
         }
       }
-      findPatients(studyId, null, categoryIds, sourceIds);
+      if (checked) {
+        findPatients(studyId, null, categoryIds, sourceIds);
+      }
     }
   }
 
@@ -113,7 +118,9 @@ class TextBlastModal extends React.Component {
       for (const source of sources) {
         change(`source-${source.id}`, checked);
       }
-      findPatients(studyId, null, categoryIds, null);
+      if (checked) {
+        findPatients(studyId, null, categoryIds, null);
+      }
     } else {
       // change the all option to unchecked
       change('source', false);
@@ -126,25 +133,37 @@ class TextBlastModal extends React.Component {
           sourceIds.push(source.id);
         }
       }
-      findPatients(studyId, null, categoryIds, sourceIds);
+      if (checked) {
+        findPatients(studyId, null, categoryIds, sourceIds);
+      }
     }
   }
 
   filterPatients(event) {
     const { formValues, filterPatients } = this.props;
     if (formValues.patientSearchValues) {
-      filterPatients(event.target.value);
+      filterPatients(event.target.value, formValues.patients);
     }
   }
 
   submitTextBlast(event) {
     event.preventDefault();
-    const { formValues, submitTextBlast, onClose } = this.props;
-    submitTextBlast(formValues.patients, formValues.message, onClose);
+    const { displayToastrError, formSyncErrors, formValues, submitTextBlast, onClose } = this.props;
+    if (!formSyncErrors.message && !formSyncErrors.patients) {
+      submitTextBlast(formValues.patients, formValues.message, onClose);
+    } else if (formSyncErrors.message) {
+      displayToastrError(formSyncErrors.message);
+    } else if (formSyncErrors.patients) {
+      displayToastrError(formSyncErrors.patients);
+    }
+  }
+
+  removePatients() {
+    const { removePatients } = this.props;
   }
 
   renderPatientSearchList() {
-    const { activeField, addPatient, formValues } = this.props;
+    const { activeField, addPatients, formValues } = this.props;
     if (formValues.filteredPatientSearchValues) {
       return (
         <ul className={classNames('list list-unstyled', { active: activeField === 'search' })}>
@@ -152,7 +171,7 @@ class TextBlastModal extends React.Component {
             <li
               key={patient.id}
               onClick={() => {
-                addPatient(patient);
+                addPatients([patient]);
               }}
             >
               {patient.firstName} {patient.lastName}
@@ -183,6 +202,22 @@ class TextBlastModal extends React.Component {
             </div>
           ))}
         </div>
+      );
+    }
+    return null;
+  }
+
+  renderPatientCount() {
+    const { formValues, removePatients } = this.props;
+    if (formValues.patients && formValues.patients.length > 0) {
+      return (
+        <span className="emails-counter">
+          <span className="counter">{formValues.patients.length}</span>
+          <span className="text"> Patients</span>
+          <a className="btn-close">
+            <i className="icomoon-icon_close" onClick={removePatients} />
+          </a>
+        </span>
       );
     }
     return null;
@@ -305,15 +340,9 @@ class TextBlastModal extends React.Component {
                 <div className="sub-holder">
                   <div className="subject-field">
                     <FormControl type="text" className="recievers" placeholder="To" disabled />
-                    <span className="emails-counter">
-                      <span className="counter">{formValues.patients ? formValues.patients.length : 0}</span>
-                      <span className="text"> Patients</span>
-                      <a className="btn-close">
-                        <i className="icomoon-icon_close" />
-                      </a>
-                    </span>
+                    {this.renderPatientCount()}
                   </div>
-                  <Field name="message" placeholder="Type a message..." component="textarea" className="form-control" required />
+                  <Field name="message" component={Input} componentClass="textarea" placeholder="Type a message..." required />
                   <div className="footer">
                     <Button type="submit" className="pull-right" onClick={this.submitTextBlast}>Submit</Button>
                   </div>
@@ -339,11 +368,13 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    addPatient: (patient) => dispatch(addPatientToTextBlast(patient)),
+    addPatients: (patients) => dispatch(addPatientsToTextBlast(patients)),
     change: (field, value) => dispatch(change(formName, field, value)),
+    displayToastrError: (error) => dispatch(toastrActions.error(error)),
     findPatients: (studyId, text, categoryIds, sourceIds) => dispatch(findPatientsForTextBlast(studyId, text, categoryIds, sourceIds)),
     filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
     removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
+    removePatients: () => dispatch(removePatientsFromTextBlast()),
     submitTextBlast: (patients, message, onClose) => dispatch(submitTextBlast(patients, message, onClose)),
   };
 }

@@ -5,8 +5,9 @@
 import {
   FIND_PATIENTS_TEXT_BLAST_SUCCESS,
   FILTER_PATIENTS_TEXT_BLAST,
-  ADD_PATIENT_TO_TEXT_BLAST,
+  ADD_PATIENTS_TO_TEXT_BLAST,
   REMOVE_PATIENT_FROM_TEXT_BLAST,
+  REMOVE_PATIENTS_FROM_TEXT_BLAST,
 } from '../constants';
 import _ from 'lodash';
 
@@ -37,30 +38,20 @@ export default function TextBlastModal(state, action) {
           ...state.values,
           filteredPatientSearchValues: state.values.patientSearchValues.filter(patient => (
             _.startsWith(patient.firstName.toUpperCase(), firstName.toUpperCase()) || (lastName && _.startsWith(patient.lastName.toUpperCase(), lastName.toUpperCase()))
-            )),
+          )),
         },
       };
     }
-    case ADD_PATIENT_TO_TEXT_BLAST: {
-      let patients;
-      if (state.values.patients) {
-        patients = [
-          ...state.values.patients,
-          action.patient,
-        ];
-      } else {
-        patients = [
-          action.patient,
-        ];
-      }
+    case ADD_PATIENTS_TO_TEXT_BLAST:
       return {
         ...state,
         values: {
           ...state.values,
-          patients,
+          patients: _.unionWith(state.values.patients, action.patients, (patient, patientToAdd) => (
+            patient.id === patientToAdd.id
+          )),
         },
       };
-    }
     case REMOVE_PATIENT_FROM_TEXT_BLAST:
       return {
         ...state,
@@ -69,6 +60,14 @@ export default function TextBlastModal(state, action) {
           patients: state.values.patients.filter(patient => (
             patient.id !== action.patient.id
           )),
+        },
+      };
+    case REMOVE_PATIENTS_FROM_TEXT_BLAST:
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          patients: [],
         },
       };
     default:

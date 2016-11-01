@@ -94,10 +94,6 @@ class StudyActionButtons extends React.Component {
               show={this.state.showTextBlastModal}
               onClose={this.closeTextBlastModal}
               onHide={this.toggleTextBlastModal}
-              initialValues={{
-                category: true,
-                source: true,
-              }}
             />
           </span>
         </div>

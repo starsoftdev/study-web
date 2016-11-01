@@ -24,7 +24,7 @@ import { FIND_PATIENTS_TEXT_BLAST,
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
-import { campaignsFetched, deletePatientNoteSuccess, findPatientsForTextBlastSuccess, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, callStatsFetched, textStatsFetched, addPatientIndicationSuccess, removePatientIndicationSuccess, updatePatientSuccess, addPatientNoteSuccess, addPatientTextSuccess, movePatientBetweenCategoriesLoading, movePatientBetweenCategoriesSuccess, movePatientBetweenCategoriesFailed } from './actions';
+import { addPatientsToTextBlast, campaignsFetched, deletePatientNoteSuccess, findPatientsForTextBlastSuccess, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, callStatsFetched, textStatsFetched, addPatientIndicationSuccess, removePatientIndicationSuccess, updatePatientSuccess, addPatientNoteSuccess, addPatientTextSuccess, movePatientBetweenCategoriesLoading, movePatientBetweenCategoriesSuccess, movePatientBetweenCategoriesFailed } from './actions';
 
 // Bootstrap sagas
 export default [
@@ -302,6 +302,7 @@ function* findPatientsSaga() {
         method: 'GET',
       });
       yield put(findPatientsForTextBlastSuccess(response));
+      yield put(addPatientsToTextBlast(response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -347,6 +348,7 @@ function* submitMovePatientBetweenCategories() {
           study_id: studyId,
           patient_id: patientId,
           patient_category_id: toCategoryId,
+          scheduled_date: new Date(),
         }),
       });
       yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, patientId));
