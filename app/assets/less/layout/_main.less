@@ -2186,20 +2186,6 @@
         padding-left: 0;
       }
     }
-    > tbody {
-      counter-reset: item;
-      > tr {
-        > td {
-          padding: 16px 0 20px 13px;
-          &:nth-child(2) {
-            &:before {
-              content: counters(item, ".", decimal) "";
-              counter-increment: item;
-            }
-          }
-        }
-      }
-    }
     .tr-active {
       > td:nth-child(2) {
         letter-spacing: -0.05rem;
