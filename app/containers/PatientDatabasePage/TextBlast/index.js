@@ -3,9 +3,8 @@
  */
 
 import React from 'react';
-import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { Field, reduxForm, change } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
@@ -14,11 +13,11 @@ import Modal from 'react-bootstrap/lib/Modal';
 import formValidator from './validator';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input/index';
-import { addPatientsToTextBlast, findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitTextBlast } from '../actions';
-import { selectActiveField, selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
+import { removePatientsFromTextBlast, submitTextBlast } from '../actions';
+import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
 import { actions as toastrActions } from 'react-redux-toastr';
 
-const formName = 'TextBlastModal';
+const formName = 'PatientDatabase.TextBlastModal';
 
 
 @reduxForm({
@@ -27,21 +26,14 @@ const formName = 'TextBlastModal';
 })
 class TextBlastModal extends React.Component {
   static propTypes = {
-    activeField: React.PropTypes.any,
-    addPatients: React.PropTypes.func.isRequired,
     bsClass: React.PropTypes.string,
-    change: React.PropTypes.func.isRequired,
     className: React.PropTypes.any,
     dialogClassName: React.PropTypes.string,
     displayToastrError: React.PropTypes.func.isRequired,
-    findPatients: React.PropTypes.func.isRequired,
-    filterPatients: React.PropTypes.func.isRequired,
     formValues: React.PropTypes.object,
     formSyncErrors: React.PropTypes.object,
     onClose: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
-    patientCategories: React.PropTypes.array,
-    removePatient: React.PropTypes.func.isRequired,
     removePatients: React.PropTypes.func.isRequired,
     role: React.PropTypes.string,
     show: React.PropTypes.bool.isRequired,
@@ -51,18 +43,8 @@ class TextBlastModal extends React.Component {
 
   constructor(props) {
     super(props);
-    this.filterPatients = this.filterPatients.bind(this);
     this.submitTextBlast = this.submitTextBlast.bind(this);
-    this.renderPatientSearchList = this.renderPatientSearchList.bind(this);
-    this.renderPatients = this.renderPatients.bind(this);
     this.renderPatientCount = this.renderPatientCount.bind(this);
-  }
-
-  filterPatients(event) {
-    const { formValues, filterPatients } = this.props;
-    if (formValues.patientSearchValues) {
-      filterPatients(event.target.value, formValues.patients);
-    }
   }
 
   submitTextBlast(event) {
@@ -75,51 +57,6 @@ class TextBlastModal extends React.Component {
     } else if (formSyncErrors.patients) {
       displayToastrError(formSyncErrors.patients);
     }
-  }
-
-  renderPatientSearchList() {
-    const { activeField, addPatients, formValues } = this.props;
-    if (formValues.filteredPatientSearchValues) {
-      return (
-        <ul className={classNames('list list-unstyled', { active: activeField === 'search' })}>
-          {formValues.filteredPatientSearchValues.map(patient => (
-            <li
-              key={patient.id}
-              onClick={() => {
-                addPatients([patient]);
-              }}
-            >
-              {patient.firstName} {patient.lastName}
-            </li>
-          ))}
-        </ul>
-      );
-    }
-    return null;
-  }
-
-  renderPatients() {
-    const { formValues, removePatient } = this.props;
-    if (formValues.patients) {
-      return (
-        <div className="selected-patients-list">
-          {formValues.patients.map(patient => (
-            <div className="patient" key={patient.id}>
-              <span className="name">{patient.firstName} {patient.lastName}</span>
-              <a
-                className="btn-remove"
-                onClick={() => {
-                  removePatient(patient);
-                }}
-              >
-                <i className="icomoon-icon_trash" />
-              </a>
-            </div>
-          ))}
-        </div>
-      );
-    }
-    return null;
   }
 
   renderPatientCount() {
@@ -182,19 +119,13 @@ class TextBlastModal extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  activeField: selectActiveField(formName),
   formValues: selectValues(formName),
   formSyncErrors: selectSyncErrors(formName),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    addPatients: (patients) => dispatch(addPatientsToTextBlast(patients)),
-    change: (field, value) => dispatch(change(formName, field, value)),
     displayToastrError: (error) => dispatch(toastrActions.error(error)),
-    findPatients: (studyId, text, categoryIds, sourceIds) => dispatch(findPatientsForTextBlast(studyId, text, categoryIds, sourceIds)),
-    filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
-    removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
     removePatients: () => dispatch(removePatientsFromTextBlast()),
     submitTextBlast: (patients, message, onClose) => dispatch(submitTextBlast(patients, message, onClose)),
   };

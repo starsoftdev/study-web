@@ -4,6 +4,7 @@ import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
+import { getItem, removeItem } from 'utils/localStorage';
 
 import request from 'utils/request';
 import composeQueryString from 'utils/composeQueryString';
@@ -12,6 +13,7 @@ import {
   FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT,
   SAVE_PATIENT,
+  SUBMIT_TEXT_BLAST,
 } from './constants';
 
 import {
@@ -30,12 +32,14 @@ export function* patientDatabasePageSaga() {
   const watcherB = yield fork(fetchPatientCategoriesWatcher);
   const watcherC = yield fork(fetchPatientWatcher);
   const watcherD = yield fork(savePatientWatcher);
+  const watcherE = yield fork(submitTextBlast);
 
   yield take(LOCATION_CHANGE);
   yield cancel(watcherA);
   yield cancel(watcherB);
   yield cancel(watcherC);
   yield cancel(watcherD);
+  yield cancel(watcherE);
 }
 
 // Bootstrap sagas
@@ -203,6 +207,35 @@ export function* savePatientWatcher() {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));
       yield put(patientSavingError(err));
+    }
+  }
+}
+
+
+function* submitTextBlast() {
+  while (true) {
+    // listen for the SUBMIT_TEXT_BLAST action
+    const { patients, message, onClose } = yield take(SUBMIT_TEXT_BLAST);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+    try {
+      const requestURL = `${API_URL}/twilioTextMessages/textBlast?access_token=${authToken}`;
+      yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          patientsIDs: patients.map(patient => (
+            patient.id
+          )),
+          message,
+        }),
+      });
+      onClose();
+      yield put(toastrActions.success('Text Blast', 'Text blast submitted successfully!'));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
     }
   }
 }

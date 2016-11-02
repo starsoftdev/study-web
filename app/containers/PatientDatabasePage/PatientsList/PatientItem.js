@@ -1,16 +1,21 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Button from 'react-bootstrap/lib/Button';
+import { Field } from 'redux-form';
 import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
 import { map } from 'lodash';
 
-import { selectSelectedPatient } from 'containers/PatientDatabasePage/selectors';
-import { fetchPatient } from 'containers/PatientDatabasePage/actions';
-import LoadingSpinner from 'components/LoadingSpinner';
+import Checkbox from '../../../components/Input/Checkbox';
+import { selectSelectedPatient } from '../../../containers/PatientDatabasePage/selectors';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import { fetchPatient, addPatientsToTextBlast,
+  removePatientFromTextBlast } from '../actions';
 
 class PatientItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    addPatientsToTextBlast: PropTypes.func,
+    removePatientFromTextBlast: PropTypes.func,
     index: PropTypes.number,
     id: PropTypes.number,
     firstName: PropTypes.string,
@@ -37,6 +42,8 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     this.hideHover = this.hideHover.bind(this);
     this.editPatient = this.editPatient.bind(this);
     this.openChat = this.openChat.bind(this);
+    this.currentPatientIsBeingFetched = this.currentPatientIsBeingFetched.bind(this);
+    this.togglePatientForTextBlast = this.togglePatientForTextBlast.bind(this);
   }
 
   showHover() {
@@ -69,18 +76,30 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     return (selectedPatient.fetching && selectedPatient.id === id);
   }
 
+  togglePatientForTextBlast(checked, id) {
+    const { addPatientsToTextBlast, id, removePatientFromTextBlast } = this.props;
+    if (checked) {
+      addPatientsToTextBlast([{ id }]);
+    } else {
+      removePatientFromTextBlast([{ id }]);
+    }
+  }
+
   render() {
-    const { index, firstName, lastName, email, phone, age, gender, bmi, indications,
-      source, studyPatientCategory } = this.props;
+    const { id, index, firstName, lastName, email, phone, age, gender, bmi, indications, source, studyPatientCategory } = this.props;
     const indicationNames = map(indications, indicationIterator => indicationIterator.name).join(', ');
 
     return (
       <tr className={classNames('patient-container', { 'tr-active': this.state.hover })} onMouseEnter={this.showHover} onMouseLeave={this.hideHover}>
         <td>
-          <span className="jcf-checkbox parent-active jcf-checked">
-            <span />
-            <input type="checkbox" name="name-1" checked />
-          </span>
+          <Field
+            name={`patient-${id}`}
+            type="checkbox"
+            component={Checkbox}
+            onChange={(checked) => {
+              this.togglePatientForTextBlast(checked, id);
+            }}
+          />
         </td>
         <td className="index">
           {index + 1}
@@ -131,6 +150,8 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    addPatientsToTextBlast: (patients) => dispatch(addPatientsToTextBlast(patients)),
+    removePatientFromTextBlast: (patient) => dispatch(removePatientFromTextBlast(patient)),
     fetchPatient: id => dispatch(fetchPatient(id)),
   };
 }
