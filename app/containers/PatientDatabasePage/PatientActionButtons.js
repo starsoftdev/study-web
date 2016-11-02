@@ -105,12 +105,6 @@ class PatientActionButtons extends React.Component {
             <span>Download</span>
           </button>
         </div>
-        <div className="btn-download pull-left">
-          <a className="btn btn-primary download">
-            <i className="icomoon-icon_download" />
-            <span>Download</span>
-          </a>
-        </div>
       </div>
     );
   }
