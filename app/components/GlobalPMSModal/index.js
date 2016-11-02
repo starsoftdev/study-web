@@ -68,7 +68,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     const scrollable = this.scrollable;
     if (this.props.patientMessages && scrollable) {
       setTimeout(() => {
