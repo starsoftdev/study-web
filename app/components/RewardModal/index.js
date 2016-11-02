@@ -7,9 +7,11 @@
 import React from 'react';
 
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
-import rewardFormValidator from './validator';
 import { Modal } from 'react-bootstrap';
-@reduxForm({ form: 'reward', validate: rewardFormValidator })
+import cardStudykik from 'assets/images/img6.png';
+import cardAmazon from 'assets/images/img7.png';
+import cardStarbucks from 'assets/images/img8.png';
+
 class RewardModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
@@ -46,13 +48,13 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                 </div>
                 <div className="row images-area">
                   <div className="col-xs-4 pull-left">
-                    <label htmlFor="radio-option3"><img src="images/img6.png" alt="" /></label>
+                    <label htmlFor="radio-option3"><img src={cardStudykik} alt="" /></label>
                   </div>
                   <div className="col-xs-4 pull-left">
-                    <label htmlFor="radio-option1"><img src="images/img7.png" alt="" /></label>
+                    <label htmlFor="radio-option1"><img src={cardStarbucks} alt="" /></label>
                   </div>
                   <div className="col-xs-4 pull-left">
-                    <label htmlFor="radio-option2"><img src="images/img8.png" alt="" /></label>
+                    <label htmlFor="radio-option2"><img src={cardAmazon} alt="" /></label>
                   </div>
                 </div>
                 <ul className="list-unstyled list-radios">
