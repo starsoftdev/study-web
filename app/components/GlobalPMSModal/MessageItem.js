@@ -11,11 +11,12 @@ import defaultUserImageDoctor from 'assets/images/Default-User-Img-Dr.png';
 class MessageItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     messageData: PropTypes.object,
+    currentUser: PropTypes.object,
   };
 
   render() {
     const { messageData, currentUser } = this.props;
-    const cts = messageData.twilioTextMessage.dateSent;
+    const cts = messageData.twilioTextMessage.dateCreated;
     const cdate = (new Date(cts)).toLocaleString();
 
     let containerClassName = 'post-holder';
