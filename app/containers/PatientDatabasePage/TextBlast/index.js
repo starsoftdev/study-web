@@ -144,12 +144,12 @@ class TextBlastModal extends React.Component {
       <Modal
         show={show}
         role={role}
-        bsClass={bsClass}
+        bsclassName={bsClass}
         dialogClassName={dialogClassName}
         className={className}
         style={style}
-        id="text-blast"
-        dialogComponentClass={CenteredModal}
+        id="text-blast-popup"
+        dialogComponentclassName={CenteredModal}
         backdrop
         keyboard
       >
@@ -167,37 +167,16 @@ class TextBlastModal extends React.Component {
           </a>
         </Modal.Header>
         <Modal.Body>
-          <Form className="text-email-blast-form">
-            <div className="sidebar pull-left">
-              <div className="scroll-holder jcf--scrollable">
-                <div className="sub-holder">
-                  <div className="custom-select-drop">
-                    <div className="search-holder">
-                      <Field
-                        name="search"
-                        type="search"
-                        component={Input}
-                        className="keyword-search"
-                      />
-                      <i className="icomoon-icon_search2" />
-                      {this.renderPatientSearchList()}
-                    </div>
-                  </div>
-                  {this.renderPatients()}
+          <Form className="text-email-blast-form no-sidebar user-active">
+            <div className="scroll-holder">
+              <div className="sub-holder">
+                <div className="subject-field">
+                  <FormControl type="text" className="recievers" placeholder="To" disabled />
+                  {this.renderPatientCount()}
                 </div>
-              </div>
-            </div>
-            <div className="form-holder">
-              <div className="scroll-holder jcf--scrollable">
-                <div className="sub-holder">
-                  <div className="subject-field">
-                    <FormControl type="text" className="recievers" placeholder="To" disabled />
-                    {this.renderPatientCount()}
-                  </div>
-                  <Field name="message" component={Input} componentClass="textarea" placeholder="Type a message..." required />
-                  <div className="footer">
-                    <Button type="submit" className="pull-right" onClick={this.submitTextBlast}>Submit</Button>
-                  </div>
+                <Field name="message" component={Input} componentClass="textarea" placeholder="Type a message..." required />
+                <div className="footer">
+                  <Button type="submit" className="pull-right" onClick={this.submitTextBlast}>Submit</Button>
                 </div>
               </div>
             </div>
