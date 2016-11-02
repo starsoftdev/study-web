@@ -1,31 +1,39 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { Field, reduxForm, change } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import { map, omit } from 'lodash';
 
+import Checkbox from '../../../components/Input/Checkbox';
 import CenteredModal from '../../../components/CenteredModal/index';
 import EditPatientForm from '../../../containers/PatientDatabasePage/EditPatientForm';
-import ChatForm from 'components/ChatForm';
+import ChatForm from '../../../components/ChatForm';
 import { selectPatients,
   selectSelectedPatient,
   selectSelectedPatientDetailsForForm,
   selectSavedPatient,
-  selectChat } from 'containers/PatientDatabasePage/selectors';
+  selectChat } from '../../../containers/PatientDatabasePage/selectors';
 import {
-  clearSelectedPatient,
+  sendStudyPatientMessages,
+} from '../../../containers/GlobalNotifications/actions';
+import { clearSelectedPatient,
   savePatient,
   initChat,
   disableChat,
-} from 'containers/PatientDatabasePage/actions';
-import {
-  sendStudyPatientMessages,
-} from 'containers/GlobalNotifications/actions';
+  addPatientsToTextBlast,
+  removePatientsFromTextBlast } from '../actions';
 import PatientItem from './PatientItem';
 import './styles.less';
 
+const formName = 'PatientDatabase.TextBlastModal';
+
+@reduxForm({ form: formName })
 class PatientsList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    addPatientsToTextBlast: PropTypes.func,
+    change: PropTypes.func,
+    removePatientsFromTextBlast: PropTypes.func,
     patients: PropTypes.object,
     selectedPatient: PropTypes.object,
     selectedPatientDetailsForForm: PropTypes.object,
@@ -46,6 +54,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     this.openChat = this.openChat.bind(this);
     this.closeChat = this.closeChat.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
+    this.toggleAllPatientSelection = this.toggleAllPatientSelection.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -103,6 +112,18 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     this.props.disableChat();
   }
 
+  toggleAllPatientSelection(checked) {
+    const { addPatientsToTextBlast, change, patients, removePatientsFromTextBlast } = this.props;
+    if (checked) {
+      addPatientsToTextBlast(patients.details);
+    } else {
+      removePatientsFromTextBlast();
+    }
+    for (const patient of patients.details) {
+      change(`patient-${patient.id}`, checked);
+    }
+  }
+
   render() {
     const { patients, selectedPatientDetailsForForm } = this.props;
     const chat = this.props.chat.active ? this.props.chat.details : null;
@@ -123,10 +144,12 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
               <thead>
                 <tr>
                   <th>
-                    <span className="jcf-checkbox parent-active jcf-checked">
-                      <span />
-                      <input type="checkbox" checked />
-                    </span>
+                    <Field
+                      name="patients"
+                      type="checkbox"
+                      component={Checkbox}
+                      onChange={this.toggleAllPatientSelection}
+                    />
                   </th>
                   <th>#</th>
                   <th>NAME</th>
@@ -189,6 +212,9 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    addPatientsToTextBlast: (patients) => dispatch(addPatientsToTextBlast(patients)),
+    change: (field, value) => dispatch(change(formName, field, value)),
+    removePatientsFromTextBlast: () => dispatch(removePatientsFromTextBlast()),
     clearSelectedPatient: () => dispatch(clearSelectedPatient()),
     savePatient: (id, data) => dispatch(savePatient(id, data)),
     initChat: (payload) => dispatch(initChat(payload)),
