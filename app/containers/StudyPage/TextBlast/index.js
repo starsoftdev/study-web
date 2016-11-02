@@ -20,7 +20,7 @@ import { addPatientsToTextBlast, findPatientsForTextBlast, filterPatientsForText
 import { selectActiveField, selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
 import { actions as toastrActions } from 'react-redux-toastr';
 
-const formName = 'TextBlastModal';
+const formName = 'StudyPage.TextBlastModal';
 
 
 @reduxForm({

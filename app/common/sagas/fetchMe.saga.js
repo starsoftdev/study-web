@@ -47,5 +47,6 @@ export function* fetchMeFromToken() {
     if (e.status === 401) {
       removeItem('auth_token');
     }
+    yield put(push('/login'));
   }
 }
