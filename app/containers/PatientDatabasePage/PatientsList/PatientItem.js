@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Button from 'react-bootstrap/lib/Button';
-import { Field } from 'redux-form';
+import { Field, change } from 'redux-form';
 import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
 import { map } from 'lodash';
@@ -12,9 +12,12 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import { fetchPatient, addPatientsToTextBlast,
   removePatientFromTextBlast } from '../actions';
 
+const formName = 'PatientDatabase.TextBlastModal';
+
 class PatientItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     addPatientsToTextBlast: PropTypes.func,
+    change: PropTypes.func,
     removePatientFromTextBlast: PropTypes.func,
     index: PropTypes.number,
     id: PropTypes.number,
@@ -76,10 +79,11 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     return (selectedPatient.fetching && selectedPatient.id === id);
   }
 
-  togglePatientForTextBlast(checked, id) {
-    const { addPatientsToTextBlast, id, removePatientFromTextBlast } = this.props;
+  togglePatientForTextBlast(checked) {
+    const { addPatientsToTextBlast, change, id, removePatientFromTextBlast } = this.props;
     if (checked) {
       addPatientsToTextBlast([{ id }]);
+      change('all-patients', false);
     } else {
       removePatientFromTextBlast([{ id }]);
     }
@@ -96,9 +100,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
             name={`patient-${id}`}
             type="checkbox"
             component={Checkbox}
-            onChange={(checked) => {
-              this.togglePatientForTextBlast(checked, id);
-            }}
+            onChange={this.togglePatientForTextBlast}
           />
         </td>
         <td className="index">
@@ -150,6 +152,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    change: (field, value) => dispatch(change(formName, field, value)),
     addPatientsToTextBlast: (patients) => dispatch(addPatientsToTextBlast(patients)),
     removePatientFromTextBlast: (patient) => dispatch(removePatientFromTextBlast(patient)),
     fetchPatient: id => dispatch(fetchPatient(id)),
