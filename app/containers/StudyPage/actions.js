@@ -49,6 +49,10 @@ import {
   UPDATE_PATIENT_SUCCESS,
   ADD_PATIENT_NOTE_SUCCESS,
   ADD_PATIENT_TEXT_SUCCESS,
+  SWITCH_TO_NOTE_SECTION_DETAIL,
+  SWITCH_TO_TEXT_SECTION_DETAIL,
+  SWITCH_TO_EMAIL_SECTION_DETAIL,
+  SWITCH_TO_OTHER_SECTION_DETAIL,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -385,5 +389,29 @@ export function submitAddPatient(studyId, patient, onClose) {
     studyId,
     patient,
     onClose,
+  };
+}
+
+export function switchToNoteSectionDetail() {
+  return {
+    type: SWITCH_TO_NOTE_SECTION_DETAIL,
+  };
+}
+
+export function switchToTextSectionDetail() {
+  return {
+    type: SWITCH_TO_TEXT_SECTION_DETAIL,
+  };
+}
+
+export function switchToEmailSectionDetail() {
+  return {
+    type: SWITCH_TO_EMAIL_SECTION_DETAIL,
+  };
+}
+
+export function switchToOtherSectionDetail() {
+  return {
+    type: SWITCH_TO_OTHER_SECTION_DETAIL,
   };
 }

@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Input from 'components/Input';
+import Form from 'react-bootstrap/lib/Form';
 
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
@@ -97,51 +98,47 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
       )) : 'in this chat, are no posts';
 
     return (
-      <div className="">
-        <form
-          className="form-green chat-form"
-          onSubmit={handleSubmit}
-        >
-          <fieldset>
-            <div className="row">
-              <div className="col-md-12">
-                <div
-                  className="form-group messages"
-                  id="mess-container"
-                  ref={(scrollable) => {
-                    this.scrollable = scrollable;
-                  }}
-                >
-                  {listMessages}
-                </div>
-                <div className="row form-group">
-                  <div
-                    className="field col-sm-12"
-                    ref={(inputContainer) => {
-                      this.inputContainer = inputContainer;
-                    }}
-                  >
-                    <Field
-                      name="body"
-                      component={Input}
-                      type="text"
-                      disabled={isSaving}
-                    />
-                  </div>
-                </div>
-                <div className="form-group pull-right">
-                  <button type="submit" className="btn btn-default btn-add-row" disabled={isSaving}>
-                    {isSaving
-                      ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-patient" /></span>
-                      : <span>Submit</span>
-                    }
-                  </button>
-                </div>
+      <Form
+        className="chat-form"
+        onSubmit={handleSubmit}
+      >
+        <fieldset>
+          <div className="col-md-12">
+            <div
+              className="form-group messages"
+              id="mess-container"
+              ref={(scrollable) => {
+                this.scrollable = scrollable;
+              }}
+            >
+              {listMessages}
+            </div>
+            <div className="row form-group">
+              <div
+                className="field col-sm-12"
+                ref={(inputContainer) => {
+                  this.inputContainer = inputContainer;
+                }}
+              >
+                <Field
+                  name="body"
+                  component={Input}
+                  type="text"
+                  disabled={isSaving}
+                />
               </div>
             </div>
-          </fieldset>
-        </form>
-      </div>
+            <div className="form-group pull-right">
+              <button type="submit" className="btn btn-default btn-add-row" disabled={isSaving}>
+                {isSaving
+                  ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-patient" /></span>
+                  : <span>Submit</span>
+                }
+              </button>
+            </div>
+          </div>
+        </fieldset>
+      </Form>
     );
   }
 }

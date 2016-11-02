@@ -16,6 +16,7 @@ import TextSection from './TextSection';
 import EmailSection from './EmailSection';
 import OtherSection from './OtherSection';
 import { normalizePhoneDisplay } from '../helper/functions';
+import { switchToNoteSectionDetail, switchToTextSectionDetail, switchToEmailSectionDetail, switchToOtherSectionDetail } from '../actions';
 
 import {
   selectSocket,
@@ -23,6 +24,7 @@ import {
 
 class PatientDetailModal extends React.Component {
   static propTypes = {
+    carousel: React.PropTypes.object,
     currentPatientCategory: React.PropTypes.object,
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
@@ -30,72 +32,20 @@ class PatientDetailModal extends React.Component {
     onClose: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number.isRequired,
     socket: React.PropTypes.any,
+    switchToNoteSection: React.PropTypes.func.isRequired,
+    switchToTextSection: React.PropTypes.func.isRequired,
+    switchToEmailSection: React.PropTypes.func.isRequired,
+    switchToOtherSection: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
-    this.state = {
-      carousel: {
-        note: true,
-        text: false,
-        email: false,
-        other: false,
-      },
-    };
-    this.toggleNoteSection = this.toggleNoteSection.bind(this);
-    this.toggleTextSection = this.toggleTextSection.bind(this);
-    this.toggleEmailSection = this.toggleEmailSection.bind(this);
-    this.toggleOtherSection = this.toggleOtherSection.bind(this);
     this.renderOtherSection = this.renderOtherSection.bind(this);
     this.renderPatientDetail = this.renderPatientDetail.bind(this);
   }
 
-  toggleNoteSection() {
-    this.setState({
-      carousel: {
-        note: true,
-        text: false,
-        email: false,
-        other: false,
-      },
-    });
-  }
-
-  toggleTextSection() {
-    this.setState({
-      carousel: {
-        note: false,
-        text: true,
-        email: false,
-        other: false,
-      },
-    });
-  }
-
-  toggleEmailSection() {
-    this.setState({
-      carousel: {
-        note: false,
-        text: false,
-        email: true,
-        other: false,
-      },
-    });
-  }
-
-  toggleOtherSection() {
-    this.setState({
-      carousel: {
-        note: false,
-        text: false,
-        email: false,
-        other: true,
-      },
-    });
-  }
-
   renderOtherSection() {
-    const { currentPatient, currentUser } = this.props;
+    const { carousel, currentPatient, currentUser } = this.props;
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       if (currentPatient.dob) {
@@ -105,7 +55,7 @@ class PatientDetailModal extends React.Component {
         formattedPatient.dobYear = dob.year();
       }
       return (
-        <OtherSection active={this.state.carousel.other} initialValues={formattedPatient} currentUser={currentUser} enableReinitialize />
+        <OtherSection active={carousel.other} initialValues={formattedPatient} currentUser={currentUser} enableReinitialize />
       );
     }
     return null;
@@ -125,7 +75,7 @@ class PatientDetailModal extends React.Component {
   }
 
   render() {
-    const { currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket } = this.props;
+    const { carousel, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToTextSection, switchToEmailSection, switchToOtherSection } = this.props;
     return (
       <Collapse dimension="width" in={openPatientModal} timeout={250} className="patients-list-form">
         <div className="form-area">
@@ -143,15 +93,15 @@ class PatientDetailModal extends React.Component {
           <div className="column">
             <div id="carousel-example-generic" className="carousel slide popup-slider">
               <ol className="carousel-indicators">
-                <li className={classNames({ active: this.state.carousel.note })} onClick={this.toggleNoteSection}>Note</li>
-                <li className={classNames({ active: this.state.carousel.text })} onClick={this.toggleTextSection}>Text</li>
-                <li className={classNames({ active: this.state.carousel.email })} onClick={this.toggleEmailSection}>Email</li>
-                <li className={classNames({ active: this.state.carousel.other })} onClick={this.toggleOtherSection}>Other</li>
+                <li className={classNames({ active: carousel.note })} onClick={switchToNoteSection}>Note</li>
+                <li className={classNames({ active: carousel.text })} onClick={switchToTextSection}>Text</li>
+                <li className={classNames({ active: carousel.email })} onClick={switchToEmailSection}>Email</li>
+                <li className={classNames({ active: carousel.other })} onClick={switchToOtherSection}>Other</li>
               </ol>
               <div className="carousel-inner" role="listbox">
-                <NotesSection active={this.state.carousel.note} currentUser={currentUser} currentPatient={currentPatient} studyId={studyId} />
-                <TextSection active={this.state.carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={currentPatient} />
-                <EmailSection active={this.state.carousel.email} />
+                <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={currentPatient} studyId={studyId} />
+                <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={currentPatient} />
+                <EmailSection active={carousel.email} />
                 {this.renderOtherSection()}
               </div>
             </div>
@@ -163,13 +113,18 @@ class PatientDetailModal extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  socket: selectSocket(),
+  carousel: Selector.selectCarousel(),
   currentPatient: Selector.selectCurrentPatient(),
   currentPatientCategory: Selector.selectCurrentPatientCategory(),
+  socket: selectSocket(),
   studyId: Selector.selectStudyId(),
 });
 
-const mapDispatchToProps = () => ({
+const mapDispatchToProps = (dispatch) => ({
+  switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
+  switchToTextSection: () => dispatch(switchToTextSectionDetail()),
+  switchToEmailSection: () => dispatch(switchToEmailSectionDetail()),
+  switchToOtherSection: () => dispatch(switchToOtherSectionDetail()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientDetailModal);

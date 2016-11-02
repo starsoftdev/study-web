@@ -47,13 +47,14 @@ class PatientCategory extends React.Component {
     currentUser: React.PropTypes.object.isRequired,
     submitMovePatientBetweenCategories: React.PropTypes.func.isRequired,
     onPatientClick: React.PropTypes.func.isRequired,
+    onPatientTextClick: React.PropTypes.func.isRequired,
   };
 
   componentDidMount() {
   }
 
   render() {
-    const { category, connectDropTarget, currentPatientId, currentUser, onPatientClick } = this.props;
+    const { category, connectDropTarget, currentPatientId, currentUser, onPatientClick, onPatientTextClick } = this.props;
     return connectDropTarget(
       <li key={category.id}>
         <span className="opener">
@@ -64,7 +65,7 @@ class PatientCategory extends React.Component {
           <div className="slide-holder">
             <ul className="list-unstyled">
               {category.patients.map(patient => (
-                <Patient key={patient.id} category={category} currentPatientId={currentPatientId} patient={patient} currentUser={currentUser} onPatientClick={onPatientClick} />
+                <Patient key={patient.id} category={category} currentPatientId={currentPatientId} patient={patient} currentUser={currentUser} onPatientClick={onPatientClick} onPatientTextClick={onPatientTextClick} />
               ))}
             </ul>
           </div>

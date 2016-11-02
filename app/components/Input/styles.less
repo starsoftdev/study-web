@@ -1,3 +1,5 @@
+@import "~assets/less/_custom.less";
+
 /* react-select styles */
 .Select.form-control {
   padding: 0;
@@ -5,6 +7,10 @@
 
 .Select-control {
   border: none !important;
+}
+
+.Select-placeholder {
+  color: @input-color;
 }
 
 .Select-menu-outer {
@@ -17,10 +23,6 @@
 .top-positioned .Select-menu-outer {
   top: auto;
   bottom: 100%;
-}
-
-.Select-placeholder, .Select-input, .Select-value {
-  padding: 0 15px !important;
 }
 
 .Select-arrow-zone {
