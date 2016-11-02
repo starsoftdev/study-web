@@ -26,3 +26,8 @@ export const SAVE_PATIENT_ERROR                 = 'PatientDatabasePage/SAVE_PATI
 
 export const INIT_CHAT                          = 'PatientDatabasePage/INIT_CHAT';
 export const DISABLE_CHAT                       = 'PatientDatabasePage/DISABLE_CHAT';
+
+export const ADD_PATIENTS_TO_TEXT_BLAST         = 'PatientDatabasePage/ADD_PATIENTS_TO_TEXT_BLAST';
+export const REMOVE_PATIENT_FROM_TEXT_BLAST     = 'PatientDatabasePage/REMOVE_PATIENT_FROM_TEXT_BLAST';
+export const REMOVE_PATIENTS_FROM_TEXT_BLAST    = 'PatientDatabasePage/REMOVE_PATIENTS_FROM_TEXT_BLAST';
+export const SUBMIT_TEXT_BLAST    = 'PatientDatabasePage/SUBMIT_TEXT_BLAST';
