@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { selectSelectedUser } from 'containers/App/selectors';
+import { selectSelectedUser, selectCurrentUser } from '../../containers/App/selectors';
 
 import defaultUserImage from 'assets/images/Default-User-Img.png';
 import defaultUserImageGirl from 'assets/images/Default-User-Img-Girl.png';
@@ -14,14 +14,15 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
   };
 
   render() {
-    const { messageData } = this.props;
+    const { messageData, currentUser } = this.props;
     const cts = messageData.twilioTextMessage.dateSent;
     const cdate = (new Date(cts)).toLocaleString();
 
     let containerClassName = 'post-holder';
     let senderImage = defaultUserImageGirl;
-
-    let senderName = 'Anonymous';
+    // todo remove and put back Anonymous behavior
+    // let senderName = 'Anonymous';
+    let senderName = `${currentUser.firstName} ${currentUser.lastName}`;
 
     if (messageData.twilioTextMessage.direction === 'outbound-api') {
       containerClassName = 'post-holder even';
@@ -53,6 +54,7 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
 
 const mapStateToProps = createStructuredSelector({
   selectedUser: selectSelectedUser(),
+  currentUser: selectCurrentUser(),
 });
 
 const mapDispatchToProps = {};

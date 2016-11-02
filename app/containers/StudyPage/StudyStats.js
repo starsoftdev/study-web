@@ -39,36 +39,36 @@ class StudyStats extends React.Component {
         <Collapse className="infoarea" in={this.state.open}>
           <Row>
             <Col xs={4}>
-              <div className="box same-height-left" style={{ height: '103px' }}>
+              <div className="box same-height-left">
                 <i className="icomoon-open-eye" />
                 <strong className="number">{stats.views}</strong>
                 <h3>TOTAL STUDY VIEWS</h3>
               </div>
-              <div className="box same-height-left" style={{ height: '103px' }}>
+              <div className="box same-height-left">
                 <i className="icomoon-user-in" />
                 <strong className="number">{stats.referrals}</strong>
                 <h3>TOTAL PATIENT REFERRALS</h3>
               </div>
             </Col>
             <Col xs={4} className="green">
-              <div className="box" style={{ height: '103px' }}>
+              <div className="box">
                 <i className="icomoon-phone" />
                 <strong className="number">{stats.calls}</strong>
                 <h3>CALLS PLACED</h3>
               </div>
-              <div className="box" style={{ height: '103px' }}>
+              <div className="box">
                 <i className="icomoon-icon_clock_alt" />
                 <strong className="number">{stats.callsDuration}</strong>
                 <h3>CALLS DURATION</h3>
               </div>
             </Col>
             <Col xs={4} className="orange">
-              <div className="box same-height-right" style={{ height: '103px' }}>
+              <div className="box same-height-right">
                 <i className="icomoon-chat-up" />
                 <strong className="number">{stats.texts}</strong>
                 <h3>TEXTS SENT</h3>
               </div>
-              <div className="box same-height-right" style={{ height: '103px' }}>
+              <div className="box same-height-right">
                 <i className="icomoon-chat-down" />
                 <strong className="number">{stats.textsReceived}</strong>
                 <h3>TEXTS RECEIVED</h3>
