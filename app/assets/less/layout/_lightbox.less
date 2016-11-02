@@ -869,7 +869,7 @@ input:focus {
 #email-blast-popup,
 #text-blast-popup {
   .modal-content {
-    max-width: 1024px;
+    max-width: 640px;
     background: #fff;
   }
   &.width-medium {
@@ -913,6 +913,31 @@ input:focus {
     .scroll-holder {
       max-height: 80vh;
       overflow: auto;
+    }
+  }
+  &.no-sidebar {
+    &:before { display: none; }
+
+    .form-holder .scroll-holder {
+      top: auto;
+      left: auto;
+      right: auto;
+      min-height: 444px;
+      max-height: 78vh;
+      position: relative;
+
+      @media screen and (max-height: 600px) {
+        min-height: 300px;
+      }
+    }
+
+    .sub-holder {
+      top: 0;
+      left: 0;
+      width: 100%;
+      position: absolute;
+      min-height: inherit;
+      padding: 40px 0 83px !important;
     }
   }
   .form-holder {

@@ -139,26 +139,17 @@ class TextBlastModal extends React.Component {
   }
 
   render() {
-    const { show, role, bsClass, dialogClassName, className, style, onHide } = this.props;
+    const { show, className, onHide } = this.props;
     return (
       <Modal
         show={show}
-        role={role}
-        bsclassName={bsClass}
-        dialogClassName={dialogClassName}
         className={className}
-        style={style}
         id="text-blast-popup"
-        dialogComponentclassName={CenteredModal}
+        dialogComponentClass={CenteredModal}
         backdrop
         keyboard
       >
         <Modal.Header>
-          <div className="sidebar pull-left">
-            <Modal.Title>
-              <strong>Select Contacts</strong>
-            </Modal.Title>
-          </div>
           <Modal.Title>
             <strong className="title">Text Blast</strong>
           </Modal.Title>
@@ -168,19 +159,21 @@ class TextBlastModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <Form className="text-email-blast-form no-sidebar user-active">
-            <div className="scroll-holder">
-              <div className="sub-holder">
-                <div className="subject-field">
-                  <FormControl type="text" className="recievers" placeholder="To" disabled />
-                  {this.renderPatientCount()}
-                </div>
-                <Field name="message" component={Input} componentClass="textarea" placeholder="Type a message..." required />
-                <div className="footer">
-                  <Button type="submit" className="pull-right" onClick={this.submitTextBlast}>Submit</Button>
+            <div className="form-holder">
+              <div className="scroll-holder">
+                <div className="sub-holder">
+                  <div className="subject-field">
+                    <FormControl type="text" className="recievers" placeholder="To" disabled />
+                    {this.renderPatientCount()}
+                  </div>
+                  <Field name="message" component={Input} componentClass="textarea" placeholder="Type a message..." required />
+                  <div className="footer">
+                    <Button type="submit" className="pull-right" onClick={this.submitTextBlast}>Submit</Button>
+                  </div>
                 </div>
               </div>
+              <input type="reset" className="hidden btn btn-gray-outline" value="reset" />
             </div>
-            <input type="reset" className="hidden btn btn-gray-outline" value="reset" />
           </Form>
         </Modal.Body>
       </Modal>
