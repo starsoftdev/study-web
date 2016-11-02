@@ -43,7 +43,6 @@ class TextSection extends React.Component {
 
     this.state = {
       twilioMessages : [],
-      currentPatient : null,
     };
   }
 
@@ -51,33 +50,35 @@ class TextSection extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.currentPatient !== null && this.state.currentPatient !== newProps.currentPatient) {
-      this.setState({ currentPatient: newProps.currentPatient }, () => {
-        this.initStudyPatientMessagesFetch(newProps);
-      });
-    } else {
-      this.setState({ currentPatient: null });
+    if (newProps.active && newProps.currentPatient) {
+      this.initStudyPatientMessagesFetch(newProps);
     }
+
     this.props.socket.on('notifyMessage', () => {
       this.initStudyPatientMessagesFetch(newProps);
     });
   }
 
   initStudyPatientMessagesFetch(props) {
-    props.fetchStudyPatientMessages({
-      studyId: props.studyId,
-      patientId: props.currentPatient.id,
-      cb: (err, data) => {
-        if (!err) {
-          if (this.state.twilioMessages !== data.messages) {
-            this.setState({ twilioMessages: data.messages });
+    if (props.currentPatient) {
+      // otherwise method componentWillReceiveProps
+      // receiving data with a missing property currentPatient
+      // which leads to an error
+      props.fetchStudyPatientMessages({
+        studyId: props.studyId,
+        patientId: props.currentPatient.id,
+        cb: (err, data) => {
+          if (!err) {
+            if (this.state.twilioMessages !== data.messages) {
+              this.setState({ twilioMessages: data.messages });
+            }
+          } else {
+            console.log(err);
           }
-        } else {
-          console.log(err);
-        }
-        this.props.setProcessingStatus({ status: false });
-      },
-    });
+          this.props.setProcessingStatus({ status: false });
+        },
+      });
+    }
   }
 
   scrollElement() {
