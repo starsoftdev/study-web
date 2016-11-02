@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Form from 'react-bootstrap/lib/Form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
@@ -40,47 +41,51 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
     const statusOptions = [{ label: 'Active', value: ACTIVE_STATUS_VALUE }, { label: 'Inactive', value: INACTIVE_STATUS_VALUE }];
 
     return (
-      <form className="form-search-studies" onSubmit={handleSubmit}>
-        <div className="search-studies">
-          <div className="row form-group">
-            <div className="col-sm-3">
+      <Form className="form-search" onSubmit={handleSubmit}>
+        <div className="fields-holder">
+          <div className="search-area pull-left">
+            <div className="field">
               <Field
                 name="name"
                 component={Input}
                 type="text"
+                className="keyword-search"
                 placeholder="Search Name..."
                 disabled={clientSites.fetching || studies.fetching}
               />
-            </div>
-            <div className="col-sm-3">
-              <Field
-                name="site"
-                component={ReactSelect}
-                placeholder="Select Site Location"
-                options={siteOptions}
-                disabled={clientSites.fetching || studies.fetching}
-              />
-            </div>
-            <div className="col-sm-3">
-              <Field
-                name="status"
-                component={ReactSelect}
-                placeholder="Select Status"
-                options={statusOptions}
-                disabled={clientSites.fetching || studies.fetching}
-              />
-            </div>
-            <div className="col-sm-3">
-              <button type="submit" className="btn btn-primary btn-search" disabled={clientSites.fetching || studies.fetching || hasError}>
-                {(studies.fetching)
-                  ? <LoadingSpinner showOnlyIcon size={20} className="fetching-studies" />
-                  : <span>Search</span>
-                }
-              </button>
+              <label htmlFor="search">
+                <i className="icomoon-icon_search2" />
+              </label>
             </div>
           </div>
+          <div className="pull-left custom-select">
+            <Field
+              name="site"
+              component={ReactSelect}
+              placeholder="Select Site Location"
+              options={siteOptions}
+              disabled={clientSites.fetching || studies.fetching}
+            />
+          </div>
+          <div className="pull-left custom-select">
+            <Field
+              name="status"
+              component={ReactSelect}
+              placeholder="Select Status"
+              options={statusOptions}
+              disabled={clientSites.fetching || studies.fetching}
+            />
+          </div>
+          <div className="hidden">
+            <button type="submit" className="btn btn-primary btn-search" disabled={clientSites.fetching || studies.fetching || hasError}>
+              {(studies.fetching)
+                ? <LoadingSpinner showOnlyIcon size={20} className="fetching-studies" />
+                : <span>Search</span>
+              }
+            </button>
+          </div>
         </div>
-      </form>
+      </Form>
     );
   }
 }
