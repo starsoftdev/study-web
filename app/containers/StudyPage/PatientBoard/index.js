@@ -13,7 +13,7 @@ import { selectCurrentUser } from 'containers/App/selectors';
 
 import PatientCategory from './PatientCategory';
 import PatientDetailModal from '../PatientDetail/PatientDetailModal';
-import { fetchPatientDetails, setCurrentPatientCategoryId, setCurrentPatientId } from '../actions';
+import { fetchPatientDetails, setCurrentPatientCategoryId, setCurrentPatientId, switchToNoteSectionDetail, switchToTextSectionDetail } from '../actions';
 
 @DragDropContext(HTML5Backend)
 class PatientBoard extends React.Component {
@@ -24,6 +24,8 @@ class PatientBoard extends React.Component {
     patientCategories: React.PropTypes.array.isRequired,
     setCurrentPatientCategoryId: React.PropTypes.func.isRequired,
     setCurrentPatientId: React.PropTypes.func.isRequired,
+    switchToNoteSection: React.PropTypes.func.isRequired,
+    switchToTextSection: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -32,9 +34,29 @@ class PatientBoard extends React.Component {
       openPatientModal: false,
     };
     this.onPatientClick = this.onPatientClick.bind(this);
+    this.onPatientTextClick = this.onPatientTextClick.bind(this);
+    this.showModal = this.showModal.bind(this);
   }
 
   onPatientClick(category, patient) {
+    const show = this.showModal(category, patient);
+    this.setState({
+      openPatientModal: show || false,
+    });
+    const { switchToNoteSection } = this.props;
+    switchToNoteSection();
+  }
+
+  onPatientTextClick(category, patient) {
+    const show = this.showModal(category, patient);
+    this.setState({
+      openPatientModal: show || false,
+    });
+    const { switchToTextSection } = this.props;
+    switchToTextSection();
+  }
+
+  showModal(category, patient) {
     const { fetchPatientDetails, currentPatientId, setCurrentPatientCategoryId, setCurrentPatientId } = this.props;
     const show = patient && currentPatientId !== patient.id;
     if (show) {
@@ -45,9 +67,7 @@ class PatientBoard extends React.Component {
       setCurrentPatientCategoryId(-1);
       setCurrentPatientId(-1);
     }
-    this.setState({
-      openPatientModal: show || false,
-    });
+    return show;
   }
 
   render() {
@@ -58,7 +78,7 @@ class PatientBoard extends React.Component {
           <nav className="nav-status">
             <ul className="list-inline">
               {patientCategories.map(patientCategory => (
-                <PatientCategory key={patientCategory.id} category={patientCategory} currentUser={currentUser} currentPatientId={currentPatientId} onPatientClick={this.onPatientClick} />
+                <PatientCategory key={patientCategory.id} category={patientCategory} currentUser={currentUser} currentPatientId={currentPatientId} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} />
               ))}
             </ul>
           </nav>
@@ -80,6 +100,8 @@ const mapDispatchToProps = (dispatch) => (
     fetchPatientDetails: (categoryId, patient) => dispatch(fetchPatientDetails(categoryId, patient)),
     setCurrentPatientId: (id) => dispatch(setCurrentPatientId(id)),
     setCurrentPatientCategoryId: (id) => dispatch(setCurrentPatientCategoryId(id)),
+    switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
+    switchToTextSection: () => dispatch(switchToTextSectionDetail()),
   }
 );
 

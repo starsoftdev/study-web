@@ -5,10 +5,11 @@
 */
 
 import React from 'react';
-import { Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+import CenteredModal from '../../components/CenteredModal/index';
+import Modal from 'react-bootstrap/lib/Modal';
 import { selectCurrentUser, selectSitePatients, selectPatientMessages } from 'containers/App/selectors';
 
 import MessageItem from './MessageItem';
@@ -115,11 +116,11 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     }
     return (
       <div>
-        <Modal className="custom-modal global-pms" id="chart-popup" show={this.props.showModal} onHide={this.props.closeModal}>
+        <Modal className="custom-modal global-pms" dialogComponentClass={CenteredModal} id="chart-popup" show={this.props.showModal} onHide={this.props.closeModal}>
           <Modal.Header>
             <Modal.Title>PATIENT MESSAGING SUITE</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closeModal}>
-              <i className="icomoon-icon_close"></i>
+              <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>

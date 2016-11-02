@@ -197,16 +197,9 @@ body > .jcf-select-drop.jcf-drop-flipped {
 	width: 100% !important;
 }
 .jcf-list ul {
-	list-style: none;
 	padding: 3px;
 	margin: 0;
 	max-height: 206px;
-}
-.jcf-list ul li {
-	overflow: hidden;
-	display: block;
-
-	&:first-child { display: none !important; }
 }
 .jcf-list .jcf-overflow {
 	overflow: auto;
@@ -497,6 +490,17 @@ div.jcf-select-data-search {
 			border-color: #00afef;
 		}
 	}
+}
+
+.select-indication-slide,
+div.jcf-select-data-search {
+  .form-control {
+    border-color: #ccc;
+    padding: 5px 35px 5px 14px;
+    &:hover, &:focus {
+      border-color: #00afef;
+    }
+  }
 }
 
 [type=checkbox],
