@@ -8,6 +8,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
+import Form from 'react-bootstrap/lib/Form';
+import Button from 'react-bootstrap/lib/Button';
 import Input from 'components/Input';
 
 import formValidator from './validator';
@@ -31,9 +33,7 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
   render() {
     const { handleSubmit } = this.props;
     return (
-      <form
-        onSubmit={handleSubmit}
-      >
+      <Form onSubmit={handleSubmit}>
         <fieldset>
           <Field
             name="body"
@@ -41,11 +41,11 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
             componentClass="textarea"
             // disabled={isSaving}
           />
-          <button type="submit" className="btn btn-default">
+          <Button type="submit">
             Send
-          </button>
+          </Button>
         </fieldset>
-      </form>
+      </Form>
     );
   }
 }

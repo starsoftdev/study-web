@@ -28,11 +28,21 @@ import {
   MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
   MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
   UPDATE_PATIENT_SUCCESS,
+  SWITCH_TO_NOTE_SECTION_DETAIL,
+  SWITCH_TO_TEXT_SECTION_DETAIL,
+  SWITCH_TO_EMAIL_SECTION_DETAIL,
+  SWITCH_TO_OTHER_SECTION_DETAIL,
 } from './constants';
 import _ from 'lodash';
 
 const initialState = {
   stats: {},
+  carousel: {
+    note: true,
+    text: false,
+    email: false,
+    other: false,
+  },
 };
 
 function studyPageReducer(state = initialState, action) {
@@ -170,6 +180,46 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         patientBoardLoading: false,
+      };
+    case SWITCH_TO_NOTE_SECTION_DETAIL:
+      return {
+        ...state,
+        carousel: {
+          note: true,
+          text: false,
+          email: false,
+          other: false,
+        },
+      };
+    case SWITCH_TO_TEXT_SECTION_DETAIL:
+      return {
+        ...state,
+        carousel: {
+          note: false,
+          text: true,
+          email: false,
+          other: false,
+        },
+      };
+    case SWITCH_TO_EMAIL_SECTION_DETAIL:
+      return {
+        ...state,
+        carousel: {
+          note: false,
+          text: false,
+          email: true,
+          other: false,
+        },
+      };
+    case SWITCH_TO_OTHER_SECTION_DETAIL:
+      return {
+        ...state,
+        carousel: {
+          note: false,
+          text: false,
+          email: false,
+          other: true,
+        },
       };
     default:
       return state;

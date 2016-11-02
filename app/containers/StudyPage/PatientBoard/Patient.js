@@ -48,6 +48,7 @@ class Patient extends React.Component {
     currentPatientId: React.PropTypes.number,
     isDragging: React.PropTypes.bool.isRequired,
     onPatientClick: React.PropTypes.func.isRequired,
+    onPatientTextClick: React.PropTypes.func.isRequired,
     patient: React.PropTypes.object.isRequired,
   };
 
@@ -57,10 +58,15 @@ class Patient extends React.Component {
   }
 
   renderPatientTextMessageSummary(patient) {
-    const { currentUser } = this.props;
+    const { category, currentUser, onPatientTextClick } = this.props;
     if (patient.lastTextMessage) {
       return (
-        <a className="bottom">
+        <a
+          className="bottom"
+          onClick={() => {
+            onPatientTextClick(category, patient);
+          }}
+        >
           <div className="msg-alert">
             <div className="msg">
               <p>{patient.lastTextMessage.body}</p>
@@ -80,13 +86,13 @@ class Patient extends React.Component {
     const { connectDragSource, category, currentPatientId, onPatientClick, patient } = this.props;
     const patientPhone = formatPhone(patient.phone);
     return connectDragSource(
-      <li
-        className={classNames({ 'patient-selected': patient.id === currentPatientId })}
-        onClick={() => {
-          onPatientClick(category, patient);
-        }}
-      >
-        <a className="top">
+      <li className={classNames({ 'patient-selected': patient.id === currentPatientId })}>
+        <a
+          className="top"
+          onClick={() => {
+            onPatientClick(category, patient);
+          }}
+        >
           <strong className="name">
             <span className="first-name">{patient.firstName}</span>
             <span> </span>

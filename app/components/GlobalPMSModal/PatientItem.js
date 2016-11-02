@@ -30,7 +30,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     const lastDate = (new Date(patientData.twtm_max_date_created ? patientData.twtm_max_date_created : patientData.created_at)).toLocaleString();
     return (
       <li className={patientSelected === true ? 'active' : ''} onClick={this.selectPatient}>
-        <a href="#chat-room1" className="tab-opener">
+        <a className="tab-opener">
           <div className="user-img">
             <img src={patientData.gender === 'Male' ? defaultUserImage : defaultUserImageGirl} alt="" />
           </div>
