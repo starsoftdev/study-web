@@ -93,6 +93,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                   multi
                   joinValues
                   objectValue
+                  clearable={false}
                   disabled={patients.fetching}
                   className="multiSelectWrap"
                 />
@@ -111,6 +112,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                   multi
                   joinValues
                   objectValue
+                  clearable={false}
                   disabled={patients.fetching}
                   className="multiSelectWrap"
                 />

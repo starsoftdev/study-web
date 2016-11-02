@@ -4,6 +4,7 @@
 
 import React from 'react';
 import moment from 'moment-timezone';
+import classNames from 'classnames';
 
 class PatientText extends React.Component {
   static propTypes = {
@@ -22,13 +23,27 @@ class PatientText extends React.Component {
   }
 
   renderProfileImage() {
-    const { textMessage } = this.props;
+    const { currentPatient, textMessage } = this.props;
+    /* eslint-disable global-require */
     if (textMessage.user) {
       return (
         <img role="presentation" src={textMessage.user.profileImageURL} />
       );
+    } else if (textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound') {
+      const url = require('../../../assets/images/Default-User-Img-Dr.png');
+      return (
+        <img role="presentation" src={url} />
+      );
+    } else if (currentPatient.gender === 'Female') {
+      const url = require('../../../assets/images/Default-User-Img-Girl.png');
+      return (
+        <img role="presentation" src={url} />
+      );
     }
-    return null;
+    const url = require('../../../assets/images/Default-User-Img.png');
+    return (
+      <img role="presentation" src={url} />
+    );
   }
 
   renderTextMessageOriginUser() {
@@ -45,10 +60,9 @@ class PatientText extends React.Component {
 
   render() {
     const { currentUser, textMessage } = this.props;
-    const messageStyle = (textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound') ? '' : 'reply';
     if (textMessage) {
       return (
-        <div className={`post-msg ${messageStyle}`}>
+        <div className={classNames('post-msg', { reply: textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound' })}>
           <div className="img-holder">
             {this.renderProfileImage()}
           </div>

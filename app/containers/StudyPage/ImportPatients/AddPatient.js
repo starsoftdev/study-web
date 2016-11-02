@@ -121,7 +121,7 @@ class AddPatient extends React.Component {
                 />
               </div>
               <div className="text-right">
-                <Button type="submit" onClick={(event) => this.addPatient(event)} />
+                <Button onClick={(event) => this.addPatient(event)}>Submit</Button>
               </div>
             </Form>
           </div>

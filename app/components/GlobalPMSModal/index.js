@@ -120,7 +120,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
           <Modal.Header>
             <Modal.Title>PATIENT MESSAGING SUITE</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closeModal}>
-              <i className="icomoon-icon_close"></i>
+              <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>
