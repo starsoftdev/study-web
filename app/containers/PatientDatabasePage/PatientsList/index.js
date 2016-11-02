@@ -128,7 +128,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
                 <tr>
                   <th>
                     <Field
-                      name="patients"
+                      name="all-patients"
                       type="checkbox"
                       component={Checkbox}
                       onChange={this.toggleAllPatientSelection}
