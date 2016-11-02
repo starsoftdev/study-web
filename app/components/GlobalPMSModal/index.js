@@ -68,6 +68,15 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const scrollable = this.scrollable;
+    if (this.props.patientMessages && scrollable) {
+      setTimeout(() => {
+        scrollable.scrollTop = scrollable.scrollHeight;
+      }, 0);
+    }
+  }
+
   selectPatient(item) {
     if (item.id !== this.state.selectedPatient.id) {
       this.setState({ selectedPatient: item });
@@ -129,7 +138,12 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                       <span className="protocol">{protocolNumber}</span>
                     </a>
                   </header>
-                  <div className="scroll-holder">
+                  <div
+                    className="scroll-holder"
+                    ref={(scrollable) => {
+                      this.scrollable = scrollable;
+                    }}
+                  >
                     <article className="post-msg">
                       {patientMessageListContents}
                     </article>
