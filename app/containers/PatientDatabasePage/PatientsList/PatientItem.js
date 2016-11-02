@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Button from 'react-bootstrap/lib/Button';
+import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
 import { map } from 'lodash';
 
@@ -28,9 +30,21 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
 
   constructor(props) {
     super(props);
-
+    this.state = {
+      hover: false,
+    };
+    this.showHover = this.showHover.bind(this);
+    this.hideHover = this.hideHover.bind(this);
     this.editPatient = this.editPatient.bind(this);
     this.openChat = this.openChat.bind(this);
+  }
+
+  showHover() {
+    this.setState({ hover: true });
+  }
+
+  hideHover() {
+    this.setState({ hover: false });
   }
 
   editPatient() {
@@ -61,7 +75,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     const indicationNames = map(indications, indicationIterator => indicationIterator.name).join(', ');
 
     return (
-      <tr className="patient-container">
+      <tr className={classNames('patient-container', { 'tr-active': this.state.hover })} onMouseEnter={this.showHover} onMouseLeave={this.hideHover}>
         <td>
           <span className="jcf-checkbox parent-active jcf-checked">
             <span />
@@ -69,7 +83,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
           </span>
         </td>
         <td className="index">
-          <span>{index + 1}</span>
+          {index + 1}
         </td>
         <td className="name">
           <span>{firstName} {lastName}</span>
@@ -96,18 +110,15 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
           <span>{studyPatientCategory.patientCategory.name}</span>
         </td>
         <td className="source">
-          <span>{source.type}</span>
-        </td>
-        <td className="action">
-          <button className="btn btn-primary btn-edit-patient pull-right" onClick={this.editPatient} disabled={(this.currentPatientIsBeingFetched())}>
-            {(this.currentPatientIsBeingFetched())
-              ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-patient" /></span>
-              : <span>Edit</span>
-            }
-          </button>
-        </td>
-        <td className="open-chat">
-          <i className="fa fa-comments" aria-hidden="true" onClick={this.openChat} />
+          <div className="btn-block">
+            <span>{source.type}</span>
+            <Button bsStyle="primary" className="btn-edit-patient pull-right" onClick={this.editPatient} disabled={(this.currentPatientIsBeingFetched())}>
+              {(this.currentPatientIsBeingFetched())
+                ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-patient" /></span>
+                : <span>Edit</span>
+              }
+            </Button>
+          </div>
         </td>
       </tr>
     );

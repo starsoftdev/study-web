@@ -138,8 +138,6 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
                   <th>BMI</th>
                   <th>STATUS</th>
                   <th>SOURCE</th>
-                  <th></th>
-                  <th></th>
                 </tr>
               </thead>
               <tbody>
