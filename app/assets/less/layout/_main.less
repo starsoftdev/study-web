@@ -2027,25 +2027,25 @@
             width: 51px;
           }
           .visa {
-            background-image: url(~assets/images/payment/visa.png);
+            background-image: url("~assets/images/payment/visa.png");
           }
           .american-express {
-            background-image: url(~assets/images/payment/american-express.png);
+            background-image: url("~assets/images/payment/american-express.png");
           }
           .mastercard {
-            background-image: url(~assets/images/payment/mastercard.png);
+            background-image: url("~assets/images/payment/mastercard.png");
           }
           .discover {
-            background-image: url(~assets/images/payment/discover.png);
+            background-image: url("~assets/images/payment/discover.png");
           }
           .jcb {
-            background-image: url(~assets/images/payment/jcb.png);
+            background-image: url("~assets/images/payment/jcb.png");
           }
           .diners-club {
-            background-image: url(~assets/images/payment/diners-club.png);
+            background-image: url("~assets/images/payment/diners-club.png");
           }
           .unknown {
-            background-image: url(~assets/images/payment/unknown.png);
+            background-image: url("~assets/images/payment/unknown.png");
           }
         }
       }
@@ -2072,263 +2072,256 @@
     }
   }
 }
+
 .patient-database {
-
-  background-image: none;
-  background-color: transparent;
-
-	.btns {
-		.font(0,0);
-		margin: 0 0 25px;
-
-		.btn {
-			padding: 5px 10px;
-			margin: 0 0 0 12px;
-
-			&.download {
-				min-width: 150px;
-			}
-
-			&.import {
-				min-width: 123px;
-			}
-
-			&.email {
-				min-width: 224px;
-			}
-		}
-
-    .fa {
-      margin-right: 5px;
+  .btns-popups {
+    overflow: hidden;
+    margin: 0 -6px 25px;
+    .col {
+      padding: 0 6px;
     }
-	}
-
-
-
-	.form-search {
-		margin: 0;
-
-		.fields-holder {
-			margin: 0;
-
-			> div {
-				padding: 0 12px 12px 0;
-
-			}
-		}
-
-		.bmi,
-		.age-range,
-		.gender,
-		.indication,
-		.select-holder,
-		.search-area  {
-			margin: 0;
-			width: 25%;
-		}
-
-		.col {
-			width: 45%;
-		}
-
-		.sign {
-			display: block;
-			padding: 0 1px;
-			overflow: hidden;
-			line-height: 40px;
-			text-align: center;
-		}
-
-		.title {
-			.font(18px);
-			color: #354052;
-			display: block;
-			margin: 0 0 2px;
-			text-transform: uppercase;
-
-			&:empty {
-				min-height: 23px;
-			}
-		}
-
-		.field {
-			position: relative;
-		}
-
-		.btn-area { display: none; }
-	}
-
-	.table-holder {
-		header {
-			padding: 14px 18px 16px 15px;
-		}
-
-
-	}
-
-	.table {
-    border: 1px solid #f78e1e;
-    background-color: #fff;
-
-    caption {
-      background-color: #f78e1e;
-      color: #fff;
-      padding: 12px;
+  }
+  .table > thead > tr > th:first-child .jcf-checkbox {
+    margin-top: 3px;
+    @media screen and (max-width: @psd) {
+      margin: 0;
+    }
+  }
+  .table .jcf-checkbox {
+    margin-top: 3px;
+    @media screen and (max-width: @psd) {
+      margin: 0;
+    }
+  }
+  .form-search {
+    margin: 0 -12px 5px 0;
+    .fields-holder {
+      margin: 0;
+      > div {
+        padding: 0 12px 25px 0;
+      }
+    }
+    .col-holder {
+      margin: 0 -6px;
+    }
+    .bmi,
+    .age-range,
+    .gender,
+    .indication,
+    .select-holder,
+    .search-area {
+      margin: 0;
+      width: 25%;
+    }
+    .col {
+      width: 45%;
+    }
+    .sign {
+      display: block;
+      padding: 0 1px;
+      overflow: hidden;
+      line-height: 40px;
+      text-align: center;
+    }
+    .title {
+      .font(18px);
+      color: #354052;
+      display: block;
+      margin: 0 0 2px;
       text-transform: uppercase;
-      font-size: 21px;
-      font-weight: 700;
+      &:empty {
+        min-height: 23px;
+      }
     }
-
-    td,
-    th {
-      &:nth-child(1) { width: 4.0%; }
-      &:nth-child(2) { width: 12.5%; }
+    .field {
+      position: relative;
+    }
+    .btn-area {
+      display: none;
+    }
+  }
+  .table-holder {
+    header {
+      padding: 14px 18px 16px 15px;
+    }
+  }
+  .table {
+    td, th {
+      &:nth-child(1) {
+        width: 40px;
+        padding-right: 0;
+        padding-left: 11px;
+      }
+      &:nth-child(2) {
+        width: 65px;
+        padding-left: 5px;
+      }
       &:nth-child(3) {
         width: 12.5%;
+      }
+      &:nth-child(4) {
+        width: 16.7%;
         word-break: break-all;
       }
-      &:nth-child(4) { width: 11.5%; }
-      &:nth-child(5) { width: 16.5%; }
-      &:nth-child(6) { width: 5.5%; }
-      &:nth-child(7) { width: 8.0%; }
-      &:nth-child(8) { width: 4.5%; }
-      &:nth-child(9) { width: 11.5%; }
-      &:nth-child(10) {	width: 8.5%; }
-      &:nth-child(11) {	width: auto; }
+      &:nth-child(5) {
+        width: 11.5%;
+      }
+      &:nth-child(6) {
+        width: 9.8%;
+      }
+      &:nth-child(7) {
+        width: 5.5%;
+      }
+      &:nth-child(8) {
+        width: 8.0%;
+      }
+      &:nth-child(9) {
+        width: 4.9%;
+      }
+      &:nth-child(10) {
+        width: 11.8%;
+      }
+      &:nth-child(11) {
+        width: auto;
+        padding-left: 0;
+      }
     }
-
-		> tbody {
-			counter-reset: item;
-			> tr {
-				> td {
-          padding: 16px 12px;
-
-					&:first-child {
-						&:before {
-							content: counters(item, ".", decimal) "";
-							counter-increment: item;
-						}
-					}
-				}
-			}
-		}
-
-		.tr-active {
-			> td:nth-child(2) {
-				letter-spacing: -0.05rem;
-			}
-		}
-
-		.btn-block {
-			position: relative;
-			min-height: 42px;
-			width: auto;
-			line-height: 42px;
-			margin: 0 12px 0 0;
-			padding: 0 72px 0 0;
-		}
-
-		.btn {
-			i {
-				display: none;
-			}
-		}
-	}
-
-	.advance-search-opener {
-		display: none;
-	}
-
-	@media screen and (max-width: @psd) {
-
-		.advance-search-opener {
-			top: auto;
-			right: auto;
-			float: right;
-			display: block;
-			position: relative;
-		}
-
-
-		.form-search {
-			margin: 0 -6px 23px;
-
-			.btn-area { display: block; }
-
-
-			.fields-holder {
-				margin: 0;
-				padding: 0;
-
-				> div {
-					width: 50%;
-					margin: 0;
-					padding: 0 6px 7px;
-
-				}
-			}
-
-			.select-holder,
-			.bmi,
-			.age-range,
-			.gender,
-			.indication,
-			.search-area {
-				width: 50%;
-				margin: 0;
-			}
-
-
-			.indication + .indication { clear: left; }
-
-			.col {
-				width: 47.5%;
-			}
-
-			.title:empty {
-				min-height: 23px;
-			}
-
-			&.active {
-				.form-slide {
-					opacity: 1;
-					margin: 20px 0 0;
-					visibility: visible;
-				}
-
-				.btn-primary {
-					.icomoon-icon_search2:before { content: "\e900"; }
-				}
-			}
-		}
-
-
-		.table {
-
-			> thead {
-				> tr > th {
-					.font(14px);
-					padding-left: 5px;
-
-					&:first-child {
-						padding-left: 8px;
-					}
-				}
-			}
-
-			> tbody > tr > td {
-
-				.font(14px);
-
-				.btn-block {
-
-				}
-			}
-		}
-
-	}
-
-
+    .tr-active {
+      > td:nth-child(2) {
+        letter-spacing: -0.05rem;
+      }
+    }
+    .btn-block {
+      position: relative;
+      min-height: 42px;
+      width: auto;
+      line-height: 42px;
+      margin: 0 12px 0 0;
+      padding: 0 72px 0 0;
+    }
+    .btn {
+      top: 0;
+      right: 0;
+      position: absolute;
+      i {
+        display: none;
+      }
+    }
+  }
+  .advance-search-opener {
+    display: none;
+  }
+  @media screen and (max-width: @psd) {
+    .advance-search-opener {
+      top: auto;
+      right: auto;
+      float: right;
+      display: block;
+      position: relative;
+    }
+    .form-search {
+      margin: 0 -6px 5px;
+      .btn-area {
+        display: block;
+      }
+      .fields-holder {
+        margin: 0;
+        padding: 0;
+        > div {
+          width: 25%;
+          margin: 0;
+          padding: 0 6px 25px;
+        }
+      }
+      .select-holder,
+      .bmi,
+      .age-range,
+      .gender,
+      .indication,
+      .search-area {
+        width: 25%;
+        margin: 0;
+      }
+      .col {
+        width: 47.5%;
+      }
+      .title:empty {
+        min-height: 23px;
+      }
+      &.active {
+        .form-slide {
+          opacity: 1;
+          margin: 20px 0 0;
+          visibility: visible;
+        }
+        .btn-primary {
+          .icomoon-icon_search2:before {
+            content: "\e900";
+          }
+        }
+      }
+    }
+    .table {
+      td, th {
+        &:nth-child(1) {
+          width: 38px;
+          padding-left: 11px;
+        }
+        &:nth-child(2) {
+          width: 51px;
+        }
+        &:nth-child(3) {
+          width: 10.5%;
+        }
+        &:nth-child(4) {
+          width: 16.7%;
+        }
+        &:nth-child(5) {
+          width: 12.5%;
+        }
+        &:nth-child(6) {
+          width: 9.8%;
+          padding-left: 0;
+          .caret-arrow {
+            margin: 0 -5px 0 -2px;
+          }
+        }
+        &:nth-child(7) {
+          width: 5.5%;
+        }
+        &:nth-child(8) {
+          width: 8.0%;
+        }
+        &:nth-child(9) {
+          width: 5.9%;
+        }
+        &:nth-child(10) {
+          width: 9%;
+          padding-right: 20px;
+        }
+        &:nth-child(11) {
+          width: auto;
+        }
+      }
+      > thead {
+        > tr > th {
+          .font(14px);
+          padding-left: 5px;
+          &:first-child {
+            padding-left: 11px;
+          }
+        }
+      }
+      > tbody > tr > td {
+        .font(14px);
+        padding-left: 5px;
+        &:first-child {
+          padding-left: 11px;
+        }
+        .btn-block {}
+      }
+    }
+  }
 }
 
 .link {
@@ -2934,7 +2927,7 @@
 		margin: 0 0 12px;
 		position: relative;
 
-		[class^="icon-"], [class*=" icon-"] {
+		[class^="icomoon-"], [class*=" icomoon-"] {
 			top: 20px;
 			right: 20px;
 			font-size: 30px;

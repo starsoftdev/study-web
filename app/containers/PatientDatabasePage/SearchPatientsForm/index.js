@@ -5,13 +5,13 @@ import { Field, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import { map } from 'lodash';
 
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
+import Input from '../../../components/Input';
+import ReactSelect from '../../../components/Input/ReactSelect';
 import { selectSearchPatientsFormError } from './selectors';
-import { selectPatientCategories, selectPatients } from 'containers/PatientDatabasePage/selectors';
-import { selectIndications, selectSources } from 'containers/App/selectors';
+import { selectPatientCategories, selectPatients } from '../../../containers/PatientDatabasePage/selectors';
+import { selectIndications, selectSources } from '../../../containers/App/selectors';
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
@@ -63,21 +63,25 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     ];
 
     return (
-      <form className="form-search-patients" onSubmit={handleSubmit}>
+      <form className="form-search" onSubmit={handleSubmit}>
         <div className="search-patients">
           <div className="row form-group">
             <div className="col-sm-3">
               <span className="title">
                 <label>Name</label>
               </span>
-              <div>
+              <div className="field">
                 <Field
                   name="name"
                   component={Input}
-                  type="text"
+                  type="search"
                   placeholder="Search..."
+                  className="keyword-search"
                   disabled={patients.fetching}
                 />
+                <label htmlFor="search">
+                  <i className="icomoon-icon_search2" />
+                </label>
               </div>
             </div>
             <div className="col-sm-3">
@@ -219,15 +223,13 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
               </div>
             </div>
           </div>
-          <div className="row">
-            <div className="col-sm-12">
-              <Button type="submit" bsStyle="primary" className="btn-search" disabled={patients.fetching || hasError}>
-                {(patients.fetching)
-                  ? <LoadingSpinner showOnlyIcon size={20} className="fetching-patients" />
-                  : <span>Search</span>
-                }
-              </Button>
-            </div>
+          <div className="hidden">
+            <Button type="submit" bsStyle="primary" className="btn-search" disabled={patients.fetching || hasError}>
+              {(patients.fetching)
+                ? <LoadingSpinner showOnlyIcon size={20} className="fetching-patients" />
+                : <span>Search</span>
+              }
+            </Button>
           </div>
         </div>
       </form>

@@ -27,6 +27,11 @@ import {
 
   INIT_CHAT,
   DISABLE_CHAT,
+
+  ADD_PATIENTS_TO_TEXT_BLAST,
+  REMOVE_PATIENT_FROM_TEXT_BLAST,
+  REMOVE_PATIENTS_FROM_TEXT_BLAST,
+  SUBMIT_TEXT_BLAST,
 } from './constants';
 
 export function fetchPatients(searchParams = {}) {
@@ -157,5 +162,34 @@ export function initChat(payload) {
 export function disableChat() {
   return {
     type: DISABLE_CHAT,
+  };
+}
+
+export function addPatientsToTextBlast(patients) {
+  return {
+    type: ADD_PATIENTS_TO_TEXT_BLAST,
+    patients,
+  };
+}
+
+export function removePatientFromTextBlast(patient) {
+  return {
+    type: REMOVE_PATIENT_FROM_TEXT_BLAST,
+    patient,
+  };
+}
+
+export function removePatientsFromTextBlast() {
+  return {
+    type: REMOVE_PATIENTS_FROM_TEXT_BLAST,
+  };
+}
+
+export function submitTextBlast(patients, message, onClose) {
+  return {
+    type: SUBMIT_TEXT_BLAST,
+    patients,
+    message,
+    onClose,
   };
 }
