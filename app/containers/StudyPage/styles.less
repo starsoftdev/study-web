@@ -363,57 +363,37 @@
   position: relative;
   text-align: center;
   text-transform: uppercase;
-}
-#text-email-blast .modal-opener:hover,
-.add-patient-info-import:hover,
-.upload-patient-info:hover {
-  color: #fff;
-}
-#text-email-blast .modal-opener:hover .table,
-.add-patient-info-import:hover .table,
-.upload-patient-info:hover .table {
-  background: #00afef;
-}
-#text-email-blast .modal-opener [class^="icomoon-"],
-.add-patient-info-import [class^="icomoon-"],
-.upload-patient-info [class^="icomoon-"],
-#text-email-blast .modal-opener [class*=" icomoon-"],
-.add-patient-info-import [class*=" icomoon-"],
-.upload-patient-info [class*=" icomoon-"] {
-  display: block;
-  font-size: 40px;
-  margin: 0 0 10px;
-}
-#text-email-blast .modal-opener [class^="icomoon-"].icomoon-envelop,
-.add-patient-info-import [class^="icomoon-"].icomoon-envelop,
-.upload-patient-info [class^="icomoon-"].icomoon-envelop,
-#text-email-blast .modal-opener [class*=" icomoon-"].icomoon-envelop,
-.add-patient-info-import [class*=" icomoon-"].icomoon-envelop,
-.upload-patient-info [class*=" icomoon-"].icomoon-envelop {
-  font-size: 34px;
-}
-#text-email-blast .modal-opener .text,
-.add-patient-info-import .text,
-.upload-patient-info .text {
-  display: block;
-}
-#text-email-blast .modal-opener .table,
-.add-patient-info-import .table,
-.upload-patient-info .table {
-  width: 100%;
-  height: 100%;
-  color: inherit;
-  display: table;
-  font-size: 18px;
-  table-layout: fixed;
-  transition: all 0.25s ease;
-}
-#text-email-blast .modal-opener .table-cell,
-.add-patient-info-import .table-cell,
-.upload-patient-info .table-cell {
-  padding: 10px;
-  display: table-cell;
-  vertical-align: middle;
+  &:hover {
+    color: #fff;
+    .table {
+      background: #00afef;
+    }
+  }
+  [class^="icomoon-"],
+  [class*=" icomoon-"] {
+    display: block;
+    font-size: 40px;
+    margin: 0 0 10px;
+    &.icomoon-envelop {
+      font-size: 34px;
+    }
+  }
+  .text {
+    display: block;
+  }
+  .table {
+    .size(100%);
+    color: inherit;
+    display: table;
+    font-size: 18px;
+    table-layout: fixed;
+    transition: all 0.25s ease;
+  }
+  .table-cell {
+    padding: 10px;
+    display: table-cell;
+    vertical-align: middle;
+  }
 }
 .add-patient-info-import {
   padding-top: 4px;
@@ -421,11 +401,13 @@
 .upload-patient-info {
   padding-bottom: 4px;
 }
-#text-email-blast .modal-opener {
-  padding: 3px 3px 4px;
-}
-#text-email-blast .modal-opener ~ .modal-opener {
-  padding: 4px 3px 3px;
+#text-email-blast {
+  .modal-opener {
+    padding: 3px 3px 4px;
+    ~ .modal-opener {
+      padding: 4px 3px 3px;
+    }
+  }
 }
 
 #text-blast {
@@ -718,7 +700,7 @@
       min-width: 194px;
       text-transform: uppercase;
     }
-    .lightbox-opener {
+    .modal-opener {
       .align;
       color: #fff;
       display: none;
@@ -729,7 +711,7 @@
     }
   }
   &.scheduled-patient-active {
-    .form-head .lightbox-opener {
+    .form-head .modal-opener {
       display: inline-block;
       color: #101010;
       &:hover {
