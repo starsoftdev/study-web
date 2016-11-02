@@ -47,7 +47,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     super(props);
 
     this.selectPatient = this.selectPatient.bind(this);
-    this.sendMessage = this.sendMessage.bind(this);
     this.state = {
       selectedPatient: { id: 0 },
     };
@@ -77,24 +76,8 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     }
   }
 
-  sendMessage(message) {
-    const options = {
-      body: message.body,
-      studyId: this.state.selectedPatient.study_id,
-      patientId: this.state.selectedPatient.id,
-      to: this.state.selectedPatient.phone,
-    };
-
-    this.props.sendStudyPatientMessages(options, (err, data) => {
-      if (!err) {
-        console.log('data', data);
-      }
-    });
-  }
-
-
   render() {
-    const { sitePatients, patientMessages } = this.props;
+    const { sitePatients, patientMessages, sendStudyPatientMessages } = this.props;
     const sitePatientsListContents = sitePatients.details.map((item, index) => (
       <PatientItem
         patientData={item}
@@ -152,7 +135,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                     </article>
                   </div>
                   <footer>
-                    <ChatForm onSubmit={this.sendMessage} />
+                    <ChatForm selectedPatient={this.state.selectedPatient} sendStudyPatientMessages={sendStudyPatientMessages} />
                   </footer>
                 </section>
               </div>

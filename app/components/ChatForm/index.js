@@ -7,9 +7,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, reset } from 'redux-form';
 import Input from 'components/Input';
 import Form from 'react-bootstrap/lib/Form';
+import Button from 'react-bootstrap/lib/Button';
 
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
@@ -28,25 +29,29 @@ import {
 
 import './styles.less';
 
-@reduxForm({ form: 'chatPatient', validate: formValidator })
+const formName = 'chatPatient';
+
+@reduxForm({ form: formName, validate: formValidator })
 
 class ChatForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     isSaving: PropTypes.any,
-    handleSubmit: PropTypes.func,
     fetchStudyPatientMessages: PropTypes.func,
     setProcessingStatus: PropTypes.func,
+    handleSubmit: PropTypes.func,
     socket: PropTypes.any,
+    chat: PropTypes.object,
+    sendStudyPatientMessages: PropTypes.func,
+    reset: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
-
-    this.fetchStudyPatientMessages = this.fetchStudyPatientMessages.bind(this);
-
     this.state = {
       twilioMessages : [],
     };
+    this.fetchStudyPatientMessages = this.fetchStudyPatientMessages.bind(this);
+    this.sendMessage = this.sendMessage.bind(this);
   }
 
   componentDidMount() {
@@ -54,14 +59,27 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
   }
 
   componentWillReceiveProps(newProps) {
-    // console.log('componentWillReceiveProps', newProps);
     this.props.socket.on('notifyMessage', () => {
-      // console.log('notifyMessage');
       this.fetchStudyPatientMessages(newProps);
     });
   }
 
-  componentDidUpdate() {}
+  sendMessage(message) {
+    const { chat, sendStudyPatientMessages, reset } = this.props;
+    const options = {
+      body: message.body,
+      studyId: chat.details.study_id,
+      patientId: chat.details.id,
+      to: chat.details.phone,
+    };
+
+    sendStudyPatientMessages(options, (err, data) => {
+      if (!err) {
+        console.log('data', data);
+      }
+    });
+    reset();
+  }
 
   fetchStudyPatientMessages(props) {
     const scrollable = this.scrollable;
@@ -100,7 +118,7 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
     return (
       <Form
         className="chat-form"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(this.sendMessage)}
       >
         <fieldset>
           <div className="col-md-12">
@@ -129,12 +147,12 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
               </div>
             </div>
             <div className="form-group pull-right">
-              <button type="submit" className="btn btn-default btn-add-row" disabled={isSaving}>
+              <Button type="submit" className="btn-add-row" disabled={isSaving}>
                 {isSaving
                   ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-patient" /></span>
                   : <span>Submit</span>
                 }
-              </button>
+              </Button>
             </div>
           </div>
         </fieldset>
@@ -153,6 +171,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchStudyPatientMessages: (payload) => dispatch(fetchStudyPatientMessages(payload)),
     setProcessingStatus: (payload) => dispatch(setProcessingStatus(payload)),
+    reset: () => dispatch(reset(formName)),
   };
 }
 

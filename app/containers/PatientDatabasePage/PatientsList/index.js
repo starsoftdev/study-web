@@ -5,8 +5,8 @@ import { Modal } from 'react-bootstrap';
 import { map, omit } from 'lodash';
 
 import CenteredModal from '../../../components/CenteredModal/index';
-import EditPatientForm from 'containers/PatientDatabasePage/EditPatientForm';
-import ChatForm from 'components/ChatForm';
+import EditPatientForm from '../../../containers/PatientDatabasePage/EditPatientForm';
+import ChatForm from '../../../components/ChatForm';
 import { selectPatients,
   selectSelectedPatient,
   selectSelectedPatientDetailsForForm,
@@ -45,7 +45,6 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     this.updatePatient = this.updatePatient.bind(this);
     this.openChat = this.openChat.bind(this);
     this.closeChat = this.closeChat.bind(this);
-    this.sendMessage = this.sendMessage.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -73,22 +72,6 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     payload.patient_category_id = patientData.status;
 
     this.props.savePatient(selectedPatient.details.id, payload);
-  }
-
-  sendMessage(message) {
-    const { chat } = this.props;
-    const options = {
-      body: message.body,
-      studyId: chat.details.study_id,
-      patientId: chat.details.id,
-      to: chat.details.phone,
-    };
-
-    this.props.sendStudyPatientMessages(options, (err, data) => {
-      if (!err) {
-        console.log('data', data);
-      }
-    });
   }
 
   chatModalShouldBeShown() {
@@ -157,7 +140,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
                 <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <ChatForm onSubmit={this.sendMessage} />
+                <ChatForm chat={chat} sendStudyPatientMessages={sendStudyPatientMessages} />
               </Modal.Body>
             </Modal>
             : ''
