@@ -5,7 +5,7 @@ import { Modal } from 'react-bootstrap';
 import { map, omit } from 'lodash';
 
 import CenteredModal from '../../../components/CenteredModal/index';
-import EditPatientForm from 'containers/PatientDatabasePage/EditPatientForm';
+import EditPatientForm from '../../../containers/PatientDatabasePage/EditPatientForm';
 import ChatForm from 'components/ChatForm';
 import { selectPatients,
   selectSelectedPatient,
@@ -115,11 +115,19 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     if (patients.details.length > 0) {
       return (
         <div className="patients">
-          <div className="table-responsive">
-            <table className="table table-striped">
-              <caption>Total Patients Count: {patients.details.length}</caption>
+          <div className="table-holder">
+            <header>
+              <h2>Total Patients Count: {patients.details.length}</h2>
+            </header>
+            <table className="table">
               <thead>
                 <tr>
+                  <th>
+                    <span className="jcf-checkbox parent-active jcf-checked">
+                      <span />
+                      <input type="checkbox" checked />
+                    </span>
+                  </th>
                   <th>#</th>
                   <th>NAME</th>
                   <th>EMAIL</th>

@@ -5,13 +5,13 @@ import { Field, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import { map } from 'lodash';
 
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
+import Input from '../../../components/Input';
+import ReactSelect from '../../../components/Input/ReactSelect';
 import { selectSearchPatientsFormError } from './selectors';
-import { selectPatientCategories, selectPatients } from 'containers/PatientDatabasePage/selectors';
-import { selectIndications, selectSources } from 'containers/App/selectors';
+import { selectPatientCategories, selectPatients } from '../../../containers/PatientDatabasePage/selectors';
+import { selectIndications, selectSources } from '../../../containers/App/selectors';
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
@@ -70,14 +70,18 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
               <span className="title">
                 <label>Name</label>
               </span>
-              <div>
+              <div className="field">
                 <Field
                   name="name"
                   component={Input}
-                  type="text"
+                  type="search"
                   placeholder="Search..."
+                  className="keyword-search"
                   disabled={patients.fetching}
                 />
+                <label htmlFor="search">
+                  <i className="icomoon-icon_search2" />
+                </label>
               </div>
             </div>
             <div className="col-sm-3">

@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { map, omit, omitBy, isUndefined } from 'lodash';
 
-import SearchPatientsForm from 'containers/PatientDatabasePage/SearchPatientsForm/index';
-import PatientsList from 'containers/PatientDatabasePage/PatientsList/index';
+import SearchPatientsForm from '../../containers/PatientDatabasePage/SearchPatientsForm/index';
+import PatientsList from '../../containers/PatientDatabasePage/PatientsList/index';
 import PatientActionButtons from './PatientActionButtons';
 import { fetchIndications, fetchSources } from 'containers/App/actions';
 import { fetchPatientCategories, fetchPatients } from './actions';
@@ -46,8 +46,8 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
 
   render() {
     return (
-      <div className="patient-database-page">
-        <div className="container-fluid">
+      <div className="container-fluid">
+        <div className="patient-database">
           <Helmet title="Patient Database - StudyKIK" />
           <h2 className="main-heading">Patient Database</h2>
           <section className="actions-panel">

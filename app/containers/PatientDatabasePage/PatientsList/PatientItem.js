@@ -62,6 +62,12 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
 
     return (
       <tr className="patient-container">
+        <td>
+          <span className="jcf-checkbox parent-active jcf-checked">
+            <span />
+            <input type="checkbox" name="name-1" checked />
+          </span>
+        </td>
         <td className="index">
           <span>{index + 1}</span>
         </td>
