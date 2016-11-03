@@ -11,6 +11,7 @@ import Input from 'components/Input';
 import ChangePasswordForm from 'components/ChangePasswordForm';
 import defaultImage from 'assets/images/Default-User-Img.png';
 import './styles.less';
+import CenteredModal from 'components/CenteredModal/index';
 
 @reduxForm({ form: 'profile' })
 class ProfileForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -94,7 +95,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
                 component={Input}
                 type="text"
                 className="col pull-left"
-                isDisabled="true"
+                isDisabled
               />
               <Field
                 name="lastName"
@@ -102,7 +103,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
                 type="text"
                 placeholder="Last Name"
                 className="col pull-right"
-                isDisabled="true"
+                isDisabled
               />
             </div>
           </div>
@@ -117,7 +118,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
             type="text"
             placeholder="Email"
             className="field"
-            isDisabled="true"
+            isDisabled
           />
         </div>
 
@@ -127,7 +128,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         </div>
 
 
-        <Modal className="custom-modal" show={this.state.passwordResetModalOpen} onHide={this.closeResetPasswordModal}>
+        <Modal className="custom-modal" dialogComponentClass={CenteredModal} show={this.state.passwordResetModalOpen} onHide={this.closeResetPasswordModal}>
           <Modal.Header>
             <Modal.Title>CHANGE PASSWORD</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeResetPasswordModal}>
