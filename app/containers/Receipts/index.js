@@ -109,7 +109,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     if (_.isEmpty(this.searchOptions)) {
       this.searchOptions.push(options);
     } else {
-      let el = _.find(this.searchOptions, { type });
+      const el = _.find(this.searchOptions, { type });
       if (el) {
         this.searchOptions[_.findKey(this.searchOptions, el)] = options;
       } else {
