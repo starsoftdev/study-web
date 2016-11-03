@@ -75,7 +75,7 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
   changeRange(ev) {
     ev.preventDefault();
     const range = this.state.predefined;
-    this.props.search(range, 'range')
+    this.props.search(range, 'range');
     this.hidePopup();
   }
 
@@ -134,10 +134,6 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
               onChange={(event) => this.props.search(event, 'site')}
             />
           </div>
-
-          {/*<button type="submit" className="btn btn-default btn-add-row">
-            <i className="fa fa-search" aria-hidden="true" />
-          </button>*/}
         </div>
 
         {/* <Modal

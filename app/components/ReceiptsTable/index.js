@@ -60,7 +60,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps() {
     if (this.state.filteredReceipts) {
       this.setState({
         filteredReceipts: null,
@@ -243,7 +243,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     this.setState({
       filteredReceipts: receiptsArr,
       activeSort: sort,
-      activeDirection: direction
+      activeDirection: direction,
     });
   }
 

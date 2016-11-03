@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer } from 'react-sticky';
-const _ = require('lodash')
+const _ = require('lodash');
 
 import {
   getReceipts,
@@ -65,7 +65,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     this.props.getReceipts();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps() {
     // console.log('componentWillReceiveProps', nextProps);
   }
 
@@ -97,23 +97,23 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     let options;
     this.searchOptions = this.searchOptions || [];
     if (type === 'search') {
-      options = {data: event.target.value, type}
+      options = { data: event.target.value, type };
     } else if (type === 'site') {
       const { siteLocations } = this.props;
       const site = siteLocations[event - 1] || null;
-      options = {data: site, type}
+      options = { data: site, type };
     } else if (type === 'range') {
-      options = {data: event, type}
+      options = { data: event, type };
     }
 
     if (_.isEmpty(this.searchOptions)) {
-      this.searchOptions.push(options)
+      this.searchOptions.push(options);
     } else {
       let el = _.find(this.searchOptions, { type });
       if (el) {
-        this.searchOptions[_.findKey(this.searchOptions, el)] = options
+        this.searchOptions[_.findKey(this.searchOptions, el)] = options;
       } else {
-        this.searchOptions.push(options)
+        this.searchOptions.push(options);
       }
     }
 
