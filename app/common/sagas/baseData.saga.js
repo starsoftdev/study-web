@@ -149,7 +149,9 @@ export function* fetchSourcesWatcher() {
     yield take(FETCH_SOURCES);
 
     try {
-      const requestURL = `${API_URL}/sources`;
+      const queryParams = { filter: '{"order":"orderNumber ASC"}' };
+      const queryString = composeQueryString(queryParams);
+      const requestURL = `${API_URL}/sources?${queryString}`;
       const response = yield call(request, requestURL);
 
       yield put(sourcesFetched(response));
