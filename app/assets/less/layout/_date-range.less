@@ -1,52 +1,53 @@
 .lightbox-content{
 
-  .holder{
+}
+
+.holder{
+  overflow: hidden;
+
+  .dateRange-helper{
+    position: relative;
     overflow: hidden;
 
-    .dateRange-helper{
-      position: relative;
-      overflow: hidden;
+    .emit-border{
+      display: inline-block;
+      height: 100%;
+      width: 20%;
+      border-right: 2px #f78e1e solid;
+      position: absolute;
+    }
 
-      .emit-border{
+    .right-part{
+      width: 80%;
+      float: right;
+      padding: 0 10px 20px 10px;
+
+      span{
         display: inline-block;
-        height: 100%;
-        width: 20%;
-        border-right: 2px #f78e1e solid;
-        position: absolute;
+        text-align: center;
+        padding: 10px;
+        color: #fff;
+        cursor: pointer;
+        background: #f78e1e;
+        transition: all 0.25s;
+        margin-top: 10px;
+
+        &.left{
+          float: left;
+        }
+
+        &.right{
+          float: right;
+          margin-right: 3px;
+        }
+
+        &:hover{
+          cursor: inherit;
+        }
       }
 
-      .right-part{
-        width: 80%;
-        float: right;
-        padding: 0 10px 20px 10px;
-
-        span{
-          display: inline-block;
-          text-align: center;
-          padding: 10px;
-          color: #fff;
-          cursor: pointer;
-          background: #f78e1e;
-          transition: all 0.25s;
-          margin-top: 10px;
-
-          &.left{
-            float: left;
-          }
-
-          &.right{
-            float: right;
-            margin-right: 3px;
-          }
-
-          &:hover{
-            cursor: inherit;
-          }
-        }
-
-        .btn-block{
-          margin: 70px 0 0 0;
-        }
+      .btn-block{
+        margin: 70px 0 0 0;
       }
     }
   }

@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer } from 'react-sticky';
+const _ = require('lodash')
 
 import {
   getReceipts,
@@ -26,7 +27,7 @@ import {
 
 import selectReceipts from './selectors';
 import ReceiptsTable from 'components/ReceiptsTable';
-import ProposalsForm from 'components/ProposalsForm';
+import TableSearchForm from 'components/TableSearchForm';
 import './styles.less';
 
 export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -37,7 +38,6 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     fetchSites: PropTypes.func,
     getReceipts: PropTypes.func,
     createPDF: PropTypes.func,
-    location: PropTypes.any,
     receipts: PropTypes.any,
     currentUser: PropTypes.any,
   };
@@ -46,7 +46,6 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     super(props, context);
 
     this.createPdf = this.createPdf.bind(this);
-    this.changeRange = this.changeRange.bind(this);
     this.search = this.search.bind(this);
     this.selectCurrent = this.selectCurrent.bind(this);
     this.selectAll = this.selectAll.bind(this);
@@ -68,14 +67,6 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
 
   componentWillReceiveProps(nextProps) {
     // console.log('componentWillReceiveProps', nextProps);
-    if (nextProps.receipts) {
-      for (const receipt of nextProps.receipts) {
-        receipt.selected = false;
-      }
-      this.setState({
-        receipts: nextProps.receipts,
-      });
-    }
   }
 
   get selectedReceipts() {
@@ -86,6 +77,14 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     this.SelectedReceipts = value;
   }
 
+  get searchOptions() {
+    return this.SearchOptions;
+  }
+
+  set searchOptions(value) {
+    this.SearchOptions = value;
+  }
+
   selectCurrent(receipt) {
     this.selectedReceipts = receipt;
   }
@@ -94,24 +93,31 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     this.selectedReceipts = receipt;
   }
 
-  changeRange(payload) {
-    this.setState({
-      site : null,
-      searchBy : null,
-      range : payload,
-    });
-  }
+  search(event, type) {
+    let options;
+    this.searchOptions = this.searchOptions || [];
+    if (type === 'search') {
+      options = {data: event.target.value, type}
+    } else if (type === 'site') {
+      const { siteLocations } = this.props;
+      const site = siteLocations[event - 1] || null;
+      options = {data: site, type}
+    } else if (type === 'range') {
+      options = {data: event, type}
+    }
 
-  search(value) {
-    const { siteLocations } = this.props;
-    const site = siteLocations[value.site - 1] || null;
-    const searchBy = value.search || null;
+    if (_.isEmpty(this.searchOptions)) {
+      this.searchOptions.push(options)
+    } else {
+      let el = _.find(this.searchOptions, { type });
+      if (el) {
+        this.searchOptions[_.findKey(this.searchOptions, el)] = options
+      } else {
+        this.searchOptions.push(options)
+      }
+    }
 
-    this.setState({
-      site,
-      range : null,
-      searchBy,
-    });
+    this.props.getReceipts(this.searchOptions);
   }
 
   createPdf() {
@@ -126,7 +132,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
         <Helmet title="Proposals - StudyKIK" />
         <section className="calendar-section receipts">
           <h2 className="main-heading">RECEIPTS</h2>
-          <ProposalsForm
+          <TableSearchForm
             changeRange={this.changeRange}
             search={this.search}
             createPdf={this.createPdf}
@@ -135,10 +141,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
           <ReceiptsTable
             selectCurrent={this.selectCurrent}
             selectAll={this.selectAll}
-            range={this.state.range}
-            site={this.state.site}
-            searchBy={this.state.searchBy}
-            receipts={this.state.receipts}
+            receipts={this.props.receipts}
             {...this.props}
           />
         </section>

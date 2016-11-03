@@ -10,6 +10,8 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 
 import { defaultRanges, DateRange } from 'react-date-range';
+// import Modal from 'react-bootstrap/lib/Modal';
+// import CenteredModal from '../CenteredModal/index';
 import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
 import './styles.less';
@@ -18,12 +20,11 @@ const mapStateToProps = createStructuredSelector({});
 
 @reduxForm({ form: 'ProposalForm' })
 @connect(mapStateToProps)
-class ProposalsForm extends Component { // eslint-disable-line react/prefer-stateless-function
+class TableSearchForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
     createPdf: PropTypes.func,
     changeRange: PropTypes.func,
-    handleSubmit: PropTypes.func,
     search: PropTypes.func,
   };
 
@@ -35,7 +36,6 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
     this.hidePopup = this.hidePopup.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this, 'predefined');
-    this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
       showPopup: false,
@@ -75,24 +75,19 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
   changeRange(ev) {
     ev.preventDefault();
     const range = this.state.predefined;
-    this.props.changeRange(range);
+    this.props.search(range, 'range')
     this.hidePopup();
-  }
-
-  handleSubmit(form) {
-    this.props.search(form);
   }
 
   render() {
     const { predefined } = this.state;
     const format = 'dddd, D MMMM YYYY';
-    const { siteLocations, handleSubmit } = this.props;
+    const { siteLocations } = this.props;
     const state = this.state;
 
     return (
       <form
         className="form-search clearfix"
-        onSubmit={handleSubmit(this.handleSubmit)}
       >
         <div className="btns-area pull-right">
           <div className="col pull-right">
@@ -125,13 +120,8 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
                 id="search"
                 name="search"
                 placeholder="Search"
-                ref={(searchInput) => {
-                  this.searchInput = searchInput;
-                }}
+                onChange={(event) => this.props.search(event, 'search')}
               />
-              {/* <label htmlFor="search">
-                <span className="Select-clear">×</span>
-              </label> */}
             </div>
           </div>
           <div className="pull-left custom-select">
@@ -141,13 +131,54 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
               placeholder="Select Site Location"
               options={siteLocations}
               className="field"
+              onChange={(event) => this.props.search(event, 'site')}
             />
           </div>
 
-          <button type="submit" className="btn btn-default btn-add-row">
+          {/*<button type="submit" className="btn btn-default btn-add-row">
             <i className="fa fa-search" aria-hidden="true" />
-          </button>
+          </button>*/}
         </div>
+
+        {/* <Modal
+          show={state.showPopup}
+          dialogComponentClass={CenteredModal}
+        >
+          <Modal.Header>
+            <div className="head">
+              <Modal.Title>
+                <strong className="title">DATE RANGE</strong>
+              </Modal.Title>
+              <a className="lightbox-close close" href="#" onClick={this.hidePopup}><i className="icomoon-icon_close" /></a>
+            </div>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="holder">
+              <DateRange
+                linkedCalendars
+                ranges={defaultRanges}
+                onInit={this.handleChange}
+                onChange={this.handleChange}
+              />
+              <div className="dateRange-helper">
+                <div className="emit-border"></div>
+                <div className="right-part">
+                  <span className="left">{ predefined.startDate && predefined.startDate.format(format).toString() }</span>
+                  <span className="right">{ predefined.endDate && predefined.endDate.format(format).toString() }</span>
+                  <div className="btn-block text-right">
+                    <a
+                      href="#"
+                      className="btn btn-default lightbox-close"
+                      onClick={this.changeRange}
+                    >
+                      submit
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal> */}
 
         <div id="date-range" className={(state.showPopup) ? 'lightbox fixed-popup lightbox-active' : 'lightbox fixed-popup'}>
           <div className="lightbox-holder">
@@ -191,4 +222,4 @@ class ProposalsForm extends Component { // eslint-disable-line react/prefer-stat
   }
 }
 
-export default ProposalsForm;
+export default TableSearchForm;
