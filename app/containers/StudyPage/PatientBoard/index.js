@@ -36,6 +36,16 @@ class PatientBoard extends React.Component {
     this.onPatientClick = this.onPatientClick.bind(this);
     this.onPatientTextClick = this.onPatientTextClick.bind(this);
     this.showModal = this.showModal.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
+  }
+
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
   }
 
   onPatientClick(category, patient) {
@@ -54,6 +64,18 @@ class PatientBoard extends React.Component {
     });
     const { switchToTextSection } = this.props;
     switchToTextSection();
+  }
+
+  handleScroll(event) {
+    const patientListContainer = this.patientListContainer;
+    const scrollTop = event.srcElement.body.scrollTop;
+    let className = '';
+    if (scrollTop >= 640) {
+      className = 'list-inline stick';
+    } else {
+      className = 'list-inline';
+    }
+    patientListContainer.className = className;
   }
 
   showModal(category, patient) {
@@ -76,7 +98,12 @@ class PatientBoard extends React.Component {
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': this.state.openPatientModal })}>
           <nav className="nav-status">
-            <ul className="list-inline">
+            <ul
+              className="list-inline"
+              ref={(patientListContainer) => {
+                this.patientListContainer = patientListContainer;
+              }}
+            >
               {patientCategories.map(patientCategory => (
                 <PatientCategory key={patientCategory.id} category={patientCategory} currentUser={currentUser} currentPatientId={currentPatientId} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} />
               ))}
