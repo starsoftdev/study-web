@@ -44,15 +44,21 @@ export function* getReceipts() {
   while (true) {
     const { payload } = yield take(GET_RECEIPT);
     try {
+      let requestURL;
       const queryParams = {
         filter: '{"include": ["sites", "paymentMethod", {"invoiceDetails": ["indication", {"campaign": ["study", "site", "level"]}]}]}',
       };
       const queryString = composeQueryString(queryParams);
-      const requestURL = `${API_URL}/invoices/?${queryString}`;
-      const response = yield call(request, requestURL);
+      if (!payload) {
+        requestURL = `${API_URL}/invoices/?${queryString}`;
+      } else {
+        const authToken = getItem('auth_token');
+        const options = JSON.stringify(payload);
+        requestURL = `${API_URL}/invoices/getReceipts?options=${options}&access_token=${authToken}`;
+      }
 
+      const response = yield call(request, requestURL);
       yield put(receiptsReceived(response));
-      yield put(toastrActions.success('', 'Receipts received.'));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
