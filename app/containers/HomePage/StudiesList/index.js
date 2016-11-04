@@ -4,7 +4,8 @@ import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
 import { countBy } from 'lodash';
 
-import { selectStudies } from 'containers/HomePage/selectors';
+import { MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
+import { selectStudies, selectSelectedLevelPrice } from 'containers/HomePage/selectors';
 import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from 'containers/HomePage/constants';
 import StudyItem from './StudyItem';
 import RenewStudyForm from 'containers/HomePage/RenewStudyForm';
@@ -14,6 +15,7 @@ import './styles.less';
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     studies: PropTypes.object,
+    selectedLevelPrice: PropTypes.object,
   };
 
   constructor(props) {
@@ -24,6 +26,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       upgradeModalOpen: false,
       editModalOpen: false,
       selectedStudyId: null,
+      selectedIndicationId: null,
       renewData: null,
     };
 
@@ -37,10 +40,11 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.handleRenewStudyFormSubmit = this.handleRenewStudyFormSubmit.bind(this);
   }
 
-  openRenewModal(studyId) {
+  openRenewModal(studyId, indicationId) {
     this.setState({
       renewModalOpen: true,
       selectedStudyId: studyId,
+      selectedIndicationId: indicationId,
     });
   }
 
@@ -62,6 +66,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.setState({
       renewModalOpen: false,
       selectedStudyId: null,
+      selectedIndicationId: null,
       renewData: null,
     });
   }
@@ -70,6 +75,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.setState({
       upgradeModalOpen: false,
       selectedStudyId: null,
+      selectedIndicationId: null,
     });
   }
 
@@ -77,6 +83,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.setState({
       editModalOpen: false,
       selectedStudyId: null,
+      selectedIndicationId: null,
     });
   }
 
@@ -90,12 +97,54 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
   }
 
+  generateRenewStudyShoppingCartAddOns() {
+    if (!this.state.renewData) {
+      return [];
+    }
+
+    const { exposureLevel, campaignLength, condenseToTwoWeeks,
+      patientMessagingSuite, callTracking } = this.state.renewData;
+    const { selectedLevelPrice } = this.props;
+    const durationString = (condenseToTwoWeeks) ? '2 Weeks' : `${campaignLength} Month(s)`;
+    const addOns = [];
+
+    if (selectedLevelPrice.fetching || !selectedLevelPrice.details) {
+      return addOns;
+    }
+
+    addOns.push({
+      title: `${durationString} ${exposureLevel.name} Listing`,
+      price: selectedLevelPrice.details.price,
+      quantity: 1,
+      total: selectedLevelPrice.details.price,
+    });
+    if (patientMessagingSuite) {
+      addOns.push({
+        title: 'Patient Messaging Suite',
+        price: MESSAGING_SUITE_PRICE,
+        quantity: 1,
+        total: MESSAGING_SUITE_PRICE,
+      });
+    }
+    if (callTracking) {
+      addOns.push({
+        title: 'Call Tracking',
+        price: CALL_TRACKING_PRICE,
+        quantity: 1,
+        total: CALL_TRACKING_PRICE,
+      });
+    }
+
+    return addOns;
+  }
+
   render() {
     const { studies } = this.props;
     const countResult = countBy(studies.details, entityIterator => entityIterator.status);
     const activeCount = countResult[ACTIVE_STATUS_VALUE] || 0;
     const inactiveCount = countResult[INACTIVE_STATUS_VALUE] || 0;
     const totalCount = studies.details.length;
+    const addOns = this.generateRenewStudyShoppingCartAddOns();
     const studiesListContents = studies.details.map((item, index) => (
       <StudyItem
         {...item}
@@ -106,14 +155,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         onEdit={this.openEditModal}
       />
     ));
-    const testProducts = [
-      {
-        title: 'Test',
-        quantity: 999,
-        price: 888,
-        total: 7666,
-      },
-    ];
 
     if (studies.details.length > 0) {
       return (
@@ -167,6 +208,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                   <div className="row">
                     <div className="left-panel col-sm-6">
                       <RenewStudyForm
+                        indicationId={this.state.selectedIndicationId}
                         onSubmitValues={this.handleRenewStudyRequestValues}
                       />
                     </div>
@@ -174,7 +216,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                       <ShoppingCartForm
                         showCards
                         noBorder
-                        addOns={testProducts}
+                        addOns={addOns}
                         onSubmit={this.handleRenewStudyFormSubmit}
                       />
                     </div>
@@ -196,6 +238,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
 const mapStateToProps = createStructuredSelector({
   studies: selectStudies(),
+  selectedLevelPrice: selectSelectedLevelPrice(),
 });
 
 export default connect(mapStateToProps, null)(StudiesList);

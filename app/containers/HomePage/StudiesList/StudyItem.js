@@ -4,7 +4,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   static propTypes = {
     index: PropTypes.number,
     studyId: PropTypes.number,
-    indication: PropTypes.string,
+    indication: PropTypes.object,
     location: PropTypes.string,
     sponsor: PropTypes.string,
     protocol: PropTypes.string,
@@ -32,7 +32,9 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   onRenewClick() {
-    this.props.onRenew(this.props.studyId);
+    const { studyId, indication, onRenew } = this.props;
+
+    onRenew(studyId, indication.id);
   }
 
   onUpgradeClick() {
@@ -64,7 +66,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
             <span>{index + 1}</span>
           </td>
           <td className="indication">
-            <span>{indication}</span>
+            <span>{indication.name}</span>
           </td>
           <td className="location">
             <span>{location}</span>
@@ -93,7 +95,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
             <span>{index + 1}</span>
           </td>
           <td className="indication">
-            <span>{indication}</span>
+            <span>{indication.name}</span>
           </td>
           <td className="location">
             <span>{location}</span>

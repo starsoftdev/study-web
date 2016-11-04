@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import moment from 'moment';
-import { map } from 'lodash';
+import { map, find } from 'lodash';
 
 import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
@@ -12,20 +12,26 @@ import Toggle from 'components/Input/Toggle';
 import { selectRenewStudyFormError,
   selectRenewStudyFormExposureLevelValue,
   selectRenewStudyFormCampaignLengthValue,
+  selectRenewStudyFormCondenseToTwoWeeksValue,
   selectRenewStudyFormPatientMessagingSuiteValue,
   selectRenewStudyFormCallTrackingValue,
   selectRenewStudyFormStartDateValue,
   selectRenewStudyFormNotesValue,
 } from './selectors';
 import { selectLevels } from 'containers/App/selectors';
+import { selectSelectedLevelPrice } from 'containers/HomePage/selectors';
+import { fetchLevelPrice, clearLevelPrice } from 'containers/HomePage/actions';
 import { CAMPAIGN_LENGTH_LIST } from 'common/constants';
 import formValidator from './validator';
+import LoadingSpinner from 'components/LoadingSpinner';
 import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   levels: selectLevels(),
+  selectedLevelPrice: selectSelectedLevelPrice(),
   exposureLevel: selectRenewStudyFormExposureLevelValue(),
   campaignLength: selectRenewStudyFormCampaignLengthValue(),
+  condenseToTwoWeeks: selectRenewStudyFormCondenseToTwoWeeksValue(),
   patientMessagingSuite: selectRenewStudyFormPatientMessagingSuiteValue(),
   callTracking: selectRenewStudyFormCallTrackingValue(),
   startDate: selectRenewStudyFormStartDateValue(),
@@ -33,20 +39,32 @@ const mapStateToProps = createStructuredSelector({
   hasError: selectRenewStudyFormError(),
 });
 
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchLevelPrice: (id, indicationId) => dispatch(fetchLevelPrice(id, indicationId)),
+    clearLevelPrice: () => dispatch(clearLevelPrice()),
+  };
+}
+
 @reduxForm({ form: 'renewStudy', validate: formValidator })
-@connect(mapStateToProps, null)
+@connect(mapStateToProps, mapDispatchToProps)
 
 class RenewStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     levels: PropTypes.array,
+    selectedLevelPrice: PropTypes.object,
     exposureLevel: PropTypes.number,
     campaignLength: PropTypes.number,
+    condenseToTwoWeeks: PropTypes.bool,
     patientMessagingSuite: PropTypes.bool,
     callTracking: PropTypes.bool,
     startDate: PropTypes.object,
     notes: PropTypes.string,
     hasError: PropTypes.bool,
+    indicationId: PropTypes.number,
+    fetchLevelPrice: PropTypes.func,
+    clearLevelPrice: PropTypes.func,
     onSubmitValues: PropTypes.func,
   };
 
@@ -54,65 +72,63 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     super(props);
 
     this.onExposureLevelChange = this.onExposureLevelChange.bind(this);
-    this.onCampaignLengthChange = this.onCampaignLengthChange.bind(this);
-    this.onPatientMessagingSuiteChange = this.onPatientMessagingSuiteChange.bind(this);
-    this.onCallTrackingChange = this.onCallTrackingChange.bind(this);
-    this.onStartDateChange = this.onStartDateChange.bind(this);
-    this.onNotesChange = this.onNotesChange.bind(this);
   }
 
-  onExposureLevelChange(value) {
-    this.props.dispatch(change('renewStudy', 'exposureLevel', value));
-    setTimeout(this.submitValues.bind(this), 0);
-  }
-
-  onCampaignLengthChange(value) {
-    this.props.dispatch(change('renewStudy', 'campaignLength', value));
-    setTimeout(this.submitValues.bind(this), 0);
-  }
-
-  onPatientMessagingSuiteChange(value) {
-    this.props.dispatch(change('renewStudy', 'patientMessagingSuite', value));
-    setTimeout(this.submitValues.bind(this), 0);
-  }
-
-  onCallTrackingChange(value) {
-    this.props.dispatch(change('renewStudy', 'callTracking', value));
-    setTimeout(this.submitValues.bind(this), 0);
-  }
-
-  onStartDateChange(value) {
-    this.props.dispatch(change('renewStudy', 'startDate', value));
-    setTimeout(this.submitValues.bind(this), 0);
-  }
-
-  onNotesChange(value) {
-    this.props.dispatch(change('renewStudy', 'notes', value));
-    setTimeout(this.submitValues.bind(this), 0);
-  }
-
-  submitValues() {
-    const { exposureLevel, campaignLength, patientMessagingSuite,
+  componentWillReceiveProps(newProps) {
+    const { levels, exposureLevel, campaignLength, condenseToTwoWeeks, patientMessagingSuite,
       callTracking, startDate, notes, hasError, onSubmitValues } = this.props;
+    let condenseToTwoWeeksValue = null;
 
-    if (hasError) {
-      return;
+    if (newProps.campaignLength !== 1) {
+      this.props.dispatch(change('renewStudy', 'condenseToTwoWeeks', false));
+      condenseToTwoWeeksValue = false;
+    } else {
+      condenseToTwoWeeksValue = newProps.condenseToTwoWeeks || false;
     }
 
-    const requestValues = {
-      exposureLevel,
-      campaignLength,
-      patientMessagingSuite,
-      callTracking,
-      startDate: startDate.format('YYYY/MM/DD'),
-      notes,
-    };
+    if (hasError || !newProps.exposureLevel || !newProps.campaignLength || !newProps.startDate) {
+      return onSubmitValues(null);
+    }
 
-    onSubmitValues(requestValues);
+    const foundExposureLevel = find(levels, { id: newProps.exposureLevel });
+
+    if (newProps.exposureLevel !== exposureLevel ||
+      newProps.campaignLength !== campaignLength ||
+      newProps.condenseToTwoWeeks !== condenseToTwoWeeks ||
+      newProps.patientMessagingSuite !== patientMessagingSuite ||
+      newProps.callTracking !== callTracking ||
+      newProps.startDate !== startDate ||
+      newProps.notes !== notes) {
+      const requestValues = {
+        exposureLevel: foundExposureLevel,
+        campaignLength: newProps.campaignLength,
+        condenseToTwoWeeks: condenseToTwoWeeksValue,
+        patientMessagingSuite: newProps.patientMessagingSuite || false,
+        callTracking: newProps.callTracking || false,
+        startDate: newProps.startDate.format('YYYY/MM/DD'),
+        notes: newProps.notes || '',
+      };
+
+      return onSubmitValues(requestValues);
+    }
+
+    return true;
+  }
+
+  onExposureLevelChange(levelId) {
+    const { indicationId, fetchLevelPrice, clearLevelPrice, dispatch } = this.props;
+
+    if (!levelId) {
+      clearLevelPrice();
+    } else {
+      fetchLevelPrice(levelId, indicationId);
+    }
+
+    dispatch(change('renewStudy', 'exposureLevel', levelId));
   }
 
   render() {
-    const { levels } = this.props;
+    const { levels, campaignLength, selectedLevelPrice } = this.props;
     const exposureLevelOptions = map(levels, levelIterator => ({ label: levelIterator.name, value: levelIterator.id }));
     const campaignLengthOptions = CAMPAIGN_LENGTH_LIST;
 
@@ -123,14 +139,24 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
             <strong className="required col-sm-5">
               <label>EXPOSURE LEVEL</label>
             </strong>
-            <div className="field col-sm-7">
+            <div className="field col-sm-6">
               <Field
                 name="exposureLevel"
                 component={ReactSelect}
                 placeholder="Select..."
                 options={exposureLevelOptions}
                 onChange={this.onExposureLevelChange}
+                disabled={selectedLevelPrice.fetching}
               />
+            </div>
+            <div className="field col-sm-1">
+              {selectedLevelPrice.fetching &&
+                (
+                <span>
+                  <LoadingSpinner showOnlyIcon size={20} className="fetching-level-price" />
+                </span>
+                )
+              }
             </div>
           </div>
           <div className="row form-group">
@@ -143,10 +169,24 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                 component={ReactSelect}
                 placeholder="Select..."
                 options={campaignLengthOptions}
-                onChange={this.onCampaignLengthChange}
               />
             </div>
           </div>
+          {campaignLength === 1 &&
+            (
+            <div className="row form-group">
+              <strong className="col-sm-5">
+                <label>CONDENSE TO 2 WEEKS</label>
+              </strong>
+              <div className="field col-sm-7">
+                <Field
+                  name="condenseToTwoWeeks"
+                  component={Toggle}
+                />
+              </div>
+            </div>
+            )
+          }
           <div className="row form-group">
             <strong className="col-sm-5">
               <label>PATIENT MESSAGING SUITE: $247</label>
@@ -155,7 +195,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
               <Field
                 name="patientMessagingSuite"
                 component={Toggle}
-                onChange={this.onPatientMessagingSuiteChange}
               />
             </div>
           </div>
@@ -167,7 +206,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
               <Field
                 name="callTracking"
                 component={Toggle}
-                onChange={this.onCallTrackingChange}
               />
             </div>
           </div>
@@ -180,7 +218,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                 name="startDate"
                 component={DatePicker}
                 className="form-control datepicker-input"
-                onChange={this.onStartDateChange}
                 initialDate={moment(new Date())}
               />
             </div>
@@ -194,7 +231,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                 name="notes"
                 component={Input}
                 componentClass="textarea"
-                onChange={this.onNotesChange}
               />
             </div>
           </div>

@@ -13,6 +13,7 @@ import {
   FETCH_PATIENT_MESSAGES,
   FETCH_REWARDS_POINT,
   FETCH_STUDIES,
+  FETCH_LEVEL_PRICE,
 } from './constants';
 
 import {
@@ -21,6 +22,8 @@ import {
   fetchRewardsPointSucceeded,
   studiesFetched,
   studiesFetchingError,
+  levelPriceFetched,
+  levelPriceFetchingError,
 } from './actions';
 
 // Bootstrap sagas
@@ -104,11 +107,28 @@ export function* fetchStudiesWorker(action) {
   }
 }
 
+export function* fetchLevelPriceWatcher() {
+  yield* takeLatest(FETCH_LEVEL_PRICE, fetchLevelPriceWorker);
+}
+
+export function* fetchLevelPriceWorker(action) {
+  try {
+    const { id, indicationId } = action;
+    const requestURL = `${API_URL}/levels/${id}/price/indication/${indicationId}`;
+    const response = yield call(request, requestURL);
+
+    yield put(levelPriceFetched(response));
+  } catch (err) {
+    yield put(levelPriceFetchingError(err));
+  }
+}
+
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   const watcherB = yield fork(fetchPatientMessagesWatcher);
   const watcherC = yield fork(fetchRewardsPointWatcher);
   const watcherD = yield fork(fetchStudiesWatcher);
+  const watcherE = yield fork(fetchLevelPriceWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -117,4 +137,5 @@ export function* homePageSaga() {
   yield cancel(watcherB);
   yield cancel(watcherC);
   yield cancel(watcherD);
+  yield cancel(watcherE);
 }
