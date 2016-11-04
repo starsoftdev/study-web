@@ -8,6 +8,10 @@ import {
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
+  FETCH_LEVEL_PRICE,
+  FETCH_LEVEL_PRICE_SUCCESS,
+  FETCH_LEVEL_PRICE_ERROR,
+  CLEAR_LEVEL_PRICE,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser) {
@@ -70,5 +74,33 @@ export function studiesFetchingError(payload) {
   return {
     type: FETCH_STUDIES_ERROR,
     payload,
+  };
+}
+
+export function fetchLevelPrice(id, indicationId) {
+  return {
+    type: FETCH_LEVEL_PRICE,
+    id,
+    indicationId,
+  };
+}
+
+export function levelPriceFetched(payload) {
+  return {
+    type: FETCH_LEVEL_PRICE_SUCCESS,
+    payload,
+  };
+}
+
+export function levelPriceFetchingError(payload) {
+  return {
+    type: FETCH_LEVEL_PRICE_ERROR,
+    payload,
+  };
+}
+
+export function clearLevelPrice() {
+  return {
+    type: CLEAR_LEVEL_PRICE,
   };
 }

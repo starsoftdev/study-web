@@ -8,6 +8,10 @@ import {
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
+  FETCH_LEVEL_PRICE,
+  FETCH_LEVEL_PRICE_SUCCESS,
+  FETCH_LEVEL_PRICE_ERROR,
+  CLEAR_LEVEL_PRICE,
 } from './constants';
 
 import {
@@ -26,6 +30,11 @@ const initialState = {
   rewardsPoint: 0,
   studies: {
     details: [],
+    fetching: false,
+    error: null,
+  },
+  selectedLevelPrice: {
+    details: null,
     fetching: false,
     error: null,
   },
@@ -107,7 +116,7 @@ export default function homePageReducer(state = initialState, action) {
       forEach(payload, (studyIterator) => {
         entity = {
           studyId: studyIterator.id,
-          indication: (studyIterator.indication) ? studyIterator.indication.name : '',
+          indication: studyIterator.indication,
           location: '',
           sponsor: '',
           protocol: studyIterator.protocolNumber,
@@ -158,6 +167,42 @@ export default function homePageReducer(state = initialState, action) {
           details: [],
           fetching: false,
           error: payload,
+        },
+      };
+    case FETCH_LEVEL_PRICE:
+      return {
+        ...state,
+        selectedLevelPrice: {
+          details: null,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_LEVEL_PRICE_SUCCESS:
+      return {
+        ...state,
+        selectedLevelPrice: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_LEVEL_PRICE_ERROR:
+      return {
+        ...state,
+        selectedLevelPrice: {
+          details: null,
+          fetching: false,
+          error: payload,
+        },
+      };
+    case CLEAR_LEVEL_PRICE:
+      return {
+        ...state,
+        selectedLevelPrice: {
+          details: null,
+          fetching: false,
+          error: null,
         },
       };
     default:

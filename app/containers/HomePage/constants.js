@@ -11,5 +11,11 @@ export const FETCH_STUDIES                    = 'HomePage/Viewport/FETCH_STUDIES
 export const FETCH_STUDIES_SUCCESS            = 'HomePage/Viewport/FETCH_STUDIES_SUCCESS';
 export const FETCH_STUDIES_ERROR              = 'HomePage/Viewport/FETCH_STUDIES_ERROR';
 
+export const FETCH_LEVEL_PRICE                = 'HomePage/Viewport/FETCH_LEVEL_PRICE';
+export const FETCH_LEVEL_PRICE_SUCCESS        = 'HomePage/Viewport/FETCH_LEVEL_PRICE_SUCCESS';
+export const FETCH_LEVEL_PRICE_ERROR          = 'HomePage/Viewport/FETCH_LEVEL_PRICE_ERROR';
+
+export const CLEAR_LEVEL_PRICE                = 'HomePage/Viewport/CLEAR_LEVEL_PRICE';
+
 export const ACTIVE_STATUS_VALUE              = 'Active';
 export const INACTIVE_STATUS_VALUE            = 'Inactive';
