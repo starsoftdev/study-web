@@ -8,10 +8,13 @@ import {
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
-  FETCH_LEVEL_PRICE,
-  FETCH_LEVEL_PRICE_SUCCESS,
-  FETCH_LEVEL_PRICE_ERROR,
-  CLEAR_LEVEL_PRICE,
+  FETCH_INDICATION_LEVEL_PRICE,
+  FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+  FETCH_INDICATION_LEVEL_PRICE_ERROR,
+  CLEAR_INDICATION_LEVEL_PRICE,
+  RENEW_STUDY,
+  RENEW_STUDY_SUCCESS,
+  RENEW_STUDY_ERROR,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser) {
@@ -77,30 +80,52 @@ export function studiesFetchingError(payload) {
   };
 }
 
-export function fetchLevelPrice(id, indicationId) {
+export function fetchIndicationLevelPrice(levelId, indicationId) {
   return {
-    type: FETCH_LEVEL_PRICE,
-    id,
+    type: FETCH_INDICATION_LEVEL_PRICE,
+    levelId,
     indicationId,
   };
 }
 
-export function levelPriceFetched(payload) {
+export function indicationLevelPriceFetched(payload) {
   return {
-    type: FETCH_LEVEL_PRICE_SUCCESS,
+    type: FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
     payload,
   };
 }
 
-export function levelPriceFetchingError(payload) {
+export function indicationLevelPriceFetchingError(payload) {
   return {
-    type: FETCH_LEVEL_PRICE_ERROR,
+    type: FETCH_INDICATION_LEVEL_PRICE_ERROR,
     payload,
   };
 }
 
-export function clearLevelPrice() {
+export function clearIndicationLevelPrice() {
   return {
-    type: CLEAR_LEVEL_PRICE,
+    type: CLEAR_INDICATION_LEVEL_PRICE,
+  };
+}
+
+export function renewStudy(cartValues, formValues) {
+  return {
+    type: RENEW_STUDY,
+    cartValues,
+    formValues,
+  };
+}
+
+export function studyRenewed(payload) {
+  return {
+    type: RENEW_STUDY_SUCCESS,
+    payload,
+  };
+}
+
+export function studyRenewingError(payload) {
+  return {
+    type: RENEW_STUDY_ERROR,
+    payload,
   };
 }

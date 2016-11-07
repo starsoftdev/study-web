@@ -8,10 +8,13 @@ import {
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
-  FETCH_LEVEL_PRICE,
-  FETCH_LEVEL_PRICE_SUCCESS,
-  FETCH_LEVEL_PRICE_ERROR,
-  CLEAR_LEVEL_PRICE,
+  FETCH_INDICATION_LEVEL_PRICE,
+  FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+  FETCH_INDICATION_LEVEL_PRICE_ERROR,
+  CLEAR_INDICATION_LEVEL_PRICE,
+  RENEW_STUDY,
+  RENEW_STUDY_SUCCESS,
+  RENEW_STUDY_ERROR,
 } from './constants';
 
 import {
@@ -33,9 +36,14 @@ const initialState = {
     fetching: false,
     error: null,
   },
-  selectedLevelPrice: {
+  selectedIndicationLevelPrice: {
     details: null,
     fetching: false,
+    error: null,
+  },
+  renewedStudy: {
+    details: null,
+    submitting: false,
     error: null,
   },
 };
@@ -169,40 +177,67 @@ export default function homePageReducer(state = initialState, action) {
           error: payload,
         },
       };
-    case FETCH_LEVEL_PRICE:
+    case FETCH_INDICATION_LEVEL_PRICE:
       return {
         ...state,
-        selectedLevelPrice: {
+        selectedIndicationLevelPrice: {
           details: null,
           fetching: true,
           error: null,
         },
       };
-    case FETCH_LEVEL_PRICE_SUCCESS:
+    case FETCH_INDICATION_LEVEL_PRICE_SUCCESS:
       return {
         ...state,
-        selectedLevelPrice: {
-          details: payload,
+        selectedIndicationLevelPrice: {
+          details: payload.price,
           fetching: false,
           error: null,
         },
       };
-    case FETCH_LEVEL_PRICE_ERROR:
+    case FETCH_INDICATION_LEVEL_PRICE_ERROR:
       return {
         ...state,
-        selectedLevelPrice: {
+        selectedIndicationLevelPrice: {
           details: null,
           fetching: false,
           error: payload,
         },
       };
-    case CLEAR_LEVEL_PRICE:
+    case CLEAR_INDICATION_LEVEL_PRICE:
       return {
         ...state,
-        selectedLevelPrice: {
+        selectedIndicationLevelPrice: {
           details: null,
           fetching: false,
           error: null,
+        },
+      };
+    case RENEW_STUDY:
+      return {
+        ...state,
+        renewedStudy: {
+          details: null,
+          submitting: true,
+          error: null,
+        },
+      };
+    case RENEW_STUDY_SUCCESS:
+      return {
+        ...state,
+        renewedStudy: {
+          details: payload,
+          submitting: false,
+          error: null,
+        },
+      };
+    case RENEW_STUDY_ERROR:
+      return {
+        ...state,
+        renewedStudy: {
+          details: null,
+          submitting: false,
+          error: payload,
         },
       };
     default:

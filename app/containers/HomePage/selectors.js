@@ -27,9 +27,14 @@ const selectStudies = () => createSelector(
   substate => substate.studies
 );
 
-const selectSelectedLevelPrice = () => createSelector(
+const selectSelectedIndicationLevelPrice = () => createSelector(
   selectHomePageDomain(),
-  substate => substate.selectedLevelPrice
+  substate => substate.selectedIndicationLevelPrice
+);
+
+const selectRenewedStudy = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.renewedStudy
 );
 
 export default selectHomePage;
@@ -39,5 +44,6 @@ export {
   selectPatientMessages,
   selectRewardsPoint,
   selectStudies,
-  selectSelectedLevelPrice,
+  selectSelectedIndicationLevelPrice,
+  selectRenewedStudy,
 };
