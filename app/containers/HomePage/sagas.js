@@ -4,7 +4,8 @@ import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
-import { get } from 'lodash';
+import { reset } from 'redux-form';
+import { get, forEach } from 'lodash';
 
 import request from 'utils/request';
 import composeQueryString from 'utils/composeQueryString';
@@ -13,6 +14,8 @@ import {
   FETCH_PATIENT_MESSAGES,
   FETCH_REWARDS_POINT,
   FETCH_STUDIES,
+  FETCH_INDICATION_LEVEL_PRICE,
+  RENEW_STUDY,
 } from './constants';
 
 import {
@@ -21,6 +24,10 @@ import {
   fetchRewardsPointSucceeded,
   studiesFetched,
   studiesFetchingError,
+  indicationLevelPriceFetched,
+  indicationLevelPriceFetchingError,
+  studyRenewed,
+  studyRenewingError,
 } from './actions';
 
 // Bootstrap sagas
@@ -104,11 +111,71 @@ export function* fetchStudiesWorker(action) {
   }
 }
 
+export function* fetchIndicationLevelPriceWatcher() {
+  yield* takeLatest(FETCH_INDICATION_LEVEL_PRICE, fetchIndicationLevelPriceWorker);
+}
+
+export function* fetchIndicationLevelPriceWorker(action) {
+  try {
+    const { levelId, indicationId } = action;
+    const requestURL = `${API_URL}/indicationLevelSkus/getPrice`;
+    const params = {
+      query: {
+        levelId,
+        indicationId,
+      },
+    };
+    const response = yield call(request, requestURL, params);
+    yield put(indicationLevelPriceFetched(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(indicationLevelPriceFetchingError(err));
+  }
+}
+
+export function* renewStudyWatcher() {
+  yield* takeLatest(RENEW_STUDY, renewStudyWorker);
+}
+
+export function* renewStudyWorker(action) {
+  try {
+    const { cartValues, formValues } = action;
+    const requestURL = `${API_URL}/studies/${formValues.studyId}`;
+
+    const data = new FormData();
+    forEach(formValues, (value, index) => {
+      if (index === 'studyId') {
+        return true;
+      }
+      return data.append(index, value);
+    });
+    data.append('cartValues', JSON.stringify(cartValues));
+
+    const params = {
+      method: 'PUT',
+      body: data,
+      useDefaultContentType: true,
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(toastrActions.success('Renew Study', 'The request has been submitted successfully'));
+    yield put(studyRenewed(response));
+    yield put(reset('renewStudy'));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(studyRenewingError(err));
+  }
+}
+
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   const watcherB = yield fork(fetchPatientMessagesWatcher);
   const watcherC = yield fork(fetchRewardsPointWatcher);
   const watcherD = yield fork(fetchStudiesWatcher);
+  const watcherE = yield fork(fetchIndicationLevelPriceWatcher);
+  const watcherF = yield fork(renewStudyWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -117,4 +184,6 @@ export function* homePageSaga() {
   yield cancel(watcherB);
   yield cancel(watcherC);
   yield cancel(watcherD);
+  yield cancel(watcherE);
+  yield cancel(watcherF);
 }
