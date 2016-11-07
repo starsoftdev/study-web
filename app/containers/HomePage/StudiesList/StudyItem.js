@@ -1,25 +1,25 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 
-class StudyItem extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class StudyItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    index: React.PropTypes.number,
-    studyId: React.PropTypes.number,
-    indication: React.PropTypes.string,
-    location: React.PropTypes.string,
-    sponsor: React.PropTypes.string,
-    protocol: React.PropTypes.string,
-    patientMessagingSuite: React.PropTypes.string,
-    status: React.PropTypes.string,
-    startDate: React.PropTypes.string,
-    endDate: React.PropTypes.string,
-    onRenew: React.PropTypes.func,
-    onUpgrade: React.PropTypes.func,
-    onEdit: React.PropTypes.func,
-    push: React.PropTypes.func,
+    index: PropTypes.number,
+    studyId: PropTypes.number,
+    indication: PropTypes.object,
+    location: PropTypes.string,
+    sponsor: PropTypes.string,
+    protocol: PropTypes.string,
+    patientMessagingSuite: PropTypes.string,
+    status: PropTypes.string,
+    startDate: PropTypes.string,
+    endDate: PropTypes.string,
+    onRenew: PropTypes.func,
+    onUpgrade: PropTypes.func,
+    onEdit: PropTypes.func,
+    push: PropTypes.func,
   };
 
   constructor(props) {
@@ -43,7 +43,9 @@ class StudyItem extends React.Component { // eslint-disable-line react/prefer-st
   }
 
   onRenewClick() {
-    this.props.onRenew(this.props.studyId);
+    const { studyId, indication, onRenew } = this.props;
+
+    onRenew(studyId, indication.id);
   }
 
   onUpgradeClick() {
@@ -74,7 +76,7 @@ class StudyItem extends React.Component { // eslint-disable-line react/prefer-st
             <span>{index + 1}</span>
           </td>
           <td className="indication">
-            <span>{indication}</span>
+            <span>{indication.name}</span>
           </td>
           <td className="location">
             <span>{location}</span>
@@ -116,7 +118,7 @@ class StudyItem extends React.Component { // eslint-disable-line react/prefer-st
             <span>{index + 1}</span>
           </td>
           <td className="indication">
-            <span>{indication}</span>
+            <span>{indication.name}</span>
           </td>
           <td className="location">
             <span>{location}</span>
@@ -147,11 +149,8 @@ class StudyItem extends React.Component { // eslint-disable-line react/prefer-st
   }
 }
 
-const mapStateToProps = () => ({
-});
-
 const mapDispatchToProps = (dispatch) => ({
   push: (path) => dispatch(push(path)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(StudyItem);
+export default connect(null, mapDispatchToProps)(StudyItem);

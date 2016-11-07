@@ -35,6 +35,11 @@ const selectRenewStudyFormCampaignLengthValue = () => createSelector(
   substate => get(substate, 'renewStudy.values.campaignLength', null)
 );
 
+const selectRenewStudyFormCondenseToTwoWeeksValue = () => createSelector(
+  selectFormDomain(),
+  substate => get(substate, 'renewStudy.values.condenseToTwoWeeks', null)
+);
+
 const selectRenewStudyFormPatientMessagingSuiteValue = () => createSelector(
   selectFormDomain(),
   substate => get(substate, 'renewStudy.values.patientMessagingSuite', null)
@@ -61,6 +66,7 @@ export {
   selectRenewStudyFormError,
   selectRenewStudyFormExposureLevelValue,
   selectRenewStudyFormCampaignLengthValue,
+  selectRenewStudyFormCondenseToTwoWeeksValue,
   selectRenewStudyFormPatientMessagingSuiteValue,
   selectRenewStudyFormCallTrackingValue,
   selectRenewStudyFormStartDateValue,

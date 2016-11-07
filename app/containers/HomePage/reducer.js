@@ -8,6 +8,13 @@ import {
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
+  FETCH_INDICATION_LEVEL_PRICE,
+  FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+  FETCH_INDICATION_LEVEL_PRICE_ERROR,
+  CLEAR_INDICATION_LEVEL_PRICE,
+  RENEW_STUDY,
+  RENEW_STUDY_SUCCESS,
+  RENEW_STUDY_ERROR,
 } from './constants';
 
 import {
@@ -27,6 +34,16 @@ const initialState = {
   studies: {
     details: [],
     fetching: false,
+    error: null,
+  },
+  selectedIndicationLevelPrice: {
+    details: null,
+    fetching: false,
+    error: null,
+  },
+  renewedStudy: {
+    details: null,
+    submitting: false,
     error: null,
   },
 };
@@ -107,7 +124,7 @@ export default function homePageReducer(state = initialState, action) {
       forEach(payload, (studyIterator) => {
         entity = {
           studyId: studyIterator.id,
-          indication: (studyIterator.indication) ? studyIterator.indication.name : '',
+          indication: studyIterator.indication,
           location: '',
           sponsor: '',
           protocol: studyIterator.protocolNumber,
@@ -157,6 +174,69 @@ export default function homePageReducer(state = initialState, action) {
         studies: {
           details: [],
           fetching: false,
+          error: payload,
+        },
+      };
+    case FETCH_INDICATION_LEVEL_PRICE:
+      return {
+        ...state,
+        selectedIndicationLevelPrice: {
+          details: null,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_INDICATION_LEVEL_PRICE_SUCCESS:
+      return {
+        ...state,
+        selectedIndicationLevelPrice: {
+          details: payload.price,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_INDICATION_LEVEL_PRICE_ERROR:
+      return {
+        ...state,
+        selectedIndicationLevelPrice: {
+          details: null,
+          fetching: false,
+          error: payload,
+        },
+      };
+    case CLEAR_INDICATION_LEVEL_PRICE:
+      return {
+        ...state,
+        selectedIndicationLevelPrice: {
+          details: null,
+          fetching: false,
+          error: null,
+        },
+      };
+    case RENEW_STUDY:
+      return {
+        ...state,
+        renewedStudy: {
+          details: null,
+          submitting: true,
+          error: null,
+        },
+      };
+    case RENEW_STUDY_SUCCESS:
+      return {
+        ...state,
+        renewedStudy: {
+          details: payload,
+          submitting: false,
+          error: null,
+        },
+      };
+    case RENEW_STUDY_ERROR:
+      return {
+        ...state,
+        renewedStudy: {
+          details: null,
+          submitting: false,
           error: payload,
         },
       };
