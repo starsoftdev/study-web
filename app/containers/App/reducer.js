@@ -1,5 +1,5 @@
 import { getItem } from 'utils/localStorage';
-import { forEach, map, remove, cloneDeep, findIndex } from 'lodash';
+import { forEach, map, remove, cloneDeep, findIndex, concat } from 'lodash';
 
 import {
   SET_AUTH_STATE,
@@ -40,12 +40,15 @@ import {
   FETCH_SITE_PATIENTS,
   FETCH_SITE_PATIENTS_SUCCESS,
   FETCH_SITE_PATIENTS_ERROR,
+  UPDATE_SITE_PATIENTS,
 
   FETCH_PATIENT_MESSAGES,
   FETCH_PATIENT_MESSAGES_SUCCESS,
   FETCH_PATIENT_MESSAGES_ERROR,
+  UPDATE_PATIENT_MESSAGES,
 
   MARK_AS_READ_PATIENT_MESSAGES,
+
 
   FETCH_CLIENT_ROLES,
   FETCH_CLIENT_ROLES_SUCCESS,
@@ -178,6 +181,7 @@ export default function appReducer(state = initialState, action) {
   const clientSitesCollection = map(state.baseData.clientSites.details, cloneDeep);
   const clientRolesCollection = map(state.baseData.clientRoles.details, cloneDeep);
   let sitePatientsCollection = [];
+  let patientMessagesCollection = [];
   let baseDataInnerState = null;
   let resultState = null;
 
@@ -437,6 +441,28 @@ export default function appReducer(state = initialState, action) {
         },
       };
       break;
+    case UPDATE_SITE_PATIENTS:
+      sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
+        let patientData = null;
+        patientData = item;
+        if (patientData.id === action.newMessage.patient_id && patientData.study_id === action.newMessage.study_id) {
+          patientData.count_unread = 0;
+          if (patientData.count_unread) {
+            patientData.count_unread += 1;
+          } else {
+            patientData.count_unread = 1;
+          }
+        }
+        return patientData;
+      });
+      baseDataInnerState = {
+        sitePatients: {
+          details: sitePatientsCollection,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
     case MARK_AS_READ_PATIENT_MESSAGES:
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
         let patientData = null;
@@ -480,6 +506,23 @@ export default function appReducer(state = initialState, action) {
           details: [],
           fetching: false,
           error: payload,
+        },
+      };
+      break;
+    case UPDATE_PATIENT_MESSAGES:
+      patientMessagesCollection = concat(state.baseData.patientMessages.details, action.newMessage);
+      baseDataInnerState = {
+        patientMessages: {
+          details: patientMessagesCollection,
+          fetching: false,
+          error: null,
+        },
+      };
+      baseDataInnerState = {
+        patientMessages: {
+          details: patientMessagesCollection,
+          fetching: false,
+          error: null,
         },
       };
       break;

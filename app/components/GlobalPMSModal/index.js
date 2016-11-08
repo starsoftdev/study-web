@@ -17,7 +17,7 @@ import PatientItem from './PatientItem';
 
 import ChatForm from './ChatForm';
 
-import { fetchSitePatients, fetchPatientMessages, markAsReadPatientMessages } from 'containers/App/actions';
+import { fetchSitePatients, fetchPatientMessages, markAsReadPatientMessages, updateSitePatients } from 'containers/App/actions';
 import {
   selectSocket,
 } from 'containers/GlobalNotifications/selectors';
@@ -38,6 +38,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     closeModal: React.PropTypes.func,
     socket: React.PropTypes.any,
     fetchSitePatients: React.PropTypes.func,
+    updateSitePatients: React.PropTypes.func,
     fetchPatientMessages: React.PropTypes.func,
     sendStudyPatientMessages: React.PropTypes.func,
     markAsReadPatientMessages: React.PropTypes.func,
@@ -54,11 +55,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
 
   componentWillReceiveProps(newProps) {
     if (this.props.socket) {
-      this.props.socket.on('notifyMessage', () => {
+      this.props.socket.on('notifyMessage', (newMessage) => {
         console.log('notifyMessage');
+        this.props.updateSitePatients(newMessage);
         if (this.state.selectedPatient && this.state.selectedPatient.study_id) {
-          console.log('refresh message');
-          this.props.fetchSitePatients(this.props.currentUser.id);
           this.props.fetchPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
         }
       });
@@ -171,6 +171,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchSitePatients: (siteId) => dispatch(fetchSitePatients(siteId)),
+    updateSitePatients: (newMessage) => dispatch(updateSitePatients(newMessage)),
     fetchPatientMessages: (patientId, studyId) => dispatch(fetchPatientMessages(patientId, studyId)),
     markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
     sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
