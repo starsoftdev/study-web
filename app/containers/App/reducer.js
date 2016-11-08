@@ -452,6 +452,8 @@ export default function appReducer(state = initialState, action) {
           } else {
             patientData.count_unread = 1;
           }
+          patientData.twtm_max_date_created = action.newMessage.created_datetime;
+          patientData.last_message_body = action.newMessage.body;
         }
         return patientData;
       });
