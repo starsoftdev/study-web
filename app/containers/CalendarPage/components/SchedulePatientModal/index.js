@@ -89,6 +89,7 @@ export default class SchedulePatientModal extends Component {
         value: study.protocolNumber,
         indication: this.props.indications[study.indication_id],
         studyId: study.id,
+        siteId: siteLocationOption.siteId,
       }));
       this.setState({
         optionStep: 1,
@@ -108,11 +109,7 @@ export default class SchedulePatientModal extends Component {
 
   handleProtocolChoose(protocolOption) {
     if (protocolOption) {
-      this.props.fetchPatientsByStudy(protocolOption.studyId, {
-        offset: 0,
-        limit: -1,
-        category: '*',
-      });
+      this.props.fetchPatientsByStudy(protocolOption.studyId, protocolOption.siteId);
       this.setState({
         optionStep: 2,
         protocol: protocolOption,
