@@ -127,12 +127,10 @@ export default class SchedulePatientModal extends Component {
   handlePatientChoose(patientOption) {
     if (patientOption) {
       this.setState({
-        optionStep: 3,
         patient: patientOption,
       });
     } else {
       this.setState({
-        optionStep: 2,
         patient: null,
       });
     }
@@ -176,6 +174,48 @@ export default class SchedulePatientModal extends Component {
                           <input type="text" className="form-control add-date scheduleTime" readOnly value={selectedCellInfo.selectedDate && moment(selectedCellInfo.selectedDate).format('MM/DD/YY')} />
                         </div>
                       </div>
+
+                      <div className="field-row">
+                        <strong className="label required"><label htmlFor="patient-time">Time</label></strong>
+                        <div className="field">
+                          <div className="col-holder row">
+                            <div className="col pull-left hours">
+                              <Field
+                                id="patient-time"
+                                name="hour"
+                                component={ReactSelect}
+                                placeholder="--Hours--"
+                                options={hourOptions}
+                                className="visible-first-del min-height"
+                                disabled={submitting}
+                              />
+                            </div>
+                            <div className="col pull-left minutes">
+                              <Field
+                                id="minutes"
+                                name="minute"
+                                component={ReactSelect}
+                                placeholder="--Minutes--"
+                                options={minuteOptions}
+                                className="visible-first-del min-height"
+                                disabled={submitting}
+                              />
+                            </div>
+                            <div className="col pull-left time-mode">
+                              <Field
+                                id="time-period"
+                                name="period"
+                                component={ReactSelect}
+                                placeholder="--Minutes--"
+                                options={periodOptions}
+                                className="visible-first"
+                                disabled={submitting}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                       <div className="field-row">
                         <strong className="label required"><label htmlFor="popup-site-location">Site Location</label></strong>
                         <div className="field site-location">
@@ -231,48 +271,7 @@ export default class SchedulePatientModal extends Component {
                           </div>
                         </div>
                       }
-                      {optionStep === 3 &&
-                        <div className="field-row">
-                          <strong className="label required"><label htmlFor="patient-time">Time</label></strong>
-                          <div className="field">
-                            <div className="col-holder row">
-                              <div className="col pull-left hours">
-                                <Field
-                                  id="patient-time"
-                                  name="hour"
-                                  component={ReactSelect}
-                                  placeholder="--Hours--"
-                                  options={hourOptions}
-                                  className="visible-first-del min-height"
-                                  disabled={submitting}
-                                />
-                              </div>
-                              <div className="col pull-left minutes">
-                                <Field
-                                  id="minutes"
-                                  name="minute"
-                                  component={ReactSelect}
-                                  placeholder="--Minutes--"
-                                  options={minuteOptions}
-                                  className="visible-first-del min-height"
-                                  disabled={submitting}
-                                />
-                              </div>
-                              <div className="col pull-left time-mode">
-                                <Field
-                                  id="time-period"
-                                  name="period"
-                                  component={ReactSelect}
-                                  placeholder="--Minutes--"
-                                  options={periodOptions}
-                                  className="visible-first"
-                                  disabled={submitting}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      }
+
                       <div className="text-right">
                         <input type="reset" className="btn btn-gray-outline hidden" value="reset" />
                         <input type="submit" className="btn btn-default" value="Submit" disabled={submitting} />
