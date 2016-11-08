@@ -446,7 +446,6 @@ export default function appReducer(state = initialState, action) {
         let patientData = null;
         patientData = item;
         if (patientData.id === action.newMessage.patient_id && patientData.study_id === action.newMessage.study_id) {
-          patientData.count_unread = 0;
           if (patientData.count_unread) {
             patientData.count_unread += 1;
           } else {
