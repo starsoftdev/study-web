@@ -8,11 +8,9 @@ import composeQueryString from 'utils/composeQueryString';
 
 import {
   receiptsReceived,
-  pdfCreated,
 } from 'containers/Receipts/actions';
 import {
   GET_RECEIPT,
-  CREATE_PDF,
   GET_PDF,
 } from 'containers/Receipts/constants';
 import { getItem } from 'utils/localStorage';
@@ -30,13 +28,11 @@ const serializeParams = (obj) => {
 // Individual exports for testing
 export function* receiptSaga() {
   const watcherA = yield fork(getReceipts);
-  const watcherB = yield fork(createPdf);
   const watcherC = yield fork(getPdf);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
   yield cancel(watcherA);
-  yield cancel(watcherB);
   yield cancel(watcherC);
 }
 
@@ -67,50 +63,24 @@ export function* getReceipts() {
   }
 }
 
-export function* createPdf() {
-  while (true) {
-    const { payload } = yield take(CREATE_PDF);
-    try {
-      const requestURL = `${API_URL}/invoices/createPDF`;
-      const params = {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      };
-
-      const response = yield call(request, requestURL, params);
-      yield put(pdfCreated(response));
-      yield put(toastrActions.success('', 'Success! DPF created.'));
-    } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
-      payload.cb(err, null);
-    }
-  }
-}
-
 export function* getPdf() {
   while (true) {
     const { payload } = yield take(GET_PDF);
     try {
-      const requestURL = `${API_URL}/invoices/getPDF`;
-      const fileName = (payload.data.files.length === 1) ? payload.data.files[0].fileName : null;
+      const requestURL = `${API_URL}/invoices/getInvoicePDF`;
       const authToken = getItem('auth_token');
-      const archiveName = payload.data.archive;
       const params = {
         access_token: authToken,
       };
-
-      if (fileName) {
-        params.fileName = fileName;
+      const invoices = [];
+      for (const value of payload) {
+        invoices.push(value.invoicePdfId);
       }
-      if (archiveName) {
-        params.archiveName = archiveName;
-      }
+      params.invoices = invoices;
       location.replace(`${requestURL}?${serializeParams(params)}`);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
-      payload.cb(err, null);
     }
   }
 }

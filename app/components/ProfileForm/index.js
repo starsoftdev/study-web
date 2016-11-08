@@ -9,7 +9,7 @@ import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 import { Modal } from 'react-bootstrap';
 import Input from 'components/Input';
 import ChangePasswordForm from 'components/ChangePasswordForm';
-import defaultImage from 'assets/images/Default-User-Img.png';
+import defaultImage from 'assets/images/Default-User-Img-Dr.png';
 import './styles.less';
 import CenteredModal from 'components/CenteredModal/index';
 

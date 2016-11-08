@@ -28,6 +28,9 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
     if (messageData.twilioTextMessage.direction === 'outbound-api') {
       containerClassName = 'post-holder even';
       senderImage = defaultUserImageDoctor;
+      if (this.props.currentUser.profileImageURL) {
+        senderImage = this.props.currentUser.profileImageURL;
+      }
       if (messageData.user) {
         senderName = messageData.user.firstName.concat(' '.concat(messageData.user.lastName));
       }
