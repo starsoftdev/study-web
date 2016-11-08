@@ -49,10 +49,12 @@ import {
   FETCH_SITE_PATIENTS,
   FETCH_SITE_PATIENTS_SUCCESS,
   FETCH_SITE_PATIENTS_ERROR,
+  UPDATE_SITE_PATIENTS,
 
   FETCH_PATIENT_MESSAGES,
   FETCH_PATIENT_MESSAGES_SUCCESS,
   FETCH_PATIENT_MESSAGES_ERROR,
+  UPDATE_PATIENT_MESSAGES,
 
   MARK_AS_READ_PATIENT_MESSAGES,
 
@@ -394,17 +396,16 @@ export function sitePatientsFetchingError(payload) {
   };
 }
 
-export function fetchPatientMessages(patientId, studyId) {
+export function updateSitePatients(newMessage) {
   return {
-    type: FETCH_PATIENT_MESSAGES,
-    patientId,
-    studyId,
+    type: UPDATE_SITE_PATIENTS,
+    newMessage,
   };
 }
 
-export function markAsReadPatientMessages(patientId, studyId) {
+export function fetchPatientMessages(patientId, studyId) {
   return {
-    type: MARK_AS_READ_PATIENT_MESSAGES,
+    type: FETCH_PATIENT_MESSAGES,
     patientId,
     studyId,
   };
@@ -421,6 +422,21 @@ export function patientMessagesFetchingError(payload) {
   return {
     type: FETCH_PATIENT_MESSAGES_ERROR,
     payload,
+  };
+}
+
+export function updatePatientMessages(newMessage) {
+  return {
+    type: UPDATE_PATIENT_MESSAGES,
+    newMessage,
+  };
+}
+
+export function markAsReadPatientMessages(patientId, studyId) {
+  return {
+    type: MARK_AS_READ_PATIENT_MESSAGES,
+    patientId,
+    studyId,
   };
 }
 
