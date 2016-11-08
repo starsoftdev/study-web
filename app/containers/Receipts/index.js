@@ -13,7 +13,7 @@ const _ = require('lodash');
 
 import {
   getReceipts,
-  createPDF,
+  getPDF,
 } from 'containers/Receipts/actions';
 import {
   fetchSites,
@@ -37,7 +37,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     unsubscribeFromPageEvent: PropTypes.func,
     fetchSites: PropTypes.func,
     getReceipts: PropTypes.func,
-    createPDF: PropTypes.func,
+    getPDF: PropTypes.func,
     receipts: PropTypes.any,
     currentUser: PropTypes.any,
   };
@@ -45,7 +45,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
   constructor(props, context) {
     super(props, context);
 
-    this.createPdf = this.createPdf.bind(this);
+    this.getPDF = this.getPDF.bind(this);
     this.search = this.search.bind(this);
     this.selectCurrent = this.selectCurrent.bind(this);
     this.selectAll = this.selectAll.bind(this);
@@ -67,6 +67,12 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
 
   componentWillReceiveProps() {
     // console.log('componentWillReceiveProps', nextProps);
+  }
+
+  getPDF() {
+    if (this.selectedReceipts) {
+      this.props.getPDF(this.selectedReceipts);
+    }
   }
 
   get selectedReceipts() {
@@ -120,12 +126,6 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     this.props.getReceipts(this.searchOptions);
   }
 
-  createPdf() {
-    if (this.selectedReceipts) {
-      this.props.createPDF(this.selectedReceipts);
-    }
-  }
-
   render() {
     return (
       <StickyContainer className="container-fluid">
@@ -135,7 +135,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
           <TableSearchForm
             changeRange={this.changeRange}
             search={this.search}
-            createPdf={this.createPdf}
+            createPdf={this.getPDF}
             {...this.props}
           />
           <ReceiptsTable
@@ -162,7 +162,7 @@ function mapDispatchToProps(dispatch) {
     fetchEvents: (values) => dispatch(fetchEvents(values)),
     fetchSites: () => dispatch(fetchSites()),
     getReceipts: (values) => dispatch(getReceipts(values)),
-    createPDF: (values) => dispatch(createPDF(values)),
+    getPDF: (values) => dispatch(getPDF(values)),
   };
 }
 

@@ -104,7 +104,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             <Button onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
           </div>
 
-          <AvatarMenu handleLogoutClick={this.handleLogoutClick} />
+          <AvatarMenu handleLogoutClick={this.handleLogoutClick} currentUser={this.props.currentUser} />
 
         </div>
         <AddCreditsModal
