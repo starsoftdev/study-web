@@ -446,8 +446,9 @@ export default function appReducer(state = initialState, action) {
         let patientData = null;
         patientData = item;
         if (patientData.id === action.newMessage.patient_id && patientData.study_id === action.newMessage.study_id) {
-          if (patientData.count_unread) {
-            patientData.count_unread += 1;
+          const countUnread = patientData.count_unread;
+          if (countUnread) {
+            patientData.count_unread = countUnread + 1;
           } else {
             patientData.count_unread = 1;
           }
@@ -461,6 +462,8 @@ export default function appReducer(state = initialState, action) {
           error: null,
         },
       };
+      console.log('=====UPDATE_SITE_PATIENTS');
+      console.log(baseDataInnerState);
       break;
     case MARK_AS_READ_PATIENT_MESSAGES:
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
