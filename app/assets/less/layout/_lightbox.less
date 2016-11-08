@@ -11,12 +11,12 @@
 	overflow-x: hidden;
 	visibility: hidden;
 	transition: all 0.75s ease;
-	
+
 	&.lightbox-active {
 		opacity: 1;
 		visibility: visible;
 	}
-	
+
 	.overlay {
 		top: 0;
 		left: 0;
@@ -25,18 +25,18 @@
 		position: fixed;
 		background: rgba(0,0,0,0.5);
 	}
-	
+
 	.lightbox-holder {
 		.size(100%);
 		display: table;
 		table-layout: fixed;
 	}
-	
+
 	.lightbox-frame {
 		display: table-cell;
 		vertical-align: middle;
 	}
-	
+
 	.lightbox-content {
 		z-index: 3;
 		margin:0 auto;
@@ -45,64 +45,61 @@
 		position: relative;
 		border: #f78e1e solid 2px;
 	}
-	
-	
+
+
 	.head {
 		color: #fff;
 		position: relative;
 		background: #f78e1e;
 		padding: 17px 50px 17px 15px;
 	}
-	
+
 	.title {
 		.font(21px);
 		display: block;
 		font-weight: 700;
 		text-transform: uppercase;
 	}
-	
+
 	.close {
 		top: 50%;
 		opacity: 1;
 		right: 10px;
 		color: #fff;
 		.font(26px,1);
+		.size(26px);
 		text-shadow: none;
 		position: absolute;
-		.transform(translate(0,-50%));
-		transform-origin: 50% 50%;
-		
+		margin: -13px 0 0;
+
 		i {
 			display: block;
 			transition: all 0.25s;
 		}
-		
+
 		&:hover {
 			color: #fff;
-			
-			i {
-				margin: 5px 0 0 0;
-				.transform(rotate(180deg));
-			}
+			margin: -11px -2px 0 0;
+			.transform(rotate(-180deg));
 		}
 	}
 }
-	
+
 .form-lightbox {
 	padding: 25px;
-	
+
 	.field-row {
 		.font(0,0);
 		.clearfix;
 		margin: 0 0 15px;
 		position: relative;
-		
+
 		> * {
 			.align(@align: middle);
 			.font(@font-size-base);
 		}
 	}
-	
+
 	.label {
 		width: 35%;
 		color: #101010;
@@ -112,46 +109,46 @@
 		padding: 0 5px 0 0;
 		text-transform: uppercase;
 	}
-	
+
 	.field {
 		width: 65%;
 		position: relative;
 	}
-	
+
 	.row {
 		margin: 0 -6px;
 	}
-	
+
 	.col-small {
 		padding: 0 6px;
 		width: 33.3333%;
 	}
-	
+
 	.col  {
 		width: 50%;
 		padding: 0 6px;
 	}
-	
+
 	.btn-primary {
 		padding: 5px;
 		min-width: 100px;
 	}
-	
+
 	.jcf-select {
 		.jcf-select-text {
 			min-height: 36px;
-			
+
 			span {
 				transform: none;
 			}
 		}
 	}
-	
+
 	.jcf-select-year,
 	.jcf-select-month {
 		.jcf-select-text {
 			.font(0,0);
-			
+
 			span {
 				&:before {
 					.font(18px, 36px);
@@ -159,7 +156,7 @@
 			}
 		}
 	}
-	
+
 	.jcf-select-month {
 		.jcf-select-text {
 			span {
@@ -169,7 +166,7 @@
 			}
 		}
 	}
-	
+
 	.jcf-select-year {
 		.jcf-select-text {
 			span {
@@ -179,41 +176,41 @@
 			}
 		}
 	}
-	
+
 	.changed {
 		.jcf-select-text {
 			.font(18px,36px);
-			
+
 			span:before { display: none !important; }
 		}
 	}
-	
+
 	.jcf-checkbox {
 		margin: 0 6px 0 0;
 		vertical-align: middle;
-		
+
 		+ label {
 			vertical-align: middle;
 		}
 	}
-	
+
 	.select-indication-slide {
 		opacity: 0;
 		visibility: hidden;
-		
+
 		&.active {
 			opacity: 1;
 			visibility: visible;
 		}
-		
+
 		.search-holder {
 			margin: 0 0 3px;
 			position: relative;
-			
+
 			.form-control {
 				padding: 6px 35px 6px 15px;
 			}
-		
+
 			label {
 				top: 50%;
 				right: 10px;
@@ -223,7 +220,7 @@
 			}
 		}
 	}
-	
+
 	.category-list {
 		&:empty:before {
 			content: 'Add Indication';
@@ -263,7 +260,7 @@ input:focus {
 	transition: all 0.25s;
 	text-transform: uppercase;
 	.transform(translate(0,-50%));
-	
+
 	span {
 		display: block;
 		overflow: hidden;
@@ -271,11 +268,11 @@ input:focus {
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
-	
+
 	.has-error & {
-		
+
 	}
-	
+
 	&:before {
 		top: 50%;
 		right: 100%;
@@ -289,11 +286,11 @@ input:focus {
 	.lightbox-content {
 		padding: 19px 20px 25px;
 	}
-	
+
 	.btn-block {
 		.font(0,0);
 	}
-	
+
 	.btn {
 		min-width: 80px;
 		margin: 0 6px;
@@ -301,7 +298,7 @@ input:focus {
 }
 
 #edit-scedule {
-	
+
 	.protocol,
 	.site-location,
 	.name {
@@ -309,16 +306,16 @@ input:focus {
 		color: #354052;
 		.font(18px, 24px);
 	}
-	
+
 	.name {
 		font-size: 22px;
 		font-weight: 700;
 	}
-	
+
 	.protocol {
 		margin: 0 0 15px;
 	}
-	
+
 	.btn {
 		padding: 0 10px;
 		line-height: 36px;
@@ -332,69 +329,69 @@ input:focus {
 #date-range {
 	overflow: auto;
 	//min-width: 1020px;
-	
+
 	.lightbox-content {
 		max-width: 1095px;
-		
-		
+
+
 	}
-	
+
 	/*.holder {
 		height: 526px;
 		overflow: hidden;
 	}*/
-	
+
 	.date-range-area {
 		height: 100%;
 		padding: 25px;
 		overflow-y: auto;
 		overflow-x: hidden;
 	}
-	
+
 	.calendars {
 		margin: 0 0 15px;
 	}
-	
+
 	.datepicker {
 		position: relative;
-		
+
 		.datepicker-input.invisible {
 			bottom: 100%;
 			position: absolute;
 		}
 	}
-	
+
 	.calendar {
 		margin: 0;
 		width: 100%;
 	}
-	
+
 	.btn-block {
 		padding: 0;
 	}
-	
+
 	.select-end-date,
 	.select-start-date {
 		max-width: 410px;
 		width: 50%;
 	}
-	
+
 	@media screen and (max-width: 1180px) {
 		.lightbox-content {
 			margin: 15px;
 		}
-		
+
 		.select-end-date,
 		.select-start-date {
 			width: 100%;
 			max-width: none;
 			margin: 0 0 15px;
 		}
-		
+
 		.select-end-date {
 			margin: 0;
 		}
-		
+
 	}
 }
 
@@ -406,17 +403,17 @@ input:focus {
 	padding: 20px 3px;
 	text-transform: uppercase;
 	border-right: 2px #f78e1e solid;
-	
+
 	ul {
 		margin: 0;
 	}
-	
+
 	a {
 		display: block;
 		color: #101010;
 		padding: 7px 18px;
 	}
-	
+
 	a:hover,
 	.active a {
 		color: #fff;
