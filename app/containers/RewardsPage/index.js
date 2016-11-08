@@ -64,13 +64,18 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
         <section className="rewards">
           <h2 className="main-heading">REWARDS</h2>
-          <RewardForm
-            siteLocations={siteLocations}
-          />
+          <div className="form-search clearfix">
+            <div className="pull-left custom-select">
+              <RewardForm
+                siteLocations={siteLocations}
+              />
+            </div>
+          </div>
+
           <header className="sub-header clearfix">
             <h3 className="pull-left">Wayne Enterprise Has <strong>450 KIKs</strong></h3>
             <a className="btn bgn-chat lightbox-opener pull-right" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal}></a>
-            <RewardModal showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} />
+            <RewardModal siteLocations={siteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} />
           </header>
 
           <div className="row images-area">
