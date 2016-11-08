@@ -4,11 +4,12 @@ import enhanceWithClickOutside from 'react-click-outside';
 
 import './styles.less';
 
-import userAvatar from 'assets/images/new_version/img-logged-user.png';
+import defaultImage from 'assets/images/Default-User-Img-Dr.png';
 
 class AvatarMenu extends React.Component {
   static propTypes = {
     handleLogoutClick: PropTypes.func.isRequired,
+    currentUser: PropTypes.func.any,
   }
 
   state = {
@@ -32,7 +33,7 @@ class AvatarMenu extends React.Component {
       <div className="logged-user-area open-close pull-right">
         <a className="opener" onClick={this.toggleAvatarMenuHandle}>
           <div className="img-circle">
-            <img src={userAvatar} width="43" height="43" alt="Bruce Wayne" />
+            <img src={this.props.currentUser.profileImageURL || defaultImage} width="43" height="43" alt="Bruce Wayne" />
           </div>
           <span className="text margin-left-5px margin-right-5px">Bruce Wayne</span>
           <i className="caret" />
