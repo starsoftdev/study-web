@@ -16,17 +16,86 @@ class FilterBar extends Component {
     updateFilter: PropTypes.func.isRequired,
   }
 
+  state = {
+    siteLocation: null,
+    indication: null,
+    protocol: null,
+    indicationOptions: [],
+    protocolOptions: [],
+  }
+
   handleFilterChange = (field, option) => {
     const newValue = option ? option.value : '';
 
+    switch (field) {
+      case 'siteLocation':
+        this.handleSiteLocationChoose(option);
+        break;
+      case 'indication':
+        this.handleIndicationChoose(option);
+        break;
+      default:
+        break;
+    }
+
     this.props.updateFilter(field, newValue);
+  }
+
+  handleSiteLocationChoose(siteLocationOption) {
+    if (siteLocationOption) {
+      const selectedSite = this.props.sites.filter(s => s.id === siteLocationOption.siteId)[0];
+      if (selectedSite === null) {
+        throw new Error('SiteLocation options are not properly populated.');
+      }
+      const indicationIds = _.uniq(selectedSite.studies.map(study => study.indication_id));
+      const indicationOptions = indicationIds.map(id => {
+        const i = _.find(this.props.indications, { id });
+        const protocolOptions = selectedSite.studies.filter(s => s.indication_id === id)
+          .map(s => ({
+            label: s.protocolNumber,
+            value: s.protocolNumber,
+          }));
+        return {
+          label: i.name,
+          value: i.name,
+          protocolOptions,
+        };
+      });
+      this.setState({
+        siteLocation: siteLocationOption,
+        protocol: null,
+        indicationOptions,
+      });
+    } else {
+      this.setState({
+        siteLocation: null,
+        indication: null,
+        protocol: null,
+        indicationOptions: [],
+        protocolOptions: [],
+      });
+    }
+  }
+
+  handleIndicationChoose(indicationOption) {
+    if (indicationOption) {
+      this.setState({
+        indication: indicationOption,
+        protocolOptions: indicationOption.protocolOptions,
+      });
+    } else {
+      this.setState({
+        indication: null,
+        protocol: null,
+        protocolOptions: [],
+      });
+    }
   }
 
   render() {
     const {
       sites,
-      indications,
-      schedules,
+      // schedules,
       fetchingSites,
       filter,
     } = this.props;
@@ -34,18 +103,7 @@ class FilterBar extends Component {
     const siteLocationOptions = sites.map(s => ({
       label: s.name,
       value: s.name,
-    }));
-
-    const protocols = _.uniq(schedules.map(s => s.protocolNumber));
-
-    const protocolOptions = protocols.map(p => ({
-      label: p,
-      value: p,
-    }));
-
-    const indicationOptions = indications.map(i => ({
-      label: i.name,
-      value: i.name,
+      siteId: s.id,
     }));
 
     return (
@@ -61,7 +119,7 @@ class FilterBar extends Component {
           </div>
           <div className="pull-left custom-select">
             <Select
-              className="data-search"
+              className="form-control data-search"
               value={filter.siteLocation}
               disabled={fetchingSites}
               options={siteLocationOptions}
@@ -71,19 +129,21 @@ class FilterBar extends Component {
           </div>
           <div className="pull-left custom-select">
             <Select
-              className="data-search"
+              className="form-control data-search"
               value={filter.indication}
-              options={indicationOptions}
-              placeholder="--Select Indication--"
+              options={this.state.indicationOptions}
+              disabled={this.state.siteLocation === null}
+              placeholder={this.state.siteLocation ? '--Select Indication--' : '--N/A--'}
               onChange={(option) => this.handleFilterChange('indication', option)}
             />
           </div>
           <div className="pull-left custom-select">
             <Select
-              className="data-search"
+              className="form-control data-search"
               value={filter.protocol}
-              options={protocolOptions}
-              placeholder="--Select Protocol--"
+              options={this.state.protocolOptions}
+              disabled={this.state.indication === null}
+              placeholder={this.state.indication ? '--Select Protocol--' : '--N/A--'}
               onChange={(option) => this.handleFilterChange('protocol', option)}
             />
           </div>

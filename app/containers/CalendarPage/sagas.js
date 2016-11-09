@@ -7,6 +7,7 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
+import { getItem } from 'utils/localStorage';
 import request from 'utils/request';
 
 import {
@@ -37,16 +38,21 @@ export function* fetchPatientsByStudyWatcher() {
 }
 
 export function* fetchPatientsByStudyWorker(action) {
+  const authToken = getItem('auth_token');
+  const { studyId, siteId } = action;
+
   try {
-    const requestURL = `${API_URL}/studies/${action.studyId}/patient-categories`;
-    const params = {
+    let requestURL = `${API_URL}/studies/${studyId}/patients?access_token=${authToken}&siteId=${siteId}`;
+    const response = yield call(request, requestURL, {
       method: 'GET',
-      query: action.searchParams,
-    };
-    const response = yield call(request, requestURL, params);
+    });
 
     yield put(fetchPatientsByStudySucceeded(response));
   } catch (err) {
+    // if returns forbidden we remove the token from local storage
+    if (err.status === 401) {
+      removeItem('auth_token');
+    }
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
     yield put(fetchPatientsByStudyFailed(err));
     yield put(toastrActions.error('', errorMessage));
