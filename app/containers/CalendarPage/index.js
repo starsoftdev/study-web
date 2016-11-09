@@ -128,7 +128,7 @@ export class CalendarPage extends React.Component {
     if (data.siteLocation && data.protocol) { // CREATE
       submitData = {
         siteLocation: data.siteLocation.label,
-        indication: data.protocol.indication.name,
+        indication: data.protocol.indication,
         protocolNumber: data.protocol.label,
         patientId: data.patient.value,
         userId: this.props.currentUser.id,
