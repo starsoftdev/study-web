@@ -34,5 +34,6 @@ deploy:
   api_key: c85b89de-53eb-4124-a9b6-a127b5cc3042
   app:
     develop: shrouded-dawn-63302
+    master: shrouded-dawn-63302
 
 after_success: 'npm run coveralls'
