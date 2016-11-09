@@ -5,15 +5,27 @@
 */
 
 import React from 'react';
-
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 import { Modal } from 'react-bootstrap';
 import RewardForm from 'components/RewardForm';
+import RadioButton from 'components/Input/RadioButton';
 import cardStudykik from 'assets/images/img6.png';
 import cardAmazon from 'assets/images/img7.png';
 import cardStarbucks from 'assets/images/img8.png';
+import {
+  selectSiteLocations,
+} from 'containers/App/selectors';
 
 import './style.less';
+
+const mapStateToProps = createStructuredSelector({
+  siteLocations : selectSiteLocations(),
+});
+
+@reduxForm({ form: 'rewardForm' })
+@connect(mapStateToProps, null)
 class RewardModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
@@ -22,6 +34,20 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
     closeModal: React.PropTypes.func,
     redeemReward: React.PropTypes.func,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      card: 0,
+    };
+
+    this.selectCard = this.selectCard.bind(this);
+  }
+
+  selectCard() {
+
+  }
 
   render() {
     return (
@@ -57,15 +83,33 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                 </div>
                 <ul className="list-unstyled list-radios">
                   <li>
-                    <input type="radio" name="rewards" id="radio-option1" />
+                    <Field
+                      name="rewards"
+                      type="radio"
+                      component={RadioButton}
+                      className=""
+                      onChange={this.selectCard}
+                    />
                     <span className="text">75 KIKs = $25 Starbucks Gift Card</span>
                   </li>
                   <li>
-                    <input type="radio" name="rewards" id="radio-option2" />
+                    <Field
+                      name="rewards"
+                      type="radio"
+                      component={RadioButton}
+                      className=""
+                      onChange={this.selectCard}
+                    />
                     <span className="text">225 KIKs = $75 Amazon Gift Card</span>
                   </li>
                   <li>
-                    <input type="radio" name="rewards" id="radio-option3" />
+                    <Field
+                      name="rewards"
+                      type="radio"
+                      component={RadioButton}
+                      className=""
+                      onChange={this.selectCard}
+                    />
                     <span className="text"> 1,559 KIKs = $1,559 StudyKIK Platinum Listing</span>
                   </li>
                 </ul>
