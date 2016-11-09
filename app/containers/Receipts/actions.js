@@ -9,7 +9,6 @@ import {
   GET_RECEIPT,
   RECEIPTS_RECEIVED,
   GET_PDF,
-  CREATE_PDF,
 } from './constants';
 
 export function defaultAction() {
@@ -32,14 +31,7 @@ export function getReceipts(payload) {
   };
 }
 
-export function createPDF(payload) {
-  return {
-    type: CREATE_PDF,
-    payload,
-  };
-}
-
-export function pdfCreated(payload) {
+export function getPDF(payload) {
   return {
     type: GET_PDF,
     payload,

@@ -40,7 +40,6 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   static propTypes = {
     selectCurrent: PropTypes.func,
     selectAll: PropTypes.func,
-    range: PropTypes.any,
     searchBy: PropTypes.any,
     receipts: PropTypes.any,
   };
@@ -51,7 +50,6 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     this.onClickAll = this.onClickAll.bind(this);
     this.onClickCurrent = this.onClickCurrent.bind(this);
     this.sortBy = this.sortBy.bind(this);
-    this.sort = this.sort.bind(this);
 
     this.state = {
       checkAll: false,
@@ -62,22 +60,8 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    //  console.log('componentWillReceiveProps', nextProps);
-
-    if (nextProps.proposals) {
-      this.setState({
-        filteredReceipts: null,
-      });
-    }
-
-    if (nextProps.range) {
-      this.rangeSort(nextProps.range);
-    }
-
-    if (nextProps.site || nextProps.searchBy) {
-      this.sort(nextProps.site, nextProps.searchBy);
-    } else {
+  componentWillReceiveProps() {
+    if (this.state.filteredReceipts) {
       this.setState({
         filteredReceipts: null,
       });
@@ -146,54 +130,6 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
       this.selectedReceipts = (this.state.checkAll) ? receipts : null;
       this.props.selectAll(this.selectedReceipts);
     });
-  }
-
-  sort(site, searchBy) {
-    const receiptsMatch = [];
-    const receiptsArr = this.props.receipts;
-
-    if (site !== null && searchBy !== null) {
-      const number = parseInt(searchBy, 10);
-      for (const receipt of receiptsArr) {
-        const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
-        const protocol = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.study.protocolNumber : '-';
-        if (name === site.name) {
-          if (!_.isNaN(number)) {
-            if (number === receipt.id) {
-              receiptsMatch.push(receipt);
-            }
-          } else if (searchBy === name) {
-            receiptsMatch.push(receipt);
-          } else if (searchBy === protocol) {
-            receiptsMatch.push(receipt);
-          }
-        }
-      }
-    } else if (searchBy !== null) {
-      for (const receipt of receiptsArr) {
-        const number = parseInt(searchBy, 10);
-        const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
-        const protocol = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.study.protocolNumber : '-';
-        if (!_.isNaN(number)) {
-          if (number === receipt.id) {
-            receiptsMatch.push(receipt);
-          }
-        } else if (searchBy === name) {
-          receiptsMatch.push(receipt);
-        } else if (searchBy === protocol) {
-          receiptsMatch.push(receipt);
-        }
-      }
-    } else if (site !== null) {
-      for (const receipt of receiptsArr) {
-        const name = (receipt.invoiceDetails[0].campaign) ? receipt.invoiceDetails[0].campaign.site.name : receipt.sites.name;
-        if (name === site.name) {
-          receiptsMatch.push(receipt);
-        }
-      }
-    }
-
-    this.setState({ filteredReceipts: receiptsMatch });
   }
 
   get selectedReceipts() {
@@ -304,23 +240,11 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
         break;
     }
 
-    this.setState({ filteredReceipts: receiptsArr, activeSort: sort, activeDirection: direction });
-  }
-
-  rangeSort(range) {
-    const receiptsInRange = [];
-    const receiptsArr = this.props.receipts;
-    for (const receipt of receiptsArr) {
-      const created = new Date(receipt.created).getTime();
-      const startDate = new Date(range.startDate).getTime();
-      const endDate = new Date(range.endDate).getTime();
-
-      if (created > startDate && created < endDate) {
-        receiptsInRange.push(receipt);
-      }
-    }
-
-    this.setState({ filteredReceipts: receiptsInRange });
+    this.setState({
+      filteredReceipts: receiptsArr,
+      activeSort: sort,
+      activeDirection: direction,
+    });
   }
 
   mapHeaders(raw, state, result) {
@@ -338,7 +262,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     });
   }
 
-  mapProposals(raw, result) {
+  mapReceipts(raw, result) {
     _.map(raw, (source, key) => {
       const date = new Date(source.created);
       const dateWrapper = moment(date).format('YYYY/MM/DD');
@@ -381,7 +305,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     const heads = [];
 
     this.mapHeaders(headers, state, heads);
-    this.mapProposals(receiptsArr, receipts);
+    this.mapReceipts(receiptsArr, receipts);
 
     return (
       <div className="table-holder">

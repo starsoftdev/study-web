@@ -3,8 +3,8 @@
  */
 
 import React from 'react';
-import classNames from 'classnames';
 import moment from 'moment-timezone';
+import classNames from 'classnames';
 
 class PatientText extends React.Component {
   static propTypes = {
@@ -23,20 +23,37 @@ class PatientText extends React.Component {
   }
 
   renderProfileImage() {
-    const { textMessage } = this.props;
+    const { currentPatient, textMessage } = this.props;
+    /* eslint-disable global-require */
     if (textMessage.user) {
       return (
         <img role="presentation" src={textMessage.user.profileImageURL} />
       );
+    } else if (textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound') {
+      let url = require('../../../assets/images/Default-User-Img-Dr.png');
+      if (this.props.currentUser.profileImageURL) {
+        url = this.props.currentUser.profileImageURL;
+      }
+      return (
+        <img role="presentation" src={url} />
+      );
+    } else if (currentPatient.gender === 'Female') {
+      const url = require('../../../assets/images/Default-User-Img-Girl.png');
+      return (
+        <img role="presentation" src={url} />
+      );
     }
-    return null;
+    const url = require('../../../assets/images/Default-User-Img.png');
+    return (
+      <img role="presentation" src={url} />
+    );
   }
 
   renderTextMessageOriginUser() {
-    const { currentPatient, textMessage } = this.props;
-    if (textMessage.user) {
+    const { currentPatient, textMessage, currentUser } = this.props;
+    if (textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound') {
       return (
-        <strong className="name">{textMessage.user.firstName} {textMessage.user.lastName}</strong>
+        <strong className="name">{currentUser.firstName} {currentUser.lastName}</strong>
       );
     }
     return (
@@ -48,7 +65,7 @@ class PatientText extends React.Component {
     const { currentUser, textMessage } = this.props;
     if (textMessage) {
       return (
-        <div className={classNames('post-msg', { reply: textMessage.user })}>
+        <div className={classNames('post-msg', { reply: textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound' })}>
           <div className="img-holder">
             {this.renderProfileImage()}
           </div>
@@ -59,8 +76,8 @@ class PatientText extends React.Component {
             </a>
           </div>
           {this.renderTextMessageOriginUser()}
-          <time dateTime={textMessage.createdAt}>
-            {moment.tz(textMessage.createdAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}
+          <time dateTime={textMessage.dateCreated}>
+            {moment.tz(textMessage.dateCreated, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}
           </time>
         </div>
       );

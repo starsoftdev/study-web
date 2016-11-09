@@ -1,30 +1,39 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { Field, reduxForm, change } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import { map, omit } from 'lodash';
 
-import EditPatientForm from 'containers/PatientDatabasePage/EditPatientForm';
-import ChatForm from 'components/ChatForm';
+import Checkbox from '../../../components/Input/Checkbox';
+import CenteredModal from '../../../components/CenteredModal/index';
+import EditPatientForm from '../../../containers/PatientDatabasePage/EditPatientForm';
+import ChatForm from '../../../components/ChatForm';
 import { selectPatients,
   selectSelectedPatient,
   selectSelectedPatientDetailsForForm,
   selectSavedPatient,
-  selectChat } from 'containers/PatientDatabasePage/selectors';
+  selectChat } from '../../../containers/PatientDatabasePage/selectors';
 import {
-  clearSelectedPatient,
+  sendStudyPatientMessages,
+} from '../../../containers/GlobalNotifications/actions';
+import { clearSelectedPatient,
   savePatient,
   initChat,
   disableChat,
-} from 'containers/PatientDatabasePage/actions';
-import {
-  sendStudyPatientMessages,
-} from 'containers/GlobalNotifications/actions';
+  addPatientsToTextBlast,
+  removePatientsFromTextBlast } from '../actions';
 import PatientItem from './PatientItem';
 import './styles.less';
 
+const formName = 'PatientDatabase.TextBlastModal';
+
+@reduxForm({ form: formName })
 class PatientsList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    addPatientsToTextBlast: PropTypes.func,
+    change: PropTypes.func,
+    removePatientsFromTextBlast: PropTypes.func,
     patients: PropTypes.object,
     selectedPatient: PropTypes.object,
     selectedPatientDetailsForForm: PropTypes.object,
@@ -44,7 +53,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     this.updatePatient = this.updatePatient.bind(this);
     this.openChat = this.openChat.bind(this);
     this.closeChat = this.closeChat.bind(this);
-    this.sendMessage = this.sendMessage.bind(this);
+    this.toggleAllPatientSelection = this.toggleAllPatientSelection.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -74,22 +83,6 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     this.props.savePatient(selectedPatient.details.id, payload);
   }
 
-  sendMessage(message) {
-    const { chat } = this.props;
-    const options = {
-      body: message.body,
-      studyId: chat.details.study_id,
-      patientId: chat.details.id,
-      to: chat.details.phone,
-    };
-
-    this.props.sendStudyPatientMessages(options, (err, data) => {
-      if (!err) {
-        console.log('data', data);
-      }
-    });
-  }
-
   chatModalShouldBeShown() {
     return this.props.chat.active;
   }
@@ -100,6 +93,18 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
 
   closeChat() {
     this.props.disableChat();
+  }
+
+  toggleAllPatientSelection(checked) {
+    const { addPatientsToTextBlast, change, patients, removePatientsFromTextBlast } = this.props;
+    if (checked) {
+      addPatientsToTextBlast(patients.details);
+    } else {
+      removePatientsFromTextBlast();
+    }
+    for (const patient of patients.details) {
+      change(`patient-${patient.id}`, checked);
+    }
   }
 
   render() {
@@ -114,57 +119,61 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     if (patients.details.length > 0) {
       return (
         <div className="patients">
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="table-responsive">
-                <table className="table table-striped">
-                  <caption>Total Patients Count: {patients.details.length}</caption>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>NAME</th>
-                      <th>EMAIL</th>
-                      <th>PHONE</th>
-                      <th>INDICATIONS</th>
-                      <th>AGE</th>
-                      <th>GENDER</th>
-                      <th>BMI</th>
-                      <th>STATUS</th>
-                      <th>SOURCE</th>
-                      <th></th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {patientsListContents}
-                  </tbody>
-                </table>
-              </div>
-              <Modal className="edit-patient" show={editPatientModalShown} onHide={this.closeEditPatientModal}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Edit Patient</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <EditPatientForm
-                    initialValues={selectedPatientDetailsForForm}
-                    onSubmit={this.updatePatient}
-                  />
-                </Modal.Body>
-              </Modal>
-              {(chat)
-                ?
-                <Modal className="chat-patient" show={chatModalShown} onHide={this.closeChat}>
-                  <Modal.Header closeButton>
-                    <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <ChatForm onSubmit={this.sendMessage} />
-                  </Modal.Body>
-                </Modal>
-                : ''
-              }
-            </div>
+          <div className="table-holder">
+            <header>
+              <h2>Total Patients Count: {patients.details.length}</h2>
+            </header>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>
+                    <Field
+                      name="all-patients"
+                      type="checkbox"
+                      component={Checkbox}
+                      onChange={this.toggleAllPatientSelection}
+                    />
+                  </th>
+                  <th>#</th>
+                  <th>NAME</th>
+                  <th>EMAIL</th>
+                  <th>PHONE</th>
+                  <th>INDICATIONS</th>
+                  <th>AGE</th>
+                  <th>GENDER</th>
+                  <th>BMI</th>
+                  <th>STATUS</th>
+                  <th>SOURCE</th>
+                </tr>
+              </thead>
+              <tbody>
+                {patientsListContents}
+              </tbody>
+            </table>
           </div>
+          <Modal className="edit-patient" dialogComponentClass={CenteredModal} show={editPatientModalShown} onHide={this.closeEditPatientModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Edit Patient</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <EditPatientForm
+                initialValues={selectedPatientDetailsForForm}
+                onSubmit={this.updatePatient}
+              />
+            </Modal.Body>
+          </Modal>
+          {(chat)
+            ?
+            <Modal className="chat-patient" dialogComponentClass={CenteredModal} show={chatModalShown} onHide={this.closeChat}>
+              <Modal.Header closeButton>
+                <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <ChatForm chat={chat} sendStudyPatientMessages={sendStudyPatientMessages} />
+              </Modal.Body>
+            </Modal>
+            : ''
+          }
         </div>
       );
     }
@@ -186,6 +195,9 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    addPatientsToTextBlast: (patients) => dispatch(addPatientsToTextBlast(patients)),
+    change: (field, value) => dispatch(change(formName, field, value)),
+    removePatientsFromTextBlast: () => dispatch(removePatientsFromTextBlast()),
     clearSelectedPatient: () => dispatch(clearSelectedPatient()),
     savePatient: (id, data) => dispatch(savePatient(id, data)),
     initChat: (payload) => dispatch(initChat(payload)),

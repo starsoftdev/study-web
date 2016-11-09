@@ -18,15 +18,11 @@ import { submitMovePatientBetweenCategories } from '../actions';
 const patientTarget = {
   drop(props, monitor) {
     if (monitor.didDrop()) {
-      // If you want, you can check whether some nested
-      // target already handled drop
       return;
     }
-
     // Obtain the dragged item
     const item = monitor.getItem();
-
-    props.submitMovePatientBetweenCategories(item.patientCategoryId, props.category.id, item.id);
+    props.submitMovePatientBetweenCategories(props.studyId, item.patientCategoryId, props.category.id, item.id);
   },
 };
 
@@ -46,18 +42,20 @@ class PatientCategory extends React.Component {
   static propTypes = {
     studyId: React.PropTypes.number.isRequired,
     category: React.PropTypes.object.isRequired,
+    connectDropTarget: React.PropTypes.func.isRequired,
     currentPatientId: React.PropTypes.number,
     currentUser: React.PropTypes.object.isRequired,
     submitMovePatientBetweenCategories: React.PropTypes.func.isRequired,
     onPatientClick: React.PropTypes.func.isRequired,
+    onPatientTextClick: React.PropTypes.func.isRequired,
   };
 
   componentDidMount() {
   }
 
   render() {
-    const { category, currentPatientId, currentUser, onPatientClick } = this.props;
-    return (
+    const { category, connectDropTarget, currentPatientId, currentUser, onPatientClick, onPatientTextClick } = this.props;
+    return connectDropTarget(
       <li key={category.id}>
         <span className="opener">
           <strong className="number">{category.patients.length}</strong>
@@ -67,7 +65,7 @@ class PatientCategory extends React.Component {
           <div className="slide-holder">
             <ul className="list-unstyled">
               {category.patients.map(patient => (
-                <Patient key={patient.id} category={category} currentPatientId={currentPatientId} patient={patient} currentUser={currentUser} onPatientClick={onPatientClick} />
+                <Patient key={patient.id} category={category} currentPatientId={currentPatientId} patient={patient} currentUser={currentUser} onPatientClick={onPatientClick} onPatientTextClick={onPatientTextClick} />
               ))}
             </ul>
           </div>
@@ -82,7 +80,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  submitMovePatientBetweenCategories: (fromCategoryId, toCategoryId, patientId) => dispatch(submitMovePatientBetweenCategories(fromCategoryId, toCategoryId, patientId)),
+  submitMovePatientBetweenCategories: (studyId, fromCategoryId, toCategoryId, patientId) => dispatch(submitMovePatientBetweenCategories(studyId, fromCategoryId, toCategoryId, patientId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientCategory);

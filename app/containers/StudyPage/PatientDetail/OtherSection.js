@@ -188,13 +188,9 @@ class OtherSection extends React.Component {
               </ul>
             </div>
             <Form className="sub-holder form-lightbox" noValidate="novalidate">
-              <div className="field-row full remove-indication">
+              <strong className="title">TAGS</strong>
+              <div className="field-row">
                 <strong className="label">Indications</strong>
-                <div className="field">
-                  {this.renderIndications()}
-                </div>
-              </div>
-              <div className="field-row full">
                 <div
                   className="field add-indications"
                   ref={(parent) => (
@@ -218,6 +214,12 @@ class OtherSection extends React.Component {
                   >
                     <IndicationOverlay indications={indications} submitAddIndication={submitAddPatientIndication} patient={initialValues} onClose={this.toggleIndicationPopover} />
                   </Overlay>
+                </div>
+              </div>
+              <div className="field-row remove-indication">
+                <span className="label" />
+                <div className="field">
+                  {this.renderIndications()}
                 </div>
               </div>
               <div className="fields-holder">

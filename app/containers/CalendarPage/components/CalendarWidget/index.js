@@ -44,6 +44,9 @@ class CalendarWidget extends React.Component {
               this.props.handleOpenModal(SchedulePatientModalType.CREATE, { selectedDate: start });
             }
           }}
+          onSelectDate={(label, date) => {
+            this.props.handleOpenModal(SchedulePatientModalType.CREATE, { selectedDate: date });
+          }}
           onSelectEvent={(event) => {
             this.props.handleOpenModal(SchedulePatientModalType.UPDATE, event);
           }}

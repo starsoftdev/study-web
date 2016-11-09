@@ -4,11 +4,11 @@ import { Link } from 'react-router';
 import sideNavLogo from 'assets/images/logo2.png';
 
 const menuItemsGroupA = [
-  { text: 'Home', link: '/', icon: 'icon-icon_house_alt' },
-  { text: 'List New Study', link: '/list-new-study', icon: 'icon-screen' },
-  { text: 'Order IRB Ad Creation', link: '/order-irb-ad-creation', icon: 'icon-irb' },
-  { text: 'Request Proposal', link: '/request-proposal', icon: 'icon-doller' },
-  { text: 'Refer', link: '/refer', icon: 'icon-signout' },
+  { text: 'Home', link: '/', icon: 'icomoon-icon_house_alt' },
+  { text: 'List New Study', link: '/list-new-study', icon: 'icomoon-screen' },
+  { text: 'Order IRB Ad Creation', link: '/order-irb-ad-creation', icon: 'icomoon-irb' },
+  { text: 'Request Proposal', link: '/request-proposal', icon: 'icomoon-doller' },
+  { text: 'Refer', link: '/refer', icon: 'icomoon-signout' },
 ];
 const menuItemsGroupB = [
   { text: 'Calendar', link: '/calendar', icon: 'icon-icon_calendar' },
@@ -28,7 +28,7 @@ function SideNavBar() {
             {
               menuItemsGroupA.map((item, index) =>
                 <li key={index}>
-                  <Link to={item.link} activeClassName="active"><i className={item.icon} />{item.text}</Link>
+                  <Link to={item.link} activeClassName="active"><i className={item.icon} /> {item.text}</Link>
                 </li>
               )
             }
@@ -37,7 +37,7 @@ function SideNavBar() {
             {
               menuItemsGroupB.map((item, index) =>
                 <li key={index}>
-                  <Link to={item.link} activeClassName="active"><i className={item.icon} />{item.text}</Link>
+                  <Link to={item.link} activeClassName="active"><i className={item.icon} /> {item.text}</Link>
                 </li>
               )
             }
@@ -52,7 +52,7 @@ function SideNavBar() {
           </div>
           <a href="" className="bgn-chat">
             <span className="text">CHAT NOW!</span>
-            <i className="icon-bg" />
+            <i className="icomoon-bg" />
           </a>
         </div>
 

@@ -1,32 +1,27 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import moment from 'moment';
 
 import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
 import DatePicker from 'components/Input/DatePicker';
 import Toggle from 'components/Input/Toggle';
-import { selectRenewStudyFormError,
-  selectRenewStudyFormExposureLevelValue,
+import {
   selectRenewStudyFormCampaignLengthValue,
-  selectRenewStudyFormPatientMessagingSuiteValue,
-  selectRenewStudyFormCallTrackingValue,
-  selectRenewStudyFormStartDateValue,
-  selectRenewStudyFormNotesValue,
 } from './selectors';
+import { selectStudyLevels } from 'containers/App/selectors';
+import { selectSelectedIndicationLevelPrice } from 'containers/HomePage/selectors';
+import { CAMPAIGN_LENGTH_LIST } from 'common/constants';
 import formValidator from './validator';
+import LoadingSpinner from 'components/LoadingSpinner';
 import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
-  exposureLevel: selectRenewStudyFormExposureLevelValue(),
+  studyLevels: selectStudyLevels(),
+  selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
   campaignLength: selectRenewStudyFormCampaignLengthValue(),
-  patientMessagingSuite: selectRenewStudyFormPatientMessagingSuiteValue(),
-  callTracking: selectRenewStudyFormCallTrackingValue(),
-  startDate: selectRenewStudyFormStartDateValue(),
-  notes: selectRenewStudyFormNotesValue(),
-  hasError: selectRenewStudyFormError(),
 });
 
 @reduxForm({ form: 'renewStudy', validate: formValidator })
@@ -34,44 +29,22 @@ const mapStateToProps = createStructuredSelector({
 
 class RenewStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    exposureLevel: PropTypes.number,
+    dispatch: PropTypes.func.isRequired,
+    studyLevels: PropTypes.array,
+    selectedIndicationLevelPrice: PropTypes.object,
     campaignLength: PropTypes.number,
-    patientMessagingSuite: PropTypes.bool,
-    callTracking: PropTypes.bool,
-    startDate: PropTypes.string,
-    notes: PropTypes.string,
-    hasError: PropTypes.bool,
-    handleSubmit: PropTypes.func,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.onValueChange = this.onValueChange.bind(this);
-  }
-
-  onValueChange() {
-    const { exposureLevel, campaignLength, patientMessagingSuite,
-      callTracking, startDate, notes, hasError, handleSubmit } = this.props;
-    const requestValues = {
-      exposureLevel,
-      campaignLength,
-      patientMessagingSuite,
-      callTracking,
-      startDate,
-      notes,
-    };
-
-    if (hasError) {
-      return;
+  componentWillReceiveProps(newProps) {
+    if (newProps.campaignLength !== this.props.campaignLength) {
+      if (newProps.campaignLength !== 1) {
+        this.props.dispatch(change('renewStudy', 'condenseToTwoWeeks', false));
+      }
     }
-
-    handleSubmit(requestValues);
   }
 
   render() {
-    const exposureLevelOptions = [];
-    const campaignLengthOptions = [];
+    const { studyLevels, campaignLength, selectedIndicationLevelPrice } = this.props;
 
     return (
       <form className="form-renew-study">
@@ -80,14 +53,23 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
             <strong className="required col-sm-5">
               <label>EXPOSURE LEVEL</label>
             </strong>
-            <div className="field col-sm-7">
+            <div className="field col-sm-6">
               <Field
                 name="exposureLevel"
                 component={ReactSelect}
                 placeholder="Select..."
-                options={exposureLevelOptions}
-                onChange={this.onValueChange}
+                options={studyLevels}
+                disabled={selectedIndicationLevelPrice.fetching}
               />
+            </div>
+            <div className="field col-sm-1">
+              {selectedIndicationLevelPrice.fetching &&
+                (
+                <span>
+                  <LoadingSpinner showOnlyIcon size={20} className="fetching-level-price" />
+                </span>
+                )
+              }
             </div>
           </div>
           <div className="row form-group">
@@ -99,11 +81,25 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                 name="campaignLength"
                 component={ReactSelect}
                 placeholder="Select..."
-                options={campaignLengthOptions}
-                onChange={this.onValueChange}
+                options={CAMPAIGN_LENGTH_LIST}
               />
             </div>
           </div>
+          {campaignLength === 1 &&
+            (
+            <div className="row form-group">
+              <strong className="col-sm-5">
+                <label>CONDENSE TO 2 WEEKS</label>
+              </strong>
+              <div className="field col-sm-7">
+                <Field
+                  name="condenseToTwoWeeks"
+                  component={Toggle}
+                />
+              </div>
+            </div>
+            )
+          }
           <div className="row form-group">
             <strong className="col-sm-5">
               <label>PATIENT MESSAGING SUITE: $247</label>
@@ -112,7 +108,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
               <Field
                 name="patientMessagingSuite"
                 component={Toggle}
-                onChange={this.onValueChange}
               />
             </div>
           </div>
@@ -124,7 +119,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
               <Field
                 name="callTracking"
                 component={Toggle}
-                onChange={this.onValueChange}
               />
             </div>
           </div>
@@ -137,7 +131,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                 name="startDate"
                 component={DatePicker}
                 className="form-control datepicker-input"
-                onChange={this.onValueChange}
                 initialDate={moment(new Date())}
               />
             </div>
@@ -151,7 +144,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                 name="notes"
                 component={Input}
                 componentClass="textarea"
-                onChange={this.onValueChange}
               />
             </div>
           </div>
