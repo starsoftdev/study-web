@@ -95,7 +95,7 @@ class TextSection extends React.Component {
     const { currentUser, currentPatient, studyId } = this.props;
     const textarea = this.textarea;
     const options = {
-      studyId: studyId,
+      studyId,
       currentUserId: currentUser.id,
       patientId: currentPatient.id,
       body: textarea.value,
