@@ -62,22 +62,24 @@ export default class DatePicker extends Component {
       />
     );
     const modalComponent = (
-      <Modal show={modalVisible} onHide={() => { this.toggleModal(false); }}>
+      <Modal className="custom-modal datepicker-modal" show={modalVisible} onHide={() => { this.toggleModal(false); }}>
         <div className="datepicker-box datepicker-active" style={{ display: 'block' }}>
           <div className="datepicker-holder">
             <div className="datepicker-frame">
-              <div className="datepicker-inner">
-                <div className="head">
+              <div className="datepicker-inner lightbox-content">
+                <div className="modal-header head">
                   <strong className="title">Choose Date</strong>
-                  <a href="#" className="datepicker-close" onClick={() => { this.toggleModal(false); }}>x</a>
+                  <a className="lightbox-close close" onClick={() => { this.toggleModal(false); }}>
+                    <i className="icomoon-icon_close"></i>
+                  </a>
                 </div>
-                <div className="scroll-holder jcf--scrollable">
+                <div className="scroll-holder jcf--scrollable modal-body holder">
                   <Calendar
                     date={date}
                     onChange={this.handleSelect}
                     className="calendar custom-calendar"
                   />
-                  <div className="link-holder">
+                  <div className="link-holder text-center">
                     <a href="#" onClick={() => { this.toggleModal(false); }}>To Be Determined</a>
                   </div>
                 </div>

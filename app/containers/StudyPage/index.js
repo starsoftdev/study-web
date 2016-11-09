@@ -46,15 +46,15 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 
   constructor(props) {
     super(props);
-    props.fetchStudy(props.params.id, props.params.siteId);
-    props.fetchPatientCategories(props.params.id, props.params.siteId);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
-    const { params, setStudyId, setSiteId } = this.props;
+    const { params, setStudyId, setSiteId, fetchStudy, fetchPatientCategories } = this.props;
     setStudyId(parseInt(params.id));
     setSiteId(parseInt(params.siteId));
+    fetchStudy(params.id, params.siteId);
+    fetchPatientCategories(params.id, params.siteId);
   }
 
 

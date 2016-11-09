@@ -5,7 +5,7 @@
 import React from 'react';
 import ImportPatientsModal from './ImportPatients/ImportPatientsModal';
 import TextEmailBlastModal from './TextEmailBlastModal';
-import TextBlastModal from './TextBlast/TextBlastModal';
+import TextBlastModal from './TextBlast/index';
 import AddPatient from './ImportPatients/AddPatient';
 
 class StudyActionButtons extends React.Component {
@@ -90,7 +90,11 @@ class StudyActionButtons extends React.Component {
             <i className="icomoon-icon_chat_alt" />
             <span>Text / Email Blast</span>
             <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} toggleTextBlast={this.toggleTextBlastModal} />
-            <TextBlastModal show={this.state.showTextBlastModal} onClose={this.closeTextBlastModal} onHide={this.toggleTextBlastModal} />
+            <TextBlastModal
+              show={this.state.showTextBlastModal}
+              onClose={this.closeTextBlastModal}
+              onHide={this.toggleTextBlastModal}
+            />
           </span>
         </div>
         <div className="btn-import pull-left">

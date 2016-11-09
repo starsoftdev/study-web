@@ -1,5 +1,5 @@
 import { getItem } from 'utils/localStorage';
-import { forEach, map, remove, cloneDeep, findIndex } from 'lodash';
+import { forEach, map, remove, cloneDeep, findIndex, concat } from 'lodash';
 
 import {
   SET_AUTH_STATE,
@@ -37,6 +37,19 @@ import {
   FETCH_CLIENT_SITES_SUCCESS,
   FETCH_CLIENT_SITES_ERROR,
 
+  FETCH_SITE_PATIENTS,
+  FETCH_SITE_PATIENTS_SUCCESS,
+  FETCH_SITE_PATIENTS_ERROR,
+  UPDATE_SITE_PATIENTS,
+
+  FETCH_PATIENT_MESSAGES,
+  FETCH_PATIENT_MESSAGES_SUCCESS,
+  FETCH_PATIENT_MESSAGES_ERROR,
+  UPDATE_PATIENT_MESSAGES,
+
+  MARK_AS_READ_PATIENT_MESSAGES,
+
+
   FETCH_CLIENT_ROLES,
   FETCH_CLIENT_ROLES_SUCCESS,
   FETCH_CLIENT_ROLES_ERROR,
@@ -67,6 +80,7 @@ import {
   SAVE_USER,
   SAVE_USER_SUCCESS,
   SAVE_USER_ERROR,
+
 } from './constants';
 
 import {
@@ -108,6 +122,16 @@ const initialState = {
       error: null,
     },
     clientSites: {
+      details: [],
+      fetching: false,
+      error: null,
+    },
+    sitePatients: {
+      details: [],
+      fetching: false,
+      error: null,
+    },
+    patientMessages: {
       details: [],
       fetching: false,
       error: null,
@@ -156,6 +180,8 @@ export default function appReducer(state = initialState, action) {
   const cardsCollection = cloneDeep(state.baseData.cards.details);
   const clientSitesCollection = map(state.baseData.clientSites.details, cloneDeep);
   const clientRolesCollection = map(state.baseData.clientRoles.details, cloneDeep);
+  let sitePatientsCollection = [];
+  let patientMessagesCollection = [];
   let baseDataInnerState = null;
   let resultState = null;
 
@@ -385,6 +411,122 @@ export default function appReducer(state = initialState, action) {
           details: [],
           fetching: false,
           error: payload,
+        },
+      };
+      break;
+    case FETCH_SITE_PATIENTS:
+      baseDataInnerState = {
+        sitePatients: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_SITE_PATIENTS_SUCCESS:
+      baseDataInnerState = {
+        sitePatients: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_SITE_PATIENTS_ERROR:
+      baseDataInnerState = {
+        sitePatients: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
+      };
+      break;
+    case UPDATE_SITE_PATIENTS:
+      sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
+        let patientData = null;
+        patientData = item;
+        if (patientData.id === action.newMessage.patient_id && patientData.study_id === action.newMessage.study_id) {
+          const countUnread = patientData.count_unread;
+          if (countUnread) {
+            patientData.count_unread = countUnread + 1;
+          } else {
+            patientData.count_unread = 1;
+          }
+          patientData.twtm_max_date_created = action.newMessage.created_datetime;
+          patientData.last_message_body = action.newMessage.body;
+        }
+        return patientData;
+      });
+      baseDataInnerState = {
+        sitePatients: {
+          details: sitePatientsCollection,
+          fetching: false,
+          error: null,
+        },
+      };
+      console.log('=====UPDATE_SITE_PATIENTS');
+      console.log(baseDataInnerState);
+      break;
+    case MARK_AS_READ_PATIENT_MESSAGES:
+      sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
+        let patientData = null;
+        patientData = item;
+        if (patientData.id === action.patientId && patientData.study_id === action.studyId) {
+          patientData.count_unread = 0;
+        }
+        return patientData;
+      });
+      baseDataInnerState = {
+        sitePatients: {
+          details: sitePatientsCollection,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_PATIENT_MESSAGES:
+      baseDataInnerState = {
+        patientMessages: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_PATIENT_MESSAGES_SUCCESS:
+      baseDataInnerState = {
+        patientMessages: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+
+
+      break;
+    case FETCH_PATIENT_MESSAGES_ERROR:
+      baseDataInnerState = {
+        patientMessages: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
+      };
+      break;
+    case UPDATE_PATIENT_MESSAGES:
+      patientMessagesCollection = concat(state.baseData.patientMessages.details, action.newMessage);
+      baseDataInnerState = {
+        patientMessages: {
+          details: patientMessagesCollection,
+          fetching: false,
+          error: null,
+        },
+      };
+      baseDataInnerState = {
+        patientMessages: {
+          details: patientMessagesCollection,
+          fetching: false,
+          error: null,
         },
       };
       break;

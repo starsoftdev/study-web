@@ -9,10 +9,11 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer } from 'react-sticky';
+const _ = require('lodash');
 
 import {
   getReceipts,
-  createPDF,
+  getPDF,
 } from 'containers/Receipts/actions';
 import {
   fetchSites,
@@ -26,7 +27,7 @@ import {
 
 import selectReceipts from './selectors';
 import ReceiptsTable from 'components/ReceiptsTable';
-import ProposalsForm from 'components/ProposalsForm';
+import TableSearchForm from 'components/TableSearchForm';
 import './styles.less';
 
 export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -36,8 +37,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     unsubscribeFromPageEvent: PropTypes.func,
     fetchSites: PropTypes.func,
     getReceipts: PropTypes.func,
-    createPDF: PropTypes.func,
-    location: PropTypes.any,
+    getPDF: PropTypes.func,
     receipts: PropTypes.any,
     currentUser: PropTypes.any,
   };
@@ -45,8 +45,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
   constructor(props, context) {
     super(props, context);
 
-    this.createPdf = this.createPdf.bind(this);
-    this.changeRange = this.changeRange.bind(this);
+    this.getPDF = this.getPDF.bind(this);
     this.search = this.search.bind(this);
     this.selectCurrent = this.selectCurrent.bind(this);
     this.selectAll = this.selectAll.bind(this);
@@ -66,15 +65,13 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     this.props.getReceipts();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps() {
     // console.log('componentWillReceiveProps', nextProps);
-    if (nextProps.receipts) {
-      for (const receipt of nextProps.receipts) {
-        receipt.selected = false;
-      }
-      this.setState({
-        receipts: nextProps.receipts,
-      });
+  }
+
+  getPDF() {
+    if (this.selectedReceipts) {
+      this.props.getPDF(this.selectedReceipts);
     }
   }
 
@@ -86,6 +83,14 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     this.SelectedReceipts = value;
   }
 
+  get searchOptions() {
+    return this.SearchOptions;
+  }
+
+  set searchOptions(value) {
+    this.SearchOptions = value;
+  }
+
   selectCurrent(receipt) {
     this.selectedReceipts = receipt;
   }
@@ -94,30 +99,31 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     this.selectedReceipts = receipt;
   }
 
-  changeRange(payload) {
-    this.setState({
-      site : null,
-      searchBy : null,
-      range : payload,
-    });
-  }
-
-  search(value) {
-    const { siteLocations } = this.props;
-    const site = siteLocations[value.site - 1] || null;
-    const searchBy = value.search || null;
-
-    this.setState({
-      site,
-      range : null,
-      searchBy,
-    });
-  }
-
-  createPdf() {
-    if (this.selectedReceipts) {
-      this.props.createPDF(this.selectedReceipts);
+  search(event, type) {
+    let options;
+    this.searchOptions = this.searchOptions || [];
+    if (type === 'search') {
+      options = { data: event.target.value, type };
+    } else if (type === 'site') {
+      const { siteLocations } = this.props;
+      const site = siteLocations[event - 1] || null;
+      options = { data: site, type };
+    } else if (type === 'range') {
+      options = { data: event, type };
     }
+
+    if (_.isEmpty(this.searchOptions)) {
+      this.searchOptions.push(options);
+    } else {
+      const el = _.find(this.searchOptions, { type });
+      if (el) {
+        this.searchOptions[_.findKey(this.searchOptions, el)] = options;
+      } else {
+        this.searchOptions.push(options);
+      }
+    }
+
+    this.props.getReceipts(this.searchOptions);
   }
 
   render() {
@@ -126,19 +132,16 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
         <Helmet title="Proposals - StudyKIK" />
         <section className="calendar-section receipts">
           <h2 className="main-heading">RECEIPTS</h2>
-          <ProposalsForm
+          <TableSearchForm
             changeRange={this.changeRange}
             search={this.search}
-            createPdf={this.createPdf}
+            createPdf={this.getPDF}
             {...this.props}
           />
           <ReceiptsTable
             selectCurrent={this.selectCurrent}
             selectAll={this.selectAll}
-            range={this.state.range}
-            site={this.state.site}
-            searchBy={this.state.searchBy}
-            receipts={this.state.receipts}
+            receipts={this.props.receipts}
             {...this.props}
           />
         </section>
@@ -159,7 +162,7 @@ function mapDispatchToProps(dispatch) {
     fetchEvents: (values) => dispatch(fetchEvents(values)),
     fetchSites: () => dispatch(fetchSites()),
     getReceipts: (values) => dispatch(getReceipts(values)),
-    createPDF: (values) => dispatch(createPDF(values)),
+    getPDF: (values) => dispatch(getPDF(values)),
   };
 }
 

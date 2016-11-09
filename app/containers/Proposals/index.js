@@ -31,7 +31,7 @@ import {
 import { selectProposals } from './selectors';
 
 import ProposalsTable from 'components/ProposalsTable';
-import ProposalsForm from 'components/ProposalsForm';
+import TableSearchForm from 'components/TableSearchForm';
 import './styles.less';
 
 export class Proposals extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -168,7 +168,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
         <Helmet title="Proposals - StudyKIK" />
         <section className="calendar-section receipts">
           <h2 className="main-heading">PROPOSALS</h2>
-          <ProposalsForm
+          <TableSearchForm
             changeRange={this.changeRange}
             search={this.search}
             createPdf={this.createPdf}

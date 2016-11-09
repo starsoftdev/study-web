@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { map, omit, omitBy, isUndefined } from 'lodash';
 
-import SearchPatientsForm from 'containers/PatientDatabasePage/SearchPatientsForm';
-import PatientsList from 'containers/PatientDatabasePage/PatientsList';
+import SearchPatientsForm from '../../containers/PatientDatabasePage/SearchPatientsForm/index';
+import PatientsList from '../../containers/PatientDatabasePage/PatientsList/index';
+import PatientActionButtons from './PatientActionButtons';
 import { fetchIndications, fetchSources } from 'containers/App/actions';
 import { fetchPatientCategories, fetchPatients } from './actions';
 import './styles.less';
@@ -45,25 +46,14 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
 
   render() {
     return (
-      <div className="patient-database-page">
-        <div className="container-fluid">
+      <div className="container-fluid">
+        <div className="patient-database">
           <Helmet title="Patient Database - StudyKIK" />
-          <h2 className="main-heading">PATIENT DATABASE</h2>
+          <h2 className="main-heading">Patient Database</h2>
           <section className="actions-panel">
             <div className="form-group clearfix">
               <div className="additional-actions btns pull-right">
-                <button type="button" className="btn btn-primary btn-blast">
-                  <i className="fa fa-comments-o" aria-hidden="true"></i>
-                  <span>Text/Email Blast</span>
-                </button>
-                <button type="button" className="btn btn-primary btn-import">
-                  <i className="fa fa-upload" aria-hidden="true"></i>
-                  <span>Import</span>
-                </button>
-                <button type="button" className="btn btn-primary btn-download">
-                  <i className="fa fa-download" aria-hidden="true"></i>
-                  <span>Download</span>
-                </button>
+                <PatientActionButtons />
               </div>
             </div>
           </section>

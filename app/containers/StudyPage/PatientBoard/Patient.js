@@ -9,68 +9,6 @@ import { DragSource } from 'react-dnd';
 import { formatPhone } from '../helper/functions';
 import DragTypes from './dragSourceTypes';
 
-class Patient extends React.Component {
-
-  static propTypes = {
-    category: React.PropTypes.object.isRequired,
-    connectDragSource: React.PropTypes.func.isRequired,
-    currentUser: React.PropTypes.object.isRequired,
-    currentPatientId: React.PropTypes.number,
-    isDragging: React.PropTypes.bool.isRequired,
-    onPatientClick: React.PropTypes.func.isRequired,
-    patient: React.PropTypes.object.isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-    this.renderPatientTextMessageSummary = this.renderPatientTextMessageSummary.bind(this);
-  }
-
-  renderPatientTextMessageSummary(patient) {
-    const { currentUser } = this.props;
-    if (patient.lastTextMessage) {
-      return (
-        <a className="bottom">
-          <div className="msg-alert">
-            <div className="msg">
-              <p>{patient.lastTextMessage.body}</p>
-            </div>
-            <div className="time">
-              <span className="counter-circle">{patient.textMessageCount}</span>
-              <time dateTime={patient.lastTextMessage.dateUpdated}>{moment.tz(patient.lastTextMessage.dateUpdated, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
-            </div>
-          </div>
-        </a>
-      );
-    }
-    return null;
-  }
-
-  render() {
-    const { connectDragSource, category, currentPatientId, onPatientClick, patient } = this.props;
-    const patientPhone = formatPhone(patient.phone);
-    return connectDragSource(
-      <li
-        className={classNames({ 'patient-selected': patient.id === currentPatientId })}
-        onClick={() => {
-          onPatientClick(category, patient);
-        }}
-      >
-        <a className="top">
-          <strong className="name">
-            <span className="first-name">{patient.firstName}</span>
-            <span> </span>
-            <span className="last-name">{patient.lastName}</span>
-          </strong>
-          <span className="email">{patient.email}</span>
-          <span className="phone">{patientPhone}</span>
-        </a>
-        {this.renderPatientTextMessageSummary(patient)}
-      </li>
-    );
-  }
-}
-
 /**
  * Specifies the drag source contract.
  * Only `beginDrag` function is required.
@@ -100,4 +38,73 @@ const collect = (connect, monitor) => ({
   isDragging: monitor.isDragging(),
 });
 
-export default DragSource(DragTypes.PATIENT, patientSource, collect)(Patient);
+@DragSource(DragTypes.PATIENT, patientSource, collect)
+class Patient extends React.Component {
+
+  static propTypes = {
+    category: React.PropTypes.object.isRequired,
+    connectDragSource: React.PropTypes.func.isRequired,
+    currentUser: React.PropTypes.object.isRequired,
+    currentPatientId: React.PropTypes.number,
+    isDragging: React.PropTypes.bool.isRequired,
+    onPatientClick: React.PropTypes.func.isRequired,
+    onPatientTextClick: React.PropTypes.func.isRequired,
+    patient: React.PropTypes.object.isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+    this.renderPatientTextMessageSummary = this.renderPatientTextMessageSummary.bind(this);
+  }
+
+  renderPatientTextMessageSummary(patient) {
+    const { category, currentUser, onPatientTextClick } = this.props;
+    if (patient.lastTextMessage) {
+      return (
+        <a
+          className="bottom"
+          onClick={() => {
+            onPatientTextClick(category, patient);
+          }}
+        >
+          <div className="msg-alert">
+            <div className="msg">
+              <p>{patient.lastTextMessage.body}</p>
+            </div>
+            <div className="time">
+              <span className="counter-circle">{patient.textMessageCount}</span>
+              <time dateTime={patient.lastTextMessage.dateUpdated}>{moment.tz(patient.lastTextMessage.dateUpdated, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+            </div>
+          </div>
+        </a>
+      );
+    }
+    return null;
+  }
+
+  render() {
+    const { connectDragSource, category, currentPatientId, onPatientClick, patient } = this.props;
+    const patientPhone = formatPhone(patient.phone);
+    return connectDragSource(
+      <li className={classNames({ 'patient-selected': patient.id === currentPatientId })}>
+        <a
+          className="top"
+          onClick={() => {
+            onPatientClick(category, patient);
+          }}
+        >
+          <strong className="name">
+            <span className="first-name">{patient.firstName}</span>
+            <span> </span>
+            <span className="last-name">{patient.lastName}</span>
+          </strong>
+          <span className="email">{patient.email}</span>
+          <span className="phone">{patientPhone}</span>
+        </a>
+        {this.renderPatientTextMessageSummary(patient)}
+      </li>
+    );
+  }
+}
+
+export default Patient;

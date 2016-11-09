@@ -18,6 +18,8 @@ import {
   ADD_CREDITS,
 
   FETCH_CLIENT_SITES,
+  FETCH_SITE_PATIENTS,
+  FETCH_PATIENT_MESSAGES,
   FETCH_CLIENT_ROLES,
   FETCH_SITE,
   FETCH_USER,
@@ -50,6 +52,10 @@ import {
 
   clientSitesFetched,
   clientSitesFetchingError,
+  sitePatientsFetched,
+  sitePatientsFetchingError,
+  patientMessagesFetched,
+  patientMessagesFetchingError,
   clientRolesFetched,
   clientRolesFetchingError,
   siteFetched,
@@ -78,6 +84,8 @@ export default function* baseDataSaga() {
   yield fork(addCreditsWatcher);
 
   yield fork(fetchClientSitesWatcher);
+  yield fork(fetchSitePatientsWatcher);
+  yield fork(fetchPatientMessagesWatcher);
   yield fork(fetchClientRolesWatcher);
   yield fork(fetchSiteWatcher);
   yield fork(fetchUserWatcher);
@@ -141,7 +149,9 @@ export function* fetchSourcesWatcher() {
     yield take(FETCH_SOURCES);
 
     try {
-      const requestURL = `${API_URL}/sources`;
+      const queryParams = { filter: '{"order":"orderNumber ASC"}' };
+      const queryString = composeQueryString(queryParams);
+      const requestURL = `${API_URL}/sources?${queryString}`;
       const response = yield call(request, requestURL);
 
       yield put(sourcesFetched(response));
@@ -291,6 +301,37 @@ export function* fetchClientSitesWatcher() {
       yield put(clientSitesFetched(response));
     } catch (err) {
       yield put(clientSitesFetchingError(err));
+    }
+  }
+}
+
+export function* fetchSitePatientsWatcher() {
+  while (true) {
+    const { userId } = yield take(FETCH_SITE_PATIENTS);
+
+    try {
+      const requestURL = `${API_URL}/patients/getPatientsByUser?userId=${userId}`;
+      const response = yield call(request, requestURL);
+
+      yield put(sitePatientsFetched(response));
+    } catch (err) {
+      yield put(sitePatientsFetchingError(err));
+    }
+  }
+}
+
+
+export function* fetchPatientMessagesWatcher() {
+  while (true) {
+    const { patientId, studyId } = yield take(FETCH_PATIENT_MESSAGES);
+
+    try {
+      const requestURL = `${API_URL}/patients/getMessagesByPatientAndStudy?patientId=${patientId}&studyId=${studyId}`;
+      const response = yield call(request, requestURL);
+
+      yield put(patientMessagesFetched(response));
+    } catch (err) {
+      yield put(patientMessagesFetchingError(err));
     }
   }
 }

@@ -24,30 +24,12 @@ import { FIND_PATIENTS_TEXT_BLAST,
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
-import { campaignsFetched, deletePatientNoteSuccess, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, callStatsFetched, textStatsFetched, addPatientIndicationSuccess, removePatientIndicationSuccess, updatePatientSuccess, addPatientNoteSuccess, addPatientTextSuccess, movePatientBetweenCategoriesLoading, movePatientBetweenCategoriesSuccess, movePatientBetweenCategoriesFailed } from './actions';
+import { addPatientsToTextBlast, campaignsFetched, deletePatientNoteSuccess, findPatientsForTextBlastSuccess, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, callStatsFetched, textStatsFetched, addPatientIndicationSuccess, removePatientIndicationSuccess, updatePatientSuccess, addPatientNoteSuccess, addPatientTextSuccess, movePatientBetweenCategoriesLoading, movePatientBetweenCategoriesSuccess, movePatientBetweenCategoriesFailed } from './actions';
 
 // Bootstrap sagas
 export default [
   fetchStudySaga,
 ];
-
-function* findPatients() {
-  const authToken = getItem('auth_token');
-
-  // listen for the FETCH_STUDY action
-  const { studyId, text, categoryIds, sourceIds } = yield take(FIND_PATIENTS_TEXT_BLAST);
-  const filter = { studyId, text, categoryIds, sourceIds };
-  try {
-    const requestURL = `${API_URL}/studies/${studyId}/findPatient/${filter}?access_token=${authToken}`;
-    const response = yield call(request, requestURL, {
-      method: 'GET',
-    });
-    yield put(studyViewsStatFetched(response));
-  } catch (e) {
-    const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
-  }
-}
 
 function* fetchStudyDetails() {
   const authToken = getItem('auth_token');
@@ -297,6 +279,37 @@ function* fetchPatientDetails() {
   }
 }
 
+function* findPatientsSaga() {
+  while (true) {
+    const authToken = getItem('auth_token');
+
+    // listen for the FIND_PATIENTS_TEXT_BLAST action
+    const { studyId, text, categoryIds, sourceIds } = yield take(FIND_PATIENTS_TEXT_BLAST);
+    let filter = {};
+    if (text) {
+      filter.text = text;
+    }
+    if (categoryIds && categoryIds.length > 0) {
+      filter.categoryIds = categoryIds;
+    }
+    if (sourceIds && sourceIds.length > 0) {
+      filter.sourceIds = sourceIds;
+    }
+    filter = JSON.stringify(filter);
+    try {
+      const requestURL = `${API_URL}/studies/${studyId}/findPatients?filter=${filter}&access_token=${authToken}`;
+      const response = yield call(request, requestURL, {
+        method: 'GET',
+      });
+      yield put(findPatientsForTextBlastSuccess(response));
+      yield put(addPatientsToTextBlast(response));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
 function* submitAddPatientIndication() {
   while (true) {
     // listen for the SUBMIT_ADD_PATIENT_INDICATION action
@@ -335,6 +348,7 @@ function* submitMovePatientBetweenCategories() {
           study_id: studyId,
           patient_id: patientId,
           patient_category_id: toCategoryId,
+          scheduled_date: new Date(),
         }),
       });
       yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, patientId));
@@ -463,16 +477,21 @@ function* submitPatientText() {
 function* submitTextBlast() {
   while (true) {
     // listen for the SUBMIT_TEXT_BLAST action
-    const { patients, onClose } = yield take(SUBMIT_TEXT_BLAST);
+    const { patients, message, onClose } = yield take(SUBMIT_TEXT_BLAST);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
     }
     try {
-      const requestURL = `${API_URL}/textMessages?access_token=${authToken}`;
+      const requestURL = `${API_URL}/twilioTextMessages/textBlast?access_token=${authToken}`;
       yield call(request, requestURL, {
         method: 'POST',
-        body: JSON.stringify(patients),
+        body: JSON.stringify({
+          patientsIDs: patients.map(patient => (
+            patient.id
+          )),
+          message,
+        }),
       });
       onClose();
       yield put(toastrActions.success('Text Blast', 'Text blast submitted successfully!'));
@@ -547,9 +566,9 @@ export function* fetchStudySaga() {
     yield call(fetchPatientCategories);
     yield fork(fetchPatientsSaga);
     yield fork(fetchPatientDetails);
-    yield fork(findPatients);
-    yield fork(submitMovePatientBetweenCategories);
+    yield fork(findPatientsSaga);
     yield fork(submitAddPatientIndication);
+    yield fork(submitMovePatientBetweenCategories);
     yield fork(submitRemovePatientIndication);
     yield fork(submitPatientUpdate);
     yield fork(submitTextBlast);

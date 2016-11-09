@@ -14,7 +14,23 @@ class PatientNote extends React.Component {
     submitDeleteNote: React.PropTypes.func.isRequired,
   };
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+    this.renderProfileImage = this.renderProfileImage.bind(this);
+  }
+
+  renderProfileImage() {
+    const { note } = this.props;
+    /* eslint-disable global-require */
+    if (note.user.profileImageURL) {
+      return (
+        <img role="presentation" src={note.user.profileImageURL} />
+      );
+    }
+    const url = require('../../../assets/images/Default-User-Img-Dr.png');
+    return (
+      <img role="presentation" src={url} />
+    );
   }
 
   render() {
@@ -22,7 +38,7 @@ class PatientNote extends React.Component {
     return (
       <div className={classNames('post-msg', { reply: note.user.id === currentUser.id })}>
         <div className="img-holder">
-          <img role="presentation" src={note.user.profileImageURL} />
+          {this.renderProfileImage()}
         </div>
         <div className="post-content">
           <p>{note.note}</p>

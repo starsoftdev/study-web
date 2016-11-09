@@ -327,7 +327,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           <Modal.Header>
             <Modal.Title>ADD CREDITS</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddSiteModal}>
-              <i className="icon-icon_close"></i>
+              <i className="icomoon-icon_close"></i>
             </a>
           </Modal.Header>
           <Modal.Body>
