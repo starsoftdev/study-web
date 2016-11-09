@@ -87,7 +87,7 @@ export default class SchedulePatientModal extends Component {
       const protocolOptions = selectedSite.studies.map(study => ({
         label: study.protocolNumber,
         value: study.protocolNumber,
-        indication: this.props.indications[study.indication_id],
+        indication: _.find(this.props.indications, { id: study.indication_id }).name,
         studyId: study.id,
         siteId: siteLocationOption.siteId,
       }));
