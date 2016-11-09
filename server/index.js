@@ -23,22 +23,49 @@ setup(app, {
 // get the intended port number, use port 5000 if not provided
 const port = argv.port || process.env.PORT || 5000;
 
-// Start your app.
-app.listen(port, (err) => {
-  if (err) {
-    return logger.error(err.message);
+// import the server handling over HTTPS and HTTP
+const https = require('https');
+const http = require('http');
+
+app.start = (httpOnly) => {
+  if (httpOnly === undefined) {
+    /* eslint-disable no-param-reassign */
+    httpOnly = process.env.HTTP;
   }
+  let server = null;
+  if (!httpOnly) {
+    /* eslint-disable global-require */
+    const sslConfig = require('./ssl-config');
 
-  // Connect to ngrok in dev mode
-  if (ngrok) {
-    ngrok.connect(port, (innerErr, url) => {
-      if (innerErr) {
-        return logger.error(innerErr);
-      }
-
-      logger.appStarted(port, url);
-    });
+    const options = {
+      key: sslConfig.privateKey,
+      cert: sslConfig.certificate,
+    };
+    server = https.createServer(options, app);
   } else {
-    logger.appStarted(port);
+    server = http.createServer(app);
   }
-});
+  // Start your app.
+  server.listen(port, (err) => {
+    if (err) {
+      return logger.error(err.message);
+    }
+
+    // Connect to ngrok in dev mode
+    if (ngrok) {
+      ngrok.connect(port, (innerErr, url) => {
+        if (innerErr) {
+          return logger.error(innerErr);
+        }
+
+        logger.appStarted(port, url);
+      });
+    } else {
+      logger.appStarted(port);
+    }
+  });
+
+  return server;
+};
+
+app.start();
