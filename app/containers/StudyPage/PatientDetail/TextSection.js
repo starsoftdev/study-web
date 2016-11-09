@@ -92,12 +92,14 @@ class TextSection extends React.Component {
   }
 
   submitText() {
+    const { currentUser, currentPatient, studyId } = this.props;
     const textarea = this.textarea;
     const options = {
-      studyId: this.props.studyId,
-      patientId: this.props.currentPatient.id,
+      studyId: studyId,
+      currentUserId: currentUser.id,
+      patientId: currentPatient.id,
       body: textarea.value,
-      to: this.props.currentPatient.phone,
+      to: currentPatient.phone,
     };
 
     this.props.sendStudyPatientMessages(options, (err) => {
