@@ -13,11 +13,11 @@ import {
   DELETE_SCHEDULE_ERROR,
 } from './constants';
 
-export function fetchPatientsByStudy(studyId, searchParams) {
+export function fetchPatientsByStudy(studyId, siteId) {
   return {
     type: FETCH_PATIENTS_BY_STUDY,
     studyId,
-    searchParams,
+    siteId,
   };
 }
 export function fetchPatientsByStudySucceeded(payload) {

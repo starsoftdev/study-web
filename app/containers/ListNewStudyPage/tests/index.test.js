@@ -21,7 +21,6 @@ describe('<ListNewStudyPage />', () => {
         submitForm: expect.createSpy(),
         formValues: {},
         listNewStudyState: {},
-        getAvailPhoneNumbers: expect.createSpy(),
       };
 
       const shallowWrapper = shallow(<ListNewStudyPage {...props} />);

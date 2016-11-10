@@ -9,7 +9,6 @@ import {
   HIDE_ADD_SITE_LOCATION_MODAL,
   SHOW_ADD_EMAIL_MODAL,
   HIDE_ADD_EMAIL_MODAL,
-  GET_AVAIL_PHONE_NUMBERS_SUCCESS,
   SUBMIT_FORM,
   SUBMIT_FORM_SUCCESS,
   SUBMIT_FORM_ERROR,
@@ -19,13 +18,10 @@ import {
   CLEAR_FORM_SUBMISSION_DATA,
 } from './constants';
 
-import _ from 'lodash';
-
 const initialState = {
   showAddSiteLocationModal: false,
   showAddEmailModal: false,
   showSubmitFormModal: false,
-  availPhoneNumbers: [],
   indicationLevelPrice: null,
   formSubmissionStatus: {
     submitting: false,
@@ -55,11 +51,6 @@ function listNewStudyPageReducer(state = initialState, action) {
       return {
         ...state,
         showAddEmailModal: false,
-      };
-    case GET_AVAIL_PHONE_NUMBERS_SUCCESS:
-      return {
-        ...state,
-        availPhoneNumbers: _.map(action.payload.avail, (value) => ({ ...value, value:value.phoneNumber, label: value.friendlyName })),
       };
     case SUBMIT_FORM:
       return {

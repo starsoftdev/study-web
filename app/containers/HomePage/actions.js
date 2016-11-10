@@ -15,6 +15,9 @@ import {
   RENEW_STUDY,
   RENEW_STUDY_SUCCESS,
   RENEW_STUDY_ERROR,
+  UPGRADE_STUDY,
+  UPGRADE_STUDY_SUCCESS,
+  UPGRADE_STUDY_ERROR,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser) {
@@ -126,6 +129,28 @@ export function studyRenewed(payload) {
 export function studyRenewingError(payload) {
   return {
     type: RENEW_STUDY_ERROR,
+    payload,
+  };
+}
+
+export function upgradeStudy(cartValues, formValues) {
+  return {
+    type: UPGRADE_STUDY,
+    cartValues,
+    formValues,
+  };
+}
+
+export function studyUpgraded(payload) {
+  return {
+    type: UPGRADE_STUDY_SUCCESS,
+    payload,
+  };
+}
+
+export function studyUpgradingError(payload) {
+  return {
+    type: UPGRADE_STUDY_ERROR,
     payload,
   };
 }
