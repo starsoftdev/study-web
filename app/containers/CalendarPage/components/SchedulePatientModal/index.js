@@ -37,6 +37,8 @@ const periodOptions = [
 @reduxForm({ form: 'schedulePatient' })
 export default class SchedulePatientModal extends Component {
   static propTypes = {
+    siteLocationOptions: PropTypes.array.isRequired,
+    isAdmin: PropTypes.bool.isRequired,
     sites: PropTypes.array.isRequired,
     indications: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
@@ -49,6 +51,7 @@ export default class SchedulePatientModal extends Component {
     fetchPatientsByStudy: PropTypes.func.isRequired,
     fetchingSites: PropTypes.bool,
     fetchingPatientsByStudy: PropTypes.bool.isRequired,
+    initialize: PropTypes.func.isRequired,
   }
 
   state = {
@@ -61,10 +64,30 @@ export default class SchedulePatientModal extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.modalType === SchedulePatientModalType.HIDDEN) {
+    const { siteLocationOptions, isAdmin } = this.props;
+
+    if (nextProps.modalType === SchedulePatientModalType.CREATE) {
+      if (!isAdmin) {
+        const site = siteLocationOptions[0];
+        if (this.state.siteLocation === null && site) {  // prevent recursive render
+          if (site) {
+            this.handleSiteLocationChoose(site);
+            this.props.initialize({               // manually set siteLocation form value
+              siteLocation: site,
+            });
+          }
+        }
+      }
+    } else if (nextProps.modalType === SchedulePatientModalType.HIDDEN) {
       this.setState({
-        optionStep: 0,
+        optionStep: nextProps.isAdmin ? 0 : 1,
+        siteLocation: null,
+        protocol: null,
+        patient: null,
+        protocolOptions: [],
+        patientOptions: [],
       });
+      this.props.initialize({});
     }
 
     if (!nextProps.fetchingPatientsByStudy && nextProps.patientsByStudy !== this.props.patientsByStudy) {
@@ -81,7 +104,7 @@ export default class SchedulePatientModal extends Component {
   handleSiteLocationChoose(siteLocationOption) {
     if (siteLocationOption) {
       const selectedSite = this.props.sites.filter(s => s.id === siteLocationOption.siteId)[0];
-      if (selectedSite === null) {
+      if (!selectedSite) {
         throw new Error('SiteLocation options are not properly populated.');
       }
       const protocolOptions = selectedSite.studies.map(study => ({
@@ -138,7 +161,8 @@ export default class SchedulePatientModal extends Component {
 
   render() {
     const {
-      sites,
+      siteLocationOptions,
+      isAdmin,
       handleCloseModal,
       handleDelete,
       handleSubmit,
@@ -148,12 +172,6 @@ export default class SchedulePatientModal extends Component {
     } = this.props;
 
     const { optionStep, protocolOptions, patientOptions } = this.state;
-
-    const siteLocationOptions = sites.map(s => ({
-      label: s.name,
-      value: s.name,
-      siteId: s.id,
-    }));
 
     return (
       <Modal show={modalType !== SchedulePatientModalType.HIDDEN} onHide={handleCloseModal}>
@@ -225,7 +243,7 @@ export default class SchedulePatientModal extends Component {
                             placeholder="--Select Site Location--"
                             options={siteLocationOptions}
                             className="data-search"
-                            disabled={submitting || this.props.fetchingSites}
+                            disabled={submitting || this.props.fetchingSites || !isAdmin}
                             objectValue
                             onChange={this.handleSiteLocationChoose.bind(this)}
                             selectedValue={this.state.siteLocation}
