@@ -24,9 +24,11 @@ export function receiptsReceived(payload) {
   };
 }
 
-export function getReceipts(payload) {
+export function getReceipts(limit, offset, payload) {
   return {
     type: GET_RECEIPT,
+    limit,
+    offset,
     payload,
   };
 }

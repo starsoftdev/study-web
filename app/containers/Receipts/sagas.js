@@ -38,11 +38,11 @@ export function* receiptSaga() {
 
 export function* getReceipts() {
   while (true) {
-    const { payload } = yield take(GET_RECEIPT);
+    const { limit, offset, payload } = yield take(GET_RECEIPT);
     try {
       let requestURL;
       const queryParams = {
-        filter: '{"include": ["sites", "paymentMethod", {"invoiceDetails": ["indication", {"campaign": ["study", "site", "level"]}]}]}',
+        filter: '{"include": ["sites", "paymentMethod", {"invoiceDetails": ["indication", {"campaign": ["study", "site", "level"]}]}], "limit":'+limit+', "skip":'+offset+'}',
       };
       const queryString = composeQueryString(queryParams);
       if (!payload) {
