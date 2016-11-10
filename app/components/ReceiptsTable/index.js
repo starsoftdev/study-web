@@ -8,6 +8,8 @@ import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
 import './styles.less';
+import { StickyContainer, Sticky } from 'react-sticky';
+import InfiniteScroll from 'react-infinite-scroller';
 
 const headers = [
   {
@@ -41,7 +43,9 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     selectCurrent: PropTypes.func,
     selectAll: PropTypes.func,
     searchBy: PropTypes.any,
-    receipts: PropTypes.any,
+    receipts: PropTypes.array,
+    getReceipts: PropTypes.func,
+    hasMoreItems: PropTypes.bool,
   };
 
   constructor(props) {
@@ -50,6 +54,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     this.onClickAll = this.onClickAll.bind(this);
     this.onClickCurrent = this.onClickCurrent.bind(this);
     this.sortBy = this.sortBy.bind(this);
+    this.loadItems = this.loadItems.bind(this);
 
     this.state = {
       checkAll: false,
@@ -140,14 +145,20 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     this.SelectedReceipts = value;
   }
 
+  loadItems(page) {
+    console.log('load items ', page);
+    this.props.getReceipts(15, 0);
+  }
+
   sortBy(ev) {
     ev.preventDefault();
     const sort = ev.currentTarget.dataset.sort;
     let direction = 'down';
 
-    if (ev.currentTarget.className && ev.currentTarget.className === 'down') {
+    if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1) {
       direction = 'up';
     }
+    console.log(direction);
 
     const receiptsArr = this.state.filteredReceipts || this.props.receipts;
     const directionUnits = (direction === 'up') ? {
@@ -249,15 +260,39 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
   mapHeaders(raw, state, result) {
     _.map(raw, (header, key) => {
+
+      let width = '';
+      switch(key){
+        case 0:
+          width = '9.6%'
+          break;
+        case 1:
+          width = '17.4%'
+          break;
+        case 2:
+          width = '18.4%'
+          break;
+        case 3:
+          width = '20.7%'
+          break;
+        case 4:
+          width = '17.4%'
+          break;
+        case 5:
+          width = '9.5%'
+          break;
+      }
+
       result.push(
-        <th
+        <div
           key={key}
           data-sort={header.sort}
           onClick={this.sortBy}
-          className={(state.activeSort === header.sort) ? state.activeDirection : ''}
+          className={`th ${(state.activeSort === header.sort) ? state.activeDirection : ''}`}
+          style={{ width: width }}
         >
           {header.text} <i className="caret-arrow" />
-        </th>
+        </div>
       );
     });
   }
@@ -298,44 +333,101 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     });
   }
 
+  mapReceipts2(raw, result) {
+    _.map(raw, (source, key) => {
+      const date = new Date(source.created);
+      const dateWrapper = moment(date).format('YYYY/MM/DD');
+      const sub = ((source.total % 100) === 0) ? '.00' : false;
+
+      if (source.invoiceDetails.length) {
+        let site = '-';
+        const protocol = (source.invoiceDetails[0].campaign) ? source.invoiceDetails[0].campaign.study.protocolNumber : '-';
+        if (source.invoiceDetails[0].campaign) {
+          site = source.invoiceDetails[0].campaign.site.name;
+        } else if (source.sites) {
+          site = source.sites.name;
+        }
+
+        result.push(
+          <div className="tr" key={key}>
+            <div className="td" style={{ width: '7%' }}>
+              <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
+                <span className="input-style" onClick={this.onClickCurrent}>
+                  <input type="checkbox" name={key} />
+                </span>
+              </span>
+            </div>
+            <div className="td" style={{ width: '9.6%' }}>{dateWrapper}</div>
+            <div className="td" style={{ width: '17.4%' }}>{site}</div>
+            <div className="td" style={{ width: '18.4%' }}>{source.invoiceDetails[0].invoice_id}</div>
+            <div className="td" style={{ width: '20.7%' }}>{protocol}</div>
+            <div className="td" style={{ width: '17.4%' }}>card</div>
+            <div className="td" style={{ width: '9.5%' }}>${(sub) ? `${(source.total / 100)}${sub}` : `${(source.total / 100).toFixed(2)}` }</div>
+          </div>
+        );
+      }
+    });
+  }
+
   render() {
+    console.log('render');
     const state = this.state;
-    const receiptsArr = state.filteredReceipts || this.props.receipts;
+    //const receiptsArr = state.filteredReceipts || this.props.receipts;
     const receipts = [];
+    const receipts2 = [];
     const heads = [];
 
     this.mapHeaders(headers, state, heads);
-    this.mapReceipts(receiptsArr, receipts);
+    this.mapReceipts(this.props.receipts, receipts);
+    this.mapReceipts2(this.props.receipts, receipts2);
 
     return (
       <div className="table-holder">
-        <table className="table">
-          <colgroup>
-            <col style={{ width: '7%' }} />
-            <col style={{ width: '9.6%' }} />
-            <col style={{ width: '17.4%' }} />
-            <col style={{ width: '18.4%' }} />
-            <col style={{ width: 'auto' }} />
-            <col style={{ width: '17.4%' }} />
-            <col style={{ width: '9.5%' }} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th>
-                <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
-                  <span className="input-style" onClick={this.onClickAll}>
-                    <input name="all" type="checkbox" />
+        <StickyContainer className="table-sticky">
+          <Sticky className="header">
+            <div className="tr">
+              <div className="th" style={{ width: '7%' }}>
+                  <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
+                    <span className="input-style" onClick={this.onClickAll}>
+                      <input name="all" type="checkbox" />
+                    </span>
                   </span>
-                </span>
                 <span>#</span><i className="caret-arrow" />
-              </th>
+              </div>
               {heads}
-            </tr>
-          </thead>
-          <tbody>
+            </div>
+          </Sticky>
+
+          <InfiniteScroll
+            className="tbody"
+            pageStart={0}
+            loadMore={this.loadItems}
+            initialLoad={false}
+            hasMore={this.props.hasMoreItems}
+            loader={<div>Loading...</div>}
+          >
+            {receipts2}
+          </InfiniteScroll>
+
+          {/*<table className="table">
+            <colgroup>
+              <col style={{ width: '7%' }} />
+              <col style={{ width: '9.6%' }} />
+              <col style={{ width: '17.4%' }} />
+              <col style={{ width: '18.4%' }} />
+              <col style={{ width: '20.7%' }} />
+              <col style={{ width: '17.4%' }} />
+              <col style={{ width: '9.5%' }} />
+            </colgroup>
+
+            <tbody>
             {receipts}
-          </tbody>
-        </table>
+            </tbody>
+
+            
+          </table>*/}
+          
+        </StickyContainer>
       </div>
     );
   }

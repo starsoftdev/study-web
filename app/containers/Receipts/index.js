@@ -25,7 +25,7 @@ import {
   selectEvents,
 } from 'containers/App/selectors';
 
-import selectReceipts from './selectors';
+import selectReceipts, {selectReceiptsList, selectHasMoreItems} from './selectors';
 import ReceiptsTable from 'components/ReceiptsTable';
 import TableSearchForm from 'components/TableSearchForm';
 import './styles.less';
@@ -38,8 +38,9 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     fetchSites: PropTypes.func,
     getReceipts: PropTypes.func,
     getPDF: PropTypes.func,
-    receipts: PropTypes.any,
+    receipts: PropTypes.array,
     currentUser: PropTypes.any,
+    hasMoreItems: PropTypes.bool,
   };
 
   constructor(props, context) {
@@ -62,7 +63,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
 
   componentDidMount() {
     this.props.fetchSites();
-    this.props.getReceipts();
+    this.props.getReceipts(15, 0);
   }
 
   componentWillReceiveProps() {
@@ -123,7 +124,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
       }
     }
 
-    this.props.getReceipts(this.searchOptions);
+    this.props.getReceipts(10, 0, this.searchOptions);
   }
 
   render() {
@@ -141,7 +142,9 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
           <ReceiptsTable
             selectCurrent={this.selectCurrent}
             selectAll={this.selectAll}
+            getReceipts={this.props.getReceipts}
             receipts={this.props.receipts}
+            hasMoreItems={this.props.hasMoreItems}
             {...this.props}
           />
         </section>
@@ -153,15 +156,16 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
 const mapStateToProps = createStructuredSelector({
   siteLocations : selectSiteLocations(),
   currentUser: selectCurrentUser(),
-  receipts: selectReceipts(),
+  receipts: selectReceiptsList(),
   pageEvents: selectEvents(),
+  hasMoreItems: selectHasMoreItems(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchEvents: (values) => dispatch(fetchEvents(values)),
     fetchSites: () => dispatch(fetchSites()),
-    getReceipts: (values) => dispatch(getReceipts(values)),
+    getReceipts: (limit, offset, values) => dispatch(getReceipts(limit, offset, values)),
     getPDF: (values) => dispatch(getPDF(values)),
   };
 }
