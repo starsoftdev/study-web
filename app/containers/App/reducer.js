@@ -80,7 +80,7 @@ import {
   SAVE_USER,
   SAVE_USER_SUCCESS,
   SAVE_USER_ERROR,
-
+  GET_AVAIL_PHONE_NUMBERS_SUCCESS,
 } from './constants';
 
 import {
@@ -171,6 +171,7 @@ const initialState = {
       saving: false,
       error: null,
     },
+    availPhoneNumbers: [],
   },
 };
 
@@ -860,6 +861,11 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
         },
+      };
+      break;
+    case GET_AVAIL_PHONE_NUMBERS_SUCCESS:
+      baseDataInnerState = {
+        availPhoneNumbers: map(payload.avail, (value) => ({ ...value, value: value.phoneNumber, label: value.friendlyName })),
       };
       break;
     default:

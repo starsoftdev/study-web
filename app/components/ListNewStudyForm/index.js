@@ -16,7 +16,7 @@ import moment from 'moment';
 import { Modal } from 'react-bootstrap';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import RenderLeads from 'components/RequestProposalForm/RenderLeads';
+import RenderLeads from 'components/RenderLeads';
 import RenderEmailsList from './RenderEmailsList';
 import EditSiteForm from 'components/EditSiteForm';
 import { selectCurrentUserClientId } from 'containers/App/selectors';

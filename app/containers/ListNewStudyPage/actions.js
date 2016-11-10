@@ -12,9 +12,6 @@ import {
   SUBMIT_FORM,
   SUBMIT_FORM_SUCCESS,
   SUBMIT_FORM_ERROR,
-  GET_AVAIL_PHONE_NUMBERS,
-  GET_AVAIL_PHONE_NUMBERS_SUCCESS,
-  GET_AVAIL_PHONE_NUMBERS_ERROR,
   HIDE_SUBMIT_FORM_MODAL,
   FETCH_INDICATION_LEVEL_PRICE,
   FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
@@ -64,26 +61,6 @@ export function formSubmitted(payload) {
 export function formSubmissionError(payload) {
   return {
     type: SUBMIT_FORM_ERROR,
-    payload,
-  };
-}
-
-export function getAvailPhoneNumbers() {
-  return {
-    type: GET_AVAIL_PHONE_NUMBERS,
-  };
-}
-
-export function getAvailPhoneNumbersSuccess(payload) {
-  return {
-    type: GET_AVAIL_PHONE_NUMBERS_SUCCESS,
-    payload,
-  };
-}
-
-export function getAvailPhoneNumbersError(payload) {
-  return {
-    type: GET_AVAIL_PHONE_NUMBERS_ERROR,
     payload,
   };
 }

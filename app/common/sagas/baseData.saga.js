@@ -27,6 +27,7 @@ import {
   DELETE_CLIENT_ROLE,
   SAVE_SITE,
   SAVE_USER,
+  GET_AVAIL_PHONE_NUMBERS,
 } from 'containers/App/constants';
 
 
@@ -70,6 +71,8 @@ import {
   siteSavingError,
   userSaved,
   userSavingError,
+  getAvailPhoneNumbersSuccess,
+  getAvailPhoneNumbersError,
 } from 'containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -93,6 +96,7 @@ export default function* baseDataSaga() {
   yield fork(deleteClientRoleWatcher);
   yield fork(saveSiteWatcher);
   yield fork(saveUserWatcher);
+  yield fork(getAvailPhoneNumbersWatcher);
 }
 
 export function* fetchSitesWatcher() {
@@ -509,6 +513,26 @@ export function* saveUserWatcher() {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));
       yield put(userSavingError(err));
+    }
+  }
+}
+
+export function* getAvailPhoneNumbersWatcher() {
+  while (true) {
+    yield take(GET_AVAIL_PHONE_NUMBERS);
+
+    try {
+      const requestURL = `${API_URL}/sources/getAvailPhoneNumbers`;
+      const params = {
+        query: {
+          country: 'US',
+          areaCode: '510',
+        },
+      };
+      const response = yield call(request, requestURL, params);
+      yield put(getAvailPhoneNumbersSuccess(response));
+    } catch (e) {
+      yield put(getAvailPhoneNumbersError(e));
     }
   }
 }
