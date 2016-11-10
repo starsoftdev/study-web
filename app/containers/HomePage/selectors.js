@@ -37,6 +37,11 @@ const selectRenewedStudy = () => createSelector(
   substate => substate.renewedStudy
 );
 
+const selectUpgradedStudy = () => createSelector(
+  selectHomePageDomain(),
+    substate => substate.upgradedStudy
+);
+
 export default selectHomePage;
 export {
   selectHomePageDomain,
@@ -46,4 +51,5 @@ export {
   selectStudies,
   selectSelectedIndicationLevelPrice,
   selectRenewedStudy,
+  selectUpgradedStudy,
 };
