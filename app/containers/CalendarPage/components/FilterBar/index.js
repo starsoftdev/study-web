@@ -8,6 +8,8 @@ import 'react-select/dist/react-select.min.css';
 
 class FilterBar extends Component {
   static propTypes = {
+    siteLocationOptions: PropTypes.array.isRequired,
+    isAdmin: PropTypes.bool.isRequired,
     sites: PropTypes.array.isRequired,
     indications: PropTypes.array.isRequired,
     schedules: PropTypes.array.isRequired,
@@ -22,6 +24,19 @@ class FilterBar extends Component {
     protocol: null,
     indicationOptions: [],
     protocolOptions: [],
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { siteLocationOptions, isAdmin } = this.props;
+
+    if (!isAdmin) {
+      if (prevState.siteLocation === null || prevState.siteLocation.siteId !== this.state.siteLocation.siteId) {  // prevent recursive render
+        const site = siteLocationOptions[0];
+        if (site) {
+          this.handleFilterChange('siteLocation', site);
+        }
+      }
+    }
   }
 
   handleFilterChange = (field, option) => {
@@ -44,7 +59,7 @@ class FilterBar extends Component {
   handleSiteLocationChoose(siteLocationOption) {
     if (siteLocationOption) {
       const selectedSite = this.props.sites.filter(s => s.id === siteLocationOption.siteId)[0];
-      if (selectedSite === null) {
+      if (!selectedSite) {
         throw new Error('SiteLocation options are not properly populated.');
       }
       const indicationIds = _.uniq(selectedSite.studies.map(study => study.indication_id));
@@ -94,17 +109,12 @@ class FilterBar extends Component {
 
   render() {
     const {
-      sites,
+      isAdmin,
+      siteLocationOptions,
       // schedules,
       fetchingSites,
       filter,
     } = this.props;
-
-    const siteLocationOptions = sites.map(s => ({
-      label: s.name,
-      value: s.name,
-      siteId: s.id,
-    }));
 
     return (
       <form action="#" className="form-search clearfix alt">
@@ -121,7 +131,7 @@ class FilterBar extends Component {
             <Select
               className="form-control data-search"
               value={filter.siteLocation}
-              disabled={fetchingSites}
+              disabled={fetchingSites || !isAdmin}
               options={siteLocationOptions}
               placeholder="--Select Site Location--"
               onChange={(option) => this.handleFilterChange('siteLocation', option)}

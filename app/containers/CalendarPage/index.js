@@ -9,6 +9,7 @@ import SchedulePatientModal from './components/SchedulePatientModal';
 import FilterBar from './components/FilterBar';
 
 import moment from 'moment';
+import _ from 'lodash';
 
 import {
   fetchSites,
@@ -150,24 +151,44 @@ export class CalendarPage extends React.Component {
         time: updatedDate.add(data.period === 'AM' ?
           data.hour % 12 :
           (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').utc().format(),
+        userId: this.props.currentUser.id,
       };
     }
 
     this.handleModalVisibility(SchedulePatientModalType.HIDDEN);
-
     this.props.submitSchedule(submitData);
   }
 
   handleDelete = (scheduleId) => {
     this.handleModalVisibility(SchedulePatientModalType.HIDDEN);
 
-    this.props.deleteSchedule(scheduleId, this.props.currentUser.userId);
+    this.props.deleteSchedule(scheduleId, this.props.currentUser.id);
   }
 
   render() {
-    const { sites, indications, patientsByStudy, schedules } = this.props;
+    const { currentUser, sites, indications, patientsByStudy, schedules } = this.props;
     const fetchingSites = sites.isFetching;
     const fetchingPatientsByStudy = patientsByStudy.isFetching;
+    const isAdmin = !currentUser || !currentUser.site_id;
+
+    let siteLocationOptions = [];
+    if (isAdmin) {
+      siteLocationOptions = sites.map(s => ({
+        label: s.name,
+        value: s.name,
+        siteId: s.id,
+      }));
+    } else {
+      const site = _.find(sites, { id: currentUser.site_id });
+
+      if (site) {     // if site is fetched
+        siteLocationOptions = [{
+          label: site.name,
+          value: site.name,
+          siteId: site.id,
+        }];
+      }
+    }
 
     return (
       <div className="container-fluid">
@@ -175,6 +196,8 @@ export class CalendarPage extends React.Component {
           <h2 className="main-heading">CALENDAR</h2>
           <div className="btn-block"><a href="#" className="btn btn-primary">Today</a></div>
           <FilterBar
+            siteLocationOptions={siteLocationOptions}
+            isAdmin={isAdmin}
             sites={sites}
             indications={indications}
             schedules={schedules.data}
@@ -187,6 +210,8 @@ export class CalendarPage extends React.Component {
             handleOpenModal={this.handleModalVisibility}
           />
           <SchedulePatientModal
+            siteLocationOptions={siteLocationOptions}
+            isAdmin={isAdmin}
             sites={sites}
             indications={indications}
             onSubmit={this.handleSubmit}
