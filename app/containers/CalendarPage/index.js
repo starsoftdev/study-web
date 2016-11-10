@@ -151,6 +151,7 @@ export class CalendarPage extends React.Component {
         time: updatedDate.add(data.period === 'AM' ?
           data.hour % 12 :
           (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').utc().format(),
+        userId: this.props.currentUser.id,
       };
     }
 
@@ -161,7 +162,7 @@ export class CalendarPage extends React.Component {
   handleDelete = (scheduleId) => {
     this.handleModalVisibility(SchedulePatientModalType.HIDDEN);
 
-    this.props.deleteSchedule(scheduleId, this.props.currentUser.userId);
+    this.props.deleteSchedule(scheduleId, this.props.currentUser.id);
   }
 
   render() {
