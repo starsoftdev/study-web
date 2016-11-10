@@ -20,5 +20,9 @@ export const RENEW_STUDY                                 = 'HomePage/Viewport/RE
 export const RENEW_STUDY_SUCCESS                         = 'HomePage/Viewport/RENEW_STUDY_SUCCESS';
 export const RENEW_STUDY_ERROR                           = 'HomePage/Viewport/RENEW_STUDY_ERROR';
 
+export const UPGRADE_STUDY                               = 'HomePage/Viewport/UPGRADE_STUDY';
+export const UPGRADE_STUDY_SUCCESS                       = 'HomePage/Viewport/UPGRADE_STUDY_SUCCESS';
+export const UPGRADE_STUDY_ERROR                         = 'HomePage/Viewport/UPGRADE_STUDY_ERROR';
+
 export const ACTIVE_STATUS_VALUE                         = 'Active';
 export const INACTIVE_STATUS_VALUE                       = 'Inactive';

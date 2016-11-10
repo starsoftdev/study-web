@@ -6,7 +6,6 @@ describe('listNewStudyPageReducer', () => {
     const initialState = {
       showAddSiteLocationModal: false,
       showAddEmailModal: false,
-      availPhoneNumbers: [],
     };
     expect(listNewStudyPageReducer(undefined, {})).toEqual(initialState);
   });

@@ -28,7 +28,7 @@ class CalendarWidget extends React.Component {
     }));
 
     return (
-      <div className="calendar-box">
+      <div className="calendar-box calendar-slider">
         <BigCalendar
           popup
           selectable
