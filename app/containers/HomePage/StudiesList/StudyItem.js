@@ -49,7 +49,9 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   onUpgradeClick() {
-    this.props.onUpgrade(this.props.studyId);
+    const { studyId, indication, onUpgrade } = this.props;
+
+    onUpgrade(studyId, indication.id);
   }
 
   onEditClick() {

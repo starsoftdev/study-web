@@ -10,11 +10,11 @@ import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
 import ShoppingCartForm from 'components/ShoppingCartForm';
 import ListNewStudyForm from 'components/ListNewStudyForm';
-import { selectListNewStudyPageDomain, selectAvailPhoneNumbers, selectFormSubmissionStatus, selectShowSubmitFormModal, selectIndicationLevelPrice } from 'containers/ListNewStudyPage/selectors';
+import { selectListNewStudyPageDomain, selectFormSubmissionStatus, selectShowSubmitFormModal, selectIndicationLevelPrice } from 'containers/ListNewStudyPage/selectors';
 import { selectListNewStudyFormValues, selectListNewStudyFormError } from 'components/ListNewStudyForm/selectors';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
 import _, { find } from 'lodash';
-import { submitForm, getAvailPhoneNumbers, hideSubmitFormModal, fetchIndicationLevelPrice, clearFormSubmissionData } from 'containers/ListNewStudyPage/actions';
+import { submitForm, hideSubmitFormModal, fetchIndicationLevelPrice, clearFormSubmissionData } from 'containers/ListNewStudyPage/actions';
 import { Modal } from 'react-bootstrap';
 import LoadingSpinner from 'components/LoadingSpinner';
 import './styles.less';
@@ -25,6 +25,7 @@ import {
   fetchIndications,
   fetchLevels,
   saveSite,
+  getAvailPhoneNumbers,
 } from 'containers/App/actions';
 import {
   selectSiteLocations,
@@ -32,6 +33,7 @@ import {
   selectStudyLevels,
   selectSites,
   selectCurrentUser,
+  selectAvailPhoneNumbers,
 } from 'containers/App/selectors';
 
 export class ListNewStudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function

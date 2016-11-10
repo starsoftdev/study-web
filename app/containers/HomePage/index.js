@@ -14,7 +14,7 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUserClientId } from 'containers/App/selectors';
-import { fetchClientSites, fetchLevels } from 'containers/App/actions';
+import { fetchClientSites, fetchLevels, getAvailPhoneNumbers } from 'containers/App/actions';
 import { fetchStudies } from './actions';
 
 import Dashboard from './Dashboard';
@@ -28,6 +28,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     fetchClientSites: PropTypes.func,
     fetchLevels: PropTypes.func,
     fetchStudies: PropTypes.func,
+    getAvailPhoneNumbers: PropTypes.func,
   };
 
   constructor(props) {
@@ -41,6 +42,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     if (currentUserClientId) {
       this.props.fetchClientSites(currentUserClientId, {});
       this.props.fetchLevels();
+      this.props.getAvailPhoneNumbers();
       setTimeout(this.props.fetchStudies, 0);
     }
   }
@@ -92,6 +94,7 @@ function mapDispatchToProps(dispatch) {
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchLevels: () => dispatch(fetchLevels()),
     fetchStudies: searchParams => dispatch(fetchStudies(searchParams)),
+    getAvailPhoneNumbers: () => dispatch(getAvailPhoneNumbers()),
   };
 }
 

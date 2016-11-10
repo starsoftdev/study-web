@@ -89,6 +89,9 @@ import {
   SAVE_USER_SUCCESS,
   SAVE_USER_ERROR,
 
+  GET_AVAIL_PHONE_NUMBERS,
+  GET_AVAIL_PHONE_NUMBERS_SUCCESS,
+  GET_AVAIL_PHONE_NUMBERS_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -617,6 +620,26 @@ export function userSaved(siteId, payload) {
 export function userSavingError(payload) {
   return {
     type: SAVE_USER_ERROR,
+    payload,
+  };
+}
+
+export function getAvailPhoneNumbers() {
+  return {
+    type: GET_AVAIL_PHONE_NUMBERS,
+  };
+}
+
+export function getAvailPhoneNumbersSuccess(payload) {
+  return {
+    type: GET_AVAIL_PHONE_NUMBERS_SUCCESS,
+    payload,
+  };
+}
+
+export function getAvailPhoneNumbersError(payload) {
+  return {
+    type: GET_AVAIL_PHONE_NUMBERS_ERROR,
     payload,
   };
 }
