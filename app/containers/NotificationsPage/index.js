@@ -3,7 +3,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import moment from 'moment';
 
 import {
   selectCurrentUser,
@@ -14,6 +13,8 @@ import {
 import {
   fetchNotifications,
 } from 'containers/GlobalNotifications/actions';
+
+import NotificationItem from './Item';
 
 export class NotificationsPage extends React.Component {
   static propTypes = {
@@ -49,26 +50,9 @@ export class NotificationsPage extends React.Component {
 								</tr>
 							</thead>
 							<tbody>
-                { this.props.notifications.map(n =>
-  								<tr className="">
-  									<td>
-  										<div className="info clearfix">
-  											<div className="img-holder">
-  												<img alt="image description" src="images/patient1.jpg" />
-  											</div>
-  											<div className="desc">
-  												<p>
-                            <span dangerouslySetInnerHTML={{ __html: n.event_log.eventMessage }} />
-                            <br />
-                            Fill Out Enrollment Data: Acne Study (Platinum Listing)
-                          </p>
-  											</div>
-  										</div>
-  									</td>
-  									<td>{moment(n.event_log.created).format('MM/DD/YY')}</td>
-  									<td>{moment(n.event_log.created).format('hh:mm A')}</td>
-  								</tr>
-                )}
+                {
+                  this.props.notifications.map(n => <NotificationItem eventLog={n.event_log} />)
+                }
 							</tbody>
 						</table>
 					</section>
