@@ -14,6 +14,8 @@ const _ = require('lodash');
 import {
   getReceipts,
   getPDF,
+  setSearchOptions,
+  setActiveSort,
 } from 'containers/Receipts/actions';
 import {
   fetchSites,
@@ -25,7 +27,7 @@ import {
   selectEvents,
 } from 'containers/App/selectors';
 
-import selectReceipts, {selectReceiptsList, selectHasMoreItems} from './selectors';
+import { selectReceiptsList, selectPaginationOptions, selectSearchOptions } from './selectors';
 import ReceiptsTable from 'components/ReceiptsTable';
 import TableSearchForm from 'components/TableSearchForm';
 import './styles.less';
@@ -40,7 +42,10 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     getPDF: PropTypes.func,
     receipts: PropTypes.array,
     currentUser: PropTypes.any,
-    hasMoreItems: PropTypes.bool,
+    paginationOptions: PropTypes.object,
+    searchOptions: PropTypes.array,
+    setSearchOptions: PropTypes.func,
+    setActiveSort: PropTypes.func,
   };
 
   constructor(props, context) {
@@ -63,7 +68,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
 
   componentDidMount() {
     this.props.fetchSites();
-    this.props.getReceipts(15, 0);
+    this.props.getReceipts(15, 0, this.props.receipts);
   }
 
   componentWillReceiveProps() {
@@ -103,28 +108,39 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
   search(event, type) {
     let options;
     this.searchOptions = this.searchOptions || [];
-    if (type === 'search') {
+    if (type === 'search' && event.target.value) {
       options = { data: event.target.value, type };
     } else if (type === 'site') {
       const { siteLocations } = this.props;
       const site = siteLocations[event - 1] || null;
-      options = { data: site, type };
+      if (site) {
+        options = { data: site, type };
+      }
     } else if (type === 'range') {
       options = { data: event, type };
     }
 
-    if (_.isEmpty(this.searchOptions)) {
-      this.searchOptions.push(options);
-    } else {
+    if (options) {
+      if (_.isEmpty(this.searchOptions)) {
+        this.searchOptions.push(options);
+      } else {
+        const el = _.find(this.searchOptions, { type });
+        if (el) {
+          this.searchOptions[_.findKey(this.searchOptions, el)] = options;
+        } else {
+          this.searchOptions.push(options);
+        }
+      }
+    } else if (!_.isEmpty(this.searchOptions)) {
       const el = _.find(this.searchOptions, { type });
       if (el) {
-        this.searchOptions[_.findKey(this.searchOptions, el)] = options;
-      } else {
-        this.searchOptions.push(options);
+        this.searchOptions.splice(_.findKey(this.searchOptions, el), 1);
       }
     }
 
-    this.props.getReceipts(10, 0, this.searchOptions);
+    this.props.setSearchOptions(this.searchOptions);
+
+    this.props.getReceipts(15, 0, this.props.receipts, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection, this.searchOptions);
   }
 
   render() {
@@ -144,7 +160,9 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
             selectAll={this.selectAll}
             getReceipts={this.props.getReceipts}
             receipts={this.props.receipts}
-            hasMoreItems={this.props.hasMoreItems}
+            paginationOptions={this.props.paginationOptions}
+            searchOptions={this.props.searchOptions}
+            setActiveSort={this.props.setActiveSort}
             {...this.props}
           />
         </section>
@@ -158,15 +176,18 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   receipts: selectReceiptsList(),
   pageEvents: selectEvents(),
-  hasMoreItems: selectHasMoreItems(),
+  paginationOptions: selectPaginationOptions(),
+  searchOptions: selectSearchOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchEvents: (values) => dispatch(fetchEvents(values)),
     fetchSites: () => dispatch(fetchSites()),
-    getReceipts: (limit, offset, values) => dispatch(getReceipts(limit, offset, values)),
+    getReceipts: (limit, offset, receipts, orderBy, orderDir, values) => dispatch(getReceipts(limit, offset, receipts, orderBy, orderDir, values)),
     getPDF: (values) => dispatch(getPDF(values)),
+    setSearchOptions: (payload) => dispatch(setSearchOptions(payload)),
+    setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
   };
 }
 
