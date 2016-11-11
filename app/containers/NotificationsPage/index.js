@@ -29,34 +29,36 @@ export class NotificationsPage extends React.Component {
 
   render() {
     return (
-      <section className="rewards">
-        <h2 className="main-heading">NOTIFICATIONS</h2>
+      <div className="container-fluid">
+        <section className="rewards">
+          <h2 className="main-heading">NOTIFICATIONS</h2>
 
-        <section className="table-holder">
-          <header>
-            <h2>HISTORY</h2>
-          </header>
-          <table className="table">
-            <colgroup>
-              <col style={{ width: 'auto' }} />
-              <col style={{ width: '11%' }} />
-              <col style={{ width: '11%' }} />
-            </colgroup>
-            <thead>
-              <tr>
-                <th>DESCRIPTION <i className="caret-arrow"></i></th>
-                <th>DATE <i className="caret-arrow"></i></th>
-                <th>TIME <i className="caret-arrow"></i></th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                this.props.notifications.map(n => <NotificationItem eventLog={n.event_log} />)
-              }
-            </tbody>
-          </table>
+          <section className="table-holder">
+            <header>
+              <h2>HISTORY</h2>
+            </header>
+            <table className="table">
+              <colgroup>
+                <col style={{ width: 'auto' }} />
+                <col style={{ width: '11%' }} />
+                <col style={{ width: '11%' }} />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>DESCRIPTION <i className="caret-arrow"></i></th>
+                  <th>DATE <i className="caret-arrow"></i></th>
+                  <th>TIME <i className="caret-arrow"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  this.props.notifications.map(n => <NotificationItem eventLog={n.event_log} />)
+                }
+              </tbody>
+            </table>
+          </section>
         </section>
-      </section>
+      </div>
     );
   }
 }
