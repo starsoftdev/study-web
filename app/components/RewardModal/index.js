@@ -46,7 +46,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
   }
 
   selectCard() {
-
+    this.setState({card: 0})
   }
 
   render() {
@@ -88,7 +88,8 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                       type="radio"
                       component={RadioButton}
                       className=""
-                      onChange={this.selectCard}
+                      value="0"
+                      checked={this.state.card == "0"}
                     />
                     <span className="text">75 KIKs = $25 Starbucks Gift Card</span>
                   </li>
@@ -98,7 +99,8 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                       type="radio"
                       component={RadioButton}
                       className=""
-                      onChange={this.selectCard}
+                      value="1"
+                      checked={this.state.card == "1"}
                     />
                     <span className="text">225 KIKs = $75 Amazon Gift Card</span>
                   </li>
@@ -108,7 +110,8 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                       type="radio"
                       component={RadioButton}
                       className=""
-                      onChange={this.selectCard}
+                      value="2"
+                      checked={this.state.card == "2"}
                     />
                     <span className="text"> 1,559 KIKs = $1,559 StudyKIK Platinum Listing</span>
                   </li>

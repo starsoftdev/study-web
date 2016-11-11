@@ -67,10 +67,10 @@
 		right: 10px;
 		color: #fff;
 		.font(26px,1);
+		.size(26px);
 		text-shadow: none;
 		position: absolute;
-		.transform(translate(0,-50%));
-		transform-origin: 50% 50%;
+		margin: -13px 0 0;
 
 		i {
 			display: block;
@@ -80,10 +80,8 @@
 		&:hover {
 			color: #fff;
 
-			i {
-				margin: 5px 0 0 0;
-				.transform(rotate(180deg));
-			}
+			margin: -11px -2px 0 0;
+			.transform(rotate(-180deg));
 		}
 	}
 }
