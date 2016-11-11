@@ -9,7 +9,7 @@ import defaultImage from 'assets/images/Default-User-Img-Dr.png';
 class AvatarMenu extends React.Component {
   static propTypes = {
     handleLogoutClick: PropTypes.func.isRequired,
-    currentUser: PropTypes.func.any,
+    currentUser: PropTypes.any,
   }
 
   state = {
