@@ -19,7 +19,26 @@ const selectReceipts = () => createSelector(
   (substate) => substate
 );
 
+const selectReceiptsList = () => createSelector(
+  selectReceiptsDomain(),
+  (substate) => substate.receiptsList
+);
+
+const selectPaginationOptions = () => createSelector(
+  selectReceiptsDomain(),
+  (substate) => substate.paginationOptions
+);
+
+const selectSearchOptions = () => createSelector(
+  selectReceiptsDomain(),
+  (substate) => substate.searchOptions
+);
+
+
 export default selectReceipts;
 export {
   selectReceiptsDomain,
+  selectReceiptsList,
+  selectPaginationOptions,
+  selectSearchOptions,
 };
