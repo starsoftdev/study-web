@@ -19,6 +19,7 @@ import {
 
   FETCH_CLIENT_SITES,
   FETCH_SITE_PATIENTS,
+  SEARCH_SITE_PATIENTS,
   FETCH_PATIENT_MESSAGES,
   FETCH_CLIENT_ROLES,
   FETCH_SITE,
@@ -55,6 +56,8 @@ import {
   clientSitesFetchingError,
   sitePatientsFetched,
   sitePatientsFetchingError,
+  sitePatientsSearched,
+  sitePatientsSearchingError,
   patientMessagesFetched,
   patientMessagesFetchingError,
   clientRolesFetched,
@@ -88,6 +91,7 @@ export default function* baseDataSaga() {
 
   yield fork(fetchClientSitesWatcher);
   yield fork(fetchSitePatientsWatcher);
+  yield fork(searchSitePatientsWatcher);
   yield fork(fetchPatientMessagesWatcher);
   yield fork(fetchClientRolesWatcher);
   yield fork(fetchSiteWatcher);
@@ -324,18 +328,35 @@ export function* fetchSitePatientsWatcher() {
   }
 }
 
+export function* searchSitePatientsWatcher() {
+  while (true) {
+    const { keyword } = yield take(SEARCH_SITE_PATIENTS);
+
+    try {
+      const requestURL = `${API_URL}/patients/getPatientMessagesByName?name=${keyword}&message=${keyword}`;
+      const response = yield call(request, requestURL);
+
+      yield put(sitePatientsSearched(response));
+    } catch (err) {
+      yield put(sitePatientsSearchingError(err));
+    }
+  }
+}
 
 export function* fetchPatientMessagesWatcher() {
   while (true) {
     const { patientId, studyId } = yield take(FETCH_PATIENT_MESSAGES);
+    if (patientId && patientId > 0 && studyId && studyId > 0) {
+      try {
+        const requestURL = `${API_URL}/patients/getMessagesByPatientAndStudy?patientId=${patientId}&studyId=${studyId}`;
+        const response = yield call(request, requestURL);
 
-    try {
-      const requestURL = `${API_URL}/patients/getMessagesByPatientAndStudy?patientId=${patientId}&studyId=${studyId}`;
-      const response = yield call(request, requestURL);
-
-      yield put(patientMessagesFetched(response));
-    } catch (err) {
-      yield put(patientMessagesFetchingError(err));
+        yield put(patientMessagesFetched(response));
+      } catch (err) {
+        yield put(patientMessagesFetchingError(err));
+      }
+    } else {
+      yield put(patientMessagesFetched([]));
     }
   }
 }
