@@ -58,7 +58,6 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         value: 'Female',
       },
     ];
-
     return (
       <Form className="form-lightbox form-edit-patient-information" onSubmit={handleSubmit}>
         <div className="field-row form-group">
@@ -102,7 +101,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label required">
-            <label>PHONE</label>
+            <label>Phone</label>
           </strong>
           <Field
             name="phone"
