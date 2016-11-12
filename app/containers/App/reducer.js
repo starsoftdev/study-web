@@ -453,12 +453,12 @@ export default function appReducer(state = initialState, action) {
         if (patientData.id === action.newMessage.patient_id && patientData.study_id === action.newMessage.study_id) {
           const countUnread = patientData.count_unread;
           if (countUnread) {
-            patientData.count_unread = countUnread + 1;
+            patientData.count_unread = parseInt(countUnread) + 1;
           } else {
             patientData.count_unread = 1;
           }
-          patientData.twtm_max_date_created = action.newMessage.created_datetime;
-          patientData.last_message_body = action.newMessage.body;
+          patientData.twtm_max_date_created = action.newMessage.twilioTextMessage.created_datetime;
+          patientData.last_message_body = action.newMessage.twilioTextMessage.body;
         }
         return patientData;
       });

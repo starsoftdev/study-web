@@ -72,7 +72,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       this.props.socket.on('notifyMessage', (newMessage) => {
         console.log('notifyMessage');
         console.log('newMessage', newMessage);
-        if (newMessage.direction === 'inbound') {
+        if (newMessage.twilioTextMessage.direction === 'inbound') {
           this.props.updateSitePatients(newMessage);
         }
         if (this.state.selectedPatient && this.state.selectedPatient.study_id) {
