@@ -51,6 +51,10 @@ import {
   FETCH_SITE_PATIENTS_ERROR,
   UPDATE_SITE_PATIENTS,
 
+  SEARCH_SITE_PATIENTS,
+  SEARCH_SITE_PATIENTS_SUCCESS,
+  SEARCH_SITE_PATIENTS_ERROR,
+
   FETCH_PATIENT_MESSAGES,
   FETCH_PATIENT_MESSAGES_SUCCESS,
   FETCH_PATIENT_MESSAGES_ERROR,
@@ -403,6 +407,27 @@ export function updateSitePatients(newMessage) {
   return {
     type: UPDATE_SITE_PATIENTS,
     newMessage,
+  };
+}
+
+export function searchSitePatients(keyword) {
+  return {
+    type: SEARCH_SITE_PATIENTS,
+    keyword,
+  };
+}
+
+export function sitePatientsSearched(payload) {
+  return {
+    type: SEARCH_SITE_PATIENTS_SUCCESS,
+    payload,
+  };
+}
+
+export function sitePatientsSearchingError(payload) {
+  return {
+    type: SEARCH_SITE_PATIENTS_ERROR,
+    payload,
   };
 }
 

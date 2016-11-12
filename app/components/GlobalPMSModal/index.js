@@ -10,14 +10,24 @@ import { createStructuredSelector } from 'reselect';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import Modal from 'react-bootstrap/lib/Modal';
-import { selectCurrentUser, selectSitePatients, selectPatientMessages } from 'containers/App/selectors';
+import {
+  selectCurrentUser,
+  selectSitePatients,
+  selectPatientMessages,
+} from 'containers/App/selectors';
 
 import MessageItem from './MessageItem';
 import PatientItem from './PatientItem';
 
 import ChatForm from './ChatForm';
 
-import { fetchSitePatients, fetchPatientMessages, markAsReadPatientMessages, updateSitePatients } from 'containers/App/actions';
+import {
+  fetchSitePatients,
+  searchSitePatients,
+  fetchPatientMessages,
+  markAsReadPatientMessages,
+  updateSitePatients,
+} from 'containers/App/actions';
 import {
   selectSocket,
 } from 'containers/GlobalNotifications/selectors';
@@ -26,6 +36,7 @@ import {
   sendStudyPatientMessages,
 } from 'containers/GlobalNotifications/actions';
 
+import _ from 'lodash';
 import './styles.less';
 
 class GlobalPMSModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -38,6 +49,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     closeModal: React.PropTypes.func,
     socket: React.PropTypes.any,
     fetchSitePatients: React.PropTypes.func,
+    searchSitePatients: React.PropTypes.func,
     updateSitePatients: React.PropTypes.func,
     fetchPatientMessages: React.PropTypes.func,
     sendStudyPatientMessages: React.PropTypes.func,
@@ -48,6 +60,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     super(props);
 
     this.selectPatient = this.selectPatient.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.state = {
       selectedPatient: { id: 0 },
     };
@@ -66,8 +79,15 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         }
       });
     }
-    if (newProps.showModal === true && newProps.sitePatients.details.length > 0 && this.state.selectedPatient.id === 0) {
-      this.selectPatient(newProps.sitePatients.details[0]);
+    if (newProps.showModal === true) {
+      let selectedPatient = { id: 0 };
+      _.forEach(newProps.sitePatients.details, (item) => {
+        if (item.show === undefined || (item.show && item.show === true)) {
+          selectedPatient = item;
+          return;
+        }
+      });
+      this.selectPatient(selectedPatient);
     }
   }
 
@@ -88,9 +108,22 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     }
   }
 
+  handleKeyPress(e) {
+    const searchKey = this.searchKey;
+    if (e.key === 'Enter') {
+      this.props.searchSitePatients(searchKey.value);
+    }
+  }
+
   render() {
     const { sitePatients, patientMessages, sendStudyPatientMessages } = this.props;
-    const sitePatientsListContents = sitePatients.details.map((item, index) => (
+    const sitePatientArray = [];
+    sitePatients.details.forEach((item) => {
+      if (item.show === undefined || (item.show && item.show === true)) {
+        sitePatientArray.push(item);
+      }
+    });
+    const sitePatientsListContents = sitePatientArray.map((item, index) => (
       <PatientItem
         patientData={item}
         key={index}
@@ -124,7 +157,15 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                 <div className="scroll-holder">
                   <div className="custom-select-drop">
                     <div className="search-holder">
-                      <input className="form-control keyword-search" type="search" placeholder="Search" />
+                      <input
+                        className="form-control keyword-search"
+                        type="search"
+                        placeholder="Search"
+                        onKeyPress={this.handleKeyPress}
+                        ref={(searchKey) => {
+                          this.searchKey = searchKey;
+                        }}
+                      />
                       <i className="icomoon-icon_search2"></i>
                     </div>
                   </div>
@@ -174,6 +215,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchSitePatients: (siteId) => dispatch(fetchSitePatients(siteId)),
+    searchSitePatients: (keyword) => dispatch(searchSitePatients(keyword)),
     updateSitePatients: (newMessage) => dispatch(updateSitePatients(newMessage)),
     fetchPatientMessages: (patientId, studyId) => dispatch(fetchPatientMessages(patientId, studyId)),
     markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
