@@ -11,6 +11,7 @@ import NotificationBox from './NotificationBox';
 import AvatarMenu from './AvatarMenu';
 
 import { fetchSitePatients } from 'containers/App/actions';
+import { logout } from 'containers/LoginPage/actions';
 
 import {
   selectCurrentUser,
@@ -24,10 +25,12 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     currentUser: PropTypes.any,
     sitePatients: React.PropTypes.object,
     fetchSitePatients: React.PropTypes.func,
-  }
+    logout: React.PropTypes.func,
+  };
 
   constructor(props) {
     super(props);
+    this.handleLogoutClick = this.handleLogoutClick.bind(this);
     this.showAddCreditsModal = this.showAddCreditsModal.bind(this);
     this.closeAddCreditsModal = this.closeAddCreditsModal.bind(this);
     this.showGlobalPMSModal = this.showGlobalPMSModal.bind(this);
@@ -46,8 +49,11 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
       console.error('Something is wrong with session');
       return;
     }
-    console.log(currentUser);
     this.props.fetchSitePatients(currentUser.id);
+  }
+
+  handleLogoutClick() {
+    this.props.logout();
   }
 
   showAddCreditsModal() {
@@ -56,10 +62,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
   closeAddCreditsModal() {
     this.setState({ showAddCreditsModal: false });
-  }
-
-  handleLogoutClick = () => {
-    console.log('logout');
   }
 
   showGlobalPMSModal() {
@@ -129,6 +131,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchSitePatients: (siteId) => dispatch(fetchSitePatients(siteId)),
+    logout: () => dispatch(logout()),
   };
 }
 
