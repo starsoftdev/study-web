@@ -63,6 +63,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.state = {
       selectedPatient: { id: 0 },
+      patientLoaded: true,
     };
   }
 
@@ -79,15 +80,17 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         }
       });
     }
-    if (newProps.showModal === true) {
+    if (newProps.showModal === true && newProps.sitePatients.details.length > 0 && this.state.patientLoaded === true) {
       let selectedPatient = { id: 0 };
       _.forEach(newProps.sitePatients.details, (item) => {
         if (item.show === undefined || (item.show && item.show === true)) {
           selectedPatient = item;
-          return;
+          return false;
         }
+        return true;
       });
       this.selectPatient(selectedPatient);
+      this.setState({ patientLoaded: false });
     }
   }
 
@@ -112,6 +115,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     const searchKey = this.searchKey;
     if (e.key === 'Enter') {
       this.props.searchSitePatients(searchKey.value);
+      this.setState({ patientLoaded: true });
     }
   }
 
