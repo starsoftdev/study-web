@@ -192,10 +192,7 @@
     "stylelint-config-standard": "12.0.0",
     "webpack-dev-middleware": "1.6.1"
   },
-  "pre-commit#develop": [
-    "lint:fix"
-  ],
-  "pre-commit#master": [
+  "pre-commit": [
     "lint:fix"
   ]
 }
