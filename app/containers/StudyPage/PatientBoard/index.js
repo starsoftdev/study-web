@@ -3,10 +3,10 @@
  */
 
 import React from 'react';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
-import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
 import * as Selector from '../selectors';
 import { selectCurrentUser } from 'containers/App/selectors';
@@ -32,6 +32,7 @@ class PatientBoard extends React.Component {
     super(props);
     this.state = {
       openPatientModal: false,
+      stick: false,
     };
     this.onPatientClick = this.onPatientClick.bind(this);
     this.onPatientTextClick = this.onPatientTextClick.bind(this);
@@ -67,15 +68,10 @@ class PatientBoard extends React.Component {
   }
 
   handleScroll(event) {
-    const patientListContainer = this.patientListContainer;
     const scrollTop = event.srcElement.body.scrollTop;
-    let className = '';
-    if (scrollTop >= 640) {
-      className = 'list-inline stick';
-    } else {
-      className = 'list-inline';
-    }
-    patientListContainer.className = className;
+    this.setState({
+      stick: scrollTop >= 640,
+    });
   }
 
   showModal(category, patient) {
@@ -98,12 +94,7 @@ class PatientBoard extends React.Component {
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': this.state.openPatientModal })}>
           <nav className="nav-status">
-            <ul
-              className="list-inline"
-              ref={(patientListContainer) => {
-                this.patientListContainer = patientListContainer;
-              }}
-            >
+            <ul className={classNames('list-inline', { stick: this.state.stick })}>
               {patientCategories.map(patientCategory => (
                 <PatientCategory key={patientCategory.id} category={patientCategory} currentUser={currentUser} currentPatientId={currentPatientId} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} />
               ))}
