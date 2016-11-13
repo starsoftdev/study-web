@@ -3,6 +3,9 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { orderBy } from 'lodash';
+import moment from 'moment';
+import classnames from 'classnames';
 
 import {
   selectCurrentUser,
@@ -16,6 +19,21 @@ import {
 
 import NotificationItem from './Item';
 
+const sanitize = (notifications) => notifications.map(n => {
+  const { event_log } = n;
+  const description = event_log.eventMessage.replace(/<strong>/g, '').replace(/<\/strong>/g, '');
+
+  const date = moment(event_log.created).format('MM/DD/YY');
+  const time = moment(event_log.created).format('hh:mm A');
+
+  return {
+    ...n,
+    description,
+    date,
+    time,
+  };
+});
+
 export class NotificationsPage extends React.Component {
   static propTypes = {
     currentUser: PropTypes.any,
@@ -23,11 +41,57 @@ export class NotificationsPage extends React.Component {
     fetchNotifications: PropTypes.func,
   }
 
+  constructor(props) {
+    super(props);
+
+    const initialNotifications = sanitize(props.notifications);
+    this.state = {
+      notifications: initialNotifications,
+      sortDescription: 0,     // 0: none, 1: asc, 2: desc
+      sortDate: 0,
+      sortTime: 0,
+    };
+  }
+
   componentDidMount() {
     this.props.fetchNotifications(this.props.currentUser.id);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.notifications !== nextProps.notifications) {
+      this.setState({
+        notifications: sanitize(nextProps.notifications),
+      });
+    }
+  }
+
+  sortBy = (field) => {
+    let { notifications } = this.state;
+    let sortField;
+    if (field === 'description') {
+      sortField = 'sortDescription';
+    } else if (field === 'date') {
+      sortField = 'sortDate';
+    } else {
+      sortField = 'sortTime';
+    }
+
+    const sortVal = (this.state[sortField] + 1) % 3;
+    if (sortVal === 0) {
+      notifications = orderBy(notifications, ['event_log_id'], ['asc']);
+    } else if (sortVal !== 0) {
+      notifications = orderBy(notifications, [field], [sortVal === 1 ? 'asc' : 'desc']);
+    }
+
+    this.setState({
+      notifications,
+      [sortField]: sortVal,
+    });
+  }
+
   render() {
+    const { sortDescription, sortDate, sortTime } = this.state;
+
     return (
       <div className="container-fluid">
         <section className="rewards">
@@ -45,14 +109,14 @@ export class NotificationsPage extends React.Component {
               </colgroup>
               <thead>
                 <tr>
-                  <th>DESCRIPTION <i className="caret-arrow"></i></th>
-                  <th>DATE <i className="caret-arrow"></i></th>
-                  <th>TIME <i className="caret-arrow"></i></th>
+                  <th className={classnames({ up: sortDescription === 1, down: sortDescription === 2 })} onClick={() => { this.sortBy('description'); }}>DESCRIPTION <i className="caret-arrow"></i></th>
+                  <th className={classnames({ up: sortDate === 1, down: sortDate === 2 })} onClick={() => { this.sortBy('date'); }}>DATE <i className="caret-arrow"></i></th>
+                  <th className={classnames({ up: sortTime === 1, down: sortTime === 2 })} onClick={() => { this.sortBy('time'); }}>TIME <i className="caret-arrow"></i></th>
                 </tr>
               </thead>
               <tbody>
                 {
-                  this.props.notifications.map(n => <NotificationItem eventLog={n.event_log} />)
+                  this.state.notifications.map((n, i) => <NotificationItem key={i} notification={n} />)
                 }
               </tbody>
             </table>
