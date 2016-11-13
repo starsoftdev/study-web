@@ -14,10 +14,8 @@ function RadioButton({ input, className, children, onChange }) {
         <span
           onClick={() => {
             input.onChange(!input.checked);
-            console.log('in')
             if (onChange) {
               onChange(!input.checked);
-
             }
           }}
         />

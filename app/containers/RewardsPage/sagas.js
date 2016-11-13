@@ -7,7 +7,7 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
 import { get } from 'lodash';
-
+import moment from 'moment';
 import request from 'utils/request';
 
 import {
@@ -47,12 +47,22 @@ export function* submitFormWatcher() {
   while (true) {
     // listen for the SUBMIT_FORM action dispatched on form submit
     const { payload } = yield take(SUBMIT_FORM);
+    console.log('dxxxxxxxx');
+    console.log(payload);
+
+    const reLoad = {
+      rewardData: "string",
+      points: payload.points,
+      created: moment(),
+      entity_id: 4,
+      client_id: 4
+    };
 
     try {
-      const requestURL = `${API_URL}/sites`;
+      const requestURL = `${API_URL}/rewards`;
       const params = {
         method: 'POST',
-        body: JSON.stringify(payload),
+        body: JSON.stringify(reLoad),
       };
       const response = yield call(request, requestURL, params);
 

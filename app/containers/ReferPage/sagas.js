@@ -51,7 +51,7 @@ export function* submitFormWatcher() {
 
     try {
       const requestURL = `${API_URL}/referral`;
-      const params = {
+      const params = {  
         method: 'POST',
         body: JSON.stringify(payload),
       };
