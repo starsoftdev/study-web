@@ -26,6 +26,10 @@ export const FETCH_COUPON_ERROR          = 'App/FETCH_COUPON_ERROR';
 
 export const CLEAR_COUPON                = 'App/CLEAR_COUPON';
 
+export const FETCH_REWARDS                 = 'App/FETCH_REWARDS';
+export const FETCH_REWARDS_SUCCESS         = 'App/FETCH_REWARDS_SUCCESS';
+export const FETCH_REWARDS_ERROR           = 'App/FETCH_REWARDS_ERROR';
+
 export const FETCH_CARDS                 = 'App/FETCH_CARDS';
 export const FETCH_CARDS_SUCCESS         = 'App/FETCH_CARDS_SUCCESS';
 export const FETCH_CARDS_ERROR           = 'App/FETCH_CARDS_ERROR';

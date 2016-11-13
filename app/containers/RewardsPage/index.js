@@ -15,7 +15,6 @@ import {
 import {
   selectSiteLocations,
 } from 'containers/App/selectors';
-
 import { submitForm } from 'containers/RewardsPage/actions';
 import RewardModal from 'components/RewardModal';
 import RewardForm from 'components/RewardForm';
@@ -42,6 +41,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
     this.openRewardModal = this.openRewardModal.bind(this);
     this.closeRewardModal = this.closeRewardModal.bind(this);
+    this.onSubmitForm = this.props.onSubmitForm.bind(this);
   }
 
   componentDidMount() {
@@ -49,7 +49,6 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
   }
 
   openRewardModal() {
-    console.log('test');
     this.setState({ rewardModalOpen: true });
   }
 
@@ -75,7 +74,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
           <header className="sub-header clearfix">
             <h3 className="pull-left">Wayne Enterprise Has <strong>450 KIKs</strong></h3>
             <a className="btn bgn-chat lightbox-opener pull-right" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal}></a>
-            <RewardModal siteLocations={siteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} />
+            <RewardModal siteLocations={siteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} onSubmit={this.onSubmitForm} />
           </header>
 
           <div className="row images-area">
