@@ -828,6 +828,46 @@
   }
 }
 
+.caret-arrow {
+	.font(0,0);
+	margin: 0 0 0 2px;
+	.align(@align: middle);
+
+	&:before {
+		.arrow(0 4px);
+		margin: -3px 0 0;
+		border-bottom-color: #354052;
+		transition: border 0.25s ease;
+	}
+}
+
+.list-head .col,
+th {
+	cursor: pointer;
+
+	&:hover {
+		color: #999;
+	}
+
+	&.up {
+		.caret-arrow:before { border-width: 0 4px 4px; }
+
+	}
+
+	&.down {
+		.caret-arrow:before {
+			border-width: 4px 4px 0;
+			border-color: #354052 transparent transparent;
+		}
+	}
+
+	&.none {
+		.caret-arrow:before {
+			border-width: 0 4px;
+		}
+	}
+}
+
 .small-block {
 	@media screen and (max-width: @psd) {
 		display: block;
