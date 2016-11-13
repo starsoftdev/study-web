@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react';
-import moment from 'moment';
 
-const NotificationItem = ({ eventLog }) => {
-  const { created, eventMessage } = eventLog;
+const NotificationItem = ({ notification }) => {
+  const { event_log, date, time } = notification;
 
   return (
     <tr className="">
@@ -13,19 +12,19 @@ const NotificationItem = ({ eventLog }) => {
           </div>
           <div className="desc">
             <p>
-              <span dangerouslySetInnerHTML={{ __html: eventMessage }} />
+              <span dangerouslySetInnerHTML={{ __html: event_log.eventMessage }} />
             </p>
           </div>
         </div>
       </td>
-      <td>{moment(created).format('MM/DD/YY')}</td>
-      <td>{moment(created).format('hh:mm A')}</td>
+      <td>{date}</td>
+      <td>{time}</td>
     </tr>
   );
 };
 
 NotificationItem.propTypes = {
-  eventLog: PropTypes.object,
+  notification: PropTypes.object,
 };
 
 export default NotificationItem;
