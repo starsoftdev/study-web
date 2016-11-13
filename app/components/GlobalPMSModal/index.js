@@ -64,11 +64,12 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     this.state = {
       selectedPatient: { id: 0 },
       patientLoaded: true,
+      socketBinded: false,
     };
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.socket) {
+    if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
         console.log('notifyMessage');
         console.log('newMessage', newMessage);
@@ -77,8 +78,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         }
         if (this.state.selectedPatient && this.state.selectedPatient.study_id) {
           this.props.fetchPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
+          this.props.markAsReadPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
         }
       });
+      this.setState({ socketBinded: true });
     }
     if (newProps.showModal === true && newProps.sitePatients.details.length > 0 && this.state.patientLoaded === true) {
       let selectedPatient = { id: 0 };
