@@ -10,14 +10,19 @@ import { createStructuredSelector } from 'reselect';
 
 import {
   fetchSites,
+  fetchRewards,
 } from 'containers/App/actions';
 
 import {
   selectSiteLocations,
+  selectRewards,
 } from 'containers/App/selectors';
+
 import { submitForm } from 'containers/RewardsPage/actions';
 import RewardModal from 'components/RewardModal';
 import RewardForm from 'components/RewardForm';
+import RewardsList from './RewardsList';
+
 import cardStudykik from 'assets/images/img6.png';
 import cardAmazon from 'assets/images/img7.png';
 import cardStarbucks from 'assets/images/img8.png';
@@ -28,7 +33,9 @@ import gold from 'assets/images/gold.svg';
 export class RewardsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
+    rewards: PropTypes.array,
     fetchSites: PropTypes.func,
+    fetchRewards: PropTypes.func,
     onSubmitForm: PropTypes.func,
   }
 
@@ -46,6 +53,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
   componentDidMount() {
     this.props.fetchSites();
+    this.props.fetchRewards();
   }
 
   openRewardModal() {
@@ -57,7 +65,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
   }
 
   render() {
-    const { siteLocations } = this.props;
+    const { siteLocations, rewards } = this.props;
     return (
       <div className="container-fluid">
 
@@ -114,9 +122,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
             </aside>
 
             <div className="detail">
-
               <div className="infoarea row">
-
                 <div className="col-sm-4">
                   <div>
                     <div className="box">
@@ -201,78 +207,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
           </div>
 
           <section className="table-holder">
-            <header>
-              <h2>REWARDS HISTORY</h2>
-            </header>
-            <table className="table">
-              <colgroup>
-                <col style={{ width: '48%' }} />
-                <col style={{ width: '13.2%' }} />
-                <col style={{ width: '14.5%' }} />
-                <col style={{ width: '14.2%' }} />
-                <col style={{ width: 'auto' }} />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>DESCRIPTION <i className="caret-arrow"></i></th>
-                  <th>DATE <i className="caret-arrow"></i></th>
-                  <th>TIME <i className="caret-arrow"></i></th>
-                  <th>AMOUNT <i className="caret-arrow"></i></th>
-                  <th>BALANCE <i className="caret-arrow"></i></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <div className="info clearfix">
-                      <div className="img-holder">
-                        <img src="images/patient1.jpg" alt="" />
-                      </div>
-                      <div className="desc">
-                        <p><strong>Alan Walker</strong> Earned 150 KIKs<br /> Fill Out Enrollment Data: Acne Study (Platinum Listing)</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>05/15/16</td>
-                  <td>12:30 PM</td>
-                  <td>+150 </td>
-                  <td>225</td>
-                </tr>
-                <tr>
-                  <td>
-                    <div className="info clearfix">
-                      <div className="img-holder">
-                        <img src="images/patient2.jpg" alt="" />
-                      </div>
-                      <div className="desc">
-                        <p><strong>Kety Perry</strong> Redeemed Amazon Gift Card for 225 KIKs</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>05/15/16</td>
-                  <td>10:48 PM</td>
-                  <td>-225 </td>
-                  <td>75</td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <div className="info clearfix">
-                      <div className="img-holder">
-                        <img src="images/patient3.jpg" alt="" />
-                      </div>
-                      <div className="desc">
-                        <p><strong>Alan Walker</strong> Earned 150 KIKs<br /> Fill Out Enrollment Data: Acne Study (Platinum Listing)</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>05/15/16</td>
-                  <td>02:14 PM</td>
-                  <td>+300</td>
-                  <td>30</td>
-                </tr>
-              </tbody>
-            </table>
+            <RewardsList rewards={ this.props.rewards } />
           </section>
 
         </section>
@@ -284,11 +219,13 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
 const mapStateToProps = createStructuredSelector({
   siteLocations : selectSiteLocations(),
+  rewards: selectRewards(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchSites: () => dispatch(fetchSites()),
+    fetchRewards: () => dispatch(fetchRewards()),
     onSubmitForm: (values) => dispatch(submitForm(values)),
   };
 }

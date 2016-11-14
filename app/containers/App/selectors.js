@@ -44,6 +44,8 @@ const selectSiteLocations = () => createSelector(
   selectGlobal(),
   (substate) => {
     const sites = get(substate, 'baseData.sites', []);
+    console.log('********site');
+    console.log(sites);
     return map(sites, e => pick(e, ['id', 'name']));
   }
 );
@@ -86,7 +88,7 @@ const selectCoupon = () => createSelector(
 
 const selectRewards = () => createSelector(
   selectGlobal(),
-  (substate) => get(substate, 'baseData.rewards', {})
+  (substate) => get(substate, 'baseData.rewards', [])
 );
 
 const selectCards = () => createSelector(
