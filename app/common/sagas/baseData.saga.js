@@ -199,7 +199,6 @@ export function* fetchCouponWatcher() {
 export function* fetchRewardsWatcher() {
   while (true) {
     const { customerId } = yield take(FETCH_REWARDS);
-
     try {
       const requestURL = `${API_URL}/rewards`;
       const response = yield call(request, requestURL);
