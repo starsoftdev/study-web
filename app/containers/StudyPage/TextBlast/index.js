@@ -82,7 +82,7 @@ class TextBlastModal extends React.Component {
       if (checked) {
         findPatients(studyId, null, null, sourceIds);
       } else {
-        removePatients()
+        removePatients();
       }
     } else {
       // change the all option to unchecked
@@ -99,7 +99,7 @@ class TextBlastModal extends React.Component {
       if (categoryIds.length || sourceIds.length) {
         findPatients(studyId, null, categoryIds, sourceIds);
       } else {
-        removePatients()
+        removePatients();
       }
     }
   }
@@ -123,7 +123,7 @@ class TextBlastModal extends React.Component {
       if (checked) {
         findPatients(studyId, null, categoryIds, null);
       } else {
-        removePatients()
+        removePatients();
       }
     } else {
       // change the all option to unchecked
@@ -140,7 +140,7 @@ class TextBlastModal extends React.Component {
       if (sourceIds.length || categoryIds.length) {
         findPatients(studyId, null, categoryIds, sourceIds);
       } else {
-        removePatients()
+        removePatients();
       }
     }
   }
