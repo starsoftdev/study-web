@@ -10,3 +10,6 @@ stats.json
 npm-debug.log
 npm-debug.log.*
 .idea
+
+dist/
+ture/
