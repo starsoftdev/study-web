@@ -47,9 +47,9 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
   }
 
   sendMessage(message) {
-    const { selectedPatient, sendStudyPatientMessages, reset } = this.props;
+    const { selectedPatient, sendStudyPatientMessages, currentUser, reset } = this.props;
     const options = {
-      userId: this.props.currentUser.id,
+      currentUserId: currentUser.id,
       body: message.body,
       studyId: selectedPatient.study_id,
       patientId: selectedPatient.id,
