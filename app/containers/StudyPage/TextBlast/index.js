@@ -79,7 +79,7 @@ class TextBlastModal extends React.Component {
       for (const category of patientCategories) {
         change(`category-${category.id}`, checked);
       }
-      if (checked) {
+      if (checked || sourceIds.length) {
         findPatients(studyId, null, null, sourceIds);
       } else {
         removePatients();
@@ -120,7 +120,7 @@ class TextBlastModal extends React.Component {
       for (const source of sources) {
         change(`source-${source.id}`, checked);
       }
-      if (checked) {
+      if (checked || categoryIds.length) {
         findPatients(studyId, null, categoryIds, null);
       } else {
         removePatients();
