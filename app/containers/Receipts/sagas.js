@@ -31,6 +31,7 @@ export function* receiptSaga() {
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
+  yield put(receiptsReceived([], true, 1));
   yield cancel(watcherA);
   yield cancel(watcherC);
 }
