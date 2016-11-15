@@ -9,6 +9,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     index: PropTypes.number,
     studyId: PropTypes.number,
     indication: PropTypes.object,
+    campaign: PropTypes.object,
     location: PropTypes.string,
     sponsor: PropTypes.string,
     protocol: PropTypes.string,

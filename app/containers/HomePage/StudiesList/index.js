@@ -151,14 +151,14 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       ...renewStudyFormValues,
       stripeCustomerId: currentUserStripeCustomerId,
       studyId: this.state.selectedStudyId,
-      selectedIndicationId: this.state.selectedIndicationId
+      selectedIndicationId: this.state.selectedIndicationId,
     });
 
     renewStudy(cartParams, {
       ...renewStudyFormValues,
       stripeCustomerId: currentUserStripeCustomerId,
       studyId: this.state.selectedStudyId,
-      selectedIndicationId: this.state.selectedIndicationId
+      selectedIndicationId: this.state.selectedIndicationId,
     });
   }
 
