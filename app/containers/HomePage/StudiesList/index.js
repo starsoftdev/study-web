@@ -105,11 +105,12 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     });
   }
 
-  openUpgradeModal(studyId, indicationId) {
+  openUpgradeModal(studyId, indicationId, campaign) {
     this.setState({
       upgradeModalOpen: true,
       selectedStudyId: studyId,
       selectedIndicationId: indicationId,
+      campaign,
     });
   }
 
@@ -146,14 +147,31 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
   handleRenewStudyFormSubmit(cartParams) {
     const { currentUserStripeCustomerId, renewStudyFormValues, renewStudy } = this.props;
+    console.log(cartParams, {
+      ...renewStudyFormValues,
+      stripeCustomerId: currentUserStripeCustomerId,
+      studyId: this.state.selectedStudyId,
+      selectedIndicationId: this.state.selectedIndicationId
+    });
 
-    renewStudy(cartParams, { ...renewStudyFormValues, stripeCustomerId: currentUserStripeCustomerId, studyId: this.state.selectedStudyId });
+    renewStudy(cartParams, {
+      ...renewStudyFormValues,
+      stripeCustomerId: currentUserStripeCustomerId,
+      studyId: this.state.selectedStudyId,
+      selectedIndicationId: this.state.selectedIndicationId
+    });
   }
 
   handleUpgradeStudyFormSubmit(cartParams) {
     const { currentUserStripeCustomerId, upgradeStudyFormValues, upgradeStudy } = this.props;
 
-    upgradeStudy(cartParams, { ...upgradeStudyFormValues, stripeCustomerId: currentUserStripeCustomerId, studyId: this.state.selectedStudyId });
+    upgradeStudy(cartParams, {
+      ...upgradeStudyFormValues,
+      stripeCustomerId: currentUserStripeCustomerId,
+      studyId: this.state.selectedStudyId,
+      selectedIndicationId: this.state.selectedIndicationId,
+      campaignId: this.state.campaign.id,
+    });
   }
 
   generateRenewStudyShoppingCartAddOns() {

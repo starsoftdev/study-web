@@ -144,21 +144,13 @@ export function* renewStudyWatcher() {
 export function* renewStudyWorker(action) {
   try {
     const { cartValues, formValues } = action;
-    const requestURL = `${API_URL}/studies/${formValues.studyId}`;
-
-    const data = new FormData();
-    forEach(formValues, (value, index) => {
-      if (index === 'studyId') {
-        return true;
-      }
-      return data.append(index, value);
-    });
-    data.append('cartValues', JSON.stringify(cartValues));
-
+    const requestURL = `${API_URL}/studies/${formValues.studyId}/renewStudy`;
     const params = {
-      method: 'PUT',
-      body: data,
-      useDefaultContentType: true,
+      method: 'POST',
+      body: JSON.stringify({
+        formValues,
+        cartValues,
+      }),
     };
     const response = yield call(request, requestURL, params);
 
@@ -179,21 +171,13 @@ export function* upgradeStudyWatcher() {
 export function* upgradeStudyWorker(action) {
   try {
     const { cartValues, formValues } = action;
-    const requestURL = `${API_URL}/studies/${formValues.studyId}/upgrade`;
-
-    const data = new FormData();
-    forEach(formValues, (value, index) => {
-      if (index === 'studyId') {
-        return true;
-      }
-      return data.append(index, value);
-    });
-    data.append('cartValues', JSON.stringify(cartValues));
-
+    const requestURL = `${API_URL}/studies/${formValues.studyId}/upgradeStudy`;
     const params = {
       method: 'POST',
-      body: data,
-      useDefaultContentType: true,
+      body: JSON.stringify({
+        formValues,
+        cartValues,
+      }),
     };
     const response = yield call(request, requestURL, params);
 

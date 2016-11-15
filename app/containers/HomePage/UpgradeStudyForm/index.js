@@ -9,7 +9,7 @@ import Toggle from 'components/Input/Toggle';
 import { selectStudyLevels, selectAvailPhoneNumbers } from 'containers/App/selectors';
 import { selectSelectedIndicationLevelPrice } from 'containers/HomePage/selectors';
 import { selectUpgradeStudyFormCallTrackingValue, selectUpgradeStudyFormLeadsCount } from './selectors';
-import RenderLeads from 'components/RenderLeads';
+import RenderLeads from './renderLeads';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 import './styles.less';
@@ -48,9 +48,9 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
       <form className="form-upgrade-study">
         <div className="upgrade-study">
           <div className="row form-group">
-            <strong className="required col-sm-5">
+            <span className="required col-sm-5">
               <label>UPGRADE LEVEL</label>
-            </strong>
+            </span>
             <div className="field col-sm-6">
               <Field
                 name="level"
@@ -71,9 +71,9 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
             </div>
           </div>
           <div className="row form-group">
-            <strong className="col-sm-5">
+            <span className="col-sm-5">
               <label>PATIENT MESSAGING SUITE: $247</label>
-            </strong>
+            </span>
             <div className="field col-sm-7">
               <Field
                 name="patientMessagingSuite"
@@ -82,9 +82,9 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
             </div>
           </div>
           <div className="row form-group">
-            <strong className="col-sm-5">
+            <span className="col-sm-5">
               <label>CALL TRACKING: $247</label>
-            </strong>
+            </span>
             <div className="field col-sm-7">
               <Field
                 name="callTracking"
@@ -96,9 +96,9 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
             <FieldArray name="leads" component={RenderLeads} availPhoneNumbers={availPhoneNumbers} />
           }
           <div className="row form-group">
-            <strong className="col-sm-5">
+            <span className="col-sm-5">
               <label>NOTES</label>
-            </strong>
+            </span>
             <div className="field col-sm-7">
               <Field
                 name="notes"
