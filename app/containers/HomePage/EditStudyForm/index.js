@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, FieldArray, reduxForm } from 'redux-form';
+import { Field, FieldArray, change, reduxForm } from 'redux-form';
 
 import Input from 'components/Input';
 import { selectCurrentUserClientId } from 'containers/App/selectors';
@@ -29,8 +29,13 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     formValues: PropTypes.object,
     hasError: PropTypes.bool,
     editedStudy: PropTypes.object,
+    siteUsers: PropTypes.array,
     handleSubmit: PropTypes.func,
   };
+
+  componentWillMount() {
+    this.props.dispatch(change('editStudy', 'emailNotifications', this.props.siteUsers));
+  }
 
   render() {
     const { formValues, hasError, editedStudy, handleSubmit } = this.props;
@@ -70,11 +75,13 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
               <label>STUDY AD</label>
             </strong>
             <div className="field col-sm-7">
+              <label htmlFor="study-ad" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn"></label>
               <Field
-                id="study_file"
+                id="study-ad"
                 name="studyAd"
                 component={Input}
                 type="file"
+                className="hidden"
               />
             </div>
           </div>

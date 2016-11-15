@@ -124,10 +124,11 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     });
   }
 
-  openEditModal(studyId) {
+  openEditModal(studyId, siteUsers) {
     this.setState({
       editModalOpen: true,
       selectedStudyId: studyId,
+      selectedSiteUsers: siteUsers,
     });
   }
 
@@ -151,6 +152,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.setState({
       editModalOpen: false,
       selectedStudyId: null,
+      selectedSiteUsers: null,
     });
   }
 
@@ -365,7 +367,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                 <Modal.Body>
                   <div className="row">
                     <div className="col-sm-12">
-                      <EditStudyForm onSubmit={this.handleEditStudyFormSubmit} />
+                      <EditStudyForm siteUsers={this.state.selectedSiteUsers} onSubmit={this.handleEditStudyFormSubmit} />
                     </div>
                   </div>
                 </Modal.Body>

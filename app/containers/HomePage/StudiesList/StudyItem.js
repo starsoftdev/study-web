@@ -14,6 +14,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     protocol: PropTypes.string,
     patientMessagingSuite: PropTypes.string,
     status: PropTypes.string,
+    siteUsers: PropTypes.array,
     startDate: PropTypes.string,
     endDate: PropTypes.string,
     onRenew: PropTypes.func,
@@ -55,7 +56,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   onEditClick() {
-    this.props.onEdit(this.props.studyId);
+    this.props.onEdit(this.props.studyId, this.props.siteUsers);
   }
 
   showButtons() {

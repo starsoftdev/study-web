@@ -146,6 +146,7 @@ export default function homePageReducer(state = initialState, action) {
           protocol: studyIterator.protocolNumber,
           patientMessagingSuite: (studyIterator.patientMessagingSuite) ? 'On' : 'Off',
           status: studyIterator.status,
+          siteUsers: null,
           startDate: '',
           endDate: '',
         };
@@ -169,6 +170,7 @@ export default function homePageReducer(state = initialState, action) {
             ...entity,
             location: siteIterator.location,
             status: siteIterator.status,
+            siteUsers: siteIterator.users,
             startDate: startDateStr,
             endDate: endDateStr,
           };
