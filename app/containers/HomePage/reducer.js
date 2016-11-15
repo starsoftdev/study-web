@@ -18,6 +18,9 @@ import {
   UPGRADE_STUDY,
   UPGRADE_STUDY_SUCCESS,
   UPGRADE_STUDY_ERROR,
+  EDIT_STUDY,
+  EDIT_STUDY_SUCCESS,
+  EDIT_STUDY_ERROR,
 } from './constants';
 
 import {
@@ -50,6 +53,11 @@ const initialState = {
     error: null,
   },
   upgradedStudy: {
+    details: null,
+    submitting: false,
+    error: null,
+  },
+  editedStudy: {
     details: null,
     submitting: false,
     error: null,
@@ -270,6 +278,33 @@ export default function homePageReducer(state = initialState, action) {
       return {
         ...state,
         upgradedStudy: {
+          details: null,
+          submitting: false,
+          error: payload,
+        },
+      };
+    case EDIT_STUDY:
+      return {
+        ...state,
+        editedStudy: {
+          details: null,
+          submitting: true,
+          error: null,
+        },
+      };
+    case EDIT_STUDY_SUCCESS:
+      return {
+        ...state,
+        editedStudy: {
+          details: payload,
+          submitting: false,
+          error: null,
+        },
+      };
+    case EDIT_STUDY_ERROR:
+      return {
+        ...state,
+        editedStudy: {
           details: null,
           submitting: false,
           error: payload,
