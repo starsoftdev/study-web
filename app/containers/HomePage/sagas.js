@@ -17,6 +17,7 @@ import {
   FETCH_INDICATION_LEVEL_PRICE,
   RENEW_STUDY,
   UPGRADE_STUDY,
+  EDIT_STUDY,
 } from './constants';
 
 import {
@@ -31,6 +32,8 @@ import {
   studyRenewingError,
   studyUpgraded,
   studyUpgradingError,
+  studyEdited,
+  studyEditingError,
 } from './actions';
 
 // Bootstrap sagas
@@ -143,20 +146,17 @@ export function* renewStudyWatcher() {
 
 export function* renewStudyWorker(action) {
   try {
-    const { cartValues, formValues } = action;
-    const requestURL = `${API_URL}/studies/${formValues.studyId}`;
+    const { studyId, cartValues, formValues } = action;
+    const requestURL = `${API_URL}/studies/${studyId}/renew`;
 
     const data = new FormData();
     forEach(formValues, (value, index) => {
-      if (index === 'studyId') {
-        return true;
-      }
-      return data.append(index, value);
+      data.append(index, value);
     });
     data.append('cartValues', JSON.stringify(cartValues));
 
     const params = {
-      method: 'PUT',
+      method: 'POST',
       body: data,
       useDefaultContentType: true,
     };
@@ -178,15 +178,12 @@ export function* upgradeStudyWatcher() {
 
 export function* upgradeStudyWorker(action) {
   try {
-    const { cartValues, formValues } = action;
-    const requestURL = `${API_URL}/studies/${formValues.studyId}/upgrade`;
+    const { studyId, cartValues, formValues } = action;
+    const requestURL = `${API_URL}/studies/${studyId}/upgrade`;
 
     const data = new FormData();
     forEach(formValues, (value, index) => {
-      if (index === 'studyId') {
-        return true;
-      }
-      return data.append(index, value);
+      data.append(index, value);
     });
     data.append('cartValues', JSON.stringify(cartValues));
 
@@ -207,6 +204,37 @@ export function* upgradeStudyWorker(action) {
   }
 }
 
+export function* editStudyWatcher() {
+  yield* takeLatest(EDIT_STUDY, editStudyWorker);
+}
+
+export function* editStudyWorker(action) {
+  try {
+    const { studyId, formValues } = action;
+    const requestURL = `${API_URL}/studies/${studyId}`;
+
+    const data = new FormData();
+    forEach(formValues, (value, index) => {
+      data.append(index, value);
+    });
+
+    const params = {
+      method: 'PUT',
+      body: data,
+      useDefaultContentType: true,
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(toastrActions.success('Edit Study', 'The request has been submitted successfully'));
+    yield put(studyEdited(response));
+    yield put(reset('editStudy'));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(studyEditingError(err));
+  }
+}
+
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   const watcherB = yield fork(fetchPatientMessagesWatcher);
@@ -215,6 +243,7 @@ export function* homePageSaga() {
   const watcherE = yield fork(fetchIndicationLevelPriceWatcher);
   const watcherF = yield fork(renewStudyWatcher);
   const watcherG = yield fork(upgradeStudyWatcher);
+  const watcherH = yield fork(editStudyWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -226,4 +255,5 @@ export function* homePageSaga() {
   yield cancel(watcherE);
   yield cancel(watcherF);
   yield cancel(watcherG);
+  yield cancel(watcherH);
 }
