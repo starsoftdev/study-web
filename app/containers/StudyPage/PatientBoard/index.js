@@ -70,7 +70,7 @@ class PatientBoard extends React.Component {
   handleScroll(event) {
     const scrollTop = event.srcElement.body.scrollTop;
     this.setState({
-      stick: scrollTop >= 640,
+      stick: scrollTop >= 655,
     });
   }
 
