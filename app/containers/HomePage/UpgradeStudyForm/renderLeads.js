@@ -19,10 +19,15 @@ const RenderLeads = ({ fields, availPhoneNumbers }) => (
   <div className="leads-list row form-group">
     {fields.map((lead, index) =>
       <div className="lead-item" key={index}>
-        <button className="link-delete" onClick={(ev) => {
-          ev.preventDefault();
-          fields.remove(index);
-        }}>
+        <button
+          className="link-delete"
+          onClick={
+            (ev) => {
+              ev.preventDefault();
+              fields.remove(index);
+            }
+          }
+        >
           <i className="icomoon-icon_trash" />
         </button>
         <div className="field-row">

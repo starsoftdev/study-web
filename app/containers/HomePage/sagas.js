@@ -5,7 +5,7 @@ import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
-import { get, forEach } from 'lodash';
+import { get } from 'lodash';
 
 import request from 'utils/request';
 import composeQueryString from 'utils/composeQueryString';
