@@ -51,11 +51,11 @@ export function* submitFormWatcher() {
     console.log(payload);
 
     const reLoad = {
-      rewardData: "string",
+      rewardData: 'string',
       points: payload.points,
       created: moment(),
       entity_id: 4,
-      client_id: 4
+      client_id: 4,
     };
 
     try {
