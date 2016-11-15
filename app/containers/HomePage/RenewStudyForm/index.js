@@ -50,9 +50,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       <form className="form-renew-study">
         <div className="renew-study">
           <div className="row form-group">
-            <strong className="required col-sm-5">
+            <span className="required col-sm-5">
               <label>EXPOSURE LEVEL</label>
-            </strong>
+            </span>
             <div className="field col-sm-6">
               <Field
                 name="exposureLevel"
@@ -73,9 +73,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
             </div>
           </div>
           <div className="row form-group">
-            <strong className="required col-sm-5">
+            <span className="required col-sm-5">
               <label>CAMPAIGN LENGTH</label>
-            </strong>
+            </span>
             <div className="field col-sm-7">
               <Field
                 name="campaignLength"
@@ -88,9 +88,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
           {campaignLength === 1 &&
             (
             <div className="row form-group">
-              <strong className="col-sm-5">
+              <span className="col-sm-5">
                 <label>CONDENSE TO 2 WEEKS</label>
-              </strong>
+              </span>
               <div className="field col-sm-7">
                 <Field
                   name="condenseToTwoWeeks"
@@ -101,9 +101,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
             )
           }
           <div className="row form-group">
-            <strong className="col-sm-5">
+            <span className="col-sm-5">
               <label>PATIENT MESSAGING SUITE: $247</label>
-            </strong>
+            </span>
             <div className="field col-sm-7">
               <Field
                 name="patientMessagingSuite"
@@ -112,9 +112,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
             </div>
           </div>
           <div className="row form-group">
-            <strong className="col-sm-5">
+            <span className="col-sm-5">
               <label>CALL TRACKING: $247</label>
-            </strong>
+            </span>
             <div className="field col-sm-7">
               <Field
                 name="callTracking"
@@ -123,9 +123,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
             </div>
           </div>
           <div className="row form-group">
-            <strong className="required col-sm-5">
+            <span className="required col-sm-5">
               <label>START DATE</label>
-            </strong>
+            </span>
             <div className="field col-sm-7">
               <Field
                 name="startDate"
@@ -136,9 +136,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
             </div>
           </div>
           <div className="row form-group">
-            <strong className="col-sm-5">
+            <span className="col-sm-5">
               <label>NOTES</label>
-            </strong>
+            </span>
             <div className="field col-sm-7">
               <Field
                 name="notes"
