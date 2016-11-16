@@ -27,10 +27,10 @@
 	.btn-primary {
 		color: #00afef;
 		font-weight: 600;
-		padding: 6px 12px;
+		padding: 5px 12px;
 		background: #fff;
 		.font(18px, 24px);
-		border-width: 2px;
+		border-width: 1px;
 		border-radius: 2px;
 		border-color: #00afef;
 		text-transform: uppercase;
@@ -577,7 +577,7 @@
 /* table-holder */
 .table-holder {
   background: #fff;
-  border: #f78e1e solid 2px;
+  border: #f78e1e solid 1px;
   header {
     .clearfix;
     color: #fff;
@@ -680,6 +680,7 @@
 
 .table {
   margin: 0;
+  background-color: #fff;
   .font(18px);
   color: #354052;
   .info {
@@ -731,7 +732,7 @@
 			font-weight: 700;
 			vertical-align: middle;
 			text-transform: uppercase;
-			padding: 16px 5px 16px 13px;
+			padding: 16px 13px;
 			transition: all 0.25s ease;
 
 			&:hover {
@@ -752,24 +753,23 @@
     &:hover {
       > td {
         background: #f1f1f1;
+        span {
+          font-weight: 700;
+        }
       }
     }
     > td {
       border-color: #fff;
       vertical-align: middle;
-      padding: 26px 5px 26px 13px;
+      padding: 20px 13px;
     }
   }
   > thead > tr,
   > tbody > tr {
     > th, > td {
-      &:nth-child(1) {
-        padding-left: 16px;
-      }
       &:last-child {
-        padding-left: 0;
-        padding-right: 0;
         vertical-align: middle;
+        padding: 15px 13px;
       }
     }
     .inactive {
