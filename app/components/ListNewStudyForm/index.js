@@ -127,9 +127,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
                 <div className="field-row label-top">
                   <strong className="label"><label>EMAIL NOTIFICATIONS</label></strong>
                   <div className="field">
-
                     <div className="emails-list-holder">
-
                       <FieldArray
                         name="emailNotifications"
                         component={RenderEmailsList}
@@ -137,7 +135,6 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
                         listNewStudyState={this.props.listNewStudyState}
                         dispatch={this.props.dispatch}
                       />
-
                     </div>
 
                   </div>
@@ -171,7 +168,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           <div className="field-row">
             <strong className="label"><label htmlFor="clinicaltrialGovLink">UPLOAD STUDY AD</label></strong>
             <div className="field">
-              <label htmlFor="study_file" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn"></label>
+              <label htmlFor="study_file" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn" />
               <Field
                 id="study_file"
                 name="file"
@@ -327,7 +324,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           <Modal.Header>
             <Modal.Title>ADD CREDITS</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddSiteModal}>
-              <i className="icomoon-icon_close"></i>
+              <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>

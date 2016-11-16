@@ -114,7 +114,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
   }
 
   render() {
-    console.log(this.props);
     const { siteLocations, indications, studyLevels, formValues, fullSiteLocations, hasErrors, indicationLevelPrice } = this.props;
 
     const addOns = [];
