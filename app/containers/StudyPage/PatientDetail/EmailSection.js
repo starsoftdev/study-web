@@ -17,7 +17,9 @@ class EmailSection extends React.Component {
     const { active } = this.props;
     return (
       <div className={classNames('item emails-info', { active })}>
-        Coming soon
+        <section className="postarea email">
+          Coming soon
+        </section>
       </div>
     );
   }
