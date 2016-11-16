@@ -3222,7 +3222,7 @@ th {
     white-space: nowrap;
     background: #f78e1e;
     text-transform: uppercase;
-    padding: 16px 5px 16px 42px;
+    padding: 5px 12px 5px 12px;
     &:before {
       content: '';
       .size(1px, 28px);
@@ -3233,18 +3233,20 @@ th {
       background: #ffc689;
     }
     .text {
+      margin-left: 5px;
       white-space: normal;
       .align(@align: middle);
     }
     .number {
-      top: 17px;
-      left: 9px;
-      .size(26px);
+      height: 26px;
+      min-width: 26px;
+      padding-left: 2px;
+      padding-right: 2px;
       color: #00afef;
       background: #fff;
       .font(18px, 24px);
-      position: absolute;
       text-align: center;
+      .align(@align: middle);
       border: solid 1px #fff;
     }
   }
@@ -3382,7 +3384,6 @@ th {
   @media screen and (max-width: 1650px) {
     .opener {
       .font(12px);
-      padding: 5px 5px 5px 31px;
       &:before {
         height: 44px;
       }
@@ -3393,8 +3394,8 @@ th {
         hyphens: auto;
       }
       .number {
-        left: 7px;
-        .size(20px);
+        height: 20px;
+        min-height: 20px;
         .font(14px, 20px);
       }
     }
