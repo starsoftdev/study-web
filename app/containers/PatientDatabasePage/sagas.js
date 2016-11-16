@@ -49,8 +49,8 @@ export default [
 
 export function* fetchPatientsWatcher() {
   while (true) {
-    const { searchParams } = yield take(FETCH_PATIENTS);
-
+    const { searchParams, patients } = yield take(FETCH_PATIENTS);
+    console.log('saga', searchParams);
     try {
       const filterObj = {
         include: [
@@ -61,7 +61,13 @@ export function* fetchPatientsWatcher() {
         where: {
           and: [],
         },
+        limit: searchParams.limit || 15,
+        skip: searchParams.skip || 0,
       };
+
+      if (searchParams.sort && searchParams.direction) {
+        filterObj.order = `${searchParams.sort} ${((searchParams.direction === 'down') ? 'DESC' : 'ASC')}`;
+      }
 
       if (searchParams) {
         if (searchParams.name) {
@@ -134,10 +140,10 @@ export function* fetchPatientsWatcher() {
       };
 
       const queryString = composeQueryString(queryParams);
-      const requestURL = `${API_URL}/patients?${queryString}`;
+      //const requestURL = `${API_URL}/patients?${queryString}`;
+      const requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
       const response = yield call(request, requestURL);
-
-      yield put(patientsFetched(searchParams, response));
+      yield put(patientsFetched(searchParams, response, patients));
     } catch (err) {
       yield put(patientsFetchingError(err));
     }
