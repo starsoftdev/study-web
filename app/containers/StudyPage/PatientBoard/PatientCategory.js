@@ -79,14 +79,12 @@ class PatientCategory extends React.Component {
     const patientColumn = this.patientColumn;
     const clientRect = patientColumn.getClientRects();
 
-    this.setState({ columnWidth: (patientColumn.clientWidth).toString().concat('px') });
-    this.setState({ columnLeft: clientRect[0].left.toString().concat('px') });
+    this.setState({ columnWidth: `${patientColumn.clientWidth}px` });
   }
 
   handleScroll() {
     const patientColumn = this.patientColumn;
     const clientRect = patientColumn.getClientRects();
-    this.setState({ columnLeft: clientRect[0].left.toString().concat('px') });
   }
 
   render() {
