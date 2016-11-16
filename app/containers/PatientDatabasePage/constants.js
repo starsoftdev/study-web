@@ -31,3 +31,6 @@ export const ADD_PATIENTS_TO_TEXT_BLAST         = 'PatientDatabasePage/ADD_PATIE
 export const REMOVE_PATIENT_FROM_TEXT_BLAST     = 'PatientDatabasePage/REMOVE_PATIENT_FROM_TEXT_BLAST';
 export const REMOVE_PATIENTS_FROM_TEXT_BLAST    = 'PatientDatabasePage/REMOVE_PATIENTS_FROM_TEXT_BLAST';
 export const SUBMIT_TEXT_BLAST    = 'PatientDatabasePage/SUBMIT_TEXT_BLAST';
+
+export const SET_ACTIVE_SORT    = 'PatientDatabasePage/SET_ACTIVE_SORT';
+

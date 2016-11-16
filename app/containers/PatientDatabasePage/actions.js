@@ -32,17 +32,20 @@ import {
   REMOVE_PATIENT_FROM_TEXT_BLAST,
   REMOVE_PATIENTS_FROM_TEXT_BLAST,
   SUBMIT_TEXT_BLAST,
+  SET_ACTIVE_SORT,
 } from './constants';
 
-export function fetchPatients(searchParams = {}) {
+export function fetchPatients(searchParams = {}, patients = {}) {
   return {
     type: FETCH_PATIENTS,
     searchParams,
+    patients,
   };
 }
 
-export function patientsFetched(searchParams, payload) {
+export function patientsFetched(searchParams, payload, patients) {
   let result = payload;
+  const initResult = payload;
   if (searchParams.includeIndication) {
     const includeIndications = searchParams.includeIndication.split(',');
     result = filter(result, patientIterator => {
@@ -69,9 +72,25 @@ export function patientsFetched(searchParams, payload) {
     result = filter(result, patientIterator => (patientIterator.studyPatientCategory.patient_category_id === searchParams.status));
   }
 
+  let resultArr = [];
+  if (searchParams.skip === 0) {
+    resultArr = result;
+  } else {
+    resultArr = patients.concat(result);
+  }
+
+  let hasMore = true;
+  let page = (searchParams.skip / 15) + 1;
+  if (initResult.length < searchParams.limit) {
+    hasMore = false;
+    page = 1;
+  }
+   
   return {
     type: FETCH_PATIENTS_SUCCESS,
-    payload: result,
+    payload: resultArr,
+    hasMore: hasMore,
+    page: page,
   };
 }
 
@@ -191,5 +210,13 @@ export function submitTextBlast(patients, message, onClose) {
     patients,
     message,
     onClose,
+  };
+}
+
+export function setActiveSort(sort, direction) {
+  return {
+    type: SET_ACTIVE_SORT,
+    sort,
+    direction,
   };
 }

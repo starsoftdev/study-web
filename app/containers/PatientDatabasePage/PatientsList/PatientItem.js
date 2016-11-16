@@ -94,43 +94,43 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     const indicationNames = map(indications, indicationIterator => indicationIterator.name).join(', ');
 
     return (
-      <tr className={classNames('patient-container', { 'tr-active': this.state.hover })} onMouseEnter={this.showHover} onMouseLeave={this.hideHover}>
-        <td>
+      <div className={classNames('tr', 'patient-container', { 'tr-active': this.state.hover })} onMouseEnter={this.showHover} onMouseLeave={this.hideHover}>
+        <div className="td">
           <Field
             name={`patient-${id}`}
             type="checkbox"
             component={Checkbox}
             onChange={this.togglePatientForTextBlast}
           />
-        </td>
-        <td className="index">
+        </div>
+        <div className="td index">
           {index + 1}
-        </td>
-        <td className="name">
+        </div>
+        <div className="td name">
           <span>{firstName} {lastName}</span>
-        </td>
-        <td className="email">
+        </div>
+        <div className="td email">
           <span>{email}</span>
-        </td>
-        <td className="phone">
-          <span>{phone}</span>
-        </td>
-        <td className="indication">
+        </div>
+        <div className="td phone">
+          <span>{id}</span>
+        </div>
+        <div className="td indication">
           <span>{indicationNames}</span>
-        </td>
-        <td className="age">
+        </div>
+        <div className="td age">
           <span>{age}</span>
-        </td>
-        <td className="gender">
+        </div>
+        <div className="td gender">
           <span>{gender}</span>
-        </td>
-        <td className="bmi">
+        </div>
+        <div className="td bmi">
           <span>{bmi}</span>
-        </td>
-        <td className="status">
+        </div>
+        <div className="td status">
           <span>{studyPatientCategory.patientCategory.name}</span>
-        </td>
-        <td className="source">
+        </div>
+        <div className="td source">
           <div className="btn-block">
             <span>{source.type}</span>
             <Button bsStyle="primary" className="btn-edit-patient pull-right" onClick={this.editPatient} disabled={(this.currentPatientIsBeingFetched())}>
@@ -140,8 +140,8 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
               }
             </Button>
           </div>
-        </td>
-      </tr>
+        </div>
+      </div>
     );
   }
 }
