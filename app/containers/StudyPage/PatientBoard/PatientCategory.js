@@ -87,9 +87,15 @@ class PatientCategory extends React.Component {
           <div className="slide-holder">
             <ul className="list-unstyled">
               {category.patients.map(patient => (
-                <Patient key={patient.id} category={category} currentPatientId={currentPatientId} patient={patient}
-                         currentUser={currentUser} onPatientClick={onPatientClick}
-                         onPatientTextClick={onPatientTextClick}/>
+                <Patient
+                  key={patient.id}
+                  category={category}
+                  currentPatientId={currentPatientId}
+                  patient={patient}
+                  currentUser={currentUser}
+                  onPatientClick={onPatientClick}
+                  onPatientTextClick={onPatientTextClick}
+                />
               ))}
             </ul>
           </div>
