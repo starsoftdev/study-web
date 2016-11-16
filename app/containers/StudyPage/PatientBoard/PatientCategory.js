@@ -54,15 +54,12 @@ class PatientCategory extends React.Component {
     super(props);
     this.state = {
       columnWidth: '',
-      columnLeft: '',
     };
     this.handleResize = this.handleResize.bind(this);
-    this.handleScroll = this.handleScroll.bind(this);
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize);
-    window.addEventListener('scroll', this.handleScroll);
   }
   componentDidUpdate() {
     if (this.state.columnWidth === '') {
@@ -72,19 +69,12 @@ class PatientCategory extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
-    window.removeEventListener('scroll', this.handleScroll);
   }
 
   handleResize() {
     const patientColumn = this.patientColumn;
-    const clientRect = patientColumn.getClientRects();
 
     this.setState({ columnWidth: `${patientColumn.clientWidth}px` });
-  }
-
-  handleScroll() {
-    const patientColumn = this.patientColumn;
-    const clientRect = patientColumn.getClientRects();
   }
 
   render() {
