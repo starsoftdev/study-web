@@ -20,10 +20,6 @@
 		margin: 0 0 0 50px;
 	}
 
-	.fields-holder {
-		overflow: hidden;
-	}
-
 	.btn-primary {
 		color: #00afef;
 		font-weight: 600;
@@ -3202,29 +3198,31 @@ th {
 
   .stick {
     .opener {
+      border: solid #f1f1f1;
+      border-width: 20px 0 0 0;
       position: fixed;
       top: 71px;
       z-index: 1000;
+      min-height: 79px;
       .number {
         top: 17px;
       }
     }
     .slide {
-      margin-top: 81px;
+      margin-top: 61px;
     }
   }
   .opener {
-  	border-top: 20px solid #f1f1f1;
     color: #fff;
     display: block;
     .font(14px, 1);
-    min-height: 79px;
+    min-height: 59px;
     font-weight: 700;
     text-align: left;
     white-space: nowrap;
     background: #f78e1e;
     text-transform: uppercase;
-    padding: 16px 5px 16px 42px;
+    padding: 5px 12px 5px 12px;
     &:before {
       content: '';
       .size(1px, 28px);
@@ -3235,18 +3233,20 @@ th {
       background: #ffc689;
     }
     .text {
+      margin-left: 5px;
       white-space: normal;
       .align(@align: middle);
     }
     .number {
-      top: 37px;
-      left: 9px;
-      .size(26px);
+      height: 26px;
+      min-width: 26px;
+      padding-left: 2px;
+      padding-right: 2px;
       color: #00afef;
       background: #fff;
       .font(18px, 24px);
-      position: absolute;
       text-align: center;
+      .align(@align: middle);
       border: solid 1px #fff;
     }
   }
@@ -3384,7 +3384,6 @@ th {
   @media screen and (max-width: 1650px) {
     .opener {
       .font(12px);
-      padding: 5px 5px 5px 31px;
       &:before {
         height: 44px;
       }
@@ -3395,8 +3394,8 @@ th {
         hyphens: auto;
       }
       .number {
-        left: 7px;
-        .size(20px);
+        height: 20px;
+        min-height: 20px;
         .font(14px, 20px);
       }
     }

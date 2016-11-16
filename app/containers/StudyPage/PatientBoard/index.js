@@ -15,6 +15,9 @@ import PatientCategory from './PatientCategory';
 import PatientDetailModal from '../PatientDetail/PatientDetailModal';
 import { fetchPatientDetails, setCurrentPatientCategoryId, setCurrentPatientId, switchToNoteSectionDetail, switchToTextSectionDetail } from '../actions';
 
+import Scroll from 'react-scroll';
+const scroll = Scroll.animateScroll;
+
 @DragDropContext(HTML5Backend)
 class PatientBoard extends React.Component {
   static propTypes = {
@@ -56,6 +59,10 @@ class PatientBoard extends React.Component {
     });
     const { switchToNoteSection } = this.props;
     switchToNoteSection();
+    const options = {
+      duration: 500,
+    };
+    scroll.scrollTo(633, options);
   }
 
   onPatientTextClick(category, patient) {
@@ -65,12 +72,16 @@ class PatientBoard extends React.Component {
     });
     const { switchToTextSection } = this.props;
     switchToTextSection();
+    const options = {
+      duration: 500,
+    };
+    scroll.scrollTo(633, options);
   }
 
   handleScroll(event) {
     const scrollTop = event.target.scrollingElement.scrollTop;
     this.setState({
-      stick: scrollTop >= 655,
+      stick: scrollTop >= 633,
     });
   }
 
