@@ -280,9 +280,8 @@ export default function appReducer(state = initialState, action) {
       baseDataInnerState = {
         rewards: [],
       };
-      break; 
+      break;
     case FETCH_REWARDS_SUCCESS:
-      console.log(payload);
       baseDataInnerState = {
         rewards: payload,
       };
@@ -291,7 +290,7 @@ export default function appReducer(state = initialState, action) {
       baseDataInnerState = {
         rewards: [],
       };
-      break;   
+      break;
     case FETCH_CARDS:
       baseDataInnerState = {
         cards: {

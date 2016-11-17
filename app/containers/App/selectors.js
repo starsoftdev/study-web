@@ -44,8 +44,6 @@ const selectSiteLocations = () => createSelector(
   selectGlobal(),
   (substate) => {
     const sites = get(substate, 'baseData.sites', []);
-    console.log('********site');
-    console.log(sites);
     return map(sites, e => pick(e, ['id', 'name']));
   }
 );
