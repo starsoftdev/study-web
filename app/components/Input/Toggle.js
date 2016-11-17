@@ -41,8 +41,8 @@ function Toggle({ input, name, className }) {
         thumbAnimateRange={[0, 80]}
         activeLabelStyle={labelStyle}
         inactiveLabelStyle={labelStyle}
-        thumbStyle={{ borderRadius: 0, width: '80px', height: '36px' }}
-        trackStyle={{ borderRadius: 0, width: '160px', height: '36px' }}
+        thumbStyle={{ borderRadius: 0, width: '80px', height: '36px', 'box-shadow': 'none' }}
+        trackStyle={{ borderRadius: 0, width: '160px', height: '40px', border: '2px solid #cdcdcd' }}
         onToggle={(value) => input.onChange(!value)}
       />
     </div>
