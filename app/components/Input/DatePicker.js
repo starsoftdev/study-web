@@ -68,7 +68,7 @@ export default class DatePicker extends Component {
             <div className="datepicker-frame">
               <div className="datepicker-inner lightbox-content">
                 <div className="modal-header head">
-                  <strong className="title">Choose Date</strong>
+                  <strong className="title">CHOOSE START DATE</strong>
                   <a className="lightbox-close close" onClick={() => { this.toggleModal(false); }}>
                     <i className="icomoon-icon_close"></i>
                   </a>

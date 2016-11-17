@@ -74,6 +74,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     this.onSaveCard = this.onSaveCard.bind(this);
     this.openAddNewCardModal = this.openAddNewCardModal.bind(this);
     this.closeAddNewCardModal = this.closeAddNewCardModal.bind(this);
+    this.onSelectCard = this.onSelectCard.bind(this);
     this.state = {
       addNewCardModalOpen: false,
     };
@@ -107,6 +108,12 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
 
   onFetchCoupon() {
     this.props.fetchCoupon(this.props.couponId);
+  }
+
+  onSelectCard(value) {
+    if (value === -1) {
+      this.openAddNewCardModal();
+    }
   }
 
   changeHiddenTotal() {
@@ -162,19 +169,24 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
         value: cardIterator.id,
       }));
     }
+    creditCardOptions = creditCardOptions.concat({
+      label: 'Add New Card',
+      value: -1,
+    });
 
     let cardsPanelContent = null;
     if (showCards) {
       cardsPanelContent = (
         <div className="card-selection">
           <div className="row">
-            <div className="col-sm-10">
+            <div className="col-sm-12">
               <Field
                 name="creditCard"
                 component={ReactSelect}
                 placeholder="Select Credit Card"
                 options={creditCardOptions}
                 disabled={cards.fetching || submitting}
+                onChange={this.onSelectCard}
               />
               <Modal className="modal-add-new-card" show={this.state.addNewCardModalOpen} onHide={this.closeAddNewCardModal}>
                 <Modal.Header closeButton>
@@ -184,12 +196,6 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                   <AddNewCardForm onSubmit={this.onSaveCard} />
                 </Modal.Body>
               </Modal>
-            </div>
-            <div className="col-sm-2">
-              {cards.fetching
-                ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-cards" /></span>
-                : <a href="#" className="link-add-new-card" onClick={this.openAddNewCardModal}>+</a>
-              }
             </div>
           </div>
         </div>

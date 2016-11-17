@@ -84,7 +84,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
           <div className="row">
             <div className="col-sm-12">
               <div className="table-responsive">
-                <table className="table table-striped">
+                <table className="table">
                   <caption>ADMINS</caption>
                   <thead>
                     <tr>
