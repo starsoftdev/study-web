@@ -6,10 +6,12 @@
 
 import {
   FETCH_IRB_PRODUCT_LIST_SUCCESS,
+  FETCH_IRB_AD_CREATION_SUCCESS,
 } from './constants';
 
 const initialState = {
   productList: [],
+  irbAdCreation: null,
 };
 
 function irbAdCreationPageReducer(state = initialState, action) {
@@ -18,6 +20,11 @@ function irbAdCreationPageReducer(state = initialState, action) {
       return {
         ...state,
         productList: action.payload,
+      };
+    case FETCH_IRB_AD_CREATION_SUCCESS:
+      return {
+        ...state,
+        irbAdCreation: action.payload,
       };
     default:
       return state;
