@@ -21,6 +21,7 @@ import {
 
   INIT_CHAT,
   DISABLE_CHAT,
+  SET_ACTIVE_SORT,
 } from './constants';
 
 const initialState = {
@@ -49,6 +50,13 @@ const initialState = {
     active: false,
     error: null,
   },
+  paginationOptions: {
+    hasMoreItems: true,
+    page: 1,
+    activeSort: null,
+    activeDirection: null,
+    prevSearchFilter: {},
+  },
 };
 
 export default function patientDatabasePageReducer(state = initialState, action) {
@@ -61,9 +69,16 @@ export default function patientDatabasePageReducer(state = initialState, action)
       return {
         ...state,
         patients: {
-          details: [],
+          details: state.patients.details,
           fetching: true,
           error: null,
+        },
+        paginationOptions: {
+          hasMoreItems: false,
+          page: state.paginationOptions.page,
+          activeSort: state.paginationOptions.activeSort,
+          activeDirection: state.paginationOptions.activeDirection,
+          prevSearchFilter: state.paginationOptions.prevSearchFilter,
         },
       };
     case FETCH_PATIENTS_SUCCESS:
@@ -73,6 +88,13 @@ export default function patientDatabasePageReducer(state = initialState, action)
           details: payload,
           fetching: false,
           error: null,
+        },
+        paginationOptions: {
+          hasMoreItems: action.hasMore,
+          page: action.page,
+          activeSort: state.paginationOptions.activeSort,
+          activeDirection: state.paginationOptions.activeDirection,
+          prevSearchFilter: action.searchFilter,
         },
       };
     case FETCH_PATIENTS_ERROR:
@@ -211,6 +233,17 @@ export default function patientDatabasePageReducer(state = initialState, action)
           details: null,
           active: false,
           error: null,
+        },
+      };
+    case SET_ACTIVE_SORT:
+      return {
+        ...state,
+        paginationOptions: {
+          hasMoreItems: state.paginationOptions.hasMoreItems,
+          page: state.paginationOptions.page,
+          activeSort: action.sort,
+          activeDirection: action.direction,
+          prevSearchFilter: state.paginationOptions.prevSearchFilter,
         },
       };
     default:
