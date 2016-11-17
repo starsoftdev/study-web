@@ -20,7 +20,7 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   componentWillReceiveProps(newProps) {
-  
+
   }
 
   render() {

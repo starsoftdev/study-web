@@ -207,7 +207,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
           </div>
 
           <section className="table-holder">
-            <RewardsList rewards={ this.props.rewards } />
+            <RewardsList rewards={this.props.rewards} />
           </section>
 
         </section>

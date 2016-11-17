@@ -8,9 +8,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import ReactSelect from 'components/Input/ReactSelect';
-import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
-import { Modal } from 'react-bootstrap';
-import RewardForm from 'components/RewardForm';
+import { Field, reduxForm } from 'redux-form';
+import Modal from 'react-bootstrap/lib/Modal';
 import RadioButton from 'components/Input/RadioButton';
 import cardStudykik from 'assets/images/img6.png';
 import cardAmazon from 'assets/images/img7.png';
