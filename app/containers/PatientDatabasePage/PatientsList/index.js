@@ -118,11 +118,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   }
 
   loadItems() {
-    const limit = 15;
-    console.log('load');
     this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, false);
-    //const offset = (this.props.paginationOptions.page) * 15;
-    //this.props.getReceipts(limit, offset, this.props.receipts, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection, this.props.searchOptions);
   }
 
   sortBy(ev) {
@@ -132,19 +128,17 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
 
     if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
       direction = 'down';
-    }else if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1){
+    } else if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1) {
       direction = null;
       sort = null;
     }
-    console.log('sort', sort, direction);
 
     this.props.setActiveSort(sort, direction);
 
-    this.props.searchPatients({...this.props.paginationOptions.prevSearchFilter, sort: sort, direction: direction}, true);
+    this.props.searchPatients({ ...this.props.paginationOptions.prevSearchFilter, sort, direction }, true);
   }
 
   render() {
-
     const { patients, selectedPatientDetailsForForm } = this.props;
     const chat = this.props.chat.active ? this.props.chat.details : null;
     const patientsListContents = patients.details.map((item, index) => {
@@ -159,7 +153,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     if (selectedPatientDetailsForForm) {
       selectedPatientDetailsForForm.phone = normalizePhoneDisplay(selectedPatientDetailsForForm.phone);
     }
-    
+
     if (patients.details.length > 0) {
       return (
         <div>

@@ -94,8 +94,8 @@ export default function patientDatabasePageReducer(state = initialState, action)
           page: action.page,
           activeSort: state.paginationOptions.activeSort,
           activeDirection: state.paginationOptions.activeDirection,
-          prevSearchFilter: state.paginationOptions.prevSearchFilter,
-        }
+          prevSearchFilter: action.searchFilter,
+        },
       };
     case FETCH_PATIENTS_ERROR:
       return {
