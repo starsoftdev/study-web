@@ -50,14 +50,60 @@ class PatientCategory extends React.Component {
     onPatientTextClick: React.PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      columnWidth: '',
+      columnLeft: '',
+    };
+    this.handleResize = this.handleResize.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
+  }
+
   componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
+    window.addEventListener('scroll', this.handleScroll);
+  }
+  componentDidUpdate() {
+    if (this.state.columnWidth === '') {
+      this.handleResize();
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  handleResize() {
+    const patientColumn = this.patientColumn;
+    const clientRect = patientColumn.getClientRects();
+
+    this.setState({ columnWidth: (patientColumn.clientWidth).toString().concat('px') });
+    this.setState({ columnLeft: clientRect[0].left.toString().concat('px') });
+  }
+
+  handleScroll() {
+    const patientColumn = this.patientColumn;
+    const clientRect = patientColumn.getClientRects();
+    this.setState({ columnLeft: clientRect[0].left.toString().concat('px') });
   }
 
   render() {
     const { category, connectDropTarget, currentPatientId, currentUser, onPatientClick, onPatientTextClick } = this.props;
+
+    const openerStyle = {
+      width: this.state.columnWidth,
+      left: this.state.columnLeft,
+    };
     return connectDropTarget(
-      <li key={category.id}>
-        <span className="opener">
+      <li
+        key={category.id}
+        ref={(patientColumn) => {
+          this.patientColumn = patientColumn;
+        }}
+      >
+        <span className="opener" style={openerStyle}>
           <strong className="number">{category.patients.length}</strong>
           <span className="text">{category.name}</span>
         </span>

@@ -367,6 +367,17 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
+      path: '/notifications',
+      name: 'notificationPage',
+      getComponent(nextState, cb) {
+        const renderRoute = loadModule(cb);
+
+        System.import('containers/NotificationsPage')
+          .then(component => renderRoute(component))
+          .catch(errorLoading);
+      },
+    }, {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {

@@ -55,6 +55,10 @@ import {
   FETCH_SITE_PATIENTS_ERROR,
   UPDATE_SITE_PATIENTS,
 
+  SEARCH_SITE_PATIENTS,
+  SEARCH_SITE_PATIENTS_SUCCESS,
+  SEARCH_SITE_PATIENTS_ERROR,
+
   FETCH_PATIENT_MESSAGES,
   FETCH_PATIENT_MESSAGES_SUCCESS,
   FETCH_PATIENT_MESSAGES_ERROR,
@@ -93,6 +97,9 @@ import {
   SAVE_USER_SUCCESS,
   SAVE_USER_ERROR,
 
+  GET_AVAIL_PHONE_NUMBERS,
+  GET_AVAIL_PHONE_NUMBERS_SUCCESS,
+  GET_AVAIL_PHONE_NUMBERS_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -431,6 +438,27 @@ export function updateSitePatients(newMessage) {
   };
 }
 
+export function searchSitePatients(keyword) {
+  return {
+    type: SEARCH_SITE_PATIENTS,
+    keyword,
+  };
+}
+
+export function sitePatientsSearched(payload) {
+  return {
+    type: SEARCH_SITE_PATIENTS_SUCCESS,
+    payload,
+  };
+}
+
+export function sitePatientsSearchingError(payload) {
+  return {
+    type: SEARCH_SITE_PATIENTS_ERROR,
+    payload,
+  };
+}
+
 export function fetchPatientMessages(patientId, studyId) {
   return {
     type: FETCH_PATIENT_MESSAGES,
@@ -645,6 +673,26 @@ export function userSaved(siteId, payload) {
 export function userSavingError(payload) {
   return {
     type: SAVE_USER_ERROR,
+    payload,
+  };
+}
+
+export function getAvailPhoneNumbers() {
+  return {
+    type: GET_AVAIL_PHONE_NUMBERS,
+  };
+}
+
+export function getAvailPhoneNumbersSuccess(payload) {
+  return {
+    type: GET_AVAIL_PHONE_NUMBERS_SUCCESS,
+    payload,
+  };
+}
+
+export function getAvailPhoneNumbersError(payload) {
+  return {
+    type: GET_AVAIL_PHONE_NUMBERS_ERROR,
     payload,
   };
 }

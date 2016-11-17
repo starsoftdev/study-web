@@ -15,6 +15,9 @@ import {
   RENEW_STUDY,
   RENEW_STUDY_SUCCESS,
   RENEW_STUDY_ERROR,
+  UPGRADE_STUDY,
+  UPGRADE_STUDY_SUCCESS,
+  UPGRADE_STUDY_ERROR,
 } from './constants';
 
 import {
@@ -42,6 +45,11 @@ const initialState = {
     error: null,
   },
   renewedStudy: {
+    details: null,
+    submitting: false,
+    error: null,
+  },
+  upgradedStudy: {
     details: null,
     submitting: false,
     error: null,
@@ -235,6 +243,33 @@ export default function homePageReducer(state = initialState, action) {
       return {
         ...state,
         renewedStudy: {
+          details: null,
+          submitting: false,
+          error: payload,
+        },
+      };
+    case UPGRADE_STUDY:
+      return {
+        ...state,
+        upgradedStudy: {
+          details: null,
+          submitting: true,
+          error: null,
+        },
+      };
+    case UPGRADE_STUDY_SUCCESS:
+      return {
+        ...state,
+        upgradedStudy: {
+          details: payload,
+          submitting: false,
+          error: null,
+        },
+      };
+    case UPGRADE_STUDY_ERROR:
+      return {
+        ...state,
+        upgradedStudy: {
           details: null,
           submitting: false,
           error: payload,

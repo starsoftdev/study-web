@@ -16,6 +16,7 @@ import {
   FETCH_STUDIES,
   FETCH_INDICATION_LEVEL_PRICE,
   RENEW_STUDY,
+  UPGRADE_STUDY,
 } from './constants';
 
 import {
@@ -28,6 +29,8 @@ import {
   indicationLevelPriceFetchingError,
   studyRenewed,
   studyRenewingError,
+  studyUpgraded,
+  studyUpgradingError,
 } from './actions';
 
 // Bootstrap sagas
@@ -169,6 +172,41 @@ export function* renewStudyWorker(action) {
   }
 }
 
+export function* upgradeStudyWatcher() {
+  yield* takeLatest(UPGRADE_STUDY, upgradeStudyWorker);
+}
+
+export function* upgradeStudyWorker(action) {
+  try {
+    const { cartValues, formValues } = action;
+    const requestURL = `${API_URL}/studies/${formValues.studyId}/upgrade`;
+
+    const data = new FormData();
+    forEach(formValues, (value, index) => {
+      if (index === 'studyId') {
+        return true;
+      }
+      return data.append(index, value);
+    });
+    data.append('cartValues', JSON.stringify(cartValues));
+
+    const params = {
+      method: 'POST',
+      body: data,
+      useDefaultContentType: true,
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(toastrActions.success('Upgrade Study', 'The request has been submitted successfully'));
+    yield put(studyUpgraded(response));
+    yield put(reset('upgradeStudy'));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(studyUpgradingError(err));
+  }
+}
+
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   const watcherB = yield fork(fetchPatientMessagesWatcher);
@@ -176,6 +214,7 @@ export function* homePageSaga() {
   const watcherD = yield fork(fetchStudiesWatcher);
   const watcherE = yield fork(fetchIndicationLevelPriceWatcher);
   const watcherF = yield fork(renewStudyWatcher);
+  const watcherG = yield fork(upgradeStudyWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -186,4 +225,5 @@ export function* homePageSaga() {
   yield cancel(watcherD);
   yield cancel(watcherE);
   yield cancel(watcherF);
+  yield cancel(watcherG);
 }
