@@ -171,12 +171,13 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
             <div className="fixed-block">
               <div className="fixed-block-holder">
-                <Sticky className="sticky-shopping-cart">
-                  {<ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} disableSubmit={hasErrors} />}
-                </Sticky>
+                <div className="order-summery-container">
+                  <Sticky className="sticky-shopping-cart">
+                    {<ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} disableSubmit={hasErrors} />}
+                  </Sticky>
+                </div>
               </div>
             </div>
-
           </div>
         </section>
         <Modal className="custom-modal" show={this.props.showSubmitFormModal}>

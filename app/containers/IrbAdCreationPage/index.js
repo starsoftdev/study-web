@@ -5,6 +5,7 @@
  */
 
 import React, { PropTypes } from 'react';
+import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { createStructuredSelector } from 'reselect';
@@ -84,6 +85,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
 
       return (
         <StickyContainer className="container-fluid">
+          <Helmet title="Order IRB Ad Creation - StudyKIK" />
           <section className="study-portal">
             <h2 className="main-heading">ORDER IRB AD CREATION</h2>
             <div className="form-study row">
@@ -97,11 +99,11 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
 
               <div className="fixed-block">
                 <div className="fixed-block-holder">
-                  <Sticky className="sticky-shopping-cart">
-
-                    <ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} disableSubmit={hasError} />
-
-                  </Sticky>
+                  <div className="order-summery-container">
+                    <Sticky className="sticky-shopping-cart">
+                      <ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} disableSubmit={hasError} />
+                    </Sticky>
+                  </div>
                 </div>
               </div>
 
