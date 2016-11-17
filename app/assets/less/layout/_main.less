@@ -1055,8 +1055,8 @@ th {
 
 	.fixed-block-holder {
 		float: right;
-		width: 34.2%;
-
+		width: 43.4%;
+		
 	}
 
 	.fixed-block {
@@ -1065,14 +1065,15 @@ th {
 		height: 1px;
 		padding: 0 20px;
 		position: absolute;
-		left: 0 !important;
+		left: 261px !important;
 
 	}
 
+	.order-summery-container {
+		margin: 0 0 0 25px;
+	}
+
 	.order-summery {
-
-
-
 		.head {
 			color: #fff;
 			background: #f78e1e;
@@ -1256,6 +1257,15 @@ th {
 		}
 
 	}	//	end media query
+}
+
+@media screen and (max-width: 1600px) {
+  .form-study .label {
+    font-size: 15px;
+  }
+  .form-study .fixed-block {
+    left: 220px !important;
+  }
 }
 
 .clear-left {
@@ -3575,11 +3585,15 @@ th {
   }
   .modal-body{
     padding: 25px 25px 25px 25px;
+
     .rdr-Calendar{
       width: 100% !important;
-      padding: 0px !important;
+      padding: 0 !important;
 
       border: #f78e1e solid 2px;
+      border-bottom: none;
+
+      border-radius: 0px !important;
 
       .rdr-Day{
         width: 76px !important;
@@ -3592,6 +3606,28 @@ th {
         height: 40px !important;
         font-size: 18px !important;
       }
+    }
+
+    .current-date {
+    	height: 42px;
+    	background-color: #f78e1e;
+    	display: block;
+    	margin-top: -6px;
+
+    	border-left: 2px solid #f78e1e;
+    	border-right: 2px solid #f78e1e;
+    	border-bottom: 2px solid #f78e1e;
+
+    	font-size: 18px;
+    	color: #ffffff;
+    	text-align: center;
+    	line-height: 42px;
+
+	    transition: all 0.25s;
+	    
+    	&:hover {
+    		background-color: #a0cf67;
+    	}
     }
   }
 }
