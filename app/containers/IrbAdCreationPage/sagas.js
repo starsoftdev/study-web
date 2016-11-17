@@ -11,11 +11,14 @@ import {
   formSubmissionError,
   fetchIrbProductListSuccess,
   fetchIrbProductListError,
+  fetchIrbAdCreationSuccess,
+  fetchIrbAdCreationError,
 } from 'containers/IrbAdCreationPage/actions';
 
 import {
   SUBMIT_FORM,
   FETCH_IRB_PRODUCT_LIST,
+  FETCH_IRB_AD_CREATION,
 } from 'containers/IrbAdCreationPage/constants';
 
 export function* submitFormWatcher() {
@@ -72,14 +75,33 @@ export function* fetchIrbProductListWatcher() {
   }
 }
 
+export function* fetchIrbAdCreationWatcher() {
+  while (true) {
+    const { id } = yield take(FETCH_IRB_AD_CREATION);
+
+    try {
+      const requestURL = `${API_URL}/irbAdCreations/${id}`;
+      const response = yield call(request, requestURL);
+
+      yield put(fetchIrbAdCreationSuccess(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while fetching the irb ad creation');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(fetchIrbAdCreationError(err));
+    }
+  }
+}
+
 export function* irbAdCreationPageSaga() {
   const watcherA = yield fork(submitFormWatcher);
   const watcherB = yield fork(fetchIrbProductListWatcher);
+  const watcherC = yield fork(fetchIrbAdCreationWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
   yield cancel(watcherA);
   yield cancel(watcherB);
+  yield cancel(watcherC);
 }
 
 // All sagas to be loaded
