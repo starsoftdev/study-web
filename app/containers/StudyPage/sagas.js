@@ -563,7 +563,7 @@ export function* fetchStudySaga() {
     yield fork(fetchPatientReferralStat);
     yield fork(fetchStudyCallStats);
     yield fork(fetchStudyTextStats);
-    yield call(fetchPatientCategories);
+    yield fork(fetchPatientCategories);
     yield fork(fetchPatientsSaga);
     yield fork(fetchPatientDetails);
     yield fork(findPatientsSaga);
