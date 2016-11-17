@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 
-const NotificationItem = ({ notification }) => {
+const NotificationItem = ({ notification, onClick }) => {
   const { event_log, date, time } = notification;
 
   return (
-    <tr className="">
+    <tr className="" onClick={onClick}>
       <td>
         <div className="info clearfix">
           <div className="img-holder">
@@ -25,6 +25,7 @@ const NotificationItem = ({ notification }) => {
 
 NotificationItem.propTypes = {
   notification: PropTypes.object,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default NotificationItem;
