@@ -197,6 +197,10 @@ const selectSavedUser = () => createSelector(
   (substate) => get(substate, 'baseData.savedUser', {})
 );
 
+const selectAvailPhoneNumbers = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.availPhoneNumbers', [])
+);
 // end
 
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
@@ -234,6 +238,7 @@ export {
   selectDeletedClientRole,
   selectSavedSite,
   selectSavedUser,
+  selectAvailPhoneNumbers,
 
   selectLocationState,
 };

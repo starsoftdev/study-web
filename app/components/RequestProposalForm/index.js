@@ -12,7 +12,7 @@ import { Field, FieldArray, reduxForm, change } from 'redux-form';
 import Input from 'components/Input';
 import Toggle from 'components/Input/Toggle';
 import ReactSelect from 'components/Input/ReactSelect';
-import RenderLeads from './RenderLeads';
+import RenderLeads from 'components/RenderLeads';
 
 import { CAMPAIGN_LENGTH_LIST } from 'common/constants';
 import {

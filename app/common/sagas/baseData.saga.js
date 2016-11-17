@@ -20,6 +20,7 @@ import {
 
   FETCH_CLIENT_SITES,
   FETCH_SITE_PATIENTS,
+  SEARCH_SITE_PATIENTS,
   FETCH_PATIENT_MESSAGES,
   FETCH_CLIENT_ROLES,
   FETCH_SITE,
@@ -28,6 +29,7 @@ import {
   DELETE_CLIENT_ROLE,
   SAVE_SITE,
   SAVE_USER,
+  GET_AVAIL_PHONE_NUMBERS,
 } from 'containers/App/constants';
 
 
@@ -57,6 +59,8 @@ import {
   clientSitesFetchingError,
   sitePatientsFetched,
   sitePatientsFetchingError,
+  sitePatientsSearched,
+  sitePatientsSearchingError,
   patientMessagesFetched,
   patientMessagesFetchingError,
   clientRolesFetched,
@@ -73,6 +77,8 @@ import {
   siteSavingError,
   userSaved,
   userSavingError,
+  getAvailPhoneNumbersSuccess,
+  getAvailPhoneNumbersError,
 } from 'containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -89,6 +95,7 @@ export default function* baseDataSaga() {
 
   yield fork(fetchClientSitesWatcher);
   yield fork(fetchSitePatientsWatcher);
+  yield fork(searchSitePatientsWatcher);
   yield fork(fetchPatientMessagesWatcher);
   yield fork(fetchClientRolesWatcher);
   yield fork(fetchSiteWatcher);
@@ -97,6 +104,7 @@ export default function* baseDataSaga() {
   yield fork(deleteClientRoleWatcher);
   yield fork(saveSiteWatcher);
   yield fork(saveUserWatcher);
+  yield fork(getAvailPhoneNumbersWatcher);
 }
 
 export function* fetchSitesWatcher() {
@@ -338,18 +346,35 @@ export function* fetchSitePatientsWatcher() {
   }
 }
 
+export function* searchSitePatientsWatcher() {
+  while (true) {
+    const { keyword } = yield take(SEARCH_SITE_PATIENTS);
+
+    try {
+      const requestURL = `${API_URL}/patients/getPatientMessagesByName?name=${keyword}&message=${keyword}`;
+      const response = yield call(request, requestURL);
+
+      yield put(sitePatientsSearched(response));
+    } catch (err) {
+      yield put(sitePatientsSearchingError(err));
+    }
+  }
+}
 
 export function* fetchPatientMessagesWatcher() {
   while (true) {
     const { patientId, studyId } = yield take(FETCH_PATIENT_MESSAGES);
+    if (patientId && patientId > 0 && studyId && studyId > 0) {
+      try {
+        const requestURL = `${API_URL}/patients/getMessagesByPatientAndStudy?patientId=${patientId}&studyId=${studyId}`;
+        const response = yield call(request, requestURL);
 
-    try {
-      const requestURL = `${API_URL}/patients/getMessagesByPatientAndStudy?patientId=${patientId}&studyId=${studyId}`;
-      const response = yield call(request, requestURL);
-
-      yield put(patientMessagesFetched(response));
-    } catch (err) {
-      yield put(patientMessagesFetchingError(err));
+        yield put(patientMessagesFetched(response));
+      } catch (err) {
+        yield put(patientMessagesFetchingError(err));
+      }
+    } else {
+      yield put(patientMessagesFetched([]));
     }
   }
 }
@@ -527,6 +552,26 @@ export function* saveUserWatcher() {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));
       yield put(userSavingError(err));
+    }
+  }
+}
+
+export function* getAvailPhoneNumbersWatcher() {
+  while (true) {
+    yield take(GET_AVAIL_PHONE_NUMBERS);
+
+    try {
+      const requestURL = `${API_URL}/sources/getAvailPhoneNumbers`;
+      const params = {
+        query: {
+          country: 'US',
+          areaCode: '510',
+        },
+      };
+      const response = yield call(request, requestURL, params);
+      yield put(getAvailPhoneNumbersSuccess(response));
+    } catch (e) {
+      yield put(getAvailPhoneNumbersError(e));
     }
   }
 }

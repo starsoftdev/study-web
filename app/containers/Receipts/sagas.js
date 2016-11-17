@@ -4,7 +4,6 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import request from 'utils/request';
 import { get } from 'lodash';
-import composeQueryString from 'utils/composeQueryString';
 
 import {
   receiptsReceived,
@@ -32,29 +31,48 @@ export function* receiptSaga() {
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
+  yield put(receiptsReceived([], true, 1));
   yield cancel(watcherA);
   yield cancel(watcherC);
 }
 
 export function* getReceipts() {
   while (true) {
-    const { payload } = yield take(GET_RECEIPT);
+    const { limit, offset, receipts, orderBy, orderDir, payload } = yield take(GET_RECEIPT);
     try {
       let requestURL;
-      const queryParams = {
-        filter: '{"include": ["sites", "paymentMethod", {"invoiceDetails": ["indication", {"campaign": ["study", "site", "level"]}]}]}',
-      };
-      const queryString = composeQueryString(queryParams);
+      const authToken = getItem('auth_token');
+
+      let sortParams = '';
+      if (orderBy && orderDir) {
+        sortParams = `&orderBy=${orderBy}&orderDir=${((orderDir === 'down') ? 'DESC' : 'ASC')}`;
+      }
       if (!payload) {
-        requestURL = `${API_URL}/invoices/?${queryString}`;
+        requestURL = `${API_URL}/invoices/getReceipts?limit=${limit}&skip=${offset}&access_token=${authToken}${sortParams}`;
       } else {
-        const authToken = getItem('auth_token');
+        payload.limit = limit;
+        payload.skip = offset;
         const options = JSON.stringify(payload);
-        requestURL = `${API_URL}/invoices/getReceipts?options=${options}&access_token=${authToken}`;
+        requestURL = `${API_URL}/invoices/getReceipts?options=${options}&limit=${limit}&skip=${offset}&access_token=${authToken}${sortParams}`;
       }
 
       const response = yield call(request, requestURL);
-      yield put(receiptsReceived(response));
+
+      let resultArr = [];
+      if (payload && offset === 0) {
+        resultArr = response;
+      } else {
+        resultArr = receipts.concat(response);
+      }
+
+      let hasMore = true;
+      let page = (offset / 15) + 1;
+      if (response.length < limit) {
+        hasMore = false;
+        page = 1;
+      }
+
+      yield put(receiptsReceived(resultArr, hasMore, page));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
@@ -74,7 +92,7 @@ export function* getPdf() {
       };
       const invoices = [];
       for (const value of payload) {
-        invoices.push(value.invoicePdfId);
+        invoices.push(value.invoice_pdf_id);
       }
       params.invoices = invoices;
       location.replace(`${requestURL}?${serializeParams(params)}`);

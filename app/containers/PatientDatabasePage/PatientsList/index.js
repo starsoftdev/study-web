@@ -24,6 +24,8 @@ import { clearSelectedPatient,
   addPatientsToTextBlast,
   removePatientsFromTextBlast } from '../actions';
 import PatientItem from './PatientItem';
+import { normalizePhone, normalizePhoneDisplay } from '../../StudyPage/helper/functions';
+
 import './styles.less';
 
 const formName = 'PatientDatabase.TextBlastModal';
@@ -79,6 +81,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     payload.indications = map(patientData.indications, indicationIterator => indicationIterator.value);
     payload.source_id = patientData.source;
     payload.patient_category_id = patientData.status;
+    payload.phone = normalizePhone(patientData.phone);
 
     this.props.savePatient(selectedPatient.details.id, payload);
   }
@@ -110,11 +113,18 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   render() {
     const { patients, selectedPatientDetailsForForm } = this.props;
     const chat = this.props.chat.active ? this.props.chat.details : null;
-    const patientsListContents = patients.details.map((item, index) => (
-      <PatientItem {...item} key={index} index={index} openChat={this.openChat} />
-    ));
+    const patientsListContents = patients.details.map((item, index) => {
+      const patient = item;
+      patient.phone = normalizePhoneDisplay(patient.phone);
+      return (
+        <PatientItem {...patient} key={index} index={index} openChat={this.openChat} />
+      );
+    });
     const editPatientModalShown = this.editPatientModalShouldBeShown();
     const chatModalShown = this.chatModalShouldBeShown();
+    if (selectedPatientDetailsForForm) {
+      selectedPatientDetailsForForm.phone = normalizePhoneDisplay(selectedPatientDetailsForForm.phone);
+    }
 
     if (patients.details.length > 0) {
       return (
