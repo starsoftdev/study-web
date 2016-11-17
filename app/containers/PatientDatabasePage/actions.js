@@ -4,8 +4,6 @@
  *
  */
 
-import { filter, findIndex } from 'lodash';
-
 import {
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
@@ -35,18 +33,19 @@ import {
   SET_ACTIVE_SORT,
 } from './constants';
 
-export function fetchPatients(searchParams = {}, patients = {}) {
+export function fetchPatients(searchParams = {}, patients = {}, searchFilter = {}) {
   return {
     type: FETCH_PATIENTS,
     searchParams,
     patients,
+    searchFilter,
   };
 }
 
-export function patientsFetched(searchParams, payload, patients) {
-  let result = payload;
+export function patientsFetched(searchParams, payload, patients, searchFilter) {
+  const result = payload;
   const initResult = payload;
-  if (searchParams.includeIndication) {
+  /* if (searchParams.includeIndication) {
     const includeIndications = searchParams.includeIndication.split(',');
     result = filter(result, patientIterator => {
       const foundIndications = filter(includeIndications, includeIterator => {
@@ -66,11 +65,11 @@ export function patientsFetched(searchParams, payload, patients) {
       });
       return !foundIndications.length;
     });
-  }
+  }*/
 
-  if (searchParams.status) {
+  /* if (searchParams.status) {
     result = filter(result, patientIterator => (patientIterator.studyPatientCategory.patient_category_id === searchParams.status));
-  }
+  }*/
 
   let resultArr = [];
   if (searchParams.skip === 0) {
@@ -85,12 +84,13 @@ export function patientsFetched(searchParams, payload, patients) {
     hasMore = false;
     page = 1;
   }
-   
+
   return {
     type: FETCH_PATIENTS_SUCCESS,
     payload: resultArr,
-    hasMore: hasMore,
-    page: page,
+    hasMore,
+    page,
+    searchFilter,
   };
 }
 

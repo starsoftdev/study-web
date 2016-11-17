@@ -113,7 +113,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
           <span>{email}</span>
         </div>
         <div className="td phone">
-          <span>{id}</span>
+          <span>{phone}</span>
         </div>
         <div className="td indication">
           <span>{indicationNames}</span>

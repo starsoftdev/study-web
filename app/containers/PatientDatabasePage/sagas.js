@@ -49,8 +49,7 @@ export default [
 
 export function* fetchPatientsWatcher() {
   while (true) {
-    const { searchParams, patients } = yield take(FETCH_PATIENTS);
-    console.log('saga', searchParams);
+    const { searchParams, patients, searchFilter } = yield take(FETCH_PATIENTS);
     try {
       const filterObj = {
         include: [
@@ -67,6 +66,24 @@ export function* fetchPatientsWatcher() {
 
       if (searchParams.sort && searchParams.direction) {
         filterObj.order = `${searchParams.sort} ${((searchParams.direction === 'down') ? 'DESC' : 'ASC')}`;
+      }
+
+      if (searchParams.status) {
+        filterObj.where.and.push({
+          status: searchParams.status,
+        });
+      }
+
+      if (searchParams.includeIndication) {
+        filterObj.where.and.push({
+          includeIndication: searchParams.includeIndication,
+        });
+      }
+
+      if (searchParams.excludeIndication) {
+        filterObj.where.and.push({
+          excludeIndication: searchParams.excludeIndication,
+        });
       }
 
       if (searchParams) {
@@ -140,10 +157,10 @@ export function* fetchPatientsWatcher() {
       };
 
       const queryString = composeQueryString(queryParams);
-      //const requestURL = `${API_URL}/patients?${queryString}`;
+      // const requestURL = `${API_URL}/patients?${queryString}`;
       const requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
       const response = yield call(request, requestURL);
-      yield put(patientsFetched(searchParams, response, patients));
+      yield put(patientsFetched(searchParams, response, patients, searchFilter));
     } catch (err) {
       yield put(patientsFetchingError(err));
     }
