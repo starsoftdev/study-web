@@ -245,7 +245,9 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                   className="btn btn-primary coupon-btn"
                   onClick={this.onFetchCoupon}
                   disabled={coupon.fetching || submitting}
-                />
+                >
+                  <span>APPLY</span>
+                </button>
               </div>
 
               <div className="total clearfix">
