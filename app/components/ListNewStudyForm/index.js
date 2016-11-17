@@ -270,6 +270,22 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             />
           </div>
 
+          {(() => {
+            if (this.props.formValues.campaignLength === 1) {
+              return (
+                <div className="field-row">
+                  <strong className="label"><label>CONDENSE TO 2 WEEKS</label></strong>
+                  <Field
+                    name="condenseTwoWeeks"
+                    component={Toggle}
+                    className="field"
+                  />
+                </div>
+              );
+            }
+            return false;
+          })()}
+
           <div className="field-row">
             <strong className="label"><label>Patient messaging <br />
             Suite: $247</label></strong>
