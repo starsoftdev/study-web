@@ -109,11 +109,12 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     }
   }
 
-  openRenewModal(studyId, indicationId) {
+  openRenewModal(studyId, indicationId, campaign) {
     this.setState({
       renewModalOpen: true,
       selectedStudyId: studyId,
       selectedIndicationId: indicationId,
+      selectedCampaign: campaign,
     });
   }
 
@@ -166,6 +167,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       ...renewStudyFormValues,
       stripeCustomerId: currentUserStripeCustomerId,
       selectedIndicationId: this.state.selectedIndicationId,
+      selectedSiteId: this.state.selectedCampaign.site_id,
     });
   }
 
@@ -177,6 +179,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       stripeCustomerId: currentUserStripeCustomerId,
       selectedIndicationId: this.state.selectedIndicationId,
       selectedCampaignId: this.state.selectedCampaign.id,
+      selectedSiteId: this.state.selectedCampaign.site_id,
     });
   }
 
@@ -416,8 +419,8 @@ function mapDispatchToProps(dispatch) {
     fetchLevels: () => dispatch(fetchLevels()),
     fetchIndicationLevelPrice: (levelId, indicationId) => dispatch(fetchIndicationLevelPrice(levelId, indicationId)),
     clearIndicationLevelPrice: () => dispatch(clearIndicationLevelPrice()),
-    renewStudy: (cartValues, formValues) => dispatch(renewStudy(cartValues, formValues)),
-    upgradeStudy: (cartValues, formValues) => dispatch(upgradeStudy(cartValues, formValues)),
+    renewStudy: (studyId, cartValues, formValues) => dispatch(renewStudy(studyId, cartValues, formValues)),
+    upgradeStudy: (studyId, cartValues, formValues) => dispatch(upgradeStudy(studyId, cartValues, formValues)),
     editStudy: (formValues) => dispatch(editStudy(formValues)),
   };
 }
