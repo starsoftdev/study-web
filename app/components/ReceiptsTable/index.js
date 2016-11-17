@@ -48,6 +48,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     paginationOptions: PropTypes.object,
     searchOptions: PropTypes.array,
     setActiveSort: PropTypes.func,
+    siteLocations: PropTypes.array,
   };
 
   constructor(props) {
@@ -210,10 +211,16 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   }
 
   mapReceipts(raw, result) {
+    const { siteLocations } = this.props;
     _.map(raw, (source, key) => {
       const date = new Date(source.created);
       const dateWrapper = moment(date).format('MM/DD/YY');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
+      let siteName = source.site_name
+
+      if (!siteName && source.site_id && siteLocations.length) {
+        siteName = _.find(siteLocations, { 'id': source.site_id }).name;
+      }
 
       result.push(
         <div className="tr" key={key}>
@@ -226,7 +233,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
             <span>{(key + 1)}</span>
           </div>
           <div className="td" style={{ width: '9.6%' }}>{dateWrapper}</div>
-          <div className="td" style={{ width: '17.4%' }}>{source.site_name}</div>
+          <div className="td" style={{ width: '17.4%' }}>{siteName}</div>
           <div className="td" style={{ width: '18.4%' }}>{source.invoice_id}</div>
           <div className="td" style={{ width: '19.7%' }}>{source.protocol_number}</div>
           <div className="td" style={{ width: '17.4%' }}>card</div>
