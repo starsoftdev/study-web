@@ -53,7 +53,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
             <span className="required col-sm-5">
               <label>EXPOSURE LEVEL</label>
             </span>
-            <div className="field col-sm-6">
+            <div className="field col-sm-7">
               <Field
                 name="exposureLevel"
                 component={ReactSelect}
