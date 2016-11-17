@@ -18,6 +18,9 @@ import {
   UPGRADE_STUDY,
   UPGRADE_STUDY_SUCCESS,
   UPGRADE_STUDY_ERROR,
+  EDIT_STUDY,
+  EDIT_STUDY_SUCCESS,
+  EDIT_STUDY_ERROR,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser) {
@@ -111,9 +114,10 @@ export function clearIndicationLevelPrice() {
   };
 }
 
-export function renewStudy(cartValues, formValues) {
+export function renewStudy(studyId, cartValues, formValues) {
   return {
     type: RENEW_STUDY,
+    studyId,
     cartValues,
     formValues,
   };
@@ -133,9 +137,10 @@ export function studyRenewingError(payload) {
   };
 }
 
-export function upgradeStudy(cartValues, formValues) {
+export function upgradeStudy(studyId, cartValues, formValues) {
   return {
     type: UPGRADE_STUDY,
+    studyId,
     cartValues,
     formValues,
   };
@@ -151,6 +156,28 @@ export function studyUpgraded(payload) {
 export function studyUpgradingError(payload) {
   return {
     type: UPGRADE_STUDY_ERROR,
+    payload,
+  };
+}
+
+export function editStudy(studyId, formValues) {
+  return {
+    type: EDIT_STUDY,
+    studyId,
+    formValues,
+  };
+}
+
+export function studyEdited(payload) {
+  return {
+    type: EDIT_STUDY_SUCCESS,
+    payload,
+  };
+}
+
+export function studyEditingError(payload) {
+  return {
+    type: EDIT_STUDY_ERROR,
     payload,
   };
 }

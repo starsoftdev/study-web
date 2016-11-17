@@ -139,8 +139,8 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     return (
       <div className="sites-users-page">
         <div className="container-fluid">
-          <Helmet title="Manage Sites/Users - StudyKIK" />
-          <h2 className="main-heading">MANAGE SITES/USERS</h2>
+          <Helmet title="Manage Sites / Users - StudyKIK" />
+          <h2 className="main-heading">MANAGE SITES / USERS</h2>
           <section className="actions-panel">
             <div className="row form-group">
               <div className="col-sm-3">
@@ -184,10 +184,10 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
               </div>
             </div>
           </section>
-          <section className="form-group">
+          <section className="table-holder form-group">
             <ClientRolesList />
           </section>
-          <section className="form-group">
+          <section className="table-holder form-group">
             <ClientSitesList />
           </section>
         </div>
