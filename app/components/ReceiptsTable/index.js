@@ -216,10 +216,10 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
       const date = new Date(source.created);
       const dateWrapper = moment(date).format('MM/DD/YY');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
-      let siteName = source.site_name
+      let siteName = source.site_name;
 
       if (!siteName && source.site_id && siteLocations.length) {
-        siteName = _.find(siteLocations, { 'id': source.site_id }).name;
+        siteName = _.find(siteLocations, { id: source.site_id }).name;
       }
 
       result.push(
