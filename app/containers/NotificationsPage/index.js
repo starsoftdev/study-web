@@ -6,6 +6,7 @@ import { createStructuredSelector } from 'reselect';
 import { orderBy } from 'lodash';
 import moment from 'moment';
 import classnames from 'classnames';
+import { push } from 'react-router-redux';
 
 import {
   selectCurrentUser,
@@ -18,6 +19,18 @@ import {
 } from 'containers/GlobalNotifications/actions';
 
 import NotificationItem from './Item';
+
+export const getRedirectionUrl = (notification) => {
+  const data = JSON.parse(notification.event_log.eventData);
+  switch (notification.event_log.eventType) {
+    case 'create-user':
+      return `/${data.user_id}/profile`;
+    case 'create-irb_ad_creation':
+      return `/order-irb-ad-creation/${data.irb_ad_creation_id}`;
+    default:
+      return '/';
+  }
+};
 
 const sanitize = (notifications) => notifications.map(n => {
   const { event_log } = n;
@@ -39,6 +52,7 @@ export class NotificationsPage extends React.Component {
     currentUser: PropTypes.any,
     notifications: PropTypes.array,
     fetchNotifications: PropTypes.func,
+    push: PropTypes.func,
   }
 
   constructor(props) {
@@ -63,6 +77,10 @@ export class NotificationsPage extends React.Component {
         notifications: sanitize(nextProps.notifications),
       });
     }
+  }
+
+  handleClickItem = (notification) => {
+    this.props.push(getRedirectionUrl(notification));
   }
 
   sortBy = (field) => {
@@ -116,7 +134,7 @@ export class NotificationsPage extends React.Component {
               </thead>
               <tbody>
                 {
-                  this.state.notifications.map((n, i) => <NotificationItem key={i} notification={n} />)
+                  this.state.notifications.map((n, i) => <NotificationItem key={i} notification={n} onClick={() => { this.handleClickItem(n); }} />)
                 }
               </tbody>
             </table>
@@ -134,6 +152,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   fetchNotifications,
+  push,
 };
 
 export default connect(
