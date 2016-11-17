@@ -43,7 +43,6 @@ class PatientBoard extends React.Component {
     this.handleScroll = this.handleScroll.bind(this);
   }
 
-
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll);
   }
@@ -79,9 +78,15 @@ class PatientBoard extends React.Component {
   }
 
   handleScroll(event) {
-    const scrollTop = event.target.scrollingElement.scrollTop;
+    let scrollTop;
+    if (event.target.scrollingElement) {
+      scrollTop = event.target.scrollingElement.scrollTop;
+    } else {
+      // for firefox compatibility
+      scrollTop = event.pageY;
+    }
     this.setState({
-      stick: scrollTop >= 633,
+      stick: scrollTop >= 634,
     });
   }
 
