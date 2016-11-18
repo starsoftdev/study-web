@@ -31,7 +31,9 @@ import {
   REMOVE_PATIENTS_FROM_TEXT_BLAST,
   SUBMIT_TEXT_BLAST,
   SET_ACTIVE_SORT,
+  SORT_PATIENTS_SUCCESS,
 } from './constants';
+import _ from 'lodash';
 
 export function fetchPatients(searchParams = {}, patients = {}, searchFilter = {}) {
   return {
@@ -73,9 +75,23 @@ export function patientsFetched(searchParams, payload, patients, searchFilter) {
 
   let resultArr = [];
   if (searchParams.skip === 0) {
+    _.forEach(result, (item, index) => {
+      result[index].orderNumber = index + 1;
+    });
     resultArr = result;
   } else {
+    const patientsCount = patients.length;
+    _.forEach(result, (item, index) => {
+      result[index].orderNumber = patientsCount + index + 1;
+    });
     resultArr = patients.concat(result);
+  }
+
+  if (searchParams.sort && searchParams.sort === 'orderNumber') {
+    const dir = ((searchParams.direction === 'down') ? 'desc' : 'asc');
+    resultArr = _.orderBy(resultArr, [function (o) {
+      return o.orderNumber;
+    }], [dir]);
   }
 
   let hasMore = true;
@@ -218,5 +234,12 @@ export function setActiveSort(sort, direction) {
     type: SET_ACTIVE_SORT,
     sort,
     direction,
+  };
+}
+
+export function sortPatientsSuccess(patients) {
+  return {
+    type: SORT_PATIENTS_SUCCESS,
+    patients,
   };
 }

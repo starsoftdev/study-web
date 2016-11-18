@@ -64,7 +64,7 @@ export function* fetchPatientsWatcher() {
         skip: searchParams.skip || 0,
       };
 
-      if (searchParams.sort && searchParams.direction) {
+      if (searchParams.sort && searchParams.direction && searchParams.sort !== 'orderNumber') {
         filterObj.order = `${searchParams.sort} ${((searchParams.direction === 'down') ? 'DESC' : 'ASC')}`;
       }
 
