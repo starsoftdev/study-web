@@ -52,6 +52,14 @@ export default class DatePicker extends Component {
     const { name, className, dateStyle, ...rest } = this.props;
     const { date, modalVisible } = this.state;
 
+    const currentDate = new Date();
+    const options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+    const currentDateString = currentDate.toLocaleDateString('en-us', options);
     const inputComponent = (
       <input
         type="text"
@@ -68,7 +76,7 @@ export default class DatePicker extends Component {
             <div className="datepicker-frame">
               <div className="datepicker-inner lightbox-content">
                 <div className="modal-header head">
-                  <strong className="title">Choose Date</strong>
+                  <strong className="title">CHOOSE START DATE</strong>
                   <a className="lightbox-close close" onClick={() => { this.toggleModal(false); }}>
                     <i className="icomoon-icon_close"></i>
                   </a>
@@ -79,6 +87,9 @@ export default class DatePicker extends Component {
                     onChange={this.handleSelect}
                     className="calendar custom-calendar"
                   />
+                  <div className="current-date">
+                    Today: {currentDateString}
+                  </div>
                   <div className="link-holder text-center">
                     <a href="#" onClick={() => { this.toggleModal(false); }}>To Be Determined</a>
                   </div>

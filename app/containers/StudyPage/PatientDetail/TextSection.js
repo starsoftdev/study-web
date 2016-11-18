@@ -131,7 +131,14 @@ class TextSection extends React.Component {
         </section>
       );
     }
-    return null;
+    return (
+      <section
+        className="postarea text"
+        ref={(scrollable) => {
+          this.scrollable = scrollable;
+        }}
+      />
+    );
   }
 
   render() {

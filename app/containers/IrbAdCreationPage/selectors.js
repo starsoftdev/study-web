@@ -24,9 +24,14 @@ const selectIrbProductList = () => createSelector(
   (substate) => substate.productList
 );
 
+const selectIrbAdCreationDetail = () => createSelector(
+  selectIrbAdCreationPageDomain(),
+  (substate) => substate.irbAdCreation,
+);
 
 export default selectIrbAdCreationPage;
 export {
   selectIrbAdCreationPageDomain,
   selectIrbProductList,
+  selectIrbAdCreationDetail,
 };

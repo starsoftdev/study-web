@@ -10,10 +10,21 @@ import { DragDropContext } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
 import * as Selector from '../selectors';
 import { selectCurrentUser } from 'containers/App/selectors';
+import { push } from 'react-router-redux';
 
 import PatientCategory from './PatientCategory';
 import PatientDetailModal from '../PatientDetail/PatientDetailModal';
 import { fetchPatientDetails, setCurrentPatientCategoryId, setCurrentPatientId, switchToNoteSectionDetail, switchToTextSectionDetail } from '../actions';
+
+import Scroll from 'react-scroll';
+const scroll = Scroll.animateScroll;
+
+function getParamFromHash(url, hash, param) {
+  // assumes that parm doesn't contain any regex characters
+  const re = new RegExp(`#${hash}.*[?&]${param}=([^&]+)(&|$)`);
+  const match = url.match(re);
+  return (match ? match[1] : '');
+}
 
 @DragDropContext(HTML5Backend)
 class PatientBoard extends React.Component {
@@ -26,6 +37,8 @@ class PatientBoard extends React.Component {
     setCurrentPatientId: React.PropTypes.func.isRequired,
     switchToNoteSection: React.PropTypes.func.isRequired,
     switchToTextSection: React.PropTypes.func.isRequired,
+    push: React.PropTypes.func.isRequired,
+
   };
 
   constructor(props) {
@@ -40,9 +53,16 @@ class PatientBoard extends React.Component {
     this.handleScroll = this.handleScroll.bind(this);
   }
 
+  componentWillMount() {
+    this.showModal();
+  }
 
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll);
+  }
+
+  componentWillReceiveProps() {
+    this.showModal();
   }
 
   componentWillUnmount() {
@@ -50,42 +70,71 @@ class PatientBoard extends React.Component {
   }
 
   onPatientClick(category, patient) {
-    const show = this.showModal(category, patient);
-    this.setState({
-      openPatientModal: show || false,
-    });
-    const { switchToNoteSection } = this.props;
-    switchToNoteSection();
+    const { currentPatientId, push } = this.props;
+    const show = patient && currentPatientId !== patient.id;
+    if (show) {
+      push(`${window.location.pathname}#modal?patientCategory=${category.id}&patient=${patient.id}&carousel=note`);
+    } else {
+      push(window.location.pathname);
+    }
   }
 
   onPatientTextClick(category, patient) {
-    const show = this.showModal(category, patient);
-    this.setState({
-      openPatientModal: show || false,
-    });
-    const { switchToTextSection } = this.props;
-    switchToTextSection();
+    const { currentPatientId, push } = this.props;
+    const show = patient && currentPatientId !== patient.id;
+    if (show) {
+      push(`${window.location.pathname}#modal?patientCategory=${category.id}&patient=${patient.id}&carousel=text`);
+    } else {
+      push(window.location.pathname);
+    }
   }
 
   handleScroll(event) {
-    const scrollTop = event.srcElement.body.scrollTop;
+    let scrollTop;
+    if (event.target.scrollingElement) {
+      scrollTop = event.target.scrollingElement.scrollTop;
+    } else {
+      // for firefox compatibility
+      scrollTop = event.pageY;
+    }
     this.setState({
-      stick: scrollTop >= 655,
+      stick: scrollTop >= 634,
     });
   }
 
-  showModal(category, patient) {
-    const { fetchPatientDetails, currentPatientId, setCurrentPatientCategoryId, setCurrentPatientId } = this.props;
-    const show = patient && currentPatientId !== patient.id;
-    if (show) {
-      setCurrentPatientCategoryId(category.id);
-      setCurrentPatientId(patient.id);
-      fetchPatientDetails(patient.id);
+  showModal() {
+    const { fetchPatientDetails, setCurrentPatientCategoryId, setCurrentPatientId } = this.props;
+    const patientCategoryId = getParamFromHash(window.location.hash, 'modal', 'patientCategory');
+    const patientId = getParamFromHash(window.location.hash, 'modal', 'patient');
+
+    if (patientCategoryId && patientId) {
+      setCurrentPatientCategoryId(parseInt(patientCategoryId));
+      setCurrentPatientId(parseInt(patientId));
+      fetchPatientDetails(parseInt(patientId));
+      this.setState({
+        openPatientModal: true,
+      });
     } else {
       setCurrentPatientCategoryId(-1);
       setCurrentPatientId(-1);
+      this.setState({
+        openPatientModal: false,
+      });
     }
-    return show;
+
+    const carousel = getParamFromHash(window.location.hash, 'modal', 'carousel');
+
+    if (carousel === 'text') {
+      const { switchToTextSection } = this.props;
+      switchToTextSection();
+    } else {
+      const { switchToNoteSection } = this.props;
+      switchToNoteSection();
+    }
+    const options = {
+      duration: 500,
+    };
+    scroll.scrollTo(633, options);
   }
 
   render() {
@@ -120,6 +169,7 @@ const mapDispatchToProps = (dispatch) => (
     setCurrentPatientCategoryId: (id) => dispatch(setCurrentPatientCategoryId(id)),
     switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
     switchToTextSection: () => dispatch(switchToTextSectionDetail()),
+    push: (url) => dispatch(push(url)),
   }
 );
 

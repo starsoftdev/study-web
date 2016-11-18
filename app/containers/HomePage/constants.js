@@ -24,5 +24,9 @@ export const UPGRADE_STUDY                               = 'HomePage/Viewport/UP
 export const UPGRADE_STUDY_SUCCESS                       = 'HomePage/Viewport/UPGRADE_STUDY_SUCCESS';
 export const UPGRADE_STUDY_ERROR                         = 'HomePage/Viewport/UPGRADE_STUDY_ERROR';
 
+export const EDIT_STUDY                                  = 'HomePage/Viewport/EDIT_STUDY';
+export const EDIT_STUDY_SUCCESS                          = 'HomePage/Viewport/EDIT_STUDY_SUCCESS';
+export const EDIT_STUDY_ERROR                            = 'HomePage/Viewport/EDIT_STUDY_ERROR';
+
 export const ACTIVE_STATUS_VALUE                         = 'Active';
 export const INACTIVE_STATUS_VALUE                       = 'Inactive';

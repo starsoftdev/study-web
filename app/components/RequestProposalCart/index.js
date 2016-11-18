@@ -126,7 +126,7 @@ export class RequestProposalCart extends Component {
     const { subTotal, discount, total } = this.calculateTotal(products);
 
     return (
-      <div className="order-summery">
+      <div className="shopping-cart order-summary order-summery">
         <div className="head">
           <h3>Proposal Summary</h3>
         </div>
@@ -135,11 +135,11 @@ export class RequestProposalCart extends Component {
           <div className="scroll-holder">
 
             <div className="table-holder">
-              <table className="table-summery">
+              <table className="table-summary">
                 <colgroup>
-                  <col style={{ width: '44.2%' }} />
-                  <col style={{ width: '17.6%' }} />
-                  <col style={{ width: '23.6%' }} />
+                  <col style={{ width: '36.2%' }} />
+                  <col style={{ width: '19.6%' }} />
+                  <col style={{ width: '25.6%' }} />
                   <col style={{ width: 'auto' }} />
                 </colgroup>
                 <thead>
@@ -181,7 +181,9 @@ export class RequestProposalCart extends Component {
                 className="btn btn-primary coupon-btn"
                 onClick={this.onFetchCoupon}
                 disabled={coupon.fetching}
-              />
+              >
+                <span>APPLY</span>
+              </button>
             </div>
 
             <div className="total clearfix">

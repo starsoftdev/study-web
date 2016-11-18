@@ -31,7 +31,7 @@ class LoginForm extends React.Component { // eslint-disable-line react/prefer-st
             name="email"
             type="text"
             component={Input}
-            placeholder="Username or email"
+            placeholder="Email"
             className="col-sm-12"
           />
         </FormGroup>
