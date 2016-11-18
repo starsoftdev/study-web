@@ -29,11 +29,13 @@ const labelStyle = {
   fontSize: '18px',
   fontWeight: 600,
   width: '80px',
+  left: 0,
+  paddingRight: 0,
 };
 
 function Toggle({ input, name, className }) {
   return (
-    <div className={classNames(className)}>
+    <div className={classNames(className, 'toggle')}>
       <ToggleButton
         value={input.value || false}
         name={name}
@@ -41,7 +43,7 @@ function Toggle({ input, name, className }) {
         thumbAnimateRange={[0, 80]}
         activeLabelStyle={labelStyle}
         inactiveLabelStyle={labelStyle}
-        thumbStyle={{ borderRadius: 0, width: '80px', height: '36px', 'box-shadow': 'none' }}
+        thumbStyle={{ borderRadius: 0, width: '80px', height: '36px', boxShadow: 'none' }}
         trackStyle={{ borderRadius: 0, width: '160px', height: '40px', border: '2px solid #cdcdcd' }}
         onToggle={(value) => input.onChange(!value)}
       />
