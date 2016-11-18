@@ -9,11 +9,13 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     index: PropTypes.number,
     studyId: PropTypes.number,
     indication: PropTypes.object,
+    campaign: PropTypes.object,
     location: PropTypes.string,
     sponsor: PropTypes.string,
     protocol: PropTypes.string,
     patientMessagingSuite: PropTypes.string,
     status: PropTypes.string,
+    siteUsers: PropTypes.array,
     startDate: PropTypes.string,
     endDate: PropTypes.string,
     onRenew: PropTypes.func,
@@ -43,19 +45,19 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   onRenewClick() {
-    const { studyId, indication, onRenew } = this.props;
+    const { studyId, indication, onRenew, campaign } = this.props;
 
-    onRenew(studyId, indication.id);
+    onRenew(studyId, indication.id, campaign);
   }
 
   onUpgradeClick() {
-    const { studyId, indication, onUpgrade } = this.props;
+    const { studyId, indication, onUpgrade, campaign } = this.props;
 
-    onUpgrade(studyId, indication.id);
+    onUpgrade(studyId, indication.id, campaign);
   }
 
   onEditClick() {
-    this.props.onEdit(this.props.studyId);
+    this.props.onEdit(this.props.studyId, this.props.siteUsers);
   }
 
   showButtons() {

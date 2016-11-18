@@ -39,7 +39,7 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
     const isSuperAdmin = (name === 'Super Admin');
 
     if (isSuperAdmin) {
-      accessStr = name;
+      accessStr = 'Admin';
     } else if (purchase && reward) {
       accessStr = 'All Access';
     } else if (purchase && !reward) {

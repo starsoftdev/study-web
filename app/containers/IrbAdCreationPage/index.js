@@ -5,14 +5,15 @@
  */
 
 import React, { PropTypes } from 'react';
+import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { createStructuredSelector } from 'reselect';
 import IrbAdCreationForm from 'components/IrbAdCreationForm';
 import ShoppingCartForm from 'components/ShoppingCartForm';
 import { selectIrbAdCreationFormValues, selectIrbAdCreationFormError } from 'components/IrbAdCreationForm/selectors';
-import { selectIrbProductList } from 'containers/IrbAdCreationPage/selectors';
-import { submitForm, fetchIrbProductList } from 'containers/IrbAdCreationPage/actions';
+import { selectIrbProductList, selectIrbAdCreationDetail } from 'containers/IrbAdCreationPage/selectors';
+import { submitForm, fetchIrbProductList, fetchIrbAdCreation } from 'containers/IrbAdCreationPage/actions';
 
 import {
   fetchSites,
@@ -38,13 +39,20 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     hasError: PropTypes.bool,
     currentUser: PropTypes.object,
     productList: PropTypes.array,
+    irbAdCreationDetail: PropTypes.object,
+    params: PropTypes.object,
     fetchProductList: PropTypes.func,
+    fetchIrbAdCreation: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
     this.submitForm = this.props.submitForm.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
+
+    if (!isNaN(props.params.id)) {
+      this.props.fetchIrbAdCreation(props.params.id);
+    }
   }
 
   componentDidMount() {
@@ -65,7 +73,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
   }
 
   render() {
-    const { siteLocations, indications, hasError, productList } = this.props;
+    const { siteLocations, indications, hasError, productList, irbAdCreationDetail } = this.props;
 
     if (productList[0]) {
       const addOns = [{
@@ -77,6 +85,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
 
       return (
         <StickyContainer className="container-fluid">
+          <Helmet title="Order IRB Ad Creation - StudyKIK" />
           <section className="study-portal">
             <h2 className="main-heading">ORDER IRB AD CREATION</h2>
             <div className="form-study row">
@@ -84,16 +93,17 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
                 <IrbAdCreationForm
                   siteLocations={siteLocations}
                   indications={indications}
+                  initialValues={irbAdCreationDetail}
                 />
               </div>
 
               <div className="fixed-block">
                 <div className="fixed-block-holder">
-                  <Sticky className="sticky-shopping-cart">
-
-                    <ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} disableSubmit={hasError} />
-
-                  </Sticky>
+                  <div className="order-summery-container">
+                    <Sticky className="sticky-shopping-cart">
+                      <ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} disableSubmit={hasError} />
+                    </Sticky>
+                  </div>
                 </div>
               </div>
 
@@ -113,6 +123,7 @@ const mapStateToProps = createStructuredSelector({
   hasError: selectIrbAdCreationFormError(),
   currentUser: selectCurrentUser(),
   productList: selectIrbProductList(),
+  irbAdCreationDetail: selectIrbAdCreationDetail(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -120,6 +131,7 @@ function mapDispatchToProps(dispatch) {
     fetchSites:       () => dispatch(fetchSites()),
     fetchIndications: () => dispatch(fetchIndications()),
     fetchProductList: () => dispatch(fetchIrbProductList()),
+    fetchIrbAdCreation: (id) => dispatch(fetchIrbAdCreation(id)),
     submitForm:     (cartValues, formValues) => dispatch(submitForm(cartValues, formValues)),
   };
 }

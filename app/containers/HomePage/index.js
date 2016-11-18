@@ -59,7 +59,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
   render() {
     return (
       <div className="home-page">
-        <Helmet title="Home Page - StudyKIK" />
+        <Helmet title="Home - StudyKIK" />
         <div className="container-fluid">
           <div className="dashboard form-group">
             <Dashboard location={this.props.location} />

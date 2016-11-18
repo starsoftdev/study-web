@@ -10,7 +10,7 @@
 }
 
 .Select-placeholder {
-  color: @input-color;
+  color: @input-color !important;
 }
 
 .Select-menu-outer {
@@ -36,3 +36,10 @@
 
 /* react-toggle-button styles */
 
+div.toggle > div:first-child {
+  width: 160px !important;
+
+  > div {
+    color: red;
+  }
+}
