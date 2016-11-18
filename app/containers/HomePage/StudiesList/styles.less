@@ -1,0 +1,97 @@
+.studies {
+  table {
+    .inner-info {
+      margin-left: 15px;
+
+      .info-value {
+        margin-left: 10px;
+        color: #030303;
+      }
+    }
+  }
+  .study-container {
+    .index {
+      width: 8%;
+    }
+    .indication {
+      width: 14%;
+    }
+    .location {
+      width: 13%;
+    }
+    .sponsor {
+      width: 14%;
+    }
+    .protocol {
+      width: 10%;
+    }
+    .patient-messaging-suite {
+      width: 8%;
+    }
+    .status {
+      width: 11%;
+    }
+    .start-date {
+      width: 11%;
+    }
+    .end-date {
+      width: 11%;
+    }
+  }
+}
+
+.modal {
+  &.edit-study-modal {
+    .modal-lg {
+      width: 590px;
+
+      .modal-content {
+        max-width: none;
+
+        .modal-body {
+          padding: 20px;
+        }
+      }
+    }
+  }
+
+  &.renew-study-modal,
+  &.upgrade-study-modal {
+    .modal-lg {
+      width: 1000px !important;
+
+      .modal-content {
+        max-width: none;
+
+        .modal-body {
+          padding-top: 0;
+          padding-bottom: 0;
+
+          & > .row {
+            height: 100%;
+
+            .left-panel,
+            .right-panel {
+              height: 100%;
+              padding-top: 15px;
+              padding-bottom: 15px;
+            }
+          }
+        }
+      }
+
+      .left-panel {
+        .form-renew-study,
+        .form-upgrade-study {
+          margin-top: 10px;
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+      }
+
+      .right-panel {
+        border-left: 2px solid #f78e1e;
+      }
+    }
+  }
+}

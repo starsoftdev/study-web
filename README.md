@@ -7,25 +7,34 @@ You will need to install packages first and install the Postgres database to run
 Create a file named `.env` at the root of this project that includes the following values:
 ```
 NODE_ENV=development
-PORT=8080
 API_URL=http://localhost:3000/api/v1
 HOST_URL=http://localhost:3000
+HTTP=true
+```
+If you like inline source maps, and debugging anywhere in the app with Chrome Dev Tools, enter this line into the .env file as well:
+```
+SOURCEMAP=true
 ```
 
 If you want to develop with Redux Dev Tools, then have this value in the .env as well:
 ```
 DEVTOOLS=true
 ```
+You will also need to install the associated Chrome extension for Redux Dev Tools to use it.
+https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
 
-If you want to use production search indices, change your config to:
+If you want to use staging to test the web repo, change your config to:
 ```
-API_URL=https://studykik.com/api
+API_URL=http://api-staging.studykik.com/api/v1
 ```
 
 ### Install packages
 ```
 npm install
 ```
+for correct installation of package 'git-validate' it may be necessary
+to manually create a pre-commit file in ./.git/hooks directory and change
+the rights for it.
 
 ### Running the app:
 ```
@@ -101,8 +110,3 @@ If there are more than 5 import statements, feel free to add a line break betwee
 - [React-Router](https://github.com/rackt/react-router) for routing goodness.
 - [React-Transform](https://github.com/gaearon/babel-plugin-react-transform) for development fun (and productivity).
 - [Webpack](https://github.com/webpack/webpack) for asset management and production builds.
-- [TComb Forms](https://github.com/gcanti/tcomb-form/) for managing forms.
-
-## API Explorer
-
-- http://ec2-52-23-162-255.compute-1.amazonaws.com/explorer/

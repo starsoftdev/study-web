@@ -1,8 +1,8 @@
-webpack.*
-server/*
-scripts/*
-dist/*
-node_modules/*
-tests/*
-*/**/*.md
-client/shared/components/MySortable/index.js
+build/**
+docs/**
+dist/**
+internals/**
+ture/**
+node_modules/**
+coverage/**
+.gitignore
