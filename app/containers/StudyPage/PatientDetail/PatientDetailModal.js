@@ -9,6 +9,7 @@ import Collapse from 'react-bootstrap/lib/Collapse';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+import { selectCurrentUser } from 'containers/App/selectors';
 import * as Selector from '../selectors';
 import PatientDetailSection from './PatientDetailSection';
 import NotesSection from './NotesSection';
@@ -55,7 +56,7 @@ class PatientDetailModal extends React.Component {
         formattedPatient.dobYear = dob.year();
       }
       return (
-        <OtherSection active={carousel.other} initialValues={formattedPatient} currentUser={currentUser} enableReinitialize />
+        <OtherSection active={carousel.other} initialValues={formattedPatient} currentUser={currentUser} />
       );
     }
     return null;
@@ -68,7 +69,7 @@ class PatientDetailModal extends React.Component {
       const formattedPatient = Object.assign({}, currentPatient);
       formattedPatient.phone = normalizePhoneDisplay(currentPatient.phone);
       return (
-        <PatientDetailSection initialValues={formattedPatient} enableReinitialize />
+        <PatientDetailSection initialValues={formattedPatient} />
       );
     }
     return null;
@@ -113,9 +114,11 @@ class PatientDetailModal extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
   carousel: Selector.selectCarousel(),
   currentPatient: Selector.selectCurrentPatient(),
   currentPatientCategory: Selector.selectCurrentPatientCategory(),
+  openPatientModal: Selector.selectOpenPatientModal(),
   socket: selectSocket(),
   studyId: Selector.selectStudyId(),
 });

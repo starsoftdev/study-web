@@ -30,6 +30,7 @@ import {
   SET_SITE_ID,
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
+  SET_OPEN_PATIENT_MODAL,
   SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
   MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
@@ -235,6 +236,13 @@ export function setCurrentPatientCategoryId(id) {
   return {
     type: SET_CURRENT_PATIENT_CATEGORY_ID,
     id,
+  };
+}
+
+export function setOpenPatientModal(show) {
+  return {
+    type: SET_OPEN_PATIENT_MODAL,
+    show,
   };
 }
 

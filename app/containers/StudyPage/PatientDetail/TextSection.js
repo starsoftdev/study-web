@@ -73,7 +73,7 @@ class TextSection extends React.Component {
               this.setState({ twilioMessages: data.messages });
             }
           } else {
-            console.log(err);
+            console.error(err);
           }
           this.props.setProcessingStatus({ status: false });
         },

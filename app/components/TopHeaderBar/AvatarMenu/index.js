@@ -43,8 +43,8 @@ class AvatarMenu extends React.Component {
             <ul className="list-unstyled">
               <li><Link to="/me/profile" onClick={() => this.handleClickOutside()}>PROFILE</Link></li>
               <li><Link to="/payment-information" onClick={() => this.handleClickOutside()}>PAYMENT INFORMATION</Link></li>
-              <li><Link to="#" onClick={() => this.handleClickOutside()}>RECEIPTS</Link></li>
-              <li><Link to="#" onClick={() => this.handleClickOutside()}>PROPOSALS</Link></li>
+              <li><Link to="/receipts" onClick={() => this.handleClickOutside()}>RECEIPTS</Link></li>
+              <li><Link to="/proposals" onClick={() => this.handleClickOutside()}>PROPOSALS</Link></li>
               <Link
                 to="/logout"
                 onClick={() => {
