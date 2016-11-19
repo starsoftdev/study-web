@@ -23,6 +23,7 @@ import {
   SET_SITE_ID,
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
+  SET_OPEN_PATIENT_MODAL,
   SUBMIT_DELETE_NOTE_SUCCESS,
   MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
@@ -43,6 +44,7 @@ const initialState = {
     email: false,
     other: false,
   },
+  openPatientModal: false,
 };
 
 function studyPageReducer(state = initialState, action) {
@@ -170,6 +172,11 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         currentPatientCategoryId: action.id,
+      };
+    case SET_OPEN_PATIENT_MODAL:
+      return {
+        ...state,
+        openPatientModal: action.show,
       };
     case MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING:
       return {

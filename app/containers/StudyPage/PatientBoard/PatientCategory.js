@@ -6,6 +6,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { DropTarget } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
+
+import { selectCurrentUser } from 'containers/App/selectors';
 import * as Selector from '../selectors';
 import DragTypes from './dragSourceTypes';
 import Patient from './Patient';
@@ -129,6 +131,8 @@ class PatientCategory extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
+  currentPatientId: Selector.selectCurrentPatientId(),
+  currentUser: selectCurrentUser(),
   studyId: Selector.selectStudyId(),
 });
 
