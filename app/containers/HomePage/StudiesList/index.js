@@ -309,7 +309,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               <div className="table-responsive">
                 <table className="table">
                   <caption>
-                    <span className="pull-left">Study/Site Status</span>
+                    <span className="pull-left">Study Status</span>
                     <span className="pull-right">
                       <span className="inner-info">
                         <span className="info-label">ACTIVE</span>
