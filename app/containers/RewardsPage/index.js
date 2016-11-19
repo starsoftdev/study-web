@@ -15,6 +15,7 @@ import {
 
 import {
   selectSiteLocations,
+  selectUserSiteLocations,
   selectRewards,
 } from 'containers/App/selectors';
 
@@ -218,7 +219,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 }
 
 const mapStateToProps = createStructuredSelector({
-  siteLocations : selectSiteLocations(),
+  siteLocations : selectUserSiteLocations(currentUserId, currentClientId),
   rewards: selectRewards(),
 });
 
