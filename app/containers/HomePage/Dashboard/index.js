@@ -2,13 +2,13 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { selectCurrentUser } from 'containers/App/selectors';
+import { selectCurrentUser, selectSitePatients } from 'containers/App/selectors';
 
 import { fetchPatientSignUps, fetchPatientMessages, fetchRewardsPoint } from '../actions';
 import { selectPatientSignUps, selectPatientMessages, selectRewardsPoint } from '../selectors';
 
 import './styles.less';
-
+import { sumBy } from 'lodash';
 import graph from 'assets/images/graph.svg';
 
 export class Dashboard extends React.Component {
@@ -20,6 +20,7 @@ export class Dashboard extends React.Component {
     fetchPatientSignUps: PropTypes.func,
     fetchPatientMessages: PropTypes.func,
     fetchRewardsPoint: PropTypes.func,
+    sitePatients: React.PropTypes.object,
   }
 
   componentDidMount() {
@@ -34,8 +35,13 @@ export class Dashboard extends React.Component {
   }
 
   render() {
-    const { patientSignUps, patientMessages, rewardsPoint } = this.props;
-
+    const { patientSignUps, patientMessages, rewardsPoint, sitePatients } = this.props;
+    const unreadTexts = sumBy(sitePatients.details, (sitePatient) => {
+      if (sitePatient.count_unread == null) {
+        return 0;
+      }
+      return parseInt(sitePatient.count_unread);
+    });
     return (
       <section className="row infoarea text-uppercase">
         <h2 className="hidden">Statics</h2>
@@ -66,7 +72,7 @@ export class Dashboard extends React.Component {
             </div>
             <div className="textbox">
               <h2>PATIENT<br /> MESSAGES</h2>
-              <span className="counter">TOTAL {patientMessages.unreadTexts + patientMessages.unreadEmails}</span>
+              <span className="counter">TOTAL {unreadTexts + patientMessages.unreadEmails}</span>
             </div>
           </div>
           <div className="box">
@@ -76,7 +82,7 @@ export class Dashboard extends React.Component {
             </div>
             <div className="col pull-right">
               <span className="sub-title">UNREAD<br /> TEXT</span>
-              <strong className="number"><i className="icomoon-icon_chat_alt"></i> {patientMessages.unreadTexts}</strong>
+              <strong className="number"><i className="icomoon-icon_chat_alt"></i> {unreadTexts}</strong>
             </div>
           </div>
         </article>
@@ -110,6 +116,7 @@ const mapStateToProps = createStructuredSelector({
   patientSignUps: selectPatientSignUps(),
   patientMessages: selectPatientMessages(),
   rewardsPoint: selectRewardsPoint(),
+  sitePatients: selectSitePatients(),
 });
 const mapDispatchToProps = {
   fetchPatientSignUps,
