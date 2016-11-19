@@ -44,6 +44,7 @@ const selectUserSites = (siteId, clientId) => createSelector(
   selectGlobal(),
   (substate) => {
     const sites = get(substate, 'baseData.sites', []);
+    var userSites = [];
     if(siteId){
       return filter(sites, e => e.id == siteId);  
     } else if (clientId) {
@@ -53,6 +54,24 @@ const selectUserSites = (siteId, clientId) => createSelector(
     }
   }
 );
+
+// get user's site locations based on siteId and ClientId
+const selectUserSiteLocations = (siteId, clientId) => createSelector(
+  selectGlobal(),
+  (substate) => {
+    const sites = get(substate, 'baseData.sites', []);
+    var userSites = [];
+    if(siteId){
+      userSites = filter(sites, e => e.id == siteId);  
+    } else if (clientId) {
+      userSites = get(substate, 'baseData.clientSites', {})
+    } else {
+      userSites = []
+    }
+    return map(userSites, e => pick(e, ['id', 'name']));
+  }
+);
+
 // Deccorated site locations
 const selectSiteLocations = () => createSelector(
   selectGlobal(),
