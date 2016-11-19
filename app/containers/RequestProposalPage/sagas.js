@@ -14,11 +14,14 @@ import {
   formSubmissionError,
   couponFetched,
   couponFetchingError,
+  fetchProposalSuccess,
+  fetchProposalError,
 } from 'containers/RequestProposalPage/actions';
 
 import {
   SUBMIT_FORM,
   FETCH_COUPON,
+  FETCH_PROPOSAL,
 } from 'containers/RequestProposalPage/constants';
 
 // Bootstrap sagas
@@ -68,12 +71,29 @@ export function* fetchCouponWatcher() {
   }
 }
 
+export function* fetchProposalWatcher() {
+  while (true) {
+    const { id } = yield take(FETCH_PROPOSAL);
+
+    try {
+      const requestURL = `${API_URL}/proposals/${id}`;
+      const response = yield call(request, requestURL);
+
+      yield put(fetchProposalSuccess(response));
+    } catch (err) {
+      yield put(fetchProposalError(err));
+    }
+  }
+}
+
 export function* requestProposalPageSaga() {
   const watcherA = yield fork(submitFormWatcher);
   const watcherB = yield fork(fetchCouponWatcher);
+  const watcherC = yield fork(fetchProposalWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
   yield cancel(watcherA);
   yield cancel(watcherB);
+  yield cancel(watcherC);
 }
