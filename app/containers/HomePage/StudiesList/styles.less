@@ -11,31 +11,73 @@
   }
   .study-container {
     .index {
-      width: 8%;
+      width: 5%;
     }
     .indication {
-      width: 14%;
+      width: 17%;
     }
     .location {
-      width: 13%;
+      width: 16%;
     }
     .sponsor {
-      width: 14%;
+      width: 16%;
     }
     .protocol {
-      width: 10%;
+      width: 15%;
     }
     .patient-messaging-suite {
-      width: 8%;
+      width: 7%;
     }
     .status {
-      width: 11%;
+      width: 8%;
     }
     .start-date {
-      width: 11%;
+      width: 8%;
     }
     .end-date {
-      width: 11%;
+      width: 8%;
+    }
+    &.tr-inactive {
+      .protocol,
+      .patient-messaging-suite,
+      .status,
+      .start-date,
+      .end-date {
+        & > span {
+          opacity: 1;
+        }
+      }
+      .btns-slide {
+        opacity: 0;
+        .btns {
+          left: 0;
+          width: 0;
+        }
+      }
+    }
+    &.tr-active {
+      .btns-slide {
+        opacity: 1;
+        .btns {
+          left: -480px;
+          width: 480px;
+        }
+      }
+      .status,
+      .start-date,
+      .end-date {
+        & > span {
+          opacity: 0;
+        }
+      }
+      @media screen and (max-width: 1260px) {
+        .protocol,
+        .patient-messaging-suite {
+          & > span {
+            opacity: 0;
+          }
+        }
+      }
     }
   }
 }

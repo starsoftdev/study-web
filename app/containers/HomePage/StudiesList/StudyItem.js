@@ -72,84 +72,45 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     const { index, indication, location, sponsor, protocol, patientMessagingSuite, status,
       startDate, endDate } = this.props;
     const buttonsShown = this.state.buttonsShown;
-    let content = null;
-    if (buttonsShown) {
-      content = (
-        <tr className={classNames('study-container', { 'tr-active': buttonsShown })} onMouseEnter={this.showButtons} onMouseLeave={this.hideButtons}>
-          <td className="index">
-            <span>{index + 1}</span>
-          </td>
-          <td className="indication">
-            <span>{indication.name}</span>
-          </td>
-          <td className="location">
-            <span>{location}</span>
-          </td>
-          <td className="sponsor">
-            <span>{sponsor}</span>
-          </td>
-          <td className="protocol">
-            <span>{protocol}</span>
-          </td>
-          <td className="patient-messaging-suite">
-            <span>{patientMessagingSuite}</span>
-          </td>
-          <td className="status">
-            <span>{status}</span>
-          </td>
-          <td className="start-date">
-            <span>{startDate}</span>
-          </td>
-          <td className="end-date">
-            <span>{endDate}</span>
-          </td>
-          <td className="actions">
-            <div className="btns-slide">
-              <div className="btns">
-                <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>
-                <Button bsStyle="primary" className="btn-renew" onClick={this.onRenewClick}>Renew</Button>
-                <Button bsStyle="danger" className="btn-upgrade" onClick={this.onUpgradeClick}>Upgrade</Button>
-                <Button bsStyle="info" className="btn-edit" onClick={this.onEditClick}>Edit</Button>
-              </div>
+    return (
+      <tr className={classNames('study-container', { 'tr-active': buttonsShown, 'tr-inactive': !buttonsShown })} onMouseEnter={this.showButtons} onMouseLeave={this.hideButtons}>
+        <td className="index">
+          <span>{index + 1}</span>
+        </td>
+        <td className="indication">
+          <span>{indication.name}</span>
+        </td>
+        <td className="location">
+          <span>{location}</span>
+        </td>
+        <td className="sponsor">
+          <span>{sponsor}</span>
+        </td>
+        <td className="protocol">
+          <span>{protocol}</span>
+        </td>
+        <td className="patient-messaging-suite">
+          <span>{patientMessagingSuite}</span>
+        </td>
+        <td className="status">
+          <span>{status}</span>
+        </td>
+        <td className="start-date">
+          <span>{startDate}</span>
+        </td>
+        <td className="end-date">
+          <span>{endDate}</span>
+          <div className="btns-slide">
+            <div className="btns">
+              <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>
+              <Button bsStyle="primary" className="btn-renew" onClick={this.onRenewClick}>Renew</Button>
+              <Button bsStyle="danger" className="btn-upgrade" onClick={this.onUpgradeClick}>Upgrade</Button>
+              <Button bsStyle="info" className="btn-edit" onClick={this.onEditClick}>Edit</Button>
             </div>
-          </td>
-        </tr>
-      );
-    } else {
-      content = (
-        <tr className={classNames('study-container', { 'tr-active': buttonsShown })} onMouseEnter={this.showButtons} onMouseLeave={this.hideButtons}>
-          <td className="index">
-            <span>{index + 1}</span>
-          </td>
-          <td className="indication">
-            <span>{indication.name}</span>
-          </td>
-          <td className="location">
-            <span>{location}</span>
-          </td>
-          <td className="sponsor">
-            <span>{sponsor}</span>
-          </td>
-          <td className="protocol">
-            <span>{protocol}</span>
-          </td>
-          <td className="patient-messaging-suite">
-            <span>{patientMessagingSuite}</span>
-          </td>
-          <td className="status">
-            <span>{status}</span>
-          </td>
-          <td className="start-date">
-            <span>{startDate}</span>
-          </td>
-          <td className="end-date">
-            <span>{endDate}</span>
-          </td>
-        </tr>
-      );
-    }
-
-    return content;
+          </div>
+        </td>
+      </tr>
+    );
   }
 }
 
