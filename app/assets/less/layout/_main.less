@@ -815,29 +815,6 @@ input[type=text]:-ms-input-placeholder {
       font-weight: 600;
     }
   }
-  .home-page & {
-    .tr-active {
-      > td {
-        &:nth-child(7),
-        &:nth-child(8),
-        &:nth-child(9) {
-          opacity: 0;
-        }
-      }
-    }
-    > tbody > tr {
-      > td {
-        &:nth-child(7),
-        &:nth-child(6) {
-          color: #a0cf67;
-
-          &.off {
-            color: #f78e1e;
-          }
-        }
-      }
-    }
-  }
   @media screen and (max-width: @psd) {
     font-size: 14px;
   }
@@ -3244,12 +3221,9 @@ th {
 
   .stick {
     .opener {
-      border: solid #f1f1f1;
-      border-width: 20px 0 0 0;
       position: fixed;
       top: 71px;
       z-index: 1000;
-      min-height: 79px;
       .number {
         top: 17px;
       }

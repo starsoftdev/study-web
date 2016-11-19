@@ -63,7 +63,7 @@ class PatientBoard extends React.Component {
       const options = {
         duration: 500,
       };
-      scroll.scrollTo(633, options);
+      scroll.scrollTo(650, options);
       switchToNoteSection();
     } else {
       setCurrentPatientId(-1);
@@ -83,7 +83,7 @@ class PatientBoard extends React.Component {
       const options = {
         duration: 500,
       };
-      scroll.scrollTo(633, options);
+      scroll.scrollTo(650, options);
       switchToTextSection();
     } else {
       setCurrentPatientId(-1);
@@ -102,7 +102,7 @@ class PatientBoard extends React.Component {
       scrollTop = event.pageY;
     }
     this.setState({
-      stick: scrollTop >= 634,
+      stick: scrollTop >= 654,
     });
   }
 
