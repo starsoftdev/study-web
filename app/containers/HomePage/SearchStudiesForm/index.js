@@ -50,7 +50,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
                 component={Input}
                 type="text"
                 className="keyword-search"
-                placeholder="Search Name..."
+                placeholder="Search..."
                 disabled={clientSites.fetching || studies.fetching}
               />
               <label htmlFor="search">
