@@ -8,6 +8,7 @@ import {
   FETCH_COUPON,
   FETCH_COUPON_SUCCESS,
   FETCH_COUPON_ERROR,
+  FETCH_PROPOSAL_SUCCESS,
 } from 'containers/RequestProposalPage/constants';
 
 const initialState = {
@@ -16,6 +17,7 @@ const initialState = {
     fetching: false,
     error: null,
   },
+  proposalDetail: null,
 };
 
 function requestProposalPageReducer(state = initialState, action) {
@@ -46,6 +48,11 @@ function requestProposalPageReducer(state = initialState, action) {
           fetching: false,
           error: action.payload,
         },
+      };
+    case FETCH_PROPOSAL_SUCCESS:
+      return {
+        ...state,
+        proposalDetail: action.payload,
       };
     default:
       return state;
