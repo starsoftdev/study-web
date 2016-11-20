@@ -16,14 +16,14 @@ import cardAmazon from 'assets/images/img7.png';
 import cardStarbucks from 'assets/images/img8.png';
 
 import {
-  selectSiteLocations,
+  selectUserSiteLocations,
   selectCurrentUserClientId,
 } from 'containers/App/selectors';
 
 import './style.less';
 
 const mapStateToProps = createStructuredSelector({
-  siteLocations : selectSiteLocations(),
+  siteLocations : selectUserSiteLocations(),
   currentUserClientId: selectCurrentUserClientId(),
 });
 

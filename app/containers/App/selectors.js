@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { get, map, pick, findIndex } from 'lodash';
+import { get, map, pick, filter, findIndex } from 'lodash';
 
 /**
  * Direct selector to the app state domain
@@ -40,34 +40,42 @@ const selectSites = () => createSelector(
 );
 
 // get user's sites based on siteId and ClientId
-const selectUserSites = (siteId, clientId) => createSelector(
+const selectUserSites = () => createSelector(
   selectGlobal(),
   (substate) => {
+    const currentUser = get(substate, 'userData');
+    const siteId = currentUser.site_id;
     const sites = get(substate, 'baseData.sites', []);
-    var userSites = [];
     if(siteId){
       return filter(sites, e => e.id == siteId);  
-    } else if (clientId) {
-      return get(substate, 'baseData.clientSites', {})
     } else {
-      return []
-    }
+      const clientId = get(substate, 'userData.roleForClient.client.id', null);
+      if(clientId) {
+        return get(substate, 'baseData.clientSites', {})  
+      } else {
+        return []  
+      }
+    } 
   }
 );
 
 // get user's site locations based on siteId and ClientId
-const selectUserSiteLocations = (siteId, clientId) => createSelector(
+const selectUserSiteLocations = () => createSelector(
   selectGlobal(),
   (substate) => {
+    const currentUser = get(substate, 'userData');
+    const siteId = currentUser.site_id;
     const sites = get(substate, 'baseData.sites', []);
     var userSites = [];
+    
     if(siteId){
       userSites = filter(sites, e => e.id == siteId);  
-    } else if (clientId) {
-      userSites = get(substate, 'baseData.clientSites', {})
     } else {
-      userSites = []
-    }
+      const clientId = get(substate, 'userData.roleForClient.client.id', null);
+      if(clientId){
+        userSites = get(substate, 'baseData.clientSites.details', {})  
+      }
+    } 
     return map(userSites, e => pick(e, ['id', 'name']));
   }
 );
@@ -246,6 +254,8 @@ export {
 
   selectSites,
   selectSiteLocations,
+  selectUserSites,
+  selectUserSiteLocations,
   selectIndications,
   selectSources,
   selectLevels,

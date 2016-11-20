@@ -10,11 +10,11 @@ import { createStructuredSelector } from 'reselect';
 
 import {
   fetchSites,
+  fetchClientSites,
   fetchRewards,
 } from 'containers/App/actions';
 
 import {
-  selectSiteLocations,
   selectUserSiteLocations,
   selectRewards,
 } from 'containers/App/selectors';
@@ -34,8 +34,11 @@ import gold from 'assets/images/gold.svg';
 export class RewardsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
+    currentUser: PropTypes.object,
+    currentUserClientId: PropTypes.number,
     rewards: PropTypes.array,
     fetchSites: PropTypes.func,
+    fetchClientSites: PropTypes.func,
     fetchRewards: PropTypes.func,
     onSubmitForm: PropTypes.func,
   }
@@ -50,6 +53,12 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     this.openRewardModal = this.openRewardModal.bind(this);
     this.closeRewardModal = this.closeRewardModal.bind(this);
     this.onSubmitForm = this.props.onSubmitForm.bind(this);
+  }
+  componentWillMount() {
+    const { currentUserClientId } = this.props;
+    if (currentUserClientId) {
+      this.props.fetchClientSites(currentUserClientId, {});
+    }
   }
 
   componentDidMount() {
@@ -219,13 +228,14 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 }
 
 const mapStateToProps = createStructuredSelector({
-  siteLocations : selectUserSiteLocations(currentUserId, currentClientId),
+  siteLocations: selectUserSiteLocations(),
   rewards: selectRewards(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchSites: () => dispatch(fetchSites()),
+    fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchRewards: () => dispatch(fetchRewards()),
     onSubmitForm: (values) => dispatch(submitForm(values)),
   };
