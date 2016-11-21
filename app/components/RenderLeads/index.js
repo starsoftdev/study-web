@@ -43,7 +43,7 @@ const RenderLeads = ({ fields, availPhoneNumbers }) => (
                 <Field
                   name={`${lead}.source_phone`}
                   component={ReactSelect}
-                  placeholder="Select Lead Source"
+                  placeholder="Select Phone Number"
                   options={availPhoneNumbers}
                   className="field"
                 />

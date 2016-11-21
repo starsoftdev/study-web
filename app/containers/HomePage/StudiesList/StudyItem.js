@@ -14,6 +14,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     sponsor: PropTypes.string,
     protocol: PropTypes.string,
     patientMessagingSuite: PropTypes.string,
+    unreadMessageCount: PropTypes.number,
     status: PropTypes.string,
     siteUsers: PropTypes.array,
     startDate: PropTypes.string,
@@ -70,7 +71,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 
   render() {
     const { index, indication, location, sponsor, protocol, patientMessagingSuite, status,
-      startDate, endDate } = this.props;
+      startDate, endDate, unreadMessageCount } = this.props;
     const buttonsShown = this.state.buttonsShown;
     let content = null;
     if (buttonsShown) {
@@ -91,8 +92,16 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <td className="protocol">
             <span>{protocol}</span>
           </td>
-          <td className="patient-messaging-suite">
+          <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off') })}>
             <span>{patientMessagingSuite}</span>
+            {(() => {
+              if (unreadMessageCount > 0) {
+                return (
+                  <span className="counter-circle">{unreadMessageCount}</span>
+                );
+              }
+              return false;
+            })()}
           </td>
           <td className="status">
             <span>{status}</span>
@@ -133,8 +142,16 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <td className="protocol">
             <span>{protocol}</span>
           </td>
-          <td className="patient-messaging-suite">
+          <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off') })}>
             <span>{patientMessagingSuite}</span>
+            {(() => {
+              if (unreadMessageCount > 0) {
+                return (
+                  <span className="counter-circle">{unreadMessageCount}</span>
+                );
+              }
+              return false;
+            })()}
           </td>
           <td className="status">
             <span>{status}</span>
