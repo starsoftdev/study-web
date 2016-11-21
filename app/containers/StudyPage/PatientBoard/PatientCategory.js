@@ -7,12 +7,11 @@ import { connect } from 'react-redux';
 import { DropTarget } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
 
-import { selectCurrentUser } from 'containers/App/selectors';
+import { selectCurrentUser, selectSitePatients } from 'containers/App/selectors';
 import * as Selector from '../selectors';
 import DragTypes from './dragSourceTypes';
 import Patient from './Patient';
 import { submitMovePatientBetweenCategories } from '../actions';
-import { selectSitePatients } from 'containers/App/selectors';
 import { find } from 'lodash';
 
 /**
