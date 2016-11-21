@@ -7,13 +7,15 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
-import { submitPatientText } from '../actions';
+import { submitPatientText, readStudyPatientMessages } from '../actions';
 
 import {
   sendStudyPatientMessages,
   fetchStudyPatientMessages,
   setProcessingStatus,
 } from 'containers/GlobalNotifications/actions';
+
+import { markAsReadPatientMessages } from 'containers/App/actions';
 
 import PatientText from './PatientText';
 
@@ -33,6 +35,8 @@ class TextSection extends React.Component {
     setProcessingStatus: React.PropTypes.func,
     socket: React.PropTypes.any,
     studyId: React.PropTypes.any,
+    readStudyPatientMessages: React.PropTypes.func.isRequired,
+    markAsReadPatientMessages: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -43,6 +47,7 @@ class TextSection extends React.Component {
 
     this.state = {
       twilioMessages : [],
+      socketBinded: false,
     };
   }
 
@@ -54,9 +59,16 @@ class TextSection extends React.Component {
       this.initStudyPatientMessagesFetch(newProps);
     }
 
-    this.props.socket.on('notifyMessage', () => {
-      this.initStudyPatientMessagesFetch(newProps);
-    });
+    if (this.props.socket && this.state.socketBinded === false) {
+      this.props.socket.on('notifyMessage', () => {
+        this.initStudyPatientMessagesFetch(newProps);
+        if (this.props.active && newMessage) {
+          this.props.readStudyPatientMessages(this.props.currentPatient.id, this.props.studyId);
+          this.props.markAsReadPatientMessages(this.props.currentPatient.id, this.props.studyId);
+        }
+      });
+      this.setState({ patientLoaded: false });
+    }
   }
 
   initStudyPatientMessagesFetch(props) {
@@ -170,6 +182,8 @@ const mapDispatchToProps = (dispatch) => ({
   sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
   fetchStudyPatientMessages: (payload) => dispatch(fetchStudyPatientMessages(payload)),
   setProcessingStatus: (payload) => dispatch(setProcessingStatus(payload)),
+  readStudyPatientMessages: (patientId, studyId) => dispatch(readStudyPatientMessages(patientId, studyId)),
+  markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextSection);

@@ -12,6 +12,8 @@ import * as Selector from '../selectors';
 import DragTypes from './dragSourceTypes';
 import Patient from './Patient';
 import { submitMovePatientBetweenCategories } from '../actions';
+import { selectSitePatients } from 'containers/App/selectors';
+import { find } from 'lodash';
 
 /**
  * Specifies the drop target contract.
@@ -50,6 +52,7 @@ class PatientCategory extends React.Component {
     submitMovePatientBetweenCategories: React.PropTypes.func.isRequired,
     onPatientClick: React.PropTypes.func.isRequired,
     onPatientTextClick: React.PropTypes.func.isRequired,
+    sitePatients: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -82,23 +85,33 @@ class PatientCategory extends React.Component {
   }
 
   renderPatients() {
-    const { category, currentPatientId, currentUser, onPatientClick, onPatientTextClick } = this.props;
+    const { category, currentPatientId, currentUser, onPatientClick, onPatientTextClick, studyId, sitePatients } = this.props;
     if (category.patients.length > 0) {
       return (
         <div className="slide">
           <div className="slide-holder">
             <ul className="list-unstyled">
-              {category.patients.map(patient => (
-                <Patient
-                  key={patient.id}
-                  category={category}
-                  currentPatientId={currentPatientId}
-                  patient={patient}
-                  currentUser={currentUser}
-                  onPatientClick={onPatientClick}
-                  onPatientTextClick={onPatientTextClick}
-                />
-              ))}
+              {category.patients.map(patient => {
+                // console.log(studyId);
+                // console.log(patient.id);
+                const patientData = find(sitePatients.details, { study_id: studyId, id: patient.id });
+                let unreadMessageCount = 0;
+                if (patientData !== undefined) {
+                  unreadMessageCount = patientData.count_unread === null ? 0 : patientData.count_unread;
+                }
+                return (
+                  <Patient
+                    key={patient.id}
+                    category={category}
+                    currentPatientId={currentPatientId}
+                    patient={patient}
+                    unreadMessageCount={unreadMessageCount}
+                    currentUser={currentUser}
+                    onPatientClick={onPatientClick}
+                    onPatientTextClick={onPatientTextClick}
+                  />
+                );
+              })}
             </ul>
           </div>
         </div>
@@ -134,6 +147,7 @@ const mapStateToProps = createStructuredSelector({
   currentPatientId: Selector.selectCurrentPatientId(),
   currentUser: selectCurrentUser(),
   studyId: Selector.selectStudyId(),
+  sitePatients: selectSitePatients(),
 });
 
 const mapDispatchToProps = (dispatch) => ({

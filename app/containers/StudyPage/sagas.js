@@ -10,6 +10,7 @@ import { FIND_PATIENTS_TEXT_BLAST,
   FETCH_PATIENT_DETAILS,
   FETCH_PATIENT_CATEGORIES,
   FETCH_STUDY,
+  READ_STUDY_PATIENT_MESSAGES,
   SUBMIT_ADD_PATIENT_INDICATION,
   SUBMIT_REMOVE_PATIENT_INDICATION,
   SUBMIT_PATIENT_UPDATE,
@@ -24,7 +25,32 @@ import { FIND_PATIENTS_TEXT_BLAST,
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
-import { addPatientsToTextBlast, campaignsFetched, deletePatientNoteSuccess, findPatientsForTextBlastSuccess, patientCategoriesFetched, patientsFetched, patientDetailsFetched, siteFetched, sourcesFetched, studyFetched, studyViewsStatFetched, patientReferralStatFetched, callStatsFetched, textStatsFetched, addPatientIndicationSuccess, removePatientIndicationSuccess, updatePatientSuccess, addPatientNoteSuccess, addPatientTextSuccess, movePatientBetweenCategoriesLoading, movePatientBetweenCategoriesSuccess, movePatientBetweenCategoriesFailed } from './actions';
+import {
+  addPatientsToTextBlast,
+  campaignsFetched,
+  deletePatientNoteSuccess,
+  findPatientsForTextBlastSuccess,
+  patientCategoriesFetched,
+  patientsFetched,
+  patientDetailsFetched,
+  siteFetched,
+  sourcesFetched,
+  studyFetched,
+  studyViewsStatFetched,
+  patientReferralStatFetched,
+  callStatsFetched,
+  textStatsFetched,
+  addPatientIndicationSuccess,
+  removePatientIndicationSuccess,
+  updatePatientSuccess,
+  addPatientNoteSuccess,
+  addPatientTextSuccess,
+  movePatientBetweenCategoriesLoading,
+  movePatientBetweenCategoriesSuccess,
+  movePatientBetweenCategoriesFailed,
+  readStudyPatientMessagesSuccess,
+  readStudyPatientMessagesError,
+} from './actions';
 
 // Bootstrap sagas
 export default [
@@ -167,6 +193,24 @@ function* fetchPatientCategories() {
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching patient categories. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+function* readStudyPatientMessages() {
+  while (true) {
+    const { patientId, studyId } = yield take(READ_STUDY_PATIENT_MESSAGES);
+    if (patientId && patientId > 0 && studyId && studyId > 0) {
+      try {
+        const requestURL = `${API_URL}/patients/readMessagesByPatientAndStudy?patientId=${patientId}&studyId=${studyId}`;
+        const response = yield call(request, requestURL);
+
+        yield put(readStudyPatientMessagesSuccess(response));
+      } catch (err) {
+        yield put(readStudyPatientMessagesError(err));
+      }
+    } else {
+      yield put(readStudyPatientMessagesSuccess([]));
+    }
   }
 }
 
@@ -567,6 +611,7 @@ export function* fetchStudySaga() {
     yield fork(fetchPatientsSaga);
     yield fork(fetchPatientDetails);
     yield fork(findPatientsSaga);
+    yield fork(readStudyPatientMessages);
     yield fork(submitAddPatientIndication);
     yield fork(submitMovePatientBetweenCategories);
     yield fork(submitRemovePatientIndication);
