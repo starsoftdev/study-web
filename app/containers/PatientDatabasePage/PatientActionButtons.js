@@ -5,8 +5,17 @@
 import React from 'react';
 import TextEmailBlastModal from './TextEmailBlastModal';
 import TextBlastModal from './TextBlast/index';
+import { createStructuredSelector } from 'reselect';
+import { selectValues } from '../../common/selectors/form.selector';
+import { connect } from 'react-redux';
+import { exportPatients } from '../../containers/PatientDatabasePage/actions';
 
 class PatientActionButtons extends React.Component {
+  static propTypes = {
+    formValues: React.PropTypes.object,
+    exportPatients: React.PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -24,6 +33,7 @@ class PatientActionButtons extends React.Component {
     this.closeTextBlastModal = this.closeTextBlastModal.bind(this);
     this.toggleEmailBlastModal = this.toggleEmailBlastModal.bind(this);
     this.closeEmailBlastModal = this.closeEmailBlastModal.bind(this);
+    this.download = this.download.bind(this);
   }
 
   toggleImportPatientsModal() {
@@ -80,11 +90,17 @@ class PatientActionButtons extends React.Component {
     });
   }
 
+  download() {
+    if (this.props.formValues.patients) {
+      this.props.exportPatients(this.props.formValues.patients);
+    }
+  }
+
   render() {
     return (
       <div className="btns-popups">
         <div className="col pull-right">
-          <a className="btn btn-primary download"><i className="icomoon-icon_download"></i> Download</a>
+          <a onClick={this.download} className="btn btn-primary download"><i className="icomoon-icon_download"></i> Download</a>
         </div>
         <div className="col pull-right">
           <a className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload"></i> Import</a>
@@ -103,4 +119,15 @@ class PatientActionButtons extends React.Component {
   }
 }
 
-export default PatientActionButtons;
+const formName = 'PatientDatabase.TextBlastModal';
+const mapStateToProps = createStructuredSelector({
+  formValues: selectValues(formName),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    exportPatients: patients => dispatch(exportPatients(patients)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PatientActionButtons);

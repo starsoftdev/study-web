@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Button from 'react-bootstrap/lib/Button';
 import { Field, change } from 'redux-form';
 import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
@@ -34,6 +33,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     selectedPatient: PropTypes.object,
     fetchPatient: PropTypes.func,
     openChat: PropTypes.func,
+    orderNumber: PropTypes.number,
   };
 
   constructor(props) {
@@ -90,7 +90,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { id, index, firstName, lastName, email, phone, age, gender, bmi, indications, source, studyPatientCategory } = this.props;
+    const { id, orderNumber, firstName, lastName, email, phone, age, gender, bmi, indications, source, studyPatientCategory } = this.props;
     const indicationNames = map(indications, indicationIterator => indicationIterator.name).join(', ');
 
     return (
@@ -104,7 +104,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
           />
         </div>
         <div className="td index">
-          {index + 1}
+          {orderNumber}
         </div>
         <div className="td name">
           <span>{firstName} {lastName}</span>
@@ -133,12 +133,12 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
         <div className="td source">
           <div className="btn-block">
             <span>{source.type}</span>
-            <Button bsStyle="primary" className="btn-edit-patient pull-right" onClick={this.editPatient} disabled={(this.currentPatientIsBeingFetched())}>
+            <a className="btn btn-primary lightbox-opener" onClick={this.editPatient} disabled={(this.currentPatientIsBeingFetched())}>
               {(this.currentPatientIsBeingFetched())
                 ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-patient" /></span>
                 : <span>Edit</span>
               }
-            </Button>
+            </a>
           </div>
         </div>
       </div>

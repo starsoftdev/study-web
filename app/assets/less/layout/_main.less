@@ -745,8 +745,8 @@ input[type=text]:-ms-input-placeholder {
     .font(18px, 1.42857);
     white-space: normal;
   }
-  > thead > tr {
-    > th {
+  > thead, .thead > tr, .tr {
+    > th, .th {
 			color: #336;
 			cursor: pointer;
 			border-width: 0;
@@ -2217,15 +2217,18 @@ th {
     }
   }
   .table {
-    .td {
+    .td, .th {
       display: inline-block;
       padding: 16px 5px 20px 13px;
       vertical-align: middle;
+      &:nth-child(2) {
+        text-align: center;
+      }
     }
     .index {
       text-align: center;
     }
-    td, th, .td {
+    td, th, .td, .th {
       &:nth-child(1) {
         width: 2.6%;
         padding-right: 0;
