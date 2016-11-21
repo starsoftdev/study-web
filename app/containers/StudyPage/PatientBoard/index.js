@@ -13,7 +13,16 @@ import { push } from 'react-router-redux';
 
 import PatientCategory from './PatientCategory';
 import PatientDetailModal from '../PatientDetail/PatientDetailModal';
-import { fetchPatientDetails, setCurrentPatientCategoryId, setCurrentPatientId, setOpenPatientModal, switchToNoteSectionDetail, switchToTextSectionDetail } from '../actions';
+import {
+  fetchPatientDetails,
+  setCurrentPatientCategoryId,
+  setCurrentPatientId,
+  setOpenPatientModal,
+  switchToNoteSectionDetail,
+  switchToTextSectionDetail,
+  readStudyPatientMessages,
+} from '../actions';
+import { markAsReadPatientMessages } from 'containers/App/actions';
 
 import Scroll from 'react-scroll';
 const scroll = Scroll.animateScroll;
@@ -32,6 +41,9 @@ class PatientBoard extends React.Component {
     switchToNoteSection: React.PropTypes.func.isRequired,
     switchToTextSection: React.PropTypes.func.isRequired,
     push: React.PropTypes.func.isRequired,
+    readStudyPatientMessages: React.PropTypes.func.isRequired,
+    markAsReadPatientMessages: React.PropTypes.func,
+    studyId: React.PropTypes.number,
   };
 
   constructor(props) {
@@ -74,12 +86,23 @@ class PatientBoard extends React.Component {
   }
 
   onPatientTextClick(category, patient) {
-    const { currentPatientId, fetchPatientDetails, setCurrentPatientId, setCurrentPatientCategoryId, setOpenPatientModal, switchToTextSection } = this.props;
+    const {
+      currentPatientId,
+      fetchPatientDetails,
+      setCurrentPatientId,
+      setCurrentPatientCategoryId,
+      setOpenPatientModal, switchToTextSection,
+      studyId,
+      readStudyPatientMessages,
+      markAsReadPatientMessages,
+    } = this.props;
     const show = (patient && currentPatientId !== patient.id) || false;
     if (show) {
       setCurrentPatientId(patient.id);
       setCurrentPatientCategoryId(category.id);
       fetchPatientDetails(patient.id);
+      readStudyPatientMessages(patient.id, studyId);
+      markAsReadPatientMessages(patient.id, studyId);
       const options = {
         duration: 500,
       };
@@ -143,6 +166,7 @@ const mapStateToProps = createStructuredSelector({
   currentPatientCategoryId: Selector.selectCurrentPatientCategoryId(),
   carousel: Selector.selectCarousel(),
   openPatientModal: Selector.selectOpenPatientModal(),
+  studyId: Selector.selectStudyId(),
 });
 
 const mapDispatchToProps = (dispatch) => (
@@ -154,6 +178,8 @@ const mapDispatchToProps = (dispatch) => (
     switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
     switchToTextSection: () => dispatch(switchToTextSectionDetail()),
     push: (url) => dispatch(push(url)),
+    readStudyPatientMessages: (patientId, studyId) => dispatch(readStudyPatientMessages(patientId, studyId)),
+    markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
   }
 );
 
