@@ -60,7 +60,7 @@ class TextSection extends React.Component {
     }
 
     if (this.props.socket && this.state.socketBinded === false) {
-      this.props.socket.on('notifyMessage', () => {
+      this.props.socket.on('notifyMessage', (newMessage) => {
         this.initStudyPatientMessagesFetch(newProps);
         if (this.props.active && newMessage) {
           this.props.readStudyPatientMessages(this.props.currentPatient.id, this.props.studyId);
