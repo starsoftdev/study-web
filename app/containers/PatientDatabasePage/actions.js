@@ -32,6 +32,7 @@ import {
   SUBMIT_TEXT_BLAST,
   SET_ACTIVE_SORT,
   SORT_PATIENTS_SUCCESS,
+  EXPORT_PATIENTS,
 } from './constants';
 import _ from 'lodash';
 
@@ -240,6 +241,13 @@ export function setActiveSort(sort, direction) {
 export function sortPatientsSuccess(patients) {
   return {
     type: SORT_PATIENTS_SUCCESS,
+    patients,
+  };
+}
+
+export function exportPatients(patients) {
+  return {
+    type: EXPORT_PATIENTS,
     patients,
   };
 }

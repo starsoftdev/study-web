@@ -173,30 +173,30 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
                 <h2>TOTAL PATIENT COUNT: {patients.details.length}</h2>
               </header>
               <div className="fixed-table-thead">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th onClick={this.sortBy}>
+                <div className="table">
+                  <div className="thead">
+                    <div className="tr">
+                      <div className="th" onClick={this.sortBy}>
                         <Field
                           name="all-patients"
                           type="checkbox"
                           component={Checkbox}
                           onChange={this.toggleAllPatientSelection}
                         />
-                      </th>
-                      <th onClick={this.sortBy} data-sort="orderNumber" className={`${(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}`}>#<i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="firstName" className={`${(this.props.paginationOptions.activeSort === 'firstName') ? this.props.paginationOptions.activeDirection : ''}`}>NAME<i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="email" className={`${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL<i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="phone" className={`${(this.props.paginationOptions.activeSort === 'phone') ? this.props.paginationOptions.activeDirection : ''}`}>PHONE<i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="indication" className={`${(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}`}>INDICATIONS<i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="age" className={`${(this.props.paginationOptions.activeSort === 'age') ? this.props.paginationOptions.activeDirection : ''}`}>AGE<i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="gender" className={`${(this.props.paginationOptions.activeSort === 'gender') ? this.props.paginationOptions.activeDirection : ''}`}>GENDER<i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="bmi" className={`${(this.props.paginationOptions.activeSort === 'bmi') ? this.props.paginationOptions.activeDirection : ''}`}>BMI<i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="status" className={`${(this.props.paginationOptions.activeSort === 'status') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS<i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="source" className={`${(this.props.paginationOptions.activeSort === 'source') ? this.props.paginationOptions.activeDirection : ''}`}>SOURCE<i className="caret-arrow" /></th>
-                    </tr>
-                  </thead>
-                </table>
+                      </div>
+                      <div onClick={this.sortBy} data-sort="orderNumber" className={`th ${(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}`}>#<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="firstName" className={`th ${(this.props.paginationOptions.activeSort === 'firstName') ? this.props.paginationOptions.activeDirection : ''}`}>NAME<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="phone" className={`th ${(this.props.paginationOptions.activeSort === 'phone') ? this.props.paginationOptions.activeDirection : ''}`}>PHONE<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="indication" className={`th ${(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}`}>INDICATIONS<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="age" className={`th ${(this.props.paginationOptions.activeSort === 'age') ? this.props.paginationOptions.activeDirection : ''}`}>AGE<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="gender" className={`th ${(this.props.paginationOptions.activeSort === 'gender') ? this.props.paginationOptions.activeDirection : ''}`}>GENDER<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="bmi" className={`th ${(this.props.paginationOptions.activeSort === 'bmi') ? this.props.paginationOptions.activeDirection : ''}`}>BMI<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="status" className={`th ${(this.props.paginationOptions.activeSort === 'status') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="source" className={`th ${(this.props.paginationOptions.activeSort === 'source') ? this.props.paginationOptions.activeDirection : ''}`}>SOURCE<i className="caret-arrow" /></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </Sticky>
 
