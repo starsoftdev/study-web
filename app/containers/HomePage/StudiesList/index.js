@@ -2,10 +2,10 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
-import { countBy, find } from 'lodash';
+import { countBy, find, filter, sumBy } from 'lodash';
 
 import { fetchLevels } from 'containers/App/actions';
-import { selectStudyLevels, selectCurrentUserStripeCustomerId } from 'containers/App/selectors';
+import { selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients } from 'containers/App/selectors';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy,
   selectUpgradedStudy, selectEditedStudy } from 'containers/HomePage/selectors';
@@ -39,6 +39,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     renewStudy: PropTypes.func,
     upgradeStudy: PropTypes.func,
     editStudy: PropTypes.func,
+    sitePatients: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -267,21 +268,32 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { studies, renewStudyFormError, upgradeStudyFormError } = this.props;
+    const { studies, renewStudyFormError, upgradeStudyFormError, sitePatients } = this.props;
     const countResult = countBy(studies.details, entityIterator => entityIterator.status);
     const activeCount = countResult[ACTIVE_STATUS_VALUE] || 0;
     const inactiveCount = countResult[INACTIVE_STATUS_VALUE] || 0;
     const totalCount = studies.details.length;
-    const studiesListContents = studies.details.map((item, index) => (
-      <StudyItem
-        {...item}
-        key={index}
-        index={index}
-        onRenew={this.openRenewModal}
-        onUpgrade={this.openUpgradeModal}
-        onEdit={this.openEditModal}
-      />
-    ));
+
+    const studiesListContents = studies.details.map((item, index) => {
+      const unreadMessageCount = sumBy(filter(sitePatients.details, { study_id: item.studyId }), (sitePatient) => {
+        if (sitePatient.count_unread == null) {
+          return 0;
+        }
+        return parseInt(sitePatient.count_unread);
+      });
+
+      return (
+        <StudyItem
+          {...item}
+          key={index}
+          index={index}
+          unreadMessageCount={unreadMessageCount}
+          onRenew={this.openRenewModal}
+          onUpgrade={this.openUpgradeModal}
+          onEdit={this.openEditModal}
+        />
+      );
+    });
     let addOns = [];
     if (this.state.renewModalOpen) {
       addOns = this.generateRenewStudyShoppingCartAddOns();
@@ -412,6 +424,7 @@ const mapStateToProps = createStructuredSelector({
   renewedStudy: selectRenewedStudy(),
   upgradedStudy: selectUpgradedStudy(),
   editedStudy: selectEditedStudy(),
+  sitePatients: selectSitePatients(),
 });
 
 function mapDispatchToProps(dispatch) {
