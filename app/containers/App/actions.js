@@ -266,7 +266,6 @@ export function fetchRewards(customerId) {
 }
 
 export function rewardsFetched(payload) {
-  console.log(payload);
   return {
     type: FETCH_REWARDS_SUCCESS,
     payload,
