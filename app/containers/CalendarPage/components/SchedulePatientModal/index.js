@@ -189,7 +189,7 @@ export default class SchedulePatientModal extends Component {
                       <div className="field-row">
                         <strong className="label">* When</strong>
                         <div className="field">
-                          <input type="text" className="form-control add-date scheduleTime" readOnly value={selectedCellInfo.selectedDate && moment(selectedCellInfo.selectedDate).format('MM/DD/YY')} />
+                          <input type="text" className="form-control add-date scheduleTime" disabled value={selectedCellInfo.selectedDate && moment(selectedCellInfo.selectedDate).format('MM/DD/YY')} />
                         </div>
                       </div>
 
