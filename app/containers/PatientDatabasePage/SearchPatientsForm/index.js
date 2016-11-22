@@ -46,7 +46,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
 
   initSearch(e, name) {
     const params = this.props.formValues;
-    if (e.target) {
+    if (e && e.target) {
       params[e.target.name] = e.target.value;
     } else {
       params[name] = e;

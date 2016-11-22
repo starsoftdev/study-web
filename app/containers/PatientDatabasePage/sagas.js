@@ -6,7 +6,7 @@ import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { getItem } from 'utils/localStorage';
 
-import request from 'utils/request';
+import request, { serializeParams } from 'utils/request';
 import composeQueryString from 'utils/composeQueryString';
 import {
   FETCH_PATIENTS,
@@ -275,10 +275,14 @@ function* exportPatients() {
 
     try {
       const requestURL = `${API_URL}/patients/exportPatientsFromDB`;
-      yield call(request, requestURL, {
-        method: 'POST',
-        body: JSON.stringify(patients),
-      });
+      const authToken = getItem('auth_token');
+      const params = {
+        access_token: authToken,
+        patients: JSON.stringify(patients),
+      };
+       
+      location.replace(`${requestURL}?${serializeParams(params)}`);
+    
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
