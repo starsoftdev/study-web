@@ -10,19 +10,24 @@ class AvatarMenu extends React.Component {
   static propTypes = {
     handleLogoutClick: PropTypes.func.isRequired,
     currentUser: PropTypes.any,
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      avatarMenuOpen: false,
+    };
+    this.toggleAvatarMenuHandle = this.toggleAvatarMenuHandle.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
   }
 
-  state = {
-    avatarMenuOpen: false,
-  }
-
-  toggleAvatarMenuHandle = () => {
+  toggleAvatarMenuHandle() {
     this.setState({
       avatarMenuOpen: !this.state.avatarMenuOpen,
     });
   }
 
-  handleClickOutside = () => {
+  handleClickOutside() {
     this.setState({ avatarMenuOpen: false });
   }
 
@@ -45,13 +50,14 @@ class AvatarMenu extends React.Component {
               <li><Link to="/payment-information" onClick={() => this.handleClickOutside()}>PAYMENT INFORMATION</Link></li>
               <li><Link to="/receipts" onClick={() => this.handleClickOutside()}>RECEIPTS</Link></li>
               <li><Link to="/proposals" onClick={() => this.handleClickOutside()}>PROPOSALS</Link></li>
-              <Link
-                to="/logout"
+              <a
                 onClick={() => {
                   this.props.handleLogoutClick();
                   this.handleClickOutside();
                 }}
-              >LOG OUT</Link>
+              >
+                LOG OUT
+              </a>
             </ul>
           </div>
         </div>
