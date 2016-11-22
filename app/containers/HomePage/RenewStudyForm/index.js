@@ -16,7 +16,6 @@ import { selectSelectedIndicationLevelPrice } from 'containers/HomePage/selector
 import { CAMPAIGN_LENGTH_LIST } from 'common/constants';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
-import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   studyLevels: selectStudyLevels(),
@@ -48,21 +47,20 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
 
     return (
       <form className="form-renew-study">
-        <div className="renew-study">
-          <div className="row form-group">
-            <span className="required col-sm-5">
+        <div className="renew-study form-fields">
+          <div className="field-row">
+            <strong className="label required">
               <label>EXPOSURE LEVEL</label>
-            </span>
-            <div className="field col-sm-7">
+            </strong>
+            <div className="field">
               <Field
                 name="exposureLevel"
+                className="with-loader"
                 component={ReactSelect}
                 placeholder="Select..."
                 options={studyLevels}
                 disabled={selectedIndicationLevelPrice.fetching}
               />
-            </div>
-            <div className="field col-sm-1">
               {selectedIndicationLevelPrice.fetching &&
                 (
                 <span>
@@ -72,11 +70,11 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
               }
             </div>
           </div>
-          <div className="row form-group">
-            <span className="required col-sm-5">
+          <div className="field-row">
+            <strong className="label required">
               <label>CAMPAIGN LENGTH</label>
-            </span>
-            <div className="field col-sm-7">
+            </strong>
+            <div className="field">
               <Field
                 name="campaignLength"
                 component={ReactSelect}
@@ -87,11 +85,11 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
           </div>
           {campaignLength === 1 &&
             (
-            <div className="row form-group">
-              <span className="col-sm-5">
+            <div className="field-row">
+              <strong className="label">
                 <label>CONDENSE TO 2 WEEKS</label>
-              </span>
-              <div className="field col-sm-7">
+              </strong>
+              <div className="field">
                 <Field
                   name="condenseToTwoWeeks"
                   component={Toggle}
@@ -100,33 +98,33 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
             </div>
             )
           }
-          <div className="row form-group">
-            <span className="col-sm-5">
+          <div className="field-row">
+            <strong className="label">
               <label>PATIENT MESSAGING SUITE: $247</label>
-            </span>
-            <div className="field col-sm-7">
+            </strong>
+            <div className="field">
               <Field
                 name="patientMessagingSuite"
                 component={Toggle}
               />
             </div>
           </div>
-          <div className="row form-group">
-            <span className="col-sm-5">
+          <div className="field-row">
+            <strong className="label">
               <label>CALL TRACKING: $247</label>
-            </span>
-            <div className="field col-sm-7">
+            </strong>
+            <div className="field">
               <Field
                 name="callTracking"
                 component={Toggle}
               />
             </div>
           </div>
-          <div className="row form-group">
-            <span className="required col-sm-5">
+          <div className="field-row">
+            <strong className="label required">
               <label>START DATE</label>
-            </span>
-            <div className="field col-sm-7">
+            </strong>
+            <div className="field">
               <Field
                 name="startDate"
                 component={DatePicker}
@@ -135,11 +133,11 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
               />
             </div>
           </div>
-          <div className="row form-group">
-            <span className="col-sm-5">
+          <div className="field-row">
+            <strong className="label">
               <label>NOTES</label>
-            </span>
-            <div className="field col-sm-7">
+            </strong>
+            <div className="field">
               <Field
                 name="notes"
                 component={Input}

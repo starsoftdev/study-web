@@ -293,7 +293,6 @@ input[type=text]:-ms-input-placeholder {
 .infoarea {
 	color: @white;
 	position: relative;
-	margin-bottom: 30px;
 
 	.box {
 		overflow: hidden;
@@ -307,6 +306,12 @@ input[type=text]:-ms-input-placeholder {
 		border-radius: 0 0 2px 2px;
 		padding: 34px 21px 27px 29px;
 	}
+
+  .signup-info {
+    .col + .col {
+      width: 35.9%;
+    }
+  }
 
 	.msg-info {
 		.box {
@@ -461,7 +466,7 @@ input[type=text]:-ms-input-placeholder {
 		padding: 0 10px;
 		min-width: 156px;
 		font-weight: 600;
-		max-width: 176px;
+		max-width: 170px;
 		border-color: #fff;
 		margin: 0 16px 0 3px;
 
@@ -494,7 +499,7 @@ input[type=text]:-ms-input-placeholder {
 
 	/* replacement for jquery */
 	article > .box:nth-child(1) {
-	  height: 167px;
+	  height: 165px;
 	}
 	article > .box:nth-child(2) {
 	  height: 140px;
@@ -598,7 +603,7 @@ input[type=text]:-ms-input-placeholder {
 /* table-holder */
 .table-holder {
   background: #fff;
-  border: #f78e1e solid 1px;
+  border: #f78e1e solid 2px;
   header {
     .clearfix;
     color: #fff;
@@ -624,74 +629,65 @@ input[type=text]:-ms-input-placeholder {
     }
   }
   .btns-slide {
-    .size(1px);
-    .font(0, 0);
-    margin: -3px 0 0;
-    position: relative;
-    white-space: nowrap;
     .align(@align: middle);
+    display: inline-block;
+    width: 0;
+    height: 36px;
+    position: relative;
+
     .btns {
-      top: 50%;
-      width: 0;
-      right: 100%;
-      overflow: hidden;
       text-align: right;
-      margin: 0 8px 0 0;
+      overflow: hidden;
       position: absolute;
-      white-space: nowrap;
-      transition: all 0.5s;
-      .transform(translate(0, -50%));
-    }
-    .area {
-      width: 480px;
-    }
-    .btn {
-      padding: 4px 12px;
-      background: #fff;
-      .font(18px, 23px);
-      border-width: 2px;
-      margin: 0 0 0 12px;
-      border-radius: 2px;
-      vertical-align: top;
-      &:hover {
-        color: #fff;
+      -webkit-transition: left 1s;
+      -moz-transition: left 1s;
+      transition: left 1s;
+
+      .btn {
+        padding: 4px 12px;
+        background: #fff;
+        .font(18px, 23px);
+        border-width: 2px;
+        margin: 0 0 0 12px;
+        border-radius: 2px;
+        vertical-align: top;
+        &:hover {
+          color: #fff;
+        }
       }
-    }
-    .btn-default {
-      color: #00afef;
-      border-color: #00afef;
-      &:hover {
-        background: #00afef;
+      .btn-default {
+        color: #00afef;
+        border-color: #00afef;
+        &:hover {
+          background: #00afef;
+        }
       }
-    }
-    .btn-primary {
-      color: #9c6;
-      border-color: #9c6;
-      &:hover {
-        background: #9c6;
+      .btn-primary {
+        color: #9c6;
+        border-color: #9c6;
+        &:hover {
+          background: #9c6;
+        }
       }
-    }
-    .btn-danger {
-      color: #f93;
-      border-color: #f93;
-      &:hover {
-        background: #f93;
+      .btn-danger {
+        color: #f93;
+        border-color: #f93;
+        &:hover {
+          background: #f93;
+        }
       }
-    }
-    .btn-info {
-      color: #999;
-      border-color: #999;
-      &:hover {
-        background: #999;
+      .btn-info {
+        color: #999;
+        border-color: #999;
+        &:hover {
+          background: #999;
+        }
       }
     }
   }
   .tr-active {
     > td {
       background: #f1f1f1;
-    }
-    .btns-slide .btns {
-      width: 480px;
     }
   }
   col:hover {
@@ -704,6 +700,7 @@ input[type=text]:-ms-input-placeholder {
   background-color: #fff;
   .font(18px);
   color: #354052;
+
   .info {
     .font(0, 0);
     position: relative;
@@ -721,7 +718,7 @@ input[type=text]:-ms-input-placeholder {
   caption {
     background-color: #f78e1e;
     color: #fff;
-    padding: 12px;
+    padding: 12px 16px 16px;
     text-transform: uppercase;
     font-size: 21px;
     font-weight: 700;
@@ -745,9 +742,8 @@ input[type=text]:-ms-input-placeholder {
     .font(18px, 1.42857);
     white-space: normal;
   }
-  > thead, .thead > tr, .tr {
+  > thead, > thead > tr, .thead > tr, .tr {
     > th, .th {
-			color: #336;
 			cursor: pointer;
 			border-width: 0;
 			font-weight: 700;
@@ -815,6 +811,7 @@ input[type=text]:-ms-input-placeholder {
       font-weight: 600;
     }
   }
+
   @media screen and (max-width: @psd) {
     font-size: 14px;
   }
@@ -2123,6 +2120,24 @@ th, .th {
           }
         }
       }
+    }
+  }
+}
+
+/**********************/
+/*	home */
+/**********************/
+.home-page {
+  .search-studies-panel {
+    margin: 30px 0 0;
+
+    .form-search-studies {
+      width: calc(~'100% - 237px');
+    }
+
+    .btn-list-new-study {
+      padding: 6px 12px;
+      line-height: 24px;
     }
   }
 }
@@ -3513,8 +3528,12 @@ th, .th {
 
 .custom-modal {
   &.add-credits{
-    .modal-content {
-      max-width: 1100px;
+    .modal-dialog {
+      transform: translate(0, 75px);
+
+      .modal-content {
+        max-width: 1100px;
+      }
     }
   }
   .modal-content {
