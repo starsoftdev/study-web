@@ -50,9 +50,10 @@ class PatientDetailModal extends React.Component {
 
   constructor(props) {
     super(props);
+    this.onSelectText = this.onSelectText.bind(this);
     this.renderOtherSection = this.renderOtherSection.bind(this);
     this.renderPatientDetail = this.renderPatientDetail.bind(this);
-    this.onSelectText = this.onSelectText.bind(this);
+    this.renderScheduledTime = this.renderScheduledTime.bind(this);
   }
 
   onSelectText() {
@@ -98,6 +99,20 @@ class PatientDetailModal extends React.Component {
     return null;
   }
 
+  renderScheduledTime() {
+    const { currentPatientCategory } = this.props;
+    if (currentPatientCategory && currentPatientCategory.name == 'Scheduled') {
+      return (
+        <a className="modal-opener">
+          <span className="date">05/08/16</span>
+          <span> at </span>
+          <span className="time">11:30 PM </span>
+        </a>
+      );
+    }
+    return null;
+  }
+
   render() {
     const { carousel, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
     return (
@@ -105,10 +120,7 @@ class PatientDetailModal extends React.Component {
         <div className="form-area">
           <div className="form-head">
             <strong className="title">{currentPatientCategory ? currentPatientCategory.name : null}</strong>
-            <a className="lightbox-opener">
-              <span className="date" />
-              <span className="time" />
-            </a>
+            {this.renderScheduledTime()}
             <a className="btn-close" onClick={onClose}>
               <i className="glyphicon glyphicon-menu-right" />
             </a>
