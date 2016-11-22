@@ -111,6 +111,7 @@
     "extract-text-webpack-plugin": "1.0.1",
     "file-loader": "0.9.0",
     "fontfaceobserver": "2.0.1",
+    "git-validate": "^2.2.2",
     "google-libphonenumber": "^2.0.3",
     "history": "3.0.0",
     "html-loader": "0.4.3",
@@ -184,7 +185,6 @@
   "devDependencies": {
     "babel-preset-react-hmre": "1.1.1",
     "eventsource-polyfill": "0.9.6",
-    "git-validate": "^2.2.2",
     "minimist": "1.2.0",
     "plop": "1.5.0",
     "psi": "2.0.4",
