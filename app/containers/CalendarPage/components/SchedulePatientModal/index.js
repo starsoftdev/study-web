@@ -202,7 +202,7 @@ export default class SchedulePatientModal extends Component {
                                 id="patient-time"
                                 name="hour"
                                 component={ReactSelect}
-                                placeholder="--Hours--"
+                                placeholder="Hours"
                                 options={hourOptions}
                                 className="visible-first-del min-height"
                                 disabled={submitting}
@@ -213,7 +213,7 @@ export default class SchedulePatientModal extends Component {
                                 id="minutes"
                                 name="minute"
                                 component={ReactSelect}
-                                placeholder="--Minutes--"
+                                placeholder="Minutes"
                                 options={minuteOptions}
                                 className="visible-first-del min-height"
                                 disabled={submitting}
@@ -224,7 +224,7 @@ export default class SchedulePatientModal extends Component {
                                 id="time-period"
                                 name="period"
                                 component={ReactSelect}
-                                placeholder="--Minutes--"
+                                placeholder="Minutes"
                                 options={periodOptions}
                                 className="visible-first"
                                 disabled={submitting}
@@ -240,7 +240,7 @@ export default class SchedulePatientModal extends Component {
                           <Field
                             name="siteLocation"
                             component={ReactSelect}
-                            placeholder="--Select Site Location--"
+                            placeholder="Select Site Location"
                             options={siteLocationOptions}
                             className="data-search"
                             disabled={submitting || this.props.fetchingSites || !isAdmin}
@@ -259,7 +259,7 @@ export default class SchedulePatientModal extends Component {
                               id="popup-protocol"
                               name="protocol"
                               component={ReactSelect}
-                              placeholder="--Select Protocol--"
+                              placeholder="Select Protocol"
                               options={protocolOptions}
                               className="data-search"
                               disabled={submitting}
@@ -278,7 +278,7 @@ export default class SchedulePatientModal extends Component {
                               id="patient"
                               name="patient"
                               component={ReactSelect}
-                              placeholder="--Select Patient--"
+                              placeholder="Select Patient"
                               options={patientOptions}
                               className="data-search"
                               disabled={submitting || this.props.fetchingPatientsByStudy}
@@ -337,7 +337,7 @@ export default class SchedulePatientModal extends Component {
                                 id="patient-time-edit"
                                 name="hour"
                                 component={ReactSelect}
-                                placeholder="--Hours--"
+                                placeholder="Hours"
                                 options={hourOptions}
                                 className="visible-first-del min-height"
                                 disabled={submitting}
@@ -348,7 +348,7 @@ export default class SchedulePatientModal extends Component {
                                 id="minutes2"
                                 name="minute"
                                 component={ReactSelect}
-                                placeholder="--Minutes--"
+                                placeholder="Minutes"
                                 options={minuteOptions}
                                 className="visible-first-del min-height"
                                 disabled={submitting}
@@ -359,7 +359,7 @@ export default class SchedulePatientModal extends Component {
                                 id="time-period2"
                                 name="period"
                                 component={ReactSelect}
-                                placeholder="--Minutes--"
+                                placeholder="Minutes"
                                 options={periodOptions}
                                 className="visible-first"
                                 disabled={submitting}
