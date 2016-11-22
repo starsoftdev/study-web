@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
@@ -91,7 +92,10 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             <a href="#" className="link-help pull-left opener">?</a>
           </div>
 
-          <a className="lightbox-opener pull-left btn-chat-popup" onClick={this.showGlobalPMSModal}>
+          <a
+            className={classNames('opener lightbox-opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
+            onClick={this.showGlobalPMSModal}
+          >
             {unreadMessagesCount > 0
               ? <span className="counter">{unreadMessagesCount}</span>
               : ''

@@ -1,10 +1,14 @@
 .studies {
   table {
     .inner-info {
-      margin-left: 15px;
+      margin-left: 17px;
+      font-size: 21px;
+      line-height: 1.25;
+      color: #fff;
+      font-weight: 600;
 
       .info-value {
-        margin-left: 10px;
+        margin-left: 5px;
         color: #030303;
       }
     }
@@ -14,7 +18,7 @@
       width: 5%;
     }
     .indication {
-      width: 17%;
+      width: 15%;
     }
     .location {
       width: 16%;
@@ -23,7 +27,7 @@
       width: 16%;
     }
     .protocol {
-      width: 15%;
+      width: 13%;
     }
     .patient-messaging-suite {
       width: 7%;
@@ -32,10 +36,10 @@
       width: 8%;
     }
     .start-date {
-      width: 8%;
+      width: 10%;
     }
     .end-date {
-      width: 8%;
+      width: 10%;
     }
     &.tr-inactive {
       .protocol,
@@ -86,54 +90,13 @@
   &.edit-study-modal {
     .modal-lg {
       width: 590px;
-
-      .modal-content {
-        max-width: none;
-
-        .modal-body {
-          padding: 20px;
-        }
-      }
     }
   }
 
   &.renew-study-modal,
   &.upgrade-study-modal {
     .modal-lg {
-      width: 1000px !important;
-
-      .modal-content {
-        max-width: none;
-
-        .modal-body {
-          padding-top: 0;
-          padding-bottom: 0;
-
-          & > .row {
-            height: 100%;
-
-            .left-panel,
-            .right-panel {
-              height: 100%;
-              padding-top: 15px;
-              padding-bottom: 15px;
-            }
-          }
-        }
-      }
-
-      .left-panel {
-        .form-renew-study,
-        .form-upgrade-study {
-          margin-top: 10px;
-          padding-left: 14px;
-          padding-right: 14px;
-        }
-      }
-
-      .right-panel {
-        border-left: 2px solid #f78e1e;
-      }
+      width: 1100px !important;
     }
   }
 }

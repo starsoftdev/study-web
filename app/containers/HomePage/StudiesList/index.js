@@ -345,56 +345,72 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                   </tbody>
                 </table>
               </div>
-              <Modal className="renew-study-modal" show={this.state.renewModalOpen} onHide={this.closeRenewModal} bsSize="large">
+              <Modal className="renew-study-modal" id="renew-study" show={this.state.renewModalOpen} onHide={this.closeRenewModal} bsSize="large">
                 <Modal.Header closeButton>
                   <Modal.Title>Renew Study</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <div className="row">
-                    <div className="left-panel col-sm-6">
-                      <RenewStudyForm />
-                    </div>
-                    <div className="right-panel col-sm-6">
-                      <ShoppingCartForm
-                        showCards
-                        noBorder
-                        addOns={addOns}
-                        disableSubmit={renewStudyFormError}
-                        onSubmit={this.handleRenewStudyFormSubmit}
-                      />
+                  <div className="holder clearfix">
+                    <div className="form-study">
+                      <div className="pull-left col">
+                        <div className="scroll jcf--scrollable">
+                          <div className="holder-inner">
+                            <RenewStudyForm />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="pull-left col">
+                        <ShoppingCartForm
+                          showCards
+                          noBorder
+                          addOns={addOns}
+                          disableSubmit={renewStudyFormError}
+                          onSubmit={this.handleRenewStudyFormSubmit}
+                        />
+                      </div>
                     </div>
                   </div>
                 </Modal.Body>
               </Modal>
-              <Modal className="upgrade-study-modal" show={this.state.upgradeModalOpen} onHide={this.closeUpgradeModal} bsSize="large">
+              <Modal className="upgrade-study-modal" id="upgrade-study" show={this.state.upgradeModalOpen} onHide={this.closeUpgradeModal} bsSize="large">
                 <Modal.Header closeButton>
                   <Modal.Title>Upgrade Study</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <div className="row">
-                    <div className="left-panel col-sm-6">
-                      <UpgradeStudyForm />
-                    </div>
-                    <div className="right-panel col-sm-6">
-                      <ShoppingCartForm
-                        showCards
-                        noBorder
-                        addOns={addOns}
-                        disableSubmit={upgradeStudyFormError}
-                        onSubmit={this.handleUpgradeStudyFormSubmit}
-                      />
+                  <div className="holder clearfix">
+                    <div className="form-study">
+                      <div className="pull-left col">
+                        <div className="scroll jcf--scrollable">
+                          <div className="holder-inner">
+                            <UpgradeStudyForm />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="pull-left col">
+                        <ShoppingCartForm
+                          showCards
+                          noBorder
+                          addOns={addOns}
+                          disableSubmit={upgradeStudyFormError}
+                          onSubmit={this.handleUpgradeStudyFormSubmit}
+                        />
+                      </div>
                     </div>
                   </div>
                 </Modal.Body>
               </Modal>
-              <Modal className="edit-study-modal" show={this.state.editModalOpen} onHide={this.closeEditModal} bsSize="large">
+              <Modal className="edit-study-modal" id="edit-study" show={this.state.editModalOpen} onHide={this.closeEditModal} bsSize="large">
                 <Modal.Header closeButton>
                   <Modal.Title>Edit Information</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <div className="row">
-                    <div className="col-sm-12">
-                      <EditStudyForm siteUsers={this.state.selectedSiteUsers} onSubmit={this.handleEditStudyFormSubmit} />
+                  <div className="holder clearfix">
+                    <div className="form-study">
+                      <div className="scroll jcf--scrollable">
+                        <div className="holder-inner">
+                          <EditStudyForm siteUsers={this.state.selectedSiteUsers} onSubmit={this.handleEditStudyFormSubmit} />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </Modal.Body>

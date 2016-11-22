@@ -10,7 +10,6 @@ import { selectEditedStudy } from 'containers/HomePage/selectors';
 import RenderEmailsList from './RenderEmailsList';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
-import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   currentUserClientId: selectCurrentUserClientId(),
@@ -42,12 +41,12 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
 
     return (
       <form className="form-edit-study" onSubmit={handleSubmit}>
-        <div className="edit-study">
-          <div className="row form-group">
-            <strong className="required col-sm-5">
+        <div className="edit-study form-fields">
+          <div className="field-row">
+            <strong className="label required">
               <label>RECRUITMENT PHONE</label>
             </strong>
-            <div className="field col-sm-7">
+            <div className="field">
               <Field
                 name="recruitmentPhone"
                 component={Input}
@@ -55,11 +54,11 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
               />
             </div>
           </div>
-          <div className="row form-group">
-            <strong className="required col-sm-5">
+          <div className="field-row">
+            <strong className="label required">
               <label>EMAIL NOTIFICATIONS</label>
             </strong>
-            <div className="field col-sm-7">
+            <div className="field">
               <div className="emails-list-holder">
                 <FieldArray
                   name="emailNotifications"
@@ -70,11 +69,11 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
               </div>
             </div>
           </div>
-          <div className="row form-group">
-            <strong className="required col-sm-5">
+          <div className="field-row">
+            <strong className="label required">
               <label>STUDY AD</label>
             </strong>
-            <div className="field col-sm-7">
+            <div className="field">
               <label htmlFor="study-ad" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn"></label>
               <Field
                 id="study-ad"
@@ -85,15 +84,13 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
               />
             </div>
           </div>
-          <div className="row">
-            <div className="field col-sm-12">
-              <button type="submit" className="btn btn-default pull-right" disabled={hasError || editedStudy.submitting}>
-                {editedStudy.submitting
-                  ? <span><LoadingSpinner showOnlyIcon size={20} className="submitting-edit-study" /></span>
-                  : <span>Submit</span>
-                }
-              </button>
-            </div>
+          <div className="clearfix">
+            <button type="submit" className="btn btn-default btn-submit pull-right" disabled={hasError || editedStudy.submitting}>
+              {editedStudy.submitting
+                ? <span><LoadingSpinner showOnlyIcon size={20} className="submitting-edit-study" /></span>
+                : <span>Submit</span>
+              }
+            </button>
           </div>
         </div>
       </form>
