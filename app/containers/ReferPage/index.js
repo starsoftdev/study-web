@@ -22,7 +22,7 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
     companyTypes: PropTypes.array,
     fetchCompanyTypes: PropTypes.func,
     onSubmitForm: PropTypes.func,
-  };
+  }
 
   constructor(props) {
     super(props);

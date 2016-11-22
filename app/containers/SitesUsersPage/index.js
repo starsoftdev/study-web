@@ -126,7 +126,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
           <div className="container-fluid">
             <Helmet title="Manage Sites/Users" />
             <section className="no-items">
-              <h4>You don't have permission to manage sites and users</h4>
+              <h4>You don''t have permission to manage sites and users</h4>
             </section>
           </div>
         </div>
