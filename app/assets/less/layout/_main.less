@@ -1359,12 +1359,15 @@ th, .th {
 		th,
 		td {
 			font-size: 14px;
-			padding: 0 2px 15px 0;
-		    word-break: break-all;
+			padding: 0 1px 15px 1px;
+		    word-break: normal;
 
-			&:nth-child(3) {
-				text-align: center;
-			}
+		    &:first-child {
+		    	word-break: break-word;
+		    }
+		    &:nth-child(3) {
+		    	width: 40px;
+		    }
 		}
 
 		th {
