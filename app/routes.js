@@ -230,16 +230,32 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+<<<<<<< HEAD
       path: '/badges',
       name: 'badgesPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           System.import('containers/BadgesPage'),
+=======
+      path: '/rewards',
+      name: 'rewardsPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/RewardsPage/reducer'),
+          System.import('containers/RewardsPage/sagas'),
+          System.import('containers/RewardsPage'),
+>>>>>>> KIK-557
         ]);
 
         const renderRoute = loadModule(cb);
 
+<<<<<<< HEAD
         importModules.then(([component]) => {
+=======
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('rewardsPage', reducer.default);
+          injectSagas(sagas.default);
+>>>>>>> KIK-557
           renderRoute(component);
         });
 

@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { get, map, pick, findIndex } from 'lodash';
+import { get, map, pick, filter, findIndex } from 'lodash';
 
 /**
  * Direct selector to the app state domain
@@ -37,6 +37,45 @@ const selectCurrentUserStripeCustomerId = () => createSelector(
 const selectSites = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.sites', [])
+);
+
+// get user's sites based on siteId and ClientId
+const selectUserSites = () => createSelector(
+  selectGlobal(),
+  (substate) => {
+    const currentUser = get(substate, 'userData');
+    const siteId = currentUser.site_id;
+    let sites = get(substate, 'baseData.sites', []);
+    if (siteId) {
+      sites = filter(sites, e => e.id === siteId);
+    } else {
+      const clientId = get(substate, 'userData.roleForClient.client.id', null);
+      if (clientId) {
+        sites = get(substate, 'baseData.clientSites', {});
+      }
+    }
+    return sites;
+  }
+);
+
+// get user's site locations based on siteId and ClientId
+const selectUserSiteLocations = () => createSelector(
+  selectGlobal(),
+  (substate) => {
+    const currentUser = get(substate, 'userData');
+    const siteId = currentUser.site_id;
+    const sites = get(substate, 'baseData.sites', []);
+    let userSites = [];
+    if (siteId) {
+      userSites = filter(sites, e => e.id === siteId);
+    } else {
+      const clientId = get(substate, 'userData.roleForClient.client.id', null);
+      if (clientId) {
+        userSites = get(substate, 'baseData.clientSites.details', {});
+      }
+    }
+    return map(userSites, e => pick(e, ['id', 'name']));
+  }
 );
 
 // Deccorated site locations
@@ -82,6 +121,11 @@ const selectStudyLevels = () => createSelector(
 const selectCoupon = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.coupon', {})
+);
+
+const selectRewards = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.rewards', [])
 );
 
 const selectCards = () => createSelector(
@@ -208,11 +252,14 @@ export {
 
   selectSites,
   selectSiteLocations,
+  selectUserSites,
+  selectUserSiteLocations,
   selectIndications,
   selectSources,
   selectLevels,
   selectStudyLevels,
   selectCoupon,
+  selectRewards,
   selectCards,
   selectSavedCard,
   selectDeletedCard,

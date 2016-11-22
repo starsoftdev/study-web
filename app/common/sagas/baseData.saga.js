@@ -43,6 +43,8 @@ import {
   levelsFetchingError,
   couponFetched,
   couponFetchingError,
+  rewardsFetched,
+  rewardsFetchingError,
   cardsFetched,
   cardsFetchingError,
   cardSaved,
@@ -85,6 +87,7 @@ export default function* baseDataSaga() {
   yield fork(fetchLevelsWatcher);
   yield fork(fetchCouponWatcher);
   yield fork(fetchCardsWatcher);
+  yield fork(fetchRewardsWatcher);
   yield fork(saveCardWatcher);
   yield fork(deleteCardWatcher);
   yield fork(addCreditsWatcher);
@@ -196,6 +199,19 @@ export function* fetchCouponWatcher() {
       yield put(couponFetched(response));
     } catch (err) {
       yield put(couponFetchingError(err));
+    }
+  }
+}
+
+export function* fetchRewardsWatcher() {
+  while (true) {
+    try {
+      const requestURL = `${API_URL}/rewardBalances/get_aggregated_reward_balances`;
+      const response = yield call(request, requestURL);
+
+      yield put(rewardsFetched(response));
+    } catch (err) {
+      yield put(rewardsFetchingError(err));
     }
   }
 }

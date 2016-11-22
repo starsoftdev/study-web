@@ -16,6 +16,10 @@ import {
 
   CLEAR_COUPON,
 
+  FETCH_REWARDS,
+  FETCH_REWARDS_SUCCESS,
+  FETCH_REWARDS_ERROR,
+
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
@@ -140,6 +144,7 @@ const initialState = {
       fetching: false,
       error: null,
     },
+    rewards: [],
     clientRoles: {
       details: [],
       fetching: false,
@@ -269,6 +274,21 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
         },
+      };
+      break;
+    case FETCH_REWARDS:
+      baseDataInnerState = {
+        rewards: [],
+      };
+      break;
+    case FETCH_REWARDS_SUCCESS:
+      baseDataInnerState = {
+        rewards: payload,
+      };
+      break;
+    case FETCH_REWARDS_ERROR:
+      baseDataInnerState = {
+        rewards: [],
       };
       break;
     case FETCH_CARDS:
