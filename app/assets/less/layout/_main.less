@@ -3480,21 +3480,37 @@ th, .th {
 .coming-soon {
 	position: relative;
 	text-align: center;
-	padding: 40px 0 0 21px;
 
-	.img-holder {
-		.align;
-		width: 25.9%;
-		padding: 0 0 40px;
+	.table-box {
+		display: table;
+		.size(100%, 79vh);
+		table-layout: fixed;
+	}
+	
+	.table-cell {
+		padding: 10px;
+		display: table-cell;
+		vertical-align: middle;
+	}
+	
+	.sub-holder {
+		margin:0 auto;
+		max-width: 900px;
 		position: relative;
-		margin: 282px -12px 0 12px;
-
-		img {
-			.img;
+		padding: 0 0 280px 319px;
+	}
+	
+	.img-holder {
+		left: 0;
+		bottom: 0;
+		padding: 0 0 20px;
+		position: absolute;
+		
+		.imgage {
 			z-index: 2;
 			position: relative;
 		}
-
+		
 		.bottom {
 			left: 50%;
 			z-index: 1;
@@ -3506,10 +3522,9 @@ th, .th {
 	}
 
 	.msg {
-		.align;
-		.font(106px, 1);
-		.size(656px, 464px);
-		padding: 129px 50px 100px;
+		.font(80px, 1);
+		.size(556px, 364px);
+		padding: 80px 50px 100px;
 		background: url('~assets/images/bubble2.png') no-repeat;
 		background-size: 100% 100%
 	}
