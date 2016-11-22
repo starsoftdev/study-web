@@ -1,9 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { countBy, find } from 'lodash';
-
-import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy } from 'containers/HomePage/selectors';
 import RewardListItem from './RewardListItem';
 import './styles.less';
 
@@ -11,17 +7,6 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
   static propTypes = {
     rewards: PropTypes.array,
   };
-
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidMount() {
-  }
-
-  componentWillReceiveProps(newProps) {
-
-  }
 
   render() {
     const { rewards } = this.props;

@@ -1,41 +1,40 @@
 import React, { PropTypes, Component } from 'react';
-import classNames from 'classnames';
 import { connect } from 'react-redux';
+
+import defaultImage from 'assets/images/Default-User-Img-Dr.png';
 
 class RewardListItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    index: PropTypes.number,
-    reward_data: PropTypes.object,
+    id: PropTypes.number,
     points: PropTypes.number,
-    created: PropTypes.string,
-    entity_id: PropTypes.number,
-    client_id: PropTypes.number,
-    referral_id: PropTypes.number,
+    balance: PropTypes.number,
+    site_id: PropTypes.number,
+    userName: PropTypes.string,
+    userImageURL: PropTypes.string,
+    description: PropTypes.string,
+    date: PropTypes.string,
+    time: PropTypes.string,
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
-    const { index, reward_data, points, created, entity_id, client_id, referral_id } = this.props;
+    const { balance, points, userName, userImageURL, description, date, time } = this.props;
     let content = null;
     content = (
       <tr>
         <td>
           <div className="info clearfix">
             <div className="img-holder">
-              <img src="images/patient1.jpg" alt="" />
+              <img src={userImageURL || defaultImage} alt="" />
             </div>
             <div className="desc">
-              <p><strong>Alan Walker</strong> Earned 150 KIKs<br /> Fill Out Enrollment Data: Acne Study (Platinum Listing)</p>
+              <p><strong>{ userName }</strong> { description }</p>
             </div>
           </div>
         </td>
-        <td>{ created }</td>
-        <td>12:30 PM</td>
+        <td>{ date }</td>
+        <td>{ time } </td>
         <td>{ points }</td>
-        <td>225</td>
+        <td>{ balance }</td>
       </tr>
     );
     return content;

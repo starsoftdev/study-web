@@ -32,6 +32,7 @@ import diamond from 'assets/images/diamond.svg';
 import platinum from 'assets/images/platinum.svg';
 import gold from 'assets/images/gold.svg';
 
+
 export class RewardsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
@@ -76,7 +77,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
   }
 
   render() {
-    const { siteLocations, rewards } = this.props;
+    const { siteLocations } = this.props;
     return (
       <div className="container-fluid">
 
