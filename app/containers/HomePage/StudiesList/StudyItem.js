@@ -81,8 +81,10 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     }
 
     return (
-      <tr className={classNames('study-container', { 'tr-active': buttonsShown, 'tr-inactive': !buttonsShown })}
-          onMouseEnter={this.showButtons} onMouseLeave={this.hideButtons}>
+      <tr
+        className={classNames('study-container', { 'tr-active': buttonsShown, 'tr-inactive': !buttonsShown })}
+        onMouseEnter={this.showButtons} onMouseLeave={this.hideButtons}
+      >
         <td className="index">
           <span>{index + 1}</span>
         </td>
@@ -110,7 +112,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
         </td>
         <td className="end-date">
           <span>{endDate}</span>
-          <div className="btns-slide">
+          <div className="btns-slide pull-right">
             <div className="btns">
               <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>
               <Button bsStyle="primary" className="btn-renew" onClick={this.onRenewClick}>Renew</Button>

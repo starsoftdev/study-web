@@ -64,17 +64,9 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
           <div className="dashboard form-group">
             <Dashboard location={this.props.location} />
           </div>
-          <div className="search-studies-panel form-group">
-            <div className="row">
-              <div className="col-sm-10">
-                <SearchStudiesForm onSubmit={this.searchStudies} />
-              </div>
-              <div className="col-sm-2">
-                <div className="pull-right">
-                  <a href="/list-new-study" className="btn btn-primary btn-list-new-study">List New Study</a>
-                </div>
-              </div>
-            </div>
+          <div className="search-studies-panel clearfix form-group">
+            <SearchStudiesForm onSubmit={this.searchStudies} />
+            <a href="/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Study</a>
           </div>
           <div className="table-holder form-group">
             <StudiesList />

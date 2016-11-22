@@ -74,7 +74,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
   render() {
     const products = [
       {
-        title: 'Buy Credits',
+        title: '100 Credits',
         quantity: parseFloat(this.state.credits),
         price: parseFloat(this.state.price.replace('$', '')),
         total: parseFloat(this.state.price.replace('$', '')),
@@ -126,7 +126,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
                 </div>
 
                 <div className="pull-left col">
-                  <ShoppingCartForm showCards onSubmit={this.addCreditsSubmit} addOns={products} />
+                  <ShoppingCartForm showCards noBorder onSubmit={this.addCreditsSubmit} addOns={products} />
                 </div>
               </div>
 
