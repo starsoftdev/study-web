@@ -67,7 +67,7 @@ class TextSection extends React.Component {
           this.props.markAsReadPatientMessages(this.props.currentPatient.id, this.props.studyId);
         }
       });
-      this.setState({ patientLoaded: false });
+      this.setState({ socketBinded: true });
     }
   }
 
