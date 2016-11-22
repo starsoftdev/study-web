@@ -6,11 +6,11 @@ export default class Money extends Component {
     value: PropTypes.number,
     currency: PropTypes.oneOf(Object.keys(Currencies)),
     className: PropTypes.string,
-  }
+  };
 
   static defaultProps = {
     currency: 'USD',
-  }
+  };
 
   render() {
     const value = this.props.value;

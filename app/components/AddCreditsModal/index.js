@@ -32,7 +32,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
     this.state = {
       quantity: 1,
       credits: 100,
-      price: `$ ${77}`,
+      price: 7700,
     };
   }
 
@@ -47,7 +47,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
       this.setState({
         quantity: this.state.quantity + 1,
         credits: (this.state.quantity + 1) * 100,
-        price: `$ ${(this.state.quantity + 1) * 77}`,
+        price: (this.state.quantity + 1) * 7700,
       });
     }
   }
@@ -57,7 +57,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
       this.setState({
         quantity: this.state.quantity - 1,
         credits: (this.state.quantity - 1) * 100,
-        price: `$ ${(this.state.quantity - 1) * 77}`,
+        price: (this.state.quantity - 1) * 7700,
       });
     }
   }
@@ -76,8 +76,8 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
       {
         title: '100 Credits',
         quantity: parseFloat(this.state.credits),
-        price: parseFloat(this.state.price.replace('$', '')),
-        total: parseFloat(this.state.price.replace('$', '')),
+        price: this.state.price,
+        total: this.state.price,
       },
     ];
     return (
@@ -117,7 +117,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
                         <div className="field-row">
                           <strong className="label"><label htmlFor="price">PRICE</label></strong>
                           <div className="field">
-                            <input className="form-control" value={this.state.price} type="text" name="price" disabled />
+                            <input className="form-control" value={`$ ${this.state.price / 100}`} type="text" name="price" disabled />
                           </div>
                         </div>
                       </div>
