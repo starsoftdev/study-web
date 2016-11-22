@@ -50,6 +50,7 @@ class Patient extends React.Component {
     onPatientClick: React.PropTypes.func.isRequired,
     onPatientTextClick: React.PropTypes.func.isRequired,
     patient: React.PropTypes.object.isRequired,
+    unreadMessageCount: React.PropTypes.number,
   };
 
   constructor(props) {
@@ -58,7 +59,7 @@ class Patient extends React.Component {
   }
 
   renderPatientTextMessageSummary(patient) {
-    const { category, currentUser, onPatientTextClick } = this.props;
+    const { category, currentUser, onPatientTextClick, unreadMessageCount } = this.props;
     if (patient.lastTextMessage) {
       return (
         <a
@@ -72,7 +73,14 @@ class Patient extends React.Component {
               <p>{patient.lastTextMessage.body}</p>
             </div>
             <div className="time">
-              <span className="counter-circle">{patient.textMessageCount}</span>
+              {(() => {
+                if (unreadMessageCount > 0) {
+                  return (
+                    <span className="counter-circle">{unreadMessageCount}</span>
+                  );
+                }
+                return false;
+              })()}
               <time dateTime={patient.lastTextMessage.dateUpdated}>{moment.tz(patient.lastTextMessage.dateUpdated, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
             </div>
           </div>

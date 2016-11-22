@@ -9,7 +9,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { sumBy, map } from 'lodash';
 import { Field, reduxForm, change } from 'redux-form';
-import { Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
+import Modal from 'react-bootstrap/lib/Modal';
 
 import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
@@ -156,9 +157,9 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
       addOnsContent = addOns.map((product, index) => (
         <tr className="add-on" key={index}>
           <td>{product.title}</td>
-          <td><Money value={product.price} /></td>
+          <td><Money value={product.price / 100} /></td>
           <td>{product.quantity}</td>
-          <td><Money value={product.total} className="price" /></td>
+          <td><Money value={product.total / 100} className="price" /></td>
         </tr>
       ));
     }
@@ -214,16 +215,16 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
               <div className="table-holder">
                 <table className="table-summary">
                   <colgroup>
-                    <col style={{ width: '36.2%' }} />
-                    <col style={{ width: '19.6%' }} />
-                    <col style={{ width: '25.6%' }} />
+                    <col style={{ width: '44.2%' }} />
+                    <col style={{ width: '17.6%' }} />
+                    <col style={{ width: '23.6%' }} />
                     <col style={{ width: 'auto' }} />
                   </colgroup>
                   <thead>
                     <tr>
                       <th>PRODUCT <i className="caret-arrow" /></th>
                       <th>PRICE <i className="caret-arrow" /></th>
-                      <th>QUANTITY <i className="caret-arrow" /></th>
+                      <th>QTY <i className="caret-arrow" /></th>
                       <th>TOTAL <i className="caret-arrow" /></th>
                     </tr>
                   </thead>
@@ -241,18 +242,19 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                   placeholder="Coupon"
                   disabled={coupon.fetching || submitting}
                 />
-                <button
-                  className="btn btn-primary coupon-btn"
+                <Button
+                  bsStyle="primary"
+                  className="coupon-btn"
                   onClick={this.onFetchCoupon}
                   disabled={coupon.fetching || submitting}
                 >
-                  <span>APPLY</span>
-                </button>
+                  <span>Apply</span>
+                </Button>
               </div>
 
               <div className="total clearfix">
                 <span className="heading">Subtotal</span>
-                <Money value={subTotal} className="price subtotal-price" />
+                <Money value={subTotal / 100} className="price subtotal-price" />
               </div>
 
               <div className="total discount clearfix">
@@ -261,13 +263,13 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                   ? <span className="price">
                     <LoadingSpinner showOnlyIcon size={20} className="price" />
                   </span>
-                  : <Money value={discount} className="price discount-amount" />
+                  : <Money value={discount / 100} className="price discount-amount" />
                 }
               </div>
 
               <div className="total grand-total clearfix">
                 <strong className="heading">Total</strong>
-                <Money value={total} className="price total-price" />
+                <Money value={total / 100} className="price total-price" />
               </div>
 
               <div className="total hidden-value">
@@ -277,15 +279,13 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                   type="hidden"
                 />
               </div>
-
               {cardsPanelContent}
-
-              <button type="submit" className="btn btn-default" disabled={hasError || coupon.fetching || cards.fetching || submitting || disableSubmit}>
+              <Button type="submit" disabled={hasError || coupon.fetching || cards.fetching || submitting || disableSubmit}>
                 {submitting
                   ? <span><LoadingSpinner showOnlyIcon size={20} className="submitting-shopping-cart" /></span>
                   : <span>Submit</span>
                 }
-              </button>
+              </Button>
             </div>
           </div>
         </div>

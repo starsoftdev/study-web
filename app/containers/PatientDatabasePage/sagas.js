@@ -6,7 +6,7 @@ import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { getItem } from 'utils/localStorage';
 
-import request from 'utils/request';
+import request, { serializeParams } from 'utils/request';
 import composeQueryString from 'utils/composeQueryString';
 import {
   FETCH_PATIENTS,
@@ -14,6 +14,7 @@ import {
   FETCH_PATIENT,
   SAVE_PATIENT,
   SUBMIT_TEXT_BLAST,
+  EXPORT_PATIENTS,
 } from './constants';
 
 import {
@@ -33,6 +34,7 @@ export function* patientDatabasePageSaga() {
   const watcherC = yield fork(fetchPatientWatcher);
   const watcherD = yield fork(savePatientWatcher);
   const watcherE = yield fork(submitTextBlast);
+  const watcherF = yield fork(exportPatients);
 
   yield take(LOCATION_CHANGE);
   yield cancel(watcherA);
@@ -40,6 +42,7 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherC);
   yield cancel(watcherD);
   yield cancel(watcherE);
+  yield cancel(watcherF);
 }
 
 // Bootstrap sagas
@@ -64,7 +67,7 @@ export function* fetchPatientsWatcher() {
         skip: searchParams.skip || 0,
       };
 
-      if (searchParams.sort && searchParams.direction) {
+      if (searchParams.sort && searchParams.direction && searchParams.sort !== 'orderNumber') {
         filterObj.order = `${searchParams.sort} ${((searchParams.direction === 'down') ? 'DESC' : 'ASC')}`;
       }
 
@@ -259,6 +262,26 @@ function* submitTextBlast() {
       });
       onClose();
       yield put(toastrActions.success('Text Blast', 'Text blast submitted successfully!'));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
+function* exportPatients() {
+  while (true) {
+    const { patients } = yield take(EXPORT_PATIENTS);
+
+    try {
+      const requestURL = `${API_URL}/patients/exportPatientsFromDB`;
+      const authToken = getItem('auth_token');
+      const params = {
+        access_token: authToken,
+        patients: JSON.stringify(patients),
+      };
+
+      location.replace(`${requestURL}?${serializeParams(params)}`);
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));

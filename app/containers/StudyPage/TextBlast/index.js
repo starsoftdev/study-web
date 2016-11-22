@@ -148,7 +148,6 @@ class TextBlastModal extends React.Component {
   filterPatients(event) {
     const { formValues, filterPatients } = this.props;
     if (formValues.patientSearchValues) {
-      // console.log('filterPatients', event.target.value, formValues.patients);
       filterPatients(event.target.value, formValues.patients);
     }
   }
@@ -189,8 +188,6 @@ class TextBlastModal extends React.Component {
   renderPatients() {
     const { formValues, removePatient } = this.props;
     if (formValues.patients) {
-      // console.log('formValues', formValues);
-      console.log('patients', formValues.patients.length);
       return (
         <div className="selected-patients-list">
           {formValues.patients.map(patient => (

@@ -22,6 +22,7 @@ import {
   INIT_CHAT,
   DISABLE_CHAT,
   SET_ACTIVE_SORT,
+  SORT_PATIENTS_SUCCESS,
 } from './constants';
 
 const initialState = {
@@ -244,6 +245,15 @@ export default function patientDatabasePageReducer(state = initialState, action)
           activeSort: action.sort,
           activeDirection: action.direction,
           prevSearchFilter: state.paginationOptions.prevSearchFilter,
+        },
+      };
+    case SORT_PATIENTS_SUCCESS:
+      return {
+        ...state,
+        patients: {
+          details: action.patients,
+          fetching: false,
+          error: null,
         },
       };
     default:

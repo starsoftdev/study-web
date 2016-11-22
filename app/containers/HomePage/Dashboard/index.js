@@ -2,13 +2,13 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { selectCurrentUser } from 'containers/App/selectors';
+import { selectCurrentUser, selectSitePatients } from 'containers/App/selectors';
 
 import { fetchPatientSignUps, fetchPatientMessages, fetchRewardsPoint } from '../actions';
 import { selectPatientSignUps, selectPatientMessages, selectRewardsPoint } from '../selectors';
 
 import './styles.less';
-
+import { sumBy } from 'lodash';
 import graph from 'assets/images/graph.svg';
 
 export class Dashboard extends React.Component {
@@ -20,6 +20,7 @@ export class Dashboard extends React.Component {
     fetchPatientSignUps: PropTypes.func,
     fetchPatientMessages: PropTypes.func,
     fetchRewardsPoint: PropTypes.func,
+    sitePatients: React.PropTypes.object,
   }
 
   componentDidMount() {
@@ -34,12 +35,17 @@ export class Dashboard extends React.Component {
   }
 
   render() {
-    const { patientSignUps, patientMessages, rewardsPoint } = this.props;
-
+    const { patientSignUps, patientMessages, rewardsPoint, sitePatients } = this.props;
+    const unreadTexts = sumBy(sitePatients.details, (sitePatient) => {
+      if (sitePatient.count_unread == null) {
+        return 0;
+      }
+      return parseInt(sitePatient.count_unread);
+    });
     return (
       <section className="row infoarea text-uppercase">
         <h2 className="hidden">Statics</h2>
-        <article className="col-xs-4">
+        <article className="col-xs-4 signup-info">
           <div className="box">
             <div className="img-holder pull-left"><img src={graph} width="141" height="119" alt=" " /></div>
             <div className="textbox">
@@ -52,7 +58,7 @@ export class Dashboard extends React.Component {
               <span className="sub-title">Yesterday</span>
               <strong className="number">{patientSignUps.yesterday} <span className="caret-holder"><i className="caret"></i></span></strong>
             </div>
-            <div className="col pull-right text-center">
+            <div className="col pull-right">
               <span className="sub-title">Today</span>
               <strong className="number">{patientSignUps.today} <span className="caret-holder"><i className="caret"></i><i className="caret"></i></span></strong>
             </div>
@@ -66,7 +72,7 @@ export class Dashboard extends React.Component {
             </div>
             <div className="textbox">
               <h2>PATIENT<br /> MESSAGES</h2>
-              <span className="counter">TOTAL {patientMessages.unreadTexts + patientMessages.unreadEmails}</span>
+              <span className="counter">TOTAL {unreadTexts + patientMessages.unreadEmails}</span>
             </div>
           </div>
           <div className="box">
@@ -75,8 +81,8 @@ export class Dashboard extends React.Component {
               <strong className="number"><i className="icomoon-envelop"></i> {patientMessages.unreadEmails}</strong>
             </div>
             <div className="col pull-right">
-              <span className="sub-title">UNREAD<br /> TEXT</span>
-              <strong className="number"><i className="icomoon-icon_chat_alt"></i> {patientMessages.unreadTexts}</strong>
+              <span className="sub-title">UNREAD<br /> TEXTS</span>
+              <strong className="number"><i className="icomoon-icon_chat_alt"></i> {unreadTexts}</strong>
             </div>
           </div>
         </article>
@@ -92,11 +98,11 @@ export class Dashboard extends React.Component {
           <div className="box">
             <div className="col pull-left">
               <span className="sub-title">REFER CRO/<br />SPONSORS</span>
-              <strong className="number">+300 <sub> KIK<span className="small text-lowercase">s</span></sub></strong>
+              <strong className="number">+300 <span className="number-label">KIK<span className="text-lowercase">s</span></span></strong>
             </div>
             <div className="col pull-right">
               <span className="sub-title">Refer <br /> Site</span>
-              <strong className="number">+100 <sub> KIK<span className="small text-lowercase">s</span></sub></strong>
+              <strong className="number">+100 <span className="number-label">KIK<span className="text-lowercase">s</span></span></strong>
             </div>
           </div>
         </article>
@@ -110,6 +116,7 @@ const mapStateToProps = createStructuredSelector({
   patientSignUps: selectPatientSignUps(),
   patientMessages: selectPatientMessages(),
   rewardsPoint: selectRewardsPoint(),
+  sitePatients: selectSitePatients(),
 });
 const mapDispatchToProps = {
   fetchPatientSignUps,

@@ -16,7 +16,9 @@ import PatientBoard from './PatientBoard/index';
 import * as Selector from './selectors';
 import moment from 'moment';
 import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId } from './actions';
-
+import {
+  selectSocket,
+} from 'containers/GlobalNotifications/selectors';
 import './styles.less';
 
 export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -37,6 +39,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     site: PropTypes.object,
     study: PropTypes.object,
     stats: PropTypes.object,
+    socket: React.PropTypes.any,
   };
 
   static defaultProps = {
@@ -46,6 +49,9 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 
   constructor(props) {
     super(props);
+    this.state = {
+      socketBinded: false,
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -57,6 +63,17 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     fetchPatientCategories(params.id, params.siteId);
   }
 
+  componentWillReceiveProps() {
+    const { params, socket } = this.props;
+    if (socket && this.state.socketBinded === false) {
+      socket.on('notifyMessage', () => {
+        console.log('notify');
+        console.log('params', params);
+        this.props.fetchStudy(params.id, params.siteId);
+      });
+      this.setState({ socketBinded: true });
+    }
+  }
 
   handleSubmit(searchFilter) {
     const { params: { id, siteId } } = this.props;
@@ -129,6 +146,7 @@ const mapStateToProps = createStructuredSelector({
   study: Selector.selectStudy(),
   stats: Selector.selectStudyStats(),
   currentUser: selectCurrentUser(),
+  socket: selectSocket(),
 });
 
 function mapDispatchToProps(dispatch) {
