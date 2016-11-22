@@ -26,6 +26,9 @@ import {
   FETCH_SITE_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
+  READ_STUDY_PATIENT_MESSAGES,
+  READ_STUDY_PATIENT_MESSAGES_SUCCESS,
+  READ_STUDY_PATIENT_MESSAGES_ERROR,
   SET_STUDY_ID,
   SET_SITE_ID,
   SET_CURRENT_PATIENT_ID,
@@ -200,6 +203,28 @@ export function studyFetched(payload) {
 export function studyViewsStatFetched(payload) {
   return {
     type: FETCH_STUDY_VIEWS_SUCCESS,
+    payload,
+  };
+}
+
+export function readStudyPatientMessages(patientId, studyId) {
+  return {
+    type: READ_STUDY_PATIENT_MESSAGES,
+    patientId,
+    studyId,
+  };
+}
+
+export function readStudyPatientMessagesSuccess(payload) {
+  return {
+    type: READ_STUDY_PATIENT_MESSAGES_SUCCESS,
+    payload,
+  };
+}
+
+export function readStudyPatientMessagesError(payload) {
+  return {
+    type: READ_STUDY_PATIENT_MESSAGES_ERROR,
     payload,
   };
 }
