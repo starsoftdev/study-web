@@ -133,7 +133,7 @@ class FilterBar extends Component {
               value={filter.siteLocation}
               disabled={fetchingSites || !isAdmin}
               options={siteLocationOptions}
-              placeholder="--Select Site Location--"
+              placeholder="Select Site Location"
               onChange={(option) => this.handleFilterChange('siteLocation', option)}
             />
           </div>
@@ -143,7 +143,7 @@ class FilterBar extends Component {
               value={filter.indication}
               options={this.state.indicationOptions}
               disabled={this.state.siteLocation === null}
-              placeholder={this.state.siteLocation ? '--Select Indication--' : '--N/A--'}
+              placeholder={this.state.siteLocation ? 'Select Indication' : 'N/A'}
               onChange={(option) => this.handleFilterChange('indication', option)}
             />
           </div>
@@ -153,7 +153,7 @@ class FilterBar extends Component {
               value={filter.protocol}
               options={this.state.protocolOptions}
               disabled={this.state.indication === null}
-              placeholder={this.state.indication ? '--Select Protocol--' : '--N/A--'}
+              placeholder={this.state.indication ? 'Select Protocol' : 'N/A'}
               onChange={(option) => this.handleFilterChange('protocol', option)}
             />
           </div>
