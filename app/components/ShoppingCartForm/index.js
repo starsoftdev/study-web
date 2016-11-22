@@ -158,7 +158,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
         <tr className="add-on" key={index}>
           <td>{product.title}</td>
           <td><Money value={product.price / 100} /></td>
-          <td>{product.quantity / 100}</td>
+          <td>{product.quantity}</td>
           <td><Money value={product.total / 100} className="price" /></td>
         </tr>
       ));
