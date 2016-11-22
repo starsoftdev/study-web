@@ -91,12 +91,10 @@ class PatientCategory extends React.Component {
           <div className="slide-holder">
             <ul className="list-unstyled">
               {category.patients.map(patient => {
-                // console.log(studyId);
-                // console.log(patient.id);
                 const patientData = find(sitePatients.details, { study_id: studyId, id: patient.id });
                 let unreadMessageCount = 0;
                 if (patientData !== undefined) {
-                  unreadMessageCount = patientData.count_unread === null ? 0 : patientData.count_unread;
+                  unreadMessageCount = patientData.count_unread === null ? 0 : parseInt(patientData.count_unread);
                 }
                 return (
                   <Patient
