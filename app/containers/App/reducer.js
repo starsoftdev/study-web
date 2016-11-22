@@ -469,8 +469,6 @@ export default function appReducer(state = initialState, action) {
           error: null,
         },
       };
-      console.log('=====UPDATE_SITE_PATIENTS');
-      console.log(baseDataInnerState);
       break;
     case MARK_AS_READ_PATIENT_MESSAGES:
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
