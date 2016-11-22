@@ -280,9 +280,8 @@ function* exportPatients() {
         access_token: authToken,
         patients: JSON.stringify(patients),
       };
-       
+
       location.replace(`${requestURL}?${serializeParams(params)}`);
-    
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
