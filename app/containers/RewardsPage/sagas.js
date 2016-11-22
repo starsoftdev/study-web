@@ -1,8 +1,7 @@
-
 // /* eslint-disable no-constant-condition, consistent-return */
 
 import { takeLatest } from 'redux-saga';
-import { take, call, put, fork, cancel } from 'redux-saga/effects';
+import { take, call, put, fork, select, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
@@ -21,6 +20,10 @@ import {
   SUBMIT_FORM,
   FETCH_SITES,
 } from 'containers/RewardsPage/constants';
+
+import {
+  selectCurrentUser,
+} from 'conatiners/App/selectors';
 
 // Bootstrap sagas
 export default [
@@ -49,24 +52,23 @@ export function* submitFormWatcher() {
     const { payload } = yield take(SUBMIT_FORM);
     console.log('dxxxxxxxx');
     console.log(payload);
-
-    const reLoad = {
-      rewardData: 'string',
-      points: payload.points,
-      created: moment(),
-      entity_id: 4,
-      client_id: 4,
+    console { currentUser } = yield select(selectCurrentUser());
+    console.log( currentUser );
+    const redemption = {
+      redemption_type_id: payload.redemption_type,
+      site_id: payload.site,
+      user_id: currentUser.id
     };
 
     try {
-      const requestURL = `${API_URL}/rewards`;
+      const requestURL = `${API_URL}/rewardRedemption`;
       const params = {
         method: 'POST',
         body: JSON.stringify(reLoad),
       };
       const response = yield call(request, requestURL, params);
 
-      yield put(toastrActions.success('Rewards', 'The request has been submitted successfully'));
+      yield put(toastrActions.success('RewardRedemption', 'The request has been submitted successfully'));
       yield put(formSubmitted(response));
 
       // Clear the form values

@@ -93,33 +93,33 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                 <ul className="list-unstyled list-radios">
                   <li>
                     <Field
-                      name="points"
+                      name="redemption_type"
                       type="radio"
                       component={RadioButton}
                       className=""
-                      value="75"
+                      value="1"
                       checked={this.state.card === '1'}
                     />
                     <span className="text">75 KIKs = $25 Starbucks Gift Card</span>
                   </li>
                   <li>
                     <Field
-                      name="points"
+                      name="redemption_type"
                       type="radio"
                       component={RadioButton}
                       className=""
-                      value="220"
+                      value="2"
                       checked={this.state.card === '2'}
                     />
                     <span className="text">225 KIKs = $75 Amazon Gift Card</span>
                   </li>
                   <li>
                     <Field
-                      name="points"
+                      name="redemption_type"
                       type="radio"
                       component={RadioButton}
                       className=""
-                      value="1559"
+                      value="3"
                       checked={this.state.card === '3'}
                     />
                     <span className="text"> 1,559 KIKs = $1,559 StudyKIK Platinum Listing</span>
