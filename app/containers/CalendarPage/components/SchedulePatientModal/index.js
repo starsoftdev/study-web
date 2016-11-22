@@ -127,7 +127,6 @@ export default class SchedulePatientModal extends Component {
         patientOptions: [],
       });
     }
-    this.props.initialize({});
   }
 
   handleProtocolChoose(protocolOption) {
@@ -144,7 +143,6 @@ export default class SchedulePatientModal extends Component {
         patientOptions: [],
       });
     }
-    this.props.initialize({});
   }
 
   handlePatientChoose(patientOption) {
