@@ -26,10 +26,14 @@ import {
   FETCH_SITE_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
+  READ_STUDY_PATIENT_MESSAGES,
+  READ_STUDY_PATIENT_MESSAGES_SUCCESS,
+  READ_STUDY_PATIENT_MESSAGES_ERROR,
   SET_STUDY_ID,
   SET_SITE_ID,
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
+  SET_OPEN_PATIENT_MODAL,
   SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
   MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
@@ -203,6 +207,28 @@ export function studyViewsStatFetched(payload) {
   };
 }
 
+export function readStudyPatientMessages(patientId, studyId) {
+  return {
+    type: READ_STUDY_PATIENT_MESSAGES,
+    patientId,
+    studyId,
+  };
+}
+
+export function readStudyPatientMessagesSuccess(payload) {
+  return {
+    type: READ_STUDY_PATIENT_MESSAGES_SUCCESS,
+    payload,
+  };
+}
+
+export function readStudyPatientMessagesError(payload) {
+  return {
+    type: READ_STUDY_PATIENT_MESSAGES_ERROR,
+    payload,
+  };
+}
+
 export function patientReferralStatFetched(payload) {
   return {
     type: FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
@@ -235,6 +261,13 @@ export function setCurrentPatientCategoryId(id) {
   return {
     type: SET_CURRENT_PATIENT_CATEGORY_ID,
     id,
+  };
+}
+
+export function setOpenPatientModal(show) {
+  return {
+    type: SET_OPEN_PATIENT_MODAL,
+    show,
   };
 }
 

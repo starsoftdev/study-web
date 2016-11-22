@@ -22,7 +22,6 @@ import { actions as toastrActions } from 'react-redux-toastr';
 
 const formName = 'StudyPage.TextBlastModal';
 
-
 @reduxForm({
   form: formName,
   validate: formValidator,
@@ -65,7 +64,7 @@ class TextBlastModal extends React.Component {
   }
 
   selectCategory(checked, categoryId) {
-    const { change, findPatients, formValues, patientCategories, sources, studyId } = this.props;
+    const { change, findPatients, formValues, patientCategories, sources, studyId, removePatients } = this.props;
     // find patients for text blast
     let sourceIds = null;
     if (!formValues.source) {
@@ -80,8 +79,10 @@ class TextBlastModal extends React.Component {
       for (const category of patientCategories) {
         change(`category-${category.id}`, checked);
       }
-      if (checked) {
+      if (checked || sourceIds.length) {
         findPatients(studyId, null, null, sourceIds);
+      } else {
+        removePatients();
       }
     } else {
       // change the all option to unchecked
@@ -95,14 +96,16 @@ class TextBlastModal extends React.Component {
           categoryIds.push(category.id);
         }
       }
-      if (checked) {
+      if (categoryIds.length || sourceIds.length) {
         findPatients(studyId, null, categoryIds, sourceIds);
+      } else {
+        removePatients();
       }
     }
   }
 
   selectSource(checked, sourceId) {
-    const { change, findPatients, formValues, patientCategories, sources, studyId } = this.props;
+    const { change, findPatients, formValues, patientCategories, sources, studyId, removePatients } = this.props;
     // find patients for text blast
     let categoryIds = null;
     if (!formValues.category) {
@@ -117,8 +120,10 @@ class TextBlastModal extends React.Component {
       for (const source of sources) {
         change(`source-${source.id}`, checked);
       }
-      if (checked) {
+      if (checked || categoryIds.length) {
         findPatients(studyId, null, categoryIds, null);
+      } else {
+        removePatients();
       }
     } else {
       // change the all option to unchecked
@@ -132,8 +137,10 @@ class TextBlastModal extends React.Component {
           sourceIds.push(source.id);
         }
       }
-      if (checked) {
+      if (sourceIds.length || categoryIds.length) {
         findPatients(studyId, null, categoryIds, sourceIds);
+      } else {
+        removePatients();
       }
     }
   }

@@ -105,6 +105,27 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/order-irb-ad-creation/:id',
+      name: 'IrbAdCreationPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/IrbAdCreationPage/reducer'),
+          System.import('containers/IrbAdCreationPage/sagas'),
+          System.import('containers/IrbAdCreationPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('IrbAdCreationPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/patient-database',
       name: 'patientDatabasePage',
       getComponent(nextState, cb) {
@@ -231,6 +252,27 @@ export default function createRoutes(store) {
     }, {
       onEnter: redirectToLogin,
       path: '/request-proposal',
+      name: 'requestProposalPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/RequestProposalPage/reducer'),
+          System.import('containers/RequestProposalPage/sagas'),
+          System.import('containers/RequestProposalPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('requestProposalPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/request-proposal/:id',
       name: 'requestProposalPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([

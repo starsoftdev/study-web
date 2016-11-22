@@ -19,6 +19,8 @@ import {
   selectUnreadNotificationsCount,
 } from 'containers/GlobalNotifications/selectors';
 
+import { getRedirectionUrl } from 'containers/NotificationsPage';
+
 import avatar1 from 'assets/images/img2.png';
 import avatar2 from 'assets/images/img3.png';
 import avatar3 from 'assets/images/img4.png';
@@ -47,17 +49,6 @@ class NotificationBox extends React.Component {
 
   getLocalTime(utc) {
     return moment.utc(utc).local();
-  }
-
-  getRedirectionUrl = (notification) => {
-    let data;
-    switch (notification.event_log.eventType) {
-      case 'create-user':
-        data = JSON.parse(notification.event_log.eventData);
-        return `/${data.user_id}/profile`;
-      default:
-        return '/';
-    }
   }
 
   handleBadgeNumberClick = () => {
@@ -96,7 +87,7 @@ class NotificationBox extends React.Component {
                   {
                     _.take(this.props.notifications, 3).map(n => (
                       <li key={n.id}>
-                        <a href={this.getRedirectionUrl(n)}>
+                        <a href={getRedirectionUrl(n)}>
                           <div className="img-circle"><img src={avatar1} width="43" height="43" alt="Alan walker" /></div>
                           <p dangerouslySetInnerHTML={{ __html: n.event_log.eventMessage }} />
                           <time>{`${this.getLocalTime(n.event_log.created).format('MM/DD/YY')} at ${this.getLocalTime(n.event_log.created).format('h:mm A')}`}</time>

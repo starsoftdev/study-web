@@ -9,11 +9,14 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     index: PropTypes.number,
     studyId: PropTypes.number,
     indication: PropTypes.object,
+    campaign: PropTypes.object,
     location: PropTypes.string,
     sponsor: PropTypes.string,
     protocol: PropTypes.string,
     patientMessagingSuite: PropTypes.string,
+    unreadMessageCount: PropTypes.number,
     status: PropTypes.string,
+    siteUsers: PropTypes.array,
     startDate: PropTypes.string,
     endDate: PropTypes.string,
     onRenew: PropTypes.func,
@@ -43,19 +46,19 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   onRenewClick() {
-    const { studyId, indication, onRenew } = this.props;
+    const { studyId, indication, onRenew, campaign } = this.props;
 
-    onRenew(studyId, indication.id);
+    onRenew(studyId, indication.id, campaign);
   }
 
   onUpgradeClick() {
-    const { studyId, indication, onUpgrade } = this.props;
+    const { studyId, indication, onUpgrade, campaign } = this.props;
 
-    onUpgrade(studyId, indication.id);
+    onUpgrade(studyId, indication.id, campaign);
   }
 
   onEditClick() {
-    this.props.onEdit(this.props.studyId);
+    this.props.onEdit(this.props.studyId, this.props.siteUsers);
   }
 
   showButtons() {
@@ -68,7 +71,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 
   render() {
     const { index, indication, location, sponsor, protocol, patientMessagingSuite, status,
-      startDate, endDate } = this.props;
+      startDate, endDate, unreadMessageCount } = this.props;
     const buttonsShown = this.state.buttonsShown;
     let content = null;
     if (buttonsShown) {
@@ -89,8 +92,16 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <td className="protocol">
             <span>{protocol}</span>
           </td>
-          <td className="patient-messaging-suite">
+          <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off') })}>
             <span>{patientMessagingSuite}</span>
+            {(() => {
+              if (unreadMessageCount > 0) {
+                return (
+                  <span className="counter-circle">{unreadMessageCount}</span>
+                );
+              }
+              return false;
+            })()}
           </td>
           <td className="status">
             <span>{status}</span>
@@ -131,8 +142,16 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <td className="protocol">
             <span>{protocol}</span>
           </td>
-          <td className="patient-messaging-suite">
+          <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off') })}>
             <span>{patientMessagingSuite}</span>
+            {(() => {
+              if (unreadMessageCount > 0) {
+                return (
+                  <span className="counter-circle">{unreadMessageCount}</span>
+                );
+              }
+              return false;
+            })()}
           </td>
           <td className="status">
             <span>{status}</span>

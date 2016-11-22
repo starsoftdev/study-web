@@ -1,8 +1,8 @@
 /**
-*
-* Array of lead sources
-*
-*/
+ *
+ * Array of lead sources
+ *
+ */
 
 import React, { PropTypes } from 'react';
 
@@ -15,37 +15,45 @@ import {
   LEAD_SOURCE_LIST,
 } from 'common/constants';
 
-import './styles.less';
-
 const RenderLeads = ({ fields, availPhoneNumbers }) => (
-  <div className="leads-list">
+  <div className="leads-list row form-group">
     {fields.map((lead, index) =>
       <div className="lead-item" key={index}>
+        <button
+          className="link-delete"
+          onClick={
+            (ev) => {
+              ev.preventDefault();
+              fields.remove(index);
+            }
+          }
+        >
+          <i className="icomoon-icon_trash" />
+        </button>
         <div className="field-row">
-          <strong className="label required"><label>Lead Source</label></strong>
+          <span className="label required col-sm-5">
+            <label>Lead Source</label>
+          </span>
           <Field
             name={`${lead}.source_id`}
             component={ReactSelect}
             placeholder="Select Lead Source"
             options={LEAD_SOURCE_LIST}
-            className="field"
+            className="field col-sm-7"
           />
-          <button className="link-delete" onClick={() => fields.remove(index)}>
-            <i className="icomoon-icon_trash" />
-          </button>
         </div>
 
         {(() => {
           if (availPhoneNumbers) {
             return (
               <div className="field-row">
-                <strong className="label required"><label>Phone number</label></strong>
+                <span className="label required col-sm-5"><label>Phone number</label></span>
                 <Field
                   name={`${lead}.source_phone`}
                   component={ReactSelect}
-                  placeholder="Select Phone Number"
+                  placeholder="Select Lead Source"
                   options={availPhoneNumbers}
-                  className="field"
+                  className="field col-sm-7"
                 />
               </div>
             );
@@ -54,24 +62,27 @@ const RenderLeads = ({ fields, availPhoneNumbers }) => (
         })()}
 
         <div className="field-row">
-          <strong className="label required"><label>Source Name</label></strong>
+          <span className="label required col-sm-5"><label>Source Name</label></span>
           <Field
             name={`${lead}.source_name`}
             component={Input}
             type="text"
-            className="field"
+            className="field col-sm-7"
           />
         </div>
       </div>
     )}
-    <div className="field-row">
-      <strong className="label"></strong>
+    <div className="field-row col-sm-7 pull-right">
+      <span className="label"></span>
       <div className="field">
         <button
           className="add-new-source"
-          onClick={() => fields.push({})}
+          onClick={(ev) => {
+            ev.preventDefault();
+            fields.push({});
+          }}
         >
-          <i className="icomoon-icon_close"></i> Add Lead Source
+          <i className="icomoon-icon_close" /> Add Lead Source
         </button>
       </div>
     </div>

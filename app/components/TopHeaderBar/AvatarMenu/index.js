@@ -46,16 +46,18 @@ class AvatarMenu extends React.Component {
         <div className={`logged-user-drop avatar-menu ${avatarMenuClassName}`}>
           <div className="well">
             <ul className="list-unstyled">
-              <li><Link to="/me/profile" onClick={this.handleClickOutside}>PROFILE</Link></li>
-              <li><Link to="/payment-information" onClick={this.handleClickOutside}>PAYMENT INFORMATION</Link></li>
-              <li><Link to="#" onClick={this.handleClickOutside}>RECEIPTS</Link></li>
-              <li><Link to="#" onClick={this.handleClickOutside}>PROPOSALS</Link></li>
+              <li><Link to="/me/profile" onClick={() => this.handleClickOutside()}>PROFILE</Link></li>
+              <li><Link to="/payment-information" onClick={() => this.handleClickOutside()}>PAYMENT INFORMATION</Link></li>
+              <li><Link to="/receipts" onClick={() => this.handleClickOutside()}>RECEIPTS</Link></li>
+              <li><Link to="/proposals" onClick={() => this.handleClickOutside()}>PROPOSALS</Link></li>
               <a
                 onClick={() => {
                   this.props.handleLogoutClick();
                   this.handleClickOutside();
                 }}
-              >LOG OUT</a>
+              >
+                LOG OUT
+              </a>
             </ul>
           </div>
         </div>

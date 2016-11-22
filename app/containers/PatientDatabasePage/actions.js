@@ -4,8 +4,6 @@
  *
  */
 
-import { filter, findIndex } from 'lodash';
-
 import {
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
@@ -32,18 +30,25 @@ import {
   REMOVE_PATIENT_FROM_TEXT_BLAST,
   REMOVE_PATIENTS_FROM_TEXT_BLAST,
   SUBMIT_TEXT_BLAST,
+  SET_ACTIVE_SORT,
+  SORT_PATIENTS_SUCCESS,
+  EXPORT_PATIENTS,
 } from './constants';
+import _ from 'lodash';
 
-export function fetchPatients(searchParams = {}) {
+export function fetchPatients(searchParams = {}, patients = {}, searchFilter = {}) {
   return {
     type: FETCH_PATIENTS,
     searchParams,
+    patients,
+    searchFilter,
   };
 }
 
-export function patientsFetched(searchParams, payload) {
-  let result = payload;
-  if (searchParams.includeIndication) {
+export function patientsFetched(searchParams, payload, patients, searchFilter) {
+  const result = payload;
+  const initResult = payload;
+  /* if (searchParams.includeIndication) {
     const includeIndications = searchParams.includeIndication.split(',');
     result = filter(result, patientIterator => {
       const foundIndications = filter(includeIndications, includeIterator => {
@@ -63,15 +68,46 @@ export function patientsFetched(searchParams, payload) {
       });
       return !foundIndications.length;
     });
+  }*/
+
+  /* if (searchParams.status) {
+    result = filter(result, patientIterator => (patientIterator.studyPatientCategory.patient_category_id === searchParams.status));
+  }*/
+
+  let resultArr = [];
+  if (searchParams.skip === 0) {
+    _.forEach(result, (item, index) => {
+      result[index].orderNumber = index + 1;
+    });
+    resultArr = result;
+  } else {
+    const patientsCount = patients.length;
+    _.forEach(result, (item, index) => {
+      result[index].orderNumber = patientsCount + index + 1;
+    });
+    resultArr = patients.concat(result);
   }
 
-  if (searchParams.status) {
-    result = filter(result, patientIterator => (patientIterator.studyPatientCategory.patient_category_id === searchParams.status));
+  if (searchParams.sort && searchParams.sort === 'orderNumber') {
+    const dir = ((searchParams.direction === 'down') ? 'desc' : 'asc');
+    resultArr = _.orderBy(resultArr, [function (o) {
+      return o.orderNumber;
+    }], [dir]);
+  }
+
+  let hasMore = true;
+  let page = (searchParams.skip / 15) + 1;
+  if (initResult.length < searchParams.limit) {
+    hasMore = false;
+    page = 1;
   }
 
   return {
     type: FETCH_PATIENTS_SUCCESS,
-    payload: result,
+    payload: resultArr,
+    hasMore,
+    page,
+    searchFilter,
   };
 }
 
@@ -191,5 +227,27 @@ export function submitTextBlast(patients, message, onClose) {
     patients,
     message,
     onClose,
+  };
+}
+
+export function setActiveSort(sort, direction) {
+  return {
+    type: SET_ACTIVE_SORT,
+    sort,
+    direction,
+  };
+}
+
+export function sortPatientsSuccess(patients) {
+  return {
+    type: SORT_PATIENTS_SUCCESS,
+    patients,
+  };
+}
+
+export function exportPatients(patients) {
+  return {
+    type: EXPORT_PATIENTS,
+    patients,
   };
 }

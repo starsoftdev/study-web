@@ -47,6 +47,10 @@ import {
   FETCH_PATIENT_MESSAGES_ERROR,
   UPDATE_PATIENT_MESSAGES,
 
+  SEARCH_SITE_PATIENTS,
+  SEARCH_SITE_PATIENTS_SUCCESS,
+  SEARCH_SITE_PATIENTS_ERROR,
+
   MARK_AS_READ_PATIENT_MESSAGES,
 
 
@@ -449,12 +453,12 @@ export default function appReducer(state = initialState, action) {
         if (patientData.id === action.newMessage.patient_id && patientData.study_id === action.newMessage.study_id) {
           const countUnread = patientData.count_unread;
           if (countUnread) {
-            patientData.count_unread = countUnread + 1;
+            patientData.count_unread = parseInt(countUnread) + 1;
           } else {
             patientData.count_unread = 1;
           }
-          patientData.twtm_max_date_created = action.newMessage.created_datetime;
-          patientData.last_message_body = action.newMessage.body;
+          patientData.twtm_max_date_created = action.newMessage.twilioTextMessage.created_datetime;
+          patientData.last_message_body = action.newMessage.twilioTextMessage.body;
         }
         return patientData;
       });
@@ -529,6 +533,32 @@ export default function appReducer(state = initialState, action) {
         },
       };
       break;
+    case SEARCH_SITE_PATIENTS:
+      return state;
+    case SEARCH_SITE_PATIENTS_SUCCESS:
+      console.log(payload);
+      sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
+        let patientData = null;
+        patientData = item;
+        patientData.show = false;
+        forEach(payload, dataItem => {
+          if (dataItem.id === patientData.id && dataItem.study_id === patientData.study_id) {
+            patientData.show = true;
+          }
+        });
+        return patientData;
+      });
+      // return state;
+      baseDataInnerState = {
+        sitePatients: {
+          details: sitePatientsCollection,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case SEARCH_SITE_PATIENTS_ERROR:
+      return state;
     case FETCH_CLIENT_ROLES:
       baseDataInnerState = {
         clientRoles: {
