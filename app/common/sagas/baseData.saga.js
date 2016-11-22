@@ -13,7 +13,6 @@ import {
   FETCH_LEVELS,
   FETCH_COUPON,
   FETCH_CARDS,
-  FETCH_REWARDS,
   SAVE_CARD,
   DELETE_CARD,
   ADD_CREDITS,
@@ -206,9 +205,8 @@ export function* fetchCouponWatcher() {
 
 export function* fetchRewardsWatcher() {
   while (true) {
-    const { customerId } = yield take(FETCH_REWARDS);
     try {
-      const requestURL = `${API_URL}/rewards`;
+      const requestURL = `${API_URL}/rewardBalances/get_aggregated_reward_balances`;
       const response = yield call(request, requestURL);
 
       yield put(rewardsFetched(response));

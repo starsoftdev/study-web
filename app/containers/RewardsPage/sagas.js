@@ -1,12 +1,11 @@
 // /* eslint-disable no-constant-condition, consistent-return */
 
 import { takeLatest } from 'redux-saga';
-import { take, call, put, fork, select, cancel } from 'redux-saga/effects';
+import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
 import { get } from 'lodash';
-import moment from 'moment';
 import request from 'utils/request';
 
 import {
@@ -20,10 +19,6 @@ import {
   SUBMIT_FORM,
   FETCH_SITES,
 } from 'containers/RewardsPage/constants';
-
-import {
-  selectCurrentUser,
-} from 'conatiners/App/selectors';
 
 // Bootstrap sagas
 export default [
@@ -50,21 +45,16 @@ export function* submitFormWatcher() {
   while (true) {
     // listen for the SUBMIT_FORM action dispatched on form submit
     const { payload } = yield take(SUBMIT_FORM);
-    console.log('dxxxxxxxx');
-    console.log(payload);
-    console { currentUser } = yield select(selectCurrentUser());
-    console.log( currentUser );
     const redemption = {
       redemption_type_id: payload.redemption_type,
       site_id: payload.site,
-      user_id: currentUser.id
     };
 
     try {
-      const requestURL = `${API_URL}/rewardRedemption`;
+      const requestURL = `${API_URL}/rewardRedemptions`;
       const params = {
         method: 'POST',
-        body: JSON.stringify(reLoad),
+        body: JSON.stringify(redemption),
       };
       const response = yield call(request, requestURL, params);
 
@@ -72,7 +62,7 @@ export function* submitFormWatcher() {
       yield put(formSubmitted(response));
 
       // Clear the form values
-      yield put(reset('rewards'));
+      yield put(reset('rewardRedemptions'));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));

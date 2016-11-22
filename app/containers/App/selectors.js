@@ -45,17 +45,16 @@ const selectUserSites = () => createSelector(
   (substate) => {
     const currentUser = get(substate, 'userData');
     const siteId = currentUser.site_id;
-    const sites = get(substate, 'baseData.sites', []);
-    if(siteId){
-      return filter(sites, e => e.id == siteId);  
+    let sites = get(substate, 'baseData.sites', []);
+    if (siteId) {
+      sites = filter(sites, e => e.id === siteId);
     } else {
       const clientId = get(substate, 'userData.roleForClient.client.id', null);
-      if(clientId) {
-        return get(substate, 'baseData.clientSites', {})  
-      } else {
-        return []  
+      if (clientId) {
+        sites = get(substate, 'baseData.clientSites', {});
       }
-    } 
+    }
+    return sites;
   }
 );
 
@@ -66,16 +65,15 @@ const selectUserSiteLocations = () => createSelector(
     const currentUser = get(substate, 'userData');
     const siteId = currentUser.site_id;
     const sites = get(substate, 'baseData.sites', []);
-    var userSites = [];
-    
-    if(siteId){
-      userSites = filter(sites, e => e.id == siteId);  
+    let userSites = [];
+    if (siteId) {
+      userSites = filter(sites, e => e.id === siteId);
     } else {
       const clientId = get(substate, 'userData.roleForClient.client.id', null);
-      if(clientId){
-        userSites = get(substate, 'baseData.clientSites.details', {})  
+      if (clientId) {
+        userSites = get(substate, 'baseData.clientSites.details', {});
       }
-    } 
+    }
     return map(userSites, e => pick(e, ['id', 'name']));
   }
 );
