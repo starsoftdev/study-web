@@ -14,6 +14,8 @@ class PatientActionButtons extends React.Component {
   static propTypes = {
     formValues: React.PropTypes.object,
     exportPatients: React.PropTypes.func,
+    searchPatients: React.PropTypes.func,
+    paginationOptions: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -91,9 +93,7 @@ class PatientActionButtons extends React.Component {
   }
 
   download() {
-    if (this.props.formValues.patients) {
-      this.props.exportPatients(this.props.formValues.patients);
-    }
+    this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, true, true);
   }
 
   render() {

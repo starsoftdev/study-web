@@ -52,7 +52,7 @@ export default [
 
 export function* fetchPatientsWatcher() {
   while (true) {
-    const { searchParams, patients, searchFilter } = yield take(FETCH_PATIENTS);
+    const { searchParams, patients, searchFilter, isExport } = yield take(FETCH_PATIENTS);
     try {
       const filterObj = {
         include: [
@@ -65,6 +65,7 @@ export function* fetchPatientsWatcher() {
         },
         limit: searchParams.limit || 15,
         skip: searchParams.skip || 0,
+        isExport: isExport,
       };
 
       if (searchParams.sort && searchParams.direction && searchParams.sort !== 'orderNumber') {
@@ -162,8 +163,12 @@ export function* fetchPatientsWatcher() {
       const queryString = composeQueryString(queryParams);
       // const requestURL = `${API_URL}/patients?${queryString}`;
       const requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
-      const response = yield call(request, requestURL);
-      yield put(patientsFetched(searchParams, response, patients, searchFilter));
+      if (isExport){
+        location.replace(`${requestURL}&access_token=${getItem('auth_token')}`);
+      }else{
+        const response = yield call(request, requestURL);
+        yield put(patientsFetched(searchParams, response, patients, searchFilter));
+      }
     } catch (err) {
       yield put(patientsFetchingError(err));
     }

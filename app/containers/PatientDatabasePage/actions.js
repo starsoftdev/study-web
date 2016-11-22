@@ -36,12 +36,13 @@ import {
 } from './constants';
 import _ from 'lodash';
 
-export function fetchPatients(searchParams = {}, patients = {}, searchFilter = {}) {
+export function fetchPatients(searchParams = {}, patients = {}, searchFilter = {}, isExport=false) {
   return {
     type: FETCH_PATIENTS,
     searchParams,
     patients,
     searchFilter,
+    isExport,
   };
 }
 
