@@ -21,46 +21,6 @@ class DateOfBirthPicker extends React.Component {
     yearOptions: React.PropTypes.array.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.changePatientDobMonth = this.changePatientDobMonth.bind(this);
-    this.changePatientDobDay = this.changePatientDobDay.bind(this);
-    this.changePatientDobYear = this.changePatientDobYear.bind(this);
-  }
-
-  componentDidMount() {
-  }
-
-  changePatientDobDay(value) {
-    const { dobMonth, dobYear, initialValues, submitPatientUpdate } = this.props;
-    if (dobMonth && dobYear) {
-      const date = moment().year(dobYear).month(dobMonth).day(value);
-      submitPatientUpdate(initialValues.id, {
-        dob: date,
-      });
-    }
-  }
-
-  changePatientDobMonth(value) {
-    const { dobDay, dobYear, initialValues, submitPatientUpdate } = this.props;
-    if (dobDay && dobYear) {
-      const date = moment().year(dobYear).month(value).day(dobDay);
-      submitPatientUpdate(initialValues.id, {
-        dob: date,
-      });
-    }
-  }
-
-  changePatientDobYear(value) {
-    const { dobDay, dobMonth, initialValues, submitPatientUpdate } = this.props;
-    if (dobDay && dobMonth) {
-      const date = moment().year(value).month(dobMonth).day(dobDay);
-      submitPatientUpdate(initialValues.id, {
-        dob: date,
-      });
-    }
-  }
-
   render() {
     const { dayOptions, loading, monthOptions, submitting, yearOptions } = this.props;
     return (
@@ -76,7 +36,6 @@ class DateOfBirthPicker extends React.Component {
                 options={monthOptions}
                 disabled={submitting || loading}
                 placeholder="Month"
-                onChange={this.changePatientDobMonth}
               />
             </div>
             <div className="col-small pull-left">
@@ -87,7 +46,6 @@ class DateOfBirthPicker extends React.Component {
                 options={dayOptions}
                 disabled={submitting || loading}
                 placeholder="Day"
-                onChange={this.changePatientDobDay}
               />
             </div>
             <div className="col-small pull-left">
@@ -98,7 +56,6 @@ class DateOfBirthPicker extends React.Component {
                 disabled={submitting || loading}
                 options={yearOptions}
                 placeholder="Year"
-                onChange={this.changePatientDobYear}
               />
             </div>
           </div>
