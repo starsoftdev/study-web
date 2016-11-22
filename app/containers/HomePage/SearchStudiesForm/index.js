@@ -13,7 +13,6 @@ import { selectStudies } from 'containers/HomePage/selectors';
 import formValidator from './validator';
 import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from 'containers/HomePage/constants';
 import LoadingSpinner from 'components/LoadingSpinner';
-import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   clientSites: selectClientSites(),
@@ -41,8 +40,8 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
     const statusOptions = [{ label: 'Active', value: ACTIVE_STATUS_VALUE }, { label: 'Inactive', value: INACTIVE_STATUS_VALUE }];
 
     return (
-      <Form className="form-search" onSubmit={handleSubmit}>
-        <div className="fields-holder">
+      <Form className="form-search form-search-studies pull-left" onSubmit={handleSubmit}>
+        <div className="fields-holder clearfix">
           <div className="search-area pull-left">
             <div className="field">
               <Field
@@ -50,7 +49,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
                 component={Input}
                 type="text"
                 className="keyword-search"
-                placeholder="Search Name..."
+                placeholder="Search..."
                 disabled={clientSites.fetching || studies.fetching}
               />
               <label htmlFor="search">

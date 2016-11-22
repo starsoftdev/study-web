@@ -45,7 +45,7 @@ export class Dashboard extends React.Component {
     return (
       <section className="row infoarea text-uppercase">
         <h2 className="hidden">Statics</h2>
-        <article className="col-xs-4">
+        <article className="col-xs-4 signup-info">
           <div className="box">
             <div className="img-holder pull-left"><img src={graph} width="141" height="119" alt=" " /></div>
             <div className="textbox">
@@ -58,7 +58,7 @@ export class Dashboard extends React.Component {
               <span className="sub-title">Yesterday</span>
               <strong className="number">{patientSignUps.yesterday} <span className="caret-holder"><i className="caret"></i></span></strong>
             </div>
-            <div className="col pull-right text-center">
+            <div className="col pull-right">
               <span className="sub-title">Today</span>
               <strong className="number">{patientSignUps.today} <span className="caret-holder"><i className="caret"></i><i className="caret"></i></span></strong>
             </div>
@@ -81,7 +81,7 @@ export class Dashboard extends React.Component {
               <strong className="number"><i className="icomoon-envelop"></i> {patientMessages.unreadEmails}</strong>
             </div>
             <div className="col pull-right">
-              <span className="sub-title">UNREAD<br /> TEXT</span>
+              <span className="sub-title">UNREAD<br /> TEXTS</span>
               <strong className="number"><i className="icomoon-icon_chat_alt"></i> {unreadTexts}</strong>
             </div>
           </div>
@@ -98,11 +98,11 @@ export class Dashboard extends React.Component {
           <div className="box">
             <div className="col pull-left">
               <span className="sub-title">REFER CRO/<br />SPONSORS</span>
-              <strong className="number">+300 <sub> KIK<span className="small text-lowercase">s</span></sub></strong>
+              <strong className="number">+300 <span className="number-label">KIK<span className="text-lowercase">s</span></span></strong>
             </div>
             <div className="col pull-right">
               <span className="sub-title">Refer <br /> Site</span>
-              <strong className="number">+100 <sub> KIK<span className="small text-lowercase">s</span></sub></strong>
+              <strong className="number">+100 <span className="number-label">KIK<span className="text-lowercase">s</span></span></strong>
             </div>
           </div>
         </article>
