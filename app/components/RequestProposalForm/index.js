@@ -102,7 +102,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
               type="email"
               className="field"
             />
-          </div>+
+          </div>
 
           <div className="field-row">
             <strong className="label"><label>CRO Contact Name</label></strong>

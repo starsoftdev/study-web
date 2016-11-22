@@ -556,7 +556,6 @@ export default function appReducer(state = initialState, action) {
     case SEARCH_SITE_PATIENTS:
       return state;
     case SEARCH_SITE_PATIENTS_SUCCESS:
-      console.log(payload);
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
         let patientData = null;
         patientData = item;
