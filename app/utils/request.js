@@ -3,7 +3,7 @@
 import 'whatwg-fetch';
 import { pick } from 'lodash';
 
-import { getItem } from 'utils/localStorage';
+import { getItem, removeItem } from 'utils/localStorage';
 
 /**
  * Requests a URL, returning a promise
@@ -28,15 +28,20 @@ export default function request(url, options = {}) {
     headers.authorization = options.authToken;
   }
 
+  if (newUrl.indexOf('access_token') === -1) {
+    if (newUrl.indexOf('?') === -1) {
+      newUrl = `${url}?access_token=${authToken}`;
+    } else {
+      newUrl = `${url}&access_token=${authToken}`;
+    }
+  }
+
   if (!options.method || options.method === 'GET') {
     if (options.query) {
       const queryString = serializeParams(options.query);
       newUrl = `${url}?${queryString}`;
     }
   }
-
-  // Use authorization token temporarily until we write auth module.
-  // headers.authorization = 'ltDVEqf99WNfKGxJeyl2hQnOGmXb0wUFbv4DBSVHCTKzFYZ7fxEn6Wv9Umnq8jc9';
 
   if (options.useDefaultContentType) {
     delete headers['Content-Type'];
@@ -75,6 +80,9 @@ function parseJSON(response) {
 function checkStatus(response) {
   if (response.ok) { // response.status >= 200 && response.status < 300
     return response;
+  }
+  if (response.status === 401) {
+    removeItem('auth_token');
   }
 
   // details from `whatwg-fetch`

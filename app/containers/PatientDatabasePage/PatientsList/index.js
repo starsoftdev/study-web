@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import { Modal } from 'react-bootstrap';
-import { map, omit } from 'lodash';
+import _, { map, omit } from 'lodash';
 
 import Checkbox from '../../../components/Input/Checkbox';
 import CenteredModal from '../../../components/CenteredModal/index';
@@ -22,10 +22,13 @@ import { clearSelectedPatient,
   initChat,
   disableChat,
   addPatientsToTextBlast,
-  removePatientsFromTextBlast } from '../actions';
+  removePatientsFromTextBlast,
+  setActiveSort,
+  sortPatientsSuccess } from '../actions';
 import PatientItem from './PatientItem';
 import { normalizePhone, normalizePhoneDisplay } from '../../StudyPage/helper/functions';
-
+import { StickyContainer, Sticky } from 'react-sticky';
+import InfiniteScroll from 'react-infinite-scroller';
 import './styles.less';
 
 const formName = 'PatientDatabase.TextBlastModal';
@@ -46,6 +49,10 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     initChat: PropTypes.func,
     disableChat: PropTypes.func,
     sendStudyPatientMessages: PropTypes.func,
+    paginationOptions: PropTypes.object,
+    searchPatients: PropTypes.func,
+    setActiveSort: PropTypes.func,
+    sortPatientsSuccess: PropTypes.func,
   };
 
   constructor(props) {
@@ -56,6 +63,8 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     this.openChat = this.openChat.bind(this);
     this.closeChat = this.closeChat.bind(this);
     this.toggleAllPatientSelection = this.toggleAllPatientSelection.bind(this);
+    this.loadItems = this.loadItems.bind(this);
+    this.sortBy = this.sortBy.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -110,6 +119,35 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     }
   }
 
+  loadItems() {
+    this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, false);
+  }
+
+  sortBy(ev) {
+    ev.preventDefault();
+    let sort = ev.currentTarget.dataset.sort;
+    let direction = 'up';
+
+    if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
+      direction = 'down';
+    } else if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1) {
+      direction = null;
+      sort = null;
+    }
+
+    this.props.setActiveSort(sort, direction);
+
+    if (sort !== 'orderNumber') {
+      this.props.searchPatients({ ...this.props.paginationOptions.prevSearchFilter, sort, direction }, true);
+    } else {
+      const dir = ((direction === 'down') ? 'desc' : 'asc');
+      const sortedPatients = _.orderBy(this.props.patients.details, [function (o) {
+        return o.orderNumber;
+      }], [dir]);
+      this.props.sortPatientsSuccess(sortedPatients);
+    }
+  }
+
   render() {
     const { patients, selectedPatientDetailsForForm } = this.props;
     const chat = this.props.chat.active ? this.props.chat.details : null;
@@ -128,62 +166,85 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
 
     if (patients.details.length > 0) {
       return (
-        <div className="patients">
-          <div className="table-holder">
-            <header>
-              <h2>Total Patients Count: {patients.details.length}</h2>
-            </header>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>
-                    <Field
-                      name="all-patients"
-                      type="checkbox"
-                      component={Checkbox}
-                      onChange={this.toggleAllPatientSelection}
-                    />
-                  </th>
-                  <th>#</th>
-                  <th>NAME</th>
-                  <th>EMAIL</th>
-                  <th>PHONE</th>
-                  <th>INDICATIONS</th>
-                  <th>AGE</th>
-                  <th>GENDER</th>
-                  <th>BMI</th>
-                  <th>STATUS</th>
-                  <th>SOURCE</th>
-                </tr>
-              </thead>
-              <tbody>
+        <div>
+          <StickyContainer className="table-holder fixed-table">
+            <Sticky className="fixed-table-sticky-header">
+              <header className="fixed-table-head">
+                <h2>TOTAL PATIENT COUNT: {patients.details.length}</h2>
+              </header>
+              <div className="fixed-table-thead">
+                <div className="table">
+                  <div className="thead">
+                    <div className="tr">
+                      <div className="th" onClick={this.sortBy}>
+                        <Field
+                          name="all-patients"
+                          type="checkbox"
+                          component={Checkbox}
+                          onChange={this.toggleAllPatientSelection}
+                        />
+                      </div>
+                      <div onClick={this.sortBy} data-sort="orderNumber" className={`th ${(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}`}>#<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="firstName" className={`th ${(this.props.paginationOptions.activeSort === 'firstName') ? this.props.paginationOptions.activeDirection : ''}`}>NAME<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="phone" className={`th ${(this.props.paginationOptions.activeSort === 'phone') ? this.props.paginationOptions.activeDirection : ''}`}>PHONE<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="indication" className={`th ${(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}`}>INDICATIONS<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="age" className={`th ${(this.props.paginationOptions.activeSort === 'age') ? this.props.paginationOptions.activeDirection : ''}`}>AGE<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="gender" className={`th ${(this.props.paginationOptions.activeSort === 'gender') ? this.props.paginationOptions.activeDirection : ''}`}>GENDER<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="bmi" className={`th ${(this.props.paginationOptions.activeSort === 'bmi') ? this.props.paginationOptions.activeDirection : ''}`}>BMI<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="status" className={`th ${(this.props.paginationOptions.activeSort === 'status') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS<i className="caret-arrow" /></div>
+                      <div onClick={this.sortBy} data-sort="source" className={`th ${(this.props.paginationOptions.activeSort === 'source') ? this.props.paginationOptions.activeDirection : ''}`}>SOURCE<i className="caret-arrow" /></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Sticky>
+
+            <div className="table">
+              <InfiniteScroll
+                className="tbody"
+                pageStart={0}
+                loadMore={this.loadItems}
+                initialLoad={false}
+                hasMore={this.props.paginationOptions.hasMoreItems}
+                loader={<div>Loading...</div>}
+              >
                 {patientsListContents}
-              </tbody>
-            </table>
-          </div>
-          <Modal className="edit-patient" dialogComponentClass={CenteredModal} show={editPatientModalShown} onHide={this.closeEditPatientModal}>
-            <Modal.Header closeButton>
-              <Modal.Title>Edit Patient</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <EditPatientForm
-                initialValues={selectedPatientDetailsForForm}
-                onSubmit={this.updatePatient}
-              />
-            </Modal.Body>
-          </Modal>
-          {(chat)
-            ?
-            <Modal className="chat-patient" dialogComponentClass={CenteredModal} show={chatModalShown} onHide={this.closeChat}>
-              <Modal.Header closeButton>
-                <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
+              </InfiniteScroll>
+            </div>
+
+          </StickyContainer>
+
+          <div className="patients">
+            <Modal className="edit-patient" dialogComponentClass={CenteredModal} show={editPatientModalShown} onHide={this.closeEditPatientModal}>
+              <Modal.Header>
+                <Modal.Title>
+                  <strong>Information</strong>
+                </Modal.Title>
+                <a className="close" onClick={this.closeEditPatientModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
               </Modal.Header>
               <Modal.Body>
-                <ChatForm chat={chat} sendStudyPatientMessages={sendStudyPatientMessages} />
+                <EditPatientForm
+                  initialValues={selectedPatientDetailsForForm}
+                  onSubmit={this.updatePatient}
+                />
               </Modal.Body>
             </Modal>
-            : ''
-          }
+            {(chat)
+              ?
+              <Modal className="chat-patient" dialogComponentClass={CenteredModal} show={chatModalShown} onHide={this.closeChat}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <ChatForm chat={chat} sendStudyPatientMessages={sendStudyPatientMessages} />
+                </Modal.Body>
+              </Modal>
+              : ''
+            }
+          </div>
         </div>
       );
     }
@@ -213,6 +274,8 @@ function mapDispatchToProps(dispatch) {
     initChat: (payload) => dispatch(initChat(payload)),
     disableChat: (payload) => dispatch(disableChat(payload)),
     sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
+    setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
+    sortPatientsSuccess: (patients) => dispatch(sortPatientsSuccess(patients)),
   };
 }
 

@@ -14,6 +14,7 @@ import {
   FETCH_PATIENT,
   SAVE_PATIENT,
   SUBMIT_TEXT_BLAST,
+  EXPORT_PATIENTS,
 } from './constants';
 
 import {
@@ -33,6 +34,7 @@ export function* patientDatabasePageSaga() {
   const watcherC = yield fork(fetchPatientWatcher);
   const watcherD = yield fork(savePatientWatcher);
   const watcherE = yield fork(submitTextBlast);
+  const watcherF = yield fork(exportPatients);
 
   yield take(LOCATION_CHANGE);
   yield cancel(watcherA);
@@ -40,6 +42,7 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherC);
   yield cancel(watcherD);
   yield cancel(watcherE);
+  yield cancel(watcherF);
 }
 
 // Bootstrap sagas
@@ -49,8 +52,7 @@ export default [
 
 export function* fetchPatientsWatcher() {
   while (true) {
-    const { searchParams } = yield take(FETCH_PATIENTS);
-
+    const { searchParams, patients, searchFilter } = yield take(FETCH_PATIENTS);
     try {
       const filterObj = {
         include: [
@@ -61,7 +63,31 @@ export function* fetchPatientsWatcher() {
         where: {
           and: [],
         },
+        limit: searchParams.limit || 15,
+        skip: searchParams.skip || 0,
       };
+
+      if (searchParams.sort && searchParams.direction && searchParams.sort !== 'orderNumber') {
+        filterObj.order = `${searchParams.sort} ${((searchParams.direction === 'down') ? 'DESC' : 'ASC')}`;
+      }
+
+      if (searchParams.status) {
+        filterObj.where.and.push({
+          status: searchParams.status,
+        });
+      }
+
+      if (searchParams.includeIndication) {
+        filterObj.where.and.push({
+          includeIndication: searchParams.includeIndication,
+        });
+      }
+
+      if (searchParams.excludeIndication) {
+        filterObj.where.and.push({
+          excludeIndication: searchParams.excludeIndication,
+        });
+      }
 
       if (searchParams) {
         if (searchParams.name) {
@@ -134,10 +160,10 @@ export function* fetchPatientsWatcher() {
       };
 
       const queryString = composeQueryString(queryParams);
-      const requestURL = `${API_URL}/patients?${queryString}`;
+      // const requestURL = `${API_URL}/patients?${queryString}`;
+      const requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
       const response = yield call(request, requestURL);
-
-      yield put(patientsFetched(searchParams, response));
+      yield put(patientsFetched(searchParams, response, patients, searchFilter));
     } catch (err) {
       yield put(patientsFetchingError(err));
     }
@@ -236,6 +262,23 @@ function* submitTextBlast() {
       });
       onClose();
       yield put(toastrActions.success('Text Blast', 'Text blast submitted successfully!'));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
+function* exportPatients() {
+  while (true) {
+    const { patients } = yield take(EXPORT_PATIENTS);
+
+    try {
+      const requestURL = `${API_URL}/patients/exportPatientsFromDB`;
+      yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify(patients),
+      });
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));

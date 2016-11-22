@@ -108,3 +108,8 @@ export const selectCarousel = () => createSelector(
   (subState) => subState.carousel
 );
 
+export const selectOpenPatientModal = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.openPatientModal
+);
+

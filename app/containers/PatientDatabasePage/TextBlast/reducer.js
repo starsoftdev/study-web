@@ -27,7 +27,7 @@ export default function TextBlastModal(state, action) {
         values: {
           ...state.values,
           patients: state.values.patients.filter(patient => (
-            patient.id !== action.patient.id
+            patient.id !== action.patient[0].id
           )),
         },
       };

@@ -47,9 +47,10 @@ export default function TextBlastModal(state, action) {
         ...state,
         values: {
           ...state.values,
-          patients: _.unionWith(state.values.patients, action.patients, (patient, patientToAdd) => (
-            patient.id === patientToAdd.id
-          )),
+          // patients: _.unionWith(state.values.patients, action.patients, (patient, patientToAdd) => (
+          //   patient.id === patientToAdd.id
+          // )),
+          patients: action.patients,
         },
       };
     case REMOVE_PATIENT_FROM_TEXT_BLAST:

@@ -26,6 +26,22 @@ body {
 @-o-viewport        { width: device-width; }
 @viewport           { width: device-width; }
 
+::-webkit-input-placeholder {
+  color: #636363;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  color: #636363;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+  color: #636363;
+}
+
+:-ms-input-placeholder {
+  color: #636363;
+}
+
 a,
 button,
 [type] {
@@ -36,6 +52,7 @@ button,
 .btn {
 	border-radius: 2px;
 	border-width: 2px;
+  padding: 5px 12px;
 	font-weight: 600;
 	white-space: normal;
 	transition: all 0.25s;

@@ -24,16 +24,20 @@ import {
   selectStudyLevels,
 } from 'containers/App/selectors';
 
-import { submitForm } from 'containers/RequestProposalPage/actions';
+import { submitForm, fetchProposal } from 'containers/RequestProposalPage/actions';
+import { selectProposalDetail } from './selectors';
 
 export class RequestProposalPage extends Component {
   static propTypes = {
     siteLocations: PropTypes.array,
     indications: PropTypes.array,
     studyLevels: PropTypes.array,
+    proposalDetail: PropTypes.object,
+    params: PropTypes.object,
     fetchSites: PropTypes.func,
     fetchIndications: PropTypes.func,
     fetchLevels: PropTypes.func,
+    fetchProposal: PropTypes.func,
     onSubmitForm: PropTypes.func.isRequired,
     location: PropTypes.any,
   }
@@ -41,6 +45,10 @@ export class RequestProposalPage extends Component {
   constructor(props) {
     super(props);
     this.onSubmitForm = this.props.onSubmitForm.bind(this);
+
+    if (!isNaN(props.params.id)) {
+      this.props.fetchProposal(props.params.id);
+    }
   }
 
   componentDidMount() {
@@ -50,7 +58,7 @@ export class RequestProposalPage extends Component {
   }
 
   render() {
-    const { siteLocations, indications, studyLevels } = this.props;
+    const { siteLocations, indications, studyLevels, proposalDetail } = this.props;
 
     return (
       <StickyContainer className="container-fluid">
@@ -66,15 +74,18 @@ export class RequestProposalPage extends Component {
                 siteLocations={siteLocations}
                 indications={indications}
                 studyLevels={studyLevels}
+                initialValues={proposalDetail}
               />
             </div>
 
             <div className="fixed-block">
               <div className="fixed-block-holder">
-                <Sticky className="sticky-shopping-cart">
-                {/* this will be replaced with a new shopping cart component */}
-                  <RequestProposalCart onSubmit={this.onSubmitForm} />
-                </Sticky>
+                <div className="order-summery-container">
+                  <Sticky className="sticky-shopping-cart">
+                  {/* this will be replaced with a new shopping cart component */}
+                    <RequestProposalCart onSubmit={this.onSubmitForm} />
+                  </Sticky>
+                </div>
               </div>
             </div>
 
@@ -89,6 +100,7 @@ const mapStateToProps = createStructuredSelector({
   siteLocations : selectSiteLocations(),
   indications   : selectIndications(),
   studyLevels   : selectStudyLevels(),
+  proposalDetail: selectProposalDetail(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -96,6 +108,7 @@ function mapDispatchToProps(dispatch) {
     fetchSites:       () => dispatch(fetchSites()),
     fetchIndications: () => dispatch(fetchIndications()),
     fetchLevels:      () => dispatch(fetchLevels()),
+    fetchProposal:    (id) => dispatch(fetchProposal(id)),
     onSubmitForm:     (values) => dispatch(submitForm(values)),
   };
 }

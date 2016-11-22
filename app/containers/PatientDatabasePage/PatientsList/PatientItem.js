@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Button from 'react-bootstrap/lib/Button';
 import { Field, change } from 'redux-form';
 import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
@@ -34,6 +33,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     selectedPatient: PropTypes.object,
     fetchPatient: PropTypes.func,
     openChat: PropTypes.func,
+    orderNumber: PropTypes.number,
   };
 
   constructor(props) {
@@ -90,58 +90,58 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { id, index, firstName, lastName, email, phone, age, gender, bmi, indications, source, studyPatientCategory } = this.props;
+    const { id, orderNumber, firstName, lastName, email, phone, age, gender, bmi, indications, source, studyPatientCategory } = this.props;
     const indicationNames = map(indications, indicationIterator => indicationIterator.name).join(', ');
 
     return (
-      <tr className={classNames('patient-container', { 'tr-active': this.state.hover })} onMouseEnter={this.showHover} onMouseLeave={this.hideHover}>
-        <td>
+      <div className={classNames('tr', 'patient-container', { 'tr-active': this.state.hover })} onMouseEnter={this.showHover} onMouseLeave={this.hideHover}>
+        <div className="td">
           <Field
             name={`patient-${id}`}
             type="checkbox"
             component={Checkbox}
             onChange={this.togglePatientForTextBlast}
           />
-        </td>
-        <td className="index">
-          {index + 1}
-        </td>
-        <td className="name">
+        </div>
+        <div className="td index">
+          {orderNumber}
+        </div>
+        <div className="td name">
           <span>{firstName} {lastName}</span>
-        </td>
-        <td className="email">
+        </div>
+        <div className="td email">
           <span>{email}</span>
-        </td>
-        <td className="phone">
+        </div>
+        <div className="td phone">
           <span>{phone}</span>
-        </td>
-        <td className="indication">
+        </div>
+        <div className="td indication">
           <span>{indicationNames}</span>
-        </td>
-        <td className="age">
+        </div>
+        <div className="td age">
           <span>{age}</span>
-        </td>
-        <td className="gender">
+        </div>
+        <div className="td gender">
           <span>{gender}</span>
-        </td>
-        <td className="bmi">
+        </div>
+        <div className="td bmi">
           <span>{bmi}</span>
-        </td>
-        <td className="status">
+        </div>
+        <div className="td status">
           <span>{studyPatientCategory.patientCategory.name}</span>
-        </td>
-        <td className="source">
+        </div>
+        <div className="td source">
           <div className="btn-block">
             <span>{source.type}</span>
-            <Button bsStyle="primary" className="btn-edit-patient pull-right" onClick={this.editPatient} disabled={(this.currentPatientIsBeingFetched())}>
+            <a className="btn btn-primary lightbox-opener" onClick={this.editPatient} disabled={(this.currentPatientIsBeingFetched())}>
               {(this.currentPatientIsBeingFetched())
                 ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-patient" /></span>
                 : <span>Edit</span>
               }
-            </Button>
+            </a>
           </div>
-        </td>
-      </tr>
+        </div>
+      </div>
     );
   }
 }

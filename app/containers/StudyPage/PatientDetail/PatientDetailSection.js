@@ -4,15 +4,16 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { blur, Field, reduxForm } from 'redux-form';
+import { reset, blur, Field, reduxForm } from 'redux-form';
 
+import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/index';
 import { submitPatientUpdate } from '../actions';
 import formValidator from './detailValidator';
 import { normalizePhone, normalizePhoneDisplay } from '../helper/functions';
-import { selectSyncErrors } from '../../../common/selectors/form.selector';
+import { selectSyncErrors, selectValues } from '../../../common/selectors/form.selector';
 import { createStructuredSelector } from 'reselect';
 
 const formName = 'PatientDetailModal.Detail';
@@ -25,72 +26,45 @@ class PatientDetailSection extends React.Component {
   static propTypes = {
     blur: React.PropTypes.func,
     initialValues: React.PropTypes.object,
+    reset: React.PropTypes.func,
     submitting: React.PropTypes.bool.isRequired,
     submitPatientUpdate: React.PropTypes.func.isRequired,
-    unsubscribed: React.PropTypes.bool,
     formSyncErrors: React.PropTypes.object,
+    formValues: React.PropTypes.object,
   };
 
   constructor(props) {
     super(props);
-    this.changePatientFirstName = this.changePatientFirstName.bind(this);
-    this.changePatientLastName = this.changePatientLastName.bind(this);
-    this.changePatientEmail = this.changePatientEmail.bind(this);
-    this.changePatientPhone = this.changePatientPhone.bind(this);
-    this.changePatientUnsubscribe = this.changePatientUnsubscribe.bind(this);
+    this.onReset = this.onReset.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
-  changePatientFirstName(event) {
-    const { initialValues, submitPatientUpdate, formSyncErrors } = this.props;
-    if (!formSyncErrors.firstName) {
-      submitPatientUpdate(initialValues.id, {
-        firstName: event.target.value,
-      });
-    }
+  onReset() {
+    const { reset } = this.props;
+    reset();
   }
 
-  changePatientLastName(event) {
-    const { initialValues, submitPatientUpdate, formSyncErrors } = this.props;
-    if (!formSyncErrors.lastName) {
+  onSubmit(event) {
+    event.preventDefault();
+    const { blur, formSyncErrors, formValues, initialValues, submitPatientUpdate } = this.props;
+    if (!formSyncErrors.firstName && !formSyncErrors.lastName && !formSyncErrors.email && !formSyncErrors.phone) {
+      const formattedPhoneNumber = normalizePhoneDisplay(formValues.phone);
+      blur('phone', formattedPhoneNumber);
+      const phoneNumber = normalizePhone(formValues.phone);
       submitPatientUpdate(initialValues.id, {
-        lastName: event.target.value,
-      });
-    }
-  }
-
-  changePatientEmail(event) {
-    const { initialValues, submitPatientUpdate, formSyncErrors } = this.props;
-    if (!formSyncErrors.email) {
-      submitPatientUpdate(initialValues.id, {
-        email: event.target.value,
-      });
-    }
-  }
-
-  changePatientPhone(event) {
-    const { blur, initialValues, submitPatientUpdate } = this.props;
-    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
-    blur('phone', formattedPhoneNumber);
-    const { formSyncErrors } = this.props;
-    if (!formSyncErrors.phone) {
-      const phoneNumber = normalizePhone(event.target.value);
-      submitPatientUpdate(initialValues.id, {
+        firstName: formValues.firstName,
+        lastName: formValues.lastName,
+        email: formValues.email,
         phone: phoneNumber,
+        unsubscribed: formValues.unsubscribed,
       });
     }
-  }
-
-  changePatientUnsubscribe(value) {
-    const { initialValues, submitPatientUpdate } = this.props;
-    submitPatientUpdate(initialValues.id, {
-      unsubscribed: value,
-    });
   }
 
   render() {
     const { submitting } = this.props;
     return (
-      <Form className="form-lightbox form-patients-list">
+      <Form className="form-lightbox form-patients-list" onSubmit={this.onSubmit}>
         <div className="field-row">
           <strong className="label required">
             <label htmlFor="new-patient-first-name">Name</label>
@@ -106,7 +80,6 @@ class PatientDetailSection extends React.Component {
                   isDisabled={submitting}
                   required
                   tooltipDisabled
-                  onBlur={this.changePatientFirstName}
                 />
               </div>
               <div className="col pull-right">
@@ -118,7 +91,6 @@ class PatientDetailSection extends React.Component {
                   isDisabled={submitting}
                   required
                   tooltipDisabled
-                  onBlur={this.changePatientLastName}
                 />
               </div>
             </div>
@@ -134,7 +106,6 @@ class PatientDetailSection extends React.Component {
               name="email"
               component={Input}
               tooltipDisabled
-              onBlur={this.changePatientEmail}
             />
           </div>
         </div>
@@ -149,7 +120,6 @@ class PatientDetailSection extends React.Component {
               component={Input}
               required
               tooltipDisabled
-              onBlur={this.changePatientPhone}
             />
           </div>
         </div>
@@ -161,11 +131,15 @@ class PatientDetailSection extends React.Component {
               type="checkbox"
               component={Checkbox}
               className="pull-left"
-              onChange={this.changePatientUnsubscribe}
             />
             <label htmlFor="unsubscribed">Unsubscribe</label>
           </div>
         </div>
+        <div className="pull-right">
+          <Button bsStyle="primary" onClick={this.onReset}>Cancel</Button>
+          <Button type="submit">Update</Button>
+        </div>
+        <div className="clearfix" />
       </Form>
     );
   }
@@ -173,9 +147,11 @@ class PatientDetailSection extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   formSyncErrors: selectSyncErrors(formName),
+  formValues: selectValues(formName),
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  reset: () => dispatch(reset(formName)),
   submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),
   blur: (field, value) => dispatch(blur(formName, field, value)),
 });

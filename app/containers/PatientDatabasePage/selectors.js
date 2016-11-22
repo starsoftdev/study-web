@@ -1,4 +1,4 @@
-import { omit, map } from 'lodash';
+import { omit, map, get } from 'lodash';
 import { createSelector } from 'reselect';
 
 /**
@@ -59,9 +59,21 @@ const selectSavedPatient = () => createSelector(
 );
 
 
+const selectPaginationOptions = () => createSelector(
+  selectPatientDatabasePageDomain(),
+  (substate) => substate.paginationOptions
+);
+
 const selectChat = () => createSelector(
   selectPatientDatabasePageDomain(),
   (substate) => substate.chat
+);
+
+const selectFormDomain = () => state => state.form;
+
+const selectPatientDatabaseFormValues = () => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, 'searchPatients.values', {})
 );
 
 export default selectPatientDatabasePage;
@@ -73,4 +85,6 @@ export {
   selectSelectedPatientDetailsForForm,
   selectSavedPatient,
   selectChat,
+  selectPaginationOptions,
+  selectPatientDatabaseFormValues,
 };

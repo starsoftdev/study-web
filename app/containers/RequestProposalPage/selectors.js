@@ -24,8 +24,14 @@ const selectCoupon = () => createSelector(
   (substate) => substate.coupon
 );
 
+const selectProposalDetail = () => createSelector(
+  selectRequestProposalPageDomain(),
+  (substate) => substate.proposalDetail,
+);
+
 export default selectRequestProposalPage;
 export {
   selectRequestProposalPageDomain,
   selectCoupon,
+  selectProposalDetail,
 };

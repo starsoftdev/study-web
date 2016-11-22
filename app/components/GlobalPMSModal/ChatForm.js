@@ -15,9 +15,14 @@ import Input from 'components/Input';
 import formValidator from './validator';
 
 import { setProcessingStatus } from 'containers/GlobalNotifications/actions';
+
 import {
   selectProcessingStatus,
 } from 'containers/GlobalNotifications/selectors';
+
+import {
+  selectCurrentUser,
+} from 'containers/App/selectors';
 
 import './styles.less';
 
@@ -27,6 +32,7 @@ const formName = 'chatPatient';
 
 class ChatForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    currentUser: PropTypes.object,
     isSaving: PropTypes.any,
     setProcessingStatus: PropTypes.func,
     handleSubmit: PropTypes.func,
@@ -41,8 +47,9 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
   }
 
   sendMessage(message) {
-    const { selectedPatient, sendStudyPatientMessages, reset } = this.props;
+    const { selectedPatient, sendStudyPatientMessages, currentUser, reset } = this.props;
     const options = {
+      currentUserId: currentUser.id,
       body: message.body,
       studyId: selectedPatient.study_id,
       patientId: selectedPatient.id,
@@ -67,8 +74,9 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
             component={Input}
             componentClass="textarea"
             placeholder="Type a message..."
+            disabled={this.props.selectedPatient.id <= 0}
           />
-          <Button type="submit">
+          <Button type="submit" disabled={this.props.selectedPatient.id <= 0}>
             Send
           </Button>
         </fieldset>
@@ -78,6 +86,7 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
 }
 
 const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
   isSaving: selectProcessingStatus(),
 });
 
