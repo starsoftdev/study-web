@@ -15,6 +15,7 @@ import {
 } from 'containers/App/actions';
 
 import {
+  selectCurrentUserClientId,
   selectUserSiteLocations,
   selectRewards,
 } from 'containers/App/selectors';
@@ -55,6 +56,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     this.onSubmitForm = this.props.onSubmitForm.bind(this);
   }
   componentWillMount() {
+    this.props.fetchSites();
     const { currentUserClientId } = this.props;
     if (currentUserClientId) {
       this.props.fetchClientSites(currentUserClientId, {});
@@ -62,7 +64,6 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
   }
 
   componentDidMount() {
-    this.props.fetchSites();
     this.props.fetchRewards();
   }
 
@@ -228,6 +229,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 }
 
 const mapStateToProps = createStructuredSelector({
+  currentUserClientId: selectCurrentUserClientId(),
   siteLocations: selectUserSiteLocations(),
   rewards: selectRewards(),
 });
