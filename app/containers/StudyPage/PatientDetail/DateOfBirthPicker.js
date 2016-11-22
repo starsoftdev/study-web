@@ -3,7 +3,6 @@
  */
 
 import React from 'react';
-import moment from 'moment';
 import { Field } from 'redux-form';
 import ReactSelect from '../../../components/Input/ReactSelect';
 
@@ -20,6 +19,9 @@ class DateOfBirthPicker extends React.Component {
     submitPatientUpdate: React.PropTypes.func,
     yearOptions: React.PropTypes.array.isRequired,
   };
+
+  componentDidMount() {
+  }
 
   render() {
     const { dayOptions, loading, monthOptions, submitting, yearOptions } = this.props;
