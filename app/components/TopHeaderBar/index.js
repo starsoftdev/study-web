@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 
@@ -79,7 +80,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
       <header id="header">
         <div className="container-fluid">
 
-          <h1 className="logo pull-left"><a href="#"><img src={studykikLogo} width="214" height="31" alt="logo" /></a></h1>
+          <h1 className="logo pull-left"><Link to="/"><img src={studykikLogo} width="214" height="31" alt="logo" /></Link></h1>
 
           <NotificationBox currentUser={this.props.currentUser} />
 
@@ -91,7 +92,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
           </div>
 
           <div className="open-close help-drop pull-left">
-            <a href="#" className="link-help pull-left opener">?</a>
+            <a className="link-help pull-left opener">?</a>
           </div>
 
           <a
