@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import Overlay from 'react-bootstrap/lib/Overlay';
-import { Field, reduxForm } from 'redux-form';
+import { reset, Field, reduxForm } from 'redux-form';
 import classNames from 'classnames';
 import moment from 'moment-timezone';
 import Input from '../../../components/Input/index';
@@ -40,6 +40,7 @@ class OtherSection extends React.Component {
     initialValues: React.PropTypes.object,
     loading: React.PropTypes.bool,
     submitting: React.PropTypes.bool,
+    reset: React.PropTypes.func,
     submitAddPatientIndication: React.PropTypes.func.isRequired,
     submitRemovePatientIndication: React.PropTypes.func.isRequired,
     submitPatientUpdate: React.PropTypes.func.isRequired,
@@ -50,10 +51,10 @@ class OtherSection extends React.Component {
     this.state = {
       showIndicationPopover: false,
     };
-    this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
-    this.changeBMI = this.changeBMI.bind(this);
-    this.changeGender = this.changeGender.bind(this);
+    this.onReset = this.onReset.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     this.deleteIndication = this.deleteIndication.bind(this);
+    this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
     this.renderGender = this.renderGender.bind(this);
     this.renderIndications = this.renderIndications.bind(this);
   }
@@ -62,31 +63,39 @@ class OtherSection extends React.Component {
     this.props.fetchIndications();
   }
 
-  toggleIndicationPopover() {
-    this.setState({
-      showIndicationPopover: !this.state.showIndicationPopover,
-    });
+  onReset() {
+    const { reset } = this.props;
+    reset();
   }
 
-  changeBMI(event) {
-    const { formSyncErrors, initialValues, submitPatientUpdate } = this.props;
-    if (!formSyncErrors.bmi) {
-      submitPatientUpdate(initialValues.id, {
-        bmi: parseFloat(event.target.value),
-      });
+  onSubmit(event) {
+    event.preventDefault();
+    const { formSyncErrors, initialValues, formValues, submitPatientUpdate } = this.props;
+    if (!formSyncErrors.gender && !formSyncErrors.bmi) {
+      const data = {};
+      if (formValues.gender) {
+        data.gender = formValues.gender;
+      }
+      if (formValues.bmi) {
+        data.bmi = parseFloat(formValues.bmi);
+      }
+      if (formValues.dobDay && formValues.dobMonth && formValues.dobYear) {
+        const date = moment().year(formValues.dobYear).month(formValues.dobMonth).day(formValues.dobDay);
+        data.dob = date;
+      }
+      submitPatientUpdate(initialValues.id, data);
     }
-  }
-
-  changeGender(value) {
-    const { initialValues, submitPatientUpdate } = this.props;
-    submitPatientUpdate(initialValues.id, {
-      gender: value,
-    });
   }
 
   deleteIndication(indication) {
     const { initialValues, submitRemovePatientIndication } = this.props;
     submitRemovePatientIndication(initialValues.id, indication.id);
+  }
+
+  toggleIndicationPopover() {
+    this.setState({
+      showIndicationPopover: !this.state.showIndicationPopover,
+    });
   }
 
   renderGender() {
@@ -113,7 +122,6 @@ class OtherSection extends React.Component {
             options={genderOptions}
             disabled={submitting || loading}
             placeholder="Select Gender"
-            onChange={this.changeGender}
           />
         </div>
       </div>
@@ -187,7 +195,7 @@ class OtherSection extends React.Component {
                 </li>
               </ul>
             </div>
-            <Form className="sub-holder form-lightbox" noValidate="novalidate">
+            <Form className="sub-holder form-lightbox" onSubmit={this.onSubmit}>
               <strong className="title">TAGS</strong>
               <div className="field-row">
                 <strong className="label">Indications</strong>
@@ -246,7 +254,6 @@ class OtherSection extends React.Component {
                       type="text"
                       name="bmi"
                       component={Input}
-                      onBlur={this.changeBMI}
                     />
                   </div>
                 </div>
@@ -258,6 +265,10 @@ class OtherSection extends React.Component {
                     <FormControl type="text" value={initialValues.source ? initialValues.source.type : ''} disabled readOnly />
                   </div>
                 </div>
+              </div>
+              <div className="pull-right">
+                <Button bsStyle="primary" onClick={this.onReset}>Cancel</Button>
+                <Button type="submit" disabled={submitting || loading}>Update</Button>
               </div>
             </Form>
           </div>
@@ -275,10 +286,11 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  fetchIndications: () => dispatch(fetchIndications()),
+  reset: () => dispatch(reset(formName)),
   submitAddPatientIndication: (patientId, indication) => dispatch(submitAddPatientIndication(patientId, indication)),
   submitRemovePatientIndication: (patientId, indicationId) => dispatch(submitRemovePatientIndication(patientId, indicationId)),
   submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),
-  fetchIndications: () => dispatch(fetchIndications()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OtherSection);

@@ -7,13 +7,13 @@
 import {
   take, call, put, cancel, cancelled, fork, select,
 } from 'redux-saga/effects';
-import { push } from 'react-router-redux';
+import { replace, push } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { selectLocationState } from 'containers/App/selectors';
 
 import request from 'utils/request';
-import { setItem, removeItem } from 'utils/localStorage';
+import { getItem, setItem, removeItem } from 'utils/localStorage';
 import {
   LOGIN_REQUEST,
   LOGIN_ERROR,
@@ -53,15 +53,11 @@ export default function* loginSaga() {
       // it is possible the LOGOUT action gets fired before
       // the the authorize task completes, so we call cancel on it
       yield cancel(task);
-
-      yield call(logout);
-
-      // redirect to home page
-      yield put(push('/'));
+    } else {
+      // remove jwt token from localstorage
+      yield call(removeItem, 'auth_token');
+      yield call(removeItem, 'user_id');
     }
-
-    // remove jwt token from localstorage
-    yield call(removeItem, 'auth_token');
   }
 }
 
@@ -118,17 +114,19 @@ export function* authorize(data) {
 export function* logoutSaga() {
   while (true) {
     yield take(LOGOUT_REQUEST);
-    yield put(setAuthState(false));
-    yield put(setUserData(false));
 
     yield call(logout);
-    yield put(push('/'));
+    yield put(setAuthState(false));
+    yield put(setUserData(null));
+    // redirect to login page
+    yield put(replace('/login'));
   }
 }
 
 export function* logout() {
   try {
-    const requestURL = `${API_URL}/users/logout`;
+    const authToken = getItem('auth_token');
+    const requestURL = `${API_URL}/users/logout?access_token=${authToken}`;
     const params = {
       method: 'POST',
     };

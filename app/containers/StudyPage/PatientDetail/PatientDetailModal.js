@@ -17,8 +17,15 @@ import TextSection from './TextSection';
 import EmailSection from './EmailSection';
 import OtherSection from './OtherSection';
 import { normalizePhoneDisplay } from '../helper/functions';
-import { switchToNoteSectionDetail, switchToTextSectionDetail, switchToEmailSectionDetail, switchToOtherSectionDetail } from '../actions';
+import {
+  switchToNoteSectionDetail,
+  switchToTextSectionDetail,
+  switchToEmailSectionDetail,
+  switchToOtherSectionDetail,
+  readStudyPatientMessages,
+} from '../actions';
 
+import { markAsReadPatientMessages } from 'containers/App/actions';
 import {
   selectSocket,
 } from 'containers/GlobalNotifications/selectors';
@@ -37,12 +44,28 @@ class PatientDetailModal extends React.Component {
     switchToTextSection: React.PropTypes.func.isRequired,
     switchToEmailSection: React.PropTypes.func.isRequired,
     switchToOtherSection: React.PropTypes.func.isRequired,
+    readStudyPatientMessages: React.PropTypes.func.isRequired,
+    markAsReadPatientMessages: React.PropTypes.func,
   };
 
   constructor(props) {
     super(props);
     this.renderOtherSection = this.renderOtherSection.bind(this);
     this.renderPatientDetail = this.renderPatientDetail.bind(this);
+    this.onSelectText = this.onSelectText.bind(this);
+  }
+
+  onSelectText() {
+    const {
+      studyId,
+      switchToTextSection,
+      readStudyPatientMessages,
+      markAsReadPatientMessages,
+      currentPatient,
+    } = this.props;
+    readStudyPatientMessages(currentPatient.id, studyId);
+    markAsReadPatientMessages(currentPatient.id, studyId);
+    switchToTextSection();
   }
 
   renderOtherSection() {
@@ -76,7 +99,7 @@ class PatientDetailModal extends React.Component {
   }
 
   render() {
-    const { carousel, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToTextSection, switchToEmailSection, switchToOtherSection } = this.props;
+    const { carousel, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
     return (
       <Collapse dimension="width" in={openPatientModal} timeout={250} className="patients-list-form">
         <div className="form-area">
@@ -95,7 +118,7 @@ class PatientDetailModal extends React.Component {
             <div id="carousel-example-generic" className="carousel slide popup-slider">
               <ol className="carousel-indicators">
                 <li className={classNames({ active: carousel.note })} onClick={switchToNoteSection}>Note</li>
-                <li className={classNames({ active: carousel.text })} onClick={switchToTextSection}>Text</li>
+                <li className={classNames({ active: carousel.text })} onClick={this.onSelectText}>Text</li>
                 <li className={classNames({ active: carousel.email })} onClick={switchToEmailSection}>Email</li>
                 <li className={classNames({ active: carousel.other })} onClick={switchToOtherSection}>Other</li>
               </ol>
@@ -128,6 +151,8 @@ const mapDispatchToProps = (dispatch) => ({
   switchToTextSection: () => dispatch(switchToTextSectionDetail()),
   switchToEmailSection: () => dispatch(switchToEmailSectionDetail()),
   switchToOtherSection: () => dispatch(switchToOtherSectionDetail()),
+  readStudyPatientMessages: (patientId, studyId) => dispatch(readStudyPatientMessages(patientId, studyId)),
+  markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientDetailModal);
