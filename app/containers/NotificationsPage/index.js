@@ -27,6 +27,8 @@ export const getRedirectionUrl = (notification) => {
       return `/${data.user_id}/profile`;
     case 'create-irb_ad_creation':
       return `/order-irb-ad-creation/${data.irb_ad_creation_id}`;
+    case 'create-proposal':
+      return `/request-proposal/${data.proposal_id}`;
     default:
       return '/';
   }

@@ -43,7 +43,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
   }
 
   incQuantity() {
-    if (this.state.quantity < 100) {
+    if (this.state.quantity < 999) {
       this.setState({
         quantity: this.state.quantity + 1,
         credits: (this.state.quantity + 1) * 100,
@@ -74,7 +74,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
   render() {
     const products = [
       {
-        title: 'Buy Credits',
+        title: '100 Credits',
         quantity: parseFloat(this.state.credits),
         price: parseFloat(this.state.price.replace('$', '')),
         total: parseFloat(this.state.price.replace('$', '')),
@@ -84,27 +84,25 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
       <div>
         <Modal className="custom-modal add-credits" id="add-credits" show={this.props.showModal} onHide={this.props.closeModal}>
           <Modal.Header>
-            <Modal.Title>ADD CREDITS</Modal.Title>
+            <Modal.Title>Add Credits</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closeModal}>
-              <i className="icomoon-icon_close"></i>
+              <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-
               <div className="form-study">
                 <div className="pull-left col">
                   <div className="scroll jcf--scrollable">
                     <div className="holder-inner">
                       <div className="form-fields">
-
                         <div className="field-row">
                           <strong className="label required"><label htmlFor="quantity">QUANTITY</label></strong>
                           <div className="field">
                             <span className="jcf-number parent-active">
-                              <input type="number" data-type="number" value={this.state.quantity} id="quantity" className="form-control jcf-real-element field-active" data-required="true" readOnly />
-                              <span className="jcf-btn-inc" onClick={this.incQuantity}></span>
-                              <span className="jcf-btn-dec" onClick={this.decQuantity}></span>
+                              <input type="number" value={this.state.quantity} id="quantity" className="form-control jcf-real-element field-active" readOnly />
+                              <span className="jcf-btn-inc" onClick={this.incQuantity} />
+                              <span className="jcf-btn-dec" onClick={this.decQuantity} />
                             </span>
                           </div>
                         </div>
@@ -128,7 +126,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
                 </div>
 
                 <div className="pull-left col">
-                  <ShoppingCartForm showCards onSubmit={this.addCreditsSubmit} addOns={products} />
+                  <ShoppingCartForm showCards noBorder onSubmit={this.addCreditsSubmit} addOns={products} />
                 </div>
               </div>
 

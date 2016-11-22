@@ -2,10 +2,10 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
-import { countBy, find } from 'lodash';
+import { countBy, find, filter, sumBy } from 'lodash';
 
 import { fetchLevels } from 'containers/App/actions';
-import { selectStudyLevels, selectCurrentUserStripeCustomerId } from 'containers/App/selectors';
+import { selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients } from 'containers/App/selectors';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy,
   selectUpgradedStudy, selectEditedStudy } from 'containers/HomePage/selectors';
@@ -39,6 +39,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     renewStudy: PropTypes.func,
     upgradeStudy: PropTypes.func,
     editStudy: PropTypes.func,
+    sitePatients: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -267,21 +268,32 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { studies, renewStudyFormError, upgradeStudyFormError } = this.props;
+    const { studies, renewStudyFormError, upgradeStudyFormError, sitePatients } = this.props;
     const countResult = countBy(studies.details, entityIterator => entityIterator.status);
     const activeCount = countResult[ACTIVE_STATUS_VALUE] || 0;
     const inactiveCount = countResult[INACTIVE_STATUS_VALUE] || 0;
     const totalCount = studies.details.length;
-    const studiesListContents = studies.details.map((item, index) => (
-      <StudyItem
-        {...item}
-        key={index}
-        index={index}
-        onRenew={this.openRenewModal}
-        onUpgrade={this.openUpgradeModal}
-        onEdit={this.openEditModal}
-      />
-    ));
+
+    const studiesListContents = studies.details.map((item, index) => {
+      const unreadMessageCount = sumBy(filter(sitePatients.details, { study_id: item.studyId }), (sitePatient) => {
+        if (sitePatient.count_unread == null) {
+          return 0;
+        }
+        return parseInt(sitePatient.count_unread);
+      });
+
+      return (
+        <StudyItem
+          {...item}
+          key={index}
+          index={index}
+          unreadMessageCount={unreadMessageCount}
+          onRenew={this.openRenewModal}
+          onUpgrade={this.openUpgradeModal}
+          onEdit={this.openEditModal}
+        />
+      );
+    });
     let addOns = [];
     if (this.state.renewModalOpen) {
       addOns = this.generateRenewStudyShoppingCartAddOns();
@@ -297,7 +309,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               <div className="table-responsive">
                 <table className="table">
                   <caption>
-                    <span className="pull-left">Study/Site Status</span>
+                    <span className="pull-left">Study Status</span>
                     <span className="pull-right">
                       <span className="inner-info">
                         <span className="info-label">ACTIVE</span>
@@ -333,56 +345,72 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                   </tbody>
                 </table>
               </div>
-              <Modal className="renew-study-modal" show={this.state.renewModalOpen} onHide={this.closeRenewModal} bsSize="large">
+              <Modal className="renew-study-modal" id="renew-study" show={this.state.renewModalOpen} onHide={this.closeRenewModal} bsSize="large">
                 <Modal.Header closeButton>
                   <Modal.Title>Renew Study</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <div className="row">
-                    <div className="left-panel col-sm-6">
-                      <RenewStudyForm />
-                    </div>
-                    <div className="right-panel col-sm-6">
-                      <ShoppingCartForm
-                        showCards
-                        noBorder
-                        addOns={addOns}
-                        disableSubmit={renewStudyFormError}
-                        onSubmit={this.handleRenewStudyFormSubmit}
-                      />
+                  <div className="holder clearfix">
+                    <div className="form-study">
+                      <div className="pull-left col">
+                        <div className="scroll jcf--scrollable">
+                          <div className="holder-inner">
+                            <RenewStudyForm />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="pull-left col">
+                        <ShoppingCartForm
+                          showCards
+                          noBorder
+                          addOns={addOns}
+                          disableSubmit={renewStudyFormError}
+                          onSubmit={this.handleRenewStudyFormSubmit}
+                        />
+                      </div>
                     </div>
                   </div>
                 </Modal.Body>
               </Modal>
-              <Modal className="upgrade-study-modal" show={this.state.upgradeModalOpen} onHide={this.closeUpgradeModal} bsSize="large">
+              <Modal className="upgrade-study-modal" id="upgrade-study" show={this.state.upgradeModalOpen} onHide={this.closeUpgradeModal} bsSize="large">
                 <Modal.Header closeButton>
                   <Modal.Title>Upgrade Study</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <div className="row">
-                    <div className="left-panel col-sm-6">
-                      <UpgradeStudyForm />
-                    </div>
-                    <div className="right-panel col-sm-6">
-                      <ShoppingCartForm
-                        showCards
-                        noBorder
-                        addOns={addOns}
-                        disableSubmit={upgradeStudyFormError}
-                        onSubmit={this.handleUpgradeStudyFormSubmit}
-                      />
+                  <div className="holder clearfix">
+                    <div className="form-study">
+                      <div className="pull-left col">
+                        <div className="scroll jcf--scrollable">
+                          <div className="holder-inner">
+                            <UpgradeStudyForm />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="pull-left col">
+                        <ShoppingCartForm
+                          showCards
+                          noBorder
+                          addOns={addOns}
+                          disableSubmit={upgradeStudyFormError}
+                          onSubmit={this.handleUpgradeStudyFormSubmit}
+                        />
+                      </div>
                     </div>
                   </div>
                 </Modal.Body>
               </Modal>
-              <Modal className="edit-study-modal" show={this.state.editModalOpen} onHide={this.closeEditModal} bsSize="large">
+              <Modal className="edit-study-modal" id="edit-study" show={this.state.editModalOpen} onHide={this.closeEditModal} bsSize="large">
                 <Modal.Header closeButton>
                   <Modal.Title>Edit Information</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <div className="row">
-                    <div className="col-sm-12">
-                      <EditStudyForm siteUsers={this.state.selectedSiteUsers} onSubmit={this.handleEditStudyFormSubmit} />
+                  <div className="holder clearfix">
+                    <div className="form-study">
+                      <div className="scroll jcf--scrollable">
+                        <div className="holder-inner">
+                          <EditStudyForm siteUsers={this.state.selectedSiteUsers} onSubmit={this.handleEditStudyFormSubmit} />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </Modal.Body>
@@ -412,6 +440,7 @@ const mapStateToProps = createStructuredSelector({
   renewedStudy: selectRenewedStudy(),
   upgradedStudy: selectUpgradedStudy(),
   editedStudy: selectEditedStudy(),
+  sitePatients: selectSitePatients(),
 });
 
 function mapDispatchToProps(dispatch) {

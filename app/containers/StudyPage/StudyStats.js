@@ -65,7 +65,7 @@ class StudyStats extends React.Component {
             <Col xs={4} className="orange">
               <div className="box same-height-right">
                 <i className="icomoon-chat-up" />
-                <strong className="number">{stats.texts}</strong>
+                <strong className="number">{stats.textsSent}</strong>
                 <h3>TEXTS SENT</h3>
               </div>
               <div className="box same-height-right">

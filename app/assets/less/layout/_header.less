@@ -44,14 +44,11 @@
 		text-align: center;
 
 		&:hover,
-		&:focus {
+		&:focus,
+    &.active {
 			outline: none;
+      background: #76daff;
 		}
-	}
-
-	.opener:hover,
-	&.active .opener {
-		background: #76daff;
 	}
 
 	.counter {
@@ -247,6 +244,9 @@
 .btn-chat-popup {
 	position: relative;
 
+  &.active {
+    background-color: #76daff;
+  }
 	.counter {
 		top: 19px;
 		right: 17px;
@@ -281,7 +281,7 @@
     font-weight: 600;
     line-height: 26px;
     border-radius: 2px;
-    margin: 2px 0 -2px 7px;
+    margin: 2px 0 -2px 12px;
     border: solid 2px #fff;
     &:focus, &:active:focus, &:hover {
       border-color: #fff;
@@ -425,9 +425,6 @@
     }
   }
   .get-credits {
-    .btn-default {
-      margin-left: 2px;
-    }
     .icomoon-credit {
       padding: 5px 3px 0 0;
     }

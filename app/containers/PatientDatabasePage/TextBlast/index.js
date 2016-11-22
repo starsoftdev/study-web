@@ -60,15 +60,12 @@ class TextBlastModal extends React.Component {
   }
 
   renderPatientCount() {
-    const { formValues, removePatients } = this.props;
+    const { formValues } = this.props;
     if (formValues.patients && formValues.patients.length > 0) {
       return (
         <span className="emails-counter">
           <span className="counter">{formValues.patients.length}</span>
           <span className="text"> Patients</span>
-          <a className="btn-close">
-            <i className="icomoon-icon_close" onClick={removePatients} />
-          </a>
         </span>
       );
     }

@@ -118,7 +118,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
           <Field
             name="indications"
             component={ReactSelect}
-            placeholder="Search..."
+            placeholder="Select Indication"
             options={indicationOptions}
             multi
             joinValues
@@ -148,7 +148,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             name="gender"
             component={ReactSelect}
             className="field"
-            placeholder="Select"
+            placeholder="Select Gender"
             options={genderOptions}
             disabled={savedPatient.saving}
           />
@@ -173,7 +173,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             <Field
               name="status"
               component={ReactSelect}
-              placeholder="Select"
+              placeholder="Select Status"
               options={statusOptions}
               disabled={savedPatient.saving}
             />
@@ -187,7 +187,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             name="source"
             component={ReactSelect}
             className="field"
-            placeholder="Select"
+            placeholder="Select Source"
             options={sourceOptions}
             disabled={savedPatient.saving}
           />
