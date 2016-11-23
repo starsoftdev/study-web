@@ -158,6 +158,10 @@ export class CalendarPage extends React.Component {
     this.props.deleteSchedule(scheduleId, this.props.currentUser.id);
   }
 
+  navigateToToday = () => {
+    this.calendarWidget.bigCalendar.refs.inner.navigateToToday();
+  }
+
   render() {
     const { currentUser, sites, indications, patientsByStudy, schedules } = this.props;
     const fetchingSites = sites.isFetching;
@@ -187,7 +191,7 @@ export class CalendarPage extends React.Component {
       <div className="container-fluid">
         <section className="calendar-section">
           <h2 className="main-heading">CALENDAR</h2>
-          <div className="btn-block"><a href="#" className="btn btn-primary">Today</a></div>
+          <div className="btn-block"><a href="#" className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
           <FilterBar
             siteLocationOptions={siteLocationOptions}
             isAdmin={isAdmin}
@@ -201,6 +205,7 @@ export class CalendarPage extends React.Component {
           <CalendarWidget
             schedules={this.state.filteredSchedules}
             handleOpenModal={this.handleModalVisibility}
+            ref={(c) => { this.calendarWidget = c; }}
           />
           <SchedulePatientModal
             siteLocationOptions={siteLocationOptions}
