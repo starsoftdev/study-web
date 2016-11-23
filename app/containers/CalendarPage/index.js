@@ -87,14 +87,6 @@ export class CalendarPage extends React.Component {
     this.filterSchedules(nextProps.schedules.data, this.state.filter);
   }
 
-  getTimeComponents(strTime) {
-    return {
-      hour: ((moment(strTime).hour() + 11) % 12) + 1,
-      minute: moment(strTime).minute(),
-      period: moment(strTime).hour() >= 12 ? 'PM' : 'AM',
-    };
-  }
-
   updateFilter(field, newValue) {
     const newFilter = {
       ...this.state.filter,
@@ -136,6 +128,7 @@ export class CalendarPage extends React.Component {
         time: moment(this.selectedCellInfo.selectedDate).add(data.period === 'AM' ?
           data.hour % 12 :
           (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').utc().format(),
+        textReminder: data.textReminder,
       };
     } else { // UPDATE
       let updatedDate;
@@ -220,7 +213,6 @@ export class CalendarPage extends React.Component {
             submitting={false}
             selectedCellInfo={this.selectedCellInfo}
             modalType={this.state.modalType}
-            initialValues={this.selectedCellInfo.data ? this.getTimeComponents(this.selectedCellInfo.data.time) : { period: 'AM' }}
             patientsByStudy={patientsByStudy}
             fetchingSites={fetchingSites}
             fetchingPatientsByStudy={fetchingPatientsByStudy}
