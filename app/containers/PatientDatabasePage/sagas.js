@@ -14,7 +14,7 @@ import {
   FETCH_PATIENT,
   SAVE_PATIENT,
   SUBMIT_TEXT_BLAST,
-  EXPORT_PATIENTS,
+  IMPORT_PATIENTS,
 } from './constants';
 
 import {
@@ -26,6 +26,7 @@ import {
   patientFetchingError,
   patientSaved,
   patientSavingError,
+  downloadComplete,
 } from './actions';
 
 export function* patientDatabasePageSaga() {
@@ -34,7 +35,7 @@ export function* patientDatabasePageSaga() {
   const watcherC = yield fork(fetchPatientWatcher);
   const watcherD = yield fork(savePatientWatcher);
   const watcherE = yield fork(submitTextBlast);
-  const watcherF = yield fork(exportPatients);
+  const watcherF = yield fork(importPatients);
 
   yield take(LOCATION_CHANGE);
   yield cancel(watcherA);
@@ -165,6 +166,7 @@ export function* fetchPatientsWatcher() {
       const requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
       if (isExport){
         location.replace(`${requestURL}&access_token=${getItem('auth_token')}`);
+        yield put(downloadComplete());
       }else{
         const response = yield call(request, requestURL);
         yield put(patientsFetched(searchParams, response, patients, searchFilter));
@@ -274,19 +276,19 @@ function* submitTextBlast() {
   }
 }
 
-function* exportPatients() {
+function* importPatients() {
   while (true) {
-    const { patients } = yield take(EXPORT_PATIENTS);
-
+    const { payload } = yield take(IMPORT_PATIENTS);
+    const formData = new FormData();
+    formData.append('file', payload);
     try {
-      const requestURL = `${API_URL}/patients/exportPatientsFromDB`;
-      const authToken = getItem('auth_token');
-      const params = {
-        access_token: authToken,
-        patients: JSON.stringify(patients),
-      };
-
-      location.replace(`${requestURL}?${serializeParams(params)}`);
+      const requestURL = `${API_URL}/patients/importPatients`;
+      yield call(request, requestURL, {
+        useDefaultContentType: 'multipart/form-data',
+        method: 'POST',
+        body: formData,
+      });
+      yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));

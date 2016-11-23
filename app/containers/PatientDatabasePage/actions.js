@@ -33,6 +33,8 @@ import {
   SET_ACTIVE_SORT,
   SORT_PATIENTS_SUCCESS,
   EXPORT_PATIENTS,
+  DOWNLOAD_COMPLETE,
+  IMPORT_PATIENTS,
 } from './constants';
 import _ from 'lodash';
 
@@ -246,9 +248,15 @@ export function sortPatientsSuccess(patients) {
   };
 }
 
-export function exportPatients(patients) {
+export function importPatients(payload) {
   return {
-    type: EXPORT_PATIENTS,
-    patients,
+    type: IMPORT_PATIENTS,
+    payload,
+  };
+}
+
+export function downloadComplete() {
+  return {
+    type: DOWNLOAD_COMPLETE,
   };
 }
