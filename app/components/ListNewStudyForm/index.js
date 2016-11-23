@@ -189,7 +189,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>SPONSOR CONTACT NAME</label></strong>
+            <strong className="label required"><label>SPONSOR NAME</label></strong>
             <Field
               name="sponsorName"
               component={Input}
@@ -199,7 +199,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>Sponsor Contact Email</label></strong>
+            <strong className="label"><label>Sponsor Email</label></strong>
             <Field
               name="sponsorEmail"
               component={Input}
@@ -209,7 +209,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>CRO Contact Name</label></strong>
+            <strong className="label"><label>CRO Name</label></strong>
             <Field
               name="croContactName"
               component={Input}
@@ -219,7 +219,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>CRO Contact Email</label></strong>
+            <strong className="label"><label>CRO Email</label></strong>
             <Field
               name="croContactName"
               component={Input}
