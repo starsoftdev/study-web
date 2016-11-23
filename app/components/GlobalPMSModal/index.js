@@ -5,6 +5,7 @@
 */
 
 import React from 'react';
+import Sound from 'react-sound';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -39,6 +40,8 @@ import {
 import _ from 'lodash';
 import './styles.less';
 
+import alertSound from './sounds/message_received.mp3';
+
 class GlobalPMSModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
@@ -59,18 +62,22 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   constructor(props) {
     super(props);
 
+    this.onSoundFinished = this.onSoundFinished.bind(this);
+    this.startSound = this.startSound.bind(this);
     this.selectPatient = this.selectPatient.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.state = {
       selectedPatient: { id: 0 },
       patientLoaded: true,
       socketBinded: false,
+      playSound: Sound.status.STOPPED,
     };
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
+        this.startSound();
         if (newMessage.twilioTextMessage.direction === 'inbound') {
           this.props.updateSitePatients(newMessage);
         }
@@ -102,6 +109,14 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         scrollable.scrollTop = scrollable.scrollHeight;
       }, 0);
     }
+  }
+
+  onSoundFinished() {
+    this.setState({ playSound: Sound.status.STOPPED });
+  }
+
+  startSound() {
+    this.setState({ playSound: Sound.status.PLAYING });
   }
 
   selectPatient(item) {
@@ -149,6 +164,11 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     }
     return (
       <div>
+        <Sound
+          url={alertSound}
+          playStatus={this.state.playSound}
+          onFinishedPlaying={this.onSoundFinished}
+        />
         <Modal className="custom-modal global-pms" dialogComponentClass={CenteredModal} id="chart-popup" show={this.props.showModal} onHide={this.props.closeModal}>
           <Modal.Header>
             <Modal.Title>PATIENT MESSAGING SUITE</Modal.Title>
