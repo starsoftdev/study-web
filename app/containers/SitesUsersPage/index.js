@@ -141,33 +141,28 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
         <div className="container-fluid">
           <Helmet title="Manage Sites / Users - StudyKIK" />
           <h2 className="main-heading">MANAGE SITES / USERS</h2>
-          <section className="actions-panel">
-            <div className="row form-group">
-              <div className="col-sm-3">
-                <div className="has-feedback">
-                  <input type="text" className="form-control" placeholder="Search Site Name..." onKeyPress={this.searchClientSites} />
-                  <span className="form-control-feedback fa fa-search" />
+          <div className="search-sites-users-panel form-group">
+            <form className="form-search clearfix">
+              <div className="fields-holder pull-left">
+                <div className="search-area pull-left">
+                  <div className="field">
+                    <input type="text" className="form-control keyword-search" placeholder="Search Site Name..." onKeyPress={this.searchClientSites} />
+                    <label htmlFor="search">
+                      <i className="icomoon-icon_search2" />
+                    </label>
+                  </div>
+                </div>
+                <div className="search-area pull-left">
+                  <div className="field">
+                    <input type="text" className="form-control keyword-search" placeholder="Search User Name..." onKeyPress={this.searchClientRoles} />
+                    <label htmlFor="search">
+                      <i className="icomoon-icon_search2" />
+                    </label>
+                  </div>
                 </div>
               </div>
-              <div className="col-sm-3">
-                <div className="has-feedback">
-                  <input type="text" className="form-control" placeholder="Search User Name..." onKeyPress={this.searchClientRoles} />
-                  <span className="form-control-feedback fa fa-search" />
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="btns pull-right">
-                  <button type="button" className="btn btn-primary" onClick={this.openAddSiteModal}>
-                    + Add Site Location
-                  </button>
-                  <Modal className="new-site" show={this.state.addSiteModalOpen} onHide={this.closeAddSiteModal}>
-                    <Modal.Header closeButton>
-                      <Modal.Title>New Site</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <EditSiteForm onSubmit={this.addSite} />
-                    </Modal.Body>
-                  </Modal>
+              <section className="btns-area pull-right">
+                <div className="col pull-right">
                   <button type="button" className="btn btn-primary" onClick={this.openAddUserModal}>
                     + Add User
                   </button>
@@ -180,10 +175,22 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                     </Modal.Body>
                   </Modal>
                 </div>
-                <div className="clearfix" />
-              </div>
-            </div>
-          </section>
+                <div className="col pull-right">
+                  <button type="button" className="btn btn-primary" onClick={this.openAddSiteModal}>
+                    + Add Site Location
+                  </button>
+                  <Modal className="new-site" show={this.state.addSiteModalOpen} onHide={this.closeAddSiteModal}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>New Site</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <EditSiteForm onSubmit={this.addSite} />
+                    </Modal.Body>
+                  </Modal>
+                </div>
+              </section>
+            </form>
+          </div>
           <section className="table-holder form-group">
             <ClientRolesList />
           </section>
