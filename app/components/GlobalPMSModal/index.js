@@ -40,7 +40,7 @@ import {
 import _ from 'lodash';
 import './styles.less';
 
-import alertSound from './sounds/message_received.mp3';
+import alertSound from './sounds/message_received.wav';
 
 class GlobalPMSModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
