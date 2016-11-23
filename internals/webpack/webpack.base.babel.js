@@ -37,6 +37,9 @@ module.exports = (options) => ({
       test: /\.(eot|svg|ttf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
       loader: 'file-loader',
     }, {
+      test: /\.mp3$/,
+      loader: 'file-loader',
+    }, {
       test: /\.(jpg|png|gif)$/,
       loaders: [
         'file-loader',
