@@ -6,7 +6,7 @@ import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { getItem } from 'utils/localStorage';
 
-import request, { serializeParams } from 'utils/request';
+import request from 'utils/request';
 import composeQueryString from 'utils/composeQueryString';
 import {
   FETCH_PATIENTS,
@@ -66,7 +66,7 @@ export function* fetchPatientsWatcher() {
         },
         limit: searchParams.limit || 15,
         skip: searchParams.skip || 0,
-        isExport: isExport,
+        isExport,
       };
 
       if (searchParams.sort && searchParams.direction && searchParams.sort !== 'orderNumber') {
@@ -164,10 +164,10 @@ export function* fetchPatientsWatcher() {
       const queryString = composeQueryString(queryParams);
       // const requestURL = `${API_URL}/patients?${queryString}`;
       const requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
-      if (isExport){
+      if (isExport) {
         location.replace(`${requestURL}&access_token=${getItem('auth_token')}`);
         yield put(downloadComplete());
-      }else{
+      } else {
         const response = yield call(request, requestURL);
         yield put(patientsFetched(searchParams, response, patients, searchFilter));
       }
@@ -288,7 +288,7 @@ function* importPatients() {
         method: 'POST',
         body: formData,
       });
-      yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
+      yield put(toastrActions.success('Import Patients', 'We are processing your request. Patients will be added soon.'));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));

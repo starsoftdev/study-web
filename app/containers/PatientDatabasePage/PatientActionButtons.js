@@ -97,10 +97,10 @@ class PatientActionButtons extends React.Component {
     this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, true, true);
   }
 
-  uploadFile(e){
-    console.log(1);
+  uploadFile(e) {
     if (e.target.files[0]) {
       this.props.importPatients(e.target.files[0]);
+      this.fileBttn.value = '';
     }
   }
 
@@ -112,7 +112,14 @@ class PatientActionButtons extends React.Component {
         </div>
         <div className="col pull-right">
           <label htmlFor="file" className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload"></i> Import</label>
-          <input type="file" id="file" onChange={this.uploadFile} />
+          <input
+            type="file"
+            id="file"
+            onChange={this.uploadFile}
+            ref={(fileBttn) => {
+              this.fileBttn = fileBttn;
+            }}
+          />
         </div>
         <div className="col pull-right">
           <a className="btn btn-primary email lightbox-opener" onClick={this.toggleTextEmailBlastModal}><i className="icomoon-icon_chat_alt"></i> TEXT / EMAIL BLAST</a>
