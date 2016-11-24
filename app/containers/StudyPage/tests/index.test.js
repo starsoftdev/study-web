@@ -1,11 +1,11 @@
 import { StudyPage } from 'containers/StudyPage';
 import React from 'react';
 import { shallow } from 'enzyme';
-import chaiEnzyme from 'chai-enzyme'
+import chaiEnzyme from 'chai-enzyme';
 import expect from 'expect';
-import chai from 'chai'
-chai.use(chaiEnzyme())
-const chaiExpect = chai.expect
+import chai from 'chai';
+chai.use(chaiEnzyme());
+const chaiExpect = chai.expect;
 
 describe('<StudyPage />', () => {
   let setup;
