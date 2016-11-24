@@ -35,7 +35,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     this.props.fetchPatients({ limit:15, skip:0 });
   }
 
-  searchPatients(searchFilter, isSearch, isExport=false) {
+  searchPatients(searchFilter, isSearch, isExport = false) {
     const queryParams = omit(omitBy(searchFilter, isUndefined), ['includeIndication', 'excludeIndication']);
 
     if (searchFilter.includeIndication) {

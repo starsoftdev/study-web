@@ -32,13 +32,12 @@ import {
   SUBMIT_TEXT_BLAST,
   SET_ACTIVE_SORT,
   SORT_PATIENTS_SUCCESS,
-  EXPORT_PATIENTS,
   DOWNLOAD_COMPLETE,
   IMPORT_PATIENTS,
 } from './constants';
 import _ from 'lodash';
 
-export function fetchPatients(searchParams = {}, patients = {}, searchFilter = {}, isExport=false) {
+export function fetchPatients(searchParams = {}, patients = {}, searchFilter = {}, isExport = false) {
   return {
     type: FETCH_PATIENTS,
     searchParams,
