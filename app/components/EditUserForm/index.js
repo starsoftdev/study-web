@@ -10,6 +10,7 @@ import { selectEditUserFormError, selectEditUserFormSiteValue } from './selector
 import { selectSavedUser } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
+import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   savedUser: selectSavedUser(),
@@ -39,11 +40,11 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
     if (site === '0') {
       clientRolePanelContent = (
         <div className="client-role">
-          <div className="row form-group">
-            <strong className="col-sm-4">
+          <div className="field-row">
+            <strong className="label">
               <label>PURCHASE</label>
             </strong>
-            <div className="field col-sm-8">
+            <div className="field">
               <Field
                 name="purchase"
                 component={Toggle}
@@ -51,11 +52,11 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
               />
             </div>
           </div>
-          <div className="row form-group">
-            <strong className="col-sm-4">
+          <div className="field-row">
+            <strong className="label">
               <label>REWARD</label>
             </strong>
-            <div className="field col-sm-8">
+            <div className="field">
               <Field
                 name="reward"
                 component={Toggle}
@@ -69,14 +70,14 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
 
     return (
       <form className="form-edit-user" onSubmit={handleSubmit}>
-        <div className="edit-user scroll-holder jcf--scrollable">
-          <div className="row form-group">
-            <strong className="required col-sm-4">
+        <div className="edit-user form-fields">
+          <div className="field-row">
+            <strong className="required label">
               <label>NAME</label>
             </strong>
-            <div className="field col-sm-8">
+            <div className="field">
               <div className="row">
-                <div className="col-sm-6">
+                <div className="col pull-left">
                   <Field
                     name="firstName"
                     component={Input}
@@ -85,7 +86,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
                     disabled={savedUser.saving || deleting}
                   />
                 </div>
-                <div className="col-sm-6">
+                <div className="col pull-left">
                   <Field
                     name="lastName"
                     component={Input}
@@ -97,11 +98,11 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
               </div>
             </div>
           </div>
-          <div className="row form-group">
-            <strong className="required col-sm-4">
+          <div className="field-row">
+            <strong className="required label">
               <label>EMAIL</label>
             </strong>
-            <div className="field col-sm-8">
+            <div className="field">
               <Field
                 name="email"
                 component={Input}
@@ -110,11 +111,11 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
               />
             </div>
           </div>
-          <div className="row form-group">
-            <strong className="required col-sm-4">
+          <div className="field-row">
+            <strong className="required label">
               <label>SITE LOCATION</label>
             </strong>
-            <div className="field col-sm-8">
+            <div className="field">
               <Field
                 name="site"
                 component={ReactSelect}
