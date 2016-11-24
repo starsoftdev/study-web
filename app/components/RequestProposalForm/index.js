@@ -85,7 +85,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>Sponsor Contact Name</label></strong>
+            <strong className="label"><label>Sponsor Name</label></strong>
             <Field
               name="sponsorName"
               component={Input}
@@ -95,7 +95,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>Sponsor Contact Email</label></strong>
+            <strong className="label"><label>Sponsor Email</label></strong>
             <Field
               name="sponsorEmail"
               component={Input}
@@ -105,7 +105,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>CRO Contact Name</label></strong>
+            <strong className="label"><label>CRO Name</label></strong>
             <Field
               name="croName"
               component={Input}
@@ -115,7 +115,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>CRO Contact Email</label></strong>
+            <strong className="label"><label>CRO Email</label></strong>
             <Field
               name="croEmail"
               component={Input}
