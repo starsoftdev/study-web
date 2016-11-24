@@ -10,6 +10,7 @@ import moment from 'moment';
 import './styles.less';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
+import Money from 'components/Money';
 
 const headers = [
   {
@@ -215,11 +216,14 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     _.map(raw, (source, key) => {
       const date = new Date(source.created);
       const dateWrapper = moment(date).format('MM/DD/YY');
-      const sub = ((source.total % 100) === 0) ? '.00' : false;
       let siteName = source.site_name;
 
       if (!siteName && source.site_id && siteLocations.length) {
         siteName = _.find(siteLocations, { id: source.site_id }).name;
+      }
+
+      if (source.action_type === 'addCredits') {
+        siteName = 'PMS Credits';
       }
 
       result.push(
@@ -235,9 +239,9 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
           <div className="td" style={{ width: '9.6%' }}>{dateWrapper}</div>
           <div className="td" style={{ width: '17.4%' }}>{siteName}</div>
           <div className="td" style={{ width: '18.4%' }}>{source.invoice_id}</div>
-          <div className="td" style={{ width: '19.7%' }}>{source.protocol_number}</div>
+          <div className="td" style={{ width: '19.7%' }}>{source.protocol_number || '-'}</div>
           <div className="td" style={{ width: '17.4%' }}>card</div>
-          <div className="td" style={{ width: '9.5%' }}>${(sub) ? `${(source.total / 100)}${sub}` : `${(source.total / 100).toFixed(2)}` }</div>
+          <div className="td" style={{ width: '9.5%' }}><Money value={source.total / 100} className="price total-price" /></div>
         </div>
       );
     });
