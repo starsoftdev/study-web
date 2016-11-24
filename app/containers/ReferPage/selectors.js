@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-
+import { map } from 'lodash';
 /**
  * Direct selector to the referPage state domain
  */
@@ -21,7 +21,16 @@ const selectReferPage = () => createSelector(
 
 const selectCompanyTypes = () => createSelector(
   selectReferPageDomain(),
-  (substate) => substate.companyTypes
+  (substate) => {
+    const companyTypes = substate.companyTypes;
+    return map(companyTypes, e => (
+      {
+        id: `${e}`,
+        label: `${e}`,
+        type: e,
+      }
+    ));
+  }
 );
 
 
