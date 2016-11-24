@@ -30,12 +30,12 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
 
     return (
       <form className="form-edit-site" onSubmit={handleSubmit}>
-        <div className="edit-site scroll-holder jcf--scrollable">
-          <div className="row form-group">
-            <strong className="required col-sm-4">
+        <div className="edit-site form-fields">
+          <div className="field-row">
+            <strong className="required label">
               <label>SITE NAME</label>
             </strong>
-            <div className="field col-sm-8">
+            <div className="field">
               <Field
                 name="name"
                 component={Input}
@@ -44,13 +44,13 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
               />
             </div>
           </div>
-          <div className="row form-group">
-            <strong className="required col-sm-4">
+          <div className="field-row">
+            <strong className="required label">
               <label>PRINCIPAL INVESTIGATOR</label>
             </strong>
-            <div className="field col-sm-8">
+            <div className="field">
               <div className="row">
-                <div className="col-sm-6">
+                <div className="col pull-left">
                   <Field
                     name="piFirstName"
                     component={Input}
@@ -59,7 +59,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                     disabled={savedSite.saving}
                   />
                 </div>
-                <div className="col-sm-6">
+                <div className="col pull-left">
                   <Field
                     name="piLastName"
                     component={Input}
@@ -71,11 +71,11 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
               </div>
             </div>
           </div>
-          <div className="row form-group">
-            <strong className="required col-sm-4">
+          <div className="field-row">
+            <strong className="required label">
               <label>SITE PHONE</label>
             </strong>
-            <div className="field col-sm-8">
+            <div className="field">
               <Field
                 name="phone"
                 component={Input}
@@ -84,11 +84,11 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
               />
             </div>
           </div>
-          <div className="row form-group">
-            <strong className="required col-sm-4">
+          <div className="field-row">
+            <strong className="required label">
               <label>SITE ADDRESS</label>
             </strong>
-            <div className="field col-sm-8">
+            <div className="field">
               <Field
                 name="address"
                 component={Input}
@@ -97,11 +97,11 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
               />
             </div>
           </div>
-          <div className="row form-group">
-            <strong className="required col-sm-4">
+          <div className="field-row">
+            <strong className="required label">
               <label>CITY</label>
             </strong>
-            <div className="field col-sm-8">
+            <div className="field">
               <Field
                 name="city"
                 component={Input}
@@ -110,11 +110,11 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
               />
             </div>
           </div>
-          <div className="row form-group">
-            <strong className="required col-sm-4">
+          <div className="field-row">
+            <strong className="required label">
               <label>STATE / PROVINCE</label>
             </strong>
-            <div className="field col-sm-8">
+            <div className="field">
               <Field
                 name="state"
                 component={Input}
@@ -123,11 +123,11 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
               />
             </div>
           </div>
-          <div className="row form-group">
-            <strong className="required col-sm-4">
+          <div className="field-row">
+            <strong className="required label">
               <label>POSTAL CODE</label>
             </strong>
-            <div className="field col-sm-8">
+            <div className="field">
               <Field
                 name="zip"
                 component={Input}
