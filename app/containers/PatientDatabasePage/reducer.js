@@ -23,6 +23,7 @@ import {
   DISABLE_CHAT,
   SET_ACTIVE_SORT,
   SORT_PATIENTS_SUCCESS,
+  DOWNLOAD_COMPLETE,
 } from './constants';
 
 const initialState = {
@@ -66,6 +67,15 @@ export default function patientDatabasePageReducer(state = initialState, action)
   let foundIndex = -1;
 
   switch (action.type) {
+    case DOWNLOAD_COMPLETE:
+      return {
+        ...state,
+        patients: {
+          details: state.patients.details,
+          fetching: false,
+          error: null,
+        },
+      };
     case FETCH_PATIENTS:
       return {
         ...state,

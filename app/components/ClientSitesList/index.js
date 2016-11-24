@@ -128,29 +128,37 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                   </tbody>
                 </table>
               </div>
-              <Modal className="edit-site" show={editSiteModalShown} onHide={this.closeEditSiteModal}>
+              <Modal className="edit-site" id="edit-site" show={editSiteModalShown} onHide={this.closeEditSiteModal}>
                 <Modal.Header closeButton>
                   <Modal.Title>Edit Site</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <EditSiteForm
-                    initialValues={selectedSiteDetailsForForm}
-                    onSubmit={this.updateSite}
-                  />
+                  <div className="holder clearfix">
+                    <div className="form-lightbox">
+                      <EditSiteForm
+                        initialValues={selectedSiteDetailsForForm}
+                        onSubmit={this.updateSite}
+                      />
+                    </div>
+                  </div>
                 </Modal.Body>
               </Modal>
-              <Modal className="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
+              <Modal className="edit-user" id="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
                 <Modal.Header closeButton>
                   <Modal.Title>Edit User</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <EditUserForm
-                    initialValues={selectedUserDetailsForForm}
-                    siteOptions={siteOptions}
-                    deleting={deletedUser.deleting}
-                    onDelete={this.deleteUser}
-                    onSubmit={this.updateUser}
-                  />
+                  <div className="holder clearfix">
+                    <div className="form-lightbox">
+                      <EditUserForm
+                        initialValues={selectedUserDetailsForForm}
+                        siteOptions={siteOptions}
+                        deleting={deletedUser.deleting}
+                        onDelete={this.deleteUser}
+                        onSubmit={this.updateUser}
+                      />
+                    </div>
+                  </div>
                 </Modal.Body>
               </Modal>
             </div>
