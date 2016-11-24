@@ -166,12 +166,16 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                   <button type="button" className="btn btn-primary" onClick={this.openAddUserModal}>
                     + Add User
                   </button>
-                  <Modal className="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
+                  <Modal className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
                     <Modal.Header closeButton>
                       <Modal.Title>New User</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                      <EditUserForm siteOptions={siteOptions} onSubmit={this.addUser} />
+                      <div className="holder clearfix">
+                        <div className="form-lightbox">
+                          <EditUserForm siteOptions={siteOptions} onSubmit={this.addUser} />
+                        </div>
+                      </div>
                     </Modal.Body>
                   </Modal>
                 </div>
@@ -179,12 +183,16 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                   <button type="button" className="btn btn-primary" onClick={this.openAddSiteModal}>
                     + Add Site Location
                   </button>
-                  <Modal className="new-site" show={this.state.addSiteModalOpen} onHide={this.closeAddSiteModal}>
+                  <Modal className="new-site" id="new-site" show={this.state.addSiteModalOpen} onHide={this.closeAddSiteModal}>
                     <Modal.Header closeButton>
                       <Modal.Title>New Site</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                      <EditSiteForm onSubmit={this.addSite} />
+                      <div className="holder clearfix">
+                        <div className="form-lightbox">
+                          <EditSiteForm onSubmit={this.addSite} />
+                        </div>
+                      </div>
                     </Modal.Body>
                   </Modal>
                 </div>
