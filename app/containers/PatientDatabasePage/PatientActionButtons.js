@@ -8,12 +8,14 @@ import TextBlastModal from './TextBlast/index';
 import { createStructuredSelector } from 'reselect';
 import { selectValues } from '../../common/selectors/form.selector';
 import { connect } from 'react-redux';
-import { exportPatients } from '../../containers/PatientDatabasePage/actions';
+import { importPatients } from '../../containers/PatientDatabasePage/actions';
 
 class PatientActionButtons extends React.Component {
   static propTypes = {
     formValues: React.PropTypes.object,
-    exportPatients: React.PropTypes.func,
+    importPatients: React.PropTypes.func,
+    searchPatients: React.PropTypes.func,
+    paginationOptions: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -34,6 +36,7 @@ class PatientActionButtons extends React.Component {
     this.toggleEmailBlastModal = this.toggleEmailBlastModal.bind(this);
     this.closeEmailBlastModal = this.closeEmailBlastModal.bind(this);
     this.download = this.download.bind(this);
+    this.uploadFile = this.uploadFile.bind(this);
   }
 
   toggleImportPatientsModal() {
@@ -91,8 +94,13 @@ class PatientActionButtons extends React.Component {
   }
 
   download() {
-    if (this.props.formValues.patients) {
-      this.props.exportPatients(this.props.formValues.patients);
+    this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, true, true);
+  }
+
+  uploadFile(e) {
+    if (e.target.files[0]) {
+      this.props.importPatients(e.target.files[0]);
+      this.fileBttn.value = '';
     }
   }
 
@@ -103,7 +111,15 @@ class PatientActionButtons extends React.Component {
           <a onClick={this.download} className="btn btn-primary download"><i className="icomoon-icon_download"></i> Download</a>
         </div>
         <div className="col pull-right">
-          <a className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload"></i> Import</a>
+          <label htmlFor="file" className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload"></i> Import</label>
+          <input
+            type="file"
+            id="file"
+            onChange={this.uploadFile}
+            ref={(fileBttn) => {
+              this.fileBttn = fileBttn;
+            }}
+          />
         </div>
         <div className="col pull-right">
           <a className="btn btn-primary email lightbox-opener" onClick={this.toggleTextEmailBlastModal}><i className="icomoon-icon_chat_alt"></i> TEXT / EMAIL BLAST</a>
@@ -126,7 +142,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    exportPatients: patients => dispatch(exportPatients(patients)),
+    importPatients: payload => dispatch(importPatients(payload)),
   };
 }
 

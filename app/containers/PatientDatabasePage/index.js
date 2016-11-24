@@ -35,7 +35,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     this.props.fetchPatients({ limit:15, skip:0 });
   }
 
-  searchPatients(searchFilter, isSearch) {
+  searchPatients(searchFilter, isSearch, isExport = false) {
     const queryParams = omit(omitBy(searchFilter, isUndefined), ['includeIndication', 'excludeIndication']);
 
     if (searchFilter.includeIndication) {
@@ -59,7 +59,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
       queryParams.sort = this.props.paginationOptions.activeSort;
       queryParams.direction = this.props.paginationOptions.activeDirection;
     }
-    this.props.fetchPatients(queryParams, this.props.patients.details, searchFilter);
+    this.props.fetchPatients(queryParams, this.props.patients.details, searchFilter, isExport);
   }
 
   render() {
@@ -68,7 +68,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
         <section className="patient-database">
           <Helmet title="Patient Database - StudyKIK" />
           <h2 className="main-heading">Patient Database</h2>
-          <PatientActionButtons />
+          <PatientActionButtons searchPatients={this.searchPatients} paginationOptions={this.props.paginationOptions} />
 
           <SearchPatientsForm onSubmit={this.searchPatients} />
 
@@ -92,7 +92,7 @@ function mapDispatchToProps(dispatch) {
     fetchIndications: () => dispatch(fetchIndications()),
     fetchSources: () => dispatch(fetchSources()),
     fetchPatientCategories: searchParams => dispatch(fetchPatientCategories(searchParams)),
-    fetchPatients: (searchParams, patients, searchFilter) => dispatch(fetchPatients(searchParams, patients, searchFilter)),
+    fetchPatients: (searchParams, patients, searchFilter, isExport) => dispatch(fetchPatients(searchParams, patients, searchFilter, isExport)),
   };
 }
 
