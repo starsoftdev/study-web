@@ -40,7 +40,7 @@ import {
 import _ from 'lodash';
 import './styles.less';
 
-import alertSound from './sounds/message_received.wav';
+//import alertSound from './sounds/message_received.wav';
 
 class GlobalPMSModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -164,11 +164,11 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     }
     return (
       <div>
-        <Sound
+        {/*<Sound
           url={alertSound}
           playStatus={this.state.playSound}
           onFinishedPlaying={this.onSoundFinished}
-        />
+        />*/}
         <Modal className="custom-modal global-pms" dialogComponentClass={CenteredModal} id="chart-popup" show={this.props.showModal} onHide={this.props.closeModal}>
           <Modal.Header>
             <Modal.Title>PATIENT MESSAGING SUITE</Modal.Title>
