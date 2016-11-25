@@ -9,6 +9,7 @@ import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 import { Modal } from 'react-bootstrap';
 import Input from 'components/Input';
 import ChangePasswordForm from 'components/ChangePasswordForm';
+import ProfileImageForm from 'components/ProfileImageForm';
 import defaultImage from 'assets/images/Default-User-Img-Dr.png';
 import './styles.less';
 import CenteredModal from 'components/CenteredModal/index';
@@ -27,10 +28,13 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     super(props);
     this.openResetPasswordModal = this.openResetPasswordModal.bind(this);
     this.closeResetPasswordModal = this.closeResetPasswordModal.bind(this);
+    this.openProfileImageModal = this.openProfileImageModal.bind(this);
+    this.closeProfileImageModal = this.closeProfileImageModal.bind(this);
     this.uploadFile = this.uploadFile.bind(this);
 
     this.state = {
       passwordResetModalOpen: false,
+      profileImageModalOpen: false,
     };
   }
 
@@ -46,6 +50,14 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
 
   closeResetPasswordModal() {
     this.setState({ passwordResetModalOpen: false });
+  }
+
+  openProfileImageModal() {
+    this.setState({ profileImageModalOpen: true });
+  }
+
+  closeProfileImageModal() {
+    this.setState({ profileImageModalOpen: false });
   }
 
   uploadFile(e) {
@@ -81,8 +93,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         <div className="field-row">
           <strong className="label"></strong>
           <div className="field">
-            <label htmlFor="image_file" className="btn btn-grey" disabled={!me}>UPDATE PROFILE IMAGE</label>
-            <input type="file" id="image_file" onChange={this.uploadFile} />
+            <a href="#" className="btn btn-gray upload-btn lightbox-opener" onClick={this.openProfileImageModal}>Update Profile Image</a>
           </div>
         </div>
 
@@ -137,6 +148,18 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
           </Modal.Header>
           <Modal.Body>
             <ChangePasswordForm {...initialValues} onSubmit={this.props.changePassword} />
+          </Modal.Body>
+        </Modal>
+
+        <Modal className="custom-modal" dialogComponentClass={CenteredModal} show={this.state.profileImageModalOpen} onHide={this.closeProfileImageModal}>
+          <Modal.Header>
+            <Modal.Title>UPDATE PROFILE IMAGE</Modal.Title>
+            <a className="lightbox-close close" onClick={this.closeProfileImageModal}>
+              <i className="icomoon-icon_close"></i>
+            </a>
+          </Modal.Header>
+          <Modal.Body>
+            <ProfileImageForm {...initialValues} onSubmit={this.props.changePassword} />
           </Modal.Body>
         </Modal>
 
