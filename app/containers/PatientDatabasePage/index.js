@@ -32,7 +32,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     this.props.fetchIndications();
     this.props.fetchSources();
     this.props.fetchPatientCategories();
-    this.props.fetchPatients({ limit:15, skip:0 });
+    // this.props.fetchPatients({ limit:15, skip:0 });
   }
 
   searchPatients(searchFilter, isSearch, isExport = false) {

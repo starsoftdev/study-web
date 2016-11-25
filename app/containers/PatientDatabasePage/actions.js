@@ -110,6 +110,8 @@ export function patientsFetched(searchParams, payload, patients, searchFilter) {
     hasMore,
     page,
     searchFilter,
+    searchParams,
+    result,
   };
 }
 
@@ -217,9 +219,10 @@ export function removePatientFromTextBlast(patient) {
   };
 }
 
-export function removePatientsFromTextBlast() {
+export function removePatientsFromTextBlast(patients) {
   return {
     type: REMOVE_PATIENTS_FROM_TEXT_BLAST,
+    patients,
   };
 }
 
