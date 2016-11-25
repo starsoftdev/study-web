@@ -191,7 +191,7 @@ export class CalendarPage extends React.Component {
       <div className="container-fluid">
         <section className="calendar-section">
           <h2 className="main-heading">CALENDAR</h2>
-          <div className="btn-block"><a href="#" className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
+          <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
           <FilterBar
             siteLocationOptions={siteLocationOptions}
             isAdmin={isAdmin}
