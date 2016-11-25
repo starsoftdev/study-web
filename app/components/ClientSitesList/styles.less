@@ -7,18 +7,94 @@
       font-weight: 100;
     }
     .toggle-assigned-users {
-      cursor: pointer;
+      position: relative;
+
+      .toggle {
+        width: 20px;
+        height: 20px;
+        padding: 5px;
+        background: #fff;
+        min-width: inherit;
+        position: relative;
+        margin-left: 8px;
+        border: solid #00afef 2px;
+
+        &:after,
+        &:before {
+          top: 50%;
+          left: 50%;
+          content: '';
+          background: #00afef;
+          position: absolute;
+          transition: all 0.25s;
+          transform: translate(-50%,-50%);
+        }
+
+        &:before {
+          width: 2px;
+          height: 10px;
+        }
+
+        &:after {
+          width: 10px;
+          height: 2px;
+        }
+
+        &:hover {
+          outline: none;
+          background: #fff;
+          border-color: #76daff;
+          box-shadow: none !important;
+
+          &:after,
+          &:before {
+            background: #76daff;
+          }
+        }
+
+        &.toggle-minus {
+          box-shadow: none !important;
+
+          &:before {
+            transform: translate(-50%,-50%) rotate(-90deg);
+          }
+        }
+      }
     }
     .assigned-users-list {
       margin-top: 5px;
-      border-top: 1px solid #ececec;
 
       .assigned-user {
         padding: 5px 0;
-        border-bottom: 1px solid #ececec;
 
         .edit-assigned-user {
-          cursor: pointer;
+          .edit-icon {
+            top: -2px;
+            left: auto;
+            padding: 0;
+            right: auto;
+            color: #00afef;
+            border-width: 0;
+            font-size: 20px;
+            background: none;
+            min-width: inherit;
+            position: relative;
+            margin-left: 8px;
+
+            .pencil-square {
+              font-family: 'icomoon' !important;
+              font-style: normal;
+              font-weight: normal;
+              font-variant: normal;
+              text-transform: none;
+              line-height: 1;
+              -webkit-font-smoothing: antialiased;
+
+              &:before {
+                content: "\e920";
+              }
+            }
+          }
         }
       }
     }
@@ -33,15 +109,15 @@
       }
 
       &.phone {
-        width: 16%;
+        width: 14%;
       }
 
       &.address {
-        width: 20%;
+        width: 18%;
       }
 
       &.assigned-users {
-        width: 20%;
+        width: 24%;
       }
 
       &.action {
