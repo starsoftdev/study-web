@@ -29,11 +29,23 @@ export default class DatePicker extends Component {
     super(props);
 
     const { initialDate } = props;
+    this.handleInit = this.handleInit.bind(this);
 
     this.state = {
       date: initialDate,
       modalVisible: false,
     };
+  }
+
+  componentWillMount() {
+    this.handleInit(this.props.initialDate);
+  }
+
+  handleInit = (date) => {
+    this.setState({
+      date,
+    });
+    this.props.input.onBlur(date);
   }
 
   handleSelect = (date) => {
