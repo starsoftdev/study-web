@@ -50,6 +50,7 @@ class CalendarWidget extends React.Component {
           onSelectEvent={(event) => {
             this.props.handleOpenModal(SchedulePatientModalType.UPDATE, event);
           }}
+          ref={(c) => { this.bigCalendar = c; }}
         />
       </div>
     );
