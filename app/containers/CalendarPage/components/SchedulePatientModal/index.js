@@ -10,6 +10,7 @@ import { SchedulePatientModalType } from 'common/constants';
 
 import ReactSelect from 'components/Input/ReactSelect';
 import DatePicker from 'components/Input/DatePicker';
+import Checkbox from 'components/Input/Checkbox';
 
 import './styles.less';
 
@@ -27,6 +28,15 @@ function numberSequenceCreator(start, end) {
     };
   });
 }
+
+function getTimeComponents(strTime) {
+  return {
+    hour: ((moment(strTime).hour() + 11) % 12) + 1,
+    minute: moment(strTime).minute(),
+    period: moment(strTime).hour() >= 12 ? 'PM' : 'AM',
+  };
+}
+
 const hourOptions = numberSequenceCreator(1, 13);
 const minuteOptions = numberSequenceCreator(0, 60);
 const periodOptions = [
@@ -65,18 +75,21 @@ export default class SchedulePatientModal extends Component {
   componentWillReceiveProps(nextProps) {
     const { siteLocationOptions, isAdmin } = this.props;
 
-    if (nextProps.modalType === SchedulePatientModalType.CREATE) {
+    if (this.props.modalType === SchedulePatientModalType.HIDDEN && nextProps.modalType !== SchedulePatientModalType.HIDDEN) {
+      let initialValues = nextProps.selectedCellInfo.data ? getTimeComponents(nextProps.selectedCellInfo.data.time) : { period: 'AM', textReminder: true };
       if (!isAdmin) {
         const site = siteLocationOptions[0];
         if (this.state.siteLocation === null && site) {  // prevent recursive render
           if (site) {
             this.handleSiteLocationChoose(site);
-            this.props.initialize({               // manually set siteLocation form value
-              siteLocation: site,
-            });
+            initialValues = {
+              ...initialValues,
+              siteLocations: site,   // manually set siteLocation form value
+            };
           }
         }
       }
+      nextProps.initialize(initialValues);
     } else if (nextProps.modalType === SchedulePatientModalType.HIDDEN) {
       this.setState({
         siteLocation: null,
@@ -85,7 +98,6 @@ export default class SchedulePatientModal extends Component {
         protocolOptions: [],
         patientOptions: [],
       });
-      this.props.initialize({});
     }
 
     if (!nextProps.fetchingPatientsByStudy && nextProps.patientsByStudy !== this.props.patientsByStudy) {
@@ -127,7 +139,6 @@ export default class SchedulePatientModal extends Component {
         patientOptions: [],
       });
     }
-    this.props.initialize({});
   }
 
   handleProtocolChoose(protocolOption) {
@@ -144,7 +155,6 @@ export default class SchedulePatientModal extends Component {
         patientOptions: [],
       });
     }
-    this.props.initialize({});
   }
 
   handlePatientChoose(patientOption) {
@@ -224,7 +234,7 @@ export default class SchedulePatientModal extends Component {
                                 id="time-period"
                                 name="period"
                                 component={ReactSelect}
-                                placeholder="Minutes"
+                                placeholder="Period"
                                 options={periodOptions}
                                 className="visible-first"
                                 disabled={submitting}
@@ -285,6 +295,17 @@ export default class SchedulePatientModal extends Component {
                             selectedValue={this.state.patient}
                           />
                         </div>
+                      </div>
+
+                      <div className="field-row">
+                        <strong className="label">&nbsp;</strong>
+                        <Field
+                          id="text-reminder"
+                          name="textReminder"
+                          component={Checkbox}
+                          type="checkbox"
+                        />
+                        <label className="text-reminder-label" htmlFor="text-reminder">Text Reminder</label>
                       </div>
 
                       <div className="text-right">
@@ -356,7 +377,7 @@ export default class SchedulePatientModal extends Component {
                                 id="time-period2"
                                 name="period"
                                 component={ReactSelect}
-                                placeholder="Minutes"
+                                placeholder="Period"
                                 options={periodOptions}
                                 className="visible-first"
                                 disabled={submitting}

@@ -41,14 +41,14 @@ function ReactSelect({
 
   let inputComponent = (
     <Select
-      value={selectedValue || input.value}
+      value={selectedValue === undefined ? input.value : selectedValue}
       onChange={(event) => {
         input.onChange(event);
         if (onChange) {
           onChange(event);
         }
       }}
-      onBlur={() => input.onBlur(selectedValue || input.value)}
+      onBlur={() => input.onBlur(selectedValue === undefined ? input.value : selectedValue)}
       options={optionsToRender}
       placeholder={placeholder}
       className="form-control"
