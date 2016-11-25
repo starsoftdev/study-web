@@ -6,10 +6,11 @@ import { createStructuredSelector } from 'reselect';
 import { map } from 'lodash';
 
 import Checkbox from '../../../components/Input/Checkbox';
-import { selectSelectedPatient } from '../../../containers/PatientDatabasePage/selectors';
+import { selectSelectedPatient, selectPatients } from '../../../containers/PatientDatabasePage/selectors';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { fetchPatient, addPatientsToTextBlast,
   removePatientFromTextBlast } from '../actions';
+import { selectValues } from '../../../common/selectors/form.selector';
 
 const formName = 'PatientDatabase.TextBlastModal';
 
@@ -34,6 +35,8 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     fetchPatient: PropTypes.func,
     openChat: PropTypes.func,
     orderNumber: PropTypes.number,
+    patients: PropTypes.object,
+    formValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -83,7 +86,11 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     const { addPatientsToTextBlast, change, id, removePatientFromTextBlast } = this.props;
     if (checked) {
       addPatientsToTextBlast([{ id }]);
-      change('all-patients', false);
+      const totalCount = this.props.patients.details.length;
+      const newCount = this.props.formValues.patients.length;
+      if ((newCount + 1) === totalCount) {
+        change('all-patients', true);
+      }
     } else {
       removePatientFromTextBlast([{ id }]);
     }
@@ -148,6 +155,8 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
 
 const mapStateToProps = createStructuredSelector({
   selectedPatient: selectSelectedPatient(),
+  patients: selectPatients(),
+  formValues: selectValues(formName),
 });
 
 function mapDispatchToProps(dispatch) {

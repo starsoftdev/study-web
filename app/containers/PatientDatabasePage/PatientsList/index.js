@@ -112,7 +112,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     if (checked) {
       addPatientsToTextBlast(patients.details);
     } else {
-      removePatientsFromTextBlast();
+      removePatientsFromTextBlast(patients.details);
     }
     for (const patient of patients.details) {
       change(`patient-${patient.id}`, checked);
@@ -164,95 +164,103 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
       selectedPatientDetailsForForm.phone = normalizePhoneDisplay(selectedPatientDetailsForForm.phone);
     }
 
-    if (patients.details.length > 0) {
-      return (
-        <div>
-          <StickyContainer className="table-holder fixed-table">
-            <Sticky className="fixed-table-sticky-header">
-              <header className="fixed-table-head">
-                <h2>TOTAL PATIENT COUNT: {patients.details.length}</h2>
-              </header>
-              <div className="fixed-table-thead">
-                <div className="table">
-                  <div className="thead">
-                    <div className="tr">
-                      <div className="th" onClick={this.sortBy}>
-                        <Field
-                          name="all-patients"
-                          type="checkbox"
-                          component={Checkbox}
-                          onChange={this.toggleAllPatientSelection}
-                        />
-                      </div>
-                      <div onClick={this.sortBy} data-sort="orderNumber" className={`th ${(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}`}>#<i className="caret-arrow" /></div>
-                      <div onClick={this.sortBy} data-sort="firstName" className={`th ${(this.props.paginationOptions.activeSort === 'firstName') ? this.props.paginationOptions.activeDirection : ''}`}>NAME<i className="caret-arrow" /></div>
-                      <div onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL<i className="caret-arrow" /></div>
-                      <div onClick={this.sortBy} data-sort="phone" className={`th ${(this.props.paginationOptions.activeSort === 'phone') ? this.props.paginationOptions.activeDirection : ''}`}>PHONE<i className="caret-arrow" /></div>
-                      <div onClick={this.sortBy} data-sort="indication" className={`th ${(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}`}>INDICATIONS<i className="caret-arrow" /></div>
-                      <div onClick={this.sortBy} data-sort="age" className={`th ${(this.props.paginationOptions.activeSort === 'age') ? this.props.paginationOptions.activeDirection : ''}`}>AGE<i className="caret-arrow" /></div>
-                      <div onClick={this.sortBy} data-sort="gender" className={`th ${(this.props.paginationOptions.activeSort === 'gender') ? this.props.paginationOptions.activeDirection : ''}`}>GENDER<i className="caret-arrow" /></div>
-                      <div onClick={this.sortBy} data-sort="bmi" className={`th ${(this.props.paginationOptions.activeSort === 'bmi') ? this.props.paginationOptions.activeDirection : ''}`}>BMI<i className="caret-arrow" /></div>
-                      <div onClick={this.sortBy} data-sort="status" className={`th ${(this.props.paginationOptions.activeSort === 'status') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS<i className="caret-arrow" /></div>
-                      <div onClick={this.sortBy} data-sort="source" className={`th ${(this.props.paginationOptions.activeSort === 'source') ? this.props.paginationOptions.activeDirection : ''}`}>SOURCE<i className="caret-arrow" /></div>
+
+    return (
+      <div className="patient-database-fixed-table-wrapper">
+        <StickyContainer className="table-holder fixed-table">
+          <Sticky className="fixed-table-sticky-header">
+            <header className="fixed-table-head">
+              <h2>TOTAL PATIENT COUNT: {patients.details.length}</h2>
+            </header>
+            <div className="fixed-table-thead">
+              <div className="table">
+                <div className="thead">
+                  <div className="tr">
+                    <div className="th">
+                      <Field
+                        name="all-patients"
+                        type="checkbox"
+                        component={Checkbox}
+                        onChange={this.toggleAllPatientSelection}
+                      />
                     </div>
+                    <div onClick={this.sortBy} data-sort="orderNumber" className={`th ${(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}`}>#<i className="caret-arrow" /></div>
+                    <div onClick={this.sortBy} data-sort="firstName" className={`th ${(this.props.paginationOptions.activeSort === 'firstName') ? this.props.paginationOptions.activeDirection : ''}`}>NAME<i className="caret-arrow" /></div>
+                    <div onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL<i className="caret-arrow" /></div>
+                    <div onClick={this.sortBy} data-sort="phone" className={`th ${(this.props.paginationOptions.activeSort === 'phone') ? this.props.paginationOptions.activeDirection : ''}`}>PHONE<i className="caret-arrow" /></div>
+                    <div onClick={this.sortBy} data-sort="indication" className={`th ${(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}`}>INDICATIONS<i className="caret-arrow" /></div>
+                    <div onClick={this.sortBy} data-sort="age" className={`th ${(this.props.paginationOptions.activeSort === 'age') ? this.props.paginationOptions.activeDirection : ''}`}>AGE<i className="caret-arrow" /></div>
+                    <div onClick={this.sortBy} data-sort="gender" className={`th ${(this.props.paginationOptions.activeSort === 'gender') ? this.props.paginationOptions.activeDirection : ''}`}>GENDER<i className="caret-arrow" /></div>
+                    <div onClick={this.sortBy} data-sort="bmi" className={`th ${(this.props.paginationOptions.activeSort === 'bmi') ? this.props.paginationOptions.activeDirection : ''}`}>BMI<i className="caret-arrow" /></div>
+                    <div onClick={this.sortBy} data-sort="status" className={`th ${(this.props.paginationOptions.activeSort === 'status') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS<i className="caret-arrow" /></div>
+                    <div onClick={this.sortBy} data-sort="source" className={`th ${(this.props.paginationOptions.activeSort === 'source') ? this.props.paginationOptions.activeDirection : ''}`}>SOURCE<i className="caret-arrow" /></div>
                   </div>
                 </div>
               </div>
-            </Sticky>
-
-            <div className="table">
-              <InfiniteScroll
-                className="tbody"
-                pageStart={0}
-                loadMore={this.loadItems}
-                initialLoad={false}
-                hasMore={this.props.paginationOptions.hasMoreItems}
-                loader={<div>Loading...</div>}
-              >
-                {patientsListContents}
-              </InfiniteScroll>
             </div>
+          </Sticky>
 
-          </StickyContainer>
+          {(() => {
+            if (patients.details.length > 0) {
+              return (
+                <div className="table">
+                  <InfiniteScroll
+                    className="tbody"
+                    pageStart={0}
+                    loadMore={this.loadItems}
+                    initialLoad={false}
+                    hasMore={this.props.paginationOptions.hasMoreItems}
+                    loader={<div>Loading...</div>}
+                  >
+                    {patientsListContents}
+                  </InfiniteScroll>
+                </div>
+              );
+            }
+            return false;
+          })()}
 
-          <div className="patients">
-            <Modal className="edit-patient" dialogComponentClass={CenteredModal} show={editPatientModalShown} onHide={this.closeEditPatientModal}>
-              <Modal.Header>
-                <Modal.Title>
-                  <strong>Information</strong>
-                </Modal.Title>
-                <a className="close" onClick={this.closeEditPatientModal}>
-                  <i className="icomoon-icon_close" />
-                </a>
+
+        </StickyContainer>
+
+        <div className="patients">
+          <Modal className="edit-patient" dialogComponentClass={CenteredModal} show={editPatientModalShown} onHide={this.closeEditPatientModal}>
+            <Modal.Header>
+              <Modal.Title>
+                <strong>Information</strong>
+              </Modal.Title>
+              <a className="close" onClick={this.closeEditPatientModal}>
+                <i className="icomoon-icon_close" />
+              </a>
+            </Modal.Header>
+            <Modal.Body>
+              <EditPatientForm
+                initialValues={selectedPatientDetailsForForm}
+                onSubmit={this.updatePatient}
+              />
+            </Modal.Body>
+          </Modal>
+          {(chat)
+            ?
+            <Modal className="chat-patient" dialogComponentClass={CenteredModal} show={chatModalShown} onHide={this.closeChat}>
+              <Modal.Header closeButton>
+                <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <EditPatientForm
-                  initialValues={selectedPatientDetailsForForm}
-                  onSubmit={this.updatePatient}
-                />
+                <ChatForm chat={chat} sendStudyPatientMessages={sendStudyPatientMessages} />
               </Modal.Body>
             </Modal>
-            {(chat)
-              ?
-              <Modal className="chat-patient" dialogComponentClass={CenteredModal} show={chatModalShown} onHide={this.closeChat}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <ChatForm chat={chat} sendStudyPatientMessages={sendStudyPatientMessages} />
-                </Modal.Body>
-              </Modal>
-              : ''
-            }
-          </div>
+            : ''
+          }
         </div>
-      );
-    }
-    return (
+      </div>
+    );
+
+    /* return (
       <div>
         <h3>No matching patients found!</h3>
       </div>
-    );
+    );*/
   }
 }
 
@@ -268,7 +276,7 @@ function mapDispatchToProps(dispatch) {
   return {
     addPatientsToTextBlast: (patients) => dispatch(addPatientsToTextBlast(patients)),
     change: (field, value) => dispatch(change(formName, field, value)),
-    removePatientsFromTextBlast: () => dispatch(removePatientsFromTextBlast()),
+    removePatientsFromTextBlast: (patients) => dispatch(removePatientsFromTextBlast(patients)),
     clearSelectedPatient: () => dispatch(clearSelectedPatient()),
     savePatient: (id, data) => dispatch(savePatient(id, data)),
     initChat: (payload) => dispatch(initChat(payload)),

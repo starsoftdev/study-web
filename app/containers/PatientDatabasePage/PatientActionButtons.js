@@ -4,6 +4,7 @@
 
 import React from 'react';
 import TextEmailBlastModal from './TextEmailBlastModal';
+import AlertModal from './AlertModal';
 import TextBlastModal from './TextBlast/index';
 import { createStructuredSelector } from 'reselect';
 import { selectValues } from '../../common/selectors/form.selector';
@@ -26,11 +27,13 @@ class PatientActionButtons extends React.Component {
       showTextEmailBlastModal: false,
       showTextBlastModal: false,
       showEmailBlastModal: false,
+      showAlertModal: false,
     };
     this.toggleImportPatientsModal = this.toggleImportPatientsModal.bind(this);
     this.toggleAddPatientModal = this.toggleAddPatientModal.bind(this);
     this.closeAddPatientModal = this.closeAddPatientModal.bind(this);
     this.toggleTextEmailBlastModal = this.toggleTextEmailBlastModal.bind(this);
+    this.toggleAlertModal = this.toggleAlertModal.bind(this);
     this.toggleTextBlastModal = this.toggleTextBlastModal.bind(this);
     this.closeTextBlastModal = this.closeTextBlastModal.bind(this);
     this.toggleEmailBlastModal = this.toggleEmailBlastModal.bind(this);
@@ -59,10 +62,22 @@ class PatientActionButtons extends React.Component {
     });
   }
 
-  toggleTextEmailBlastModal() {
+  toggleAlertModal() {
     this.setState({
-      showTextEmailBlastModal: !this.state.showTextEmailBlastModal,
+      showAlertModal: !this.state.showAlertModal,
     });
+  }
+
+  toggleTextEmailBlastModal() {
+    if (!this.props.formValues.patients || this.props.formValues.patients.length === 0) {
+      this.setState({
+        showAlertModal: true,
+      });
+    } else {
+      this.setState({
+        showTextEmailBlastModal: !this.state.showTextEmailBlastModal,
+      });
+    }
   }
 
   toggleTextBlastModal() {
@@ -125,6 +140,7 @@ class PatientActionButtons extends React.Component {
           <a className="btn btn-primary email lightbox-opener" onClick={this.toggleTextEmailBlastModal}><i className="icomoon-icon_chat_alt"></i> TEXT / EMAIL BLAST</a>
         </div>
         <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} toggleTextBlast={this.toggleTextBlastModal} />
+        <AlertModal show={this.state.showAlertModal} onHide={this.toggleAlertModal} />
         <TextBlastModal
           show={this.state.showTextBlastModal}
           onClose={this.closeTextBlastModal}
