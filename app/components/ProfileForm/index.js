@@ -151,7 +151,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
           </Modal.Body>
         </Modal>
 
-        <Modal className="custom-modal" dialogComponentClass={CenteredModal} show={this.state.profileImageModalOpen} onHide={this.closeProfileImageModal}>
+        <Modal className="custom-modal avatar-modal" dialogComponentClass={CenteredModal} show={this.state.profileImageModalOpen} onHide={this.closeProfileImageModal}>
           <Modal.Header>
             <Modal.Title>UPDATE PROFILE IMAGE</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeProfileImageModal}>

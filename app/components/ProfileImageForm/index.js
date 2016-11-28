@@ -7,7 +7,8 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 import ReactAvatarEditor from 'react-avatar-editor';
-import Input from 'components/Input';
+// import Input from 'components/Input';
+import classNames from 'classnames';
 import FileUpload from './FileUpload';
 import './styles.less';
 
@@ -33,11 +34,13 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
       scale: 1,
       borderRadius: 0,
       preview: null,
+      selectedImage: null,
     };
 
     this.handleSave = this.handleSave.bind(this);
     this.handleScale = this.handleScale.bind(this);
     this.handleBorderRadius = this.handleBorderRadius.bind(this);
+    this.handleFileChange = this.handleFileChange.bind(this);
   }
 
   handleSave() {
@@ -59,64 +62,73 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
     this.setState({ borderRadius: borderRadiusValue });
   }
 
+  handleFileChange(img) {
+    this.setState({ selectedImage: img });
+  }
+
   logCallback(e) {
     console.log('callback', e);
   }
 
   render() {
     const { error, handleSubmit, pristine, reset, submitting } = this.props; // eslint-disable-line
-
     return (
-      <form onSubmit={handleSubmit} className="form-lightbox">
+      <form className="form-lightbox">
         <div className="drag-drop-uploader">
-          <div className="avatar-photo">
-            <FileUpload handleFileChange={this.handleFileChange} />
+          <div className={classNames('avatar-editor', { hidden: !this.state.selectedImage })}>
+            <ReactAvatarEditor
+              ref={(avatar) => {
+                this.avatar = avatar;
+              }}
+              width={350}
+              height={350}
+              scale={parseFloat(this.state.scale)}
+              borderRadius={this.state.borderRadius}
+              onSave={this.handleSave}
+              onLoadFailure={this.logCallback}
+              onLoadSuccess={this.logCallback}
+              onImageReady={this.logCallback}
+              onImageLoad={this.logCallback}
+              onDropFile={this.logCallback}
+              image={this.state.selectedImage}
+            />
+            <br />
+            Zoom:
+            <input
+              name="scale"
+              type="range"
+              ref={(scale) => {
+                this.scale = scale;
+              }}
+              onChange={this.handleScale}
+              min="1"
+              max="5"
+              step="0.01"
+              defaultValue="1"
+            />
+          </div>
+          <div className={classNames('avatar-photo', { hidden: this.state.selectedImage })}>
+            <FileUpload id="avatar_file" handleFileChange={this.handleFileChange} />
             <div className="info">
               <i className="icomoon-arrow_up_alt"></i>
               <span className="text">Drag and drop <br /> image here</span>
             </div>
           </div>
+          <div className="field-row">
+            <strong className="label required"><label htmlFor="clinicaltrialGovLink">Upload Image</label></strong>
+            <div className="field">
+              <label htmlFor="avatar_file" data-text="Browse" data-hover-text="Browse" className="btn btn-gray upload-btn" />
+            </div>
+          </div>
+          <div className="text-right">
+            <input type="button" className="btn btn-default" onClick={this.handleSave} value="submit" />
+          </div>
+          <img
+            src={this.state.preview}
+            style={{ borderRadius: this.state.borderRadius + 5 }}
+            alt=""
+          />
         </div>
-        <ReactAvatarEditor
-          ref={(avatar) => {
-            this.avatar = avatar;
-          }}
-          scale={parseFloat(this.state.scale)}
-          borderRadius={this.state.borderRadius}
-          onSave={this.handleSave}
-          onLoadFailure={this.logCallback}
-          onLoadSuccess={this.logCallback}
-          onImageReady={this.logCallback}
-          onImageLoad={this.logCallback}
-          onDropFile={this.logCallback}
-          image="example/avatar.jpg"
-          style={{ border: 'dashed 2px #ccc' }}
-        />
-        <br />
-        Zoom:
-        <input
-          name="scale"
-          type="range"
-          ref={(scale) => {
-            this.scale = scale;
-          }}
-          onChange={this.handleScale}
-          min="1"
-          max="2"
-          step="0.01"
-          defaultValue="1"
-        />
-        <br />
-        <br />
-        <input type="button" onClick={this.handleSave} value="Preview" />
-        <br />
-        <img
-          src={this.state.preview}
-          style={{ borderRadius: this.state.borderRadius + 5 }}
-          alt=""
-        />
-
-
       </form>
     );
   }

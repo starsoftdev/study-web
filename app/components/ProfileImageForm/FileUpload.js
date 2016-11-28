@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 export default class FileUpload extends Component {
   static propTypes = {
     handleFileChange: PropTypes.func,
+    id: PropTypes.string,
   };
 
   constructor(props) {
@@ -30,6 +31,7 @@ export default class FileUpload extends Component {
   render() {
     return (
       <input
+        id={this.props.id}
         ref={(inFile) => {
           this.inFile = inFile;
         }}
