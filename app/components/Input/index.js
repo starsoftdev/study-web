@@ -30,6 +30,10 @@ function Input({
   maxLength,
   children,
   isDisabled,
+  min,
+  max,
+  step,
+  defaultValue,
 }) {
   const hasError = touched && error && !active;
   const errorClass = hasError ? 'has-error' : '';
@@ -50,6 +54,10 @@ function Input({
       placeholder={placeholder}
       required={required}
       maxLength={maxLength}
+      min={min}
+      max={max}
+      step={step}
+      defaultValue={defaultValue}
       componentClass={componentClass} // Default value is `input`
       onChange={(event) => {
         input.onChange(event);
@@ -102,6 +110,10 @@ Input.propTypes = {
   required: PropTypes.bool,
   tooltipDisabled: PropTypes.bool,
   type: PropTypes.string,
+  min: PropTypes.string,
+  max: PropTypes.string,
+  step: PropTypes.string,
+  defaultValue: PropTypes.string,
 };
 
 export default Input;
