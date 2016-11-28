@@ -11,6 +11,7 @@ import ReactAvatarEditor from 'react-avatar-editor';
 import classNames from 'classnames';
 import FileUpload from './FileUpload';
 import './styles.less';
+import defaultImage from 'assets/images/Default-User-Img-Dr.png';
 
 @reduxForm(
   {
@@ -35,19 +36,34 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
       borderRadius: 0,
       preview: null,
       selectedImage: null,
+      isDragOver: false,
     };
 
     this.handleSave = this.handleSave.bind(this);
     this.handleScale = this.handleScale.bind(this);
     this.handleBorderRadius = this.handleBorderRadius.bind(this);
     this.handleFileChange = this.handleFileChange.bind(this);
+    this.useDefaultImage = this.useDefaultImage.bind(this);
+    this.onDragEnterHandler = this.onDragEnterHandler.bind(this);
+    this.onDragLeaveHandler = this.onDragLeaveHandler.bind(this);
+  }
+
+  onDragEnterHandler() {
+    this.setState({ isDragOver: true });
+  }
+
+  onDragLeaveHandler() {
+    this.setState({ isDragOver: false });
   }
 
   handleSave() {
-    const avatar = this.avatar;
-    const img = avatar.getImage().toDataURL();
-    const rect = avatar.getCroppingRect();
-    this.setState({ preview: img, croppingRect: rect });
+    if (this.state.selectedImage) {
+      const avatar = this.avatar;
+      const img = avatar.getImage().toDataURL();
+      const rect = avatar.getCroppingRect();
+      this.setState({ preview: img, croppingRect: rect });
+      this.props.handleSubmit(img);
+    }
   }
 
   handleScale() {
@@ -64,6 +80,10 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
 
   handleFileChange(img) {
     this.setState({ selectedImage: img });
+  }
+
+  useDefaultImage() {
+    this.setState({ selectedImage: defaultImage });
   }
 
   logCallback(e) {
@@ -107,8 +127,8 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
               defaultValue="1"
             />
           </div>
-          <div className={classNames('avatar-photo', { hidden: this.state.selectedImage })}>
-            <FileUpload id="avatar_file" handleFileChange={this.handleFileChange} />
+          <div className={classNames('avatar-photo', { hidden: this.state.selectedImage }, { dragover: this.state.isDragOver })}>
+            <FileUpload id="avatar_file" handleFileChange={this.handleFileChange} handleDragEnter={this.onDragEnterHandler} handleDragLeave={this.onDragLeaveHandler} />
             <div className="info">
               <i className="icomoon-arrow_up_alt"></i>
               <span className="text">Drag and drop <br /> image here</span>
@@ -120,14 +140,12 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
               <label htmlFor="avatar_file" data-text="Browse" data-hover-text="Browse" className="btn btn-gray upload-btn" />
             </div>
           </div>
+          <div className="field-row text-center">
+            <a href="#" className="link" onClick={this.useDefaultImage}>Use Default Image</a>
+          </div>
           <div className="text-right">
             <input type="button" className="btn btn-default" onClick={this.handleSave} value="submit" />
           </div>
-          <img
-            src={this.state.preview}
-            style={{ borderRadius: this.state.borderRadius + 5 }}
-            alt=""
-          />
         </div>
       </form>
     );

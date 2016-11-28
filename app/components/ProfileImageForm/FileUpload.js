@@ -2,14 +2,26 @@ import React, { Component, PropTypes } from 'react';
 
 export default class FileUpload extends Component {
   static propTypes = {
-    handleFileChange: PropTypes.func,
     id: PropTypes.string,
+    handleFileChange: PropTypes.func,
+    handleDragEnter: PropTypes.func,
+    handleDragLeave: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
     this.handleFile = this.handleFile.bind(this);
     this.onFileLoad = this.onFileLoad.bind(this);
+    this.onDragEnterHandler = this.onDragEnterHandler.bind(this);
+    this.onDragLeaveHandler = this.onDragLeaveHandler.bind(this);
+  }
+
+  onDragEnterHandler() {
+    this.props.handleDragEnter();
+  }
+
+  onDragLeaveHandler() {
+    this.props.handleDragLeave();
   }
 
   onFileLoad(img) {
@@ -38,6 +50,8 @@ export default class FileUpload extends Component {
         type="file"
         accept="image/*"
         onChange={this.handleFile}
+        onDragEnter={this.onDragEnterHandler}
+        onDragLeave={this.onDragLeaveHandler}
       />
     );
   }
