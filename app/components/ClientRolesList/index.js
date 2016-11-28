@@ -99,18 +99,22 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
                   </tbody>
                 </table>
               </div>
-              <Modal className="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
+              <Modal className="edit-user" id="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
                 <Modal.Header closeButton>
                   <Modal.Title>Edit User</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <EditUserForm
-                    initialValues={selectedUserDetailsForForm}
-                    siteOptions={siteOptions}
-                    deleting={deletedClientRole.deleting}
-                    onDelete={this.deleteClientRole}
-                    onSubmit={this.updateUser}
-                  />
+                  <div className="holder clearfix">
+                    <div className="form-lightbox">
+                      <EditUserForm
+                        initialValues={selectedUserDetailsForForm}
+                        siteOptions={siteOptions}
+                        deleting={deletedClientRole.deleting}
+                        onDelete={this.deleteClientRole}
+                        onSubmit={this.updateUser}
+                      />
+                    </div>
+                  </div>
                 </Modal.Body>
               </Modal>
             </div>

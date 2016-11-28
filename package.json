@@ -165,6 +165,7 @@
     "react-router-scroll": "0.2.1",
     "react-scroll": "^1.4.4",
     "react-select": "^1.0.0-rc.2",
+    "react-sound": "^0.5.2",
     "react-sticky": "^5.0.5",
     "react-toggle-button": "^2.1.0",
     "redux": "3.5.2",

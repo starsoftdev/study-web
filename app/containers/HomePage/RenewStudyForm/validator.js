@@ -6,7 +6,7 @@ const schema = {
   condenseToTwoWeeks: { presence: false },
   patientMessagingSuite: { presence: false },
   callTracking: { presence: false },
-  startDate: { presence: true },
+  startDate: { presence: false },
   notes: { presence: false },
 };
 
