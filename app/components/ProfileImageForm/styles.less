@@ -38,6 +38,13 @@
 		}
 	}
 
+	.avatar-photo.dragover {
+		border: dotted 2px #ccc;
+		.info {
+			color: #76daff;
+		}
+	}
+
 	.avatar-editor {
 		margin-bottom: 15px;
 	}
@@ -47,13 +54,22 @@
 	}
 
 	.icomoon-arrow_up_alt {
-	  display: block;
+	  	display: block;
 	}
 	.icomoon-arrow_up_alt {
-	  font-size: 40px;
-	  margin: 0 0 5px;
-	  transform: rotate(180deg);
-	  -ms-transform: rotate(180deg);
+	  	font-size: 40px;
+	  	margin: 0 0 5px;
+	  	transform: rotate(180deg);
+	  z-indexms-transform: rotate(180deg);
+	}
+
+	a {
+		color: #00afef;
+		text-decoration: none;
+		&:hover {
+			color: #76daff;
+			text-decoration: underline;
+		}
 	}
 }
 

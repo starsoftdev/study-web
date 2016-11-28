@@ -30,7 +30,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     this.closeResetPasswordModal = this.closeResetPasswordModal.bind(this);
     this.openProfileImageModal = this.openProfileImageModal.bind(this);
     this.closeProfileImageModal = this.closeProfileImageModal.bind(this);
-    this.uploadFile = this.uploadFile.bind(this);
+    this.uploadImage = this.uploadImage.bind(this);
 
     this.state = {
       passwordResetModalOpen: false,
@@ -60,10 +60,9 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     this.setState({ profileImageModalOpen: false });
   }
 
-  uploadFile(e) {
-    if (e.target.files[0]) {
-      this.props.changeImage({ file: e.target.files[0], user_id: this.props.currentUser.id });
-    }
+  uploadImage(e) {
+    this.props.changeImage({ imageData: e, user_id: this.props.currentUser.id });
+    this.closeProfileImageModal();
   }
 
   render() {
@@ -159,7 +158,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
             </a>
           </Modal.Header>
           <Modal.Body>
-            <ProfileImageForm {...initialValues} onSubmit={this.props.changePassword} />
+            <ProfileImageForm {...initialValues} handleSubmit={this.uploadImage} />
           </Modal.Body>
         </Modal>
 
