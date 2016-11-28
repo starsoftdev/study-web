@@ -29,6 +29,8 @@ export const getRedirectionUrl = (notification) => {
       return `/order-irb-ad-creation/${data.irb_ad_creation_id}`;
     case 'create-proposal':
       return `/request-proposal/${data.proposal_id}`;
+    case 'update-patientCategory':
+      return `/studies/`;
     default:
       return '/';
   }
