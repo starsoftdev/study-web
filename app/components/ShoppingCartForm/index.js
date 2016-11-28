@@ -216,8 +216,8 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                 <table className="table-summary">
                   <colgroup>
                     <col style={{ width: '44.2%' }} />
-                    <col style={{ width: '17.6%' }} />
-                    <col style={{ width: '23.6%' }} />
+                    <col style={{ width: '22.6%' }} />
+                    <col style={{ width: '13.6%' }} />
                     <col style={{ width: 'auto' }} />
                   </colgroup>
                   <thead>

@@ -14,7 +14,7 @@ class CenteredModal extends React.Component {
      */
     bsClass: React.PropTypes.string.isRequired,
     className: React.PropTypes.string,
-    children: React.PropTypes.array.isRequired,
+    children: React.PropTypes.any.isRequired,
     dialogClassName: React.PropTypes.string,
     style: React.PropTypes.object,
   };
