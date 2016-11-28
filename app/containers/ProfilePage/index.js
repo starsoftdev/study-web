@@ -12,6 +12,7 @@ import { selectChangePasswordResult, selectOtherUser } from 'containers/ProfileP
 import { selectCurrentUser } from 'containers/App/selectors';
 import { changePassword, changeImage, fetchOtherUser } from 'containers/ProfilePage/actions';
 import { createStructuredSelector } from 'reselect';
+import Helmet from 'react-helmet';
 
 export class ProfilePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -43,6 +44,7 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
 
     return (
       <div className="container-fluid">
+        <Helmet title="Profile - StudyKIK" />
         <section className="study-portal">
 
           <h2 className="main-heading">PROFILE</h2>

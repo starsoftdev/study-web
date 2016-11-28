@@ -124,7 +124,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
 
         <div className="field-row">
           <strong className="label"><label>PASSWORD</label></strong>
-          <a className="btn btn-primary lightbox-opener" onClick={this.openResetPasswordModal} disabled={!me}>EDIT</a>
+          <a className="btn btn-primary lightbox-opener profile-page-edit-password-btn" onClick={this.openResetPasswordModal} disabled={!me}>EDIT</a>
         </div>
 
 
