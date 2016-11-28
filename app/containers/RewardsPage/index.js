@@ -43,7 +43,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     fetchClientSites: PropTypes.func,
     fetchRewards: PropTypes.func,
     onSubmitForm: PropTypes.func,
-  }
+  };
 
   constructor(props) {
     super(props);
