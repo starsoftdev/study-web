@@ -59,10 +59,7 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
   handleSave() {
     if (this.state.selectedImage) {
       const avatar = this.avatar;
-      const img = avatar.getImage().toDataURL();
-      const rect = avatar.getCroppingRect();
-      this.setState({ preview: img, croppingRect: rect });
-      this.props.handleSubmit(img);
+      this.props.handleSubmit(avatar.getImage());
     }
   }
 

@@ -55,7 +55,7 @@ export function* changeImage() {
     try {
       const requestURL = `${API_URL}/users/change-profile-image`;
       const data = new FormData();
-      data.append('imageData', payload.imageData);
+      data.append('file', payload.file);
       data.append('user_id', payload.user_id);
 
       const params = {
