@@ -163,8 +163,9 @@ class OtherSection extends React.Component {
           <Button bsStyle="primary" onClick={this.onReset}>Cancel</Button>
           <Button type="submit" disabled={submitting || loading}>Update</Button>
         </div>
-      )
+      );
     }
+    return null;
   }
 
   render() {

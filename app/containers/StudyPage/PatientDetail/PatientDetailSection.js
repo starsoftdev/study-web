@@ -32,7 +32,7 @@ class PatientDetailSection extends React.Component {
     submitPatientUpdate: React.PropTypes.func.isRequired,
     formSyncErrors: React.PropTypes.object,
     formValues: React.PropTypes.object,
-    formDidChange: React.PropTypes.bool
+    formDidChange: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -74,6 +74,7 @@ class PatientDetailSection extends React.Component {
         </div>
       );
     }
+    return null;
   }
 
   render() {
@@ -160,7 +161,7 @@ class PatientDetailSection extends React.Component {
 const mapStateToProps = createStructuredSelector({
   formSyncErrors: selectSyncErrors(formName),
   formValues: selectValues(formName),
-  formDidChange: selectFormDidChange(formName)
+  formDidChange: selectFormDidChange(formName),
 });
 
 const mapDispatchToProps = (dispatch) => ({
