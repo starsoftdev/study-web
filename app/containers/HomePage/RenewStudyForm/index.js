@@ -55,7 +55,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
             <div className="field">
               <Field
                 name="exposureLevel"
-                className="with-loader"
+                className="with-loader-disabled-for-now"
                 component={ReactSelect}
                 placeholder="Select..."
                 options={studyLevels}
@@ -63,7 +63,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
               />
               {selectedIndicationLevelPrice.fetching &&
                 (
-                <span>
+                <span className="hide">
                   <LoadingSpinner showOnlyIcon size={20} className="fetching-level-price" />
                 </span>
                 )
