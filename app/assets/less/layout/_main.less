@@ -489,6 +489,12 @@ input[type=text]:-ms-input-placeholder {
 				content: attr(data-hovertext);
 			}
 		}
+
+    @media screen and (max-width: @psd) {
+      &:before {
+        font-size: 16px;
+      }
+    }
 	}
 
 	sub {
@@ -545,7 +551,7 @@ input[type=text]:-ms-input-placeholder {
 		}
 
 		.number {
-			font-size: 32px;
+			font-size: 26px;
 		}
 
 		.icomoon-icon_chat_alt {

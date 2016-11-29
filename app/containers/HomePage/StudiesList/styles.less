@@ -18,28 +18,38 @@
       width: 5%;
     }
     .indication {
-      width: 15%;
+      width: 14%;
     }
     .location {
-      width: 16%;
+      width: 15%;
     }
     .sponsor {
-      width: 16%;
+      width: 15%;
     }
     .protocol {
-      width: 13%;
+      width: 12%;
     }
     .patient-messaging-suite {
       width: 7%;
+      color: #a0cf67;
+
+      &.off {
+        color: #f78e1e;
+      }
     }
     .status {
       width: 8%;
+      color: #a0cf67;
+
+      &.inactive {
+        color: #f78e1e;
+      }
     }
     .start-date {
-      width: 10%;
+      width: 12%;
     }
     .end-date {
-      width: 10%;
+      width: 12%;
     }
     &.tr-inactive {
       .protocol,
@@ -53,19 +63,27 @@
       }
       .btns-slide {
         opacity: 0;
+        height: 0;
         .btns {
           left: 0;
           width: 0;
         }
       }
+      .end-date {
+        padding: 20px 13px;
+      }
     }
     &.tr-active {
       .btns-slide {
+        height: 36px;
         opacity: 1;
         .btns {
           left: -480px;
           width: 480px;
         }
+      }
+      .end-date {
+        padding: 15px 13px;
       }
       .status,
       .start-date,
