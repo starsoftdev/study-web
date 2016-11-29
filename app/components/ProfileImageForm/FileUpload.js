@@ -34,7 +34,7 @@ export default class FileUpload extends Component {
     const reader = new FileReader();
     const file = e.target.files[0];
 
-    if (!file) return;
+    if (!file || file.type.indexOf('image/') === -1) return;
 
     reader.onload = this.onFileLoad;
     reader.readAsDataURL(file);

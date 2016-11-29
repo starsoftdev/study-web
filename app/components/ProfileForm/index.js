@@ -61,8 +61,10 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
   }
 
   uploadImage(e) {
-    this.props.changeImage({ imageData: e, user_id: this.props.currentUser.id });
-    this.closeProfileImageModal();
+    e.toBlob((blob) => {
+      this.props.changeImage({ file: blob, user_id: this.props.currentUser.id });
+      this.closeProfileImageModal();
+    });
   }
 
   render() {
