@@ -3,7 +3,7 @@
  */
 
 import { createSelector } from 'reselect';
-import { get } from 'lodash';
+import { get, isEqual } from 'lodash';
 
 /**
  * Form selector to the form state domain
@@ -26,4 +26,13 @@ export const selectValues = (formName) => createSelector(
 export const selectSyncErrors = (formName) => createSelector(
   selectFormDomain(),
   (substate) => get(substate, `${formName}.syncErrors`, {})
+);
+
+export const selectFormDidChange = (formName) => createSelector(
+  selectFormDomain(),
+  (substate) => {
+    let initial = get(substate, `${formName}.initial`, {});
+    let current = get(substate, `${formName}.values`, {});
+    return !isEqual(initial, current);
+  }
 );
