@@ -186,7 +186,7 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
               <label htmlFor="avatar_file" data-text="Browse" data-hover-text="Browse" className="btn btn-gray upload-btn" />
             </div>
           </div>
-          <div className="field-row text-center">
+          <div className="field-row">
             <a href="#" className="link" onClick={this.useDefaultImage}>Use Default Image</a>
           </div>
           <div className="text-right">
