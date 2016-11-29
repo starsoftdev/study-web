@@ -71,7 +71,7 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
   handleCropLoad(e) {
     const rootElement = this.rootElement;
     const ctx = rootElement.getContext('2d');
-    ctx.drawImage(e.path[0], 0, 0, 400, 400);
+    ctx.drawImage(e.target, 0, 0, 400, 400);
     this.props.handleSubmit(rootElement);
   }
 

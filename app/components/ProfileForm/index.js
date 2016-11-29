@@ -12,6 +12,7 @@ import ChangePasswordForm from 'components/ChangePasswordForm';
 import ProfileImageForm from 'components/ProfileImageForm';
 import defaultImage from 'assets/images/Default-User-Img-Dr.png';
 import './styles.less';
+import 'blueimp-canvas-to-blob';
 import CenteredModal from 'components/CenteredModal/index';
 
 @reduxForm({ form: 'profile' })
