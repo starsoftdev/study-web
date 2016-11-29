@@ -11,7 +11,7 @@ import ReactAvatarEditor from 'react-avatar-editor';
 import classNames from 'classnames';
 import FileUpload from './FileUpload';
 import './styles.less';
-import defaultImage from 'assets/images/Default-User-Img-Dr.png';
+import defaultImage from 'assets/images/Default-User-Img-Dr-Full.png';
 
 @reduxForm(
   {
@@ -37,6 +37,7 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
       preview: null,
       selectedImage: null,
       isDragOver: false,
+      usingDefaultImage: false,
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -46,6 +47,17 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
     this.useDefaultImage = this.useDefaultImage.bind(this);
     this.onDragEnterHandler = this.onDragEnterHandler.bind(this);
     this.onDragLeaveHandler = this.onDragLeaveHandler.bind(this);
+    this.handleLoadSuccess = this.handleLoadSuccess.bind(this);
+    this.redraw = this.redraw.bind(this);
+    this.handleCropLoad = this.handleCropLoad.bind(this);
+  }
+
+  componentDidMount() {
+    this.redraw();
+  }
+
+  componentDidUpdate() {
+    this.redraw();
   }
 
   onDragEnterHandler() {
@@ -56,13 +68,33 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
     this.setState({ isDragOver: false });
   }
 
+  handleCropLoad(e) {
+    const rootElement = this.rootElement;
+    const ctx = rootElement.getContext('2d');
+    ctx.drawImage(e.path[0], 0, 0, 400, 400);
+    this.props.handleSubmit(rootElement);
+  }
+
+  redraw() {
+    const img = new Image();
+    img.src = this.state.preview;
+    img.onload = this.handleCropLoad;
+  }
+
+  handleLoadSuccess() {
+    if (this.state.usingDefaultImage === true) {
+      this.handleSave();
+      this.setState({ usingDefaultImage: false });
+    }
+  }
+
   handleSave() {
     if (this.state.selectedImage) {
       const avatar = this.avatar;
       const img = avatar.getImage().toDataURL();
       const rect = avatar.getCroppingRect();
       this.setState({ preview: img, croppingRect: rect });
-      this.props.handleSubmit(img);
+      // this.props.handleSubmit(avatar.getImage());
     }
   }
 
@@ -79,11 +111,12 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
   }
 
   handleFileChange(img) {
+    // console.log(img);
     this.setState({ selectedImage: img });
   }
 
   useDefaultImage() {
-    this.setState({ selectedImage: defaultImage });
+    this.setState({ selectedImage: defaultImage, usingDefaultImage: true });
   }
 
   logCallback(e) {
@@ -106,7 +139,7 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
               borderRadius={this.state.borderRadius}
               onSave={this.handleSave}
               onLoadFailure={this.logCallback}
-              onLoadSuccess={this.logCallback}
+              onLoadSuccess={this.handleLoadSuccess}
               onImageReady={this.logCallback}
               onImageLoad={this.logCallback}
               onDropFile={this.logCallback}
@@ -134,6 +167,19 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
               <span className="text">Drag and drop <br /> image here</span>
             </div>
           </div>
+
+          {this.state.croppingRect ? // display only if there is a cropping rect
+            <canvas
+              ref={(rootElement) => {
+                this.rootElement = rootElement;
+              }}
+              style={{ margin: '10px 24px 32px', padding: 5, border: '1px solid #CCC', display: 'none' }}
+              width={400}
+              height={400}
+            />
+            :
+            null
+          }
           <div className="field-row">
             <strong className="label required"><label htmlFor="clinicaltrialGovLink">Upload Image</label></strong>
             <div className="field">
