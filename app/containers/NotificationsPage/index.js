@@ -30,7 +30,7 @@ export const getRedirectionUrl = (notification) => {
     case 'create-proposal':
       return `/request-proposal/${data.proposal_id}`;
     case 'update-patientCategory':
-      return `/studies/`;
+      return '/studies/';
     default:
       return '/';
   }
