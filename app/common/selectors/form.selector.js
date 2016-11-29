@@ -31,8 +31,8 @@ export const selectSyncErrors = (formName) => createSelector(
 export const selectFormDidChange = (formName) => createSelector(
   selectFormDomain(),
   (substate) => {
-    let initial = get(substate, `${formName}.initial`, {});
-    let current = get(substate, `${formName}.values`, {});
+    const initial = get(substate, `${formName}.initial`, {});
+    const current = get(substate, `${formName}.values`, {});
     return !isEqual(initial, current);
   }
 );
