@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import _, { map, omit } from 'lodash';
+import moment from 'moment-timezone';
 
 import Checkbox from '../../../components/Input/Checkbox';
 import CenteredModal from '../../../components/CenteredModal/index';
@@ -162,9 +163,13 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     const chatModalShown = this.chatModalShouldBeShown();
     if (selectedPatientDetailsForForm) {
       selectedPatientDetailsForForm.phone = normalizePhoneDisplay(selectedPatientDetailsForForm.phone);
+      if (selectedPatientDetailsForForm.dob) {
+        const dob = moment(selectedPatientDetailsForForm.dob);
+        selectedPatientDetailsForForm.dobMonth = dob.month();
+        selectedPatientDetailsForForm.dobDay = dob.day();
+        selectedPatientDetailsForForm.dobYear = dob.year();
+      }
     }
-
-
     return (
       <div className="patient-database-fixed-table-wrapper">
         <StickyContainer className="table-holder fixed-table">
