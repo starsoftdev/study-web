@@ -20,7 +20,7 @@ import { selectValues, selectSyncErrors, selectFormDidChange } from '../../../co
 import { submitAddPatientIndication, submitRemovePatientIndication, submitPatientUpdate } from '../actions';
 import IndicationOverlay from './IndicationOverlay';
 import formValidator from './otherValidator';
-import DateOfBirthPicker from './DateOfBirthPicker';
+import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
 
 const formName = 'PatientDetailModal.Other';
 
@@ -169,32 +169,8 @@ class OtherSection extends React.Component {
   }
 
   render() {
-    const { active, currentUser, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, loading, submitting, submitAddPatientIndication, submitPatientUpdate } = this.props;
+    const { active, currentUser, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, loading, submitting, submitAddPatientIndication } = this.props;
     if (initialValues) {
-      const now = moment();
-      const monthOptions = moment.monthsShort();
-      for (let index = 0; index < 12; index++) {
-        const month = monthOptions[index];
-        monthOptions[index] = {
-          label: month,
-          value: index + 1,
-        };
-      }
-      const dayOptions = [];
-      for (let day = 1; day < 32; day++) {
-        dayOptions.push({
-          label: day,
-          value: day,
-        });
-      }
-      const nowYear = now.year();
-      const yearOptions = [];
-      for (let year = nowYear; year > 1900; year--) {
-        yearOptions.push({
-          label: year,
-          value: year,
-        });
-      }
       return (
         <div className={classNames('item others', { active })}>
           <div className="item-holder">
@@ -249,16 +225,11 @@ class OtherSection extends React.Component {
               <div className="fields-holder">
                 <strong className="title">Other Information</strong>
                 <DateOfBirthPicker
-                  dayOptions={dayOptions}
-                  monthOptions={monthOptions}
-                  yearOptions={yearOptions}
                   loading={loading}
                   submitting={submitting}
-                  initialValues={initialValues}
                   dobDay={dobDay}
                   dobMonth={dobMonth}
                   dobYear={dobYear}
-                  submitPatientUpdate={submitPatientUpdate}
                 />
                 {this.renderGender()}
                 <div className="field-row">
