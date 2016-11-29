@@ -104,7 +104,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <span>{patientMessagingSuite}</span>
           <span>{messageCountContent}</span>
         </td>
-        <td className="status">
+        <td className={classNames('status', { inactive: (status === 'Inactive') })}>
           <span>{status}</span>
         </td>
         <td className="start-date">

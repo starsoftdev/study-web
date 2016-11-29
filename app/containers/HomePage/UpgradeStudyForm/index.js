@@ -53,7 +53,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
             <div className="field">
               <Field
                 name="level"
-                className="with-loader"
+                className="with-loader-disabled-for-now"
                 component={ReactSelect}
                 placeholder="Select..."
                 options={studyLevels}
@@ -61,7 +61,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
               />
               {selectedIndicationLevelPrice.fetching &&
                 (
-                <span>
+                <span className="hide">
                   <LoadingSpinner showOnlyIcon size={20} className="fetching-level-price" />
                 </span>
                 )
