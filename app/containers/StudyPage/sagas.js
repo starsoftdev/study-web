@@ -299,6 +299,17 @@ function* fetchPatientDetails() {
             ],
           },
         },
+        {
+          relation: 'callRecords',
+          scope: {
+            fields: ['id', 'note', 'createdAt', 'call_record_id', 'user_id'],
+            include: [
+              {
+                relation: 'twilioCallRecord',
+              },
+            ],
+          },
+        },
       ],
     });
     try {

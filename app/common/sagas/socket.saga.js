@@ -133,7 +133,7 @@ export function* fetchStudyPatientMessages() {
     try {
       yield put(setProcessingStatus({ status: true }));
       socket.emit('getStudyPatientMessages', { studyId: payload.studyId, patientId: payload.patientId }, (err, data) => {
-        payload.cb(err, data);
+        payload.cb(err, { messages: data });
       });
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
