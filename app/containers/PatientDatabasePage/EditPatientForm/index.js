@@ -13,6 +13,7 @@ import { selectPatientCategories, selectSavedPatient } from 'containers/PatientD
 import { selectIndications, selectSources } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
+import Checkbox from '../../../components/Input/Checkbox';
 
 const mapStateToProps = createStructuredSelector({
   indications: selectIndications(),
@@ -191,6 +192,18 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             options={sourceOptions}
             disabled={savedPatient.saving}
           />
+        </div>
+        <div className="field-row">
+          <strong className="label" />
+          <div className="field">
+            <Field
+              name="unsubscribed"
+              type="checkbox"
+              component={Checkbox}
+              className="pull-left"
+            />
+            <label htmlFor="unsubscribed">Unsubscribe</label>
+          </div>
         </div>
         <div className="btn-block text-right">
           <Button type="submit" className="btn-add-row" disabled={hasError || savedPatient.saving}>
