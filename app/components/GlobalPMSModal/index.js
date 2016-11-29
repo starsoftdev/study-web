@@ -18,6 +18,7 @@ import {
 } from 'containers/App/selectors';
 
 import MessageItem from './MessageItem';
+import CallItem from './CallItem';
 import PatientItem from './PatientItem';
 
 import ChatForm from './ChatForm';
@@ -151,12 +152,18 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         patientSelected={this.state.selectedPatient.id === item.id}
       />
     ));
-    const patientMessageListContents = patientMessages.details.map((item, index) => (
-      <MessageItem
+    const patientMessageListContents = patientMessages.details.map((item, index) => {
+      if (item.text_message_id) {
+        return (<MessageItem
+          messageData={item}
+          key={index}
+        />);
+      }
+      return (<CallItem
         messageData={item}
         key={index}
-      />
-    ));
+      />);
+    });
 
     let protocolNumber = '';
     if (this.state.selectedPatient.protocol_number) {

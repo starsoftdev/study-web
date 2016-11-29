@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import { submitPatientText, readStudyPatientMessages } from '../actions';
+import CallItem from 'components/GlobalPMSModal/CallItem';
 
 import {
   sendStudyPatientMessages,
@@ -132,14 +133,21 @@ class TextSection extends React.Component {
             this.scrollable = scrollable;
           }}
         >
-          {twilioMessages.map(twilioMessage => (
-            <PatientText
-              key={twilioMessage.id}
-              currentPatient={currentPatient}
-              currentUser={currentUser}
-              textMessage={twilioMessage.twilioTextMessage}
-            />
-          ))}
+          {twilioMessages.map((twilioMessage, index) => {
+            if (twilioMessage.text_message_id) {
+              return (<PatientText
+                key={index}
+                currentPatient={currentPatient}
+                currentUser={currentUser}
+                textMessage={twilioMessage.twilioTextMessage}
+              />);
+            }
+            return (<CallItem
+              messageData={twilioMessage}
+              key={index}
+              postMsg
+            />);
+          })}
         </section>
       );
     }
