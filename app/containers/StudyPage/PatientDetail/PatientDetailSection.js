@@ -13,7 +13,7 @@ import Input from '../../../components/Input/index';
 import { submitPatientUpdate } from '../actions';
 import formValidator from './detailValidator';
 import { normalizePhone, normalizePhoneDisplay } from '../helper/functions';
-import { selectSyncErrors, selectValues } from '../../../common/selectors/form.selector';
+import { selectSyncErrors, selectValues, selectFormDidChange } from '../../../common/selectors/form.selector';
 import { createStructuredSelector } from 'reselect';
 
 const formName = 'PatientDetailModal.Detail';
@@ -21,6 +21,7 @@ const formName = 'PatientDetailModal.Detail';
 @reduxForm({
   form: formName,
   validate: formValidator,
+  enableReinitialize: true,
 })
 class PatientDetailSection extends React.Component {
   static propTypes = {
@@ -31,6 +32,7 @@ class PatientDetailSection extends React.Component {
     submitPatientUpdate: React.PropTypes.func.isRequired,
     formSyncErrors: React.PropTypes.object,
     formValues: React.PropTypes.object,
+    formDidChange: React.PropTypes.bool
   };
 
   constructor(props) {
@@ -46,7 +48,7 @@ class PatientDetailSection extends React.Component {
 
   onSubmit(event) {
     event.preventDefault();
-    const { blur, formSyncErrors, formValues, initialValues, submitPatientUpdate } = this.props;
+    const { blur, formSyncErrors, formValues, initialValues, reset, submitPatientUpdate } = this.props;
     if (!formSyncErrors.firstName && !formSyncErrors.lastName && !formSyncErrors.email && !formSyncErrors.phone) {
       const formattedPhoneNumber = normalizePhoneDisplay(formValues.phone);
       blur('phone', formattedPhoneNumber);
@@ -58,6 +60,19 @@ class PatientDetailSection extends React.Component {
         phone: phoneNumber,
         unsubscribed: formValues.unsubscribed,
       });
+    }
+    reset(formName);
+  }
+
+  renderUpdateButtons() {
+    const { formDidChange } = this.props;
+    if (formDidChange) {
+      return (
+        <div className="pull-right">
+          <Button bsStyle="primary" onClick={this.onReset}>Cancel</Button>
+          <Button type="submit">Update</Button>
+        </div>
+      );
     }
   }
 
@@ -135,10 +150,7 @@ class PatientDetailSection extends React.Component {
             <label htmlFor="unsubscribed">Unsubscribe</label>
           </div>
         </div>
-        <div className="pull-right">
-          <Button bsStyle="primary" onClick={this.onReset}>Cancel</Button>
-          <Button type="submit">Update</Button>
-        </div>
+        {this.renderUpdateButtons()}
         <div className="clearfix" />
       </Form>
     );
@@ -148,6 +160,7 @@ class PatientDetailSection extends React.Component {
 const mapStateToProps = createStructuredSelector({
   formSyncErrors: selectSyncErrors(formName),
   formValues: selectValues(formName),
+  formDidChange: selectFormDidChange(formName)
 });
 
 const mapDispatchToProps = (dispatch) => ({
