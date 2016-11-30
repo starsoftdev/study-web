@@ -32,7 +32,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
     this.state = {
       quantity: 1,
       credits: 100,
-      price: `$ ${77}`,
+      price: 7700,
     };
   }
 
@@ -47,7 +47,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
       this.setState({
         quantity: this.state.quantity + 1,
         credits: (this.state.quantity + 1) * 100,
-        price: `$ ${(this.state.quantity + 1) * 77}`,
+        price: (this.state.quantity + 1) * 7700,
       });
     }
   }
@@ -57,13 +57,14 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
       this.setState({
         quantity: this.state.quantity - 1,
         credits: (this.state.quantity - 1) * 100,
-        price: `$ ${(this.state.quantity - 1) * 77}`,
+        price: (this.state.quantity - 1) * 7700,
       });
     }
   }
 
   addCreditsSubmit(cartValues) {
     const data = {
+      quantity: this.state.quantity,
       totalAmount: cartValues.total,
       cardId: cartValues.creditCard,
     };
@@ -74,10 +75,10 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
   render() {
     const products = [
       {
-        title: 'Buy Credits',
+        title: '100 Credits',
         quantity: parseFloat(this.state.credits),
-        price: parseFloat(this.state.price.replace('$', '')),
-        total: parseFloat(this.state.price.replace('$', '')),
+        price: this.state.price,
+        total: this.state.price,
       },
     ];
     return (
@@ -109,7 +110,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
 
                         <div className="field-row">
                           <strong className="label"><label htmlFor="credits">CREDITS</label></strong>
-                          <div className="field">
+                          <div className="field"> ``
                             <input className="form-control" value={this.state.credits} type="text" name="credits" disabled />
                           </div>
                         </div>
@@ -117,7 +118,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
                         <div className="field-row">
                           <strong className="label"><label htmlFor="price">PRICE</label></strong>
                           <div className="field">
-                            <input className="form-control" value={this.state.price} type="text" name="price" disabled />
+                            <input className="form-control" value={`$ ${this.state.price / 100}`} type="text" name="price" disabled />
                           </div>
                         </div>
                       </div>
@@ -126,7 +127,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
                 </div>
 
                 <div className="pull-left col">
-                  <ShoppingCartForm showCards onSubmit={this.addCreditsSubmit} addOns={products} />
+                  <ShoppingCartForm showCards noBorder onSubmit={this.addCreditsSubmit} addOns={products} />
                 </div>
               </div>
 

@@ -9,6 +9,7 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 
 import Input from 'components/Input';
+import ReactSelect from 'components/Input/ReactSelect';
 import referFormValidator from './validator';
 
 @reduxForm({ form: 'refer', validate: referFormValidator })
@@ -25,9 +26,8 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
   render() {
     const { error, handleSubmit, pristine, reset, submitting } = this.props; // eslint-disable-line
     const { companyTypes } = this.props;
-
     return (
-      <form onSubmit={handleSubmit} className="form-study">
+      <form onSubmit={handleSubmit}>
         <div className="form-fields">
 
           <div className="field-row">
@@ -76,17 +76,11 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
             <strong className="label required"><label>CONTACT COMPANY TYPE</label></strong>
             <Field
               name="companyType"
-              component={Input}
-              componentClass="select"
+              component={ReactSelect}
+              placeholder="Select Company Type"
+              options={companyTypes}
               className="field"
-            >
-              <option value="">Select Company Type</option>
-              {
-                companyTypes.map((type, index) => (
-                  <option value={type} key={index}>{type}</option>
-                ))
-              }
-            </Field>
+            />
           </div>
 
           <div className="field-row textarea">

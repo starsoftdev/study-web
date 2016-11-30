@@ -230,6 +230,23 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/badges',
+      name: 'badgesPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/BadgesPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([component]) => {
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/list-new-study',
       name: 'listNewStudyPage',
       getComponent(nextState, cb) {
@@ -243,6 +260,27 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('listNewStudyPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/rewards',
+      name: 'rewardsPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/RewardsPage/reducer'),
+          System.import('containers/RewardsPage/sagas'),
+          System.import('containers/RewardsPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('rewardsPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });

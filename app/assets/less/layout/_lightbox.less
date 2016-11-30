@@ -317,11 +317,9 @@ input:focus {
 	}
 
 	.btn {
-		padding: 0 10px;
+		padding: 0 12px;
 		line-height: 36px;
-		min-height: 40px;
-		min-width: 108px;
-		margin: 0 0 0 6px;
+		margin: 0 0 0 10px;
 	}
 }
 
@@ -517,8 +515,54 @@ input:focus {
 
 /*	renew-study and upgrade-study */
 #add-credits,
+#edit-study,
 #upgrade-study,
 #renew-study {
+
+  .modal-content {
+    max-width: none !important;
+
+    .modal-body {
+      overflow: hidden;
+
+      .form-upgrade-study,
+      .form-renew-study {
+        .with-loader {
+          width: calc(~'100% - 20px');
+          display: inline-block;
+          vertical-align: middle;
+        }
+        .lead-item {
+          position: relative;
+          margin: 0 !important;
+          width: 100%;
+          overflow: visible;
+          display: inline-block;
+
+          .field-row {
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 15px;
+
+            span.label{
+              text-align: left;
+
+              label{
+                margin-left: 10px;
+              }
+            }
+          }
+        }
+
+        button.link-delete {
+          padding: 0;
+          left: inherit;
+          right: -10px;
+          top: 8px;
+        }
+      }
+    }
+  }
 
   .lightbox-content {
     max-width: 1100px;
@@ -536,7 +580,7 @@ input:focus {
 
     > .col {
       width: 50%;
-      max-height: 75vh;
+      max-height: 78vh;
     }
 
     .field-row {
@@ -573,7 +617,7 @@ input:focus {
 
     .custom-select,
     .field {
-      width: 62.2%;
+      width: 65.6%;
     }
 
     .link-delete {
@@ -582,7 +626,7 @@ input:focus {
   }
 
   .scroll {
-    max-height: 75vh;
+    max-height: 78vh;
     overflow-y: auto;
     overflow-x: hidden;
   }
@@ -601,6 +645,20 @@ input:focus {
       position: absolute;
       background: #f78e1e;
     }
+  }
+}
+
+#edit-study {
+  .form-study::before {
+    content: none;
+  }
+  .form-study {
+    strong.label {
+      vertical-align: top;
+    }
+  }
+  .btn-submit {
+    width: auto;
   }
 }
 

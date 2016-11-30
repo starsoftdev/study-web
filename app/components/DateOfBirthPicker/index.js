@@ -4,27 +4,47 @@
 
 import React from 'react';
 import { Field } from 'redux-form';
-import ReactSelect from '../../../components/Input/ReactSelect';
+import ReactSelect from '../Input/ReactSelect';
+import moment from 'moment-timezone';
 
 class DateOfBirthPicker extends React.Component {
   static propTypes = {
-    dayOptions: React.PropTypes.array.isRequired,
     dobMonth: React.PropTypes.number,
     dobDay: React.PropTypes.number,
     dobYear: React.PropTypes.number,
-    initialValues: React.PropTypes.object,
     loading: React.PropTypes.bool,
-    monthOptions: React.PropTypes.array.isRequired,
     submitting: React.PropTypes.bool,
-    submitPatientUpdate: React.PropTypes.func,
-    yearOptions: React.PropTypes.array.isRequired,
   };
 
   componentDidMount() {
   }
 
   render() {
-    const { dayOptions, loading, monthOptions, submitting, yearOptions } = this.props;
+    const { loading, submitting } = this.props;
+    const now = moment();
+    const monthOptions = moment.monthsShort();
+    for (let index = 0; index < 12; index++) {
+      const month = monthOptions[index];
+      monthOptions[index] = {
+        label: month,
+        value: index + 1,
+      };
+    }
+    const dayOptions = [];
+    for (let day = 1; day < 32; day++) {
+      dayOptions.push({
+        label: day,
+        value: day,
+      });
+    }
+    const nowYear = now.year();
+    const yearOptions = [];
+    for (let year = nowYear; year > 1900; year--) {
+      yearOptions.push({
+        label: year,
+        value: year,
+      });
+    }
     return (
       <div className="field-row">
         <strong className="label"><label htmlFor="patient-dob">Date of Birth</label></strong>

@@ -157,9 +157,9 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
       addOnsContent = addOns.map((product, index) => (
         <tr className="add-on" key={index}>
           <td>{product.title}</td>
-          <td><Money value={product.price} /></td>
-          <td>{product.quantity / 100}</td>
-          <td><Money value={product.total} className="price" /></td>
+          <td><Money value={product.price / 100} /></td>
+          <td>{product.quantity}</td>
+          <td><Money value={product.total / 100} className="price" /></td>
         </tr>
       ));
     }
@@ -215,17 +215,17 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
               <div className="table-holder">
                 <table className="table-summary">
                   <colgroup>
-                    <col style={{ width: '36.2%' }} />
-                    <col style={{ width: '19.6%' }} />
-                    <col style={{ width: '25.6%' }} />
+                    <col style={{ width: '44.2%' }} />
+                    <col style={{ width: '22.6%' }} />
+                    <col style={{ width: '13.6%' }} />
                     <col style={{ width: 'auto' }} />
                   </colgroup>
                   <thead>
                     <tr>
-                      <th>Product <i className="caret-arrow" /></th>
-                      <th>Price <i className="caret-arrow" /></th>
-                      <th>Quantity <i className="caret-arrow" /></th>
-                      <th>Total <i className="caret-arrow" /></th>
+                      <th>PRODUCT <i className="caret-arrow" /></th>
+                      <th>PRICE <i className="caret-arrow" /></th>
+                      <th>QTY <i className="caret-arrow" /></th>
+                      <th>TOTAL <i className="caret-arrow" /></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -254,7 +254,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
 
               <div className="total clearfix">
                 <span className="heading">Subtotal</span>
-                <Money value={subTotal} className="price subtotal-price" />
+                <Money value={subTotal / 100} className="price subtotal-price" />
               </div>
 
               <div className="total discount clearfix">
@@ -263,13 +263,13 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                   ? <span className="price">
                     <LoadingSpinner showOnlyIcon size={20} className="price" />
                   </span>
-                  : <Money value={discount} className="price discount-amount" />
+                  : <Money value={discount / 100} className="price discount-amount" />
                 }
               </div>
 
               <div className="total grand-total clearfix">
                 <strong className="heading">Total</strong>
-                <Money value={total} className="price total-price" />
+                <Money value={total / 100} className="price total-price" />
               </div>
 
               <div className="total hidden-value">

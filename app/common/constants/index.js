@@ -27,8 +27,8 @@ export const Currencies = {
   CAD: 'CAD',
 };
 
-export const MESSAGING_SUITE_PRICE = 247;
-export const CALL_TRACKING_PRICE = 247;
+export const MESSAGING_SUITE_PRICE = 24700;
+export const CALL_TRACKING_PRICE = 24700;
 
 export const MONTH_OPTIONS = [
   { label: 'Jan', value: 1 },

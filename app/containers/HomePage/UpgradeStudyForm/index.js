@@ -12,7 +12,6 @@ import { selectUpgradeStudyFormCallTrackingValue, selectUpgradeStudyFormLeadsCou
 import RenderLeads from './renderLeads';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
-import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   studyLevels: selectStudyLevels(),
@@ -46,46 +45,45 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
 
     return (
       <form className="form-upgrade-study">
-        <div className="upgrade-study">
-          <div className="row form-group">
-            <span className="required col-sm-5">
+        <div className="upgrade-study form-fields">
+          <div className="field-row">
+            <strong className="label required">
               <label>UPGRADE LEVEL</label>
-            </span>
-            <div className="field col-sm-6">
+            </strong>
+            <div className="field">
               <Field
                 name="level"
+                className="with-loader-disabled-for-now"
                 component={ReactSelect}
                 placeholder="Select..."
                 options={studyLevels}
                 disabled={selectedIndicationLevelPrice.fetching}
               />
-            </div>
-            <div className="field col-sm-1">
               {selectedIndicationLevelPrice.fetching &&
                 (
-                <span>
+                <span className="hide">
                   <LoadingSpinner showOnlyIcon size={20} className="fetching-level-price" />
                 </span>
                 )
               }
             </div>
           </div>
-          <div className="row form-group">
-            <span className="col-sm-5">
+          <div className="field-row">
+            <strong className="label">
               <label>PATIENT MESSAGING SUITE: $247</label>
-            </span>
-            <div className="field col-sm-7">
+            </strong>
+            <div className="field">
               <Field
                 name="patientMessagingSuite"
                 component={Toggle}
               />
             </div>
           </div>
-          <div className="row form-group">
-            <span className="col-sm-5">
+          <div className="field-row">
+            <strong className="label">
               <label>CALL TRACKING: $247</label>
-            </span>
-            <div className="field col-sm-7">
+            </strong>
+            <div className="field">
               <Field
                 name="callTracking"
                 component={Toggle}
@@ -95,11 +93,11 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
           {callTracking &&
             <FieldArray name="leads" component={RenderLeads} availPhoneNumbers={availPhoneNumbers} />
           }
-          <div className="row form-group">
-            <span className="col-sm-5">
+          <div className="field-row">
+            <strong className="label">
               <label>NOTES</label>
-            </span>
-            <div className="field col-sm-7">
+            </strong>
+            <div className="field">
               <Field
                 name="notes"
                 component={Input}

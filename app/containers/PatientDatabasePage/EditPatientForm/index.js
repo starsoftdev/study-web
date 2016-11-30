@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import { map } from 'lodash';
+import moment from 'moment-timezone';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 
@@ -13,8 +14,14 @@ import { selectPatientCategories, selectSavedPatient } from 'containers/PatientD
 import { selectIndications, selectSources } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
+import Checkbox from '../../../components/Input/Checkbox';
+import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
+import { selectValues } from '../../../common/selectors/form.selector';
+
+const formName = 'editPatient';
 
 const mapStateToProps = createStructuredSelector({
+  formValues: selectValues(formName),
   indications: selectIndications(),
   sources: selectSources(),
   patientCategories: selectPatientCategories(),
@@ -22,21 +29,40 @@ const mapStateToProps = createStructuredSelector({
   hasError: selectEditPatientFormError(),
 });
 
-@reduxForm({ form: 'editPatient', validate: formValidator })
+@reduxForm({ form: formName, validate: formValidator })
 @connect(mapStateToProps, null)
-
 class EditPatientForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     indications: PropTypes.array,
+    initialValues: PropTypes.object,
+    loading: React.PropTypes.bool,
+    submitting: React.PropTypes.bool,
+    formValues: React.PropTypes.object,
     sources: PropTypes.array,
     patientCategories: PropTypes.object,
     savedPatient: PropTypes.object,
     hasError: PropTypes.bool,
-    handleSubmit: PropTypes.func,
+    onSubmit: PropTypes.func,
   };
 
+  constructor(props) {
+    super(props);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
+    const { onSubmit, formValues } = this.props;
+    const formattedData = formValues;
+    if (formValues.dobDay && formValues.dobMonth && formValues.dobYear) {
+      const date = moment().year(formValues.dobYear).month(formValues.dobMonth).day(formValues.dobDay);
+      formattedData.dob = date;
+    }
+    onSubmit(formattedData);
+  }
+
   render() {
-    const { indications, sources, patientCategories, hasError, savedPatient, handleSubmit } = this.props;
+    const { formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, sources, patientCategories, hasError, loading, submitting, savedPatient } = this.props;
     const indicationOptions = map(indications, indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -59,7 +85,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       },
     ];
     return (
-      <Form className="form-lightbox form-edit-patient-information" onSubmit={handleSubmit}>
+      <Form className="form-lightbox form-edit-patient-information" onSubmit={this.onSubmit}>
         <div className="field-row form-group">
           <strong className="label required">
             <label>NAME</label>
@@ -128,18 +154,14 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="multiSelectWrap field"
           />
         </div>
-        <div className="field-row form-group">
-          <strong className="label">
-            <label>Age</label>
-          </strong>
-          <Field
-            name="age"
-            component={Input}
-            type="text"
-            className="field"
-            disabled={savedPatient.saving}
-          />
-        </div>
+        <DateOfBirthPicker
+          loading={loading}
+          submitting={submitting}
+          initialValues={initialValues}
+          dobDay={dobDay}
+          dobMonth={dobMonth}
+          dobYear={dobYear}
+        />
         <div className="field-row form-group">
           <strong className="label">
             <label>GENDER</label>
@@ -191,6 +213,18 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             options={sourceOptions}
             disabled={savedPatient.saving}
           />
+        </div>
+        <div className="field-row">
+          <strong className="label" />
+          <div className="field">
+            <Field
+              name="unsubscribed"
+              type="checkbox"
+              component={Checkbox}
+              className="pull-left"
+            />
+            <label htmlFor="unsubscribed">Unsubscribe</label>
+          </div>
         </div>
         <div className="btn-block text-right">
           <Button type="submit" className="btn-add-row" disabled={hasError || savedPatient.saving}>

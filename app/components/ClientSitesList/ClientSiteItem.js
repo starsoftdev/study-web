@@ -62,10 +62,10 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     const assignedUsersContent = users.map((item, index) => (
       <div className="assigned-user" key={index}>
         <span>{item.firstName} {item.lastName}</span>
-        <span className="edit-assigned-user" disabled={(this.assignedUserIsBeingFetched(item))} onClick={() => { this.editAssignedUser(item); }}>
+        <span className="edit-assigned-user">
           {(this.assignedUserIsBeingFetched(item))
             ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-assigned-user" /></span>
-            : <a><span className="fa fa-pencil-square-o" /></a>
+            : <a href="#" className="btn edit-icon" onClick={() => { this.editAssignedUser(item); }}><i className="pencil-square" /></a>
           }
         </span>
       </div>
@@ -86,16 +86,15 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           <span>{address}</span>
         </td>
         <td className="assigned-users">
-          <div className="toggle-assigned-users" onClick={this.toggleAssignedUsers}>
+          <div className="toggle-assigned-users">
             <span>Assigned Users</span>
             {this.state.assignedUsersCollapsed
-              ? <a><span className="fa fa-plus-square-o" /></a>
-              : <a><span className="fa fa-minus-square-o" /></a>
+              ? <a href="#" className="btn toggle toggle-plus" onClick={this.toggleAssignedUsers}></a>
+              : <a href="#" className="btn toggle toggle-minus" onClick={this.toggleAssignedUsers}></a>
             }
           </div>
-          {!this.state.assignedUsersCollapsed
-            ? <div className="assigned-users-list">{assignedUsersContent}</div>
-            : <div />
+          {!this.state.assignedUsersCollapsed &&
+            <div className="assigned-users-list">{assignedUsersContent}</div>
           }
         </td>
         <td className="action">

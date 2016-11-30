@@ -49,6 +49,11 @@ button,
 	transition: all 0.25s;
 }
 
+a.hover-underline {
+  &:hover {
+    text-decoration: underline;
+  }
+}
 .btn {
 	border-radius: 2px;
 	border-width: 2px;
@@ -86,7 +91,7 @@ button,
 	}
 
 	&.btn-gray {
-		color: #fff;
+		color: #fff !important;
 		background: darken(#999, 10%);
 
 		&:hover {
@@ -106,6 +111,20 @@ button,
 			background: darken(#999, 10%);
 		}
 	}
+}
+
+.table-responsive {
+  overflow-x: hidden;
+
+  .table {
+    thead {
+      tr {
+        th {
+          border-bottom: 0;
+        }
+      }
+    }
+  }
 }
 
 .label,

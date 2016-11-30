@@ -16,17 +16,18 @@ import Input from '../../../components/Input/index';
 import { fetchIndications } from '../../App/actions';
 import { selectIndications } from '../../App/selectors';
 import { createStructuredSelector } from 'reselect';
-import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
+import { selectValues, selectSyncErrors, selectFormDidChange } from '../../../common/selectors/form.selector';
 import { submitAddPatientIndication, submitRemovePatientIndication, submitPatientUpdate } from '../actions';
 import IndicationOverlay from './IndicationOverlay';
 import formValidator from './otherValidator';
-import DateOfBirthPicker from './DateOfBirthPicker';
+import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
 
 const formName = 'PatientDetailModal.Other';
 
 @reduxForm({
   form: formName,
   validate: formValidator,
+  enableReinitialize: true,
 })
 class OtherSection extends React.Component {
   static propTypes = {
@@ -36,6 +37,7 @@ class OtherSection extends React.Component {
     fetchIndications: React.PropTypes.func.isRequired,
     formSyncErrors: React.PropTypes.object,
     formValues: React.PropTypes.object,
+    formDidChange: React.PropTypes.bool,
     indications: React.PropTypes.array,
     initialValues: React.PropTypes.object,
     loading: React.PropTypes.bool,
@@ -70,7 +72,7 @@ class OtherSection extends React.Component {
 
   onSubmit(event) {
     event.preventDefault();
-    const { formSyncErrors, initialValues, formValues, submitPatientUpdate } = this.props;
+    const { formSyncErrors, initialValues, formValues, reset, submitPatientUpdate } = this.props;
     if (!formSyncErrors.gender && !formSyncErrors.bmi) {
       const data = {};
       if (formValues.gender) {
@@ -84,6 +86,7 @@ class OtherSection extends React.Component {
         data.dob = date;
       }
       submitPatientUpdate(initialValues.id, data);
+      reset(formName);
     }
   }
 
@@ -152,33 +155,22 @@ class OtherSection extends React.Component {
     return null;
   }
 
+  renderUpdateButtons() {
+    const { formDidChange, loading, submitting } = this.props;
+    if (formDidChange) {
+      return (
+        <div className="pull-right">
+          <Button bsStyle="primary" onClick={this.onReset}>Cancel</Button>
+          <Button type="submit" disabled={submitting || loading}>Update</Button>
+        </div>
+      );
+    }
+    return null;
+  }
+
   render() {
-    const { active, currentUser, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, loading, submitting, submitAddPatientIndication, submitPatientUpdate } = this.props;
+    const { active, currentUser, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, loading, submitting, submitAddPatientIndication } = this.props;
     if (initialValues) {
-      const now = moment();
-      const monthOptions = moment.monthsShort();
-      for (let index = 0; index < 12; index++) {
-        const month = monthOptions[index];
-        monthOptions[index] = {
-          label: month,
-          value: index + 1,
-        };
-      }
-      const dayOptions = [];
-      for (let day = 1; day < 32; day++) {
-        dayOptions.push({
-          label: day,
-          value: day,
-        });
-      }
-      const nowYear = now.year();
-      const yearOptions = [];
-      for (let year = nowYear; year > 1900; year--) {
-        yearOptions.push({
-          label: year,
-          value: year,
-        });
-      }
       return (
         <div className={classNames('item others', { active })}>
           <div className="item-holder">
@@ -233,16 +225,11 @@ class OtherSection extends React.Component {
               <div className="fields-holder">
                 <strong className="title">Other Information</strong>
                 <DateOfBirthPicker
-                  dayOptions={dayOptions}
-                  monthOptions={monthOptions}
-                  yearOptions={yearOptions}
                   loading={loading}
                   submitting={submitting}
-                  initialValues={initialValues}
                   dobDay={dobDay}
                   dobMonth={dobMonth}
                   dobYear={dobYear}
-                  submitPatientUpdate={submitPatientUpdate}
                 />
                 {this.renderGender()}
                 <div className="field-row">
@@ -266,10 +253,7 @@ class OtherSection extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className="pull-right">
-                <Button bsStyle="primary" onClick={this.onReset}>Cancel</Button>
-                <Button type="submit" disabled={submitting || loading}>Update</Button>
-              </div>
+              {this.renderUpdateButtons()}
             </Form>
           </div>
         </div>
@@ -282,6 +266,7 @@ class OtherSection extends React.Component {
 const mapStateToProps = createStructuredSelector({
   formSyncErrors: selectSyncErrors(formName),
   formValues: selectValues(formName),
+  formDidChange: selectFormDidChange(formName),
   indications: selectIndications(),
 });
 

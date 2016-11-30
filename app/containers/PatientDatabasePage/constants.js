@@ -36,4 +36,6 @@ export const SET_ACTIVE_SORT    = 'PatientDatabasePage/SET_ACTIVE_SORT';
 
 export const SORT_PATIENTS_SUCCESS    = 'PatientDatabasePage/SORT_PATIENTS_SUCCESS';
 export const EXPORT_PATIENTS    = 'PatientDatabasePage/EXPORT_PATIENTS';
+export const IMPORT_PATIENTS    = 'PatientDatabasePage/IMPORT_PATIENTS';
+export const DOWNLOAD_COMPLETE    = 'PatientDatabasePage/DOWNLOAD_COMPLETE';
 
