@@ -386,6 +386,16 @@ export default class SchedulePatientModal extends Component {
                           </div>
                         </div>
                       </div>
+                      <div className="field-row">
+                        <strong className="label">&nbsp;</strong>
+                        <Field
+                          id="text-reminder"
+                          name="textReminder"
+                          component={Checkbox}
+                          type="checkbox"
+                        />
+                        <label className="text-reminder-label" htmlFor="text-reminder">Text Reminder</label>
+                      </div>
                       <div className="btn-block text-right">
                         <input
                           type="button"
