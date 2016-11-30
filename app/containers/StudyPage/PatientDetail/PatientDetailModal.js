@@ -30,7 +30,7 @@ import {
   selectSocket,
 } from 'containers/GlobalNotifications/selectors';
 
-class PatientDetailModal extends React.Component {
+export class PatientDetailModal extends React.Component {
   static propTypes = {
     carousel: React.PropTypes.object,
     currentPatientCategory: React.PropTypes.object,
@@ -130,7 +130,7 @@ class PatientDetailModal extends React.Component {
             <div id="carousel-example-generic" className="carousel slide popup-slider">
               <ol className="carousel-indicators">
                 <li className={classNames({ active: carousel.note })} onClick={switchToNoteSection}>Note</li>
-                <li className={classNames({ active: carousel.text })} onClick={this.onSelectText}>Text</li>
+                <li className={classNames({ text: true, active: carousel.text })} onClick={this.onSelectText}>Text</li>
                 <li className={classNames({ active: carousel.email })} onClick={switchToEmailSection}>Email</li>
                 <li className={classNames({ active: carousel.other })} onClick={switchToOtherSection}>Other</li>
               </ol>

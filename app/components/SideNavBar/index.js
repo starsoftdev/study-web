@@ -14,8 +14,8 @@ const menuItemsGroupB = [
   { text: 'Calendar', link: '/calendar', icon: 'icomoon-icon_calendar' },
   { text: 'Manage Sites / Users', link: '/sites-users', icon: 'icomoon-icon_group' },
   { text: 'Patient Database', link: '/patient-database', icon: 'icomoon-icon_contacts' },
-  { text: 'Rewards', link: '/replace_me', icon: 'icomoon-gift' },
-  { text: 'Badges', link: '/replace_me', icon: 'icomoon-star' },
+  { text: 'Rewards', link: '/rewards', icon: 'icomoon-gift' },
+  { text: 'Badges', link: '/badges', icon: 'icomoon-star' },
 ];
 
 function SideNavBar() {

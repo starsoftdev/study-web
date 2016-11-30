@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import classNames from 'classnames';
 import { Link } from 'react-router';
 import enhanceWithClickOutside from 'react-click-outside';
 
@@ -36,7 +37,7 @@ class AvatarMenu extends React.Component {
 
     return (
       <div className="logged-user-area open-close pull-right">
-        <a className="opener" onClick={this.toggleAvatarMenuHandle}>
+        <a className={classNames('opener', { active: this.state.avatarMenuOpen })} onClick={this.toggleAvatarMenuHandle}>
           <div className="img-circle">
             <img src={this.props.currentUser.profileImageURL || defaultImage} width="43" height="43" alt="Bruce Wayne" />
           </div>

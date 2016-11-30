@@ -14,7 +14,7 @@ import {
   FETCH_PATIENT,
   SAVE_PATIENT,
   SUBMIT_TEXT_BLAST,
-  EXPORT_PATIENTS,
+  IMPORT_PATIENTS,
 } from './constants';
 
 import {
@@ -26,6 +26,7 @@ import {
   patientFetchingError,
   patientSaved,
   patientSavingError,
+  downloadComplete,
 } from './actions';
 
 export function* patientDatabasePageSaga() {
@@ -34,7 +35,7 @@ export function* patientDatabasePageSaga() {
   const watcherC = yield fork(fetchPatientWatcher);
   const watcherD = yield fork(savePatientWatcher);
   const watcherE = yield fork(submitTextBlast);
-  const watcherF = yield fork(exportPatients);
+  const watcherF = yield fork(importPatients);
 
   yield take(LOCATION_CHANGE);
   yield cancel(watcherA);
@@ -52,7 +53,7 @@ export default [
 
 export function* fetchPatientsWatcher() {
   while (true) {
-    const { searchParams, patients, searchFilter } = yield take(FETCH_PATIENTS);
+    const { searchParams, patients, searchFilter, isExport } = yield take(FETCH_PATIENTS);
     try {
       const filterObj = {
         include: [
@@ -65,6 +66,7 @@ export function* fetchPatientsWatcher() {
         },
         limit: searchParams.limit || 15,
         skip: searchParams.skip || 0,
+        isExport,
       };
 
       if (searchParams.sort && searchParams.direction && searchParams.sort !== 'orderNumber') {
@@ -162,8 +164,13 @@ export function* fetchPatientsWatcher() {
       const queryString = composeQueryString(queryParams);
       // const requestURL = `${API_URL}/patients?${queryString}`;
       const requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
-      const response = yield call(request, requestURL);
-      yield put(patientsFetched(searchParams, response, patients, searchFilter));
+      if (isExport) {
+        location.replace(`${requestURL}&access_token=${getItem('auth_token')}`);
+        yield put(downloadComplete());
+      } else {
+        const response = yield call(request, requestURL);
+        yield put(patientsFetched(searchParams, response, patients, searchFilter));
+      }
     } catch (err) {
       yield put(patientsFetchingError(err));
     }
@@ -269,16 +276,19 @@ function* submitTextBlast() {
   }
 }
 
-function* exportPatients() {
+function* importPatients() {
   while (true) {
-    const { patients } = yield take(EXPORT_PATIENTS);
-
+    const { payload } = yield take(IMPORT_PATIENTS);
+    const formData = new FormData();
+    formData.append('file', payload);
     try {
-      const requestURL = `${API_URL}/patients/exportPatientsFromDB`;
+      const requestURL = `${API_URL}/patients/importPatients`;
       yield call(request, requestURL, {
+        useDefaultContentType: 'multipart/form-data',
         method: 'POST',
-        body: JSON.stringify(patients),
+        body: formData,
       });
+      yield put(toastrActions.success('Import Patients', 'We are processing your request. Patients will be added soon.'));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));

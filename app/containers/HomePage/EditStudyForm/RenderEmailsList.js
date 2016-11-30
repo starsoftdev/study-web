@@ -44,15 +44,15 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
   selectAll(e) {
     if (this.props.formValues.emailNotifications) {
       forEach(this.props.formValues.emailNotifications, (value, index) => {
-        this.props.dispatch(change('editStudy', `emailNotifications[${index}].isChecked`, e.target.checked));
+        this.props.dispatch(change('editStudy', `emailNotifications[${index}].isChecked`, e));
       });
     }
   }
 
   selectEmail(e) {
-    if (this.props.formValues.checkAllInput && !e.target.checked) {
+    if (this.props.formValues.checkAllInput && !e) {
       this.props.dispatch(change('editStudy', 'checkAllInput', false));
-    } else if (!this.props.formValues.checkAllInput && e.target.checked) {
+    } else if (!this.props.formValues.checkAllInput && e) {
       const checkedArr = filter(this.props.formValues.emailNotifications, (o) => o.isChecked);
       if ((checkedArr.length + 1) === this.props.formValues.emailNotifications.length) {
         this.props.dispatch(change('editStudy', 'checkAllInput', true));

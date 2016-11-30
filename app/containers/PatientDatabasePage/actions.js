@@ -32,16 +32,18 @@ import {
   SUBMIT_TEXT_BLAST,
   SET_ACTIVE_SORT,
   SORT_PATIENTS_SUCCESS,
-  EXPORT_PATIENTS,
+  DOWNLOAD_COMPLETE,
+  IMPORT_PATIENTS,
 } from './constants';
 import _ from 'lodash';
 
-export function fetchPatients(searchParams = {}, patients = {}, searchFilter = {}) {
+export function fetchPatients(searchParams = {}, patients = {}, searchFilter = {}, isExport = false) {
   return {
     type: FETCH_PATIENTS,
     searchParams,
     patients,
     searchFilter,
+    isExport,
   };
 }
 
@@ -108,6 +110,8 @@ export function patientsFetched(searchParams, payload, patients, searchFilter) {
     hasMore,
     page,
     searchFilter,
+    searchParams,
+    result,
   };
 }
 
@@ -215,9 +219,10 @@ export function removePatientFromTextBlast(patient) {
   };
 }
 
-export function removePatientsFromTextBlast() {
+export function removePatientsFromTextBlast(patients) {
   return {
     type: REMOVE_PATIENTS_FROM_TEXT_BLAST,
+    patients,
   };
 }
 
@@ -245,9 +250,15 @@ export function sortPatientsSuccess(patients) {
   };
 }
 
-export function exportPatients(patients) {
+export function importPatients(payload) {
   return {
-    type: EXPORT_PATIENTS,
-    patients,
+    type: IMPORT_PATIENTS,
+    payload,
+  };
+}
+
+export function downloadComplete() {
+  return {
+    type: DOWNLOAD_COMPLETE,
   };
 }

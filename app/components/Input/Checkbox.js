@@ -7,7 +7,7 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
-function Checkbox({ input, className, children, onChange }) {
+function Checkbox({ input, className, children, onChange, ...rest }) {
   return (
     <div className={classNames(className)}>
       <span className={`jcf-checkbox ${input.checked ? 'jcf-checked' : 'jcf-unchecked'}`}>
@@ -21,6 +21,7 @@ function Checkbox({ input, className, children, onChange }) {
         />
         <input
           {...input}
+          {...rest}
           checked={input.checked}
           type="checkbox"
         />
@@ -37,6 +38,7 @@ Checkbox.propTypes = {
   children: PropTypes.any,
   checked: PropTypes.bool,
   onChange: PropTypes.func,
+  rest: PropTypes.object,
 };
 
 export default Checkbox;

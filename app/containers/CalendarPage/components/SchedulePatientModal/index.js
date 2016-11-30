@@ -10,6 +10,7 @@ import { SchedulePatientModalType } from 'common/constants';
 
 import ReactSelect from 'components/Input/ReactSelect';
 import DatePicker from 'components/Input/DatePicker';
+import Checkbox from 'components/Input/Checkbox';
 
 import './styles.less';
 
@@ -27,6 +28,15 @@ function numberSequenceCreator(start, end) {
     };
   });
 }
+
+function getTimeComponents(strTime) {
+  return {
+    hour: ((moment(strTime).hour() + 11) % 12) + 1,
+    minute: moment(strTime).minute(),
+    period: moment(strTime).hour() >= 12 ? 'PM' : 'AM',
+  };
+}
+
 const hourOptions = numberSequenceCreator(1, 13);
 const minuteOptions = numberSequenceCreator(0, 60);
 const periodOptions = [
@@ -55,7 +65,6 @@ export default class SchedulePatientModal extends Component {
   }
 
   state = {
-    optionStep: 0,
     siteLocation: null,
     protocol: null,
     patient: null,
@@ -66,28 +75,29 @@ export default class SchedulePatientModal extends Component {
   componentWillReceiveProps(nextProps) {
     const { siteLocationOptions, isAdmin } = this.props;
 
-    if (nextProps.modalType === SchedulePatientModalType.CREATE) {
+    if (this.props.modalType === SchedulePatientModalType.HIDDEN && nextProps.modalType !== SchedulePatientModalType.HIDDEN) {
+      let initialValues = nextProps.selectedCellInfo.data ? getTimeComponents(nextProps.selectedCellInfo.data.time) : { period: 'AM', textReminder: true };
       if (!isAdmin) {
         const site = siteLocationOptions[0];
         if (this.state.siteLocation === null && site) {  // prevent recursive render
           if (site) {
             this.handleSiteLocationChoose(site);
-            this.props.initialize({               // manually set siteLocation form value
-              siteLocation: site,
-            });
+            initialValues = {
+              ...initialValues,
+              siteLocations: site,   // manually set siteLocation form value
+            };
           }
         }
       }
+      nextProps.initialize(initialValues);
     } else if (nextProps.modalType === SchedulePatientModalType.HIDDEN) {
       this.setState({
-        optionStep: nextProps.isAdmin ? 0 : 1,
         siteLocation: null,
         protocol: null,
         patient: null,
         protocolOptions: [],
         patientOptions: [],
       });
-      this.props.initialize({});
     }
 
     if (!nextProps.fetchingPatientsByStudy && nextProps.patientsByStudy !== this.props.patientsByStudy) {
@@ -115,15 +125,16 @@ export default class SchedulePatientModal extends Component {
         siteId: siteLocationOption.siteId,
       }));
       this.setState({
-        optionStep: 1,
         siteLocation: siteLocationOption,
         protocol: null,
+        patient: null,
         protocolOptions,
       });
     } else {
       this.setState({
-        optionStep: 0,
         siteLocation: null,
+        protocol: null,
+        patient: null,
         protocolOptions: [],
         patientOptions: [],
       });
@@ -134,14 +145,13 @@ export default class SchedulePatientModal extends Component {
     if (protocolOption) {
       this.props.fetchPatientsByStudy(protocolOption.studyId, protocolOption.siteId);
       this.setState({
-        optionStep: 2,
         protocol: protocolOption,
         patient: null,
       });
     } else {
       this.setState({
-        optionStep: 1,
         protocol: null,
+        patient: null,
         patientOptions: [],
       });
     }
@@ -171,7 +181,7 @@ export default class SchedulePatientModal extends Component {
       selectedCellInfo,
     } = this.props;
 
-    const { optionStep, protocolOptions, patientOptions } = this.state;
+    const { protocolOptions, patientOptions } = this.state;
 
     return (
       <Modal show={modalType !== SchedulePatientModalType.HIDDEN} onHide={handleCloseModal}>
@@ -189,7 +199,7 @@ export default class SchedulePatientModal extends Component {
                       <div className="field-row">
                         <strong className="label">* When</strong>
                         <div className="field">
-                          <input type="text" className="form-control add-date scheduleTime" readOnly value={selectedCellInfo.selectedDate && moment(selectedCellInfo.selectedDate).format('MM/DD/YY')} />
+                          <input type="text" className="form-control add-date scheduleTime" disabled value={selectedCellInfo.selectedDate && moment(selectedCellInfo.selectedDate).format('MM/DD/YY')} />
                         </div>
                       </div>
 
@@ -202,7 +212,7 @@ export default class SchedulePatientModal extends Component {
                                 id="patient-time"
                                 name="hour"
                                 component={ReactSelect}
-                                placeholder="--Hours--"
+                                placeholder="Hours"
                                 options={hourOptions}
                                 className="visible-first-del min-height"
                                 disabled={submitting}
@@ -213,7 +223,7 @@ export default class SchedulePatientModal extends Component {
                                 id="minutes"
                                 name="minute"
                                 component={ReactSelect}
-                                placeholder="--Minutes--"
+                                placeholder="Minutes"
                                 options={minuteOptions}
                                 className="visible-first-del min-height"
                                 disabled={submitting}
@@ -224,7 +234,7 @@ export default class SchedulePatientModal extends Component {
                                 id="time-period"
                                 name="period"
                                 component={ReactSelect}
-                                placeholder="--Minutes--"
+                                placeholder="Period"
                                 options={periodOptions}
                                 className="visible-first"
                                 disabled={submitting}
@@ -240,7 +250,7 @@ export default class SchedulePatientModal extends Component {
                           <Field
                             name="siteLocation"
                             component={ReactSelect}
-                            placeholder="--Select Site Location--"
+                            placeholder="Select Site Location"
                             options={siteLocationOptions}
                             className="data-search"
                             disabled={submitting || this.props.fetchingSites || !isAdmin}
@@ -251,44 +261,52 @@ export default class SchedulePatientModal extends Component {
                         </div>
                       </div>
 
-                      {optionStep >= 1 &&
-                        <div className="field-row">
-                          <strong className="label required"><label htmlFor="popup-protocol">protocol</label></strong>
-                          <div className="field protocol">
-                            <Field
-                              id="popup-protocol"
-                              name="protocol"
-                              component={ReactSelect}
-                              placeholder="--Select Protocol--"
-                              options={protocolOptions}
-                              className="data-search"
-                              disabled={submitting}
-                              objectValue
-                              onChange={this.handleProtocolChoose.bind(this)}
-                              selectedValue={this.state.protocol}
-                            />
-                          </div>
+                      <div className="field-row">
+                        <strong className="label required"><label htmlFor="popup-protocol">protocol</label></strong>
+                        <div className="field protocol">
+                          <Field
+                            id="popup-protocol"
+                            name="protocol"
+                            component={ReactSelect}
+                            placeholder={this.state.siteLocation ? 'Select Protocol' : 'N/A'}
+                            options={protocolOptions}
+                            className="data-search"
+                            disabled={submitting || !this.state.siteLocation}
+                            objectValue
+                            onChange={this.handleProtocolChoose.bind(this)}
+                            selectedValue={this.state.protocol}
+                          />
                         </div>
-                      }
-                      {optionStep >= 2 &&
-                        <div className="field-row patient-name">
-                          <strong className="label required"><label htmlFor="patient">Patient</label></strong>
-                          <div className="field">
-                            <Field
-                              id="patient"
-                              name="patient"
-                              component={ReactSelect}
-                              placeholder="--Select Patient--"
-                              options={patientOptions}
-                              className="data-search"
-                              disabled={submitting || this.props.fetchingPatientsByStudy}
-                              objectValue
-                              onChange={this.handlePatientChoose.bind(this)}
-                              selectedValue={this.state.patient}
-                            />
-                          </div>
+                      </div>
+
+                      <div className="field-row patient-name">
+                        <strong className="label required"><label htmlFor="patient">Patient</label></strong>
+                        <div className="field">
+                          <Field
+                            id="patient"
+                            name="patient"
+                            component={ReactSelect}
+                            placeholder={this.state.protocol ? 'Select Patient' : 'N/A'}
+                            options={patientOptions}
+                            className="data-search"
+                            disabled={submitting || this.props.fetchingPatientsByStudy || !this.state.protocol}
+                            objectValue
+                            onChange={this.handlePatientChoose.bind(this)}
+                            selectedValue={this.state.patient}
+                          />
                         </div>
-                      }
+                      </div>
+
+                      <div className="field-row">
+                        <strong className="label">&nbsp;</strong>
+                        <Field
+                          id="text-reminder"
+                          name="textReminder"
+                          component={Checkbox}
+                          type="checkbox"
+                        />
+                        <label className="text-reminder-label" htmlFor="text-reminder">Text Reminder</label>
+                      </div>
 
                       <div className="text-right">
                         <input type="reset" className="btn btn-gray-outline hidden" value="reset" />
@@ -337,7 +355,7 @@ export default class SchedulePatientModal extends Component {
                                 id="patient-time-edit"
                                 name="hour"
                                 component={ReactSelect}
-                                placeholder="--Hours--"
+                                placeholder="Hours"
                                 options={hourOptions}
                                 className="visible-first-del min-height"
                                 disabled={submitting}
@@ -348,7 +366,7 @@ export default class SchedulePatientModal extends Component {
                                 id="minutes2"
                                 name="minute"
                                 component={ReactSelect}
-                                placeholder="--Minutes--"
+                                placeholder="Minutes"
                                 options={minuteOptions}
                                 className="visible-first-del min-height"
                                 disabled={submitting}
@@ -359,7 +377,7 @@ export default class SchedulePatientModal extends Component {
                                 id="time-period2"
                                 name="period"
                                 component={ReactSelect}
-                                placeholder="--Minutes--"
+                                placeholder="Period"
                                 options={periodOptions}
                                 className="visible-first"
                                 disabled={submitting}
@@ -367,6 +385,16 @@ export default class SchedulePatientModal extends Component {
                             </div>
                           </div>
                         </div>
+                      </div>
+                      <div className="field-row">
+                        <strong className="label">&nbsp;</strong>
+                        <Field
+                          id="text-reminder"
+                          name="textReminder"
+                          component={Checkbox}
+                          type="checkbox"
+                        />
+                        <label className="text-reminder-label" htmlFor="text-reminder">Text Reminder</label>
                       </div>
                       <div className="btn-block text-right">
                         <input

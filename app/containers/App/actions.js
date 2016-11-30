@@ -25,6 +25,10 @@ import {
 
   CLEAR_COUPON,
 
+  FETCH_REWARDS,
+  FETCH_REWARDS_SUCCESS,
+  FETCH_REWARDS_ERROR,
+
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
@@ -248,6 +252,30 @@ export function couponFetchingError(payload) {
 export function clearCoupon() {
   return {
     type: CLEAR_COUPON,
+  };
+}
+
+// ///////////////////////////////////////////
+// fetch rewards
+// ///////////////////////////////////////////
+export function fetchRewards(customerId) {
+  return {
+    type: FETCH_REWARDS,
+    customerId,
+  };
+}
+
+export function rewardsFetched(payload) {
+  return {
+    type: FETCH_REWARDS_SUCCESS,
+    payload,
+  };
+}
+
+export function rewardsFetchingError(payload) {
+  return {
+    type: FETCH_REWARDS_ERROR,
+    payload,
   };
 }
 

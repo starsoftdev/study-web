@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React, { PropTypes } from 'react';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
@@ -64,8 +65,11 @@ class NotificationBox extends React.Component {
   render() {
     return (
       <div className="notifications pull-left open-close">
-        <a className="opener" href="#" onClick={() => this.handleBadgeNumberClick()}>
-          <i className="icomoon-bell"></i>
+        <a
+          className={classNames('opener', { active: this.state.dropdownOpen })}
+          onClick={() => this.handleBadgeNumberClick()}
+        >
+          <i className="icomoon-bell" />
           <span className="counter">{this.props.unreadNotificationsCount}</span>
         </a>
 
@@ -98,7 +102,7 @@ class NotificationBox extends React.Component {
                 </ul>
               </div>
               <div className="btn-block text-center">
-                <Link to="/notifications">
+                <Link className="hover-underline" to="/notifications">
                   See All
                 </Link>
               </div>

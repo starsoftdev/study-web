@@ -179,7 +179,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>PROTOCOL NUMBER</label></strong>
+            <strong className="label required"><label>PROTOCOL</label></strong>
             <Field
               name="protocolNumber"
               component={Input}
@@ -189,7 +189,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>SPONSOR CONTACT NAME</label></strong>
+            <strong className="label required"><label>SPONSOR NAME</label></strong>
             <Field
               name="sponsorName"
               component={Input}
@@ -199,7 +199,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>Sponsor Contact Email</label></strong>
+            <strong className="label"><label>Sponsor Email</label></strong>
             <Field
               name="sponsorEmail"
               component={Input}
@@ -209,7 +209,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>CRO Contact Name</label></strong>
+            <strong className="label"><label>CRO Name</label></strong>
             <Field
               name="croContactName"
               component={Input}
@@ -219,9 +219,9 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>CRO Contact Email</label></strong>
+            <strong className="label"><label>CRO Email</label></strong>
             <Field
-              name="croContactName"
+              name="croContactEmail"
               component={Input}
               type="email"
               className="field"
@@ -296,16 +296,18 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             />
           </div>
 
-          <div className="tracking-source">
-            <div className="field-row">
-              <strong className="label"><label>CALL TRACKING: $247</label></strong>
-              <Field
-                name="callTracking"
-                component={Toggle}
-                className="field"
-              />
+          {false &&
+            <div className="tracking-source">
+              <div className="field-row">
+                <strong className="label"><label>CALL TRACKING: $247</label></strong>
+                <Field
+                  name="callTracking"
+                  component={Toggle}
+                  className="field"
+                />
+              </div>
             </div>
-          </div>
+          }
 
           {callTracking &&
             <FieldArray name="leadSource" component={RenderLeads} availPhoneNumbers={this.props.availPhoneNumbers} />

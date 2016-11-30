@@ -22,7 +22,7 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
     companyTypes: PropTypes.array,
     fetchCompanyTypes: PropTypes.func,
     onSubmitForm: PropTypes.func,
-  };
+  }
 
   constructor(props) {
     super(props);
@@ -45,33 +45,33 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
 
           <div className="row form-study">
 
-            <div className="col-xs-6 form-holder">
-              <ReferForm companyTypes={companyTypes} onSubmit={this.onSubmitForm} />
+            <div className="refer-info pull-right">
+              <div className="refer-holder">
+                <div className="textbox text-center pull-left">
+                  <strong className="title">
+                    Refer a new site<br />
+                    or Sponsor/CRO<br />
+                    project manager by <br />
+                    entering their contact!
+                  </strong>
+                  <p>
+                    When they list a Platinum Study or<br />
+                    higher, you will receive 100 reward <br />
+                    KIK’s. If they list a multi-site (10+) <br />
+                    central recruitment you will <br />
+                    receive 300 <br />
+                    reward KIKs!
+                  </p>
+                </div>
+                <div className="img-holder pull-left">
+                  <img src={manImage} alt="" width="256" />
+                  <img className="shadow" src={shadowImage} alt="&nbsp;" width="212" height="39" />
+                </div>
+              </div>
             </div>
 
-            <div className="col-xs-6 refer-info pull-right">
-              <div className="textbox text-center pull-left">
-                <strong className="title">
-                  Refer a new site<br />
-                  or Sponsor/CRO<br />
-                  project manager by <br />
-                  entering their contact!
-                </strong>
-
-                <p>
-                  When they list a Platinum Study or <br />
-                  higher, you will receive 100 reward <br />
-                  KIK’s. If they list a multi-site (10+) <br />
-                  central recruitment you will <br />
-                  receive 300 <br />
-                  reward KIKs!
-                </p>
-              </div>
-
-              <div className="img-holder pull-right">
-                <img src={manImage} alt="" width="256" />
-                <img className="shadow" src={shadowImage} alt="&nbsp;" width="212" height="39" />
-              </div>
+            <div className="form-holder ovh">
+              <ReferForm companyTypes={companyTypes} onSubmit={this.onSubmitForm} />
             </div>
 
           </div>
