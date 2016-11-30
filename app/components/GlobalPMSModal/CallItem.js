@@ -17,13 +17,13 @@ class CallItem extends Component { // eslint-disable-line react/prefer-stateless
     const cts = messageData.twilioCallRecord.created;
     const cdate = `${moment.utc(cts).format('MM/DD/YY')} at ${moment(cts).format('h:mm A')}`;
 
-    let containerClassName = 'post-holder';
+    let containerClassName = 'post-holder call';
     // todo remove and put back Anonymous behavior
     // let senderName = 'Anonymous';
     let senderName = `${currentUser.firstName} ${currentUser.lastName}`;
 
     if (messageData.twilioCallRecord.direction === 'outbound-api') {
-      containerClassName = 'post-holder even';
+      containerClassName = 'post-holder call even';
       if (messageData.user) {
         senderName = messageData.user.firstName.concat(' '.concat(messageData.user.lastName));
       }
@@ -31,36 +31,37 @@ class CallItem extends Component { // eslint-disable-line react/prefer-stateless
       senderName = messageData.patient.firstName.concat(' '.concat(messageData.patient.lastName));
     }
 
-    let addClass = 'long-text-width';
     if (this.props.postMsg) {
-      containerClassName = 'post-msg';
-      addClass = 'small-text-width';
+      containerClassName = 'post-msg call';
     }
 
     return (
-      <div className={containerClassName} data-post="1">
+      <div className={containerClassName} >
         {(() => {
           if (messageData.twilioCallRecord.duration === 0) {
             return (
-              <div className="global-pms-chat-call-record-text">
-                <div className={`call-record-text ${addClass}`}>Missed call from {senderName}</div>
-                <div className="call-record-date">{cdate}</div>
+              <div className="global-pms-chat-call-record-text" data-post="1">
+                <i className="icomoon-icon-incoming"></i>
+                <div>Missed call from {senderName}.</div>
+                <time >{cdate}</time>
               </div>
             );
           } else if (messageData.type === 'ended') {
             const ms = parseInt(messageData.twilioCallRecord.duration) * 1000;
             const durationStr = moment.utc(ms).format('HH:mm:ss');
             return (
-              <div className="global-pms-chat-call-record-text">
-                <div className={`call-record-text ${addClass}`}>Call ended, duration {durationStr}.</div>
-                <div className="call-record-date">{cdate}</div>
+              <div className="global-pms-chat-call-record-text" data-post="1">
+                <i className="icomoon-icon-call-end"></i>
+                <div>Call ended, duration {durationStr}.</div>
+                <time >{cdate}</time>
               </div>
             );
           }
           return (
-            <div className="global-pms-chat-call-record-text">
-              <div className={`call-record-text ${addClass}`}>Call from {senderName}.</div>
-              <div className="call-record-date">{cdate}</div>
+            <div className="global-pms-chat-call-record-text" data-post="1">
+              <i className="icomoon-icon-outgoing"></i>
+              <div>Call from {senderName}.</div>
+              <time >{cdate}</time>
             </div>
           );
         })()}
