@@ -64,6 +64,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
 
   addCreditsSubmit(cartValues) {
     const data = {
+      quantity: this.state.quantity,
       totalAmount: cartValues.total,
       cardId: cartValues.creditCard,
     };
