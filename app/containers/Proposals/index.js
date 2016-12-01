@@ -166,7 +166,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     return (
       <StickyContainer className="container-fluid">
         <Helmet title="Proposals - StudyKIK" />
-        <section className="calendar-section receipts">
+        <section className="calendar-section proposals proposals-receipts">
           <h2 className="main-heading">PROPOSALS</h2>
           <TableSearchForm
             changeRange={this.changeRange}
