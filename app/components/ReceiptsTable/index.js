@@ -213,7 +213,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
   mapReceipts(raw, result) {
     const { siteLocations } = this.props;
-    let invoiceId = null
+    let invoiceId = null;
     _.map(raw, (source, key) => {
       const date = new Date(source.created);
       const dateWrapper = moment(date).format('MM/DD/YY');
@@ -226,13 +226,13 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
       if (source.action_type === 'addCredits') {
         siteName = 'PMS Credits';
       }
-      
+
       if (key === 0 || invoiceId !== source.invoice_id) {
-        invoiceId = source.invoice_id
+        invoiceId = source.invoice_id;
         result.push(
           <div className="tr" key={key}>
             <div className="td" style={{ width: '8%' }}>
-            <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
+              <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
               <span className="input-style" onClick={this.onClickCurrent}>
                 <input type="checkbox" name={key} />
               </span>
