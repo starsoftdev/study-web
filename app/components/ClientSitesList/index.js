@@ -111,7 +111,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
           <div className="row">
             <div className="col-sm-12">
               <div className="table-responsive">
-                <table className="table table-striped">
+                <table className="table">
                   <caption>SITE LOCATIONS</caption>
                   <thead>
                     <tr>
