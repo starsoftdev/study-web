@@ -75,11 +75,22 @@ class FilterStudyPatientsForm extends Component {
       handleSubmit,
       submitting,
       loading,
+      siteId,
+      studyId,
+      search,
+      campaign,
+      source,
     } = this.props;
     /* changing the source for display purposes only */
     return (
       <form className="form-search clearfix" onSubmit={handleSubmit}>
-        <StudyActionButtons />
+        <StudyActionButtons
+          siteId={siteId}
+          studyId={studyId}
+          search={search}
+          campaign={campaign}
+          source={source}
+        />
         <div className="search-area pull-left">
           <div className="field">
             <Field
