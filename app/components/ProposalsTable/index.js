@@ -7,6 +7,7 @@
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
+import classNames from 'classnames';
 import './styles.less';
 
 const headers = [
@@ -311,7 +312,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       result.push(
         <tr key={key}>
           <td>
-            <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
+            <span className={classNames('jcf-checkbox', { 'jcf-checked': source.selected, 'jcf-unchecked': !source.selected })}>
               <span
                 className="input-style"
                 onClick={this.onClickCurrent}
@@ -323,6 +324,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
               </span>
             </span>
           </td>
+          <td></td>
           <td>{dateWrapper.calendar()}</td>
           <td>{source.site}</td>
           <td>{source.proposalNumber}</td>
@@ -346,7 +348,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       <div className="table-holder">
         <table className="table">
           <colgroup>
-            <col style={{ width: '9%' }} />
+            <col style={{ width: '2.5%' }} />
+            <col style={{ width: '4%' }} />
             <col style={{ width: '11%' }} />
             <col style={{ width: '24%' }} />
             <col style={{ width: '25%' }} />
@@ -356,12 +359,14 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           <thead>
             <tr>
               <th>
-                <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
+                <span className={(this.state.checkAll) ? 'jcf-checkbox jcf-checked' : 'jcf-checkbox jcf-unchecked'}>
                   <span className="input-style" onClick={this.onClickAll}>
                     <input name="all" type="checkbox" />
                   </span>
                 </span>
-                <span>#</span><i className="caret-arrow" />
+              </th>
+              <th>
+                #
               </th>
               {heads}
             </tr>
