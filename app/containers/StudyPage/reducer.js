@@ -12,6 +12,7 @@ import {
   FETCH_PATIENT_DETAILS_SUCCESS,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_SITE_SUCCESS,
+  EXPORT_PATIENTS_SUCCESS,
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
@@ -53,6 +54,10 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         campaigns: action.payload,
+      };
+    case EXPORT_PATIENTS_SUCCESS:
+      return {
+        ...state,
       };
     case FETCH_PATIENTS_SUCCESS:
       return {

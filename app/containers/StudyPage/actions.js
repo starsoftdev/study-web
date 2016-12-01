@@ -26,6 +26,8 @@ import {
   FETCH_SITE_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
+  EXPORT_PATIENTS,
+  EXPORT_PATIENTS_SUCCESS,
   READ_STUDY_PATIENT_MESSAGES,
   READ_STUDY_PATIENT_MESSAGES_SUCCESS,
   READ_STUDY_PATIENT_MESSAGES_ERROR,
@@ -118,6 +120,24 @@ export function fetchPatients(studyId, siteId, text, campaignId, sourceId) {
     text,
     campaignId,
     sourceId,
+  };
+}
+
+
+export function exportPatients(studyId, siteId, text, campaignId, sourceId) {
+  return {
+    type: EXPORT_PATIENTS,
+    studyId,
+    siteId,
+    text,
+    campaignId,
+    sourceId,
+  };
+}
+
+export function patientsExported() {
+  return {
+    type: EXPORT_PATIENTS_SUCCESS,
   };
 }
 
