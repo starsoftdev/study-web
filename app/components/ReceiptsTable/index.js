@@ -213,6 +213,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
   mapReceipts(raw, result) {
     const { siteLocations } = this.props;
+    let invoiceId = null
     _.map(raw, (source, key) => {
       const date = new Date(source.created);
       const dateWrapper = moment(date).format('MM/DD/YY');
@@ -225,25 +226,28 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
       if (source.action_type === 'addCredits') {
         siteName = 'PMS Credits';
       }
-
-      result.push(
-        <div className="tr" key={key}>
-          <div className="td" style={{ width: '8%' }}>
+      
+      if (key === 0 || invoiceId !== source.invoice_id) {
+        invoiceId = source.invoice_id
+        result.push(
+          <div className="tr" key={key}>
+            <div className="td" style={{ width: '8%' }}>
             <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
               <span className="input-style" onClick={this.onClickCurrent}>
                 <input type="checkbox" name={key} />
               </span>
             </span>
-            <span>{(key + 1)}</span>
+              <span>{(key + 1)}</span>
+            </div>
+            <div className="td" style={{ width: '9.6%' }}>{dateWrapper}</div>
+            <div className="td" style={{ width: '17.4%' }}>{siteName}</div>
+            <div className="td" style={{ width: '18.4%' }}>{source.invoice_id}</div>
+            <div className="td" style={{ width: '19.7%' }}>{source.protocol_number || '-'}</div>
+            <div className="td" style={{ width: '17.4%' }}>card</div>
+            <div className="td" style={{ width: '9.5%' }}><Money value={source.total / 100} className="price total-price" /></div>
           </div>
-          <div className="td" style={{ width: '9.6%' }}>{dateWrapper}</div>
-          <div className="td" style={{ width: '17.4%' }}>{siteName}</div>
-          <div className="td" style={{ width: '18.4%' }}>{source.invoice_id}</div>
-          <div className="td" style={{ width: '19.7%' }}>{source.protocol_number || '-'}</div>
-          <div className="td" style={{ width: '17.4%' }}>card</div>
-          <div className="td" style={{ width: '9.5%' }}><Money value={source.total / 100} className="price total-price" /></div>
-        </div>
-      );
+        );
+      }
     });
   }
 
