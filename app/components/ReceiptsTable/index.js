@@ -231,7 +231,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
         invoiceId = source.invoice_id;
         result.push(
           <div className="tr" key={key}>
-            <div className="td" style={{ width: '8%' }}>
+            <div className="td" style={{ width: '6.5%' }}>
               <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
                 <span className="input-style" onClick={this.onClickCurrent}>
                   <input type="checkbox" name={key} />
@@ -264,7 +264,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
         <StickyContainer className="table-sticky">
           <Sticky className="header">
             <div className="tr">
-              <div className="th" style={{ width: '8%' }}>
+              <div className="th" style={{ width: '6.5%' }}>
                 <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
                   <span className="input-style" onClick={this.onClickAll}>
                     <input name="all" type="checkbox" />
