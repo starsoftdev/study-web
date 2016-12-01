@@ -87,7 +87,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
         </td>
         <td className="assigned-users">
           <div className="toggle-assigned-users">
-            <span>Assigned Users</span>
+            <span>ASSIGNED USERS</span>
             {this.state.assignedUsersCollapsed
               ? <a href="#" className="btn toggle toggle-plus" onClick={this.toggleAssignedUsers}></a>
               : <a href="#" className="btn toggle toggle-minus" onClick={this.toggleAssignedUsers}></a>

@@ -128,7 +128,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
           {clientRolePanelContent}
           <div className="btn-block btns text-right">
             {onDelete &&
-              <button type="button" className="btn btn-default" disabled={savedUser.saving || deleting} onClick={onDelete}>
+              <button type="button" className="btn btn-gray-outline" disabled={savedUser.saving || deleting} onClick={onDelete}>
                 {deleting
                   ? <span><LoadingSpinner showOnlyIcon size={20} className="deleting-user" /></span>
                   : <span>Delete</span>
