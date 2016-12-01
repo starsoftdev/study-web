@@ -2,13 +2,24 @@
  * Created by mike on 10/2/16.
  */
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import ImportPatientsModal from './ImportPatients/ImportPatientsModal';
 import TextEmailBlastModal from './TextEmailBlastModal';
 import TextBlastModal from './TextBlast/index';
 import AddPatient from './ImportPatients/AddPatient';
 
-class StudyActionButtons extends React.Component {
+import { exportPatients } from './actions';
+
+class StudyActionButtons extends Component {
+  static propTypes = {
+    campaign: PropTypes.number,
+    search: PropTypes.string,
+    source: PropTypes.number,
+    siteId: PropTypes.number.isRequired,
+    studyId: PropTypes.number.isRequired,
+    exportPatients: PropTypes.func,
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -26,6 +37,7 @@ class StudyActionButtons extends React.Component {
     this.closeTextBlastModal = this.closeTextBlastModal.bind(this);
     this.toggleEmailBlastModal = this.toggleEmailBlastModal.bind(this);
     this.closeEmailBlastModal = this.closeEmailBlastModal.bind(this);
+    this.download = this.download.bind(this);
   }
 
   toggleImportPatientsModal() {
@@ -82,6 +94,11 @@ class StudyActionButtons extends React.Component {
     });
   }
 
+  download() {
+    const { exportPatients, siteId, studyId, campaign, source, search } = this.props;
+    exportPatients(studyId, siteId, search, campaign, source);
+  }
+
   render() {
     return (
       <div className="btns pull-right">
@@ -106,7 +123,7 @@ class StudyActionButtons extends React.Component {
           <AddPatient show={this.state.showAddPatientModal} onClose={this.closeAddPatientModal} onHide={this.toggleAddPatientModal} />
         </div>
         <div className="btn-download pull-left">
-          <a className="btn btn-primary download">
+          <a className="btn btn-primary download" onClick={this.download}>
             <i className="icomoon-icon_download" />
             <span>Download</span>
           </a>
@@ -116,4 +133,10 @@ class StudyActionButtons extends React.Component {
   }
 }
 
-export default StudyActionButtons;
+function mapDispatchToProps(dispatch) {
+  return {
+    exportPatients: (studyId, siteId, text, campaignId, sourceId) => dispatch(exportPatients(studyId, siteId, text, campaignId, sourceId)),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(StudyActionButtons);

@@ -7,6 +7,7 @@ import request from '../../utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
 import { FIND_PATIENTS_TEXT_BLAST,
   FETCH_PATIENTS,
+  EXPORT_PATIENTS,
   FETCH_PATIENT_DETAILS,
   FETCH_PATIENT_CATEGORIES,
   FETCH_STUDY,
@@ -34,6 +35,7 @@ import {
   patientsFetched,
   patientDetailsFetched,
   siteFetched,
+  patientsExported,
   sourcesFetched,
   studyFetched,
   studyViewsStatFetched,
@@ -211,6 +213,37 @@ function* readStudyPatientMessages() {
       }
     } else {
       yield put(readStudyPatientMessagesSuccess([]));
+    }
+  }
+}
+
+export function* exportPatients() {
+  while (true) {
+    // listen for the FETCH_PATIENTS action
+    const { studyId, siteId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
+    const authToken = getItem('auth_token');
+
+    try {
+      let requestURL = `${API_URL}/studies/${studyId}/getPatientsForDB?access_token=${authToken}&siteId=${siteId}`;
+      if (campaignId) {
+        requestURL += `&campaignId=${campaignId}`;
+      }
+      if (sourceId) {
+        requestURL += `&sourceId=${sourceId}`;
+      }
+      if (text) {
+        requestURL += `&text=${encodeURIComponent(text)}`;
+      }
+
+      location.replace(`${requestURL}`);
+      yield put(patientsExported());
+    } catch (e) {
+      // if returns forbidden we remove the token from local storage
+      if (e.status === 401) {
+        removeItem('auth_token');
+      }
+      const errorMessage = get(e, 'message', 'Something went wrong while fetching patients. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
     }
   }
 }
@@ -621,6 +654,7 @@ export function* fetchStudySaga() {
     yield fork(fetchStudyTextStats);
     yield fork(fetchPatientCategories);
     yield fork(fetchPatientsSaga);
+    yield fork(exportPatients);
     yield fork(fetchPatientDetails);
     yield fork(findPatientsSaga);
     yield fork(readStudyPatientMessages);
