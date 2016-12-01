@@ -7,6 +7,7 @@
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
+import classNames from 'classnames';
 import './styles.less';
 
 const headers = [
@@ -311,7 +312,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       result.push(
         <tr key={key}>
           <td>
-            <span className={((source.selected) ? 'jcf-checked' : 'jcf-unchecked') + " jcf-checkbox"}>
+            <span className={classNames('jcf-checkbox', { 'jcf-checked': source.selected, 'jcf-unchecked': !source.selected })}>
               <span
                 className="input-style"
                 onClick={this.onClickCurrent}
