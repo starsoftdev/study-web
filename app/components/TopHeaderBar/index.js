@@ -85,17 +85,18 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
           <NotificationBox currentUser={this.props.currentUser} />
 
           <div className="emails pull-left">
-            <a className="opener" data-toggle="tooltip" data-placement="bottom" title="Coming Soon">
+            <a href="#" className="opener" data-toggle="tooltip" data-placement="bottom" title="Coming Soon">
               <i className="icomoon-envelop" />
               <span className="counter">1</span>
             </a>
           </div>
 
           <div className="open-close help-drop pull-left">
-            <a className="link-help pull-left opener">?</a>
+            <a href="#" className="link-help pull-left opener">?</a>
           </div>
 
           <a
+            href="#"
             className={classNames('opener lightbox-opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
             onClick={this.showGlobalPMSModal}
           >
