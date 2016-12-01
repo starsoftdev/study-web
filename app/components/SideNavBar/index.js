@@ -12,7 +12,7 @@ const menuItemsGroupA = [
 ];
 const menuItemsGroupB = [
   { text: 'Calendar', link: '/calendar', icon: 'icomoon-icon_calendar' },
-  { text: 'Manage Sites / Users', link: '/sites-users', icon: 'icomoon-icon_group' },
+  { text: 'Manage Sites / Users', link: '/sites-users', icon: 'icomoon-icon_group', className: 'menu-manage-sites-users' },
   { text: 'Patient Database', link: '/patient-database', icon: 'icomoon-icon_contacts' },
   { text: 'Rewards', link: '/rewards', icon: 'icomoon-gift' },
   { text: 'Badges', link: '/badges', icon: 'icomoon-star' },
@@ -37,7 +37,7 @@ function SideNavBar() {
             {
               menuItemsGroupB.map((item, index) =>
                 <li key={index}>
-                  <Link to={item.link} activeClassName="active"><i className={item.icon} /> {item.text}</Link>
+                  <Link to={item.link} activeClassName="active" className={item.className}><i className={item.icon} /> {item.text}</Link>
                 </li>
               )
             }
