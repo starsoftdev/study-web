@@ -11,6 +11,7 @@ class IndicationOverlay extends React.Component {
   static propTypes = {
     indications: React.PropTypes.array,
     submitAddIndication: React.PropTypes.func.isRequired,
+    selectIndication: React.PropTypes.func,
     onClose: React.PropTypes.func.isRequired,
     patient: React.PropTypes.object.isRequired,
   };
@@ -26,8 +27,12 @@ class IndicationOverlay extends React.Component {
   }
 
   onClick(indication) {
-    const { submitAddIndication, onClose, patient } = this.props;
-    submitAddIndication(patient.id, indication);
+    const { selectIndication, submitAddIndication, onClose, patient } = this.props;
+    if (selectIndication){
+      selectIndication(indication);
+    }else{
+      submitAddIndication(patient.id, indication);
+    }
     onClose();
   }
 
@@ -40,7 +45,6 @@ class IndicationOverlay extends React.Component {
   compareIndication(indication) {
     const { patient: { indications } } = this.props;
     const { indicationFilter } = this.state;
-
     if (indicationFilter !== '') {
       const indicationName = _.toLower(indication.name);
       const lowerIndicationFilter = _.toLower(indicationFilter);

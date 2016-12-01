@@ -44,6 +44,8 @@ const selectSelectedPatientDetailsForForm = () => createSelector(
       indications: map(selectedPatientDetails.indications, indicationIterator => ({
         label: indicationIterator.name,
         value: indicationIterator.id,
+        id: indicationIterator.id,
+        name: indicationIterator.name,
       })),
       status: parseInt(selectedPatientDetails.studyPatientCategory.patient_category_id, 10),
       source: selectedPatientDetails.source_id,
