@@ -233,10 +233,10 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
           <div className="tr" key={key}>
             <div className="td" style={{ width: '8%' }}>
               <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
-              <span className="input-style" onClick={this.onClickCurrent}>
-                <input type="checkbox" name={key} />
+                <span className="input-style" onClick={this.onClickCurrent}>
+                  <input type="checkbox" name={key} />
+                </span>
               </span>
-            </span>
               <span>{(key + 1)}</span>
             </div>
             <div className="td" style={{ width: '9.6%' }}>{dateWrapper}</div>
