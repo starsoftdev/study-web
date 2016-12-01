@@ -99,13 +99,13 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
           <div className="row images-area">
             <div className="col-xs-4 pull-left">
-              <a className="lightbox-opener option3" data-for="radio-option3" onClick={this.openRewardModal}><img alt="" src={cardStudykik} /></a>
+              <a href="#" className="lightbox-opener option3" data-for="radio-option3" onClick={this.openRewardModal}><img alt="" src={cardStudykik} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a className="lightbox-opener option1" data-for="radio-option1" onClick={this.openRewardModal}><img alt="" src={cardStarbucks} /></a>
+              <a href="#" className="lightbox-opener option1" data-for="radio-option1" onClick={this.openRewardModal}><img alt="" src={cardStarbucks} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a className="lightbox-opener option2" data-for="radio-option2" onClick={this.openRewardModal}><img alt="" src={cardAmazon} /></a>
+              <a href="#" className="lightbox-opener option2" data-for="radio-option2" onClick={this.openRewardModal}><img alt="" src={cardAmazon} /></a>
             </div>
           </div>
 
