@@ -32,7 +32,6 @@ import { selectProposals } from './selectors';
 
 import ProposalsTable from 'components/ProposalsTable';
 import TableSearchForm from 'components/TableSearchForm';
-import './styles.less';
 
 export class Proposals extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -166,7 +165,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     return (
       <StickyContainer className="container-fluid">
         <Helmet title="Proposals - StudyKIK" />
-        <section className="calendar-section receipts">
+        <section className="receipts">
           <h2 className="main-heading">PROPOSALS</h2>
           <TableSearchForm
             changeRange={this.changeRange}

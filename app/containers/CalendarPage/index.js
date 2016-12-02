@@ -31,8 +31,6 @@ import { selectSchedules, selectPatientsByStudy } from './selectors';
 
 import { SchedulePatientModalType } from 'common/constants';
 
-import './styles.less';
-
 const getFilteredSchedules = (schedules, filter) =>
   schedules.filter(s =>
     `${s.patient.firstName} ${s.patient.lastName}`.toLowerCase().indexOf(filter.patientName.toLowerCase()) > -1 &&
