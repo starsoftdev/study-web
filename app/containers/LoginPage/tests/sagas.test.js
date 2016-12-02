@@ -1,9 +1,8 @@
 import expect from 'expect';
-import { take, call, put, fork, cancel } from 'redux-saga/effects';
-import loginSaga from '../../../common/sagas/login.saga';
-import { authorize } from '../../../common/sagas/login.saga';
+import { take, call, fork } from 'redux-saga/effects';
+import loginSaga, { authorize } from '../../../common/sagas/login.saga';
 
-import { fetchMeFromToken, setAuthState, setUserData } from 'containers/App/actions';
+import { fetchMeFromToken } from 'containers/App/actions';
 
 import {
   LOGIN_REQUEST,
@@ -44,7 +43,7 @@ describe('LoginPage/sagas', () => {
 
       const actualYield = iterator.next().value;
       expect(actualYield).toEqual(call(request, requestURL, params));
-    })
+    });
 
     it('should dispatch the fetchMeFromToken if it gets successful response', () => {
       const response = {};
