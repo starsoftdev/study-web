@@ -7,8 +7,6 @@
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
-import './styles.less';
-import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
 import Money from 'components/Money';
 
@@ -172,41 +170,15 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
   mapHeaders(raw, state, result) {
     _.map(raw, (header, key) => {
-      let width = '';
-      switch (key) {
-        case 0:
-          width = '9.6%';
-          break;
-        case 1:
-          width = '17.4%';
-          break;
-        case 2:
-          width = '18.4%';
-          break;
-        case 3:
-          width = '19.7%';
-          break;
-        case 4:
-          width = '17.4%';
-          break;
-        case 5:
-          width = '9.5%';
-          break;
-        default:
-          width = 'auto';
-          break;
-      }
-
       result.push(
-        <div
+        <th
           key={key}
           data-sort={header.sort}
           onClick={this.sortBy}
-          className={`th ${(this.props.paginationOptions.activeSort === header.sort) ? this.props.paginationOptions.activeDirection : ''}`}
-          style={{ width }}
+          className={`${(this.props.paginationOptions.activeSort === header.sort) ? this.props.paginationOptions.activeDirection : ''}`}
         >
           {header.text} <i className="caret-arrow" />
-        </div>
+        </th>
       );
     });
   }
@@ -230,22 +202,22 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
       if (key === 0 || invoiceId !== source.invoice_id) {
         invoiceId = source.invoice_id;
         result.push(
-          <div className="tr" key={key}>
-            <div className="td" style={{ width: '8%' }}>
+          <tr key={key}>
+            <td>
               <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
                 <span className="input-style" onClick={this.onClickCurrent}>
                   <input type="checkbox" name={key} />
                 </span>
               </span>
               <span>{(key + 1)}</span>
-            </div>
-            <div className="td" style={{ width: '9.6%' }}>{dateWrapper}</div>
-            <div className="td" style={{ width: '17.4%' }}>{siteName}</div>
-            <div className="td" style={{ width: '18.4%' }}>{source.invoice_id}</div>
-            <div className="td" style={{ width: '19.7%' }}>{source.protocol_number || '-'}</div>
-            <div className="td" style={{ width: '17.4%' }}>card</div>
-            <div className="td" style={{ width: '9.5%' }}><Money value={source.total / 100} className="price total-price" /></div>
-          </div>
+            </td>
+            <td>{dateWrapper}</td>
+            <td>{siteName}</td>
+            <td>{source.invoice_id}</td>
+            <td>{source.protocol_number || '-'}</td>
+            <td>card</td>
+            <td><Money value={source.total / 100} className="price total-price" /></td>
+          </tr>
         );
       }
     });
@@ -261,23 +233,31 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
     return (
       <div className="table-holder">
-        <StickyContainer className="table-sticky">
-          <Sticky className="header">
-            <div className="tr">
-              <div className="th" style={{ width: '8%' }}>
+        <table className="table">
+          <colgroup>
+            <col style={{ width: '6.5%' }} />
+            <col style={{ width: '9.6%' }} />
+            <col style={{ width: '17.4%' }} />
+            <col style={{ width: '18.4%' }} />
+            <col style={{ width: '19.7%' }} />
+            <col style={{ width: '17.4%' }} />
+            <col style={{ width: 'auto' }} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>
                 <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
                   <span className="input-style" onClick={this.onClickAll}>
                     <input name="all" type="checkbox" />
                   </span>
                 </span>
                 <span>#</span><i className="caret-arrow" />
-              </div>
+              </th>
               {heads}
-            </div>
-          </Sticky>
-
+            </tr>
+          </thead>
           <InfiniteScroll
-            className="tbody"
+            element="tbody"
             pageStart={0}
             loadMore={this.loadItems}
             initialLoad={false}
@@ -286,8 +266,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
           >
             {receipts}
           </InfiniteScroll>
-
-        </StickyContainer>
+        </table>
       </div>
     );
   }

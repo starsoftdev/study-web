@@ -14,7 +14,6 @@ import { defaultRanges, DateRange } from 'react-date-range';
 // import CenteredModal from '../CenteredModal/index';
 import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
-import './styles.less';
 
 const mapStateToProps = createStructuredSelector({});
 

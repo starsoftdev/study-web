@@ -30,7 +30,6 @@ import {
 import { selectReceiptsList, selectPaginationOptions, selectSearchOptions } from './selectors';
 import ReceiptsTable from 'components/ReceiptsTable';
 import TableSearchForm from 'components/TableSearchForm';
-import './styles.less';
 
 export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
