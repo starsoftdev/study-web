@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
-import { map } from 'lodash';
+import _, { map } from 'lodash';
 import moment from 'moment-timezone';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
@@ -73,20 +73,30 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   deleteIndication(indication) {
-    console.log('delete indication');
-    console.log(indication);
-    const newArr = _.remove(this.props.formValues.indications, function(n) {
-      return n.id !== indication.id;
-    });
+    const newArr = _.remove(this.props.formValues.indications, (n) => (n.id !== indication.id));
     this.props.dispatch(change('editPatient', 'indications', newArr));
   }
 
+  toggleIndicationPopover() {
+    this.setState({
+      showIndicationPopover: !this.state.showIndicationPopover,
+    });
+  }
+
+  selectIndication(indication) {
+    this.props.dispatch(change('editPatient', 'indications', this.props.formValues.indications.concat([indication])));
+  }
+
+  submitAddIndication() {
+
+  }
+
   renderIndications() {
-    const { initialValues, formValues } = this.props;
+    const { formValues } = this.props;
     if (formValues.indications) {
       return (
         <div className="category-list">
-          {formValues.indications.map((indication, index) => (
+          {formValues.indications.map((indication) => (
             <div key={indication.id} className="category">
               <span className="link">
                 <span className="text">{indication.name}</span>
@@ -103,21 +113,6 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       );
     }
     return null;
-  }
-
-  toggleIndicationPopover() {
-    this.setState({
-      showIndicationPopover: !this.state.showIndicationPopover,
-    });
-  }
-
-  selectIndication(indication) {
-    console.log(44, indication);
-    this.props.dispatch(change('editPatient', 'indications', this.props.formValues.indications.concat([indication])));
-  }
-
-  submitAddIndication(){
-
   }
 
   render() {
@@ -146,7 +141,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     const patientValues = {
       id: initialValues.id,
       indications: formValues.indications,
-    }
+    };
     return (
       <Form className="form-lightbox form-edit-patient-information" onSubmit={this.onSubmit}>
         <div className="field-row form-group">
@@ -200,7 +195,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             disabled={savedPatient.saving}
           />
         </div>
-        <div className="field-row form-group indication-hidden">
+        <div className="field-row form-group patient-database-indication-hidden">
           <strong className="label">
             <label>Indications</label>
           </strong>

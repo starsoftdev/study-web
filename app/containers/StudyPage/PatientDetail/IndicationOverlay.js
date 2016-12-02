@@ -28,9 +28,9 @@ class IndicationOverlay extends React.Component {
 
   onClick(indication) {
     const { selectIndication, submitAddIndication, onClose, patient } = this.props;
-    if (selectIndication){
+    if (selectIndication) {
       selectIndication(indication);
-    }else{
+    } else {
       submitAddIndication(patient.id, indication);
     }
     onClose();
