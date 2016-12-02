@@ -41,6 +41,10 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
   constructor(props) {
     super(props);
 
+    this.state = {
+      searchTimer: null,
+    };
+
     this.initSearch = this.initSearch.bind(this);
   }
 
@@ -48,11 +52,16 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     const params = this.props.formValues;
     if (e && e.target) {
       params[e.target.name] = e.target.value;
+      if (this.state.searchTimer) {
+        clearTimeout(this.state.searchTimer);
+        this.setState({ searchTimer: null });
+      }
+      const timerH = setTimeout(() => { this.props.onSubmit(params, true); }, 500);
+      this.setState({ searchTimer: timerH });
     } else {
       params[name] = e;
+      this.props.onSubmit(params, true);
     }
-
-    this.props.onSubmit(params, true);
   }
 
   render() {
