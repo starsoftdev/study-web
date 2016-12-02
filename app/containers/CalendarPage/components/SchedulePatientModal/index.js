@@ -58,6 +58,7 @@ export default class SchedulePatientModal extends Component {
     modalType: PropTypes.string.isRequired,
     selectedCellInfo: PropTypes.object.isRequired,
     patientsByStudy: PropTypes.object.isRequired,
+    schedules: PropTypes.array.isRequired,
     fetchPatientsByStudy: PropTypes.func.isRequired,
     fetchingSites: PropTypes.bool,
     fetchingPatientsByStudy: PropTypes.bool.isRequired,
@@ -105,8 +106,10 @@ export default class SchedulePatientModal extends Component {
         label: p.firstName + ' ' + p.lastName,
         value: p.id,
       }))));
+      const availablePatientOptions = _.differenceWith(patientOptions, this.props.schedules, (po, schedule) => po.value === schedule.patient_id);
+
       this.setState({
-        patientOptions,
+        patientOptions: availablePatientOptions,
       });
     }
   }
