@@ -6,12 +6,10 @@
 
 import React, { PropTypes } from 'react';
 import ReactSuperSelect from 'react-super-select';
-import 'react-super-select/lib/react-super-select.css';
 import classNames from 'classnames';
 
 function ReactMultiSelect({
   input,
-  name,
   placeholder,
   className,
   onChange,

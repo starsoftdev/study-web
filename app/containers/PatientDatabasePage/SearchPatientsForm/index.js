@@ -14,9 +14,6 @@ import formValidator from './validator';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import './styles.less';
 
-import ReactSuperSelect from 'react-super-select';
-import 'react-super-select/lib/react-super-select.css';
-
 import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
 
 const mapStateToProps = createStructuredSelector({
@@ -47,8 +44,6 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     super(props);
 
     this.initSearch = this.initSearch.bind(this);
-    this.handlerExample = this.handlerExample.bind(this);
-
   }
 
   initSearch(e, name) {
@@ -58,16 +53,10 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     } else {
       params[name] = e;
     }
-    console.log('search', params);
     this.props.onSubmit(params, true);
   }
 
-  handlerExample(item){
-    console.log(111, item);
-  }
-
   render() {
-    console.log('props', this.props);
     const { indications, sources, patientCategories, patients, hasError, handleSubmit } = this.props;
     const indicationOptions = map(indications, indicationIterator => ({
       label: indicationIterator.name,
@@ -95,40 +84,18 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
       },
     ];
 
-    const itemTemplate = (controlSelectedValue) => {
+    const itemTemplate = (controlSelectedValue) => (
+      <div key={controlSelectedValue.value}>
+        {controlSelectedValue.label}
+      </div>
+    );
 
-      return(
-        <div key={controlSelectedValue.value}>
-          {controlSelectedValue.label}
-        </div>);
-    };
+    const selectedItemsTemplate = (controlSelectedValue) => (
+      <div>
+        {controlSelectedValue.length} item(s) selected
+      </div>
+    );
 
-    const selectedItemsTemplate = (controlSelectedValue) => {
-      console.log(333, controlSelectedValue)
-      return (
-        <div>
-          {controlSelectedValue.length} item(s) selected
-        </div>
-      );
-    }
-
-    const groceries = [
-      {
-        id: 1,
-        attributeName: "apple",
-        label: "Apple",
-        iconClass: "rss-grocery rss-grocery-apple",
-        group: "Fruit",
-        price: 0.79
-      },{
-        id: 2,
-        attributeName: "carrot",
-        label: "Carrot",
-        iconClass: "rss-grocery rss-grocery-carrot",
-        group: "Vegetable",
-        price: 0.21
-      },
-    ];
     return (
       <form className="form-search" onSubmit={handleSubmit}>
         <div className="fields-holder clearfix">
@@ -162,9 +129,9 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 component={ReactMultiSelect}
                 placeholder="Select Indication"
                 searchPlaceholder="Search Indication"
-                searchable={true}
-                optionLabelKey='label'
-                multiple={true}
+                searchable
+                optionLabelKey="label"
+                multiple
                 onChange={(e) => this.initSearch(e, 'includeIndication')}
                 customOptionTemplateFunction={itemTemplate}
                 customSelectedValueTemplateFunction={selectedItemsTemplate}
@@ -180,16 +147,16 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
             <div className="field">
               <Field
                 name="excludeIndication"
-                component={ReactSelect}
+                component={ReactMultiSelect}
                 placeholder="Select Indication"
-                options={indicationOptions}
-                multi
-                joinValues
-                objectValue
-                clearable={false}
-                disabled={patients.fetching}
-                className="multiSelectWrap"
+                searchPlaceholder="Search Indication"
+                searchable
+                optionLabelKey="label"
+                multiple
                 onChange={(e) => this.initSearch(e, 'excludeIndication')}
+                customOptionTemplateFunction={itemTemplate}
+                customSelectedValueTemplateFunction={selectedItemsTemplate}
+                dataSource={indicationOptions}
               />
             </div>
           </div>
