@@ -28,14 +28,6 @@ export default function request(url, options = {}) {
     headers.authorization = options.authToken;
   }
 
-  if (newUrl.indexOf('access_token') === -1) {
-    if (newUrl.indexOf('?') === -1) {
-      newUrl = `${url}?access_token=${authToken}`;
-    } else {
-      newUrl = `${url}&access_token=${authToken}`;
-    }
-  }
-
   if (!options.method || options.method === 'GET') {
     if (options.query) {
       const queryString = serializeParams(options.query);
@@ -48,6 +40,7 @@ export default function request(url, options = {}) {
   }
 
   options.headers = Object.assign({}, headers, options.headers ); // eslint-disable-line
+
   return fetch(newUrl, options)
     .then(checkStatus)
     .then(parseJSON)
