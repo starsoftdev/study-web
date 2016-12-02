@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
-import { map } from 'lodash';
+import _, { map } from 'lodash';
 
 import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
@@ -67,12 +67,47 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
   }
 
   render() {
-    const { indications, sources, patientCategories, patients, hasError, handleSubmit } = this.props;
-    const indicationOptions = map(indications, indicationIterator => ({
-      label: indicationIterator.name,
-      value: indicationIterator.id,
-      id: indicationIterator.id,
-    }));
+    const { formValues, indications, sources, patientCategories, patients, hasError, handleSubmit } = this.props;
+
+    const includeIndicationArr = [];
+    let finalIncludeIndication = [];
+    const excludeIndicationArr = [];
+    let finalExcludeIndication = [];
+
+    for (const val of indications) {
+      if (!formValues.includeIndication || formValues.includeIndication.length === 0 || !_.find(formValues.includeIndication, (o) => (o.id === val.id))) {
+        includeIndicationArr.push({
+          label: val.name,
+          value: val.id,
+          id: val.id,
+        });
+      } else {
+        finalIncludeIndication.push({
+          label: val.name,
+          value: val.id,
+          id: val.id,
+        });
+      }
+
+      if (!formValues.excludeIndication || formValues.excludeIndication.length === 0 || !_.find(formValues.excludeIndication, (o) => (o.id === val.id))) {
+        excludeIndicationArr.push({
+          label: val.name,
+          value: val.id,
+          id: val.id,
+        });
+      } else {
+        finalExcludeIndication.push({
+          label: val.name,
+          value: val.id,
+          id: val.id,
+        });
+      }
+    }
+
+    finalIncludeIndication = _.concat(finalIncludeIndication, includeIndicationArr);
+    finalExcludeIndication = _.concat(finalExcludeIndication, excludeIndicationArr);
+
+
     const sourceOptions = map(sources, sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
@@ -145,7 +180,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 onChange={(e) => this.initSearch(e, 'includeIndication')}
                 customOptionTemplateFunction={itemTemplate}
                 customSelectedValueTemplateFunction={selectedItemsTemplate}
-                dataSource={indicationOptions}
+                dataSource={finalIncludeIndication}
               />
             </div>
           </div>
@@ -166,7 +201,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 onChange={(e) => this.initSearch(e, 'excludeIndication')}
                 customOptionTemplateFunction={itemTemplate}
                 customSelectedValueTemplateFunction={selectedItemsTemplate}
-                dataSource={indicationOptions}
+                dataSource={finalExcludeIndication}
               />
             </div>
           </div>
