@@ -14,6 +14,8 @@ import formValidator from './validator';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import './styles.less';
 
+import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
+
 const mapStateToProps = createStructuredSelector({
   indications: selectIndications(),
   sources: selectSources(),
@@ -69,6 +71,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     const indicationOptions = map(indications, indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
+      id: indicationIterator.id,
     }));
     const sourceOptions = map(sources, sourceIterator => ({
       label: sourceIterator.type,
@@ -90,6 +93,18 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
         value: 'Female',
       },
     ];
+
+    const itemTemplate = (controlSelectedValue) => (
+      <div key={controlSelectedValue.value}>
+        {controlSelectedValue.label}
+      </div>
+    );
+
+    const selectedItemsTemplate = (controlSelectedValue) => (
+      <div>
+        {controlSelectedValue.length} item(s) selected
+      </div>
+    );
 
     return (
       <form className="form-search" onSubmit={handleSubmit}>
@@ -121,16 +136,16 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
             <div className="field">
               <Field
                 name="includeIndication"
-                component={ReactSelect}
+                component={ReactMultiSelect}
                 placeholder="Select Indication"
-                options={indicationOptions}
-                multi
-                joinValues
-                objectValue
-                clearable={false}
-                disabled={patients.fetching}
-                className="multiSelectWrap"
+                searchPlaceholder="Search Indication"
+                searchable
+                optionLabelKey="label"
+                multiple
                 onChange={(e) => this.initSearch(e, 'includeIndication')}
+                customOptionTemplateFunction={itemTemplate}
+                customSelectedValueTemplateFunction={selectedItemsTemplate}
+                dataSource={indicationOptions}
               />
             </div>
           </div>
@@ -142,16 +157,16 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
             <div className="field">
               <Field
                 name="excludeIndication"
-                component={ReactSelect}
+                component={ReactMultiSelect}
                 placeholder="Select Indication"
-                options={indicationOptions}
-                multi
-                joinValues
-                objectValue
-                clearable={false}
-                disabled={patients.fetching}
-                className="multiSelectWrap"
+                searchPlaceholder="Search Indication"
+                searchable
+                optionLabelKey="label"
+                multiple
                 onChange={(e) => this.initSearch(e, 'excludeIndication')}
+                customOptionTemplateFunction={itemTemplate}
+                customSelectedValueTemplateFunction={selectedItemsTemplate}
+                dataSource={indicationOptions}
               />
             </div>
           </div>
