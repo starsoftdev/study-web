@@ -217,6 +217,7 @@ export class CalendarPage extends React.Component {
             selectedCellInfo={this.selectedCellInfo}
             modalType={this.state.modalType}
             patientsByStudy={patientsByStudy}
+            schedules={schedules.data}
             fetchingSites={fetchingSites}
             fetchingPatientsByStudy={fetchingPatientsByStudy}
             fetchPatientsByStudy={this.props.fetchPatientsByStudy}
