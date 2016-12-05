@@ -9,8 +9,8 @@ import { Modal } from 'react-bootstrap';
 import ShoppingCartForm from 'components/ShoppingCartForm';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { addCredits } from 'containers/App/actions';
-import { selectCurrentUser, selectAddCredits } from 'containers/App/selectors';
+import { addCredits, getCreditsPrice } from 'containers/App/actions';
+import { selectCurrentUser, selectAddCredits, selectCreditsPrice } from 'containers/App/selectors';
 import './styles.less';
 
 class AddCreditsModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -21,6 +21,8 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
     addCredits: React.PropTypes.func,
     currentUser: React.PropTypes.object,
     addCreditsOperation: React.PropTypes.object,
+    getCreditsPrice: React.PropTypes.func,
+    creditsPrice: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -31,14 +33,25 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
 
     this.state = {
       quantity: 1,
-      credits: 100,
-      price: 7700,
+      credits: 0,
+      price: 0,
     };
+  }
+
+  componentDidMount() {
+    this.props.getCreditsPrice();
   }
 
   componentWillReceiveProps(newProps) {
     if (!newProps.addCreditsOperation.adding && this.props.addCreditsOperation.adding) {
       this.props.closeModal();
+    }
+    if (newProps.creditsPrice.price && !this.props.creditsPrice.price) {
+      this.setState({
+        quantity: 1,
+        credits: newProps.creditsPrice.attributes.amount,
+        price: newProps.creditsPrice.price,
+      });
     }
   }
 
@@ -46,8 +59,8 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
     if (this.state.quantity < 999) {
       this.setState({
         quantity: this.state.quantity + 1,
-        credits: (this.state.quantity + 1) * 100,
-        price: (this.state.quantity + 1) * 7700,
+        credits: (this.state.quantity + 1) * this.props.creditsPrice.attributes.amount,
+        price: (this.state.quantity + 1) * this.props.creditsPrice.price,
       });
     }
   }
@@ -56,8 +69,8 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
     if (this.state.quantity > 1) {
       this.setState({
         quantity: this.state.quantity - 1,
-        credits: (this.state.quantity - 1) * 100,
-        price: (this.state.quantity - 1) * 7700,
+        credits: (this.state.quantity - 1) * this.props.creditsPrice.attributes.amount,
+        price: (this.state.quantity - 1) * this.props.creditsPrice.price,
       });
     }
   }
@@ -118,7 +131,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
                         <div className="field-row">
                           <strong className="label"><label htmlFor="price">PRICE</label></strong>
                           <div className="field">
-                            <input className="form-control" value={`$ ${this.state.price / 100}`} type="text" name="price" disabled />
+                            <input className="form-control" value={`$${this.state.price / 100}`} type="text" name="price" disabled />
                           </div>
                         </div>
                       </div>
@@ -142,11 +155,13 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   addCreditsOperation: selectAddCredits(),
+  creditsPrice: selectCreditsPrice(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     addCredits: (customerId, data) => dispatch(addCredits(customerId, data)),
+    getCreditsPrice: () => dispatch(getCreditsPrice()),
   };
 }
 

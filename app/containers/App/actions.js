@@ -100,6 +100,10 @@ import {
   GET_AVAIL_PHONE_NUMBERS,
   GET_AVAIL_PHONE_NUMBERS_SUCCESS,
   GET_AVAIL_PHONE_NUMBERS_ERROR,
+
+  GET_CREDITS_PRICE,
+  GET_CREDITS_PRICE_SUCCESS,
+  GET_CREDITS_PRICE_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -693,6 +697,26 @@ export function getAvailPhoneNumbersSuccess(payload) {
 export function getAvailPhoneNumbersError(payload) {
   return {
     type: GET_AVAIL_PHONE_NUMBERS_ERROR,
+    payload,
+  };
+}
+
+export function getCreditsPrice() {
+  return {
+    type: GET_CREDITS_PRICE,
+  };
+}
+
+export function getCreditsPriceSuccess(payload) {
+  return {
+    type: GET_CREDITS_PRICE_SUCCESS,
+    payload,
+  };
+}
+
+export function getCreditsPriceError(payload) {
+  return {
+    type: GET_CREDITS_PRICE_ERROR,
     payload,
   };
 }
