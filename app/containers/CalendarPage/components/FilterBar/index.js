@@ -4,8 +4,6 @@ import React, { Component, PropTypes } from 'react';
 import Select from 'react-select';
 import _ from 'lodash';
 
-import 'react-select/dist/react-select.min.css';
-
 class FilterBar extends Component {
   static propTypes = {
     siteLocationOptions: PropTypes.array.isRequired,
