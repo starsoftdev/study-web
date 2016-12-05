@@ -192,8 +192,8 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
                     onChange={this.handleChange}
                   />
                   <div className="dateRange-helper">
-                    <div className="emit-border"></div>
                     <div className="right-part">
+                      <div className="emit-border"><br/></div>
                       <span className="left">{ predefined.startDate && predefined.startDate.format(format).toString() }</span>
                       <span className="right">{ predefined.endDate && predefined.endDate.format(format).toString() }</span>
                       <div className="btn-block text-right">
