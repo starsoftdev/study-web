@@ -106,6 +106,7 @@ function studyPageReducer(state = initialState, action) {
           patientCategoryTemp.patients = [];
           return patientCategoryTemp;
         }),
+        fetchingPatientCategories: false,
       };
     case FETCH_SITE_SUCCESS:
       return {

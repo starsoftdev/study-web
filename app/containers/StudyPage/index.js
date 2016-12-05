@@ -27,6 +27,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     currentUser: PropTypes.any,
     fetchPatients: PropTypes.func.isRequired,
     fetchPatientCategories: PropTypes.func.isRequired,
+    fetchingPatientCategories: PropTypes.bool.isRequired,
     fetchingPatients: PropTypes.bool.isRequired,
     fetchStudy: PropTypes.func.isRequired,
     fetchingStudy: PropTypes.bool.isRequired,
@@ -45,6 +46,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   static defaultProps = {
     fetchingStudy: true,
     fetchingPatients: true,
+    fetchingPatientCategories: true,
   };
 
   constructor(props) {
@@ -81,14 +83,14 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { fetchingStudy, campaigns, patientCategories, site, sources, study, stats } = this.props;
-    if (fetchingStudy) {
+    const { fetchingPatientCategories, fetchingStudy, campaigns, patientCategories, site, sources, study, stats } = this.props;
+    if (fetchingStudy || fetchingPatientCategories) {
       return (
         <LoadingSpinner />
       );
-    } else if (!study) {
+    } else if (!study || !sources || !campaigns) {
       return (
-        <div>A problem occurred trying to load the page. Please refreshing the page.</div>
+        <div>A problem occurred trying to load the page. Please try refreshing the page.</div>
       );
     }
     const pageTitle = `${study.name} - StudyKIK`;
@@ -111,6 +113,9 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (study.sponsor) {
       sponsor = study.sponsor.name;
     }
+    console.log(fetchingStudy);
+    console.log(study);
+    console.log(patientCategories);
     return (
       <div className="container-fluid">
         <Helmet title={pageTitle} />
@@ -139,6 +144,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 const mapStateToProps = createStructuredSelector({
   campaigns: Selector.selectCampaigns(),
   fetchingPatients: Selector.selectFetchingPatients(),
+  fetchingPatientCategories: Selector.selectFetchingPatientCategories(),
   fetchingStudy: Selector.selectFetchingStudy(),
   patientCategories: Selector.selectPatientCategories(),
   sources: Selector.selectSources(),

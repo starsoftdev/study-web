@@ -30,6 +30,7 @@ import {
   SAVE_SITE,
   SAVE_USER,
   GET_AVAIL_PHONE_NUMBERS,
+  GET_CREDITS_PRICE,
 } from 'containers/App/constants';
 
 
@@ -79,6 +80,8 @@ import {
   userSavingError,
   getAvailPhoneNumbersSuccess,
   getAvailPhoneNumbersError,
+  getCreditsPriceSuccess,
+  getCreditsPriceError,
 } from 'containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -105,6 +108,7 @@ export default function* baseDataSaga() {
   yield fork(saveSiteWatcher);
   yield fork(saveUserWatcher);
   yield fork(getAvailPhoneNumbersWatcher);
+  yield fork(fetchCreditsPrice);
 }
 
 export function* fetchSitesWatcher() {
@@ -573,6 +577,21 @@ export function* getAvailPhoneNumbersWatcher() {
       yield put(getAvailPhoneNumbersSuccess(response));
     } catch (e) {
       yield put(getAvailPhoneNumbersError(e));
+    }
+  }
+}
+
+export function* fetchCreditsPrice() {
+  while (true) {
+    yield take(GET_CREDITS_PRICE);
+
+    try {
+      const requestURL = `${API_URL}/twilioCreditsSkus/getPrice`;
+      const response = yield call(request, requestURL);
+
+      yield put(getCreditsPriceSuccess(response));
+    } catch (err) {
+      yield put(getCreditsPriceError(err));
     }
   }
 }
