@@ -278,20 +278,28 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             disabled={savedPatient.saving}
           />
         </div>
-        <div className="field-row form-group">
-          <strong className="label">
-            <label>STATUS</label>
-          </strong>
-          <div className="field">
-            <Field
-              name="status"
-              component={ReactSelect}
-              placeholder="Select Status"
-              options={statusOptions}
-              disabled={savedPatient.saving}
-            />
-          </div>
-        </div>
+        {(() => {
+          if (this.props.formValues.status) {
+            return (
+              <div className="field-row form-group">
+                <strong className="label">
+                  <label>STATUS</label>
+                </strong>
+                <div className="field">
+                  <Field
+                    name="status"
+                    component={ReactSelect}
+                    placeholder="Select Status"
+                    options={statusOptions}
+                    disabled={savedPatient.saving}
+                  />
+                </div>
+              </div>
+            );
+          }
+
+          return false;
+        })()}
         <div className="field-row form-group">
           <strong className="label">
             <label>SOURCE</label>
