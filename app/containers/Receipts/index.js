@@ -30,7 +30,6 @@ import {
 import { selectReceiptsList, selectPaginationOptions, selectSearchOptions } from './selectors';
 import ReceiptsTable from 'components/ReceiptsTable';
 import TableSearchForm from 'components/TableSearchForm';
-import './styles.less';
 
 export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -147,7 +146,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     return (
       <StickyContainer className="container-fluid">
         <Helmet title="Proposals - StudyKIK" />
-        <section className="calendar-section receipts proposals-receipts">
+        <section className="calendar-section receipts">
           <h2 className="main-heading">RECEIPTS</h2>
           <TableSearchForm
             changeRange={this.changeRange}
