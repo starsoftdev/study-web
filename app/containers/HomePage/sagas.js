@@ -74,7 +74,7 @@ export function* fetchPatientMessagesWorker(action) {
 
     yield put(fetchPatientMessagesSucceeded(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching schedules');
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching patient messages');
     yield put(toastrActions.error('', errorMessage));
   }
 }
@@ -90,7 +90,7 @@ export function* fetchRewardsPointWorker(action) {
 
     yield put(fetchRewardsPointSucceeded(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while submitting a schedule');
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching rewards.');
     yield put(toastrActions.error('', errorMessage));
   }
 }

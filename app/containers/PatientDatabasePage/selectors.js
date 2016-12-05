@@ -47,7 +47,7 @@ const selectSelectedPatientDetailsForForm = () => createSelector(
         id: indicationIterator.id,
         name: indicationIterator.name,
       })),
-      status: parseInt(selectedPatientDetails.studyPatientCategory.patient_category_id, 10),
+      status: selectedPatientDetails.studyPatientCategory ? parseInt(selectedPatientDetails.studyPatientCategory.patient_category_id, 10) : false,
       source: selectedPatientDetails.source_id,
     };
 

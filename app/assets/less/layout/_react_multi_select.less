@@ -319,16 +319,9 @@
   background-color: #00AFEF;
   color: #FFF;
 }
-.r-ss-dropdown .r-ss-dropdown-option.r-ss-selected:focus,
-.r-ss-dropdown .r-ss-dropdown-option.r-ss-selected::selection {
-  background-color: #00AFEF;
-  color: #FFF;
-}
 .r-ss-dropdown .r-ss-dropdown-option:focus,
 .r-ss-dropdown .r-ss-dropdown-option::selection {
   outline: none;
-  background-color: #00AFEF;
-  color: #FFF;
 }
 .r-ss-page-fetch-indicator {
   list-style: none;
@@ -431,4 +424,20 @@
   opacity: 1;
   color: #000;
   background-color: #eee;
+}
+
+.r-ss-dropdown-option {
+  .close-icon{
+    display: none;
+  }
+}
+
+.r-ss-dropdown-option.r-ss-selected {
+  .close-icon{
+    display: inline-block;
+    right: 1px;
+    top: 10px;
+    color: #fff;
+    position: absolute;
+  }
 }

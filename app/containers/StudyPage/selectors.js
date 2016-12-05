@@ -103,6 +103,11 @@ export const selectFetchingPatients = () => createSelector(
   (subState) => subState.fetchingPatients
 );
 
+export const selectFetchingPatientCategories = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.fetchingPatientCategories
+);
+
 export const selectCarousel = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.carousel
