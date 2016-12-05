@@ -5,7 +5,7 @@ import { Modal } from 'react-bootstrap';
 import { countBy, find, filter, sumBy } from 'lodash';
 
 import { fetchLevels } from 'containers/App/actions';
-import { selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients } from 'containers/App/selectors';
+import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients } from 'containers/App/selectors';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy,
   selectUpgradedStudy, selectEditedStudy } from 'containers/HomePage/selectors';
@@ -23,6 +23,7 @@ import './styles.less';
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUserStripeCustomerId: PropTypes.string,
+    currentUser: PropTypes.object,
     studies: PropTypes.object,
     studyLevels: PropTypes.array,
     selectedIndicationLevelPrice: PropTypes.object,
@@ -169,6 +170,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       stripeCustomerId: currentUserStripeCustomerId,
       selectedIndicationId: this.state.selectedIndicationId,
       selectedSiteId: this.state.selectedCampaign.site_id,
+      username: this.props.currentUser.username,
     });
   }
 
@@ -181,6 +183,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       selectedIndicationId: this.state.selectedIndicationId,
       selectedCampaignId: this.state.selectedCampaign.id,
       selectedSiteId: this.state.selectedCampaign.site_id,
+      username: this.props.currentUser.username,
     });
   }
 
@@ -429,6 +432,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 }
 
 const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
   currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
   studies: selectStudies(),
   studyLevels: selectStudyLevels(),
