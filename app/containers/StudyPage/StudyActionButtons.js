@@ -101,11 +101,25 @@ class StudyActionButtons extends Component {
 
   render() {
     return (
-      <div className="btns pull-right">
-        <div className="btn-email pull-left">
+      <div className="btns-popups pull-right">
+        <div className="col pull-right">
+          <a className="btn btn-primary download" onClick={this.download}>
+            <i className="icomoon-icon_download" />
+            &nbsp;Download
+          </a>
+        </div>
+        <div className="col pull-right">
+          <span className="btn btn-primary import" onClick={this.toggleImportPatientsModal}>
+            <i className="icomoon-icon_upload" />
+            &nbsp;Import
+          </span>
+          <ImportPatientsModal show={this.state.showImportPatientsModal} onHide={this.toggleImportPatientsModal} toggleAddPatient={this.toggleAddPatientModal} />
+          <AddPatient show={this.state.showAddPatientModal} onClose={this.closeAddPatientModal} onHide={this.toggleAddPatientModal} />
+        </div>
+        <div className="col pull-right">
           <span className="btn btn-primary email" onClick={this.toggleTextEmailBlastModal}>
             <i className="icomoon-icon_chat_alt" />
-            <span>Text / Email Blast</span>
+            &nbsp;Text / Email Blast
             <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} toggleTextBlast={this.toggleTextBlastModal} />
             <TextBlastModal
               show={this.state.showTextBlastModal}
@@ -113,20 +127,6 @@ class StudyActionButtons extends Component {
               onHide={this.toggleTextBlastModal}
             />
           </span>
-        </div>
-        <div className="btn-import pull-left">
-          <span className="btn btn-primary import" onClick={this.toggleImportPatientsModal}>
-            <i className="icomoon-icon_upload" />
-            <span>Import</span>
-          </span>
-          <ImportPatientsModal show={this.state.showImportPatientsModal} onHide={this.toggleImportPatientsModal} toggleAddPatient={this.toggleAddPatientModal} />
-          <AddPatient show={this.state.showAddPatientModal} onClose={this.closeAddPatientModal} onHide={this.toggleAddPatientModal} />
-        </div>
-        <div className="btn-download pull-left">
-          <a className="btn btn-primary download" onClick={this.download}>
-            <i className="icomoon-icon_download" />
-            <span>Download</span>
-          </a>
         </div>
       </div>
     );
