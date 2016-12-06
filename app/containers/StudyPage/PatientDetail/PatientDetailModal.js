@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import striptags from 'striptags';
 
 import { selectCurrentUser } from 'containers/App/selectors';
 import * as Selector from '../selectors';
@@ -104,7 +105,7 @@ export class PatientDetailModal extends React.Component {
       <Collapse dimension="width" in={openPatientModal} timeout={250} className="patients-list-form">
         <div className="form-area">
           <div className="form-head">
-            <strong className="title">{currentPatientCategory ? currentPatientCategory.name : null}</strong>
+            <strong className="title">{currentPatientCategory ? (striptags(currentPatientCategory.headerName) || currentPatientCategory.name) : null}</strong>
             <a className="lightbox-opener">
               <span className="date" />
               <span className="time" />
