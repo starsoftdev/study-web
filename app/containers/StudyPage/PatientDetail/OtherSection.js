@@ -159,8 +159,8 @@ class OtherSection extends React.Component {
     const { formDidChange, loading, submitting } = this.props;
     if (formDidChange) {
       return (
-        <div className="pull-right">
-          <Button bsStyle="primary" onClick={this.onReset}>Cancel</Button>
+        <div className="pull-right study-page-update-patient-bttns-container">
+          <button className="btn btn-gray-outline" onClick={this.onReset}>Cancel</button>
           <Button type="submit" disabled={submitting || loading}>Update</Button>
         </div>
       );
@@ -223,7 +223,7 @@ class OtherSection extends React.Component {
                 </div>
               </div>
               <div className="fields-holder">
-                <strong className="title">Other Information</strong>
+                <strong className="title">OTHER INFORMATION</strong>
                 <DateOfBirthPicker
                   loading={loading}
                   submitting={submitting}
@@ -249,7 +249,15 @@ class OtherSection extends React.Component {
                     <label htmlFor="patient-source5">Source</label>
                   </strong>
                   <div className="field">
-                    <FormControl type="text" value={initialValues.source ? initialValues.source.type : ''} disabled readOnly />
+                    <FormControl disabled="true" type="text" value={initialValues.source ? initialValues.source.type : ''} />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="patient-source5">PATIENT REFERRAL</label>
+                  </strong>
+                  <div className="field">
+                    <a className="btn btn-primary btn-default-padding"><i className="icomoon-icon_download" />&nbsp;&nbsp;Download</a>
                   </div>
                 </div>
               </div>
