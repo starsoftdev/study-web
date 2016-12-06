@@ -101,3 +101,7 @@ export const SAVE_USER_ERROR                       = 'App/SAVE_USER_ERROR';
 export const GET_AVAIL_PHONE_NUMBERS               = 'App/GET_AVAIL_PHONE_NUMBERS';
 export const GET_AVAIL_PHONE_NUMBERS_SUCCESS       = 'App/GET_AVAIL_PHONE_NUMBERS_SUCCESS';
 export const GET_AVAIL_PHONE_NUMBERS_ERROR         = 'App/GET_AVAIL_PHONE_NUMBERS_ERROR';
+
+export const GET_CREDITS_PRICE                     = 'App/GET_CREDITS_PRICE';
+export const GET_CREDITS_PRICE_SUCCESS             = 'App/GET_CREDITS_PRICE_SUCCESS';
+export const GET_CREDITS_PRICE_ERROR               = 'App/GET_CREDITS_PRICE_ERROR ';
