@@ -7,20 +7,21 @@
 
   .dateRange-helper{
     position: relative;
-    overflow: hidden;
+    overflow-y: visible;
 
     .emit-border{
+      min-height: 500px;
       display: inline-block;
-      height: 100%;
       width: 20%;
       border-right: 2px #f78e1e solid;
       position: absolute;
     }
 
+
     .right-part{
-      width: 80%;
+      width: 100%;
       float: right;
-      padding: 0 10px 20px 10px;
+      padding: 0;
 
       span{
         display: inline-block;
@@ -30,15 +31,18 @@
         cursor: pointer;
         background: #f78e1e;
         transition: all 0.25s;
-        margin-top: 10px;
+        margin-top: -8px;
+        width: 38%;
 
         &.left{
-          float: left;
+          float: none;
+          margin-right: 10px;
+          margin-left: 21%;
         }
 
         &.right{
-          float: right;
-          margin-right: 3px;
+          float: none;
+          margin-left: 10px;
         }
 
         &:hover{
@@ -47,7 +51,7 @@
       }
 
       .btn-block{
-        margin: 70px 0 0 0;
+        margin: 15px 0 25px 0;
       }
     }
   }
