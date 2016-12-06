@@ -91,44 +91,45 @@ class FilterStudyPatientsForm extends Component {
           campaign={campaign}
           source={source}
         />
-        <div className="search-area pull-left">
-          <div className="field">
+        <div className="fields-holder">
+          <div className="search-area pull-left">
+            <div className="field">
+              <button className="btn btn-default btn-enter"><i className="icomoon-icon_search2" /></button>
+              <Field
+                component={Input}
+                type="text"
+                name="search"
+                id="search"
+                className="keyword-search"
+                placeholder="Search"
+                onChange={(event) => this.searchPatient(event, 'search')}
+              />
+            </div>
+          </div>
+          <div className="custom-select pull-left">
             <Field
-              component={Input}
-              type="search"
-              name="search"
-              id="search"
-              className="keyword-search"
-              placeholder="Search Patients"
-              onChange={(event) => this.searchPatient(event, 'search')}
+              name="campaign"
+              component={ReactSelect}
+              className="field"
+              options={campaignOptions}
+              disabled={submitting || loading}
+              placeholder="Select Campaign"
+              onChange={(event) => this.searchPatient(event, 'campaign')}
             />
-            <label htmlFor="search">
-              <i className="icomoon-icon_search2" />
-            </label>
+          </div>
+          <div className="custom-select pull-left">
+            <Field
+              name="source"
+              component={ReactSelect}
+              className="field"
+              options={sourceOptions}
+              disabled={submitting || loading}
+              placeholder="Select Source"
+              onChange={event => this.searchPatient(event, 'source')}
+            />
           </div>
         </div>
-        <div className="select pull-left">
-          <Field
-            name="campaign"
-            component={ReactSelect}
-            className="field"
-            options={campaignOptions}
-            disabled={submitting || loading}
-            placeholder="Select Campaign"
-            onChange={(event) => this.searchPatient(event, 'campaign')}
-          />
-        </div>
-        <div className="select pull-left">
-          <Field
-            name="source"
-            component={ReactSelect}
-            className="field"
-            options={sourceOptions}
-            disabled={submitting || loading}
-            placeholder="Select Source"
-            onChange={event => this.searchPatient(event, 'source')}
-          />
-        </div>
+
       </form>
     );
   }

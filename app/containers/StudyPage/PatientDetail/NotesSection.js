@@ -58,7 +58,7 @@ class NotesSection extends React.Component {
         </section>
         <div className="textarea">
           <Field name="note" component={Input} componentClass="textarea" placeholder="Type a note..." />
-          <Button onClick={this.onClick}>Send</Button>
+          <Button onClick={this.onClick}>Save</Button>
         </div>
       </div>
     );
