@@ -238,6 +238,11 @@ const selectAvailPhoneNumbers = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.availPhoneNumbers', [])
 );
+
+const selectCreditsPrice = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.creditsPrice', {})
+);
 // end
 
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
@@ -280,4 +285,5 @@ export {
   selectAvailPhoneNumbers,
 
   selectLocationState,
+  selectCreditsPrice,
 };
