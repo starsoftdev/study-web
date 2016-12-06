@@ -38,6 +38,87 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     };
   }
 
+  getColumnSortClassName(columnName) {
+    if (this.state.sortBy === columnName) {
+      if (this.state.sortOrder === 'asc') {
+        return 'up';
+      }
+
+      return 'down';
+    }
+
+    return null;
+  }
+
+  getListItemSortByValue(item) {
+    const sortBy = this.state.sortBy;
+    if (sortBy === 'name') {
+      return item.user.firstName;
+    } else if (sortBy === 'email') {
+      return item.user.email;
+    } else if (sortBy === 'access') {
+      const { name, reward, purchase } = item;
+      let accessStr = '';
+      const isSuperAdmin = (name === 'Super Admin');
+
+      if (isSuperAdmin) {
+        accessStr = 'ADMIN';
+      } else if (purchase && reward) {
+        accessStr = 'ALL ACCESS';
+      } else if (purchase && !reward) {
+        accessStr = 'PURCHASE';
+      } else if (!purchase && reward) {
+        accessStr = 'REWARDS';
+      } else {
+        accessStr = 'NO ACCESS';
+      }
+
+      return accessStr;
+    }
+
+    return null;
+  }
+
+  getSortedClientRoles() {
+    const { clientRoles } = this.props;
+    const listItems = cloneDeep(clientRoles.details);
+
+    if (!this.state.sortBy) {
+      return listItems;
+    }
+
+    const sortOrder = this.state.sortOrder;
+    const sortedListItems = listItems.sort((a, b) => {
+      if (this.getListItemSortByValue(a) < this.getListItemSortByValue(b)) {
+        return (sortOrder === 'asc') ? -1 : 1;
+      } else if (this.getListItemSortByValue(a) > this.getListItemSortByValue(b)) {
+        return (sortOrder === 'asc') ? 1 : -1;
+      }
+
+      return 0;
+    });
+
+    return sortedListItems;
+  }
+
+  clickSortHandler(columnName) {
+    if (this.state.sortBy !== columnName) {
+      this.setState({
+        sortBy: columnName,
+        sortOrder: 'asc',
+      });
+    } else if (this.state.sortOrder === 'asc') {
+      this.setState({
+        sortOrder: 'des',
+      });
+    } else if (this.state.sortOrder === 'des') {
+      this.setState({
+        sortBy: null,
+        sortOrder: null,
+      });
+    }
+  }
+
   editUserModalShouldBeShown() {
     const { selectedUser } = this.props;
     const displayed = (selectedUser.details && selectedUser.details.roleForClient) ? true: false; // eslint-disable-line
@@ -73,87 +154,6 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     this.props.deleteClientRole(selectedUser.details.roleForClient.id);
   }
 
-  clickSortHandler(columnName) {
-    if (this.state.sortBy !== columnName) {
-      this.setState({
-        sortBy: columnName,
-        sortOrder: 'asc',
-      });
-    } else {
-      if (this.state.sortOrder === 'asc') {
-        this.setState({
-          sortOrder: 'des',
-        });
-      } else if (this.state.sortOrder === 'des') {
-        this.setState({
-          sortBy: null,
-          sortOrder: null,
-        });
-      }
-    }
-  }
-
-  getColumnSortClassName(columnName) {
-    if (this.state.sortBy === columnName) {
-      if (this.state.sortOrder === 'asc') {
-        return 'up';
-      } else {
-        return 'down';
-      }
-    } else {
-      return null;
-    }
-  }
-
-  getListItemSortByValue(item) {
-    const sortBy = this.state.sortBy;
-    if (sortBy === 'name') {
-      return item.user.firstName;
-    } else if (sortBy === 'email') {
-      return item.user.email;
-    } else if (sortBy === 'access') {
-      const { name, reward, purchase } = item;
-      let accessStr = '';
-      const isSuperAdmin = (name === 'Super Admin');
-
-      if (isSuperAdmin) {
-        accessStr = 'ADMIN';
-      } else if (purchase && reward) {
-        accessStr = 'ALL ACCESS';
-      } else if (purchase && !reward) {
-        accessStr = 'PURCHASE';
-      } else if (!purchase && reward) {
-        accessStr = 'REWARDS';
-      } else {
-        accessStr = 'NO ACCESS';
-      }
-
-      return accessStr;
-    }
-  }
-
-  getSortedClientRoles() {
-    const { clientRoles } = this.props;
-    const listItems = cloneDeep(clientRoles.details);
-
-    if (!this.state.sortBy) {
-      return listItems;
-    }
-
-    const sortOrder = this.state.sortOrder;
-    const sortedListItems = listItems.sort((a, b) => {
-      if (this.getListItemSortByValue(a) < this.getListItemSortByValue(b)) {
-        return (sortOrder === 'asc') ? -1 : 1;
-      } else if (this.getListItemSortByValue(a) > this.getListItemSortByValue(b)) {
-        return (sortOrder === 'asc') ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-
-    return sortedListItems;
-  }
-
   render() {
     const { clientSites, selectedUserDetailsForForm, deletedClientRole } = this.props;
     const sortedClientRoles = this.getSortedClientRoles();
@@ -175,15 +175,15 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
                   <caption>ADMINS</caption>
                   <thead>
                     <tr>
-                      <th className={this.getColumnSortClassName('name')} onClick={() => {this.clickSortHandler('name')}}>
+                      <th className={this.getColumnSortClassName('name')} onClick={() => { this.clickSortHandler('name'); }}>
                         <span>NAME</span>
                         <i className="caret-arrow"></i>
                       </th>
-                      <th className={this.getColumnSortClassName('email')} onClick={() => {this.clickSortHandler('email')}}>
+                      <th className={this.getColumnSortClassName('email')} onClick={() => { this.clickSortHandler('email'); }}>
                         <span>EMAIL</span>
                         <i className="caret-arrow"></i>
                       </th>
-                      <th className={this.getColumnSortClassName('access')} onClick={() => {this.clickSortHandler('access')}}>
+                      <th className={this.getColumnSortClassName('access')} onClick={() => { this.clickSortHandler('access'); }}>
                         <span>ACCESS</span>
                         <i className="caret-arrow"></i>
                       </th>
