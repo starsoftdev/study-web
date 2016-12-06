@@ -146,9 +146,8 @@ export class CalendarPage extends React.Component {
       };
     } else { // UPDATE
       let updatedDate;
-
       if (data.date) {
-        updatedDate = moment(new Date(data.date));
+        updatedDate = data.date.startOf('day');
       } else {  // React Datepicker doesn't submit its initial value
         updatedDate = moment(new Date(this.selectedCellInfo.data.time)).startOf('day');
       }
