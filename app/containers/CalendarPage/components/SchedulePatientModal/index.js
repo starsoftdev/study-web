@@ -77,7 +77,11 @@ export default class SchedulePatientModal extends Component {
     const { siteLocationOptions, isAdmin } = this.props;
 
     if (this.props.modalType === SchedulePatientModalType.HIDDEN && nextProps.modalType !== SchedulePatientModalType.HIDDEN) {
-      let initialValues = nextProps.selectedCellInfo.data ? getTimeComponents(nextProps.selectedCellInfo.data.time) : { period: 'AM', textReminder: true };
+      let initialValues = nextProps.selectedCellInfo.data ?
+      {
+        ...getTimeComponents(nextProps.selectedCellInfo.data.time),
+        textReminder: true,
+      } : { period: 'AM', textReminder: true };
       if (!isAdmin) {
         const site = siteLocationOptions[0];
         if (this.state.siteLocation === null && site) {  // prevent recursive render
