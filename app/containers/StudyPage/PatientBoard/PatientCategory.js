@@ -11,8 +11,9 @@ import { selectCurrentUser, selectSitePatients } from 'containers/App/selectors'
 import * as Selector from '../selectors';
 import DragTypes from './dragSourceTypes';
 import Patient from './Patient';
-import { submitMovePatientBetweenCategories } from '../actions';
+import { schedulePatient, submitMovePatientBetweenCategories } from '../actions';
 import { find } from 'lodash';
+import classNames from 'classnames';
 
 /**
  * Specifies the drop target contract.
@@ -25,7 +26,12 @@ const patientTarget = {
     }
     // Obtain the dragged item
     const item = monitor.getItem();
-    props.submitMovePatientBetweenCategories(props.studyId, item.patientCategoryId, props.category.id, item.id);
+    if (props.category.name === 'Scheduled') {
+      // store the scheduled patient information temporarily since the user could cancel out of their category movement
+      props.schedulePatient(props.studyId, item.patientCategoryId, props.category.id, item.id);
+    } else {
+      props.submitMovePatientBetweenCategories(props.studyId, item.patientCategoryId, props.category.id, item.id);
+    }
   },
 };
 
@@ -50,6 +56,7 @@ class PatientCategory extends React.Component {
     currentUser: React.PropTypes.object.isRequired,
     submitMovePatientBetweenCategories: React.PropTypes.func.isRequired,
     onPatientClick: React.PropTypes.func.isRequired,
+    isOver: React.PropTypes.bool.isRequired,
     onPatientTextClick: React.PropTypes.func.isRequired,
     sitePatients: React.PropTypes.object,
   };
@@ -58,6 +65,7 @@ class PatientCategory extends React.Component {
     super(props);
     this.state = {
       columnWidth: '',
+      hover: false,
     };
     this.handleResize = this.handleResize.bind(this);
     this.renderPatients = this.renderPatients.bind(this);
@@ -71,6 +79,12 @@ class PatientCategory extends React.Component {
     if (this.state.columnWidth === '') {
       this.handleResize();
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      hover: nextProps.isOver,
+    });
   }
 
   componentWillUnmount() {
@@ -129,6 +143,7 @@ class PatientCategory extends React.Component {
         ref={(patientColumn) => {
           this.patientColumn = patientColumn;
         }}
+        className={classNames({ active: this.state.hover, hover: this.state.hover })}
       >
         <span className="opener" style={openerStyle}>
           <strong className="number">{category.patients.length}</strong>

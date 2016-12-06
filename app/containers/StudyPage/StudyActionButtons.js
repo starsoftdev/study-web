@@ -3,10 +3,10 @@
  */
 
 import React from 'react';
-import ImportPatientsModal from './ImportPatients/ImportPatientsModal';
+import ImportPatientsModal from './ImportPatientsModal/index';
 import TextEmailBlastModal from './TextEmailBlastModal';
 import TextBlastModal from './TextBlast/index';
-import AddPatient from './ImportPatients/AddPatient';
+import AddPatient from './ImportPatientsModal/AddPatient';
 
 class StudyActionButtons extends React.Component {
   constructor(props) {
