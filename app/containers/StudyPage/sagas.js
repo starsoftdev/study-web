@@ -183,7 +183,7 @@ function* fetchPatientCategories() {
   const { studyId, siteId } = yield take(FETCH_PATIENT_CATEGORIES);
 
   const filter = JSON.stringify({
-    fields: ['name', 'headerName', 'id'],
+    fields: ['name', 'id'],
   });
   try {
     const requestURL = `${API_URL}/patientCategories?access_token=${authToken}&filter=${filter}`;

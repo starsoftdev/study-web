@@ -123,7 +123,6 @@ class PatientCategory extends React.Component {
     const openerStyle = {
       width: this.state.columnWidth,
     };
-    const categoryName = category.headerName || category.name;
     return connectDropTarget(
       <li
         key={category.id}
@@ -133,7 +132,7 @@ class PatientCategory extends React.Component {
       >
         <span className="opener" style={openerStyle}>
           <strong className="number">{category.patients.length}</strong>
-          <span className="text" dangerouslySetInnerHTML={{ __html: categoryName }}></span>
+          <span className="text">{category.name}</span>
         </span>
         {this.renderPatients()}
       </li>
