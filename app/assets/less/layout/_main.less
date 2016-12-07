@@ -833,6 +833,23 @@ input[type=text]:-ms-input-placeholder {
   }
 }
 
+@media screen and (max-width: 1600px) {
+  .individual-study {
+    .form-search {
+      margin-bottom: 0 !important;
+      .btns-popups {
+        width: 100%;
+        margin: 0 0 30px !important;
+      }
+      .fields-holder {
+        width: 100% !important;
+        clear: both;
+        position: relative !important;
+      }
+    }
+  }
+}
+
 .caret-arrow {
 	.font(0,0);
 	margin: 0 0 0 2px;
@@ -2900,14 +2917,17 @@ th, .th {
 	}
 
 	.form-search {
-		margin: 0 -6px 30px;
+		margin: 0 -6px 32px;
 
     .fields-holder{
-      overflow: hidden;
+      position: absolute;
+      top: 0;
+      right: 586px;
+      left: 0;
     }
 
     .btns-popups {
-      margin: 0 0 0 50px;
+      margin: 0 0 0 0px;
       font-size: 0;
       line-height: 0;
       .btn {
