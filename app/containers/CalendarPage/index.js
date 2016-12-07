@@ -35,9 +35,9 @@ import { SchedulePatientModalType } from 'common/constants';
 const getFilteredSchedules = (schedules, filter) =>
   schedules.filter(s =>
     `${s.patient.firstName} ${s.patient.lastName}`.toLowerCase().indexOf(filter.patientName.toLowerCase()) > -1 &&
-      (!filter.siteLocation || s.siteLocation === filter.siteLocation) &&
-      (!filter.indication || s.indication === filter.indication) &&
-      (!filter.protocol || s.protocolNumber === filter.protocol)
+      (!filter.siteLocation || filter.siteLocation === 'All' || s.siteLocation === filter.siteLocation) &&
+      (!filter.indication || filter.indication === 'All' || s.indication === filter.indication) &&
+      (!filter.protocol || filter.protocol === 'All' || s.protocolNumber === filter.protocol)
   );
 
 export class CalendarPage extends React.Component {

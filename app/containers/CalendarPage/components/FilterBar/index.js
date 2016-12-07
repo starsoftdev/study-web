@@ -4,6 +4,8 @@ import React, { Component, PropTypes } from 'react';
 import Select from 'react-select';
 import _ from 'lodash';
 
+import { addAllOption } from 'components/Input/ReactSelect';
+
 class FilterBar extends Component {
   static propTypes = {
     siteLocationOptions: PropTypes.array.isRequired,
@@ -55,7 +57,7 @@ class FilterBar extends Component {
   }
 
   handleSiteLocationChoose(siteLocationOption) {
-    if (siteLocationOption) {
+    if (siteLocationOption && siteLocationOption.value !== 'All') {
       const selectedSite = this.props.sites.filter(s => s.id === siteLocationOption.siteId)[0];
       if (!selectedSite) {
         throw new Error('SiteLocation options are not properly populated.');
@@ -68,12 +70,14 @@ class FilterBar extends Component {
             label: s.protocolNumber,
             value: s.protocolNumber,
           }));
+        addAllOption(protocolOptions);
         return {
           label: i.name,
           value: i.name,
           protocolOptions,
         };
       });
+      addAllOption(indicationOptions);
       this.setState({
         siteLocation: siteLocationOption,
         protocol: null,
@@ -91,7 +95,7 @@ class FilterBar extends Component {
   }
 
   handleIndicationChoose(indicationOption) {
-    if (indicationOption) {
+    if (indicationOption && indicationOption.value !== 'All') {
       this.setState({
         indication: indicationOption,
         protocolOptions: indicationOption.protocolOptions,
@@ -113,6 +117,8 @@ class FilterBar extends Component {
       fetchingSites,
       filter,
     } = this.props;
+
+    addAllOption(siteLocationOptions);
 
     return (
       <form action="#" className="form-search clearfix alt">
