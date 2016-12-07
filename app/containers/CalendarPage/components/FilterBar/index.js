@@ -22,8 +22,19 @@ class FilterBar extends Component {
     siteLocation: null,
     indication: null,
     protocol: null,
+    siteLocationOptions: [],
     indicationOptions: [],
     protocolOptions: [],
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.siteLocationOptions !== nextProps.siteLocationOptions) {
+      const siteLocationOptions = [...nextProps.siteLocationOptions];
+      addAllOption(siteLocationOptions);
+      this.setState({
+        siteLocationOptions,
+      });
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -112,13 +123,10 @@ class FilterBar extends Component {
   render() {
     const {
       isAdmin,
-      siteLocationOptions,
-      // schedules,
       fetchingSites,
       filter,
     } = this.props;
-
-    addAllOption(siteLocationOptions);
+    const { siteLocationOptions } = this.state;
 
     return (
       <form action="#" className="form-search clearfix alt">
