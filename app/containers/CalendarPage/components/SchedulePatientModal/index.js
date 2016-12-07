@@ -19,12 +19,12 @@ function numberSequenceCreator(start, end) {
     if (n < 10) {
       return {
         label: '0' + n,
-        value: n,
+        value: n.toString(),
       };
     }
     return {
       label: n.toString(),
-      value: n,
+      value: n.toString(),
     };
   });
 }
