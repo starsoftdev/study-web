@@ -87,3 +87,10 @@ ReactSelect.propTypes = {
 };
 
 export default ReactSelect;
+
+export const addAllOption = (options) => {
+  if (Array.isArray(options) && options.length > 0) {
+    options.push({ label: 'All', value: 'All' });
+  }
+  return options;
+};
