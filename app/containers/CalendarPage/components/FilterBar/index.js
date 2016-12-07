@@ -29,8 +29,7 @@ class FilterBar extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.siteLocationOptions !== nextProps.siteLocationOptions) {
-      const siteLocationOptions = [...nextProps.siteLocationOptions];
-      addAllOption(siteLocationOptions);
+      const siteLocationOptions = addAllOption(nextProps.siteLocationOptions);
       this.setState({
         siteLocationOptions,
       });
@@ -74,21 +73,21 @@ class FilterBar extends Component {
         throw new Error('SiteLocation options are not properly populated.');
       }
       const indicationIds = _.uniq(selectedSite.studies.map(study => study.indication_id));
-      const indicationOptions = indicationIds.map(id => {
+      let indicationOptions = indicationIds.map(id => {
         const i = _.find(this.props.indications, { id });
-        const protocolOptions = selectedSite.studies.filter(s => s.indication_id === id)
+        let protocolOptions = selectedSite.studies.filter(s => s.indication_id === id)
           .map(s => ({
             label: s.protocolNumber,
             value: s.protocolNumber,
           }));
-        addAllOption(protocolOptions);
+        protocolOptions = addAllOption(protocolOptions);
         return {
           label: i.name,
           value: i.name,
           protocolOptions,
         };
       });
-      addAllOption(indicationOptions);
+      indicationOptions = addAllOption(indicationOptions);
       this.setState({
         siteLocation: siteLocationOption,
         protocol: null,
