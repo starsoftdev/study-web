@@ -241,7 +241,7 @@ export default class SchedulePatientModal extends Component {
                                 id="time-period"
                                 name="period"
                                 component={ReactSelect}
-                                placeholder="Period"
+                                placeholder="AM/PM"
                                 options={periodOptions}
                                 className="visible-first"
                                 disabled={submitting}
@@ -384,7 +384,7 @@ export default class SchedulePatientModal extends Component {
                                 id="time-period2"
                                 name="period"
                                 component={ReactSelect}
-                                placeholder="Period"
+                                placeholder="AM/PM"
                                 options={periodOptions}
                                 className="visible-first"
                                 disabled={submitting}
