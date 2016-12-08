@@ -169,7 +169,7 @@
     "react-select": "^1.0.0-rc.2",
     "react-sound": "^0.5.2",
     "react-sticky": "^5.0.5",
-    "react-super-select": "^0.5.7",
+    "react-super-select": "^0.5.9",
     "react-toggle-button": "^2.1.0",
     "redux": "3.5.2",
     "redux-form": "^6.1.1",
