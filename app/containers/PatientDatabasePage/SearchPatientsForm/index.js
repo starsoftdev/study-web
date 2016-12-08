@@ -182,6 +182,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 customOptionTemplateFunction={itemTemplate}
                 customSelectedValueTemplateFunction={selectedItemsTemplate}
                 dataSource={finalIncludeIndication}
+                customSearchIconClass="icomoon-icon_search2"
               />
             </div>
           </div>
@@ -203,6 +204,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 customOptionTemplateFunction={itemTemplate}
                 customSelectedValueTemplateFunction={selectedItemsTemplate}
                 dataSource={finalExcludeIndication}
+                customSearchIconClass="icomoon-icon_search2"
               />
             </div>
           </div>
