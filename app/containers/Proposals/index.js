@@ -14,6 +14,7 @@ import LoadingSpinner from 'components/LoadingSpinner';
 import {
   getProposals,
   createPDF,
+  showProposalPdf,
 } from 'containers/Proposals/actions';
 import {
   fetchSites,
@@ -45,6 +46,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     location: PropTypes.any,
     proposals: PropTypes.any,
     currentUser: PropTypes.any,
+    showProposalPdf: PropTypes.func,
   }
 
   constructor(props, context) {
@@ -180,6 +182,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
             site={this.state.site}
             searchBy={this.state.searchBy}
             proposals={this.state.proposals}
+            showProposalPdf={showProposalPdf}
             {...this.props}
           />
           {processPDF
@@ -213,6 +216,7 @@ function mapDispatchToProps(dispatch) {
     fetchSites: () => dispatch(fetchSites()),
     getProposals: (values) => dispatch(getProposals(values)),
     createPDF: (values) => dispatch(createPDF(values)),
+    showProposalPdf: (values) => dispatch(showProposalPdf(values)),
   };
 }
 
