@@ -39,6 +39,7 @@ import {
   sourcesFetched,
   studyFetched,
   studyViewsStatFetched,
+  submitAddPatientSuccess,
   patientReferralStatFetched,
   callStatsFetched,
   textStatsFetched,
@@ -603,13 +604,14 @@ function* submitPatientImport() {
     }
     try {
       const requestURL = `${API_URL}/studies/${studyId}/importPatients?access_token=${authToken}`;
-      yield call(request, requestURL, {
+      const response = yield call(request, requestURL, {
         useDefaultContentType: 'multipart/form-data',
         method: 'POST',
         body: formData,
       });
       onClose();
       yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
+      yield put(submitAddPatientSuccess(response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while importing the patient list. Please try again later or revise your patient list format.');
       yield put(toastrActions.error('', errorMessage));
@@ -627,12 +629,13 @@ function* submitAddPatient() {
     }
     try {
       const requestURL = `${API_URL}/studies/${studyId}/addPatient?access_token=${authToken}`;
-      yield call(request, requestURL, {
+      const response = yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify(patient),
       });
       onClose();
       yield put(toastrActions.success('Add Patient', 'Patient added successfully!'));
+      yield put(submitAddPatientSuccess(response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding a patient. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
