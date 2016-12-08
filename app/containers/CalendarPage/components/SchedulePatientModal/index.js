@@ -81,7 +81,7 @@ export default class SchedulePatientModal extends Component {
       {
         ...getTimeComponents(nextProps.selectedCellInfo.data.time),
         textReminder: true,
-      } : { period: 'AM', textReminder: true };
+      } : { textReminder: true };
       if (!isAdmin) {
         const site = siteLocationOptions[0];
         if (this.state.siteLocation === null && site) {  // prevent recursive render
