@@ -10,6 +10,7 @@ import {
   PROPOSALS_RECEIVED,
   GET_PDF,
   CREATE_PDF,
+  SHOW_PROPOSAL_PDF,
 } from './constants';
 
 export function defaultAction() {
@@ -43,5 +44,12 @@ export function pdfCreated(payload) {
   return {
     type: GET_PDF,
     payload,
+  };
+}
+
+export function showProposalPdf(proposalId) {
+  return {
+    type: SHOW_PROPOSAL_PDF,
+    proposalId,
   };
 }

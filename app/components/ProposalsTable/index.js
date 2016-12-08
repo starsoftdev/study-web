@@ -39,6 +39,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     range: PropTypes.any,
     searchBy: PropTypes.any,
     proposals: PropTypes.any,
+    showProposalPdf: PropTypes.func,
   };
 
   constructor(props) {
@@ -308,6 +309,12 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       const date = new Date(source.created);
       const dateWrapper = moment(date).format('MM/DD/YY');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
+
+      let proposalLink = source.proposalNumber;
+      if (source.proposalPdfId) {
+        proposalLink = <a onClick={() => this.props.showProposalPdf(source.id)}>{source.proposalNumber}</a>;
+      }
+
       result.push(
         <tr key={key}>
           <td>
@@ -326,7 +333,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           <td><span>{(key + 1)}</span></td>
           <td>{dateWrapper}</td>
           <td>{source.site}</td>
-          <td>{source.proposalNumber}</td>
+          <td>{proposalLink}</td>
           <td>{source.protocol}</td>
           <td>${(sub) ? `${(source.total / 100)}${sub}` : `${(source.total / 100).toFixed(2)}` }</td>
         </tr>
