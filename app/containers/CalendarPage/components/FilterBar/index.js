@@ -67,27 +67,70 @@ class FilterBar extends Component {
   }
 
   handleSiteLocationChoose(siteLocationOption) {
-    if (siteLocationOption && siteLocationOption.value !== 'All') {
-      const selectedSite = this.props.sites.filter(s => s.id === siteLocationOption.siteId)[0];
-      if (!selectedSite) {
-        throw new Error('SiteLocation options are not properly populated.');
-      }
-      const indicationIds = _.uniq(selectedSite.studies.map(study => study.indication_id));
-      let indicationOptions = indicationIds.map(id => {
-        const i = _.find(this.props.indications, { id });
-        let protocolOptions = selectedSite.studies.filter(s => s.indication_id === id)
-          .map(s => ({
+    if (siteLocationOption) {
+      const { sites, indications } = this.props;
+      let indicationOptions;
+
+      if (siteLocationOption.value === 'All') {
+        const indicationIds = _.chain(sites)
+          .map(site => site.studies)
+          .flatten()
+          .map(study => study.indication_id)
+          .uniq()
+          .value();
+        indicationOptions = indicationIds.map(id => {
+          const i = _.find(indications, { id });
+          let protocolOptions = _.flatten(sites.map(site => site.studies))
+            .filter(s => s.indication_id === id)
+            .map(s => ({
+              label: s.protocolNumber,
+              value: s.protocolNumber,
+            }));
+          protocolOptions = addAllOption(protocolOptions);
+          return {
+            label: i.name,
+            value: i.name,
+            protocolOptions,
+          };
+        });
+        indicationOptions = addAllOption(indicationOptions, {
+          label: 'All',
+          value: 'All',
+          protocolOptions: addAllOption(_.flatten(sites.map(site => site.studies)).map(s => ({
             label: s.protocolNumber,
             value: s.protocolNumber,
-          }));
-        protocolOptions = addAllOption(protocolOptions);
-        return {
-          label: i.name,
-          value: i.name,
-          protocolOptions,
-        };
-      });
-      indicationOptions = addAllOption(indicationOptions);
+          }))),
+        });
+      } else {
+        const selectedSite = sites.filter(s => s.id === siteLocationOption.siteId)[0];
+        if (!selectedSite) {
+          throw new Error('SiteLocation options are not properly populated.');
+        }
+        const indicationIds = _.uniq(selectedSite.studies.map(study => study.indication_id));
+        indicationOptions = indicationIds.map(id => {
+          const i = _.find(indications, { id });
+          let protocolOptions = selectedSite.studies.filter(s => s.indication_id === id)
+            .map(s => ({
+              label: s.protocolNumber,
+              value: s.protocolNumber,
+            }));
+          protocolOptions = addAllOption(protocolOptions);
+          return {
+            label: i.name,
+            value: i.name,
+            protocolOptions,
+          };
+        });
+        indicationOptions = addAllOption(indicationOptions, {
+          label: 'All',
+          value: 'All',
+          protocolOptions: addAllOption(selectedSite.studies.map(s => ({
+            label: s.protocolNumber,
+            value: s.protocolNumber,
+          }))),
+        });
+      }
+
       this.setState({
         siteLocation: siteLocationOption,
         protocol: null,
@@ -105,7 +148,7 @@ class FilterBar extends Component {
   }
 
   handleIndicationChoose(indicationOption) {
-    if (indicationOption && indicationOption.value !== 'All') {
+    if (indicationOption) {
       this.setState({
         indication: indicationOption,
         protocolOptions: indicationOption.protocolOptions,
