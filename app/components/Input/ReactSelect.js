@@ -88,9 +88,9 @@ ReactSelect.propTypes = {
 
 export default ReactSelect;
 
-export const addAllOption = (options) => {
+export const addAllOption = (options, allOption) => {
   if (Array.isArray(options) && options.length > 0) {
-    return [{ label: 'All', value: 'All' }, ...options];
+    return [allOption || { label: 'All', value: 'All' }, ...options];
   }
   return options;
 };
