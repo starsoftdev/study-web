@@ -34,6 +34,7 @@ import {
   SORT_PATIENTS_SUCCESS,
   DOWNLOAD_COMPLETE,
   IMPORT_PATIENTS,
+  CLEAR_PATIENTS_LIST,
 } from './constants';
 import _ from 'lodash';
 
@@ -260,5 +261,11 @@ export function importPatients(payload) {
 export function downloadComplete() {
   return {
     type: DOWNLOAD_COMPLETE,
+  };
+}
+
+export function clearPatientsList() {
+  return {
+    type: CLEAR_PATIENTS_LIST,
   };
 }
