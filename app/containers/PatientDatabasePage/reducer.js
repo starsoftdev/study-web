@@ -131,7 +131,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
           page: 1,
           activeSort: state.paginationOptions.activeSort,
           activeDirection: state.paginationOptions.activeDirection,
-          prevSearchFilter: state.paginationOptions.prevSearchFilter,
+          prevSearchFilter: {},
         },
       };
     case FETCH_PATIENT_CATEGORIES:
