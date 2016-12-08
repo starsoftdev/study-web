@@ -144,6 +144,12 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
         ],
         raw: { pathname: this.props.location.pathname },
       },
+      {
+        events: [
+          'import-patient-to-patientdb',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
     ];
 
     if (events) {
