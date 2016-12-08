@@ -306,7 +306,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   mapProposals(raw, result) {
     _.map(raw, (source, key) => {
       const date = new Date(source.created);
-      const dateWrapper = moment(date);
+      const dateWrapper = moment(date).format('MM/DD/YY');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
       result.push(
         <tr key={key}>
@@ -323,8 +323,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
               </span>
             </span>
           </td>
-          <td></td>
-          <td>{dateWrapper.calendar()}</td>
+          <td><span>{(key + 1)}</span></td>
+          <td>{dateWrapper}</td>
           <td>{source.site}</td>
           <td>{source.proposalNumber}</td>
           <td>{source.protocol}</td>
