@@ -113,9 +113,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (study.sponsor) {
       sponsor = study.sponsor.name;
     }
-    console.log(fetchingStudy);
-    console.log(study);
-    console.log(patientCategories);
     return (
       <div className="container-fluid">
         <Helmet title={pageTitle} />
