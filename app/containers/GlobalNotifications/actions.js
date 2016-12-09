@@ -21,6 +21,7 @@ import {
   FETCH_STUDY_PATIENT_MESSAGES,
   SEND_STUDY_PATIENT_MESSAGES,
   SET_PROCESSING_STATUS,
+  MARK_NOTIFICATIONS_READ,
 } from './constants';
 
 export function subscribeToPageEvent(payload) {
@@ -134,5 +135,12 @@ export function receiveNotification(payload) {
   return {
     type: RECEIVE_NOTIFICATION,
     payload,
+  };
+}
+
+export function markNotificationsRead(userId) {
+  return {
+    type: MARK_NOTIFICATIONS_READ,
+    userId,
   };
 }
