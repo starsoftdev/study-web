@@ -202,7 +202,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
       let invoiceIdLink = source.invoice_id;
       if (source.invoice_pdf_id) {
-        invoiceIdLink = <a onClick={() => this.props.showInvoicePdf(source.invoice_id)}>{source.invoice_id}</a>;
+        invoiceIdLink = <a className="show-pdf-link" onClick={() => this.props.showInvoicePdf(source.invoice_id)}>{source.invoice_id}</a>;
       }
 
       if (key === 0 || invoiceId !== source.invoice_id) {
