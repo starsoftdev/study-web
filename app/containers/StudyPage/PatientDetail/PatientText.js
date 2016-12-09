@@ -75,7 +75,7 @@ class PatientText extends React.Component {
               {(textMessage.isStopMessage) ?
                 <span className="stop-list-notification">
                   This patient no longer wants to receive text messages. The ability to text him/her through your portal has been removed. You may still call or email to see if he/she qualifies for the study.
-                </span>: '' }
+                </span> : '' }
             </p>
             <a className="btn-trash">
               <i className="icomoon-icon_trash" />
