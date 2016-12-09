@@ -44,9 +44,12 @@ class TextSection extends React.Component {
     super(props);
     this.renderText = this.renderText.bind(this);
     this.submitText = this.submitText.bind(this);
+    this.textAreaChange = this.textAreaChange.bind(this);
     this.initStudyPatientMessagesFetch = this.initStudyPatientMessagesFetch.bind(this);
 
     this.state = {
+      maxCharacters: 160,
+      enteredCharactersLength: 0,
       twilioMessages : [],
       socketBinded: false,
     };
@@ -94,6 +97,18 @@ class TextSection extends React.Component {
     }
   }
 
+  textAreaChange() {
+    const { maxCharacters } = this.state;
+    const value = this.textarea.value
+    if (value.length > maxCharacters) {
+      this.textarea.value = value.substring(0, maxCharacters)
+    } else {
+      this.setState({ enteredCharactersLength: value.length }, () => {
+
+      });
+    }
+  }
+
   scrollElement() {
     const scope = this;
     window.requestAnimationFrame(() => {
@@ -117,7 +132,9 @@ class TextSection extends React.Component {
 
     this.props.sendStudyPatientMessages(options, (err) => {
       if (!err) {
-        textarea.value = '';
+        this.setState({ enteredCharactersLength: 0 }, () => {
+          textarea.value = '';
+        });
       }
     });
   }
@@ -163,19 +180,26 @@ class TextSection extends React.Component {
 
   render() {
     const { active } = this.props;
+    const { maxCharacters, enteredCharactersLength } = this.state;
     this.scrollElement();
     return (
       <div className={classNames('item text', { active })}>
         {this.renderText()}
         <div className="textarea">
           <textarea
-            className="form-control"
+            className="form-control test"
             placeholder="Type a message..."
+            onChange={this.textAreaChange}
             ref={(textarea) => {
               this.textarea = textarea;
             }}
           />
           <Button onClick={this.submitText}>Send</Button>
+        </div>
+        <div className="characters-counter">
+          <span>
+            {`${enteredCharactersLength} characters entered | ${maxCharacters - enteredCharactersLength} characters remaining`}
+          </span>
         </div>
       </div>
     );
