@@ -312,7 +312,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
       let proposalLink = source.proposalNumber;
       if (source.proposalPdfId) {
-        proposalLink = <a onClick={() => this.props.showProposalPdf(source.id)}>{source.proposalNumber}</a>;
+        proposalLink = <a className="show-pdf-link" onClick={() => this.props.showProposalPdf(source.id)}>{source.proposalNumber}</a>;
       }
 
       result.push(
