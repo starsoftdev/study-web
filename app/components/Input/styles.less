@@ -11,6 +11,11 @@
   cursor: pointer;
 }
 
+.Select.is-disabled > .Select-control {
+  background-color: #eee;
+  cursor: not-allowed;
+}
+
 .Select-placeholder {
   color: @input-color !important;
   padding-left: 15px !important;
@@ -21,6 +26,7 @@
   width: calc(100% + 1px);
   border: 2px solid #CCC;
   padding: 2px;
+  max-height: 300px;
 }
 
 .top-positioned .Select-menu-outer {

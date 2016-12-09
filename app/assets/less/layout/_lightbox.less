@@ -329,9 +329,7 @@ input:focus {
 	//min-width: 1020px;
 
 	.lightbox-content {
-		max-width: 1095px;
-
-
+		max-width: 1350px;
 	}
 
 	/*.holder {
@@ -345,6 +343,16 @@ input:focus {
 		overflow-y: auto;
 		overflow-x: hidden;
 	}
+
+  .rdr-Day {
+    font-size: 18px !important;
+    width: 14% !important;
+  }
+
+  .rdr-WeekDay {
+    width: 14% !important;
+    font-size: 18px !important;
+  }
 
 	.calendars {
 		margin: 0 0 15px;
@@ -420,97 +428,153 @@ input:focus {
 }
 
 #all-patients {
+	
+	&.no-patient {
+		.list-head {
+			opacity: 0.5;
+			filter: blur(2px);
+		}
+	}
 
-  &.no-patient {
-    .list-head {
-      opacity: 0.5;
-      filter: blur(2px);
-    }
-  }
 
-  .list-holder {
-    &:empty:before {
-      padding: 0 12px;
-      content: 'Patient list is empty';
-    }
-  }
+	.list-holder {
+		padding: 0 0 25px;
 
-  .list-head {
-    .font(0,0);
-    color: #354052;
-    font-weight: 700;
-    padding: 19px 12px 20px;
+		ul:empty:before,
+		&:empty:before {
+			padding: 0 12px;
+			content: 'Patient list is empty';
+		}
 
-    > * {
-      .font(14px);
-    }
+		ul {
+			margin: 0;
+		}
 
-    .time {
-      &:before {
-        content: '\e91f';
-        margin: 0 10px 0 0;
-        font-weight: 400;
-        font-family: 'icomoon';
-      }
-    }
-  }
+		li {
+			position: relative;
 
-  .btn-gray-outline,
-  .list-head {
-    > * {
-      .align(@align: middle);
-    }
-  }
+			&:before {
+				z-index: 2;
+				content: '';
+				.position(0);
+			}
 
-  .patient-list {
-    padding: 0;
-    min-height: 45px;
+			&:hover {
+				.btn-gray-outline {
+					font-weight: 600;
+					background: #f1f1f1;
+				}
+			}
+		}
+	}
 
-    .btn-gray-outline {
-      .font(0,0);
-      display: block;
-      color: #354052;
-      border-width: 0;
-      text-align: left;
-      overflow: hidden;
-      font-weight: 400;
-      border-radius: 0;
-      padding: 15px 12px;
-      position: relative;
-      text-transform: capitalize;
+	.list-head {
+		.font(0,0);
+		color: #354052;
+		font-weight: 700;
+		padding: 19px 25px 20px;
+		text-transform: uppercase;
 
-      &:focus,
-      &:active,
-      &:active:focus,
-      &:hover {
-        background: #f1f1f1;
-      }
+		> * {
+			.font(21px);
+			cursor: pointer;
+		}
+	}
 
-      > * {
-        .font(14px);
-      }
-    }
+	.btn-gray-outline,
+	.list-head {
+		> * {
+			.align(@align: middle);
+		}
+	}
 
-    .btn-primary {
-      width: 11%;
-    }
-  }
+	.patient-list {
+		padding: 0;
+		overflow: hidden;
+		min-height: 45px;
 
-  .patient-name {
-    width: 26%;
-  }
+		.btn-gray-outline {
+			.font(0,0);
+			cursor: default;
+			display: block;
+			color: #354052;
+			border-width: 0;
+			text-align: left;
+			overflow: hidden;
+			font-weight: 400;
+			border-radius: 0;
+			padding: 15px 25px;
+			position: relative;
+			text-transform: capitalize;
 
-  .site-location {
-    width: 26%;
-  }
+			&:focus,
+			&:active,
+			&:active:focus,
+			&:hover {
+				font-weight: 600;
+				background: #f1f1f1;
+			}
 
-  .protocol {
-    width: 22%;
-  }
+			> * {
+				.font(18px, 40px);
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				transition: all 0.25s;
+			}
+		}
 
-  .time {
-    width: 15%;
-  }
+		.btn-primary {
+			float: right;
+			z-index: 3;
+			line-height: 36px;
+			padding: 0 12px;
+			position: relative;
+		}
+	}
+
+	.patient-name {
+		width: 45%;
+		padding: 0 10px 0 0;
+	}
+
+	.site-location {
+		width: 26%;
+		display: none;
+	}
+
+	.protocol {
+		width: 22%;
+		display: none;
+	}
+
+	.time {
+		width: 40%;
+		padding: 0 10px 0 0;
+	}
+
+	//	name of day
+	[data-day="1"]:before { content: 'Sunday'; }
+	[data-day="2"]:before { content: 'Monday'; }
+	[data-day="3"]:before { content: 'Tuesday'; }
+	[data-day="4"]:before { content: 'Wednesday'; }
+	[data-day="5"]:before { content: 'Thursday'; }
+	[data-day="6"]:before { content: 'Friday'; }
+	[data-day="7"]:before { content: 'Saturday'; }
+
+	//name of months
+	[data-month="01"]:before { content: 'January'; }
+	[data-month="02"]:before { content: 'February'; }
+	[data-month="03"]:before { content: 'March'; }
+	[data-month="04"]:before { content: 'April'; }
+	[data-month="05"]:before { content: 'May'; }
+	[data-month="06"]:before { content: 'June'; }
+	[data-month="07"]:before { content: 'July'; }
+	[data-month="8"]:before { content: 'August'; }
+	[data-month="09"]:before { content: 'September'; }
+	[data-month="10"]:before { content: 'October'; }
+	[data-month="11"]:before { content: 'November'; }
+	[data-month="12"]:before { content: 'December'; }
 }
 
 /*	renew-study and upgrade-study */

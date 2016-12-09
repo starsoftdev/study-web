@@ -26,6 +26,7 @@ import {
   SET_CURRENT_PATIENT_CATEGORY_ID,
   SET_OPEN_PATIENT_MODAL,
   SUBMIT_DELETE_NOTE_SUCCESS,
+  SUBMIT_ADD_PATIENT_SUCCESS,
   MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
   MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
@@ -87,6 +88,32 @@ function studyPageReducer(state = initialState, action) {
     case FETCH_PATIENT_DETAILS_SUCCESS:
     case REMOVE_PATIENT_INDICATION_SUCCESS:
     case SUBMIT_DELETE_NOTE_SUCCESS:
+    case SUBMIT_ADD_PATIENT_SUCCESS:
+      return {
+        ...state,
+        patientCategories: state.patientCategories.map(category => {
+          if (category.name === 'New Patient') {
+            if (Array.isArray(action.patients)) {
+              return {
+                ...category,
+                patients: [
+                  ...category.patients,
+                  ...action.patients,
+                ],
+              };
+            }
+            return {
+              ...category,
+              patients: [
+                ...category.patients,
+                action.patients,
+              ],
+            };
+          }
+          return category;
+        }),
+      };
+
     case UPDATE_PATIENT_SUCCESS:
       return {
         ...state,

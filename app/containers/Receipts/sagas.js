@@ -11,6 +11,7 @@ import {
 import {
   GET_RECEIPT,
   GET_PDF,
+  SHOW_INVOICE_PDF,
 } from 'containers/Receipts/constants';
 import { getItem } from 'utils/localStorage';
 
@@ -28,12 +29,15 @@ const serializeParams = (obj) => {
 export function* receiptSaga() {
   const watcherA = yield fork(getReceipts);
   const watcherC = yield fork(getPdf);
+  const watcherB = yield fork(showPdf);
+
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
   yield put(receiptsReceived([], true, 1));
   yield cancel(watcherA);
   yield cancel(watcherC);
+  yield cancel(watcherB);
 }
 
 export function* getReceipts() {
@@ -96,6 +100,27 @@ export function* getPdf() {
       }
       params.invoices = invoices;
       location.replace(`${requestURL}?${serializeParams(params)}`);
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
+export function* showPdf() {
+  while (true) {
+    const { invoiceId } = yield take(SHOW_INVOICE_PDF);
+    //
+    try {
+      const requestURL = `${API_URL}/invoices/getPreSignedUrl`;
+      const params = {
+        query: {
+          invoiceId,
+        },
+      };
+
+      const response = yield call(request, requestURL, params);
+      window.open(response.url, '_blank');
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));

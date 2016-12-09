@@ -48,6 +48,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     searchOptions: PropTypes.array,
     setActiveSort: PropTypes.func,
     siteLocations: PropTypes.array,
+    showInvoicePdf: PropTypes.func,
   };
 
   constructor(props) {
@@ -199,6 +200,11 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
         siteName = 'PMS Credits';
       }
 
+      let invoiceIdLink = source.invoice_id;
+      if (source.invoice_pdf_id) {
+        invoiceIdLink = <a className="show-pdf-link" onClick={() => this.props.showInvoicePdf(source.invoice_id)}>{source.invoice_id}</a>;
+      }
+
       if (key === 0 || invoiceId !== source.invoice_id) {
         invoiceId = source.invoice_id;
         result.push(
@@ -213,7 +219,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
             </td>
             <td>{dateWrapper}</td>
             <td>{siteName}</td>
-            <td>{source.invoice_id}</td>
+            <td>{invoiceIdLink}</td>
             <td>{source.protocol_number || '-'}</td>
             <td>card</td>
             <td><Money value={source.total / 100} className="price total-price" /></td>

@@ -19,12 +19,12 @@ function numberSequenceCreator(start, end) {
     if (n < 10) {
       return {
         label: '0' + n,
-        value: n,
+        value: n.toString(),
       };
     }
     return {
       label: n.toString(),
-      value: n,
+      value: n.toString(),
     };
   });
 }
@@ -77,7 +77,11 @@ export default class SchedulePatientModal extends Component {
     const { siteLocationOptions, isAdmin } = this.props;
 
     if (this.props.modalType === SchedulePatientModalType.HIDDEN && nextProps.modalType !== SchedulePatientModalType.HIDDEN) {
-      let initialValues = nextProps.selectedCellInfo.data ? getTimeComponents(nextProps.selectedCellInfo.data.time) : { period: 'AM', textReminder: true };
+      let initialValues = nextProps.selectedCellInfo.data ?
+      {
+        ...getTimeComponents(nextProps.selectedCellInfo.data.time),
+        textReminder: true,
+      } : { textReminder: true };
       if (!isAdmin) {
         const site = siteLocationOptions[0];
         if (this.state.siteLocation === null && site) {  // prevent recursive render
@@ -237,7 +241,7 @@ export default class SchedulePatientModal extends Component {
                                 id="time-period"
                                 name="period"
                                 component={ReactSelect}
-                                placeholder="Period"
+                                placeholder="AM/PM"
                                 options={periodOptions}
                                 className="visible-first"
                                 disabled={submitting}
@@ -380,7 +384,7 @@ export default class SchedulePatientModal extends Component {
                                 id="time-period2"
                                 name="period"
                                 component={ReactSelect}
-                                placeholder="Period"
+                                placeholder="AM/PM"
                                 options={periodOptions}
                                 className="visible-first"
                                 disabled={submitting}
