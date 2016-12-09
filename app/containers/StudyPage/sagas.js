@@ -40,6 +40,7 @@ import {
   studyFetched,
   studyViewsStatFetched,
   submitAddPatientSuccess,
+  submitAddPatientFailure,
   patientReferralStatFetched,
   callStatsFetched,
   textStatsFetched,
@@ -614,6 +615,7 @@ function* submitPatientImport() {
       yield put(submitAddPatientSuccess(response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while importing the patient list. Please try again later or revise your patient list format.');
+      yield put(submitAddPatientFailure());
       yield put(toastrActions.error('', errorMessage));
     }
   }

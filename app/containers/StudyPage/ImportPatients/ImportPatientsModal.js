@@ -10,6 +10,7 @@ import Form from 'react-bootstrap/lib/Form';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input/index';
 import { submitPatientImport } from '../actions';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 @reduxForm({ form: 'importPatients' })
 class ImportPatientsModal extends React.Component {
@@ -19,6 +20,7 @@ class ImportPatientsModal extends React.Component {
     toggleAddPatient: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number,
     submitPatientImport: React.PropTypes.func.isRequired,
+    uploadStart: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -40,8 +42,7 @@ class ImportPatientsModal extends React.Component {
     }
   }
   render() {
-    const { onHide, toggleAddPatient, ...props } = this.props;
-
+    const { onHide, toggleAddPatient, uploadStart, ...props } = this.props;
     return (
       <Modal
         {...props}
@@ -59,40 +60,44 @@ class ImportPatientsModal extends React.Component {
           </a>
         </Modal.Header>
         <Modal.Body>
-          <Form className="upload-patient-info">
-            <div className="table">
-              <label className="table-cell" htmlFor="upload-patient">
+          {uploadStart ? <div><LoadingSpinner /></div> :
+            <div>
+              <Form className="upload-patient-info">
+                <div className="table">
+                  <label className="table-cell" htmlFor="upload-patient">
+                    <i className="icomoon-arrow_up_alt" />
+                    <span className="text">Upload Patients</span>
+                    <span className="jcf-file">
+                      <span className="jcf-fake-input">No file chosen</span>
+                      <span className="jcf-upload-button">
+                        <span className="jcf-button-content">Choose file</span>
+                      </span>
+                      <Field
+                        type="file"
+                        name="uploadFile"
+                        component={Input}
+                        className="jcf-real-element"
+                        id="upload-patient"
+                        onChange={this.uploadFile}
+                      />
+                    </span>
+                  </label>
+                </div>
+              </Form>
 
-                <i className="icomoon-arrow_up_alt" />
-                <span className="text">Upload Patients</span>
-                <span className="jcf-file">
-                  <span className="jcf-fake-input">No file chosen</span>
-                  <span className="jcf-upload-button">
-                    <span className="jcf-button-content">Choose file</span>
-                  </span>
-                  <Field
-                    type="file"
-                    name="uploadFile"
-                    component={Input}
-                    className="jcf-real-element"
-                    id="upload-patient"
-                    onChange={this.uploadFile}
-                  />
-                </span>
-              </label>
+              <span className="or">
+                <span>or</span>
+              </span>
+              <a className="add-patient-info-import" onClick={toggleAddPatient}>
+                <div className="table">
+                  <div className="table-cell">
+                    <i className="icomoon-icon_plus_alt" />
+                    <span className="text">Add Patient</span>
+                  </div>
+                </div>
+              </a>
             </div>
-          </Form>
-          <span className="or">
-            <span>or</span>
-          </span>
-          <a className="add-patient-info-import" onClick={toggleAddPatient}>
-            <div className="table">
-              <div className="table-cell">
-                <i className="icomoon-icon_plus_alt" />
-                <span className="text">Add Patient</span>
-              </div>
-            </div>
-          </a>
+          }
         </Modal.Body>
       </Modal>
     );
@@ -101,6 +106,7 @@ class ImportPatientsModal extends React.Component {
 const mapStateToProps = (state) => (
   {
     studyId: state.studyPage.studyId,
+    uploadStart: state.studyPage.uploadStarted,
   }
 );
 

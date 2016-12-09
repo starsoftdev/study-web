@@ -45,6 +45,7 @@ import {
   SUBMIT_PATIENT_IMPORT,
   SUBMIT_ADD_PATIENT,
   SUBMIT_ADD_PATIENT_INDICATION,
+  SUBMIT_ADD_PATIENT_FAILURE,
   SUBMIT_REMOVE_PATIENT_INDICATION,
   SUBMIT_PATIENT_UPDATE,
   SUBMIT_PATIENT_NOTE,
@@ -449,6 +450,11 @@ export function submitAddPatientSuccess(patients) {
   return {
     type: SUBMIT_ADD_PATIENT_SUCCESS,
     patients,
+  };
+}
+export function submitAddPatientFailure() {
+  return {
+    type: SUBMIT_ADD_PATIENT_FAILURE,
   };
 }
 export function switchToNoteSectionDetail() {

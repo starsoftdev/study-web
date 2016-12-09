@@ -27,6 +27,8 @@ import {
   SET_OPEN_PATIENT_MODAL,
   SUBMIT_DELETE_NOTE_SUCCESS,
   SUBMIT_ADD_PATIENT_SUCCESS,
+  SUBMIT_ADD_PATIENT_FAILURE,
+  SUBMIT_PATIENT_IMPORT,
   MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
   MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
@@ -91,6 +93,7 @@ function studyPageReducer(state = initialState, action) {
     case SUBMIT_ADD_PATIENT_SUCCESS:
       return {
         ...state,
+        uploadStarted: null,
         patientCategories: state.patientCategories.map(category => {
           if (category.name === 'New Patient') {
             if (Array.isArray(action.patients)) {
@@ -113,7 +116,16 @@ function studyPageReducer(state = initialState, action) {
           return category;
         }),
       };
-
+    case SUBMIT_PATIENT_IMPORT:
+      return {
+        ...state,
+        uploadStarted: true,
+      };
+    case SUBMIT_ADD_PATIENT_FAILURE:
+      return {
+        ...state,
+        uploadStarted: null,
+      };
     case UPDATE_PATIENT_SUCCESS:
       return {
         ...state,
