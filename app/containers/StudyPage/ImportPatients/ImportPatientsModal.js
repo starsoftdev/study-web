@@ -7,14 +7,17 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
+import Button from 'react-bootstrap/lib/Button';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input/index';
-import { submitPatientImport } from '../actions';
+import { submitPatientImport, clearForm } from '../actions';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 
 @reduxForm({ form: 'importPatients' })
 class ImportPatientsModal extends React.Component {
   static propTypes = {
+    clearFile: React.PropTypes.func,
+    fileUploaded: React.PropTypes.string,
     show: React.PropTypes.bool.isRequired,
     onHide: React.PropTypes.func.isRequired,
     toggleAddPatient: React.PropTypes.func.isRequired,
@@ -36,13 +39,13 @@ class ImportPatientsModal extends React.Component {
     // if the file is a csv
     if (event.target.files[0].type === 'text/csv') {
       const file = event.target.files[0];
-      submitPatientImport(studyId, file, onHide);
+      submitPatientImport(studyId, file);
     } else {
       // return error
     }
   }
   render() {
-    const { onHide, toggleAddPatient, uploadStart, ...props } = this.props;
+    const { onHide, toggleAddPatient, uploadStart, fileUploaded, clearForm, ...props } = this.props;
     return (
       <Modal
         {...props}
@@ -64,9 +67,11 @@ class ImportPatientsModal extends React.Component {
             <div>
               <Form className="upload-patient-info">
                 <div className="table">
+
                   <label className="table-cell" htmlFor="upload-patient">
                     <i className="icomoon-arrow_up_alt" />
                     <span className="text">Upload Patients</span>
+                    {fileUploaded && <span className="jcf-file jcf-extension-csv parent-active">{fileUploaded}</span>}
                     <span className="jcf-file">
                       <span className="jcf-fake-input">No file chosen</span>
                       <span className="jcf-upload-button">
@@ -81,8 +86,12 @@ class ImportPatientsModal extends React.Component {
                         onChange={this.uploadFile}
                       />
                     </span>
+
                   </label>
+
                 </div>
+                {fileUploaded && <Button className="clear-import-button" onClick={() => clearForm()}><i className="fa fa-times" aria-hidden="true" /></Button>}
+
               </Form>
 
               <span className="or">
@@ -107,12 +116,14 @@ const mapStateToProps = (state) => (
   {
     studyId: state.studyPage.studyId,
     uploadStart: state.studyPage.uploadStarted,
+    fileUploaded: state.studyPage.fileUploaded,
   }
 );
 
 function mapDispatchToProps(dispatch) {
   return {
     submitPatientImport: (studyId, file, onClose) => dispatch(submitPatientImport(studyId, file, onClose)),
+    clearForm: () => dispatch(clearForm()),
   };
 }
 

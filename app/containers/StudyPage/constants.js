@@ -6,6 +6,7 @@
 
 /* eslint-disable no-multi-spaces */
 
+export const CLEAR_FORM_UPLOAD = 'StudyPage/CLEAR_FORM_UPLOAD';
 export const FIND_PATIENTS_TEXT_BLAST = 'StudyPage/FIND_PATIENTS_TEXT_BLAST';
 export const FIND_PATIENTS_TEXT_BLAST_SUCCESS = 'StudyPage/FIND_PATIENTS_TEXT_BLAST_SUCCESS';
 export const FILTER_PATIENTS_TEXT_BLAST = 'StudyPage/FILTER_PATIENTS_TEXT_BLAST';
