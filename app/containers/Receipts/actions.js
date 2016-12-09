@@ -11,6 +11,7 @@ import {
   GET_PDF,
   SET_SEARCH_OPTIONS,
   SET_ACTIVE_SORT,
+  SHOW_INVOICE_PDF,
 } from './constants';
 
 export function defaultAction() {
@@ -61,3 +62,11 @@ export function setActiveSort(sort, direction) {
     direction,
   };
 }
+
+export function showInvoicePdf(invoiceId) {
+  return {
+    type: SHOW_INVOICE_PDF,
+    invoiceId,
+  };
+}
+
