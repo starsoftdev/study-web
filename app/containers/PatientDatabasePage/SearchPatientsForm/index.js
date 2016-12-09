@@ -9,7 +9,7 @@ import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import { selectSearchPatientsFormError } from './selectors';
 import { selectPatientCategories, selectPatients, selectPatientDatabaseFormValues } from '../../../containers/PatientDatabasePage/selectors';
-import { selectIndications, selectSources } from '../../../containers/App/selectors';
+import { selectIndications, selectSources, selectSiteLocations, selectCurrentUser } from '../../../containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import './styles.less';
@@ -17,12 +17,14 @@ import './styles.less';
 import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
 
 const mapStateToProps = createStructuredSelector({
+  formValues: selectPatientDatabaseFormValues(),
+  hasError: selectSearchPatientsFormError(),
   indications: selectIndications(),
-  sources: selectSources(),
   patientCategories: selectPatientCategories(),
   patients: selectPatients(),
-  hasError: selectSearchPatientsFormError(),
-  formValues: selectPatientDatabaseFormValues(),
+  sources: selectSources(),
+  sites: selectSiteLocations(),
+  user: selectCurrentUser(),
 });
 
 @reduxForm({ form: 'searchPatients', validate: formValidator })
@@ -32,6 +34,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
   static propTypes = {
     indications: PropTypes.array,
     sources: PropTypes.array,
+    sites: PropTypes.array,
     patientCategories: PropTypes.object,
     patients: PropTypes.object,
     hasError: PropTypes.bool,
@@ -67,8 +70,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
   }
 
   render() {
-    const { formValues, indications, sources, patientCategories, patients, hasError, handleSubmit } = this.props;
-
+    const { formValues, indications, sources, sites, patientCategories, patients, hasError, handleSubmit, user } = this.props;
     const includeIndicationArr = [];
     let finalIncludeIndication = [];
     const excludeIndicationArr = [];
@@ -107,7 +109,10 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     finalIncludeIndication = _.concat(finalIncludeIndication, includeIndicationArr);
     finalExcludeIndication = _.concat(finalExcludeIndication, excludeIndicationArr);
 
-
+    const siteOptions = map(sites, siteIterator => ({
+      label: siteIterator.name,
+      value: siteIterator.id,
+    }));
     const sourceOptions = map(sources, sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
@@ -318,6 +323,23 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
               <span className="sign">-</span>
             </div>
           </div>
+          {user.roleForClient.name === ('Super Admin' || 'Admin') && <div className="select-holder pull-left">
+            <span className="site">
+              <label>SITES</label>
+            </span>
+            <div className="col-holder clearfix">
+              <div className="field">
+                <Field
+                  name="site"
+                  component={ReactSelect}
+                  placeholder="Select A Site"
+                  options={siteOptions}
+                  disabled={patients.fetching}
+                  onChange={(e) => this.initSearch(e, 'site')}
+                />
+              </div>
+            </div>
+          </div>}
           <div className="hidden">
             <Button type="submit" bsStyle="primary" className="btn-search" disabled={patients.fetching || hasError}>
               {(patients.fetching)

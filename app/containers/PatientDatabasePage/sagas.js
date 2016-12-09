@@ -59,6 +59,7 @@ export function* fetchPatientsWatcher() {
         include: [
           'indications',
           'source',
+          { campaigns: 'site' },
           { studyPatientCategory: 'patientCategory' },
         ],
         where: {
@@ -72,13 +73,16 @@ export function* fetchPatientsWatcher() {
       if (searchParams.sort && searchParams.direction && searchParams.sort !== 'orderNumber') {
         filterObj.order = `${searchParams.sort} ${((searchParams.direction === 'down') ? 'DESC' : 'ASC')}`;
       }
-
       if (searchParams.status) {
         filterObj.where.and.push({
           status: searchParams.status,
         });
       }
-
+      if (searchParams.site) {
+        filterObj.where.and.push({
+          site: searchParams.site,
+        });
+      }
       if (searchParams.includeIndication) {
         filterObj.where.and.push({
           includeIndication: searchParams.includeIndication,
@@ -169,6 +173,7 @@ export function* fetchPatientsWatcher() {
         yield put(downloadComplete());
       } else {
         const response = yield call(request, requestURL);
+        console.log("this is the response", response)
         yield put(patientsFetched(searchParams, response, patients, searchFilter));
       }
     } catch (err) {

@@ -7,7 +7,7 @@ import { createStructuredSelector } from 'reselect';
 import SearchPatientsForm from '../../containers/PatientDatabasePage/SearchPatientsForm/index';
 import PatientsList from '../../containers/PatientDatabasePage/PatientsList/index';
 import PatientActionButtons from './PatientActionButtons';
-import { fetchIndications, fetchSources } from 'containers/App/actions';
+import { fetchIndications, fetchSources, fetchSites } from 'containers/App/actions';
 import { fetchPatientCategories, fetchPatients, clearPatientsList } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
 import './styles.less';
@@ -15,6 +15,7 @@ import './styles.less';
 export class PatientDatabasePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     fetchIndications: PropTypes.func,
+    fetchSites: PropTypes.func,
     fetchSources: PropTypes.func,
     fetchPatientCategories: PropTypes.func,
     fetchPatients: PropTypes.func,
@@ -33,6 +34,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     this.props.fetchIndications();
     this.props.fetchSources();
     this.props.fetchPatientCategories();
+    this.props.fetchSites();
     // this.props.fetchPatients({ limit:15, skip:0 });
   }
 
@@ -61,7 +63,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
       queryParams.direction = this.props.paginationOptions.activeDirection;
     }
 
-    if (queryParams.status || queryParams.source || queryParams.includeIndication || queryParams.name ||
+    if (queryParams.status || queryParams.source || queryParams.includeIndication || queryParams.name || queryParams.site ||
       queryParams.excludeIndication || queryParams.gender || queryParams.ageFrom || queryParams.ageTo || queryParams.bmiFrom || queryParams.bmiTo) {
       this.props.fetchPatients(queryParams, this.props.patients.details, searchFilter, isExport);
     } else {
@@ -97,6 +99,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchIndications: () => dispatch(fetchIndications()),
+    fetchSites: () => dispatch(fetchSites()),
     fetchSources: () => dispatch(fetchSources()),
     fetchPatientCategories: searchParams => dispatch(fetchPatientCategories(searchParams)),
     fetchPatients: (searchParams, patients, searchFilter, isExport) => dispatch(fetchPatients(searchParams, patients, searchFilter, isExport)),
