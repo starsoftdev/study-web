@@ -59,7 +59,6 @@ export function* fetchPatientsWatcher() {
         include: [
           'indications',
           'source',
-          { campaigns: 'site' },
           { studyPatientCategory: 'patientCategory' },
         ],
         where: {
@@ -173,7 +172,6 @@ export function* fetchPatientsWatcher() {
         yield put(downloadComplete());
       } else {
         const response = yield call(request, requestURL);
-        console.log("this is the response", response)
         yield put(patientsFetched(searchParams, response, patients, searchFilter));
       }
     } catch (err) {

@@ -32,15 +32,16 @@ const mapStateToProps = createStructuredSelector({
 
 class SearchPatientsForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    formValues: PropTypes.object,
+    handleSubmit: PropTypes.func,
+    hasError: PropTypes.bool,
     indications: PropTypes.array,
-    sources: PropTypes.array,
-    sites: PropTypes.array,
+    onSubmit: PropTypes.func,
     patientCategories: PropTypes.object,
     patients: PropTypes.object,
-    hasError: PropTypes.bool,
-    handleSubmit: PropTypes.func,
-    formValues: PropTypes.object,
-    onSubmit: PropTypes.func,
+    sites: PropTypes.array,
+    sources: PropTypes.array,
+    user: PropTypes.object,
   };
 
   constructor(props) {
