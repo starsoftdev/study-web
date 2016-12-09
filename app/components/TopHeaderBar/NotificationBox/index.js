@@ -13,6 +13,7 @@ import _ from 'lodash';
 import {
   fetchNotifications,
   fetchUnreadNotificationsCount,
+  markNotificationsRead,
 } from 'containers/GlobalNotifications/actions';
 
 import {
@@ -34,6 +35,7 @@ class NotificationBox extends React.Component {
     unreadNotificationsCount: PropTypes.number,
     fetchNotifications: PropTypes.func.isRequired,
     fetchUnreadNotificationsCount: PropTypes.func.isRequired,
+    markNotificationsRead: PropTypes.func.isRequired,
   }
 
   state = {
@@ -55,6 +57,7 @@ class NotificationBox extends React.Component {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen,
     });
+    this.props.markNotificationsRead(this.props.currentUser.id);
   }
 
   handleClickOutside = () => {
@@ -114,6 +117,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   fetchNotifications,
   fetchUnreadNotificationsCount,
+  markNotificationsRead,
 };
 
 export default connect(

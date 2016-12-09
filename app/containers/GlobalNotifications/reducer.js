@@ -12,6 +12,7 @@ import {
   FETCH_UNREAD_NOTIFICATIONS_COUNT_SUCCESS,
   RECEIVE_NOTIFICATION,
   SET_PROCESSING_STATUS,
+  MARK_NOTIFICATIONS_READ,
 } from './constants';
 
 const initialState = {
@@ -60,6 +61,17 @@ function globalNotificationsReducer(state = initialState, action) {
         ...state,
         processing: action.payload.status,
       };
+
+    case MARK_NOTIFICATIONS_READ:
+      return {
+        ...state,
+        unreadNotificationsCount: 0,
+        notifications: state.notifications.map(n => ({
+          ...n,
+          read: true,
+        })),
+      };
+
     default:
       return state;
   }
