@@ -20,11 +20,10 @@ import {
   selectUnreadNotificationsCount,
 } from 'containers/GlobalNotifications/selectors';
 
-import { getRedirectionUrl } from 'containers/NotificationsPage';
-
-import avatar1 from 'assets/images/img2.png';
-import avatar2 from 'assets/images/img3.png';
-import avatar3 from 'assets/images/img4.png';
+import {
+  getRedirectionUrl,
+  getAvatarUrl,
+} from 'containers/NotificationsPage';
 
 import './styles.less';
 
@@ -80,20 +79,11 @@ class NotificationBox extends React.Component {
               <strong className="title">NOTIFICATIONS</strong>
               <div className="jcf-scrollable">
                 <ul className="list-unstyled">
-                  {/*
-                  <li>
-                    <a href="#">
-                      <div className="img-circle"><img src={avatar1} width="43" height="43" alt="Alan walker" /></div>
-                      <p><strong>alan walker</strong> moved Thomas Morgan from New Patient to Consented.</p>
-                      <time dateTime="2016-05-16">05/16/16 at 11:31 PM</time>
-                    </a>
-                  </li>
-                  */}
                   {
                     _.take(this.props.notifications, 3).map(n => (
                       <li key={n.id}>
                         <a href={getRedirectionUrl(n)}>
-                          <div className="img-circle"><img src={avatar1} width="43" height="43" alt="Alan walker" /></div>
+                          <div className="img-circle"><img src={getAvatarUrl(n)} width="43" height="43" alt="Avatar" /></div>
                           <p dangerouslySetInnerHTML={{ __html: n.event_log.eventMessage }} />
                           <time>{`${this.getLocalTime(n.event_log.created).format('MM/DD/YY')} at ${this.getLocalTime(n.event_log.created).format('h:mm A')}`}</time>
                         </a>
