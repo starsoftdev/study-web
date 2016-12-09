@@ -121,7 +121,6 @@ export function* showPdf() {
 
       const response = yield call(request, requestURL, params);
       window.open(response.url, '_blank');
-      
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
