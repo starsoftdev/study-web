@@ -7,6 +7,7 @@ import { createStructuredSelector } from 'reselect';
 import CalendarWidget from './components/CalendarWidget';
 import SchedulePatientModal from './components/SchedulePatientModal';
 import FilterBar from './components/FilterBar';
+import AllEventsModal from './components/AllEventsModal';
 
 import moment from 'moment';
 import _ from 'lodash';
@@ -34,9 +35,9 @@ import { SchedulePatientModalType } from 'common/constants';
 const getFilteredSchedules = (schedules, filter) =>
   schedules.filter(s =>
     `${s.patient.firstName} ${s.patient.lastName}`.toLowerCase().indexOf(filter.patientName.toLowerCase()) > -1 &&
-      (!filter.siteLocation || s.siteLocation === filter.siteLocation) &&
-      (!filter.indication || s.indication === filter.indication) &&
-      (!filter.protocol || s.protocolNumber === filter.protocol)
+      (!filter.siteLocation || filter.siteLocation === 'All' || s.siteLocation === filter.siteLocation) &&
+      (!filter.indication || filter.indication === 'All' || s.indication === filter.indication) &&
+      (!filter.protocol || filter.protocol === 'All' || s.protocolNumber === filter.protocol)
   );
 
 export class CalendarPage extends React.Component {
@@ -70,6 +71,12 @@ export class CalendarPage extends React.Component {
       protocol: null,
     },
     modalType: SchedulePatientModalType.HIDDEN,
+    showAll: {
+      visible: false,
+      date: null,
+      events: [],
+    },
+    allModalDeferred: false,
     filteredSchedules: [],
   }
 
@@ -85,17 +92,10 @@ export class CalendarPage extends React.Component {
     this.filterSchedules(nextProps.schedules.data, this.state.filter);
   }
 
-  updateFilter(field, newValue) {
-    const newFilter = {
-      ...this.state.filter,
-      [field]: newValue,
-    };
-
+  setAllModalDeferred = (allModalDeferred) => {
     this.setState({
-      filter: newFilter,
+      allModalDeferred,
     });
-
-    this.filterSchedules(this.props.schedules.data, newFilter);
   }
 
   filterSchedules(schedules, filter) {
@@ -107,9 +107,25 @@ export class CalendarPage extends React.Component {
   handleModalVisibility = (modalType, data) => {
     if (modalType !== SchedulePatientModalType.HIDDEN) {
       this.selectedCellInfo = data;
+    } else if (this.state.allModalDeferred) {
+      this.handleShowAll(true);
+      this.setState({
+        allModalDeferred: false,
+      });
     }
+
     this.setState({
       modalType,
+    });
+  }
+
+  handleShowAll = (visible, events, date) => {
+    this.setState({
+      showAll: {
+        visible,
+        events: events || this.state.showAll.events,
+        date: date || this.state.showAll.date,
+      },
     });
   }
 
@@ -130,13 +146,11 @@ export class CalendarPage extends React.Component {
       };
     } else { // UPDATE
       let updatedDate;
-
       if (data.date) {
-        updatedDate = moment(new Date(data.date));
+        updatedDate = data.date.startOf('day');
       } else {  // React Datepicker doesn't submit its initial value
         updatedDate = moment(new Date(this.selectedCellInfo.data.time)).startOf('day');
       }
-
       submitData = {
         id: this.selectedCellInfo.data.id,
         time: updatedDate.add(data.period === 'AM' ?
@@ -146,12 +160,18 @@ export class CalendarPage extends React.Component {
       };
     }
 
-    this.handleModalVisibility(SchedulePatientModalType.HIDDEN);
+    this.setState({
+      modalType: SchedulePatientModalType.HIDDEN,
+      allModalDeferred: false,
+    });
     this.props.submitSchedule(submitData);
   }
 
   handleDelete = (scheduleId) => {
-    this.handleModalVisibility(SchedulePatientModalType.HIDDEN);
+    this.setState({
+      modalType: SchedulePatientModalType.HIDDEN,
+      allModalDeferred: false,
+    });
 
     this.props.deleteSchedule(scheduleId, this.props.currentUser.id);
   }
@@ -160,8 +180,22 @@ export class CalendarPage extends React.Component {
     this.calendarWidget.bigCalendar.refs.inner.navigateToToday();
   }
 
+  updateFilter(field, newValue) {
+    const newFilter = {
+      ...this.state.filter,
+      [field]: newValue,
+    };
+
+    this.setState({
+      filter: newFilter,
+    });
+
+    this.filterSchedules(this.props.schedules.data, newFilter);
+  }
+
   render() {
     const { currentUser, sites, indications, patientsByStudy, schedules } = this.props;
+    const { showAll } = this.state;
     const fetchingSites = sites.isFetching;
     const fetchingPatientsByStudy = patientsByStudy.isFetching;
     const isAdmin = !currentUser || !currentUser.site_id;
@@ -203,6 +237,7 @@ export class CalendarPage extends React.Component {
           <CalendarWidget
             schedules={this.state.filteredSchedules}
             handleOpenModal={this.handleModalVisibility}
+            handleShowAll={this.handleShowAll}
             ref={(c) => { this.calendarWidget = c; }}
           />
           <SchedulePatientModal
@@ -221,6 +256,14 @@ export class CalendarPage extends React.Component {
             fetchingSites={fetchingSites}
             fetchingPatientsByStudy={fetchingPatientsByStudy}
             fetchPatientsByStudy={this.props.fetchPatientsByStudy}
+          />
+          <AllEventsModal
+            visible={showAll.visible}
+            date={showAll.date}
+            events={showAll.events}
+            handleCloseModal={() => this.handleShowAll(false)}
+            handleEdit={this.handleModalVisibility}
+            setAllModalDeferred={this.setAllModalDeferred}
           />
         </section>
       </div>

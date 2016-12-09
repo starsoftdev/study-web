@@ -833,6 +833,23 @@ input[type=text]:-ms-input-placeholder {
   }
 }
 
+@media screen and (max-width: 1600px) {
+  .individual-study {
+    .form-search {
+      margin-bottom: 0 !important;
+      .btns-popups {
+        width: 100%;
+        margin: 0 0 30px !important;
+      }
+      .fields-holder {
+        width: 100% !important;
+        clear: both;
+        position: relative !important;
+      }
+    }
+  }
+}
+
 .caret-arrow {
 	.font(0,0);
 	margin: 0 0 0 2px;
@@ -2501,7 +2518,7 @@ th, .th {
 	}
 
 	.category {
-		.text { margin: 0 3px 0 0; }
+		.text { margin: 0 9px 0 0; }
 	}
 }
 
@@ -2872,8 +2889,13 @@ th, .th {
 }
 
 /*	individual-study	*/
+
 .individual-study {
 	position: relative;
+
+  .study-page-update-patient-bttns-container{
+    margin-bottom: 25px;
+  }
 
 	.main-head {
 		.font(21px);
@@ -2891,15 +2913,30 @@ th, .th {
 	}
 
 	.main-heading {
-		margin: 0 0 24px;
+		margin: 0 0 34px;
 	}
 
 	.form-search {
-		margin: 0 -6px 18px;
+		margin: 0 -6px 32px;
+
+    .fields-holder{
+      position: absolute;
+      top: 0;
+      right: 586px;
+      left: 0;
+    }
+
+    .btns-popups {
+      margin: 0 0 0 0px;
+      font-size: 0;
+      line-height: 0;
+      .btn {
+        padding: 5px 12px !important;
+      }
+    }
 
 		> div {
 			margin: 0;
-			padding: 0 6px 12px;
 
 			&.btns {
 				padding: 0;
@@ -2922,7 +2959,7 @@ th, .th {
 		}
 
 		.search-area {
-			width: 22.7%;
+			width: 33.33%;
 		}
 
 		.select {
@@ -2940,6 +2977,13 @@ th, .th {
 		.btn-download {
 			width: 34%;
 		}
+
+    .btn-default.btn-enter {
+      top: 4px;
+      right: 4px;
+      padding: 1px 11px 1px 10px;
+      position: absolute;
+    }
 	}
 
 
@@ -3214,7 +3258,7 @@ th, .th {
     white-space: nowrap;
     background: #f78e1e;
     text-transform: uppercase;
-    padding: 16px 5px 16px 12px;
+    padding: 16px 5px 16px 42px;
     &:before {
       content: '';
       .size(1px, 28px);
@@ -3225,15 +3269,16 @@ th, .th {
       background: #ffc689;
     }
     .text {
-      margin-left: 5px;
       white-space: normal;
+      margin-left: 4px;
       .align(@align: middle);
     }
     .number {
       height: 26px;
-      min-width: 26px;
-      padding-left: 2px;
-      padding-right: 2px;
+      width: 26px;
+      left: 9px;
+      position: absolute;
+      top: 17px;
       color: #00afef;
       background: #fff;
       .font(18px, 24px);
@@ -3373,13 +3418,15 @@ th, .th {
       transition: all 0.25s;
     }
   }
-  @media screen and (max-width: 1650px) {
+  @media screen and (max-width: 1600px) {
     .opener {
+      padding: 5px 5px 5px 31px;
       .font(12px);
       &:before {
         height: 44px;
       }
       .text {
+        margin-left: 3px;
         -webkit-hyphens: auto;
         -moz-hyphens: auto;
         -ms-hyphens: auto;
@@ -3387,6 +3434,8 @@ th, .th {
       }
       .number {
         height: 20px;
+        width: 20px;
+        left: 7px;
         min-height: 20px;
         .font(14px, 20px);
       }
@@ -3553,6 +3602,10 @@ th, .th {
   }
 }
 
+#date-range .btn-block {
+  padding: 0 20px 0 0 !important;
+}
+
 .custom-modal.avatar-modal {
   .modal-content {
     max-width: 460px;
@@ -3668,6 +3721,14 @@ th, .th {
   .btn{
     padding: 5px 12px;
   }
+}
+
+.btn-default-padding{
+  padding: 5px 12px !important;
+}
+
+.show-pdf-link{
+  cursor: pointer;
 }
 /*****************/
 /* calendar page  */

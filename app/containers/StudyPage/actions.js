@@ -40,6 +40,7 @@ import {
   MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
   MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
+  SUBMIT_ADD_PATIENT_SUCCESS,
   SUBMIT_TEXT_BLAST,
   SUBMIT_PATIENT_IMPORT,
   SUBMIT_ADD_PATIENT,
@@ -444,7 +445,12 @@ export function submitAddPatient(studyId, patient, onClose) {
     onClose,
   };
 }
-
+export function submitAddPatientSuccess(patients) {
+  return {
+    type: SUBMIT_ADD_PATIENT_SUCCESS,
+    patients,
+  };
+}
 export function switchToNoteSectionDetail() {
   return {
     type: SWITCH_TO_NOTE_SECTION_DETAIL,
