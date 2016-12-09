@@ -178,82 +178,75 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
     const editSiteModalShown = this.editSiteModalShouldBeShown();
     const editUserModalShown = this.editUserModalShouldBeShown();
 
-    if (sortedClientSites.length > 0) {
-      return (
-        <div className="client-sites">
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="table-responsive">
-                <table className="table">
-                  <caption>SITE LOCATIONS</caption>
-                  <thead>
-                    <tr>
-                      <th className={this.getColumnSortClassName('name')} onClick={() => { this.clickSortHandler('name'); }}>
-                        <span>SITE NAME</span>
-                        <i className="caret-arrow"></i>
-                      </th>
-                      <th className={this.getColumnSortClassName('principalInvestigator')} onClick={() => { this.clickSortHandler('principalInvestigator'); }}>
-                        <span>PRINCIPAL INVESTIGATOR</span>
-                        <i className="caret-arrow"></i>
-                      </th>
-                      <th className={this.getColumnSortClassName('phone')} onClick={() => { this.clickSortHandler('phone'); }}>
-                        <span>SITE PHONE</span>
-                        <i className="caret-arrow"></i>
-                      </th>
-                      <th className={this.getColumnSortClassName('address')} onClick={() => { this.clickSortHandler('address'); }}>
-                        <span>SITE ADDRESS</span>
-                        <i className="caret-arrow"></i>
-                      </th>
-                      <th></th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {clientSitesListContents}
-                  </tbody>
-                </table>
-              </div>
-              <Modal className="edit-site" id="edit-site" show={editSiteModalShown} onHide={this.closeEditSiteModal}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Edit Site</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <div className="holder clearfix">
-                    <div className="form-lightbox">
-                      <EditSiteForm
-                        initialValues={selectedSiteDetailsForForm}
-                        onSubmit={this.updateSite}
-                      />
-                    </div>
-                  </div>
-                </Modal.Body>
-              </Modal>
-              <Modal className="edit-user" id="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Edit User</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <div className="holder clearfix">
-                    <div className="form-lightbox">
-                      <EditUserForm
-                        initialValues={selectedUserDetailsForForm}
-                        siteOptions={siteOptions}
-                        deleting={deletedUser.deleting}
-                        onDelete={this.deleteUser}
-                        onSubmit={this.updateUser}
-                      />
-                    </div>
-                  </div>
-                </Modal.Body>
-              </Modal>
+    return (
+      <div className="client-sites">
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="table-responsive">
+              <table className="table">
+                <caption>SITE LOCATIONS</caption>
+                <thead>
+                  <tr>
+                    <th className={this.getColumnSortClassName('name')} onClick={() => { this.clickSortHandler('name'); }}>
+                      <span>SITE NAME</span>
+                      <i className="caret-arrow"></i>
+                    </th>
+                    <th className={this.getColumnSortClassName('principalInvestigator')} onClick={() => { this.clickSortHandler('principalInvestigator'); }}>
+                      <span>PRINCIPAL INVESTIGATOR</span>
+                      <i className="caret-arrow"></i>
+                    </th>
+                    <th className={this.getColumnSortClassName('phone')} onClick={() => { this.clickSortHandler('phone'); }}>
+                      <span>SITE PHONE</span>
+                      <i className="caret-arrow"></i>
+                    </th>
+                    <th className={this.getColumnSortClassName('address')} onClick={() => { this.clickSortHandler('address'); }}>
+                      <span>SITE ADDRESS</span>
+                      <i className="caret-arrow"></i>
+                    </th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedClientSites.length > 0 && clientSitesListContents}
+                </tbody>
+              </table>
             </div>
+            <Modal className="edit-site" id="edit-site" show={editSiteModalShown} onHide={this.closeEditSiteModal}>
+              <Modal.Header closeButton>
+                <Modal.Title>Edit Site</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="holder clearfix">
+                  <div className="form-lightbox">
+                    <EditSiteForm
+                      initialValues={selectedSiteDetailsForForm}
+                      onSubmit={this.updateSite}
+                    />
+                  </div>
+                </div>
+              </Modal.Body>
+            </Modal>
+            <Modal className="edit-user" id="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
+              <Modal.Header closeButton>
+                <Modal.Title>Edit User</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="holder clearfix">
+                  <div className="form-lightbox">
+                    <EditUserForm
+                      initialValues={selectedUserDetailsForForm}
+                      siteOptions={siteOptions}
+                      deleting={deletedUser.deleting}
+                      onDelete={this.deleteUser}
+                      onSubmit={this.updateUser}
+                    />
+                  </div>
+                </div>
+              </Modal.Body>
+            </Modal>
           </div>
         </div>
-      );
-    }
-    return (
-      <div>
-        <h3>No matching sites found!</h3>
       </div>
     );
   }
