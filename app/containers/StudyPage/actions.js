@@ -5,6 +5,7 @@
  */
 
 import {
+  CLEAR_FORM_UPLOAD,
   FIND_PATIENTS_TEXT_BLAST,
   FIND_PATIENTS_TEXT_BLAST_SUCCESS,
   FILTER_PATIENTS_TEXT_BLAST,
@@ -69,7 +70,11 @@ export function campaignsFetched(payload) {
     payload,
   };
 }
-
+export function clearForm() {
+  return {
+    type: CLEAR_FORM_UPLOAD,
+  };
+}
 export function findPatientsForTextBlast(studyId, text, categoryIds, sourceIds) {
   return {
     type: FIND_PATIENTS_TEXT_BLAST,
@@ -446,10 +451,11 @@ export function submitAddPatient(studyId, patient, onClose) {
     onClose,
   };
 }
-export function submitAddPatientSuccess(patients) {
+export function submitAddPatientSuccess(patients, fileName) {
   return {
     type: SUBMIT_ADD_PATIENT_SUCCESS,
     patients,
+    fileName,
   };
 }
 export function submitAddPatientFailure() {

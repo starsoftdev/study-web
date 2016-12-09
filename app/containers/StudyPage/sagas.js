@@ -610,9 +610,9 @@ function* submitPatientImport() {
         method: 'POST',
         body: formData,
       });
-      onClose();
+      // onClose();
       yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
-      yield put(submitAddPatientSuccess(response));
+      yield put(submitAddPatientSuccess(response, file.name));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while importing the patient list. Please try again later or revise your patient list format.');
       yield put(submitAddPatientFailure());
