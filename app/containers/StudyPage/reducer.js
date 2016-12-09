@@ -7,6 +7,7 @@
 import {
   ADD_PATIENT_INDICATION_SUCCESS,
   ADD_PATIENT_NOTE_SUCCESS,
+  CLEAR_FORM_UPLOAD,
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENT_DETAILS_SUCCESS,
@@ -90,13 +91,40 @@ function studyPageReducer(state = initialState, action) {
     case FETCH_PATIENT_DETAILS_SUCCESS:
     case REMOVE_PATIENT_INDICATION_SUCCESS:
     case SUBMIT_DELETE_NOTE_SUCCESS:
+    case UPDATE_PATIENT_SUCCESS:
+      return {
+        ...state,
+        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),
+      };
+    case CLEAR_FORM_UPLOAD:
+      return {
+        ...state,
+        fileUploaded:null,
+      };
+    case SUBMIT_PATIENT_IMPORT:
+      return {
+        ...state,
+        fileUploaded: null,
+        uploadStarted: true,
+      };
+    case SUBMIT_ADD_PATIENT_FAILURE:
+      return {
+        ...state,
+        uploadStarted: null,
+      };
     case SUBMIT_ADD_PATIENT_SUCCESS:
       return {
         ...state,
         uploadStarted: null,
+        fileUploaded: action.fileName,
         patientCategories: state.patientCategories.map(category => {
           if (category.name === 'New Patient') {
-            if (Array.isArray(action.patients)) {
+            if (!category.patients) {
+              return {
+                ...category,
+                patients: [...action.patients],
+              };
+            } else if (Array.isArray(action.patients)) {
               return {
                 ...category,
                 patients: [
@@ -115,21 +143,6 @@ function studyPageReducer(state = initialState, action) {
           }
           return category;
         }),
-      };
-    case SUBMIT_PATIENT_IMPORT:
-      return {
-        ...state,
-        uploadStarted: true,
-      };
-    case SUBMIT_ADD_PATIENT_FAILURE:
-      return {
-        ...state,
-        uploadStarted: null,
-      };
-    case UPDATE_PATIENT_SUCCESS:
-      return {
-        ...state,
-        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),
       };
     case MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS:
       return {
