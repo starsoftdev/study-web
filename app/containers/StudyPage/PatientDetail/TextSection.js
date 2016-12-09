@@ -99,9 +99,9 @@ class TextSection extends React.Component {
 
   textAreaChange() {
     const { maxCharacters } = this.state;
-    const value = this.textarea.value
+    const value = this.textarea.value;
     if (value.length > maxCharacters) {
-      this.textarea.value = value.substring(0, maxCharacters)
+      this.textarea.value = value.substring(0, maxCharacters);
     } else {
       this.setState({ enteredCharactersLength: value.length }, () => {
 
