@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars, global-require */
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
@@ -34,6 +34,21 @@ export const getRedirectionUrl = (notification) => {
     default:
       return '/';
   }
+};
+
+export const getAvatarUrl = (notification) => {
+  const { event_log } = notification;
+  let url = require('assets/images/Default-User-Img-Dr.png');
+  if (event_log.eventType === 'twilio-message') {
+    const data = JSON.parse(event_log.eventData);
+    if (data.patientGender === 'Female') {
+      url = require('assets/images/Default-User-Img-Girl.png');
+    } else {
+      url = require('assets/images/Default-User-Img.png');
+    }
+  }
+
+  return url;
 };
 
 const sanitize = (notifications) => notifications.map(n => {
