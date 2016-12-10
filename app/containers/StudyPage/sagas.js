@@ -596,7 +596,7 @@ function* submitTextBlast() {
 function* submitPatientImport() {
   while (true) {
     // listen for the SUBMIT_PATIENT_IMPORT action
-    const { studyId, file } = yield take(SUBMIT_PATIENT_IMPORT);
+    const { studyId, file, onClose } = yield take(SUBMIT_PATIENT_IMPORT);
     const authToken = getItem('auth_token');
     const formData = new FormData();
     formData.append('file', file);
@@ -610,7 +610,7 @@ function* submitPatientImport() {
         method: 'POST',
         body: formData,
       });
-      // onClose();
+      onClose();
       yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
       yield put(submitAddPatientSuccess(response, file.name));
     } catch (e) {

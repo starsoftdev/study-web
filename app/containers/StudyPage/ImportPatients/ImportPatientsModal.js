@@ -35,11 +35,11 @@ class ImportPatientsModal extends React.Component {
   }
 
   uploadFile(event) {
-    const { submitPatientImport, studyId } = this.props;
+    const { onHide, submitPatientImport, studyId } = this.props;
     // if the file is a csv
-    if (event.target.files[0].type === 'text/csv' || event.target.files[0].type !== '' || event.target.files[0].type !== 'application/vnd.ms-excel' || event.target.files[0].type !== 'application/excel' || event.target.files[0].type !== 'text/anytext' || event.target.files[0].type !== 'application/vnd.msexcel' || event.target.files[0].type !== 'text/comma-separated-values') {
+    if (event.target.files[0].type === 'text/csv' || event.target.files[0].type === '' || event.target.files[0].type === 'application/vnd.ms-excel' || event.target.files[0].type === 'application/excel' || event.target.files[0].type === 'text/anytext' || event.target.files[0].type === 'application/vnd.msexcel' || event.target.files[0].type === 'text/comma-separated-values') {
       const file = event.target.files[0];
-      submitPatientImport(studyId, file);
+      submitPatientImport(studyId, file, onHide);
     } else {
       // return error
       console.error('wrong file type');
