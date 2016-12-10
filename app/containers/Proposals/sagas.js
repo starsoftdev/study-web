@@ -52,9 +52,8 @@ export function* getProposals() {
       const response = yield call(request, requestURL);
 
       yield put(proposalsReceived(response));
-      yield put(toastrActions.success('', 'Proposals received.'));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
+      const errorMessage = get(err, 'message', 'We encountered an error loading proposals. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
       payload.cb(err, null);
     }
