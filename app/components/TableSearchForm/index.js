@@ -144,7 +144,7 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
               <Modal.Title>
                 <strong className="title">DATE RANGE</strong>
               </Modal.Title>
-              <a className="lightbox-close close" href="#" onClick={this.hidePopup}><i className="icomoon-icon_close" /></a>
+              <a className="lightbox-close close" onClick={this.hidePopup}><i className="icomoon-icon_close" /></a>
             </div>
           </Modal.Header>
           <Modal.Body>
@@ -176,39 +176,39 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
         </Modal> */}
 
         <div id="date-range" className={(state.showPopup) ? 'lightbox fixed-popup lightbox-active' : 'lightbox fixed-popup'}>
-          <div className="lightbox-holder">
-            <div className="lightbox-frame">
-              <div className="lightbox-content">
-                <div className="head">
-                  <strong className="title">DATE RANGE</strong>
-                  <a className="lightbox-close close" href="#" onClick={this.hidePopup}><i className="icomoon-icon_close" /></a>
-                </div>
-                <div className="holder">
-                  <DateRange
-                    linkedCalendars
-                    ranges={defaultRanges}
-                    onInit={this.handleChange}
-                    onChange={this.handleChange}
-                  />
-                  <div className="dateRange-helper">
-                    <div className="emit-border"><br /></div>
-                    <div className="right-part">
-                      <div className="btn-block text-right">
-                        <a
-                          href="#"
-                          className="btn btn-default lightbox-close"
-                          onClick={this.changeRange}
-                        >
-                          submit
-                        </a>
+            <div className="lightbox-holder">
+              <div className="lightbox-frame">
+                <div className="lightbox-content">
+                  <div className="head">
+                    <strong className="title">DATE RANGE</strong>
+                    <a className="lightbox-close close" href="#" onClick={this.hidePopup}><i className="icomoon-icon_close" /></a>
+                  </div>
+                  <div className="holder">
+                    <DateRange
+                      linkedCalendars
+                      ranges={defaultRanges}
+                      onInit={this.handleChange}
+                      onChange={this.handleChange}
+                    />
+                    <div className="dateRange-helper">
+                      <div className="emit-border"><br /></div>
+                      <div className="right-part">
+                        <div className="btn-block text-right">
+                          <a
+                            href="#"
+                            className="btn btn-default lightbox-close"
+                            onClick={this.changeRange}
+                          >
+                            submit
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <a href="#" className="overlay lightbox-close" onClick={this.hidePopup} />
+            <a href="#" className="overlay lightbox-close" onClick={this.hidePopup} />
         </div>
       </form>
     );
