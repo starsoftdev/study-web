@@ -42,7 +42,7 @@ class ImportPatientsModal extends React.Component {
       submitPatientImport(studyId, file, onHide);
     } else {
       // return error
-      console.error('wrong file type');
+      console.error('Wrong file type');
     }
   }
   render() {
