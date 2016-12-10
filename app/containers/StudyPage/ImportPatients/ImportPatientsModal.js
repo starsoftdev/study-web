@@ -16,7 +16,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 @reduxForm({ form: 'importPatients' })
 class ImportPatientsModal extends React.Component {
   static propTypes = {
-    clearFile: React.PropTypes.func,
+    clearForm: React.PropTypes.func,
     fileUploaded: React.PropTypes.string,
     show: React.PropTypes.bool.isRequired,
     onHide: React.PropTypes.func.isRequired,
@@ -35,7 +35,7 @@ class ImportPatientsModal extends React.Component {
   }
 
   uploadFile(event) {
-    const { onHide, submitPatientImport, studyId } = this.props;
+    const { submitPatientImport, studyId } = this.props;
     // if the file is a csv
     if (event.target.files[0].type === 'text/csv') {
       const file = event.target.files[0];
