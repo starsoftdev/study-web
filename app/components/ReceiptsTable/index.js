@@ -241,7 +241,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
       <div className="table-holder">
         <table className="table">
           <colgroup>
-            <col style={{ width: '6.5%' }} />
+            <col style={{ width: '8%' }} />
             <col style={{ width: '9.6%' }} />
             <col style={{ width: '17.4%' }} />
             <col style={{ width: '18.4%' }} />
