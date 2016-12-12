@@ -68,9 +68,11 @@ class TextBlastModal extends React.Component {
   }
 
   textAreaChange() {
-    const value = this.textarea.value;
-    this.setState({ enteredCharactersLength: value.length }, () => {
-    });
+    setTimeout(() => {
+      const value = this.textarea.value;
+      this.setState({ enteredCharactersLength: value ? value.length : 0 }, () => {
+      });
+    }, 0);
   }
 
   selectCategory(checked, categoryId) {
