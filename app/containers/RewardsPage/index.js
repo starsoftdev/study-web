@@ -20,14 +20,15 @@ import {
   selectRewards,
 } from 'containers/App/selectors';
 
-import { submitForm } from 'containers/RewardsPage/actions';
+import { selectSiteLocation } from 'components/RewardForm/selectors';
+import { submitForm, pickReward } from 'containers/RewardsPage/actions';
 import RewardModal from 'components/RewardModal';
 import RewardForm from 'components/RewardForm';
 import RewardsList from './RewardsList';
 
 import cardStudykik from 'assets/images/img6.png';
-import cardAmazon from 'assets/images/img7.png';
-import cardStarbucks from 'assets/images/img8.png';
+import cardAmazon from 'assets/images/img8.png';
+import cardStarbucks from 'assets/images/img7.png';
 import diamond from 'assets/images/diamond.svg';
 import platinum from 'assets/images/platinum.svg';
 import gold from 'assets/images/gold.svg';
@@ -43,6 +44,8 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     fetchClientSites: PropTypes.func,
     fetchRewards: PropTypes.func,
     onSubmitForm: PropTypes.func,
+    pickReward: PropTypes.func,
+    selectedSite: PropTypes.object,
   };
 
   constructor(props) {
@@ -68,7 +71,9 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     this.props.fetchRewards();
   }
 
-  openRewardModal() {
+  openRewardModal(value) {
+    const { pickReward } = this.props;
+    pickReward(value);
     this.setState({ rewardModalOpen: true });
   }
 
@@ -76,8 +81,24 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     this.setState({ rewardModalOpen: false });
   }
 
+  renderHeaderText() {
+    const { selectedSite } = this.props;
+    if (typeof (selectedSite) === 'number') {
+      if (selectedSite === 0.5) {
+        return (
+          <h3 className="pull-left"><strong>{450} Total KIKs</strong></h3>
+        );
+      }
+      return (
+        <h3 className="pull-left">Wayne Enterprise Has <strong>450 KIKs</strong></h3>
+      );
+    }
+    return (
+      <h3 className="pull-left">Wayne Enterprise Has <strong>450 KIKs</strong></h3>
+    );
+  }
   render() {
-    const { siteLocations } = this.props;
+    const { siteLocations, pickReward } = this.props;
     return (
       <div className="container-fluid">
 
@@ -92,21 +113,23 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
           </div>
 
           <header className="sub-header clearfix">
-            <h3 className="pull-left">Wayne Enterprise Has <strong>450 KIKs</strong></h3>
+            {this.renderHeaderText()}
             <a className="btn bgn-chat lightbox-opener pull-right" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal}></a>
-            <RewardModal siteLocations={siteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} onSubmit={this.onSubmitForm} />
+            <RewardModal siteLocations={siteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} onSubmit={this.onSubmitForm} pickReward={pickReward} />
           </header>
 
           <div className="row images-area">
             <div className="col-xs-4 pull-left">
-              <a href="#" className="lightbox-opener option3" data-for="radio-option3" onClick={this.openRewardModal}><img alt="" src={cardStudykik} /></a>
+              <a href="#" className="lightbox-opener option2" data-for="radio-option2" onClick={() => this.openRewardModal('2')}><img alt="" src={cardAmazon} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a href="#" className="lightbox-opener option1" data-for="radio-option1" onClick={this.openRewardModal}><img alt="" src={cardStarbucks} /></a>
+              <a href="#" className="lightbox-opener option1" data-for="radio-option1" onClick={() => this.openRewardModal('1')}><img alt="" src={cardStarbucks} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a href="#" className="lightbox-opener option2" data-for="radio-option2" onClick={this.openRewardModal}><img alt="" src={cardAmazon} /></a>
+              <a href="#" className="lightbox-opener option3" data-for="radio-option3" onClick={() => this.openRewardModal('3')}><img alt="" src={cardStudykik} /></a>
             </div>
+
+
           </div>
 
           <div className="earning-info clearfix">
@@ -228,11 +251,11 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     );
   }
 }
-
 const mapStateToProps = createStructuredSelector({
   currentUserClientId: selectCurrentUserClientId(),
   siteLocations: selectUserSiteLocations(),
   rewards: selectRewards(),
+  selectedSite: selectSiteLocation(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -241,6 +264,7 @@ function mapDispatchToProps(dispatch) {
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchRewards: () => dispatch(fetchRewards()),
     onSubmitForm: (values) => dispatch(submitForm(values)),
+    pickReward: (value) => dispatch(pickReward(value)),
   };
 }
 

@@ -74,7 +74,9 @@ const selectUserSiteLocations = () => createSelector(
         userSites = get(substate, 'baseData.clientSites.details', {});
       }
     }
-    return map(userSites, e => pick(e, ['id', 'name']));
+    const returnArray = map(userSites, e => pick(e, ['id', 'name']));
+    returnArray.push({ id: 0.5, name: 'All' });
+    return returnArray;
   }
 );
 

@@ -11,6 +11,7 @@ import {
   FETCH_SITES,
   FETCH_SITES_SUCCESS,
   FETCH_SITES_ERROR,
+  PICK_REWARD,
 } from './constants';
 
 export function submitForm(payload) {
@@ -51,5 +52,12 @@ export function sitesFetchingError(payload) {
   return {
     type: FETCH_SITES_ERROR,
     payload,
+  };
+}
+
+export function pickReward(value) {
+  return {
+    type: PICK_REWARD,
+    value,
   };
 }
