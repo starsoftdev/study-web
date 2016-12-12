@@ -17,7 +17,6 @@ import _, { find } from 'lodash';
 import { submitForm, hideSubmitFormModal, fetchIndicationLevelPrice, clearFormSubmissionData } from 'containers/ListNewStudyPage/actions';
 import { Modal } from 'react-bootstrap';
 import LoadingSpinner from 'components/LoadingSpinner';
-import './styles.less';
 
 import Helmet from 'react-helmet';
 import {

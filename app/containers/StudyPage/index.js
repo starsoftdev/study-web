@@ -19,7 +19,6 @@ import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteI
 import {
   selectSocket,
 } from 'containers/GlobalNotifications/selectors';
-import './styles.less';
 
 export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

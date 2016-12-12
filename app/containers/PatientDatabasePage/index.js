@@ -10,7 +10,6 @@ import PatientActionButtons from './PatientActionButtons';
 import { fetchIndications, fetchSources } from 'containers/App/actions';
 import { fetchPatientCategories, fetchPatients, clearPatientsList } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
-import './styles.less';
 
 export class PatientDatabasePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
