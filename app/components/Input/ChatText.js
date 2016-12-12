@@ -9,7 +9,6 @@ import classNames from 'classnames';
 import './styles.less';
 
 function ChatText({ input, name, className, placeholder, maxLength, disabled }) {
- 
   return (
     <div className="chat-text">
       <textarea
