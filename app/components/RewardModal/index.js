@@ -12,8 +12,8 @@ import { Field, reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
 import RadioButton from 'components/Input/RadioButton';
 import cardStudykik from 'assets/images/img6.png';
-import cardAmazon from 'assets/images/img7.png';
-import cardStarbucks from 'assets/images/img8.png';
+import cardAmazon from 'assets/images/img8.png';
+import cardStarbucks from 'assets/images/img7.png';
 
 import {
   selectUserSiteLocations,
@@ -37,6 +37,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
     closeModal: React.PropTypes.func,
     handleSubmit: React.PropTypes.func.isRequired,
     currentUserClientId: React.PropTypes.number,
+    pickReward: React.PropTypes.pickReward,
   };
 
   constructor(props) {
@@ -49,8 +50,9 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
     this.selectCard = this.selectCard.bind(this);
   }
 
-  selectCard() {
-    this.setState({ card: 0 });
+  selectCard(value) {
+    const { pickReward } = this.props;
+    pickReward(value);
   }
 
   render() {
@@ -81,13 +83,13 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                 </div>
                 <div className="row images-area">
                   <div className="col-xs-4 pull-left">
-                    <label htmlFor="radio-option3"><img src={cardStudykik} alt="" /></label>
+                    <label htmlFor="radio-option1" onClick={() => { this.selectCard('1'); }}><img src={cardStarbucks} alt="" /></label>
                   </div>
                   <div className="col-xs-4 pull-left">
-                    <label htmlFor="radio-option1"><img src={cardStarbucks} alt="" /></label>
+                    <label htmlFor="radio-option2" onClick={() => { this.selectCard('2'); }}><img src={cardAmazon} alt="" /></label>
                   </div>
                   <div className="col-xs-4 pull-left">
-                    <label htmlFor="radio-option2"><img src={cardAmazon} alt="" /></label>
+                    <label htmlFor="radio-option3" onClick={() => { this.selectCard('3'); }}><img src={cardStudykik} alt="" /></label>
                   </div>
                 </div>
                 <ul className="list-unstyled list-radios">
