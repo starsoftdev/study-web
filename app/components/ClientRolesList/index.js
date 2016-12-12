@@ -165,63 +165,55 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
 
     const editUserModalShown = this.editUserModalShouldBeShown();
 
-    if (sortedClientRoles.length > 0) {
-      return (
-        <div className="client-roles">
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="table-responsive">
-                <table className="table">
-                  <caption>ADMINS</caption>
-                  <thead>
-                    <tr>
-                      <th className={this.getColumnSortClassName('name')} onClick={() => { this.clickSortHandler('name'); }}>
-                        <span>NAME</span>
-                        <i className="caret-arrow"></i>
-                      </th>
-                      <th className={this.getColumnSortClassName('email')} onClick={() => { this.clickSortHandler('email'); }}>
-                        <span>EMAIL</span>
-                        <i className="caret-arrow"></i>
-                      </th>
-                      <th className={this.getColumnSortClassName('access')} onClick={() => { this.clickSortHandler('access'); }}>
-                        <span>ACCESS</span>
-                        <i className="caret-arrow"></i>
-                      </th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {clientRolesListContents}
-                  </tbody>
-                </table>
-              </div>
-              <Modal className="edit-user" id="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Edit User</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <div className="holder clearfix">
-                    <div className="form-lightbox">
-                      <EditUserForm
-                        initialValues={selectedUserDetailsForForm}
-                        siteOptions={siteOptions}
-                        deleting={deletedClientRole.deleting}
-                        onDelete={this.deleteClientRole}
-                        onSubmit={this.updateUser}
-                      />
-                    </div>
-                  </div>
-                </Modal.Body>
-              </Modal>
+    return (
+      <div className="client-roles">
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="table-responsive">
+              <table className="table">
+                <caption>ADMINS</caption>
+                <thead>
+                  <tr>
+                    <th className={this.getColumnSortClassName('name')} onClick={() => { this.clickSortHandler('name'); }}>
+                      <span>NAME</span>
+                      <i className="caret-arrow"></i>
+                    </th>
+                    <th className={this.getColumnSortClassName('email')} onClick={() => { this.clickSortHandler('email'); }}>
+                      <span>EMAIL</span>
+                      <i className="caret-arrow"></i>
+                    </th>
+                    <th className={this.getColumnSortClassName('access')} onClick={() => { this.clickSortHandler('access'); }}>
+                      <span>ACCESS</span>
+                      <i className="caret-arrow"></i>
+                    </th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedClientRoles.length > 0 && clientRolesListContents}
+                </tbody>
+              </table>
             </div>
+            <Modal className="edit-user" id="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
+              <Modal.Header closeButton>
+                <Modal.Title>Edit User</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="holder clearfix">
+                  <div className="form-lightbox">
+                    <EditUserForm
+                      initialValues={selectedUserDetailsForForm}
+                      siteOptions={siteOptions}
+                      deleting={deletedClientRole.deleting}
+                      onDelete={this.deleteClientRole}
+                      onSubmit={this.updateUser}
+                    />
+                  </div>
+                </div>
+              </Modal.Body>
+            </Modal>
           </div>
         </div>
-      );
-    }
-
-    return (
-      <div>
-        <h3>No matching admins found!</h3>
       </div>
     );
   }
