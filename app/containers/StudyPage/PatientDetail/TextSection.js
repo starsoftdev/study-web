@@ -98,15 +98,11 @@ class TextSection extends React.Component {
   }
 
   textAreaChange() {
-    const { maxCharacters } = this.state;
-    const value = this.textarea.value;
-    if (value.length > maxCharacters) {
-      this.textarea.value = value.substring(0, maxCharacters);
-    } else {
-      this.setState({ enteredCharactersLength: value.length }, () => {
-
+    setTimeout(() => {
+      const value = this.textarea.value;
+      this.setState({ enteredCharactersLength: value ? value.length : 0 }, () => {
       });
-    }
+    }, 0);
   }
 
   scrollElement() {
@@ -190,6 +186,7 @@ class TextSection extends React.Component {
             className="form-control test"
             placeholder="Type a message..."
             onChange={this.textAreaChange}
+            maxLength={maxCharacters}
             ref={(textarea) => {
               this.textarea = textarea;
             }}
