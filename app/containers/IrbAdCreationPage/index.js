@@ -78,9 +78,9 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     if (productList[0]) {
       const addOns = [{
         title: productList[0].name,
-        price: productList[0].price,
+        price: productList[0].price * 100,
         quantity: 1,
-        total: productList[0].price,
+        total: productList[0].price * 100,
       }];
 
       return (
