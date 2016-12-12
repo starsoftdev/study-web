@@ -6,7 +6,6 @@
 
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-import './styles.less';
 
 function ChatText({ input, name, className, placeholder, maxLength, disabled }) {
   return (

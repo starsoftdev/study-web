@@ -9,7 +9,6 @@ import { selectCurrentUserClientId, selectClientSites, selectClientRoles, select
   selectDeletedClientRole, selectSavedUser, selectSelectedUserDetailsForForm } from 'containers/App/selectors';
 import { clearSelectedUser, deleteClientRole, saveUser } from 'containers/App/actions';
 import ClientRoleItem from './ClientRoleItem';
-import './styles.less';
 
 class ClientRolesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

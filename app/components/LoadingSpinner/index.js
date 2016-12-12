@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 
 import FaSpinner from 'react-icons/lib/fa/spinner';
-import './styles.less';
 
 function LoadingSpinner({ showOnlyIcon, size }) {
   if (showOnlyIcon) {

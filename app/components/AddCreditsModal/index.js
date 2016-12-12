@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { addCredits, getCreditsPrice } from 'containers/App/actions';
 import { selectCurrentUser, selectAddCredits, selectCreditsPrice } from 'containers/App/selectors';
-import './styles.less';
 
 class AddCreditsModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 

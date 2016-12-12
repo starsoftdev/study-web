@@ -30,7 +30,6 @@ import {
   selectCoupon,
 } from 'containers/RequestProposalPage/selectors';
 
-import './styles.less';
 
 export class RequestProposalCart extends Component {
   static propTypes = {
