@@ -61,6 +61,16 @@ class TextBlastModal extends React.Component {
     this.renderPatientSearchList = this.renderPatientSearchList.bind(this);
     this.renderPatients = this.renderPatients.bind(this);
     this.renderPatientCount = this.renderPatientCount.bind(this);
+    this.textAreaChange = this.textAreaChange.bind(this);
+    this.state = {
+      enteredCharactersLength: 0,
+    };
+  }
+
+  textAreaChange() {
+    const value = this.textarea.value;
+    this.setState({ enteredCharactersLength: value.length }, () => {
+    });
   }
 
   selectCategory(checked, categoryId) {
@@ -227,6 +237,7 @@ class TextBlastModal extends React.Component {
 
   render() {
     const { patientCategories, sources, show, role, bsClass, dialogClassName, className, style, onHide } = this.props;
+    const { enteredCharactersLength } = this.state;
     return (
       <Modal
         show={show}
@@ -344,8 +355,22 @@ class TextBlastModal extends React.Component {
                     <FormControl type="text" className="recievers" placeholder="To" disabled />
                     {this.renderPatientCount()}
                   </div>
-                  <Field name="message" component={Input} componentClass="textarea" placeholder="Type a message..." required />
+                  <Field
+                    name="message"
+                    component={Input}
+                    componentClass="textarea"
+                    placeholder="Type a message..."
+                    maxLength="160"
+                    required
+                    onChange={this.textAreaChange}
+                    ref={(textarea) => {
+                      this.textarea = textarea;
+                    }}
+                  />
                   <div className="footer">
+                    <span className="characters-counter">
+                      {`${160 - enteredCharactersLength}`}
+                    </span>
                     <Button type="submit" className="pull-right" onClick={this.submitTextBlast}>Submit</Button>
                   </div>
                 </div>
