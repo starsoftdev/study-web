@@ -31,7 +31,6 @@ import {
   showSiteLocationModal,
   hideSiteLocationModal,
 } from 'containers/ListNewStudyPage/actions';
-import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   callTracking: selectCallTracking(),

@@ -21,7 +21,6 @@ import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 import Money from 'components/Money';
 import { fetchCoupon, clearCoupon, fetchCards, saveCard } from 'containers/App/actions';
-import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   couponId: selectCouponId(),

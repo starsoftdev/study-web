@@ -12,7 +12,6 @@ import { selectCurrentUserClientId, selectClientSites, selectSelectedSite,
 import { clearSelectedSite, clearSelectedUser,
   deleteUser, saveSite, saveUser } from 'containers/App/actions';
 import ClientSiteItem from './ClientSiteItem';
-import './styles.less';
 
 class ClientSitesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

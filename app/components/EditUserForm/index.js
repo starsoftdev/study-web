@@ -10,7 +10,6 @@ import { selectEditUserFormError, selectEditUserFormSiteValue } from './selector
 import { selectSavedUser } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
-import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   savedUser: selectSavedUser(),

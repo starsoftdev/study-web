@@ -20,7 +20,6 @@ import {
   selectCurrentUserClientId,
 } from 'containers/App/selectors';
 
-import './style.less';
 
 const mapStateToProps = createStructuredSelector({
   siteLocations : selectUserSiteLocations(),

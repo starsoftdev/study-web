@@ -10,7 +10,6 @@ import { Modal } from 'react-bootstrap';
 
 import moment from 'moment';
 
-import './date-picker.less';
 
 export default class DatePicker extends Component {
   static propTypes = {

@@ -5,7 +5,6 @@
 */
 
 import React, { PropTypes } from 'react';
-import './style.less';
 
 
 class CardItem extends React.Component { // eslint-disable-line react/prefer-stateless-function
