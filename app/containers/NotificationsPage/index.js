@@ -7,7 +7,6 @@ import { orderBy } from 'lodash';
 import moment from 'moment';
 import classnames from 'classnames';
 import { push } from 'react-router-redux';
-
 import {
   selectCurrentUser,
 } from 'containers/App/selectors';
@@ -19,7 +18,7 @@ import {
 } from 'containers/GlobalNotifications/actions';
 
 import NotificationItem from './Item';
-
+import './styles.less';
 export const getRedirectionUrl = (notification) => {
   const data = JSON.parse(notification.event_log.eventData);
   switch (notification.event_log.eventType) {
@@ -128,7 +127,6 @@ export class NotificationsPage extends React.Component {
 
   render() {
     const { sortDescription, sortDate, sortTime } = this.state;
-
     return (
       <div className="container-fluid">
         <section className="rewards">
