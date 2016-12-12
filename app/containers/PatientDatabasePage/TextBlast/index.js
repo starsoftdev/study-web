@@ -115,6 +115,7 @@ class TextBlastModal extends React.Component {
                     name="message"
                     component={Input}
                     componentClass="textarea"
+                    className="patient-detail-text-blast"
                     placeholder="Type a message..."
                     maxLength="160"
                     required
@@ -127,7 +128,7 @@ class TextBlastModal extends React.Component {
                     <span className="characters-counter">
                       {`${160 - enteredCharactersLength}`}
                     </span>
-                    <Button type="submit" className="pull-right" onClick={this.submitTextBlast}>Submit</Button>
+                    <Button type="submit" className="pull-right" onClick={this.submitTextBlast}>Send</Button>
                   </div>
                 </div>
               </div>

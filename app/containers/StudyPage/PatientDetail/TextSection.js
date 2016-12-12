@@ -194,7 +194,7 @@ class TextSection extends React.Component {
               this.textarea = textarea;
             }}
           />
-          <span className="characters-counter">
+          <span className="remaining-counter">
             {`${maxCharacters - enteredCharactersLength}`}
           </span>
           <Button onClick={this.submitText}>Send</Button>
