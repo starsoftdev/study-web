@@ -12,7 +12,6 @@ import ClientRolesList from 'components/ClientRolesList';
 import { selectCurrentUserClientId, selectClientSites,
   selectClientRoles, selectSavedSite, selectSavedUser } from 'containers/App/selectors';
 import { fetchClientSites, fetchClientRoles, saveSite, saveUser } from 'containers/App/actions';
-import './styles.less';
 
 export class SitesUsersPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

@@ -30,7 +30,6 @@ import PatientItem from './PatientItem';
 import { normalizePhone, normalizePhoneDisplay } from '../../StudyPage/helper/functions';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
-import './styles.less';
 
 const formName = 'PatientDatabase.TextBlastModal';
 

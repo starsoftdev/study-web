@@ -12,7 +12,6 @@ import { selectPatientCategories, selectPatients, selectPatientDatabaseFormValue
 import { selectIndications, selectSources } from '../../../containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import './styles.less';
 
 import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
 

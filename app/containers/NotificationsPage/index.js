@@ -18,7 +18,6 @@ import {
 } from 'containers/GlobalNotifications/actions';
 
 import NotificationItem from './Item';
-import './styles.less';
 export const getRedirectionUrl = (notification) => {
   const data = JSON.parse(notification.event_log.eventData);
   switch (notification.event_log.eventType) {
