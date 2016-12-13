@@ -31,8 +31,8 @@ function numberSequenceCreator(start, end) {
 
 function getTimeComponents(strTime) {
   return {
-    hour: ((moment(strTime).hour() + 11) % 12) + 1,
-    minute: moment(strTime).minute(),
+    hour: (((moment(strTime).hour() + 11) % 12) + 1).toString(),
+    minute: moment(strTime).minute().toString(),
     period: moment(strTime).hour() >= 12 ? 'PM' : 'AM',
   };
 }
@@ -82,6 +82,7 @@ export default class SchedulePatientModal extends Component {
         ...getTimeComponents(nextProps.selectedCellInfo.data.time),
         textReminder: true,
       } : { textReminder: true };
+      console.log('******', initialValues);
       if (!isAdmin) {
         const site = siteLocationOptions[0];
         if (this.state.siteLocation === null && site) {  // prevent recursive render
