@@ -21,6 +21,8 @@ import {
   EDIT_STUDY,
   EDIT_STUDY_SUCCESS,
   EDIT_STUDY_ERROR,
+  SET_ACTIVE_SORT,
+  SORT_SUCCESS,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser) {
@@ -178,6 +180,21 @@ export function studyEdited(payload) {
 export function studyEditingError(payload) {
   return {
     type: EDIT_STUDY_ERROR,
+    payload,
+  };
+}
+
+export function setActiveSort(sort, direction) {
+  return {
+    type: SET_ACTIVE_SORT,
+    sort,
+    direction,
+  };
+}
+
+export function sortSuccess(payload) {
+  return {
+    type: SORT_SUCCESS,
     payload,
   };
 }
