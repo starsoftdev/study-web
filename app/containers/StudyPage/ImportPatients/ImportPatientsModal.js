@@ -3,8 +3,10 @@
  */
 
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+import { actions as toastrActions } from 'react-redux-toastr';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
@@ -23,6 +25,7 @@ class ImportPatientsModal extends React.Component {
     toggleAddPatient: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number,
     submitPatientImport: React.PropTypes.func.isRequired,
+    toastrActions: React.PropTypes.object.isRequired,
     uploadStart: React.PropTypes.bool,
   };
 
@@ -35,14 +38,14 @@ class ImportPatientsModal extends React.Component {
   }
 
   uploadFile(event) {
-    const { onHide, submitPatientImport, studyId } = this.props;
+    const { onHide, submitPatientImport, studyId, toastrActions } = this.props;
     // if the file is a csv
     if (event.target.files[0].type === 'text/csv' || event.target.files[0].type === '' || event.target.files[0].type === 'application/vnd.ms-excel' || event.target.files[0].type === 'application/excel' || event.target.files[0].type === 'text/anytext' || event.target.files[0].type === 'application/vnd.msexcel' || event.target.files[0].type === 'text/comma-separated-values') {
       const file = event.target.files[0];
       submitPatientImport(studyId, file, onHide);
     } else {
-      // return error
-      console.error('Wrong file type');
+      // display error
+      toastrActions.error('Wrong file type');
     }
   }
   render() {
@@ -124,6 +127,7 @@ const mapStateToProps = (state) => (
 function mapDispatchToProps(dispatch) {
   return {
     submitPatientImport: (studyId, file, onClose) => dispatch(submitPatientImport(studyId, file, onClose)),
+    toastrActions: bindActionCreators(toastrActions, dispatch),
     clearForm: () => dispatch(clearForm()),
   };
 }
