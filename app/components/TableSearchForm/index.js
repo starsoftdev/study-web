@@ -14,7 +14,6 @@ import { defaultRanges, DateRange } from 'react-date-range';
 // import CenteredModal from '../CenteredModal/index';
 import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
-import './styles.less';
 
 const mapStateToProps = createStructuredSelector({});
 
@@ -80,8 +79,6 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { predefined } = this.state;
-    const format = 'dddd, D MMMM YYYY';
     const { siteLocations } = this.props;
     const state = this.state;
 
@@ -145,7 +142,7 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
               <Modal.Title>
                 <strong className="title">DATE RANGE</strong>
               </Modal.Title>
-              <a className="lightbox-close close" href="#" onClick={this.hidePopup}><i className="icomoon-icon_close" /></a>
+              <a className="lightbox-close close" onClick={this.hidePopup}><i className="icomoon-icon_close" /></a>
             </div>
           </Modal.Header>
           <Modal.Body>
@@ -192,10 +189,8 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
                     onChange={this.handleChange}
                   />
                   <div className="dateRange-helper">
-                    <div className="emit-border"></div>
+                    <div className="emit-border"><br /></div>
                     <div className="right-part">
-                      <span className="left">{ predefined.startDate && predefined.startDate.format(format).toString() }</span>
-                      <span className="right">{ predefined.endDate && predefined.endDate.format(format).toString() }</span>
                       <div className="btn-block text-right">
                         <a
                           href="#"

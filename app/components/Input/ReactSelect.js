@@ -9,7 +9,6 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Select from 'react-select';
 import classNames from 'classnames';
 
-import 'react-select/dist/react-select.min.css';
 import './styles.less';
 
 function ReactSelect({
@@ -88,3 +87,10 @@ ReactSelect.propTypes = {
 };
 
 export default ReactSelect;
+
+export const addAllOption = (options, allOption) => {
+  if (Array.isArray(options) && options.length > 0) {
+    return [allOption || { label: 'All', value: 'All' }, ...options];
+  }
+  return options;
+};

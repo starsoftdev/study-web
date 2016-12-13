@@ -24,6 +24,7 @@ import {
   SET_ACTIVE_SORT,
   SORT_PATIENTS_SUCCESS,
   DOWNLOAD_COMPLETE,
+  CLEAR_PATIENTS_LIST,
 } from './constants';
 
 const initialState = {
@@ -115,6 +116,22 @@ export default function patientDatabasePageReducer(state = initialState, action)
           details: [],
           fetching: false,
           error: payload,
+        },
+      };
+    case CLEAR_PATIENTS_LIST:
+      return {
+        ...state,
+        patients: {
+          details: [],
+          fetching: false,
+          error: null,
+        },
+        paginationOptions: {
+          hasMoreItems: true,
+          page: 1,
+          activeSort: state.paginationOptions.activeSort,
+          activeDirection: state.paginationOptions.activeDirection,
+          prevSearchFilter: {},
         },
       };
     case FETCH_PATIENT_CATEGORIES:

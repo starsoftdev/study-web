@@ -98,7 +98,12 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       }
     });
 
-    this.submitForm(params, { ...this.props.formValues, emailNotifications: filteredEmails, stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId });
+    this.submitForm(params, {
+      ...this.props.formValues,
+      username: this.props.currentUser.username,
+      emailNotifications: filteredEmails,
+      stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
+    });
   }
 
   goToStudyPage() {

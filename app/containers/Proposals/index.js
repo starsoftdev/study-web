@@ -14,6 +14,7 @@ import LoadingSpinner from 'components/LoadingSpinner';
 import {
   getProposals,
   createPDF,
+  showProposalPdf,
 } from 'containers/Proposals/actions';
 import {
   fetchSites,
@@ -32,7 +33,6 @@ import { selectProposals } from './selectors';
 
 import ProposalsTable from 'components/ProposalsTable';
 import TableSearchForm from 'components/TableSearchForm';
-import './styles.less';
 
 export class Proposals extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -46,6 +46,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     location: PropTypes.any,
     proposals: PropTypes.any,
     currentUser: PropTypes.any,
+    showProposalPdf: PropTypes.func,
   }
 
   constructor(props, context) {
@@ -166,7 +167,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     return (
       <StickyContainer className="container-fluid">
         <Helmet title="Proposals - StudyKIK" />
-        <section className="calendar-section receipts">
+        <section className="receipts">
           <h2 className="main-heading">PROPOSALS</h2>
           <TableSearchForm
             changeRange={this.changeRange}
@@ -181,6 +182,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
             site={this.state.site}
             searchBy={this.state.searchBy}
             proposals={this.state.proposals}
+            showProposalPdf={showProposalPdf}
             {...this.props}
           />
           {processPDF
@@ -214,6 +216,7 @@ function mapDispatchToProps(dispatch) {
     fetchSites: () => dispatch(fetchSites()),
     getProposals: (values) => dispatch(getProposals(values)),
     createPDF: (values) => dispatch(createPDF(values)),
+    showProposalPdf: (values) => dispatch(showProposalPdf(values)),
   };
 }
 

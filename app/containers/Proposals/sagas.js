@@ -13,6 +13,7 @@ import {
   GET_PROPOSALS,
   CREATE_PDF,
   GET_PDF,
+  SHOW_PROPOSAL_PDF,
 } from 'containers/Proposals/constants';
 import { getItem } from 'utils/localStorage';
 
@@ -31,12 +32,14 @@ export function* proposalSaga() {
   const watcherA = yield fork(getProposals);
   const watcherB = yield fork(createPdf);
   const watcherC = yield fork(getPdf);
+  const watcherD = yield fork(showPdf);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
   yield cancel(watcherA);
   yield cancel(watcherB);
   yield cancel(watcherC);
+  yield cancel(watcherD);
 }
 
 export function* getProposals() {
@@ -49,9 +52,8 @@ export function* getProposals() {
       const response = yield call(request, requestURL);
 
       yield put(proposalsReceived(response));
-      yield put(toastrActions.success('', 'Proposals received.'));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
+      const errorMessage = get(err, 'message', 'We encountered an error loading proposals. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
       payload.cb(err, null);
     }
@@ -102,6 +104,27 @@ export function* getPdf() {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
       payload.cb(err, null);
+    }
+  }
+}
+
+export function* showPdf() {
+  while (true) {
+    const { proposalId } = yield take(SHOW_PROPOSAL_PDF);
+    //
+    try {
+      const requestURL = `${API_URL}/proposals/getPreSignedUrl`;
+      const params = {
+        query: {
+          proposalId,
+        },
+      };
+
+      const response = yield call(request, requestURL, params);
+      window.open(response.url, '_blank');
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      yield put(toastrActions.error('', errorMessage));
     }
   }
 }

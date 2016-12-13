@@ -10,7 +10,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, reset } from 'redux-form';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
-import Input from 'components/Input';
+import ChatText from 'components/Input/ChatText';
 
 import formValidator from './validator';
 
@@ -71,9 +71,10 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
         <fieldset>
           <Field
             name="body"
-            component={Input}
-            componentClass="textarea"
+            component={ChatText}
+            className="form-control"
             placeholder="Type a message..."
+            maxLength="160"
             disabled={this.props.selectedPatient.id <= 0}
           />
           <Button type="submit" disabled={this.props.selectedPatient.id <= 0}>

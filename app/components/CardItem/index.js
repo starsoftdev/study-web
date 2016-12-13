@@ -77,12 +77,14 @@ class CardItem extends React.Component { // eslint-disable-line react/prefer-sta
           <span>{expMonthStr}/{expYearStr}</span>
         </td>
         <td className="action">
-          <button className="btn btn-primary btn-remove-card pull-right" onClick={this.removeItem} disabled={isRemoving}>
-            {isRemoving
-              ? <span></span>
-              : <span>Remove</span>
-            }
-          </button>
+          <div>
+            <button className="btn btn-primary btn-remove-card pull-right" onClick={this.removeItem} disabled={isRemoving}>
+              {isRemoving
+                ? <span></span>
+                : <span>Remove</span>
+              }
+            </button>
+          </div>
         </td>
       </tr>
     );

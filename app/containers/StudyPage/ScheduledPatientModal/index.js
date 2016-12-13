@@ -14,6 +14,7 @@ const fieldName = 'ScheduledPatientModal';
 })
 class ScheduledPatientModal extends React.Component {
   static propTypes = {
+    onHide: React.PropTypes.func,
     show: React.PropTypes.bool.isRequired,
   };
 
@@ -21,7 +22,7 @@ class ScheduledPatientModal extends React.Component {
   }
 
   render() {
-    const { ...props } = this.props;
+    const { onHide, ...props } = this.props;
     return (
       <Modal
         {...props}

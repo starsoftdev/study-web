@@ -5,7 +5,7 @@ import { Modal } from 'react-bootstrap';
 import { countBy, find, filter, sumBy } from 'lodash';
 
 import { fetchLevels } from 'containers/App/actions';
-import { selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients } from 'containers/App/selectors';
+import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients } from 'containers/App/selectors';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy,
   selectUpgradedStudy, selectEditedStudy } from 'containers/HomePage/selectors';
@@ -23,6 +23,7 @@ import './styles.less';
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUserStripeCustomerId: PropTypes.string,
+    currentUser: PropTypes.object,
     studies: PropTypes.object,
     studyLevels: PropTypes.array,
     selectedIndicationLevelPrice: PropTypes.object,
@@ -169,6 +170,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       stripeCustomerId: currentUserStripeCustomerId,
       selectedIndicationId: this.state.selectedIndicationId,
       selectedSiteId: this.state.selectedCampaign.site_id,
+      username: this.props.currentUser.username,
     });
   }
 
@@ -181,6 +183,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       selectedIndicationId: this.state.selectedIndicationId,
       selectedCampaignId: this.state.selectedCampaign.id,
       selectedSiteId: this.state.selectedCampaign.site_id,
+      username: this.props.currentUser.username,
     });
   }
 
@@ -301,134 +304,128 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       addOns = this.generateUpgradeStudyShoppingCartAddOns();
     }
 
-    if (studies.details.length > 0) {
-      return (
-        <div className="studies">
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="table-responsive">
-                <table className="table">
-                  <caption>
-                    <span className="pull-left">Study Status</span>
-                    <span className="pull-right">
-                      <span className="inner-info">
-                        <span className="info-label">ACTIVE</span>
-                        <span className="info-value">{activeCount}</span>
-                      </span>
-                      <span className="inner-info">
-                        <span className="info-label">INACTIVE</span>
-                        <span className="info-value">{inactiveCount}</span>
-                      </span>
-                      <span className="inner-info">
-                        <span className="info-label">TOTAL</span>
-                        <span className="info-value">{totalCount}</span>
-                      </span>
+    return (
+      <div className="studies">
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="table-responsive">
+              <table className="table">
+                <caption>
+                  <span className="pull-left">Study Status</span>
+                  <span className="pull-right">
+                    <span className="inner-info">
+                      <span className="info-label">ACTIVE</span>
+                      <span className="info-value">{activeCount}</span>
                     </span>
-                  </caption>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>INDICATION</th>
-                      <th>LOCATION</th>
-                      <th>SPONSOR</th>
-                      <th>PROTOCOL</th>
-                      <th>
-                        <span className="icomoon-credit" data-original-title="Patient Messaging Suite"></span>
-                      </th>
-                      <th>STATUS</th>
-                      <th>START DATE</th>
-                      <th>END DATE</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {studiesListContents}
-                  </tbody>
-                </table>
-              </div>
-              <Modal className="renew-study-modal" id="renew-study" show={this.state.renewModalOpen} onHide={this.closeRenewModal} bsSize="large">
-                <Modal.Header closeButton>
-                  <Modal.Title>Renew Study</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <div className="holder clearfix">
-                    <div className="form-study">
-                      <div className="pull-left col">
-                        <div className="scroll jcf--scrollable">
-                          <div className="holder-inner">
-                            <RenewStudyForm />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="pull-left col">
-                        <ShoppingCartForm
-                          showCards
-                          noBorder
-                          addOns={addOns}
-                          disableSubmit={renewStudyFormError}
-                          onSubmit={this.handleRenewStudyFormSubmit}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Modal.Body>
-              </Modal>
-              <Modal className="upgrade-study-modal" id="upgrade-study" show={this.state.upgradeModalOpen} onHide={this.closeUpgradeModal} bsSize="large">
-                <Modal.Header closeButton>
-                  <Modal.Title>Upgrade Study</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <div className="holder clearfix">
-                    <div className="form-study">
-                      <div className="pull-left col">
-                        <div className="scroll jcf--scrollable">
-                          <div className="holder-inner">
-                            <UpgradeStudyForm />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="pull-left col">
-                        <ShoppingCartForm
-                          showCards
-                          noBorder
-                          addOns={addOns}
-                          disableSubmit={upgradeStudyFormError}
-                          onSubmit={this.handleUpgradeStudyFormSubmit}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Modal.Body>
-              </Modal>
-              <Modal className="edit-study-modal" id="edit-study" show={this.state.editModalOpen} onHide={this.closeEditModal} bsSize="large">
-                <Modal.Header closeButton>
-                  <Modal.Title>Edit Information</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <div className="holder clearfix">
-                    <div className="form-study">
+                    <span className="inner-info">
+                      <span className="info-label">INACTIVE</span>
+                      <span className="info-value">{inactiveCount}</span>
+                    </span>
+                    <span className="inner-info">
+                      <span className="info-label">TOTAL</span>
+                      <span className="info-value">{totalCount}</span>
+                    </span>
+                  </span>
+                </caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>INDICATION</th>
+                    <th>LOCATION</th>
+                    <th>SPONSOR</th>
+                    <th>PROTOCOL</th>
+                    <th>
+                      <span className="icomoon-credit" data-original-title="Patient Messaging Suite"></span>
+                    </th>
+                    <th>STATUS</th>
+                    <th>START DATE</th>
+                    <th>END DATE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {studies.details.length > 0 && studiesListContents}
+                </tbody>
+              </table>
+            </div>
+            <Modal className="renew-study-modal" id="renew-study" show={this.state.renewModalOpen} onHide={this.closeRenewModal} bsSize="large">
+              <Modal.Header closeButton>
+                <Modal.Title>Renew Study</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="holder clearfix">
+                  <div className="form-study">
+                    <div className="pull-left col">
                       <div className="scroll jcf--scrollable">
                         <div className="holder-inner">
-                          <EditStudyForm siteUsers={this.state.selectedSiteUsers} onSubmit={this.handleEditStudyFormSubmit} />
+                          <RenewStudyForm />
                         </div>
                       </div>
                     </div>
+                    <div className="pull-left col">
+                      <ShoppingCartForm
+                        showCards
+                        noBorder
+                        addOns={addOns}
+                        disableSubmit={renewStudyFormError}
+                        onSubmit={this.handleRenewStudyFormSubmit}
+                      />
+                    </div>
                   </div>
-                </Modal.Body>
-              </Modal>
-            </div>
+                </div>
+              </Modal.Body>
+            </Modal>
+            <Modal className="upgrade-study-modal" id="upgrade-study" show={this.state.upgradeModalOpen} onHide={this.closeUpgradeModal} bsSize="large">
+              <Modal.Header closeButton>
+                <Modal.Title>Upgrade Study</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="holder clearfix">
+                  <div className="form-study">
+                    <div className="pull-left col">
+                      <div className="scroll jcf--scrollable">
+                        <div className="holder-inner">
+                          <UpgradeStudyForm />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="pull-left col">
+                      <ShoppingCartForm
+                        showCards
+                        noBorder
+                        addOns={addOns}
+                        disableSubmit={upgradeStudyFormError}
+                        onSubmit={this.handleUpgradeStudyFormSubmit}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </Modal.Body>
+            </Modal>
+            <Modal className="edit-study-modal" id="edit-study" show={this.state.editModalOpen} onHide={this.closeEditModal} bsSize="large">
+              <Modal.Header closeButton>
+                <Modal.Title>Edit Information</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="holder clearfix">
+                  <div className="form-study">
+                    <div className="scroll jcf--scrollable">
+                      <div className="holder-inner">
+                        <EditStudyForm siteUsers={this.state.selectedSiteUsers} onSubmit={this.handleEditStudyFormSubmit} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Modal.Body>
+            </Modal>
           </div>
         </div>
-      );
-    }
-    return (
-      <div>
-        <h3>No studies found!</h3>
       </div>
     );
   }
 }
 
 const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
   currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
   studies: selectStudies(),
   studyLevels: selectStudyLevels(),

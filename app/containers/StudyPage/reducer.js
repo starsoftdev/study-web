@@ -7,11 +7,13 @@
 import {
   ADD_PATIENT_INDICATION_SUCCESS,
   ADD_PATIENT_NOTE_SUCCESS,
+  CLEAR_FORM_UPLOAD,
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENT_DETAILS_SUCCESS,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_SITE_SUCCESS,
+  EXPORT_PATIENTS_SUCCESS,
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
@@ -25,6 +27,9 @@ import {
   SET_CURRENT_PATIENT_CATEGORY_ID,
   SET_OPEN_PATIENT_MODAL,
   SUBMIT_DELETE_NOTE_SUCCESS,
+  SUBMIT_ADD_PATIENT_SUCCESS,
+  SUBMIT_ADD_PATIENT_FAILURE,
+  SUBMIT_PATIENT_IMPORT,
   MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
   MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
@@ -53,6 +58,10 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         campaigns: action.payload,
+      };
+    case EXPORT_PATIENTS_SUCCESS:
+      return {
+        ...state,
       };
     case FETCH_PATIENTS_SUCCESS:
       return {
@@ -87,6 +96,54 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),
       };
+    case CLEAR_FORM_UPLOAD:
+      return {
+        ...state,
+        fileUploaded:null,
+      };
+    case SUBMIT_PATIENT_IMPORT:
+      return {
+        ...state,
+        fileUploaded: null,
+        uploadStarted: true,
+      };
+    case SUBMIT_ADD_PATIENT_FAILURE:
+      return {
+        ...state,
+        uploadStarted: null,
+      };
+    case SUBMIT_ADD_PATIENT_SUCCESS:
+      return {
+        ...state,
+        uploadStarted: null,
+        fileUploaded: action.fileName,
+        patientCategories: state.patientCategories.map(category => {
+          if (category.name === 'New Patient') {
+            if (!category.patients) {
+              return {
+                ...category,
+                patients: [...action.patients],
+              };
+            } else if (Array.isArray(action.patients)) {
+              return {
+                ...category,
+                patients: [
+                  ...category.patients,
+                  ...action.patients,
+                ],
+              };
+            }
+            return {
+              ...category,
+              patients: [
+                ...category.patients,
+                action.patients,
+              ],
+            };
+          }
+          return category;
+        }),
+      };
     case MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS:
       return {
         ...state,
@@ -101,6 +158,7 @@ function studyPageReducer(state = initialState, action) {
           patientCategoryTemp.patients = [];
           return patientCategoryTemp;
         }),
+        fetchingPatientCategories: false,
       };
     case FETCH_SITE_SUCCESS:
       return {

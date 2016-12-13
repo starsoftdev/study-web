@@ -8,7 +8,7 @@ import SearchPatientsForm from '../../containers/PatientDatabasePage/SearchPatie
 import PatientsList from '../../containers/PatientDatabasePage/PatientsList/index';
 import PatientActionButtons from './PatientActionButtons';
 import { fetchIndications, fetchSources } from 'containers/App/actions';
-import { fetchPatientCategories, fetchPatients } from './actions';
+import { fetchPatientCategories, fetchPatients, clearPatientsList } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
 import './styles.less';
 
@@ -20,6 +20,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     fetchPatients: PropTypes.func,
     paginationOptions: PropTypes.object,
     patients: PropTypes.object,
+    clearPatientsList: PropTypes.func,
   };
 
   constructor(props) {
@@ -59,7 +60,13 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
       queryParams.sort = this.props.paginationOptions.activeSort;
       queryParams.direction = this.props.paginationOptions.activeDirection;
     }
-    this.props.fetchPatients(queryParams, this.props.patients.details, searchFilter, isExport);
+
+    if (queryParams.status || queryParams.source || queryParams.includeIndication || queryParams.name ||
+      queryParams.excludeIndication || queryParams.gender || queryParams.ageFrom || queryParams.ageTo || queryParams.bmiFrom || queryParams.bmiTo) {
+      this.props.fetchPatients(queryParams, this.props.patients.details, searchFilter, isExport);
+    } else {
+      this.props.clearPatientsList();
+    }
   }
 
   render() {
@@ -93,6 +100,7 @@ function mapDispatchToProps(dispatch) {
     fetchSources: () => dispatch(fetchSources()),
     fetchPatientCategories: searchParams => dispatch(fetchPatientCategories(searchParams)),
     fetchPatients: (searchParams, patients, searchFilter, isExport) => dispatch(fetchPatients(searchParams, patients, searchFilter, isExport)),
+    clearPatientsList: () => dispatch(clearPatientsList()),
   };
 }
 

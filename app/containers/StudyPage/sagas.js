@@ -7,6 +7,7 @@ import request from '../../utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
 import { FIND_PATIENTS_TEXT_BLAST,
   FETCH_PATIENTS,
+  EXPORT_PATIENTS,
   FETCH_PATIENT_DETAILS,
   FETCH_PATIENT_CATEGORIES,
   FETCH_STUDY,
@@ -34,9 +35,12 @@ import {
   patientsFetched,
   patientDetailsFetched,
   siteFetched,
+  patientsExported,
   sourcesFetched,
   studyFetched,
   studyViewsStatFetched,
+  submitAddPatientSuccess,
+  submitAddPatientFailure,
   patientReferralStatFetched,
   callStatsFetched,
   textStatsFetched,
@@ -211,6 +215,37 @@ function* readStudyPatientMessages() {
       }
     } else {
       yield put(readStudyPatientMessagesSuccess([]));
+    }
+  }
+}
+
+export function* exportPatients() {
+  while (true) {
+    // listen for the FETCH_PATIENTS action
+    const { studyId, siteId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
+    const authToken = getItem('auth_token');
+
+    try {
+      let requestURL = `${API_URL}/studies/${studyId}/getPatientsForDB?access_token=${authToken}&siteId=${siteId}`;
+      if (campaignId) {
+        requestURL += `&campaignId=${campaignId}`;
+      }
+      if (sourceId) {
+        requestURL += `&sourceId=${sourceId}`;
+      }
+      if (text) {
+        requestURL += `&text=${encodeURIComponent(text)}`;
+      }
+
+      location.replace(`${requestURL}`);
+      yield put(patientsExported());
+    } catch (e) {
+      // if returns forbidden we remove the token from local storage
+      if (e.status === 401) {
+        removeItem('auth_token');
+      }
+      const errorMessage = get(e, 'message', 'Something went wrong while fetching patients. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
     }
   }
 }
@@ -570,15 +605,17 @@ function* submitPatientImport() {
     }
     try {
       const requestURL = `${API_URL}/studies/${studyId}/importPatients?access_token=${authToken}`;
-      yield call(request, requestURL, {
+      const response = yield call(request, requestURL, {
         useDefaultContentType: 'multipart/form-data',
         method: 'POST',
         body: formData,
       });
       onClose();
       yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
+      yield put(submitAddPatientSuccess(response, file.name));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while importing the patient list. Please try again later or revise your patient list format.');
+      yield put(submitAddPatientFailure());
       yield put(toastrActions.error('', errorMessage));
     }
   }
@@ -594,12 +631,13 @@ function* submitAddPatient() {
     }
     try {
       const requestURL = `${API_URL}/studies/${studyId}/addPatient?access_token=${authToken}`;
-      yield call(request, requestURL, {
+      const response = yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify(patient),
       });
       onClose();
       yield put(toastrActions.success('Add Patient', 'Patient added successfully!'));
+      yield put(submitAddPatientSuccess(response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding a patient. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -621,6 +659,7 @@ export function* fetchStudySaga() {
     yield fork(fetchStudyTextStats);
     yield fork(fetchPatientCategories);
     yield fork(fetchPatientsSaga);
+    yield fork(exportPatients);
     yield fork(fetchPatientDetails);
     yield fork(findPatientsSaga);
     yield fork(readStudyPatientMessages);
