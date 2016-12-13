@@ -19,7 +19,14 @@ const selectPaymentInformationPage = () => createSelector(
   (substate) => substate
 );
 
+const selectPaginationOptions = () => createSelector(
+  selectPaymentInformationPageDomain(),
+  (substate) => substate.paginationOptions
+);
+
+
 export default selectPaymentInformationPage;
 export {
   selectPaymentInformationPageDomain,
+  selectPaginationOptions,
 };

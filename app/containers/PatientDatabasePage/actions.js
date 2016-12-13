@@ -51,31 +51,6 @@ export function fetchPatients(searchParams = {}, patients = {}, searchFilter = {
 export function patientsFetched(searchParams, payload, patients, searchFilter) {
   const result = payload;
   const initResult = payload;
-  /* if (searchParams.includeIndication) {
-    const includeIndications = searchParams.includeIndication.split(',');
-    result = filter(result, patientIterator => {
-      const foundIndications = filter(includeIndications, includeIterator => {
-        const foundIndex = findIndex(patientIterator.indications, { id: parseInt(includeIterator, 10) });
-        return (foundIndex > -1);
-      });
-      return foundIndications.length;
-    });
-  }
-
-  if (searchParams.excludeIndication) {
-    const excludeIndications = searchParams.excludeIndication.split(',');
-    result = filter(result, patientIterator => {
-      const foundIndications = filter(excludeIndications, excludeIterator => {
-        const foundIndex = findIndex(patientIterator.indications, { id: parseInt(excludeIterator, 10) });
-        return (foundIndex > -1);
-      });
-      return !foundIndications.length;
-    });
-  }*/
-
-  /* if (searchParams.status) {
-    result = filter(result, patientIterator => (patientIterator.studyPatientCategory.patient_category_id === searchParams.status));
-  }*/
 
   let resultArr = [];
   if (searchParams.skip === 0) {
