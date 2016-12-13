@@ -75,16 +75,16 @@ class PatientCategory extends React.Component {
     window.addEventListener('resize', this.handleResize);
   }
 
-  componentDidUpdate() {
-    if (this.state.columnWidth === '') {
-      this.handleResize();
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
     this.setState({
       hover: nextProps.isOver,
     });
+  }
+
+  componentDidUpdate() {
+    if (this.state.columnWidth === '') {
+      this.handleResize();
+    }
   }
 
   componentWillUnmount() {
@@ -163,6 +163,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  /* action to schedule patient with a corresponding modal */
+  schedulePatient: (studyId, fromCategoryId, toCategoryId, patientId) => dispatch(schedulePatient(studyId, fromCategoryId, toCategoryId, patientId)),
   submitMovePatientBetweenCategories: (studyId, fromCategoryId, toCategoryId, patientId) => dispatch(submitMovePatientBetweenCategories(studyId, fromCategoryId, toCategoryId, patientId)),
 });
 

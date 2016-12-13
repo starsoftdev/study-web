@@ -37,6 +37,7 @@ import {
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
   SET_OPEN_PATIENT_MODAL,
+  SCHEDULE_PATIENT,
   SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
   MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
@@ -357,6 +358,16 @@ export function addPatientTextSuccess(payload) {
   return {
     type: ADD_PATIENT_TEXT_SUCCESS,
     payload,
+  };
+}
+
+export function schedulePatient(studyId, fromCategoryId, toCategoryId, patientId) {
+  return {
+    type: SCHEDULE_PATIENT,
+    studyId,
+    fromCategoryId,
+    toCategoryId,
+    patientId,
   };
 }
 
