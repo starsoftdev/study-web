@@ -23,6 +23,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     onUpgrade: PropTypes.func,
     onEdit: PropTypes.func,
     push: PropTypes.func,
+    orderNumber: PropTypes.number,
   };
 
   constructor(props) {
@@ -70,8 +71,8 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   render() {
-    const { index, indication, location, sponsor, protocol, patientMessagingSuite, status,
-      startDate, endDate, unreadMessageCount } = this.props;
+    const { indication, location, sponsor, protocol, patientMessagingSuite, status,
+      startDate, endDate, unreadMessageCount, orderNumber } = this.props;
     const buttonsShown = this.state.buttonsShown;
     let messageCountContent = null;
     if (unreadMessageCount > 0) {
@@ -86,7 +87,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
         onMouseEnter={this.showButtons} onMouseLeave={this.hideButtons}
       >
         <td className="index">
-          <span>{index + 1}</span>
+          <span>{orderNumber}</span>
         </td>
         <td className="indication">
           <span>{indication.name}</span>

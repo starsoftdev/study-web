@@ -3,7 +3,7 @@ import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import request from 'utils/request';
-import { get } from 'lodash';
+import _, { get } from 'lodash';
 
 import {
   receiptsReceived,
@@ -48,7 +48,7 @@ export function* getReceipts() {
       const authToken = getItem('auth_token');
 
       let sortParams = '';
-      if (orderBy && orderDir) {
+      if (orderBy && orderDir && orderBy !== 'orderNumber') {
         sortParams = `&orderBy=${orderBy}&orderDir=${((orderDir === 'down') ? 'DESC' : 'ASC')}`;
       }
       if (!payload) {
@@ -64,9 +64,23 @@ export function* getReceipts() {
 
       let resultArr = [];
       if (payload && offset === 0) {
+        _.forEach(response, (item, index) => {
+          response[index].orderNumber = index + 1;
+        });
         resultArr = response;
       } else {
+        const proposalsCount = receipts.length;
+        _.forEach(response, (item, index) => {
+          response[index].orderNumber = proposalsCount + index + 1;
+        });
         resultArr = receipts.concat(response);
+      }
+
+      if (orderBy && orderBy === 'orderNumber') {
+        const dir = ((orderDir === 'down') ? 'desc' : 'asc');
+        resultArr = _.orderBy(resultArr, [function (o) {
+          return o.orderNumber;
+        }], [dir]);
       }
 
       let hasMore = true;

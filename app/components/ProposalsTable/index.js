@@ -192,14 +192,18 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
   sortBy(ev) {
     ev.preventDefault();
-    const sort = ev.currentTarget.dataset.sort;
-    let direction = 'down';
+    let sort = ev.currentTarget.dataset.sort;
+    let direction = 'up';
 
-    if (ev.currentTarget.className && ev.currentTarget.className === 'down') {
-      direction = 'up';
+    if (ev.currentTarget.className && ev.currentTarget.className === 'up') {
+      direction = 'down';
+    } else if (ev.currentTarget.className && ev.currentTarget.className === 'down') {
+      direction = null;
+      sort = null;
     }
 
     const proposalsArr = this.state.filteredProposals || this.props.proposals;
+
     const directionUnits = (direction === 'up') ? {
       more: 1,
       less: -1,
@@ -224,10 +228,10 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         break;
       case 'site':
         proposalsArr.sort((a, b) => {
-          if (a.site > b.site) {
+          if (a.site.toLowerCase() > b.site.toLowerCase()) {
             return directionUnits.more;
           }
-          if (a.site < b.site) {
+          if (a.site.toLowerCase() < b.site.toLowerCase()) {
             return directionUnits.less;
           }
           return 0;
@@ -246,6 +250,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         break;
       case 'protocol':
         proposalsArr.sort((a, b) => {
+          console.log(a);
           if (a.protocol > b.protocol) {
             return directionUnits.more;
           }
@@ -266,7 +271,27 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           return 0;
         });
         break;
+      case 'order_number':
+        proposalsArr.sort((a, b) => {
+          if (a.order_number > b.order_number) {
+            return directionUnits.more;
+          }
+          if (a.order_number < b.order_number) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
       default:
+        proposalsArr.sort((a, b) => {
+          if (a.order_number > b.order_number) {
+            return 1;
+          }
+          if (a.order_number < b.order_number) {
+            return -1;
+          }
+          return 0;
+        });
         break;
     }
 
@@ -330,7 +355,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
               </span>
             </span>
           </td>
-          <td><span>{(key + 1)}</span></td>
+          <td><span>{source.order_number}</span></td>
           <td>{dateWrapper}</td>
           <td>{source.site}</td>
           <td>{proposalLink}</td>
@@ -371,8 +396,12 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
                   </span>
                 </span>
               </th>
-              <th>
-                #
+              <th
+                data-sort="order_number"
+                onClick={this.sortBy}
+                className={(state.activeSort === 'order_number') ? state.activeDirection : ''}
+              >
+                #<i className="caret-arrow" />
               </th>
               {heads}
             </tr>

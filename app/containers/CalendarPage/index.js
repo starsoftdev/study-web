@@ -27,8 +27,9 @@ import {
   fetchSchedules,
   submitSchedule,
   deleteSchedule,
+  setActiveSort,
 } from './actions';
-import { selectSchedules, selectPatientsByStudy } from './selectors';
+import { selectSchedules, selectPatientsByStudy, selectPaginationOptions } from './selectors';
 
 import { SchedulePatientModalType } from 'common/constants';
 
@@ -53,6 +54,8 @@ export class CalendarPage extends React.Component {
     fetchSchedules: PropTypes.func.isRequired,
     submitSchedule: PropTypes.func.isRequired,
     deleteSchedule: PropTypes.func.isRequired,
+    paginationOptions: PropTypes.object,
+    setActiveSort: PropTypes.func,
   }
 
   constructor(props) {
@@ -61,6 +64,7 @@ export class CalendarPage extends React.Component {
     this.selectedCellInfo = {};
     this.updateFilter = ::this.updateFilter;
     this.handleCloseModal = this.handleModalVisibility.bind(this, SchedulePatientModalType.HIDDEN);
+    this.sortBy = this.sortBy.bind(this);
   }
 
   state = {
@@ -193,6 +197,22 @@ export class CalendarPage extends React.Component {
     this.filterSchedules(this.props.schedules.data, newFilter);
   }
 
+  sortBy(ev) {
+    ev.preventDefault();
+    let sort = ev.currentTarget.dataset.sort;
+    let direction = 'up';
+    const defaultSort = 'orderNumber';
+
+    if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
+      direction = 'down';
+    } else if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1) {
+      direction = null;
+      sort = null;
+    }
+    console.log(sort, direction);
+    this.props.setActiveSort(sort, direction);
+  }
+
   render() {
     const { currentUser, sites, indications, patientsByStudy, schedules } = this.props;
     const { showAll } = this.state;
@@ -264,6 +284,8 @@ export class CalendarPage extends React.Component {
             handleCloseModal={() => this.handleShowAll(false)}
             handleEdit={this.handleModalVisibility}
             setAllModalDeferred={this.setAllModalDeferred}
+            sortBy={this.sortBy}
+            paginationOptions={this.props.paginationOptions}
           />
         </section>
       </div>
@@ -277,6 +299,7 @@ const mapStateToProps = createStructuredSelector({
   indications: selectIndications(),
   schedules: selectSchedules,
   patientsByStudy: selectPatientsByStudy,
+  paginationOptions: selectPaginationOptions,
 });
 
 const mapDispatchToProps = {
@@ -286,6 +309,7 @@ const mapDispatchToProps = {
   fetchSchedules,
   submitSchedule,
   deleteSchedule,
+  setActiveSort,
 };
 
 export default connect(

@@ -10,6 +10,7 @@ import {
   GET_RECEIPT,
   SET_SEARCH_OPTIONS,
   SET_ACTIVE_SORT,
+  SORT_PROPOSALS_SUCCESS,
 } from './constants';
 
 const initialState = {
@@ -62,6 +63,12 @@ function receiptsReducer(state = initialState, action) {
           hasMoreItems: state.paginationOptions.hasMoreItems,
           page: state.paginationOptions.page,
         },
+      };
+    case SORT_PROPOSALS_SUCCESS:
+      console.log('reducer');
+      return {
+        ...state,
+        receiptsList: action.payload,
       };
     default:
       return state;
