@@ -13,6 +13,7 @@ import { push } from 'react-router-redux';
 
 import PatientCategory from './PatientCategory';
 import PatientDetailModal from '../PatientDetail/PatientDetailModal';
+import ScheduledPatientModal from '../ScheduledPatientModal/index';
 import {
   fetchPatientDetails,
   setCurrentPatientCategoryId,
@@ -49,6 +50,7 @@ class PatientBoard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      showScheduledPatientModal: false,
       stick: false,
     };
     this.onPatientClick = this.onPatientClick.bind(this);
@@ -142,7 +144,7 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal } = this.props;
+    const { patientCategories, openPatientModal, studyId } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal })}>
@@ -154,7 +156,7 @@ class PatientBoard extends React.Component {
             </ul>
           </nav>
           <PatientDetailModal onClose={this.onPatientClick} />
-          <ScheduledPatientModal studyId={studyId} />
+          <ScheduledPatientModal studyId={studyId} show={this.state.showScheduledPatientModal} />
         </div>
         <div className="patients-form-closer" onClick={this.onPatientClick} />
       </div>

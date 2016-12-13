@@ -1,26 +1,35 @@
-.holder{
-  width: 100%;
+.receipts {
+  .holder {
+    width: 100%;
 
-  .rdr-DateRange, .rdr-Calendar{
-    min-height: 395px;
-  }
-}
-
-.form-search {
-  .btns-area{
-    position: absolute;
-    width: 39%;
-    right: 0;
-    bottom: 30px;
-
-    .col{
-
-      .btn-primary{
-        position: relative !important;
-      }
+    .rdr-DateRange, .rdr-Calendar {
+      min-height: 395px;
     }
   }
-  .fields-holder {
-    width: 60%;
+
+  .form-search {
+    .btns-area {
+      margin: 0 0 0 50px;
+      width: auto;
+      bottom: auto;
+      position: static;
+
+      .col {
+
+        .btn-primary {
+          position: relative;
+        }
+      }
+    }
+
+    .fields-holder {
+      overflow: hidden;
+      .search-area {
+        width: 40%;
+      }
+      .custom-select {
+        width: 40%;
+      }
+    }
   }
 }

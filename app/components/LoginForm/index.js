@@ -11,7 +11,7 @@ import loginFormValidator from './validator';
   form: 'login',
   validate: loginFormValidator,
 })
-class LoginForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class LoginForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     handleSubmit: React.PropTypes.func.isRequired,
@@ -57,7 +57,7 @@ class LoginForm extends React.Component { // eslint-disable-line react/prefer-st
             <button
               type="submit"
               disabled={submitting}
-              className="btn btn-default pull-right"
+              className="btn btn-default pull-right submitBtn"
             >
               Log In
             </button>

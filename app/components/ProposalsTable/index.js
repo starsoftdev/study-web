@@ -7,7 +7,7 @@
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
-import './styles.less';
+import classNames from 'classnames';
 
 const headers = [
   {
@@ -39,6 +39,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     range: PropTypes.any,
     searchBy: PropTypes.any,
     proposals: PropTypes.any,
+    showProposalPdf: PropTypes.func,
   };
 
   constructor(props) {
@@ -306,12 +307,18 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   mapProposals(raw, result) {
     _.map(raw, (source, key) => {
       const date = new Date(source.created);
-      const dateWrapper = moment(date);
+      const dateWrapper = moment(date).format('MM/DD/YY');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
+
+      let proposalLink = source.proposalNumber;
+      if (source.proposalPdfId) {
+        proposalLink = <a className="show-pdf-link" onClick={() => this.props.showProposalPdf(source.id)}>{source.proposalNumber}</a>;
+      }
+
       result.push(
         <tr key={key}>
           <td>
-            <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
+            <span className={classNames('jcf-checkbox', { 'jcf-checked': source.selected, 'jcf-unchecked': !source.selected })}>
               <span
                 className="input-style"
                 onClick={this.onClickCurrent}
@@ -323,9 +330,10 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
               </span>
             </span>
           </td>
-          <td>{dateWrapper.calendar()}</td>
+          <td><span>{(key + 1)}</span></td>
+          <td>{dateWrapper}</td>
           <td>{source.site}</td>
-          <td>{source.proposalNumber}</td>
+          <td>{proposalLink}</td>
           <td>{source.protocol}</td>
           <td>${(sub) ? `${(source.total / 100)}${sub}` : `${(source.total / 100).toFixed(2)}` }</td>
         </tr>
@@ -346,7 +354,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       <div className="table-holder">
         <table className="table">
           <colgroup>
-            <col style={{ width: '9%' }} />
+            <col style={{ width: '2.5%' }} />
+            <col style={{ width: '4%' }} />
             <col style={{ width: '11%' }} />
             <col style={{ width: '24%' }} />
             <col style={{ width: '25%' }} />
@@ -356,12 +365,14 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           <thead>
             <tr>
               <th>
-                <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
+                <span className={(this.state.checkAll) ? 'jcf-checkbox jcf-checked' : 'jcf-checkbox jcf-unchecked'}>
                   <span className="input-style" onClick={this.onClickAll}>
                     <input name="all" type="checkbox" />
                   </span>
                 </span>
-                <span>#</span><i className="caret-arrow" />
+              </th>
+              <th>
+                #
               </th>
               {heads}
             </tr>

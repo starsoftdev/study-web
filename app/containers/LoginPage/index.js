@@ -11,7 +11,7 @@ import { loginRequest } from './actions';
 
 import './styles.less';
 
-class LoginPage extends Component {
+export class LoginPage extends Component {
 
   static propTypes = {
     onSubmitForm: React.PropTypes.func,

@@ -5,6 +5,7 @@
  */
 
 import {
+  CLEAR_FORM_UPLOAD,
   FIND_PATIENTS_TEXT_BLAST,
   FIND_PATIENTS_TEXT_BLAST_SUCCESS,
   FILTER_PATIENTS_TEXT_BLAST,
@@ -26,6 +27,8 @@ import {
   FETCH_SITE_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
+  EXPORT_PATIENTS,
+  EXPORT_PATIENTS_SUCCESS,
   READ_STUDY_PATIENT_MESSAGES,
   READ_STUDY_PATIENT_MESSAGES_SUCCESS,
   READ_STUDY_PATIENT_MESSAGES_ERROR,
@@ -38,10 +41,12 @@ import {
   MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
   MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
+  SUBMIT_ADD_PATIENT_SUCCESS,
   SUBMIT_TEXT_BLAST,
   SUBMIT_PATIENT_IMPORT,
   SUBMIT_ADD_PATIENT,
   SUBMIT_ADD_PATIENT_INDICATION,
+  SUBMIT_ADD_PATIENT_FAILURE,
   SUBMIT_REMOVE_PATIENT_INDICATION,
   SUBMIT_PATIENT_UPDATE,
   SUBMIT_PATIENT_NOTE,
@@ -65,7 +70,11 @@ export function campaignsFetched(payload) {
     payload,
   };
 }
-
+export function clearForm() {
+  return {
+    type: CLEAR_FORM_UPLOAD,
+  };
+}
 export function findPatientsForTextBlast(studyId, text, categoryIds, sourceIds) {
   return {
     type: FIND_PATIENTS_TEXT_BLAST,
@@ -118,6 +127,24 @@ export function fetchPatients(studyId, siteId, text, campaignId, sourceId) {
     text,
     campaignId,
     sourceId,
+  };
+}
+
+
+export function exportPatients(studyId, siteId, text, campaignId, sourceId) {
+  return {
+    type: EXPORT_PATIENTS,
+    studyId,
+    siteId,
+    text,
+    campaignId,
+    sourceId,
+  };
+}
+
+export function patientsExported() {
+  return {
+    type: EXPORT_PATIENTS_SUCCESS,
   };
 }
 
@@ -424,7 +451,18 @@ export function submitAddPatient(studyId, patient, onClose) {
     onClose,
   };
 }
-
+export function submitAddPatientSuccess(patients, fileName) {
+  return {
+    type: SUBMIT_ADD_PATIENT_SUCCESS,
+    patients,
+    fileName,
+  };
+}
+export function submitAddPatientFailure() {
+  return {
+    type: SUBMIT_ADD_PATIENT_FAILURE,
+  };
+}
 export function switchToNoteSectionDetail() {
   return {
     type: SWITCH_TO_NOTE_SECTION_DETAIL,

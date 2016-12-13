@@ -20,14 +20,9 @@
     font-weight: 600;
     margin: 0 30px 0 0;
   }
-  .main-heading {
-    margin: 0 0 24px;
-  }
   .form-search {
-    margin: 0 -6px;
     > div {
       margin: 0;
-      padding: 0 6px 30px;
       &.btns {
         padding: 0;
         width: 39.5%;
@@ -46,7 +41,7 @@
       min-width: inherit;
     }
     .search-area {
-      width: 22.7%;
+      width: 33.33%;
     }
     .select {
       width: 17.9%;
@@ -264,6 +259,23 @@
 #import-info .upload-patient-info label {
   cursor: pointer;
 }
+#import-info .clear-import-button {
+  background-color: transparent;
+  border-color: gray;
+  color: gray;
+  top: 6px;
+  right: 6px;
+  font-size: 18px;
+  line-height: 18px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  position: absolute;
+}
+#import-info .upload-patient-info .jcf-extension-csv {
+  border: 2px solid #1db0ec;
+  padding: 5px;
+}
 #import-info [type="reset"] {
   top: 6px;
   right: 6px;
@@ -385,7 +397,7 @@
   position: relative;
   float: right;
   background: #fff;
-  outline: 2px solid #f1f1f1;
+  outline: 2px solid #f78e1e;
   transition: width 0.25s linear;
   &.in {
     z-index: 1500;
@@ -502,7 +514,7 @@
       border-width: 0;
       border-radius: 0;
       box-shadow: none;
-      padding: 8px 125px 15px 25px;
+      padding: 8px 179px 15px 25px
     }
     .btn-default {
       top: 50%;
@@ -510,6 +522,15 @@
       position: absolute;
       .transform(translate(0, -50%));
     }
+  }
+  .characters-counter{
+    color: #a0cf67;
+    font-size: 18px;
+    font-weight: 600;
+    position: absolute;
+    top: auto;
+    right: 124px;
+    bottom: 26px;
   }
   .postarea {
     overflow: auto;
@@ -750,6 +771,11 @@
       border-width: 8px 8px 8px 0;
       border-right-color: #a0cf67;
     }
+    .stop-list-notification{
+      display: inline-block;
+      margin: 10px 0 0;
+      font-size: 15px;
+    }
   }
   p {
     margin: 0 0 10px;
@@ -865,4 +891,8 @@
   left: -9999px;
   top: -9999px;
   display: block;
+}
+
+.text-email-blast-form .form-holder .study-text-blast {
+  height: 356px;
 }

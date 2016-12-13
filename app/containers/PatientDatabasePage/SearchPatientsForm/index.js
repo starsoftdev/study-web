@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
-import { map } from 'lodash';
+import _, { map } from 'lodash';
 
 import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
@@ -13,6 +13,8 @@ import { selectIndications, selectSources } from '../../../containers/App/select
 import formValidator from './validator';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import './styles.less';
+
+import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
 
 const mapStateToProps = createStructuredSelector({
   indications: selectIndications(),
@@ -41,6 +43,10 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
   constructor(props) {
     super(props);
 
+    this.state = {
+      searchTimer: null,
+    };
+
     this.initSearch = this.initSearch.bind(this);
   }
 
@@ -48,19 +54,60 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     const params = this.props.formValues;
     if (e && e.target) {
       params[e.target.name] = e.target.value;
+      if (this.state.searchTimer) {
+        clearTimeout(this.state.searchTimer);
+        this.setState({ searchTimer: null });
+      }
+      const timerH = setTimeout(() => { this.props.onSubmit(params, true); }, 500);
+      this.setState({ searchTimer: timerH });
     } else {
       params[name] = e;
+      this.props.onSubmit(params, true);
     }
-
-    this.props.onSubmit(params, true);
   }
 
   render() {
-    const { indications, sources, patientCategories, patients, hasError, handleSubmit } = this.props;
-    const indicationOptions = map(indications, indicationIterator => ({
-      label: indicationIterator.name,
-      value: indicationIterator.id,
-    }));
+    const { formValues, indications, sources, patientCategories, patients, hasError, handleSubmit } = this.props;
+
+    const includeIndicationArr = [];
+    let finalIncludeIndication = [];
+    const excludeIndicationArr = [];
+    let finalExcludeIndication = [];
+
+    for (const val of indications) {
+      if (!formValues.includeIndication || formValues.includeIndication.length === 0 || !_.find(formValues.includeIndication, (o) => (o.id === val.id))) {
+        includeIndicationArr.push({
+          label: val.name,
+          value: val.id,
+          id: val.id,
+        });
+      } else {
+        finalIncludeIndication.push({
+          label: val.name,
+          value: val.id,
+          id: val.id,
+        });
+      }
+
+      if (!formValues.excludeIndication || formValues.excludeIndication.length === 0 || !_.find(formValues.excludeIndication, (o) => (o.id === val.id))) {
+        excludeIndicationArr.push({
+          label: val.name,
+          value: val.id,
+          id: val.id,
+        });
+      } else {
+        finalExcludeIndication.push({
+          label: val.name,
+          value: val.id,
+          id: val.id,
+        });
+      }
+    }
+
+    finalIncludeIndication = _.concat(finalIncludeIndication, includeIndicationArr);
+    finalExcludeIndication = _.concat(finalExcludeIndication, excludeIndicationArr);
+
+
     const sourceOptions = map(sources, sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
@@ -81,6 +128,19 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
         value: 'Female',
       },
     ];
+
+    const itemTemplate = (controlSelectedValue) => (
+      <div key={controlSelectedValue.value}>
+        {controlSelectedValue.label}
+        <i className="close-icon icomoon-icon_close"></i>
+      </div>
+    );
+
+    const selectedItemsTemplate = (controlSelectedValue) => (
+      <div>
+        {controlSelectedValue.length} item(s) selected
+      </div>
+    );
 
     return (
       <form className="form-search" onSubmit={handleSubmit}>
@@ -112,16 +172,17 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
             <div className="field">
               <Field
                 name="includeIndication"
-                component={ReactSelect}
+                component={ReactMultiSelect}
                 placeholder="Select Indication"
-                options={indicationOptions}
-                multi
-                joinValues
-                objectValue
-                clearable={false}
-                disabled={patients.fetching}
-                className="multiSelectWrap"
+                searchPlaceholder="Search Indication"
+                searchable
+                optionLabelKey="label"
+                multiple
                 onChange={(e) => this.initSearch(e, 'includeIndication')}
+                customOptionTemplateFunction={itemTemplate}
+                customSelectedValueTemplateFunction={selectedItemsTemplate}
+                dataSource={finalIncludeIndication}
+                customSearchIconClass="icomoon-icon_search2"
               />
             </div>
           </div>
@@ -133,16 +194,17 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
             <div className="field">
               <Field
                 name="excludeIndication"
-                component={ReactSelect}
+                component={ReactMultiSelect}
                 placeholder="Select Indication"
-                options={indicationOptions}
-                multi
-                joinValues
-                objectValue
-                clearable={false}
-                disabled={patients.fetching}
-                className="multiSelectWrap"
+                searchPlaceholder="Search Indication"
+                searchable
+                optionLabelKey="label"
+                multiple
                 onChange={(e) => this.initSearch(e, 'excludeIndication')}
+                customOptionTemplateFunction={itemTemplate}
+                customSelectedValueTemplateFunction={selectedItemsTemplate}
+                dataSource={finalExcludeIndication}
+                customSearchIconClass="icomoon-icon_search2"
               />
             </div>
           </div>

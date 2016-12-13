@@ -1,14 +1,17 @@
 import React, { PropTypes } from 'react';
 
+import { getAvatarUrl } from 'containers/NotificationsPage';
+
 const NotificationItem = ({ notification, onClick }) => {
   const { event_log, date, time } = notification;
+  const url = getAvatarUrl(notification);
 
   return (
     <tr className="" onClick={onClick}>
       <td>
         <div className="info clearfix">
           <div className="img-holder">
-            <img alt="description" src="images/patient1.jpg" />
+            <img alt="description" src={url} />
           </div>
           <div className="desc">
             <p>

@@ -1,5 +1,5 @@
 import { getItem } from 'utils/localStorage';
-import { forEach, map, remove, cloneDeep, findIndex, concat } from 'lodash';
+import { forEach, map, remove, cloneDeep, findIndex, concat, sortBy, reverse } from 'lodash';
 
 import {
   SET_AUTH_STATE,
@@ -89,6 +89,8 @@ import {
   SAVE_USER_SUCCESS,
   SAVE_USER_ERROR,
   GET_AVAIL_PHONE_NUMBERS_SUCCESS,
+
+  GET_CREDITS_PRICE_SUCCESS,
 } from './constants';
 
 import {
@@ -181,6 +183,7 @@ const initialState = {
       error: null,
     },
     availPhoneNumbers: [],
+    creditsPrice: {},
   },
 };
 
@@ -449,9 +452,10 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case FETCH_SITE_PATIENTS_SUCCESS:
+      sitePatientsCollection = reverse(sortBy(payload, item => item.twtm_max_date_created));
       baseDataInnerState = {
         sitePatients: {
-          details: payload,
+          details: sitePatientsCollection,
           fetching: false,
           error: null,
         },
@@ -477,11 +481,12 @@ export default function appReducer(state = initialState, action) {
           } else {
             patientData.count_unread = 1;
           }
-          patientData.twtm_max_date_created = action.newMessage.twilioTextMessage.created_datetime;
+          patientData.twtm_max_date_created = action.newMessage.twilioTextMessage.dateCreated;
           patientData.last_message_body = action.newMessage.twilioTextMessage.body;
         }
         return patientData;
       });
+      sitePatientsCollection = reverse(sortBy(sitePatientsCollection, item => item.twtm_max_date_created));
       baseDataInnerState = {
         sitePatients: {
           details: sitePatientsCollection,
@@ -913,6 +918,11 @@ export default function appReducer(state = initialState, action) {
     case GET_AVAIL_PHONE_NUMBERS_SUCCESS:
       baseDataInnerState = {
         availPhoneNumbers: map(payload.avail, (value) => ({ ...value, value: value.phoneNumber, label: value.friendlyName })),
+      };
+      break;
+    case GET_CREDITS_PRICE_SUCCESS:
+      baseDataInnerState = {
+        creditsPrice: payload,
       };
       break;
     default:

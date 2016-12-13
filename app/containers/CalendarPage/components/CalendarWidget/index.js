@@ -15,6 +15,7 @@ class CalendarWidget extends React.Component {
   static propTypes = {
     schedules: PropTypes.array.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
+    handleShowAll: PropTypes.func.isRequired,
   }
 
   currentDate = new Date()
@@ -30,7 +31,6 @@ class CalendarWidget extends React.Component {
     return (
       <div className="calendar-box calendar-slider">
         <BigCalendar
-          popup
           selectable
           events={eventsList}
           defaultDate={this.currentDate}
@@ -49,6 +49,9 @@ class CalendarWidget extends React.Component {
           }}
           onSelectEvent={(event) => {
             this.props.handleOpenModal(SchedulePatientModalType.UPDATE, event);
+          }}
+          onShowMore={(events, date) => {
+            this.props.handleShowAll(true, events, date);
           }}
           ref={(c) => { this.bigCalendar = c; }}
         />

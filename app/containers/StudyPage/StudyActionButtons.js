@@ -2,13 +2,24 @@
  * Created by mike on 10/2/16.
  */
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import ImportPatientsModal from './ImportPatientsModal/index';
 import TextEmailBlastModal from './TextEmailBlastModal';
 import TextBlastModal from './TextBlast/index';
 import AddPatient from './ImportPatientsModal/AddPatient';
 
-class StudyActionButtons extends React.Component {
+import { exportPatients } from './actions';
+
+class StudyActionButtons extends Component {
+  static propTypes = {
+    campaign: PropTypes.number,
+    search: PropTypes.string,
+    source: PropTypes.number,
+    siteId: PropTypes.number.isRequired,
+    studyId: PropTypes.number.isRequired,
+    exportPatients: PropTypes.func,
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -26,6 +37,7 @@ class StudyActionButtons extends React.Component {
     this.closeTextBlastModal = this.closeTextBlastModal.bind(this);
     this.toggleEmailBlastModal = this.toggleEmailBlastModal.bind(this);
     this.closeEmailBlastModal = this.closeEmailBlastModal.bind(this);
+    this.download = this.download.bind(this);
   }
 
   toggleImportPatientsModal() {
@@ -82,13 +94,32 @@ class StudyActionButtons extends React.Component {
     });
   }
 
+  download() {
+    const { exportPatients, siteId, studyId, campaign, source, search } = this.props;
+    exportPatients(studyId, siteId, search, campaign, source);
+  }
+
   render() {
     return (
-      <div className="btns pull-right">
-        <div className="btn-email pull-left">
+      <div className="btns-popups pull-right">
+        <div className="col pull-right">
+          <a className="btn btn-primary download" onClick={this.download}>
+            <i className="icomoon-icon_download" />
+            &nbsp;Download
+          </a>
+        </div>
+        <div className="col pull-right">
+          <span className="btn btn-primary import" onClick={this.toggleImportPatientsModal}>
+            <i className="icomoon-icon_upload" />
+            &nbsp;Import
+          </span>
+          <ImportPatientsModal show={this.state.showImportPatientsModal} onHide={this.toggleImportPatientsModal} toggleAddPatient={this.toggleAddPatientModal} />
+          <AddPatient show={this.state.showAddPatientModal} onClose={this.closeAddPatientModal} onHide={this.toggleAddPatientModal} />
+        </div>
+        <div className="col pull-right">
           <span className="btn btn-primary email" onClick={this.toggleTextEmailBlastModal}>
             <i className="icomoon-icon_chat_alt" />
-            <span>Text / Email Blast</span>
+            &nbsp;Text / Email Blast
             <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} toggleTextBlast={this.toggleTextBlastModal} />
             <TextBlastModal
               show={this.state.showTextBlastModal}
@@ -97,23 +128,15 @@ class StudyActionButtons extends React.Component {
             />
           </span>
         </div>
-        <div className="btn-import pull-left">
-          <span className="btn btn-primary import" onClick={this.toggleImportPatientsModal}>
-            <i className="icomoon-icon_upload" />
-            <span>Import</span>
-          </span>
-          <ImportPatientsModal show={this.state.showImportPatientsModal} onHide={this.toggleImportPatientsModal} toggleAddPatient={this.toggleAddPatientModal} />
-          <AddPatient show={this.state.showAddPatientModal} onClose={this.closeAddPatientModal} onHide={this.toggleAddPatientModal} />
-        </div>
-        <div className="btn-download pull-left">
-          <a className="btn btn-primary download">
-            <i className="icomoon-icon_download" />
-            <span>Download</span>
-          </a>
-        </div>
       </div>
     );
   }
 }
 
-export default StudyActionButtons;
+function mapDispatchToProps(dispatch) {
+  return {
+    exportPatients: (studyId, siteId, text, campaignId, sourceId) => dispatch(exportPatients(studyId, siteId, text, campaignId, sourceId)),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(StudyActionButtons);
