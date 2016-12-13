@@ -103,6 +103,9 @@ export class NotificationsPage extends React.Component {
   sortBy = (field) => {
     let { notifications } = this.state;
     let sortField;
+    let sortDescription = 0;
+    let sortDate = 0;
+    let sortTime = 0;
     if (field === 'description') {
       sortField = 'sortDescription';
     } else if (field === 'date') {
@@ -118,9 +121,18 @@ export class NotificationsPage extends React.Component {
       notifications = orderBy(notifications, [field], [sortVal === 1 ? 'asc' : 'desc']);
     }
 
+    if (field === 'description') {
+      sortDescription = sortVal;
+    } else if (field === 'date') {
+      sortDate = sortVal;
+    } else {
+      sortTime = sortVal;
+    }
     this.setState({
       notifications,
-      [sortField]: sortVal,
+      sortDescription,
+      sortDate,
+      sortTime,
     });
   }
 

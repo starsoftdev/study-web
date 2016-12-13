@@ -20,7 +20,8 @@ import {
   selectRewards,
 } from 'containers/App/selectors';
 
-import { submitForm } from 'containers/RewardsPage/actions';
+import { selectPaginationOptions } from 'containers/RewardsPage/selectors';
+import { submitForm, setActiveSort } from 'containers/RewardsPage/actions';
 import RewardModal from 'components/RewardModal';
 import RewardForm from 'components/RewardForm';
 import RewardsList from './RewardsList';
@@ -43,6 +44,8 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     fetchClientSites: PropTypes.func,
     fetchRewards: PropTypes.func,
     onSubmitForm: PropTypes.func,
+    paginationOptions: PropTypes.object,
+    setActiveSort: PropTypes.func,
   };
 
   constructor(props) {
@@ -219,7 +222,11 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
           </div>
 
           <section className="table-holder">
-            <RewardsList rewards={this.props.rewards} />
+            <RewardsList
+              rewards={this.props.rewards}
+              paginationOptions={this.props.paginationOptions}
+              setActiveSort={this.props.setActiveSort}
+            />
           </section>
 
         </section>
@@ -233,6 +240,7 @@ const mapStateToProps = createStructuredSelector({
   currentUserClientId: selectCurrentUserClientId(),
   siteLocations: selectUserSiteLocations(),
   rewards: selectRewards(),
+  paginationOptions: selectPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -241,6 +249,7 @@ function mapDispatchToProps(dispatch) {
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchRewards: () => dispatch(fetchRewards()),
     onSubmitForm: (values) => dispatch(submitForm(values)),
+    setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
   };
 }
 

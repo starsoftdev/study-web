@@ -29,7 +29,7 @@ const headers = [
   },
   {
     text: 'Payment type',
-    sort: 'payment',
+    sort: 'payment_type',
   },
   {
     text: 'Total',
@@ -49,6 +49,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     setActiveSort: PropTypes.func,
     siteLocations: PropTypes.array,
     showInvoicePdf: PropTypes.func,
+    sortProposalsSuccess: PropTypes.func,
   };
 
   constructor(props) {
@@ -156,14 +157,25 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
   sortBy(ev) {
     ev.preventDefault();
-    const sort = ev.currentTarget.dataset.sort;
-    let direction = 'down';
+    let sort = ev.currentTarget.dataset.sort;
+    let direction = 'up';
 
-    if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1) {
-      direction = 'up';
+    if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
+      direction = 'down';
+    } else if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1) {
+      direction = null;
+      sort = null;
     }
 
-    if (sort !== 'payment') {
+    console.log(sort, direction);
+    if (sort === 'orderNumber') {
+      const dir = ((direction === 'down') ? 'desc' : 'asc');
+      const sortedProposals = _.orderBy(this.props.receipts, [function (o) {
+        return o.orderNumber;
+      }], [dir]);
+      this.props.setActiveSort(sort, direction);
+      this.props.sortProposalsSuccess(sortedProposals);
+    } else if (sort !== 'payment') {
       this.props.setActiveSort(sort, direction);
       this.props.getReceipts(15, 0, this.props.receipts, sort, direction, this.props.searchOptions);
     }
@@ -185,20 +197,11 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   }
 
   mapReceipts(raw, result) {
-    const { siteLocations } = this.props;
     let invoiceId = null;
     _.map(raw, (source, key) => {
       const date = new Date(source.created);
       const dateWrapper = moment(date).format('MM/DD/YY');
-      let siteName = source.site_name;
-
-      if (!siteName && source.site_id && siteLocations.length) {
-        siteName = _.find(siteLocations, { id: source.site_id }).name;
-      }
-
-      if (source.action_type === 'addCredits') {
-        siteName = 'PMS Credits';
-      }
+      let siteName = source.site_name || '-';
 
       let invoiceIdLink = source.invoice_id;
       if (source.invoice_pdf_id) {
@@ -215,7 +218,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
                   <input type="checkbox" name={key} />
                 </span>
               </span>
-              <span>{(key + 1)}</span>
+              <span>{source.orderNumber}</span>
             </td>
             <td>{dateWrapper}</td>
             <td>{siteName}</td>
@@ -233,7 +236,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     const state = this.state;
     const receipts = [];
     const heads = [];
-
+    console.log(322, this.props.receipts);
     this.mapHeaders(headers, state, heads);
     this.mapReceipts(this.props.receipts, receipts);
 
@@ -251,13 +254,20 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
           </colgroup>
           <thead>
             <tr>
-              <th>
+              <th
+                className={`${(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}`}
+              >
                 <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
                   <span className="input-style" onClick={this.onClickAll}>
                     <input name="all" type="checkbox" />
                   </span>
                 </span>
-                <span>#</span><i className="caret-arrow" />
+                <span
+                  data-sort="orderNumber"
+                  onClick={this.sortBy}
+                  className={`${(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}`}
+                >#</span>
+                <i className="caret-arrow" />
               </th>
               {heads}
             </tr>

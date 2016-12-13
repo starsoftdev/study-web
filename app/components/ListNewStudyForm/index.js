@@ -339,7 +339,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
 
         <Modal className="custom-modal" show={this.props.listNewStudyState.showAddSiteLocationModal} onHide={this.closeAddSiteModal}>
           <Modal.Header>
-            <Modal.Title>ADD CREDITS</Modal.Title>
+            <Modal.Title>ADD SITE LOCATION</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddSiteModal}>
               <i className="icomoon-icon_close" />
             </a>
