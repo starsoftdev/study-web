@@ -21,6 +21,8 @@ import {
   EDIT_STUDY,
   EDIT_STUDY_SUCCESS,
   EDIT_STUDY_ERROR,
+  SET_ACTIVE_SORT,
+  SORT_SUCCESS,
 } from './constants';
 
 import {
@@ -61,6 +63,10 @@ const initialState = {
     details: null,
     submitting: false,
     error: null,
+  },
+  paginationOptions: {
+    activeSort: null,
+    activeDirection: null,
   },
 };
 
@@ -137,7 +143,7 @@ export default function homePageReducer(state = initialState, action) {
     case FETCH_STUDIES_SUCCESS:
       entitiesCollection = [];
 
-      forEach(payload, (studyIterator) => {
+      forEach(payload, (studyIterator, index) => {
         entity = {
           studyId: studyIterator.id,
           indication: studyIterator.indication,
@@ -150,6 +156,7 @@ export default function homePageReducer(state = initialState, action) {
           siteUsers: null,
           startDate: '',
           endDate: '',
+          orderNumber: (index + 1),
         };
         if (studyIterator.sponsors && studyIterator.sponsors.length > 0) {
           const sponsorContacts = map(studyIterator.sponsors, sponsorContactIterator => sponsorContactIterator.name);
@@ -312,6 +319,23 @@ export default function homePageReducer(state = initialState, action) {
           details: null,
           submitting: false,
           error: payload,
+        },
+      };
+    case SET_ACTIVE_SORT:
+      return {
+        ...state,
+        paginationOptions: {
+          activeSort: action.sort,
+          activeDirection: action.direction,
+        },
+      };
+    case SORT_SUCCESS:
+      return {
+        ...state,
+        studies: {
+          details: payload,
+          fetching: false,
+          error: null,
         },
       };
     default:

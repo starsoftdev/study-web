@@ -11,6 +11,7 @@ import {
   FETCH_SITES,
   FETCH_SITES_SUCCESS,
   FETCH_SITES_ERROR,
+  SET_ACTIVE_SORT,
 } from './constants';
 
 export function submitForm(payload) {
@@ -51,5 +52,13 @@ export function sitesFetchingError(payload) {
   return {
     type: FETCH_SITES_ERROR,
     payload,
+  };
+}
+
+export function setActiveSort(sort, direction) {
+  return {
+    type: SET_ACTIVE_SORT,
+    sort,
+    direction,
   };
 }

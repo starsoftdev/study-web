@@ -68,9 +68,11 @@ class TextBlastModal extends React.Component {
   }
 
   textAreaChange() {
-    const value = this.textarea.value;
-    this.setState({ enteredCharactersLength: value.length }, () => {
-    });
+    setTimeout(() => {
+      const value = this.textarea.value;
+      this.setState({ enteredCharactersLength: value ? value.length : 0 }, () => {
+      });
+    }, 0);
   }
 
   selectCategory(checked, categoryId) {
@@ -359,10 +361,12 @@ class TextBlastModal extends React.Component {
                     name="message"
                     component={Input}
                     componentClass="textarea"
+                    className="study-text-blast"
                     placeholder="Type a message..."
                     maxLength="160"
                     required
                     onChange={this.textAreaChange}
+                    style={{ height: '350px' }}
                     ref={(textarea) => {
                       this.textarea = textarea;
                     }}
@@ -371,7 +375,7 @@ class TextBlastModal extends React.Component {
                     <span className="characters-counter">
                       {`${160 - enteredCharactersLength}`}
                     </span>
-                    <Button type="submit" className="pull-right" onClick={this.submitTextBlast}>Submit</Button>
+                    <Button type="submit" className="pull-right" onClick={this.submitTextBlast}>Send</Button>
                   </div>
                 </div>
               </div>

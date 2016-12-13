@@ -15,6 +15,7 @@ import {
   DELETE_SCHEDULE,
   DELETE_SCHEDULE_SUCCESS,
   DELETE_SCHEDULE_ERROR,
+  SET_ACTIVE_SORT,
 } from './constants';
 
 const initialState = {
@@ -29,7 +30,11 @@ const initialState = {
     isDeleting: false,
     data: [],
     error: null,
-  }
+  },
+  paginationOptions: {
+    activeSort: null,
+    activeDirection: null,
+  },
 };
 
 export default function calendarPageReducer(state = initialState, action) {
@@ -120,6 +125,14 @@ export default function calendarPageReducer(state = initialState, action) {
           error: { $set: payload },
         }
       });
+    case SET_ACTIVE_SORT:
+      return {
+        ...state,
+        paginationOptions: {
+          activeSort: action.sort,
+          activeDirection: action.direction,
+        },
+      };
     default:
       return state;
   }
