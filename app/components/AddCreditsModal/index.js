@@ -79,7 +79,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
   addCreditsSubmit(cartValues) {
     const data = {
       quantity: this.state.quantity,
-      totalAmount: cartValues.total,
+      totalAmount: this.state.quantity * this.props.creditsPrice.price,
       cardId: cartValues.creditCard,
       username: this.props.currentUser.username,
     };
@@ -94,7 +94,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
         title: `${this.state.credits} Credits`,
         quantity: this.state.quantity,
         price: this.state.price,
-        total: this.state.total,
+        total: this.state.quantity * this.props.creditsPrice.price,
       },
     ];
     return (
