@@ -188,6 +188,7 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
       path: '/proposals',
       name: 'proposals',
       getComponent(nextState, cb) {
@@ -406,6 +407,7 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
       path: 'receipts',
       name: 'receipts',
       getComponent(nextState, cb) {
