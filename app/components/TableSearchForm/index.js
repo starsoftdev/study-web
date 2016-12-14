@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-
+import moment from 'moment';
 import { defaultRanges, DateRange } from 'react-date-range';
 // import Modal from 'react-bootstrap/lib/Modal';
 // import CenteredModal from '../CenteredModal/index';
@@ -189,6 +189,8 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
                     }}
                     linkedCalendars
                     ranges={defaultRanges}
+                    startDate={this.state.predefined.startDate ? this.state.predefined.startDate : moment()}
+                    endDate={this.state.predefined.endDate ? this.state.predefined.endDate : moment().add(1, 'M')}
                     onInit={this.handleChange}
                     onChange={this.handleChange}
                   />
@@ -196,6 +198,7 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
                     <div className="emit-border"><br /></div>
                     <div className="right-part">
                       <div className="btn-block text-right">
+                        {this.state.predefined.startDate && <span className="time"> {moment(this.state.predefined.startDate).format('MMM D, YYYY')} - {moment(this.state.predefined.endDate).format('MMM D, YYYY')}</span>}
                         <a
                           href="#"
                           className="btn btn-default lightbox-close"
