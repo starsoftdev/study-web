@@ -91,7 +91,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
   render() {
     const products = [
       {
-        title: `${this.state.credits} Credits`,
+        title: `100 Credits`,
         quantity: this.state.quantity,
         price: this.state.price,
         total: this.state.quantity * this.props.creditsPrice.price,
@@ -134,7 +134,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
                         <div className="field-row">
                           <strong className="label"><label htmlFor="price">PRICE</label></strong>
                           <div className="field">
-                            <input className="form-control" value={`$${this.state.price / 100}`} type="text" name="price" disabled />
+                            <input className="form-control" value={`$${this.state.quantity * this.props.creditsPrice.price / 100}`} type="text" name="price" disabled />
                           </div>
                         </div>
                       </div>
