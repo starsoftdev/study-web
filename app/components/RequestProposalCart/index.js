@@ -8,6 +8,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { find, sumBy } from 'lodash';
+import { touch } from 'redux-form';
 
 import LoadingSpinner from 'components/LoadingSpinner';
 import Money from 'components/Money';
@@ -20,6 +21,7 @@ import {
   selectProposalFormValues,
   selectProposalFormError,
 } from 'components/RequestProposalForm/selectors';
+import { fields } from 'components/RequestProposalForm/validator';
 import {
   selectLevels,
 } from 'containers/App/selectors';
@@ -40,6 +42,7 @@ export class RequestProposalCart extends Component {
     hasError: PropTypes.bool,
     fetchCoupon: PropTypes.func.isRequired,
     onSubmitForm: PropTypes.func.isRequired,
+    touchRequestProposal: PropTypes.func,
   }
 
   constructor(props) {
@@ -60,6 +63,11 @@ export class RequestProposalCart extends Component {
   }
 
   onSubmitForm() {
+    if (this.props.hasError) {
+      this.props.touchRequestProposal();
+      return;
+    }
+
     const { formValues } = this.props;
     this.props.onSubmitForm(formValues);
   }
@@ -121,7 +129,7 @@ export class RequestProposalCart extends Component {
   }
 
   render() {
-    const { coupon, hasError } = this.props;
+    const { coupon } = this.props;
     const products = this.listProducts();
     const { subTotal, discount, total } = this.calculateTotal(products);
 
@@ -203,7 +211,6 @@ export class RequestProposalCart extends Component {
             <input
               type="submit"
               className="btn btn-default"
-              disabled={hasError}
               value="submit"
               onClick={this.onSubmitForm}
             />
@@ -225,6 +232,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchCoupon: (id) => dispatch(fetchCoupon(id)),
     onSubmitForm: (values) => dispatch(submitForm(values)),
+    touchRequestProposal: () => dispatch(touch('requestProposal', ...fields)),
   };
 }
 
