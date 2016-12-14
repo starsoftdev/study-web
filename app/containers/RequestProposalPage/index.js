@@ -13,6 +13,7 @@ import Helmet from 'react-helmet';
 import RequestProposalForm from 'components/RequestProposalForm';
 import RequestProposalCart from 'components/RequestProposalCart';
 
+
 import {
   fetchSites,
   fetchIndications,
@@ -25,7 +26,7 @@ import {
 } from 'containers/App/selectors';
 
 import { submitForm, fetchProposal } from 'containers/RequestProposalPage/actions';
-import { selectProposalDetail } from './selectors';
+import { selectProposalDetail, selectProposalsFormError, selectProposalsFormValues } from './selectors';
 
 export class RequestProposalPage extends Component {
   static propTypes = {
@@ -40,11 +41,13 @@ export class RequestProposalPage extends Component {
     fetchProposal: PropTypes.func,
     onSubmitForm: PropTypes.func.isRequired,
     location: PropTypes.any,
+    hasErrors: PropTypes.object,
+    formValues: PropTypes.object,
   }
 
   constructor(props) {
     super(props);
-    this.onSubmitForm = this.props.onSubmitForm.bind(this);
+    this.submitClick = this.submitClick.bind(this);
 
     if (!isNaN(props.params.id)) {
       this.props.fetchProposal(props.params.id);
@@ -55,6 +58,10 @@ export class RequestProposalPage extends Component {
     this.props.fetchSites();
     this.props.fetchIndications();
     this.props.fetchLevels();
+  }
+
+  submitClick() {
+    this.props.onSubmitForm(this.props.formValues);
   }
 
   render() {
@@ -101,6 +108,8 @@ const mapStateToProps = createStructuredSelector({
   indications   : selectIndications(),
   studyLevels   : selectStudyLevels(),
   proposalDetail: selectProposalDetail(),
+  hasErrors: selectProposalsFormError(),
+  formValues: selectProposalsFormValues(),
 });
 
 function mapDispatchToProps(dispatch) {
