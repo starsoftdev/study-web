@@ -8,8 +8,11 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
+import { touch } from 'redux-form';
 
 import ReferForm from 'components/ReferForm';
+import { selectReferFormError } from 'components/ReferForm/selectors';
+import { fields } from 'components/ReferForm/validator';
 
 import { selectCompanyTypes } from 'containers/ReferPage/selectors';
 import { submitForm, fetchCompanyTypes } from 'containers/ReferPage/actions';
@@ -20,17 +23,22 @@ import shadowImage from 'assets/images/shadow.png';
 export class ReferPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     companyTypes: PropTypes.array,
+    hasErrors: PropTypes.bool,
     fetchCompanyTypes: PropTypes.func,
-    onSubmitForm: PropTypes.func,
-  }
-
-  constructor(props) {
-    super(props);
-    this.onSubmitForm = this.props.onSubmitForm.bind(this);
+    submitForm: PropTypes.func,
+    touchRefer: PropTypes.func,
   }
 
   componentDidMount() {
     this.props.fetchCompanyTypes();
+  }
+
+  onSubmitForm = (values) => {
+    if (this.props.hasErrors) {
+      this.props.touchRefer();
+      return;
+    }
+    this.props.submitForm(values);
   }
 
   render() {
@@ -83,12 +91,14 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
 
 const mapStateToProps = createStructuredSelector({
   companyTypes: selectCompanyTypes(),
+  hasErrors: selectReferFormError(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchCompanyTypes: () => dispatch(fetchCompanyTypes()),
-    onSubmitForm: (values) => dispatch(submitForm(values)),
+    submitForm: (values) => dispatch(submitForm(values)),
+    touchRefer: () => dispatch(touch('refer', ...fields)),
   };
 }
 
