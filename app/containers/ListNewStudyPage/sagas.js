@@ -9,36 +9,11 @@ import request from 'utils/request';
 import {
   formSubmitted,
   formSubmissionError,
-  fetchIndicationLevelPriceSuccess,
-  fetchIndicationLevelPriceError,
 } from 'containers/ListNewStudyPage/actions';
 
 import {
   SUBMIT_FORM,
-  FETCH_INDICATION_LEVEL_PRICE,
 } from 'containers/ListNewStudyPage/constants';
-
-export function* fetchIndicationLevelPriceWatcher() {
-  while (true) {
-    const { indicationId, levelId } = yield take(FETCH_INDICATION_LEVEL_PRICE);
-
-    try {
-      const requestURL = `${API_URL}/indicationLevelSkus/getPrice`;
-      const params = {
-        query: {
-          levelId,
-          indicationId,
-        },
-      };
-      const response = yield call(request, requestURL, params);
-      yield put(fetchIndicationLevelPriceSuccess(response));
-    } catch (err) {
-      const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
-      yield put(toastrActions.error('', errorMessage));
-      yield put(fetchIndicationLevelPriceError(err));
-    }
-  }
-}
 
 export function* submitFormWatcher() {
   while (true) {
@@ -80,12 +55,10 @@ export function* submitFormWatcher() {
 
 export function* listNewStudyPageSaga() {
   const watcherA = yield fork(submitFormWatcher);
-  const watcherB = yield fork(fetchIndicationLevelPriceWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
   yield cancel(watcherA);
-  yield cancel(watcherB);
 }
 
 // All sagas to be loaded
