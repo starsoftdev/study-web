@@ -214,7 +214,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
             </div>
             <Modal className="edit-site" id="edit-site" show={editSiteModalShown} onHide={this.closeEditSiteModal}>
               <Modal.Header closeButton>
-                <Modal.Title>Edit Site</Modal.Title>
+                <Modal.Title>Edit Site Location</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <div className="holder clearfix">
