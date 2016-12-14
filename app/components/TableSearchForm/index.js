@@ -183,6 +183,11 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
                 </div>
                 <div className="holder">
                   <DateRange
+                    theme={{
+                      DateRange: {
+                        display: 'inline-grid',
+                      },
+                    }}
                     linkedCalendars
                     ranges={defaultRanges}
                     onInit={this.handleChange}
