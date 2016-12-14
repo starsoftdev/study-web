@@ -31,6 +31,7 @@ import {
   SAVE_USER,
   GET_AVAIL_PHONE_NUMBERS,
   GET_CREDITS_PRICE,
+  FETCH_INDICATION_LEVEL_PRICE,
 } from 'containers/App/constants';
 
 
@@ -82,6 +83,8 @@ import {
   getAvailPhoneNumbersError,
   getCreditsPriceSuccess,
   getCreditsPriceError,
+  fetchIndicationLevelPriceSuccess,
+  fetchIndicationLevelPriceError,
 } from 'containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -109,6 +112,7 @@ export default function* baseDataSaga() {
   yield fork(saveUserWatcher);
   yield fork(getAvailPhoneNumbersWatcher);
   yield fork(fetchCreditsPrice);
+  yield fork(fetchIndicationLevelPriceWatcher);
 }
 
 export function* fetchSitesWatcher() {
@@ -592,6 +596,28 @@ export function* fetchCreditsPrice() {
       yield put(getCreditsPriceSuccess(response));
     } catch (err) {
       yield put(getCreditsPriceError(err));
+    }
+  }
+}
+
+export function* fetchIndicationLevelPriceWatcher() {
+  while (true) {
+    const { indicationId, levelId } = yield take(FETCH_INDICATION_LEVEL_PRICE);
+
+    try {
+      const requestURL = `${API_URL}/indicationLevelSkus/getPrice`;
+      const params = {
+        query: {
+          levelId,
+          indicationId,
+        },
+      };
+      const response = yield call(request, requestURL, params);
+      yield put(fetchIndicationLevelPriceSuccess(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(fetchIndicationLevelPriceError(err));
     }
   }
 }

@@ -13,10 +13,13 @@ import {
   SUBMIT_FORM_SUCCESS,
   SUBMIT_FORM_ERROR,
   HIDE_SUBMIT_FORM_MODAL,
-  FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
-  FETCH_INDICATION_LEVEL_PRICE,
   CLEAR_FORM_SUBMISSION_DATA,
 } from './constants';
+
+import {
+  FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+  FETCH_INDICATION_LEVEL_PRICE,
+} from 'containers/App/constants';
 
 const initialState = {
   showAddSiteLocationModal: false,
