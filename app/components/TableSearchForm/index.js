@@ -81,7 +81,6 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
   render() {
     const { siteLocations } = this.props;
     const state = this.state;
-
     return (
       <form
         className="form-search clearfix"
