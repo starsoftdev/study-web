@@ -118,7 +118,7 @@ export class NotificationsPage extends React.Component {
 
     const sortVal = (this.state[sortField] + 1) % 3;
     if (sortVal === 0) {
-      notifications = orderBy(notifications, ['event_log_id'], ['asc']);
+      notifications = orderBy(notifications, ['id'], ['desc']);
     } else if (sortVal !== 0) {
       notifications = orderBy(notifications, [field], [sortVal === 1 ? 'asc' : 'desc']);
     }

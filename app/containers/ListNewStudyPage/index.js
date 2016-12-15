@@ -14,7 +14,7 @@ import { selectListNewStudyPageDomain, selectFormSubmissionStatus, selectShowSub
 import { selectListNewStudyFormValues, selectListNewStudyFormError } from 'components/ListNewStudyForm/selectors';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
 import _, { find } from 'lodash';
-import { submitForm, hideSubmitFormModal, fetchIndicationLevelPrice, clearFormSubmissionData } from 'containers/ListNewStudyPage/actions';
+import { submitForm, hideSubmitFormModal, clearFormSubmissionData } from 'containers/ListNewStudyPage/actions';
 import { Modal } from 'react-bootstrap';
 import LoadingSpinner from 'components/LoadingSpinner';
 import './styles.less';
@@ -26,6 +26,7 @@ import {
   fetchLevels,
   saveSite,
   getAvailPhoneNumbers,
+  fetchIndicationLevelPrice,
 } from 'containers/App/actions';
 import {
   selectSiteLocations,
