@@ -141,7 +141,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     });
     siteOptions.push({ value: 'All', label: 'All' });
     return (
-      <div className="field-row form-group">
+      <div className="field-row site-select">
         <strong className="label">
           <label>SITE</label>
         </strong>
