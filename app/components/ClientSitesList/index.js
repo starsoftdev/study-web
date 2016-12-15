@@ -222,6 +222,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                     <EditSiteForm
                       initialValues={selectedSiteDetailsForForm}
                       onSubmit={this.updateSite}
+                      isEdit
                     />
                   </div>
                 </div>

@@ -108,6 +108,10 @@ import {
   GET_CREDITS_PRICE,
   GET_CREDITS_PRICE_SUCCESS,
   GET_CREDITS_PRICE_ERROR,
+
+  FETCH_INDICATION_LEVEL_PRICE,
+  FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+  FETCH_INDICATION_LEVEL_PRICE_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -728,6 +732,28 @@ export function getCreditsPriceSuccess(payload) {
 export function getCreditsPriceError(payload) {
   return {
     type: GET_CREDITS_PRICE_ERROR,
+    payload,
+  };
+}
+
+export function fetchIndicationLevelPrice(indicationId, levelId) {
+  return {
+    type: FETCH_INDICATION_LEVEL_PRICE,
+    indicationId,
+    levelId,
+  };
+}
+
+export function fetchIndicationLevelPriceSuccess(payload) {
+  return {
+    type: FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchIndicationLevelPriceError(payload) {
+  return {
+    type: FETCH_INDICATION_LEVEL_PRICE_ERROR,
     payload,
   };
 }
