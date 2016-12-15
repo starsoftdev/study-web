@@ -77,7 +77,7 @@ export function* fetchPatientsWatcher() {
           status: searchParams.status,
         });
       }
-      if (searchParams.site) {
+      if (searchParams.site && searchParams.site !== 'All') {
         filterObj.where.and.push({
           site: searchParams.site,
         });
