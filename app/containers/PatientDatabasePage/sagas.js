@@ -59,6 +59,7 @@ export function* fetchPatientsWatcher() {
         include: [
           'indications',
           'source',
+          { campaigns: 'site' },
           { studyPatientCategory: 'patientCategory' },
         ],
         where: {
@@ -203,12 +204,27 @@ export function* fetchPatientWatcher() {
     const { id } = yield take(FETCH_PATIENT);
 
     try {
-      const queryParams = { filter: '{"include": ["indications", "source", {"studyPatientCategory": "patientCategory"}]}' };
+      const queryParams = { filter: '{"include": ["indications", "source", {"campaigns": "site"}, {"studyPatientCategory": "patientCategory"}]}' };
       const queryString = composeQueryString(queryParams);
       const requestURL = `${API_URL}/patients/${id}?${queryString}`;
       const response = yield call(request, requestURL);
-
-      yield put(patientFetched(response));
+      /* cleaning up return */
+      const newReturn = response;
+      let tempArray = [];
+      newReturn.site = response.campaigns.map((campaign) => {
+        const returnObj = { value: campaign.site.id, label: campaign.site.name };
+        return returnObj;
+      })
+        .filter(site => {
+          let duplicate = true;
+          if (!tempArray.includes(site.value)) {
+            duplicate = false;
+            tempArray = [...tempArray, site.value];
+          }
+          return !duplicate;
+        });
+      delete newReturn.campaigns;
+      yield put(patientFetched(newReturn));
     } catch (err) {
       yield put(patientFetchingError(err));
     }

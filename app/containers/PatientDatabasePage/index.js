@@ -6,7 +6,6 @@ import { createStructuredSelector } from 'reselect';
 
 import SearchPatientsForm from '../../containers/PatientDatabasePage/SearchPatientsForm/index';
 import PatientsList from '../../containers/PatientDatabasePage/PatientsList/index';
-import PatientActionButtons from './PatientActionButtons';
 import { fetchIndications, fetchSources, fetchSites } from 'containers/App/actions';
 import { fetchPatientCategories, fetchPatients, clearPatientsList } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
@@ -77,9 +76,8 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
         <section className="patient-database">
           <Helmet title="Patient Database - StudyKIK" />
           <h2 className="main-heading">Patient Database</h2>
-          <PatientActionButtons searchPatients={this.searchPatients} paginationOptions={this.props.paginationOptions} />
 
-          <SearchPatientsForm onSubmit={this.searchPatients} />
+          <SearchPatientsForm onSubmit={this.searchPatients} searchPatients={this.searchPatients} paginationOptions={this.props.paginationOptions} />
 
           <PatientsList
             searchPatients={this.searchPatients}

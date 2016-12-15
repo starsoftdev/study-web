@@ -11,7 +11,7 @@ import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
 import { selectEditPatientFormError } from './selectors';
 import { selectPatientCategories, selectSavedPatient } from 'containers/PatientDatabasePage/selectors';
-import { selectIndications, selectSources } from 'containers/App/selectors';
+import { selectIndications, selectSources, selectSiteLocations } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 import Checkbox from '../../../components/Input/Checkbox';
@@ -19,6 +19,7 @@ import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
 import { selectValues } from '../../../common/selectors/form.selector';
 import Overlay from 'react-bootstrap/lib/Overlay';
 import IndicationOverlay from 'containers/StudyPage/PatientDetail/IndicationOverlay';
+import { editPatientSite } from '../actions';
 
 const formName = 'editPatient';
 
@@ -29,13 +30,18 @@ const mapStateToProps = createStructuredSelector({
   patientCategories: selectPatientCategories(),
   savedPatient: selectSavedPatient(),
   hasError: selectEditPatientFormError(),
+  sites: selectSiteLocations(),
+});
+const mapDispatchToProps = dispatch => ({
+  editPatientSite: (site) => dispatch(editPatientSite(site)),
 });
 
 @reduxForm({ form: formName, validate: formValidator })
-@connect(mapStateToProps, null)
+@connect(mapStateToProps, mapDispatchToProps)
 class EditPatientForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
+    editPatientSite: PropTypes.func,
     indications: PropTypes.array,
     initialValues: PropTypes.object,
     loading: React.PropTypes.bool,
@@ -44,6 +50,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     sources: PropTypes.array,
     patientCategories: PropTypes.object,
     savedPatient: PropTypes.object,
+    sites: PropTypes.array,
     hasError: PropTypes.bool,
     onSubmit: PropTypes.func,
   };
@@ -71,7 +78,19 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     }
     onSubmit(formattedData);
   }
-
+  changeSite(event, siteOptions) {
+    const { editPatientSite } = this.props;
+    let newEvent = [];
+    if (event.split(',')[1]) {
+      for (const id of event.split(',')) {
+        newEvent = [...newEvent, siteOptions.filter(site => parseInt(site.value) === parseInt(id))[0]];
+      }
+      editPatientSite(newEvent);
+    } else {
+      newEvent = [siteOptions.filter(site => parseInt(site.value) === parseInt(event))[0]];
+      editPatientSite(newEvent);
+    }
+  }
   deleteIndication(indication) {
     const newArr = _.remove(this.props.formValues.indications, (n) => (n.id !== indication.id));
     this.props.dispatch(change('editPatient', 'indications', newArr));
@@ -114,13 +133,38 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     }
     return null;
   }
-
+  renderSite() {
+    const { sites, savedPatient } = this.props;
+    let siteOptions = sites.map(site => {
+      const returnObj = { value: site.id, label: site.name };
+      return returnObj;
+    });
+    siteOptions.push({ value: 'All', label: 'All' });
+    return (
+      <div className="field-row form-group">
+        <strong className="label">
+          <label>SITE</label>
+        </strong>
+        <Field
+          name="site"
+          component={ReactSelect}
+          className="field"
+          placeholder="Select Site"
+          options={siteOptions}
+          onChange={(event) => this.changeSite(event, siteOptions)}
+          multi
+          disabled={savedPatient.saving}
+        />
+      </div>
+    );
+  }
   render() {
     const { formValues, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, sources, patientCategories, hasError, loading, submitting, savedPatient } = this.props;
     const indicationOptions = map(indications, indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
     }));
+
     const sourceOptions = map(sources, sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
@@ -313,6 +357,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             disabled={savedPatient.saving}
           />
         </div>
+        {this.renderSite()}
         <div className="field-row">
           <strong className="label" />
           <div className="field">
