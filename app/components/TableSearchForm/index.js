@@ -79,6 +79,8 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
+    const { predefined } = this.state;
+    const format = 'MMM D YYYY';
     const { siteLocations } = this.props;
     const state = this.state;
     return (
@@ -196,6 +198,8 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
                     <div className="emit-border"><br /></div>
                     <div className="right-part">
                       <div className="btn-block text-right">
+                        <span className="left">{ predefined.startDate && predefined.startDate.format(format).toString() } -</span>
+                        <span className="right">{ predefined.endDate && predefined.endDate.format(format).toString() }</span>
                         <a
                           href="#"
                           className="btn btn-default lightbox-close"
