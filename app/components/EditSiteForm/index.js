@@ -4,7 +4,6 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 
 import Input from 'components/Input';
-import { selectEditSiteFormError } from './selectors';
 import { selectSavedSite } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
@@ -12,7 +11,6 @@ import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   savedSite: selectSavedSite(),
-  hasError: selectEditSiteFormError(),
 });
 
 @reduxForm({ form: 'editSite', validate: formValidator })
@@ -22,12 +20,11 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     savedSite: PropTypes.object,
-    hasError: PropTypes.bool,
     handleSubmit: PropTypes.func,
   };
 
   render() {
-    const { savedSite, hasError, handleSubmit } = this.props;
+    const { savedSite, handleSubmit } = this.props;
 
     return (
       <form className="form-edit-site" onSubmit={handleSubmit}>
@@ -138,7 +135,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </div>
           </div>
           <div className="btn-block text-right">
-            <button type="submit" className="btn btn-default btn-add-row" disabled={hasError || savedSite.saving}>
+            <button type="submit" className="btn btn-default btn-add-row" disabled={savedSite.saving}>
               {savedSite.saving
                 ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-site" /></span>
                 : <span>Submit</span>
