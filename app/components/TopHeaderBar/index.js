@@ -12,7 +12,7 @@ import GlobalPMSModal from 'components/GlobalPMSModal';
 import NotificationBox from './NotificationBox';
 import AvatarMenu from './AvatarMenu';
 
-import { fetchSitePatients } from 'containers/App/actions';
+import { fetchSitePatients, fetchClientCredits } from 'containers/App/actions';
 import { logout } from 'containers/LoginPage/actions';
 
 import {
@@ -27,6 +27,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     currentUser: PropTypes.any,
     sitePatients: React.PropTypes.object,
     fetchSitePatients: React.PropTypes.func,
+    fetchClientCredits: React.PropTypes.func,
     logout: React.PropTypes.func,
   };
 
@@ -52,6 +53,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
       return;
     }
     this.props.fetchSitePatients(currentUser.id);
+    this.props.fetchClientCredits(currentUser.id);
   }
 
   handleLogoutClick() {
@@ -137,6 +139,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchSitePatients: (siteId) => dispatch(fetchSitePatients(siteId)),
+    fetchClientCredits: (siteId) => dispatch(fetchClientCredits(siteId)),
     logout: () => dispatch(logout()),
   };
 }
