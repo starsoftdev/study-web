@@ -70,8 +70,58 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     }
   }
 
+  renderSearchOrSite() {
+    const { user, patients, sites } = this.props;
+    let siteOptions = map(sites, siteIterator => ({
+      label: siteIterator.name,
+      value: siteIterator.id,
+    }));
+    siteOptions.push({ label: 'All', value: 'All' });
+    if (user.roleForClient.name === ('Super Admin' || 'Admin')) {
+      return (
+        <div className="select-holder pull-left">
+          <span className="site">
+            <label>SITES</label>
+          </span>
+          <div className="col-holder clearfix">
+            <div className="field">
+              <Field
+                name="site"
+                component={ReactSelect}
+                placeholder="Select A Site"
+                options={siteOptions}
+                disabled={patients.fetching}
+                onChange={(e) => this.initSearch(e, 'site')}
+              />
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div className="search-area pull-left">
+        <span className="title">
+        </span>
+        <div className="field">
+          <Field
+            name="name"
+            component={Input}
+            type="text"
+            placeholder="Search"
+            className="keyword-search"
+            disabled={patients.fetching}
+            onChange={(e) => this.initSearch(e, 'name')}
+          />
+          <label htmlFor="search">
+            <i className="icomoon-icon_search2" />
+          </label>
+        </div>
+      </div>
+    );
+  }
+
   render() {
-    const { formValues, indications, sources, sites, patientCategories, patients, hasError, handleSubmit, user } = this.props;
+    const { formValues, indications, sources, patientCategories, patients, hasError, handleSubmit } = this.props;
     const includeIndicationArr = [];
     let finalIncludeIndication = [];
     const excludeIndicationArr = [];
@@ -110,10 +160,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     finalIncludeIndication = _.concat(finalIncludeIndication, includeIndicationArr);
     finalExcludeIndication = _.concat(finalExcludeIndication, excludeIndicationArr);
 
-    const siteOptions = map(sites, siteIterator => ({
-      label: siteIterator.name,
-      value: siteIterator.id,
-    }));
+
     const sourceOptions = map(sources, sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
@@ -147,30 +194,10 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
         {controlSelectedValue.length} item(s) selected
       </div>
     );
-
     return (
       <form className="form-search" onSubmit={handleSubmit}>
         <div className="fields-holder clearfix">
-
-          <div className="search-area pull-left">
-            <span className="title">
-            </span>
-            <div className="field">
-              <Field
-                name="name"
-                component={Input}
-                type="text"
-                placeholder="Search"
-                className="keyword-search"
-                disabled={patients.fetching}
-                onChange={(e) => this.initSearch(e, 'name')}
-              />
-              <label htmlFor="search">
-                <i className="icomoon-icon_search2" />
-              </label>
-            </div>
-          </div>
-
+          {this.renderSearchOrSite()}
           <div className="select-holder indication pull-left">
             <span className="title">
               <label>Include Indication</label>
@@ -324,23 +351,6 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
               <span className="sign">-</span>
             </div>
           </div>
-          {user.roleForClient.name === ('Super Admin' || 'Admin') && <div className="select-holder pull-left">
-            <span className="site">
-              <label>SITES</label>
-            </span>
-            <div className="col-holder clearfix">
-              <div className="field">
-                <Field
-                  name="site"
-                  component={ReactSelect}
-                  placeholder="Select A Site"
-                  options={siteOptions}
-                  disabled={patients.fetching}
-                  onChange={(e) => this.initSearch(e, 'site')}
-                />
-              </div>
-            </div>
-          </div>}
           <div className="hidden">
             <Button type="submit" bsStyle="primary" className="btn-search" disabled={patients.fetching || hasError}>
               {(patients.fetching)
