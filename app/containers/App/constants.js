@@ -9,8 +9,8 @@ export const FETCH_SITES_SUCCESS                   = 'App/FETCH_SITES_SUCCESS';
 export const FETCH_SITES_ERROR                     = 'App/FETCH_SITES_ERROR';
 
 export const FETCH_CLIENT_CREDITS                  = 'App/FETCH_CLIENT_CREDITS';
-export const FETCH_CLIENT_CREDITS_SUCCESS          = 'App/FETCH_CLIENT_CREDITS_SUCCESS';
-export const FETCH_CLIENT_CREDITS_ERROR            = 'App/FETCH_CLIENT_CREDITS_ERROR';
+// export const FETCH_CLIENT_CREDITS_SUCCESS          = 'App/FETCH_CLIENT_CREDITS_SUCCESS';
+// export const FETCH_CLIENT_CREDITS_ERROR            = 'App/FETCH_CLIENT_CREDITS_ERROR';
 
 export const FETCH_INDICATIONS                     = 'App/FETCH_INDICATIONS';
 export const FETCH_INDICATIONS_SUCCESS             = 'App/FETCH_INDICATIONS_SUCCESS';
@@ -30,13 +30,13 @@ export const FETCH_COUPON_ERROR                    = 'App/FETCH_COUPON_ERROR';
 
 export const CLEAR_COUPON                          = 'App/CLEAR_COUPON';
 
-export const FETCH_REWARDS                 		   = 'App/FETCH_REWARDS';
-export const FETCH_REWARDS_SUCCESS         		   = 'App/FETCH_REWARDS_SUCCESS';
-export const FETCH_REWARDS_ERROR           		   = 'App/FETCH_REWARDS_ERROR';
+export const FETCH_REWARDS                 		     = 'App/FETCH_REWARDS';
+export const FETCH_REWARDS_SUCCESS         		     = 'App/FETCH_REWARDS_SUCCESS';
+export const FETCH_REWARDS_ERROR           		     = 'App/FETCH_REWARDS_ERROR';
 
-export const FETCH_CARDS                 		   = 'App/FETCH_CARDS';
-export const FETCH_CARDS_SUCCESS         		   = 'App/FETCH_CARDS_SUCCESS';
-export const FETCH_CARDS_ERROR           		   = 'App/FETCH_CARDS_ERROR';
+export const FETCH_CARDS                 		       = 'App/FETCH_CARDS';
+export const FETCH_CARDS_SUCCESS         		       = 'App/FETCH_CARDS_SUCCESS';
+export const FETCH_CARDS_ERROR           		       = 'App/FETCH_CARDS_ERROR';
 
 export const SAVE_CARD                             = 'App/SAVE_CARD';
 export const SAVE_CARD_SUCCESS                     = 'App/SAVE_CARD_SUCCESS';
@@ -60,11 +60,11 @@ export const FETCH_SITE_PATIENTS_SUCCESS           = 'App/FETCH_SITE_PATIENTS_SU
 export const FETCH_SITE_PATIENTS_ERROR             = 'App/FETCH_SITE_PATIENTS_ERROR';
 export const UPDATE_SITE_PATIENTS 		             = 'App/UPDATE_SITE_PATIENTS';
 
-export const SEARCH_SITE_PATIENTS         = 'App/SEARCH_SITE_PATIENTS';
-export const SEARCH_SITE_PATIENTS_SUCCESS = 'App/SEARCH_SITE_PATIENTS_SUCCESS';
-export const SEARCH_SITE_PATIENTS_ERROR   = 'App/SEARCH_SITE_PATIENTS_ERROR';
+export const SEARCH_SITE_PATIENTS                  = 'App/SEARCH_SITE_PATIENTS';
+export const SEARCH_SITE_PATIENTS_SUCCESS          = 'App/SEARCH_SITE_PATIENTS_SUCCESS';
+export const SEARCH_SITE_PATIENTS_ERROR            = 'App/SEARCH_SITE_PATIENTS_ERROR';
 
-export const MARK_AS_READ_PATIENT_MESSAGES 	= 'App/MARK_AS_READ_PATIENT_MESSAGES';
+export const MARK_AS_READ_PATIENT_MESSAGES 	       = 'App/MARK_AS_READ_PATIENT_MESSAGES';
 
 export const FETCH_PATIENT_MESSAGES                = 'App/FETCH_PATIENT_MESSAGES';
 export const FETCH_PATIENT_MESSAGES_SUCCESS        = 'App/FETCH_PATIENT_MESSAGES_SUCCESS';
