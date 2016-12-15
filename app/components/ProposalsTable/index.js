@@ -378,6 +378,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     return (
       <div className="table-holder">
         <table className="table">
+          <caption />
           <colgroup>
             <col style={{ width: '2.5%' }} />
             <col style={{ width: '4%' }} />

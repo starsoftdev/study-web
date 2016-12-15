@@ -8,6 +8,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
+import Button from 'react-bootstrap/lib/Button';
 
 import { defaultRanges, DateRange } from 'react-date-range';
 // import Modal from 'react-bootstrap/lib/Modal';
@@ -89,7 +90,6 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
         <div className="btns-area pull-right">
           <div className="col pull-right">
             <button
-              type="submit"
               className="btn btn-primary pull-right"
               onClick={this.createPdf}
             >
@@ -107,10 +107,12 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
             </a>
           </div>
         </div>
-
         <div className="fields-holder">
           <div className="search-area pull-left">
             <div className="field">
+              <Button className="btn-enter">
+                <i className="icomoon-icon_search2" />
+              </Button>
               <Field
                 type="search"
                 component={Input}
@@ -132,7 +134,6 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
             />
           </div>
         </div>
-
         {/* <Modal
           show={state.showPopup}
           dialogComponentClass={CenteredModal}
