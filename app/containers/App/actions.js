@@ -56,8 +56,8 @@ import {
   UPDATE_SITE_PATIENTS,
 
   FETCH_CLIENT_CREDITS,
-  FETCH_CLIENT_CREDITS_SUCCESS,
-  FETCH_CLIENT_CREDITS_ERROR,
+  // FETCH_CLIENT_CREDITS_SUCCESS,
+  // FETCH_CLIENT_CREDITS_ERROR,
 
   SEARCH_SITE_PATIENTS,
   SEARCH_SITE_PATIENTS_SUCCESS,
@@ -431,7 +431,7 @@ export function fetchSitePatients(userId) {
 
 export function fetchClientCredits(userId) {
   return {
-    type: FETCH_SITE_PATIENTS,
+    type: FETCH_CLIENT_CREDITS,
     userId,
   };
 }
