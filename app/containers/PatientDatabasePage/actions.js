@@ -5,6 +5,8 @@
  */
 
 import {
+  EDIT_PATIENT_SITE,
+
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENTS_ERROR,
@@ -267,5 +269,12 @@ export function downloadComplete() {
 export function clearPatientsList() {
   return {
     type: CLEAR_PATIENTS_LIST,
+  };
+}
+
+export function editPatientSite(site) {
+  return {
+    type: EDIT_PATIENT_SITE,
+    site,
   };
 }

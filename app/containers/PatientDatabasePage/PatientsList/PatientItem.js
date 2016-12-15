@@ -99,7 +99,6 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
   render() {
     const { id, orderNumber, firstName, lastName, email, phone, age, gender, bmi, indications, source, studyPatientCategory } = this.props;
     const indicationNames = map(indications, indicationIterator => indicationIterator.name).join(', ');
-
     return (
       <div className={classNames('tr', 'patient-container', { 'tr-active': this.state.hover })} onMouseEnter={this.showHover} onMouseLeave={this.hideHover}>
         <div className="td">

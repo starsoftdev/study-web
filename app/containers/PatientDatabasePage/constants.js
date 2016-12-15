@@ -40,4 +40,5 @@ export const IMPORT_PATIENTS    = 'PatientDatabasePage/IMPORT_PATIENTS';
 export const DOWNLOAD_COMPLETE    = 'PatientDatabasePage/DOWNLOAD_COMPLETE';
 
 export const CLEAR_PATIENTS_LIST = 'PatientDatabasePage/CLEAR_PATIENTS_LIST';
+export const EDIT_PATIENT_SITE = 'PatientDatabasePage/EDIT_PATIENT_SITE';
 

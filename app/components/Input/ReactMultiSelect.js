@@ -19,7 +19,6 @@ function ReactMultiSelect({
   const hasError = touched && error && !active;
   const errorClass = hasError ? 'has-error' : '';
 
-
   let inputComponent = (
     <ReactSuperSelect
       onChange={(event) => {
