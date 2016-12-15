@@ -8,37 +8,40 @@
   .dateRange-helper{
     position: relative;
     overflow-y: visible;
-    display: table;
     width: 100%;
 
     .emit-border{
-      min-height: 500px;
-      display: table-cell;
+      min-height: 80px;
+      display: inline-block;
       width: 207px;
       border-right: 2px #f78e1e solid;
     }
 
 
     .right-part{
-      width: 100%;
       float: right;
       padding: 0 25px;
-      display: table-cell;
+      display: inline-block;
 
       span.left, span.right{
-        display: inline-block;
+        display: inline;
         text-align: center;
-        padding: 10px;
-        color: #fff;
+        padding: 5px;
         cursor: pointer;
-        background: #f78e1e;
         transition: all 0.25s;
+        vertical-align: top;
+        line-height: 40px;
 
         &:hover{
           cursor: inherit;
         }
 
         width: 100%;
+      }
+
+      span.right {
+        padding-right: 10px;
+        padding-left: 0;
       }
 
       span.outer-left {
@@ -48,7 +51,7 @@
       }
 
       span.outer-right {
-        padding-left: 5px;
+        padding-left: 0;
         float: right;
         width: 50%;
       }
@@ -56,9 +59,6 @@
       .btn-block{
         margin: 15px 0 25px 0;
 
-        a.btn {
-          margin-top: 15px;
-        }
       }
     }
   }
@@ -111,13 +111,13 @@
     .start-date-calendar {
       float: left;
       width: 50%;
-      padding-right: 5px;
+      padding-right: 6px;
     }
 
     .end-date-calendar {
       float: right;
       width: 50%;
-      padding-left: 5px;
+      padding-left: 6px;
     }
 
     .rdr-Calendar {
@@ -129,11 +129,9 @@
     padding: 0 !important;
     border-radius: 0 !important;
     background: #fff !important;
-    text-align: center;
     border-collapse: inherit;
     border: #f78e1e solid 2px;
-    //width: 38% !important;
-    height: 40px !important;
+    width: 50% !important;
 
   }
 
@@ -165,8 +163,6 @@
       .rdr-MonthAndYear-button{
         padding: 0 !important;
         margin: 6px 10px !important;
-        width: 29px !important;
-        height: 29px !important;
         font-size: 0;
         line-height: 0;
         display: inherit !important;
@@ -195,6 +191,8 @@
         }
 
         &.prev{
+          margin-left: 3px !important;
+
           i:before{
             width: 28px;
             height: 28px;
@@ -212,6 +210,8 @@
         }
 
         &.next{
+          margin-right: 3px !important;
+
           i:before{
             float: right;
             width: 28px;
@@ -242,11 +242,11 @@
 
     .rdr-WeekDay{
       line-height: 22px !important;
-      padding: 8px !important;
+      padding: 8px 0 !important;
       font-weight: 600 !important;
       text-transform: uppercase !important;
       height: inherit !important;
-      width: @cube !important;
+      width: 76px !important;
       transition: all 0.25s !important;
 
       &:hover{
@@ -257,13 +257,13 @@
 
   .rdr-Days{
     span {
-      width: 14% !important;
+      width: 76px !important;
       height: 16.6% !important;
     }
 
     span.rdr-Day{
       padding: 0;
-      line-height: 52px !important;
+      line-height: 58px !important;
       transition: all 0.25s !important;
       width: 100% !important;
       height: 100% !important;
@@ -299,7 +299,7 @@
 
   @media screen and (min-width: 801px) {
     .rdr-Calendar {
-      width: 38% !important;
+      width: 47% !important;
     }
   }
 
