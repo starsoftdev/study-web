@@ -133,8 +133,8 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     return null;
   }
   renderSite() {
-    const { sites, savedPatient } = this.props;
-    let siteOptions = sites.length > 0 ? sites.map(site => site.site) : [{ label: 'no new studies', value: 'no new studies' }];
+    const { sites, savedPatient, initialValues } = this.props;
+    const siteOptions = sites.length > 0 ? [...initialValues.site, ...sites.map(site => site.site)] : initialValues.site;
     return (
       <div className="field-row site-select">
         <strong className="label">
