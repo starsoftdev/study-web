@@ -18,14 +18,14 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
     error: React.PropTypes.object,
     handleSubmit: React.PropTypes.func.isRequired,
     reset: React.PropTypes.func.isRequired,
-    pristine: React.PropTypes.bool.isRequired,
     submitting: React.PropTypes.bool.isRequired,
     companyTypes: React.PropTypes.array,
   };
 
   render() {
-    const { error, handleSubmit, pristine, reset, submitting } = this.props; // eslint-disable-line
+    const { error, handleSubmit, reset, submitting } = this.props; // eslint-disable-line
     const { companyTypes } = this.props;
+
     return (
       <form onSubmit={handleSubmit}>
         <div className="form-fields">
@@ -98,7 +98,7 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
               type="submit"
               value="SUBMIT"
               className="btn btn-default"
-              disabled={pristine || submitting}
+              disabled={submitting}
             />
           </div>
         </div>

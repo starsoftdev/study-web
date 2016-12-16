@@ -6,7 +6,7 @@ import { Field, reduxForm } from 'redux-form';
 import Input from 'components/Input';
 import Toggle from 'components/Input/Toggle';
 import ReactSelect from 'components/Input/ReactSelect';
-import { selectEditUserFormError, selectEditUserFormSiteValue } from './selectors';
+import { selectEditUserFormSiteValue } from './selectors';
 import { selectSavedUser } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
@@ -15,7 +15,6 @@ import './styles.less';
 const mapStateToProps = createStructuredSelector({
   savedUser: selectSavedUser(),
   site: selectEditUserFormSiteValue(),
-  hasError: selectEditUserFormError(),
 });
 
 @reduxForm({ form: 'editUser', validate: formValidator })
@@ -27,14 +26,13 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
     savedUser: PropTypes.object,
     siteOptions: PropTypes.array,
     site: PropTypes.string,
-    hasError: PropTypes.bool,
     handleSubmit: PropTypes.func,
     onDelete: PropTypes.func,
     deleting: PropTypes.bool,
   };
 
   render() {
-    const { savedUser, siteOptions, site, hasError, handleSubmit, onDelete, deleting } = this.props;
+    const { savedUser, siteOptions, site, handleSubmit, onDelete, deleting } = this.props;
     let clientRolePanelContent = null;
 
     if (site === '0') {
@@ -135,7 +133,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
                 }
               </button>
             }
-            <button type="submit" className="btn btn-default" disabled={hasError || savedUser.saving || deleting}>
+            <button type="submit" className="btn btn-default" disabled={savedUser.saving || deleting}>
               {savedUser.saving
                 ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
                 : <span>Submit</span>
