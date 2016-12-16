@@ -11,7 +11,7 @@ import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
 import { selectEditPatientFormError } from './selectors';
 import { selectPatientCategories, selectSavedPatient } from 'containers/PatientDatabasePage/selectors';
-import { selectIndications, selectSources, selectSiteLocations } from 'containers/App/selectors';
+import { selectIndications, selectSources, selectValidSiteLocations } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 import Checkbox from '../../../components/Input/Checkbox';
@@ -30,7 +30,7 @@ const mapStateToProps = createStructuredSelector({
   patientCategories: selectPatientCategories(),
   savedPatient: selectSavedPatient(),
   hasError: selectEditPatientFormError(),
-  sites: selectSiteLocations(),
+  sites: selectValidSiteLocations(),
 });
 const mapDispatchToProps = dispatch => ({
   editPatientSite: (site) => dispatch(editPatientSite(site)),
@@ -85,11 +85,10 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       for (const id of event.split(',')) {
         newEvent = [...newEvent, siteOptions.filter(site => parseInt(site.value) === parseInt(id))[0]];
       }
-      editPatientSite(newEvent);
     } else {
       newEvent = [siteOptions.filter(site => parseInt(site.value) === parseInt(event))[0]];
-      editPatientSite(newEvent);
     }
+    editPatientSite(newEvent);
   }
   deleteIndication(indication) {
     const newArr = _.remove(this.props.formValues.indications, (n) => (n.id !== indication.id));
@@ -135,11 +134,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
   renderSite() {
     const { sites, savedPatient } = this.props;
-    let siteOptions = sites.map(site => {
-      const returnObj = { value: site.id, label: site.name };
-      return returnObj;
-    });
-    siteOptions.push({ value: 'All', label: 'All' });
+    let siteOptions = sites.length > 0 ? sites.map(site => site.site) : [{ label: 'no new studies', value: 'no new studies' }];
     return (
       <div className="field-row site-select">
         <strong className="label">

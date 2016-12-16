@@ -86,17 +86,15 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
           <span className="site">
             <label>SITES</label>
           </span>
-          <div className="col-holder clearfix">
-            <div className="field">
-              <Field
-                name="site"
-                component={ReactSelect}
-                placeholder="Select A Site"
-                options={siteOptions}
-                disabled={patients.fetching}
-                onChange={(e) => this.initSearch(e, 'site')}
-              />
-            </div>
+          <div className="field">
+            <Field
+              name="site"
+              component={ReactSelect}
+              placeholder="Select A Site"
+              options={siteOptions}
+              disabled={patients.fetching}
+              onChange={(e) => this.initSearch(e, 'site')}
+            />
           </div>
         </div>
       );
