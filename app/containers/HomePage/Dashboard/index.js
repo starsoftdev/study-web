@@ -2,7 +2,10 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { selectCurrentUser, selectSitePatients } from 'containers/App/selectors';
+import RewardModal from 'components/RewardModal';
+
+import { selectCurrentUser, selectSitePatients, selectUserSiteLocations } from 'containers/App/selectors';
+import { submitForm } from 'containers/RewardsPage/actions';
 
 import { fetchPatientSignUps, fetchPatientMessages, fetchRewardsPoint } from '../actions';
 import { selectPatientSignUps, selectPatientMessages, selectRewardsPoint } from '../selectors';
@@ -21,6 +24,12 @@ export class Dashboard extends React.Component {
     fetchPatientMessages: PropTypes.func,
     fetchRewardsPoint: PropTypes.func,
     sitePatients: React.PropTypes.object,
+    siteLocations: PropTypes.array,
+    submitForm: PropTypes.func,
+  }
+
+  state = {
+    rewardModalOpen: false,
   }
 
   componentDidMount() {
@@ -30,12 +39,16 @@ export class Dashboard extends React.Component {
     this.props.fetchRewardsPoint(currentUser);
   }
 
-  handleRedeemClick = () => {
-    console.log('redeem clicked');
+  openRewardModal = () => {
+    this.setState({ rewardModalOpen: true });
+  }
+
+  closeRewardModal = () => {
+    this.setState({ rewardModalOpen: false });
   }
 
   render() {
-    const { patientSignUps, patientMessages, rewardsPoint, sitePatients } = this.props;
+    const { patientSignUps, patientMessages, rewardsPoint, sitePatients, siteLocations, submitForm } = this.props;
     const unreadTexts = sumBy(sitePatients.details, (sitePatient) => {
       if (sitePatient.count_unread == null) {
         return 0;
@@ -91,7 +104,7 @@ export class Dashboard extends React.Component {
             <i className="icomoon-gift pull-left"></i>
             <div className="textbox">
               <h2>REWARDS</h2>
-              <a href="#popup-rewards" className="btn btn-info lightbox-opener" data-text="Redeem" data-hovertext="Redeem Now" onClick={() => this.handleRedeemClick()}>Redeem</a>
+              <a href="#popup-rewards" className="btn btn-info lightbox-opener" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal}>Redeem</a>
               <span className="counter">{rewardsPoint} KIK<span className="small text-lowercase">s</span></span>
             </div>
           </div>
@@ -106,6 +119,7 @@ export class Dashboard extends React.Component {
             </div>
           </div>
         </article>
+        <RewardModal siteLocations={siteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} onSubmit={submitForm} />
       </section>
     );
   }
@@ -117,11 +131,13 @@ const mapStateToProps = createStructuredSelector({
   patientMessages: selectPatientMessages(),
   rewardsPoint: selectRewardsPoint(),
   sitePatients: selectSitePatients(),
+  siteLocations: selectUserSiteLocations(),
 });
 const mapDispatchToProps = {
   fetchPatientSignUps,
   fetchPatientMessages,
   fetchRewardsPoint,
+  submitForm,
 };
 
 export default connect(
