@@ -9,9 +9,11 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { createStructuredSelector } from 'reselect';
+import { touch } from 'redux-form';
 import IrbAdCreationForm from 'components/IrbAdCreationForm';
 import ShoppingCartForm from 'components/ShoppingCartForm';
 import { selectIrbAdCreationFormValues, selectIrbAdCreationFormError } from 'components/IrbAdCreationForm/selectors';
+import { fields } from 'components/IrbAdCreationForm/validator';
 import { selectIrbProductList, selectIrbAdCreationDetail } from 'containers/IrbAdCreationPage/selectors';
 import { submitForm, fetchIrbProductList, fetchIrbAdCreation } from 'containers/IrbAdCreationPage/actions';
 
@@ -43,6 +45,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     params: PropTypes.object,
     fetchProductList: PropTypes.func,
     fetchIrbAdCreation: PropTypes.func,
+    touchIrbAdCreation: PropTypes.func,
   };
 
   constructor(props) {
@@ -62,6 +65,11 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
   }
 
   onSubmitForm(params) {
+    if (this.props.hasError) {
+      this.props.touchIrbAdCreation();
+      return;
+    }
+
     const siteLocation = _.find(this.props.siteLocations, { id: this.props.formValues.siteLocation });
     this.submitForm(params, {
       ...this.props.formValues,
@@ -74,7 +82,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
   }
 
   render() {
-    const { siteLocations, indications, hasError, productList, irbAdCreationDetail } = this.props;
+    const { siteLocations, indications, productList, irbAdCreationDetail } = this.props;
 
     if (productList[0]) {
       const addOns = [{
@@ -102,7 +110,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
                 <div className="fixed-block-holder">
                   <div className="order-summery-container">
                     <Sticky className="sticky-shopping-cart">
-                      <ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} disableSubmit={hasError} />
+                      <ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} />
                     </Sticky>
                   </div>
                 </div>
@@ -134,6 +142,7 @@ function mapDispatchToProps(dispatch) {
     fetchProductList: () => dispatch(fetchIrbProductList()),
     fetchIrbAdCreation: (id) => dispatch(fetchIrbAdCreation(id)),
     submitForm:     (cartValues, formValues) => dispatch(submitForm(cartValues, formValues)),
+    touchIrbAdCreation: () => dispatch(touch('irbAdCreation', ...fields)),
   };
 }
 

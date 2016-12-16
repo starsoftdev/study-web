@@ -4,7 +4,6 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 
 import Input from 'components/Input';
-import { selectEditSiteFormError } from './selectors';
 import { selectSavedSite } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
@@ -14,7 +13,6 @@ import _ from 'lodash';
 
 const mapStateToProps = createStructuredSelector({
   savedSite: selectSavedSite(),
-  hasError: selectEditSiteFormError(),
 });
 
 @reduxForm({ form: 'editSite', validate: formValidator })
@@ -24,7 +22,6 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     savedSite: PropTypes.object,
-    hasError: PropTypes.bool,
     handleSubmit: PropTypes.func,
     isEdit: PropTypes.bool,
   };
@@ -40,7 +37,9 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     let city = '';
     let state = '';
     let postalCode = '';
-
+    let streetNmber = '';
+    let route = '';
+    this.geoSuggest.update('');
     if (e.gmaps && e.gmaps.address_components) {
       const addressComponents = e.gmaps.address_components;
       for (const val of addressComponents) {
@@ -62,13 +61,22 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             this.props.dispatch(change('editSite', 'zip', val.long_name));
           }
         }
+        if (!streetNmber && _.find(val.types, (o) => (o === 'street_number'))) {
+          streetNmber = val.short_name;
+        }
+        if (!route && _.find(val.types, (o) => (o === 'route'))) {
+          route = val.short_name;
+        }
+        if (streetNmber && route) {
+          this.geoSuggest.update(`${streetNmber} ${route}`);
+          this.props.dispatch(change('editSite', 'address', `${streetNmber} ${route}`));
+        }
       }
-      this.props.dispatch(change('editSite', 'address', e.label));
     }
   }
 
   render() {
-    const { savedSite, hasError, handleSubmit, isEdit } = this.props;
+    const { savedSite, handleSubmit, isEdit } = this.props;
 
     return (
       <form className="form-edit-site" onSubmit={handleSubmit}>
@@ -140,7 +148,9 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                     onChange={this.addressChanged}
                   />);
                 }
+
                 return (<Geosuggest
+                  ref={(el) => { this.geoSuggest = el; }}
                   onSuggestSelect={this.onSuggestSelect}
                 />);
               })()}
@@ -186,7 +196,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </div>
           </div>
           <div className="btn-block text-right">
-            <button type="submit" className="btn btn-default btn-add-row" disabled={hasError || savedSite.saving}>
+            <button type="submit" className="btn btn-default btn-add-row" disabled={savedSite.saving}>
               {savedSite.saving
                 ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-site" /></span>
                 : <span>Submit</span>
