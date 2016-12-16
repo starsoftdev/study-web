@@ -10,7 +10,7 @@ import { reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import { submitPatientText, readStudyPatientMessages } from '../actions';
 import CallItem from 'components/GlobalPMSModal/CallItem';
-import { fetchClientCredits } from 'containers/App/actions';
+import { fetchClientCredits, markAsReadPatientMessages } from 'containers/App/actions';
 
 import {
   sendStudyPatientMessages,
@@ -18,7 +18,6 @@ import {
   setProcessingStatus,
 } from 'containers/GlobalNotifications/actions';
 
-import { markAsReadPatientMessages } from 'containers/App/actions';
 import { selectClientCredits } from 'containers/App/selectors';
 
 import PatientText from './PatientText';
