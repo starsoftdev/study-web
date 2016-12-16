@@ -12,9 +12,11 @@ import ShoppingCartForm from 'components/ShoppingCartForm';
 import ListNewStudyForm from 'components/ListNewStudyForm';
 import { selectListNewStudyPageDomain, selectFormSubmissionStatus, selectShowSubmitFormModal, selectIndicationLevelPrice } from 'containers/ListNewStudyPage/selectors';
 import { selectListNewStudyFormValues, selectListNewStudyFormError } from 'components/ListNewStudyForm/selectors';
+import { fields } from 'components/ListNewStudyForm/validator';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
 import _, { find } from 'lodash';
 import { submitForm, hideSubmitFormModal, clearFormSubmissionData } from 'containers/ListNewStudyPage/actions';
+import { touch } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import LoadingSpinner from 'components/LoadingSpinner';
 import './styles.less';
@@ -62,6 +64,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     fetchIndicationLevelPrice: PropTypes.func,
     clearFormSubmissionData: PropTypes.func,
     history: PropTypes.object,
+    touchNewStudy: PropTypes.func,
   }
 
   constructor(props) {
@@ -99,6 +102,11 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       }
     });
 
+    if (this.props.hasErrors) {
+      this.props.touchNewStudy();
+      return;
+    }
+
     this.submitForm(params, {
       ...this.props.formValues,
       username: this.props.currentUser.username,
@@ -120,7 +128,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
   }
 
   render() {
-    const { siteLocations, indications, studyLevels, formValues, fullSiteLocations, hasErrors, indicationLevelPrice } = this.props;
+    const { siteLocations, indications, studyLevels, formValues, fullSiteLocations, indicationLevelPrice } = this.props;
 
     const addOns = [];
     const level = find(studyLevels, { id: formValues.exposureLevel });
@@ -179,7 +187,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
               <div className="fixed-block-holder">
                 <div className="order-summery-container">
                   <Sticky className="sticky-shopping-cart">
-                    {<ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} disableSubmit={hasErrors} />}
+                    {<ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} />}
                   </Sticky>
                 </div>
               </div>
@@ -248,6 +256,7 @@ function mapDispatchToProps(dispatch) {
     hideSubmitFormModal:  () => dispatch(hideSubmitFormModal()),
     fetchIndicationLevelPrice: (indicationId, levelId) => dispatch(fetchIndicationLevelPrice(indicationId, levelId)),
     clearFormSubmissionData: () => (dispatch(clearFormSubmissionData())),
+    touchNewStudy: () => (dispatch(touch('listNewStudy', ...fields))),
   };
 }
 

@@ -64,6 +64,10 @@ class NotificationBox extends React.Component {
     this.setState({ dropdownOpen: false });
   }
 
+  seeAllClick = () => {
+    this.setState({ dropdownOpen: false });
+  }
+
   render() {
     return (
       <div className="notifications pull-left open-close">
@@ -96,7 +100,7 @@ class NotificationBox extends React.Component {
                 </ul>
               </div>
               <div className="btn-block text-center">
-                <Link className="hover-underline" to="/notifications">
+                <Link onClick={this.seeAllClick} className="hover-underline" to="/notifications">
                   See All
                 </Link>
               </div>
