@@ -71,7 +71,7 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
     const { fields, formValues } = this.props;
     return (
       <div>
-        <div className="heading-area">
+        <div className={fields.length === 0 ? 'heading-area-no-border' : 'heading-area'}>
           <Field
             name="checkAllInput"
             component={Checkbox}
