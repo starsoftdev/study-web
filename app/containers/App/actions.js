@@ -56,8 +56,8 @@ import {
   UPDATE_SITE_PATIENTS,
 
   FETCH_CLIENT_CREDITS,
-  // FETCH_CLIENT_CREDITS_SUCCESS,
-  // FETCH_CLIENT_CREDITS_ERROR,
+  FETCH_CLIENT_CREDITS_SUCCESS,
+  FETCH_CLIENT_CREDITS_ERROR,
 
   SEARCH_SITE_PATIENTS,
   SEARCH_SITE_PATIENTS_SUCCESS,
@@ -422,16 +422,30 @@ export function clientSitesFetchingError(payload) {
   };
 }
 
-export function fetchSitePatients(userId) {
+export function fetchClientCredits(userId) {
   return {
-    type: FETCH_SITE_PATIENTS,
+    type: FETCH_CLIENT_CREDITS,
     userId,
   };
 }
 
-export function fetchClientCredits(userId) {
+export function clientCreditsFetched(payload) {
   return {
-    type: FETCH_CLIENT_CREDITS,
+    type: FETCH_CLIENT_CREDITS_SUCCESS,
+    payload,
+  };
+}
+
+export function clientCreditsFetchingError(payload) {
+  return {
+    type: FETCH_CLIENT_CREDITS_ERROR,
+    payload,
+  };
+}
+
+export function fetchSitePatients(userId) {
+  return {
+    type: FETCH_SITE_PATIENTS,
     userId,
   };
 }

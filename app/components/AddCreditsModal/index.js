@@ -82,6 +82,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
       totalAmount: this.state.quantity * this.props.creditsPrice.price,
       cardId: cartValues.creditCard,
       username: this.props.currentUser.username,
+      userId: this.props.currentUser.id,
     };
 
     this.props.addCredits(this.props.currentUser.roleForClient.client.stripeCustomerId, data);
