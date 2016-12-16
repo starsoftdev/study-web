@@ -20,6 +20,7 @@ import {
 
   FETCH_CLIENT_SITES,
   FETCH_SITE_PATIENTS,
+  FETCH_CLIENT_CREDITS,
   SEARCH_SITE_PATIENTS,
   FETCH_PATIENT_MESSAGES,
   FETCH_CLIENT_ROLES,
@@ -61,6 +62,9 @@ import {
   clientSitesFetchingError,
   sitePatientsFetched,
   sitePatientsFetchingError,
+  fetchClientCredits,
+  clientCreditsFetched,
+  clientCreditsFetchingError,
   sitePatientsSearched,
   sitePatientsSearchingError,
   patientMessagesFetched,
@@ -101,6 +105,7 @@ export default function* baseDataSaga() {
 
   yield fork(fetchClientSitesWatcher);
   yield fork(fetchSitePatientsWatcher);
+  yield fork(fetchClientCreditsWatcher);
   yield fork(searchSitePatientsWatcher);
   yield fork(fetchPatientMessagesWatcher);
   yield fork(fetchClientRolesWatcher);
@@ -299,6 +304,7 @@ export function* addCreditsWatcher() {
 
       yield put(toastrActions.success('Add Credits', 'Credits added successfully!'));
       yield put(creditsAdded(response));
+      yield put(fetchClientCredits(data.userId));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));
@@ -351,6 +357,21 @@ export function* fetchSitePatientsWatcher() {
       yield put(sitePatientsFetched(response));
     } catch (err) {
       yield put(sitePatientsFetchingError(err));
+    }
+  }
+}
+
+export function* fetchClientCreditsWatcher() {
+  while (true) {
+    const { userId } = yield take(FETCH_CLIENT_CREDITS);
+
+    try {
+      const requestURL = `${API_URL}/users/${userId}/getClientCreditsByUser`;
+      const response = yield call(request, requestURL);
+
+      yield put(clientCreditsFetched(response));
+    } catch (err) {
+      yield put(clientCreditsFetchingError(err));
     }
   }
 }

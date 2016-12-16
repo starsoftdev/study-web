@@ -159,6 +159,11 @@ const selectSitePatients = () => createSelector(
   (substate) => get(substate, 'baseData.sitePatients', {})
 );
 
+const selectClientCredits = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.clientCredits', {})
+);
+
 const selectPatientMessages = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.patientMessages', {})
@@ -272,6 +277,7 @@ export {
 
   selectClientSites,
   selectSitePatients,
+  selectClientCredits,
   selectPatientMessages,
   selectClientRoles,
   selectSelectedSite,

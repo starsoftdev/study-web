@@ -18,6 +18,7 @@ import { logout } from 'containers/LoginPage/actions';
 import {
   selectCurrentUser,
   selectSitePatients,
+  selectClientCredits,
 } from 'containers/App/selectors';
 
 import { sumBy } from 'lodash';
@@ -26,6 +27,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
   static propTypes = {
     currentUser: PropTypes.any,
     sitePatients: React.PropTypes.object,
+    clientCredits: React.PropTypes.object,
     fetchSitePatients: React.PropTypes.func,
     fetchClientCredits: React.PropTypes.func,
     logout: React.PropTypes.func,
@@ -78,6 +80,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
   render() {
     const unreadMessagesCount = sumBy(this.props.sitePatients.details, (item) => parseInt(item.count_unread ? item.count_unread : 0));
+    const credits = this.props.clientCredits.details.customerCredits;
     return (
       <header id="header">
         <div className="container-fluid">
@@ -110,7 +113,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
           </a>
 
           <div className="get-credits pull-left">
-            <span>100 Credits</span>
+            <span>{credits} Credits</span>
             <Button onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
           </div>
 
@@ -134,12 +137,13 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   sitePatients: selectSitePatients(),
+  clientCredits: selectClientCredits(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSitePatients: (siteId) => dispatch(fetchSitePatients(siteId)),
-    fetchClientCredits: (siteId) => dispatch(fetchClientCredits(siteId)),
+    fetchSitePatients: (userId) => dispatch(fetchSitePatients(userId)),
+    fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
     logout: () => dispatch(logout()),
   };
 }

@@ -9,8 +9,8 @@ export const FETCH_SITES_SUCCESS                   = 'App/FETCH_SITES_SUCCESS';
 export const FETCH_SITES_ERROR                     = 'App/FETCH_SITES_ERROR';
 
 export const FETCH_CLIENT_CREDITS                  = 'App/FETCH_CLIENT_CREDITS';
-// export const FETCH_CLIENT_CREDITS_SUCCESS          = 'App/FETCH_CLIENT_CREDITS_SUCCESS';
-// export const FETCH_CLIENT_CREDITS_ERROR            = 'App/FETCH_CLIENT_CREDITS_ERROR';
+export const FETCH_CLIENT_CREDITS_SUCCESS          = 'App/FETCH_CLIENT_CREDITS_SUCCESS';
+export const FETCH_CLIENT_CREDITS_ERROR            = 'App/FETCH_CLIENT_CREDITS_ERROR';
 
 export const FETCH_INDICATIONS                     = 'App/FETCH_INDICATIONS';
 export const FETCH_INDICATIONS_SUCCESS             = 'App/FETCH_INDICATIONS_SUCCESS';
