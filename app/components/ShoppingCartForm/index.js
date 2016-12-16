@@ -15,7 +15,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
 import AddNewCardForm from 'components/AddNewCardForm';
-import { selectCouponId, selectTotal, selectShoppingCartFormError } from './selectors';
+import { selectCouponId, selectTotal } from './selectors';
 import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSavedCard } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
@@ -30,7 +30,6 @@ const mapStateToProps = createStructuredSelector({
   cards: selectCards(),
   currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
   savedCard: selectSavedCard(),
-  hasError: selectShoppingCartFormError(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -58,14 +57,12 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     showCards: PropTypes.bool,
     cards: PropTypes.object,
     savedCard: PropTypes.object,
-    hasError: PropTypes.bool,
     submitting: PropTypes.bool,
     fetchCoupon: PropTypes.func,
     clearCoupon: PropTypes.func,
     fetchCards: PropTypes.func,
     saveCard: PropTypes.func,
     handleSubmit: PropTypes.func,
-    disableSubmit: PropTypes.bool,
   };
 
   constructor(props) {
@@ -150,7 +147,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     const title = this.props.title || 'Order Summary';
     const noBorderClassName = (this.props.noBorder) ? 'no-border' : '';
     const formClassName = `form-study form-shopping-cart ${noBorderClassName}`;
-    const { addOns, coupon, showCards, cards, hasError, submitting, handleSubmit, disableSubmit } = this.props;
+    const { addOns, coupon, showCards, cards, submitting, handleSubmit } = this.props;
     const { subTotal, discount, total } = this.calculateTotal();
     let addOnsContent = null;
     if (addOns) {

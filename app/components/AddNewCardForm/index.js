@@ -11,7 +11,6 @@ import { Field, reduxForm } from 'redux-form';
 
 import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
-import { selectAddNewCardFormError } from './selectors';
 import { selectSavedCard } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
@@ -20,7 +19,6 @@ import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   savedCard: selectSavedCard(),
-  hasError: selectAddNewCardFormError(),
 });
 
 @reduxForm({ form: 'addNewCard', validate: formValidator })
@@ -30,12 +28,11 @@ class AddNewCardForm extends Component { // eslint-disable-line react/prefer-sta
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     savedCard: PropTypes.object,
-    hasError: PropTypes.bool,
     handleSubmit: PropTypes.func,
   };
 
   render() {
-    const { savedCard, hasError, handleSubmit } = this.props;
+    const { savedCard, handleSubmit } = this.props;
 
     return (
       <form className="form-add-new-card" onSubmit={handleSubmit}>
