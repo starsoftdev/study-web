@@ -37,7 +37,9 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     let city = '';
     let state = '';
     let postalCode = '';
-
+    let streetNmber = '';
+    let route = '';
+    this.geoSuggest.update('');
     if (e.gmaps && e.gmaps.address_components) {
       const addressComponents = e.gmaps.address_components;
       for (const val of addressComponents) {
@@ -59,8 +61,17 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             this.props.dispatch(change('editSite', 'zip', val.long_name));
           }
         }
+        if (!streetNmber && _.find(val.types, (o) => (o === 'street_number'))) {
+          streetNmber = val.short_name;
+        }
+        if (!route && _.find(val.types, (o) => (o === 'route'))) {
+          route = val.short_name;
+        }
+        if (streetNmber && route) {
+          this.geoSuggest.update(`${streetNmber} ${route}`);
+          this.props.dispatch(change('editSite', 'address', `${streetNmber} ${route}`));
+        }
       }
-      this.props.dispatch(change('editSite', 'address', e.label));
     }
   }
 
@@ -137,7 +148,9 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                     onChange={this.addressChanged}
                   />);
                 }
+
                 return (<Geosuggest
+                  ref={(el) => { this.geoSuggest = el; }}
                   onSuggestSelect={this.onSuggestSelect}
                 />);
               })()}
