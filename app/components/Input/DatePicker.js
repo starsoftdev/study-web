@@ -9,6 +9,7 @@ import { Calendar } from 'react-date-range';
 import { Modal } from 'react-bootstrap';
 
 import moment from 'moment';
+import _ from 'lodash';
 
 import './date-picker.less';
 
@@ -56,6 +57,17 @@ export default class DatePicker extends Component {
     this.props.input.onBlur(date);
   }
 
+  navigateToday = () => {
+    const today = moment();
+    const todayYear = today.year();
+    const todayMonth = today.month();
+    const calendarYear = this.calendar.getShownDate().year();
+    const calendarMonth = this.calendar.getShownDate().month();
+    const monthDiff = ((todayYear - calendarYear) * 12) + (todayMonth - calendarMonth);
+
+    this.calendar.changeMonth(monthDiff, { preventDefault: _.noop });
+  }
+
   toggleModal = (visible) => {
     this.setState({ modalVisible: visible });
   }
@@ -98,8 +110,9 @@ export default class DatePicker extends Component {
                     date={date}
                     onChange={this.handleSelect}
                     className="calendar custom-calendar"
+                    ref={(calendar) => { this.calendar = calendar; }}
                   />
-                  <div className="current-date">
+                  <div className="current-date" onClick={this.navigateToday}>
                     Today: {currentDateString}
                   </div>
                   <div className="link-holder text-center">
