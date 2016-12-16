@@ -59,6 +59,10 @@ class TextSection extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
+    if (!newProps.currentPatient) {
+      this.textarea.value = '';
+    }
+
     if (newProps.active && newProps.currentPatient) {
       this.initStudyPatientMessagesFetch(newProps);
     }
