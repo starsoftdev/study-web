@@ -330,7 +330,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
                     component={ReactSelect}
                     placeholder="Select Status"
                     options={statusOptions}
-                    disabled={savedPatient.saving}
+                    disabled
                   />
                 </div>
               </div>
