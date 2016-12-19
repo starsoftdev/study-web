@@ -32,7 +32,7 @@ import cardStarbucks from 'assets/images/img8.png';
 import diamond from 'assets/images/diamond.svg';
 import platinum from 'assets/images/platinum.svg';
 import gold from 'assets/images/gold.svg';
-
+import Helmet from 'react-helmet';
 
 export class RewardsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -83,7 +83,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     const { siteLocations } = this.props;
     return (
       <div className="container-fluid">
-
+        <Helmet title="Rewards - StudyKIK" />
         <section className="rewards">
           <h2 className="main-heading">REWARDS</h2>
           <div className="form-search clearfix">

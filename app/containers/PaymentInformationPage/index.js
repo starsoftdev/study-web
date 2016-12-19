@@ -13,6 +13,7 @@ import AddCreditCardModal from 'components/AddCreditCardModal';
 import { fetchCards, deleteCard, saveCard } from 'containers/App/actions';
 import { selectPaginationOptions } from 'containers/PaymentInformationPage/selectors';
 import { setActiveSort } from 'containers/PaymentInformationPage/actions';
+import Helmet from 'react-helmet';
 
 export class PaymentInformationPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -74,6 +75,7 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
     }
     return (
       <div className="container-fluid">
+        <Helmet title="Payment Information - StudyKIK" />
         <section className="payment-information">
           <h2 className="main-heading">PAYMENT INFORMATION</h2>
 

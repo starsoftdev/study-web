@@ -149,7 +149,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
   render() {
     return (
       <StickyContainer className="container-fluid">
-        <Helmet title="Proposals - StudyKIK" />
+        <Helmet title="Receipts - StudyKIK" />
         <section className="receipts">
           <h2 className="main-heading">RECEIPTS</h2>
           <TableSearchForm
