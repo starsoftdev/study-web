@@ -153,7 +153,7 @@
     "react-big-calendar": "git+https://github.com/studykik/kik-react-big-calendar.git#3cdb215430c97c397fbbcaa7e44ae9820f65bbc1",
     "react-bootstrap": "^0.30.3",
     "react-click-outside": "^2.1.0",
-    "react-date-range": "git+https://github.com/studykik/react-date-range.git#022e4102f482b7f48f4ef8f67f5cfa5f32e6f4af",
+    "react-date-range": "git+https://github.com/studykik/react-date-range.git#aa47d76b70879891725734b2dc451b8c705306fe",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "15.3.2",
