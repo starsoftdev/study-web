@@ -1,29 +1,24 @@
-.lightbox-content{
-
-}
-
-.holder{
+.holder {
   overflow: hidden;
 
-  .dateRange-helper{
+  .dateRange-helper {
     position: relative;
     overflow-y: visible;
     width: 100%;
 
-    .emit-border{
+    .emit-border {
       min-height: 80px;
       display: inline-block;
       width: 207px;
       border-right: 2px #f78e1e solid;
     }
 
-
-    .right-part{
+    .right-part {
       float: right;
       padding: 0 25px;
       display: inline-block;
 
-      span.left, span.right{
+      span.left, span.right {
         display: inline;
         text-align: center;
         padding: 5px;
@@ -32,7 +27,7 @@
         vertical-align: top;
         line-height: 40px;
 
-        &:hover{
+        &:hover {
           cursor: inherit;
         }
 
@@ -56,7 +51,7 @@
         width: 50%;
       }
 
-      .btn-block{
+      .btn-block {
         margin: 15px 0 25px 0;
 
       }
@@ -64,12 +59,12 @@
   }
 }
 
-.rdr-DateRange {
+.rdr-DateRange, .rdr-Calendar {
   position: relative;
   overflow: hidden;
   display: table;
 
-  .rdr-PredefinedRanges{
+  .rdr-PredefinedRanges {
     width: 207px !important;
     float: none !important;
     vertical-align: top !important;
@@ -93,7 +88,7 @@
       white-space: normal;
       transition: all 0.25s;
 
-      &:hover, &.active{
+      &:hover, &.active {
         color: #fff !important;
         background: #00afef !important;
       }
@@ -125,7 +120,7 @@
     }
   }
 
-  .rdr-Calendar{
+  .rdr-Calendar {
     padding: 0 !important;
     border-radius: 0 !important;
     background: #fff !important;
@@ -135,9 +130,9 @@
 
   }
 
-  .rdr-MonthAndYear{
+  .rdr-MonthAndYear {
 
-    .rdr-MonthAndYear-innerWrapper{
+    .rdr-MonthAndYear-innerWrapper {
       overflow: hidden;
       color: #fff;
       background: #f78e1e;
@@ -145,12 +140,12 @@
       padding: 0 !important;
       height: 40px !important;
 
-      .rdr-MonthAndYear-divider{
+      .rdr-MonthAndYear-divider {
         visibility: hidden;
         display: none;
       }
 
-      .rdr-MonthAndYear-month, .rdr-MonthAndYear-year{
+      .rdr-MonthAndYear-month, .rdr-MonthAndYear-year {
         padding: 6px 10px 6px 0;
         font-size: 20px !important;
         line-height: 25px !important;
@@ -160,7 +155,7 @@
         height: 100%;
       }
 
-      .rdr-MonthAndYear-button{
+      .rdr-MonthAndYear-button {
         padding: 0 !important;
         margin: 6px 10px !important;
         font-size: 0;
@@ -172,15 +167,15 @@
         border-radius: 0 !important;
         background: none !important;
 
-        &:hover{
+        &:hover {
 
-          i:before{
+          i:before {
             color: #f78e1e !important;
             background: #fff !important;
           }
         }
 
-        i{
+        i {
           display: block;
           width: 29px !important;
           height: 29px !important;
@@ -190,10 +185,10 @@
           text-align: center;
         }
 
-        &.prev{
+        &.prev {
           margin-left: 3px !important;
 
-          i:before{
+          i:before {
             width: 28px;
             height: 28px;
             color: #fff;
@@ -209,10 +204,10 @@
           }
         }
 
-        &.next{
+        &.next {
           margin-right: 3px !important;
 
-          i:before{
+          i:before {
             float: right;
             width: 28px;
             height: 28px;
@@ -234,13 +229,13 @@
 
   @cube: 52px;
 
-  .rdr-WeekDays{
+  .rdr-WeekDays {
     color: #fff;
     background: #ffc689;
     font-size: 18px !important;
     width: 100% !important;
 
-    .rdr-WeekDay{
+    .rdr-WeekDay {
       line-height: 22px !important;
       padding: 8px 0 !important;
       font-weight: 600 !important;
@@ -249,48 +244,48 @@
       width: 14.28% !important;
       transition: all 0.25s !important;
 
-      &:hover{
+      &:hover {
         cursor: inherit;
       }
     }
   }
 
-  .rdr-Days{
+  .rdr-Days {
     span {
       width: 14.28% !important;
       height: 16.6% !important;
     }
 
-    span.rdr-Day{
+    span.rdr-Day {
       padding: 0;
       line-height: 58px !important;
       transition: all 0.25s !important;
       width: 100% !important;
       height: 100% !important;
 
-      &:hover{
+      &:hover {
         color: #fff !important;
         font-weight: 700;
         background: #a0cf67 !important;
       }
 
-      &.is-inRange{
+      &.is-inRange {
         background: #ededed !important;
 
-        &:hover{
+        &:hover {
           color: #fff !important;
           font-weight: 700;
           background: #a0cf67 !important;
         }
       }
 
-      &.is-selected{
+      &.is-selected {
         color: #fff !important;
         font-weight: 700;
         background: #a0cf67 !important;
       }
 
-      &.is-passive{
+      &.is-passive {
         opacity: 0 !important;
       }
 
@@ -312,8 +307,8 @@
       margin-left: 21% !important;
     }
 
-    .dateRange-helper{
-      .btn-block{
+    .dateRange-helper {
+      .btn-block {
         text-align: center;
       }
     }
