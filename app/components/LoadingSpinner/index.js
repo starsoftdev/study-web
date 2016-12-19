@@ -13,7 +13,7 @@ function LoadingSpinner({ showOnlyIcon, size }) {
   return (
     <div className="container-fluid">
       <div className="row">
-        <div className="col-xs-12 text-center">
+        <div className="col-xs-12 text-center spinner-container">
           <p>
             <FaSpinner size={size || 30} className="spinner-icon text-info" />
           </p>
