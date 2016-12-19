@@ -156,7 +156,6 @@ class PatientBoard extends React.Component {
             </ul>
           </nav>
           <PatientDetailModal onClose={this.onPatientClick} />
-          <ScheduledPatientModal studyId={studyId} show={this.state.showScheduledPatientModal} />
         </div>
         <div className="patients-form-closer" onClick={this.onPatientClick} />
       </div>

@@ -345,6 +345,12 @@ function* fetchPatientDetails() {
             ],
           },
         },
+        {
+          relation: 'callReminders',
+          scope: {
+            fields: ['time'],
+          },
+        },
       ],
     });
     try {

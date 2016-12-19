@@ -6,9 +6,12 @@ import React from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
 import Collapse from 'react-bootstrap/lib/Collapse';
+import Modal from 'react-bootstrap/lib/Modal';
+import ModalBody from 'react-bootstrap/lib/ModalBody';
+import ModalHeader from 'react-bootstrap/lib/ModalHeader';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
+import ScheduledPatientModal from '../ScheduledPatientModal'
 import { selectCurrentUser } from 'containers/App/selectors';
 import * as Selector from '../selectors';
 import PatientDetailSection from './PatientDetailSection';
@@ -54,6 +57,9 @@ export class PatientDetailModal extends React.Component {
     this.renderOtherSection = this.renderOtherSection.bind(this);
     this.renderPatientDetail = this.renderPatientDetail.bind(this);
     this.renderScheduledTime = this.renderScheduledTime.bind(this);
+    this.state = {
+      showScheduledPatientModal: false,
+    }
   }
 
   onSelectText() {
@@ -98,17 +104,33 @@ export class PatientDetailModal extends React.Component {
     }
     return null;
   }
-
-  renderScheduledTime() {
-    const { currentPatientCategory } = this.props;
-    if (currentPatientCategory && currentPatientCategory.name == 'Scheduled') {
+  renderScheduleTimeModal() {
+    const { currentPatient } = this.props;
+    if (currentPatient && currentPatient.callReminders) {
       return (
-        <a className="modal-opener">
-          <span className="date">05/08/16</span>
-          <span> at </span>
-          <span className="time">11:30 PM </span>
-        </a>
+        <Modal style="z-index: 1" show={this.state.showScheduledPatientModal} onHide={() => this.setState({ showScheduledPatientModal: false })}>
+          <ModalHeader closeButton>Schedule Patient</ModalHeader>
+          <ModalBody>
+            <ScheduledPatientModal firstName={currentPatient.firstName} lastName={currentPatient.lastName} />
+          </ModalBody>
+        </Modal>
       );
+    }
+
+  }
+  renderScheduledTime() {
+    const { currentPatientCategory, currentPatient } = this.props;
+    if (currentPatientCategory && currentPatientCategory.name === 'Scheduled') {
+      if (currentPatient && currentPatient.callReminders) {
+        return (
+          <a className="modal-opener" onClick={() => this.setState({ showScheduledPatientModal: true })}>
+            <span className="date">{moment(currentPatient.callReminders[0].time).format('MM/DD/YY')}</span>
+            <span> at </span>
+            <span className="time">{moment(currentPatient.callReminders[0].time).format('hh:mm A')} </span>
+          </a>
+        );
+      }
+
     }
     return null;
   }
@@ -125,6 +147,7 @@ export class PatientDetailModal extends React.Component {
               <i className="glyphicon glyphicon-menu-right" />
             </a>
           </div>
+          {this.renderScheduleTimeModal()}
           {this.renderPatientDetail()}
           <div className="column">
             <div id="carousel-example-generic" className="carousel slide popup-slider">
