@@ -32,6 +32,7 @@ class ImportPatientsModal extends React.Component {
   constructor(props) {
     super(props);
     this.uploadFile = this.uploadFile.bind(this);
+    this.renderUpload = this.renderUpload.bind(this);
   }
 
   componentDidMount() {
@@ -48,8 +49,73 @@ class ImportPatientsModal extends React.Component {
       toastrActions.error('Wrong file type');
     }
   }
+
+  renderUpload() {
+    const { toggleAddPatient, uploadStart, fileUploaded, clearForm } = this.props;
+    if (uploadStart) {
+      return (
+        <div className="text-center" style={{ marginTop: '20px', marginBottom: '20px' }}>
+          <p>
+            <LoadingSpinner showOnlyIcon />
+          </p>
+          <p className="text-info spinner-text">
+            Uploading CSV File...
+          </p>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Form className="upload-patient-info">
+            <div className="table">
+              <label className="table-cell" htmlFor="upload-patient">
+                <i className="icomoon-arrow_up_alt" />
+                <span className="text">Upload Patients</span>
+                {fileUploaded && <span className="jcf-file jcf-extension-csv parent-active">{fileUploaded}</span>}
+                <span className="jcf-file">
+                  <span className="jcf-fake-input">No file chosen</span>
+                  <span className="jcf-upload-button">
+                    <span className="jcf-button-content">Choose file</span>
+                  </span>
+                  <Field
+                    type="file"
+                    name="uploadFile"
+                    component={Input}
+                    className="jcf-real-element"
+                    id="upload-patient"
+                    onChange={this.uploadFile}
+                  />
+                </span>
+              </label>
+
+            </div>
+            {fileUploaded && <Button className="clear-import-button" onClick={() => clearForm()}><i className="fa fa-times" aria-hidden="true" /></Button>}
+
+          </Form>
+
+          <span className="or">
+            <span>or</span>
+          </span>
+          <a className="add-patient-info-import" onClick={toggleAddPatient}>
+            <div className="table">
+              <div className="table-cell">
+                <i className="icomoon-icon_plus_alt" />
+                <span className="text">Add Patient</span>
+              </div>
+            </div>
+          </a>
+        </div>
+      );
+    }
+  }
+
   render() {
-    const { onHide, toggleAddPatient, uploadStart, fileUploaded, clearForm, ...props } = this.props;
+    let { onHide, ...props } = this.props;
+    delete props.toggleAddPatient;
+    delete props.toggleAddPatient;
+    delete props.uploadStart;
+    delete props.fileUploaded;
+    delete props.clearForm;
     return (
       <Modal
         {...props}
@@ -67,50 +133,7 @@ class ImportPatientsModal extends React.Component {
           </a>
         </Modal.Header>
         <Modal.Body>
-          {uploadStart ? <div><LoadingSpinner /></div> :
-            <div>
-              <Form className="upload-patient-info">
-                <div className="table">
-
-                  <label className="table-cell" htmlFor="upload-patient">
-                    <i className="icomoon-arrow_up_alt" />
-                    <span className="text">Upload Patients</span>
-                    {fileUploaded && <span className="jcf-file jcf-extension-csv parent-active">{fileUploaded}</span>}
-                    <span className="jcf-file">
-                      <span className="jcf-fake-input">No file chosen</span>
-                      <span className="jcf-upload-button">
-                        <span className="jcf-button-content">Choose file</span>
-                      </span>
-                      <Field
-                        type="file"
-                        name="uploadFile"
-                        component={Input}
-                        className="jcf-real-element"
-                        id="upload-patient"
-                        onChange={this.uploadFile}
-                      />
-                    </span>
-
-                  </label>
-
-                </div>
-                {fileUploaded && <Button className="clear-import-button" onClick={() => clearForm()}><i className="fa fa-times" aria-hidden="true" /></Button>}
-
-              </Form>
-
-              <span className="or">
-                <span>or</span>
-              </span>
-              <a className="add-patient-info-import" onClick={toggleAddPatient}>
-                <div className="table">
-                  <div className="table-cell">
-                    <i className="icomoon-icon_plus_alt" />
-                    <span className="text">Add Patient</span>
-                  </div>
-                </div>
-              </a>
-            </div>
-          }
+          {this.renderUpload()}
         </Modal.Body>
       </Modal>
     );

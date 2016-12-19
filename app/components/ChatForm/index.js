@@ -149,7 +149,7 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
             <div className="form-group pull-right">
               <Button type="submit" className="btn-add-row" disabled={isSaving}>
                 {isSaving
-                  ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-patient" /></span>
+                  ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                   : <span>Submit</span>
                 }
               </Button>

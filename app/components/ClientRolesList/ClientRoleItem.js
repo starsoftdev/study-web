@@ -65,7 +65,7 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
           {!isSuperAdmin &&
             <button type="button" className="btn btn-primary btn-edit-user pull-right" onClick={this.editUser} disabled={(this.currentUserIsBeingFetched())}>
               {(this.currentUserIsBeingFetched())
-                ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-user" /></span>
+                ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                 : <span>Edit</span>
               }
             </button>

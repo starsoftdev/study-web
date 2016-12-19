@@ -78,7 +78,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
           <div className="hidden">
             <button type="submit" className="btn btn-primary btn-search" disabled={clientSites.fetching || studies.fetching || hasError}>
               {(studies.fetching)
-                ? <LoadingSpinner showOnlyIcon size={20} className="fetching-studies" />
+                ? <LoadingSpinner showOnlyIcon size={20} />
                 : <span>Search</span>
               }
             </button>
