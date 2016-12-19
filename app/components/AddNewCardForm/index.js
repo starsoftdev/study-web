@@ -146,7 +146,7 @@ class AddNewCardForm extends Component { // eslint-disable-line react/prefer-sta
           <div className="btn-block text-right">
             <button type="submit" className="btn btn-default btn-add-row" disabled={savedCard.saving}>
               {savedCard.saving
-                ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-card" /></span>
+                ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                 : <span>Submit</span>
               }
             </button>

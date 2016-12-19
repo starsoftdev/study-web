@@ -54,9 +54,13 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
     if (!userDataFetched) {
       return (
-        <div className="text-center">
-          <LoadingSpinner showOnlyIcon size={30} className="loading-user-data" />
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-xs-12 text-center spinner-container">
+            <LoadingSpinner showOnlyIcon />
+          </div>
         </div>
+      </div>
       );
     }
 

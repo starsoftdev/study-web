@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 import FaSpinner from 'react-icons/lib/fa/spinner';
 import './styles.less';
 
-function LoadingSpinner({ showOnlyIcon, size }) {
+function LoadingSpinner({ message, showOnlyIcon, size }) {
   if (showOnlyIcon) {
     return (
       <FaSpinner size={size || 30} className="spinner-icon text-info" />
@@ -18,7 +18,7 @@ function LoadingSpinner({ showOnlyIcon, size }) {
             <FaSpinner size={size || 30} className="spinner-icon text-info" />
           </p>
           <p className="text-info spinner-text">
-            Loading
+            {message || 'Loading'}
           </p>
         </div>
       </div>
@@ -27,6 +27,7 @@ function LoadingSpinner({ showOnlyIcon, size }) {
 }
 
 LoadingSpinner.propTypes = {
+  message: PropTypes.string,
   showOnlyIcon: PropTypes.bool,
   size: PropTypes.number,
 };

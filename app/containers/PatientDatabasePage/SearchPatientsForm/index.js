@@ -321,7 +321,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
           <div className="hidden">
             <Button type="submit" bsStyle="primary" className="btn-search" disabled={patients.fetching || hasError}>
               {(patients.fetching)
-                ? <LoadingSpinner showOnlyIcon size={20} className="fetching-patients" />
+                ? <LoadingSpinner showOnlyIcon size={20} />
                 : <span>Search</span>
               }
             </Button>

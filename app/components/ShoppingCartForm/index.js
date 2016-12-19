@@ -279,7 +279,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
               {cardsPanelContent}
               <Button type="submit" disabled={coupon.fetching || cards.fetching || submitting}>
                 {submitting
-                  ? <span><LoadingSpinner showOnlyIcon size={20} className="submitting-shopping-cart" /></span>
+                  ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                   : <span>Submit</span>
                 }
               </Button>

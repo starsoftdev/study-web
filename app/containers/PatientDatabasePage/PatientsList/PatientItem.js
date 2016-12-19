@@ -142,7 +142,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
             <span>{source ? source.type : ''}</span>
             <a className="btn btn-primary lightbox-opener" onClick={this.editPatient} disabled={(this.currentPatientIsBeingFetched())}>
               {(this.currentPatientIsBeingFetched())
-                ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-patient" /></span>
+                ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                 : <span>Edit</span>
               }
             </a>

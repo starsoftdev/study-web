@@ -190,7 +190,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
             <div>
               <div className="loading-bacground"></div>
               <div className="loading-container">
-                <LoadingSpinner showOnlyIcon size={20} className="saving-card" />
+                <LoadingSpinner showOnlyIcon size={20} />
               </div>
             </div>
             : null
