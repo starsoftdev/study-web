@@ -7,6 +7,7 @@ import { orderBy } from 'lodash';
 import moment from 'moment';
 import classnames from 'classnames';
 import { push } from 'react-router-redux';
+import Helmet from 'react-helmet';
 
 import {
   selectCurrentUser,
@@ -143,6 +144,7 @@ export class NotificationsPage extends React.Component {
 
     return (
       <div className="container-fluid">
+        <Helmet title="Notifications - StudyKIK" />
         <section className="rewards">
           <h2 className="main-heading">NOTIFICATIONS</h2>
 
