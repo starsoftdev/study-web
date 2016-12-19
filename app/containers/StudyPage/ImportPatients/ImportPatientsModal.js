@@ -63,50 +63,49 @@ class ImportPatientsModal extends React.Component {
           </p>
         </div>
       );
-    } else {
-      return (
-        <div>
-          <Form className="upload-patient-info">
-            <div className="table">
-              <label className="table-cell" htmlFor="upload-patient">
-                <i className="icomoon-arrow_up_alt" />
-                <span className="text">Upload Patients</span>
-                {fileUploaded && <span className="jcf-file jcf-extension-csv parent-active">{fileUploaded}</span>}
-                <span className="jcf-file">
-                  <span className="jcf-fake-input">No file chosen</span>
-                  <span className="jcf-upload-button">
-                    <span className="jcf-button-content">Choose file</span>
-                  </span>
-                  <Field
-                    type="file"
-                    name="uploadFile"
-                    component={Input}
-                    className="jcf-real-element"
-                    id="upload-patient"
-                    onChange={this.uploadFile}
-                  />
-                </span>
-              </label>
-
-            </div>
-            {fileUploaded && <Button className="clear-import-button" onClick={() => clearForm()}><i className="fa fa-times" aria-hidden="true" /></Button>}
-
-          </Form>
-
-          <span className="or">
-            <span>or</span>
-          </span>
-          <a className="add-patient-info-import" onClick={toggleAddPatient}>
-            <div className="table">
-              <div className="table-cell">
-                <i className="icomoon-icon_plus_alt" />
-                <span className="text">Add Patient</span>
-              </div>
-            </div>
-          </a>
-        </div>
-      );
     }
+    return (
+      <div>
+        <Form className="upload-patient-info">
+          <div className="table">
+            <label className="table-cell" htmlFor="upload-patient">
+              <i className="icomoon-arrow_up_alt" />
+              <span className="text">Upload Patients</span>
+              {fileUploaded && <span className="jcf-file jcf-extension-csv parent-active">{fileUploaded}</span>}
+              <span className="jcf-file">
+                <span className="jcf-fake-input">No file chosen</span>
+                <span className="jcf-upload-button">
+                  <span className="jcf-button-content">Choose file</span>
+                </span>
+                <Field
+                  type="file"
+                  name="uploadFile"
+                  component={Input}
+                  className="jcf-real-element"
+                  id="upload-patient"
+                  onChange={this.uploadFile}
+                />
+              </span>
+            </label>
+
+          </div>
+          {fileUploaded && <Button className="clear-import-button" onClick={() => clearForm()}><i className="fa fa-times" aria-hidden="true" /></Button>}
+
+        </Form>
+
+        <span className="or">
+          <span>or</span>
+        </span>
+        <a className="add-patient-info-import" onClick={toggleAddPatient}>
+          <div className="table">
+            <div className="table-cell">
+              <i className="icomoon-icon_plus_alt" />
+              <span className="text">Add Patient</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    );
   }
 
   render() {
