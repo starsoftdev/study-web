@@ -218,12 +218,10 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
               </Modal.Header>
               <Modal.Body>
                 <div className="holder clearfix">
-                  <div className="form-lightbox">
-                    <EditSiteForm
-                      initialValues={selectedSiteDetailsForForm}
-                      onSubmit={this.updateSite}
-                    />
-                  </div>
+                  <EditSiteForm
+                    initialValues={selectedSiteDetailsForForm}
+                    onSubmit={this.updateSite}
+                  />
                 </div>
               </Modal.Body>
             </Modal>
