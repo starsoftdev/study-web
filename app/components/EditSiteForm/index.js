@@ -152,6 +152,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                 return (<Geosuggest
                   ref={(el) => { this.geoSuggest = el; }}
                   onSuggestSelect={this.onSuggestSelect}
+                  placeholder=""
                 />);
               })()}
             </div>

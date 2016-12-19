@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 
 import varImage from 'assets/images/img10.svg';
 import bubbleImage from 'assets/images/foot.svg';
+import Helmet from 'react-helmet';
 
 
 export class BadgesPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -16,6 +17,7 @@ export class BadgesPage extends React.Component { // eslint-disable-line react/p
   render() {
     return (
       <div className="container-fluid">
+        <Helmet title="Badges - StudyKIK" />
         <div className="coming-soon">
           <div className="table-box">
             <div className="table-cell">

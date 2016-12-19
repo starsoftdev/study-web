@@ -11,6 +11,7 @@ import AllEventsModal from './components/AllEventsModal';
 
 import moment from 'moment';
 import _ from 'lodash';
+import Helmet from 'react-helmet';
 
 import {
   fetchSites,
@@ -241,6 +242,7 @@ export class CalendarPage extends React.Component {
 
     return (
       <div className="container-fluid">
+        <Helmet title="Calendar - StudyKIK" />
         <section className="calendar-section">
           <h2 className="main-heading">CALENDAR</h2>
           <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
