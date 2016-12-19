@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
-
+import moment from 'moment';
 import { defaultRanges, DateRange } from 'react-date-range';
 // import Modal from 'react-bootstrap/lib/Modal';
 // import CenteredModal from '../CenteredModal/index';
@@ -36,6 +36,7 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
     this.hidePopup = this.hidePopup.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this, 'predefined');
+    this.renderDateFooter = this.renderDateFooter.bind(this);
 
     this.state = {
       showPopup: false,
@@ -46,8 +47,6 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
       predefined : {},
     };
   }
-
-  componentWillReceiveProps() {}
 
   handleChange(which, payload) {
     this.setState({
@@ -79,9 +78,27 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
     this.hidePopup();
   }
 
-  render() {
+  renderDateFooter() {
     const { predefined } = this.state;
-    const format = 'MMM D YYYY';
+    if (predefined.startDate) {
+      const format = 'MMM D, YYYY';
+      if (predefined.startDate.isSameOrAfter(predefined.endDate, 'day')) {
+        return (
+          <span className="time">
+            {moment(predefined.startDate).format(format)}
+          </span>
+        );
+      }
+      return (
+        <span className="time">
+          {moment(predefined.startDate).format(format)} - {moment(predefined.endDate).format(format)}
+        </span>
+      );
+    }
+    return null;
+  }
+
+  render() {
     const { siteLocations } = this.props;
     const state = this.state;
     return (
@@ -192,6 +209,8 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
                     }}
                     linkedCalendars
                     ranges={defaultRanges}
+                    startDate={this.state.predefined.startDate ? this.state.predefined.startDate : moment()}
+                    endDate={this.state.predefined.endDate ? this.state.predefined.endDate : moment().add(1, 'M')}
                     onInit={this.handleChange}
                     onChange={this.handleChange}
                   />
@@ -199,10 +218,8 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
                     <div className="emit-border"><br /></div>
                     <div className="right-part">
                       <div className="btn-block text-right">
-                        <span className="left">{ predefined.startDate && predefined.startDate.format(format).toString() } -</span>
-                        <span className="right">{ predefined.endDate && predefined.endDate.format(format).toString() }</span>
+                        {this.renderDateFooter()}
                         <a
-                          href="#"
                           className="btn btn-default lightbox-close"
                           onClick={this.changeRange}
                         >
@@ -215,7 +232,7 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
               </div>
             </div>
           </div>
-          <a href="#" className="overlay lightbox-close" onClick={this.hidePopup} />
+          <a className="overlay lightbox-close" onClick={this.hidePopup} />
         </div>
       </form>
     );
