@@ -9,8 +9,6 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Select from 'react-select';
 import classNames from 'classnames';
 
-import './styles.less';
-
 function ReactSelect({
   input,
   name,
