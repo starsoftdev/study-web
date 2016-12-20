@@ -30,7 +30,6 @@ import PatientItem from './PatientItem';
 import { normalizePhone, normalizePhoneDisplay } from '../../StudyPage/helper/functions';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
-import './styles.less';
 
 const formName = 'PatientDatabase.TextBlastModal';
 
@@ -229,7 +228,14 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
         </StickyContainer>
 
         <div className="patients">
-          <Modal className="edit-patient" dialogComponentClass={CenteredModal} show={editPatientModalShown} onHide={this.closeEditPatientModal}>
+          <Modal
+            className="edit-patient"
+            dialogComponentClass={CenteredModal}
+            show={editPatientModalShown}
+            onHide={this.closeEditPatientModal}
+            backdrop
+            keyboard
+          >
             <Modal.Header>
               <Modal.Title>
                 <strong>Information</strong>
@@ -248,8 +254,11 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
           {(chat)
             ?
             <Modal className="chat-patient" dialogComponentClass={CenteredModal} show={chatModalShown} onHide={this.closeChat}>
-              <Modal.Header closeButton>
+              <Modal.Header>
                 <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeRenewModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
               </Modal.Header>
               <Modal.Body>
                 <ChatForm chat={chat} sendStudyPatientMessages={sendStudyPatientMessages} />

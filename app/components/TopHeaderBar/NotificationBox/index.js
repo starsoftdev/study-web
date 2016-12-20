@@ -72,7 +72,6 @@ class NotificationBox extends React.Component {
     return (
       <div className="notifications pull-left open-close">
         <a
-          href="#"
           className={classNames('opener', { active: this.state.dropdownOpen })}
           onClick={() => this.handleBadgeNumberClick()}
         >

@@ -41,7 +41,7 @@ class CallItem extends Component { // eslint-disable-line react/prefer-stateless
           if (messageData.twilioCallRecord.duration === 0) {
             return (
               <div className="global-pms-chat-call-record-text" data-post="1">
-                <i className="icomoon-icon-incoming"></i>
+                <i className="icomoon-icon-incoming" />
                 <div>Missed call from {senderName}.</div>
                 <time >{cdate}</time>
               </div>
@@ -51,7 +51,7 @@ class CallItem extends Component { // eslint-disable-line react/prefer-stateless
             const durationStr = moment.utc(ms).format('HH:mm:ss');
             return (
               <div className="global-pms-chat-call-record-text" data-post="1">
-                <i className="icomoon-icon-call-end"></i>
+                <i className="icomoon-icon-call-end" />
                 <div>Call ended, duration {durationStr}.</div>
                 <time >{cdate}</time>
               </div>
@@ -59,7 +59,7 @@ class CallItem extends Component { // eslint-disable-line react/prefer-stateless
           }
           return (
             <div className="global-pms-chat-call-record-text" data-post="1">
-              <i className="icomoon-icon-outgoing"></i>
+              <i className="icomoon-icon-outgoing" />
               <div>Call from {senderName}.</div>
               <time >{cdate}</time>
             </div>

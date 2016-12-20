@@ -61,7 +61,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
           <Modal.Header>
             <Modal.Title>SELECT REWARD</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closeModal}>
-              <i className="icomoon-icon_close"></i>
+              <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>
@@ -126,7 +126,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                   </li>
                 </ul>
                 <div className="btn-block text-right">
-                  <a href="#" className="lightbox-close btn btn-primary" onClick={handleSubmit}>Redeem</a>
+                  <a className="lightbox-close btn btn-primary" onClick={handleSubmit}>Redeem</a>
                 </div>
               </div>
             </div>

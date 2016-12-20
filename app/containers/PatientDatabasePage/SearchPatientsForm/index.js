@@ -132,7 +132,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     const itemTemplate = (controlSelectedValue) => (
       <div key={controlSelectedValue.value}>
         {controlSelectedValue.label}
-        <i className="close-icon icomoon-icon_close"></i>
+        <i className="close-icon icomoon-icon_close" />
       </div>
     );
 

@@ -386,7 +386,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               backdrop
               keyboard
             >
-              <Modal.Header closeButton>
+              <Modal.Header>
                 <Modal.Title>Renew Study</Modal.Title>
                 <a className="lightbox-close close" onClick={this.closeRenewModal}>
                   <i className="icomoon-icon_close" />

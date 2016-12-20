@@ -101,7 +101,15 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
     ];
     return (
       <div>
-        <Modal dialogComponentClass={CenteredModal} className="add-credits" id="add-credits" show={this.props.showModal} onHide={this.props.closeModal}>
+        <Modal
+          className="add-credits"
+          id="add-credits"
+          dialogComponentClass={CenteredModal}
+          show={this.props.showModal}
+          onHide={this.props.closeModal}
+          backdrop
+          keyboard
+        >
           <Modal.Header>
             <Modal.Title>Add Credits</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closeModal}>

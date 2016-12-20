@@ -123,10 +123,10 @@ class PatientActionButtons extends React.Component {
     return (
       <div className="btns-popups">
         <div className="col pull-right">
-          <a onClick={this.download} className="btn btn-primary download"><i className="icomoon-icon_download"></i> Download</a>
+          <a onClick={this.download} className="btn btn-primary download"><i className="icomoon-icon_download" /> Download</a>
         </div>
         <div className="col pull-right">
-          <label htmlFor="file" className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload"></i> Import</label>
+          <label htmlFor="file" className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload" /> Import</label>
           <input
             type="file"
             id="file"
@@ -137,7 +137,7 @@ class PatientActionButtons extends React.Component {
           />
         </div>
         <div className="col pull-right">
-          <a className="btn btn-primary email lightbox-opener" onClick={this.toggleTextEmailBlastModal}><i className="icomoon-icon_chat_alt"></i> TEXT / EMAIL BLAST</a>
+          <a className="btn btn-primary email lightbox-opener" onClick={this.toggleTextEmailBlastModal}><i className="icomoon-icon_chat_alt" /> TEXT / EMAIL BLAST</a>
         </div>
         <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} toggleTextBlast={this.toggleTextBlastModal} />
         <AlertModal show={this.state.showAlertModal} onHide={this.toggleAlertModal} />
