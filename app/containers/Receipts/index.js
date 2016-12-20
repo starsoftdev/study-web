@@ -74,10 +74,6 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     this.props.getReceipts(15, 0, this.props.receipts);
   }
 
-  componentWillReceiveProps() {
-    // console.log('componentWillReceiveProps', nextProps);
-  }
-
   getPDF() {
     if (this.selectedReceipts) {
       this.props.getPDF(this.selectedReceipts);

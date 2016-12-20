@@ -170,7 +170,6 @@ function* fetchStudyTextStats() {
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
-    console.log('response', response);
     yield put(textStatsFetched(response));
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
