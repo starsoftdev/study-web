@@ -7,7 +7,6 @@
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
-import classNames from 'classnames';
 
 const headers = [
   {
