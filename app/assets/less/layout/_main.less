@@ -1903,12 +1903,6 @@ th, .th {
 		background: #a0cf67;
 	}
 
-	.selected {
-		.lightbox-opener {
-			//padding-top: 2px;
-		}
-	}
-
 	.list-holder {
 		max-height: 80px;
 		padding: 0 12px;
@@ -3722,19 +3716,28 @@ th, .th {
   overflow: auto !important;
 }
 
+/**********************/
+/*	React Input, multi select and date picker components */
+/**********************/
+@import '../../../components/Input/styles';
+@import '../layout/_react_multi_select';
+@import '../../../components/Input/date-picker';
+/**********************/
+/*	React geosuggest component */
+/**********************/
+@import '../layout/_react_geosuggest';
+/**********************/
+/*	Shopping cart form component */
+/**********************/
+@import '../../../components/ShoppingCartForm/styles';
 /*****************/
 /* top header bar  */
 /*****************/
 @import '../../../components/AddCreditsModal/styles.less';
 /*****************/
-/* home page */
+/* profile page  */
 /*****************/
-@import "../../../containers/HomePage/Dashboard/styles.less";
-@import "../../../containers/HomePage/StudiesList/styles.less";
-/*****************/
-/* calendar page  */
-/*****************/
-@import "../../../containers/CalendarPage/styles.less";
+@import "../../../components/ProfileForm/styles.less";
 /*****************/
 /* proposals page  */
 /*****************/
@@ -3746,6 +3749,20 @@ th, .th {
 /*****************/
 @import "../../../containers/Receipts/styles.less";
 /*****************/
+/* home page */
+/*****************/
+@import "../../../containers/HomePage/Dashboard/styles.less";
+@import "../../../containers/HomePage/StudiesList/styles.less";
+/*****************/
+/* calendar page  */
+/*****************/
+@import "../../../containers/CalendarPage/styles.less";
+/*****************/
+/* patient database page  */
+/*****************/
+@import "../../../containers/PatientDatabasePage/styles.less";
+@import "../../../containers/PatientDatabasePage/PatientsList/styles.less";
+/*****************/
 /* manage sites/users page  */
 /*****************/
 @import '../../../containers/SitesUsersPage/styles.less';
@@ -3755,16 +3772,3 @@ th, .th {
 /* rewards page  */
 /*****************/
 @import '../../../containers/RewardsPage/styles';
-/**********************/
-/*	React multi select component */
-/**********************/
-@import '../../../components/Input/styles';
-@import '../layout/_react_multi_select';
-/**********************/
-/*	React geosuggest component */
-/**********************/
-@import '../layout/_react_geosuggest';
-/**********************/
-/*	React Date Picker component */
-/**********************/
-@import '../../../components/Input/date-picker';

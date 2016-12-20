@@ -195,7 +195,15 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
                 </tbody>
               </table>
             </div>
-            <Modal dialogComponentClass={CenteredModal} className="edit-user" id="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
+            <Modal
+              className="edit-user"
+              id="edit-user"
+              dialogComponentClass={CenteredModal}
+              show={editUserModalShown}
+              onHide={this.closeEditUserModal}
+              backdrop
+              keyboard
+            >
               <Modal.Header>
                 <Modal.Title>Edit User</Modal.Title>
                 <a className="lightbox-close close" onClick={this.closeEditUserModal}>

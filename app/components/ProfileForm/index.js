@@ -11,7 +11,6 @@ import Input from 'components/Input';
 import ChangePasswordForm from 'components/ChangePasswordForm';
 import ProfileImageForm from 'components/ProfileImageForm';
 import defaultImage from 'assets/images/Default-User-Img-Dr.png';
-import './styles.less';
 import 'blueimp-canvas-to-blob';
 import CenteredModal from 'components/CenteredModal/index';
 
@@ -76,9 +75,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
       },
     };
     return (
-      <form className="form-study">
-
-
+      <form>
         <div className="field-row label-top file-img active">
           <strong className="label"><label htmlFor="profile-img">PROFILE IMAGE</label></strong>
           <div className="field">
@@ -93,9 +90,9 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         </div>
 
         <div className="field-row">
-          <strong className="label"></strong>
+          <strong className="label" />
           <div className="field">
-            <a href="#" className="btn btn-gray upload-btn lightbox-opener" onClick={this.openProfileImageModal}>Update Profile Image</a>
+            <a className="btn btn-gray upload-btn" onClick={this.openProfileImageModal}>Update Profile Image</a>
           </div>
         </div>
 
@@ -137,27 +134,38 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
 
         <div className="field-row">
           <strong className="label"><label>PASSWORD</label></strong>
-          <a className="btn btn-primary lightbox-opener profile-page-edit-password-btn" onClick={this.openResetPasswordModal} disabled={!me}>EDIT</a>
+          <a className="btn btn-primary" onClick={this.openResetPasswordModal} disabled={!me}>EDIT</a>
         </div>
-
-
-        <Modal className="custom-modal" dialogComponentClass={CenteredModal} show={this.state.passwordResetModalOpen} onHide={this.closeResetPasswordModal}>
+        <Modal
+          className="profile-page-modal"
+          dialogComponentClass={CenteredModal}
+          show={this.state.passwordResetModalOpen}
+          onHide={this.closeResetPasswordModal}
+          backdrop
+          keyboard
+        >
           <Modal.Header>
             <Modal.Title>CHANGE PASSWORD</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeResetPasswordModal}>
-              <i className="icomoon-icon_close"></i>
+              <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>
             <ChangePasswordForm {...initialValues} onSubmit={this.props.changePassword} />
           </Modal.Body>
         </Modal>
-
-        <Modal className="custom-modal avatar-modal" dialogComponentClass={CenteredModal} show={this.state.profileImageModalOpen} onHide={this.closeProfileImageModal}>
+        <Modal
+          className="profile-page-modal avatar-modal"
+          dialogComponentClass={CenteredModal}
+          show={this.state.profileImageModalOpen}
+          onHide={this.closeProfileImageModal}
+          backdrop
+          keyboard
+        >
           <Modal.Header>
             <Modal.Title>UPDATE PROFILE IMAGE</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeProfileImageModal}>
-              <i className="icomoon-icon_close"></i>
+              <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>

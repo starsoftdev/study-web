@@ -96,19 +96,19 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
           <header className="sub-header clearfix">
             <h3 className="pull-left">Wayne Enterprise Has <strong>450 KIKs</strong></h3>
-            <a className="btn bgn-chat lightbox-opener pull-right" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal}></a>
+            <a className="btn bgn-chat pull-right" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal}></a>
             <RewardModal siteLocations={siteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} onSubmit={this.onSubmitForm} />
           </header>
 
           <div className="row images-area">
             <div className="col-xs-4 pull-left">
-              <a href="#" className="lightbox-opener option3" data-for="radio-option3" onClick={this.openRewardModal}><img alt="" src={cardStudykik} /></a>
+              <a className="option3" data-for="radio-option3" onClick={this.openRewardModal}><img alt="" src={cardStudykik} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a href="#" className="lightbox-opener option1" data-for="radio-option1" onClick={this.openRewardModal}><img alt="" src={cardStarbucks} /></a>
+              <a className="option1" data-for="radio-option1" onClick={this.openRewardModal}><img alt="" src={cardStarbucks} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a href="#" className="lightbox-opener option2" data-for="radio-option2" onClick={this.openRewardModal}><img alt="" src={cardAmazon} /></a>
+              <a className="option2" data-for="radio-option2" onClick={this.openRewardModal}><img alt="" src={cardAmazon} /></a>
             </div>
           </div>
 

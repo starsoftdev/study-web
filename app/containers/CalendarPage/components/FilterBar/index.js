@@ -178,7 +178,7 @@ class FilterBar extends Component {
               <input type="search" id="search" className="form-control keyword-search" placeholder="Search"
                 onChange={(ev) => this.handleFilterChange('patientName', ev.target)}
               />
-              <label htmlFor="search"><i className="icomoon-icon_search2"></i></label>
+              <label htmlFor="search"><i className="icomoon-icon_search2" /></label>
             </div>
           </div>
           <div className="pull-left custom-select">

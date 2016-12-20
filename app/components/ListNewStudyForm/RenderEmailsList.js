@@ -107,7 +107,7 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
           <Modal.Header>
             <Modal.Title>ADD EMAIL NOTIFICATION</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddEmailModal}>
-              <i className="icomoon-icon_close"></i>
+              <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>
