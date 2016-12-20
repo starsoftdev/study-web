@@ -329,13 +329,13 @@ export default class SchedulePatientModal extends Component {
         }
 
         {modalType === SchedulePatientModalType.UPDATE &&
-          <div id="edit-scedule" className="lightbox lightbox-active fixed-popup">
+          <div id="edit-schedule" className="lightbox lightbox-active fixed-popup">
             <div className="lightbox-holder">
               <div className="lightbox-frame">
                 <div className="lightbox-content">
                   <div className="head">
                     <strong className="title">EDIT SCHEDULE</strong>
-                    <a className="close lightbox-close" href="#" onClick={handleCloseModal}><i className="icomoon-icon_close"></i></a>
+                    <a className="close lightbox-close" href="#" onClick={handleCloseModal}><i className="icomoon-icon_close" /></a>
                   </div>
                   <div className="scroll-holder">
                     <form action="#" className="form-lightbox form-edit-schedule" onSubmit={handleSubmit}>

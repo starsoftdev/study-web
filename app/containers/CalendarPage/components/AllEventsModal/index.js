@@ -31,13 +31,13 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, handleEdit, s
             <div className="lightbox-content">
               <div className="head">
                 <strong className="title">{moment(date).format('dddd, MMMM DD, YYYY')}</strong>
-                <a className="lightbox-close close" onClick={handleCloseModal}><i className="icomoon-icon_close"></i></a>
+                <a className="lightbox-close close" onClick={handleCloseModal}><i className="icomoon-icon_close" /></a>
               </div>
               <div className="scroll-holder jcf--scrollable">
                 <div className="list-head clearfix">
                   <div onClick={sortBy} data-sort="patientName" className={(paginationOptions.activeSort === 'patientName') ? `${paginationOptions.activeDirection} col patient-name` : 'col patient-name'}>Patient <i className="caret-arrow" /></div>
-                  <div className="col site-location hidden">Site Location <i className="caret-arrow"></i></div>
-                  <div className="col protocol hidden">Protocol <i className="caret-arrow"></i></div>
+                  <div className="col site-location hidden">Site Location <i className="caret-arrow" /></div>
+                  <div className="col protocol hidden">Protocol <i className="caret-arrow" /></div>
                   <div onClick={sortBy} data-sort="time" className={(paginationOptions.activeSort === 'time') ? `${paginationOptions.activeDirection} col time` : 'col time'}>Time <i className="caret-arrow" /></div>
                 </div>
                 <div className="patient-list">
@@ -46,7 +46,7 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, handleEdit, s
                       {
                         sorted.map((event, index) => (
                           <li key={index}>
-                            <a href="#edit-scedule" className="btn btn-gray-outline lightbox-opener">
+                            <a href="#edit-schedule" className="btn btn-gray-outline lightbox-opener">
                               <span className="patient-name">{`${event.data.patient.firstName} ${event.data.patient.lastName}`}</span>
                               <span className="time">{moment(event.data.time).format('h:mm A')}</span>
                               <span
