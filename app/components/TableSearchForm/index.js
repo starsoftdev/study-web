@@ -154,8 +154,8 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
         <Modal
           id="date-range"
           className="date-range-modal"
-          show={state.showPopup}
           dialogComponentClass={CenteredModal}
+          show={state.showPopup}
           onHide={this.hidePopup}
           backdrop
           keyboard

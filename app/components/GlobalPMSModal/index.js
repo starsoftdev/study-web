@@ -182,7 +182,15 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
           playStatus={this.state.playSound}
           onFinishedPlaying={this.onSoundFinished}
         />
-        <Modal className="custom-modal global-pms" dialogComponentClass={CenteredModal} id="chart-popup" show={this.props.showModal} onHide={this.props.closeModal}>
+        <Modal
+          className="custom-modal global-pms"
+          id="chart-popup"
+          dialogComponentClass={CenteredModal}
+          show={this.props.showModal}
+          onHide={this.props.closeModal}
+          backdrop
+          keyboard
+        >
           <Modal.Header>
             <Modal.Title>PATIENT MESSAGING SUITE</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closeModal}>
@@ -204,7 +212,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                           this.searchKey = searchKey;
                         }}
                       />
-                      <i className="icomoon-icon_search2"></i>
+                      <i className="icomoon-icon_search2" />
                     </div>
                   </div>
                   <ul className="tabset list-unstyled">

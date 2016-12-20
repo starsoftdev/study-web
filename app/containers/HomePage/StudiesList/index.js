@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
 import _, { countBy, find, filter, sumBy } from 'lodash';
 
+import CenteredModal from '../../../components/CenteredModal/index';
 import { fetchLevels } from 'containers/App/actions';
 import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients } from 'containers/App/selectors';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
@@ -18,7 +19,6 @@ import RenewStudyForm from 'containers/HomePage/RenewStudyForm';
 import UpgradeStudyForm from 'containers/HomePage/UpgradeStudyForm';
 import EditStudyForm from 'containers/HomePage/EditStudyForm';
 import ShoppingCartForm from 'components/ShoppingCartForm';
-import './styles.less';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -364,7 +364,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                     <th onClick={this.sortBy} data-sort="sponsor" className={(this.props.paginationOptions.activeSort === 'sponsor') ? this.props.paginationOptions.activeDirection : ''}>SPONSOR<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="protocol" className={(this.props.paginationOptions.activeSort === 'protocol') ? this.props.paginationOptions.activeDirection : ''}>PROTOCOL<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="patientMessagingSuite" className={(this.props.paginationOptions.activeSort === 'patientMessagingSuite') ? this.props.paginationOptions.activeDirection : ''}>
-                      <span className="icomoon-credit" data-original-title="Patient Messaging Suite"></span><i className="caret-arrow" />
+                      <span className="icomoon-credit" data-original-title="Patient Messaging Suite" />
+                      <i className="caret-arrow" />
                     </th>
                     <th onClick={this.sortBy} data-sort="status" className={(this.props.paginationOptions.activeSort === 'status') ? this.props.paginationOptions.activeDirection : ''}>STATUS<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="startDate" className={(this.props.paginationOptions.activeSort === 'startDate') ? this.props.paginationOptions.activeDirection : ''}>START DATE<i className="caret-arrow" /></th>
@@ -376,71 +377,98 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                 </tbody>
               </table>
             </div>
-            <Modal className="renew-study-modal" id="renew-study" show={this.state.renewModalOpen} onHide={this.closeRenewModal} bsSize="large">
+            <Modal
+              className="renew-study-modal"
+              id="renew-study"
+              dialogComponentClass={CenteredModal}
+              show={this.state.renewModalOpen}
+              onHide={this.closeRenewModal}
+              backdrop
+              keyboard
+            >
               <Modal.Header closeButton>
                 <Modal.Title>Renew Study</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeRenewModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
               </Modal.Header>
               <Modal.Body>
-                <div className="holder clearfix">
-                  <div className="form-study">
-                    <div className="pull-left col">
-                      <div className="scroll jcf--scrollable">
-                        <div className="holder-inner">
-                          <RenewStudyForm />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="pull-left col">
-                      <ShoppingCartForm
-                        showCards
-                        noBorder
-                        addOns={addOns}
-                        disableSubmit={renewStudyFormError}
-                        onSubmit={this.handleRenewStudyFormSubmit}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </Modal.Body>
-            </Modal>
-            <Modal className="upgrade-study-modal" id="upgrade-study" show={this.state.upgradeModalOpen} onHide={this.closeUpgradeModal} bsSize="large">
-              <Modal.Header closeButton>
-                <Modal.Title>Upgrade Study</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <div className="holder clearfix">
-                  <div className="form-study">
-                    <div className="pull-left col">
-                      <div className="scroll jcf--scrollable">
-                        <div className="holder-inner">
-                          <UpgradeStudyForm />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="pull-left col">
-                      <ShoppingCartForm
-                        showCards
-                        noBorder
-                        addOns={addOns}
-                        disableSubmit={upgradeStudyFormError}
-                        onSubmit={this.handleUpgradeStudyFormSubmit}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </Modal.Body>
-            </Modal>
-            <Modal className="edit-study-modal" id="edit-study" show={this.state.editModalOpen} onHide={this.closeEditModal} bsSize="large">
-              <Modal.Header closeButton>
-                <Modal.Title>Edit Information</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <div className="holder clearfix">
-                  <div className="form-study">
+                <div className="form-study">
+                  <div className="pull-left col">
                     <div className="scroll jcf--scrollable">
                       <div className="holder-inner">
-                        <EditStudyForm siteUsers={this.state.selectedSiteUsers} onSubmit={this.handleEditStudyFormSubmit} />
+                        <RenewStudyForm />
                       </div>
+                    </div>
+                  </div>
+                  <div className="pull-left col">
+                    <ShoppingCartForm
+                      showCards
+                      noBorder
+                      addOns={addOns}
+                      disableSubmit={renewStudyFormError}
+                      onSubmit={this.handleRenewStudyFormSubmit}
+                    />
+                  </div>
+                </div>
+              </Modal.Body>
+            </Modal>
+            <Modal
+              className="upgrade-study-modal"
+              id="upgrade-study"
+              dialogComponentClass={CenteredModal}
+              show={this.state.upgradeModalOpen}
+              onHide={this.closeUpgradeModal}
+              backdrop
+              keyboard
+            >
+              <Modal.Header>
+                <Modal.Title>Upgrade Study</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeUpgradeModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="form-study">
+                  <div className="pull-left col">
+                    <div className="scroll jcf--scrollable">
+                      <div className="holder-inner">
+                        <UpgradeStudyForm />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="pull-left col">
+                    <ShoppingCartForm
+                      showCards
+                      noBorder
+                      addOns={addOns}
+                      disableSubmit={upgradeStudyFormError}
+                      onSubmit={this.handleUpgradeStudyFormSubmit}
+                    />
+                  </div>
+                </div>
+              </Modal.Body>
+            </Modal>
+            <Modal
+              className="edit-study-modal"
+              id="edit-study"
+              dialogComponentClass={CenteredModal}
+              show={this.state.editModalOpen}
+              onHide={this.closeEditModal}
+              backdrop
+              keyboard
+            >
+              <Modal.Header>
+                <Modal.Title>Edit Information</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeEditModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="form-study">
+                  <div className="scroll jcf--scrollable">
+                    <div className="holder-inner">
+                      <EditStudyForm siteUsers={this.state.selectedSiteUsers} onSubmit={this.handleEditStudyFormSubmit} />
                     </div>
                   </div>
                 </div>

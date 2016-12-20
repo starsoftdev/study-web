@@ -10,7 +10,6 @@ import { submitForm } from 'containers/RewardsPage/actions';
 import { fetchPatientSignUps, fetchPatientMessages, fetchRewardsPoint } from '../actions';
 import { selectPatientSignUps, selectPatientMessages, selectRewardsPoint } from '../selectors';
 
-import './styles.less';
 import { sumBy } from 'lodash';
 import graph from 'assets/images/graph.svg';
 
@@ -69,18 +68,18 @@ export class Dashboard extends React.Component {
           <div className="box">
             <div className="col pull-left">
               <span className="sub-title">Yesterday</span>
-              <strong className="number">{patientSignUps.yesterday} <span className="caret-holder"><i className="caret"></i></span></strong>
+              <strong className="number">{patientSignUps.yesterday} <span className="caret-holder"><i className="caret" /></span></strong>
             </div>
             <div className="col pull-right">
               <span className="sub-title">Today</span>
-              <strong className="number">{patientSignUps.today} <span className="caret-holder"><i className="caret"></i><i className="caret"></i></span></strong>
+              <strong className="number">{patientSignUps.today} <span className="caret-holder"><i className="caret" /><i className="caret" /></span></strong>
             </div>
           </div>
         </article>
         <article className="col-xs-4 msg-info">
           <div className="box">
             <div className="messages-counter pull-left">
-              <i className="icomoon-icon_comment_alt"></i>
+              <i className="icomoon-icon_comment_alt" />
               <strong className="number hidden">72</strong>
             </div>
             <div className="textbox">
@@ -91,20 +90,20 @@ export class Dashboard extends React.Component {
           <div className="box">
             <div className="col pull-left">
               <span className="sub-title">UNREAD<br /> EMAILS</span>
-              <strong className="number"><i className="icomoon-envelop"></i> {patientMessages.unreadEmails}</strong>
+              <strong className="number"><i className="icomoon-envelop" /> {patientMessages.unreadEmails}</strong>
             </div>
             <div className="col pull-right">
               <span className="sub-title">UNREAD<br /> TEXTS</span>
-              <strong className="number"><i className="icomoon-icon_chat_alt"></i> {unreadTexts}</strong>
+              <strong className="number"><i className="icomoon-icon_chat_alt" /> {unreadTexts}</strong>
             </div>
           </div>
         </article>
         <article className="col-xs-4 rewards-info">
           <div className="box">
-            <i className="icomoon-gift pull-left"></i>
+            <i className="icomoon-gift pull-left" />
             <div className="textbox">
               <h2>REWARDS</h2>
-              <a href="#popup-rewards" className="btn btn-info lightbox-opener" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal}>Redeem</a>
+              <a className="btn btn-info lightbox-opener" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal}>Redeem</a>
               <span className="counter">{rewardsPoint} KIK<span className="small text-lowercase">s</span></span>
             </div>
           </div>
