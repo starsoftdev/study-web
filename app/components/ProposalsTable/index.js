@@ -343,19 +343,13 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       result.push(
         <tr key={key}>
           <td>
-            <span className={classNames('jcf-checkbox', { 'jcf-checked': source.selected, 'jcf-unchecked': !source.selected })}>
-              <span
-                className="input-style"
-                onClick={this.onClickCurrent}
-              >
-                <input
-                  type="checkbox"
-                  name={key}
-                />
+            <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
+              <span className="input-style" onClick={this.onClickCurrent}>
+                <input type="checkbox" name={key} />
               </span>
             </span>
+            <span>{source.order_number}</span>
           </td>
-          <td><span>{source.order_number}</span></td>
           <td>{dateWrapper}</td>
           <td>{source.site}</td>
           <td>{proposalLink}</td>
@@ -380,8 +374,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         <table className="table">
           <caption />
           <colgroup>
-            <col style={{ width: '2.5%' }} />
-            <col style={{ width: '4%' }} />
+            <col style={{ width: '6.5%' }} />
             <col style={{ width: '11%' }} />
             <col style={{ width: '24%' }} />
             <col style={{ width: '25%' }} />
@@ -390,19 +383,19 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           </colgroup>
           <thead>
             <tr>
-              <th>
-                <span className={(this.state.checkAll) ? 'jcf-checkbox jcf-checked' : 'jcf-checkbox jcf-unchecked'}>
+              <th className={`${(state.activeSort === 'orderNumber') ? state.activeDirection : ''}`}>
+                <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
                   <span className="input-style" onClick={this.onClickAll}>
                     <input name="all" type="checkbox" />
                   </span>
                 </span>
-              </th>
-              <th
-                data-sort="order_number"
-                onClick={this.sortBy}
-                className={(state.activeSort === 'order_number') ? state.activeDirection : ''}
-              >
-                #<i className="caret-arrow" />
+                <span
+                  data-sort="order_number"
+                  onClick={this.sortBy}
+                  className={(state.activeSort === 'order_number') ? state.activeDirection : ''}
+                >
+                  #<i className="caret-arrow" />
+                </span>
               </th>
               {heads}
             </tr>
