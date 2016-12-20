@@ -44,6 +44,13 @@ export default class DatePicker extends Component {
     this.handleInit(this.props.initialDate);
   }
 
+  setToBeDetermined = () => {
+    this.setState({
+      date: null,
+    });
+    this.props.input.onBlur(null);
+  }
+
   handleInit(date) {
     this.setState({
       date,
@@ -83,12 +90,13 @@ export default class DatePicker extends Component {
     delete rest.input;
     delete rest.meta;
     delete rest.initialDate;
+    const inputValue = (date === null) ? 'To Be Determined' : moment(date).format(dateStyle);
     const inputComponent = (
       <input
         type="text"
         name={name}
         readOnly
-        value={moment(date).format(dateStyle)}
+        value={inputValue}
         {...rest}
       />
     );
@@ -120,7 +128,7 @@ export default class DatePicker extends Component {
             Today: {currentDate.format('dddd, MMMM Do, YYYY')}
           </div>
           <div className="link-holder text-center">
-            <a onClick={() => { this.toggleModal(false); }}>To Be Determined</a>
+            <a onClick={() => { this.setToBeDetermined(); this.toggleModal(false); }}>To Be Determined</a>
           </div>
         </Modal.Body>
       </Modal>
