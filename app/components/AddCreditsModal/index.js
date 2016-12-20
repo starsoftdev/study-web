@@ -6,12 +6,13 @@
 
 import React from 'react';
 import { Modal } from 'react-bootstrap';
-import ShoppingCartForm from 'components/ShoppingCartForm';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+
+import CenteredModal from '../../components/CenteredModal/index';
+import ShoppingCartForm from 'components/ShoppingCartForm';
 import { addCredits, getCreditsPrice } from 'containers/App/actions';
 import { selectCurrentUser, selectAddCredits, selectCreditsPrice } from 'containers/App/selectors';
-import './styles.less';
 
 class AddCreditsModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -100,7 +101,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
     ];
     return (
       <div>
-        <Modal className="custom-modal add-credits" id="add-credits" show={this.props.showModal} onHide={this.props.closeModal}>
+        <Modal dialogComponentClass={CenteredModal} className="add-credits" id="add-credits" show={this.props.showModal} onHide={this.props.closeModal}>
           <Modal.Header>
             <Modal.Title>Add Credits</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closeModal}>
