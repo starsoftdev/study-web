@@ -52,12 +52,10 @@ export function* setSocketConnection() {
         const nsp = window.io(requestURL);
         socket = nsp;
         yield put(connectionEstablished(nsp));
-        yield put(toastrActions.success('', 'Connected to socket.'));
         payload.cb(null, socket);
       }
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      console.trace('Socket error', err);
       payload.cb(err, null);
     }
   }
