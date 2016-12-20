@@ -38,6 +38,7 @@ import {
   SET_CURRENT_PATIENT_CATEGORY_ID,
   SET_OPEN_PATIENT_MODAL,
   SCHEDULE_PATIENT,
+  SHOW_SCHEDULED_MODAL,
   SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
   MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
@@ -402,6 +403,11 @@ export function movePatientBetweenCategoriesFailed() {
   };
 }
 
+export function showScheduledModal() {
+  return {
+    type: SHOW_SCHEDULED_MODAL,
+  };
+}
 export function submitTextBlast(patients, message, onClose) {
   return {
     type: SUBMIT_TEXT_BLAST,

@@ -118,3 +118,7 @@ export const selectOpenPatientModal = () => createSelector(
   (subState) => subState.openPatientModal
 );
 
+export const selectOpenScheduledModal = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.openScheduledModal
+)

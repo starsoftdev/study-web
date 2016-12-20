@@ -16,6 +16,7 @@ import PatientDetailModal from '../PatientDetail/PatientDetailModal';
 import ScheduledPatientModal from '../ScheduledPatientModal/index';
 import {
   fetchPatientDetails,
+  showScheduledModal,
   setCurrentPatientCategoryId,
   setCurrentPatientId,
   setOpenPatientModal,
@@ -35,10 +36,12 @@ class PatientBoard extends React.Component {
     currentPatientCategoryId: React.PropTypes.number,
     fetchPatientDetails: React.PropTypes.func.isRequired,
     openPatientModal: React.PropTypes.bool.isRequired,
+    openScheduledModal: React.PropTypes.bool.isRequired,
     patientCategories: React.PropTypes.array.isRequired,
     setCurrentPatientId: React.PropTypes.func.isRequired,
     setCurrentPatientCategoryId: React.PropTypes.func.isRequired,
     setOpenPatientModal: React.PropTypes.func.isRequired,
+    showScheduledModal: React.PropTypes.func.isRequired,
     switchToNoteSection: React.PropTypes.func.isRequired,
     switchToTextSection: React.PropTypes.func.isRequired,
     push: React.PropTypes.func.isRequired,
@@ -144,10 +147,10 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, studyId } = this.props;
+    const { patientCategories, openPatientModal, studyId, openScheduledModal, showScheduledModal } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
-        <div className={classNames('patients-list-area', { 'form-active': openPatientModal })}>
+        <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !showScheduledModal })}>
           <nav className="nav-status">
             <ul className={classNames('list-inline', { stick: this.state.stick })}>
               {patientCategories.map(patientCategory => (
@@ -156,6 +159,7 @@ class PatientBoard extends React.Component {
             </ul>
           </nav>
           <PatientDetailModal onClose={this.onPatientClick} />
+          <ScheduledPatientModal show={openScheduledModal} onHide={showScheduledModal} />
         </div>
         <div className="patients-form-closer" onClick={this.onPatientClick} />
       </div>
@@ -168,6 +172,7 @@ const mapStateToProps = createStructuredSelector({
   currentPatientCategoryId: Selector.selectCurrentPatientCategoryId(),
   carousel: Selector.selectCarousel(),
   openPatientModal: Selector.selectOpenPatientModal(),
+  openScheduledModal: Selector.selectOpenScheduledModal(),
   studyId: Selector.selectStudyId(),
 });
 
@@ -177,6 +182,7 @@ const mapDispatchToProps = (dispatch) => (
     setCurrentPatientId: (id) => dispatch(setCurrentPatientId(id)),
     setCurrentPatientCategoryId: (id) => dispatch(setCurrentPatientCategoryId(id)),
     setOpenPatientModal: (show) => dispatch(setOpenPatientModal(show)),
+    showScheduledModal: () => dispatch(showScheduledModal()),
     switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
     switchToTextSection: () => dispatch(switchToTextSectionDetail()),
     push: (url) => dispatch(push(url)),

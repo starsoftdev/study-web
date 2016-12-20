@@ -11,7 +11,7 @@ import ModalBody from 'react-bootstrap/lib/ModalBody';
 import ModalHeader from 'react-bootstrap/lib/ModalHeader';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import ScheduledPatientModal from '../ScheduledPatientModal'
+import ScheduledPatientModal from '../ScheduledPatientModal';
 import { selectCurrentUser } from 'containers/App/selectors';
 import * as Selector from '../selectors';
 import PatientDetailSection from './PatientDetailSection';
@@ -21,6 +21,7 @@ import EmailSection from './EmailSection';
 import OtherSection from './OtherSection';
 import { normalizePhoneDisplay } from '../helper/functions';
 import {
+  showScheduledModal,
   switchToNoteSectionDetail,
   switchToTextSectionDetail,
   switchToEmailSectionDetail,
@@ -40,7 +41,9 @@ export class PatientDetailModal extends React.Component {
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     openPatientModal: React.PropTypes.bool.isRequired,
+    openScheduledModal: React.PropTypes.bool.isRequired,
     onClose: React.PropTypes.func.isRequired,
+    showScheduledModal: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number.isRequired,
     socket: React.PropTypes.any,
     switchToNoteSection: React.PropTypes.func.isRequired,
@@ -59,7 +62,7 @@ export class PatientDetailModal extends React.Component {
     this.renderScheduledTime = this.renderScheduledTime.bind(this);
     this.state = {
       showScheduledPatientModal: false,
-    }
+    };
   }
 
   onSelectText() {
@@ -104,41 +107,26 @@ export class PatientDetailModal extends React.Component {
     }
     return null;
   }
-  renderScheduleTimeModal() {
-    const { currentPatient } = this.props;
-    if (currentPatient && currentPatient.callReminders) {
-      return (
-        <Modal style="z-index: 1" show={this.state.showScheduledPatientModal} onHide={() => this.setState({ showScheduledPatientModal: false })}>
-          <ModalHeader closeButton>Schedule Patient</ModalHeader>
-          <ModalBody>
-            <ScheduledPatientModal firstName={currentPatient.firstName} lastName={currentPatient.lastName} />
-          </ModalBody>
-        </Modal>
-      );
-    }
-
-  }
   renderScheduledTime() {
-    const { currentPatientCategory, currentPatient } = this.props;
+    const { currentPatientCategory, currentPatient, showScheduledModal } = this.props;
     if (currentPatientCategory && currentPatientCategory.name === 'Scheduled') {
       if (currentPatient && currentPatient.callReminders) {
         return (
-          <a className="modal-opener" onClick={() => this.setState({ showScheduledPatientModal: true })}>
+          <a className="modal-opener" onClick={() => showScheduledModal()}>
             <span className="date">{moment(currentPatient.callReminders[0].time).format('MM/DD/YY')}</span>
             <span> at </span>
             <span className="time">{moment(currentPatient.callReminders[0].time).format('hh:mm A')} </span>
           </a>
         );
       }
-
     }
     return null;
   }
 
   render() {
-    const { carousel, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
+    const { carousel, openScheduledModal, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
     return (
-      <Collapse dimension="width" in={openPatientModal} timeout={250} className="patients-list-form">
+      <Collapse dimension="width" in={openPatientModal} timeout={250} className={ openScheduledModal ? 'patients-list-form-OnSchedule' : 'patients-list-form'}>
         <div className="form-area">
           <div className="form-head">
             <strong className="title">{currentPatientCategory ? currentPatientCategory.name : null}</strong>
@@ -147,7 +135,6 @@ export class PatientDetailModal extends React.Component {
               <i className="glyphicon glyphicon-menu-right" />
             </a>
           </div>
-          {this.renderScheduleTimeModal()}
           {this.renderPatientDetail()}
           <div className="column">
             <div id="carousel-example-generic" className="carousel slide popup-slider">
@@ -177,11 +164,13 @@ const mapStateToProps = createStructuredSelector({
   currentPatient: Selector.selectCurrentPatient(),
   currentPatientCategory: Selector.selectCurrentPatientCategory(),
   openPatientModal: Selector.selectOpenPatientModal(),
+  openScheduledModal: Selector.selectOpenScheduledModal(),
   socket: selectSocket(),
   studyId: Selector.selectStudyId(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  showScheduledModal: () => dispatch(showScheduledModal()),
   switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
   switchToTextSection: () => dispatch(switchToTextSectionDetail()),
   switchToEmailSection: () => dispatch(switchToEmailSectionDetail()),
