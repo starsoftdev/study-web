@@ -23,6 +23,7 @@ class TextEmailBlastModal extends React.Component {
         {...props}
         id="text-email-blast"
         dialogComponentClass={CenteredModal}
+        onHide={props.onHide}
         backdrop
         keyboard
       >

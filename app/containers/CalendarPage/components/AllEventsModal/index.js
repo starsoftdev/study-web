@@ -28,7 +28,7 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, handleEdit, s
       <div id="all-patients" className="fixed-popup lightbox lightbox-active">
         <div className="lightbox-holder">
           <div className="lightbox-frame">
-            <div className="lightbox-content">
+            <div className="modal-content">
               <div className="head">
                 <strong className="title">{moment(date).format('dddd, MMMM DD, YYYY')}</strong>
                 <a className="lightbox-close close" onClick={handleCloseModal}><i className="icomoon-icon_close" /></a>

@@ -321,7 +321,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           key={key}
           data-sort={header.sort}
           onClick={this.sortBy}
-          className={(state.activeSort === header.sort) ? state.activeDirection : ''}
+          className={state.activeSort === header.sort ? state.activeDirection : ''}
         >
           {header.text} <i className="caret-arrow" />
         </th>
@@ -383,7 +383,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           </colgroup>
           <thead>
             <tr>
-              <th className={`${(state.activeSort === 'orderNumber') ? state.activeDirection : ''}`}>
+              <th className={state.activeSort === 'orderNumber' ? state.activeDirection : ''}>
                 <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
                   <span className="input-style" onClick={this.onClickAll}>
                     <input name="all" type="checkbox" />

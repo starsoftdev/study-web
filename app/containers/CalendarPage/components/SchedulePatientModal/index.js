@@ -197,7 +197,7 @@ export default class SchedulePatientModal extends Component {
           <div id="add-scedule" className="lightbox lightbox-active fixed-popup">
             <div className="lightbox-holder">
               <div className="lightbox-frame">
-                <div className="lightbox-content">
+                <div className="modal-content">
                   <div className="head">
                     <strong className="title">SCHEDULE PATIENT</strong>
                     <a className="lightbox-close close" href="#" onClick={handleCloseModal}><i className="icomoon-icon_close"></i></a>
@@ -332,7 +332,7 @@ export default class SchedulePatientModal extends Component {
           <div id="edit-schedule" className="lightbox lightbox-active fixed-popup">
             <div className="lightbox-holder">
               <div className="lightbox-frame">
-                <div className="lightbox-content">
+                <div className="modal-content">
                   <div className="head">
                     <strong className="title">EDIT SCHEDULE</strong>
                     <a className="close lightbox-close" href="#" onClick={handleCloseModal}><i className="icomoon-icon_close" /></a>
