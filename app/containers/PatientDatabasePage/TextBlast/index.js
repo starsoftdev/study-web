@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
+import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
@@ -18,7 +19,6 @@ import { selectValues, selectSyncErrors } from '../../../common/selectors/form.s
 import { actions as toastrActions } from 'react-redux-toastr';
 
 const formName = 'PatientDatabase.TextBlastModal';
-
 
 @reduxForm({
   form: formName,
@@ -91,9 +91,10 @@ class TextBlastModal extends React.Component {
     return (
       <Modal
         show={show}
-        className={className}
+        className={classNames('patient-database-text-blast', className)}
         id="text-blast-popup"
         dialogComponentClass={CenteredModal}
+        onHide={onHide}
         backdrop
         keyboard
       >
@@ -118,7 +119,7 @@ class TextBlastModal extends React.Component {
                     name="message"
                     component={Input}
                     componentClass="textarea"
-                    className="patient-detail-text-blast"
+                    className="message"
                     placeholder="Type a message..."
                     maxLength="160"
                     required

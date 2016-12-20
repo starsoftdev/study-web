@@ -242,14 +242,14 @@ class TextBlastModal extends React.Component {
     const { enteredCharactersLength } = this.state;
     return (
       <Modal
-        show={show}
-        role={role}
+        className={classNames('study-text-blast', className)}
+        id="text-blast"
         bsClass={bsClass}
         dialogClassName={dialogClassName}
-        className={className}
-        style={style}
-        id="text-blast"
         dialogComponentClass={CenteredModal}
+        show={show}
+        role={role}
+        style={style}
         backdrop
         keyboard
       >
@@ -361,7 +361,7 @@ class TextBlastModal extends React.Component {
                     name="message"
                     component={Input}
                     componentClass="textarea"
-                    className="study-text-blast"
+                    className="message"
                     placeholder="Type a message..."
                     maxLength="160"
                     required

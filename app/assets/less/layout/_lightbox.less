@@ -958,31 +958,6 @@ input:focus {
   padding-bottom: 4px;
 }
 
-#email-blast-popup,
-#text-blast-popup {
-  .modal-content {
-    max-width: 640px;
-    background: #fff;
-  }
-  &.width-medium {
-    .modal-content {
-      max-width: 722px;
-    }
-    .text-email-blast-form .emails-counter {
-      padding: 3px 12px;
-      min-width: inherit;
-      .btn-close {
-        display: none;
-      }
-    }
-  }
-}
-#text-blast-popup {
-  .text-email-blast-form .form-holder .sub-holder {
-    padding-top: 0;
-  }
-}
-
 .text-email-blast-form {
   overflow: hidden;
   position: relative;
@@ -994,18 +969,6 @@ input:focus {
     content: '';
     position: absolute;
     background: #f78e1e;
-  }
-  .has-error {
-    textarea, .form-control:not([disabled]) {
-      color: #f00;
-      .placeholder(#f00);
-    }
-  }
-  .sidebar {
-    .scroll-holder {
-      max-height: 80vh;
-      overflow: auto;
-    }
   }
   &.no-sidebar {
     &:before { display: none; }
@@ -1032,6 +995,18 @@ input:focus {
       padding: 40px 0 83px !important;
     }
   }
+  .has-error {
+    textarea, .form-control:not([disabled]) {
+      color: #f00;
+      .placeholder(#f00);
+    }
+  }
+  .sidebar {
+    .scroll-holder {
+      max-height: 80vh;
+      overflow: auto;
+    }
+  }
   .form-holder {
     overflow: hidden;
     .head {
@@ -1048,7 +1023,7 @@ input:focus {
       overflow: visible;
     }
     .sub-holder {
-      padding: 40px 0 85px;
+      padding: 0 0 85px;
       height: 100%;
       .btn-gray-outline {
         margin: 0 12px 0 0;
@@ -1093,10 +1068,6 @@ input:focus {
         outline: none;
       }
     }
-  }
-  .sub-holder {
-    padding: 25px;
-    min-height: 150px;
   }
   .custom-select-drop {
     margin: 0 0 15px;
