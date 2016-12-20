@@ -95,7 +95,7 @@ export default class DatePicker extends Component {
     const modalComponent = (
       <Modal dialogComponentClass={CenteredModal} className="datepicker-modal" show={modalVisible} onHide={() => { this.toggleModal(false); }}>
         <Modal.Header>
-          <strong className="title">Choose Start Date</strong>
+          <Modal.Title>Choose Start Date</Modal.Title>
           <a className="lightbox-close close" onClick={() => { this.toggleModal(false); }}>
             <i className="icomoon-icon_close" />
           </a>

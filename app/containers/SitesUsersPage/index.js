@@ -5,6 +5,7 @@ import Helmet from 'react-helmet';
 import { Modal } from 'react-bootstrap';
 import { map } from 'lodash';
 
+import CenteredModal from '../../components/CenteredModal/index';
 import EditSiteForm from 'components/EditSiteForm';
 import EditUserForm from 'components/EditUserForm';
 import ClientSitesList from 'components/ClientSitesList';
@@ -12,7 +13,6 @@ import ClientRolesList from 'components/ClientRolesList';
 import { selectCurrentUserClientId, selectClientSites,
   selectClientRoles, selectSavedSite, selectSavedUser } from 'containers/App/selectors';
 import { fetchClientSites, fetchClientRoles, saveSite, saveUser } from 'containers/App/actions';
-import './styles.less';
 
 export class SitesUsersPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -166,9 +166,12 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                   <button type="button" className="btn btn-primary" onClick={this.openAddUserModal}>
                     + Add User
                   </button>
-                  <Modal className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
-                    <Modal.Header closeButton>
+                  <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
+                    <Modal.Header>
                       <Modal.Title>New User</Modal.Title>
+                      <a className="lightbox-close close" onClick={this.closeAddUserModal}>
+                        <i className="icomoon-icon_close" />
+                      </a>
                     </Modal.Header>
                     <Modal.Body>
                       <div className="holder clearfix">
@@ -183,9 +186,12 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                   <button type="button" className="btn btn-primary" onClick={this.openAddSiteModal}>
                     + Add Site Location
                   </button>
-                  <Modal className="new-site" id="new-site" show={this.state.addSiteModalOpen} onHide={this.closeAddSiteModal}>
-                    <Modal.Header closeButton>
+                  <Modal dialogComponentClass={CenteredModal} className="new-site" id="new-site" show={this.state.addSiteModalOpen} onHide={this.closeAddSiteModal}>
+                    <Modal.Header>
                       <Modal.Title>New Site</Modal.Title>
+                      <a className="lightbox-close close" onClick={this.closeAddSiteModal}>
+                        <i className="icomoon-icon_close" />
+                      </a>
                     </Modal.Header>
                     <Modal.Body>
                       <div className="holder clearfix edit-site-holder">

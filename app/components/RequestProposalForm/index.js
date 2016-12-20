@@ -8,6 +8,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, FieldArray, reduxForm, change } from 'redux-form';
+import moment from 'moment';
+import DatePicker from '../../components/Input/DatePicker';
 
 import Input from 'components/Input';
 import Toggle from 'components/Input/Toggle';
@@ -196,10 +198,11 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           <div className="field-row">
             <strong className="label required"><label>Start Date</label></strong>
             <Field
+              id="start-date"
               name="startDate"
-              component={Input}
-              type="date"
-              className="field"
+              component={DatePicker}
+              className="form-control field datepicker-input"
+              initialDate={moment()}
             />
           </div>
 
