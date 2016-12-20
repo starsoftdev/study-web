@@ -21,6 +21,7 @@ import {
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
   REMOVE_PATIENT_INDICATION_SUCCESS,
+  SHOW_SCHEDULED_MODAL,
   SET_STUDY_ID,
   SET_SITE_ID,
   SET_CURRENT_PATIENT_ID,
@@ -49,6 +50,7 @@ const initialState = {
     email: false,
     other: false,
   },
+  openScheduledModal: false,
   openPatientModal: false,
 };
 
@@ -235,6 +237,11 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         openPatientModal: action.show,
+      };
+    case SHOW_SCHEDULED_MODAL:
+      return {
+        ...state,
+        openScheduledModal: !state.openScheduledModal,
       };
     case MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING:
       return {
