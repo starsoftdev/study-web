@@ -11,8 +11,8 @@ import { Field, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import moment from 'moment';
 import { defaultRanges, DateRange } from 'react-date-range';
-// import Modal from 'react-bootstrap/lib/Modal';
-// import CenteredModal from '../CenteredModal/index';
+import Modal from 'react-bootstrap/lib/Modal';
+import CenteredModal from '../CenteredModal/index';
 import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
 
@@ -117,7 +117,6 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
 
           <div className="col pull-right">
             <a
-              href="#date-range"
               className="btn btn-primary lightbox-opener"
               onClick={this.showPopup}
             >
@@ -152,88 +151,48 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
             />
           </div>
         </div>
-        {/* <Modal
+        <Modal
+          id="date-range"
+          className="date-range-modal"
           show={state.showPopup}
           dialogComponentClass={CenteredModal}
+          onHide={this.hidePopup}
+          backdrop
+          keyboard
         >
           <Modal.Header>
-            <div className="head">
-              <Modal.Title>
-                <strong className="title">DATE RANGE</strong>
-              </Modal.Title>
-              <a className="lightbox-close close" onClick={this.hidePopup}><i className="icomoon-icon_close" /></a>
-            </div>
+            <Modal.Title>Date Range</Modal.Title>
+            <a className="lightbox-close close" onClick={this.hidePopup}>
+              <i className="icomoon-icon_close" />
+            </a>
           </Modal.Header>
           <Modal.Body>
-            <div className="holder">
-              <DateRange
-                linkedCalendars
-                ranges={defaultRanges}
-                onInit={this.handleChange}
-                onChange={this.handleChange}
-              />
-              <div className="dateRange-helper">
-                <div className="emit-border"></div>
-                <div className="right-part">
-                  <span className="left">{ predefined.startDate && predefined.startDate.format(format).toString() }</span>
-                  <span className="right">{ predefined.endDate && predefined.endDate.format(format).toString() }</span>
-                  <div className="btn-block text-right">
-                    <a
-                      href="#"
-                      className="btn btn-default lightbox-close"
-                      onClick={this.changeRange}
-                    >
-                      submit
-                    </a>
-                  </div>
+            <DateRange
+              theme={{
+                DateRange: {
+                  display: 'inline-grid',
+                },
+              }}
+              linkedCalendars
+              ranges={defaultRanges}
+              startDate={this.state.predefined.startDate ? this.state.predefined.startDate : moment()}
+              endDate={this.state.predefined.endDate ? this.state.predefined.endDate : moment().add(1, 'M')}
+              onInit={this.handleChange}
+              onChange={this.handleChange}
+            />
+            <div className="dateRange-helper">
+              <div className="emit-border"><br /></div>
+              <div className="right-part">
+                <div className="btn-block text-right">
+                  {this.renderDateFooter()}
+                  <Button onClick={this.changeRange}>
+                    Submit
+                  </Button>
                 </div>
               </div>
             </div>
           </Modal.Body>
-        </Modal> */}
-
-        <div id="date-range" className={(state.showPopup) ? 'lightbox fixed-popup lightbox-active' : 'lightbox fixed-popup'}>
-          <div className="lightbox-holder">
-            <div className="lightbox-frame">
-              <div className="lightbox-content">
-                <div className="head">
-                  <strong className="title">DATE RANGE</strong>
-                  <a className="lightbox-close close" href="#" onClick={this.hidePopup}><i className="icomoon-icon_close" /></a>
-                </div>
-                <div className="holder">
-                  <DateRange
-                    theme={{
-                      DateRange: {
-                        display: 'inline-grid',
-                      },
-                    }}
-                    linkedCalendars
-                    ranges={defaultRanges}
-                    startDate={this.state.predefined.startDate ? this.state.predefined.startDate : moment()}
-                    endDate={this.state.predefined.endDate ? this.state.predefined.endDate : moment().add(1, 'M')}
-                    onInit={this.handleChange}
-                    onChange={this.handleChange}
-                  />
-                  <div className="dateRange-helper">
-                    <div className="emit-border"><br /></div>
-                    <div className="right-part">
-                      <div className="btn-block text-right">
-                        {this.renderDateFooter()}
-                        <a
-                          className="btn btn-default lightbox-close"
-                          onClick={this.changeRange}
-                        >
-                          submit
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <a className="overlay lightbox-close" onClick={this.hidePopup} />
-        </div>
+        </Modal>
       </form>
     );
   }

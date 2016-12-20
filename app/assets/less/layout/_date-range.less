@@ -1,60 +1,56 @@
-.holder {
-  overflow: hidden;
+.dateRange-helper {
+  position: relative;
+  overflow-y: visible;
+  width: 100%;
 
-  .dateRange-helper {
-    position: relative;
-    overflow-y: visible;
-    width: 100%;
+  .emit-border {
+    min-height: 80px;
+    display: inline-block;
+    width: 207px;
+    border-right: 2px #f78e1e solid;
+  }
 
-    .emit-border {
-      min-height: 80px;
-      display: inline-block;
-      width: 207px;
-      border-right: 2px #f78e1e solid;
+  .right-part {
+    float: right;
+    padding: 0 25px;
+    display: inline-block;
+
+    span.left, span.right {
+      display: inline;
+      text-align: center;
+      padding: 5px;
+      cursor: pointer;
+      transition: all 0.25s;
+      vertical-align: top;
+      line-height: 40px;
+
+      &:hover {
+        cursor: inherit;
+      }
+
+      width: 100%;
     }
 
-    .right-part {
+    span.right {
+      padding-right: 10px;
+      padding-left: 0;
+    }
+
+    span.outer-left {
+      padding-right: 5px;
+      float: left;
+      width: 50%;
+    }
+
+    span.outer-right {
+      padding-left: 0;
       float: right;
-      padding: 0 25px;
-      display: inline-block;
+      width: 50%;
+    }
 
-      span.left, span.right {
-        display: inline;
-        text-align: center;
-        padding: 5px;
-        cursor: pointer;
-        transition: all 0.25s;
-        vertical-align: top;
-        line-height: 40px;
+    .btn-block {
+      margin: 15px 0 25px 0;
 
-        &:hover {
-          cursor: inherit;
-        }
-
-        width: 100%;
-      }
-
-      span.right {
-        padding-right: 10px;
-        padding-left: 0;
-      }
-
-      span.outer-left {
-        padding-right: 5px;
-        float: left;
-        width: 50%;
-      }
-
-      span.outer-right {
-        padding-left: 0;
-        float: right;
-        width: 50%;
-      }
-
-      .btn-block {
-        margin: 15px 0 25px 0;
-
-      }
     }
   }
 }

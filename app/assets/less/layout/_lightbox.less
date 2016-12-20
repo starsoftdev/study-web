@@ -282,22 +282,7 @@ input:focus {
 	}
 }
 
-#popup-remover {
-	.lightbox-content {
-		padding: 19px 20px 25px;
-	}
-
-	.btn-block {
-		.font(0,0);
-	}
-
-	.btn {
-		min-width: 80px;
-		margin: 0 6px;
-	}
-}
-
-#edit-scedule {
+#edit-schedule {
 
 	.protocol,
 	.site-location,
@@ -326,16 +311,10 @@ input:focus {
 /* date-range */
 #date-range {
 	overflow: auto;
-	//min-width: 1020px;
 
-	.lightbox-content {
+	.modal-content {
 		max-width: 1350px;
 	}
-
-	/*.holder {
-		height: 526px;
-		overflow: hidden;
-	}*/
 
 	.date-range-area {
 		height: 100%;
@@ -380,11 +359,12 @@ input:focus {
 		width: 50%;
 	}
 
-	@media screen and (max-width: 1180px) {
-		//.lightbox-content {
-		//	margin: 15px;
-		//}
+  .time {
+    vertical-align: middle;
+    margin-right: 10px;
+  }
 
+	@media screen and (max-width: 1180px) {
 		.select-end-date,
 		.select-start-date {
 			width: 100%;
