@@ -19,7 +19,6 @@ import { submitForm, hideSubmitFormModal, clearFormSubmissionData } from 'contai
 import { touch } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import LoadingSpinner from 'components/LoadingSpinner';
-import './styles.less';
 
 import Helmet from 'react-helmet';
 import {
