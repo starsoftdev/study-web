@@ -337,15 +337,16 @@
   display: inline-block;
 }
 
-#text-blast {
+.study-text-blast {
   .modal-dialog {
     min-width: 728px;
   }
   .modal-content {
     max-width: 1024px;
   }
-  .text-email-blast-form .form-holder .sub-holder {
-    padding-top: 0;
+  .sub-holder {
+    padding: 25px;
+    min-height: 150px;
   }
   .sidebar {
     width: 300px;
@@ -357,6 +358,9 @@
       right: auto;
       left: 0;
     }
+  }
+  .message {
+    height: 100%;
   }
 }
 
@@ -907,8 +911,4 @@
   left: -9999px;
   top: -9999px;
   display: block;
-}
-
-.text-email-blast-form .form-holder .study-text-blast {
-  height: 356px;
 }

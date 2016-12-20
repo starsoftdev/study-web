@@ -269,12 +269,6 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
         </div>
       </div>
     );
-
-    /* return (
-      <div>
-        <h3>No matching patients found!</h3>
-      </div>
-    );*/
   }
 }
 
