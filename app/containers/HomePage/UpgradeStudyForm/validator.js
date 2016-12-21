@@ -1,14 +1,12 @@
-import { validatorFactory } from 'utils/reduxForm';
-
-const schema = {
-  level: { presence: true },
-  patientMessagingSuite: { presence: false },
-  callTracking: { presence: false },
-  notes: { presence: false },
-};
-
-const upgradeStudyFields = Object.keys(schema);
-
+const upgradeStudyFields = ['level', 'patientMessagingSuite', 'callTracking', 'notes'];
 export { upgradeStudyFields };
 
-export default validatorFactory(schema);
+export default values => {
+  const errors = {};
+
+  if (!values.level && !values.patientMessagingSuite) {
+    errors.level = 'You need to select either Upgrade Level or Patient Messaging Suite';
+    errors.patientMessagingSuite = 'You need to select either Upgrade Level or Patient Messaging Suite';
+  }
+  return errors;
+};
