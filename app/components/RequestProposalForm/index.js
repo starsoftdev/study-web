@@ -38,12 +38,24 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
     studyLevels: PropTypes.array,
     callTracking: PropTypes.bool,
     leadsCount: PropTypes.number,
+    formValues: PropTypes.object,
   };
+
+  constructor(props) {
+    super(props);
+    this.campaignLengthChaged = this.campaignLengthChaged.bind(this);
+  }
 
   componentWillReceiveProps(newProps) {
     // If leads are all removed, set `callTracking` value to false
     if (newProps.leadsCount === 0 && this.props.leadsCount === 1) {
       this.props.dispatch(change('requestProposal', 'callTracking', false));
+    }
+  }
+
+  campaignLengthChaged(campaignLength) {
+    if (campaignLength !== 1) {
+      this.props.dispatch(change('requestProposal', 'condenseTwoWeeks', false));
     }
   }
 
@@ -165,8 +177,25 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
               placeholder="Select Campaign Length"
               options={CAMPAIGN_LENGTH_LIST}
               className="field top-positioned"
+              onChange={this.campaignLengthChaged}
             />
           </div>
+
+          {(() => {
+            if (this.props.formValues.campaignLength === 1) {
+              return (
+                <div className="field-row">
+                  <strong className="label"><label>CONDENSE TO 2 WEEKS</label></strong>
+                  <Field
+                    name="condenseTwoWeeks"
+                    component={Toggle}
+                    className="field"
+                  />
+                </div>
+              );
+            }
+            return false;
+          })()}
 
           <div className="field-row">
             <strong className="label"><label>Patient messaging <br />
