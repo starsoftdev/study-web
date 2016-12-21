@@ -10,6 +10,7 @@ import TextBlastModal from './TextBlast/index';
 import AddPatient from './ImportPatients/AddPatient';
 
 import { exportPatients } from './actions';
+import { reset } from 'redux-form';
 
 class StudyActionButtons extends Component {
   static propTypes = {
@@ -19,6 +20,7 @@ class StudyActionButtons extends Component {
     siteId: PropTypes.number.isRequired,
     studyId: PropTypes.number.isRequired,
     exportPatients: PropTypes.func,
+    resetTextBlastForm: PropTypes.func,
   };
   constructor(props) {
     super(props);
@@ -67,6 +69,7 @@ class StudyActionButtons extends Component {
   }
 
   toggleTextBlastModal() {
+    this.props.resetTextBlastForm();
     this.setState({
       showTextEmailBlastModal: !this.state.showTextEmailBlastModal,
       showTextBlastModal: !this.state.showTextBlastModal,
@@ -136,6 +139,7 @@ class StudyActionButtons extends Component {
 function mapDispatchToProps(dispatch) {
   return {
     exportPatients: (studyId, siteId, text, campaignId, sourceId) => dispatch(exportPatients(studyId, siteId, text, campaignId, sourceId)),
+    resetTextBlastForm: () => dispatch(reset('StudyPage.TextBlastModal')),
   };
 }
 
