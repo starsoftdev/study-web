@@ -62,7 +62,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     clearCoupon: PropTypes.func,
     fetchCards: PropTypes.func,
     saveCard: PropTypes.func,
-    handleSubmit: PropTypes.func,
+    validateAndSubmit: PropTypes.func,
   };
 
   constructor(props) {
@@ -147,9 +147,10 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     const title = this.props.title || 'Order Summary';
     const noBorderClassName = (this.props.noBorder) ? 'no-border' : '';
     const formClassName = `form-study form-shopping-cart ${noBorderClassName}`;
-    const { addOns, coupon, showCards, cards, submitting, handleSubmit } = this.props;
+    const { addOns, coupon, showCards, cards, submitting, validateAndSubmit } = this.props;
     const { subTotal, discount, total } = this.calculateTotal();
     let addOnsContent = null;
+
     if (addOns) {
       addOnsContent = addOns.map((product, index) => (
         <tr className="add-on" key={index}>
@@ -211,7 +212,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     }
 
     return (
-      <form className={formClassName} onSubmit={handleSubmit}>
+      <form className={formClassName}>
         <div className="shopping-cart order-summary order-summery">
           <div className="head">
             <h3>{title}</h3>
@@ -287,7 +288,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                 />
               </div>
               {cardsPanelContent}
-              <Button type="submit" disabled={coupon.fetching || cards.fetching || submitting}>
+              <Button disabled={coupon.fetching || cards.fetching || submitting} onClick={validateAndSubmit}>
                 {submitting
                   ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                   : <span>Submit</span>

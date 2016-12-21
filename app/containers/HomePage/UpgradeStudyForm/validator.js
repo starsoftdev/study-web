@@ -7,4 +7,8 @@ const schema = {
   notes: { presence: false },
 };
 
+const upgradeStudyFields = Object.keys(schema);
+
+export { upgradeStudyFields };
+
 export default validatorFactory(schema);

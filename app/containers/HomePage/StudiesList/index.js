@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
 import _, { countBy, find, filter, sumBy } from 'lodash';
+import { touch } from 'redux-form';
 
 import CenteredModal from '../../../components/CenteredModal/index';
 import { fetchLevels } from 'containers/App/actions';
@@ -19,6 +20,9 @@ import RenewStudyForm from 'containers/HomePage/RenewStudyForm';
 import UpgradeStudyForm from 'containers/HomePage/UpgradeStudyForm';
 import EditStudyForm from 'containers/HomePage/EditStudyForm';
 import ShoppingCartForm from 'components/ShoppingCartForm';
+import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
+import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
+import { upgradeStudyFields } from '../UpgradeStudyForm/validator';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -44,6 +48,10 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     paginationOptions: React.PropTypes.object,
     setActiveSort: PropTypes.func,
     sortSuccess: PropTypes.func,
+    shoppingCartFormError: PropTypes.object,
+    shoppingCartFormValues: PropTypes.object,
+    touchUpgradeStudy: PropTypes.func,
+    touchShoppingCart: PropTypes.func,
   };
 
   constructor(props) {
@@ -178,10 +186,17 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     });
   }
 
-  handleUpgradeStudyFormSubmit(cartParams) {
-    const { currentUserStripeCustomerId, upgradeStudyFormValues, upgradeStudy } = this.props;
+  handleUpgradeStudyFormSubmit() {
+    const { shoppingCartFormError, shoppingCartFormValues, upgradeStudyFormError, touchUpgradeStudy, touchShoppingCart,
+      currentUserStripeCustomerId, upgradeStudyFormValues, upgradeStudy } = this.props;
 
-    upgradeStudy(this.state.selectedStudyId, cartParams, {
+    if (upgradeStudyFormError || shoppingCartFormError) {
+      touchUpgradeStudy();
+      touchShoppingCart();
+      return;
+    }
+
+    upgradeStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...upgradeStudyFormValues,
       stripeCustomerId: currentUserStripeCustomerId,
       selectedIndicationId: this.state.selectedIndicationId,
@@ -300,7 +315,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { studies, renewStudyFormError, upgradeStudyFormError, sitePatients } = this.props;
+    const { studies, renewStudyFormError, sitePatients } = this.props;
     const countResult = countBy(studies.details, entityIterator => entityIterator.status);
     const activeCount = countResult[ACTIVE_STATUS_VALUE] || 0;
     const inactiveCount = countResult[INACTIVE_STATUS_VALUE] || 0;
@@ -442,8 +457,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                       showCards
                       noBorder
                       addOns={addOns}
-                      disableSubmit={upgradeStudyFormError}
-                      onSubmit={this.handleUpgradeStudyFormSubmit}
+                      validateAndSubmit={this.handleUpgradeStudyFormSubmit}
                     />
                   </div>
                 </div>
@@ -496,6 +510,8 @@ const mapStateToProps = createStructuredSelector({
   editedStudy: selectEditedStudy(),
   sitePatients: selectSitePatients(),
   paginationOptions: selectPaginationOptions(),
+  shoppingCartFormError: selectShoppingCartFormError(),
+  shoppingCartFormValues: selectShoppingCartFormValues(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -508,6 +524,8 @@ function mapDispatchToProps(dispatch) {
     editStudy: (formValues) => dispatch(editStudy(formValues)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
     sortSuccess: (payload) => dispatch(sortSuccess(payload)),
+    touchUpgradeStudy: () => dispatch(touch('upgradeStudy', ...upgradeStudyFields)),
+    touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
   };
 }
 
