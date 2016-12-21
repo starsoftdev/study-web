@@ -179,7 +179,7 @@ class TextBlastModal extends React.Component {
     const { currentUser, displayToastrError, formSyncErrors, formValues, submitTextBlast, onClose } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
       submitTextBlast(formValues.patients, formValues.message, (err, data) => {
-        onClose(err, data)
+        onClose(err, data);
         this.props.fetchClientCredits(currentUser.id);
       });
     } else if (formSyncErrors.message) {
