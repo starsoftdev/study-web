@@ -82,6 +82,7 @@ export class RequestProposalPage extends Component {
                 indications={indications}
                 studyLevels={studyLevels}
                 initialValues={proposalDetail}
+                formValues={this.props.formValues}
               />
             </div>
 
