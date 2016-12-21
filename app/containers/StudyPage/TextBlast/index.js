@@ -19,6 +19,8 @@ import * as Selector from '../selectors';
 import { addPatientsToTextBlast, findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitTextBlast } from '../actions';
 import { selectActiveField, selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
 import { actions as toastrActions } from 'react-redux-toastr';
+import { fetchClientCredits } from 'containers/App/actions';
+import { selectCurrentUser, selectClientCredits } from 'containers/App/selectors';
 
 const formName = 'StudyPage.TextBlastModal';
 
@@ -33,6 +35,9 @@ class TextBlastModal extends React.Component {
     bsClass: React.PropTypes.string,
     change: React.PropTypes.func.isRequired,
     className: React.PropTypes.any,
+    currentUser: React.PropTypes.object,
+    clientCredits: React.PropTypes.object,
+    fetchClientCredits: React.PropTypes.func,
     dialogClassName: React.PropTypes.string,
     displayToastrError: React.PropTypes.func.isRequired,
     findPatients: React.PropTypes.func.isRequired,
@@ -65,6 +70,11 @@ class TextBlastModal extends React.Component {
     this.state = {
       enteredCharactersLength: 0,
     };
+  }
+
+  componentDidMount() {
+    const { currentUser } = this.props;
+    this.props.fetchClientCredits(currentUser.id);
   }
 
   textAreaChange() {
@@ -166,9 +176,12 @@ class TextBlastModal extends React.Component {
 
   submitTextBlast(event) {
     event.preventDefault();
-    const { displayToastrError, formSyncErrors, formValues, submitTextBlast, onClose } = this.props;
+    const { currentUser, displayToastrError, formSyncErrors, formValues, submitTextBlast, onClose } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
-      submitTextBlast(formValues.patients, formValues.message, onClose);
+      submitTextBlast(formValues.patients, formValues.message, (err, data) => {
+        onClose(err, data)
+        this.props.fetchClientCredits(currentUser.id);
+      });
     } else if (formSyncErrors.message) {
       displayToastrError(formSyncErrors.message);
     } else if (formSyncErrors.patients) {
@@ -240,6 +253,8 @@ class TextBlastModal extends React.Component {
   render() {
     const { patientCategories, sources, show, role, bsClass, dialogClassName, className, style, onHide } = this.props;
     const { enteredCharactersLength } = this.state;
+    const clientCredits = this.props.clientCredits.details.customerCredits;
+    const disabled = (clientCredits === 0 || clientCredits === null);
     return (
       <Modal
         className={classNames('study-text-blast', className)}
@@ -375,7 +390,14 @@ class TextBlastModal extends React.Component {
                     <span className="characters-counter">
                       {`${160 - enteredCharactersLength}`}
                     </span>
-                    <Button type="submit" className="pull-right" onClick={this.submitTextBlast}>Send</Button>
+                    <Button
+                      type="submit"
+                      className="pull-right"
+                      disabled={disabled}
+                      onClick={this.submitTextBlast}
+                    >
+                      Send
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -389,6 +411,8 @@ class TextBlastModal extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
+  clientCredits: selectClientCredits(),
   activeField: selectActiveField(formName),
   formValues: selectValues(formName),
   formSyncErrors: selectSyncErrors(formName),
@@ -407,6 +431,7 @@ function mapDispatchToProps(dispatch) {
     removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
     removePatients: () => dispatch(removePatientsFromTextBlast()),
     submitTextBlast: (patients, message, onClose) => dispatch(submitTextBlast(patients, message, onClose)),
+    fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
   };
 }
 
