@@ -10,6 +10,7 @@ import { createStructuredSelector } from 'reselect';
 import { selectValues } from '../../common/selectors/form.selector';
 import { connect } from 'react-redux';
 import { importPatients } from '../../containers/PatientDatabasePage/actions';
+import { change } from 'redux-form';
 
 class PatientActionButtons extends React.Component {
   static propTypes = {
@@ -17,6 +18,7 @@ class PatientActionButtons extends React.Component {
     importPatients: React.PropTypes.func,
     searchPatients: React.PropTypes.func,
     paginationOptions: React.PropTypes.object,
+    clearTextBlastMessage: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -81,6 +83,7 @@ class PatientActionButtons extends React.Component {
   }
 
   toggleTextBlastModal() {
+    this.props.clearTextBlastMessage();
     this.setState({
       showTextEmailBlastModal: !this.state.showTextEmailBlastModal,
       showTextBlastModal: !this.state.showTextBlastModal,
@@ -159,6 +162,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     importPatients: payload => dispatch(importPatients(payload)),
+    clearTextBlastMessage: () => dispatch(change(formName, 'message', '')),
   };
 }
 
