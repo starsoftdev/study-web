@@ -8,16 +8,22 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import ReactSelect from 'components/Input/ReactSelect';
+import { Field, reduxForm } from 'redux-form';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import ShoppingCartForm from 'components/ShoppingCartForm';
-import { addCredits, getCreditsPrice } from 'containers/App/actions';
-import { selectCurrentUser, selectAddCredits, selectCreditsPrice } from 'containers/App/selectors';
+import { fetchSites, addCredits, getCreditsPrice } from 'containers/App/actions';
+import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice } from 'containers/App/selectors';
 
+@reduxForm({ form: 'addCredits', validate: null })
+@connect(mapStateToProps)
 class AddCreditsModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     showModal: React.PropTypes.bool,
+    siteLocations: React.PropTypes.array,
+    fetchSites: React.PropTypes.func,
     closeModal: React.PropTypes.func,
     addCredits: React.PropTypes.func,
     currentUser: React.PropTypes.object,
@@ -31,8 +37,10 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
     this.incQuantity = this.incQuantity.bind(this);
     this.decQuantity = this.decQuantity.bind(this);
     this.addCreditsSubmit = this.addCreditsSubmit.bind(this);
+    this.handleSiteLocationChoose = this.handleSiteLocationChoose.bind(this);
 
     this.state = {
+      site: null,
       quantity: 1,
       credits: 0,
       total: 0,
@@ -41,6 +49,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
   }
 
   componentDidMount() {
+    this.props.fetchSites();
     this.props.getCreditsPrice();
   }
 
@@ -55,6 +64,12 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
         price: newProps.creditsPrice.price,
       });
     }
+  }
+
+  handleSiteLocationChoose(e) {
+    this.setState({
+      site: e,
+    });
   }
 
   incQuantity() {
@@ -84,6 +99,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
       cardId: cartValues.creditCard,
       username: this.props.currentUser.username,
       userId: this.props.currentUser.id,
+      site: this.state.site,
     };
 
     this.props.addCredits(this.props.currentUser.roleForClient.client.stripeCustomerId, data);
@@ -91,6 +107,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
 
 
   render() {
+    const { siteLocations } = this.props;
     const products = [
       {
         title: '100 Credits',
@@ -123,6 +140,26 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
                   <div className="scroll jcf--scrollable">
                     <div className="holder-inner">
                       <div className="form-fields">
+
+                        <div className="field-row">
+                          <strong className="label required"><label>Site Location</label></strong>
+                          <Field
+                            name="siteLocation"
+                            component={ReactSelect}
+                            placeholder="Select Site Location"
+                            options={siteLocations}
+                            className="field"
+                            onChange={this.handleSiteLocationChoose}
+                          />
+                        </div>
+
+                        <div className="field-row overflow">
+                          <span className="message">
+                            Location selection will appear on invoice for accounting purposes.
+                            Credits are added to all accounts.
+                          </span>
+                        </div>
+
                         <div className="field-row">
                           <strong className="label required"><label htmlFor="quantity">QUANTITY</label></strong>
                           <div className="field">
@@ -137,14 +174,14 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
                         <div className="field-row">
                           <strong className="label"><label htmlFor="credits">CREDITS</label></strong>
                           <div className="field">
-                            <input className="form-control" value={this.state.credits} type="text" name="credits" disabled />
+                            <input className="form-control" value={this.state.credits} type="text" id="credits" name="credits" disabled />
                           </div>
                         </div>
 
                         <div className="field-row">
                           <strong className="label"><label htmlFor="price">PRICE</label></strong>
                           <div className="field">
-                            <input className="form-control" value={`$${(this.state.quantity * this.props.creditsPrice.price) / 100}`} type="text" name="price" disabled />
+                            <input className="form-control" value={`$${(this.state.quantity * this.props.creditsPrice.price) / 100}`} type="text" id="price" name="price" disabled />
                           </div>
                         </div>
                       </div>
@@ -166,6 +203,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
 }
 
 const mapStateToProps = createStructuredSelector({
+  siteLocations : selectSiteLocations(),
   currentUser: selectCurrentUser(),
   addCreditsOperation: selectAddCredits(),
   creditsPrice: selectCreditsPrice(),
@@ -173,6 +211,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchSites:       () => dispatch(fetchSites()),
     addCredits: (customerId, data) => dispatch(addCredits(customerId, data)),
     getCreditsPrice: () => dispatch(getCreditsPrice()),
   };
