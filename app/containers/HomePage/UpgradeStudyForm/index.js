@@ -47,7 +47,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
       <form className="form-upgrade-study">
         <div className="upgrade-study form-fields">
           <div className="field-row">
-            <strong className="label required">
+            <strong className="label">
               <label>UPGRADE LEVEL</label>
             </strong>
             <div className="field">

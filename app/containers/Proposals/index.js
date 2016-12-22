@@ -140,17 +140,22 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     });
   }
 
-  search(value) {
+  search(value, type) {
     const { siteLocations } = this.props;
 
-    if (value.search || value.site) {
-      const searchBy = (value.search.length) ? value.search : null;
-      const site = siteLocations[value.site - 1] || null;
+    if (type === 'search') {
+      const searchBy = (value.target.value.length) ? value.target.value : null;
+
+      this.setState({
+        searchBy,
+      });
+    }
+
+    if (type === 'site') {
+      const site = siteLocations[value - 1] || null;
 
       this.setState({
         site,
-        range : null,
-        searchBy,
       });
     }
   }
