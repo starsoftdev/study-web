@@ -5,4 +5,8 @@ const schema = {
   creditCard: { presence: { message: '^You need to select credit card' } },
 };
 
+const shoppingCartFields = Object.keys(schema);
+
+export { shoppingCartFields };
+
 export default validatorFactory(schema);
