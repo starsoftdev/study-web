@@ -23,6 +23,7 @@ import ShoppingCartForm from 'components/ShoppingCartForm';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
 import { upgradeStudyFields } from '../UpgradeStudyForm/validator';
+import { renewStudyFields } from '../RenewStudyForm/validator';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -51,6 +52,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     shoppingCartFormError: PropTypes.object,
     shoppingCartFormValues: PropTypes.object,
     touchUpgradeStudy: PropTypes.func,
+    touchRenewStudy: PropTypes.func,
     touchShoppingCart: PropTypes.func,
   };
 
@@ -174,10 +176,17 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     });
   }
 
-  handleRenewStudyFormSubmit(cartParams) {
-    const { currentUserStripeCustomerId, renewStudyFormValues, renewStudy } = this.props;
+  handleRenewStudyFormSubmit() {
+    const { currentUserStripeCustomerId, renewStudyFormValues, renewStudy, renewStudyFormError, shoppingCartFormValues, shoppingCartFormError,
+      touchRenewStudy, touchShoppingCart } = this.props;
 
-    renewStudy(this.state.selectedStudyId, cartParams, {
+    if (renewStudyFormError || shoppingCartFormError) {
+      touchRenewStudy();
+      touchShoppingCart();
+      return;
+    }
+
+    renewStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...renewStudyFormValues,
       stripeCustomerId: currentUserStripeCustomerId,
       selectedIndicationId: this.state.selectedIndicationId,
@@ -421,8 +430,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                       showCards
                       noBorder
                       addOns={addOns}
-                      disableSubmit={renewStudyFormError}
-                      onSubmit={this.handleRenewStudyFormSubmit}
+                      validateAndSubmit={this.handleRenewStudyFormSubmit}
                     />
                   </div>
                 </div>
@@ -525,6 +533,7 @@ function mapDispatchToProps(dispatch) {
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
     sortSuccess: (payload) => dispatch(sortSuccess(payload)),
     touchUpgradeStudy: () => dispatch(touch('upgradeStudy', ...upgradeStudyFields)),
+    touchRenewStudy: () => dispatch(touch('renewStudy', ...renewStudyFields)),
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
   };
 }
