@@ -195,8 +195,8 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                 keyboard
               >
                 <Modal.Header>
-                  <Modal.Title>Add New Card</Modal.Title>
-                  <a className="lightbox-close close" onClick={this.closeRenewModal}>
+                  <Modal.Title>Add New Card1</Modal.Title>
+                  <a className="lightbox-close close" onClick={this.closeAddNewCardModal}>
                     <i className="icomoon-icon_close" />
                   </a>
                 </Modal.Header>
