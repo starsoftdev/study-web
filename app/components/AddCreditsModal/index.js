@@ -75,7 +75,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     }
   }
 
-  handleSiteLocationChoose(e) {}
+  handleSiteLocationChoose() {}
 
   incQuantity() {
     if (this.state.quantity < 999) {
@@ -98,7 +98,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
   }
 
   addCreditsSubmit(ev) {
-    ev.preventDefault()
+    ev.preventDefault();
     const {
       addCreditsFormValues,
       addCreditsFormError,
