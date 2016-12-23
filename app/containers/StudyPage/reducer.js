@@ -38,6 +38,7 @@ import {
   SWITCH_TO_TEXT_SECTION_DETAIL,
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
+  SUBMIT_ADD_PATIENT,
 } from './constants';
 import _ from 'lodash';
 
@@ -50,10 +51,20 @@ const initialState = {
     other: false,
   },
   openPatientModal: false,
+  addPatientStatus:{
+    adding: false,
+  },
 };
 
 function studyPageReducer(state = initialState, action) {
   switch (action.type) {
+    case SUBMIT_ADD_PATIENT:
+      return {
+        ...state,
+        addPatientStatus:{
+          adding: true,
+        },
+      };
     case FETCH_CAMPAIGNS_SUCCESS:
       return {
         ...state,
@@ -111,10 +122,16 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         uploadStarted: null,
+        addPatientStatus:{
+          adding: false,
+        },
       };
     case SUBMIT_ADD_PATIENT_SUCCESS:
       return {
         ...state,
+        addPatientStatus:{
+          adding: false,
+        },
         uploadStarted: null,
         fileUploaded: action.fileName,
         patientCategories: state.patientCategories.map(category => {

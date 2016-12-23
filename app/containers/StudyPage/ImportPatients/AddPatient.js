@@ -12,7 +12,7 @@ import formValidator from './validator';
 import Input from '../../../components/Input/index';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { submitAddPatient } from '../actions';
-import { selectStudyId } from '../selectors';
+import { selectStudyId, selectAddPatientStatus } from '../selectors';
 import { selectSyncErrors, selectValues } from '../../../common/selectors/form.selector';
 import { createStructuredSelector } from 'reselect';
 import { normalizePhone } from '../helper/functions';
@@ -29,6 +29,7 @@ class AddPatient extends React.Component {
     submitAddPatient: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
+    addPatientStatus: React.PropTypes.object,
   };
   constructor(props) {
     super(props);
@@ -47,7 +48,8 @@ class AddPatient extends React.Component {
   }
 
   render() {
-    const { onHide, ...props } = this.props;
+    const { addPatientStatus, onHide, ...props } = this.props;
+    console.log(addPatientStatus);
     return (
       <Modal
         {...props}
@@ -121,7 +123,7 @@ class AddPatient extends React.Component {
                 />
               </div>
               <div className="text-right">
-                <Button onClick={(event) => this.addPatient(event)}>Submit</Button>
+                <Button disabled={addPatientStatus.adding} onClick={(event) => this.addPatient(event)}>Submit</Button>
               </div>
             </Form>
           </div>
@@ -136,6 +138,7 @@ const mapStateToProps = createStructuredSelector({
   newPatient: selectValues(formName),
   errorList: selectSyncErrors(formName),
   studyId: selectStudyId(),
+  addPatientStatus: selectAddPatientStatus(),
 });
 
 function mapDispatchToProps(dispatch) {
