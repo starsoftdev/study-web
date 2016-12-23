@@ -33,6 +33,7 @@ const initialState = {
   patientSignUps: {
     today: 0,
     yesterday: 0,
+    total: 0,
   },
   patientMessages: {
     unreadTexts: 0,
@@ -85,6 +86,7 @@ export default function homePageReducer(state = initialState, action) {
         patientSignUps: {
           today: payload.today,
           yesterday: payload.yesterday,
+          total: payload.total,
         },
       };
     case FETCH_PATIENT_MESSAGES_SUCCEESS:

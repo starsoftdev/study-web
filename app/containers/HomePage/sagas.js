@@ -234,14 +234,15 @@ export function* homePageSaga() {
   const watcherH = yield fork(editStudyWatcher);
 
   // Suspend execution until location changes
-  yield take(LOCATION_CHANGE);
-
-  yield cancel(watcherA);
-  yield cancel(watcherB);
-  yield cancel(watcherC);
-  yield cancel(watcherD);
-  yield cancel(watcherE);
-  yield cancel(watcherF);
-  yield cancel(watcherG);
-  yield cancel(watcherH);
+  const options = yield take(LOCATION_CHANGE);
+  if (options.payload.pathname !== '/') {
+    yield cancel(watcherA);
+    yield cancel(watcherB);
+    yield cancel(watcherC);
+    yield cancel(watcherD);
+    yield cancel(watcherE);
+    yield cancel(watcherF);
+    yield cancel(watcherG);
+    yield cancel(watcherH);
+  }
 }
