@@ -13,9 +13,11 @@ import { touch } from 'redux-form';
 import IrbAdCreationForm from 'components/IrbAdCreationForm';
 import ShoppingCartForm from 'components/ShoppingCartForm';
 import { selectIrbAdCreationFormValues, selectIrbAdCreationFormError } from 'components/IrbAdCreationForm/selectors';
-import { fields } from 'components/IrbAdCreationForm/validator';
+import { fields as irbAdCreationFields } from 'components/IrbAdCreationForm/validator';
 import { selectIrbProductList, selectIrbAdCreationDetail } from 'containers/IrbAdCreationPage/selectors';
 import { submitForm, fetchIrbProductList, fetchIrbAdCreation } from 'containers/IrbAdCreationPage/actions';
+import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
+import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
 
 import {
   fetchSites,
@@ -43,9 +45,12 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     productList: PropTypes.array,
     irbAdCreationDetail: PropTypes.object,
     params: PropTypes.object,
+    shoppingCartFormValues: PropTypes.object,
+    shoppingCartFormError: PropTypes.object,
     fetchProductList: PropTypes.func,
     fetchIrbAdCreation: PropTypes.func,
     touchIrbAdCreation: PropTypes.func,
+    touchShoppingCart: PropTypes.func,
   };
 
   constructor(props) {
@@ -64,14 +69,16 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     this.props.fetchProductList();
   }
 
-  onSubmitForm(params) {
-    if (this.props.hasError) {
-      this.props.touchIrbAdCreation();
+  onSubmitForm() {
+    const { hasError, shoppingCartFormValues, shoppingCartFormError, touchIrbAdCreation, touchShoppingCart } = this.props;
+    if (hasError || shoppingCartFormError) {
+      touchIrbAdCreation();
+      touchShoppingCart();
       return;
     }
 
     const siteLocation = _.find(this.props.siteLocations, { id: this.props.formValues.siteLocation });
-    this.submitForm(params, {
+    this.submitForm(shoppingCartFormValues, {
       ...this.props.formValues,
       username: this.props.currentUser.username,
       siteLocationName: siteLocation.name,
@@ -110,7 +117,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
                 <div className="fixed-block-holder">
                   <div className="order-summery-container">
                     <Sticky className="sticky-shopping-cart">
-                      <ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} />
+                      <ShoppingCartForm showCards addOns={addOns} validateAndSubmit={this.onSubmitForm} />
                     </Sticky>
                   </div>
                 </div>
@@ -133,6 +140,8 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   productList: selectIrbProductList(),
   irbAdCreationDetail: selectIrbAdCreationDetail(),
+  shoppingCartFormValues: selectShoppingCartFormValues(),
+  shoppingCartFormError: selectShoppingCartFormError(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -142,7 +151,8 @@ function mapDispatchToProps(dispatch) {
     fetchProductList: () => dispatch(fetchIrbProductList()),
     fetchIrbAdCreation: (id) => dispatch(fetchIrbAdCreation(id)),
     submitForm:     (cartValues, formValues) => dispatch(submitForm(cartValues, formValues)),
-    touchIrbAdCreation: () => dispatch(touch('irbAdCreation', ...fields)),
+    touchIrbAdCreation: () => dispatch(touch('irbAdCreation', ...irbAdCreationFields)),
+    touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
   };
 }
 
