@@ -62,7 +62,7 @@ export class Dashboard extends React.Component {
             <div className="img-holder pull-left"><img src={graph} width="141" height="119" alt=" " /></div>
             <div className="textbox">
               <h2>PATIENT <br /> SIGN UPS</h2>
-              <span className="counter">TOTAL {patientSignUps.today + patientSignUps.yesterday}</span>
+              <span className="counter">TOTAL {patientSignUps.total}</span>
             </div>
           </div>
           <div className="box">
