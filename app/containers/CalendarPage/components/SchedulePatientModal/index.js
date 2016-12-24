@@ -9,40 +9,9 @@ import moment from 'moment';
 import { SchedulePatientModalType } from 'common/constants';
 
 import ReactSelect from 'components/Input/ReactSelect';
-import DatePicker from 'components/Input/DatePicker';
 import Checkbox from 'components/Input/Checkbox';
 
 import './styles.less';
-
-function numberSequenceCreator(start, end) {
-  return _.range(start, end).map(n => {
-    if (n < 10) {
-      return {
-        label: '0' + n,
-        value: n.toString(),
-      };
-    }
-    return {
-      label: n.toString(),
-      value: n.toString(),
-    };
-  });
-}
-
-function getTimeComponents(strTime) {
-  return {
-    hour: (((moment(strTime).hour() + 11) % 12) + 1).toString(),
-    minute: moment(strTime).minute().toString(),
-    period: moment(strTime).hour() >= 12 ? 'PM' : 'AM',
-  };
-}
-
-const hourOptions = numberSequenceCreator(1, 13);
-const minuteOptions = numberSequenceCreator(0, 60);
-const periodOptions = [
-  { label: 'AM', value: 'AM' },
-  { label: 'PM', value: 'PM' },
-];
 
 @reduxForm({ form: 'schedulePatient' })
 export default class SchedulePatientModal extends Component {
@@ -53,9 +22,8 @@ export default class SchedulePatientModal extends Component {
     indications: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     handleCloseModal: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
-    modalType: PropTypes.string.isRequired,
+    modalType: PropTypes.string,
     selectedCellInfo: PropTypes.object.isRequired,
     patientsByStudy: PropTypes.object.isRequired,
     schedules: PropTypes.array.isRequired,
@@ -63,6 +31,9 @@ export default class SchedulePatientModal extends Component {
     fetchingSites: PropTypes.bool,
     fetchingPatientsByStudy: PropTypes.bool.isRequired,
     initialize: PropTypes.func.isRequired,
+    hourOptions: PropTypes.array,
+    minuteOptions: PropTypes.array,
+    periodOptions: PropTypes.array,
   }
 
   state = {
@@ -76,13 +47,9 @@ export default class SchedulePatientModal extends Component {
   componentWillReceiveProps(nextProps) {
     const { siteLocationOptions, isAdmin } = this.props;
 
-    if (this.props.modalType === SchedulePatientModalType.HIDDEN && nextProps.modalType !== SchedulePatientModalType.HIDDEN) {
-      let initialValues = nextProps.selectedCellInfo.data ?
-      {
-        ...getTimeComponents(nextProps.selectedCellInfo.data.time),
-        textReminder: true,
-      } : { textReminder: true };
-      console.log('******', initialValues);
+    if (this.props.modalType === SchedulePatientModalType.HIDDEN && nextProps.modalType === SchedulePatientModalType.CREATE) {
+      let initialValues = { textReminder: true };
+
       if (!isAdmin) {
         const site = siteLocationOptions[0];
         if (this.state.siteLocation === null && site) {  // prevent recursive render
@@ -182,19 +149,21 @@ export default class SchedulePatientModal extends Component {
       siteLocationOptions,
       isAdmin,
       handleCloseModal,
-      handleDelete,
       handleSubmit,
       submitting,
       modalType,
       selectedCellInfo,
+      hourOptions,
+      minuteOptions,
+      periodOptions,
     } = this.props;
 
     const { protocolOptions, patientOptions } = this.state;
 
     return (
-      <Modal show={modalType !== SchedulePatientModalType.HIDDEN} onHide={handleCloseModal}>
+      <Modal show={modalType === SchedulePatientModalType.CREATE} onHide={handleCloseModal}>
         {modalType === SchedulePatientModalType.CREATE &&
-          <div id="add-scedule" className="lightbox lightbox-active fixed-popup">
+          (<div id="add-scedule" className="lightbox lightbox-active fixed-popup">
             <div className="lightbox-holder">
               <div className="lightbox-frame">
                 <div className="modal-content">
@@ -325,105 +294,7 @@ export default class SchedulePatientModal extends Component {
                 </div>
               </div>
             </div>
-          </div>
-        }
-
-        {modalType === SchedulePatientModalType.UPDATE &&
-          <div id="edit-schedule" className="lightbox lightbox-active fixed-popup">
-            <div className="lightbox-holder">
-              <div className="lightbox-frame">
-                <div className="modal-content">
-                  <div className="head">
-                    <strong className="title">EDIT SCHEDULE</strong>
-                    <a className="close lightbox-close" onClick={handleCloseModal}><i className="icomoon-icon_close" /></a>
-                  </div>
-                  <div className="scroll-holder">
-                    <form action="#" className="form-lightbox form-edit-schedule" onSubmit={handleSubmit}>
-                      <strong className="name">{`${selectedCellInfo.data.patient.firstName} ${selectedCellInfo.data.patient.lastName}`}</strong>
-                      <span className="site-location">{selectedCellInfo.data.siteLocation}</span>
-                      <span className="protocol">{selectedCellInfo.data.protocolNumber}</span>
-                      <div className="field-row">
-                        <strong className="label">* When</strong>
-                        <div className="field append-calendar">
-                          <Field
-                            id="start-date"
-                            name="date"
-                            component={DatePicker}
-                            className="form-control datepicker-input"
-                            initialDate={moment(this.props.selectedCellInfo.data.time)}
-                          />
-                        </div>
-                      </div>
-                      <div className="field-row">
-                        <strong className="label required"><label htmlFor="patient-time-edit">Time</label></strong>
-                        <div className="field">
-                          <div className="col-holder row">
-                            <div className="col pull-left hours">
-                              <Field
-                                id="patient-time-edit"
-                                name="hour"
-                                component={ReactSelect}
-                                placeholder="Hours"
-                                options={hourOptions}
-                                className="visible-first-del min-height"
-                                disabled={submitting}
-                              />
-                            </div>
-                            <div className="col pull-left minutes">
-                              <Field
-                                id="minutes2"
-                                name="minute"
-                                component={ReactSelect}
-                                placeholder="Minutes"
-                                options={minuteOptions}
-                                className="visible-first-del min-height"
-                                disabled={submitting}
-                              />
-                            </div>
-                            <div className="col pull-left time-mode">
-                              <Field
-                                id="time-period2"
-                                name="period"
-                                component={ReactSelect}
-                                placeholder="AM/PM"
-                                options={periodOptions}
-                                className="visible-first"
-                                disabled={submitting}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="field-row">
-                        <strong className="label">&nbsp;</strong>
-                        <Field
-                          id="text-reminder"
-                          name="textReminder"
-                          component={Checkbox}
-                          type="checkbox"
-                        />
-                        <label className="text-reminder-label" htmlFor="text-reminder">Text Reminder</label>
-                      </div>
-                      <div className="btn-block text-right">
-                        <input
-                          type="button"
-                          className="btn btn-gray-outline lightbox-opener"
-                          disabled={submitting}
-                          value={submitting ? 'deleting...' : 'delete'}
-                          onClick={() => handleDelete(selectedCellInfo.data.id)}
-                        />
-                        <input
-                          type="submit"
-                          className="btn btn-default btn-update"
-                          value={submitting ? 'updating...' : 'update'}
-                        />
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          </div>)
         }
       </Modal>
     );
