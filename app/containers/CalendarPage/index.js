@@ -6,6 +6,7 @@ import { createStructuredSelector } from 'reselect';
 
 import CalendarWidget from './components/CalendarWidget';
 import SchedulePatientModal from './components/SchedulePatientModal';
+import EditScheduleModal from './components/EditScheduleModal';
 import FilterBar from './components/FilterBar';
 import AllEventsModal from './components/AllEventsModal';
 
@@ -41,6 +42,28 @@ const getFilteredSchedules = (schedules, filter) =>
       (!filter.indication || filter.indication === 'All' || s.indication === filter.indication) &&
       (!filter.protocol || filter.protocol === 'All' || s.protocolNumber === filter.protocol)
   );
+
+function numberSequenceCreator(start, end) {
+  return _.range(start, end).map(n => {
+    if (n < 10) {
+      return {
+        label: `0${n}`,
+        value: n.toString(),
+      };
+    }
+    return {
+      label: n.toString(),
+      value: n.toString(),
+    };
+  });
+}
+
+const hourOptions = numberSequenceCreator(1, 13);
+const minuteOptions = numberSequenceCreator(0, 60);
+const periodOptions = [
+  { label: 'AM', value: 'AM' },
+  { label: 'PM', value: 'PM' },
+];
 
 export class CalendarPage extends React.Component {
   static propTypes = {
@@ -210,7 +233,7 @@ export class CalendarPage extends React.Component {
       direction = null;
       sort = null;
     }
-    console.log(sort, direction);
+
     this.props.setActiveSort(sort, direction);
   }
 
@@ -269,7 +292,6 @@ export class CalendarPage extends React.Component {
             indications={indications}
             onSubmit={this.handleSubmit}
             handleCloseModal={this.handleCloseModal}
-            handleDelete={this.handleDelete}
             submitting={false}
             selectedCellInfo={this.selectedCellInfo}
             modalType={this.state.modalType}
@@ -278,6 +300,20 @@ export class CalendarPage extends React.Component {
             fetchingSites={fetchingSites}
             fetchingPatientsByStudy={fetchingPatientsByStudy}
             fetchPatientsByStudy={this.props.fetchPatientsByStudy}
+            hourOptions={hourOptions}
+            minuteOptions={minuteOptions}
+            periodOptions={periodOptions}
+          />
+          <EditScheduleModal
+            onSubmit={this.handleSubmit}
+            handleCloseModal={this.handleCloseModal}
+            handleDelete={this.handleDelete}
+            submitting={false}
+            selectedCellInfo={this.selectedCellInfo}
+            modalType={this.state.modalType}
+            hourOptions={hourOptions}
+            minuteOptions={minuteOptions}
+            periodOptions={periodOptions}
           />
           <AllEventsModal
             visible={showAll.visible}
