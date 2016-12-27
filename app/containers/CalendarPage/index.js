@@ -303,6 +303,7 @@ export class CalendarPage extends React.Component {
             hourOptions={hourOptions}
             minuteOptions={minuteOptions}
             periodOptions={periodOptions}
+            initialValues={{ hour: '0' }}
           />
           <EditScheduleModal
             onSubmit={this.handleSubmit}
