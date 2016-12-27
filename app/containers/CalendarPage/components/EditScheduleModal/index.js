@@ -11,6 +11,8 @@ import ReactSelect from 'components/Input/ReactSelect';
 import DatePicker from 'components/Input/DatePicker';
 import Checkbox from 'components/Input/Checkbox';
 
+import validator from './validator';
+
 import './styles.less';
 
 function getTimeComponents(strTime) {
@@ -21,7 +23,7 @@ function getTimeComponents(strTime) {
   };
 }
 
-@reduxForm({ form: 'editSchedule' })
+@reduxForm({ form: 'editSchedule', validate: validator })
 export default class EditScheduleModal extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func.isRequired,
