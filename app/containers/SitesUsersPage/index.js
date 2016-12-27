@@ -155,10 +155,10 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                 </div>
                 <div className="search-area pull-left">
                   <div className="field">
-                    <input type="text" className="form-control keyword-search" placeholder="Search User Name..." onKeyPress={this.searchClientRoles} />
-                    <label htmlFor="search">
+                    <Button className="btn-enter">
                       <i className="icomoon-icon_search2" />
-                    </label>
+                    </Button>
+                    <input type="text" className="form-control keyword-search" placeholder="Search User Name..." onKeyPress={this.searchClientRoles} />
                   </div>
                 </div>
               </div>
