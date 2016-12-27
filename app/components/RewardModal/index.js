@@ -20,6 +20,8 @@ import {
   selectCurrentUserClientId,
 } from 'containers/App/selectors';
 
+import validator from './validator';
+
 import './style.less';
 
 const mapStateToProps = createStructuredSelector({
@@ -27,7 +29,7 @@ const mapStateToProps = createStructuredSelector({
   currentUserClientId: selectCurrentUserClientId(),
 });
 
-@reduxForm({ form: 'rewardForm' })
+@reduxForm({ form: 'rewardForm', validate: validator })
 @connect(mapStateToProps, null)
 class RewardModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
