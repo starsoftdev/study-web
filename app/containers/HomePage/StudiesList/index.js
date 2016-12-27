@@ -12,7 +12,7 @@ import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy,
   selectUpgradedStudy, selectEditedStudy, selectPaginationOptions } from 'containers/HomePage/selectors';
 import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from 'containers/HomePage/constants';
-import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess } from 'containers/HomePage/actions';
+import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice } from 'containers/HomePage/actions';
 import { selectRenewStudyFormValues, selectRenewStudyFormError } from 'containers/HomePage/RenewStudyForm/selectors';
 import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError } from 'containers/HomePage/UpgradeStudyForm/selectors';
 import StudyItem from './StudyItem';
@@ -41,6 +41,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     editedStudy: PropTypes.object,
     fetchLevels: PropTypes.func,
     fetchIndicationLevelPrice: PropTypes.func,
+    fetchUpgradeStudyPrice: PropTypes.func,
     clearIndicationLevelPrice: PropTypes.func,
     renewStudy: PropTypes.func,
     upgradeStudy: PropTypes.func,
@@ -118,7 +119,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
     if (newLevelOfUpgradeStudy !== oldLevelOfUpgradeStudy) {
       if (newLevelOfUpgradeStudy) {
-        this.props.fetchIndicationLevelPrice(newLevelOfUpgradeStudy, this.state.selectedIndicationId);
+        const selectedStudy = _.find(this.props.studies.details, (o) => (o.studyId === this.state.selectedStudyId));
+        this.props.fetchUpgradeStudyPrice(selectedStudy.campaign.level_id, newLevelOfUpgradeStudy);
       } else {
         this.props.clearIndicationLevelPrice();
       }
@@ -330,7 +332,11 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const inactiveCount = countResult[INACTIVE_STATUS_VALUE] || 0;
     const totalCount = studies.details.length;
 
+    let selectedStudy = null;
     const studiesListContents = studies.details.map((item, index) => {
+      if (item.studyId === this.state.selectedStudyId) {
+        selectedStudy = item;
+      }
       const unreadMessageCount = sumBy(filter(sitePatients.details, { study_id: item.studyId }), (sitePatient) => {
         if (sitePatient.count_unread == null) {
           return 0;
@@ -456,7 +462,9 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                   <div className="pull-left col">
                     <div className="scroll jcf--scrollable">
                       <div className="holder-inner">
-                        <UpgradeStudyForm />
+                        <UpgradeStudyForm
+                          selectedStudy={selectedStudy}
+                        />
                       </div>
                     </div>
                   </div>
@@ -526,6 +534,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchLevels: () => dispatch(fetchLevels()),
     fetchIndicationLevelPrice: (levelId, indicationId) => dispatch(fetchIndicationLevelPrice(levelId, indicationId)),
+    fetchUpgradeStudyPrice: (fromLevel, toLevel) => dispatch(fetchUpgradeStudyPrice(fromLevel, toLevel)),
     clearIndicationLevelPrice: () => dispatch(clearIndicationLevelPrice()),
     renewStudy: (studyId, cartValues, formValues) => dispatch(renewStudy(studyId, cartValues, formValues)),
     upgradeStudy: (studyId, cartValues, formValues) => dispatch(upgradeStudy(studyId, cartValues, formValues)),
