@@ -92,7 +92,8 @@
   }
 
   a.rdr-PredefinedRangesItemActive {
-    color: #00afef !important;
+    background-color: #00afef !important;
+    color: white !important;
   }
 
   .calendar-container {
@@ -103,12 +104,28 @@
       float: left;
       width: 50%;
       padding-right: 6px;
+
+      .next.rdr-MonthAndYear-button {
+        width: 29px !important;
+
+        i {
+          display: none !important;
+        }
+      }
     }
 
     .calendar-1 {
       float: right;
       width: 50%;
       padding-left: 6px;
+
+      .prev.rdr-MonthAndYear-button {
+        width: 29px !important;
+
+        i {
+          display: none !important;
+        }
+      }
     }
 
     .rdr-Calendar {
