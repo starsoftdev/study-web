@@ -150,6 +150,9 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
             <span className="title">
             </span>
             <div className="field">
+              <Button className="btn-enter">
+                <i className="icomoon-icon_search2" />
+              </Button>
               <Field
                 name="name"
                 component={Input}
@@ -159,9 +162,6 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 disabled={patients.fetching}
                 onChange={(e) => this.initSearch(e, 'name')}
               />
-              <label htmlFor="search">
-                <i className="icomoon-icon_search2" />
-              </label>
             </div>
           </div>
 

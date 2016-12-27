@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 import { Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
 import { map } from 'lodash';
 
 import CenteredModal from '../../components/CenteredModal/index';
@@ -146,18 +147,18 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
               <div className="fields-holder pull-left">
                 <div className="search-area pull-left">
                   <div className="field">
-                    <input type="text" className="form-control keyword-search" placeholder="Search Site Name..." onKeyPress={this.searchClientSites} />
-                    <label htmlFor="search">
+                    <Button className="btn-enter">
                       <i className="icomoon-icon_search2" />
-                    </label>
+                    </Button>
+                    <input type="text" className="form-control keyword-search" placeholder="Search Site Name..." onKeyPress={this.searchClientSites} />
                   </div>
                 </div>
                 <div className="search-area pull-left">
                   <div className="field">
-                    <input type="text" className="form-control keyword-search" placeholder="Search User Name..." onKeyPress={this.searchClientRoles} />
-                    <label htmlFor="search">
+                    <Button className="btn-enter">
                       <i className="icomoon-icon_search2" />
-                    </label>
+                    </Button>
+                    <input type="text" className="form-control keyword-search" placeholder="Search User Name..." onKeyPress={this.searchClientRoles} />
                   </div>
                 </div>
               </div>
