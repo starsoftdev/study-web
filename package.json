@@ -172,7 +172,7 @@
     "react-sound": "^0.5.2",
     "react-sticky": "^5.0.5",
     "react-super-select": "^0.5.9",
-    "react-toggle-button": "^2.1.0",
+    "react-toggle-button": "git+https://github.com/studykik/react-toggle-button.git#403d0722819f0b7b94698cf61b2ecc82a8eb2b6b",
     "redux": "3.5.2",
     "redux-form": "^6.1.1",
     "redux-saga": "0.11.0",
