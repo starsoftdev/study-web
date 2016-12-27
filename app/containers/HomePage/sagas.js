@@ -18,6 +18,7 @@ import {
   RENEW_STUDY,
   UPGRADE_STUDY,
   EDIT_STUDY,
+  FETCH_UPGRADE_STUDY_PRICE,
 } from './constants';
 
 import {
@@ -140,6 +141,29 @@ export function* fetchIndicationLevelPriceWorker(action) {
   }
 }
 
+export function* fetchUpgradeStudyPriceWatcher() {
+  yield* takeLatest(FETCH_UPGRADE_STUDY_PRICE, fetchUpgradeStudyPriceWorker);
+}
+
+export function* fetchUpgradeStudyPriceWorker(action) {
+  try {
+    const { fromLevel, toLevel } = action;
+    const requestURL = `${API_URL}/upgradeLevelSkus/getPrice`;
+    const params = {
+      query: {
+        fromLevel,
+        toLevel,
+      },
+    };
+    const response = yield call(request, requestURL, params);
+    yield put(indicationLevelPriceFetched(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(indicationLevelPriceFetchingError(err));
+  }
+}
+
 export function* renewStudyWatcher() {
   yield* takeLatest(RENEW_STUDY, renewStudyWorker);
 }
@@ -187,6 +211,8 @@ export function* upgradeStudyWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(toastrActions.success('Upgrade Study', 'The request has been submitted successfully'));
+    response.newLevelId = formValues.level;
+    response.studyId = studyId;
     yield put(studyUpgraded(response));
     yield put(reset('upgradeStudy'));
   } catch (err) {
@@ -232,6 +258,7 @@ export function* homePageSaga() {
   const watcherF = yield fork(renewStudyWatcher);
   const watcherG = yield fork(upgradeStudyWatcher);
   const watcherH = yield fork(editStudyWatcher);
+  const watcherI = yield fork(fetchUpgradeStudyPriceWatcher);
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
@@ -244,5 +271,6 @@ export function* homePageSaga() {
     yield cancel(watcherF);
     yield cancel(watcherG);
     yield cancel(watcherH);
+    yield cancel(watcherI);
   }
 }
