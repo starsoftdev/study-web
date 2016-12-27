@@ -669,9 +669,9 @@ export function* fetchStudySaga() {
     const watcherO = yield fork(submitPatientUpdate);
     const watcherP = yield fork(submitTextBlast);
     const watcherQ = yield fork(submitPatientImport);
-    const watcherR =yield fork(submitAddPatient);
-    const watcherS =yield fork(submitPatientNote);
-    const watcherT =yield fork(submitDeleteNote);
+    const watcherR = yield fork(submitAddPatient);
+    const watcherS = yield fork(submitPatientNote);
+    const watcherT = yield fork(submitDeleteNote);
     const watcherU = yield fork(submitPatientText);
 
     yield take(LOCATION_CHANGE);
