@@ -59,7 +59,7 @@ export default class SchedulePatientModal extends Component {
             this.handleSiteLocationChoose(site);
             initialValues = {
               ...initialValues,
-              siteLocations: site,   // manually set siteLocation form value
+              siteLocation: site,   // manually set siteLocation form value
             };
           }
         }
