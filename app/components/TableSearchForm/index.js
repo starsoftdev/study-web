@@ -44,7 +44,10 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
       linked : {},
       datePicker : null,
       firstDayOfWeek : null,
-      predefined : {},
+      predefined : {
+        startDate: moment().clone().subtract(30, 'days'),
+        endDate: moment(),
+      },
     };
   }
 
