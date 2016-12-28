@@ -176,7 +176,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
               component={ReactSelect}
               placeholder="Select Campaign Length"
               options={CAMPAIGN_LENGTH_LIST}
-              className="field top-positioned"
+              className="field"
               onChange={this.campaignLengthChaged}
             />
           </div>
