@@ -63,7 +63,7 @@ export default class EditScheduleModal extends Component {
     } = this.props;
 
     return (
-      <Modal show={modalType === SchedulePatientModalType.UPDATE} onHide={handleCloseModal}>
+      <Modal show={modalType === SchedulePatientModalType.UPDATE} onHide={handleCloseModal} id="edit-schedule-modal">
         { modalType === SchedulePatientModalType.UPDATE &&
           (<div id="edit-schedule" className="lightbox lightbox-active fixed-popup">
             <div className="lightbox-holder">
