@@ -12,12 +12,16 @@ import ShoppingCartForm from 'components/ShoppingCartForm';
 import ListNewStudyForm from 'components/ListNewStudyForm';
 import { selectListNewStudyPageDomain, selectFormSubmissionStatus, selectShowSubmitFormModal, selectIndicationLevelPrice } from 'containers/ListNewStudyPage/selectors';
 import { selectListNewStudyFormValues, selectListNewStudyFormError } from 'components/ListNewStudyForm/selectors';
+import { fields as newStudyFields } from 'components/ListNewStudyForm/validator';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
 import _, { find } from 'lodash';
-import { submitForm, hideSubmitFormModal, fetchIndicationLevelPrice, clearFormSubmissionData } from 'containers/ListNewStudyPage/actions';
+import { submitForm, hideSubmitFormModal, clearFormSubmissionData } from 'containers/ListNewStudyPage/actions';
+import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
+import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
+
+import { touch } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import LoadingSpinner from 'components/LoadingSpinner';
-import './styles.less';
 
 import Helmet from 'react-helmet';
 import {
@@ -26,6 +30,7 @@ import {
   fetchLevels,
   saveSite,
   getAvailPhoneNumbers,
+  fetchIndicationLevelPrice,
 } from 'containers/App/actions';
 import {
   selectSiteLocations,
@@ -61,6 +66,10 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     fetchIndicationLevelPrice: PropTypes.func,
     clearFormSubmissionData: PropTypes.func,
     history: PropTypes.object,
+    shoppingCartFormValues: PropTypes.object,
+    shoppingCartFormError: PropTypes.object,
+    touchNewStudy: PropTypes.func,
+    touchShoppingCart: PropTypes.func,
   }
 
   constructor(props) {
@@ -90,7 +99,16 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     }
   }
 
-  onSubmitForm(params) {
+  onSubmitForm() {
+    const { hasErrors, shoppingCartFormValues, shoppingCartFormError, touchNewStudy, touchShoppingCart } = this.props;
+    console.log(shoppingCartFormValues);
+
+    if (hasErrors || shoppingCartFormError) {
+      touchNewStudy();
+      touchShoppingCart();
+      return;
+    }
+
     const filteredEmails = [];
     _.forEach(this.props.formValues.emailNotifications, (item) => {
       if (item.isChecked) {
@@ -98,9 +116,9 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       }
     });
 
-    this.submitForm(params, {
+    this.submitForm(shoppingCartFormValues, {
       ...this.props.formValues,
-      username: this.props.currentUser.username,
+      user_id: this.props.currentUser.id,
       emailNotifications: filteredEmails,
       stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
     });
@@ -119,7 +137,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
   }
 
   render() {
-    const { siteLocations, indications, studyLevels, formValues, fullSiteLocations, hasErrors, indicationLevelPrice } = this.props;
+    const { siteLocations, indications, studyLevels, formValues, fullSiteLocations, indicationLevelPrice } = this.props;
 
     const addOns = [];
     const level = find(studyLevels, { id: formValues.exposureLevel });
@@ -178,7 +196,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
               <div className="fixed-block-holder">
                 <div className="order-summery-container">
                   <Sticky className="sticky-shopping-cart">
-                    {<ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} disableSubmit={hasErrors} />}
+                    {<ShoppingCartForm showCards addOns={addOns} validateAndSubmit={this.onSubmitForm} />}
                   </Sticky>
                 </div>
               </div>
@@ -234,6 +252,8 @@ const mapStateToProps = createStructuredSelector({
   formSubmissionStatus: selectFormSubmissionStatus(),
   showSubmitFormModal: selectShowSubmitFormModal(),
   indicationLevelPrice: selectIndicationLevelPrice(),
+  shoppingCartFormValues: selectShoppingCartFormValues(),
+  shoppingCartFormError: selectShoppingCartFormError(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -247,6 +267,8 @@ function mapDispatchToProps(dispatch) {
     hideSubmitFormModal:  () => dispatch(hideSubmitFormModal()),
     fetchIndicationLevelPrice: (indicationId, levelId) => dispatch(fetchIndicationLevelPrice(indicationId, levelId)),
     clearFormSubmissionData: () => (dispatch(clearFormSubmissionData())),
+    touchNewStudy: () => (dispatch(touch('listNewStudy', ...newStudyFields))),
+    touchShoppingCart: () => (dispatch(touch('shoppingCart', ...shoppingCartFields))),
   };
 }
 

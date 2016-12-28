@@ -11,6 +11,7 @@ import {
   DELETE_SCHEDULE,
   DELETE_SCHEDULE_SUCCESS,
   DELETE_SCHEDULE_ERROR,
+  SET_ACTIVE_SORT,
 } from './constants';
 
 export function fetchPatientsByStudy(studyId, siteId) {
@@ -88,5 +89,13 @@ export function deleteScheduleFailed(payload) {
   return {
     type: DELETE_SCHEDULE_ERROR,
     payload,
+  };
+}
+
+export function setActiveSort(sort, direction) {
+  return {
+    type: SET_ACTIVE_SORT,
+    sort,
+    direction,
   };
 }

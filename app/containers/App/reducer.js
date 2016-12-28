@@ -46,6 +46,10 @@ import {
   FETCH_SITE_PATIENTS_ERROR,
   UPDATE_SITE_PATIENTS,
 
+  FETCH_CLIENT_CREDITS,
+  FETCH_CLIENT_CREDITS_SUCCESS,
+  FETCH_CLIENT_CREDITS_ERROR,
+
   FETCH_PATIENT_MESSAGES,
   FETCH_PATIENT_MESSAGES_SUCCESS,
   FETCH_PATIENT_MESSAGES_ERROR,
@@ -138,6 +142,11 @@ const initialState = {
     },
     sitePatients: {
       details: [],
+      fetching: false,
+      error: null,
+    },
+    clientCredits: {
+      details: {},
       fetching: false,
       error: null,
     },
@@ -509,6 +518,33 @@ export default function appReducer(state = initialState, action) {
           details: sitePatientsCollection,
           fetching: false,
           error: null,
+        },
+      };
+      break;
+    case FETCH_CLIENT_CREDITS:
+      baseDataInnerState = {
+        clientCredits: {
+          details: {},
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_CLIENT_CREDITS_SUCCESS:
+      baseDataInnerState = {
+        clientCredits: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_CLIENT_CREDITS_ERROR:
+      baseDataInnerState = {
+        clientCredits: {
+          details: {},
+          fetching: false,
+          error: payload,
         },
       };
       break;

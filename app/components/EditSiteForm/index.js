@@ -1,17 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 
 import Input from 'components/Input';
-import { selectEditSiteFormError } from './selectors';
 import { selectSavedSite } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
+import Geosuggest from 'react-geosuggest';
+import './styles.less';
+import _ from 'lodash';
 
 const mapStateToProps = createStructuredSelector({
   savedSite: selectSavedSite(),
-  hasError: selectEditSiteFormError(),
 });
 
 @reduxForm({ form: 'editSite', validate: formValidator })
@@ -21,18 +22,67 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     savedSite: PropTypes.object,
-    hasError: PropTypes.bool,
     handleSubmit: PropTypes.func,
+    isEdit: PropTypes.bool,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.onSuggestSelect = this.onSuggestSelect.bind(this);
+  }
+
+
+  onSuggestSelect(e) {
+    let city = '';
+    let state = '';
+    let postalCode = '';
+    let streetNmber = '';
+    let route = '';
+    this.geoSuggest.update('');
+    if (e.gmaps && e.gmaps.address_components) {
+      const addressComponents = e.gmaps.address_components;
+      for (const val of addressComponents) {
+        if (!city) {
+          city = _.find(val.types, (o) => (o === 'locality'));
+          if (city) {
+            this.props.dispatch(change('editSite', 'city', val.long_name));
+          }
+        }
+        if (!state) {
+          state = _.find(val.types, (o) => (o === 'administrative_area_level_1'));
+          if (state) {
+            this.props.dispatch(change('editSite', 'state', val.long_name));
+          }
+        }
+        if (!postalCode) {
+          postalCode = _.find(val.types, (o) => (o === 'postal_code'));
+          if (postalCode) {
+            this.props.dispatch(change('editSite', 'zip', val.long_name));
+          }
+        }
+        if (!streetNmber && _.find(val.types, (o) => (o === 'street_number'))) {
+          streetNmber = val.short_name;
+        }
+        if (!route && _.find(val.types, (o) => (o === 'route'))) {
+          route = val.short_name;
+        }
+        if (streetNmber && route) {
+          this.geoSuggest.update(`${streetNmber} ${route}`);
+          this.props.dispatch(change('editSite', 'address', `${streetNmber} ${route}`));
+        }
+      }
+    }
+  }
+
   render() {
-    const { savedSite, hasError, handleSubmit } = this.props;
+    const { savedSite, handleSubmit, isEdit } = this.props;
 
     return (
-      <form className="form-edit-site" onSubmit={handleSubmit}>
+      <form className="form-lightbox form-edit-site" onSubmit={handleSubmit}>
         <div className="edit-site form-fields">
           <div className="field-row">
-            <strong className="required label">
+            <strong className="label required">
               <label>SITE NAME</label>
             </strong>
             <div className="field">
@@ -45,7 +95,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </div>
           </div>
           <div className="field-row">
-            <strong className="required label">
+            <strong className="label required">
               <label>PRINCIPAL INVESTIGATOR</label>
             </strong>
             <div className="field">
@@ -72,7 +122,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </div>
           </div>
           <div className="field-row">
-            <strong className="required label">
+            <strong className="label required">
               <label>SITE PHONE</label>
             </strong>
             <div className="field">
@@ -85,20 +135,30 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </div>
           </div>
           <div className="field-row">
-            <strong className="required label">
+            <strong className="label required">
               <label>SITE ADDRESS</label>
             </strong>
             <div className="field">
-              <Field
-                name="address"
-                component={Input}
-                type="text"
-                disabled={savedSite.saving}
-              />
+              {(() => {
+                if (isEdit) {
+                  return (<Field
+                    name="address"
+                    component={Input}
+                    disabled={savedSite.saving}
+                    onChange={this.addressChanged}
+                  />);
+                }
+
+                return (<Geosuggest
+                  ref={(el) => { this.geoSuggest = el; }}
+                  onSuggestSelect={this.onSuggestSelect}
+                  placeholder=""
+                />);
+              })()}
             </div>
           </div>
           <div className="field-row">
-            <strong className="required label">
+            <strong className="label required">
               <label>CITY</label>
             </strong>
             <div className="field">
@@ -111,7 +171,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </div>
           </div>
           <div className="field-row">
-            <strong className="required label">
+            <strong className="label required">
               <label>STATE / PROVINCE</label>
             </strong>
             <div className="field">
@@ -124,7 +184,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </div>
           </div>
           <div className="field-row">
-            <strong className="required label">
+            <strong className="label required">
               <label>POSTAL CODE</label>
             </strong>
             <div className="field">
@@ -137,9 +197,9 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </div>
           </div>
           <div className="btn-block text-right">
-            <button type="submit" className="btn btn-default btn-add-row" disabled={hasError || savedSite.saving}>
+            <button type="submit" className="btn btn-default btn-add-row" disabled={savedSite.saving}>
               {savedSite.saving
-                ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-site" /></span>
+                ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                 : <span>Submit</span>
               }
             </button>

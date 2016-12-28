@@ -13,12 +13,13 @@ import ReactSelect from 'components/Input/ReactSelect';
 import { Field, FieldArray, reduxForm, change } from 'redux-form';
 import _ from 'lodash';
 import moment from 'moment';
-import { Modal } from 'react-bootstrap';
+import CenteredModal from '../../components/CenteredModal/index';
+import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import RenderLeads from 'components/RenderLeads';
 import RenderEmailsList from './RenderEmailsList';
-import EditSiteForm from 'components/EditSiteForm';
+import EditSiteForm from '../../components/EditSiteForm/index';
 import { selectCurrentUserClientId } from 'containers/App/selectors';
 import {
   selectCallTracking,
@@ -31,7 +32,6 @@ import {
   showSiteLocationModal,
   hideSiteLocationModal,
 } from 'containers/ListNewStudyPage/actions';
-import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   callTracking: selectCallTracking(),
@@ -338,15 +338,17 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
 
         </div>
 
-        <Modal className="custom-modal" show={this.props.listNewStudyState.showAddSiteLocationModal} onHide={this.closeAddSiteModal}>
+        <Modal dialogComponentClass={CenteredModal} show={this.props.listNewStudyState.showAddSiteLocationModal} onHide={this.closeAddSiteModal}>
           <Modal.Header>
-            <Modal.Title>ADD CREDITS</Modal.Title>
+            <Modal.Title>ADD SITE LOCATION</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddSiteModal}>
               <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>
-            <EditSiteForm onSubmit={this.addSite} />
+            <div className="container-fluid">
+              <EditSiteForm onSubmit={this.addSite} />
+            </div>
           </Modal.Body>
         </Modal>
 

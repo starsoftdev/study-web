@@ -30,3 +30,11 @@ export const EDIT_STUDY_ERROR                            = 'HomePage/Viewport/ED
 
 export const ACTIVE_STATUS_VALUE                         = 'Active';
 export const INACTIVE_STATUS_VALUE                       = 'Inactive';
+
+export const SET_ACTIVE_SORT                             = 'HomePage/Dashboard/SET_ACTIVE_SORT';
+export const SORT_SUCCESS                                = 'HomePage/Dashboard/SORT_SUCCESS';
+
+export const FETCH_UPGRADE_STUDY_PRICE                   = 'HomePage/Viewport/FETCH_UPGRADE_STUDY_PRICE';
+export const FETCH_UPGRADE_STUDY_PRICE_SUCCESS           = 'HomePage/Viewport/FETCH_UPGRADE_STUDY_PRICE_SUCCESS';
+export const FETCH_UPGRADE_STUDY_PRICE_ERROR             = 'HomePage/Viewport/FETCH_UPGRADE_STUDY_PRICE_ERROR';
+

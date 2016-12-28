@@ -22,6 +22,7 @@ import CallItem from './CallItem';
 import PatientItem from './PatientItem';
 
 import ChatForm from './ChatForm';
+import { change } from 'redux-form';
 
 import {
   fetchSitePatients,
@@ -58,6 +59,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     fetchPatientMessages: React.PropTypes.func,
     sendStudyPatientMessages: React.PropTypes.func,
     markAsReadPatientMessages: React.PropTypes.func,
+    setChatTextValue: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -98,7 +100,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         }
         return true;
       });
-      this.selectPatient(selectedPatient);
+      this.selectPatient(selectedPatient, true);
       this.setState({ patientLoaded: false });
     }
   }
@@ -120,11 +122,15 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     this.setState({ playSound: Sound.status.PLAYING });
   }
 
-  selectPatient(item) {
+  selectPatient(item, initialSelect = false) {
     if (item.id !== this.state.selectedPatient.id) {
       this.setState({ selectedPatient: item });
       this.props.fetchPatientMessages(item.id, item.study_id);
       this.props.markAsReadPatientMessages(item.id, item.study_id);
+
+      if (!initialSelect) {
+        this.props.setChatTextValue('');
+      }
     }
   }
 
@@ -176,7 +182,15 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
           playStatus={this.state.playSound}
           onFinishedPlaying={this.onSoundFinished}
         />
-        <Modal className="custom-modal global-pms" dialogComponentClass={CenteredModal} id="chart-popup" show={this.props.showModal} onHide={this.props.closeModal}>
+        <Modal
+          className="custom-modal global-pms"
+          id="chart-popup"
+          dialogComponentClass={CenteredModal}
+          show={this.props.showModal}
+          onHide={this.props.closeModal}
+          backdrop
+          keyboard
+        >
           <Modal.Header>
             <Modal.Title>PATIENT MESSAGING SUITE</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closeModal}>
@@ -198,7 +212,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                           this.searchKey = searchKey;
                         }}
                       />
-                      <i className="icomoon-icon_search2"></i>
+                      <i className="icomoon-icon_search2" />
                     </div>
                   </div>
                   <ul className="tabset list-unstyled">
@@ -210,7 +224,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                 <section className="chat-area" id="chat-room1">
                   <header>
                     <strong className="name">{this.state.selectedPatient.first_name} {this.state.selectedPatient.last_name}</strong>
-                    <a href="#">
+                    <a>
                       <span className="protocol">{protocolNumber}</span>
                     </a>
                   </header>
@@ -252,6 +266,7 @@ function mapDispatchToProps(dispatch) {
     fetchPatientMessages: (patientId, studyId) => dispatch(fetchPatientMessages(patientId, studyId)),
     markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
     sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
+    setChatTextValue: (value) => dispatch(change('chatPatient', 'body', value)),
   };
 }
 

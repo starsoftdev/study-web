@@ -3,10 +3,6 @@
 	padding: 0 10px 30px;
 }
 
-.loading-user-data {
-  margin-top: 100px;
-}
-
 .hidden {
   display: none;
 }
@@ -30,7 +26,7 @@ input[type=text]::-moz-placeholder {  /* Firefox 19+ */
    opacity: 1;
 }
 
-input[type=text]:-ms-input-placeholder {  
+input[type=text]:-ms-input-placeholder {
    color: #101010;
    opacity: 1;
 }
@@ -168,7 +164,7 @@ input[type=text]:-ms-input-placeholder {
 	padding: 5px 10px;
 	margin: 0 10px 0 0;
 	text-transform: uppercase;
-	
+
 	&:before {
 		content: attr(data-text);
 		vertical-align: initial !important;
@@ -724,10 +720,10 @@ input[type=text]:-ms-input-placeholder {
   caption {
     background-color: #f78e1e;
     color: #fff;
-    padding: 12px 16px 16px;
     text-transform: uppercase;
     font-size: 21px;
     font-weight: 700;
+    padding: 21px 16px 25px;
   }
   .img-holder {
     top: 2px;
@@ -1063,7 +1059,7 @@ th, .th {
 	.fixed-block-holder {
 		float: right;
 		width: 43.4%;
-		
+
 	}
 
 	.fixed-block {
@@ -1174,7 +1170,8 @@ th, .th {
 		margin: 0 0 30px;
 	}
 
-	[type=submit] {
+	[type=submit],
+	[type=button] {
 		width: 100%;
 		.font(18px);
 		display: block;
@@ -1389,10 +1386,6 @@ th, .th {
 			font-size: 14px;
 			padding: 0 1px 15px 1px;
 		    word-break: normal;
-
-		    &:first-child {
-		    	word-break: break-word;
-		    }
 		    &:nth-child(3) {
 		    	width: 40px;
 		    }
@@ -1408,7 +1401,6 @@ th, .th {
 #wrapper .tooltip {
 	.tooltip-inner {
 		.font(18px);
-		padding: 10px;
 		font-weight: 700;
 		max-width: 259px;
 		padding: 7px 5px;
@@ -1907,12 +1899,6 @@ th, .th {
 		background: #a0cf67;
 	}
 
-	.selected {
-		.lightbox-opener {
-			//padding-top: 2px;
-		}
-	}
-
 	.list-holder {
 		max-height: 80px;
 		padding: 0 12px;
@@ -2315,7 +2301,7 @@ th, .th {
         padding-left: 11px;
       }
       &:nth-child(2) {
-        width: 4%;
+        width: 2%;
         padding-left: 5px;
       }
       &:nth-child(3) {
@@ -2341,7 +2327,7 @@ th, .th {
         width: 5.9%;
       }
       &:nth-child(10) {
-        width: 11.8%;
+        width: 13.8%;
       }
       &:nth-child(11) {
         width: 13.7%;
@@ -2977,16 +2963,7 @@ th, .th {
 		.btn-download {
 			width: 34%;
 		}
-
-    .btn-default.btn-enter {
-      top: 4px;
-      right: 4px;
-      padding: 1px 11px 1px 10px;
-      position: absolute;
-    }
 	}
-
-
 
 	@media screen and (max-width: 1650px) {
 		.form-search {
@@ -3187,6 +3164,17 @@ th, .th {
 		}
 
 	}
+}
+
+.btn-default.btn-enter {
+  top: 4px;
+  right: 4px;
+  padding: 1px 11px 1px 10px;
+  position: absolute;
+
+  + .form-control {
+    padding-right: 61px;
+  }
 }
 
 .patients-list-area {
@@ -3471,31 +3459,31 @@ th, .th {
 		.size(100%, 79vh);
 		table-layout: fixed;
 	}
-	
+
 	.table-cell {
 		padding: 10px;
 		display: table-cell;
 		vertical-align: middle;
 	}
-	
+
 	.sub-holder {
 		margin:0 auto;
 		max-width: 900px;
 		position: relative;
 		padding: 0 0 280px 319px;
 	}
-	
+
 	.img-holder {
 		left: 0;
 		bottom: 0;
 		padding: 0 0 20px;
 		position: absolute;
-		
+
 		.imgage {
 			z-index: 2;
 			position: relative;
 		}
-		
+
 		.bottom {
 			left: 50%;
 			z-index: 1;
@@ -3527,13 +3515,6 @@ th, .th {
 }
 
 .custom-modal {
-  &.add-credits{
-    .modal-dialog {
-      .modal-content {
-        max-width: 1100px;
-      }
-    }
-  }
   .modal-content {
     border-radius: 0px;
     margin: 0 auto;
@@ -3617,16 +3598,16 @@ th, .th {
     }
   }
 }
-  
 
-.datepicker-modal{
-  .modal-dialog{
+
+.datepicker-modal {
+  .modal-dialog {
     width: 590px;
   }
-  .modal-body{
+  .modal-body {
     padding: 25px 25px 25px 25px;
 
-    .rdr-Calendar{
+    .rdr-Calendar {
       width: 100% !important;
       padding: 0 !important;
 
@@ -3635,13 +3616,13 @@ th, .th {
 
       border-radius: 0px !important;
 
-      .rdr-Day{
+      .rdr-Day {
         width: 76px !important;
         height: 58px !important;
         font-size: 18px !important;
       }
 
-      .rdr-WeekDay{
+      .rdr-WeekDay {
         width: 76px !important;
         height: 40px !important;
         font-size: 18px !important;
@@ -3664,7 +3645,7 @@ th, .th {
     	line-height: 42px;
 
 	    transition: all 0.25s;
-	    
+
     	&:hover {
     		background-color: #a0cf67;
     	}
@@ -3726,10 +3707,37 @@ th, .th {
 .show-pdf-link{
   cursor: pointer;
 }
+
+.edit-site-holder{
+  overflow: auto !important;
+}
+
+/**********************/
+/*	Centered Modal component */
+/**********************/
+@import '../../../components/CenteredModal/styles';
+/**********************/
+/*	React Input, multi select and date picker components */
+/**********************/
+@import '../../../components/Input/styles';
+@import '../layout/_react_multi_select';
+@import '../../../components/Input/date-picker';
+/**********************/
+/*	React geosuggest component */
+/**********************/
+@import '../layout/_react_geosuggest';
+/**********************/
+/*	Shopping cart form component */
+/**********************/
+@import '../../../components/ShoppingCartForm/styles';
 /*****************/
-/* calendar page  */
+/* top header bar  */
 /*****************/
-@import "../../../containers/CalendarPage/styles.less";
+@import '../../../components/AddCreditsModal/styles.less';
+/*****************/
+/* profile page  */
+/*****************/
+@import "../../../components/ProfileForm/styles.less";
 /*****************/
 /* proposals page  */
 /*****************/
@@ -3741,10 +3749,33 @@ th, .th {
 /*****************/
 @import "../../../containers/Receipts/styles.less";
 /*****************/
+/* home page */
+/*****************/
+@import "../../../containers/HomePage/Dashboard/styles.less";
+@import "../../../containers/HomePage/StudiesList/styles.less";
+/*****************/
+/* List New Study page  */
+/*****************/
+@import "../../../containers/ListNewStudyPage/styles.less";
+@import "../../../components/ListNewStudyForm/styles.less";
+@import "../../../components/EditSiteForm/styles.less";
+/*****************/
+/* calendar page  */
+/*****************/
+@import "../../../containers/CalendarPage/styles.less";
+/*****************/
+/* patient database page  */
+/*****************/
+@import "../../../containers/PatientDatabasePage/styles.less";
+@import "../../../containers/PatientDatabasePage/PatientsList/styles.less";
+/*****************/
+/* manage sites/users page  */
+/*****************/
+@import '../../../containers/SitesUsersPage/styles.less';
+@import '../../../components/ClientRolesList/styles.less';
+@import '../../../components/ClientSitesList/styles.less';
+@import '../../../components/EditUserForm/styles.less';
+/*****************/
 /* rewards page  */
 /*****************/
 @import '../../../containers/RewardsPage/styles';
-/**********************/
-/*	React multi select component */
-/**********************/
-@import '../layout/_react_multi_select';

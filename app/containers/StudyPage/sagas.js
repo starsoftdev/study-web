@@ -2,9 +2,10 @@
  * Created by mike on 9/23/16.
  */
 
-import { call, fork, put, take } from 'redux-saga/effects';
+import { call, fork, put, take, cancel } from 'redux-saga/effects';
 import request from '../../utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
+import { LOCATION_CHANGE } from 'react-router-redux';
 import { FIND_PATIENTS_TEXT_BLAST,
   FETCH_PATIENTS,
   EXPORT_PATIENTS,
@@ -170,7 +171,6 @@ function* fetchStudyTextStats() {
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
-    console.log('response', response);
     yield put(textStatsFetched(response));
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
@@ -652,27 +652,50 @@ export function* fetchStudySaga() {
   }
 
   try {
-    yield fork(fetchStudyDetails);
-    yield fork(fetchStudyViewsStat);
-    yield fork(fetchPatientReferralStat);
-    yield fork(fetchStudyCallStats);
-    yield fork(fetchStudyTextStats);
-    yield fork(fetchPatientCategories);
-    yield fork(fetchPatientsSaga);
-    yield fork(exportPatients);
-    yield fork(fetchPatientDetails);
-    yield fork(findPatientsSaga);
-    yield fork(readStudyPatientMessages);
-    yield fork(submitAddPatientIndication);
-    yield fork(submitMovePatientBetweenCategories);
-    yield fork(submitRemovePatientIndication);
-    yield fork(submitPatientUpdate);
-    yield fork(submitTextBlast);
-    yield fork(submitPatientImport);
-    yield fork(submitAddPatient);
-    yield fork(submitPatientNote);
-    yield fork(submitDeleteNote);
-    yield fork(submitPatientText);
+    const watcherA = yield fork(fetchStudyDetails);
+    const watcherB = yield fork(fetchStudyViewsStat);
+    const watcherC = yield fork(fetchPatientReferralStat);
+    const watcherD = yield fork(fetchStudyCallStats);
+    const watcherE = yield fork(fetchStudyTextStats);
+    const watcherF = yield fork(fetchPatientCategories);
+    const watcherG = yield fork(fetchPatientsSaga);
+    const watcherH = yield fork(exportPatients);
+    const watcherI = yield fork(fetchPatientDetails);
+    const watcherJ = yield fork(findPatientsSaga);
+    const watcherK = yield fork(readStudyPatientMessages);
+    const watcherL = yield fork(submitAddPatientIndication);
+    const watcherM = yield fork(submitMovePatientBetweenCategories);
+    const watcherN = yield fork(submitRemovePatientIndication);
+    const watcherO = yield fork(submitPatientUpdate);
+    const watcherP = yield fork(submitTextBlast);
+    const watcherQ = yield fork(submitPatientImport);
+    const watcherR = yield fork(submitAddPatient);
+    const watcherS = yield fork(submitPatientNote);
+    const watcherT = yield fork(submitDeleteNote);
+    const watcherU = yield fork(submitPatientText);
+
+    yield take(LOCATION_CHANGE);
+    yield cancel(watcherA);
+    yield cancel(watcherB);
+    yield cancel(watcherC);
+    yield cancel(watcherD);
+    yield cancel(watcherE);
+    yield cancel(watcherF);
+    yield cancel(watcherG);
+    yield cancel(watcherH);
+    yield cancel(watcherI);
+    yield cancel(watcherJ);
+    yield cancel(watcherK);
+    yield cancel(watcherL);
+    yield cancel(watcherM);
+    yield cancel(watcherN);
+    yield cancel(watcherO);
+    yield cancel(watcherP);
+    yield cancel(watcherQ);
+    yield cancel(watcherR);
+    yield cancel(watcherS);
+    yield cancel(watcherT);
+    yield cancel(watcherU);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

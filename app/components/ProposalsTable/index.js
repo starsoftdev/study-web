@@ -7,7 +7,6 @@
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
-import classNames from 'classnames';
 
 const headers = [
   {
@@ -192,14 +191,18 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
   sortBy(ev) {
     ev.preventDefault();
-    const sort = ev.currentTarget.dataset.sort;
-    let direction = 'down';
+    let sort = ev.currentTarget.dataset.sort;
+    let direction = 'up';
 
-    if (ev.currentTarget.className && ev.currentTarget.className === 'down') {
-      direction = 'up';
+    if (ev.currentTarget.className && ev.currentTarget.className === 'up') {
+      direction = 'down';
+    } else if (ev.currentTarget.className && ev.currentTarget.className === 'down') {
+      direction = null;
+      sort = null;
     }
 
     const proposalsArr = this.state.filteredProposals || this.props.proposals;
+
     const directionUnits = (direction === 'up') ? {
       more: 1,
       less: -1,
@@ -224,10 +227,10 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         break;
       case 'site':
         proposalsArr.sort((a, b) => {
-          if (a.site > b.site) {
+          if (a.site.toLowerCase() > b.site.toLowerCase()) {
             return directionUnits.more;
           }
-          if (a.site < b.site) {
+          if (a.site.toLowerCase() < b.site.toLowerCase()) {
             return directionUnits.less;
           }
           return 0;
@@ -246,6 +249,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         break;
       case 'protocol':
         proposalsArr.sort((a, b) => {
+          console.log(a);
           if (a.protocol > b.protocol) {
             return directionUnits.more;
           }
@@ -266,7 +270,27 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           return 0;
         });
         break;
+      case 'order_number':
+        proposalsArr.sort((a, b) => {
+          if (a.order_number > b.order_number) {
+            return directionUnits.more;
+          }
+          if (a.order_number < b.order_number) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
       default:
+        proposalsArr.sort((a, b) => {
+          if (a.order_number > b.order_number) {
+            return 1;
+          }
+          if (a.order_number < b.order_number) {
+            return -1;
+          }
+          return 0;
+        });
         break;
     }
 
@@ -296,7 +320,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           key={key}
           data-sort={header.sort}
           onClick={this.sortBy}
-          className={(state.activeSort === header.sort) ? state.activeDirection : ''}
+          className={state.activeSort === header.sort ? state.activeDirection : ''}
         >
           {header.text} <i className="caret-arrow" />
         </th>
@@ -318,19 +342,13 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       result.push(
         <tr key={key}>
           <td>
-            <span className={classNames('jcf-checkbox', { 'jcf-checked': source.selected, 'jcf-unchecked': !source.selected })}>
-              <span
-                className="input-style"
-                onClick={this.onClickCurrent}
-              >
-                <input
-                  type="checkbox"
-                  name={key}
-                />
+            <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
+              <span className="input-style" onClick={this.onClickCurrent}>
+                <input type="checkbox" name={key} />
               </span>
             </span>
+            <span>{source.order_number}</span>
           </td>
-          <td><span>{(key + 1)}</span></td>
           <td>{dateWrapper}</td>
           <td>{source.site}</td>
           <td>{proposalLink}</td>
@@ -353,9 +371,9 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     return (
       <div className="table-holder">
         <table className="table">
+          <caption />
           <colgroup>
-            <col style={{ width: '2.5%' }} />
-            <col style={{ width: '4%' }} />
+            <col style={{ width: '6.5%' }} />
             <col style={{ width: '11%' }} />
             <col style={{ width: '24%' }} />
             <col style={{ width: '25%' }} />
@@ -364,15 +382,19 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           </colgroup>
           <thead>
             <tr>
-              <th>
-                <span className={(this.state.checkAll) ? 'jcf-checkbox jcf-checked' : 'jcf-checkbox jcf-unchecked'}>
+              <th className={state.activeSort === 'orderNumber' ? state.activeDirection : ''}>
+                <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
                   <span className="input-style" onClick={this.onClickAll}>
                     <input name="all" type="checkbox" />
                   </span>
                 </span>
-              </th>
-              <th>
-                #
+                <span
+                  data-sort="order_number"
+                  onClick={this.sortBy}
+                  className={(state.activeSort === 'order_number') ? state.activeDirection : ''}
+                >
+                  #<i className="caret-arrow" />
+                </span>
               </th>
               {heads}
             </tr>

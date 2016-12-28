@@ -64,7 +64,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
               {selectedIndicationLevelPrice.fetching &&
                 (
                 <span className="hide">
-                  <LoadingSpinner showOnlyIcon size={20} className="fetching-level-price" />
+                  <LoadingSpinner showOnlyIcon size={20} />
                 </span>
                 )
               }

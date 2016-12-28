@@ -132,7 +132,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     const itemTemplate = (controlSelectedValue) => (
       <div key={controlSelectedValue.value}>
         {controlSelectedValue.label}
-        <i className="close-icon icomoon-icon_close"></i>
+        <i className="close-icon icomoon-icon_close" />
       </div>
     );
 
@@ -150,6 +150,9 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
             <span className="title">
             </span>
             <div className="field">
+              <Button className="btn-enter">
+                <i className="icomoon-icon_search2" />
+              </Button>
               <Field
                 name="name"
                 component={Input}
@@ -159,9 +162,6 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 disabled={patients.fetching}
                 onChange={(e) => this.initSearch(e, 'name')}
               />
-              <label htmlFor="search">
-                <i className="icomoon-icon_search2" />
-              </label>
             </div>
           </div>
 
@@ -321,7 +321,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
           <div className="hidden">
             <Button type="submit" bsStyle="primary" className="btn-search" disabled={patients.fetching || hasError}>
               {(patients.fetching)
-                ? <LoadingSpinner showOnlyIcon size={20} className="fetching-patients" />
+                ? <LoadingSpinner showOnlyIcon size={20} />
                 : <span>Search</span>
               }
             </Button>

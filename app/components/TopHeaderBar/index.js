@@ -12,12 +12,13 @@ import GlobalPMSModal from 'components/GlobalPMSModal';
 import NotificationBox from './NotificationBox';
 import AvatarMenu from './AvatarMenu';
 
-import { fetchSitePatients } from 'containers/App/actions';
+import { fetchSitePatients, fetchClientCredits } from 'containers/App/actions';
 import { logout } from 'containers/LoginPage/actions';
 
 import {
   selectCurrentUser,
   selectSitePatients,
+  selectClientCredits,
 } from 'containers/App/selectors';
 
 import { sumBy } from 'lodash';
@@ -26,7 +27,9 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
   static propTypes = {
     currentUser: PropTypes.any,
     sitePatients: React.PropTypes.object,
+    clientCredits: React.PropTypes.object,
     fetchSitePatients: React.PropTypes.func,
+    fetchClientCredits: React.PropTypes.func,
     logout: React.PropTypes.func,
   };
 
@@ -52,6 +55,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
       return;
     }
     this.props.fetchSitePatients(currentUser.id);
+    this.props.fetchClientCredits(currentUser.id);
   }
 
   handleLogoutClick() {
@@ -76,6 +80,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
   render() {
     const unreadMessagesCount = sumBy(this.props.sitePatients.details, (item) => parseInt(item.count_unread ? item.count_unread : 0));
+    const credits = this.props.clientCredits.details.customerCredits || 0;
     return (
       <header id="header">
         <div className="container-fluid">
@@ -85,19 +90,18 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
           <NotificationBox currentUser={this.props.currentUser} />
 
           <div className="emails pull-left">
-            <a href="#" className="opener" data-toggle="tooltip" data-placement="bottom" title="Coming Soon">
+            <a className="opener" data-toggle="tooltip" data-placement="bottom" title="Coming Soon">
               <i className="icomoon-envelop" />
               <span className="counter">1</span>
             </a>
           </div>
 
           <div className="open-close help-drop pull-left">
-            <a href="#" className="link-help pull-left opener">?</a>
+            <a className="link-help pull-left opener">?</a>
           </div>
 
           <a
-            href="#"
-            className={classNames('opener lightbox-opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
+            className={classNames('opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
             onClick={this.showGlobalPMSModal}
           >
             {unreadMessagesCount > 0
@@ -108,7 +112,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
           </a>
 
           <div className="get-credits pull-left">
-            <span>100 Credits</span>
+            <span>{credits} Credits</span>
             <Button onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
           </div>
 
@@ -132,11 +136,13 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   sitePatients: selectSitePatients(),
+  clientCredits: selectClientCredits(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSitePatients: (siteId) => dispatch(fetchSitePatients(siteId)),
+    fetchSitePatients: (userId) => dispatch(fetchSitePatients(userId)),
+    fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
     logout: () => dispatch(logout()),
   };
 }

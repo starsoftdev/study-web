@@ -23,6 +23,7 @@ import {
   readStudyPatientMessages,
 } from '../actions';
 import { markAsReadPatientMessages } from 'containers/App/actions';
+import { change } from 'redux-form';
 
 import Scroll from 'react-scroll';
 const scroll = Scroll.animateScroll;
@@ -44,6 +45,7 @@ class PatientBoard extends React.Component {
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
     studyId: React.PropTypes.number,
+    setFormValueByName: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -55,6 +57,7 @@ class PatientBoard extends React.Component {
     this.onPatientTextClick = this.onPatientTextClick.bind(this);
     this.showModal = this.showModal.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
+    this.resetFormsValues = this.resetFormsValues.bind(this);
   }
 
   componentDidMount() {
@@ -80,6 +83,7 @@ class PatientBoard extends React.Component {
     } else {
       setCurrentPatientId(-1);
       setCurrentPatientCategoryId(-1);
+      this.resetFormsValues();
     }
     // set up the redux state for opening the modal
     setOpenPatientModal(show);
@@ -114,6 +118,11 @@ class PatientBoard extends React.Component {
     }
     // set up the redux state for opening the modal
     setOpenPatientModal(show);
+  }
+
+  resetFormsValues() {
+    this.props.setFormValueByName('PatientDetailModal.Notes', 'note', '');
+    this.props.setFormValueByName('PatientDetailSection.Text', 'body', '');
   }
 
   handleScroll(event) {
@@ -180,6 +189,7 @@ const mapDispatchToProps = (dispatch) => (
     push: (url) => dispatch(push(url)),
     readStudyPatientMessages: (patientId, studyId) => dispatch(readStudyPatientMessages(patientId, studyId)),
     markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
+    setFormValueByName: (name, attrName, value) => dispatch(change(name, attrName, value)),
   }
 );
 

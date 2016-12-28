@@ -7,7 +7,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import ProfileForm from 'components/ProfileForm';
+import ProfileForm from '../../components/ProfileForm';
 import { selectChangePasswordResult, selectOtherUser } from 'containers/ProfilePage/selectors';
 import { selectCurrentUser } from 'containers/App/selectors';
 import { changePassword, changeImage, fetchOtherUser } from 'containers/ProfilePage/actions';
@@ -45,11 +45,9 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
     return (
       <div className="container-fluid">
         <Helmet title="Profile - StudyKIK" />
-        <section className="study-portal">
-
+        <section>
           <h2 className="main-heading">PROFILE</h2>
-
-          <div className="row form-study">
+          <div className="row profile form-study">
 
             <div className="col-xs-6 form-holder">
               {(() => {

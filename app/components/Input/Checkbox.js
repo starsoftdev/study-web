@@ -8,6 +8,9 @@ import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
 function Checkbox({ input, className, children, onChange, ...rest }) {
+  const restProps = Object.assign({}, rest);
+  delete restProps.meta;
+
   return (
     <div className={classNames(className)}>
       <span className={`jcf-checkbox ${input.checked ? 'jcf-checked' : 'jcf-unchecked'}`}>
@@ -21,7 +24,7 @@ function Checkbox({ input, className, children, onChange, ...rest }) {
         />
         <input
           {...input}
-          {...rest}
+          {...restProps}
           checked={input.checked}
           type="checkbox"
         />

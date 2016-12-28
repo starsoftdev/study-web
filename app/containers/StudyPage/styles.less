@@ -337,15 +337,16 @@
   display: inline-block;
 }
 
-#text-blast {
+.study-text-blast {
   .modal-dialog {
     min-width: 728px;
   }
   .modal-content {
     max-width: 1024px;
   }
-  .text-email-blast-form .form-holder .sub-holder {
-    padding-top: 0;
+  .sub-holder {
+    padding: 25px;
+    min-height: 150px;
   }
   .sidebar {
     width: 300px;
@@ -357,6 +358,9 @@
       right: auto;
       left: 0;
     }
+  }
+  .message {
+    height: 100%;
   }
 }
 
@@ -391,6 +395,7 @@
 }
 
 .patients-list-form {
+  top: 2px;
   right: 0;
   width: 0;
   margin: 0 0 0 -100%;
@@ -529,7 +534,7 @@
       border-width: 0;
       border-radius: 0;
       box-shadow: none;
-      padding: 8px 125px 15px 25px;
+      padding: 8px 179px 15px 25px
     }
     .btn-default {
       top: 50%;
@@ -540,11 +545,12 @@
   }
   .characters-counter{
     color: #a0cf67;
-    font-size: 15px;
+    font-size: 18px;
+    font-weight: 600;
     position: absolute;
-    top: 50%;
-    margin-top: -10px;
-    right: 110px;
+    top: auto;
+    right: 124px;
+    bottom: 26px;
   }
   .postarea {
     overflow: auto;
@@ -785,10 +791,12 @@
       border-width: 8px 8px 8px 0;
       border-right-color: #a0cf67;
     }
-    .stop-list-notification{
+    .stop-list-notification,
+    .blast-message-notification{
       display: inline-block;
       margin: 10px 0 0;
       font-size: 15px;
+      width: 100%;
     }
   }
   p {

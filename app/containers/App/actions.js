@@ -55,6 +55,10 @@ import {
   FETCH_SITE_PATIENTS_ERROR,
   UPDATE_SITE_PATIENTS,
 
+  FETCH_CLIENT_CREDITS,
+  FETCH_CLIENT_CREDITS_SUCCESS,
+  FETCH_CLIENT_CREDITS_ERROR,
+
   SEARCH_SITE_PATIENTS,
   SEARCH_SITE_PATIENTS_SUCCESS,
   SEARCH_SITE_PATIENTS_ERROR,
@@ -104,6 +108,10 @@ import {
   GET_CREDITS_PRICE,
   GET_CREDITS_PRICE_SUCCESS,
   GET_CREDITS_PRICE_ERROR,
+
+  FETCH_INDICATION_LEVEL_PRICE,
+  FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+  FETCH_INDICATION_LEVEL_PRICE_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -414,6 +422,27 @@ export function clientSitesFetchingError(payload) {
   };
 }
 
+export function fetchClientCredits(userId) {
+  return {
+    type: FETCH_CLIENT_CREDITS,
+    userId,
+  };
+}
+
+export function clientCreditsFetched(payload) {
+  return {
+    type: FETCH_CLIENT_CREDITS_SUCCESS,
+    payload,
+  };
+}
+
+export function clientCreditsFetchingError(payload) {
+  return {
+    type: FETCH_CLIENT_CREDITS_ERROR,
+    payload,
+  };
+}
+
 export function fetchSitePatients(userId) {
   return {
     type: FETCH_SITE_PATIENTS,
@@ -717,6 +746,28 @@ export function getCreditsPriceSuccess(payload) {
 export function getCreditsPriceError(payload) {
   return {
     type: GET_CREDITS_PRICE_ERROR,
+    payload,
+  };
+}
+
+export function fetchIndicationLevelPrice(indicationId, levelId) {
+  return {
+    type: FETCH_INDICATION_LEVEL_PRICE,
+    indicationId,
+    levelId,
+  };
+}
+
+export function fetchIndicationLevelPriceSuccess(payload) {
+  return {
+    type: FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchIndicationLevelPriceError(payload) {
+  return {
+    type: FETCH_INDICATION_LEVEL_PRICE_ERROR,
     payload,
   };
 }

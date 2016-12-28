@@ -51,10 +51,10 @@ class ManageTransferNumber extends React.Component { // eslint-disable-line reac
           </colgroup>
           <thead>
             <tr>
-              <th>TYPE <i className="caret-arrow"></i></th>
-              <th>CALL NUMBER <i className="caret-arrow"></i></th>
-              <th>TEXT NUMBER <i className="caret-arrow"></i></th>
-              <th>REDIRECT NUMBER <i className="caret-arrow"></i></th>
+              <th>TYPE <i className="caret-arrow" /></th>
+              <th>CALL NUMBER <i className="caret-arrow" /></th>
+              <th>TEXT NUMBER <i className="caret-arrow" /></th>
+              <th>REDIRECT NUMBER <i className="caret-arrow" /></th>
             </tr>
           </thead>
           <FieldArray

@@ -20,6 +20,7 @@ import {
 
   FETCH_CLIENT_SITES,
   FETCH_SITE_PATIENTS,
+  FETCH_CLIENT_CREDITS,
   SEARCH_SITE_PATIENTS,
   FETCH_PATIENT_MESSAGES,
   FETCH_CLIENT_ROLES,
@@ -31,6 +32,7 @@ import {
   SAVE_USER,
   GET_AVAIL_PHONE_NUMBERS,
   GET_CREDITS_PRICE,
+  FETCH_INDICATION_LEVEL_PRICE,
 } from 'containers/App/constants';
 
 
@@ -60,6 +62,9 @@ import {
   clientSitesFetchingError,
   sitePatientsFetched,
   sitePatientsFetchingError,
+  fetchClientCredits,
+  clientCreditsFetched,
+  clientCreditsFetchingError,
   sitePatientsSearched,
   sitePatientsSearchingError,
   patientMessagesFetched,
@@ -82,6 +87,8 @@ import {
   getAvailPhoneNumbersError,
   getCreditsPriceSuccess,
   getCreditsPriceError,
+  fetchIndicationLevelPriceSuccess,
+  fetchIndicationLevelPriceError,
 } from 'containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -98,6 +105,7 @@ export default function* baseDataSaga() {
 
   yield fork(fetchClientSitesWatcher);
   yield fork(fetchSitePatientsWatcher);
+  yield fork(fetchClientCreditsWatcher);
   yield fork(searchSitePatientsWatcher);
   yield fork(fetchPatientMessagesWatcher);
   yield fork(fetchClientRolesWatcher);
@@ -109,6 +117,7 @@ export default function* baseDataSaga() {
   yield fork(saveUserWatcher);
   yield fork(getAvailPhoneNumbersWatcher);
   yield fork(fetchCreditsPrice);
+  yield fork(fetchIndicationLevelPriceWatcher);
 }
 
 export function* fetchSitesWatcher() {
@@ -295,6 +304,7 @@ export function* addCreditsWatcher() {
 
       yield put(toastrActions.success('Add Credits', 'Credits added successfully!'));
       yield put(creditsAdded(response));
+      yield put(fetchClientCredits(data.userId));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));
@@ -347,6 +357,21 @@ export function* fetchSitePatientsWatcher() {
       yield put(sitePatientsFetched(response));
     } catch (err) {
       yield put(sitePatientsFetchingError(err));
+    }
+  }
+}
+
+export function* fetchClientCreditsWatcher() {
+  while (true) {
+    const { userId } = yield take(FETCH_CLIENT_CREDITS);
+
+    try {
+      const requestURL = `${API_URL}/users/${userId}/getClientCreditsByUser`;
+      const response = yield call(request, requestURL);
+
+      yield put(clientCreditsFetched(response));
+    } catch (err) {
+      yield put(clientCreditsFetchingError(err));
     }
   }
 }
@@ -592,6 +617,28 @@ export function* fetchCreditsPrice() {
       yield put(getCreditsPriceSuccess(response));
     } catch (err) {
       yield put(getCreditsPriceError(err));
+    }
+  }
+}
+
+export function* fetchIndicationLevelPriceWatcher() {
+  while (true) {
+    const { indicationId, levelId } = yield take(FETCH_INDICATION_LEVEL_PRICE);
+
+    try {
+      const requestURL = `${API_URL}/indicationLevelSkus/getPrice`;
+      const params = {
+        query: {
+          levelId,
+          indicationId,
+        },
+      };
+      const response = yield call(request, requestURL, params);
+      yield put(fetchIndicationLevelPriceSuccess(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(fetchIndicationLevelPriceError(err));
     }
   }
 }

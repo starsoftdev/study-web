@@ -11,6 +11,9 @@ import { selectCurrentUser, selectCards, selectSavedCard } from 'containers/App/
 import PaymentMethodsForm from 'components/PaymentMethodsForm';
 import AddCreditCardModal from 'components/AddCreditCardModal';
 import { fetchCards, deleteCard, saveCard } from 'containers/App/actions';
+import { selectPaginationOptions } from 'containers/PaymentInformationPage/selectors';
+import { setActiveSort } from 'containers/PaymentInformationPage/actions';
+import Helmet from 'react-helmet';
 
 export class PaymentInformationPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -21,6 +24,8 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
     saveCard: PropTypes.func,
     fetchCards: PropTypes.func,
     savedCard: PropTypes.object,
+    paginationOptions: PropTypes.object,
+    setActiveSort: PropTypes.func,
   }
 
   constructor(props) {
@@ -70,6 +75,7 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
     }
     return (
       <div className="container-fluid">
+        <Helmet title="Payment Information - StudyKIK" />
         <section className="payment-information">
           <h2 className="main-heading">PAYMENT INFORMATION</h2>
 
@@ -84,6 +90,8 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
             creditCards={creditCards}
             deleteCreditCard={this.deleteCard}
             customerId={customerId}
+            paginationOptions={this.props.paginationOptions}
+            setActiveSort={this.props.setActiveSort}
           />
         </section>
       </div>
@@ -95,6 +103,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   creditCards: selectCards(),
   savedCard: selectSavedCard(),
+  paginationOptions: selectPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -102,6 +111,7 @@ function mapDispatchToProps(dispatch) {
     fetchCards: (customerId) => dispatch(fetchCards(customerId)),
     deleteCard: (customerId, cardId) => dispatch(deleteCard(customerId, cardId)),
     saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+    setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
   };
 }
 

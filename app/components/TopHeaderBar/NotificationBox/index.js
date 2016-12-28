@@ -13,6 +13,7 @@ import _ from 'lodash';
 import {
   fetchNotifications,
   fetchUnreadNotificationsCount,
+  markNotificationsRead,
 } from 'containers/GlobalNotifications/actions';
 
 import {
@@ -34,6 +35,7 @@ class NotificationBox extends React.Component {
     unreadNotificationsCount: PropTypes.number,
     fetchNotifications: PropTypes.func.isRequired,
     fetchUnreadNotificationsCount: PropTypes.func.isRequired,
+    markNotificationsRead: PropTypes.func.isRequired,
   }
 
   state = {
@@ -55,9 +57,14 @@ class NotificationBox extends React.Component {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen,
     });
+    this.props.markNotificationsRead(this.props.currentUser.id);
   }
 
   handleClickOutside = () => {
+    this.setState({ dropdownOpen: false });
+  }
+
+  seeAllClick = () => {
     this.setState({ dropdownOpen: false });
   }
 
@@ -65,7 +72,6 @@ class NotificationBox extends React.Component {
     return (
       <div className="notifications pull-left open-close">
         <a
-          href="#"
           className={classNames('opener', { active: this.state.dropdownOpen })}
           onClick={() => this.handleBadgeNumberClick()}
         >
@@ -93,7 +99,7 @@ class NotificationBox extends React.Component {
                 </ul>
               </div>
               <div className="btn-block text-center">
-                <Link className="hover-underline" to="/notifications">
+                <Link onClick={this.seeAllClick} className="hover-underline" to="/notifications">
                   See All
                 </Link>
               </div>
@@ -114,6 +120,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   fetchNotifications,
   fetchUnreadNotificationsCount,
+  markNotificationsRead,
 };
 
 export default connect(

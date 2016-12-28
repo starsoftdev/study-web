@@ -5,7 +5,7 @@ import { Field, FieldArray, change, reduxForm } from 'redux-form';
 
 import Input from 'components/Input';
 import { selectCurrentUserClientId } from 'containers/App/selectors';
-import { selectEditStudyFormValues, selectEditStudyFormError } from './selectors';
+import { selectEditStudyFormValues } from './selectors';
 import { selectEditedStudy } from 'containers/HomePage/selectors';
 import RenderEmailsList from './RenderEmailsList';
 import formValidator from './validator';
@@ -14,7 +14,6 @@ import LoadingSpinner from 'components/LoadingSpinner';
 const mapStateToProps = createStructuredSelector({
   currentUserClientId: selectCurrentUserClientId(),
   formValues: selectEditStudyFormValues(),
-  hasError: selectEditStudyFormError(),
   editedStudy: selectEditedStudy(),
 });
 
@@ -26,7 +25,6 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     dispatch: PropTypes.func.isRequired,
     currentUserClientId: PropTypes.number,
     formValues: PropTypes.object,
-    hasError: PropTypes.bool,
     editedStudy: PropTypes.object,
     siteUsers: PropTypes.array,
     handleSubmit: PropTypes.func,
@@ -37,7 +35,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    const { formValues, hasError, editedStudy, handleSubmit } = this.props;
+    const { formValues, editedStudy, handleSubmit } = this.props;
 
     return (
       <form className="form-edit-study" onSubmit={handleSubmit}>
@@ -55,7 +53,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
             </div>
           </div>
           <div className="field-row">
-            <strong className="label required">
+            <strong className="label">
               <label>EMAIL NOTIFICATIONS</label>
             </strong>
             <div className="field">
@@ -70,7 +68,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
             </div>
           </div>
           <div className="field-row">
-            <strong className="label required">
+            <strong className="label">
               <label>STUDY AD</label>
             </strong>
             <div className="field">
@@ -85,9 +83,9 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
             </div>
           </div>
           <div className="clearfix">
-            <button type="submit" className="btn btn-default btn-submit pull-right" disabled={hasError || editedStudy.submitting}>
+            <button type="submit" className="btn btn-default btn-submit pull-right" disabled={editedStudy.submitting}>
               {editedStudy.submitting
-                ? <span><LoadingSpinner showOnlyIcon size={20} className="submitting-edit-study" /></span>
+                ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                 : <span>Submit</span>
               }
             </button>

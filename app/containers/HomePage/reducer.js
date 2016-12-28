@@ -1,5 +1,5 @@
 /* eslint-disable comma-dangle, no-case-declarations */
-import { forEach, map } from 'lodash';
+import _, { forEach, map } from 'lodash';
 
 import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
@@ -21,6 +21,8 @@ import {
   EDIT_STUDY,
   EDIT_STUDY_SUCCESS,
   EDIT_STUDY_ERROR,
+  SET_ACTIVE_SORT,
+  SORT_SUCCESS,
 } from './constants';
 
 import {
@@ -31,6 +33,7 @@ const initialState = {
   patientSignUps: {
     today: 0,
     yesterday: 0,
+    total: 0,
   },
   patientMessages: {
     unreadTexts: 0,
@@ -62,6 +65,10 @@ const initialState = {
     submitting: false,
     error: null,
   },
+  paginationOptions: {
+    activeSort: null,
+    activeDirection: null,
+  },
 };
 
 export default function homePageReducer(state = initialState, action) {
@@ -79,6 +86,7 @@ export default function homePageReducer(state = initialState, action) {
         patientSignUps: {
           today: payload.today,
           yesterday: payload.yesterday,
+          total: payload.total,
         },
       };
     case FETCH_PATIENT_MESSAGES_SUCCEESS:
@@ -137,7 +145,7 @@ export default function homePageReducer(state = initialState, action) {
     case FETCH_STUDIES_SUCCESS:
       entitiesCollection = [];
 
-      forEach(payload, (studyIterator) => {
+      forEach(payload, (studyIterator, index) => {
         entity = {
           studyId: studyIterator.id,
           indication: studyIterator.indication,
@@ -150,6 +158,7 @@ export default function homePageReducer(state = initialState, action) {
           siteUsers: null,
           startDate: '',
           endDate: '',
+          orderNumber: (index + 1),
         };
         if (studyIterator.sponsors && studyIterator.sponsors.length > 0) {
           const sponsorContacts = map(studyIterator.sponsors, sponsorContactIterator => sponsorContactIterator.name);
@@ -163,7 +172,8 @@ export default function homePageReducer(state = initialState, action) {
         forEach(studyIterator.sites, (siteIterator) => {
           startDateStr = '';
           endDateStr = '';
-          if (siteIterator.campaigns && siteIterator.campaigns.length > 0) {
+
+          if (siteIterator.campaigns && siteIterator.campaigns.length > 0 && siteIterator.campaigns[0]) {
             startDateStr = new Date(siteIterator.campaigns[0].dateFrom).toLocaleDateString();
             endDateStr = new Date(siteIterator.campaigns[0].dateTo).toLocaleDateString();
           }
@@ -270,8 +280,16 @@ export default function homePageReducer(state = initialState, action) {
         },
       };
     case UPGRADE_STUDY_SUCCESS:
+      const studies = _.cloneDeep(state.studies.details);
+      const study = _.find(studies, (o) => (o.studyId === payload.studyId));
+      study.campaign.level_id = payload.newLevelId;
       return {
         ...state,
+        studies: {
+          details: studies,
+          fetching: false,
+          error: null,
+        },
         upgradedStudy: {
           details: payload,
           submitting: false,
@@ -312,6 +330,23 @@ export default function homePageReducer(state = initialState, action) {
           details: null,
           submitting: false,
           error: payload,
+        },
+      };
+    case SET_ACTIVE_SORT:
+      return {
+        ...state,
+        paginationOptions: {
+          activeSort: action.sort,
+          activeDirection: action.direction,
+        },
+      };
+    case SORT_SUCCESS:
+      return {
+        ...state,
+        studies: {
+          details: payload,
+          fetching: false,
+          error: null,
         },
       };
     default:
