@@ -163,7 +163,7 @@ export default class SchedulePatientModal extends Component {
     const { protocolOptions, patientOptions } = this.state;
 
     return (
-      <Modal show={modalType === SchedulePatientModalType.CREATE} onHide={handleCloseModal}>
+      <Modal show={modalType === SchedulePatientModalType.CREATE} onHide={handleCloseModal} id="add-schedule-modal">
         <div id="add-scedule" className="lightbox lightbox-active fixed-popup">
           <div className="lightbox-holder">
             <div className="lightbox-frame">
