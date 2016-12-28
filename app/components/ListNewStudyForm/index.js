@@ -266,7 +266,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
               component={ReactSelect}
               placeholder="Select Campaign Length"
               options={CAMPAIGN_LENGTH_LIST}
-              className="field top-positioned"
+              className="field"
             />
           </div>
 
