@@ -118,7 +118,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
     this.submitForm(shoppingCartFormValues, {
       ...this.props.formValues,
-      username: this.props.currentUser.username,
+      user_id: this.props.currentUser.id,
       emailNotifications: filteredEmails,
       stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
     });
