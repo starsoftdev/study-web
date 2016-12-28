@@ -167,9 +167,9 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { selectedSiteDetailsForForm, selectedUserDetailsForForm, deletedUser } = this.props;
+    const { selectedSiteDetailsForForm, selectedUserDetailsForForm, deletedUser, filterMethod } = this.props;
     const sortedClientSites = this.getSortedClientSites();
-    const clientSitesListContents = sortedClientSites.map((item, index) => (
+    const clientSitesListContents = sortedClientSites.filter(filterMethod).map((item, index) => (
       <ClientSiteItem {...item} key={index} />
     ));
     const siteOptions = map(sortedClientSites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));

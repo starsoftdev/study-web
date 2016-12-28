@@ -34,6 +34,8 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     this.state = {
       addSiteModalOpen: false,
       addUserModalOpen: false,
+      roleFilterMethod: () => true,
+      siteFilterMethod: () => true,
     };
 
     this.openAddSiteModal = this.openAddSiteModal.bind(this);
@@ -80,18 +82,37 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
   }
 
   searchClientSites(event) {
-    if (event.key === 'Enter') {
-      const { currentUserClientId } = this.props;
-      const searchFilter = { name: event.target.value };
-      this.props.fetchClientSites(currentUserClientId, searchFilter);
+    if ((event.key && event.key === 'Enter') ||
+         event.button) {
+      if (event.target.value !== '') {
+        const nameQuery = event.target.value;
+        this.setState({
+          siteFilterMethod: (clientSite) => clientSite.name.toUpperCase().includes(nameQuery.toUpperCase()),
+        });
+      } else {
+        this.setState({
+          siteFilterMethod: () => true,
+        });
+      }
     }
   }
 
   searchClientRoles(event) {
-    if (event.key === 'Enter') {
-      const { currentUserClientId } = this.props;
-      const searchFilter = { name: event.target.value };
-      this.props.fetchClientRoles(currentUserClientId, searchFilter);
+    if ((event.key && event.key === 'Enter') ||
+         event.button) {
+      if (event.target.value !== '') {
+        const nameQuery = event.target.value;
+        this.setState({
+          roleFilterMethod: (clientRole) => {
+            const fullName = `${clientRole.user.firstName} ${clientRole.user.lastName}`;
+            return (fullName.toUpperCase().includes(nameQuery.toUpperCase()));
+          },
+        });
+      } else {
+        this.setState({
+          roleFilterMethod: () => true,
+        });
+      }
     }
   }
 
@@ -207,10 +228,10 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
             </form>
           </div>
           <section className="table-holder form-group client-roles-holder">
-            <ClientRolesList />
+            <ClientRolesList filterMethod={this.state.roleFilterMethod} />
           </section>
           <section className="table-holder form-group client-sites-holder">
-            <ClientSitesList />
+            <ClientSitesList filterMethod={this.state.siteFilterMethod} />
           </section>
         </div>
       </div>
