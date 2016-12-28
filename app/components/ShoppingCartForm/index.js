@@ -168,10 +168,10 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
         value: cardIterator.id,
       }));
     }
-    creditCardOptions = creditCardOptions.concat({
+    creditCardOptions = [{
       label: 'Add New Card',
       value: -1,
-    });
+    }].concat(creditCardOptions);
 
     let cardsPanelContent = null;
     if (showCards) {

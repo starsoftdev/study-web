@@ -193,7 +193,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       stripeCustomerId: currentUserStripeCustomerId,
       selectedIndicationId: this.state.selectedIndicationId,
       selectedSiteId: this.state.selectedCampaign.site_id,
-      username: this.props.currentUser.username,
+      user_id: this.props.currentUser.id,
     });
   }
 
@@ -213,7 +213,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       selectedIndicationId: this.state.selectedIndicationId,
       selectedCampaignId: this.state.selectedCampaign.id,
       selectedSiteId: this.state.selectedCampaign.site_id,
-      username: this.props.currentUser.username,
+      user_id: this.props.currentUser.id,
     });
   }
 
