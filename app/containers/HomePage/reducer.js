@@ -1,5 +1,5 @@
 /* eslint-disable comma-dangle, no-case-declarations */
-import { forEach, map } from 'lodash';
+import _, { forEach, map } from 'lodash';
 
 import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
@@ -33,6 +33,7 @@ const initialState = {
   patientSignUps: {
     today: 0,
     yesterday: 0,
+    total: 0,
   },
   patientMessages: {
     unreadTexts: 0,
@@ -85,6 +86,7 @@ export default function homePageReducer(state = initialState, action) {
         patientSignUps: {
           today: payload.today,
           yesterday: payload.yesterday,
+          total: payload.total,
         },
       };
     case FETCH_PATIENT_MESSAGES_SUCCEESS:
@@ -170,7 +172,8 @@ export default function homePageReducer(state = initialState, action) {
         forEach(studyIterator.sites, (siteIterator) => {
           startDateStr = '';
           endDateStr = '';
-          if (siteIterator.campaigns && siteIterator.campaigns.length > 0) {
+
+          if (siteIterator.campaigns && siteIterator.campaigns.length > 0 && siteIterator.campaigns[0]) {
             startDateStr = new Date(siteIterator.campaigns[0].dateFrom).toLocaleDateString();
             endDateStr = new Date(siteIterator.campaigns[0].dateTo).toLocaleDateString();
           }
@@ -277,8 +280,16 @@ export default function homePageReducer(state = initialState, action) {
         },
       };
     case UPGRADE_STUDY_SUCCESS:
+      const studies = _.cloneDeep(state.studies.details);
+      const study = _.find(studies, (o) => (o.studyId === payload.studyId));
+      study.campaign.level_id = payload.newLevelId;
       return {
         ...state,
+        studies: {
+          details: studies,
+          fetching: false,
+          error: null,
+        },
         upgradedStudy: {
           details: payload,
           submitting: false,

@@ -62,6 +62,7 @@ import {
   SWITCH_TO_TEXT_SECTION_DETAIL,
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
+  SET_ADD_PATIENT_STATUS,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -484,5 +485,12 @@ export function switchToEmailSectionDetail() {
 export function switchToOtherSectionDetail() {
   return {
     type: SWITCH_TO_OTHER_SECTION_DETAIL,
+  };
+}
+
+export function setAddPatientStatus(status) {
+  return {
+    type: SET_ADD_PATIENT_STATUS,
+    status,
   };
 }
