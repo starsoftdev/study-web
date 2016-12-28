@@ -12,6 +12,7 @@ import { selectUpgradeStudyFormCallTrackingValue, selectUpgradeStudyFormLeadsCou
 import RenderLeads from './renderLeads';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
+import _ from 'lodash';
 
 const mapStateToProps = createStructuredSelector({
   studyLevels: selectStudyLevels(),
@@ -32,6 +33,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     callTracking: PropTypes.bool,
     leadsCount: PropTypes.number,
     availPhoneNumbers: PropTypes.array,
+    selectedStudy: PropTypes.object,
   };
 
   componentWillReceiveProps(newProps) {
@@ -41,7 +43,21 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   render() {
-    const { studyLevels, selectedIndicationLevelPrice, callTracking, availPhoneNumbers } = this.props;
+    const { studyLevels, selectedIndicationLevelPrice, callTracking, availPhoneNumbers, selectedStudy } = this.props;
+
+    let filteredLevels = studyLevels;
+    let isDisabled = false;
+    let value = null;
+
+    if (selectedStudy && selectedStudy.campaign) {
+      filteredLevels = _.filter(studyLevels, (o) => (o.id > selectedStudy.campaign.level_id));
+    }
+
+    if (filteredLevels.length === 0) {
+      filteredLevels.push(studyLevels[studyLevels.length - 1]);
+      value = studyLevels[studyLevels.length - 1].id;
+      isDisabled = true;
+    }
 
     return (
       <form className="form-upgrade-study">
@@ -56,8 +72,9 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                 className="with-loader-disabled-for-now"
                 component={ReactSelect}
                 placeholder="Select..."
-                options={studyLevels}
-                disabled={selectedIndicationLevelPrice.fetching}
+                options={filteredLevels}
+                selectedValue={value || undefined}
+                disabled={selectedIndicationLevelPrice.fetching || isDisabled}
               />
               {selectedIndicationLevelPrice.fetching &&
                 (
