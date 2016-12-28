@@ -22,7 +22,10 @@ function getTimeComponents(strTime) {
   };
 }
 
-@reduxForm({form: 'editSchedule', validate: validator})
+@reduxForm({
+  form: 'editSchedule',
+  validate: validator,
+})
 export default class EditScheduleModal extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func.isRequired,
@@ -72,7 +75,7 @@ export default class EditScheduleModal extends Component {
           <Modal.Header>
             <Modal.Title>EDIT SCHEDULE</Modal.Title>
             <a className="lightbox-close close" onClick={handleCloseModal}>
-              <i className="icomoon-icon_close"/>
+              <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>
