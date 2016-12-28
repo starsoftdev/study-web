@@ -22,7 +22,7 @@ function getTimeComponents(strTime) {
   };
 }
 
-@reduxForm({ form: 'editSchedule', validate: validator })
+@reduxForm({form: 'editSchedule', validate: validator})
 export default class EditScheduleModal extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func.isRequired,
@@ -63,8 +63,12 @@ export default class EditScheduleModal extends Component {
 
     if (modalType === SchedulePatientModalType.UPDATE) {
       return (
-        <Modal dialogComponentClass={CenteredModal} show={modalType === SchedulePatientModalType.UPDATE}
-               onHide={handleCloseModal} id="edit-schedule-modal">
+        <Modal
+          dialogComponentClass={CenteredModal}
+          show={modalType === SchedulePatientModalType.UPDATE}
+          onHide={handleCloseModal}
+          id="edit-schedule-modal"
+        >
           <Modal.Header>
             <Modal.Title>EDIT SCHEDULE</Modal.Title>
             <a className="lightbox-close close" onClick={handleCloseModal}>
@@ -74,7 +78,8 @@ export default class EditScheduleModal extends Component {
           <Modal.Body>
             <form className="form-lightbox form-edit-schedule" onSubmit={handleSubmit}>
               <strong
-                className="name">{`${selectedCellInfo.data.patient.firstName} ${selectedCellInfo.data.patient.lastName}`}</strong>
+                className="name"
+              >{`${selectedCellInfo.data.patient.firstName} ${selectedCellInfo.data.patient.lastName}`}</strong>
               <span className="site-location">{selectedCellInfo.data.siteLocation}</span>
               <span className="protocol">{selectedCellInfo.data.protocolNumber}</span>
               <div className="field-row">
