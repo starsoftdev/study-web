@@ -12,8 +12,14 @@ const selectSchedules = createSelector(
   (substate) => substate.schedules,
 );
 
+const selectPaginationOptions = createSelector(
+  selectCalendarPageDomain,
+  (substate) => substate.paginationOptions,
+);
+
 export {
   selectCalendarPageDomain,
   selectPatientsByStudy,
   selectSchedules,
+  selectPaginationOptions,
 };

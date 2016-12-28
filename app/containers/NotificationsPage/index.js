@@ -7,6 +7,7 @@ import { orderBy } from 'lodash';
 import moment from 'moment';
 import classnames from 'classnames';
 import { push } from 'react-router-redux';
+import Helmet from 'react-helmet';
 
 import {
   selectCurrentUser,
@@ -105,6 +106,9 @@ export class NotificationsPage extends React.Component {
   sortBy = (field) => {
     let { notifications } = this.state;
     let sortField;
+    let sortDescription = 0;
+    let sortDate = 0;
+    let sortTime = 0;
     if (field === 'description') {
       sortField = 'sortDescription';
     } else if (field === 'date') {
@@ -115,14 +119,23 @@ export class NotificationsPage extends React.Component {
 
     const sortVal = (this.state[sortField] + 1) % 3;
     if (sortVal === 0) {
-      notifications = orderBy(notifications, ['event_log_id'], ['asc']);
+      notifications = orderBy(notifications, ['id'], ['desc']);
     } else if (sortVal !== 0) {
       notifications = orderBy(notifications, [field], [sortVal === 1 ? 'asc' : 'desc']);
     }
 
+    if (field === 'description') {
+      sortDescription = sortVal;
+    } else if (field === 'date') {
+      sortDate = sortVal;
+    } else {
+      sortTime = sortVal;
+    }
     this.setState({
       notifications,
-      [sortField]: sortVal,
+      sortDescription,
+      sortDate,
+      sortTime,
     });
   }
 
@@ -131,6 +144,7 @@ export class NotificationsPage extends React.Component {
 
     return (
       <div className="container-fluid">
+        <Helmet title="Notifications - StudyKIK" />
         <section className="rewards">
           <h2 className="main-heading">NOTIFICATIONS</h2>
 
@@ -146,9 +160,9 @@ export class NotificationsPage extends React.Component {
               </colgroup>
               <thead>
                 <tr>
-                  <th className={classnames({ up: sortDescription === 1, down: sortDescription === 2 })} onClick={() => { this.sortBy('description'); }}>DESCRIPTION <i className="caret-arrow"></i></th>
-                  <th className={classnames({ up: sortDate === 1, down: sortDate === 2 })} onClick={() => { this.sortBy('date'); }}>DATE <i className="caret-arrow"></i></th>
-                  <th className={classnames({ up: sortTime === 1, down: sortTime === 2 })} onClick={() => { this.sortBy('time'); }}>TIME <i className="caret-arrow"></i></th>
+                  <th className={classnames({ up: sortDescription === 1, down: sortDescription === 2 })} onClick={() => { this.sortBy('description'); }}>DESCRIPTION <i className="caret-arrow" /></th>
+                  <th className={classnames({ up: sortDate === 1, down: sortDate === 2 })} onClick={() => { this.sortBy('date'); }}>DATE <i className="caret-arrow" /></th>
+                  <th className={classnames({ up: sortTime === 1, down: sortTime === 2 })} onClick={() => { this.sortBy('time'); }}>TIME <i className="caret-arrow" /></th>
                 </tr>
               </thead>
               <tbody>

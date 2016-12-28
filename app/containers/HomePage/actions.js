@@ -21,6 +21,11 @@ import {
   EDIT_STUDY,
   EDIT_STUDY_SUCCESS,
   EDIT_STUDY_ERROR,
+  SET_ACTIVE_SORT,
+  SORT_SUCCESS,
+  FETCH_UPGRADE_STUDY_PRICE,
+  FETCH_UPGRADE_STUDY_PRICE_SUCCESS,
+  FETCH_UPGRADE_STUDY_PRICE_ERROR,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser) {
@@ -178,6 +183,43 @@ export function studyEdited(payload) {
 export function studyEditingError(payload) {
   return {
     type: EDIT_STUDY_ERROR,
+    payload,
+  };
+}
+
+export function setActiveSort(sort, direction) {
+  return {
+    type: SET_ACTIVE_SORT,
+    sort,
+    direction,
+  };
+}
+
+export function sortSuccess(payload) {
+  return {
+    type: SORT_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchUpgradeStudyPrice(fromLevel, toLevel) {
+  return {
+    type: FETCH_UPGRADE_STUDY_PRICE,
+    fromLevel,
+    toLevel,
+  };
+}
+
+export function fetchUpgradeStudySuccess(payload) {
+  return {
+    type: FETCH_UPGRADE_STUDY_PRICE_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchUpgradeStudyError(payload) {
+  return {
+    type: FETCH_UPGRADE_STUDY_PRICE_ERROR,
     payload,
   };
 }

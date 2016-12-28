@@ -11,5 +11,7 @@ const schema = {
   campaignLength: { presence: { message: '^You need to select campaign length' } },
   startDate: { presence: true },
 };
+const fields = Object.keys(schema);
 
+export { fields };
 export default validatorFactory(schema);

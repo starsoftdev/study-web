@@ -75,7 +75,7 @@ const selectUserSiteLocations = () => createSelector(
       }
     }
     const returnArray = map(userSites, e => pick(e, ['id', 'name']));
-    returnArray.push({ id: 0.5, name: 'All' });
+    returnArray.push({ id: 0, name: 'All' });
     return returnArray;
   }
 );
@@ -159,6 +159,11 @@ const selectClientSites = () => createSelector(
 const selectSitePatients = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.sitePatients', {})
+);
+
+const selectClientCredits = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.clientCredits', {})
 );
 
 const selectPatientMessages = () => createSelector(
@@ -274,6 +279,7 @@ export {
 
   selectClientSites,
   selectSitePatients,
+  selectClientCredits,
   selectPatientMessages,
   selectClientRoles,
   selectSelectedSite,

@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
 import { map, cloneDeep } from 'lodash';
 
+import CenteredModal from '../../components/CenteredModal/index';
 import EditUserForm from 'components/EditUserForm';
 import { selectCurrentUserClientId, selectClientSites, selectClientRoles, selectSelectedUser,
   selectDeletedClientRole, selectSavedUser, selectSelectedUserDetailsForForm } from 'containers/App/selectors';
@@ -176,15 +177,15 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
                   <tr>
                     <th className={this.getColumnSortClassName('name')} onClick={() => { this.clickSortHandler('name'); }}>
                       <span>NAME</span>
-                      <i className="caret-arrow"></i>
+                      <i className="caret-arrow" />
                     </th>
                     <th className={this.getColumnSortClassName('email')} onClick={() => { this.clickSortHandler('email'); }}>
                       <span>EMAIL</span>
-                      <i className="caret-arrow"></i>
+                      <i className="caret-arrow" />
                     </th>
                     <th className={this.getColumnSortClassName('access')} onClick={() => { this.clickSortHandler('access'); }}>
                       <span>ACCESS</span>
-                      <i className="caret-arrow"></i>
+                      <i className="caret-arrow" />
                     </th>
                     <th></th>
                   </tr>
@@ -194,9 +195,20 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
                 </tbody>
               </table>
             </div>
-            <Modal className="edit-user" id="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
-              <Modal.Header closeButton>
+            <Modal
+              className="edit-user"
+              id="edit-user"
+              dialogComponentClass={CenteredModal}
+              show={editUserModalShown}
+              onHide={this.closeEditUserModal}
+              backdrop
+              keyboard
+            >
+              <Modal.Header>
                 <Modal.Title>Edit User</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeEditUserModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
               </Modal.Header>
               <Modal.Body>
                 <div className="holder clearfix">

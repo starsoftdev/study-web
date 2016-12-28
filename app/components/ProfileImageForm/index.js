@@ -111,7 +111,6 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
   }
 
   handleFileChange(img) {
-    // console.log(img);
     this.setState({ selectedImage: img });
   }
 
@@ -163,7 +162,7 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
           <div className={classNames('avatar-photo', { hidden: this.state.selectedImage }, { dragover: this.state.isDragOver })}>
             <FileUpload id="avatar_file" handleFileChange={this.handleFileChange} handleDragEnter={this.onDragEnterHandler} handleDragLeave={this.onDragLeaveHandler} />
             <div className="info">
-              <i className="icomoon-arrow_up_alt"></i>
+              <i className="icomoon-arrow_up_alt" />
               <span className="text">Drag and drop <br /> image here</span>
             </div>
           </div>
@@ -187,7 +186,7 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
             </div>
           </div>
           <div className="field-row">
-            <a href="#" className="link" onClick={this.useDefaultImage}>Use Default Image</a>
+            <a className="link" onClick={this.useDefaultImage}>Use Default Image</a>
           </div>
           <div className="text-right">
             <input type="button" className="btn btn-default" onClick={this.handleSave} value="submit" />

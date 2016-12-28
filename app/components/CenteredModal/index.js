@@ -5,8 +5,6 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import './styles.less';
-
 class CenteredModal extends React.Component {
   static propTypes = {
     /**

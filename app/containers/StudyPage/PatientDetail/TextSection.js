@@ -5,10 +5,12 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import { submitPatientText, readStudyPatientMessages } from '../actions';
 import CallItem from 'components/GlobalPMSModal/CallItem';
+import { fetchClientCredits, markAsReadPatientMessages } from 'containers/App/actions';
 
 import {
   sendStudyPatientMessages,
@@ -16,7 +18,7 @@ import {
   setProcessingStatus,
 } from 'containers/GlobalNotifications/actions';
 
-import { markAsReadPatientMessages } from 'containers/App/actions';
+import { selectClientCredits } from 'containers/App/selectors';
 
 import PatientText from './PatientText';
 
@@ -30,6 +32,7 @@ class TextSection extends React.Component {
     active: React.PropTypes.bool.isRequired,
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
+    clientCredits: React.PropTypes.object,
     submitPatientText: React.PropTypes.func.isRequired,
     fetchStudyPatientMessages: React.PropTypes.func,
     sendStudyPatientMessages: React.PropTypes.func,
@@ -38,6 +41,7 @@ class TextSection extends React.Component {
     studyId: React.PropTypes.any,
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
+    fetchClientCredits: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -56,9 +60,16 @@ class TextSection extends React.Component {
   }
 
   componentDidMount() {
+    const { currentUser } = this.props;
+    this.props.fetchClientCredits(currentUser.id);
   }
 
   componentWillReceiveProps(newProps) {
+    const { currentUser } = newProps;
+    if (!newProps.currentPatient) {
+      this.textarea.value = '';
+    }
+
     if (newProps.active && newProps.currentPatient) {
       this.initStudyPatientMessagesFetch(newProps);
     }
@@ -69,6 +80,7 @@ class TextSection extends React.Component {
         if (this.props.active && newMessage) {
           this.props.readStudyPatientMessages(this.props.currentPatient.id, this.props.studyId);
           this.props.markAsReadPatientMessages(this.props.currentPatient.id, this.props.studyId);
+          this.props.fetchClientCredits(currentUser.id);
         }
       });
       this.setState({ socketBinded: true });
@@ -98,15 +110,11 @@ class TextSection extends React.Component {
   }
 
   textAreaChange() {
-    const { maxCharacters } = this.state;
-    const value = this.textarea.value;
-    if (value.length > maxCharacters) {
-      this.textarea.value = value.substring(0, maxCharacters);
-    } else {
-      this.setState({ enteredCharactersLength: value.length }, () => {
-
+    setTimeout(() => {
+      const value = this.textarea.value;
+      this.setState({ enteredCharactersLength: value ? value.length : 0 }, () => {
       });
-    }
+    }, 0);
   }
 
   scrollElement() {
@@ -134,6 +142,7 @@ class TextSection extends React.Component {
       if (!err) {
         this.setState({ enteredCharactersLength: 0 }, () => {
           textarea.value = '';
+          this.props.fetchClientCredits(currentUser.id);
         });
       }
     });
@@ -180,7 +189,9 @@ class TextSection extends React.Component {
 
   render() {
     const { active } = this.props;
+    const clientCredits = this.props.clientCredits.details.customerCredits;
     const { maxCharacters, enteredCharactersLength } = this.state;
+    const disabled = (clientCredits === 0 || clientCredits === null);
     this.scrollElement();
     return (
       <div className={classNames('item text', { active })}>
@@ -190,21 +201,28 @@ class TextSection extends React.Component {
             className="form-control test"
             placeholder="Type a message..."
             onChange={this.textAreaChange}
+            maxLength={maxCharacters}
             ref={(textarea) => {
               this.textarea = textarea;
             }}
           />
-          <span className="characters-counter">
+          <span className="remaining-counter">
             {`${maxCharacters - enteredCharactersLength}`}
           </span>
-          <Button onClick={this.submitText}>Send</Button>
+          <Button
+            disabled={disabled}
+            onClick={this.submitText}
+          >
+            Send
+          </Button>
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = () => ({
+const mapStateToProps = createStructuredSelector({
+  clientCredits: selectClientCredits(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -214,6 +232,7 @@ const mapDispatchToProps = (dispatch) => ({
   setProcessingStatus: (payload) => dispatch(setProcessingStatus(payload)),
   readStudyPatientMessages: (patientId, studyId) => dispatch(readStudyPatientMessages(patientId, studyId)),
   markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
+  fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextSection);

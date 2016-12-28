@@ -65,7 +65,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
         <span className="edit-assigned-user">
           {(this.assignedUserIsBeingFetched(item))
             ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-assigned-user" /></span>
-            : <a href="#" className="btn edit-icon" onClick={() => { this.editAssignedUser(item); }}><i className="pencil-square" /></a>
+            : <a className="btn edit-icon" onClick={() => { this.editAssignedUser(item); }}><i className="pencil-square" /></a>
           }
         </span>
       </div>
@@ -89,8 +89,8 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           <div className="toggle-assigned-users">
             <span>ASSIGNED USERS</span>
             {this.state.assignedUsersCollapsed
-              ? <a href="#" className="btn toggle toggle-plus" onClick={this.toggleAssignedUsers}></a>
-              : <a href="#" className="btn toggle toggle-minus" onClick={this.toggleAssignedUsers}></a>
+              ? <a className="btn toggle toggle-plus" onClick={this.toggleAssignedUsers}></a>
+              : <a className="btn toggle toggle-minus" onClick={this.toggleAssignedUsers}></a>
             }
           </div>
           {!this.state.assignedUsersCollapsed &&
@@ -100,7 +100,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
         <td className="action">
           <button type="button" className="btn btn-primary btn-edit-site pull-right" onClick={this.editSite} disabled={(this.currentSiteIsBeingFetched())}>
             {(this.currentSiteIsBeingFetched())
-              ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-site" /></span>
+              ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
               : <span>Edit</span>
             }
           </button>

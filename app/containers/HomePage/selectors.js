@@ -47,6 +47,11 @@ const selectEditedStudy = () => createSelector(
   substate => substate.editedStudy
 );
 
+const selectPaginationOptions = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.paginationOptions
+);
+
 export default selectHomePage;
 export {
   selectHomePageDomain,
@@ -58,4 +63,5 @@ export {
   selectRenewedStudy,
   selectUpgradedStudy,
   selectEditedStudy,
+  selectPaginationOptions,
 };

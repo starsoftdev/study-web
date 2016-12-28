@@ -6,11 +6,13 @@ import { createStructuredSelector } from 'reselect';
 
 import CalendarWidget from './components/CalendarWidget';
 import SchedulePatientModal from './components/SchedulePatientModal';
+import EditScheduleModal from './components/EditScheduleModal';
 import FilterBar from './components/FilterBar';
 import AllEventsModal from './components/AllEventsModal';
 
 import moment from 'moment';
 import _ from 'lodash';
+import Helmet from 'react-helmet';
 
 import {
   fetchSites,
@@ -27,8 +29,9 @@ import {
   fetchSchedules,
   submitSchedule,
   deleteSchedule,
+  setActiveSort,
 } from './actions';
-import { selectSchedules, selectPatientsByStudy } from './selectors';
+import { selectSchedules, selectPatientsByStudy, selectPaginationOptions } from './selectors';
 
 import { SchedulePatientModalType } from 'common/constants';
 
@@ -39,6 +42,28 @@ const getFilteredSchedules = (schedules, filter) =>
       (!filter.indication || filter.indication === 'All' || s.indication === filter.indication) &&
       (!filter.protocol || filter.protocol === 'All' || s.protocolNumber === filter.protocol)
   );
+
+function numberSequenceCreator(start, end) {
+  return _.range(start, end).map(n => {
+    if (n < 10) {
+      return {
+        label: `0${n}`,
+        value: n.toString(),
+      };
+    }
+    return {
+      label: n.toString(),
+      value: n.toString(),
+    };
+  });
+}
+
+const hourOptions = numberSequenceCreator(1, 13);
+const minuteOptions = numberSequenceCreator(0, 60);
+const periodOptions = [
+  { label: 'AM', value: 'AM' },
+  { label: 'PM', value: 'PM' },
+];
 
 export class CalendarPage extends React.Component {
   static propTypes = {
@@ -53,6 +78,8 @@ export class CalendarPage extends React.Component {
     fetchSchedules: PropTypes.func.isRequired,
     submitSchedule: PropTypes.func.isRequired,
     deleteSchedule: PropTypes.func.isRequired,
+    paginationOptions: PropTypes.object,
+    setActiveSort: PropTypes.func,
   }
 
   constructor(props) {
@@ -61,6 +88,7 @@ export class CalendarPage extends React.Component {
     this.selectedCellInfo = {};
     this.updateFilter = ::this.updateFilter;
     this.handleCloseModal = this.handleModalVisibility.bind(this, SchedulePatientModalType.HIDDEN);
+    this.sortBy = this.sortBy.bind(this);
   }
 
   state = {
@@ -193,6 +221,22 @@ export class CalendarPage extends React.Component {
     this.filterSchedules(this.props.schedules.data, newFilter);
   }
 
+  sortBy(ev) {
+    ev.preventDefault();
+    let sort = ev.currentTarget.dataset.sort;
+    let direction = 'up';
+    const defaultSort = 'orderNumber';
+
+    if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
+      direction = 'down';
+    } else if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1) {
+      direction = null;
+      sort = null;
+    }
+
+    this.props.setActiveSort(sort, direction);
+  }
+
   render() {
     const { currentUser, sites, indications, patientsByStudy, schedules } = this.props;
     const { showAll } = this.state;
@@ -221,6 +265,7 @@ export class CalendarPage extends React.Component {
 
     return (
       <div className="container-fluid">
+        <Helmet title="Calendar - StudyKIK" />
         <section className="calendar-section">
           <h2 className="main-heading">CALENDAR</h2>
           <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
@@ -247,7 +292,6 @@ export class CalendarPage extends React.Component {
             indications={indications}
             onSubmit={this.handleSubmit}
             handleCloseModal={this.handleCloseModal}
-            handleDelete={this.handleDelete}
             submitting={false}
             selectedCellInfo={this.selectedCellInfo}
             modalType={this.state.modalType}
@@ -256,6 +300,21 @@ export class CalendarPage extends React.Component {
             fetchingSites={fetchingSites}
             fetchingPatientsByStudy={fetchingPatientsByStudy}
             fetchPatientsByStudy={this.props.fetchPatientsByStudy}
+            hourOptions={hourOptions}
+            minuteOptions={minuteOptions}
+            periodOptions={periodOptions}
+            initialValues={{ hour: '0' }}
+          />
+          <EditScheduleModal
+            onSubmit={this.handleSubmit}
+            handleCloseModal={this.handleCloseModal}
+            handleDelete={this.handleDelete}
+            submitting={false}
+            selectedCellInfo={this.selectedCellInfo}
+            modalType={this.state.modalType}
+            hourOptions={hourOptions}
+            minuteOptions={minuteOptions}
+            periodOptions={periodOptions}
           />
           <AllEventsModal
             visible={showAll.visible}
@@ -264,6 +323,8 @@ export class CalendarPage extends React.Component {
             handleCloseModal={() => this.handleShowAll(false)}
             handleEdit={this.handleModalVisibility}
             setAllModalDeferred={this.setAllModalDeferred}
+            sortBy={this.sortBy}
+            paginationOptions={this.props.paginationOptions}
           />
         </section>
       </div>
@@ -277,6 +338,7 @@ const mapStateToProps = createStructuredSelector({
   indications: selectIndications(),
   schedules: selectSchedules,
   patientsByStudy: selectPatientsByStudy,
+  paginationOptions: selectPaginationOptions,
 });
 
 const mapDispatchToProps = {
@@ -286,6 +348,7 @@ const mapDispatchToProps = {
   fetchSchedules,
   submitSchedule,
   deleteSchedule,
+  setActiveSort,
 };
 
 export default connect(

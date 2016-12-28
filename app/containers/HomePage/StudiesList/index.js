@@ -2,15 +2,17 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
-import { countBy, find, filter, sumBy } from 'lodash';
+import _, { countBy, find, filter, sumBy } from 'lodash';
+import { touch } from 'redux-form';
 
+import CenteredModal from '../../../components/CenteredModal/index';
 import { fetchLevels } from 'containers/App/actions';
 import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients } from 'containers/App/selectors';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy,
-  selectUpgradedStudy, selectEditedStudy } from 'containers/HomePage/selectors';
+  selectUpgradedStudy, selectEditedStudy, selectPaginationOptions } from 'containers/HomePage/selectors';
 import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from 'containers/HomePage/constants';
-import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy } from 'containers/HomePage/actions';
+import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice } from 'containers/HomePage/actions';
 import { selectRenewStudyFormValues, selectRenewStudyFormError } from 'containers/HomePage/RenewStudyForm/selectors';
 import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError } from 'containers/HomePage/UpgradeStudyForm/selectors';
 import StudyItem from './StudyItem';
@@ -18,7 +20,10 @@ import RenewStudyForm from 'containers/HomePage/RenewStudyForm';
 import UpgradeStudyForm from 'containers/HomePage/UpgradeStudyForm';
 import EditStudyForm from 'containers/HomePage/EditStudyForm';
 import ShoppingCartForm from 'components/ShoppingCartForm';
-import './styles.less';
+import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
+import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
+import { upgradeStudyFields } from '../UpgradeStudyForm/validator';
+import { renewStudyFields } from '../RenewStudyForm/validator';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -36,11 +41,20 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     editedStudy: PropTypes.object,
     fetchLevels: PropTypes.func,
     fetchIndicationLevelPrice: PropTypes.func,
+    fetchUpgradeStudyPrice: PropTypes.func,
     clearIndicationLevelPrice: PropTypes.func,
     renewStudy: PropTypes.func,
     upgradeStudy: PropTypes.func,
     editStudy: PropTypes.func,
     sitePatients: React.PropTypes.object,
+    paginationOptions: React.PropTypes.object,
+    setActiveSort: PropTypes.func,
+    sortSuccess: PropTypes.func,
+    shoppingCartFormError: PropTypes.object,
+    shoppingCartFormValues: PropTypes.object,
+    touchUpgradeStudy: PropTypes.func,
+    touchRenewStudy: PropTypes.func,
+    touchShoppingCart: PropTypes.func,
   };
 
   constructor(props) {
@@ -64,6 +78,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.handleRenewStudyFormSubmit = this.handleRenewStudyFormSubmit.bind(this);
     this.handleUpgradeStudyFormSubmit = this.handleUpgradeStudyFormSubmit.bind(this);
     this.handleEditStudyFormSubmit = this.handleEditStudyFormSubmit.bind(this);
+    this.sortBy = this.sortBy.bind(this);
   }
 
   componentDidMount() {
@@ -104,7 +119,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
     if (newLevelOfUpgradeStudy !== oldLevelOfUpgradeStudy) {
       if (newLevelOfUpgradeStudy) {
-        this.props.fetchIndicationLevelPrice(newLevelOfUpgradeStudy, this.state.selectedIndicationId);
+        const selectedStudy = _.find(this.props.studies.details, (o) => (o.studyId === this.state.selectedStudyId));
+        this.props.fetchUpgradeStudyPrice(selectedStudy.campaign.level_id, newLevelOfUpgradeStudy);
       } else {
         this.props.clearIndicationLevelPrice();
       }
@@ -162,28 +178,42 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     });
   }
 
-  handleRenewStudyFormSubmit(cartParams) {
-    const { currentUserStripeCustomerId, renewStudyFormValues, renewStudy } = this.props;
+  handleRenewStudyFormSubmit() {
+    const { currentUserStripeCustomerId, renewStudyFormValues, renewStudy, renewStudyFormError, shoppingCartFormValues, shoppingCartFormError,
+      touchRenewStudy, touchShoppingCart } = this.props;
 
-    renewStudy(this.state.selectedStudyId, cartParams, {
+    if (renewStudyFormError || shoppingCartFormError) {
+      touchRenewStudy();
+      touchShoppingCart();
+      return;
+    }
+
+    renewStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...renewStudyFormValues,
       stripeCustomerId: currentUserStripeCustomerId,
       selectedIndicationId: this.state.selectedIndicationId,
       selectedSiteId: this.state.selectedCampaign.site_id,
-      username: this.props.currentUser.username,
+      user_id: this.props.currentUser.id,
     });
   }
 
-  handleUpgradeStudyFormSubmit(cartParams) {
-    const { currentUserStripeCustomerId, upgradeStudyFormValues, upgradeStudy } = this.props;
+  handleUpgradeStudyFormSubmit() {
+    const { shoppingCartFormError, shoppingCartFormValues, upgradeStudyFormError, touchUpgradeStudy, touchShoppingCart,
+      currentUserStripeCustomerId, upgradeStudyFormValues, upgradeStudy } = this.props;
 
-    upgradeStudy(this.state.selectedStudyId, cartParams, {
+    if (upgradeStudyFormError || shoppingCartFormError) {
+      touchUpgradeStudy();
+      touchShoppingCart();
+      return;
+    }
+
+    upgradeStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...upgradeStudyFormValues,
       stripeCustomerId: currentUserStripeCustomerId,
       selectedIndicationId: this.state.selectedIndicationId,
       selectedCampaignId: this.state.selectedCampaign.id,
       selectedSiteId: this.state.selectedCampaign.site_id,
-      username: this.props.currentUser.username,
+      user_id: this.props.currentUser.id,
     });
   }
 
@@ -270,14 +300,43 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     return addOns;
   }
 
+  sortBy(ev) {
+    ev.preventDefault();
+    let sort = ev.currentTarget.dataset.sort;
+    let direction = 'up';
+    const defaultSort = 'orderNumber';
+
+    if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
+      direction = 'down';
+    } else if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1) {
+      direction = null;
+      sort = null;
+    }
+
+    this.props.setActiveSort(sort, direction);
+
+    const dir = ((direction === 'down') ? 'desc' : 'asc');
+    const sorted = _.orderBy(this.props.studies.details, [function (o) {
+      if (sort === 'indication') {
+        return o.indication.name;
+      }
+      return o[(sort || defaultSort)];
+    }], [dir]);
+    this.props.sortSuccess(sorted);
+  }
+
   render() {
-    const { studies, renewStudyFormError, upgradeStudyFormError, sitePatients } = this.props;
+    const { studies, sitePatients } = this.props;
     const countResult = countBy(studies.details, entityIterator => entityIterator.status);
     const activeCount = countResult[ACTIVE_STATUS_VALUE] || 0;
     const inactiveCount = countResult[INACTIVE_STATUS_VALUE] || 0;
     const totalCount = studies.details.length;
 
+    let selectedStudy = null;
     const studiesListContents = studies.details.map((item, index) => {
+      if (item.studyId === this.state.selectedStudyId) {
+        selectedStudy = item;
+      }
       const unreadMessageCount = sumBy(filter(sitePatients.details, { study_id: item.studyId }), (sitePatient) => {
         if (sitePatient.count_unread == null) {
           return 0;
@@ -329,17 +388,18 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                 </caption>
                 <thead>
                   <tr>
-                    <th>#</th>
-                    <th>INDICATION</th>
-                    <th>LOCATION</th>
-                    <th>SPONSOR</th>
-                    <th>PROTOCOL</th>
-                    <th>
-                      <span className="icomoon-credit" data-original-title="Patient Messaging Suite"></span>
+                    <th onClick={this.sortBy} data-sort="orderNumber" className={(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}>#<i className="caret-arrow" /></th>
+                    <th onClick={this.sortBy} data-sort="indication" className={(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}>INDICATION<i className="caret-arrow" /></th>
+                    <th onClick={this.sortBy} data-sort="location" className={(this.props.paginationOptions.activeSort === 'location') ? this.props.paginationOptions.activeDirection : ''}>LOCATION<i className="caret-arrow" /></th>
+                    <th onClick={this.sortBy} data-sort="sponsor" className={(this.props.paginationOptions.activeSort === 'sponsor') ? this.props.paginationOptions.activeDirection : ''}>SPONSOR<i className="caret-arrow" /></th>
+                    <th onClick={this.sortBy} data-sort="protocol" className={(this.props.paginationOptions.activeSort === 'protocol') ? this.props.paginationOptions.activeDirection : ''}>PROTOCOL<i className="caret-arrow" /></th>
+                    <th onClick={this.sortBy} data-sort="patientMessagingSuite" className={(this.props.paginationOptions.activeSort === 'patientMessagingSuite') ? this.props.paginationOptions.activeDirection : ''}>
+                      <span className="icomoon-credit" data-original-title="Patient Messaging Suite" />
+                      <i className="caret-arrow" />
                     </th>
-                    <th>STATUS</th>
-                    <th>START DATE</th>
-                    <th>END DATE</th>
+                    <th onClick={this.sortBy} data-sort="status" className={(this.props.paginationOptions.activeSort === 'status') ? this.props.paginationOptions.activeDirection : ''}>STATUS<i className="caret-arrow" /></th>
+                    <th onClick={this.sortBy} data-sort="startDate" className={(this.props.paginationOptions.activeSort === 'startDate') ? this.props.paginationOptions.activeDirection : ''}>START DATE<i className="caret-arrow" /></th>
+                    <th onClick={this.sortBy} data-sort="endDate" className={(this.props.paginationOptions.activeSort === 'endDate') ? this.props.paginationOptions.activeDirection : ''}>END DATE<i className="caret-arrow" /></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -347,71 +407,98 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                 </tbody>
               </table>
             </div>
-            <Modal className="renew-study-modal" id="renew-study" show={this.state.renewModalOpen} onHide={this.closeRenewModal} bsSize="large">
-              <Modal.Header closeButton>
+            <Modal
+              className="renew-study-modal"
+              id="renew-study"
+              dialogComponentClass={CenteredModal}
+              show={this.state.renewModalOpen}
+              onHide={this.closeRenewModal}
+              backdrop
+              keyboard
+            >
+              <Modal.Header>
                 <Modal.Title>Renew Study</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeRenewModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
               </Modal.Header>
               <Modal.Body>
-                <div className="holder clearfix">
-                  <div className="form-study">
-                    <div className="pull-left col">
-                      <div className="scroll jcf--scrollable">
-                        <div className="holder-inner">
-                          <RenewStudyForm />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="pull-left col">
-                      <ShoppingCartForm
-                        showCards
-                        noBorder
-                        addOns={addOns}
-                        disableSubmit={renewStudyFormError}
-                        onSubmit={this.handleRenewStudyFormSubmit}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </Modal.Body>
-            </Modal>
-            <Modal className="upgrade-study-modal" id="upgrade-study" show={this.state.upgradeModalOpen} onHide={this.closeUpgradeModal} bsSize="large">
-              <Modal.Header closeButton>
-                <Modal.Title>Upgrade Study</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <div className="holder clearfix">
-                  <div className="form-study">
-                    <div className="pull-left col">
-                      <div className="scroll jcf--scrollable">
-                        <div className="holder-inner">
-                          <UpgradeStudyForm />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="pull-left col">
-                      <ShoppingCartForm
-                        showCards
-                        noBorder
-                        addOns={addOns}
-                        disableSubmit={upgradeStudyFormError}
-                        onSubmit={this.handleUpgradeStudyFormSubmit}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </Modal.Body>
-            </Modal>
-            <Modal className="edit-study-modal" id="edit-study" show={this.state.editModalOpen} onHide={this.closeEditModal} bsSize="large">
-              <Modal.Header closeButton>
-                <Modal.Title>Edit Information</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <div className="holder clearfix">
-                  <div className="form-study">
+                <div className="form-study">
+                  <div className="pull-left col">
                     <div className="scroll jcf--scrollable">
                       <div className="holder-inner">
-                        <EditStudyForm siteUsers={this.state.selectedSiteUsers} onSubmit={this.handleEditStudyFormSubmit} />
+                        <RenewStudyForm />
                       </div>
+                    </div>
+                  </div>
+                  <div className="pull-left col">
+                    <ShoppingCartForm
+                      showCards
+                      noBorder
+                      addOns={addOns}
+                      validateAndSubmit={this.handleRenewStudyFormSubmit}
+                    />
+                  </div>
+                </div>
+              </Modal.Body>
+            </Modal>
+            <Modal
+              className="upgrade-study-modal"
+              id="upgrade-study"
+              dialogComponentClass={CenteredModal}
+              show={this.state.upgradeModalOpen}
+              onHide={this.closeUpgradeModal}
+              backdrop
+              keyboard
+            >
+              <Modal.Header>
+                <Modal.Title>Upgrade Study</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeUpgradeModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="form-study">
+                  <div className="pull-left col">
+                    <div className="scroll jcf--scrollable">
+                      <div className="holder-inner">
+                        <UpgradeStudyForm
+                          selectedStudy={selectedStudy}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="pull-left col">
+                    <ShoppingCartForm
+                      showCards
+                      noBorder
+                      addOns={addOns}
+                      validateAndSubmit={this.handleUpgradeStudyFormSubmit}
+                    />
+                  </div>
+                </div>
+              </Modal.Body>
+            </Modal>
+            <Modal
+              className="edit-study-modal"
+              id="edit-study"
+              dialogComponentClass={CenteredModal}
+              show={this.state.editModalOpen}
+              onHide={this.closeEditModal}
+              backdrop
+              keyboard
+            >
+              <Modal.Header>
+                <Modal.Title>Edit Information</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeEditModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="form-study">
+                  <div className="scroll jcf--scrollable">
+                    <div className="holder-inner">
+                      <EditStudyForm siteUsers={this.state.selectedSiteUsers} onSubmit={this.handleEditStudyFormSubmit} />
                     </div>
                   </div>
                 </div>
@@ -438,16 +525,25 @@ const mapStateToProps = createStructuredSelector({
   upgradedStudy: selectUpgradedStudy(),
   editedStudy: selectEditedStudy(),
   sitePatients: selectSitePatients(),
+  paginationOptions: selectPaginationOptions(),
+  shoppingCartFormError: selectShoppingCartFormError(),
+  shoppingCartFormValues: selectShoppingCartFormValues(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchLevels: () => dispatch(fetchLevels()),
     fetchIndicationLevelPrice: (levelId, indicationId) => dispatch(fetchIndicationLevelPrice(levelId, indicationId)),
+    fetchUpgradeStudyPrice: (fromLevel, toLevel) => dispatch(fetchUpgradeStudyPrice(fromLevel, toLevel)),
     clearIndicationLevelPrice: () => dispatch(clearIndicationLevelPrice()),
     renewStudy: (studyId, cartValues, formValues) => dispatch(renewStudy(studyId, cartValues, formValues)),
     upgradeStudy: (studyId, cartValues, formValues) => dispatch(upgradeStudy(studyId, cartValues, formValues)),
     editStudy: (formValues) => dispatch(editStudy(formValues)),
+    setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
+    sortSuccess: (payload) => dispatch(sortSuccess(payload)),
+    touchUpgradeStudy: () => dispatch(touch('upgradeStudy', ...upgradeStudyFields)),
+    touchRenewStudy: () => dispatch(touch('renewStudy', ...renewStudyFields)),
+    touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
   };
 }
 

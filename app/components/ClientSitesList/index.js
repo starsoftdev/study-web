@@ -4,15 +4,15 @@ import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
 import { map, cloneDeep } from 'lodash';
 
-import EditSiteForm from 'components/EditSiteForm';
-import EditUserForm from 'components/EditUserForm';
+import CenteredModal from '../../components/CenteredModal/index';
+import EditSiteForm from '../../components/EditSiteForm';
+import EditUserForm from '../../components/EditUserForm';
 import { selectCurrentUserClientId, selectClientSites, selectSelectedSite,
   selectSelectedSiteDetailsForForm, selectSelectedUser, selectSelectedUserDetailsForForm,
   selectDeletedUser, selectSavedSite, selectSavedUser } from 'containers/App/selectors';
 import { clearSelectedSite, clearSelectedUser,
   deleteUser, saveSite, saveUser } from 'containers/App/actions';
 import ClientSiteItem from './ClientSiteItem';
-import './styles.less';
 
 class ClientSitesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -189,19 +189,19 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                   <tr>
                     <th className={this.getColumnSortClassName('name')} onClick={() => { this.clickSortHandler('name'); }}>
                       <span>SITE NAME</span>
-                      <i className="caret-arrow"></i>
+                      <i className="caret-arrow" />
                     </th>
                     <th className={this.getColumnSortClassName('principalInvestigator')} onClick={() => { this.clickSortHandler('principalInvestigator'); }}>
                       <span>PRINCIPAL INVESTIGATOR</span>
-                      <i className="caret-arrow"></i>
+                      <i className="caret-arrow" />
                     </th>
                     <th className={this.getColumnSortClassName('phone')} onClick={() => { this.clickSortHandler('phone'); }}>
                       <span>SITE PHONE</span>
-                      <i className="caret-arrow"></i>
+                      <i className="caret-arrow" />
                     </th>
                     <th className={this.getColumnSortClassName('address')} onClick={() => { this.clickSortHandler('address'); }}>
                       <span>SITE ADDRESS</span>
-                      <i className="caret-arrow"></i>
+                      <i className="caret-arrow" />
                     </th>
                     <th></th>
                     <th></th>
@@ -212,9 +212,12 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                 </tbody>
               </table>
             </div>
-            <Modal className="edit-site" id="edit-site" show={editSiteModalShown} onHide={this.closeEditSiteModal}>
-              <Modal.Header closeButton>
-                <Modal.Title>Edit Site</Modal.Title>
+            <Modal dialogComponentClass={CenteredModal} className="edit-site" id="edit-site" show={editSiteModalShown} onHide={this.closeEditSiteModal}>
+              <Modal.Header>
+                <Modal.Title>Edit Site Location</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeEditSiteModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
               </Modal.Header>
               <Modal.Body>
                 <div className="holder clearfix">
@@ -222,14 +225,18 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                     <EditSiteForm
                       initialValues={selectedSiteDetailsForForm}
                       onSubmit={this.updateSite}
+                      isEdit
                     />
                   </div>
                 </div>
               </Modal.Body>
             </Modal>
-            <Modal className="edit-user" id="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
-              <Modal.Header closeButton>
+            <Modal dialogComponentClass={CenteredModal} className="edit-user" id="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
+              <Modal.Header>
                 <Modal.Title>Edit User</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeEditUserModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
               </Modal.Header>
               <Modal.Body>
                 <div className="holder clearfix">

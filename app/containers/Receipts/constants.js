@@ -12,4 +12,4 @@ export const GET_PDF = 'app/Receipts/GET_PDF';
 export const SET_SEARCH_OPTIONS = 'app/Receipts/SET_SEARCH_OPTIONS';
 export const SET_ACTIVE_SORT = 'app/Receipts/SET_ACTIVE_SORT';
 export const SHOW_INVOICE_PDF = 'app/Receipts/SHOW_INVOICE_PDF';
-
+export const SORT_PROPOSALS_SUCCESS = 'app/Receipts/SORT_PROPOSALS_SUCCESS';

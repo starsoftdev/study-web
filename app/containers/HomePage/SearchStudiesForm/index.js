@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Form from 'react-bootstrap/lib/Form';
+import Button from 'react-bootstrap/lib/Button';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
@@ -44,6 +45,9 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
         <div className="fields-holder clearfix">
           <div className="search-area pull-left">
             <div className="field">
+              <Button className="btn-enter">
+                <i className="icomoon-icon_search2" />
+              </Button>
               <Field
                 name="name"
                 component={Input}
@@ -52,9 +56,6 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
                 placeholder="Search..."
                 disabled={clientSites.fetching || studies.fetching}
               />
-              <label htmlFor="search">
-                <i className="icomoon-icon_search2" />
-              </label>
             </div>
           </div>
           <div className="pull-left custom-select">
@@ -78,7 +79,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
           <div className="hidden">
             <button type="submit" className="btn btn-primary btn-search" disabled={clientSites.fetching || studies.fetching || hasError}>
               {(studies.fetching)
-                ? <LoadingSpinner showOnlyIcon size={20} className="fetching-studies" />
+                ? <LoadingSpinner showOnlyIcon size={20} />
                 : <span>Search</span>
               }
             </button>

@@ -4,25 +4,43 @@
 *
 */
 
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 import { Modal } from 'react-bootstrap';
-import ShoppingCartForm from 'components/ShoppingCartForm';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { addCredits, getCreditsPrice } from 'containers/App/actions';
-import { selectCurrentUser, selectAddCredits, selectCreditsPrice } from 'containers/App/selectors';
-import './styles.less';
+import ReactSelect from 'components/Input/ReactSelect';
+import { Field, reduxForm, touch, reset } from 'redux-form';
 
-class AddCreditsModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
+import CenteredModal from '../../components/CenteredModal/index';
+import ShoppingCartForm from 'components/ShoppingCartForm';
+import { fetchSites, addCredits, getCreditsPrice } from 'containers/App/actions';
+import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice } from 'containers/App/selectors';
+import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
+import { selectAddCreditsFormValues, selectAddCreditsFormError } from './selectors';
+import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
+import validator, { addCreditsFields } from './validator';
 
+@reduxForm({ form: 'addCredits', validate: validator })
+@connect(mapStateToProps)
+
+class AddCreditsModal extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    showModal: React.PropTypes.bool,
-    closeModal: React.PropTypes.func,
-    addCredits: React.PropTypes.func,
-    currentUser: React.PropTypes.object,
-    addCreditsOperation: React.PropTypes.object,
-    getCreditsPrice: React.PropTypes.func,
-    creditsPrice: React.PropTypes.object,
+    showModal: PropTypes.bool,
+    siteLocations: PropTypes.array,
+    fetchSites: PropTypes.func,
+    closeModal: PropTypes.func,
+    addCredits: PropTypes.func,
+    currentUser: PropTypes.object,
+    addCreditsOperation: PropTypes.object,
+    getCreditsPrice: PropTypes.func,
+    creditsPrice: PropTypes.object,
+    shoppingCartFormError: PropTypes.object,
+    shoppingCartFormValues: PropTypes.object,
+    addCreditsFormValues: PropTypes.object,
+    addCreditsFormError: PropTypes.bool,
+    touchShoppingCart: PropTypes.func,
+    resetForm: PropTypes.func,
+    touchAddCredits: PropTypes.func,
   };
 
   constructor(props) {
@@ -30,21 +48,25 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
     this.incQuantity = this.incQuantity.bind(this);
     this.decQuantity = this.decQuantity.bind(this);
     this.addCreditsSubmit = this.addCreditsSubmit.bind(this);
+    this.handleSiteLocationChoose = this.handleSiteLocationChoose.bind(this);
+    this.closeModal = this.closeModal.bind(this);
 
     this.state = {
       quantity: 1,
       credits: 0,
+      total: 0,
       price: 0,
     };
   }
 
   componentDidMount() {
+    this.props.fetchSites();
     this.props.getCreditsPrice();
   }
 
   componentWillReceiveProps(newProps) {
     if (!newProps.addCreditsOperation.adding && this.props.addCreditsOperation.adding) {
-      this.props.closeModal();
+      this.closeModal();
     }
     if (newProps.creditsPrice.price && !this.props.creditsPrice.price) {
       this.setState({
@@ -55,12 +77,32 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
     }
   }
 
+  resetState() {
+    const resetState = {
+      quantity: 1,
+      credits: 100,
+      total: 0,
+      price: 7700,
+    };
+
+    this.setState(resetState, () => {
+      this.props.resetForm();
+    });
+  }
+
+  closeModal() {
+    this.props.closeModal();
+    this.resetState();
+  }
+
+  handleSiteLocationChoose() {}
+
   incQuantity() {
     if (this.state.quantity < 999) {
       this.setState({
         quantity: this.state.quantity + 1,
         credits: (this.state.quantity + 1) * this.props.creditsPrice.attributes.amount,
-        price: (this.state.quantity + 1) * this.props.creditsPrice.price,
+        total: (this.state.quantity + 1) * this.props.creditsPrice.price,
       });
     }
   }
@@ -70,36 +112,66 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
       this.setState({
         quantity: this.state.quantity - 1,
         credits: (this.state.quantity - 1) * this.props.creditsPrice.attributes.amount,
-        price: (this.state.quantity - 1) * this.props.creditsPrice.price,
+        total: (this.state.quantity - 1) * this.props.creditsPrice.price,
       });
     }
   }
 
-  addCreditsSubmit(cartValues) {
+  addCreditsSubmit(ev) {
+    ev.preventDefault();
+    const {
+      addCreditsFormValues,
+      addCreditsFormError,
+      shoppingCartFormValues,
+      shoppingCartFormError,
+      addCredits,
+      currentUser,
+      touchShoppingCart,
+      touchAddCredits,
+    } = this.props;
+
     const data = {
       quantity: this.state.quantity,
-      totalAmount: cartValues.total,
-      cardId: cartValues.creditCard,
+      totalAmount: this.state.quantity * this.props.creditsPrice.price,
+      cardId: shoppingCartFormValues.creditCard,
+      userId: this.props.currentUser.id,
+      site: addCreditsFormValues.siteLocation,
     };
-    this.props.addCredits(this.props.currentUser.roleForClient.client.stripeCustomerId, data);
+
+    if (addCreditsFormError || shoppingCartFormError) {
+      touchAddCredits();
+      touchShoppingCart();
+      return;
+    }
+
+    addCredits(currentUser.roleForClient.client.stripeCustomerId, data);
   }
 
 
   render() {
+    const { siteLocations } = this.props;
     const products = [
       {
         title: '100 Credits',
-        quantity: parseFloat(this.state.credits),
+        quantity: this.state.quantity,
         price: this.state.price,
-        total: this.state.price,
+        total: this.state.quantity * this.props.creditsPrice.price,
       },
     ];
     return (
       <div>
-        <Modal className="custom-modal add-credits" id="add-credits" show={this.props.showModal} onHide={this.props.closeModal}>
+        <Modal
+          className="add-credits"
+          id="add-credits"
+          dialogComponentClass={CenteredModal}
+          show={this.props.showModal}
+          onHide={this.closeModal}
+          backdrop
+          keyboard
+        >
           <Modal.Header>
             <Modal.Title>Add Credits</Modal.Title>
-            <a className="lightbox-close close" onClick={this.props.closeModal}>
+            <a className="lightbox-close close" onClick={this.closeModal}>
               <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
@@ -110,11 +182,38 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
                   <div className="scroll jcf--scrollable">
                     <div className="holder-inner">
                       <div className="form-fields">
+
+                        <div className="field-row extra-style">
+                          <strong className="label required"><label>Site Location</label></strong>
+                          <Field
+                            name="siteLocation"
+                            component={ReactSelect}
+                            placeholder="Select Site Location"
+                            options={siteLocations}
+                            className="field"
+                            onChange={this.handleSiteLocationChoose}
+                          />
+                        </div>
+
+                        <div className="field-row overflow">
+                          <span className="message">
+                            Location selection will appear on invoice for accounting purposes.
+                            Credits are added to all accounts.
+                          </span>
+                        </div>
+
                         <div className="field-row">
                           <strong className="label required"><label htmlFor="quantity">QUANTITY</label></strong>
                           <div className="field">
                             <span className="jcf-number parent-active">
-                              <input type="number" value={this.state.quantity} id="quantity" className="form-control jcf-real-element field-active" readOnly />
+                              <input
+                                type="number"
+                                value={this.state.quantity}
+                                id="quantity"
+                                className="form-control jcf-real-element field-active"
+                                name="quantity"
+                                readOnly
+                              />
                               <span className="jcf-btn-inc" onClick={this.incQuantity} />
                               <span className="jcf-btn-dec" onClick={this.decQuantity} />
                             </span>
@@ -123,15 +222,29 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
 
                         <div className="field-row">
                           <strong className="label"><label htmlFor="credits">CREDITS</label></strong>
-                          <div className="field"> ``
-                            <input className="form-control" value={this.state.credits} type="text" name="credits" disabled />
+                          <div className="field">
+                            <input
+                              className="form-control"
+                              value={this.state.credits}
+                              type="text"
+                              id="credits"
+                              name="credits"
+                              disabled
+                            />
                           </div>
                         </div>
 
                         <div className="field-row">
                           <strong className="label"><label htmlFor="price">PRICE</label></strong>
                           <div className="field">
-                            <input className="form-control" value={`$${this.state.price / 100}`} type="text" name="price" disabled />
+                            <input
+                              className="form-control"
+                              value={`$${(this.state.quantity * this.props.creditsPrice.price) / 100}`}
+                              type="text"
+                              id="price"
+                              name="price"
+                              disabled
+                            />
                           </div>
                         </div>
                       </div>
@@ -140,7 +253,7 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
                 </div>
 
                 <div className="pull-left col">
-                  <ShoppingCartForm showCards noBorder onSubmit={this.addCreditsSubmit} addOns={products} />
+                  <ShoppingCartForm showCards noBorder validateAndSubmit={this.addCreditsSubmit} addOns={products} />
                 </div>
               </div>
 
@@ -153,6 +266,11 @@ class AddCreditsModal extends React.Component { // eslint-disable-line react/pre
 }
 
 const mapStateToProps = createStructuredSelector({
+  shoppingCartFormError: selectShoppingCartFormError(),
+  shoppingCartFormValues: selectShoppingCartFormValues(),
+  addCreditsFormValues: selectAddCreditsFormValues(),
+  addCreditsFormError: selectAddCreditsFormError(),
+  siteLocations : selectSiteLocations(),
   currentUser: selectCurrentUser(),
   addCreditsOperation: selectAddCredits(),
   creditsPrice: selectCreditsPrice(),
@@ -160,8 +278,12 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchSites:       () => dispatch(fetchSites()),
     addCredits: (customerId, data) => dispatch(addCredits(customerId, data)),
     getCreditsPrice: () => dispatch(getCreditsPrice()),
+    touchAddCredits: () => dispatch(touch('addCredits', ...addCreditsFields)),
+    touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
+    resetForm: () => dispatch(reset('addCredits')),
   };
 }
 

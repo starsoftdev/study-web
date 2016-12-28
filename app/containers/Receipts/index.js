@@ -17,6 +17,7 @@ import {
   setSearchOptions,
   setActiveSort,
   showInvoicePdf,
+  sortProposalsSuccess,
 } from 'containers/Receipts/actions';
 import {
   fetchSites,
@@ -47,6 +48,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     setSearchOptions: PropTypes.func,
     setActiveSort: PropTypes.func,
     showInvoicePdf: PropTypes.func,
+    sortProposalsSuccess: PropTypes.func,
   };
 
   constructor(props, context) {
@@ -70,10 +72,6 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
   componentDidMount() {
     this.props.fetchSites();
     this.props.getReceipts(15, 0, this.props.receipts);
-  }
-
-  componentWillReceiveProps() {
-    // console.log('componentWillReceiveProps', nextProps);
   }
 
   getPDF() {
@@ -147,7 +145,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
   render() {
     return (
       <StickyContainer className="container-fluid">
-        <Helmet title="Proposals - StudyKIK" />
+        <Helmet title="Receipts - StudyKIK" />
         <section className="receipts">
           <h2 className="main-heading">RECEIPTS</h2>
           <TableSearchForm
@@ -165,6 +163,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
             searchOptions={this.props.searchOptions}
             setActiveSort={this.props.setActiveSort}
             showInvoicePdf={this.props.showInvoicePdf}
+            sortProposalsSuccess={this.props.sortProposalsSuccess}
             {...this.props}
           />
         </section>
@@ -191,6 +190,7 @@ function mapDispatchToProps(dispatch) {
     setSearchOptions: (payload) => dispatch(setSearchOptions(payload)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
     showInvoicePdf: (values) => dispatch(showInvoicePdf(values)),
+    sortProposalsSuccess: (values) => dispatch(sortProposalsSuccess(values)),
   };
 }
 

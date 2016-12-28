@@ -22,12 +22,13 @@ class AlertModal extends React.Component {
         {...props}
         id="patient-database-alert"
         dialogComponentClass={CenteredModal}
+        onHide={this.props.onHide}
         backdrop
         keyboard
       >
 
         <Modal.Body>
-          <div className="patient-database-alert-lightbox-content text-center">
+          <div className="text-center">
             <p>
               Please select patient(s).
             </p>

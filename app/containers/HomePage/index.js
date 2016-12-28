@@ -12,6 +12,7 @@
 import React, { PropTypes, Component } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUserClientId } from 'containers/App/selectors';
 import { fetchClientSites, fetchLevels, getAvailPhoneNumbers } from 'containers/App/actions';
@@ -66,7 +67,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
           </div>
           <div className="search-studies-panel clearfix form-group">
             <SearchStudiesForm onSubmit={this.searchStudies} />
-            <a href="/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Study</a>
+            <Link to="/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Study</Link>
           </div>
           <div className="table-holder form-group">
             <StudiesList />
