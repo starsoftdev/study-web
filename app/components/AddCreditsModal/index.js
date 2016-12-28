@@ -9,7 +9,7 @@ import { Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import ReactSelect from 'components/Input/ReactSelect';
-import { Field, reduxForm, touch } from 'redux-form';
+import { Field, reduxForm, touch, reset } from 'redux-form';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import ShoppingCartForm from 'components/ShoppingCartForm';
@@ -39,6 +39,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     addCreditsFormValues: PropTypes.object,
     addCreditsFormError: PropTypes.bool,
     touchShoppingCart: PropTypes.func,
+    resetForm: PropTypes.func,
     touchAddCredits: PropTypes.func,
   };
 
@@ -48,6 +49,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     this.decQuantity = this.decQuantity.bind(this);
     this.addCreditsSubmit = this.addCreditsSubmit.bind(this);
     this.handleSiteLocationChoose = this.handleSiteLocationChoose.bind(this);
+    this.closeModal = this.closeModal.bind(this);
 
     this.state = {
       quantity: 1,
@@ -64,7 +66,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
 
   componentWillReceiveProps(newProps) {
     if (!newProps.addCreditsOperation.adding && this.props.addCreditsOperation.adding) {
-      this.props.closeModal();
+      this.closeModal();
     }
     if (newProps.creditsPrice.price && !this.props.creditsPrice.price) {
       this.setState({
@@ -73,6 +75,24 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
         price: newProps.creditsPrice.price,
       });
     }
+  }
+
+  resetState() {
+    const resetState = {
+      quantity: 1,
+      credits: 100,
+      total: 0,
+      price: 7700,
+    };
+
+    this.setState(resetState, () => {
+      this.props.resetForm();
+    });
+  }
+
+  closeModal() {
+    this.props.closeModal();
+    this.resetState();
   }
 
   handleSiteLocationChoose() {}
@@ -146,13 +166,13 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
           id="add-credits"
           dialogComponentClass={CenteredModal}
           show={this.props.showModal}
-          onHide={this.props.closeModal}
+          onHide={this.closeModal}
           backdrop
           keyboard
         >
           <Modal.Header>
             <Modal.Title>Add Credits</Modal.Title>
-            <a className="lightbox-close close" onClick={this.props.closeModal}>
+            <a className="lightbox-close close" onClick={this.closeModal}>
               <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
@@ -164,7 +184,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
                     <div className="holder-inner">
                       <div className="form-fields">
 
-                        <div className="field-row">
+                        <div className="field-row extra-style">
                           <strong className="label required"><label>Site Location</label></strong>
                           <Field
                             name="siteLocation"
@@ -264,6 +284,7 @@ function mapDispatchToProps(dispatch) {
     getCreditsPrice: () => dispatch(getCreditsPrice()),
     touchAddCredits: () => dispatch(touch('addCredits', ...addCreditsFields)),
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
+    resetForm: () => dispatch(reset('addCredits')),
   };
 }
 
