@@ -80,7 +80,6 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     const siteLocation = _.find(this.props.siteLocations, { id: this.props.formValues.siteLocation });
     this.submitForm(shoppingCartFormValues, {
       ...this.props.formValues,
-      username: this.props.currentUser.username,
       siteLocationName: siteLocation.name,
       user_id: this.props.currentUser.id,
       stripeProductId: this.props.productList[0].stripeProductId,

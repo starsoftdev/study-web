@@ -288,7 +288,7 @@ function* importPatients() {
         method: 'POST',
         body: formData,
       });
-      yield put(toastrActions.success('Import Patients', 'We are processing your request. Patients will be added soon.'));
+      yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
