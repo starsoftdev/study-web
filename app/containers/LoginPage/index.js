@@ -9,7 +9,6 @@ import Helmet from 'react-helmet';
 import LoginForm from 'components/LoginForm';
 import { loginRequest } from './actions';
 
-import './styles.less';
 
 export class LoginPage extends Component {
 

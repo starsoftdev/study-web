@@ -26,7 +26,6 @@ import {
   getAvatarUrl,
 } from 'containers/NotificationsPage';
 
-import './styles.less';
 
 class NotificationBox extends React.Component {
   static propTypes = {

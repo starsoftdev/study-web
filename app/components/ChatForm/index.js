@@ -27,7 +27,6 @@ import {
   setProcessingStatus,
 } from 'containers/GlobalNotifications/actions';
 
-import './styles.less';
 
 const formName = 'chatPatient';
 

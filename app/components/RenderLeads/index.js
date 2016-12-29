@@ -15,7 +15,6 @@ import {
   LEAD_SOURCE_LIST,
 } from 'common/constants';
 
-import './styles.less';
 
 const RenderLeads = ({ fields, availPhoneNumbers }) => (
   <div className="leads-list">
