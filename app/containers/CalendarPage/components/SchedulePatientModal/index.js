@@ -8,12 +8,11 @@ import moment from 'moment';
 
 import { SchedulePatientModalType } from 'common/constants';
 
-import ReactSelect from 'components/Input/ReactSelect';
-import Checkbox from 'components/Input/Checkbox';
+import ReactSelect from '../../../../components/Input/ReactSelect';
+import Checkbox from '../../../../components/Input/Checkbox';
+import CenteredModal from '../../../../components/CenteredModal';
 
 import validator from './validator';
-
-import './styles.less';
 
 @reduxForm({ form: 'schedulePatient', validate: validator })
 export default class SchedulePatientModal extends Component {
@@ -59,7 +58,7 @@ export default class SchedulePatientModal extends Component {
             this.handleSiteLocationChoose(site);
             initialValues = {
               ...initialValues,
-              siteLocations: site,   // manually set siteLocation form value
+              siteLocation: site,   // manually set siteLocation form value
             };
           }
         }
@@ -163,139 +162,133 @@ export default class SchedulePatientModal extends Component {
     const { protocolOptions, patientOptions } = this.state;
 
     return (
-      <Modal show={modalType === SchedulePatientModalType.CREATE} onHide={handleCloseModal}>
-        <div id="add-scedule" className="lightbox lightbox-active fixed-popup">
-          <div className="lightbox-holder">
-            <div className="lightbox-frame">
-              <div className="modal-content">
-                <div className="head">
-                  <strong className="title">SCHEDULE PATIENT</strong>
-                  <a className="lightbox-close close" onClick={handleCloseModal}><i className="icomoon-icon_close" /></a>
-                </div>
-                <div className="scroll-holder jcf--scrollable">
-                  <form className="form-lightbox form-add-schedule show-on-select" onSubmit={handleSubmit}>
-                    <div className="field-row">
-                      <strong className="label">* When</strong>
-                      <div className="field">
-                        <input type="text" className="form-control add-date scheduleTime" disabled value={selectedCellInfo.selectedDate && moment(selectedCellInfo.selectedDate).format('MM/DD/YY')} />
-                      </div>
-                    </div>
+      <Modal dialogComponentClass={CenteredModal} show={modalType === SchedulePatientModalType.CREATE} onHide={handleCloseModal} id="add-schedule-modal">
+        <Modal.Header>
+          <Modal.Title>SCHEDULE PATIENT</Modal.Title>
+          <a className="lightbox-close close" onClick={handleCloseModal}>
+            <i className="icomoon-icon_close" />
+          </a>
+        </Modal.Header>
+        <Modal.Body>
+          <form className="form-lightbox form-add-schedule show-on-select" onSubmit={handleSubmit}>
+            <div className="field-row">
+              <strong className="label">* When</strong>
+              <div className="field">
+                <input type="text" className="form-control add-date scheduleTime" disabled value={selectedCellInfo.selectedDate && moment(selectedCellInfo.selectedDate).format('MM/DD/YY')} />
+              </div>
+            </div>
 
-                    <div className="field-row">
-                      <strong className="label required"><label htmlFor="patient-time">Time</label></strong>
-                      <div className="field">
-                        <div className="col-holder row">
-                          <div className="col pull-left hours">
-                            <Field
-                              id="patient-time"
-                              name="hour"
-                              component={ReactSelect}
-                              placeholder="Hours"
-                              options={hourOptions}
-                              className="visible-first-del min-height"
-                              disabled={submitting}
-                            />
-                          </div>
-                          <div className="col pull-left minutes">
-                            <Field
-                              id="minutes"
-                              name="minute"
-                              component={ReactSelect}
-                              placeholder="Minutes"
-                              options={minuteOptions}
-                              className="visible-first-del min-height"
-                              disabled={submitting}
-                            />
-                          </div>
-                          <div className="col pull-left time-mode">
-                            <Field
-                              id="time-period"
-                              name="period"
-                              component={ReactSelect}
-                              placeholder="AM/PM"
-                              options={periodOptions}
-                              className="visible-first"
-                              disabled={submitting}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="field-row">
-                      <strong className="label required"><label htmlFor="popup-site-location">Site Location</label></strong>
-                      <div className="field site-location">
-                        <Field
-                          name="siteLocation"
-                          component={ReactSelect}
-                          placeholder="Select Site Location"
-                          options={siteLocationOptions}
-                          className="data-search"
-                          disabled={submitting || this.props.fetchingSites || !isAdmin}
-                          objectValue
-                          onChange={this.handleSiteLocationChoose.bind(this)}
-                          selectedValue={this.state.siteLocation}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="field-row">
-                      <strong className="label required"><label htmlFor="popup-protocol">protocol</label></strong>
-                      <div className="field protocol">
-                        <Field
-                          id="popup-protocol"
-                          name="protocol"
-                          component={ReactSelect}
-                          placeholder={this.state.siteLocation ? 'Select Protocol' : 'N/A'}
-                          options={protocolOptions}
-                          className="data-search"
-                          disabled={submitting || !this.state.siteLocation}
-                          objectValue
-                          onChange={this.handleProtocolChoose.bind(this)}
-                          selectedValue={this.state.protocol}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="field-row patient-name">
-                      <strong className="label required"><label htmlFor="patient">Patient</label></strong>
-                      <div className="field">
-                        <Field
-                          id="patient"
-                          name="patient"
-                          component={ReactSelect}
-                          placeholder={this.state.protocol ? 'Select Patient' : 'N/A'}
-                          options={patientOptions}
-                          className="data-search"
-                          disabled={submitting || this.props.fetchingPatientsByStudy || !this.state.protocol}
-                          objectValue
-                          onChange={this.handlePatientChoose.bind(this)}
-                          selectedValue={this.state.patient}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="field-row">
-                      <strong className="label">&nbsp;</strong>
-                      <Field
-                        id="text-reminder"
-                        name="textReminder"
-                        component={Checkbox}
-                        type="checkbox"
-                      />
-                      <label className="text-reminder-label" htmlFor="text-reminder">Text Reminder</label>
-                    </div>
-
-                    <div className="text-right">
-                      <input type="reset" className="btn btn-gray-outline hidden" value="reset" />
-                      <input type="submit" className="btn btn-default" value="Submit" disabled={submitting} />
-                    </div>
-                  </form>
+            <div className="field-row">
+              <strong className="label required"><label htmlFor="patient-time">Time</label></strong>
+              <div className="field">
+                <div className="col-holder row">
+                  <div className="col pull-left hours">
+                    <Field
+                      id="patient-time"
+                      name="hour"
+                      component={ReactSelect}
+                      placeholder="Hours"
+                      options={hourOptions}
+                      className="visible-first-del min-height"
+                      disabled={submitting}
+                    />
+                  </div>
+                  <div className="col pull-left minutes">
+                    <Field
+                      id="minutes"
+                      name="minute"
+                      component={ReactSelect}
+                      placeholder="Minutes"
+                      options={minuteOptions}
+                      className="visible-first-del min-height"
+                      disabled={submitting}
+                    />
+                  </div>
+                  <div className="col pull-left time-mode">
+                    <Field
+                      id="time-period"
+                      name="period"
+                      component={ReactSelect}
+                      placeholder="AM/PM"
+                      options={periodOptions}
+                      className="visible-first"
+                      disabled={submitting}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+
+            <div className="field-row">
+              <strong className="label required"><label htmlFor="popup-site-location">Site Location</label></strong>
+              <div className="field site-location">
+                <Field
+                  name="siteLocation"
+                  component={ReactSelect}
+                  placeholder="Select Site Location"
+                  options={siteLocationOptions}
+                  className="data-search"
+                  disabled={submitting || this.props.fetchingSites || !isAdmin}
+                  objectValue
+                  onChange={this.handleSiteLocationChoose.bind(this)}
+                  selectedValue={this.state.siteLocation}
+                />
+              </div>
+            </div>
+
+            <div className="field-row">
+              <strong className="label required"><label htmlFor="popup-protocol">protocol</label></strong>
+              <div className="field protocol">
+                <Field
+                  id="popup-protocol"
+                  name="protocol"
+                  component={ReactSelect}
+                  placeholder={this.state.siteLocation ? 'Select Protocol' : 'N/A'}
+                  options={protocolOptions}
+                  className="data-search"
+                  disabled={submitting || !this.state.siteLocation}
+                  objectValue
+                  onChange={this.handleProtocolChoose.bind(this)}
+                  selectedValue={this.state.protocol}
+                />
+              </div>
+            </div>
+
+            <div className="field-row patient-name">
+              <strong className="label required"><label htmlFor="patient">Patient</label></strong>
+              <div className="field">
+                <Field
+                  id="patient"
+                  name="patient"
+                  component={ReactSelect}
+                  placeholder={this.state.protocol ? 'Select Patient' : 'N/A'}
+                  options={patientOptions}
+                  className="data-search"
+                  disabled={submitting || this.props.fetchingPatientsByStudy || !this.state.protocol}
+                  objectValue
+                  onChange={this.handlePatientChoose.bind(this)}
+                  selectedValue={this.state.patient}
+                />
+              </div>
+            </div>
+
+            <div className="field-row">
+              <strong className="label">&nbsp;</strong>
+              <Field
+                id="text-reminder"
+                name="textReminder"
+                component={Checkbox}
+                type="checkbox"
+              />
+              <label className="text-reminder-label" htmlFor="text-reminder">Text Reminder</label>
+            </div>
+
+            <div className="text-right">
+              <input type="reset" className="btn btn-gray-outline hidden" value="reset" />
+              <input type="submit" className="btn btn-default" value="Submit" disabled={submitting} />
+            </div>
+          </form>
+        </Modal.Body>
       </Modal>
     );
   }

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Form from 'react-bootstrap/lib/Form';
+import Button from 'react-bootstrap/lib/Button';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
@@ -31,6 +32,13 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
     handleSubmit: PropTypes.func,
   };
 
+  // performSearch(event) {
+  //   const queryParams = {
+  //     name: event.target.value,
+  //     siteId:
+  //   }
+  // }
+
   render() {
     const { clientSites, studies, hasError, handleSubmit } = this.props;
     const siteOptions = map(clientSites.details, siteIterator => ({
@@ -44,6 +52,9 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
         <div className="fields-holder clearfix">
           <div className="search-area pull-left">
             <div className="field">
+              <Button className="btn-enter" type="submit">
+                <i className="icomoon-icon_search2" />
+              </Button>
               <Field
                 name="name"
                 component={Input}
@@ -52,9 +63,6 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
                 placeholder="Search..."
                 disabled={clientSites.fetching || studies.fetching}
               />
-              <label htmlFor="search">
-                <i className="icomoon-icon_search2" />
-              </label>
             </div>
           </div>
           <div className="pull-left custom-select">

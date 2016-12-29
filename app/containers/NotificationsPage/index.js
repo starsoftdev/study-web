@@ -20,7 +20,6 @@ import {
 } from 'containers/GlobalNotifications/actions';
 
 import NotificationItem from './Item';
-
 export const getRedirectionUrl = (notification) => {
   const data = JSON.parse(notification.event_log.eventData);
   switch (notification.event_log.eventType) {
@@ -141,7 +140,6 @@ export class NotificationsPage extends React.Component {
 
   render() {
     const { sortDescription, sortDate, sortTime } = this.state;
-
     return (
       <div className="container-fluid">
         <Helmet title="Notifications - StudyKIK" />

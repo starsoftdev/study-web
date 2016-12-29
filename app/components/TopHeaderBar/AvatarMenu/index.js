@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import { Link } from 'react-router';
 import enhanceWithClickOutside from 'react-click-outside';
 
-import './styles.less';
 
 import defaultImage from 'assets/images/Default-User-Img-Dr.png';
 
