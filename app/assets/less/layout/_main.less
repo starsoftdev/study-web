@@ -31,6 +31,15 @@ input[type=text]:-ms-input-placeholder {
    opacity: 1;
 }
 
+.coming-soon-wrapper:hover {
+	.coming-soon-old {
+		display: none !important;
+	}
+	.coming-soon-new:after {
+		content: 'COMING SOON';
+	}
+}
+
 .form-search {
 	clear: both;
 	margin: 0 -6px 30px;
