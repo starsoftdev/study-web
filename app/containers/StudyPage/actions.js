@@ -12,6 +12,7 @@ import {
   ADD_PATIENTS_TO_TEXT_BLAST,
   REMOVE_PATIENT_FROM_TEXT_BLAST,
   REMOVE_PATIENTS_FROM_TEXT_BLAST,
+  FETCHING_STUDY,
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
@@ -71,11 +72,19 @@ export function campaignsFetched(payload) {
     payload,
   };
 }
+
 export function clearForm() {
   return {
     type: CLEAR_FORM_UPLOAD,
   };
 }
+
+export function fetchingStudy() {
+  return {
+    type: FETCHING_STUDY,
+  };
+}
+
 export function findPatientsForTextBlast(studyId, text, categoryIds, sourceIds) {
   return {
     type: FIND_PATIENTS_TEXT_BLAST,
