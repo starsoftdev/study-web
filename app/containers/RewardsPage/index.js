@@ -154,7 +154,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                 <li>
                   <span className="number"><span></span></span>
                   <h4>Referrals!</h4>
-                  <p>We appreciate your referrals! Earn points for every site or sponsor that lists a Platinum Study with StudyKIK</p>
+                  <p>We appreciate your referrals! Earn points for every site or sponsor that lists a Platinum Study or higher  with StudyKIK</p>
                 </li>
               </ol>
             </aside>
