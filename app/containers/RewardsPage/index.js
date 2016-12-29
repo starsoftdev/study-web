@@ -33,6 +33,7 @@ import cardStarbucks from 'assets/images/img7.png';
 import diamond from 'assets/images/diamond.svg';
 import platinum from 'assets/images/platinum.svg';
 import gold from 'assets/images/gold.svg';
+import ruby from 'assets/images/ruby.png';
 import Helmet from 'react-helmet';
 
 export class RewardsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -160,7 +161,26 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
             <div className="detail">
               <div className="infoarea row">
-                <div className="col-sm-4">
+                <div className="col-sm-3 column diamond">
+                  <div>
+                    <div className="box">
+                      <div className="box-holder">
+                        <h3>RUBY LISTING</h3>
+                        <strong className="number">+500 <span>KIK<span className="text-lowercase">s</span></span></strong>
+                      </div>
+                    </div>
+
+                    <div className="box">
+                      <div className="box-holder">
+                        <h3>RUBY LISTING</h3>
+                        <strong className="number">+50 <span>KIK<span className="text-lowercase">s</span></span></strong>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="package-img diamond"><img className="ruby-img" src={ruby} alt="RUBY LISTING" width="135" /></div>
+                </div>
+
+                <div className="col-sm-3 column">
                   <div>
                     <div className="box">
                       <div className="box-holder">
@@ -179,7 +199,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                   <div className="package-img diamond"><img src={diamond} alt="DIAMOND LISTING" width="115" height="102" /></div>
                 </div>
 
-                <div className="col-sm-4 msg-info">
+                <div className="col-sm-3 msg-info column">
                   <div>
                     <div className="box">
                       <div className="box-holder">
@@ -198,7 +218,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                   <div className="package-img platinum"><img src={platinum} alt="PLATINUM LISTING" width="108" height="115" /></div>
                 </div>
 
-                <div className="col-sm-4 rewards-info">
+                <div className="col-sm-3 rewards-info column">
                   <div>
                     <div className="box">
                       <div className="box-holder">
@@ -216,11 +236,10 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                   </div>
                   <div className="package-img gold"><img src={gold} alt="GOLD LISTING" width="98" height="108" /></div>
                 </div>
-
               </div>
 
               <div className="infoarea row">
-                <div className="col-xs-6 sponsor">
+                <div className="col-xs-8 sponsor">
                   <div className="box">
                     <div className="box-holder">
                       <h3>REFER A SPONSOR</h3>
@@ -229,7 +248,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                   </div>
                 </div>
 
-                <div className="col-xs-6 site">
+                <div className="col-xs-4 site">
                   <div className="box">
                     <div className="box-holder">
                       <h3>REFER A SITE</h3>
@@ -238,7 +257,6 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                   </div>
                 </div>
               </div>
-
             </div>
 
           </div>
