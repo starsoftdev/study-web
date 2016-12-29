@@ -1,8 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import RewardListItem from './RewardListItem';
-import './styles.less';
 import _ from 'lodash';
+import RewardListItem from './RewardListItem';
 
 class RewardsList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

@@ -4,13 +4,12 @@
 *
 */
 
+import _ from 'lodash';
+import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
 import { Calendar } from 'react-date-range';
-import { Modal } from 'react-bootstrap';
+import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../CenteredModal/index';
-
-import moment from 'moment';
-import _ from 'lodash';
 
 export default class DatePicker extends Component {
   static propTypes = {
