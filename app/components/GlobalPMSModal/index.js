@@ -40,7 +40,6 @@ import {
 } from 'containers/GlobalNotifications/actions';
 
 import _ from 'lodash';
-import './styles.less';
 
 import alertSound from './sounds/message_received.wav';
 

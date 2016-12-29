@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 import { Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
 import { map } from 'lodash';
 
 import CenteredModal from '../../components/CenteredModal/index';
@@ -33,14 +34,21 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     this.state = {
       addSiteModalOpen: false,
       addUserModalOpen: false,
+      roleFilterMethod: () => true,
+      siteFilterMethod: () => true,
+      siteName: '',
+      userName: '',
     };
 
     this.openAddSiteModal = this.openAddSiteModal.bind(this);
     this.closeAddSiteModal = this.closeAddSiteModal.bind(this);
     this.openAddUserModal = this.openAddUserModal.bind(this);
     this.closeAddUserModal = this.closeAddUserModal.bind(this);
-    this.searchClientRoles = this.searchClientRoles.bind(this);
-    this.searchClientSites = this.searchClientSites.bind(this);
+    this.filterClientRoles = this.filterClientRoles.bind(this);
+    this.filterClientSites = this.filterClientSites.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSiteQueryChange = this.handleSiteQueryChange.bind(this);
+    this.handleUserQueryChange = this.handleUserQueryChange.bind(this);
     this.addSite = this.addSite.bind(this);
     this.addUser = this.addUser.bind(this);
   }
@@ -78,20 +86,49 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     this.setState({ addUserModalOpen: false });
   }
 
-  searchClientSites(event) {
-    if (event.key === 'Enter') {
-      const { currentUserClientId } = this.props;
-      const searchFilter = { name: event.target.value };
-      this.props.fetchClientSites(currentUserClientId, searchFilter);
+  filterClientSites(searchQuery) {
+    if (searchQuery !== '') {
+      this.setState({
+        siteFilterMethod: (clientSite) => clientSite.name.toUpperCase().includes(searchQuery.toUpperCase()),
+      });
+    } else {
+      this.setState({
+        siteFilterMethod: () => true,
+      });
     }
   }
 
-  searchClientRoles(event) {
-    if (event.key === 'Enter') {
-      const { currentUserClientId } = this.props;
-      const searchFilter = { name: event.target.value };
-      this.props.fetchClientRoles(currentUserClientId, searchFilter);
+  filterClientRoles(searchQuery) {
+    if (searchQuery !== '') {
+      this.setState({
+        roleFilterMethod: (clientRole) => {
+          const fullName = `${clientRole.user.firstName} ${clientRole.user.lastName}`;
+          return (fullName.toUpperCase().includes(searchQuery.toUpperCase()));
+        },
+      });
+    } else {
+      this.setState({
+        roleFilterMethod: () => true,
+      });
     }
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.filterClientSites(this.state.siteName);
+    this.filterClientRoles(this.state.userName);
+  }
+
+  handleSiteQueryChange(event) {
+    this.setState({
+      siteName: event.target.value,
+    });
+  }
+
+  handleUserQueryChange(event) {
+    this.setState({
+      userName: event.target.value,
+    });
   }
 
   addSite(siteData) {
@@ -142,22 +179,22 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
           <Helmet title="Manage Sites / Users - StudyKIK" />
           <h2 className="main-heading">MANAGE SITES / USERS</h2>
           <div className="search-sites-users-panel form-group">
-            <form className="form-search clearfix">
+            <form className="form-search clearfix" onSubmit={this.handleSubmit}>
               <div className="fields-holder pull-left">
                 <div className="search-area pull-left">
                   <div className="field">
-                    <input type="text" className="form-control keyword-search" placeholder="Search Site Name..." onKeyPress={this.searchClientSites} />
-                    <label htmlFor="search">
+                    <Button className="btn-enter" type="submit">
                       <i className="icomoon-icon_search2" />
-                    </label>
+                    </Button>
+                    <input onChange={this.handleSiteQueryChange} type="text" className="form-control keyword-search" placeholder="Search Site Name..." />
                   </div>
                 </div>
                 <div className="search-area pull-left">
                   <div className="field">
-                    <input type="text" className="form-control keyword-search" placeholder="Search User Name..." onKeyPress={this.searchClientRoles} />
-                    <label htmlFor="search">
+                    <Button className="btn-enter" type="submit">
                       <i className="icomoon-icon_search2" />
-                    </label>
+                    </Button>
+                    <input onChange={this.handleUserQueryChange} type="text" className="form-control keyword-search" placeholder="Search User Name..." />
                   </div>
                 </div>
               </div>
@@ -206,10 +243,10 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
             </form>
           </div>
           <section className="table-holder form-group client-roles-holder">
-            <ClientRolesList />
+            <ClientRolesList filterMethod={this.state.roleFilterMethod} />
           </section>
           <section className="table-holder form-group client-sites-holder">
-            <ClientSitesList />
+            <ClientSitesList filterMethod={this.state.siteFilterMethod} />
           </section>
         </div>
       </div>

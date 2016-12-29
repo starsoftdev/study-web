@@ -46,11 +46,12 @@ class TextEmailBlastModal extends React.Component {
           <span className="or">
             <span className="text">OR</span>
           </span>
-          <span className="modal-opener">
+          <span className="modal-opener coming-soon-wrapper">
             <div className="table">
               <div className="table-cell">
                 <i className="icomoon-envelop" />
-                <span className="text">Email Blast</span>
+                <span className="text coming-soon-old">Email Blast</span>
+                <span className="text coming-soon-new" />
               </div>
             </div>
           </span>

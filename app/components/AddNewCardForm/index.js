@@ -15,7 +15,6 @@ import { selectSavedCard } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { MONTH_OPTIONS as monthOptions, YEAR_OPTIONS as yearOptions } from 'common/constants';
-import './styles.less';
 
 const mapStateToProps = createStructuredSelector({
   savedCard: selectSavedCard(),

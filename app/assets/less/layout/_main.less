@@ -31,6 +31,15 @@ input[type=text]:-ms-input-placeholder {
    opacity: 1;
 }
 
+.coming-soon-wrapper:hover {
+	.coming-soon-old {
+		display: none !important;
+	}
+	.coming-soon-new:after {
+		content: 'COMING SOON';
+	}
+}
+
 .form-search {
 	clear: both;
 	margin: 0 -6px 30px;
@@ -1178,7 +1187,6 @@ th, .th {
 		min-height: 40px;
 		font-weight: 700;
 		border-radius: 3px;
-		letter-spacing: 2px;
 		text-transform: uppercase;
 	}
 
@@ -3712,24 +3720,6 @@ th, .th {
   overflow: auto !important;
 }
 
-/**********************/
-/*	Centered Modal component */
-/**********************/
-@import '../../../components/CenteredModal/styles';
-/**********************/
-/*	React Input, multi select and date picker components */
-/**********************/
-@import '../../../components/Input/styles';
-@import '../layout/_react_multi_select';
-@import '../../../components/Input/date-picker';
-/**********************/
-/*	React geosuggest component */
-/**********************/
-@import '../layout/_react_geosuggest';
-/**********************/
-/*	Shopping cart form component */
-/**********************/
-@import '../../../components/ShoppingCartForm/styles';
 /*****************/
 /* top header bar  */
 /*****************/
@@ -3763,11 +3753,15 @@ th, .th {
 /* calendar page  */
 /*****************/
 @import "../../../containers/CalendarPage/styles.less";
+@import "../../../containers/CalendarPage/components/AllEventsModal/styles.less";
+@import "../../../containers/CalendarPage/components/EditScheduleModal/styles.less";
+@import "../../../containers/CalendarPage/components/SchedulePatientModal/styles.less";
 /*****************/
 /* patient database page  */
 /*****************/
 @import "../../../containers/PatientDatabasePage/styles.less";
 @import "../../../containers/PatientDatabasePage/PatientsList/styles.less";
+@import "../../../containers/PatientDatabasePage/SearchPatientsForm/styles";
 /*****************/
 /* manage sites/users page  */
 /*****************/
@@ -3779,3 +3773,90 @@ th, .th {
 /* rewards page  */
 /*****************/
 @import '../../../containers/RewardsPage/styles';
+/*****************/
+/* notifications page  */
+/*****************/
+@import "../../../containers/NotificationsPage/styles";
+
+/*****************/
+/* Login page  */
+/*****************/
+@import "../../../containers/LoginPage/styles";
+/*****************/
+/* Individual Study page */
+/*****************/
+@import "../../../containers/StudyPage/styles";
+
+/* Components */
+
+/*****************/
+/* AddNewCardForm Component  */
+/*****************/
+@import "../../../components/AddNewCardForm/styles";
+/*****************/
+/* CardItem Component  */
+/*****************/
+@import "../../../components/CardItem/style";
+/**********************/
+/*	Centered Modal component */
+/**********************/
+@import '../../../components/CenteredModal/styles';
+/*****************/
+/* ChangePasswordForm Component  */
+/*****************/
+@import "../../../components/ChangePasswordForm/styles";
+/*****************/
+/* ChatForm Component  */
+/*****************/
+@import "../../../components/ChatForm/styles";
+/*****************/
+/* GlobalPMSModal Component  */
+/*****************/
+@import "../../../components/GlobalPMSModal/styles";
+/*****************/
+/* IrbAdCreationForm Component  */
+/*****************/
+@import "../../../components/IrbAdCreationForm/styles";
+/*****************/
+/* LoadingSpinner Component  */
+/*****************/
+@import "../../../components/LoadingSpinner/styles";
+/*****************/
+/* ProfileForm Component  */
+/*****************/
+@import "../../../components/ProfileForm/styles";
+/*****************/
+/* ProfileImageForm Component  */
+/*****************/
+@import "../../../components/ProfileImageForm/styles";
+/**********************/
+/*	React Input, multi select and date picker components */
+/**********************/
+@import '../../../components/Input/styles';
+@import '../layout/_react_multi_select';
+@import '../../../components/Input/date-picker';
+/*****************/
+/* RenderLeads Component  */
+/*****************/
+@import "../../../components/RenderLeads/styles";
+/*****************/
+/* RequestProposalCart Component  */
+/*****************/
+@import "../../../components/RequestProposalCart/styles";
+/*****************/
+/* RewardModal Component  */
+/*****************/
+@import "../../../components/RewardModal/style";
+/**********************/
+/*	React geosuggest component */
+/**********************/
+@import '../layout/_react_geosuggest';
+/**********************/
+/*	Shopping cart form component */
+/**********************/
+@import '../../../components/ShoppingCartForm/styles';
+/*****************/
+/* TopHeaderBar Component  */
+/*****************/
+@import "../../../components/TopHeaderBar/NotificationBox/styles";
+@import "../../../components/TopHeaderBar/AvatarMenu/styles";

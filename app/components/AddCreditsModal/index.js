@@ -8,19 +8,23 @@ import React, { PropTypes, Component } from 'react';
 import { Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import ReactSelect from 'components/Input/ReactSelect';
+
+import ReactSelect from '../../components/Input/ReactSelect';
 import { Field, reduxForm, touch, reset } from 'redux-form';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import ShoppingCartForm from 'components/ShoppingCartForm';
-import { fetchSites, addCredits, getCreditsPrice } from 'containers/App/actions';
+import { fetchSites, getCreditsPrice } from 'containers/App/actions';
 import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice } from 'containers/App/selectors';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
 import { selectAddCreditsFormValues, selectAddCreditsFormError } from './selectors';
 import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
-import validator, { addCreditsFields } from './validator';
+import validator from './validator';
 
-@reduxForm({ form: 'addCredits', validate: validator })
+@reduxForm({
+  form: 'addCredits',
+  validate: validator,
+})
 @connect(mapStateToProps)
 
 class AddCreditsModal extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -279,9 +283,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchSites:       () => dispatch(fetchSites()),
-    addCredits: (customerId, data) => dispatch(addCredits(customerId, data)),
     getCreditsPrice: () => dispatch(getCreditsPrice()),
-    touchAddCredits: () => dispatch(touch('addCredits', ...addCreditsFields)),
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
     resetForm: () => dispatch(reset('addCredits')),
   };

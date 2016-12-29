@@ -10,7 +10,6 @@ import ReactAvatarEditor from 'react-avatar-editor';
 // import Input from 'components/Input';
 import classNames from 'classnames';
 import FileUpload from './FileUpload';
-import './styles.less';
 import defaultImage from 'assets/images/Default-User-Img-Dr-Full.png';
 
 @reduxForm(

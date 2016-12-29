@@ -10,13 +10,13 @@ import { selectCurrentUserClientId, selectClientSites, selectClientRoles, select
   selectDeletedClientRole, selectSavedUser, selectSelectedUserDetailsForForm } from 'containers/App/selectors';
 import { clearSelectedUser, deleteClientRole, saveUser } from 'containers/App/actions';
 import ClientRoleItem from './ClientRoleItem';
-import './styles.less';
 
 class ClientRolesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUserClientId: PropTypes.number,
     clientSites: PropTypes.object,
     clientRoles: PropTypes.object,
+    filterMethod: PropTypes.func,
     selectedUser: PropTypes.object,
     selectedUserDetailsForForm: PropTypes.object,
     deletedClientRole: PropTypes.object,
@@ -156,9 +156,9 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { clientSites, selectedUserDetailsForForm, deletedClientRole } = this.props;
+    const { clientSites, selectedUserDetailsForForm, deletedClientRole, filterMethod } = this.props;
     const sortedClientRoles = this.getSortedClientRoles();
-    const clientRolesListContents = sortedClientRoles.map((item, index) => (
+    const clientRolesListContents = sortedClientRoles.filter(filterMethod).map((item, index) => (
       <ClientRoleItem {...item} key={index} />
     ));
     const siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));

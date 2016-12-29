@@ -34,7 +34,6 @@ import {
 } from 'containers/RequestProposalPage/selectors';
 
 import { fetchIndicationLevelPrice } from 'containers/App/actions';
-import './styles.less';
 
 export class RequestProposalCart extends Component {
   static propTypes = {
