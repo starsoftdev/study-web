@@ -12,7 +12,7 @@ import { selectSearchStudiesFormError } from './selectors';
 import { selectClientSites } from 'containers/App/selectors';
 import { selectStudies } from 'containers/HomePage/selectors';
 import formValidator from './validator';
-import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from 'containers/HomePage/constants';
+import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../constants';
 import LoadingSpinner from 'components/LoadingSpinner';
 
 const mapStateToProps = createStructuredSelector({
@@ -34,18 +34,20 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
 
   render() {
     const { clientSites, studies, hasError, handleSubmit } = this.props;
-    const siteOptions = map(clientSites.details, siteIterator => ({
+    const siteOptions = [{ label: 'All', id: 0 }].concat(map(clientSites.details, siteIterator => ({
       label: siteIterator.name,
       value: siteIterator.id,
-    }));
-    const statusOptions = [{ label: 'Active', value: ACTIVE_STATUS_VALUE }, { label: 'Inactive', value: INACTIVE_STATUS_VALUE }];
+    })));
+    const statusOptions = [{ label: 'All', id: 0 },
+                           { label: 'Active', value: ACTIVE_STATUS_VALUE },
+                           { label: 'Inactive', value: INACTIVE_STATUS_VALUE }];
 
     return (
       <Form className="form-search form-search-studies pull-left" onSubmit={handleSubmit}>
         <div className="fields-holder clearfix">
           <div className="search-area pull-left">
             <div className="field">
-              <Button className="btn-enter">
+              <Button className="btn-enter" type="submit">
                 <i className="icomoon-icon_search2" />
               </Button>
               <Field
