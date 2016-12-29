@@ -26,6 +26,7 @@ function FormGeosuggest({ input, name, className, meta: { touched, error, active
     name={name}
     className={className}
     onBlur={e => input.onBlur(e)}
+    onFocus={e => input.onFocus(e)}
     {...rest}
   />);
 
