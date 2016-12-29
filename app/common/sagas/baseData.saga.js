@@ -62,7 +62,6 @@ import {
   clientSitesFetchingError,
   sitePatientsFetched,
   sitePatientsFetchingError,
-  fetchClientCredits,
   clientCreditsFetched,
   clientCreditsFetchingError,
   sitePatientsSearched,
@@ -304,7 +303,6 @@ export function* addCreditsWatcher() {
 
       yield put(toastrActions.success('Add Credits', 'Credits added successfully!'));
       yield put(creditsAdded(response));
-      yield put(fetchClientCredits(data.userId));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));

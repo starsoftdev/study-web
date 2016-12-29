@@ -16,6 +16,10 @@ import { fetchSitePatients, fetchClientCredits } from 'containers/App/actions';
 import { logout } from 'containers/LoginPage/actions';
 
 import {
+  selectSocket,
+} from 'containers/GlobalNotifications/selectors';
+
+import {
   selectCurrentUser,
   selectSitePatients,
   selectClientCredits,
@@ -25,6 +29,7 @@ import { sumBy } from 'lodash';
 
 class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    socket: React.PropTypes.any,
     currentUser: PropTypes.any,
     sitePatients: React.PropTypes.object,
     clientCredits: React.PropTypes.object,
@@ -42,6 +47,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     this.closeGlobalPMSModal = this.closeGlobalPMSModal.bind(this);
 
     this.state = {
+      socketBinded: false,
       showAddCreditsModal: false,
       showGlobalPMSModal: false,
     };
@@ -56,6 +62,18 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     }
     this.props.fetchSitePatients(currentUser.id);
     this.props.fetchClientCredits(currentUser.id);
+  }
+
+  componentWillReceiveProps() {
+    const { currentUser, socket } = this.props;
+
+    if (socket && this.state.socketBinded === false) {
+      this.setState({ socketBinded: true }, () => {
+        socket.on('notifyChangePoints', () => {
+          this.props.fetchClientCredits(currentUser.id);
+        });
+      });
+    }
   }
 
   handleLogoutClick() {
@@ -137,6 +155,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   sitePatients: selectSitePatients(),
   clientCredits: selectClientCredits(),
+  socket: selectSocket(),
 });
 
 function mapDispatchToProps(dispatch) {
