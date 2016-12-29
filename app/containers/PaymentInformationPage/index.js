@@ -67,7 +67,7 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
   render() {
     let customerId = false;
     if (this.props.currentUser && this.props.currentUser.roleForClient) {
-      customerId = parseInt(this.props.currentUser.roleForClient.client.stripeCustomerId, 10);
+      customerId = this.props.currentUser.roleForClient.client.stripeCustomerId;
     }
     let creditCards = [];
     if (this.props.creditCards.details && this.props.creditCards.details.data) {
