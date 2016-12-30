@@ -108,14 +108,14 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     finalExcludeIndication = _.concat(finalExcludeIndication, excludeIndicationArr);
 
 
-    const sourceOptions = map(sources, sourceIterator => ({
+    const sourceOptions = [{ id: 0, label: 'All', value: null }].concat(map(sources, sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
-    }));
-    const statusOptions = map(patientCategories.details, patientCategoryIterator => ({
+    })));
+    const statusOptions = [{ id: 0, label: 'All', value: null }].concat(map(patientCategories.details, patientCategoryIterator => ({
       label: patientCategoryIterator.name,
       value: patientCategoryIterator.id,
-    }));
+    })));
     const genderOptions = [
       {
         label: 'All',
@@ -178,6 +178,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 searchable
                 optionLabelKey="label"
                 multiple
+                includeAllOption
                 onChange={(e) => this.initSearch(e, 'includeIndication')}
                 customOptionTemplateFunction={itemTemplate}
                 customSelectedValueTemplateFunction={selectedItemsTemplate}
@@ -200,6 +201,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 searchable
                 optionLabelKey="label"
                 multiple
+                includeAllOption
                 onChange={(e) => this.initSearch(e, 'excludeIndication')}
                 customOptionTemplateFunction={itemTemplate}
                 customSelectedValueTemplateFunction={selectedItemsTemplate}
