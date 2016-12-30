@@ -18,6 +18,7 @@ import EmailSection from './EmailSection';
 import OtherSection from './OtherSection';
 import { normalizePhoneDisplay } from '../helper/functions';
 import {
+  fetchPatientDetails,
   switchToNoteSectionDetail,
   switchToTextSectionDetail,
   switchToEmailSectionDetail,
@@ -37,6 +38,7 @@ export class PatientDetailModal extends React.Component {
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     openPatientModal: React.PropTypes.bool.isRequired,
+    fetchPatientDetails: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number.isRequired,
     socket: React.PropTypes.any,
@@ -53,6 +55,26 @@ export class PatientDetailModal extends React.Component {
     this.renderOtherSection = this.renderOtherSection.bind(this);
     this.renderPatientDetail = this.renderPatientDetail.bind(this);
     this.onSelectText = this.onSelectText.bind(this);
+
+    this.state = {
+      socketBinded: false,
+    };
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { socket, currentPatient, fetchPatientDetails } = newProps;
+
+    if (socket && this.state.socketBinded === false && newProps.currentPatient) {
+      socket.on('notifyUnsubscribePatient', () => {
+        fetchPatientDetails(currentPatient.id);
+      });
+
+      socket.on('notifySubscribePatient', () => {
+        fetchPatientDetails(currentPatient.id);
+      });
+
+      this.setState({ socketBinded: true });
+    }
   }
 
   onSelectText() {
@@ -147,6 +169,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  fetchPatientDetails: (patientId) => dispatch(fetchPatientDetails(patientId)),
   switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
   switchToTextSection: () => dispatch(switchToTextSectionDetail()),
   switchToEmailSection: () => dispatch(switchToEmailSectionDetail()),
