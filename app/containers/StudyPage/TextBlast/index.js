@@ -72,11 +72,6 @@ class TextBlastModal extends React.Component {
     };
   }
 
-  componentDidMount() {
-    const { currentUser } = this.props;
-    this.props.fetchClientCredits(currentUser.id);
-  }
-
   textAreaChange() {
     setTimeout(() => {
       const value = this.textarea.value;

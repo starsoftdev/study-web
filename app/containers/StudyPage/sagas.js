@@ -31,6 +31,7 @@ import {
   addPatientsToTextBlast,
   campaignsFetched,
   deletePatientNoteSuccess,
+  fetchingStudy,
   findPatientsForTextBlastSuccess,
   patientCategoriesFetched,
   patientsFetched,
@@ -68,6 +69,8 @@ function* fetchStudyDetails() {
   // listen for the FETCH_STUDY action
   const { studyId, siteId } = yield take(FETCH_STUDY);
 
+  // put the fetching study action in case of a navigation action
+  yield put(fetchingStudy());
   const filter = JSON.stringify({
     include: [
       {

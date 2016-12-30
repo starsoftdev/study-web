@@ -7,7 +7,7 @@ import Input from 'components/Input';
 import { selectSavedSite } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
-import Geosuggest from 'react-geosuggest';
+import FormGeosuggest from 'components/Input/Geosuggest';
 import './styles.less';
 import _ from 'lodash';
 
@@ -32,16 +32,16 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     this.onSuggestSelect = this.onSuggestSelect.bind(this);
   }
 
-
   onSuggestSelect(e) {
     let city = '';
     let state = '';
     let postalCode = '';
     let streetNmber = '';
     let route = '';
-    this.geoSuggest.update('');
+
     if (e.gmaps && e.gmaps.address_components) {
       const addressComponents = e.gmaps.address_components;
+
       for (const val of addressComponents) {
         if (!city) {
           city = _.find(val.types, (o) => (o === 'locality'));
@@ -72,6 +72,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
           this.props.dispatch(change('editSite', 'address', `${streetNmber} ${route}`));
         }
       }
+      this.props.dispatch(change('editSite', 'address', e.label));
     }
   }
 
@@ -149,7 +150,9 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                   />);
                 }
 
-                return (<Geosuggest
+                return (<Field
+                  name="address"
+                  component={FormGeosuggest}
                   ref={(el) => { this.geoSuggest = el; }}
                   onSuggestSelect={this.onSuggestSelect}
                   placeholder=""
