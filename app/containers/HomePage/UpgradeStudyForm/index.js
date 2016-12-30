@@ -71,7 +71,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                 name="level"
                 className="with-loader-disabled-for-now"
                 component={ReactSelect}
-                placeholder="Select..."
+                placeholder="Select Upgrade"
                 options={filteredLevels}
                 selectedValue={value || undefined}
                 disabled={selectedIndicationLevelPrice.fetching || isDisabled}
