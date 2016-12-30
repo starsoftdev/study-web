@@ -57,7 +57,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                 name="exposureLevel"
                 className="with-loader-disabled-for-now"
                 component={ReactSelect}
-                placeholder="Select..."
+                placeholder="Select Exposure Level"
                 options={studyLevels}
                 disabled={selectedIndicationLevelPrice.fetching}
               />
@@ -78,7 +78,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
               <Field
                 name="campaignLength"
                 component={ReactSelect}
-                placeholder="Select..."
+                placeholder="Select Campaign Length"
                 options={CAMPAIGN_LENGTH_LIST}
               />
             </div>
