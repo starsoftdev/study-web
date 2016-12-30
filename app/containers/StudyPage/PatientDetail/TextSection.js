@@ -59,11 +59,6 @@ class TextSection extends React.Component {
     };
   }
 
-  componentDidMount() {
-    const { currentUser } = this.props;
-    this.props.fetchClientCredits(currentUser.id);
-  }
-
   componentWillReceiveProps(newProps) {
     const { currentUser } = newProps;
     if (!newProps.currentPatient) {
