@@ -188,8 +188,9 @@ class TextSection extends React.Component {
   }
 
   render() {
-    const { active } = this.props;
+    const { currentPatient, active } = this.props;
     const clientCredits = this.props.clientCredits.details.customerCredits;
+    const unsubscribed = (currentPatient) ? currentPatient.unsubscribed : null
     const { maxCharacters, enteredCharactersLength } = this.state;
     const disabled = (clientCredits === 0 || clientCredits === null);
     this.scrollElement();
@@ -210,7 +211,7 @@ class TextSection extends React.Component {
             {`${maxCharacters - enteredCharactersLength}`}
           </span>
           <Button
-            disabled={disabled}
+            disabled={disabled || unsubscribed}
             onClick={this.submitText}
           >
             Send
