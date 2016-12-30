@@ -60,7 +60,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
       queryParams.direction = this.props.paginationOptions.activeDirection;
     }
 
-    if (queryParams.status !== undefined || queryParams.source !== undefined || queryParams.includeIndication || queryParams.name ||
+    if (queryParams.status != null || queryParams.source != null || queryParams.includeIndication || queryParams.name ||
       queryParams.excludeIndication || queryParams.gender || queryParams.ageFrom || queryParams.ageTo || queryParams.bmiFrom || queryParams.bmiTo) {
       this.props.fetchPatients(queryParams, this.props.patients.details, searchFilter, isExport);
     } else {
