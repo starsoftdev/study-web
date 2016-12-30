@@ -1,7 +1,6 @@
 /* eslint-disable no-constant-condition, consistent-return */
 
-import { take, call, fork, put } from 'redux-saga/effects';
-import { takeLatest } from 'redux-saga';
+import { take, call, put, fork } from 'redux-saga/effects';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
@@ -105,7 +104,7 @@ export default function* baseDataSaga() {
 
   yield fork(fetchClientSitesWatcher);
   yield fork(fetchSitePatientsWatcher);
-  yield takeLatest(FETCH_CLIENT_CREDITS, fetchClientCreditsWatcher);
+  yield fork(fetchClientCreditsWatcher);
   yield fork(searchSitePatientsWatcher);
   yield fork(fetchPatientMessagesWatcher);
   yield fork(fetchClientRolesWatcher);
@@ -348,6 +347,7 @@ export function* fetchClientSitesWatcher() {
 export function* fetchSitePatientsWatcher() {
   while (true) {
     const { userId } = yield take(FETCH_SITE_PATIENTS);
+
     try {
       const requestURL = `${API_URL}/patients/getPatientsByUser?userId=${userId}`;
       const response = yield call(request, requestURL);
@@ -359,15 +359,18 @@ export function* fetchSitePatientsWatcher() {
   }
 }
 
-export function* fetchClientCreditsWatcher(action) {
-  const { userId } = action;
-  try {
-    const requestURL = `${API_URL}/users/${userId}/getClientCreditsByUser`;
-    const response = yield call(request, requestURL);
+export function* fetchClientCreditsWatcher() {
+  while (true) {
+    const { userId } = yield take(FETCH_CLIENT_CREDITS);
 
-    yield put(clientCreditsFetched(response));
-  } catch (err) {
-    yield put(clientCreditsFetchingError(err));
+    try {
+      const requestURL = `${API_URL}/users/${userId}/getClientCreditsByUser`;
+      const response = yield call(request, requestURL);
+
+      yield put(clientCreditsFetched(response));
+    } catch (err) {
+      yield put(clientCreditsFetchingError(err));
+    }
   }
 }
 
