@@ -142,7 +142,6 @@ class TextSection extends React.Component {
       if (!err) {
         this.setState({ enteredCharactersLength: 0 }, () => {
           textarea.value = '';
-          this.props.fetchClientCredits(currentUser.id);
         });
       }
     });

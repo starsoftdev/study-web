@@ -256,6 +256,21 @@
   margin: 0;
 }
 
+.field-row{
+  .field {
+    .pull-left{
+
+      &.none-event{
+        cursor: not-allowed;
+
+        span{
+          pointer-events: none;
+        }
+      }
+    }
+  }
+}
+
 #import-info .upload-patient-info label {
   cursor: pointer;
 }

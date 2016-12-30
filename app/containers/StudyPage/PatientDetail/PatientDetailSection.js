@@ -78,7 +78,11 @@ class PatientDetailSection extends React.Component {
   }
 
   render() {
-    const { submitting } = this.props;
+    const { submitting, initialValues } = this.props;
+    let unsubscribedClassName = 'pull-left';
+    if (initialValues.isUnsubscribedByPatient) {
+      unsubscribedClassName += ' none-event';
+    }
     return (
       <Form className="form-lightbox form-patients-list" onSubmit={this.onSubmit}>
         <div className="field-row">
@@ -146,7 +150,7 @@ class PatientDetailSection extends React.Component {
               name="unsubscribed"
               type="checkbox"
               component={Checkbox}
-              className="pull-left"
+              className={unsubscribedClassName}
             />
             <label htmlFor="unsubscribed">Unsubscribe</label>
           </div>
