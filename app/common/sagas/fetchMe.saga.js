@@ -6,7 +6,7 @@ import { push } from 'react-router-redux';
 import moment from 'moment-timezone';
 
 import request from '../../utils/request';
-import { getItem, removeItem } from '../../utils/localStorage';
+import { getItem, removeItem, setItem } from '../../utils/localStorage';
 import { FETCH_ME_FROM_TOKEN } from '../../containers/App/constants';
 import { setAuthState, setUserData } from '../../containers/App/actions';
 import { selectCurrentPath } from '../../common/selectors/router.selector';
@@ -38,6 +38,9 @@ export function* fetchMeFromToken() {
     const currentPath = yield select(selectCurrentPath);
     const pathsToRedirect = ['/login'];
     if (pathsToRedirect.indexOf(currentPath) > -1) {
+      if (response.isTempPassword) {
+        yield call(setItem, 'temp_password', true);
+      }
       yield put(push('/app'));
     }
   } catch (e) {
