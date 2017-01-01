@@ -137,7 +137,6 @@ import {
 } from '../../containers/ProfilePage/constants';
 
 import {
-  UPGRADE_STUDY_SUCCESS,
   SORT_SUCCESS,
 } from '../../containers/HomePage/constants';
 
@@ -335,19 +334,6 @@ export default function appReducer(state = initialState, action) {
         indications: payload,
       };
       break;
-    case UPGRADE_STUDY_SUCCESS: {
-      const studies = _.cloneDeep(state.baseData.studies.details);
-      const study = _.find(studies, (o) => (o.studyId === payload.studyId));
-      study.campaign.level_id = payload.newLevelId;
-      baseDataInnerState = {
-        studies: {
-          details: studies,
-          fetching: false,
-          error: null,
-        },
-      };
-      break;
-    }
     case SORT_SUCCESS:
       baseDataInnerState = {
         studies: {
