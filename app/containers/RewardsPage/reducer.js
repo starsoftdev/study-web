@@ -4,8 +4,6 @@
  *
  */
 
-import { map } from 'lodash';
-
 import {
   DEFAULT_SITES,
   SET_ACTIVE_SORT,
