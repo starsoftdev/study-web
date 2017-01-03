@@ -11,6 +11,7 @@ import {
   FETCH_SITES,
   FETCH_SITES_SUCCESS,
   FETCH_SITES_ERROR,
+  PICK_REWARD,
   SET_ACTIVE_SORT,
 } from './constants';
 
@@ -35,23 +36,10 @@ export function formSubmissionError(payload) {
   };
 }
 
-export function fetchSites() {
+export function pickReward(value) {
   return {
-    type: FETCH_SITES,
-  };
-}
-
-export function sitesFetched(payload) {
-  return {
-    type: FETCH_SITES_SUCCESS,
-    payload,
-  };
-}
-
-export function sitesFetchingError(payload) {
-  return {
-    type: FETCH_SITES_ERROR,
-    payload,
+    type: PICK_REWARD,
+    value,
   };
 }
 

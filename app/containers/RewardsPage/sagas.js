@@ -1,6 +1,5 @@
 // /* eslint-disable no-constant-condition, consistent-return */
 
-import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
@@ -11,35 +10,16 @@ import request from 'utils/request';
 import {
   formSubmitted,
   formSubmissionError,
-  sitesFetched,
-  sitesFetchingError,
 } from 'containers/RewardsPage/actions';
 
 import {
   SUBMIT_FORM,
-  FETCH_SITES,
 } from 'containers/RewardsPage/constants';
 
 // Bootstrap sagas
 export default [
   RewardsPageSaga,
 ];
-
-// Does not allow concurrent fetches of site locations (for demo purpose)
-// Alternatively you may use takeEvery
-export function* fetchSitesWatcher() {
-  yield* takeLatest(FETCH_SITES, fetchSites);
-}
-
-export function* fetchSites() {
-  try {
-    const requestURL = `${API_URL}/sites`;
-    const response = yield call(request, requestURL);
-    yield put(sitesFetched(response));
-  } catch (err) {
-    yield put(sitesFetchingError(err));
-  }
-}
 
 export function* submitFormWatcher() {
   while (true) {
@@ -72,11 +52,9 @@ export function* submitFormWatcher() {
 }
 
 export function* RewardsPageSaga() {
-  const watcherA = yield fork(fetchSitesWatcher);
   const watcherB = yield fork(submitFormWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
-  yield cancel(watcherA);
   yield cancel(watcherB);
 }

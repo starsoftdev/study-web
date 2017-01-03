@@ -8,7 +8,6 @@ import { map } from 'lodash';
 
 import {
   DEFAULT_SITES,
-  FETCH_SITES_SUCCESS,
   SET_ACTIVE_SORT,
 } from 'containers/RewardsPage/constants';
 
@@ -22,11 +21,6 @@ const initialState = {
 
 function RewardsPageReducer(state = initialState, action) {
   switch (action.type) {
-    case FETCH_SITES_SUCCESS:
-      return {
-        ...state,
-        sites: map(action.payload, 'type'),
-      };
     case SET_ACTIVE_SORT:
       return {
         ...state,
