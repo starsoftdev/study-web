@@ -104,7 +104,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                       value="1"
                       checked={this.state.card === '1'}
                     />
-                    <span className="text">75 KIKs = $25 Starbucks Gift Card</span>
+                    <div className="text">75 KIKs = $25 Starbucks Gift Card</div>
                   </li>
                   <li>
                     <Field
@@ -115,7 +115,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                       value="2"
                       checked={this.state.card === '2'}
                     />
-                    <span className="text">225 KIKs = $75 Amazon Gift Card</span>
+                    <div className="text">225 KIKs = $75 Amazon Gift Card</div>
                   </li>
                   <li>
                     <Field
@@ -126,7 +126,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                       value="3"
                       checked={this.state.card === '3'}
                     />
-                    <span className="text"> 1,559 KIKs = $1,559 StudyKIK Platinum Listing</span>
+                    <div className="text"> 1,559 KIKs = $1,559 StudyKIK Platinum Listing</div>
                   </li>
                 </ul>
                 <div className="btn-block text-right">
