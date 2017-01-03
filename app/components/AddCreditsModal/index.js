@@ -19,7 +19,7 @@ import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCredits
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
 import { selectAddCreditsFormValues, selectAddCreditsFormError } from './selectors';
 import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
-import validator from './validator';
+import validator, { addCreditsFields } from './validator';
 
 @reduxForm({
   form: 'addCredits',
@@ -285,6 +285,7 @@ function mapDispatchToProps(dispatch) {
     addCredits: (customerId, data) => dispatch(addCredits(customerId, data)),
     fetchSites:       () => dispatch(fetchSites()),
     getCreditsPrice: () => dispatch(getCreditsPrice()),
+    touchAddCredits: () => dispatch(touch('addCredits', ...addCreditsFields)),
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
     resetForm: () => dispatch(reset('addCredits')),
   };
