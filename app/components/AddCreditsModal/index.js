@@ -14,7 +14,7 @@ import { Field, reduxForm, touch, reset } from 'redux-form';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import ShoppingCartForm from 'components/ShoppingCartForm';
-import { fetchSites, getCreditsPrice } from 'containers/App/actions';
+import { addCredits, fetchSites, getCreditsPrice } from 'containers/App/actions';
 import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice } from 'containers/App/selectors';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
 import { selectAddCreditsFormValues, selectAddCreditsFormError } from './selectors';
@@ -282,6 +282,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    addCredits: (customerId, data) => dispatch(addCredits(customerId, data)),
     fetchSites:       () => dispatch(fetchSites()),
     getCreditsPrice: () => dispatch(getCreditsPrice()),
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
