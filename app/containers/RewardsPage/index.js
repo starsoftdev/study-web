@@ -20,18 +20,20 @@ import {
   selectRewards,
 } from 'containers/App/selectors';
 
-import { selectPaginationOptions } from 'containers/RewardsPage/selectors';
-import { submitForm, setActiveSort } from 'containers/RewardsPage/actions';
-import RewardModal from 'components/RewardModal';
-import RewardForm from 'components/RewardForm';
-import RewardsList from './RewardsList';
+import { selectSiteLocation } from 'components/RewardForm/selectors';
+import { selectPaginationOptions } from './selectors';
+import { submitForm, pickReward, setActiveSort } from 'containers/RewardsPage/actions';
+import RewardModal from '../../components/RewardModal';
+import RewardForm from '../../components/RewardForm';
+import RewardsList from './RewardsList/index';
 
 import cardStudykik from 'assets/images/img6.png';
-import cardAmazon from 'assets/images/img7.png';
-import cardStarbucks from 'assets/images/img8.png';
+import cardAmazon from 'assets/images/img8.png';
+import cardStarbucks from 'assets/images/img7.png';
 import diamond from 'assets/images/diamond.svg';
 import platinum from 'assets/images/platinum.svg';
 import gold from 'assets/images/gold.svg';
+import ruby from 'assets/images/ruby.png';
 import Helmet from 'react-helmet';
 
 export class RewardsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -44,6 +46,8 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     fetchClientSites: PropTypes.func,
     fetchRewards: PropTypes.func,
     onSubmitForm: PropTypes.func,
+    pickReward: PropTypes.func,
+    selectedSite: PropTypes.object,
     paginationOptions: PropTypes.object,
     setActiveSort: PropTypes.func,
   };
@@ -71,7 +75,9 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     this.props.fetchRewards();
   }
 
-  openRewardModal() {
+  openRewardModal(value) {
+    const { pickReward } = this.props;
+    pickReward(value);
     this.setState({ rewardModalOpen: true });
   }
 
@@ -79,8 +85,23 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     this.setState({ rewardModalOpen: false });
   }
 
+  renderHeaderText() {
+    const { selectedSite } = this.props;
+    if (typeof (selectedSite) === 'number') {
+      if (selectedSite === 0) {
+        return (
+          <h3 className="pull-left">'Client' Has <strong>450 KIKs</strong></h3>
+        );
+      }
+      return (
+        <h3 className="pull-left">'Site' Has <strong>450 KIKs</strong></h3>
+      );
+    }
+    // shouldn't ever display this, since the site should be pre-populated, depending on whether they're a site user or an admin. If they're an admin, pre-select all sites
+    return null;
+  }
   render() {
-    const { siteLocations } = this.props;
+    const { siteLocations, pickReward } = this.props;
     return (
       <div className="container-fluid">
         <Helmet title="Rewards - StudyKIK" />
@@ -95,21 +116,23 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
           </div>
 
           <header className="sub-header clearfix">
-            <h3 className="pull-left">Wayne Enterprise Has <strong>450 KIKs</strong></h3>
-            <a className="btn bgn-chat pull-right" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal}></a>
-            <RewardModal siteLocations={siteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} onSubmit={this.onSubmitForm} />
+            {this.renderHeaderText()}
+            <a className="btn bgn-chat pull-right" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal} />
+            <RewardModal siteLocations={siteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} onSubmit={this.onSubmitForm} pickReward={pickReward} />
           </header>
 
           <div className="row images-area">
             <div className="col-xs-4 pull-left">
-              <a className="option3" data-for="radio-option3" onClick={this.openRewardModal}><img alt="" src={cardStudykik} /></a>
+              <a className="option2" data-for="radio-option2" onClick={() => this.openRewardModal('2')}><img role="presentation" src={cardAmazon} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a className="option1" data-for="radio-option1" onClick={this.openRewardModal}><img alt="" src={cardStarbucks} /></a>
+              <a className="option1" data-for="radio-option1" onClick={() => this.openRewardModal('1')}><img role="presentation" src={cardStarbucks} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a className="option2" data-for="radio-option2" onClick={this.openRewardModal}><img alt="" src={cardAmazon} /></a>
+              <a className="option3" data-for="radio-option3" onClick={() => this.openRewardModal('3')}><img role="presentation" src={cardStudykik} /></a>
             </div>
+
+
           </div>
 
           <div className="earning-info clearfix">
@@ -131,14 +154,33 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                 <li>
                   <span className="number"><span></span></span>
                   <h4>Referrals!</h4>
-                  <p>We appreciate your referrals! Earn points for every site or sponsor that lists a Platinum Study with StudyKIK</p>
+                  <p>We appreciate your referrals! Earn points for every site or sponsor that lists a Platinum Study or higher  with StudyKIK</p>
                 </li>
               </ol>
             </aside>
 
             <div className="detail">
               <div className="infoarea row">
-                <div className="col-sm-4">
+                <div className="col-sm-3 column diamond">
+                  <div>
+                    <div className="box">
+                      <div className="box-holder">
+                        <h3>RUBY LISTING</h3>
+                        <strong className="number">+500 <span>KIK<span className="text-lowercase">s</span></span></strong>
+                      </div>
+                    </div>
+
+                    <div className="box">
+                      <div className="box-holder">
+                        <h3>RUBY LISTING</h3>
+                        <strong className="number">+50 <span>KIK<span className="text-lowercase">s</span></span></strong>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="package-img diamond"><img className="ruby-img" src={ruby} alt="RUBY LISTING" width="135" /></div>
+                </div>
+
+                <div className="col-sm-3 column">
                   <div>
                     <div className="box">
                       <div className="box-holder">
@@ -157,7 +199,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                   <div className="package-img diamond"><img src={diamond} alt="DIAMOND LISTING" width="115" height="102" /></div>
                 </div>
 
-                <div className="col-sm-4 msg-info">
+                <div className="col-sm-3 msg-info column">
                   <div>
                     <div className="box">
                       <div className="box-holder">
@@ -176,7 +218,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                   <div className="package-img platinum"><img src={platinum} alt="PLATINUM LISTING" width="108" height="115" /></div>
                 </div>
 
-                <div className="col-sm-4 rewards-info">
+                <div className="col-sm-3 rewards-info column">
                   <div>
                     <div className="box">
                       <div className="box-holder">
@@ -194,11 +236,10 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                   </div>
                   <div className="package-img gold"><img src={gold} alt="GOLD LISTING" width="98" height="108" /></div>
                 </div>
-
               </div>
 
               <div className="infoarea row">
-                <div className="col-xs-6 sponsor">
+                <div className="col-xs-8 sponsor">
                   <div className="box">
                     <div className="box-holder">
                       <h3>REFER A SPONSOR</h3>
@@ -207,7 +248,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                   </div>
                 </div>
 
-                <div className="col-xs-6 site">
+                <div className="col-xs-4 site">
                   <div className="box">
                     <div className="box-holder">
                       <h3>REFER A SITE</h3>
@@ -216,7 +257,6 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                   </div>
                 </div>
               </div>
-
             </div>
 
           </div>
@@ -240,6 +280,7 @@ const mapStateToProps = createStructuredSelector({
   currentUserClientId: selectCurrentUserClientId(),
   siteLocations: selectUserSiteLocations(),
   rewards: selectRewards(),
+  selectedSite: selectSiteLocation(),
   paginationOptions: selectPaginationOptions(),
 });
 
@@ -249,6 +290,7 @@ function mapDispatchToProps(dispatch) {
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchRewards: () => dispatch(fetchRewards()),
     onSubmitForm: (values) => dispatch(submitForm(values)),
+    pickReward: (value) => dispatch(pickReward(value)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
   };
 }

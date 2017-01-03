@@ -9,6 +9,7 @@ import { reducer as formReducer } from 'redux-form';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 import { default as textBlastModalReducer } from './containers/StudyPage/TextBlast/reducer';
 import { default as patientsListReducer } from './containers/PatientDatabasePage/TextBlast/reducer';
+import { default as rewardForm } from './containers/RewardsPage/RewardModal/reducer';
 import appReducer from './containers/App/reducer';
 import globalNotificationsReducer from './containers/GlobalNotifications/reducer';
 
@@ -21,6 +22,7 @@ export default function createReducer(asyncReducers) {
     form: formReducer.plugin({
       'StudyPage.TextBlastModal': textBlastModalReducer,
       'PatientDatabase.TextBlastModal': patientsListReducer,
+      rewardForm,
     }),
     toastr: toastrReducer,
     globalNotifications: globalNotificationsReducer,
