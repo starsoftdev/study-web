@@ -7,10 +7,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import ReactSelect from 'components/Input/ReactSelect';
 import { Field, reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
-import RadioButton from 'components/Input/RadioButton';
+import CenteredModal from '../../components/CenteredModal/index';
+import ReactSelect from '../../components/Input/ReactSelect';
+import RadioButton from '../../components/Input/RadioButton';
 import cardStudykik from 'assets/images/img6.png';
 import cardAmazon from 'assets/images/img8.png';
 import cardStarbucks from 'assets/images/img7.png';
@@ -62,7 +63,15 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
     const { handleSubmit } = this.props;
     return (
       <form onSubmit={handleSubmit}>
-        <Modal className="custom-modal reward-modal" id="select-reward-form" show={this.props.showModal} onHide={this.props.closeModal}>
+        <Modal
+          className="reward-modal"
+          id="select-reward-form"
+          dialogComponentClass={CenteredModal}
+          show={this.props.showModal}
+          onHide={this.props.closeModal}
+          backdrop
+          keyboard
+        >
           <Modal.Header>
             <Modal.Title>SELECT REWARD</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closeModal}>
