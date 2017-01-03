@@ -12,8 +12,8 @@ import { Field, reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
 import RadioButton from 'components/Input/RadioButton';
 import cardStudykik from 'assets/images/img6.png';
-import cardAmazon from 'assets/images/img7.png';
-import cardStarbucks from 'assets/images/img8.png';
+import cardAmazon from 'assets/images/img8.png';
+import cardStarbucks from 'assets/images/img7.png';
 
 import {
   selectUserSiteLocations,
@@ -40,6 +40,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
     closeModal: React.PropTypes.func,
     handleSubmit: React.PropTypes.func.isRequired,
     currentUserClientId: React.PropTypes.number,
+    pickReward: React.PropTypes.pickReward,
   };
 
   constructor(props) {
@@ -52,8 +53,9 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
     this.selectCard = this.selectCard.bind(this);
   }
 
-  selectCard() {
-    this.setState({ card: 0 });
+  selectCard(value) {
+    const { pickReward } = this.props;
+    pickReward(value);
   }
 
   render() {
@@ -84,13 +86,13 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                 </div>
                 <div className="row images-area">
                   <div className="col-xs-4 pull-left">
-                    <label htmlFor="radio-option3"><img src={cardStudykik} alt="" /></label>
+                    <label htmlFor="radio-option1" onClick={() => { this.selectCard('1'); }}><img src={cardStarbucks} alt="" /></label>
                   </div>
                   <div className="col-xs-4 pull-left">
-                    <label htmlFor="radio-option1"><img src={cardStarbucks} alt="" /></label>
+                    <label htmlFor="radio-option2" onClick={() => { this.selectCard('2'); }}><img src={cardAmazon} alt="" /></label>
                   </div>
                   <div className="col-xs-4 pull-left">
-                    <label htmlFor="radio-option2"><img src={cardAmazon} alt="" /></label>
+                    <label htmlFor="radio-option3" onClick={() => { this.selectCard('3'); }}><img src={cardStudykik} alt="" /></label>
                   </div>
                 </div>
                 <ul className="list-unstyled list-radios">
@@ -103,7 +105,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                       value="1"
                       checked={this.state.card === '1'}
                     />
-                    <span className="text">75 KIKs = $25 Starbucks Gift Card</span>
+                    <div className="text">75 KIKs = $25 Starbucks Gift Card</div>
                   </li>
                   <li>
                     <Field
@@ -114,7 +116,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                       value="2"
                       checked={this.state.card === '2'}
                     />
-                    <span className="text">225 KIKs = $75 Amazon Gift Card</span>
+                    <div className="text">225 KIKs = $75 Amazon Gift Card</div>
                   </li>
                   <li>
                     <Field
@@ -125,7 +127,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                       value="3"
                       checked={this.state.card === '3'}
                     />
-                    <span className="text"> 1,559 KIKs = $1,559 StudyKIK Platinum Listing</span>
+                    <div className="text"> 1,559 KIKs = $1,559 StudyKIK Platinum Listing</div>
                   </li>
                 </ul>
                 <div className="btn-block text-right">

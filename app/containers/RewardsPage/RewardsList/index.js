@@ -34,22 +34,22 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
   render() {
     const { rewards } = this.props;
 
-    let sorted = rewards;
-    if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
-      const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
-
-      sorted = _.orderBy(rewards, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
-    }
-
-    const RewardsListContents = sorted.map((item, index) => (
-      <RewardListItem
-        {...item}
-        key={index}
-        index={index}
-      />
-    ));
-
     if (rewards.length > 0) {
+      let sorted = rewards;
+
+      if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
+        const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
+
+        sorted = _.orderBy(rewards, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
+      }
+      const RewardsListContents = sorted.map((item, index) => (
+        <RewardListItem
+          {...item}
+          key={index}
+          index={index}
+        />
+      ));
+
       return (
         <div>
           <header>
@@ -79,9 +79,32 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
         </div>
       );
     }
+
     return (
       <div>
-        <h3>No rewards found!</h3>
+        <header>
+          <h2>REWARDS HISTORY</h2>
+        </header>
+        <table className="table">
+          <colgroup>
+            <col style={{ width: '48%' }} />
+            <col style={{ width: '13.2%' }} />
+            <col style={{ width: '14.5%' }} />
+            <col style={{ width: '14.2%' }} />
+            <col style={{ width: 'auto' }} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>DESCRIPTION <i className="caret-arrow"></i></th>
+              <th>DATE <i className="caret-arrow"></i></th>
+              <th>TIME <i className="caret-arrow"></i></th>
+              <th>AMOUNT <i className="caret-arrow"></i></th>
+              <th>BALANCE <i className="caret-arrow"></i></th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     );
   }
