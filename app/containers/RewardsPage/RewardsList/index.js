@@ -33,6 +33,7 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
 
   render() {
     const { rewards } = this.props;
+    let rewardsListContents = null;
 
     if (rewards.length > 0) {
       let sorted = rewards;
@@ -42,42 +43,13 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
 
         sorted = _.orderBy(rewards, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
       }
-      const RewardsListContents = sorted.map((item, index) => (
+      rewardsListContents = sorted.map((item, index) => (
         <RewardListItem
           {...item}
           key={index}
           index={index}
         />
       ));
-
-      return (
-        <div>
-          <header>
-            <h2>REWARDS HISTORY</h2>
-          </header>
-          <table className="table">
-            <colgroup>
-              <col style={{ width: '48%' }} />
-              <col style={{ width: '13.2%' }} />
-              <col style={{ width: '14.5%' }} />
-              <col style={{ width: '14.2%' }} />
-              <col style={{ width: 'auto' }} />
-            </colgroup>
-            <thead>
-              <tr>
-                <th onClick={this.sortBy} data-sort="userName" className={(this.props.paginationOptions.activeSort === 'userName') ? this.props.paginationOptions.activeDirection : ''}>DESCRIPTION <i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="date" className={(this.props.paginationOptions.activeSort === 'date') ? this.props.paginationOptions.activeDirection : ''}>DATE <i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="time" className={(this.props.paginationOptions.activeSort === 'time') ? this.props.paginationOptions.activeDirection : ''}>TIME <i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="points" className={(this.props.paginationOptions.activeSort === 'points') ? this.props.paginationOptions.activeDirection : ''}>AMOUNT <i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="balance" className={(this.props.paginationOptions.activeSort === 'balance') ? this.props.paginationOptions.activeDirection : ''}>BALANCE <i className="caret-arrow" /></th>
-              </tr>
-            </thead>
-            <tbody>
-              {RewardsListContents}
-            </tbody>
-          </table>
-        </div>
-      );
     }
 
     return (
@@ -95,14 +67,15 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
           </colgroup>
           <thead>
             <tr>
-              <th>DESCRIPTION <i className="caret-arrow"></i></th>
-              <th>DATE <i className="caret-arrow"></i></th>
-              <th>TIME <i className="caret-arrow"></i></th>
-              <th>AMOUNT <i className="caret-arrow"></i></th>
-              <th>BALANCE <i className="caret-arrow"></i></th>
+              <th onClick={this.sortBy} data-sort="userName" className={(this.props.paginationOptions.activeSort === 'userName') ? this.props.paginationOptions.activeDirection : ''}>DESCRIPTION <i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="date" className={(this.props.paginationOptions.activeSort === 'date') ? this.props.paginationOptions.activeDirection : ''}>DATE <i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="time" className={(this.props.paginationOptions.activeSort === 'time') ? this.props.paginationOptions.activeDirection : ''}>TIME <i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="points" className={(this.props.paginationOptions.activeSort === 'points') ? this.props.paginationOptions.activeDirection : ''}>AMOUNT <i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="balance" className={(this.props.paginationOptions.activeSort === 'balance') ? this.props.paginationOptions.activeDirection : ''}>BALANCE <i className="caret-arrow" /></th>
             </tr>
           </thead>
           <tbody>
+            {rewardsListContents}
           </tbody>
         </table>
       </div>
