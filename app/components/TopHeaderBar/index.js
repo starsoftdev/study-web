@@ -115,7 +115,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
           </div>
 
           <div className="open-close help-drop pull-left">
-            <a className="link-help pull-left opener">?</a>
+            <a className="link-help pull-left opener" data-toggle="tooltip" data-placement="bottom" title="Coming Soon">?</a>
           </div>
 
           <a
