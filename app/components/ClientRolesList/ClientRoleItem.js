@@ -10,8 +10,8 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
   static propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
-    reward: PropTypes.bool,
-    purchase: PropTypes.bool,
+    canRedeemRewards: PropTypes.bool,
+    canPurchase: PropTypes.bool,
     user: PropTypes.object,
     selectedUser: PropTypes.object,
     fetchUser: PropTypes.func,
@@ -34,17 +34,17 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { name, reward, purchase, user } = this.props;
+    const { name, canRedeemRewards, canPurchase, user } = this.props;
     let accessStr = '';
     const isSuperAdmin = (name === 'Super Admin');
 
     if (isSuperAdmin) {
       accessStr = 'ADMIN';
-    } else if (purchase && reward) {
+    } else if (canPurchase && canRedeemRewards) {
       accessStr = 'ALL ACCESS';
-    } else if (purchase && !reward) {
+    } else if (canPurchase && !canRedeemRewards) {
       accessStr = 'PURCHASE';
-    } else if (!purchase && reward) {
+    } else if (!canPurchase && canRedeemRewards) {
       accessStr = 'REWARDS';
     } else {
       accessStr = 'NO ACCESS';

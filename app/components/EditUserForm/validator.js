@@ -5,8 +5,8 @@ const schema = {
   lastName: { presence: true },
   email: { presence: true },
   site: { presence: true },
-  purchase: { presence: false },
-  reward: { presence: false },
+  canPurchase: { presence: false },
+  canRedeemRewards: { presence: false },
 };
 
 export default validatorFactory(schema);
