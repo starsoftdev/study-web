@@ -203,7 +203,7 @@ const selectSelectedUserDetailsForForm = () => createSelector(
       selectedUserInput.lastName = selectedUserDetails.lastName;
       selectedUserInput.email = selectedUserDetails.email;
 
-      if (!selectedUserDetails.roleForClient.site) {
+      if (!selectedUserDetails.roleForClient) {
         const foundSiteIndex = findIndex(clientSitesDetails, (siteIterator) => (findIndex(siteIterator.users, { id: selectedUserDetails.id }) > -1));
         if (foundSiteIndex > -1) {
           selectedUserInput.site = clientSitesDetails[foundSiteIndex].id.toString();
