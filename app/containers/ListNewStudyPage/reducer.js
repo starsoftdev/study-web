@@ -58,7 +58,6 @@ function listNewStudyPageReducer(state = initialState, action) {
     case SUBMIT_FORM:
       return {
         ...state,
-        showSubmitFormModal: true,
         formSubmissionStatus: {
           submitting: true,
           error: null,
