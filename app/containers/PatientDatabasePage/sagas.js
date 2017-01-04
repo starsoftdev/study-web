@@ -282,7 +282,6 @@ function* importPatients() {
   while (true) {
     const { payload } = yield take(IMPORT_PATIENTS);
     const formData = new FormData();
-    console.log(payload);
     formData.append('file', payload);
     try {
       const requestURL = `${API_URL}/patients/importPatients`;

@@ -52,6 +52,12 @@ class PatientActionButtons extends React.Component {
     this.renderUpload = this.renderUpload.bind(this);
   }
 
+  componentWillReceiveProps(newProps){
+    if (this.props.importPatientsStatus.uploadStart && !newProps.importPatientsStatus.uploadStart){
+      this.toggleImportPatientsModal();
+    }
+  }
+
   toggleImportPatientsModal() {
     this.setState({
       showImportPatientsModal: !this.state.showImportPatientsModal,
@@ -133,8 +139,7 @@ class PatientActionButtons extends React.Component {
   renderUpload() {
     const { clearForm } = this.props;
     const { uploadStart, fileUploaded } = this.props.importPatientsStatus;
-    console.log(123, this.props.importPatientsStatus);
-    console.log(uploadStart, fileUploaded);
+
     if (uploadStart) {
       return (
         <div className="text-center" style={{ marginTop: '20px', marginBottom: '20px' }}>
