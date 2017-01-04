@@ -14,7 +14,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     piLastName: PropTypes.string,
     phone: PropTypes.string,
     address: PropTypes.string,
-    users: PropTypes.array,
+    roles: PropTypes.array,
     selectedSite: PropTypes.object,
     selectedUser: PropTypes.object,
     fetchSite: PropTypes.func,
@@ -58,10 +58,10 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { name, piFirstName, piLastName, phone, address, users } = this.props;
-    const assignedUsersContent = users.map((item, index) => (
+    const { name, piFirstName, piLastName, phone, address, roles } = this.props;
+    const assignedUsersContent = roles.map((item, index) => (
       <div className="assigned-user" key={index}>
-        <span>{item.firstName} {item.lastName}</span>
+        <span>{item.user.firstName} {item.user.lastName}</span>
         <span className="edit-assigned-user">
           {(this.assignedUserIsBeingFetched(item))
             ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-assigned-user" /></span>
