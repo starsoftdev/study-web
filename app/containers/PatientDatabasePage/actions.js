@@ -34,7 +34,10 @@ import {
   SORT_PATIENTS_SUCCESS,
   DOWNLOAD_COMPLETE,
   IMPORT_PATIENTS,
+  IMPORT_PATIENTS_SUCCESS,
+  IMPORT_PATIENTS_ERROR,
   CLEAR_PATIENTS_LIST,
+  CLEAR_IMPORT_FORM,
 } from './constants';
 import _ from 'lodash';
 
@@ -233,6 +236,20 @@ export function importPatients(payload) {
   };
 }
 
+export function importPatientsSuccess(fileName) {
+  return {
+    type: IMPORT_PATIENTS_SUCCESS,
+    fileName,
+  };
+}
+
+export function importPatientsError(payload) {
+  return {
+    type: IMPORT_PATIENTS_ERROR,
+    payload,
+  };
+}
+
 export function downloadComplete() {
   return {
     type: DOWNLOAD_COMPLETE,
@@ -242,5 +259,11 @@ export function downloadComplete() {
 export function clearPatientsList() {
   return {
     type: CLEAR_PATIENTS_LIST,
+  };
+}
+
+export function clearForm() {
+  return {
+    type: CLEAR_IMPORT_FORM,
   };
 }

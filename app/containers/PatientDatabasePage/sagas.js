@@ -27,6 +27,9 @@ import {
   patientSaved,
   patientSavingError,
   downloadComplete,
+  importPatientsSuccess,
+  importPatientsError,
+  clearPatientsList,
 } from './actions';
 
 export function* patientDatabasePageSaga() {
@@ -38,6 +41,9 @@ export function* patientDatabasePageSaga() {
   const watcherF = yield fork(importPatients);
 
   yield take(LOCATION_CHANGE);
+
+  yield put(clearPatientsList());
+
   yield cancel(watcherA);
   yield cancel(watcherB);
   yield cancel(watcherC);
@@ -289,9 +295,11 @@ function* importPatients() {
         body: formData,
       });
       yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
+      yield put(importPatientsSuccess(payload.name));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
+      yield put(importPatientsError(e));
     }
   }
 }
