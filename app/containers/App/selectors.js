@@ -203,7 +203,7 @@ const selectSelectedUserDetailsForForm = () => createSelector(
       selectedUserInput.lastName = selectedUserDetails.lastName;
       selectedUserInput.email = selectedUserDetails.email;
 
-      if (!selectedUserDetails.roleForClient) {
+      if (!selectedUserDetails.roleForClient.site) {
         const foundSiteIndex = findIndex(clientSitesDetails, (siteIterator) => (findIndex(siteIterator.users, { id: selectedUserDetails.id }) > -1));
         if (foundSiteIndex > -1) {
           selectedUserInput.site = clientSitesDetails[foundSiteIndex].id.toString();
@@ -211,9 +211,9 @@ const selectSelectedUserDetailsForForm = () => createSelector(
           selectedUserInput.site = null;
         }
       } else {
-        selectedUserInput.site = '0';
-        selectedUserInput.purchase = selectedUserDetails.roleForClient.purchase;
-        selectedUserInput.reward = selectedUserDetails.roleForClient.reward;
+        selectedUserInput.isAdmin = selectedUserDetails.roleForClient.isAdmin;
+        selectedUserInput.canPurchase = selectedUserDetails.roleForClient.canPurchase;
+        selectedUserInput.canRedeemRewards = selectedUserDetails.roleForClient.canRedeemRewards;
       }
     }
 
