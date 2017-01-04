@@ -29,6 +29,7 @@ import {
   downloadComplete,
   importPatientsSuccess,
   importPatientsError,
+  clearPatientsList,
 } from './actions';
 
 export function* patientDatabasePageSaga() {
@@ -40,6 +41,9 @@ export function* patientDatabasePageSaga() {
   const watcherF = yield fork(importPatients);
 
   yield take(LOCATION_CHANGE);
+
+  yield put(clearPatientsList());
+
   yield cancel(watcherA);
   yield cancel(watcherB);
   yield cancel(watcherC);
