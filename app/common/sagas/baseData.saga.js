@@ -127,7 +127,7 @@ export function* fetchSitesWatcher() {
       const requestURL = `${API_URL}/sites`;
 
       const filterObj = {
-        include: ['users', 'studies'],
+        include: ['studies'],
       };
 
       const searchParams = action.payload || {};
@@ -317,7 +317,14 @@ export function* fetchClientSitesWatcher() {
 
     try {
       const filterObj = {
-        include: ['users', 'studies'],
+        include: [{
+          relation: 'roles',
+          scope: {
+            include: ['user'],
+          },
+        }, {
+          relation: 'studies',
+        }],
         where: {},
       };
 
