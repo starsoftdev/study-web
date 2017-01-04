@@ -126,7 +126,13 @@ class PatientActionButtons extends React.Component {
   }
 
   download() {
-    this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, true, true);
+    if (!this.props.formValues.patients || this.props.formValues.patients.length === 0) {
+      this.setState({
+        showAlertModal: true,
+      });
+    } else {
+      this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, true, true);
+    }
   }
 
   uploadFile(e) {
