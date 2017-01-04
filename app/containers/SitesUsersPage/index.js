@@ -143,13 +143,17 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
-      siteId: parseInt(userData.site, 10),
     };
     if (userData.isAdmin) {
       userInput.clientRole = {
+        siteId: parseInt(userData.site, 10),
         canPurchase: userData.canPurchase || false,
         canRedeemRewards: userData.canRedeemRewards || false,
       };
+    } else {
+      userInput.clientRole = {
+        siteId: parseInt(userData.site, 10)
+      }
     }
 
     this.props.saveUser(currentUserClientId, null, userInput);
