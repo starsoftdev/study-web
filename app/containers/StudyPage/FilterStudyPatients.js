@@ -6,6 +6,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import Input from '../../components/Input/index';
+import Button from 'react-bootstrap/lib/Button';
 import ReactSelect from '../../components/Input/ReactSelect';
 import StudyActionButtons from './StudyActionButtons';
 
@@ -94,7 +95,9 @@ class FilterStudyPatientsForm extends Component {
         <div className="fields-holder">
           <div className="search-area pull-left">
             <div className="field">
-              <button className="btn btn-default btn-enter"><i className="icomoon-icon_search2" /></button>
+              <Button className="btn-enter">
+                <i className="icomoon-icon_search2" />
+              </Button>
               <Field
                 component={Input}
                 type="text"
