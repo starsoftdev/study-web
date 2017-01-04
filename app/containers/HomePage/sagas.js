@@ -13,6 +13,7 @@ import {
   FETCH_PATIENT_SIGN_UPS,
   FETCH_PATIENT_MESSAGES,
   FETCH_REWARDS_POINT,
+  FETCH_PRINCIPAL_INVESTIGATORS,
   FETCH_STUDIES,
   FETCH_INDICATION_LEVEL_PRICE,
   RENEW_STUDY,
@@ -25,6 +26,7 @@ import {
   fetchPatientSignUpsSucceeded,
   fetchPatientMessagesSucceeded,
   fetchRewardsPointSucceeded,
+  fetchPrincipalInvestigatorsSucceeded,
   studiesFetched,
   studiesFetchingError,
   indicationLevelPriceFetched,
@@ -48,7 +50,14 @@ export function* fetchPatientSignUpsWatcher() {
 
 export function* fetchPatientSignUpsWorker(action) {
   try {
-    const requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/patientSignUps`;
+    console.log(action.currentUser);
+    let requestURL = '';
+    if (action.roleForClient && action.roleForClient.client_id) {
+      requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/patientSignUps`;
+    } else {
+      requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/patientSignUps`;
+    }
+
     const params = {
       method: 'GET',
       query: {
@@ -60,6 +69,28 @@ export function* fetchPatientSignUpsWorker(action) {
     yield put(fetchPatientSignUpsSucceeded(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+export function* fetchPrincipalInvestigatorsWatcher() {
+  yield* takeLatest(FETCH_PRINCIPAL_INVESTIGATORS, fetchPrincipalInvestigatorsWorker);
+}
+
+export function* fetchPrincipalInvestigatorsWorker(action) {
+  try {
+    console.log(action.currentUser);
+    const requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/principalInvestigators`;
+
+    const params = {
+      method: 'GET',
+      query: {},
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchPrincipalInvestigatorsSucceeded(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching principal investigators');
     yield put(toastrActions.error('', errorMessage));
   }
 }
@@ -259,6 +290,7 @@ export function* homePageSaga() {
   const watcherG = yield fork(upgradeStudyWatcher);
   const watcherH = yield fork(editStudyWatcher);
   const watcherI = yield fork(fetchUpgradeStudyPriceWatcher);
+  const fetchPrincipalInvestigatorsWatcher1 = yield fork(fetchPrincipalInvestigatorsWatcher);
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
@@ -272,5 +304,6 @@ export function* homePageSaga() {
     yield cancel(watcherG);
     yield cancel(watcherH);
     yield cancel(watcherI);
+    yield cancel(fetchPrincipalInvestigatorsWatcher1);
   }
 }

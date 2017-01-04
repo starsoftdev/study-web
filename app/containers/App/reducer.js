@@ -206,6 +206,7 @@ export default function appReducer(state = initialState, action) {
   let patientMessagesCollection = [];
   let baseDataInnerState = null;
   let resultState = null;
+  let userRoleType = '';
 
   switch (action.type) {
     case SET_AUTH_STATE:
@@ -215,9 +216,17 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SET_USER_DATA:
+      if (payload.userData.roleForSponsor) {
+        userRoleType = 'sponsor';
+      } else if (payload.userData.roleForClient) {
+        userRoleType = 'client';
+      } else {
+        userRoleType = '';
+      }
       resultState = {
         ...state,
         userData: payload.userData,
+        userRoleType,
       };
       break;
     case CHANGE_IMAGE_SUCCESS:

@@ -14,16 +14,19 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUserClientId } from 'containers/App/selectors';
+import { selectUserRoleType, selectCurrentUserClientId } from 'containers/App/selectors';
 import { fetchClientSites, fetchLevels, getAvailPhoneNumbers } from 'containers/App/actions';
 import { fetchStudies } from './actions';
 
 import Dashboard from './Dashboard';
+import SponsorDashboard from './SponsorDashboard';
 import SearchStudiesForm from './SearchStudiesForm';
+import SearchProtocolsForm from './SearchProtocolsForm';
 import StudiesList from './StudiesList';
 
 export class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    userRoleType: PropTypes.string,
     location: PropTypes.any,
     currentUserClientId: PropTypes.number,
     fetchClientSites: PropTypes.func,
@@ -39,8 +42,8 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
   }
 
   componentWillMount() {
-    const { currentUserClientId } = this.props;
-    if (currentUserClientId) {
+    const { currentUserClientId, userRoleType } = this.props;
+    if (currentUserClientId && userRoleType === 'client') {
       this.props.fetchClientSites(currentUserClientId, {});
       this.props.fetchLevels();
       this.props.getAvailPhoneNumbers();
@@ -57,28 +60,54 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     this.props.fetchStudies(queryParams);
   }
 
+  searchProtocols(searchParams) {
+    const queryParams = {
+      name: searchParams.name,
+      siteId: searchParams.site,
+      status: searchParams.status,
+    };
+    this.props.fetchStudies(queryParams);
+  }
+
   render() {
+    const { userRoleType } = this.props;
+    console.log(userRoleType);
     return (
       <div className="home-page">
         <Helmet title="Home - StudyKIK" />
-        <div className="container-fluid">
-          <div className="dashboard form-group">
-            <Dashboard location={this.props.location} />
+        {userRoleType === 'client' &&
+          (
+          <div className="container-fluid">
+            <div className="dashboard form-group">
+              <Dashboard location={this.props.location} />
+            </div>
+            <div className="search-studies-panel clearfix form-group">
+              <SearchStudiesForm onSubmit={this.searchStudies} />
+              <Link to="/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Study</Link>
+            </div>
+            <div className="table-holder form-group">
+              <StudiesList />
+            </div>
           </div>
-          <div className="search-studies-panel clearfix form-group">
-            <SearchStudiesForm onSubmit={this.searchStudies} />
-            <Link to="/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Study</Link>
+          )
+        }
+        {userRoleType === 'sponsor' &&
+          (
+          <div className="container-fluid sponsor-portal">
+            <section className="home-section">
+              <SponsorDashboard location={this.props.location} />
+              <SearchProtocolsForm onSubmit={this.searchProtocols} />
+            </section>
           </div>
-          <div className="table-holder form-group">
-            <StudiesList />
-          </div>
-        </div>
+          )
+        }
       </div>
     );
   }
 }
 
 const mapStateToProps = createStructuredSelector({
+  userRoleType: selectUserRoleType(),
   currentUserClientId: selectCurrentUserClientId(),
 });
 
