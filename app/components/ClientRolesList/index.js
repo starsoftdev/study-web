@@ -139,10 +139,10 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
       email: userData.email,
       siteId: parseInt(userData.site, 10),
     };
-    if (userData.site === '0') {
+    if (userData.isAdmin) {
       userInput.clientRole = {
-        purchase: userData.purchase || false,
-        reward: userData.reward || false,
+        canPurchase: userData.canPurchase || false,
+        canRedeemRewards: userData.canRedeemRewards || false,
       };
     }
 
