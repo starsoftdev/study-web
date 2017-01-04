@@ -52,8 +52,8 @@ class PatientActionButtons extends React.Component {
     this.renderUpload = this.renderUpload.bind(this);
   }
 
-  componentWillReceiveProps(newProps){
-    if (this.props.importPatientsStatus.uploadStart && !newProps.importPatientsStatus.uploadStart){
+  componentWillReceiveProps(newProps) {
+    if (this.props.importPatientsStatus.uploadStart && !newProps.importPatientsStatus.uploadStart) {
       this.toggleImportPatientsModal();
     }
   }
