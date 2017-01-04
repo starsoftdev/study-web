@@ -94,7 +94,7 @@ class FilterStudyPatientsForm extends Component {
         <div className="fields-holder">
           <div className="search-area pull-left">
             <div className="field">
-              <button className="btn btn-default btn-enter"><i className="icomoon-icon_search2" /></button>
+              <label className="btn btn-default btn-enter"><i className="icomoon-icon_search2" /></label>
               <Field
                 component={Input}
                 type="text"
