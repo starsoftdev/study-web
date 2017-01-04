@@ -60,6 +60,10 @@ const selectSavedPatient = () => createSelector(
   (substate) => substate.savedPatient
 );
 
+const selectImportPatientsStatus = () => createSelector(
+  selectPatientDatabasePageDomain(),
+  (substate) => substate.importPatientsStatus
+);
 
 const selectPaginationOptions = () => createSelector(
   selectPatientDatabasePageDomain(),
@@ -89,4 +93,5 @@ export {
   selectChat,
   selectPaginationOptions,
   selectPatientDatabaseFormValues,
+  selectImportPatientsStatus,
 };
