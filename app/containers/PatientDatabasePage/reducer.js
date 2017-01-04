@@ -25,6 +25,11 @@ import {
   SORT_PATIENTS_SUCCESS,
   DOWNLOAD_COMPLETE,
   CLEAR_PATIENTS_LIST,
+
+  IMPORT_PATIENTS,
+  IMPORT_PATIENTS_SUCCESS,
+  IMPORT_PATIENTS_ERROR,
+  CLEAR_IMPORT_FORM,
 } from './constants';
 
 const initialState = {
@@ -60,6 +65,10 @@ const initialState = {
     activeDirection: null,
     prevSearchFilter: {},
   },
+  importPatientsStatus: {
+    uploadStart: false,
+    fileUploaded: null,
+  },
 };
 
 export default function patientDatabasePageReducer(state = initialState, action) {
@@ -68,6 +77,38 @@ export default function patientDatabasePageReducer(state = initialState, action)
   let foundIndex = -1;
 
   switch (action.type) {
+    case CLEAR_IMPORT_FORM:
+      return {
+        ...state,
+        importPatientsStatus: {
+          uploadStart: false,
+          fileUploaded: null,
+        },
+      };
+    case IMPORT_PATIENTS:
+      return {
+        ...state,
+        importPatientsStatus: {
+          uploadStart: true,
+          fileUploaded: null,
+        },
+      };
+    case IMPORT_PATIENTS_SUCCESS:
+      return {
+        ...state,
+        importPatientsStatus: {
+          uploadStart: false,
+          fileUploaded: action.fileName,
+        },
+      };
+    case IMPORT_PATIENTS_ERROR:
+      return {
+        ...state,
+        importPatientsStatus: {
+          uploadStart: false,
+          fileUploaded: null,
+        },
+      };
     case DOWNLOAD_COMPLETE:
       return {
         ...state,
