@@ -9,8 +9,13 @@ import TextBlastModal from './TextBlast/index';
 import { createStructuredSelector } from 'reselect';
 import { selectValues } from '../../common/selectors/form.selector';
 import { connect } from 'react-redux';
-import { importPatients } from '../../containers/PatientDatabasePage/actions';
+import { importPatients, clearForm } from '../../containers/PatientDatabasePage/actions';
 import { change } from 'redux-form';
+import CenteredModal from '../../components/CenteredModal/index';
+import Modal from 'react-bootstrap/lib/Modal';
+import { selectImportPatientsStatus } from './selectors';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import Button from 'react-bootstrap/lib/Button';
 
 class PatientActionButtons extends React.Component {
   static propTypes = {
@@ -19,6 +24,8 @@ class PatientActionButtons extends React.Component {
     searchPatients: React.PropTypes.func,
     paginationOptions: React.PropTypes.object,
     clearTextBlastMessage: React.PropTypes.func,
+    importPatientsStatus: React.PropTypes.object,
+    clearForm: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -42,6 +49,7 @@ class PatientActionButtons extends React.Component {
     this.closeEmailBlastModal = this.closeEmailBlastModal.bind(this);
     this.download = this.download.bind(this);
     this.uploadFile = this.uploadFile.bind(this);
+    this.renderUpload = this.renderUpload.bind(this);
   }
 
   toggleImportPatientsModal() {
@@ -122,6 +130,55 @@ class PatientActionButtons extends React.Component {
     }
   }
 
+  renderUpload() {
+    const { clearForm } = this.props;
+    const { uploadStart, fileUploaded } = this.props.importPatientsStatus;
+    console.log(123, this.props.importPatientsStatus);
+    console.log(uploadStart, fileUploaded);
+    if (uploadStart) {
+      return (
+        <div className="text-center" style={{ marginTop: '20px', marginBottom: '20px' }}>
+          <p>
+            <LoadingSpinner showOnlyIcon />
+          </p>
+          <p className="text-info spinner-text">
+            Uploading CSV File...
+          </p>
+        </div>
+      );
+    }
+    return (
+      <div>
+        <div className="upload-patient-info">
+          <div className="table">
+            <label className="table-cell" htmlFor="file">
+              <i className="icomoon-arrow_up_alt" />
+              <span className="text">Upload Patients</span>
+              {fileUploaded && <span className="jcf-file jcf-extension-csv parent-active">{fileUploaded}</span>}
+              <span className="jcf-file">
+                <span className="jcf-fake-input">No file chosen</span>
+                <span className="jcf-upload-button">
+                  <span className="jcf-button-content">Choose file</span>
+                </span>
+                <input
+                  type="file"
+                  id="file"
+                  onChange={this.uploadFile}
+                  ref={(fileBttn) => {
+                    this.fileBttn = fileBttn;
+                  }}
+                />
+              </span>
+            </label>
+
+          </div>
+          {fileUploaded && <Button className="clear-import-button" onClick={() => clearForm()}><i className="fa fa-times" aria-hidden="true" /></Button>}
+
+        </div>
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className="btns-popups">
@@ -129,15 +186,7 @@ class PatientActionButtons extends React.Component {
           <a onClick={this.download} className="btn btn-primary download"><i className="icomoon-icon_download" /> Download</a>
         </div>
         <div className="col pull-right">
-          <label htmlFor="file" className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload" /> Import</label>
-          <input
-            type="file"
-            id="file"
-            onChange={this.uploadFile}
-            ref={(fileBttn) => {
-              this.fileBttn = fileBttn;
-            }}
-          />
+          <label onClick={this.toggleAddPatientModal} className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload" /> Import</label>
         </div>
         <div className="col pull-right">
           <a className="btn btn-primary email lightbox-opener" onClick={this.toggleTextEmailBlastModal}><i className="icomoon-icon_chat_alt" /> TEXT / EMAIL BLAST</a>
@@ -149,6 +198,26 @@ class PatientActionButtons extends React.Component {
           onClose={this.closeTextBlastModal}
           onHide={this.toggleTextBlastModal}
         />
+        <Modal
+          show={this.state.showImportPatientsModal}
+          onHide={this.toggleAddPatientModal}
+          id="import-info"
+          dialogComponentClass={CenteredModal}
+          backdrop
+          keyboard
+        >
+          <Modal.Header>
+            <Modal.Title>
+              <strong>Import</strong>
+            </Modal.Title>
+            <a className="close" onClick={this.closeAddPatientModal}>
+              <i className="icomoon-icon_close" />
+            </a>
+          </Modal.Header>
+          <Modal.Body>
+            {this.renderUpload()}
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }
@@ -157,12 +226,14 @@ class PatientActionButtons extends React.Component {
 const formName = 'PatientDatabase.TextBlastModal';
 const mapStateToProps = createStructuredSelector({
   formValues: selectValues(formName),
+  importPatientsStatus: selectImportPatientsStatus(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     importPatients: payload => dispatch(importPatients(payload)),
     clearTextBlastMessage: () => dispatch(change(formName, 'message', '')),
+    clearForm: () => (dispatch(clearForm())),
   };
 }
 

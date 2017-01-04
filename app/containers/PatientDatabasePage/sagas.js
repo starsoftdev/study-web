@@ -27,6 +27,8 @@ import {
   patientSaved,
   patientSavingError,
   downloadComplete,
+  importPatientsSuccess,
+  importPatientsError,
 } from './actions';
 
 export function* patientDatabasePageSaga() {
@@ -280,6 +282,7 @@ function* importPatients() {
   while (true) {
     const { payload } = yield take(IMPORT_PATIENTS);
     const formData = new FormData();
+    console.log(payload);
     formData.append('file', payload);
     try {
       const requestURL = `${API_URL}/patients/importPatients`;
@@ -289,9 +292,11 @@ function* importPatients() {
         body: formData,
       });
       yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
+      yield put(importPatientsSuccess(payload.name));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
+      yield put(importPatientsError(e));
     }
   }
 }
