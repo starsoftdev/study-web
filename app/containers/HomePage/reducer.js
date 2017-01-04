@@ -5,6 +5,7 @@ import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
   FETCH_PATIENT_MESSAGES_SUCCEESS,
   FETCH_REWARDS_POINT_SUCCEESS,
+  FETCH_PRINCIPAL_INVESTIGATORS_SUCCEESS,
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
@@ -33,6 +34,11 @@ const initialState = {
   patientSignUps: {
     today: 0,
     yesterday: 0,
+    total: 0,
+  },
+  principalInvestigators: {
+    active: 0,
+    inactive: 0,
     total: 0,
   },
   patientMessages: {
@@ -101,6 +107,15 @@ export default function homePageReducer(state = initialState, action) {
       return {
         ...state,
         rewardsPoint: action.payload.rewardPoints,
+      };
+    case FETCH_PRINCIPAL_INVESTIGATORS_SUCCEESS:
+      return {
+        ...state,
+        principalInvestigators: {
+          active: payload.active,
+          inactive: payload.inactive,
+          total: payload.total,
+        },
       };
     case RECEIVE_NOTIFICATION:
       newState = state;

@@ -16,6 +16,11 @@ const selectCurrentUser = () => createSelector(
   (substate) => substate.userData
 );
 
+const selectUserRoleType = () => createSelector(
+  selectGlobal(),
+  (substate) => substate.userRoleType
+);
+
 const selectEvents = () => createSelector(
   selectGlobal(),
   (substate) => substate.pageEvents
@@ -259,6 +264,7 @@ export {
   selectAuthState,
   selectEvents,
   selectCurrentUser,
+  selectUserRoleType,
   selectCurrentUserClientId,
   selectCurrentUserStripeCustomerId,
 

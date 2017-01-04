@@ -5,6 +5,8 @@ import {
   FETCH_PATIENT_MESSAGES_SUCCEESS,
   FETCH_REWARDS_POINT,
   FETCH_REWARDS_POINT_SUCCEESS,
+  FETCH_PRINCIPAL_INVESTIGATORS,
+  FETCH_PRINCIPAL_INVESTIGATORS_SUCCEESS,
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
@@ -66,6 +68,20 @@ export function fetchRewardsPoint(currentUser) {
 export function fetchRewardsPointSucceeded(payload) {
   return {
     type: FETCH_REWARDS_POINT_SUCCEESS,
+    payload,
+  };
+}
+
+export function fetchPrincipalInvestigators(currentUser) {
+  return {
+    type: FETCH_PRINCIPAL_INVESTIGATORS,
+    currentUser,
+  };
+}
+
+export function fetchPrincipalInvestigatorsSucceeded(payload) {
+  return {
+    type: FETCH_PRINCIPAL_INVESTIGATORS_SUCCEESS,
     payload,
   };
 }
