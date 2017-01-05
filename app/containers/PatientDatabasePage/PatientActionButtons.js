@@ -4,7 +4,7 @@
 
 import React from 'react';
 import TextEmailBlastModal from './TextEmailBlastModal';
-import AlertModal from './AlertModal';
+import AlertModal from 'components/AlertModal';
 import TextBlastModal from './TextBlast/index';
 import { createStructuredSelector } from 'reselect';
 import { selectValues } from '../../common/selectors/form.selector';
@@ -203,7 +203,7 @@ class PatientActionButtons extends React.Component {
           <a className="btn btn-primary email lightbox-opener" onClick={this.toggleTextEmailBlastModal}><i className="icomoon-icon_chat_alt" /> TEXT / EMAIL BLAST</a>
         </div>
         <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} toggleTextBlast={this.toggleTextBlastModal} />
-        <AlertModal show={this.state.showAlertModal} onHide={this.toggleAlertModal} />
+        <AlertModal show={this.state.showAlertModal} onHide={this.toggleAlertModal} name="patient" />
         <TextBlastModal
           show={this.state.showTextBlastModal}
           onClose={this.closeTextBlastModal}

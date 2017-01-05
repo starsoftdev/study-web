@@ -32,6 +32,7 @@ import {
 import { selectReceiptsList, selectPaginationOptions, selectSearchOptions } from './selectors';
 import ReceiptsTable from 'components/ReceiptsTable';
 import TableSearchForm from 'components/TableSearchForm';
+import AlertModal from 'components/AlertModal';
 
 export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -66,6 +67,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
       processPDF: false,
       receipts: null,
       filteredReceipts: null,
+      showAlertModal: false,
     };
   }
 
@@ -77,7 +79,17 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
   getPDF() {
     if (this.selectedReceipts) {
       this.props.getPDF(this.selectedReceipts);
+    } else {
+      this.setState({
+        showAlertModal: true,
+      });
     }
+  }
+
+  hideAlertModal = () => {
+    this.setState({
+      showAlertModal: false,
+    });
   }
 
   get selectedReceipts() {
@@ -154,6 +166,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
             createPdf={this.getPDF}
             {...this.props}
           />
+          <AlertModal show={this.state.showAlertModal} onHide={this.hideAlertModal} name="receipt" />
           <ReceiptsTable
             selectCurrent={this.selectCurrent}
             selectAll={this.selectAll}
