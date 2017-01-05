@@ -33,6 +33,7 @@ import { selectProposals } from './selectors';
 
 import ProposalsTable from 'components/ProposalsTable';
 import TableSearchForm from 'components/TableSearchForm';
+import AlertModal from 'components/AlertModal';
 
 export class Proposals extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -163,7 +164,17 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
   createPdf() {
     if (this.selectedProposal) {
       this.props.createPDF(this.selectedProposal);
+    } else {
+      this.setState({
+        showAlertModal: true,
+      });
     }
+  }
+
+  hideAlertModal = () => {
+    this.setState({
+      showAlertModal: false,
+    });
   }
 
   render() {
@@ -179,6 +190,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
             createPdf={this.createPdf}
             {...this.props}
           />
+          <AlertModal show={this.state.showAlertModal} onHide={this.hideAlertModal} name="proposal" />
           <ProposalsTable
             selectCurrent={this.selectCurrent}
             selectAll={this.selectAll}

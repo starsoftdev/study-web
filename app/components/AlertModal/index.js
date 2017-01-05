@@ -1,28 +1,22 @@
-/**
- * Created by mike on 10/4/16.
- */
-
 import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from '../../components/CenteredModal/index';
+import CenteredModal from 'components/CenteredModal';
 
 class AlertModal extends React.Component {
   static propTypes = {
     show: React.PropTypes.bool.isRequired,
     onHide: React.PropTypes.func.isRequired,
+    name: React.PropTypes.string.isRequired,
   };
 
-  componentDidMount() {
-  }
-
   render() {
-    const { ...props } = this.props;
+    const { show, name, onHide } = this.props;
     return (
       <Modal
-        {...props}
+        show={show}
         id="patient-database-alert"
         dialogComponentClass={CenteredModal}
-        onHide={this.props.onHide}
+        onHide={onHide}
         backdrop
         keyboard
       >
@@ -30,10 +24,10 @@ class AlertModal extends React.Component {
         <Modal.Body>
           <div className="text-center">
             <p>
-              Please select patient(s).
+              Please select {name}(s).
             </p>
             <div className="btn-block">
-              <a className="btn btn-default lightbox-close" onClick={this.props.onHide}>OK</a>
+              <a className="btn btn-default lightbox-close" onClick={onHide}>OK</a>
             </div>
           </div>
         </Modal.Body>
