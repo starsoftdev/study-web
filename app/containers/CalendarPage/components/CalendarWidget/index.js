@@ -41,7 +41,7 @@ class CalendarWidget extends React.Component {
           })}
           onSelectSlot={({ start, end, slots }) => {
             if (slots.length === 1) {
-              this.props.handleOpenModal(SchedulePatientModalType.CREATE, {selectedDate: start});
+              this.props.handleOpenModal(SchedulePatientModalType.CREATE, { selectedDate: start });
             }
           }}
           onSelectDate={(label, date) => {
