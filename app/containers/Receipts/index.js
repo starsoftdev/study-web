@@ -71,7 +71,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
 
   componentDidMount() {
     this.props.fetchSites();
-    this.props.getReceipts(15, 0, this.props.receipts, 'created', 'up');
+    this.props.getReceipts(15, 0, this.props.receipts);
   }
 
   getPDF() {
