@@ -54,7 +54,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       proposals: false,
       filteredProposals: null,
       activeSort: 'date',
-      activeDirection: 'up',
+      activeDirection: 'down',
     };
   }
 
