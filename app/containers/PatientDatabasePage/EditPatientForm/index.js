@@ -234,6 +234,8 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
               placement="bottom"
               container={this.parent}
               target={() => this.target}
+              rootClose
+              onHide={() => { this.toggleIndicationPopover(); }}
             >
               <IndicationOverlay indications={indications} submitAddIndication={this.submitAddIndication} selectIndication={this.selectIndication} patient={patientValues} onClose={this.toggleIndicationPopover} />
             </Overlay>

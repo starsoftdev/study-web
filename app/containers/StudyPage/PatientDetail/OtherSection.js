@@ -204,13 +204,15 @@ class OtherSection extends React.Component {
                     )}
                     onClick={this.toggleIndicationPopover}
                   >
-                    + Add Indication
+                    + Add Indication22
                   </Button>
                   <Overlay
                     show={this.state.showIndicationPopover}
                     placement="bottom"
                     container={this.parent}
                     target={() => this.target}
+                    rootClose
+                    onHide={() => { this.toggleIndicationPopover(); }}
                   >
                     <IndicationOverlay indications={indications} submitAddIndication={submitAddPatientIndication} patient={initialValues} onClose={this.toggleIndicationPopover} />
                   </Overlay>
