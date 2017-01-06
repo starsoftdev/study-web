@@ -5,11 +5,20 @@ import {
   FETCH_PATIENT_MESSAGES_SUCCEESS,
   FETCH_REWARDS_POINT,
   FETCH_REWARDS_POINT_SUCCEESS,
-  FETCH_PRINCIPAL_INVESTIGATORS,
-  FETCH_PRINCIPAL_INVESTIGATORS_SUCCEESS,
+  FETCH_PRINCIPAL_INVESTIGATOR_TOTALS,
+  FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS,
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
+  FETCH_PROTOCOLS,
+  FETCH_PROTOCOLS_SUCCESS,
+  FETCH_PROTOCOLS_ERROR,
+  FETCH_PROTOCOL_NUMBERS,
+  FETCH_PROTOCOL_NUMBERS_SUCCESS,
+  FETCH_PROTOCOL_NUMBERS_ERROR,
+  FETCH_INDICATIONS,
+  FETCH_INDICATIONS_SUCCESS,
+  FETCH_INDICATIONS_ERROR,
   FETCH_INDICATION_LEVEL_PRICE,
   FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
   FETCH_INDICATION_LEVEL_PRICE_ERROR,
@@ -72,16 +81,16 @@ export function fetchRewardsPointSucceeded(payload) {
   };
 }
 
-export function fetchPrincipalInvestigators(currentUser) {
+export function fetchPrincipalInvestigatorTotals(currentUser) {
   return {
-    type: FETCH_PRINCIPAL_INVESTIGATORS,
+    type: FETCH_PRINCIPAL_INVESTIGATOR_TOTALS,
     currentUser,
   };
 }
 
-export function fetchPrincipalInvestigatorsSucceeded(payload) {
+export function fetchPrincipalInvestigatorTotalsSucceeded(payload) {
   return {
-    type: FETCH_PRINCIPAL_INVESTIGATORS_SUCCEESS,
+    type: FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS,
     payload,
   };
 }
@@ -103,6 +112,69 @@ export function studiesFetched(payload) {
 export function studiesFetchingError(payload) {
   return {
     type: FETCH_STUDIES_ERROR,
+    payload,
+  };
+}
+
+export function fetchProtocols(searchParams = null) {
+  return {
+    type: FETCH_PROTOCOLS,
+    searchParams,
+  };
+}
+
+export function protocolsFetched(payload) {
+  return {
+    type: FETCH_PROTOCOLS_SUCCESS,
+    payload,
+  };
+}
+
+export function protocolsFetchingError(payload) {
+  return {
+    type: FETCH_PROTOCOLS_ERROR,
+    payload,
+  };
+}
+
+export function fetchProtocolNumbers(currentUser) {
+  return {
+    type: FETCH_PROTOCOL_NUMBERS,
+    currentUser,
+  };
+}
+
+export function protocolNumbersFetched(payload) {
+  return {
+    type: FETCH_PROTOCOL_NUMBERS_SUCCESS,
+    payload,
+  };
+}
+
+export function protocolNumbersFetchingError(payload) {
+  return {
+    type: FETCH_PROTOCOL_NUMBERS_ERROR,
+    payload,
+  };
+}
+
+export function fetchIndications(currentUser) {
+  return {
+    type: FETCH_INDICATIONS,
+    currentUser,
+  };
+}
+
+export function indicationsFetched(payload) {
+  return {
+    type: FETCH_INDICATIONS_SUCCESS,
+    payload,
+  };
+}
+
+export function indicationsFetchingError(payload) {
+  return {
+    type: FETCH_INDICATIONS_ERROR,
     payload,
   };
 }

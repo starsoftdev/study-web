@@ -14,24 +14,29 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
-import { selectUserRoleType, selectCurrentUserClientId } from 'containers/App/selectors';
+import { selectUserRoleType, selectCurrentUserClientId, selectCurrentUser } from 'containers/App/selectors';
 import { fetchClientSites, fetchLevels, getAvailPhoneNumbers } from 'containers/App/actions';
-import { fetchStudies } from './actions';
+import { fetchStudies, fetchProtocols, fetchProtocolNumbers, fetchIndications } from './actions';
 
 import Dashboard from './Dashboard';
 import SponsorDashboard from './SponsorDashboard';
 import SearchStudiesForm from './SearchStudiesForm';
 import SearchProtocolsForm from './SearchProtocolsForm';
+import ProtocolsList from './ProtocolsList';
 import StudiesList from './StudiesList';
 
 export class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    currentUser: PropTypes.object,
     userRoleType: PropTypes.string,
     location: PropTypes.any,
     currentUserClientId: PropTypes.number,
     fetchClientSites: PropTypes.func,
     fetchLevels: PropTypes.func,
     fetchStudies: PropTypes.func,
+    fetchProtocols: PropTypes.func,
+    fetchProtocolNumbers: PropTypes.func,
+    fetchIndications: PropTypes.func,
     getAvailPhoneNumbers: PropTypes.func,
   };
 
@@ -39,15 +44,20 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     super(props);
 
     this.searchStudies = this.searchStudies.bind(this);
+    this.searchProtocols = this.searchProtocols.bind(this);
   }
 
   componentWillMount() {
-    const { currentUserClientId, userRoleType } = this.props;
+    const { currentUserClientId, userRoleType, currentUser } = this.props;
     if (currentUserClientId && userRoleType === 'client') {
       this.props.fetchClientSites(currentUserClientId, {});
       this.props.fetchLevels();
       this.props.getAvailPhoneNumbers();
       setTimeout(this.props.fetchStudies, 0);
+    } else if (currentUser && currentUser.roleForSponsor.id) {
+      this.props.fetchProtocols({ sponsorRoleId: currentUser.roleForSponsor.id });
+      this.props.fetchProtocolNumbers(currentUser);
+      this.props.fetchIndications(currentUser);
     }
   }
 
@@ -61,17 +71,19 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
   }
 
   searchProtocols(searchParams) {
+    const { currentUser } = this.props;
     const queryParams = {
-      name: searchParams.name,
-      siteId: searchParams.site,
+      sponsorRoleId: currentUser.roleForSponsor.id,
+      search: searchParams.search,
+      protocol: searchParams.protocol,
       status: searchParams.status,
     };
-    this.props.fetchStudies(queryParams);
+    console.log(queryParams);
+    this.props.fetchProtocols(queryParams);
   }
 
   render() {
     const { userRoleType } = this.props;
-    console.log(userRoleType);
     return (
       <div className="home-page">
         <Helmet title="Home - StudyKIK" />
@@ -96,7 +108,12 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
           <div className="container-fluid sponsor-portal">
             <section className="home-section">
               <SponsorDashboard location={this.props.location} />
-              <SearchProtocolsForm onSubmit={this.searchProtocols} />
+              <div className="search-studies-panel clearfix form-group">
+                <SearchProtocolsForm onSubmit={this.searchProtocols} />
+                <Link to="/list-new-study" className="btn btn-primary btn-list-new-study pull-right"><i className="icomoon-icon_creditcard"></i> add credits</Link>
+                <Link to="/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Protocol</Link>
+              </div>
+              <ProtocolsList />
             </section>
           </div>
           )
@@ -109,6 +126,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
 const mapStateToProps = createStructuredSelector({
   userRoleType: selectUserRoleType(),
   currentUserClientId: selectCurrentUserClientId(),
+  currentUser: selectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -116,6 +134,9 @@ function mapDispatchToProps(dispatch) {
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchLevels: () => dispatch(fetchLevels()),
     fetchStudies: searchParams => dispatch(fetchStudies(searchParams)),
+    fetchProtocols: searchParams => dispatch(fetchProtocols(searchParams)),
+    fetchProtocolNumbers: currentUser => dispatch(fetchProtocolNumbers(currentUser)),
+    fetchIndications: currentUser => dispatch(fetchIndications(currentUser)),
     getAvailPhoneNumbers: () => dispatch(getAvailPhoneNumbers()),
   };
 }

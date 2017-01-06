@@ -2,13 +2,11 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import RewardModal from 'components/RewardModal';
-
-import { selectCurrentUser, selectSitePatients, selectUserSiteLocations } from 'containers/App/selectors';
+import { selectCurrentUser } from 'containers/App/selectors';
 import { submitForm } from 'containers/RewardsPage/actions';
 
-import { fetchPatientSignUps, fetchPrincipalInvestigators } from '../actions';
-import { selectPatientSignUps, selectPrincipalInvestigators } from '../selectors';
+import { fetchPatientSignUps, fetchPrincipalInvestigatorTotals, fetchProtocols } from '../actions';
+import { selectPatientSignUps, selectPrincipalInvestigatorTotals } from '../selectors';
 
 import './styles.less';
 import graphImage from 'assets/images/graph.svg';
@@ -17,9 +15,10 @@ export class SponsorDashboard extends React.Component {
   static propTypes = {
     currentUser: PropTypes.any,
     patientSignUps: PropTypes.object,
-    principalInvestigators: PropTypes.object,
+    principalInvestigatorTotals: PropTypes.object,
     fetchPatientSignUps: PropTypes.func,
-    fetchPrincipalInvestigators: PropTypes.func,
+    fetchPrincipalInvestigatorTotals: PropTypes.func,
+    fetchProtocols: PropTypes.func,
     submitForm: PropTypes.func,
   }
 
@@ -30,7 +29,7 @@ export class SponsorDashboard extends React.Component {
   componentDidMount() {
     const { currentUser } = this.props;
     this.props.fetchPatientSignUps(currentUser);
-    this.props.fetchPrincipalInvestigators(currentUser);
+    this.props.fetchPrincipalInvestigatorTotals(currentUser);
   }
 
   openRewardModal = () => {
@@ -42,7 +41,7 @@ export class SponsorDashboard extends React.Component {
   }
 
   render() {
-    const { patientSignUps, principalInvestigators } = this.props;
+    const { patientSignUps, principalInvestigatorTotals } = this.props;
     return (
       <div className="infoarea row">
         <div className="col-xs-6">
@@ -59,15 +58,15 @@ export class SponsorDashboard extends React.Component {
               <ul className="list-inline text-center list-activities alt">
                 <li>
                   <span className="sub-title">Active</span>
-                  <strong className="number">{principalInvestigators.active}</strong>
+                  <strong className="number">{principalInvestigatorTotals.active}</strong>
                 </li>
                 <li>
                   <span className="sub-title">Inactive</span>
-                  <strong className="number">{principalInvestigators.inactive}</strong>
+                  <strong className="number">{principalInvestigatorTotals.inactive}</strong>
                 </li>
                 <li>
                   <span className="sub-title">Total</span>
-                  <strong className="number">{principalInvestigators.total}</strong>
+                  <strong className="number">{principalInvestigatorTotals.total}</strong>
                 </li>
               </ul>
             </div>
@@ -111,11 +110,12 @@ export class SponsorDashboard extends React.Component {
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   patientSignUps: selectPatientSignUps(),
-  principalInvestigators: selectPrincipalInvestigators(),
+  principalInvestigatorTotals: selectPrincipalInvestigatorTotals(),
 });
 const mapDispatchToProps = {
   fetchPatientSignUps,
-  fetchPrincipalInvestigators,
+  fetchPrincipalInvestigatorTotals,
+  fetchProtocols,
   submitForm,
 };
 

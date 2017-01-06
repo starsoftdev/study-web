@@ -7,23 +7,13 @@ import { connect } from 'react-redux';
 class ProtocolItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     index: PropTypes.number,
-    studyId: PropTypes.number,
-    indication: PropTypes.object,
-    campaign: PropTypes.object,
-    location: PropTypes.string,
-    sponsor: PropTypes.string,
-    protocol: PropTypes.string,
-    patientMessagingSuite: PropTypes.string,
-    unreadMessageCount: PropTypes.number,
-    status: PropTypes.string,
-    siteUsers: PropTypes.array,
-    startDate: PropTypes.string,
-    endDate: PropTypes.string,
-    onRenew: PropTypes.func,
-    onUpgrade: PropTypes.func,
-    onEdit: PropTypes.func,
-    push: PropTypes.func,
-    orderNumber: PropTypes.number,
+    protocolNumber: PropTypes.string,
+    indication: PropTypes.string,
+    croName: PropTypes.string,
+    activeCount: PropTypes.string,
+    inactiveCount: PropTypes.string,
+    patientMessagingSuiteCount: PropTypes.string,
+    unreadMessageCount: PropTypes.string,
   };
 
   constructor(props) {
@@ -33,34 +23,34 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
       buttonsShown: false,
     };
 
-    this.onViewClick = this.onViewClick.bind(this);
-    this.onRenewClick = this.onRenewClick.bind(this);
-    this.onUpgradeClick = this.onUpgradeClick.bind(this);
-    this.onEditClick = this.onEditClick.bind(this);
+    // this.onViewClick = this.onViewClick.bind(this);
+    // this.onRenewClick = this.onRenewClick.bind(this);
+    // this.onUpgradeClick = this.onUpgradeClick.bind(this);
+    // this.onEditClick = this.onEditClick.bind(this);
     this.showButtons = this.showButtons.bind(this);
     this.hideButtons = this.hideButtons.bind(this);
   }
 
-  onViewClick() {
-    const { push, studyId } = this.props;
-    push(`/studies/${studyId}/sites/1`);
-  }
+  // onViewClick() {
+  //   const { push, studyId } = this.props;
+  //   push(`/studies/${studyId}/sites/1`);
+  // }
 
-  onRenewClick() {
-    const { studyId, indication, onRenew, campaign } = this.props;
+  // onRenewClick() {
+  //   const { studyId, indication, onRenew, campaign } = this.props;
 
-    onRenew(studyId, indication.id, campaign);
-  }
+  //   onRenew(studyId, indication.id, campaign);
+  // }
 
-  onUpgradeClick() {
-    const { studyId, indication, onUpgrade, campaign } = this.props;
+  // onUpgradeClick() {
+  //   const { studyId, indication, onUpgrade, campaign } = this.props;
 
-    onUpgrade(studyId, indication.id, campaign);
-  }
+  //   onUpgrade(studyId, indication.id, campaign);
+  // }
 
-  onEditClick() {
-    this.props.onEdit(this.props.studyId, this.props.siteUsers);
-  }
+  // onEditClick() {
+  //   this.props.onEdit(this.props.studyId, this.props.siteUsers);
+  // }
 
   showButtons() {
     this.setState({ buttonsShown: true });
@@ -71,14 +61,18 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
   }
 
   render() {
-    const { indication, location, sponsor, protocol, patientMessagingSuite, status,
-      startDate, endDate, unreadMessageCount, orderNumber } = this.props;
+    const { protocolNumber, indication, croName, activeCount, inactiveCount, patientMessagingSuiteCount, unreadMessageCount } = this.props;
     const buttonsShown = this.state.buttonsShown;
     let messageCountContent = null;
-    if (unreadMessageCount > 0) {
+    let patientMessagingSuite = 'Off';
+    if (unreadMessageCount && unreadMessageCount > 0) {
       messageCountContent = (
         <span className="counter-circle">{unreadMessageCount}</span>
       );
+    }
+
+    if (patientMessagingSuiteCount && patientMessagingSuiteCount > 0) {
+      patientMessagingSuite = 'On';
     }
 
     return (
@@ -86,39 +80,51 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
         className={classNames('study-container', { 'tr-active': buttonsShown, 'tr-inactive': !buttonsShown })}
         onMouseEnter={this.showButtons} onMouseLeave={this.hideButtons}
       >
-        <td className="index">
-          <span>{orderNumber}</span>
+        <td>
         </td>
-        <td className="indication">
-          <span>{indication.name}</span>
+        <td>
+          <span>{protocolNumber}</span>
         </td>
-        <td className="location">
-          <span>{location}</span>
+        <td>
+          <span>{indication}</span>
         </td>
-        <td className="sponsor">
-          <span>{sponsor}</span>
-        </td>
-        <td className="protocol">
-          <span>{protocol}</span>
+        <td>
+          <span>{croName}</span>
         </td>
         <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off') })}>
           <span>{patientMessagingSuite}</span>
           <span>{messageCountContent}</span>
         </td>
-        <td className={classNames('status', { inactive: (status === 'Inactive') })}>
-          <span>{status}</span>
+        <td>
+          <span>{activeCount}</span>
         </td>
-        <td className="start-date">
-          <span>{startDate}</span>
-        </td>
-        <td className="end-date">
-          <span>{endDate}</span>
+        <td>
+          <span>{inactiveCount}</span>
           <div className="btns-slide pull-right">
             <div className="btns">
               <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>
               <Button bsStyle="primary" className="btn-renew" onClick={this.onRenewClick}>Renew</Button>
               <Button bsStyle="danger" className="btn-upgrade" onClick={this.onUpgradeClick}>Upgrade</Button>
               <Button bsStyle="info" className="btn-edit" onClick={this.onEditClick}>Edit</Button>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div className="btns-slide">
+            <div className="btns">
+              <div className="area">
+                <a href="#" className="btn btn-default">View Report</a>
+                <a href="#renew-study" className="btn btn-primary lightbox-opener">Renew</a>
+                <a href="#add-site-popup" className="btn btn-danger lightbox-opener">Add Site</a>
+                <label className="check-switcher">
+                  <input type="checkbox" id="messaging4" />
+                  <span data-off="OFF" data-on="ON" className="text"></span>
+                  <div className="tooltip custom top">
+                    <div className="tooltop-arrow"></div>
+                    <div data-deactive="MESSAGING SUITE" data-active="MESSAGING SUITE" className="tooltop-inner"></div>
+                  </div>
+                </label>
+              </div>
             </div>
           </div>
         </td>

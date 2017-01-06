@@ -13,8 +13,11 @@ import {
   FETCH_PATIENT_SIGN_UPS,
   FETCH_PATIENT_MESSAGES,
   FETCH_REWARDS_POINT,
-  FETCH_PRINCIPAL_INVESTIGATORS,
+  FETCH_PRINCIPAL_INVESTIGATOR_TOTALS,
   FETCH_STUDIES,
+  FETCH_PROTOCOLS,
+  FETCH_PROTOCOL_NUMBERS,
+  FETCH_INDICATIONS,
   FETCH_INDICATION_LEVEL_PRICE,
   RENEW_STUDY,
   UPGRADE_STUDY,
@@ -26,9 +29,15 @@ import {
   fetchPatientSignUpsSucceeded,
   fetchPatientMessagesSucceeded,
   fetchRewardsPointSucceeded,
-  fetchPrincipalInvestigatorsSucceeded,
+  fetchPrincipalInvestigatorTotalsSucceeded,
   studiesFetched,
   studiesFetchingError,
+  protocolsFetched,
+  protocolsFetchingError,
+  protocolNumbersFetched,
+  protocolNumbersFetchingError,
+  indicationsFetched,
+  indicationsFetchingError,
   indicationLevelPriceFetched,
   indicationLevelPriceFetchingError,
   studyRenewed,
@@ -73,11 +82,11 @@ export function* fetchPatientSignUpsWorker(action) {
   }
 }
 
-export function* fetchPrincipalInvestigatorsWatcher() {
-  yield* takeLatest(FETCH_PRINCIPAL_INVESTIGATORS, fetchPrincipalInvestigatorsWorker);
+export function* fetchPrincipalInvestigatorTotalsWatcher() {
+  yield* takeLatest(FETCH_PRINCIPAL_INVESTIGATOR_TOTALS, fetchPrincipalInvestigatorTotalsWorker);
 }
 
-export function* fetchPrincipalInvestigatorsWorker(action) {
+export function* fetchPrincipalInvestigatorTotalsWorker(action) {
   try {
     console.log(action.currentUser);
     const requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/principalInvestigators`;
@@ -88,7 +97,7 @@ export function* fetchPrincipalInvestigatorsWorker(action) {
     };
     const response = yield call(request, requestURL, params);
 
-    yield put(fetchPrincipalInvestigatorsSucceeded(response));
+    yield put(fetchPrincipalInvestigatorTotalsSucceeded(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching principal investigators');
     yield put(toastrActions.error('', errorMessage));
@@ -146,6 +155,65 @@ export function* fetchStudiesWorker(action) {
     yield put(studiesFetched(response));
   } catch (err) {
     yield put(studiesFetchingError(err));
+  }
+}
+
+export function* fetchProtocolsWatcher() {
+  yield* takeLatest(FETCH_PROTOCOLS, fetchProtocolsWorker);
+}
+
+export function* fetchProtocolsWorker(action) {
+  try {
+    let queryString;
+    let requestURL;
+    if (action.searchParams) {
+      queryString = composeQueryString(action.searchParams);
+      requestURL = `${API_URL}/studies/getProtocolsBySponsorRole?${queryString}`;
+    } else {
+      requestURL = `${API_URL}/studies/getProtocolsBySponsorRole`;
+    }
+    const response = yield call(request, requestURL);
+    yield put(protocolsFetched(response));
+  } catch (err) {
+    yield put(protocolsFetchingError(err));
+  }
+}
+
+export function* fetchProtocolNumbersWatcher() {
+  yield* takeLatest(FETCH_PROTOCOL_NUMBERS, fetchProtocolNumbersWorker);
+}
+
+export function* fetchProtocolNumbersWorker(action) {
+  try {
+    const requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/protocols`;
+
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(protocolNumbersFetched(response));
+  } catch (err) {
+    yield put(protocolNumbersFetchingError(err));
+  }
+}
+
+export function* fetchIndicationsWatcher() {
+  yield* takeLatest(FETCH_INDICATIONS, fetchIndicationsWorker);
+}
+
+export function* fetchIndicationsWorker(action) {
+  try {
+    const requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/indications`;
+
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(indicationsFetched(response));
+  } catch (err) {
+    yield put(indicationsFetchingError(err));
   }
 }
 
@@ -290,7 +358,10 @@ export function* homePageSaga() {
   const watcherG = yield fork(upgradeStudyWatcher);
   const watcherH = yield fork(editStudyWatcher);
   const watcherI = yield fork(fetchUpgradeStudyPriceWatcher);
-  const fetchPrincipalInvestigatorsWatcher1 = yield fork(fetchPrincipalInvestigatorsWatcher);
+  const fetchPrincipalInvestigatorTotalsWatcher1 = yield fork(fetchPrincipalInvestigatorTotalsWatcher);
+  const fetchProtocolsWatcher1 = yield fork(fetchProtocolsWatcher);
+  const fetchProtocolNumbersWatcher1 = yield fork(fetchProtocolNumbersWatcher);
+  const fetchIndicationsWatcher1 = yield fork(fetchIndicationsWatcher);
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
@@ -304,6 +375,9 @@ export function* homePageSaga() {
     yield cancel(watcherG);
     yield cancel(watcherH);
     yield cancel(watcherI);
-    yield cancel(fetchPrincipalInvestigatorsWatcher1);
+    yield cancel(fetchPrincipalInvestigatorTotalsWatcher1);
+    yield cancel(fetchProtocolsWatcher1);
+    yield cancel(fetchProtocolNumbersWatcher1);
+    yield cancel(fetchIndicationsWatcher1);
   }
 }
