@@ -49,17 +49,19 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
   }
 
   selectAll(e) {
+    const checked = e;
     if (this.props.formValues.emailNotifications) {
       _.forEach(this.props.formValues.emailNotifications, (value, index) => {
-        this.props.dispatch(change('listNewStudy', `emailNotifications[${index}].isChecked`, e.target.checked));
+        this.props.dispatch(change('listNewStudy', `emailNotifications[${index}].isChecked`, checked));
       });
     }
   }
 
   selectEmail(e) {
-    if (this.props.formValues.checkAllInput && !e.target.checked) {
+    const checked = e;
+    if (this.props.formValues.checkAllInput && !checked) {
       this.props.dispatch(change('listNewStudy', 'checkAllInput', false));
-    } else if (!this.props.formValues.checkAllInput && e.target.checked) {
+    } else if (!this.props.formValues.checkAllInput && checked) {
       const checkedArr = _.filter(this.props.formValues.emailNotifications, (o) => o.isChecked);
       if ((checkedArr.length + 1) === this.props.formValues.emailNotifications.length) {
         this.props.dispatch(change('listNewStudy', 'checkAllInput', true));
