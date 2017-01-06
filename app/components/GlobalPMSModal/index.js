@@ -8,6 +8,7 @@ import React from 'react';
 import Sound from 'react-sound';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { Link } from 'react-router';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import Modal from 'react-bootstrap/lib/Modal';
@@ -223,9 +224,9 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                 <section className="chat-area" id="chat-room1">
                   <header>
                     <strong className="name">{this.state.selectedPatient.first_name} {this.state.selectedPatient.last_name}</strong>
-                    <a>
+                    <Link to={`/studies/${this.state.selectedPatient.study_id}/sites/${this.state.selectedPatient.site_id}`} onClick={this.props.closeModal}>
                       <span className="protocol">{protocolNumber}</span>
-                    </a>
+                    </Link>
                   </header>
                   <div
                     className="scroll-holder"

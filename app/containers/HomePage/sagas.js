@@ -261,16 +261,15 @@ export function* homePageSaga() {
   const watcherI = yield fork(fetchUpgradeStudyPriceWatcher);
 
   // Suspend execution until location changes
-  const options = yield take(LOCATION_CHANGE);
-  if (options.payload.pathname !== '/') {
-    yield cancel(watcherA);
-    yield cancel(watcherB);
-    yield cancel(watcherC);
-    yield cancel(watcherD);
-    yield cancel(watcherE);
-    yield cancel(watcherF);
-    yield cancel(watcherG);
-    yield cancel(watcherH);
-    yield cancel(watcherI);
-  }
+  yield take(LOCATION_CHANGE);
+
+  yield cancel(watcherA);
+  yield cancel(watcherB);
+  yield cancel(watcherC);
+  yield cancel(watcherD);
+  yield cancel(watcherE);
+  yield cancel(watcherF);
+  yield cancel(watcherG);
+  yield cancel(watcherH);
+  yield cancel(watcherI);
 }

@@ -30,6 +30,10 @@ import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
 import 'assets/less/main.less';
 
+// import moment timezone and set the default timezone
+import moment from 'moment-timezone';
+moment.tz.setDefault('America/New_York');
+
 // Create redux store with history
 // this uses the singleton browserHistory provided by react-router
 // Optionally, this could be changed to leverage a created history
@@ -47,7 +51,6 @@ const rootRoute = {
   component: App,
   childRoutes: createRoutes(store),
 };
-
 
 const render = () => {
   ReactDOM.render(
@@ -72,7 +75,6 @@ const render = () => {
     document.getElementById('app')
   );
 };
-
 
 render();
 

@@ -204,7 +204,7 @@ class OtherSection extends React.Component {
                     )}
                     onClick={this.toggleIndicationPopover}
                   >
-                    + Add Indication22
+                    + Add Indication
                   </Button>
                   <Overlay
                     show={this.state.showIndicationPopover}

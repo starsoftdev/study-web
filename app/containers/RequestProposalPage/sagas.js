@@ -61,7 +61,7 @@ export function* fetchCouponWatcher() {
     const encodedCouponId = encodeURIComponent(couponId);
 
     try {
-      const requestURL = `${API_URL}/clients/retrieve_coupon/${encodedCouponId}`;
+      const requestURL = `${API_URL}/clients/stripeCustomers/retrieveCoupon/${encodedCouponId}`;
       const response = yield call(request, requestURL);
 
       yield put(couponFetched(response));
