@@ -1,3 +1,5 @@
+/* eslint-disable react/prefer-stateless-function */
+
 import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from 'components/CenteredModal';

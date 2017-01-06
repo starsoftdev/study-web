@@ -127,7 +127,7 @@ export function* fetchSitesWatcher() {
       const requestURL = `${API_URL}/sites`;
 
       const filterObj = {
-        include: ['users', 'studies'],
+        include: ['studies'],
       };
 
       const searchParams = action.payload || {};
@@ -206,7 +206,7 @@ export function* fetchCouponWatcher() {
     const encodedCouponId = encodeURIComponent(couponId);
 
     try {
-      const requestURL = `${API_URL}/clients/retrieve_coupon/${encodedCouponId}`;
+      const requestURL = `${API_URL}/clients/stripeCustomers/retrieveCoupon/${encodedCouponId}`;
       const response = yield call(request, requestURL);
 
       yield put(couponFetched(response));
@@ -236,7 +236,7 @@ export function* fetchCardsWatcher() {
     const { customerId } = yield take(FETCH_CARDS);
 
     try {
-      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/retrieve_cardsList`;
+      const requestURL = `${API_URL}/clients/stripeCustomers/${customerId}/retrieve_cardsList`;
       const response = yield call(request, requestURL);
 
       yield put(cardsFetched(response));
@@ -251,7 +251,7 @@ export function* saveCardWatcher() {
     const { customerId, cardData } = yield take(SAVE_CARD);
 
     try {
-      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/save_card`;
+      const requestURL = `${API_URL}/clients/stripeCustomers/${customerId}/saveCard`;
       const options = {
         method: 'POST',
         body: JSON.stringify(cardData),
@@ -276,7 +276,7 @@ export function* deleteCardWatcher() {
     };
 
     try {
-      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/delete_card/${cardId}`;
+      const requestURL = `${API_URL}/clients/stripeCustomers/${customerId}/deleteCard/${cardId}`;
       const response = yield call(request, requestURL, options);
 
       yield put(toastrActions.success('Delete Card', 'Card deleted successfully!'));
@@ -298,7 +298,7 @@ export function* addCreditsWatcher() {
     };
 
     try {
-      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/checkout_credits`;
+      const requestURL = `${API_URL}/clients/stripeCustomers/${customerId}/checkout_credits`;
       const response = yield call(request, requestURL, options);
 
       yield put(toastrActions.success('Add Credits', 'Credits added successfully!'));
@@ -317,7 +317,14 @@ export function* fetchClientSitesWatcher() {
 
     try {
       const filterObj = {
-        include: ['users', 'studies'],
+        include: [{
+          relation: 'roles',
+          scope: {
+            include: ['user'],
+          },
+        }, {
+          relation: 'studies',
+        }],
         where: {},
       };
 
