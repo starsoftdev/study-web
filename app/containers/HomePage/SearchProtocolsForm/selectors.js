@@ -7,26 +7,26 @@ import { get } from 'lodash';
 const selectFormDomain = () => state => state.form;
 
 /**
- * SearchStudiesForm -> all values
+ * SearchProtocolsForm -> all values
  */
-const selectSearchStudiesFormValues = () => createSelector(
+const selectSearchProtocolsFormValues = () => createSelector(
   selectFormDomain(),
-  substate => get(substate, 'searchStudies.values', {})
+  substate => get(substate, 'searchProtocols.values', {})
 );
 
 /**
- * SearchStudiesForm -> checking validation error
+ * SearchProtocolsForm -> checking validation error
  */
-const selectSearchStudiesFormError = () => createSelector(
+const selectSearchProtocolsFormError = () => createSelector(
   selectFormDomain(),
   (substate) => {
-    const errors = get(substate, 'searchStudies.syncErrors', {});
+    const errors = get(substate, 'searchProtocols.syncErrors', {});
     return Object.keys(errors).length > 0;
   }
 );
 
 export default selectFormDomain;
 export {
-  selectSearchStudiesFormValues,
-  selectSearchStudiesFormError,
+  selectSearchProtocolsFormValues,
+  selectSearchProtocolsFormError,
 };
