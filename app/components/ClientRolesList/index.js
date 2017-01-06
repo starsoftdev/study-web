@@ -136,7 +136,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     const userInput = {
       firstName: userData.firstName,
       lastName: userData.lastName,
-      email: userData.email
+      email: userData.email,
     };
     if (userData.isAdmin) {
       userInput.clientRole = {
@@ -146,8 +146,8 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
       };
     } else {
       userInput.clientRole = {
-        siteId: parseInt(userData.site, 10)
-      }
+        siteId: parseInt(userData.site, 10),
+      };
     }
 
     this.props.saveUser(currentUserClientId, selectedUser.details.id, userInput);

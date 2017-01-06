@@ -152,8 +152,8 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
       };
     } else {
       userInput.clientRole = {
-        siteId: parseInt(userData.site, 10)
-      }
+        siteId: parseInt(userData.site, 10),
+      };
     }
 
     this.props.saveUser(currentUserClientId, null, userInput);
