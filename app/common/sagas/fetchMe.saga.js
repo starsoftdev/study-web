@@ -35,7 +35,7 @@ export function* fetchMeFromToken() {
 
     // If the user landed on `/login` as the first route, redirect him
     const currentPath = yield select(selectCurrentPath);
-    const pathsToRedirect = ['/', '/login'];
+    const pathsToRedirect = ['/login'];
     if (pathsToRedirect.indexOf(currentPath) > -1) {
       yield put(push('/'));
     }
