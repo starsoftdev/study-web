@@ -158,8 +158,8 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
       };
     } else {
       userInput.clientRole = {
-        siteId: parseInt(userData.site, 10)
-      }
+        siteId: parseInt(userData.site, 10),
+      };
     }
 
     this.props.saveUser(currentUserClientId, selectedUser.details.id, userInput);
