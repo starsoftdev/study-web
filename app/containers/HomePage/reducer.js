@@ -38,6 +38,7 @@ const initialState = {
   patientMessages: {
     unreadTexts: 0,
     unreadEmails: 0,
+    total: 0,
   },
   rewardsPoint: 0,
   studies: {
@@ -95,6 +96,7 @@ export default function homePageReducer(state = initialState, action) {
         patientMessages: {
           unreadTexts: payload.unreadTexts,
           unreadEmails: payload.unreadEmails,
+          total: payload.total,
         },
       };
     case FETCH_REWARDS_POINT_SUCCEESS:
@@ -120,6 +122,7 @@ export default function homePageReducer(state = initialState, action) {
             patientMessages: {
               unreadTexts: newState.patientMessages.unreadTexts + 1,
               unreadEmails: newState.patientMessages.unreadEmails,
+              total: newState.patientMessages.total + 1,
             },
           };
           break;
