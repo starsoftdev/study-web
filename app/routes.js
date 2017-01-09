@@ -439,6 +439,23 @@ export default function createRoutes(store) {
           .catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
+      path: '/dashboard',
+      name: 'dashboardPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/DashboardPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([component]) => {
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {
