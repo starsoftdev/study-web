@@ -23,6 +23,7 @@ import { FIND_PATIENTS_TEXT_BLAST,
   SUBMIT_DELETE_NOTE,
   SUBMIT_PATIENT_TEXT,
   SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
+  FETCH_PATIENT_ORIGINAL_INDICATION,
 } from './constants';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
@@ -56,6 +57,7 @@ import {
   movePatientBetweenCategoriesFailed,
   readStudyPatientMessagesSuccess,
   readStudyPatientMessagesError,
+  fetchPatientOriginalIndicationSuccess,
 } from './actions';
 
 // Bootstrap sagas
@@ -373,6 +375,26 @@ function* fetchPatientDetails() {
   }
 }
 
+function* fetchPatientOriginalIndication() {
+  while (true) {
+    const { patientId } = yield take(FETCH_PATIENT_ORIGINAL_INDICATION);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/patients/${patientId}/original_indication?access_token=${authToken}`;
+      const response = yield call(request, requestURL, {
+        method: 'GET',
+      });
+      yield put(fetchPatientOriginalIndicationSuccess(response));
+    } catch (e) {
+      console.trace(e);
+    }
+  }
+}
+
 function* findPatientsSaga() {
   while (true) {
     const authToken = getItem('auth_token');
@@ -676,6 +698,7 @@ export function* fetchStudySaga() {
     const watcherS = yield fork(submitPatientNote);
     const watcherT = yield fork(submitDeleteNote);
     const watcherU = yield fork(submitPatientText);
+    const watcherV = yield fork(fetchPatientOriginalIndication);
 
     yield take(LOCATION_CHANGE);
     yield cancel(watcherA);
@@ -699,6 +722,7 @@ export function* fetchStudySaga() {
     yield cancel(watcherS);
     yield cancel(watcherT);
     yield cancel(watcherU);
+    yield cancel(watcherV);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

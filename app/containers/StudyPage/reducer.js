@@ -41,6 +41,7 @@ import {
   SWITCH_TO_OTHER_SECTION_DETAIL,
   SUBMIT_ADD_PATIENT,
   SET_ADD_PATIENT_STATUS,
+  FETCH_PATIENT_ORIGINAL_INDICATION_SUCCESS,
 } from './constants';
 import _ from 'lodash';
 
@@ -56,6 +57,7 @@ const initialState = {
   addPatientStatus:{
     adding: false,
   },
+  originalIndication: {},
 };
 
 function studyPageReducer(state = initialState, action) {
@@ -312,6 +314,15 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         addPatientStatus:{
           adding: action.status,
+        },
+      };
+    case FETCH_PATIENT_ORIGINAL_INDICATION_SUCCESS:
+    console.log('asdsfas', action.payload)
+      return {
+        ...state,
+        originalIndication: {
+          ...state.originalIndication,
+          [action.payload.patient_id]: action.payload.indication_id,
         },
       };
     default:
