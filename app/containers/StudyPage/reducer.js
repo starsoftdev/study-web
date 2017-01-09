@@ -317,7 +317,6 @@ function studyPageReducer(state = initialState, action) {
         },
       };
     case FETCH_PATIENT_ORIGINAL_INDICATION_SUCCESS:
-    console.log('asdsfas', action.payload)
       return {
         ...state,
         originalIndication: {
