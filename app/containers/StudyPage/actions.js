@@ -64,6 +64,8 @@ import {
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
   SET_ADD_PATIENT_STATUS,
+  FETCH_PATIENT_ORIGINAL_INDICATION,
+  FETCH_PATIENT_ORIGINAL_INDICATION_SUCCESS,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -501,5 +503,19 @@ export function setAddPatientStatus(status) {
   return {
     type: SET_ADD_PATIENT_STATUS,
     status,
+  };
+}
+
+export function fetchPatientOriginalIndication(patientId) {
+  return {
+    type: FETCH_PATIENT_ORIGINAL_INDICATION,
+    patientId,
+  };
+}
+
+export function fetchPatientOriginalIndicationSuccess(payload) {
+  return {
+    type: FETCH_PATIENT_ORIGINAL_INDICATION_SUCCESS,
+    payload,
   };
 }

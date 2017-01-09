@@ -123,3 +123,7 @@ export const selectAddPatientStatus = () => createSelector(
   (subState) => subState.addPatientStatus
 );
 
+export const selectOriginalIndication = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.originalIndication
+);
