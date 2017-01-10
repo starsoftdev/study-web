@@ -42,6 +42,8 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     const regionOptions = [];
     const regionWithTimezones = [];
 
+
+    console.log(timezones);
     for (const tz of timezones) {
       const parsedRegion = tz.substr(0, tz.indexOf('/'));
       const parsedTimezone = tz.substr(tz.indexOf('/') + 1);
@@ -91,7 +93,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
       this.closeResetPasswordModal();
     }
 
-    if (newProps.formValues.selectedRegion && newProps.formValues.selectedTimezone && (newProps.formValues.selectedTimezone !== this.props.formValues.selectedTimezone)) {
+    if (newProps.formValues.selectedRegion && newProps.formValues.selectedTimezone && (newProps.formValues.selectedTimezone !== this.props.formValues.selectedTimezone) && (this.props.formValues.selectedRegion)) {
       const newTimezone = (newProps.formValues.selectedRegion === newProps.formValues.selectedTimezone) ? newProps.formValues.selectedRegion : `${newProps.formValues.selectedRegion}/${newProps.formValues.selectedTimezone}`;
       this.props.changeUsersTimezone(this.props.currentUser.id, newTimezone);
     }
