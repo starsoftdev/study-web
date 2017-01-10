@@ -27,6 +27,7 @@ import {
 
 import {
   RECEIVE_NOTIFICATION,
+  SEND_STUDY_PATIENT_MESSAGES,
 } from 'containers/GlobalNotifications/constants';
 
 const initialState = {
@@ -103,6 +104,16 @@ export default function homePageReducer(state = initialState, action) {
       return {
         ...state,
         rewardsPoint: action.payload.rewardPoints,
+      };
+    case SEND_STUDY_PATIENT_MESSAGES:
+      newState = state;
+      return {
+        ...state,
+        patientMessages: {
+          unreadTexts: newState.patientMessages.unreadTexts,
+          unreadEmails: newState.patientMessages.unreadEmails,
+          total: newState.patientMessages.total + 1,
+        },
       };
     case RECEIVE_NOTIFICATION:
       newState = state;
