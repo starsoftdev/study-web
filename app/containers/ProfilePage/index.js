@@ -55,11 +55,19 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
 
             <div className="col-xs-6 form-holder">
               {(() => {
+                const userObjToUse = (me ? this.props.currentUser : this.props.otherUser);
+                let selectedRegion = userObjToUse.timezone.substr(0, userObjToUse.timezone.indexOf('/'));
+                const selectedTimezone = userObjToUse.timezone.substr(userObjToUse.timezone.indexOf('/') + 1);
+
+                if (!selectedRegion) {
+                  selectedRegion = selectedTimezone;
+                }
+
                 const initialValues = {
                   initialValues: {
                     ...(me ? this.props.currentUser : this.props.otherUser.info),
-                    selectedRegion : (me ? this.props.currentUser.timezone.substr(0, this.props.currentUser.timezone.indexOf('/')) : this.props.otherUser.timezone.substr(0, this.props.otherUser.timezone.indexOf('/'))),
-                    selectedTimezone : (me ? this.props.currentUser.timezone.substr(this.props.currentUser.timezone.indexOf('/') + 1) : this.props.otherUser.timezone.substr(this.props.otherUser.timezone.indexOf('/') + 1)),
+                    selectedRegion,
+                    selectedTimezone,
                   },
                 };
 
