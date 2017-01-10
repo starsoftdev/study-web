@@ -11,7 +11,7 @@ import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
 import { selectEditPatientFormError } from './selectors';
 import { selectPatientCategories, selectSavedPatient } from 'containers/PatientDatabasePage/selectors';
-import { selectIndications, selectSources } from 'containers/App/selectors';
+import { selectIndications, selectSources, selectOriginalIndication } from 'containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 import Checkbox from '../../../components/Input/Checkbox';
@@ -19,6 +19,7 @@ import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
 import { selectValues } from '../../../common/selectors/form.selector';
 import Overlay from 'react-bootstrap/lib/Overlay';
 import IndicationOverlay from 'containers/StudyPage/PatientDetail/IndicationOverlay';
+import { fetchPatientOriginalIndication } from 'containers/App/actions';
 
 const formName = 'editPatient';
 
@@ -29,10 +30,14 @@ const mapStateToProps = createStructuredSelector({
   patientCategories: selectPatientCategories(),
   savedPatient: selectSavedPatient(),
   hasError: selectEditPatientFormError(),
+  originalIndication: selectOriginalIndication(),
 });
+const mapDispatchToProps = {
+  fetchPatientOriginalIndication,
+};
 
 @reduxForm({ form: formName, validate: formValidator })
-@connect(mapStateToProps, null)
+@connect(mapStateToProps, mapDispatchToProps)
 class EditPatientForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -45,7 +50,9 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     patientCategories: PropTypes.object,
     savedPatient: PropTypes.object,
     hasError: PropTypes.bool,
+    originalIndication: React.PropTypes.object,
     onSubmit: PropTypes.func,
+    fetchPatientOriginalIndication: PropTypes.func,
   };
 
   constructor(props) {
@@ -59,6 +66,10 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     this.deleteIndication = this.deleteIndication.bind(this);
     this.selectIndication = this.selectIndication.bind(this);
     this.submitAddIndication = this.submitAddIndication.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.fetchPatientOriginalIndication(this.props.initialValues.id);
   }
 
   onSubmit(event) {
@@ -92,7 +103,8 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   renderIndications() {
-    const { formValues } = this.props;
+    const { formValues, initialValues, originalIndication } = this.props;
+
     if (formValues.indications) {
       return (
         <div className="category-list">
@@ -100,12 +112,14 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             <div key={indication.id} className="category">
               <span className="link">
                 <span className="text">{indication.name}</span>
-                <span
-                  className="icomoon-icon_trash"
-                  onClick={() => {
-                    this.deleteIndication(indication);
-                  }}
-                />
+                { originalIndication[initialValues.id] !== indication.id &&
+                  <span
+                    className="icomoon-icon_trash"
+                    onClick={() => {
+                      this.deleteIndication(indication);
+                    }}
+                  />
+                }
               </span>
             </div>
           ))}

@@ -95,6 +95,8 @@ import {
   GET_AVAIL_PHONE_NUMBERS_SUCCESS,
 
   GET_CREDITS_PRICE_SUCCESS,
+
+  FETCH_PATIENT_ORIGINAL_INDICATION_SUCCESS,
 } from './constants';
 
 import {
@@ -193,6 +195,7 @@ const initialState = {
     },
     availPhoneNumbers: [],
     creditsPrice: {},
+    originalIndication: {},
   },
 };
 
@@ -961,6 +964,14 @@ export default function appReducer(state = initialState, action) {
         creditsPrice: payload,
       };
       break;
+    case FETCH_PATIENT_ORIGINAL_INDICATION_SUCCESS:
+      return {
+        ...state,
+        originalIndication: {
+          ...state.originalIndication,
+          [action.payload.patient_id]: action.payload.indication_id,
+        },
+      };
     default:
       return state;
   }
