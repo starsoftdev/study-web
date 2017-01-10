@@ -15,7 +15,6 @@ import PatientCategory from './PatientCategory';
 import PatientDetailModal from '../PatientDetail/PatientDetailModal';
 import {
   fetchPatientDetails,
-  fetchPatientOriginalIndication,
   setCurrentPatientCategoryId,
   setCurrentPatientId,
   setOpenPatientModal,
@@ -23,7 +22,7 @@ import {
   switchToTextSectionDetail,
   readStudyPatientMessages,
 } from '../actions';
-import { markAsReadPatientMessages } from 'containers/App/actions';
+import { markAsReadPatientMessages, fetchPatientOriginalIndication } from 'containers/App/actions';
 import { change } from 'redux-form';
 
 import Scroll from 'react-scroll';
