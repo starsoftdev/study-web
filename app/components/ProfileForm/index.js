@@ -13,6 +13,8 @@ import ProfileImageForm from 'components/ProfileImageForm';
 import defaultImage from 'assets/images/Default-User-Img-Dr.png';
 import 'blueimp-canvas-to-blob';
 import CenteredModal from 'components/CenteredModal/index';
+import ReactSelect from 'components/Input/ReactSelect';
+import moment from 'moment-timezone';
 
 @reduxForm({ form: 'profile' })
 class ProfileForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -22,6 +24,9 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     changeImage: React.PropTypes.func,
     changePasswordResult: React.PropTypes.object,
     me: React.PropTypes.bool,
+    formValues: React.PropTypes.object,
+    changeUsersTimezone: React.PropTypes.func,
+    changeTimezoneState: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -32,15 +37,63 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     this.closeProfileImageModal = this.closeProfileImageModal.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
 
+
+    const timezones = moment.tz.names();
+    const regionOptions = [];
+    const regionWithTimezones = [];
+
+    for (const tz of timezones) {
+      const parsedRegion = tz.substr(0, tz.indexOf('/'));
+      const parsedTimezone = tz.substr(tz.indexOf('/') + 1);
+
+      if (!parsedRegion) {
+        regionWithTimezones[parsedTimezone] = [];
+
+        regionWithTimezones[parsedTimezone].push({
+          label: parsedTimezone,
+          value: parsedTimezone,
+        });
+
+        regionOptions.push({
+          label: parsedTimezone,
+          value: parsedTimezone,
+        });
+      } else if (regionWithTimezones[parsedRegion]) {
+        regionWithTimezones[parsedRegion].push({
+          label: parsedTimezone,
+          value: parsedTimezone,
+        });
+      } else {
+        regionWithTimezones[parsedRegion] = [];
+
+        regionWithTimezones[parsedRegion].push({
+          label: parsedTimezone,
+          value: parsedTimezone,
+        });
+
+        regionOptions.push({
+          label: parsedRegion,
+          value: parsedRegion,
+        });
+      }
+    }
+
     this.state = {
       passwordResetModalOpen: false,
       profileImageModalOpen: false,
+      regionOptions,
+      regionWithTimezones,
     };
   }
 
   componentWillReceiveProps(newProps) {
     if (!newProps.changePasswordResult.passwordChanging && this.props.changePasswordResult.passwordChanging) {
       this.closeResetPasswordModal();
+    }
+
+    if (newProps.formValues.selectedRegion && newProps.formValues.selectedTimezone && (newProps.formValues.selectedTimezone !== this.props.formValues.selectedTimezone)) {
+      const newTimezone = (newProps.formValues.selectedRegion === newProps.formValues.selectedTimezone) ? newProps.formValues.selectedRegion : `${newProps.formValues.selectedRegion}/${newProps.formValues.selectedTimezone}`;
+      this.props.changeUsersTimezone(this.props.currentUser.id, newTimezone);
     }
   }
 
@@ -69,6 +122,12 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
 
   render() {
     const { me } = this.props;
+    let timezoneOptions = [];
+
+    if (this.props.formValues.selectedRegion) {
+      timezoneOptions = this.state.regionWithTimezones[this.props.formValues.selectedRegion];
+    }
+
     const initialValues = {
       initialValues: {
         user_id: this.props.currentUser.id,
@@ -129,6 +188,29 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
             placeholder="Email"
             className="field"
             isDisabled
+          />
+        </div>
+
+        <div className="field-row">
+          <strong className="label"><label>Time Zone</label></strong>
+          <Field
+            name="selectedRegion"
+            component={ReactSelect}
+            placeholder="Select Region"
+            options={this.state.regionOptions}
+            disabled={!me || this.props.changeTimezoneState.saving}
+            className="field"
+          />
+        </div>
+        <div className="field-row">
+          <strong className="label"><label></label></strong>
+          <Field
+            name="selectedTimezone"
+            component={ReactSelect}
+            placeholder="Select Time Zone"
+            options={timezoneOptions}
+            disabled={!me || !this.props.formValues.selectedRegion || this.props.changeTimezoneState.saving}
+            className="field"
           />
         </div>
 

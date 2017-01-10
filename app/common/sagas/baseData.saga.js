@@ -33,6 +33,7 @@ import {
   GET_AVAIL_PHONE_NUMBERS,
   GET_CREDITS_PRICE,
   FETCH_INDICATION_LEVEL_PRICE,
+  CHANGE_USERS_TIMEZONE,
 } from 'containers/App/constants';
 
 
@@ -88,6 +89,8 @@ import {
   getCreditsPriceError,
   fetchIndicationLevelPriceSuccess,
   fetchIndicationLevelPriceError,
+  changeUsersTimezoneSuccess,
+  changeUsersTimezoneError,
 } from 'containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -117,6 +120,7 @@ export default function* baseDataSaga() {
   yield fork(getAvailPhoneNumbersWatcher);
   yield fork(fetchCreditsPrice);
   yield fork(fetchIndicationLevelPriceWatcher);
+  yield fork(changeUsersTimezoneWatcher);
 }
 
 export function* fetchSitesWatcher() {
@@ -644,6 +648,26 @@ export function* fetchIndicationLevelPriceWatcher() {
       const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
       yield put(toastrActions.error('', errorMessage));
       yield put(fetchIndicationLevelPriceError(err));
+    }
+  }
+}
+
+export function* changeUsersTimezoneWatcher() {
+  while (true) {
+    const { userId, payload } = yield take(CHANGE_USERS_TIMEZONE);
+    try {
+      const requestURL = `${API_URL}/users/${userId}`;
+      const params = {
+        method: 'PUT',
+        body: JSON.stringify({ timezone: payload }),
+      };
+      const response = yield call(request, requestURL, params);
+      yield put(toastrActions.success('Profile', 'Timezone updated!'));
+      yield put(changeUsersTimezoneSuccess(response.timezone));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Can not update timezone');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(changeUsersTimezoneError(err));
     }
   }
 }
