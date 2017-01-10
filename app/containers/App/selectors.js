@@ -250,6 +250,11 @@ const selectCreditsPrice = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.creditsPrice', {})
 );
+
+const selectOriginalIndication = () => createSelector(
+  selectGlobal(),
+  (subState) => subState.originalIndication
+);
 // end
 
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
@@ -294,4 +299,6 @@ export {
 
   selectLocationState,
   selectCreditsPrice,
+
+  selectOriginalIndication,
 };
