@@ -189,8 +189,8 @@ export default function homePageReducer(state = initialState, action) {
           endDateStr = '';
 
           if (siteIterator.campaigns && siteIterator.campaigns.length > 0 && siteIterator.campaigns[0]) {
-            startDateStr = moment.utc(siteIterator.campaigns[0].dateFrom).format('DD.MM.YYYY');
-            endDateStr = moment.utc(siteIterator.campaigns[0].dateTo).format('DD.MM.YYYY');
+            startDateStr = moment.utc(siteIterator.campaigns[0].dateFrom).format('MM/DD/YYYY');
+            endDateStr = moment.utc(siteIterator.campaigns[0].dateTo).format('MM/DD/YYYY');
           }
           entity = {
             ...entity,
