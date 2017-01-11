@@ -32,7 +32,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
   handleFileChange(e) {
     this.setState({ fileName: e.target.files[0].name });
 
-    this.props.dispatch(change('irb_filename', this.state.fileName));
+    this.props.dispatch(this.actions.change('irb_filename', this.state.fileName));
   }
 
   render() {
