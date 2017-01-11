@@ -1,5 +1,6 @@
 /* eslint-disable comma-dangle, no-case-declarations */
 import _, { forEach, map } from 'lodash';
+import moment from 'moment';
 
 import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
@@ -188,8 +189,8 @@ export default function homePageReducer(state = initialState, action) {
           endDateStr = '';
 
           if (siteIterator.campaigns && siteIterator.campaigns.length > 0 && siteIterator.campaigns[0]) {
-            startDateStr = new Date(siteIterator.campaigns[0].dateFrom).toLocaleDateString();
-            endDateStr = new Date(siteIterator.campaigns[0].dateTo).toLocaleDateString();
+            startDateStr = moment.utc(siteIterator.campaigns[0].dateFrom).format('DD.MM.YYYY');
+            endDateStr = moment.utc(siteIterator.campaigns[0].dateTo).format('DD.MM.YYYY');
           }
           entity = {
             ...entity,

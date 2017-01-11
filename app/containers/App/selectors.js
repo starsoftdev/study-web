@@ -255,6 +255,11 @@ const selectOriginalIndication = () => createSelector(
   selectGlobal(),
   (subState) => subState.originalIndication
 );
+
+const selectChangeTimezoneState = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.changeUsersTimezoneState', {})
+);
 // end
 
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
@@ -301,4 +306,5 @@ export {
   selectCreditsPrice,
 
   selectOriginalIndication,
+  selectChangeTimezoneState,
 };
