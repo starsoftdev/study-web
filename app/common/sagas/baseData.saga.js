@@ -35,6 +35,7 @@ import {
   FETCH_INDICATION_LEVEL_PRICE,
 
   FETCH_PATIENT_ORIGINAL_INDICATION,
+  CHANGE_USERS_TIMEZONE,
 } from 'containers/App/constants';
 
 
@@ -91,6 +92,8 @@ import {
   fetchIndicationLevelPriceSuccess,
   fetchIndicationLevelPriceError,
   fetchPatientOriginalIndicationSuccess,
+  changeUsersTimezoneSuccess,
+  changeUsersTimezoneError,
 } from 'containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -121,6 +124,7 @@ export default function* baseDataSaga() {
   yield fork(fetchCreditsPrice);
   yield fork(fetchIndicationLevelPriceWatcher);
   yield fork(fetchPatientOriginalIndication);
+  yield fork(changeUsersTimezoneWatcher);
 }
 
 export function* fetchSitesWatcher() {
@@ -664,6 +668,26 @@ export function* fetchPatientOriginalIndication() {
       yield put(fetchPatientOriginalIndicationSuccess(response));
     } catch (e) {
       console.trace(e);
+    }
+  }
+}
+
+export function* changeUsersTimezoneWatcher() {
+  while (true) {
+    const { userId, payload } = yield take(CHANGE_USERS_TIMEZONE);
+    try {
+      const requestURL = `${API_URL}/users/${userId}`;
+      const params = {
+        method: 'PUT',
+        body: JSON.stringify({ timezone: payload }),
+      };
+      const response = yield call(request, requestURL, params);
+      yield put(toastrActions.success('Profile', 'Timezone updated!'));
+      yield put(changeUsersTimezoneSuccess(response.timezone));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Can not update timezone');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(changeUsersTimezoneError(err));
     }
   }
 }
