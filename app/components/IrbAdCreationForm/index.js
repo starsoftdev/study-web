@@ -14,6 +14,7 @@ import Input from 'components/Input';
 class IrbAdCreationForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
+    dispatch: PropTypes.func.isRequired,
     siteLocations: PropTypes.array,
     indications: PropTypes.array,
     handleSubmit: React.PropTypes.func.isRequired,
