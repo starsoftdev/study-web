@@ -19,6 +19,21 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
     handleSubmit: React.PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.handleFileChange = this.handleFileChange.bind(this);
+    this.state = {
+      fileName: "",
+    };
+  }
+
+  handleFileChange(e) {
+    this.setState({ fileName: e.target.files[0].name });
+
+    props.dispatch(actions.change("irb_filename", fileName));
+  }
+
   render() {
     const { siteLocations, indications, handleSubmit } = this.props;
 
@@ -55,6 +70,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
               <Field
                 name="irbName"
                 component={Input}
+                value=""
               />
             </div>
           </div>
@@ -65,6 +81,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
               <Field
                 name="irbEmail"
                 component={Input}
+                value=""
               />
             </div>
           </div>
@@ -75,6 +92,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
               <Field
                 name="compensationAmount"
                 component={Input}
+                value=""
               />
             </div>
           </div>
@@ -93,12 +111,15 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
             <strong className="label"><label htmlFor="clinicaltrialGovLink">UPLOAD BLINDED PROTOCOL</label></strong>
             <div className="field">
               <label htmlFor="irb_file" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn"></label>
+
               <Field
                 id="irb_file"
+                onChange={this.handleFileChange}
                 name="file"
                 component={Input}
                 type="file"
               />
+              <strong className="label"><label htmlFor="irb_filename">{this.state.fileName}</label></strong>
             </div>
           </div>
 

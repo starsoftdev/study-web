@@ -17,12 +17,15 @@ import { fields } from 'components/ReferForm/validator';
 import { selectCompanyTypes } from 'containers/ReferPage/selectors';
 import { submitForm, fetchCompanyTypes } from 'containers/ReferPage/actions';
 
+import { selectUserSiteLocations } from 'containers/App/selectors';
+
 import manImage from 'assets/images/man.svg';
 import shadowImage from 'assets/images/shadow.png';
 
 export class ReferPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     companyTypes: PropTypes.array,
+    UserSiteLocations: PropTypes.array,
     hasErrors: PropTypes.bool,
     fetchCompanyTypes: PropTypes.func,
     submitForm: PropTypes.func,
@@ -90,6 +93,7 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
 }
 
 const mapStateToProps = createStructuredSelector({
+  UserSiteLocations: selectUserSiteLocations(),
   companyTypes: selectCompanyTypes(),
   hasErrors: selectReferFormError(),
 });
