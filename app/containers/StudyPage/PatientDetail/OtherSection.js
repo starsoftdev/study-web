@@ -137,7 +137,7 @@ class OtherSection extends React.Component {
       return (
         <div className="category-list">
           {initialValues.patientIndications.map(pi => (
-            <div key={pi.id} className="category">
+            <div key={pi.indication.id} className="category">
               <span className="link">
                 <span className="text">{pi.indication.name}</span>
                 { !pi.isOriginal &&

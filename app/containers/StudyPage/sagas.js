@@ -303,8 +303,8 @@ function* fetchPatientDetails() {
         {
           relation: 'patientIndications',
           scope: {
-            include: 'indication'
-          }
+            include: 'indication',
+          },
         },
         {
           relation: 'notes',
