@@ -251,11 +251,6 @@ const selectCreditsPrice = () => createSelector(
   (substate) => get(substate, 'baseData.creditsPrice', {})
 );
 
-const selectOriginalIndication = () => createSelector(
-  selectGlobal(),
-  (subState) => subState.originalIndication
-);
-
 const selectChangeTimezoneState = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.changeUsersTimezoneState', {})
@@ -305,6 +300,5 @@ export {
   selectLocationState,
   selectCreditsPrice,
 
-  selectOriginalIndication,
   selectChangeTimezoneState,
 };
