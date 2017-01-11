@@ -43,7 +43,7 @@ class IndicationOverlay extends React.Component {
   }
 
   compareIndication(indication) {
-    const { patient: { patientIndications } } = this.props;
+    const { patient: { indications } } = this.props;
     const { indicationFilter } = this.state;
     if (indicationFilter !== '') {
       const indicationName = _.toLower(indication.name);
@@ -52,8 +52,8 @@ class IndicationOverlay extends React.Component {
         return false;
       }
     }
-    for (const currentPI of patientIndications) {
-      if (indication.id === currentPI.indication.id) {
+    for (const currentIndication of indications) {
+      if (indication.id === currentIndication.id) {
         return false;
       }
     }

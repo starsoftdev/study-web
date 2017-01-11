@@ -172,7 +172,14 @@ class OtherSection extends React.Component {
 
   render() {
     const { active, currentUser, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, loading, submitting, submitAddPatientIndication } = this.props;
+
     if (initialValues) {
+      const overlayValues = { ...initialValues };
+
+      if (initialValues.patientIndications) {
+        overlayValues.indications = initialValues.patientIndications.map(pi => pi.indication.id);
+      }
+
       return (
         <div className={classNames('item others', { active })}>
           <div className="item-holder">
@@ -216,7 +223,7 @@ class OtherSection extends React.Component {
                     rootClose
                     onHide={() => { this.toggleIndicationPopover(); }}
                   >
-                    <IndicationOverlay indications={indications} submitAddIndication={submitAddPatientIndication} patient={initialValues} onClose={this.toggleIndicationPopover} />
+                    <IndicationOverlay indications={indications} submitAddIndication={submitAddPatientIndication} patient={overlayValues} onClose={this.toggleIndicationPopover} />
                   </Overlay>
                 </div>
               </div>
