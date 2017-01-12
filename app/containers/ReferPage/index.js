@@ -27,6 +27,8 @@ import {
 import manImage from 'assets/images/man.svg';
 import shadowImage from 'assets/images/shadow.png';
 
+import _ from 'lodash';
+
 export class ReferPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
