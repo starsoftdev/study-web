@@ -9,10 +9,16 @@ const OfflinePlugin = require('offline-plugin');
 
 module.exports = require('./webpack.base.babel')({
   // In production, we skip all hot-reloading stuff
-  entry: [
-    'babel-polyfill',
-    path.join(process.cwd(), 'app/app.js'),
-  ],
+ entry: {
+    'app': [
+      'babel-polyfill',
+      path.join(process.cwd(), 'app/app.js'),
+    ],
+    'corporate': [
+      'babel-polyfill',
+      path.join(process.cwd(), 'corporate/app.js'),
+    ],
+  },
 
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
   output: {
@@ -55,6 +61,8 @@ module.exports = require('./webpack.base.babel')({
 
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({
+      filename: 'app.html',
+      chunks: ['app'],
       template: 'app/index.html',
       minify: {
         removeComments: true,
@@ -68,7 +76,25 @@ module.exports = require('./webpack.base.babel')({
         minifyCSS: true,
         minifyURLs: true,
       },
-      inject: true,
+    }),
+
+    // Minify and optimize the index.html
+    new HtmlWebpackPlugin({
+      filename: 'corporate.html',
+      chunks: ['corporate'],
+      template: 'corporate/index.html',
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
     }),
 
     // Extract the CSS into a seperate file

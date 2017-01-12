@@ -103,7 +103,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
       <header id="header">
         <div className="container-fluid">
 
-          <h1 className="logo pull-left"><Link to="/"><img src={studykikLogo} width="214" height="31" alt="logo" /></Link></h1>
+          <h1 className="logo pull-left"><Link to="/app/"><img src={studykikLogo} width="214" height="31" alt="logo" /></Link></h1>
 
           <NotificationBox currentUser={this.props.currentUser} />
 
