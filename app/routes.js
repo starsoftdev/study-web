@@ -24,7 +24,7 @@ export default function createRoutes(store) {
   return [
     {
       onEnter: redirectToLogin,
-      path: '/app/',
+      path: '/app',
       name: 'homePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
