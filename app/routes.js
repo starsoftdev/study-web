@@ -439,7 +439,7 @@ export default function createRoutes(store) {
           .catch(errorLoading);
       },
     }, {
-      path: '/app/*',
+      path: '/app*',
       name: 'notfound',
       getComponent(nextState, cb) {
         System.import('containers/NotFoundPage')
