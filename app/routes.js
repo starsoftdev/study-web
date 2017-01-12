@@ -24,7 +24,7 @@ export default function createRoutes(store) {
   return [
     {
       onEnter: redirectToLogin,
-      path: '/',
+      path: '/app/',
       name: 'homePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -45,7 +45,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/calendar',
+      path: '/app/calendar',
       name: 'calendarPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -66,7 +66,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToDashboard,
-      path: '/login',
+      path: '/app/login',
       name: 'loginPage',
       getComponent(nextState, cb) {
         System.import('containers/LoginPage')
@@ -84,7 +84,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/order-irb-ad-creation',
+      path: '/app/order-irb-ad-creation',
       name: 'IrbAdCreationPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -105,7 +105,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/order-irb-ad-creation/:id',
+      path: '/app/order-irb-ad-creation/:id',
       name: 'IrbAdCreationPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -126,7 +126,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/patient-database',
+      path: '/app/patient-database',
       name: 'patientDatabasePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -147,7 +147,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/payment-information',
+      path: '/app/payment-information',
       name: 'paymentInformationPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -168,7 +168,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/:userId/profile',
+      path: '/app/:userId/profile',
       name: 'profilePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -189,7 +189,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/proposals',
+      path: '/app/proposals',
       name: 'proposals',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -210,7 +210,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/refer',
+      path: '/app/refer',
       name: 'referPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -231,7 +231,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/badges',
+      path: '/app/badges',
       name: 'badgesPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -248,7 +248,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/list-new-study',
+      path: '/app/list-new-study',
       name: 'listNewStudyPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -269,7 +269,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/rewards',
+      path: '/app/rewards',
       name: 'rewardsPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -290,7 +290,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/request-proposal',
+      path: '/app/request-proposal',
       name: 'requestProposalPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -311,7 +311,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/request-proposal/:id',
+      path: '/app/request-proposal/:id',
       name: 'requestProposalPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -332,7 +332,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToDashboard,
-      path: '/reset-password',
+      path: '/app/reset-password',
       name: 'resetPasswordPage',
       getComponent(nextState, cb) {
         System.import('containers/ResetPasswordPage')
@@ -341,7 +341,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToDashboard,
-      path: '/set-new-password',
+      path: '/app/set-new-password',
       name: 'setNewPasswordPage',
       getComponent(nextState, cb) {
         System.import('containers/SetNewPasswordPage')
@@ -350,7 +350,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/sites-users',
+      path: '/app/sites-users',
       name: 'sitesUsersPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -367,7 +367,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/studies/:id/sites/:siteId',
+      path: '/app/studies/:id/sites/:siteId',
       name: 'studyPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -387,7 +387,7 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
-      path: '/manage-transfer-number',
+      path: '/app/manage-transfer-number',
       name: 'manageTransferNumberPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -408,7 +408,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: 'receipts',
+      path: '/app/receipts',
       name: 'receipts',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -429,7 +429,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/notifications',
+      path: '/app/notifications',
       name: 'notificationPage',
       getComponent(nextState, cb) {
         const renderRoute = loadModule(cb);
@@ -439,7 +439,7 @@ export default function createRoutes(store) {
           .catch(errorLoading);
       },
     }, {
-      path: '*',
+      path: '/app/*',
       name: 'notfound',
       getComponent(nextState, cb) {
         System.import('containers/NotFoundPage')

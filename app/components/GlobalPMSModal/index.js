@@ -224,7 +224,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                 <section className="chat-area" id="chat-room1">
                   <header>
                     <strong className="name">{this.state.selectedPatient.first_name} {this.state.selectedPatient.last_name}</strong>
-                    <Link to={`/studies/${this.state.selectedPatient.study_id}/sites/${this.state.selectedPatient.site_id}`} onClick={this.props.closeModal}>
+                    <Link to={`/app/studies/${this.state.selectedPatient.study_id}/sites/${this.state.selectedPatient.site_id}`} onClick={this.props.closeModal}>
                       <span className="protocol">{protocolNumber}</span>
                     </Link>
                   </header>
