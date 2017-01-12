@@ -48,7 +48,6 @@ export function* submitFormWatcher() {
   while (true) {
     // listen for the SUBMIT_FORM action dispatched on form submit
     const { payload } = yield take(SUBMIT_FORM);
-
     try {
       const requestURL = `${API_URL}/referral`;
       const params = {
