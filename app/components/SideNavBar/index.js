@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import sideNavLogo from 'assets/images/logo2.png';
 
 const menuItemsGroupA = [
-  { upperText: 'Home', link: '/app/', icon: 'icomoon-icon_house_alt' },
+  { upperText: 'Home', link: '/app', icon: 'icomoon-icon_house_alt' },
   { upperText: 'List New Study', link: '/app/list-new-study', icon: 'icomoon-screen' },
   { upperText: 'Order IRB Ad Creation', link: '/app/order-irb-ad-creation', icon: 'icomoon-irb' },
   { upperText: 'Request Proposal', link: '/app/request-proposal', icon: 'icomoon-doller' },
