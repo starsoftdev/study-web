@@ -112,7 +112,13 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
             <strong className="label"><label htmlFor="clinicaltrialGovLink">UPLOAD BLINDED PROTOCOL</label></strong>
             <div className="field">
               <label htmlFor="irb_file" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn"></label>
-              <input type="file" id="irb_file" onChange={this.handleFileChange} />
+              <Field
+                id="irb_file"
+                name="file"
+                onChange={this.handleFileChange}
+                component={Input}
+                type="file"
+              />
               <strong className="label"><label className="filename" htmlFor="irb_filename">{this.state.fileName}</label></strong>
             </div>
           </div>
