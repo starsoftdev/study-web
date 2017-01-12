@@ -119,7 +119,7 @@ export function* logoutSaga() {
     yield put(setAuthState(false));
     yield put(setUserData(null));
     // redirect to login page
-    yield put(replace('/login'));
+    yield put(replace('/app/login'));
   }
 }
 
@@ -172,7 +172,7 @@ export function* setNewPassword() {
         const requestURL = `${API_URL}/users/reset-password`;
         yield call(request, requestURL, params);
         yield put(toastrActions.success('Set new password', 'The request has been submitted successfully'));
-        yield put(push('/login'));
+        yield put(push('/app/login'));
       } else {
         const errorMessage = get(null, 'message', 'Can not find auth token!');
         yield put(toastrActions.error('', errorMessage));
