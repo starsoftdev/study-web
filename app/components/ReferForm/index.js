@@ -17,6 +17,7 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
   static propTypes = {
     error: React.PropTypes.object,
     handleSubmit: React.PropTypes.func.isRequired,
+    siteLocations: React.PropTypes.array,
     reset: React.PropTypes.func.isRequired,
     submitting: React.PropTypes.bool.isRequired,
     companyTypes: React.PropTypes.array,
@@ -24,12 +25,22 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
 
   render() {
     const { error, handleSubmit, reset, submitting } = this.props; // eslint-disable-line
-    const { companyTypes } = this.props;
+    const { siteLocations, companyTypes } = this.props;
 
     return (
       <form onSubmit={handleSubmit}>
         <div className="form-fields">
-
+          <div className="field-row">
+            <strong className="label required"><label htmlFor="site-location">SITE LOCATION</label></strong>
+            <div className="field">
+              <Field
+                name="siteLocation"
+                component={ReactSelect}
+                placeholder="Select Site Location"
+                options={siteLocations}
+              />
+            </div>
+          </div>
           <div className="field-row">
             <strong className="label required"><label>CONTACT NAME</label></strong>
             <div className="field">
