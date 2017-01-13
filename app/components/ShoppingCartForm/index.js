@@ -63,6 +63,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     fetchCards: PropTypes.func,
     saveCard: PropTypes.func,
     validateAndSubmit: PropTypes.func,
+    manualDisableSubmit: PropTypes.bool,
   };
 
   constructor(props) {
@@ -147,7 +148,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     const title = this.props.title || 'Order Summary';
     const noBorderClassName = (this.props.noBorder) ? 'no-border' : '';
     const formClassName = `form-study form-shopping-cart ${noBorderClassName}`;
-    const { addOns, coupon, showCards, cards, submitting, validateAndSubmit } = this.props;
+    const { addOns, coupon, showCards, cards, submitting, validateAndSubmit, manualDisableSubmit } = this.props;
     const { subTotal, discount, total } = this.calculateTotal();
     let addOnsContent = null;
 
@@ -288,7 +289,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                 />
               </div>
               {cardsPanelContent}
-              <Button disabled={coupon.fetching || cards.fetching || submitting} onClick={validateAndSubmit}>
+              <Button disabled={coupon.fetching || cards.fetching || submitting || manualDisableSubmit} onClick={validateAndSubmit}>
                 {submitting
                   ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                   : <span>Submit</span>
