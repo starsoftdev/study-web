@@ -33,6 +33,9 @@ import {
   GET_AVAIL_PHONE_NUMBERS,
   GET_CREDITS_PRICE,
   FETCH_INDICATION_LEVEL_PRICE,
+
+  FETCH_PATIENT_ORIGINAL_INDICATION,
+  CHANGE_USERS_TIMEZONE,
 } from 'containers/App/constants';
 
 
@@ -88,6 +91,9 @@ import {
   getCreditsPriceError,
   fetchIndicationLevelPriceSuccess,
   fetchIndicationLevelPriceError,
+  fetchPatientOriginalIndicationSuccess,
+  changeUsersTimezoneSuccess,
+  changeUsersTimezoneError,
 } from 'containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -117,6 +123,8 @@ export default function* baseDataSaga() {
   yield fork(getAvailPhoneNumbersWatcher);
   yield fork(fetchCreditsPrice);
   yield fork(fetchIndicationLevelPriceWatcher);
+  yield fork(fetchPatientOriginalIndication);
+  yield fork(changeUsersTimezoneWatcher);
 }
 
 export function* fetchSitesWatcher() {
@@ -127,7 +135,7 @@ export function* fetchSitesWatcher() {
       const requestURL = `${API_URL}/sites`;
 
       const filterObj = {
-        include: ['users', 'studies'],
+        include: ['studies'],
       };
 
       const searchParams = action.payload || {};
@@ -206,7 +214,7 @@ export function* fetchCouponWatcher() {
     const encodedCouponId = encodeURIComponent(couponId);
 
     try {
-      const requestURL = `${API_URL}/clients/retrieve_coupon/${encodedCouponId}`;
+      const requestURL = `${API_URL}/clients/stripeCustomers/retrieveCoupon/${encodedCouponId}`;
       const response = yield call(request, requestURL);
 
       yield put(couponFetched(response));
@@ -236,7 +244,7 @@ export function* fetchCardsWatcher() {
     const { customerId } = yield take(FETCH_CARDS);
 
     try {
-      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/retrieve_cardsList`;
+      const requestURL = `${API_URL}/clients/stripeCustomers/${customerId}/retrieve_cardsList`;
       const response = yield call(request, requestURL);
 
       yield put(cardsFetched(response));
@@ -251,7 +259,7 @@ export function* saveCardWatcher() {
     const { customerId, cardData } = yield take(SAVE_CARD);
 
     try {
-      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/save_card`;
+      const requestURL = `${API_URL}/clients/stripeCustomers/${customerId}/saveCard`;
       const options = {
         method: 'POST',
         body: JSON.stringify(cardData),
@@ -276,7 +284,7 @@ export function* deleteCardWatcher() {
     };
 
     try {
-      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/delete_card/${cardId}`;
+      const requestURL = `${API_URL}/clients/stripeCustomers/${customerId}/deleteCard/${cardId}`;
       const response = yield call(request, requestURL, options);
 
       yield put(toastrActions.success('Delete Card', 'Card deleted successfully!'));
@@ -298,7 +306,7 @@ export function* addCreditsWatcher() {
     };
 
     try {
-      const requestURL = `${API_URL}/clients/stripe_customer/${customerId}/checkout_credits`;
+      const requestURL = `${API_URL}/clients/stripeCustomers/${customerId}/checkout_credits`;
       const response = yield call(request, requestURL, options);
 
       yield put(toastrActions.success('Add Credits', 'Credits added successfully!'));
@@ -317,7 +325,14 @@ export function* fetchClientSitesWatcher() {
 
     try {
       const filterObj = {
-        include: ['users', 'studies'],
+        include: [{
+          relation: 'roles',
+          scope: {
+            include: ['user'],
+          },
+        }, {
+          relation: 'studies',
+        }],
         where: {},
       };
 
@@ -637,6 +652,42 @@ export function* fetchIndicationLevelPriceWatcher() {
       const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
       yield put(toastrActions.error('', errorMessage));
       yield put(fetchIndicationLevelPriceError(err));
+    }
+  }
+}
+
+export function* fetchPatientOriginalIndication() {
+  while (true) {
+    const { patientId } = yield take(FETCH_PATIENT_ORIGINAL_INDICATION);
+
+    try {
+      const requestURL = `${API_URL}/patients/${patientId}/original_indication`;
+      const response = yield call(request, requestURL, {
+        method: 'GET',
+      });
+      yield put(fetchPatientOriginalIndicationSuccess(response));
+    } catch (e) {
+      console.trace(e);
+    }
+  }
+}
+
+export function* changeUsersTimezoneWatcher() {
+  while (true) {
+    const { userId, payload } = yield take(CHANGE_USERS_TIMEZONE);
+    try {
+      const requestURL = `${API_URL}/users/${userId}`;
+      const params = {
+        method: 'PUT',
+        body: JSON.stringify({ timezone: payload }),
+      };
+      const response = yield call(request, requestURL, params);
+      yield put(toastrActions.success('Profile', 'Timezone updated!'));
+      yield put(changeUsersTimezoneSuccess(response.timezone));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Can not update timezone');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(changeUsersTimezoneError(err));
     }
   }
 }

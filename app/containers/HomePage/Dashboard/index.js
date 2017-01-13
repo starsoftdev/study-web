@@ -10,7 +10,6 @@ import { submitForm } from 'containers/RewardsPage/actions';
 import { fetchPatientSignUps, fetchPatientMessages, fetchRewardsPoint } from '../actions';
 import { selectPatientSignUps, selectPatientMessages, selectRewardsPoint } from '../selectors';
 
-import { sumBy } from 'lodash';
 import graph from 'assets/images/graph.svg';
 
 export class Dashboard extends React.Component {
@@ -47,13 +46,7 @@ export class Dashboard extends React.Component {
   }
 
   render() {
-    const { patientSignUps, patientMessages, rewardsPoint, sitePatients, siteLocations, submitForm } = this.props;
-    const unreadTexts = sumBy(sitePatients.details, (sitePatient) => {
-      if (sitePatient.count_unread == null) {
-        return 0;
-      }
-      return parseInt(sitePatient.count_unread);
-    });
+    const { patientSignUps, patientMessages, rewardsPoint, siteLocations, submitForm } = this.props;
     return (
       <section className="row infoarea text-uppercase">
         <h2 className="hidden">Statics</h2>
@@ -84,7 +77,7 @@ export class Dashboard extends React.Component {
             </div>
             <div className="textbox">
               <h2>PATIENT<br /> MESSAGES</h2>
-              <span className="counter">TOTAL {unreadTexts + patientMessages.unreadEmails}</span>
+              <span className="counter">TOTAL {patientMessages.total}</span>
             </div>
           </div>
           <div className="box">
@@ -94,7 +87,7 @@ export class Dashboard extends React.Component {
             </div>
             <div className="col pull-right">
               <span className="sub-title">UNREAD<br /> TEXTS</span>
-              <strong className="number"><i className="icomoon-icon_chat_alt" /> {unreadTexts}</strong>
+              <strong className="number"><i className="icomoon-icon_chat_alt" /> {patientMessages.unreadTexts}</strong>
             </div>
           </div>
         </article>

@@ -122,4 +122,3 @@ export const selectAddPatientStatus = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.addPatientStatus
 );
-

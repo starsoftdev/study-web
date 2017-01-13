@@ -269,11 +269,9 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     if (level) {
       if (!selectedIndicationLevelPrice.fetching && selectedIndicationLevelPrice.details) {
         const foundLevel = find(studyLevels, { id: level });
-        const monthLength = find(CAMPAIGN_LENGTH_LIST, { value: 1 });
-        const durationString = monthLength.label;
 
         addOns.push({
-          title: `${durationString} ${foundLevel.type}`,
+          title: `${foundLevel.type}`,
           price: selectedIndicationLevelPrice.details,
           quantity: 1,
           total: selectedIndicationLevelPrice.details,

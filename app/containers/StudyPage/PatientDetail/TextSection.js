@@ -132,7 +132,7 @@ class TextSection extends React.Component {
       body: textarea.value,
       to: currentPatient.phone,
     };
-
+    console.log('submitText', options);
     this.props.sendStudyPatientMessages(options, (err) => {
       if (!err) {
         this.setState({ enteredCharactersLength: 0 }, () => {
