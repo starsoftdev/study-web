@@ -394,9 +394,14 @@ function patients(state, currentPatientId, action) {
         if (patient.id === currentPatientId) {
           return {
             ...patient,
-            indications: [
-              ...patient.indications,
-              action.indication,
+            patientIndications: [
+              ...patient.patientIndications,
+              {
+                isOriginal: false,      // always false on manual addition of indication
+                indication: action.indication,
+                indication_id: action.indication.id,
+                patient_id: action.patientId,
+              }
             ],
           };
         }
@@ -423,8 +428,8 @@ function patients(state, currentPatientId, action) {
         if (patient.id === currentPatientId) {
           return {
             ...patient,
-            indications: patient.indications.filter(indication => (
-              indication.id !== action.indicationId
+            patientIndications: patient.patientIndications.filter(pi => (
+              pi.indication.id !== action.indicationId
             )),
           };
         }
