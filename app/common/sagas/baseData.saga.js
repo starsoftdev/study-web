@@ -34,7 +34,6 @@ import {
   GET_CREDITS_PRICE,
   FETCH_INDICATION_LEVEL_PRICE,
 
-  FETCH_PATIENT_ORIGINAL_INDICATION,
   CHANGE_USERS_TIMEZONE,
 } from 'containers/App/constants';
 
@@ -91,7 +90,6 @@ import {
   getCreditsPriceError,
   fetchIndicationLevelPriceSuccess,
   fetchIndicationLevelPriceError,
-  fetchPatientOriginalIndicationSuccess,
   changeUsersTimezoneSuccess,
   changeUsersTimezoneError,
 } from 'containers/App/actions';
@@ -123,7 +121,6 @@ export default function* baseDataSaga() {
   yield fork(getAvailPhoneNumbersWatcher);
   yield fork(fetchCreditsPrice);
   yield fork(fetchIndicationLevelPriceWatcher);
-  yield fork(fetchPatientOriginalIndication);
   yield fork(changeUsersTimezoneWatcher);
 }
 
@@ -652,22 +649,6 @@ export function* fetchIndicationLevelPriceWatcher() {
       const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
       yield put(toastrActions.error('', errorMessage));
       yield put(fetchIndicationLevelPriceError(err));
-    }
-  }
-}
-
-export function* fetchPatientOriginalIndication() {
-  while (true) {
-    const { patientId } = yield take(FETCH_PATIENT_ORIGINAL_INDICATION);
-
-    try {
-      const requestURL = `${API_URL}/patients/${patientId}/original_indication`;
-      const response = yield call(request, requestURL, {
-        method: 'GET',
-      });
-      yield put(fetchPatientOriginalIndicationSuccess(response));
-    } catch (e) {
-      console.trace(e);
     }
   }
 }

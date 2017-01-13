@@ -96,8 +96,6 @@ import {
 
   GET_CREDITS_PRICE_SUCCESS,
 
-  FETCH_PATIENT_ORIGINAL_INDICATION_SUCCESS,
-
   CHANGE_USERS_TIMEZONE,
   CHANGE_USERS_TIMEZONE_SUCCESS,
   CHANGE_USERS_TIMEZONE_ERROR,
@@ -202,7 +200,6 @@ const initialState = {
     changeUsersTimezoneState: {
       saving: false,
     },
-    originalIndication: {},
   },
 };
 
@@ -1001,14 +998,6 @@ export default function appReducer(state = initialState, action) {
         },
       };
       break;
-    case FETCH_PATIENT_ORIGINAL_INDICATION_SUCCESS:
-      return {
-        ...state,
-        originalIndication: {
-          ...state.originalIndication,
-          [action.payload.patient_id]: action.payload.indication_id,
-        },
-      };
     default:
       return state;
   }
