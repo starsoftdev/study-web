@@ -100,12 +100,14 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             <div key={indication.id} className="category">
               <span className="link">
                 <span className="text">{indication.name}</span>
-                <span
-                  className="icomoon-icon_trash"
-                  onClick={() => {
-                    this.deleteIndication(indication);
-                  }}
-                />
+                { !indication.isOriginal &&
+                  <span
+                    className="icomoon-icon_trash"
+                    onClick={() => {
+                      this.deleteIndication(indication);
+                    }}
+                  />
+                }
               </span>
             </div>
           ))}

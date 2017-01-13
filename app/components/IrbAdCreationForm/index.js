@@ -14,10 +14,26 @@ import Input from 'components/Input';
 class IrbAdCreationForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
+    dispatch: PropTypes.func.isRequired,
     siteLocations: PropTypes.array,
     indications: PropTypes.array,
     handleSubmit: React.PropTypes.func.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.handleFileChange = this.handleFileChange.bind(this);
+    this.state = {
+      fileName: '',
+    };
+  }
+
+  handleFileChange(e) {
+    this.setState({ fileName: e.target.files[0].name });
+
+    this.props.dispatch(this.actions.change('irb_filename', this.state.fileName));
+  }
 
   render() {
     const { siteLocations, indications, handleSubmit } = this.props;
@@ -55,6 +71,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
               <Field
                 name="irbName"
                 component={Input}
+                value=""
               />
             </div>
           </div>
@@ -65,6 +82,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
               <Field
                 name="irbEmail"
                 component={Input}
+                value=""
               />
             </div>
           </div>
@@ -75,6 +93,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
               <Field
                 name="compensationAmount"
                 component={Input}
+                value=""
               />
             </div>
           </div>
@@ -96,9 +115,11 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
               <Field
                 id="irb_file"
                 name="file"
+                onChange={this.handleFileChange}
                 component={Input}
                 type="file"
               />
+              <strong className="label"><label className="filename" htmlFor="irb_filename">{this.state.fileName}</label></strong>
             </div>
           </div>
 

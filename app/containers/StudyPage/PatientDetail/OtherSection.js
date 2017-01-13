@@ -18,7 +18,6 @@ import { selectIndications } from '../../App/selectors';
 import { createStructuredSelector } from 'reselect';
 import { selectValues, selectSyncErrors, selectFormDidChange } from '../../../common/selectors/form.selector';
 import { submitAddPatientIndication, submitRemovePatientIndication, submitPatientUpdate } from '../actions';
-import { selectOriginalIndication } from '../selectors';
 import IndicationOverlay from './IndicationOverlay';
 import formValidator from './otherValidator';
 import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
@@ -41,7 +40,6 @@ class OtherSection extends React.Component {
     formDidChange: React.PropTypes.bool,
     indications: React.PropTypes.array,
     initialValues: React.PropTypes.object,
-    originalIndication: React.PropTypes.object,
     loading: React.PropTypes.bool,
     submitting: React.PropTypes.bool,
     reset: React.PropTypes.func,
@@ -134,19 +132,19 @@ class OtherSection extends React.Component {
   }
 
   renderIndications() {
-    const { initialValues, originalIndication } = this.props;
-    if (initialValues.indications) {
+    const { initialValues } = this.props;
+    if (initialValues.patientIndications) {
       return (
         <div className="category-list">
-          {initialValues.indications.map(indication => (
-            <div key={indication.id} className="category">
+          {initialValues.patientIndications.map(pi => (
+            <div key={pi.indication.id} className="category">
               <span className="link">
-                <span className="text">{indication.name}</span>
-                { originalIndication[initialValues.id] !== indication.id &&
+                <span className="text">{pi.indication.name}</span>
+                { !pi.isOriginal &&
                   <span
                     className="icomoon-icon_trash"
                     onClick={() => {
-                      this.deleteIndication(indication);
+                      this.deleteIndication(pi.indication);
                     }}
                   />
                 }
@@ -282,7 +280,6 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectValues(formName),
   formDidChange: selectFormDidChange(formName),
   indications: selectIndications(),
-  originalIndication: selectOriginalIndication(),
 });
 
 const mapDispatchToProps = (dispatch) => ({

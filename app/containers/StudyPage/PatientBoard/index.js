@@ -15,7 +15,6 @@ import PatientCategory from './PatientCategory';
 import PatientDetailModal from '../PatientDetail/PatientDetailModal';
 import {
   fetchPatientDetails,
-  fetchPatientOriginalIndication,
   setCurrentPatientCategoryId,
   setCurrentPatientId,
   setOpenPatientModal,
@@ -35,7 +34,6 @@ class PatientBoard extends React.Component {
     currentPatientId: React.PropTypes.number,
     currentPatientCategoryId: React.PropTypes.number,
     fetchPatientDetails: React.PropTypes.func.isRequired,
-    fetchPatientOriginalIndication: React.PropTypes.func.isRequired,
     openPatientModal: React.PropTypes.bool.isRequired,
     patientCategories: React.PropTypes.array.isRequired,
     setCurrentPatientId: React.PropTypes.func.isRequired,
@@ -71,13 +69,12 @@ class PatientBoard extends React.Component {
   }
 
   onPatientClick(category, patient) {
-    const { currentPatientId, fetchPatientDetails, fetchPatientOriginalIndication, setCurrentPatientId, setCurrentPatientCategoryId, setOpenPatientModal, switchToNoteSection } = this.props;
+    const { currentPatientId, fetchPatientDetails, setCurrentPatientId, setCurrentPatientCategoryId, setOpenPatientModal, switchToNoteSection } = this.props;
     const show = (patient && currentPatientId !== patient.id) || false;
     if (show) {
       setCurrentPatientId(patient.id);
       setCurrentPatientCategoryId(category.id);
       fetchPatientDetails(patient.id);
-      fetchPatientOriginalIndication(patient.id);
       const options = {
         duration: 500,
       };
@@ -96,7 +93,6 @@ class PatientBoard extends React.Component {
     const {
       currentPatientId,
       fetchPatientDetails,
-      fetchPatientOriginalIndication,
       setCurrentPatientId,
       setCurrentPatientCategoryId,
       setOpenPatientModal, switchToTextSection,
@@ -109,7 +105,6 @@ class PatientBoard extends React.Component {
       setCurrentPatientId(patient.id);
       setCurrentPatientCategoryId(category.id);
       fetchPatientDetails(patient.id);
-      fetchPatientOriginalIndication(patient.id);
       readStudyPatientMessages(patient.id, studyId);
       markAsReadPatientMessages(patient.id, studyId);
       const options = {
@@ -144,11 +139,10 @@ class PatientBoard extends React.Component {
   }
 
   showModal() {
-    const { currentPatientId, fetchPatientDetails, fetchPatientOriginalIndication, openPatientModal } = this.props;
+    const { currentPatientId, fetchPatientDetails, openPatientModal } = this.props;
     // have a way to show the modal from the state, and also from an argument, so that we can handle both modal opening from page transitions and modal opening from a user action like a click
     if (openPatientModal) {
       fetchPatientDetails(currentPatientId);
-      fetchPatientOriginalIndication(currentPatientId);
       const options = {
         duration: 500,
       };
@@ -187,7 +181,6 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => (
   {
     fetchPatientDetails: (patientId) => dispatch(fetchPatientDetails(patientId)),
-    fetchPatientOriginalIndication: (patientId) => dispatch(fetchPatientOriginalIndication(patientId)),
     setCurrentPatientId: (id) => dispatch(setCurrentPatientId(id)),
     setCurrentPatientCategoryId: (id) => dispatch(setCurrentPatientCategoryId(id)),
     setOpenPatientModal: (show) => dispatch(setOpenPatientModal(show)),
