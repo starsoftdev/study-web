@@ -41,7 +41,6 @@ import {
   SWITCH_TO_OTHER_SECTION_DETAIL,
   SUBMIT_ADD_PATIENT,
   SET_ADD_PATIENT_STATUS,
-  FETCH_PATIENT_ORIGINAL_INDICATION_SUCCESS,
 } from './constants';
 import _ from 'lodash';
 
@@ -57,7 +56,6 @@ const initialState = {
   addPatientStatus:{
     adding: false,
   },
-  originalIndication: {},
 };
 
 function studyPageReducer(state = initialState, action) {
@@ -316,14 +314,6 @@ function studyPageReducer(state = initialState, action) {
           adding: action.status,
         },
       };
-    case FETCH_PATIENT_ORIGINAL_INDICATION_SUCCESS:
-      return {
-        ...state,
-        originalIndication: {
-          ...state.originalIndication,
-          [action.payload.patient_id]: action.payload.indication_id,
-        },
-      };
     default:
       return state;
   }
@@ -404,9 +394,14 @@ function patients(state, currentPatientId, action) {
         if (patient.id === currentPatientId) {
           return {
             ...patient,
-            indications: [
-              ...patient.indications,
-              action.indication,
+            patientIndications: [
+              ...patient.patientIndications,
+              {
+                isOriginal: false,      // always false on manual addition of indication
+                indication: action.indication,
+                indication_id: action.indication.id,
+                patient_id: action.patientId,
+              },
             ],
           };
         }
@@ -433,8 +428,8 @@ function patients(state, currentPatientId, action) {
         if (patient.id === currentPatientId) {
           return {
             ...patient,
-            indications: patient.indications.filter(indication => (
-              indication.id !== action.indicationId
+            patientIndications: patient.patientIndications.filter(pi => (
+              pi.indication.id !== action.indicationId
             )),
           };
         }

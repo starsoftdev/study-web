@@ -1,5 +1,6 @@
 /* eslint-disable comma-dangle, no-case-declarations */
 import _, { forEach, map } from 'lodash';
+import moment from 'moment';
 
 import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
@@ -27,6 +28,7 @@ import {
 
 import {
   RECEIVE_NOTIFICATION,
+  SEND_STUDY_PATIENT_MESSAGES,
 } from 'containers/GlobalNotifications/constants';
 
 const initialState = {
@@ -104,6 +106,16 @@ export default function homePageReducer(state = initialState, action) {
         ...state,
         rewardsPoint: action.payload.rewardPoints,
       };
+    case SEND_STUDY_PATIENT_MESSAGES:
+      newState = state;
+      return {
+        ...state,
+        patientMessages: {
+          unreadTexts: newState.patientMessages.unreadTexts,
+          unreadEmails: newState.patientMessages.unreadEmails,
+          total: newState.patientMessages.total + 1,
+        },
+      };
     case RECEIVE_NOTIFICATION:
       newState = state;
       switch (action.payload.event) {
@@ -177,8 +189,8 @@ export default function homePageReducer(state = initialState, action) {
           endDateStr = '';
 
           if (siteIterator.campaigns && siteIterator.campaigns.length > 0 && siteIterator.campaigns[0]) {
-            startDateStr = new Date(siteIterator.campaigns[0].dateFrom).toLocaleDateString();
-            endDateStr = new Date(siteIterator.campaigns[0].dateTo).toLocaleDateString();
+            startDateStr = moment.utc(siteIterator.campaigns[0].dateFrom).format('MM/DD/YYYY');
+            endDateStr = moment.utc(siteIterator.campaigns[0].dateTo).format('MM/DD/YYYY');
           }
           entity = {
             ...entity,

@@ -95,6 +95,10 @@ import {
   GET_AVAIL_PHONE_NUMBERS_SUCCESS,
 
   GET_CREDITS_PRICE_SUCCESS,
+
+  CHANGE_USERS_TIMEZONE,
+  CHANGE_USERS_TIMEZONE_SUCCESS,
+  CHANGE_USERS_TIMEZONE_ERROR,
 } from './constants';
 
 import {
@@ -193,6 +197,9 @@ const initialState = {
     },
     availPhoneNumbers: [],
     creditsPrice: {},
+    changeUsersTimezoneState: {
+      saving: false,
+    },
   },
 };
 
@@ -959,6 +966,36 @@ export default function appReducer(state = initialState, action) {
     case GET_CREDITS_PRICE_SUCCESS:
       baseDataInnerState = {
         creditsPrice: payload,
+      };
+      break;
+    case CHANGE_USERS_TIMEZONE:
+      baseDataInnerState = {
+        changeUsersTimezoneState: {
+          saving: true,
+        },
+      };
+      break;
+    case CHANGE_USERS_TIMEZONE_SUCCESS:
+      baseDataInnerState = {
+        changeUsersTimezoneState: {
+          saving: false,
+        },
+      };
+
+      resultState = {
+        ...state,
+        userData: { ...state.userData, timezone: payload },
+        baseData: {
+          ...state.baseData,
+          ...baseDataInnerState,
+        },
+      };
+      break;
+    case CHANGE_USERS_TIMEZONE_ERROR:
+      baseDataInnerState = {
+        changeUsersTimezoneState: {
+          saving: false,
+        },
       };
       break;
     default:
