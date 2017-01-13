@@ -401,7 +401,7 @@ function patients(state, currentPatientId, action) {
                 indication: action.indication,
                 indication_id: action.indication.id,
                 patient_id: action.patientId,
-              }
+              },
             ],
           };
         }
