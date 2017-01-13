@@ -38,14 +38,15 @@ const selectSelectedPatientDetailsForForm = () => createSelector(
       return null;
     }
 
-    let selectedPatientDetailsForForm = omit(selectedPatientDetails, ['created', 'indications', 'source_id', 'source', 'lastAction', 'study_patient_category_id', 'studyPatientCategory']);
+    let selectedPatientDetailsForForm = omit(selectedPatientDetails, ['created', 'patientIndications', 'source_id', 'source', 'lastAction', 'study_patient_category_id', 'studyPatientCategory']);
     selectedPatientDetailsForForm = {
       ...selectedPatientDetailsForForm,
-      indications: map(selectedPatientDetails.indications, indicationIterator => ({
-        label: indicationIterator.name,
-        value: indicationIterator.id,
-        id: indicationIterator.id,
-        name: indicationIterator.name,
+      indications: map(selectedPatientDetails.patientIndications, piIterator => ({
+        label: piIterator.indication.name,
+        value: piIterator.indication.id,
+        id: piIterator.indication.id,
+        name: piIterator.indication.name,
+        isOriginal: piIterator.isOriginal,
       })),
       status: selectedPatientDetails.studyPatientCategory ? parseInt(selectedPatientDetails.studyPatientCategory.patient_category_id, 10) : false,
       source: selectedPatientDetails.source_id,
