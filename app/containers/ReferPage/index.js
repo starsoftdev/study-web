@@ -16,13 +16,25 @@ import { fields } from 'components/ReferForm/validator';
 
 import { selectCompanyTypes } from 'containers/ReferPage/selectors';
 import { submitForm, fetchCompanyTypes } from 'containers/ReferPage/actions';
+import {
+  fetchSites,
+} from 'containers/App/actions';
+import {
+  selectSiteLocations,
+  selectCurrentUser,
+} from 'containers/App/selectors';
 
 import manImage from 'assets/images/man.svg';
 import shadowImage from 'assets/images/shadow.png';
 
+import _ from 'lodash';
+
 export class ReferPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    siteLocations: PropTypes.array,
+    fetchSites: PropTypes.func,
     companyTypes: PropTypes.array,
+    currentUser: PropTypes.object,
     hasErrors: PropTypes.bool,
     fetchCompanyTypes: PropTypes.func,
     submitForm: PropTypes.func,
@@ -30,6 +42,7 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentDidMount() {
+    this.props.fetchSites();
     this.props.fetchCompanyTypes();
   }
 
@@ -38,11 +51,23 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
       this.props.touchRefer();
       return;
     }
-    this.props.submitForm(values);
+    const siteLocation = _.find(this.props.siteLocations, { id: values.siteLocation });
+    const newValues = {
+      siteLocationName: siteLocation.name,
+      user_id: this.props.currentUser.id,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      companyType: values.companyType,
+      companyName: values.companyName,
+      siteLocation: values.siteLocation,
+      message: values.message,
+    };
+    this.props.submitForm(newValues);
   }
 
   render() {
-    const { companyTypes } = this.props;
+    const { siteLocations, companyTypes } = this.props;
 
     return (
       <div className="container-fluid">
@@ -52,7 +77,6 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
           <h2 className="main-heading">REFER</h2>
 
           <div className="row form-study">
-
             <div className="refer-info pull-right">
               <div className="refer-holder">
                 <div className="textbox text-center pull-left">
@@ -79,7 +103,7 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
             </div>
 
             <div className="form-holder ovh">
-              <ReferForm companyTypes={companyTypes} onSubmit={this.onSubmitForm} />
+              <ReferForm siteLocations={siteLocations} companyTypes={companyTypes} onSubmit={this.onSubmitForm} />
             </div>
 
           </div>
@@ -90,12 +114,15 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
 }
 
 const mapStateToProps = createStructuredSelector({
+  siteLocations : selectSiteLocations(),
+  currentUser: selectCurrentUser(),
   companyTypes: selectCompanyTypes(),
   hasErrors: selectReferFormError(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchSites:       () => dispatch(fetchSites()),
     fetchCompanyTypes: () => dispatch(fetchCompanyTypes()),
     submitForm: (values) => dispatch(submitForm(values)),
     touchRefer: () => dispatch(touch('refer', ...fields)),

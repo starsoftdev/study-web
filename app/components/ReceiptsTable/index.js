@@ -64,8 +64,8 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
       checkAll: false,
       receipts: false,
       filteredReceipts: null,
-      activeSort: null,
-      activeDirection: null,
+      activeSort: 'created',
+      activeDirection: 'down',
     };
   }
 

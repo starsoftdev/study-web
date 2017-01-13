@@ -45,7 +45,7 @@ export function* submitFormWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      yield put(toastrActions.success('IRB Ad Form', 'The request has been submitted successfully'));
+      yield put(toastrActions.success('IRB Ad Creation', 'The request has been submitted successfully'));
       yield put(formSubmitted(response));
 
       // Clear the form values

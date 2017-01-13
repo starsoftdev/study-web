@@ -112,6 +112,13 @@ import {
   FETCH_INDICATION_LEVEL_PRICE,
   FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
   FETCH_INDICATION_LEVEL_PRICE_ERROR,
+
+  FETCH_PATIENT_ORIGINAL_INDICATION,
+  FETCH_PATIENT_ORIGINAL_INDICATION_SUCCESS,
+
+  CHANGE_USERS_TIMEZONE,
+  CHANGE_USERS_TIMEZONE_SUCCESS,
+  CHANGE_USERS_TIMEZONE_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -768,6 +775,42 @@ export function fetchIndicationLevelPriceSuccess(payload) {
 export function fetchIndicationLevelPriceError(payload) {
   return {
     type: FETCH_INDICATION_LEVEL_PRICE_ERROR,
+    payload,
+  };
+}
+
+export function fetchPatientOriginalIndication(patientId) {
+  return {
+    type: FETCH_PATIENT_ORIGINAL_INDICATION,
+    patientId,
+  };
+}
+
+export function fetchPatientOriginalIndicationSuccess(payload) {
+  return {
+    type: FETCH_PATIENT_ORIGINAL_INDICATION_SUCCESS,
+    payload,
+  };
+}
+
+export function changeUsersTimezone(userId, payload) {
+  return {
+    type: CHANGE_USERS_TIMEZONE,
+    userId,
+    payload,
+  };
+}
+
+export function changeUsersTimezoneSuccess(payload) {
+  return {
+    type: CHANGE_USERS_TIMEZONE_SUCCESS,
+    payload,
+  };
+}
+
+export function changeUsersTimezoneError(payload) {
+  return {
+    type: CHANGE_USERS_TIMEZONE_ERROR,
     payload,
   };
 }

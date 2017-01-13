@@ -19,6 +19,7 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
     const cts = messageData.twilioTextMessage.dateCreated;
     const cdate = (new Date(cts)).toLocaleString();
 
+    let addon = '';
     let containerClassName = 'post-holder';
     let senderImage = defaultUserImageGirl;
     // todo remove and put back Anonymous behavior
@@ -43,14 +44,23 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
       }
     }
 
+    if (messageData.twilioTextMessage.isStopMessage) {
+      addon = <span className="stop-list-notification">This patient no longer wants to receive text messages. The ability to text him/her through your portal has been removed. You may still call or email to see if he/she qualifies for the study.</span>;
+    } else if (messageData.twilioTextMessage.isStartMessage) {
+      addon = <span className="stop-list-notification">This patient is able to receive text messages.</span>;
+    }
+
     return (
       <div className={containerClassName} data-post="1">
         <div className="img-holder"><img alt="" src={senderImage} /></div>
         <div className="post-content">
-          <p>{messageData.twilioTextMessage.body}</p>
+          <p>
+            {messageData.twilioTextMessage.body}
+            {addon}
+          </p>
         </div>
         <strong className="email">{senderName}</strong>
-        <time >{cdate}</time>
+        <time>{cdate}</time>
       </div>
     );
   }

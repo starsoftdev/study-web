@@ -1,5 +1,6 @@
 /* eslint-disable comma-dangle, no-case-declarations */
 import _, { forEach, map } from 'lodash';
+import moment from 'moment';
 
 import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
@@ -37,6 +38,7 @@ import {
 
 import {
   RECEIVE_NOTIFICATION,
+  SEND_STUDY_PATIENT_MESSAGES,
 } from 'containers/GlobalNotifications/constants';
 
 const initialState = {
@@ -53,6 +55,7 @@ const initialState = {
   patientMessages: {
     unreadTexts: 0,
     unreadEmails: 0,
+    total: 0,
   },
   rewardsPoint: 0,
   studies: {
@@ -125,6 +128,7 @@ export default function homePageReducer(state = initialState, action) {
         patientMessages: {
           unreadTexts: payload.unreadTexts,
           unreadEmails: payload.unreadEmails,
+          total: payload.total,
         },
       };
     case FETCH_REWARDS_POINT_SUCCEESS:
@@ -139,6 +143,16 @@ export default function homePageReducer(state = initialState, action) {
           active: payload.active,
           inactive: payload.inactive,
           total: payload.total,
+        },
+      };
+    case SEND_STUDY_PATIENT_MESSAGES:
+      newState = state;
+      return {
+        ...state,
+        patientMessages: {
+          unreadTexts: newState.patientMessages.unreadTexts,
+          unreadEmails: newState.patientMessages.unreadEmails,
+          total: newState.patientMessages.total + 1,
         },
       };
     case RECEIVE_NOTIFICATION:
@@ -159,6 +173,7 @@ export default function homePageReducer(state = initialState, action) {
             patientMessages: {
               unreadTexts: newState.patientMessages.unreadTexts + 1,
               unreadEmails: newState.patientMessages.unreadEmails,
+              total: newState.patientMessages.total + 1,
             },
           };
           break;
@@ -213,8 +228,8 @@ export default function homePageReducer(state = initialState, action) {
           endDateStr = '';
 
           if (siteIterator.campaigns && siteIterator.campaigns.length > 0 && siteIterator.campaigns[0]) {
-            startDateStr = new Date(siteIterator.campaigns[0].dateFrom).toLocaleDateString();
-            endDateStr = new Date(siteIterator.campaigns[0].dateTo).toLocaleDateString();
+            startDateStr = moment.utc(siteIterator.campaigns[0].dateFrom).format('MM/DD/YYYY');
+            endDateStr = moment.utc(siteIterator.campaigns[0].dateTo).format('MM/DD/YYYY');
           }
           entity = {
             ...entity,

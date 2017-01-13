@@ -40,7 +40,7 @@ class CalendarWidget extends React.Component {
           eventPropGetter={(event, start, end, isSelected) => ({
           })}
           onSelectSlot={({ start, end, slots }) => {
-            if (slots.length === 1 && moment(this.currentDate).month() === moment(start).month()) {
+            if (slots.length === 1) {
               this.props.handleOpenModal(SchedulePatientModalType.CREATE, { selectedDate: start });
             }
           }}
