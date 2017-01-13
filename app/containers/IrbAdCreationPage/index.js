@@ -61,6 +61,10 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     if (!isNaN(props.params.id)) {
       this.props.fetchIrbAdCreation(props.params.id);
     }
+
+    this.state = {
+      uniqueId: '1'
+    }
   }
 
   componentDidMount() {
@@ -79,6 +83,10 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
 
     const siteLocation = _.find(this.props.siteLocations, { id: this.props.formValues.siteLocation });
     const indication = _.find(this.props.indications, { id: this.props.formValues.indication_id });
+
+    this.setState({
+      uniqueId: this.state.uniqueId + '1'
+    });
     this.submitForm(shoppingCartFormValues, {
       ...this.props.formValues,
       siteLocationName: siteLocation.name,
