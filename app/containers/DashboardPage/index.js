@@ -4,76 +4,69 @@ import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 import { Modal } from 'react-bootstrap';
 import Button from 'react-bootstrap/lib/Button';
-import { map } from 'lodash';
+import { map, mapKeys, concat, findIndex, pullAt } from 'lodash';
 import './styles.less';
-import CenteredModal from '../../components/CenteredModal/index';
-import EditUserForm from 'components/EditUserForm';
+import CenteredModal from 'components/CenteredModal';
+import FiltersForm from './FiltersForm';
 import ClientRolesList from 'components/ClientRolesList';
-import { selectCurrentUserClientId, selectClientSites,
-  selectClientRoles, selectSavedSite, selectSavedUser } from 'containers/App/selectors';
-import { fetchClientSites, fetchClientRoles, saveSite, saveUser } from 'containers/App/actions';
+import Filter from 'components/Filter';
+import { selectFilterFormValues } from './FiltersForm/selectors';
 
 export class DashboardPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    currentUserClientId: PropTypes.number,
-    clientSites: PropTypes.object,
-    clientRoles: PropTypes.object,
-    savedSite: PropTypes.object,
-    savedUser: PropTypes.object,
-    fetchClientSites: PropTypes.func,
-    fetchClientRoles: PropTypes.func,
-    saveSite: PropTypes.func,
-    saveUser: PropTypes.func,
+    filtersFormValues: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      addSiteModalOpen: false,
-      addUserModalOpen: false,
-      roleFilterMethod: () => true,
-      siteFilterMethod: () => true,
-      siteName: '',
-      userName: '',
+      customFilters: [],
+      modalFilters: props.filtersFormValues ? props.filtersFormValues : [],
     };
 
     this.addFilter = this.addFilter.bind(this);
-    this.closeAddSiteModal = this.closeAddSiteModal.bind(this);
+    this.removeFilter = this.removeFilter.bind(this);
     this.openFiltersModal = this.openFiltersModal.bind(this);
     this.closeFiltersModal = this.closeFiltersModal.bind(this);
-    this.filterClientRoles = this.filterClientRoles.bind(this);
-    this.filterClientSites = this.filterClientSites.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleSiteQueryChange = this.handleSiteQueryChange.bind(this);
-    this.handleUserQueryChange = this.handleUserQueryChange.bind(this);
-    this.addSite = this.addSite.bind(this);
-    this.addUser = this.addUser.bind(this);
-  }
-
-  componentWillMount() {
-    const { currentUserClientId } = this.props;
-    if (currentUserClientId) {
-      this.props.fetchClientSites(currentUserClientId, {});
-      this.props.fetchClientRoles(currentUserClientId, {});
-    }
   }
 
   componentWillReceiveProps(newProps) {
-    if (!newProps.savedSite.saving && this.props.savedSite.saving) {
-      this.closeAddSiteModal();
+    console.log('new props', newProps);
+
+    this.setState({
+      modalFilters: newProps.filtersFormValues,
+    });
+  }
+
+  addFilter(options) {
+    const { customFilters } = this.state;
+    customFilters.push(options);
+    this.setState({ customFilters });
+  }
+
+  removeFilter(filter) {
+    const { customFilters, modalFilters } = this.state;
+    console.log('remove this filter', filter, customFilters, modalFilters);
+
+    if (filter.name === 'search') {
+      pullAt(customFilters, findIndex(customFilters, filter));
+      this.setState({ customFilters });
+      return;
     }
-    if (!newProps.savedUser.saving && this.props.savedUser.saving) {
-      this.closeFiltersModal();
+
+    if (modalFilters[filter.name]) {
+      pullAt(modalFilters[filter.name], findIndex(modalFilters[filter.name], ['label', filter.value]));
+      this.setState({ modalFilters });
     }
   }
 
-  addFilter() {
-    console.log('add new filter');
+  saveFilters() {
+
   }
 
-  closeAddSiteModal() {
-    this.setState({ addSiteModalOpen: false });
+  clearFilters() {
+    this.setState({ filters: [] });
   }
 
   openFiltersModal() {
@@ -84,92 +77,30 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
     this.setState({ addUserModalOpen: false });
   }
 
-  filterClientSites(searchQuery) {
-    if (searchQuery !== '') {
-      this.setState({
-        siteFilterMethod: (clientSite) => clientSite.name.toUpperCase().includes(searchQuery.toUpperCase()),
-      });
-    } else {
-      this.setState({
-        siteFilterMethod: () => true,
-      });
-    }
-  }
-
-  filterClientRoles(searchQuery) {
-    if (searchQuery !== '') {
-      this.setState({
-        roleFilterMethod: (clientRole) => {
-          const fullName = `${clientRole.user.firstName} ${clientRole.user.lastName}`;
-          return (fullName.toUpperCase().includes(searchQuery.toUpperCase()));
-        },
-      });
-    } else {
-      this.setState({
-        roleFilterMethod: () => true,
-      });
-    }
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    this.filterClientSites(this.state.siteName);
-    this.filterClientRoles(this.state.userName);
-  }
-
-  handleSiteQueryChange(event) {
-    this.setState({
-      siteName: event.target.value,
-    });
-  }
-
   handleUserQueryChange(event) {
     this.setState({
       userName: event.target.value,
     });
   }
 
-  addSite(siteData) {
-    const { currentUserClientId } = this.props;
+  mapFilterValues(filters) {
+    let newFilters = [];
+    mapKeys(filters, (filterValues, key) => {
+      newFilters = concat(newFilters, map(filterValues, (v) => {
+        return {
+          name: key,
+          type: key === 'percentage' ? 'compare' : 'value',
+          value: v.label,
+        };
+      }));
+    });
 
-    this.props.saveSite(currentUserClientId, null, siteData);
-  }
-
-  addUser(userData) {
-    const { currentUserClientId } = this.props;
-    const userInput = {
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      email: userData.email,
-      siteId: parseInt(userData.site, 10),
-    };
-    if (userData.site === '0') {
-      userInput.clientRole = {
-        purchase: userData.purchase || false,
-        reward: userData.reward || false,
-      };
-    }
-
-    this.props.saveUser(currentUserClientId, null, userInput);
+    return newFilters;
   }
 
   render() {
-    const { currentUserClientId, clientSites } = this.props;
-    if (!currentUserClientId) {
-      return (
-        <div className="sites-users-page">
-          <div className="container-fluid">
-            <Helmet title="Manage Sites/Users" />
-            <section className="no-items">
-              <h4>You don't have permission to manage sites and users</h4>
-            </section>
-          </div>
-        </div>
-      );
-    }
-
-    const siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
-    siteOptions.unshift({ label: 'All', value: '0' });
+    const { customFilters, modalFilters } = this.state;
+    const filters = concat(this.mapFilterValues(modalFilters), customFilters);
 
     return (
       <div className="dashboard-page container-fluid">
@@ -177,10 +108,20 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
         <div className="fixed-header clearfix">
           <h2 className="main-heading pull-left">STUDYKIK DASHBOARD</h2>
           <div className="filter-btns pull-right">
-            <button type="button" className="btn btn-primary" onClick={this.openFiltersModal}>
+            <Button
+              bsStyle="primary"
+              onClick={() => this.addFilter({
+                name: 'search',
+                type: 'search',
+                value: '',
+              })}
+            >
+              Search
+            </Button>
+            <Button bsStyle="primary" onClick={this.openFiltersModal}>
               Filters
-            </button>
-            <Modal dialogComponentClass={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.addUserModalOpen} onHide={this.closeFiltersModal}>
+            </Button>
+            <Modal dialogComponentclassName={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.addUserModalOpen} onHide={this.closeFiltersModal}>
               <Modal.Header>
                 <Modal.Title>Filters</Modal.Title>
                 <a className="lightbox-close close" onClick={this.closeFiltersModal}>
@@ -190,55 +131,122 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
               <Modal.Body>
                 <div className="holder clearfix">
                   <div className="form-lightbox">
-                    <EditUserForm siteOptions={siteOptions} onSubmit={this.addUser} />
+                    <FiltersForm handleSubmit={this.addUser} />
                   </div>
                 </div>
               </Modal.Body>
             </Modal>
-            <button type="button" className="btn btn-primary" onClick={this.addFilter}>
-              Search
-            </button>
           </div>
         </div>
         <section className="filters-section">
-          <div className="filters-bar">
-            <div className="filter-holder">
-              <strong className="title">FILTERS</strong>
-              <div className="filter-btns pull-right">
-                <button type="button" className="btn btn-primary" onClick={this.saveFilters}>
-                  Save Filters
-                </button>
-                <button type="button" className="btn btn-primary" onClick={this.clearFilters}>
-                  Clear
-                </button>
-              </div>
-              <form className="form-search clearfix" onSubmit={this.handleSubmit}>
-                <div className="fields-holder pull-left">
-                  <div className="search-area pull-left">
-                    <div className="field">
-                      <Button className="btn-enter" type="submit">
-                        <i className="icomoon-icon_search2" />
-                      </Button>
-                      <input onChange={this.handleSiteQueryChange} type="text" className="form-control keyword-search" placeholder="Search Site Name..." />
-                    </div>
-                  </div>
-                  <div className="search-area pull-left">
-                    <div className="field">
-                      <Button className="btn-enter" type="submit">
-                        <i className="icomoon-icon_search2" />
-                      </Button>
-                      <input onChange={this.handleUserQueryChange} type="text" className="form-control keyword-search" placeholder="Search User Name..." />
-                    </div>
-                  </div>
+          {(filters.length > 0) && (
+            <div className="filters-bar">
+              <div className="filter-holder">
+                <strong className="title">FILTERS</strong>
+                <div className="filter-btns pull-right">
+                  <Button bsStyle="primary" onClick={() => this.saveFilters()}>
+                    Save Filters
+                  </Button>
+                  <Button bsStyle="primary" onClick={() => this.clearFilters()}>
+                    Clear
+                  </Button>
                 </div>
-              </form>
+                <form className="form-search clearfix">
+                  <div className="fields-holder pull-left">
+                    {filters.map((filter, index) =>
+                      <Filter key={index} options={filter} initialValues={modalFilters} onClose={() => this.removeFilter(filter)} />
+                    )}
+                    <Button
+                      bsStyle="primary"
+                      className="pull-left btn-add-filter"
+                      onClick={() => this.addFilter({
+                        name: 'search',
+                        type: 'search',
+                        value: '',
+                      })}
+                    >+</Button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+        </section>
+        <section>
+          <div className="d-stats clearfix">
+            <ul className="list-unstyled info-list  pull-left">
+              <li>
+                <strong className="heading">TODAY:</strong>
+                <span className="number">308</span>
+              </li>
+              <li>
+                <strong className="heading">YESTERDAY: </strong>
+                <span className="number">749</span>
+              </li>
+              <li>
+                <strong className="heading">CAMPAIGN TOTAL: </strong>
+                <span className="number">275390</span>
+              </li>
+              <li>
+                <strong className="heading">GRAND TOTAL: </strong>
+                <span className="number">476</span>
+              </li>
+            </ul>
+            <ul className="list-unstyled info-list pull-left">
+              <li>
+                <strong className="heading">RED: </strong>
+                <span className="number">179 <span>(37.61%)</span></span>
+              </li>
+              <li>
+                <strong className="heading">YELLOW: </strong>
+                <span className="number">107 <span>(22.48%)</span></span>
+              </li>
+              <li>
+                <strong className="heading">GREEN: </strong>
+                <span className="number">165 <span>(34.66%)</span></span>
+              </li>
+              <li>
+                <strong className="heading">PURPLE: </strong>
+                <span className="number">25 <span>(5.25%)</span></span>
+              </li>
+            </ul>
+            <div className="chart pull-left">
+
+            </div>
+            <ul className="list-unstyled info-list pull-left">
+              <li>
+                <strong className="heading">TIER 1: </strong>
+                <span className="number">261 <span>(58.52%)</span></span>
+              </li>
+              <li>
+                <strong className="heading">TIER 2: </strong>
+                <span className="number">78 <span>(17.49%)</span></span>
+              </li>
+              <li>
+                <strong className="heading">TIER 3: </strong>
+                <span className="number">65 <span>(14.57%)</span></span>
+              </li>
+              <li>
+                <strong className="heading">TIER 4: </strong>
+                <span className="number">42 <span>(9.42%)</span></span>
+              </li>
+            </ul>
+            <div className="chart pull-left">
             </div>
           </div>
-          <div className="stats clearfix"></div>
-          <div className="graph-area"></div>
+          <div className="graph-area clearfix">
+            <div className="head clearfix">
+              <h2 className="pull-left">PATIENTS PER DAY</h2>
+              <span className="counter pull-left">0% OF GOAL 0.49%</span>
+              <Button bsStyle="primary" className="lightbox-opener pull-right" onClick={this.openDateRangeModal}>
+                <i className="icon-icon_calendar"></i>
+            Last 30 days: 08/04/16 - 09/04/16
+              </Button>
+            </div>
+            <div className="graph-holder">
+            </div>
+          </div>
           <div className="table-container">
             <section className="table-holder form-group client-roles-holder">
-              <ClientRolesList filterMethod={this.state.roleFilterMethod} />
             </section>
           </div>
         </section>
@@ -248,19 +256,11 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUserClientId: selectCurrentUserClientId(),
-  clientSites: selectClientSites(),
-  clientRoles: selectClientRoles(),
-  savedSite: selectSavedSite(),
-  savedUser: selectSavedUser(),
+  filtersFormValues: selectFilterFormValues(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
-    fetchClientRoles: (clientId, searchParams) => dispatch(fetchClientRoles(clientId, searchParams)),
-    saveSite: (clientId, id, data) => dispatch(saveSite(clientId, id, data)),
-    saveUser: (clientId, id, data) => dispatch(saveUser(clientId, id, data)),
   };
 }
 
