@@ -18,7 +18,6 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
     siteLocations: PropTypes.array,
     indications: PropTypes.array,
     handleSubmit: React.PropTypes.func.isRequired,
-    fileName: React.PropTypes.string,
   };
 
   constructor(props) {
@@ -26,14 +25,8 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
 
     this.handleFileChange = this.handleFileChange.bind(this);
     this.state = {
-      fileName: this.props.fileName,
+      fileName: '',
     };
-  }
-
-  reset() {
-    this.setState({
-      fileName: ''
-    });
   }
 
   handleFileChange(e) {
@@ -46,6 +39,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
 
   render() {
     const { siteLocations, indications, handleSubmit } = this.props;
+    const { fileName } = this.state;
 
     return (
       <form className="form-study" onSubmit={handleSubmit}>
@@ -128,7 +122,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
                 component={Input}
                 type="file"
               />
-              <strong className="label lfilename"><label className="filename" htmlFor="irb_filename">{this.state.fileName}</label></strong>
+              <strong className="label lfilename"><label className="filename" htmlFor="irb_filename">{fileName}</label></strong>
             </div>
           </div>
 
