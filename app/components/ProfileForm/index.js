@@ -42,8 +42,6 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     const regionOptions = [];
     const regionWithTimezones = [];
 
-
-    console.log(timezones);
     for (const tz of timezones) {
       const parsedRegion = tz.substr(0, tz.indexOf('/'));
       const parsedTimezone = tz.substr(tz.indexOf('/') + 1);
@@ -52,24 +50,24 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         regionWithTimezones[parsedTimezone] = [];
 
         regionWithTimezones[parsedTimezone].push({
-          label: parsedTimezone,
+          label: parsedTimezone.replace(/_/g, ' '),
           value: parsedTimezone,
         });
 
         regionOptions.push({
-          label: parsedTimezone,
+          label: parsedTimezone.replace(/_/g, ' '),
           value: parsedTimezone,
         });
       } else if (regionWithTimezones[parsedRegion]) {
         regionWithTimezones[parsedRegion].push({
-          label: parsedTimezone,
+          label: parsedTimezone.replace(/_/g, ' '),
           value: parsedTimezone,
         });
       } else {
         regionWithTimezones[parsedRegion] = [];
 
         regionWithTimezones[parsedRegion].push({
-          label: parsedTimezone,
+          label: parsedTimezone.replace(/_/g, ' '),
           value: parsedTimezone,
         });
 
