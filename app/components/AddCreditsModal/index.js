@@ -21,6 +21,8 @@ import { selectAddCreditsFormValues, selectAddCreditsFormError } from './selecto
 import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
 import validator, { addCreditsFields } from './validator';
 
+import _ from 'lodash';
+
 @reduxForm({
   form: 'addCredits',
   validate: validator,
@@ -134,12 +136,14 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
       touchAddCredits,
     } = this.props;
 
+    const siteLocationName = _.find(this.props.siteLocations, { id: addCreditsFormValues.siteLocation });
     const data = {
       quantity: this.state.quantity,
       totalAmount: this.state.quantity * this.props.creditsPrice.price,
       cardId: shoppingCartFormValues.creditCard,
       userId: this.props.currentUser.id,
       site: addCreditsFormValues.siteLocation,
+      siteLocationName: siteLocationName.name,
     };
 
     if (addCreditsFormError || shoppingCartFormError) {

@@ -434,6 +434,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                       showCards
                       noBorder
                       addOns={addOns}
+                      manualDisableSubmit={this.props.renewedStudy.submitting}
                       validateAndSubmit={this.handleRenewStudyFormSubmit}
                     />
                   </div>
@@ -471,6 +472,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                       showCards
                       noBorder
                       addOns={addOns}
+                      manualDisableSubmit={this.props.upgradedStudy.submitting}
                       validateAndSubmit={this.handleUpgradeStudyFormSubmit}
                     />
                   </div>
