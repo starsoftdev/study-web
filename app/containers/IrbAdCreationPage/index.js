@@ -63,8 +63,8 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     }
 
     this.state = {
-      uniqueId: '1'
-    }
+      uniqueId: '1',
+    };
   }
 
   componentDidMount() {
@@ -95,11 +95,11 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
 
     if (this.state.uniqueId.length > 1) {
       this.setState({
-        uniqueId: '1'
+        uniqueId: '1',
       });
     } else {
       this.setState({
-        uniqueId: '11'
+        uniqueId: '11',
       });
     }
   }
@@ -122,7 +122,8 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
             <h2 className="main-heading">ORDER IRB AD CREATION</h2>
             <div className="form-study row">
               <div className="col-xs-6 form-holder">
-                <IrbAdCreationForm key={this.state.uniqueId}
+                <IrbAdCreationForm
+                  key={this.state.uniqueId}
                   siteLocations={siteLocations}
                   indications={indications}
                   initialValues={irbAdCreationDetail}
