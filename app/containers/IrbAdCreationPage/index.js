@@ -84,9 +84,6 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     const siteLocation = _.find(this.props.siteLocations, { id: this.props.formValues.siteLocation });
     const indication = _.find(this.props.indications, { id: this.props.formValues.indication_id });
 
-    this.setState({
-      uniqueId: this.state.uniqueId + '1'
-    });
     this.submitForm(shoppingCartFormValues, {
       ...this.props.formValues,
       siteLocationName: siteLocation.name,
@@ -95,6 +92,16 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
       stripeProductId: this.props.productList[0].stripeProductId,
       stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
     });
+
+    if (this.state.uniqueId.length > 1) {
+      this.setState({
+        uniqueId: '1'
+      });
+    } else {
+      this.setState({
+        uniqueId: '11'
+      });
+    }
   }
 
   render() {
@@ -115,7 +122,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
             <h2 className="main-heading">ORDER IRB AD CREATION</h2>
             <div className="form-study row">
               <div className="col-xs-6 form-holder">
-                <IrbAdCreationForm
+                <IrbAdCreationForm key={this.state.uniqueId}
                   siteLocations={siteLocations}
                   indications={indications}
                   initialValues={irbAdCreationDetail}
