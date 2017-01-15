@@ -444,12 +444,14 @@ export default function createRoutes(store) {
       name: 'dashboardPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
+          System.import('containers/DashboardPage/reducer'),
           System.import('containers/DashboardPage'),
         ]);
 
         const renderRoute = loadModule(cb);
 
-        importModules.then(([component]) => {
+        importModules.then(([reducer, component]) => {
+          injectReducer('dashboardPage', reducer.default);
           renderRoute(component);
         });
 
