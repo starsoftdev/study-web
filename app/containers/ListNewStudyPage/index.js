@@ -116,9 +116,13 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       }
     });
 
+    const siteLocation = _.find(this.props.siteLocations, { id: this.props.formValues.siteLocation });
+
     this.submitForm(shoppingCartFormValues, {
       ...this.props.formValues,
+      siteLocationName: siteLocation.name,
       user_id: this.props.currentUser.id,
+      currentUser: this.props.currentUser,
       emailNotifications: filteredEmails,
       stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
     });
