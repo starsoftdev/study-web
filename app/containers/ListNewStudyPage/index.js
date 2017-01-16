@@ -78,6 +78,9 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     this.onSubmitForm = this.onSubmitForm.bind(this);
     this.closeSubmitFormModal = this.closeSubmitFormModal.bind(this);
     this.goToStudyPage = this.goToStudyPage.bind(this);
+    this.state = {
+      uniqueId: '1',
+    };
   }
 
   componentDidMount() {
@@ -126,6 +129,16 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       emailNotifications: filteredEmails,
       stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
     });
+
+    if (this.state.uniqueId.length > 1) {
+      this.setState({
+        uniqueId: '1',
+      });
+    } else {
+      this.setState({
+        uniqueId: '11',
+      });
+    }
   }
 
   goToStudyPage() {
@@ -142,6 +155,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
   render() {
     const { siteLocations, indications, studyLevels, formValues, fullSiteLocations, indicationLevelPrice } = this.props;
+    const { uniqueId} = this.state;
 
     const addOns = [];
     const level = find(studyLevels, { id: formValues.exposureLevel });
@@ -185,6 +199,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
             <div className="col-xs-6 form-holder">
               <ListNewStudyForm
+                key={uniqueId}
                 formValues={formValues}
                 fullSiteLocations={fullSiteLocations}
                 siteLocations={siteLocations}
