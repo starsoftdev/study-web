@@ -146,7 +146,6 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
     return null;
   }
 
-
   mapFilterValues(filters) {
     let newFilters = [];
     mapKeys(filters, (filterValues, key) => {
