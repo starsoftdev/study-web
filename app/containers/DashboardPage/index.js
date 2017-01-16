@@ -16,6 +16,7 @@ import { selectFilterFormValues } from './FiltersForm/selectors';
 import rd3 from 'react-d3';
 
 const PieChart = rd3.PieChart;
+const LineChart = rd3.LineChart;
 
 @reduxForm({ form: 'filterPanel', destroyOnUnmount: false })
 export class DashboardPage extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -121,6 +122,13 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
       { label: 'TIER 2', value: 78 },
       { label: 'TIER 3', value: 65 },
       { lable: 'TIER 4', value: 42 },
+    ];
+
+    const lineData = [
+      {
+        name: 'Patients',
+        values: [{ x: 0, y: 2 }, { x: 1, y: 3 }, { x: 2, y: 1 }, { x: 3, y: 3 }, { x: 4, y: 5 }, { x: 5, y: 1 }, { x: 6, y: 3 }, { x: 7, y: 2 }, { x: 8, y: 4 }, { x: 10, y: 1 }, { x: 12, y: 3 }, { x: 13, y: 1 }, { x: 15, y: 5 }],
+      },
     ];
 
     return (
@@ -291,6 +299,17 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
               </Button>
             </div>
             <div className="graph-holder">
+              <LineChart
+                data={lineData}
+                width="100%"
+                height={130}
+                viewBoxObject={{
+                  x: 0,
+                  y: 0,
+                  width: 1200,
+                  height: 150,
+                }}
+              />
             </div>
           </div>
           <div className="table-container">
