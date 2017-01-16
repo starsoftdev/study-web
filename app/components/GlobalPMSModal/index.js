@@ -16,6 +16,7 @@ import {
   selectCurrentUser,
   selectSitePatients,
   selectPatientMessages,
+  selectClientCredits,
 } from 'containers/App/selectors';
 
 import MessageItem from './MessageItem';
@@ -31,6 +32,7 @@ import {
   fetchPatientMessages,
   markAsReadPatientMessages,
   updateSitePatients,
+  fetchClientCredits,
 } from 'containers/App/actions';
 import {
   selectSocket,
@@ -60,6 +62,8 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     sendStudyPatientMessages: React.PropTypes.func,
     markAsReadPatientMessages: React.PropTypes.func,
     setChatTextValue: React.PropTypes.func,
+    clientCredits: React.PropTypes.object,
+    fetchClientCredits: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -78,8 +82,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   componentWillReceiveProps(newProps) {
+    const { currentUser } = newProps;
     if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
+        this.props.fetchClientCredits(currentUser.id);
         if (newMessage.twilioTextMessage.direction === 'inbound') {
           this.startSound();
         }
@@ -144,6 +150,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
 
   render() {
     const { sitePatients, patientMessages, sendStudyPatientMessages } = this.props;
+    const clientCredits = this.props.clientCredits;
     const sitePatientArray = [];
     sitePatients.details.forEach((item) => {
       if (item.show === undefined || (item.show && item.show === true)) {
@@ -239,7 +246,11 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                     </article>
                   </div>
                   <footer>
-                    <ChatForm selectedPatient={this.state.selectedPatient} sendStudyPatientMessages={sendStudyPatientMessages} />
+                    <ChatForm
+                      clientCredits={clientCredits}
+                      selectedPatient={this.state.selectedPatient}
+                      sendStudyPatientMessages={sendStudyPatientMessages}
+                    />
                   </footer>
                 </section>
               </div>
@@ -255,6 +266,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   sitePatients: selectSitePatients(),
   patientMessages: selectPatientMessages(),
+  clientCredits: selectClientCredits(),
   socket: selectSocket(),
 });
 
@@ -267,6 +279,7 @@ function mapDispatchToProps(dispatch) {
     markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
     sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
     setChatTextValue: (value) => dispatch(change('chatPatient', 'body', value)),
+    fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
   };
 }
 

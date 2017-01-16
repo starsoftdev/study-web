@@ -16,6 +16,7 @@ import { selectSelectedIndicationLevelPrice } from 'containers/HomePage/selector
 import { CAMPAIGN_LENGTH_LIST } from 'common/constants';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
+import _ from 'lodash';
 
 const mapStateToProps = createStructuredSelector({
   studyLevels: selectStudyLevels(),
@@ -32,6 +33,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     studyLevels: PropTypes.array,
     selectedIndicationLevelPrice: PropTypes.object,
     campaignLength: PropTypes.number,
+    selectedStudy: PropTypes.object,
   };
 
   componentWillReceiveProps(newProps) {
@@ -43,7 +45,17 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { studyLevels, campaignLength, selectedIndicationLevelPrice } = this.props;
+    const { studyLevels, campaignLength, selectedIndicationLevelPrice, selectedStudy } = this.props;
+
+    let initDate = moment();
+    let minDate = 'none';
+
+    if (selectedStudy && selectedStudy.maxCampaign && selectedStudy.maxCampaign.dateTo) {
+      minDate = moment.utc(selectedStudy.maxCampaign.dateTo).add(1, 'days');
+      if (initDate <= minDate) {
+        initDate = _.cloneDeep(minDate);
+      }
+    }
 
     return (
       <form className="form-renew-study">
@@ -57,7 +69,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                 name="exposureLevel"
                 className="with-loader-disabled-for-now"
                 component={ReactSelect}
-                placeholder="Select..."
+                placeholder="Select Exposure Level"
                 options={studyLevels}
                 disabled={selectedIndicationLevelPrice.fetching}
               />
@@ -78,7 +90,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
               <Field
                 name="campaignLength"
                 component={ReactSelect}
-                placeholder="Select..."
+                placeholder="Select Campaign Length"
                 options={CAMPAIGN_LENGTH_LIST}
               />
             </div>
@@ -131,7 +143,8 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                 name="startDate"
                 component={DatePicker}
                 className="form-control datepicker-input"
-                initialDate={moment(new Date())}
+                initialDate={initDate}
+                minDate={minDate}
               />
             </div>
           </div>

@@ -34,6 +34,7 @@ class AddEmailNotificationForm extends React.Component { // eslint-disable-line 
                 <Field
                   name="firstName"
                   component={Input}
+                  placeholder="First Name"
                   type="text"
                 />
               </div>
@@ -41,6 +42,7 @@ class AddEmailNotificationForm extends React.Component { // eslint-disable-line 
                 <Field
                   name="lastName"
                   component={Input}
+                  placeholder="Last Name"
                   type="text"
                 />
               </div>

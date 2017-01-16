@@ -24,6 +24,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     onEdit: PropTypes.func,
     push: PropTypes.func,
     orderNumber: PropTypes.number,
+    siteId: PropTypes.number,
   };
 
   constructor(props) {
@@ -47,15 +48,15 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   onRenewClick() {
-    const { studyId, indication, onRenew, campaign } = this.props;
+    const { studyId, indication, onRenew, campaign, siteId } = this.props;
 
-    onRenew(studyId, indication.id, campaign);
+    onRenew(studyId, indication.id, campaign, siteId);
   }
 
   onUpgradeClick() {
-    const { studyId, indication, onUpgrade, campaign } = this.props;
+    const { studyId, indication, onUpgrade, campaign, siteId } = this.props;
 
-    onUpgrade(studyId, indication.id, campaign);
+    onUpgrade(studyId, indication.id, campaign, siteId);
   }
 
   onEditClick() {
@@ -102,7 +103,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <span>{protocol}</span>
         </td>
         <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off') })}>
-          <span>{patientMessagingSuite}</span>
+          <span className="patient-messaging-suite-status">{patientMessagingSuite}</span>
           <span>{messageCountContent}</span>
         </td>
         <td className={classNames('status', { inactive: (status === 'Inactive') })}>

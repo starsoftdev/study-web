@@ -75,7 +75,7 @@ class NotificationBox extends React.Component {
           onClick={() => this.handleBadgeNumberClick()}
         >
           <i className="icomoon-bell" />
-          <span className="counter">{this.props.unreadNotificationsCount}</span>
+          { this.props.unreadNotificationsCount > 0 && <span className="counter">{this.props.unreadNotificationsCount}</span> }
         </a>
 
         {this.state.dropdownOpen &&

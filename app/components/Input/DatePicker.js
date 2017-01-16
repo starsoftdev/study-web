@@ -18,6 +18,7 @@ export default class DatePicker extends Component {
     className: PropTypes.string,
     initialDate: PropTypes.object.isRequired,
     dateStyle: PropTypes.string,
+    minDate: PropTypes.any,
   }
 
   static defaultProps = {
@@ -74,7 +75,6 @@ export default class DatePicker extends Component {
     const monthDiff = ((todayYear - calendarYear) * 12) + (todayMonth - calendarMonth);
 
     this.calendar.changeMonth(monthDiff, { preventDefault: _.noop });
-    this.handleSelect(today);
   }
 
   toggleModal(visible) {
@@ -82,7 +82,7 @@ export default class DatePicker extends Component {
   }
 
   render() {
-    const { name, className, dateStyle, ...rest } = this.props;
+    const { name, className, dateStyle, minDate, ...rest } = this.props;
     const { date, modalVisible } = this.state;
 
     const currentDate = moment();
@@ -122,6 +122,7 @@ export default class DatePicker extends Component {
             onChange={this.handleSelect}
             className="calendar custom-calendar"
             ref={(calendar) => { this.calendar = calendar; }}
+            minDate={minDate || 'none'}
           />
           <div className="current-date" onClick={this.navigateToday}>
             Today: {currentDate.format('dddd, MMMM Do, YYYY')}

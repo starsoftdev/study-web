@@ -15,7 +15,6 @@ import CenteredModal from '../../components/CenteredModal/index';
 import Modal from 'react-bootstrap/lib/Modal';
 import { selectImportPatientsStatus } from './selectors';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import Button from 'react-bootstrap/lib/Button';
 
 class PatientActionButtons extends React.Component {
   static propTypes = {
@@ -143,7 +142,6 @@ class PatientActionButtons extends React.Component {
   }
 
   renderUpload() {
-    const { clearForm } = this.props;
     const { uploadStart, fileUploaded } = this.props.importPatientsStatus;
 
     if (uploadStart) {
@@ -163,7 +161,7 @@ class PatientActionButtons extends React.Component {
         <div className="upload-patient-info">
           <div className="table">
             <label className="table-cell" htmlFor="file">
-              <i className="icomoon-arrow_up_alt" />
+              <i className={fileUploaded ? 'icomoon-icon_check' : 'icomoon-arrow_up_alt'} />
               <span className="text">Upload Patients</span>
               {fileUploaded && <span className="jcf-file jcf-extension-csv parent-active">{fileUploaded}</span>}
               <span className="jcf-file">
@@ -183,7 +181,6 @@ class PatientActionButtons extends React.Component {
             </label>
 
           </div>
-          {fileUploaded && <Button className="clear-import-button" onClick={() => clearForm()}><i className="fa fa-times" aria-hidden="true" /></Button>}
 
         </div>
       </div>
