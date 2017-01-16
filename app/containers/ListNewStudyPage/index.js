@@ -120,10 +120,12 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     });
 
     const siteLocation = _.find(this.props.siteLocations, { id: this.props.formValues.siteLocation });
+    const indication = _.find(this.props.indications, { id: this.props.formValues.indication_id });
 
     this.submitForm(shoppingCartFormValues, {
       ...this.props.formValues,
       siteLocationName: siteLocation.name,
+      indicationName: indication.name,
       user_id: this.props.currentUser.id,
       currentUser: this.props.currentUser,
       emailNotifications: filteredEmails,
