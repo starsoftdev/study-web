@@ -47,7 +47,6 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     const { isLoggedIn, userDataFetched, pageEvents, location } = this.props;
     const { pathname } = location;
 
-    console.log('App Props pathname', pathname);
     if (!isLoggedIn) {
       return (
         <div className="container-fluid">
