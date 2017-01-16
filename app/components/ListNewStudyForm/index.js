@@ -70,10 +70,6 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     };
   }
 
-  handleFileChange(e) {
-    this.setState({ fileName: e.target.files[0].name });
-  }
-
   componentWillReceiveProps(newProps) {
     // If leads are all removed, set `callTracking` value to false
     if (newProps.leadsCount === 0 && this.props.leadsCount === 1) {
@@ -83,6 +79,10 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
 
   closeAddSiteModal() {
     this.props.dispatch(hideSiteLocationModal());
+  }
+
+  handleFileChange(e) {
+    this.setState({ fileName: e.target.files[0].name });
   }
 
   handleSiteLocationChoose(e) {
