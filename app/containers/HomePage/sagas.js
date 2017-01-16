@@ -59,9 +59,8 @@ export function* fetchPatientSignUpsWatcher() {
 
 export function* fetchPatientSignUpsWorker(action) {
   try {
-    console.log(action.currentUser);
     let requestURL = '';
-    if (action.roleForClient && action.roleForClient.client_id) {
+    if (action.currentUser.roleForClient && action.currentUser.roleForClient.client_id) {
       requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/patientSignUps`;
     } else {
       requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/patientSignUps`;

@@ -54,7 +54,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
       this.props.fetchLevels();
       this.props.getAvailPhoneNumbers();
       setTimeout(this.props.fetchStudies, 0);
-    } else if (currentUser && currentUser.roleForSponsor.id) {
+    } else if (currentUser && userRoleType === 'sponsor') {
       this.props.fetchProtocols({ sponsorRoleId: currentUser.roleForSponsor.id });
       this.props.fetchProtocolNumbers(currentUser);
       this.props.fetchIndications(currentUser);
@@ -78,7 +78,6 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
       protocol: searchParams.protocol,
       status: searchParams.status,
     };
-    console.log(queryParams);
     this.props.fetchProtocols(queryParams);
   }
 
