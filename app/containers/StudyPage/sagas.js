@@ -80,6 +80,9 @@ function* fetchStudyDetails() {
         relation: 'sources',
       },
       {
+        relation: 'sponsors',
+      },
+      {
         relation: 'sites',
         scope: {
           where: {

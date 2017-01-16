@@ -69,9 +69,6 @@ export function* authorize(data) {
       body: JSON.stringify(data),
     });
 
-    // TODO: do i need this? I will navigate away anyways
-    // resolve(response);
-
     // store auth token to localstorage
     yield call(setItem, 'auth_token', response.id);
     yield call(setItem, 'user_id', response.userId);
