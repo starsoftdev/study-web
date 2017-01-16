@@ -13,6 +13,9 @@ import FiltersForm from './FiltersForm';
 import ClientRolesList from 'components/ClientRolesList';
 import Filter from 'components/Filter';
 import { selectFilterFormValues } from './FiltersForm/selectors';
+import rd3 from 'react-d3';
+
+const PieChart = rd3.PieChart;
 
 @reduxForm({ form: 'filterPanel', destroyOnUnmount: false })
 export class DashboardPage extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -106,6 +109,19 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
   render() {
     const { customFilters, modalFilters } = this.state;
     const filters = concat(this.mapFilterValues(modalFilters), customFilters);
+    const pieData1 = [
+      { label: 'RED', value: 179 },
+      { label: 'YELLOW', value: 107 },
+      { label: 'GREEN', value: 165 },
+      { lable: 'PURPLE', value: 25 },
+    ];
+
+    const pieData2 = [
+      { label: 'TIER 1', value: 261 },
+      { label: 'TIER 2', value: 78 },
+      { label: 'TIER 3', value: 65 },
+      { lable: 'TIER 4', value: 42 },
+    ];
 
     return (
       <div className="dashboard-page container-fluid">
@@ -223,7 +239,16 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
               </li>
             </ul>
             <div className="chart pull-left">
-
+              <PieChart
+                data={pieData1}
+                width={180}
+                height={180}
+                radius={90}
+                innerRadius={0}
+                sectorBorderColor="white"
+                showOuterLabels={false}
+                showInnerLabels={false}
+              />
             </div>
             <ul className="list-unstyled info-list pull-left">
               <li>
@@ -244,6 +269,16 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
               </li>
             </ul>
             <div className="chart pull-left">
+              <PieChart
+                data={pieData2}
+                width={180}
+                height={180}
+                radius={90}
+                innerRadius={0}
+                sectorBorderColor="white"
+                showOuterLabels={false}
+                showInnerLabels={false}
+              />
             </div>
           </div>
           <div className="graph-area clearfix">
