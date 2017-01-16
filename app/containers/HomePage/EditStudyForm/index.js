@@ -34,8 +34,29 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     this.props.dispatch(change('editStudy', 'emailNotifications', this.props.siteUsers));
   }
 
+  renderEmailList() {
+    const { formValues } = this.props;
+
+    if (Object.getOwnPropertyNames(formValues).length === 0) {
+      return (
+        <div className="emails-list-holder"></div>
+      );
+    }
+
+    return (
+      <div className="emails-list-holder">
+        <FieldArray
+          name="emailNotifications"
+          component={RenderEmailsList}
+          formValues={formValues}
+          dispatch={this.props.dispatch}
+        />
+      </div>
+    );
+  }
+
   render() {
-    const { formValues, editedStudy, handleSubmit } = this.props;
+    const { editedStudy, handleSubmit } = this.props;
 
     return (
       <form className="form-edit-study" onSubmit={handleSubmit}>
@@ -57,14 +78,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
               <label>EMAIL NOTIFICATIONS</label>
             </strong>
             <div className="field">
-              <div className="emails-list-holder">
-                <FieldArray
-                  name="emailNotifications"
-                  component={RenderEmailsList}
-                  formValues={formValues}
-                  dispatch={this.props.dispatch}
-                />
-              </div>
+              {this.renderEmailList()}
             </div>
           </div>
           <div className="field-row">
@@ -86,7 +100,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
             <button type="submit" className="btn btn-default btn-submit pull-right" disabled={editedStudy.submitting}>
               {editedStudy.submitting
                 ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
-                : <span>Submit</span>
+                : <span>Update</span>
               }
             </button>
           </div>

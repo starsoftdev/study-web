@@ -304,7 +304,10 @@ function* fetchPatientDetails() {
     const filter = JSON.stringify({
       include: [
         {
-          relation: 'indications',
+          relation: 'patientIndications',
+          scope: {
+            include: 'indication',
+          },
         },
         {
           relation: 'notes',

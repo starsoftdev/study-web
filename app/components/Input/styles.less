@@ -22,12 +22,18 @@
 }
 
 .Select-menu-outer {
-  margin: 2px -2px 0 -2px;
-  width: calc(100% + 1px);
+  margin: 2px 0 0 -2px;
+  box-sizing: initial !important;
   border: 2px solid #CCC;
-  padding: 2px;
   max-height: 300px;
-  z-index: 90000;
+  div {
+    margin: 1px;
+  }
+}
+
+.Select-option:last-child {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .top-positioned .Select-menu-outer {
@@ -62,7 +68,7 @@ div.toggle.has-error > div:first-child {
   position: relative;
 }
 
-.remaining-counter{
+.remaining-counter {
     font-size: 18px;
     font-weight: 600;
     color: #a0cf67;

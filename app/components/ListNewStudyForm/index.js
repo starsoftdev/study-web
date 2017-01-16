@@ -64,6 +64,10 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     this.handleSiteLocationChoose = this.handleSiteLocationChoose.bind(this);
     this.closeAddSiteModal = this.closeAddSiteModal.bind(this);
     this.addSite = this.addSite.bind(this);
+    this.handleFileChange = this.handleFileChange.bind(this);
+    this.state = {
+      fileName: '',
+    };
   }
 
   componentWillReceiveProps(newProps) {
@@ -75,6 +79,10 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
 
   closeAddSiteModal() {
     this.props.dispatch(hideSiteLocationModal());
+  }
+
+  handleFileChange(e) {
+    this.setState({ fileName: e.target.files[0].name });
   }
 
   handleSiteLocationChoose(e) {
@@ -98,6 +106,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
 
   render() {
     const { siteLocations, indications, studyLevels, callTracking, formValues } = this.props;
+    const { fileName } = this.state;
 
     if (!_.find(siteLocations, (o) => (o.id === 'add-new-location'))) {
       siteLocations.push({
@@ -173,8 +182,10 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
                 id="study_file"
                 name="file"
                 component={Input}
+                onChange={this.handleFileChange}
                 type="file"
               />
+              <strong className="label lfilename"><label className="filename" htmlFor="irb_filename">{fileName}</label></strong>
             </div>
           </div>
 
@@ -346,9 +357,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             </a>
           </Modal.Header>
           <Modal.Body>
-            <div className="container-fluid">
-              <EditSiteForm onSubmit={this.addSite} />
-            </div>
+            <EditSiteForm onSubmit={this.addSite} />
           </Modal.Body>
         </Modal>
 

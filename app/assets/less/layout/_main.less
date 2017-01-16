@@ -40,6 +40,14 @@ input[type=text]:-ms-input-placeholder {
 	}
 }
 
+.btn-primary:active {
+  color: white;
+  background-color: #00afef;
+  border-color: #00afef;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
 .form-search {
 	clear: both;
 	margin: 0 -6px 30px;
@@ -732,7 +740,7 @@ input[type=text]:-ms-input-placeholder {
     text-transform: uppercase;
     font-size: 21px;
     font-weight: 700;
-    padding: 21px 16px 25px;
+    padding: 12px 16px 16px;
   }
   .img-holder {
     top: 2px;
@@ -980,6 +988,10 @@ th, .th {
 		padding: 0 10px 0 0;
 		text-transform: uppercase;
 	}
+
+  .lfilename {
+    width: 52%;
+  }
 
 	.label-top {
 		> * {
@@ -1378,6 +1390,10 @@ th, .th {
 		color: #354052;
 		vertical-align: top;
 		padding: 16px 5px 4px 0;
+
+    &:nth-child(2) {
+        padding-right: 10px;
+    }
 	}
 
 	tbody > tr {
@@ -2501,6 +2517,11 @@ th, .th {
 		color: #636363;
 		font-size: 18px;
 		position: relative;
+
+    &:hover{
+      cursor: pointer;
+      color: #999;
+    }
 	}
 }
 
@@ -3788,6 +3809,13 @@ th, .th {
 /*****************/
 @import "../../../containers/StudyPage/styles";
 
+/*****************/
+/* Dashboard page  */
+/*****************/
+@import "../../../containers/DashboardPage/styles.less";
+@import "../../../containers/DashboardPage/FiltersForm/styles.less";
+@import "../../../containers/DashboardPage/StudyList/styles.less";
+
 /* Components */
 
 /*****************/
@@ -3861,3 +3889,13 @@ th, .th {
 /*****************/
 @import "../../../components/TopHeaderBar/NotificationBox/styles";
 @import "../../../components/TopHeaderBar/AvatarMenu/styles";
+
+/*****************/
+/* Dashboard TopHeaderBar Component  */
+/*****************/
+@import "../../../components/TopHeaderBar2/AvatarMenu/styles";
+
+/*****************/
+/* Filter Component  */
+/*****************/
+@import "../../../components/Filter/styles.less";

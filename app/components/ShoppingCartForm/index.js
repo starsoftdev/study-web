@@ -63,6 +63,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     fetchCards: PropTypes.func,
     saveCard: PropTypes.func,
     validateAndSubmit: PropTypes.func,
+    manualDisableSubmit: PropTypes.bool,
   };
 
   constructor(props) {
@@ -147,7 +148,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     const title = this.props.title || 'Order Summary';
     const noBorderClassName = (this.props.noBorder) ? 'no-border' : '';
     const formClassName = `form-study form-shopping-cart ${noBorderClassName}`;
-    const { addOns, coupon, showCards, cards, submitting, validateAndSubmit } = this.props;
+    const { addOns, coupon, showCards, cards, submitting, validateAndSubmit, manualDisableSubmit } = this.props;
     const { subTotal, discount, total } = this.calculateTotal();
     let addOnsContent = null;
 
@@ -155,9 +156,9 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
       addOnsContent = addOns.map((product, index) => (
         <tr className="add-on" key={index}>
           <td>{product.title}</td>
-          <td><Money value={product.price / 100} /></td>
+          <td className="right"><Money value={product.price / 100} /></td>
           <td>{product.quantity}</td>
-          <td><Money value={product.total / 100} className="price" /></td>
+          <td className="right"><Money value={product.total / 100} className="price" /></td>
         </tr>
       ));
     }
@@ -196,7 +197,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                 keyboard
               >
                 <Modal.Header>
-                  <Modal.Title>Add New Card1</Modal.Title>
+                  <Modal.Title>Add New Card</Modal.Title>
                   <a className="lightbox-close close" onClick={this.closeAddNewCardModal}>
                     <i className="icomoon-icon_close" />
                   </a>
@@ -288,7 +289,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                 />
               </div>
               {cardsPanelContent}
-              <Button disabled={coupon.fetching || cards.fetching || submitting} onClick={validateAndSubmit}>
+              <Button disabled={coupon.fetching || cards.fetching || submitting || manualDisableSubmit} onClick={validateAndSubmit}>
                 {submitting
                   ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                   : <span>Submit</span>
