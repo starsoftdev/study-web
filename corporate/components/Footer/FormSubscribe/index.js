@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react';
-import {Link} from 'react-router';
 
 export default class FormSubscribe extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
