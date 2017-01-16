@@ -32,8 +32,6 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('new props', newProps);
-
     this.setState({
       modalFilters: newProps.filtersFormValues,
     });
