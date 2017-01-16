@@ -67,6 +67,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       selectedStudyId: null,
       selectedIndicationId: null,
       selectedCampaign: null,
+      selectedSiteId: null,
     };
 
     this.openRenewModal = this.openRenewModal.bind(this);
@@ -127,21 +128,24 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     }
   }
 
-  openRenewModal(studyId, indicationId, campaign) {
+  openRenewModal(studyId, indicationId, campaign, siteId) {
     this.setState({
       renewModalOpen: true,
       selectedStudyId: studyId,
       selectedIndicationId: indicationId,
       selectedCampaign: campaign,
+      selectedSiteId: siteId,
+
     });
   }
 
-  openUpgradeModal(studyId, indicationId, campaign) {
+  openUpgradeModal(studyId, indicationId, campaign, siteId) {
     this.setState({
       upgradeModalOpen: true,
       selectedStudyId: studyId,
       selectedIndicationId: indicationId,
       selectedCampaign: campaign,
+      selectedSiteId: siteId,
     });
   }
 
@@ -158,6 +162,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       renewModalOpen: false,
       selectedStudyId: null,
       selectedIndicationId: null,
+      selectedSiteId: null,
     });
   }
 
@@ -167,6 +172,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       selectedStudyId: null,
       selectedIndicationId: null,
       selectedCampaign: null,
+      selectedSiteId: null,
     });
   }
 
@@ -192,7 +198,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       ...renewStudyFormValues,
       stripeCustomerId: currentUserStripeCustomerId,
       selectedIndicationId: this.state.selectedIndicationId,
-      selectedSiteId: this.state.selectedCampaign.site_id,
+      selectedSiteId: this.state.selectedSiteId,
       user_id: this.props.currentUser.id,
     });
   }
@@ -212,7 +218,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       stripeCustomerId: currentUserStripeCustomerId,
       selectedIndicationId: this.state.selectedIndicationId,
       selectedCampaignId: this.state.selectedCampaign.id,
-      selectedSiteId: this.state.selectedCampaign.site_id,
+      selectedSiteId: this.state.selectedSiteId,
       user_id: this.props.currentUser.id,
     });
   }
@@ -425,7 +431,9 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                   <div className="pull-left col">
                     <div className="scroll jcf--scrollable">
                       <div className="holder-inner">
-                        <RenewStudyForm />
+                        <RenewStudyForm
+                          selectedStudy={selectedStudy}
+                        />
                       </div>
                     </div>
                   </div>

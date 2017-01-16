@@ -200,6 +200,8 @@ export default function homePageReducer(state = initialState, action) {
             siteUsers: siteIterator.users,
             startDate: startDateStr,
             endDate: endDateStr,
+            maxCampaign: siteIterator.maxCampaign,
+            siteId: siteIterator.id,
           };
           entitiesCollection.push(entity);
         });

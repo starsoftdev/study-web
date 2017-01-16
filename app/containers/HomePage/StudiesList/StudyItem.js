@@ -24,6 +24,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     onEdit: PropTypes.func,
     push: PropTypes.func,
     orderNumber: PropTypes.number,
+    siteId: PropTypes.number,
   };
 
   constructor(props) {
@@ -47,15 +48,15 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   onRenewClick() {
-    const { studyId, indication, onRenew, campaign } = this.props;
+    const { studyId, indication, onRenew, campaign, siteId } = this.props;
 
-    onRenew(studyId, indication.id, campaign);
+    onRenew(studyId, indication.id, campaign, siteId);
   }
 
   onUpgradeClick() {
-    const { studyId, indication, onUpgrade, campaign } = this.props;
+    const { studyId, indication, onUpgrade, campaign, siteId } = this.props;
 
-    onUpgrade(studyId, indication.id, campaign);
+    onUpgrade(studyId, indication.id, campaign, siteId);
   }
 
   onEditClick() {
