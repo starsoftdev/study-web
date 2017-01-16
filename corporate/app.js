@@ -1,10 +1,20 @@
-/**
- * app.js
- *
- * This is the entry file for the corporate, only setup and boilerplate
- * code.
- */
+import React from 'react';
+import {render} from 'react-dom';
+import {Router, browserHistory} from 'react-router';
 
-'use strict';
+import {default as Corporate} from 'corporate/containers/Corporate';
+import {default as Home} from 'corporate/containers/HomePage';
+import {default as NotFound} from 'corporate/containers/NotFoundPage';
 
-console.log('corporate app.js');
+import './assets/less/main.less';
+
+const routes = {
+  path: '/',
+  component: Corporate,
+  indexRoute: {component: Home},
+  childRoutes: [
+    {path: '*', component: NotFound},
+  ]
+}
+
+render(<Router history={browserHistory} routes={routes}/>, document.getElementById('app'))
