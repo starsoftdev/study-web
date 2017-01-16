@@ -28,8 +28,6 @@ import StudiesList from './StudiesList';
 export class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUser: PropTypes.object,
-    userRoleType: PropTypes.string,
-    location: PropTypes.any,
     currentUserClientId: PropTypes.number,
     fetchClientSites: PropTypes.func,
     fetchLevels: PropTypes.func,
@@ -38,6 +36,8 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     fetchProtocolNumbers: PropTypes.func,
     fetchIndications: PropTypes.func,
     getAvailPhoneNumbers: PropTypes.func,
+    location: PropTypes.any,
+    userRoleType: PropTypes.string,
   };
 
   constructor(props) {
@@ -48,7 +48,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
   }
 
   componentWillMount() {
-    const { currentUserClientId, userRoleType, currentUser } = this.props;
+    const { currentUser, currentUserClientId, userRoleType } = this.props;
     if (currentUserClientId && userRoleType === 'client') {
       this.props.fetchClientSites(currentUserClientId, {});
       this.props.fetchLevels();
@@ -109,8 +109,8 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
               <SponsorDashboard location={this.props.location} />
               <div className="search-studies-panel clearfix form-group">
                 <SearchProtocolsForm onSubmit={this.searchProtocols} />
-                <Link to="/list-new-study" className="btn btn-primary btn-list-new-study pull-right"><i className="icomoon-icon_creditcard"></i> add credits</Link>
-                <Link to="/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Protocol</Link>
+                {/* <Link to="/list-new-study" className="btn btn-primary btn-list-new-study pull-right"><i className="icomoon-icon_creditcard"></i> add credits</Link> */}
+                {/* <Link to="/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Protocol</Link> */}
               </div>
               <ProtocolsList />
             </section>
@@ -123,9 +123,9 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
 }
 
 const mapStateToProps = createStructuredSelector({
-  userRoleType: selectUserRoleType(),
-  currentUserClientId: selectCurrentUserClientId(),
   currentUser: selectCurrentUser(),
+  currentUserClientId: selectCurrentUserClientId(),
+  userRoleType: selectUserRoleType(),
 });
 
 function mapDispatchToProps(dispatch) {
