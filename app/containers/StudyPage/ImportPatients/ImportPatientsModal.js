@@ -9,7 +9,6 @@ import { Field, reduxForm } from 'redux-form';
 import { actions as toastrActions } from 'react-redux-toastr';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
-import Button from 'react-bootstrap/lib/Button';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input/index';
 import { submitPatientImport, clearForm } from '../actions';
@@ -51,7 +50,7 @@ class ImportPatientsModal extends React.Component {
   }
 
   renderUpload() {
-    const { toggleAddPatient, uploadStart, fileUploaded, clearForm } = this.props;
+    const { toggleAddPatient, uploadStart, fileUploaded } = this.props;
     if (uploadStart) {
       return (
         <div className="text-center" style={{ marginTop: '20px', marginBottom: '20px' }}>
@@ -69,7 +68,7 @@ class ImportPatientsModal extends React.Component {
         <Form className="upload-patient-info">
           <div className="table">
             <label className="table-cell" htmlFor="upload-patient">
-              <i className="icomoon-arrow_up_alt" />
+              <i className={fileUploaded ? 'icomoon-icon_check' : 'icomoon-arrow_up_alt'} />
               <span className="text">Upload Patients</span>
               {fileUploaded && <span className="jcf-file jcf-extension-csv parent-active">{fileUploaded}</span>}
               <span className="jcf-file">
@@ -89,7 +88,6 @@ class ImportPatientsModal extends React.Component {
             </label>
 
           </div>
-          {fileUploaded && <Button className="clear-import-button" onClick={() => clearForm()}><i className="fa fa-times" aria-hidden="true" /></Button>}
 
         </Form>
 

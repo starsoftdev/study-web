@@ -100,7 +100,7 @@ export class RequestProposalCart extends Component {
     const months = find(CAMPAIGN_LENGTH_LIST, { value: formValues.campaignLength });
     if (level && months && indicationLevelPrice) {
       products.push({
-        title: `${months.label} ${level.name}`,
+        title: ((formValues.condenseTwoWeeks && months.value === 1) ? `2 Weeks ${level.name}` : `${months.label} ${level.name}`),
         price: indicationLevelPrice,
         quantity: months.value,
         total: indicationLevelPrice * months.value,
@@ -171,13 +171,13 @@ export class RequestProposalCart extends Component {
                 <tbody>
                   {products &&
                     products.map((product, index) => (
-                      <tr key={index}>
+                      <tr className="add-on" key={index}>
                         <td>{product.title}</td>
-                        <td>
+                        <td className="right">
                           <Money value={product.price / 100} />
                         </td>
                         <td>{product.quantity}</td>
-                        <td>
+                        <td className="right">
                           <Money value={product.total / 100} className="price" />
                         </td>
                       </tr>
