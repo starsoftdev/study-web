@@ -18,6 +18,7 @@ export default class DatePicker extends Component {
     className: PropTypes.string,
     initialDate: PropTypes.object.isRequired,
     dateStyle: PropTypes.string,
+    minDate: PropTypes.any,
   }
 
   static defaultProps = {

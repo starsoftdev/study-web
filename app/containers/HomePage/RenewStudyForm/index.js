@@ -16,6 +16,7 @@ import { selectSelectedIndicationLevelPrice } from 'containers/HomePage/selector
 import { CAMPAIGN_LENGTH_LIST } from 'common/constants';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
+import _ from 'lodash';
 
 const mapStateToProps = createStructuredSelector({
   studyLevels: selectStudyLevels(),
@@ -48,10 +49,10 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
 
     let initDate = moment();
     let minDate = 'none';
-    
-    if (selectedStudy && selectedStudy.maxCampaign && selectedStudy.maxCampaign.dateTo){
+
+    if (selectedStudy && selectedStudy.maxCampaign && selectedStudy.maxCampaign.dateTo) {
       minDate = moment.utc(selectedStudy.maxCampaign.dateTo).add(1, 'days');
-      if (initDate <= minDate){
+      if (initDate <= minDate) {
         initDate = _.cloneDeep(minDate);
       }
     }
