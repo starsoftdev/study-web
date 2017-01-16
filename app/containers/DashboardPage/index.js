@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 import { Modal } from 'react-bootstrap';
+import { Field, reduxForm } from 'redux-form';
+
 import Button from 'react-bootstrap/lib/Button';
 import { map, mapKeys, concat, findIndex, pullAt } from 'lodash';
 import './styles.less';
@@ -12,6 +14,7 @@ import ClientRolesList from 'components/ClientRolesList';
 import Filter from 'components/Filter';
 import { selectFilterFormValues } from './FiltersForm/selectors';
 
+@reduxForm({ form: 'filterPanel', destroyOnUnmount: false })
 export class DashboardPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     filtersFormValues: PropTypes.object,
@@ -39,15 +42,19 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
 
   addFilter(options) {
     const { customFilters } = this.state;
-    customFilters.push(options);
+    const newOptions = {
+      ...options,
+      name: options.name + customFilters.length,
+    };
+    customFilters.push(newOptions);
     this.setState({ customFilters });
   }
 
   removeFilter(filter) {
     const { customFilters, modalFilters } = this.state;
-    console.log('remove this filter', filter, customFilters, modalFilters);
 
-    if (filter.name === 'search') {
+    if (filter.type === 'search') {
+      console.log('remove ', filter, 'from ', customFilters);
       pullAt(customFilters, findIndex(customFilters, filter));
       this.setState({ customFilters });
       return;
@@ -152,7 +159,15 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
                 <form className="form-search clearfix">
                   <div className="fields-holder pull-left">
                     {filters.map((filter, index) =>
-                      <Filter key={index} options={filter} initialValues={modalFilters} onClose={() => this.removeFilter(filter)} />
+                      <Field
+                        name={filter.name}
+                        key={index}
+                        options={filter}
+                        className="filter-field"
+                        component={Filter}
+                        onClose={() => this.removeFilter(filter)}
+                        onChange={(e) => { console.log('onChange-filter', e); }}
+                      />
                     )}
                     <Button
                       bsStyle="primary"
