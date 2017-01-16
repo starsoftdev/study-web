@@ -43,7 +43,6 @@ function ReactMultiCheckBox({
   let inputComponent = (
     <ReactSuperSelect
       onChange={(event) => {
-        console.log('event', event, 'input', input);
         input.onChange(event);
         if (onChange) {
           if (includeAllOption && event && _.find(event, item => item.label === 'All')) {
