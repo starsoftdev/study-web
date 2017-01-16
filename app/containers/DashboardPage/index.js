@@ -10,9 +10,10 @@ import { map, mapKeys, concat, findIndex, pullAt } from 'lodash';
 import './styles.less';
 import CenteredModal from 'components/CenteredModal';
 import FiltersForm from './FiltersForm';
-import ClientRolesList from 'components/ClientRolesList';
+import StudyList from './StudyList';
 import Filter from 'components/Filter';
-import { selectFilterFormValues } from './FiltersForm/selectors';
+// import { selectFilterFormValues } from './FiltersForm/selectors';
+import { selectStudies, selectFilterFormValues, selectPaginationOptions } from './selectors';
 import rd3 from 'react-d3';
 
 const PieChart = rd3.PieChart;
@@ -22,6 +23,8 @@ const LineChart = rd3.LineChart;
 export class DashboardPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     filtersFormValues: PropTypes.object,
+    paginationOptions: PropTypes.object,
+    studies: PropTypes.array,
   };
 
   constructor(props) {
@@ -58,7 +61,6 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
     const { customFilters, modalFilters } = this.state;
 
     if (filter.type === 'search') {
-      console.log('remove ', filter, 'from ', customFilters);
       pullAt(customFilters, findIndex(customFilters, filter));
       this.setState({ customFilters });
       return;
@@ -294,7 +296,7 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
               <h2 className="pull-left">PATIENTS PER DAY</h2>
               <span className="counter pull-left">0% OF GOAL 0.49%</span>
               <Button bsStyle="primary" className="lightbox-opener pull-right" onClick={this.openDateRangeModal}>
-                <i className="icon-icon_calendar"></i>
+                <i className="icomoon-icon_calendar"></i>
             Last 30 days: 08/04/16 - 09/04/16
               </Button>
             </div>
@@ -313,7 +315,11 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
             </div>
           </div>
           <div className="table-container">
-            <section className="table-holder form-group client-roles-holder">
+            <section className="patient-database">
+              <StudyList
+                studies={this.props.studies}
+                paginationOptions={this.props.paginationOptions}
+              />
             </section>
           </div>
         </section>
@@ -324,6 +330,8 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
 
 const mapStateToProps = createStructuredSelector({
   filtersFormValues: selectFilterFormValues(),
+  studies: selectStudies(),
+  paginationOptions: selectPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
