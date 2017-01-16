@@ -15,6 +15,8 @@ import Filter from 'components/Filter';
 // import { selectFilterFormValues } from './FiltersForm/selectors';
 import { selectStudies, selectFilterFormValues, selectPaginationOptions } from './selectors';
 import rd3 from 'react-d3';
+import moment from 'moment';
+import { defaultRanges, DateRange } from 'react-date-range';
 
 const PieChart = rd3.PieChart;
 const LineChart = rd3.LineChart;
@@ -33,6 +35,14 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
     this.state = {
       customFilters: [],
       modalFilters: props.filtersFormValues ? props.filtersFormValues : [],
+      showDateRangeModal: false,
+      rangePicker : {},
+      datePicker : null,
+      firstDayOfWeek : null,
+      predefined : {
+        startDate: moment().clone().subtract(30, 'days'),
+        endDate: moment(),
+      },
     };
 
     this.addFilter = this.addFilter.bind(this);
@@ -77,7 +87,8 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
   }
 
   clearFilters() {
-    this.setState({ filters: [] });
+    this.setState({ customFilters: [],
+      modalFilters: [] });
   }
 
   openFiltersModal() {
@@ -93,6 +104,48 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
       userName: event.target.value,
     });
   }
+
+  showDateRangeModal(ev) {
+    if (ev) {
+      ev.preventDefault();
+    }
+    this.setState({ showDateRangeModal: true });
+  }
+
+  hideDateRangeModal(ev) {
+    if (ev) {
+      ev.preventDefault();
+    }
+    this.setState({ showDateRangeModal: false });
+  }
+
+  changeRange(ev) {
+    ev.preventDefault();
+    // const range = this.state.predefined;
+    // this.props.search(range, 'range');
+    this.hideDateRangeModal();
+  }
+
+  renderDateFooter() {
+    const { predefined } = this.state;
+    if (predefined.startDate) {
+      const format = 'MMM D, YYYY';
+      if (predefined.startDate.isSameOrAfter(predefined.endDate, 'day')) {
+        return (
+          <span className="time">
+            {moment(predefined.startDate).format(format)}
+          </span>
+        );
+      }
+      return (
+        <span className="time">
+          {moment(predefined.startDate).format(format)} - {moment(predefined.endDate).format(format)}
+        </span>
+      );
+    }
+    return null;
+  }
+
 
   mapFilterValues(filters) {
     let newFilters = [];
@@ -295,7 +348,7 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
             <div className="head clearfix">
               <h2 className="pull-left">PATIENTS PER DAY</h2>
               <span className="counter pull-left">0% OF GOAL 0.49%</span>
-              <Button bsStyle="primary" className="lightbox-opener pull-right" onClick={this.openDateRangeModal}>
+              <Button bsStyle="primary" className="lightbox-opener pull-right" onClick={() => { this.showDateRangeModal(); }}>
                 <i className="icomoon-icon_calendar"></i>
             Last 30 days: 08/04/16 - 09/04/16
               </Button>
@@ -313,6 +366,48 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
                 }}
               />
             </div>
+            <Modal
+              id="date-range"
+              className="date-range-modal"
+              dialogComponentClass={CenteredModal}
+              show={this.state.showDateRangeModal}
+              onHide={() => { this.hideDateRangeModal(); }}
+              backdrop
+              keyboard
+            >
+              <Modal.Header>
+                <Modal.Title>Date Range</Modal.Title>
+                <a className="lightbox-close close" onClick={() => { this.hideDateRangeModal(); }}>
+                  <i className="icomoon-icon_close" />
+                </a>
+              </Modal.Header>
+              <Modal.Body>
+                <DateRange
+                  theme={{
+                    DateRange: {
+                      display: 'inline-grid',
+                    },
+                  }}
+                  linkedCalendars
+                  ranges={defaultRanges}
+                  startDate={this.state.predefined.startDate ? this.state.predefined.startDate : moment()}
+                  endDate={this.state.predefined.endDate ? this.state.predefined.endDate : moment().add(1, 'M')}
+                  onInit={this.handleChange}
+                  onChange={this.handleChange}
+                />
+                <div className="dateRange-helper">
+                  <div className="emit-border"><br /></div>
+                  <div className="right-part">
+                    <div className="btn-block text-right">
+                      {this.renderDateFooter()}
+                      <Button onClick={() => { this.changeRange(); }}>
+                        Submit
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Modal.Body>
+            </Modal>
           </div>
           <div className="table-container">
             <section className="patient-database">
