@@ -11,10 +11,10 @@ import './assets/less/main.less';
 const routes = {
   path: '/',
   component: Corporate,
-  indexRoute: {component: Home},
+  indexRoute: { component: Home },
   childRoutes: [
-    {path: '*', component: NotFound},
-  ]
-}
+    { path: '*', component: NotFound },
+  ],
+};
 
-render(<Router history={browserHistory} routes={routes}/>, document.getElementById('app'))
+render(<Router history={browserHistory} routes={routes}/>, document.getElementById('app'));

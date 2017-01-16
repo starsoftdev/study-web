@@ -7,7 +7,6 @@ const menuItems = [
   { text: 'Sitemap', link: '/sitemap' },
   { text: 'RSS Feeds', link: '/rss' },
 ];
-//..
 
 function FooterNavBar() {
   return (
