@@ -22,18 +22,10 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
 
   constructor(props) {
     super(props);
-
-    this.state = {
-    };
-
     this.sortBy = this.sortBy.bind(this);
   }
 
   componentDidMount() {
-    
-  }
-
-  componentWillReceiveProps(newProps) {
   }
 
   sortBy(ev) {
@@ -112,7 +104,7 @@ const mapStateToProps = createStructuredSelector({
   paginationOptions: selectPaginationOptions(),
 });
 
-function mapDispatchToProps  (dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
     sortSuccess: (payload) => dispatch(sortSuccess(payload)),

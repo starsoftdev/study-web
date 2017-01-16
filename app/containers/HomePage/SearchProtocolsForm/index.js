@@ -45,11 +45,6 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
       label: row.name,
       value: row.id,
     })));
-    const statusOptions = [{ label: 'All', id: 0 },
-                           { label: 'Active', value: ACTIVE_STATUS_VALUE },
-                           { label: 'Inactive', value: INACTIVE_STATUS_VALUE }];
-    console.log(protocolNumbers);
-    console.log(statusOptions);
 
     return (
       <Form className="form-search form-search-protocols pull-left" onSubmit={handleSubmit}>

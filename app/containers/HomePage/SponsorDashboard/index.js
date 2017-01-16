@@ -8,7 +8,6 @@ import { submitForm } from 'containers/RewardsPage/actions';
 import { fetchPatientSignUps, fetchPrincipalInvestigatorTotals, fetchProtocols } from '../actions';
 import { selectPatientSignUps, selectPrincipalInvestigatorTotals } from '../selectors';
 
-import './styles.less';
 import graphImage from 'assets/images/graph.svg';
 
 export class SponsorDashboard extends React.Component {
@@ -47,7 +46,7 @@ export class SponsorDashboard extends React.Component {
         <div className="col-xs-6">
           <div className="box table-box">
             <div className="box-holder">
-              <i className="icomoon-doctor pull-left"></i>
+              <i className="icomoon-doctor pull-left" />
               <div className="textbox">
                 <h2>Principal <br /> INVESTIGATORS</h2>
               </div>
