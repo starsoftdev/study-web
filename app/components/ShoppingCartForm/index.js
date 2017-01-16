@@ -156,9 +156,9 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
       addOnsContent = addOns.map((product, index) => (
         <tr className="add-on" key={index}>
           <td>{product.title}</td>
-          <td><Money value={product.price / 100} /></td>
+          <td className="right"><Money value={product.price / 100} /></td>
           <td>{product.quantity}</td>
-          <td><Money value={product.total / 100} className="price" /></td>
+          <td className="right"><Money value={product.total / 100} className="price" /></td>
         </tr>
       ));
     }
@@ -197,7 +197,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                 keyboard
               >
                 <Modal.Header>
-                  <Modal.Title>Add New Card1</Modal.Title>
+                  <Modal.Title>Add New Card</Modal.Title>
                   <a className="lightbox-close close" onClick={this.closeAddNewCardModal}>
                     <i className="icomoon-icon_close" />
                   </a>

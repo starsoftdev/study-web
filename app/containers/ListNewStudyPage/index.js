@@ -149,7 +149,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
     if (level && months && indicationLevelPrice) {
       addOns.push({
-        title: `${months.label} ${level.type}`,
+        title: ((formValues.condenseTwoWeeks && months.value === 1) ? `2 Weeks ${level.type}` : `${months.label} ${level.type}`),
         price: indicationLevelPrice,
         quantity: months.value,
         total: indicationLevelPrice * months.value,
