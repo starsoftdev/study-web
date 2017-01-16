@@ -86,7 +86,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
             <button type="submit" className="btn btn-default btn-submit pull-right" disabled={editedStudy.submitting}>
               {editedStudy.submitting
                 ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
-                : <span>Submit</span>
+                : <span>Update</span>
               }
             </button>
           </div>

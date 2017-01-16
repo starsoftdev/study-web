@@ -346,9 +346,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             </a>
           </Modal.Header>
           <Modal.Body>
-            <div className="container-fluid">
-              <EditSiteForm onSubmit={this.addSite} />
-            </div>
+            <EditSiteForm onSubmit={this.addSite} />
           </Modal.Body>
         </Modal>
 
