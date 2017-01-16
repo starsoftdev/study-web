@@ -9,6 +9,10 @@ import ReactMultiSelect from 'components/Input/ReactMultiSelect';
 import StudyItem from './StudyItem';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
+import { Modal } from 'react-bootstrap';
+import CenteredModal from 'components/CenteredModal';
+import moment from 'moment';
+import { defaultRanges, DateRange } from 'react-date-range';
 
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -23,6 +27,17 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.toggleAllStudySelection = this.toggleAllStudySelection.bind(this);
     this.sortBy = this.sortBy.bind(this);
     this.loadItems = this.loadItems.bind(this);
+
+    this.state = {
+      showDateRangeModal: false,
+      rangePicker : {},
+      datePicker : null,
+      firstDayOfWeek : null,
+      predefined : {
+        startDate: moment().clone().subtract(30, 'days'),
+        endDate: moment(),
+      },
+    };
   }
 
   toggleAllStudySelection(checked) {
@@ -59,6 +74,47 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     //   }], [dir]);
     //   this.props.sortPatientsSuccess(sortedPatients);
     // }
+  }
+
+  showDateRangeModal(ev) {
+    if (ev) {
+      ev.preventDefault();
+    }
+    this.setState({ showDateRangeModal: true });
+  }
+
+  hideDateRangeModal(ev) {
+    if (ev) {
+      ev.preventDefault();
+    }
+    this.setState({ showDateRangeModal: false });
+  }
+
+  changeRange(ev) {
+    ev.preventDefault();
+    // const range = this.state.predefined;
+    // this.props.search(range, 'range');
+    this.hideDateRangeModal();
+  }
+
+  renderDateFooter() {
+    const { predefined } = this.state;
+    if (predefined.startDate) {
+      const format = 'MMM D, YYYY';
+      if (predefined.startDate.isSameOrAfter(predefined.endDate, 'day')) {
+        return (
+          <span className="time">
+            {moment(predefined.startDate).format(format)}
+          </span>
+        );
+      }
+      return (
+        <span className="time">
+          {moment(predefined.startDate).format(format)} - {moment(predefined.endDate).format(format)}
+        </span>
+      );
+    }
+    return null;
   }
 
   render() {
@@ -105,7 +161,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                 <Button
                   bsStyle="primary"
                   className="pull-left"
-                  onClick={() => {}}
+                  onClick={() => { this.showDateRangeModal(); }}
                 >
                   <i className="icomoon-icon_calendar"></i>
                   Date Range
@@ -119,6 +175,48 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   Download
                 </Button>
               </div>
+              <Modal
+                id="date-range"
+                className="date-range-modal"
+                dialogComponentClass={CenteredModal}
+                show={this.state.showDateRangeModal}
+                onHide={() => { this.hideDateRangeModal(); }}
+                backdrop
+                keyboard
+              >
+                <Modal.Header>
+                  <Modal.Title>Date Range</Modal.Title>
+                  <a className="lightbox-close close" onClick={() => { this.hideDateRangeModal(); }}>
+                    <i className="icomoon-icon_close" />
+                  </a>
+                </Modal.Header>
+                <Modal.Body>
+                  <DateRange
+                    theme={{
+                      DateRange: {
+                        display: 'inline-grid',
+                      },
+                    }}
+                    linkedCalendars
+                    ranges={defaultRanges}
+                    startDate={this.state.predefined.startDate ? this.state.predefined.startDate : moment()}
+                    endDate={this.state.predefined.endDate ? this.state.predefined.endDate : moment().add(1, 'M')}
+                    onInit={this.handleChange}
+                    onChange={this.handleChange}
+                  />
+                  <div className="dateRange-helper">
+                    <div className="emit-border"><br /></div>
+                    <div className="right-part">
+                      <div className="btn-block text-right">
+                        {this.renderDateFooter()}
+                        <Button onClick={() => { this.changeRange(); }}>
+                          Submit
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </Modal.Body>
+              </Modal>
             </header>
             <div className="fixed-table-thead">
               <div className="table">
