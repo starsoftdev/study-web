@@ -74,7 +74,6 @@ export default class DatePicker extends Component {
     const monthDiff = ((todayYear - calendarYear) * 12) + (todayMonth - calendarMonth);
 
     this.calendar.changeMonth(monthDiff, { preventDefault: _.noop });
-    this.handleSelect(today);
   }
 
   toggleModal(visible) {
