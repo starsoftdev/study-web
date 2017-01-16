@@ -106,7 +106,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
 
   render() {
     const { siteLocations, indications, productList, irbAdCreationDetail } = this.props;
-    const { uniqueId} = this.state;
+    const { uniqueId } = this.state;
 
     if (productList[0]) {
       const addOns = [{

@@ -157,7 +157,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
   render() {
     const { siteLocations, indications, studyLevels, formValues, fullSiteLocations, indicationLevelPrice } = this.props;
-    const { uniqueId} = this.state;
+    const { uniqueId } = this.state;
 
     const addOns = [];
     const level = find(studyLevels, { id: formValues.exposureLevel });
