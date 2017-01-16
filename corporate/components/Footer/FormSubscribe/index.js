@@ -9,11 +9,9 @@ export default class FormSubscribe extends React.Component { // eslint-disable-l
     super(props);
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
-  componentWillReceiveProps() {
-  }
+  componentWillReceiveProps() {}
 
   render() {
     return (

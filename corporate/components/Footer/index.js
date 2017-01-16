@@ -13,11 +13,9 @@ export default class Footer extends React.Component { // eslint-disable-line rea
     super(props);
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
-  componentWillReceiveProps() {
-  }
+  componentWillReceiveProps() {}
 
   render() {
     return (

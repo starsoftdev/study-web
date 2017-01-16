@@ -11,18 +11,16 @@ export default class Header extends React.Component { // eslint-disable-line rea
   constructor(props) {
     super(props);
 
-    this.handleClick = this.handleClick.bind(this)
+    this.handleClick = this.handleClick.bind(this);
 
     this.state = {
-      menuCollapsed: true
-    }
+      menuCollapsed: true,
+    };
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
-  componentWillReceiveProps() {
-  }
+  componentWillReceiveProps() {}
 
   handleClick() {
     this.button.classList.toggle('collapsed');
