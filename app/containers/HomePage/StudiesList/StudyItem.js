@@ -24,6 +24,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     onEdit: PropTypes.func,
     push: PropTypes.func,
     orderNumber: PropTypes.number,
+    siteId: PropTypes.number,
   };
 
   constructor(props) {

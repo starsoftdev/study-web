@@ -135,7 +135,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       selectedIndicationId: indicationId,
       selectedCampaign: campaign,
       selectedSiteId: siteId,
-      
+
     });
   }
 
@@ -193,7 +193,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       touchShoppingCart();
       return;
     }
-    
+
     renewStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...renewStudyFormValues,
       stripeCustomerId: currentUserStripeCustomerId,
@@ -347,7 +347,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         }
         return parseInt(sitePatient.count_unread);
       });
-      
+
       return (
         <StudyItem
           {...item}
