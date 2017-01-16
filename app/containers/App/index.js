@@ -17,6 +17,7 @@ import { createStructuredSelector } from 'reselect';
 
 import SideNavBar from 'components/SideNavBar';
 import TopHeaderBar from 'components/TopHeaderBar';
+import TopHeaderBar2 from 'components/TopHeaderBar2';
 import LoadingSpinner from 'components/LoadingSpinner';
 import GlobalNotifications from 'containers/GlobalNotifications';
 import { fetchMeFromToken } from './actions';
@@ -32,6 +33,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     userDataFetched: React.PropTypes.object,
     pageEvents: React.PropTypes.any,
     fetchMeFromToken: React.PropTypes.func,
+    location: React.PropTypes.object,
   };
 
   componentWillMount() {
@@ -42,7 +44,8 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
   componentWillReceiveProps() {}
 
   render() {
-    const { isLoggedIn, userDataFetched, pageEvents } = this.props;
+    const { isLoggedIn, userDataFetched, pageEvents, location } = this.props;
+    const { pathname } = location;
 
     if (!isLoggedIn) {
       return (
@@ -60,6 +63,17 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
               <LoadingSpinner showOnlyIcon />
             </div>
           </div>
+        </div>
+      );
+    }
+
+    if (pathname === '/dashboard') {
+      return (
+        <div id="wrapper" className="dashboard">
+          <TopHeaderBar2 />
+          <main id="main">
+            {React.Children.toArray(this.props.children)}
+          </main>
         </div>
       );
     }
