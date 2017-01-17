@@ -130,27 +130,27 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     }
   }
 
-  openRenewModal(studyId, indicationId, campaign, siteId, indicationName, locationName) {
+  openRenewModal(studyId, indicationId, campaign, siteId, iName, lName) {
     this.setState({
       renewModalOpen: true,
       selectedStudyId: studyId,
       selectedIndicationId: indicationId,
       selectedCampaign: campaign,
       selectedSiteId: siteId,
-      indicationName: indicationName,
-      locationName: locationName,
+      indicationName: iName,
+      locationName: lName,
     });
   }
 
-  openUpgradeModal(studyId, indicationId, campaign, siteId, indicationName, locationName) {
+  openUpgradeModal(studyId, indicationId, campaign, siteId, iName, lName) {
     this.setState({
       upgradeModalOpen: true,
       selectedStudyId: studyId,
       selectedIndicationId: indicationId,
       selectedCampaign: campaign,
       selectedSiteId: siteId,
-      indicationName: indicationName,
-      locationName: locationName,
+      indicationName: iName,
+      locationName: lName,
     });
   }
 
