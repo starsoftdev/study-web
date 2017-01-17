@@ -129,13 +129,11 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
   mapFilterValues(filters) {
     let newFilters = [];
     mapKeys(filters, (filterValues, key) => {
-      newFilters = concat(newFilters, map(filterValues, (v) => {
-        return {
-          name: key,
-          type: key === 'percentage' ? 'compare' : 'value',
-          value: v.label,
-        };
-      }));
+      newFilters = concat(newFilters, map(filterValues, (v) => ({
+        name: key,
+        type: key === 'percentage' ? 'compare' : 'value',
+        value: v.label,
+      })));
     });
 
     return newFilters;
