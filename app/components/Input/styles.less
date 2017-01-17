@@ -3,7 +3,7 @@
 
 /* react-select styles */
 .Select.form-control {
-  padding: 0;
+  padding: 0 !important;
 }
 
 .Select-control {
@@ -26,9 +26,14 @@
   box-sizing: initial !important;
   border: 2px solid #CCC;
   max-height: 300px;
-  div{
+  div {
     margin: 1px;
   }
+}
+
+.Select-option:last-child {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .top-positioned .Select-menu-outer {
@@ -63,7 +68,7 @@ div.toggle.has-error > div:first-child {
   position: relative;
 }
 
-.remaining-counter{
+.remaining-counter {
     font-size: 18px;
     font-weight: 600;
     color: #a0cf67;

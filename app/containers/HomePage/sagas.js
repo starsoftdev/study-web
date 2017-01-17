@@ -13,7 +13,11 @@ import {
   FETCH_PATIENT_SIGN_UPS,
   FETCH_PATIENT_MESSAGES,
   FETCH_REWARDS_POINT,
+  FETCH_PRINCIPAL_INVESTIGATOR_TOTALS,
   FETCH_STUDIES,
+  FETCH_PROTOCOLS,
+  FETCH_PROTOCOL_NUMBERS,
+  FETCH_INDICATIONS,
   FETCH_INDICATION_LEVEL_PRICE,
   RENEW_STUDY,
   UPGRADE_STUDY,
@@ -25,8 +29,15 @@ import {
   fetchPatientSignUpsSucceeded,
   fetchPatientMessagesSucceeded,
   fetchRewardsPointSucceeded,
+  fetchPrincipalInvestigatorTotalsSucceeded,
   studiesFetched,
   studiesFetchingError,
+  protocolsFetched,
+  protocolsFetchingError,
+  protocolNumbersFetched,
+  protocolNumbersFetchingError,
+  indicationsFetched,
+  indicationsFetchingError,
   indicationLevelPriceFetched,
   indicationLevelPriceFetchingError,
   studyRenewed,
@@ -48,7 +59,13 @@ export function* fetchPatientSignUpsWatcher() {
 
 export function* fetchPatientSignUpsWorker(action) {
   try {
-    const requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/patientSignUps`;
+    let requestURL = '';
+    if (action.currentUser.roleForClient && action.currentUser.roleForClient.client_id) {
+      requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/patientSignUps`;
+    } else {
+      requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/patientSignUps`;
+    }
+
     const params = {
       method: 'GET',
       query: {
@@ -60,6 +77,28 @@ export function* fetchPatientSignUpsWorker(action) {
     yield put(fetchPatientSignUpsSucceeded(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+export function* fetchPrincipalInvestigatorTotalsWatcher() {
+  yield* takeLatest(FETCH_PRINCIPAL_INVESTIGATOR_TOTALS, fetchPrincipalInvestigatorTotalsWorker);
+}
+
+export function* fetchPrincipalInvestigatorTotalsWorker(action) {
+  try {
+    console.log(action.currentUser);
+    const requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/principalInvestigators`;
+
+    const params = {
+      method: 'GET',
+      query: {},
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchPrincipalInvestigatorTotalsSucceeded(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching principal investigators');
     yield put(toastrActions.error('', errorMessage));
   }
 }
@@ -115,6 +154,65 @@ export function* fetchStudiesWorker(action) {
     yield put(studiesFetched(response));
   } catch (err) {
     yield put(studiesFetchingError(err));
+  }
+}
+
+export function* fetchProtocolsWatcher() {
+  yield* takeLatest(FETCH_PROTOCOLS, fetchProtocolsWorker);
+}
+
+export function* fetchProtocolsWorker(action) {
+  try {
+    let queryString;
+    let requestURL;
+    if (action.searchParams) {
+      queryString = composeQueryString(action.searchParams);
+      requestURL = `${API_URL}/studies/getProtocolsBySponsorRole?${queryString}`;
+    } else {
+      requestURL = `${API_URL}/studies/getProtocolsBySponsorRole`;
+    }
+    const response = yield call(request, requestURL);
+    yield put(protocolsFetched(response));
+  } catch (err) {
+    yield put(protocolsFetchingError(err));
+  }
+}
+
+export function* fetchProtocolNumbersWatcher() {
+  yield* takeLatest(FETCH_PROTOCOL_NUMBERS, fetchProtocolNumbersWorker);
+}
+
+export function* fetchProtocolNumbersWorker(action) {
+  try {
+    const requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/protocols`;
+
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(protocolNumbersFetched(response));
+  } catch (err) {
+    yield put(protocolNumbersFetchingError(err));
+  }
+}
+
+export function* fetchIndicationsWatcher() {
+  yield* takeLatest(FETCH_INDICATIONS, fetchIndicationsWorker);
+}
+
+export function* fetchIndicationsWorker(action) {
+  try {
+    const requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/indications`;
+
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(indicationsFetched(response));
+  } catch (err) {
+    yield put(indicationsFetchingError(err));
   }
 }
 
@@ -259,17 +357,26 @@ export function* homePageSaga() {
   const watcherG = yield fork(upgradeStudyWatcher);
   const watcherH = yield fork(editStudyWatcher);
   const watcherI = yield fork(fetchUpgradeStudyPriceWatcher);
+  const fetchPrincipalInvestigatorTotalsWatcher1 = yield fork(fetchPrincipalInvestigatorTotalsWatcher);
+  const fetchProtocolsWatcher1 = yield fork(fetchProtocolsWatcher);
+  const fetchProtocolNumbersWatcher1 = yield fork(fetchProtocolNumbersWatcher);
+  const fetchIndicationsWatcher1 = yield fork(fetchIndicationsWatcher);
 
   // Suspend execution until location changes
-  yield take(LOCATION_CHANGE);
-
-  yield cancel(watcherA);
-  yield cancel(watcherB);
-  yield cancel(watcherC);
-  yield cancel(watcherD);
-  yield cancel(watcherE);
-  yield cancel(watcherF);
-  yield cancel(watcherG);
-  yield cancel(watcherH);
-  yield cancel(watcherI);
+  const options = yield take(LOCATION_CHANGE);
+  if (options.payload.pathname !== '/') {
+    yield cancel(watcherA);
+    yield cancel(watcherB);
+    yield cancel(watcherC);
+    yield cancel(watcherD);
+    yield cancel(watcherE);
+    yield cancel(watcherF);
+    yield cancel(watcherG);
+    yield cancel(watcherH);
+    yield cancel(watcherI);
+    yield cancel(fetchPrincipalInvestigatorTotalsWatcher1);
+    yield cancel(fetchProtocolsWatcher1);
+    yield cancel(fetchProtocolNumbersWatcher1);
+    yield cancel(fetchIndicationsWatcher1);
+  }
 }
