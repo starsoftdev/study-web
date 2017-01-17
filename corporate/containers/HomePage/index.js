@@ -15,9 +15,9 @@ export default class Home extends React.Component { // eslint-disable-line react
   componentWillMount() {}
 
   componentDidMount() {
-    //TODO: find or implement analog of JQuery in-viewport in react
-    this.animatedH2.classList.add("in-viewport", "fadeInUp");
-    this.animatedForm.classList.add("in-viewport", "fadeInUp");
+    // TODO: find or implement analog of JQuery in-viewport in react
+    this.animatedH2.classList.add('in-viewport', 'fadeInUp');
+    this.animatedForm.classList.add('in-viewport', 'fadeInUp');
   }
 
   componentWillReceiveProps() {}

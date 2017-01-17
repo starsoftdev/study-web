@@ -1,20 +1,12 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 
 import FormSubscribe from './FormSubscribe';
 import FooterNavBar from './FooterNavBar';
 import SocialNetworks from './SocialNetworks';
 
-export default class Footer extends React.Component { // eslint-disable-line react/prefer-stateless-function
-
-  static propTypes = {};
-
-  constructor(props) {
-    super(props);
+export default class Footer extends React.Component {
+  componentDidMount() {
   }
-
-  componentDidMount() {}
-
-  componentWillReceiveProps() {}
 
   render() {
     return (
