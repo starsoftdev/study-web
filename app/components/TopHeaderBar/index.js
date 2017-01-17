@@ -98,7 +98,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
   }
 
   render() {
-    const {userRoleType} = this.props;
+    const { userRoleType } = this.props;
     if (userRoleType === 'client') {
       const unreadMessagesCount = sumBy(this.props.sitePatients.details, (item) => parseInt(item.count_unread ? item.count_unread : 0));
       const credits = this.props.clientCredits.details.customerCredits || 0;
@@ -108,11 +108,11 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
             <h1 className="logo pull-left">
               <Link to="/">
-                <img src={studykikLogo} width="214" height="31" alt="logo"/>
+                <img src={studykikLogo} width="214" height="31" alt="logo" />
               </Link>
             </h1>
 
-            <NotificationBox currentUser={this.props.currentUser}/>
+            <NotificationBox currentUser={this.props.currentUser} />
 
             <div className="emails pull-left">
               <a
@@ -138,14 +138,14 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             </div>
 
             <a
-              className={classNames('opener pull-left btn-chat-popup', {active: this.state.showGlobalPMSModal})}
+              className={classNames('opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
               onClick={this.showGlobalPMSModal}
             >
               {unreadMessagesCount > 0
                 ? <span className="counter">{unreadMessagesCount}</span>
                 : ''
               }
-              <i className="icomoon-credit"/>
+              <i className="icomoon-credit" />
             </a>
 
             <div className="get-credits pull-left">
@@ -153,7 +153,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
               <Button onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
             </div>
 
-            <AvatarMenu handleLogoutClick={this.handleLogoutClick} currentUser={this.props.currentUser}/>
+            <AvatarMenu handleLogoutClick={this.handleLogoutClick} currentUser={this.props.currentUser} />
 
           </div>
           <AddCreditsModal
@@ -178,7 +178,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             </Link>
           </h1>
 
-          <NotificationBox currentUser={this.props.currentUser}/>
+          <NotificationBox currentUser={this.props.currentUser} />
 
           <div className="emails pull-left">
             <a
@@ -218,12 +218,10 @@ const mapStateToProps = createStructuredSelector({
   userRoleType: selectUserRoleType(),
 });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchSitePatients: (userId) => dispatch(fetchSitePatients(userId)),
-    fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
-    logout: () => dispatch(logout()),
-  };
-}
+const mapDispatchToProps = (dispatch) => ({
+  fetchSitePatients: (userId) => dispatch(fetchSitePatients(userId)),
+  fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
+  logout: () => dispatch(logout()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopHeaderBar);

@@ -11,7 +11,6 @@ import ReactSelect from 'components/Input/ReactSelect';
 import { selectSearchProtocolsFormError } from './selectors';
 import { selectProtocols, selectProtocolNumbers, selectIndications } from 'containers/HomePage/selectors';
 import formValidator from './validator';
-import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from 'containers/HomePage/constants';
 import LoadingSpinner from 'components/LoadingSpinner';
 
 const mapStateToProps = createStructuredSelector({
