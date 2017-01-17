@@ -131,7 +131,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       currentUser: this.props.currentUser,
       emailNotifications: filteredEmails,
       stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
-      exposureLevelName: studyLevel.name,
+      exposureLevelName: studyLevel.label,
     });
 
     if (this.state.uniqueId.length > 1) {
