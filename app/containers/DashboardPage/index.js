@@ -126,6 +126,21 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
     this.hideDateRangeModal();
   }
 
+  mapFilterValues(filters) {
+    let newFilters = [];
+    mapKeys(filters, (filterValues, key) => {
+      newFilters = concat(newFilters, map(filterValues, (v) => {
+        return {
+          name: key,
+          type: key === 'percentage' ? 'compare' : 'value',
+          value: v.label,
+        };
+      }));
+    });
+
+    return newFilters;
+  }
+
   renderDateFooter() {
     const { predefined } = this.state;
     if (predefined.startDate) {
@@ -144,21 +159,6 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
       );
     }
     return null;
-  }
-
-  mapFilterValues(filters) {
-    let newFilters = [];
-    mapKeys(filters, (filterValues, key) => {
-      newFilters = concat(newFilters, map(filterValues, (v) => {
-        return {
-          name: key,
-          type: key === 'percentage' ? 'compare' : 'value',
-          value: v.label,
-        };
-      }));
-    });
-
-    return newFilters;
   }
 
   render() {
@@ -428,9 +428,4 @@ const mapStateToProps = createStructuredSelector({
   paginationOptions: selectPaginationOptions(),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage);
+export default connect(mapStateToProps)(DashboardPage);
