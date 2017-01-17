@@ -21,7 +21,8 @@ class SideNavBar extends React.Component {
 
   render() {
     const { userRoleType } = this.props;
-    let menuItemsGroupA, menuItemsGroupB;
+    let menuItemsGroupA;
+    let menuItemsGroupB;
     if (userRoleType === 'client') {
       menuItemsGroupA = [
         { upperText: 'Home', link: '/', icon: 'icomoon-icon_house_alt' },

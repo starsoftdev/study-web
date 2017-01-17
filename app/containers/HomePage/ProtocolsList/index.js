@@ -1,13 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Modal } from 'react-bootstrap';
-import _, { countBy, find, filter, sumBy } from 'lodash';
-import { touch } from 'redux-form';
+import _ from 'lodash';
 
-import CenteredModal from '../../../components/CenteredModal/index';
 import { selectCurrentUser } from 'containers/App/selectors';
-import { setActiveSort, sortSuccess } from 'containers/HomePage/actions'
+import { setActiveSort, sortSuccess } from 'containers/HomePage/actions';
 import { selectProtocols, selectPaginationOptions } from 'containers/HomePage/selectors';
 import ProtocolItem from './ProtocolItem';
 
@@ -51,18 +48,14 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    const { protocols, sitePatients } = this.props;
-    const countResult = countBy(protocols.details, entityIterator => entityIterator.status);
-    const totalCount = protocols.details.length;
-    const ProtocolsListContents = protocols.details.map((item, index) => {
-      return (
-        <ProtocolItem
-          {...item}
-          key={index}
-          index={index}
-        />
-      );
-    });
+    const { protocols } = this.props;
+    const ProtocolsListContents = protocols.details.map((item, index) => ((
+      <ProtocolItem
+        {...item}
+        key={index}
+        index={index}
+      />
+    )));
 
     return (
       <section className="table-holder table-area fixed-table">
@@ -104,11 +97,9 @@ const mapStateToProps = createStructuredSelector({
   paginationOptions: selectPaginationOptions(),
 });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
-    sortSuccess: (payload) => dispatch(sortSuccess(payload)),
-  };
-}
+const mapDispatchToProps = (dispatch) => ({
+  setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
+  sortSuccess: (payload) => dispatch(sortSuccess(payload)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProtocolsList);
