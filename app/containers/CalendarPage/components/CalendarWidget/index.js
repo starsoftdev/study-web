@@ -13,6 +13,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 class CalendarWidget extends React.Component {
   static propTypes = {
+    currentUser: PropTypes.object,
     schedules: PropTypes.array.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
     handleShowAll: PropTypes.func.isRequired,
@@ -20,13 +21,27 @@ class CalendarWidget extends React.Component {
 
   currentDate = new Date()
 
-  render() {
-    const eventsList = this.props.schedules.map(s => ({
-      data: s,
-      title: s.patient.firstName + ' ' + s.patient.lastName + ' ' + moment(s.time).format('h:mm A'),
-      start: s.time,
-      end: s.time,
-    }));
+  render() {    
+    const { currentUser } = this.props;
+
+    const eventsList = this.props.schedules.map(s => {      
+      const localTime = moment(s.time);
+      const browserTime = moment()
+        .utcOffset(-new Date().getTimezoneOffset())
+        .year(localTime.year())
+        .month(localTime.month())
+        .day(localTime.day())
+        .hour(localTime.hour())
+        .minute(localTime.minute());
+      console.log('******', localTime.format(), browserTime.format());
+
+      return {
+        data: s,
+        title: s.patient.firstName + ' ' + s.patient.lastName + ' ' + localTime.format('h:mm A'),
+        start: browserTime,
+        end: browserTime,
+      }
+    });
 
     return (
       <div className="calendar-box calendar-slider">
