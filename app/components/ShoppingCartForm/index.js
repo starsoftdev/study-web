@@ -64,6 +64,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     saveCard: PropTypes.func,
     validateAndSubmit: PropTypes.func,
     manualDisableSubmit: PropTypes.bool,
+    showAddNewCard: PropTypes.func,
   };
 
   constructor(props) {
@@ -112,6 +113,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
   onSelectCard(value) {
     if (value === -1) {
       this.openAddNewCardModal();
+      this.props.showAddNewCard();
     }
   }
 

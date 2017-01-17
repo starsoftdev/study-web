@@ -14,8 +14,9 @@ import { Field, reduxForm, touch, reset } from 'redux-form';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import ShoppingCartForm from 'components/ShoppingCartForm';
-import { addCredits, fetchSites, getCreditsPrice } from 'containers/App/actions';
-import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice } from 'containers/App/selectors';
+import AddNewCardForm from '../../components/AddNewCardForm';
+import { addCredits, fetchSites, getCreditsPrice, saveCard } from 'containers/App/actions';
+import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice, selectCurrentUserStripeCustomerId } from 'containers/App/selectors';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
 import { selectAddCreditsFormValues, selectAddCreditsFormError } from './selectors';
 import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
@@ -47,6 +48,8 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     touchShoppingCart: PropTypes.func,
     resetForm: PropTypes.func,
     touchAddCredits: PropTypes.func,
+    saveCard: PropTypes.func,
+    currentUserStripeCustomerId: PropTypes.string,
   };
 
   constructor(props) {
@@ -56,12 +59,17 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     this.addCreditsSubmit = this.addCreditsSubmit.bind(this);
     this.handleSiteLocationChoose = this.handleSiteLocationChoose.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.handleNewModalOpen = this.handleNewModalOpen.bind(this);
+    this.openAddCardModal = this.openAddCardModal.bind(this);
+    this.closeAddCardModal = this.closeAddCardModal.bind(this);
+    this.onSaveCard = this.onSaveCard.bind(this);
 
     this.state = {
       quantity: 1,
       credits: 0,
       total: 0,
       price: 0,
+      addCardModalOpen: false,
     };
   }
 
@@ -81,6 +89,27 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
         price: newProps.creditsPrice.price,
       });
     }
+  }
+
+  onSaveCard(params) {
+    this.props.saveCard(this.props.currentUserStripeCustomerId, params);
+  }
+
+  openAddCardModal() {
+    this.setState({
+      addCardModalOpen: true,
+    })
+  }
+
+  closeAddCardModal() {
+    this.setState({
+      addCardModalOpen: false,
+    });
+  }
+
+  handleNewModalOpen() {
+    this.closeModal();
+    this.openAddCardModal();
   }
 
   resetState() {
@@ -261,11 +290,29 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
                 </div>
 
                 <div className="pull-left col">
-                  <ShoppingCartForm showCards noBorder validateAndSubmit={this.addCreditsSubmit} addOns={products} />
+                  <ShoppingCartForm showCards noBorder validateAndSubmit={this.addCreditsSubmit} addOns={products} showAddNewCard={this.handleNewModalOpen} />
                 </div>
               </div>
 
             </div>
+          </Modal.Body>
+        </Modal>
+        <Modal
+          className="modal-add-new-card"
+          show={this.state.addCardModalOpen}
+          onHide={this.closeAddCardModal}
+          dialogComponentClass={CenteredModal}
+          backdrop
+          keyboard
+        >
+          <Modal.Header>
+            <Modal.Title>Add New Card</Modal.Title>
+            <a className="lightbox-close close" onClick={this.closeAddCardModal}>
+              <i className="icomoon-icon_close" />
+            </a>
+          </Modal.Header>
+          <Modal.Body>
+            <AddNewCardForm onSubmit={this.onSaveCard} />
           </Modal.Body>
         </Modal>
       </div>
@@ -282,6 +329,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   addCreditsOperation: selectAddCredits(),
   creditsPrice: selectCreditsPrice(),
+  currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -292,6 +340,7 @@ function mapDispatchToProps(dispatch) {
     touchAddCredits: () => dispatch(touch('addCredits', ...addCreditsFields)),
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
     resetForm: () => dispatch(reset('addCredits')),
+    saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
   };
 }
 

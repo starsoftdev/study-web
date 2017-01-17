@@ -6,7 +6,7 @@ import _, { countBy, find, filter, sumBy } from 'lodash';
 import { touch } from 'redux-form';
 
 import CenteredModal from '../../../components/CenteredModal/index';
-import { fetchLevels } from 'containers/App/actions';
+import { fetchLevels, saveCard } from 'containers/App/actions';
 import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients } from 'containers/App/selectors';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy,
@@ -20,6 +20,7 @@ import RenewStudyForm from 'containers/HomePage/RenewStudyForm';
 import UpgradeStudyForm from 'containers/HomePage/UpgradeStudyForm';
 import EditStudyForm from 'containers/HomePage/EditStudyForm';
 import ShoppingCartForm from 'components/ShoppingCartForm';
+import AddNewCardForm from 'components/AddNewCardForm';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
 import { upgradeStudyFields } from '../UpgradeStudyForm/validator';
@@ -55,6 +56,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     touchUpgradeStudy: PropTypes.func,
     touchRenewStudy: PropTypes.func,
     touchShoppingCart: PropTypes.func,
+    saveCard: PropTypes.func,
   };
 
   constructor(props) {
@@ -70,6 +72,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       selectedSiteId: null,
       indicationName: null,
       locationName: null,
+      addCardModalOpen: false,
     };
 
     this.openRenewModal = this.openRenewModal.bind(this);
@@ -81,6 +84,10 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.handleRenewStudyFormSubmit = this.handleRenewStudyFormSubmit.bind(this);
     this.handleUpgradeStudyFormSubmit = this.handleUpgradeStudyFormSubmit.bind(this);
     this.handleEditStudyFormSubmit = this.handleEditStudyFormSubmit.bind(this);
+    this.handleNewModalOpen = this.handleNewModalOpen.bind(this);
+    this.openAddCardModal = this.openAddCardModal.bind(this);
+    this.closeAddCardModal = this.closeAddCardModal.bind(this);
+    this.onSaveCard = this.onSaveCard.bind(this);
     this.sortBy = this.sortBy.bind(this);
   }
 
@@ -130,6 +137,10 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     }
   }
 
+  onSaveCard(params) {
+    this.props.saveCard(this.props.currentUserStripeCustomerId, params);
+  }
+
   openRenewModal(studyId, indicationId, campaign, siteId, iName, lName) {
     this.setState({
       renewModalOpen: true,
@@ -160,6 +171,12 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       selectedStudyId: studyId,
       selectedSiteUsers: siteUsers,
     });
+  }
+
+  openAddCardModal() {
+    this.setState({
+      addCardModalOpen: true,
+    })
   }
 
   closeRenewModal() {
@@ -193,6 +210,24 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     });
   }
 
+  closeAddCardModal() {
+    this.setState({
+      addCardModalOpen: false,
+    });
+  }
+
+  handleNewModalOpen() {
+    const { renewModalOpen, upgradeModalOpen, editModalOpen } = this.state;
+    if (renewModalOpen) {
+      this.closeRenewModal();
+    } else if (upgradeModalOpen) {
+      this.closeUpgradeModal();
+    } else if (editModalOpen) {
+      this.closeEditModal();
+    }
+    this.openAddCardModal();
+  }
+
   handleRenewStudyFormSubmit() {
     const { currentUserStripeCustomerId, renewStudyFormValues, renewStudy, renewStudyFormError, shoppingCartFormValues, shoppingCartFormError,
       touchRenewStudy, touchShoppingCart } = this.props;
@@ -203,6 +238,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       return;
     }
 
+    const studyLevel = _.find(this.props.studyLevels, { id: renewStudyFormValues.exposureLevel });
+
     renewStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...renewStudyFormValues,
       stripeCustomerId: currentUserStripeCustomerId,
@@ -211,6 +248,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       user_id: this.props.currentUser.id,
       indicationName: this.state.indicationName,
       locationName: this.state.locationName,
+      exposureLevelName: studyLevel.name,
     });
   }
 
@@ -224,6 +262,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       return;
     }
 
+    const studyLevel = _.find(this.props.studyLevels, { id: upgradeStudyFormValues.level });
+
     upgradeStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...upgradeStudyFormValues,
       stripeCustomerId: currentUserStripeCustomerId,
@@ -233,6 +273,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       user_id: this.props.currentUser.id,
       indicationName: this.state.indicationName,
       locationName: this.state.locationName,
+      exposureLevelName: studyLevel.name,
     });
   }
 
@@ -457,6 +498,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                       addOns={addOns}
                       manualDisableSubmit={this.props.renewedStudy.submitting}
                       validateAndSubmit={this.handleRenewStudyFormSubmit}
+                      showAddNewCard={this.handleNewModalOpen}
                     />
                   </div>
                 </div>
@@ -495,6 +537,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                       addOns={addOns}
                       manualDisableSubmit={this.props.upgradedStudy.submitting}
                       validateAndSubmit={this.handleUpgradeStudyFormSubmit}
+                      showAddNewCard={this.handleNewModalOpen}
                     />
                   </div>
                 </div>
@@ -523,6 +566,24 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                     </div>
                   </div>
                 </div>
+              </Modal.Body>
+            </Modal>
+            <Modal
+              className="modal-add-new-card"
+              show={this.state.addCardModalOpen}
+              onHide={this.closeAddCardModal}
+              dialogComponentClass={CenteredModal}
+              backdrop
+              keyboard
+            >
+              <Modal.Header>
+                <Modal.Title>Add New Card</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeAddCardModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
+              </Modal.Header>
+              <Modal.Body>
+                <AddNewCardForm onSubmit={this.onSaveCard} />
               </Modal.Body>
             </Modal>
           </div>
@@ -565,6 +626,7 @@ function mapDispatchToProps(dispatch) {
     touchUpgradeStudy: () => dispatch(touch('upgradeStudy', ...upgradeStudyFields)),
     touchRenewStudy: () => dispatch(touch('renewStudy', ...renewStudyFields)),
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
+    saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
   };
 }
 
