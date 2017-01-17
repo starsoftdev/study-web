@@ -73,7 +73,7 @@ class Filter extends React.Component {
           placeholder=""
           options={comparisonOptions}
           meta={{ active: true }}
-          onChange={(e) => console.log(123)}
+          onChange={() => {}}
         />
         <input type="text" name={name} className="form-control" placeholder="Search" />
         <button className="btn btn-default">Apply</button>

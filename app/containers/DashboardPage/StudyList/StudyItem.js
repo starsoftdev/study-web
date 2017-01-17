@@ -39,9 +39,9 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   render() {
-    const { index, status, studyInfo, siteInfo, location, exposureLevel, goal, indication, patients } = this.props;
+    const { index, studyInfo, siteInfo, location, exposureLevel, goal, indication, patients } = this.props;
     const indicationNames = map(indication, indicationIterator => indicationIterator).join(', ');
-    const memberNames = map(studyInfo.members, v => '<span>' + v + '</span>').join(', ');
+    const memberNames = map(studyInfo.members, v => `<span>${v}</span>`).join(', ');
     return (
       <div className={classNames('tr', 'study-container', { 'tr-active': this.state.hover })} onMouseEnter={this.showHover} onMouseLeave={this.hideHover}>
         <div className="td">
@@ -105,8 +105,4 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 const mapStateToProps = createStructuredSelector({
 });
 
-function mapDispatchToProps(dispatch) {
-  return {};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(StudyItem);
+export default connect(mapStateToProps)(StudyItem);
