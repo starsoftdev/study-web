@@ -55,7 +55,6 @@ export function* setSocketConnection() {
         payload.cb(null, socket);
       }
     } catch (err) {
-      console.trace('Socket error', err);
       payload.cb(err, null);
     }
   }

@@ -34,7 +34,7 @@ function ReactMultiCheckBox({
     </div>
   );
 
-  const selectedItemsTemplate = (controlSelectedValue) => (
+  const selectedItemsTemplate = () => (
     <div>
       {placeholder}
     </div>

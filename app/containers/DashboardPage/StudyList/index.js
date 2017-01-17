@@ -1,11 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, change } from 'redux-form';
+import { Field } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Checkbox from '../../../components/Input/Checkbox';
 import ReactSelect from 'components/Input/ReactSelect';
-import ReactMultiSelect from 'components/Input/ReactMultiSelect';
 import StudyItem from './StudyItem';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -119,12 +118,9 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
   render() {
     const { studies } = this.props;
-    console.log('studylist', studies);
-    const studyListContents = studies.map((item, index) => {
-      return (
-        <StudyItem {...item} key={index} index={index} />
-      );
-    });
+    const studyListContents = studies.map((item, index) =>
+      <StudyItem {...item} key={index} index={index} />
+    );
 
     const campaignOptions = [{ label: 'Newest', id: 0 },
                            { label: '10', value: 10, id: 1 },
@@ -272,10 +268,4 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 const mapStateToProps = createStructuredSelector({
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    // change: (field, value) => dispatch(change(formName, field, value)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(StudyList);
+export default connect(mapStateToProps)(StudyList);
