@@ -25,7 +25,7 @@ export default class NavBar extends React.Component { // eslint-disable-line rea
   componentWillReceiveProps() {}
 
   render() {
-    //TODO: add 'collapsing' state to show menu opening animation
+    // TODO: add 'collapsing' state to show menu opening animation
     const { menuCollapsed } = this.props;
     return (
       <div
