@@ -25,30 +25,30 @@ class SideNavBar extends React.Component {
     let menuItemsGroupB;
     if (userRoleType === 'client') {
       menuItemsGroupA = [
-        { upperText: 'Home', link: '/', icon: 'icomoon-icon_house_alt' },
-        { upperText: 'List New Study', link: '/list-new-study', icon: 'icomoon-screen' },
-        { upperText: 'Order IRB Ad Creation', link: '/order-irb-ad-creation', icon: 'icomoon-irb' },
-        { upperText: 'Request Proposal', link: '/request-proposal', icon: 'icomoon-doller' },
-        { upperText: 'Refer', link: '/refer', icon: 'icomoon-signout' },
+        { upperText: 'Home', link: '/app', icon: 'icomoon-icon_house_alt' },
+        { upperText: 'List New Study', link: '/app/list-new-study', icon: 'icomoon-screen' },
+        { upperText: 'Order IRB Ad Creation', link: '/app/order-irb-ad-creation', icon: 'icomoon-irb' },
+        { upperText: 'Request Proposal', link: '/app/request-proposal', icon: 'icomoon-doller' },
+        { upperText: 'Refer', link: '/app/refer', icon: 'icomoon-signout' },
       ];
       menuItemsGroupB = [
-        { upperText: 'Calendar', link: '/calendar', icon: 'icomoon-icon_calendar' },
-        { upperText: 'Manage', lowerText: 'Sites / Users', link: '/sites-users', icon: 'icomoon-icon_group' },
-        { upperText: 'Patient Database', link: '/patient-database', icon: 'icomoon-icon_contacts' },
-        { upperText: 'Rewards', link: '/rewards', icon: 'icomoon-gift' },
-        { upperText: 'Badges', link: '/badges', icon: 'icomoon-star' },
+        { upperText: 'Calendar', link: '/app/calendar', icon: 'icomoon-icon_calendar' },
+        { upperText: 'Manage', lowerText: 'Sites / Users', link: '//appsites-users', icon: 'icomoon-icon_group' },
+        { upperText: 'Patient Database', link: '/app/patient-database', icon: 'icomoon-icon_contacts' },
+        { upperText: 'Rewards', link: '/app/rewards', icon: 'icomoon-gift' },
+        { upperText: 'Badges', link: '/app/badges', icon: 'icomoon-star' },
       ];
     } else {
       menuItemsGroupA = [
-        { upperText: 'Home', link: '/', icon: 'icomoon-icon_house_alt' },
-        { upperText: 'List New Protocol', link: '/list-new-protocol', icon: 'icomoon-screen' },
-        { upperText: 'Order IRB Ad Creation', link: '/order-irb-ad-creation', icon: 'icomoon-irb' },
-        { upperText: 'Request Proposal', link: '/request-proposal', icon: 'icomoon-doller' },
-        { upperText: 'Find Out How Many Sites Are Listing Your Protocol', link: '/refer', icon: 'icomoon-help-with-circle' },
+        { upperText: 'Home', link: '/app', icon: 'icomoon-icon_house_alt' },
+        { upperText: 'List New Protocol', link: '/app/list-new-protocol', icon: 'icomoon-screen' },
+        { upperText: 'Order IRB Ad Creation', link: '/app/order-irb-ad-creation', icon: 'icomoon-irb' },
+        { upperText: 'Request Proposal', link: '/app/request-proposal', icon: 'icomoon-doller' },
+        { upperText: 'Find Out How Many Sites Are Listing Your Protocol', link: '/app/refer', icon: 'icomoon-help-with-circle' },
       ];
       menuItemsGroupB = [
-        { upperText: 'Calendar', link: '/calendar', icon: 'icomoon-icon_calendar' },
-        { upperText: 'Manage Users', lowerText: '', link: '/protocol-users', icon: 'icomoon-icon_group' },
+        { upperText: 'Calendar', link: '/app/calendar', icon: 'icomoon-icon_calendar' },
+        { upperText: 'Manage Users', lowerText: '', link: '/app/protocol-users', icon: 'icomoon-icon_group' },
       ];
     }
     return (

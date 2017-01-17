@@ -54,6 +54,9 @@ module.exports = (options) => ({
     }, {
       test: /\.(mp4|webm)$/,
       loader: 'url-loader?limit=10000',
+    }, {
+      test: /\.(eot|woff|otf)$/,
+      loader: "file-loader"
     }],
   },
   plugins: options.plugins.concat([
@@ -74,7 +77,15 @@ module.exports = (options) => ({
     }),
   ]),
   resolve: {
-    modules: ['app', 'node_modules'],
+    alias: {
+      corporate: path.resolve(process.cwd(), 'corporate'),
+      app: path.resolve(process.cwd(), 'app')
+    },
+    modules: [
+      'app',
+      'corporate',
+      'node_modules'
+    ],
     extensions: [
       '',
       '.js',

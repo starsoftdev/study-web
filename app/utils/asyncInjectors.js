@@ -64,7 +64,7 @@ function redirectToLogin(store) {
   return (nextState, replace) => {
     if (!selectAuthState()(store.getState())) {
       replace({
-        pathname: '/login',
+        pathname: '/app/login',
         state: { nextPathname: nextState.location.pathname },
       });
     }
@@ -74,7 +74,7 @@ function redirectToLogin(store) {
 function redirectToDashboard(store) {
   return (nextState, replace) => {
     if (selectAuthState()(store.getState())) {
-      replace('/');
+      replace('/app/');
     }
   };
 }

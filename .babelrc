@@ -12,7 +12,8 @@
   "env": {
     "production": {
       "only": [
-        "app"
+        "app",
+        "corporate"
       ],
       "plugins": [
         "transform-decorators-legacy",
