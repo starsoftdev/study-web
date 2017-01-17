@@ -237,7 +237,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       touchShoppingCart();
       return;
     }
-
     const studyLevel = _.find(this.props.studyLevels, { id: renewStudyFormValues.exposureLevel });
 
     renewStudy(this.state.selectedStudyId, shoppingCartFormValues, {
@@ -248,7 +247,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       user_id: this.props.currentUser.id,
       indicationName: this.state.indicationName,
       locationName: this.state.locationName,
-      exposureLevelName: studyLevel.name,
+      exposureLevelName: studyLevel.label,
     });
   }
 
@@ -273,7 +272,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       user_id: this.props.currentUser.id,
       indicationName: this.state.indicationName,
       locationName: this.state.locationName,
-      exposureLevelName: studyLevel.name,
+      exposureLevelName: studyLevel.label,
     });
   }
 
