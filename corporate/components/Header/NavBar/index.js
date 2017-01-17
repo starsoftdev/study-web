@@ -10,15 +10,11 @@ const menuItems = [
   { text: 'Contact', link: '/contact' },
 ];
 
-export default class NavBar extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export default class NavBar extends React.Component {
 
   static propTypes = {
     menuCollapsed: React.PropTypes.any,
   };
-
-  constructor(props) {
-    super(props);
-  }
 
   componentDidMount() {}
 
