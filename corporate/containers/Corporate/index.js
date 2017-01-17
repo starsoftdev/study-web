@@ -1,6 +1,6 @@
 import React from 'react';
-import { default as Header } from 'corporate/components/Header';
-import { default as Footer } from 'corporate/components/Footer';
+import { default as Header } from '../../components/Header';
+import { default as Footer } from '../../components/Footer';
 
 import './styles.less';
 
