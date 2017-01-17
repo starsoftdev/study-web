@@ -49,7 +49,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
               </button>
-              <a href="#" className="btn btn-default btn-login">LOGIN</a>
+              <a href="/app/login" className="btn btn-default btn-login">LOGIN</a>
               <div className="logo-holder">
                 <Link to='/' className="navbar-brand" title='Study KIK'>
                   <img src={studyKikLogo} alt="Study KIK" width="150"/>
