@@ -176,7 +176,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   openAddCardModal() {
     this.setState({
       addCardModalOpen: true,
-    })
+    });
   }
 
   closeRenewModal() {
