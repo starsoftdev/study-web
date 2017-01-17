@@ -94,7 +94,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
             </div>
             <div className="search-studies-panel clearfix form-group">
               <SearchStudiesForm onSubmit={this.searchStudies} />
-              <Link to="/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Study</Link>
+              <Link to="/app/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Study</Link>
             </div>
             <div className="table-holder form-group">
               <StudiesList />
@@ -109,8 +109,8 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
               <SponsorDashboard location={this.props.location} />
               <div className="search-studies-panel clearfix form-group">
                 <SearchProtocolsForm onSubmit={this.searchProtocols} />
-                {/* <Link to="/list-new-study" className="btn btn-primary btn-list-new-study pull-right"><i className="icomoon-icon_creditcard"></i> add credits</Link> */}
-                {/* <Link to="/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Protocol</Link> */}
+                {/* <Link to="/app/add-credits" className="btn btn-primary btn-list-new-study pull-right"><i className="icomoon-icon_creditcard"></i> Add Credits</Link> */}
+                {/* <Link to="/app/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Protocol</Link> */}
               </div>
               <ProtocolsList />
             </section>

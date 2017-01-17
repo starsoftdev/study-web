@@ -49,7 +49,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
         <FormGroup>
 
           <Col sm={6}>
-            <Link to="/reset-password">
+            <Link to="/app/reset-password">
               Forgot password ?
             </Link>
           </Col>
