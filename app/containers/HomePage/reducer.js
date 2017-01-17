@@ -6,9 +6,19 @@ import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
   FETCH_PATIENT_MESSAGES_SUCCEESS,
   FETCH_REWARDS_POINT_SUCCEESS,
+  FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS,
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
+  FETCH_PROTOCOLS,
+  FETCH_PROTOCOLS_SUCCESS,
+  FETCH_PROTOCOLS_ERROR,
+  FETCH_PROTOCOL_NUMBERS,
+  FETCH_PROTOCOL_NUMBERS_SUCCESS,
+  FETCH_PROTOCOL_NUMBERS_ERROR,
+  FETCH_INDICATIONS,
+  FETCH_INDICATIONS_SUCCESS,
+  FETCH_INDICATIONS_ERROR,
   FETCH_INDICATION_LEVEL_PRICE,
   FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
   FETCH_INDICATION_LEVEL_PRICE_ERROR,
@@ -37,6 +47,11 @@ const initialState = {
     yesterday: 0,
     total: 0,
   },
+  principalInvestigatorTotals: {
+    active: 0,
+    inactive: 0,
+    total: 0,
+  },
   patientMessages: {
     unreadTexts: 0,
     unreadEmails: 0,
@@ -44,6 +59,21 @@ const initialState = {
   },
   rewardsPoint: 0,
   studies: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  protocols: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  protocolNumbers: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  indications: {
     details: [],
     fetching: false,
     error: null,
@@ -105,6 +135,15 @@ export default function homePageReducer(state = initialState, action) {
       return {
         ...state,
         rewardsPoint: action.payload.rewardPoints,
+      };
+    case FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS:
+      return {
+        ...state,
+        principalInvestigatorTotals: {
+          active: payload.active,
+          inactive: payload.inactive,
+          total: payload.total,
+        },
       };
     case SEND_STUDY_PATIENT_MESSAGES:
       newState = state;
@@ -219,6 +258,87 @@ export default function homePageReducer(state = initialState, action) {
       return {
         ...state,
         studies: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
+      };
+    case FETCH_PROTOCOLS:
+      return {
+        ...state,
+        protocols: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_PROTOCOLS_SUCCESS:
+      return {
+        ...state,
+        protocols: {
+          details: payload.protocols,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_PROTOCOLS_ERROR:
+      return {
+        ...state,
+        protocols: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
+      };
+    case FETCH_PROTOCOL_NUMBERS:
+      return {
+        ...state,
+        protocolNumbers: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_PROTOCOL_NUMBERS_SUCCESS:
+      return {
+        ...state,
+        protocolNumbers: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_PROTOCOL_NUMBERS_ERROR:
+      return {
+        ...state,
+        protocolNumbers: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
+      };
+    case FETCH_INDICATIONS:
+      return {
+        ...state,
+        indications: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_INDICATIONS_SUCCESS:
+      return {
+        ...state,
+        indications: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_INDICATIONS_ERROR:
+      return {
+        ...state,
+        indications: {
           details: [],
           fetching: false,
           error: payload,
