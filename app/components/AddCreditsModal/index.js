@@ -98,7 +98,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
   openAddCardModal() {
     this.setState({
       addCardModalOpen: true,
-    })
+    });
   }
 
   closeAddCardModal() {
