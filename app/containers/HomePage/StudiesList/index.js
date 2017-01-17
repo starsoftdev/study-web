@@ -330,7 +330,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { studies, sitePatients } = this.props;
+    const { studies, sitePatients, currentUser } = this.props;
     const countResult = countBy(studies.details, entityIterator => entityIterator.status);
     const activeCount = countResult[ACTIVE_STATUS_VALUE] || 0;
     const inactiveCount = countResult[INACTIVE_STATUS_VALUE] || 0;
@@ -351,6 +351,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       return (
         <StudyItem
           {...item}
+          currentUser={currentUser}
           key={index}
           index={index}
           unreadMessageCount={unreadMessageCount}

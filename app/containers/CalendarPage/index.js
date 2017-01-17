@@ -14,6 +14,8 @@ import moment from 'moment';
 import _ from 'lodash';
 import Helmet from 'react-helmet';
 
+import { getLocalTime, getUTCTime } from 'utils/time';
+
 import {
   fetchSites,
   fetchIndications,
@@ -159,6 +161,7 @@ export class CalendarPage extends React.Component {
 
   handleSubmit = (data) => {
     let submitData;
+    const { currentUser } = this.props;
 
     if (data.siteLocation && data.protocol) { // CREATE
       submitData = {
@@ -166,10 +169,11 @@ export class CalendarPage extends React.Component {
         indication: data.protocol.indication,
         protocolNumber: data.protocol.label,
         patientId: data.patient.value,
-        userId: this.props.currentUser.id,
-        time: moment(this.selectedCellInfo.selectedDate).add(data.period === 'AM' ?
+        userId: currentUser.id,
+        time: getUTCTime(moment(this.selectedCellInfo.selectedDate).add(data.period === 'AM' ?
           data.hour % 12 :
-          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').utc().format(),
+          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').format('YYYY-MM-DD hh:mm'),
+          currentUser.timezone).format(),
         textReminder: data.textReminder,
       };
     } else { // UPDATE
@@ -181,10 +185,11 @@ export class CalendarPage extends React.Component {
       }
       submitData = {
         id: this.selectedCellInfo.data.id,
-        time: updatedDate.add(data.period === 'AM' ?
+        time: getUTCTime(updatedDate.add(data.period === 'AM' ?
           data.hour % 12 :
-          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').utc().format(),
-        userId: this.props.currentUser.id,
+          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').format('YYYY-MM-DD hh:mm'),
+          currentUser.timezone).format(),
+        userId: currentUser.id,
       };
     }
 
@@ -280,6 +285,7 @@ export class CalendarPage extends React.Component {
             updateFilter={this.updateFilter}
           />
           <CalendarWidget
+            currentUser={currentUser}
             schedules={this.state.filteredSchedules}
             handleOpenModal={this.handleModalVisibility}
             handleShowAll={this.handleShowAll}
