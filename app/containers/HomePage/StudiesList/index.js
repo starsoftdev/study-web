@@ -68,6 +68,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       selectedIndicationId: null,
       selectedCampaign: null,
       selectedSiteId: null,
+      indicationName: null,
+      locationName: null,
     };
 
     this.openRenewModal = this.openRenewModal.bind(this);
@@ -128,24 +130,27 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     }
   }
 
-  openRenewModal(studyId, indicationId, campaign, siteId) {
+  openRenewModal(studyId, indicationId, campaign, siteId, indicationName, locationName) {
     this.setState({
       renewModalOpen: true,
       selectedStudyId: studyId,
       selectedIndicationId: indicationId,
       selectedCampaign: campaign,
       selectedSiteId: siteId,
-
+      indicationName: indicationName,
+      locationName: locationName,
     });
   }
 
-  openUpgradeModal(studyId, indicationId, campaign, siteId) {
+  openUpgradeModal(studyId, indicationId, campaign, siteId, indicationName, locationName) {
     this.setState({
       upgradeModalOpen: true,
       selectedStudyId: studyId,
       selectedIndicationId: indicationId,
       selectedCampaign: campaign,
       selectedSiteId: siteId,
+      indicationName: indicationName,
+      locationName: locationName,
     });
   }
 
@@ -163,6 +168,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       selectedStudyId: null,
       selectedIndicationId: null,
       selectedSiteId: null,
+      indicationName: null,
+      locationName: null,
     });
   }
 
@@ -173,6 +180,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       selectedIndicationId: null,
       selectedCampaign: null,
       selectedSiteId: null,
+      indicationName: null,
+      locationName: null,
     });
   }
 
@@ -200,6 +209,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       selectedIndicationId: this.state.selectedIndicationId,
       selectedSiteId: this.state.selectedSiteId,
       user_id: this.props.currentUser.id,
+      indicationName: this.state.indicationName,
+      locationName: this.state.locationName,
     });
   }
 
@@ -220,6 +231,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       selectedCampaignId: this.state.selectedCampaign.id,
       selectedSiteId: this.state.selectedSiteId,
       user_id: this.props.currentUser.id,
+      indicationName: this.state.indicationName,
+      locationName: this.state.locationName,
     });
   }
 
