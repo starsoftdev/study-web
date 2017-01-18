@@ -168,6 +168,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
           />
           <AlertModal show={this.state.showAlertModal} onHide={this.hideAlertModal} name="receipt" />
           <ReceiptsTable
+            currentUser={this.props.currentUser}
             selectCurrent={this.selectCurrent}
             selectAll={this.selectAll}
             getReceipts={this.props.getReceipts}

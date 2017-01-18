@@ -14,6 +14,8 @@ import moment from 'moment';
 import _ from 'lodash';
 import Helmet from 'react-helmet';
 
+import { getLocalTime, getUTCTime } from 'utils/time';
+
 import {
   fetchSites,
   fetchIndications,
@@ -106,6 +108,7 @@ export class CalendarPage extends React.Component {
     },
     allModalDeferred: false,
     filteredSchedules: [],
+    localSchedules: [],
   }
 
   componentDidMount() {
@@ -117,7 +120,17 @@ export class CalendarPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.filterSchedules(nextProps.schedules.data, this.state.filter);
+    if (this.props.schedules.data !== nextProps.schedules.data || this.props.currentUser.timezone !== nextProps.currentUser.timezone) {
+      const timezone = nextProps.currentUser.timezone;
+      const localSchedules = nextProps.schedules.data.map(s => ({
+        ...s,
+        time: getLocalTime(s.time, timezone),
+      }));
+      this.setState({
+        localSchedules,
+      });
+      this.filterSchedules(localSchedules, this.state.filter);
+    }
   }
 
   setAllModalDeferred = (allModalDeferred) => {
@@ -159,6 +172,7 @@ export class CalendarPage extends React.Component {
 
   handleSubmit = (data) => {
     let submitData;
+    const { currentUser } = this.props;
 
     if (data.siteLocation && data.protocol) { // CREATE
       submitData = {
@@ -166,10 +180,11 @@ export class CalendarPage extends React.Component {
         indication: data.protocol.indication,
         protocolNumber: data.protocol.label,
         patientId: data.patient.value,
-        userId: this.props.currentUser.id,
-        time: moment(this.selectedCellInfo.selectedDate).add(data.period === 'AM' ?
+        userId: currentUser.id,
+        time: getUTCTime(moment(this.selectedCellInfo.selectedDate).clone().add(data.period === 'AM' ?
           data.hour % 12 :
-          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').utc().format(),
+          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').format('YYYY-MM-DD HH:mm'),
+          currentUser.timezone).format(),
         textReminder: data.textReminder,
       };
     } else { // UPDATE
@@ -179,12 +194,16 @@ export class CalendarPage extends React.Component {
       } else {  // React Datepicker doesn't submit its initial value
         updatedDate = moment(new Date(this.selectedCellInfo.data.time)).startOf('day');
       }
+      const nn = updatedDate.clone().add(data.period === 'AM' ?
+          data.hour % 12 :
+          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes');
       submitData = {
         id: this.selectedCellInfo.data.id,
-        time: updatedDate.add(data.period === 'AM' ?
+        time: getUTCTime(updatedDate.clone().add(data.period === 'AM' ?
           data.hour % 12 :
-          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').utc().format(),
-        userId: this.props.currentUser.id,
+          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').format('YYYY-MM-DD HH:mm'),
+          currentUser.timezone).format(),
+        userId: currentUser.id,
       };
     }
 
@@ -218,7 +237,7 @@ export class CalendarPage extends React.Component {
       filter: newFilter,
     });
 
-    this.filterSchedules(this.props.schedules.data, newFilter);
+    this.filterSchedules(this.state.localSchedules, newFilter);
   }
 
   sortBy(ev) {
@@ -238,8 +257,8 @@ export class CalendarPage extends React.Component {
   }
 
   render() {
-    const { currentUser, sites, indications, patientsByStudy, schedules } = this.props;
-    const { showAll } = this.state;
+    const { currentUser, sites, indications, patientsByStudy } = this.props;
+    const { showAll, localSchedules } = this.state;
     const fetchingSites = sites.isFetching;
     const fetchingPatientsByStudy = patientsByStudy.isFetching;
     const isAdmin = currentUser && currentUser.roleForClient.name === 'Super Admin';
@@ -274,12 +293,13 @@ export class CalendarPage extends React.Component {
             isAdmin={isAdmin}
             sites={sites}
             indications={indications}
-            schedules={schedules.data}
+            schedules={localSchedules}
             fetchingSites={fetchingSites}
             filter={this.state.filter}
             updateFilter={this.updateFilter}
           />
           <CalendarWidget
+            currentUser={currentUser}
             schedules={this.state.filteredSchedules}
             handleOpenModal={this.handleModalVisibility}
             handleShowAll={this.handleShowAll}
@@ -296,7 +316,7 @@ export class CalendarPage extends React.Component {
             selectedCellInfo={this.selectedCellInfo}
             modalType={this.state.modalType}
             patientsByStudy={patientsByStudy}
-            schedules={schedules.data}
+            schedules={localSchedules}
             fetchingSites={fetchingSites}
             fetchingPatientsByStudy={fetchingPatientsByStudy}
             fetchPatientsByStudy={this.props.fetchPatientsByStudy}
@@ -306,6 +326,7 @@ export class CalendarPage extends React.Component {
             initialValues={{ hour: '0' }}
           />
           <EditScheduleModal
+            currentUser={currentUser}
             onSubmit={this.handleSubmit}
             handleCloseModal={this.handleCloseModal}
             handleDelete={this.handleDelete}
