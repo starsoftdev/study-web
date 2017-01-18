@@ -28,20 +28,36 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     editedStudy: PropTypes.object,
     siteUsers: PropTypes.array,
     handleSubmit: PropTypes.func,
+    handleAddEmail: PropTypes.func,
+    handleCloseEmail: PropTypes.func,
+    emailFields: PropTypes.array,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.openEmailModal = this.openEmailModal.bind(this);
+    this.closeEmailModal = this.closeEmailModal.bind(this);
+
+    this.state = {
+      addEmailModalShow: false,
+    };
+  }
 
   componentWillMount() {
     this.props.dispatch(change('editStudy', 'emailNotifications', this.props.siteUsers));
   }
 
+  openEmailModal() {
+    this.props.handleAddEmail();
+  }
+
+  closeEmailModal() {
+    this.props.handleCloseEmail();
+  }
+
   renderEmailList() {
     const { formValues } = this.props;
-
-    if (Object.getOwnPropertyNames(formValues).length === 0) {
-      return (
-        <div className="emails-list-holder"></div>
-      );
-    }
 
     return (
       <div className="emails-list-holder">
@@ -49,7 +65,10 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
           name="emailNotifications"
           component={RenderEmailsList}
           formValues={formValues}
+          addFields={this.props.emailFields}
           dispatch={this.props.dispatch}
+          addEmailModal={this.openEmailModal}
+          closeEmailModal={this.closeEmailModal}
         />
       </div>
     );

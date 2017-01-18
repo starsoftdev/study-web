@@ -7,8 +7,8 @@ import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import enhanceWithClickOutside from 'react-click-outside';
 
-import moment from 'moment';
 import _ from 'lodash';
+import { getLocalTime } from 'utils/time';
 
 import {
   fetchNotifications,
@@ -48,10 +48,6 @@ class NotificationBox extends React.Component {
     this.props.fetchNotifications(currentUser.id);
   }
 
-  getLocalTime(utc) {
-    return moment.utc(utc).local();
-  }
-
   handleBadgeNumberClick = () => {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen,
@@ -67,7 +63,15 @@ class NotificationBox extends React.Component {
     this.setState({ dropdownOpen: false });
   }
 
+  parseNotificationTime(time, timezone) {
+    const localTime = getLocalTime(time, timezone);
+
+    return `${localTime.format('MM/DD/YY')} at ${localTime.format('h:mm A')}`;
+  }
+
   render() {
+    const { currentUser } = this.props;
+
     return (
       <div className="notifications pull-left open-close">
         <a
@@ -90,7 +94,7 @@ class NotificationBox extends React.Component {
                         <a href={getRedirectionUrl(n)}>
                           <div className="img-circle"><img src={getAvatarUrl(n)} width="43" height="43" alt="Avatar" /></div>
                           <p dangerouslySetInnerHTML={{ __html: n.event_log.eventMessage }} />
-                          <time>{`${this.getLocalTime(n.event_log.created).format('MM/DD/YY')} at ${this.getLocalTime(n.event_log.created).format('h:mm A')}`}</time>
+                          <time>{this.parseNotificationTime(n.event_log.created, currentUser.timezone)}</time>
                         </a>
                       </li>
                     ))
