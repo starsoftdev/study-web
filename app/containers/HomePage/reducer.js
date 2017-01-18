@@ -1,6 +1,5 @@
 /* eslint-disable comma-dangle, no-case-declarations */
 import _, { forEach, map } from 'lodash';
-import moment from 'moment';
 
 import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
@@ -198,8 +197,8 @@ export default function homePageReducer(state = initialState, action) {
             status: siteIterator.status,
             campaign: siteIterator.campaigns[0],
             siteUsers: siteIterator.users,
-            startDate: startDate,
-            endDate: endDate,
+            startDate,
+            endDate,
             maxCampaign: siteIterator.maxCampaign,
             siteId: siteIterator.id,
           };
