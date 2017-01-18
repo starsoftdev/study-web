@@ -3,7 +3,6 @@
  */
 import { take, call, put, select } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
-import moment from 'moment-timezone';
 
 import request from 'utils/request';
 import { getItem, removeItem } from 'utils/localStorage';
@@ -30,8 +29,6 @@ export function* fetchMeFromToken() {
   try {
     const requestURL = `${API_URL}/users/${userId}/get-full-user-info?access_token=${authToken}`;
     const response = yield call(request, requestURL);
-    // set the default timezone
-    moment.tz.setDefault(response.timezone);
 
     yield put(setUserData(response));
 

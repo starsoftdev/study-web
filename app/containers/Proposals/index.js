@@ -192,6 +192,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
           />
           <AlertModal show={this.state.showAlertModal} onHide={this.hideAlertModal} name="proposal" />
           <ProposalsTable
+            currentUser={this.props.currentUser}
             selectCurrent={this.selectCurrent}
             selectAll={this.selectAll}
             range={this.state.range}
