@@ -4,6 +4,8 @@ import React, { PropTypes } from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 
+import { getLocalTime } from 'utils/time';
+
 import { SchedulePatientModalType } from 'common/constants';
 
 // Setup the localizer by providing the moment (or globalize) Object
@@ -25,15 +27,15 @@ class CalendarWidget extends React.Component {
     const { currentUser } = this.props;
 
     const eventsList = this.props.schedules.map(s => {      
-      const localTime = moment(s.time);
+      const localTime = s.time;
       const browserTime = moment()
         .utcOffset(-new Date().getTimezoneOffset())
         .year(localTime.year())
         .month(localTime.month())
-        .day(localTime.day())
+        .date(localTime.date())
         .hour(localTime.hour())
-        .minute(localTime.minute());
-      console.log('******', localTime.format(), browserTime.format());
+        .minute(localTime.minute())
+        .seconds(0);
 
       return {
         data: s,

@@ -5,6 +5,8 @@ import { Field, reduxForm } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import moment from 'moment';
 
+import { getLocalTime } from 'utils/time';
+
 import { SchedulePatientModalType } from 'common/constants';
 
 import ReactSelect from '../../../../components/Input/ReactSelect';
@@ -14,11 +16,13 @@ import CenteredModal from '../../../../components/CenteredModal';
 
 import validator from './validator';
 
-function getTimeComponents(strTime) {
+function getTimeComponents(strTime, timezone) {
+  const localTime = getLocalTime(strTime, timezone);
+
   return {
-    hour: (((moment(strTime).hour() + 11) % 12) + 1).toString(),
-    minute: moment(strTime).minute().toString(),
-    period: moment(strTime).hour() >= 12 ? 'PM' : 'AM',
+    hour: (((localTime.hour() + 11) % 12) + 1).toString(),
+    minute: localTime.minute().toString(),
+    period: localTime.hour() >= 12 ? 'PM' : 'AM',
   };
 }
 
@@ -28,6 +32,7 @@ function getTimeComponents(strTime) {
 })
 export default class EditScheduleModal extends Component {
   static propTypes = {
+    currentUser: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     handleCloseModal: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
@@ -43,7 +48,7 @@ export default class EditScheduleModal extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.modalType === SchedulePatientModalType.HIDDEN && nextProps.modalType === SchedulePatientModalType.UPDATE) {
       const initialValues = {
-        ...getTimeComponents(nextProps.selectedCellInfo.data.time),
+        ...getTimeComponents(nextProps.selectedCellInfo.data.time, nextProps.currentUser.timezone),
         textReminder: true,
       };
 
