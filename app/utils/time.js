@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 export function getLocalTime(utcTime, timezone) {
   return moment(utcTime).tz(timezone);
