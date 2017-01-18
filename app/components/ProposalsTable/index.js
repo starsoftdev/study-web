@@ -6,7 +6,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
-import moment from 'moment';
+import { getLocalTime } from 'utils/time';
 
 const headers = [
   {
@@ -33,6 +33,7 @@ const headers = [
 
 class ProposalsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    currentUser: PropTypes.object,
     selectCurrent: PropTypes.func,
     selectAll: PropTypes.func,
     range: PropTypes.any,
@@ -330,8 +331,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
   mapProposals(raw, result) {
     _.map(raw, (source, key) => {
-      const date = new Date(source.created);
-      const dateWrapper = moment(date).format('MM/DD/YY');
+      const dateWrapper = getLocalTime(source.created, this.props.currentUser.timezone).format('MM/DD/YY');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
 
       let proposalLink = source.proposalNumber;
