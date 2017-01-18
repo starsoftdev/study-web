@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+import { getLocalTime } from 'utils/time';
 import { selectSelectedUser, selectCurrentUser } from '../../containers/App/selectors';
 
 import defaultUserImage from 'assets/images/Default-User-Img.png';
@@ -17,7 +18,7 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
   render() {
     const { messageData, currentUser } = this.props;
     const cts = messageData.twilioTextMessage.dateCreated;
-    const cdate = (new Date(cts)).toLocaleString();
+    const cdate = getLocalTime(cts, currentUser.timezone).format('M/DD/YYYY, H:mm:ss A');
 
     let addon = '';
     let containerClassName = 'post-holder';

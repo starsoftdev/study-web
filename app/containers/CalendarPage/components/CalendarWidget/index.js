@@ -4,6 +4,8 @@ import React, { PropTypes } from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 
+import { getLocalTime } from 'utils/time';
+
 import { SchedulePatientModalType } from 'common/constants';
 
 // Setup the localizer by providing the moment (or globalize) Object
@@ -13,6 +15,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 class CalendarWidget extends React.Component {
   static propTypes = {
+    currentUser: PropTypes.object,
     schedules: PropTypes.array.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
     handleShowAll: PropTypes.func.isRequired,
@@ -21,12 +24,26 @@ class CalendarWidget extends React.Component {
   currentDate = new Date()
 
   render() {
-    const eventsList = this.props.schedules.map(s => ({
-      data: s,
-      title: s.patient.firstName + ' ' + s.patient.lastName + ' ' + moment(s.time).format('h:mm A'),
-      start: s.time,
-      end: s.time,
-    }));
+    const { currentUser } = this.props;
+
+    const eventsList = this.props.schedules.map(s => {
+      const localTime = s.time;
+      const browserTime = moment()
+        .utcOffset(-new Date().getTimezoneOffset())
+        .year(localTime.year())
+        .month(localTime.month())
+        .date(localTime.date())
+        .hour(localTime.hour())
+        .minute(localTime.minute())
+        .seconds(0);
+
+      return {
+        data: s,
+        title: s.patient.firstName + ' ' + s.patient.lastName + ' ' + localTime.format('h:mm A'),
+        start: browserTime,
+        end: browserTime,
+      };
+    });
 
     return (
       <div className="calendar-box calendar-slider">

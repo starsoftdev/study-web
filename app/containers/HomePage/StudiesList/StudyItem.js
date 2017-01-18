@@ -4,8 +4,11 @@ import Button from 'react-bootstrap/lib/Button';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 
+import { getLocalTime } from 'utils/time';
+
 class StudyItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    currentUser: PropTypes.object,
     index: PropTypes.number,
     studyId: PropTypes.number,
     indication: PropTypes.object,
@@ -44,7 +47,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 
   onViewClick() {
     const { push, studyId } = this.props;
-    push(`/studies/${studyId}/sites/1`);
+    push(`/app/studies/${studyId}/sites/1`);
   }
 
   onRenewClick() {
@@ -71,8 +74,15 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     this.setState({ buttonsShown: false });
   }
 
+  parseDate(date, timezone) {
+    if (!date) {
+      return '';
+    }
+    return getLocalTime(date, timezone).format('MM/DD/YYYY');
+  }
+
   render() {
-    const { indication, location, sponsor, protocol, patientMessagingSuite, status,
+    const { currentUser, indication, location, sponsor, protocol, patientMessagingSuite, status,
       startDate, endDate, unreadMessageCount, orderNumber } = this.props;
     const buttonsShown = this.state.buttonsShown;
     let messageCountContent = null;
@@ -110,10 +120,10 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <span>{status}</span>
         </td>
         <td className="start-date">
-          <span>{startDate}</span>
+          <span>{this.parseDate(startDate, currentUser.timezone)}</span>
         </td>
         <td className="end-date">
-          <span>{endDate}</span>
+          <span>{this.parseDate(endDate, currentUser.timezone)}</span>
           <div className="btns-slide pull-right">
             <div className="btns">
               <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>

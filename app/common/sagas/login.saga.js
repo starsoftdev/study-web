@@ -86,7 +86,7 @@ export function* authorize(data) {
     if (nextPathName) {
       yield put(push(nextPathName));
     } else {
-      yield put(push('/'));
+      yield put(push('/app'));
     }
 
     // return the response from the generator task
