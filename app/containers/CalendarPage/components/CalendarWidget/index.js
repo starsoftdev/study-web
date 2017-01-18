@@ -23,10 +23,10 @@ class CalendarWidget extends React.Component {
 
   currentDate = new Date()
 
-  render() {    
+  render() {
     const { currentUser } = this.props;
 
-    const eventsList = this.props.schedules.map(s => {      
+    const eventsList = this.props.schedules.map(s => {
       const localTime = s.time;
       const browserTime = moment()
         .utcOffset(-new Date().getTimezoneOffset())
@@ -42,7 +42,7 @@ class CalendarWidget extends React.Component {
         title: s.patient.firstName + ' ' + s.patient.lastName + ' ' + localTime.format('h:mm A'),
         start: browserTime,
         end: browserTime,
-      }
+      };
     });
 
     return (
