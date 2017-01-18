@@ -99,7 +99,7 @@ class FilterStudyPatientsForm extends Component {
               <Button className="btn-enter">
                 <i className="icomoon-icon_search2" />
               </Button>
-              <Debounce time="100" handler="onChange">
+              <Debounce time="200" handler="onChange">
                 <Field
                   component={Input}
                   type="text"
