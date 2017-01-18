@@ -6,8 +6,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
-import moment from 'moment';
 import InfiniteScroll from 'react-infinite-scroller';
+import { getLocalTime } from 'utils/time';
 import Money from 'components/Money';
 
 const headers = [
@@ -39,6 +39,7 @@ const headers = [
 
 class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    currentUser: PropTypes.object,
     selectCurrent: PropTypes.func,
     selectAll: PropTypes.func,
     searchBy: PropTypes.any,
@@ -199,8 +200,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   mapReceipts(raw, result) {
     let invoiceId = null;
     _.map(raw, (source, key) => {
-      const date = new Date(source.created);
-      const dateWrapper = moment(date).format('MM/DD/YY');
+      const dateWrapper = getLocalTime(source.created, this.props.currentUser.timezone).format('MM/DD/YY');
       let siteName = source.site_name || '-';
 
       let invoiceIdLink = source.invoice_id;

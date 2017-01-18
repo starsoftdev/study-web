@@ -1,6 +1,5 @@
 /* eslint-disable comma-dangle, no-case-declarations */
 import _, { forEach, map } from 'lodash';
-import moment from 'moment';
 
 import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
@@ -109,8 +108,8 @@ export default function homePageReducer(state = initialState, action) {
   let newState;
   let entity;
   let entitiesCollection;
-  let startDateStr = '';
-  let endDateStr = '';
+  let startDate = '';
+  let endDate = '';
 
   switch (action.type) {
     case FETCH_PATIENT_SIGN_UPS_SUCCEESS:
@@ -224,12 +223,12 @@ export default function homePageReducer(state = initialState, action) {
           return true;
         }
         forEach(studyIterator.sites, (siteIterator) => {
-          startDateStr = '';
-          endDateStr = '';
+          startDate = '';
+          endDate = '';
 
           if (siteIterator.campaigns && siteIterator.campaigns.length > 0 && siteIterator.campaigns[0]) {
-            startDateStr = moment.utc(siteIterator.campaigns[0].dateFrom).format('MM/DD/YYYY');
-            endDateStr = moment.utc(siteIterator.campaigns[0].dateTo).format('MM/DD/YYYY');
+            startDate = siteIterator.campaigns[0].dateFrom;
+            endDate = siteIterator.campaigns[0].dateTo;
           }
           entity = {
             ...entity,
@@ -237,8 +236,8 @@ export default function homePageReducer(state = initialState, action) {
             status: siteIterator.status,
             campaign: siteIterator.campaigns[0],
             siteUsers: siteIterator.users,
-            startDate: startDateStr,
-            endDate: endDateStr,
+            startDate,
+            endDate,
             maxCampaign: siteIterator.maxCampaign,
             siteId: siteIterator.id,
           };
