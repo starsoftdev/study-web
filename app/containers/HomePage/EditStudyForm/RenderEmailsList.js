@@ -11,6 +11,9 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
     dispatch: PropTypes.func.isRequired,
     formValues: PropTypes.object.isRequired,
     fields: PropTypes.object,
+    addEmailModal: PropTypes.func,
+    closeEmailModal: PropTypes.func,
+    addFields: PropTypes.array,
   };
 
   constructor(props) {
@@ -21,18 +24,32 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
     this.addEmailNotificationSubmit = this.addEmailNotificationSubmit.bind(this);
     this.selectAll = this.selectAll.bind(this);
     this.selectEmail = this.selectEmail.bind(this);
+    this.addNewFileds = this.addNewFileds.bind(this);
 
     this.state = {
       addEmailModalShow: false,
     };
   }
 
+  componentWillMount() {
+    this.addNewFileds(this.props.addFields);
+  }
+
   addEmailNotificationClick() {
     this.setState({ addEmailModalShow: true });
+    this.props.addEmailModal();
   }
 
   closeAddEmailModal() {
     this.setState({ addEmailModalShow: false });
+    this.props.closeEmailModal();
+  }
+
+  addNewFileds(values) {
+    forEach(values, (Object) => {
+      this.props.fields.push(Object);
+    });
+    this.props.dispatch(change('editStudy', 'checkAllInput', false));
   }
 
   addEmailNotificationSubmit(values) {
