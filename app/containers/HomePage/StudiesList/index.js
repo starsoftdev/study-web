@@ -237,14 +237,14 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   handleAddEmailNotificationSubmit(values) {
-    let emailFields = this.state.emailFields;
-    if (!emailFields) {
-      emailFields = [ values ];
+    let emailFieldsTemp = this.state.emailFields;
+    if (!emailFieldsTemp) {
+      emailFieldsTemp = [values];
     } else {
-      emailFields.push(values);
+      emailFieldsTemp.push(values);
     }
     this.setState({
-      emailFields: emailFields,
+      emailFields: emailFieldsTemp,
     });
     this.handleCloseEmailNotificationModal();
   }
