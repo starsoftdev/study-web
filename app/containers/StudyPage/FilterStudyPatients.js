@@ -9,6 +9,7 @@ import Input from '../../components/Input/index';
 import Button from 'react-bootstrap/lib/Button';
 import ReactSelect from '../../components/Input/ReactSelect';
 import StudyActionButtons from './StudyActionButtons';
+import { Debounce } from 'react-throttle';
 
 import { fetchPatients } from './actions';
 
@@ -98,15 +99,17 @@ class FilterStudyPatientsForm extends Component {
               <Button className="btn-enter">
                 <i className="icomoon-icon_search2" />
               </Button>
-              <Field
-                component={Input}
-                type="text"
-                name="search"
-                id="search"
-                className="keyword-search"
-                placeholder="Search"
-                onChange={(event) => this.searchPatient(event, 'search')}
-              />
+              <Debounce time="100" handler="onChange">
+                <Field
+                  component={Input}
+                  type="text"
+                  name="search"
+                  id="search"
+                  className="keyword-search"
+                  placeholder="Search"
+                  onChange={(event) => this.searchPatient(event, 'search')}
+                />
+              </Debounce>
             </div>
           </div>
           <div className="custom-select pull-left">
