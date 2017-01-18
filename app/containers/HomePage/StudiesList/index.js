@@ -21,6 +21,7 @@ import UpgradeStudyForm from 'containers/HomePage/UpgradeStudyForm';
 import EditStudyForm from 'containers/HomePage/EditStudyForm';
 import ShoppingCartForm from 'components/ShoppingCartForm';
 import AddNewCardForm from 'components/AddNewCardForm';
+import AddEmailNotificationForm from 'components/AddEmailNotificationForm';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
 import { upgradeStudyFields } from '../UpgradeStudyForm/validator';
@@ -73,6 +74,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       indicationName: null,
       locationName: null,
       addCardModalOpen: false,
+      addEmailModalShow: false,
+      emailFields: null,
     };
 
     this.openRenewModal = this.openRenewModal.bind(this);
@@ -89,6 +92,9 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.closeAddCardModal = this.closeAddCardModal.bind(this);
     this.onSaveCard = this.onSaveCard.bind(this);
     this.sortBy = this.sortBy.bind(this);
+    this.handleAddEmailNotificationModal = this.handleAddEmailNotificationModal.bind(this);
+    this.handleCloseEmailNotificationModal = this.handleCloseEmailNotificationModal.bind(this);
+    this.handleAddEmailNotificationSubmit = this.handleAddEmailNotificationSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -214,6 +220,33 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.setState({
       addCardModalOpen: false,
     });
+  }
+
+  handleAddEmailNotificationModal() {
+    this.setState({
+      editModalOpen: false,
+      addEmailModalShow: true,
+    });
+  }
+
+  handleCloseEmailNotificationModal() {
+    this.setState({
+      editModalOpen: true,
+      addEmailModalShow: false,
+    });
+  }
+
+  handleAddEmailNotificationSubmit(values) {
+    let emailFields = this.state.emailFields;
+    if (!emailFields) {
+      emailFields = [ values ];
+    } else {
+      emailFields.push(values);
+    }
+    this.setState({
+      emailFields: emailFields,
+    });
+    this.handleCloseEmailNotificationModal();
   }
 
   handleNewModalOpen() {
@@ -561,7 +594,13 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                 <div className="form-study">
                   <div className="scroll jcf--scrollable">
                     <div className="holder-inner">
-                      <EditStudyForm siteUsers={this.state.selectedSiteUsers} onSubmit={this.handleEditStudyFormSubmit} />
+                      <EditStudyForm
+                        siteUsers={this.state.selectedSiteUsers}
+                        onSubmit={this.handleEditStudyFormSubmit}
+                        handleAddEmail={this.handleAddEmailNotificationModal}
+                        handleCloseEmail={this.handleCloseEmailNotificationModal}
+                        emailFields={this.state.emailFields}
+                      />
                     </div>
                   </div>
                 </div>
@@ -583,6 +622,17 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               </Modal.Header>
               <Modal.Body>
                 <AddNewCardForm onSubmit={this.onSaveCard} />
+              </Modal.Body>
+            </Modal>
+            <Modal className="custom-modal" show={this.state.addEmailModalShow} onHide={this.handleCloseEmailNotificationModal}>
+              <Modal.Header>
+                <Modal.Title>ADD EMAIL NOTIFICATION</Modal.Title>
+                <a className="lightbox-close close" onClick={this.handleCloseEmailNotificationModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
+              </Modal.Header>
+              <Modal.Body>
+                <AddEmailNotificationForm onSubmit={this.handleAddEmailNotificationSubmit} />
               </Modal.Body>
             </Modal>
           </div>
