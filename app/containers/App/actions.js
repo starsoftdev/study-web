@@ -347,9 +347,10 @@ export function cardSavingError(payload) {
 // ///////////////////////////////////////////
 // delete card
 // ///////////////////////////////////////////
-export function deleteCard(customerId, cardId) {
+export function deleteCard(clientId, customerId, cardId) {
   return {
     type: DELETE_CARD,
+    clientId,
     customerId,
     cardId,
   };
