@@ -12,6 +12,12 @@ import Input from 'components/Input';
 
 export class LoginForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
+  constructor(props) {
+    super(props);
+
+    this.onChange = this.onChange.bind(this)
+  }
+
   static propTypes = {
     handleSubmit: React.PropTypes.func.isRequired,
     submitting: React.PropTypes.bool.isRequired,
@@ -20,6 +26,12 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
   componentDidMount() {
     // TODO: find or implement analog of JQuery in-viewport in react
     this.animatedForm.classList.add('in-viewport', 'fadeInUp');
+  }
+
+  onChange (ev) {
+    console.log('remember', ev.target.checked);
+    this.checkbox.classList.toggle('jcf-unchecked');
+    this.checkbox.classList.toggle('jcf-checked');
   }
 
   render() {
@@ -54,16 +66,28 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
         />
         <div className="field-row clearfix area">
           <div className="pull-left">
-            <input type="checkbox" id="remember" />
+            <span
+              className="jcf-checkbox jcf-unchecked"
+              ref={(checkbox) => {
+                this.checkbox = checkbox;
+              }}
+            >
+              <span></span>
+              <input
+                type="checkbox"
+                className="remember"
+                onChange={this.onChange}
+              />
+            </span>
             <label htmlFor="remember">Remember Me</label>
           </div>
           <a href="/app/reset-password" className="link pull-right" title="Forgot Password?">
             Forgot Password?
           </a>
         </div>
-        <FormGroup>
+        <div className="field-row">
           <input disabled={submitting} type="submit" value="submit" className="btn btn-default btn-block input-lg" />
-        </FormGroup>
+        </div>
       </form>
     );
   }

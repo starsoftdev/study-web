@@ -1,8 +1,6 @@
-/* eslint-disable react/prefer-stateless-function */
-
 import React from 'react';
 
-export default class FormSubscribe extends React.Component {
+export default class FormSubscribe extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {};
 
   render() {
