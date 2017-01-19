@@ -51,7 +51,7 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
                 </div>
                 <div className="col-xs-4">
                   <h3 className="txt-orange"><i className="icon-map-marker txt-orange"></i> LOCATION</h3>
-                  <address>1675 Scenic Ave <br /> Suite 150 <br/> Costa Mesa, Ca 92626</address>
+                  <address>1675 Scenic Ave <br /> Suite 150 <br /> Costa Mesa, Ca 92626</address>
                 </div>
                 <div className="col-xs-4 pull-right col">
 
