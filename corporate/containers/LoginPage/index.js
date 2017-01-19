@@ -11,7 +11,7 @@ import { loginRequest } from './actions';
 export class LoginPage extends Component {
 
   static propTypes = {
-    loginRequest: React.PropTypes.func,
+    onSubmitForm: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -23,7 +23,7 @@ export class LoginPage extends Component {
     return (
       <div className="login-page-wrapper">
         <div className="container">
-          <LoginForm handleSubmit={this.onSubmitForm}/>
+          <LoginForm onSubmit={this.onSubmitForm}/>
         </div>
       </div>
     );

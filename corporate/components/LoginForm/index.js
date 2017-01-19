@@ -1,33 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
+import { Field, reduxForm } from 'redux-form';
+import loginFormValidator from './validator';
+
+import Input from 'components/Input';
+
+@reduxForm({
+  form: 'login',
+  validate: loginFormValidator,
+})
 
 export class LoginForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     handleSubmit: React.PropTypes.func.isRequired,
+    submitting: React.PropTypes.bool.isRequired,
   };
-
-  constructor(props) {
-    super(props);
-    this.onSubmitForm = this.onSubmitForm.bind(this);
-  }
 
   componentDidMount() {
     // TODO: find or implement analog of JQuery in-viewport in react
     this.animatedForm.classList.add('in-viewport', 'fadeInUp');
   }
 
-  onSubmitForm (e) {
-    e.preventDefault();
-
-    this.props.handleSubmit({
-      email: this.email.value,
-      password: this.password.value
-    })
-  }
-
   render() {
+    const { handleSubmit, submitting } = this.props;
+
     return (
       <form
         ref={(animatedForm) => {
@@ -36,32 +34,25 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
         className="form-login"
         data-formvalidation="true"
         data-view="fadeInUp"
-        onSubmit={this.onSubmitForm}
+        onSubmit={handleSubmit}
       >
         <h2 className="main-heading">ACCOUNT LOGIN</h2>
-        <FormGroup>
-          <input
-            ref={(email) => {
-              this.email = email;
-            }}
-            name="email" type="email"
-            className="form-control input-lg"
-            data-required="true"
-            placeholder="* Email"
-          />
-        </FormGroup>
-        <FormGroup>
-          <input
-            ref={(password) => {
-              this.password = password;
-            }}
-            name="password"
-            type="password"
-            className="form-control input-lg"
-            data-required="true"
-            placeholder="* Password"
-          />
-        </FormGroup>
+        <Field
+          name="email"
+          type="text"
+          component={Input}
+          placeholder="* Email"
+          className="field-row"
+          bsClass="form-control input-lg"
+        />
+        <Field
+          name="password"
+          type="password"
+          component={Input}
+          placeholder="* Password"
+          className="field-row"
+          bsClass="form-control input-lg"
+        />
         <div className="field-row clearfix area">
           <div className="pull-left">
             <input type="checkbox" id="remember"/>
@@ -72,7 +63,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
           </a>
         </div>
         <FormGroup>
-          <input type="submit" value="submit" className="btn btn-default btn-block input-lg"/>
+          <input disabled={submitting} type="submit" value="submit" className="btn btn-default btn-block input-lg"/>
         </FormGroup>
       </form>
     );

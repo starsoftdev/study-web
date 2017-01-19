@@ -21,6 +21,7 @@ function Input({
   id,
   placeholder,
   componentClass,
+  bsClass,
   className,
   tooltipDisabled,
   onBlur,
@@ -59,6 +60,7 @@ function Input({
       step={step}
       defaultValue={defaultValue}
       componentClass={componentClass} // Default value is `input`
+      bsClass={bsClass || 'form-control'}
       onChange={(event) => {
         input.onChange(event);
         if (onChange) {
