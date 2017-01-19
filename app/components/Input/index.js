@@ -98,6 +98,7 @@ function Input({
 
 Input.propTypes = {
   componentClass: PropTypes.string,
+  bsClass: PropTypes.string,
   className: PropTypes.string,
   children: PropTypes.array,
   isDisabled: PropTypes.bool,

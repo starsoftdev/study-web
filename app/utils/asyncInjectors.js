@@ -62,7 +62,7 @@ export function injectAsyncSagas(store, isValid) {
 }
 
 function redirectToLogin(store) {
-  return (nextState, replace) => {
+  return (nextState) => {
     if (!selectAuthState()(store.getState())) {
       /**
        * it's necessary to reboot in order to enter into a corporate portal entry point

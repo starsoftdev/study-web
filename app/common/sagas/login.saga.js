@@ -34,8 +34,6 @@ import {
 
 import { loginError, logout as logoutAction } from 'containers/LoginPage/actions';
 import { fetchMeFromToken, setAuthState, setUserData } from 'containers/App/actions';
-import { selectNextPathname } from 'common/selectors/router.selector';
-
 
 export default function* loginSaga() {
   while (true) {

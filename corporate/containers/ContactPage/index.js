@@ -1,8 +1,8 @@
 import React from 'react';
 
-import img17 from 'assets/images/img17.svg';
-import img18 from 'assets/images/img18.svg';
-import imgWifi from 'assets/images/wifi.svg';
+import img17 from '../../assets/images/img17.svg';
+import img18 from '../../assets/images/img18.svg';
+import imgWifi from '../../assets/images/wifi.svg';
 
 import './styles.less';
 
@@ -43,8 +43,7 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
             data-view="fadeInUp"
           >
             <div className="form-holder">
-              <p className="text-center txt-green">To speak with one of our friendly staff members, please contact
-                us.</p>
+              <p className="text-center txt-green">To speak with one of our friendly staff members, please contact us.</p>
               <div className="row contact-info">
                 <div className="col-xs-4">
                   <h3 className="txt-orange"><i className="icon-phone txt-orange"></i> PHONE</h3>
@@ -60,20 +59,19 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
                   <a href="mailto:info@studykik.com" className="email">info@studykik.com</a>
                 </div>
               </div>
-              <input type="text" className="form-control input-lg" placeholder="* Full Name" data-required="true"/>
-              <input type="email" className="form-control input-lg" placeholder="* Email" data-required="true"/>
-              <input type="text" data-type="number" className="form-control input-lg" placeholder="* Mobile Phone"
-                     data-required="true"/>
+              <input type="text" className="form-control input-lg" placeholder="* Full Name" data-required="true" />
+              <input type="email" className="form-control input-lg" placeholder="* Email" data-required="true" />
+              <input type="text" data-type="number" className="form-control input-lg" placeholder="* Mobile Phone" data-required="true" />
               <textarea className="form-control input-lg" placeholder="* Message" data-required="true"></textarea>
-              <input type="submit" className="btn btn-default btn-block input-lg" value="Submit"/>
+              <input type="submit" className="btn btn-default btn-block input-lg" value="Submit" />
               <div className="image left">
-                <img src={img17} alt="&nbsp;" width="351" height="437" className="svg"/>
+                <img src={img17} alt="&nbsp;" width="351" height="437" className="svg" />
                 <span className="wifi">
-                  <img src={imgWifi} alt="&nbsp;" width="40" className="svg"/>
+                  <img src={imgWifi} alt="&nbsp;" width="40" className="svg" />
                 </span>
               </div>
               <div className="image right">
-                <img src={img18} alt="&nbsp;" width="380" height="480" className="svg"/>
+                <img src={img18} alt="&nbsp;" width="380" height="480" className="svg" />
               </div>
             </div>
           </form>

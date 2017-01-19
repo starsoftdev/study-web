@@ -26,7 +26,7 @@ const redirectApp = () => {
   const redirectPath = getItem('redirect_path') || '/app';
   removeItem('redirect_path');
   location.href = redirectPath;
-}
+};
 
 const routes = {
   path: '/',

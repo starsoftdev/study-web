@@ -1,10 +1,6 @@
 import React from 'react';
 
 export default class FormSubscribe extends React.Component {
-  componentDidMount() {}
-
-  componentWillReceiveProps() {}
-
   render() {
     return (
       <form className="form-subscribe" data-formvalidation="true">

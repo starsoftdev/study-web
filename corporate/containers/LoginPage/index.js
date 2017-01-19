@@ -23,7 +23,7 @@ export class LoginPage extends Component {
     return (
       <div className="login-page-wrapper">
         <div className="container">
-          <LoginForm onSubmit={this.onSubmitForm}/>
+          <LoginForm onSubmit={this.onSubmitForm} />
         </div>
       </div>
     );
