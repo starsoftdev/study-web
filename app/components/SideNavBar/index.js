@@ -33,7 +33,7 @@ class SideNavBar extends React.Component {
       ];
       menuItemsGroupB = [
         { upperText: 'Calendar', link: '/app/calendar', icon: 'icomoon-icon_calendar' },
-        { upperText: 'Manage', lowerText: 'Sites / Users', link: '//appsites-users', icon: 'icomoon-icon_group' },
+        { upperText: 'Manage', lowerText: 'Sites / Users', link: '/app/sites-users', icon: 'icomoon-icon_group' },
         { upperText: 'Patient Database', link: '/app/patient-database', icon: 'icomoon-icon_contacts' },
         { upperText: 'Rewards', link: '/app/rewards', icon: 'icomoon-gift' },
         { upperText: 'Badges', link: '/app/badges', icon: 'icomoon-star' },
