@@ -66,8 +66,10 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
 
   render() {
     let customerId = false;
+    let clientId = false;
     if (this.props.currentUser && this.props.currentUser.roleForClient) {
       customerId = this.props.currentUser.roleForClient.client.stripeCustomerId;
+      clientId = this.props.currentUser.roleForClient.client.id;
     }
     let creditCards = [];
     if (this.props.creditCards.details && this.props.creditCards.details.data) {
@@ -81,7 +83,7 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
 
           <div>
             <div className="btn-block text-right">
-              <a className="btn btn-primary lightbox-opener" onClick={this.showCreditCardModal}>+   ADD  NEW CARD</a>
+              <a className="btn btn-primary lightbox-opener" onClick={this.showCreditCardModal}>+ ADD NEW CARD</a>
             </div>
             <AddCreditCardModal addCreditCard={this.onSaveCard} showModal={this.state.showAddCreditCardModal} closeModal={this.closeAddCredtCardModal} />
           </div>
@@ -89,6 +91,7 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
           <PaymentMethodsForm
             creditCards={creditCards}
             deleteCreditCard={this.deleteCard}
+            clientId={clientId}
             customerId={customerId}
             paginationOptions={this.props.paginationOptions}
             setActiveSort={this.props.setActiveSort}
@@ -109,7 +112,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchCards: (customerId) => dispatch(fetchCards(customerId)),
-    deleteCard: (customerId, cardId) => dispatch(deleteCard(customerId, cardId)),
+    deleteCard: (clientId, customerId, cardId) => dispatch(deleteCard(clientId, customerId, cardId)),
     saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
   };

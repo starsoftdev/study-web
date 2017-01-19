@@ -10,6 +10,9 @@ import React, { PropTypes } from 'react';
 class CardItem extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
+    clientId: PropTypes.number,
+    customerId: PropTypes.number,
+    deleteCreditCard: PropTypes.func,
     id: PropTypes.string,
     brand: PropTypes.string,
     name: PropTypes.string,
@@ -17,8 +20,6 @@ class CardItem extends React.Component { // eslint-disable-line react/prefer-sta
     exp_month: PropTypes.number,
     exp_year: PropTypes.number,
     isRemoving: PropTypes.bool,
-    deleteCreditCard: PropTypes.func,
-    customerId: PropTypes.number,
   }
 
   constructor(props) {
@@ -27,9 +28,8 @@ class CardItem extends React.Component { // eslint-disable-line react/prefer-sta
   }
 
   removeItem() {
-    const customerId = this.props.customerId;
-    const cardId = this.props.id;
-    this.props.deleteCreditCard(customerId, cardId);
+    const { id, clientId, customerId } = this.props;
+    this.props.deleteCreditCard(clientId, customerId, id);
   }
 
   render() {
