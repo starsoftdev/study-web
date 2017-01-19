@@ -81,14 +81,6 @@ export function* authorize(data) {
     // fetch details of authenticated user
     yield put(fetchMeFromToken());
 
-    // redirect to nextPathName or to the dashboard page
-    const nextPathName = yield select(selectNextPathname);
-    if (nextPathName) {
-      yield put(push(nextPathName));
-    } else {
-      yield put(push('/app'));
-    }
-
     // return the response from the generator task
     return response;
   } catch (err) {
