@@ -1,6 +1,10 @@
+/* eslint-disable react/prefer-stateless-function */
+
 import React from 'react';
 
 export default class FormSubscribe extends React.Component {
+  static propTypes = {};
+
   render() {
     return (
       <form className="form-subscribe" data-formvalidation="true">
