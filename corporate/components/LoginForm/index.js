@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import { Field, reduxForm } from 'redux-form';
 import loginFormValidator from './validator';
