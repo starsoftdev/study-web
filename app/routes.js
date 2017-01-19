@@ -65,15 +65,6 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
-      onEnter: redirectToDashboard,
-      path: '/app/login',
-      name: 'loginPage',
-      getComponent(nextState, cb) {
-        System.import('containers/LoginPage')
-          .then(loadModule(cb))
-          .catch(errorLoading);
-      },
-    }, {
       onEnter: redirectToLogin,
       path: '/confirm-password-change',
       name: 'confirmPasswordChangePage',

@@ -3,6 +3,7 @@ import invariant from 'invariant';
 import warning from 'warning';
 import createReducer from 'reducers';
 import { selectAuthState } from 'containers/App/selectors';
+import { getItem, setItem, removeItem } from 'utils/localStorage';
 
 /**
  * Validate the shape of redux store
@@ -63,10 +64,12 @@ export function injectAsyncSagas(store, isValid) {
 function redirectToLogin(store) {
   return (nextState, replace) => {
     if (!selectAuthState()(store.getState())) {
-      replace({
-        pathname: '/app/login',
-        state: { nextPathname: nextState.location.pathname },
-      });
+      /**
+       * it's necessary to reboot in order to enter into a corporate portal entry point
+       * where login page is stored
+       */
+      setItem('redirect_path', nextState.location.pathname);
+      location.href = '/login';
     }
   };
 }

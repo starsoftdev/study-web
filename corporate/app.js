@@ -3,7 +3,11 @@ import { Router, browserHistory } from 'react-router';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
-import configureStore from './store';
+import { getItem, setItem, removeItem } from 'utils/localStorage';
+
+import '!file?name=[name].[ext]!./manifest.json';
+
+import configureStore from '../app/store';
 
 import { default as Corporate } from './containers/Corporate';
 import { default as Home } from './containers/HomePage';
@@ -17,6 +21,13 @@ const initialState = {};
 const store = configureStore(initialState, browserHistory);
 const history = syncHistoryWithStore(browserHistory, store);
 
+const redirectApp = () => {
+  // redirect to nextPathName or to the dashboard page
+  const redirectPath = getItem('redirect_path') || '/app';
+  removeItem('redirect_path');
+  location.href = redirectPath;
+}
+
 const routes = {
   path: '/',
   component: Corporate,
@@ -24,6 +35,7 @@ const routes = {
   childRoutes: [
     { path: '/login', component: LoginPage },
     { path: '/contact', component: ContactPage },
+    { path: '/app', component: LoginPage, onEnter: redirectApp },
     { path: '*', component: NotFound },
   ],
 };
