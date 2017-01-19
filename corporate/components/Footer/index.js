@@ -5,13 +5,18 @@ import FooterNavBar from './FooterNavBar';
 import SocialNetworks from './SocialNetworks';
 
 export default class Footer extends React.Component {
-  componentDidMount() {
-  }
+  static propTypes = {
+    location: React.PropTypes.any,
+  };
 
   render() {
+    const { pathname } = this.props.location;
+
     return (
       <footer id="footer">
-        <FormSubscribe />
+        {(pathname === '/') > 0 &&
+          <FormSubscribe />
+        }
         <div className="footer-holder">
           <div className="container-fluid">
             <div className="clearfix">
