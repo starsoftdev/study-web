@@ -73,16 +73,11 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
               <span></span>
               <input
                 type="checkbox"
-                className="remember"
+                id="remember"
                 onChange={this.toggleCheckbox}
               />
             </span>
-            <label
-              htmlFor="remember"
-              onClick={this.toggleCheckbox}
-            >
-              Remember Me
-            </label>
+            <label htmlFor="remember">Remember Me</label>
           </div>
           <a href="/app/reset-password" className="link pull-right" title="Forgot Password?">
             Forgot Password?
