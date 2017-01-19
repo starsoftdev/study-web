@@ -76,6 +76,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       addCardModalOpen: false,
       addEmailModalShow: false,
       emailFields: null,
+      isReNew: false,
     };
 
     this.openRenewModal = this.openRenewModal.bind(this);
@@ -217,9 +218,17 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   closeAddCardModal() {
-    this.setState({
-      addCardModalOpen: false,
-    });
+    if (this.state.isReNew) {
+      this.setState({
+        addCardModalOpen: false,
+        renewModalOpen: true,
+      });
+    } else {
+      this.setState({
+        addCardModalOpen: false,
+        upgradeModalOpen: true,
+      });
+    }
   }
 
   handleAddEmailNotificationModal() {
@@ -252,9 +261,15 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   handleNewModalOpen() {
     const { renewModalOpen, upgradeModalOpen, editModalOpen } = this.state;
     if (renewModalOpen) {
-      this.closeRenewModal();
+      this.setState({
+        renewModalOpen: false,
+        isReNew: true,
+      });
     } else if (upgradeModalOpen) {
-      this.closeUpgradeModal();
+      this.setState({
+        upgradeModalOpen: false,
+        isReNew: false,
+      });
     } else if (editModalOpen) {
       this.closeEditModal();
     }
