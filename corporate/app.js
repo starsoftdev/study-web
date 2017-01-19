@@ -3,7 +3,7 @@ import { Router, browserHistory } from 'react-router';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
-import { getItem, setItem, removeItem } from 'utils/localStorage';
+import { getItem, removeItem } from 'utils/localStorage';
 
 import '!file?name=[name].[ext]!./manifest.json';
 

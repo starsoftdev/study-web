@@ -3,7 +3,7 @@ import invariant from 'invariant';
 import warning from 'warning';
 import createReducer from 'reducers';
 import { selectAuthState } from 'containers/App/selectors';
-import { getItem, setItem, removeItem } from 'utils/localStorage';
+import { setItem } from 'utils/localStorage';
 
 /**
  * Validate the shape of redux store
