@@ -4,7 +4,11 @@ import { Link } from 'react-router';
 import NavBar from './NavBar';
 import studyKikLogo from 'assets/images/logo.svg';
 
-export default class Header extends React.Component {
+export default class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  static propTypes = {
+    location: React.PropTypes.any,
+  };
+
   constructor(props) {
     super(props);
 
@@ -23,6 +27,7 @@ export default class Header extends React.Component {
   }
 
   render() {
+    const { pathname } = this.props.location;
     const { menuCollapsed } = this.state;
     return (
       <header id="header">
@@ -44,7 +49,9 @@ export default class Header extends React.Component {
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
               </button>
-              <Link to="/login" className="btn btn-default btn-login">LOGIN</Link>
+              {(pathname !== '/login') > 0 &&
+                <Link to="/login" className="btn btn-default btn-login">LOGIN</Link>
+              }
               <div className="logo-holder">
                 <Link to="/" className="navbar-brand" title="Study KIK">
                   <img src={studyKikLogo} alt="Study KIK" width="150" />

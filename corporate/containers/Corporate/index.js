@@ -23,7 +23,7 @@ export default class Corporate extends React.Component { // eslint-disable-line 
   render() {
     return (
       <div id="wrapper">
-        <Header />
+        <Header {...this.props} />
         {React.Children.toArray(this.props.children)}
         <Footer {...this.props} />
       </div>
