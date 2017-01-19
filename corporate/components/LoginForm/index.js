@@ -1,5 +1,4 @@
 import React from 'react';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
 import { Field, reduxForm } from 'redux-form';
 import loginFormValidator from './validator';
 
@@ -12,24 +11,23 @@ import Input from 'components/Input';
 
 export class LoginForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
-  constructor(props) {
-    super(props);
-
-    this.onChange = this.onChange.bind(this)
-  }
-
   static propTypes = {
     handleSubmit: React.PropTypes.func.isRequired,
     submitting: React.PropTypes.bool.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.toggleCheckbox = this.toggleCheckbox.bind(this);
+  }
 
   componentDidMount() {
     // TODO: find or implement analog of JQuery in-viewport in react
     this.animatedForm.classList.add('in-viewport', 'fadeInUp');
   }
 
-  onChange (ev) {
-    console.log('remember', ev.target.checked);
+  toggleCheckbox() {
     this.checkbox.classList.toggle('jcf-unchecked');
     this.checkbox.classList.toggle('jcf-checked');
   }
@@ -76,10 +74,15 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
               <input
                 type="checkbox"
                 className="remember"
-                onChange={this.onChange}
+                onChange={this.toggleCheckbox}
               />
             </span>
-            <label htmlFor="remember">Remember Me</label>
+            <label
+              htmlFor="remember"
+              onClick={this.toggleCheckbox}
+            >
+              Remember Me
+            </label>
           </div>
           <a href="/app/reset-password" className="link pull-right" title="Forgot Password?">
             Forgot Password?
