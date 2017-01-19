@@ -54,7 +54,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
         />
         <div className="field-row clearfix area">
           <div className="pull-left">
-            <input type="checkbox" id="remember"/>
+            <input type="checkbox" id="remember" />
             <label htmlFor="remember">Remember Me</label>
           </div>
           <a href="/app/reset-password" className="link pull-right" title="Forgot Password?">
@@ -62,7 +62,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
           </a>
         </div>
         <FormGroup>
-          <input disabled={submitting} type="submit" value="submit" className="btn btn-default btn-block input-lg"/>
+          <input disabled={submitting} type="submit" value="submit" className="btn btn-default btn-block input-lg" />
         </FormGroup>
       </form>
     );
