@@ -188,7 +188,7 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
             <a className="link" onClick={this.useDefaultImage}>Use Default Image</a>
           </div>
           <div className="text-right">
-            <input type="button" className="btn btn-default" onClick={this.handleSave} value="submit" />
+            <input type="button" className="btn btn-default" onClick={this.handleSave} value="update" />
           </div>
         </div>
       </form>

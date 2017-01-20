@@ -39,7 +39,7 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
       rangePicker : {},
       datePicker : null,
       firstDayOfWeek : null,
-      predefined : {
+      dateRange : {
         startDate: moment().clone().subtract(30, 'days'),
         endDate: moment(),
       },
@@ -49,6 +49,12 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
     this.removeFilter = this.removeFilter.bind(this);
     this.openFiltersModal = this.openFiltersModal.bind(this);
     this.closeFiltersModal = this.closeFiltersModal.bind(this);
+    this.saveFilters = this.saveFilters.bind(this);
+    this.handleChange = this.handleChange.bind(this, 'dateRange');
+    this.showDateRangeModal = this.showDateRangeModal.bind(this);
+    this.hideDateRangeModal = this.hideDateRangeModal.bind(this);
+    this.changeRange = this.changeRange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -119,11 +125,28 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
     this.setState({ showDateRangeModal: false });
   }
 
-  changeRange(ev) {
-    ev.preventDefault();
-    // const range = this.state.predefined;
-    // this.props.search(range, 'range');
+  changeRange() {
+    // TODO: update filter
     this.hideDateRangeModal();
+  }
+
+  handleChange(which, payload) {
+    this.setState({
+      [which] : payload,
+    });
+  }
+
+  parseDateRange() {
+    const { startDate, endDate } = this.state.dateRange;
+    const today = moment();
+    const fmt = 'MM/DD/YY';
+    let prefix = '';
+
+    if (endDate.format(fmt) === today.format(fmt)) {
+      prefix = ' Last ';
+    }
+    const days = endDate.diff(startDate, 'days');
+    return `${prefix} ${days} Days: ${startDate.format(fmt)} - ${endDate.format(fmt)}`;
   }
 
   mapFilterValues(filters) {
@@ -140,19 +163,19 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
   }
 
   renderDateFooter() {
-    const { predefined } = this.state;
-    if (predefined.startDate) {
+    const { dateRange } = this.state;
+    if (dateRange.startDate) {
       const format = 'MMM D, YYYY';
-      if (predefined.startDate.isSameOrAfter(predefined.endDate, 'day')) {
+      if (dateRange.startDate.isSameOrAfter(dateRange.endDate, 'day')) {
         return (
           <span className="time">
-            {moment(predefined.startDate).format(format)}
+            {moment(dateRange.startDate).format(format)}
           </span>
         );
       }
       return (
         <span className="time">
-          {moment(predefined.startDate).format(format)} - {moment(predefined.endDate).format(format)}
+          {moment(dateRange.startDate).format(format)} - {moment(dateRange.endDate).format(format)}
         </span>
       );
     }
@@ -163,17 +186,17 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
     const { customFilters, modalFilters } = this.state;
     const filters = concat(this.mapFilterValues(modalFilters), customFilters);
     const pieData1 = [
-      { label: 'RED', value: 179 },
-      { label: 'YELLOW', value: 107 },
-      { label: 'GREEN', value: 165 },
-      { lable: 'PURPLE', value: 25 },
+      { label: 'RED', value: 179, percent: 37.61, color: '#dd0000' },
+      { label: 'YELLOW', value: 107, percent: 22.48, color: '#f9ce15' },
+      { label: 'GREEN', value: 165, percent: 34.66, color: '#7dbc00' },
+      { label: 'PURPLE', value: 25, percent: 5.25, color: '#873fbd' },
     ];
 
     const pieData2 = [
-      { label: 'TIER 1', value: 261 },
-      { label: 'TIER 2', value: 78 },
-      { label: 'TIER 3', value: 65 },
-      { lable: 'TIER 4', value: 42 },
+      { label: 'TIER 1', value: 261, percent: 54.52, color: '#00afef' },
+      { label: 'TIER 2', value: 78, percent: 17.49, color: '#f78e1e' },
+      { label: 'TIER 3', value: 65, percent: 14.57, color: '#a0cf67' },
+      { label: 'TIER 4', value: 42, percent: 9.42, color: '#949ca1' },
     ];
 
     const lineData = [
@@ -281,22 +304,17 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
               </li>
             </ul>
             <ul className="list-unstyled info-list pull-left">
-              <li>
-                <strong className="heading">RED: </strong>
-                <span className="number">179 <span>(37.61%)</span></span>
-              </li>
-              <li>
-                <strong className="heading">YELLOW: </strong>
-                <span className="number">107 <span>(22.48%)</span></span>
-              </li>
-              <li>
-                <strong className="heading">GREEN: </strong>
-                <span className="number">165 <span>(34.66%)</span></span>
-              </li>
-              <li>
-                <strong className="heading">PURPLE: </strong>
-                <span className="number">25 <span>(5.25%)</span></span>
-              </li>
+              {
+                map(pieData1, (data, index) => {
+                  const colorClass = data.label.toLowerCase();
+                  return (
+                    <li key={index}>
+                      <strong className={`heading color ${colorClass}`}>{data.label}: </strong>
+                      <span className="number">{data.value} <span>({data.percent})</span></span>
+                    </li>
+                  );
+                })
+              }
             </ul>
             <div className="chart pull-left">
               <PieChart
@@ -308,25 +326,22 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
                 sectorBorderColor="white"
                 showOuterLabels={false}
                 showInnerLabels={false}
+                colors={(data) => data.color}
+                colorAccessor={(data) => data}
               />
             </div>
             <ul className="list-unstyled info-list pull-left">
-              <li>
-                <strong className="heading">TIER 1: </strong>
-                <span className="number">261 <span>(58.52%)</span></span>
-              </li>
-              <li>
-                <strong className="heading">TIER 2: </strong>
-                <span className="number">78 <span>(17.49%)</span></span>
-              </li>
-              <li>
-                <strong className="heading">TIER 3: </strong>
-                <span className="number">65 <span>(14.57%)</span></span>
-              </li>
-              <li>
-                <strong className="heading">TIER 4: </strong>
-                <span className="number">42 <span>(9.42%)</span></span>
-              </li>
+              {
+                map(pieData2, (data, index) => {
+                  const colorClass = data.label.toLowerCase().replace(' ', '');
+                  return (
+                    <li key={index}>
+                      <strong className={`heading color ${colorClass}`}>{data.label}: </strong>
+                      <span className="number">{data.value} <span>({data.percent})</span></span>
+                    </li>
+                  );
+                })
+              }
             </ul>
             <div className="chart pull-left">
               <PieChart
@@ -338,6 +353,8 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
                 sectorBorderColor="white"
                 showOuterLabels={false}
                 showInnerLabels={false}
+                colors={(data) => data.color}
+                colorAccessor={(data) => data}
               />
             </div>
           </div>
@@ -347,7 +364,7 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
               <span className="counter pull-left">0% OF GOAL 0.49%</span>
               <Button bsStyle="primary" className="lightbox-opener pull-right" onClick={() => { this.showDateRangeModal(); }}>
                 <i className="icomoon-icon_calendar"></i>
-            Last 30 days: 08/04/16 - 09/04/16
+                {this.parseDateRange()}
               </Button>
             </div>
             <div className="graph-holder">
@@ -387,8 +404,8 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
                   }}
                   linkedCalendars
                   ranges={defaultRanges}
-                  startDate={this.state.predefined.startDate ? this.state.predefined.startDate : moment()}
-                  endDate={this.state.predefined.endDate ? this.state.predefined.endDate : moment().add(1, 'M')}
+                  startDate={this.state.dateRange.startDate ? this.state.dateRange.startDate : moment()}
+                  endDate={this.state.dateRange.endDate ? this.state.dateRange.endDate : moment().add(1, 'M')}
                   onInit={this.handleChange}
                   onChange={this.handleChange}
                 />
@@ -397,7 +414,7 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
                   <div className="right-part">
                     <div className="btn-block text-right">
                       {this.renderDateFooter()}
-                      <Button onClick={() => { this.changeRange(); }}>
+                      <Button onClick={this.changeRange}>
                         Submit
                       </Button>
                     </div>
@@ -406,14 +423,10 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
               </Modal.Body>
             </Modal>
           </div>
-          <div className="table-container">
-            <section className="patient-database">
-              <StudyList
-                studies={this.props.studies}
-                paginationOptions={this.props.paginationOptions}
-              />
-            </section>
-          </div>
+          <StudyList
+            studies={this.props.studies}
+            paginationOptions={this.props.paginationOptions}
+          />
         </section>
       </div>
     );

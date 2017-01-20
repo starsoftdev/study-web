@@ -160,6 +160,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             currentUser={this.props.currentUser}
             showModal={this.state.showAddCreditsModal}
             closeModal={this.closeAddCreditsModal}
+            openModal={this.showAddCreditsModal}
           />
           <GlobalPMSModal
             showModal={this.state.showGlobalPMSModal}

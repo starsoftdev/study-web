@@ -1,11 +1,18 @@
 import React from 'react';
 
 export default class FormSubscribe extends React.Component { // eslint-disable-line react/prefer-stateless-function
+
   static propTypes = {};
+
+  componentDidMount() {
+  }
+
+  componentWillReceiveProps() {
+  }
 
   render() {
     return (
-      <form className="form-subscribe" data-formvalidation="true">
+      <form className="form-subscribe" action="#" data-formvalidation="true">
         <div className="container">
           <strong className="title pull-left">Learn About Future Clinical Trials</strong>
           <div className="holder">
@@ -18,13 +25,7 @@ export default class FormSubscribe extends React.Component { // eslint-disable-l
                 <input type="email" placeholder="* Email" data-required="true" className="form-control" />
               </div>
               <div className="col-xs-4">
-                <input
-                  type="text"
-                  data-type="number"
-                  placeholder="* Mobile Phone"
-                  data-required="true"
-                  className="form-control"
-                />
+                <input type="text" data-type="number" placeholder="* Mobile Phone" data-required="true" className="form-control" />
               </div>
             </div>
           </div>
