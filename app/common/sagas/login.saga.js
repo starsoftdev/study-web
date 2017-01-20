@@ -105,10 +105,14 @@ export function* logoutSaga() {
     yield take(LOGOUT_REQUEST);
 
     yield call(logout);
+
+    // Redirect to login page before setting auth state.
+    // This way no components will attempt to re-render using
+    // absent user data.
+    yield call(() => { location.href = '/login'; });
+
     yield put(setAuthState(false));
     yield put(setUserData(null));
-    // redirect to login page
-    yield put(replace('/app/login'));
   }
 }
 
