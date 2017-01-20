@@ -126,14 +126,11 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
   }
 
   changeRange() {
-    const range = this.state.dateRange;
-    // this.props.search(range, 'range');
-    console.log('change date range', range);
+    // TODO: update filter
     this.hideDateRangeModal();
   }
 
   handleChange(which, payload) {
-    // console.log('date handle change', which, 'payload', payload);
     this.setState({
       [which] : payload,
     });
@@ -432,14 +429,10 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
               </Modal.Body>
             </Modal>
           </div>
-          <div className="table-container">
-            <section className="patient-database">
-              <StudyList
-                studies={this.props.studies}
-                paginationOptions={this.props.paginationOptions}
-              />
-            </section>
-          </div>
+          <StudyList
+            studies={this.props.studies}
+            paginationOptions={this.props.paginationOptions}
+          />
         </section>
       </div>
     );
