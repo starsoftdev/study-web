@@ -185,18 +185,19 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
   render() {
     const { customFilters, modalFilters } = this.state;
     const filters = concat(this.mapFilterValues(modalFilters), customFilters);
+    
     const pieData1 = [
-      { label: 'RED', value: 179 },
-      { label: 'YELLOW', value: 107 },
-      { label: 'GREEN', value: 165 },
-      { lable: 'PURPLE', value: 25 },
+      { label: 'RED', value: 179, percent: 37.61, color: '#dd0000' },
+      { label: 'YELLOW', value: 107, percent: 22.48, color: '#f9ce15' },
+      { label: 'GREEN', value: 165, percent: 34.66, color: '#7dbc00' },
+      { label: 'PURPLE', value: 25, percent: 5.25, color: '#873fbd' },
     ];
 
     const pieData2 = [
-      { label: 'TIER 1', value: 261 },
-      { label: 'TIER 2', value: 78 },
-      { label: 'TIER 3', value: 65 },
-      { lable: 'TIER 4', value: 42 },
+      { label: 'TIER 1', value: 261, percent: 54.52, color: '#00afef' },
+      { label: 'TIER 2', value: 78, percent: 17.49, color: '#f78e1e' },
+      { label: 'TIER 3', value: 65, percent: 14.57, color: '#a0cf67' },
+      { label: 'TIER 4', value: 42, percent: 9.42, color: '#949ca1' },
     ];
 
     const lineData = [
