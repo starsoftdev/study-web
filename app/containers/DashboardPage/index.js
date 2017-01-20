@@ -39,7 +39,7 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
       rangePicker : {},
       datePicker : null,
       firstDayOfWeek : null,
-      predefined : {
+      dateRange : {
         startDate: moment().clone().subtract(30, 'days'),
         endDate: moment(),
       },
@@ -49,6 +49,12 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
     this.removeFilter = this.removeFilter.bind(this);
     this.openFiltersModal = this.openFiltersModal.bind(this);
     this.closeFiltersModal = this.closeFiltersModal.bind(this);
+    this.saveFilters = this.saveFilters.bind(this);
+    this.handleChange = this.handleChange.bind(this, 'dateRange');
+    this.showDateRangeModal = this.showDateRangeModal.bind(this);
+    this.hideDateRangeModal = this.hideDateRangeModal.bind(this);
+    this.changeRange = this.changeRange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -119,11 +125,28 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
     this.setState({ showDateRangeModal: false });
   }
 
-  changeRange(ev) {
-    ev.preventDefault();
-    // const range = this.state.predefined;
-    // this.props.search(range, 'range');
+  changeRange() {
+    // TODO: update filter
     this.hideDateRangeModal();
+  }
+
+  handleChange(which, payload) {
+    this.setState({
+      [which] : payload,
+    });
+  }
+
+  parseDateRange() {
+    const { startDate, endDate } = this.state.dateRange;
+    const today = moment();
+    const fmt = 'MM/DD/YY';
+    let prefix = '';
+
+    if (endDate.format(fmt) === today.format(fmt)) {
+      prefix = ' Last ';
+    }
+    const days = endDate.diff(startDate, 'days');
+    return `${prefix} ${days} Days: ${startDate.format(fmt)} - ${endDate.format(fmt)}`;
   }
 
   mapFilterValues(filters) {
@@ -140,19 +163,19 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
   }
 
   renderDateFooter() {
-    const { predefined } = this.state;
-    if (predefined.startDate) {
+    const { dateRange } = this.state;
+    if (dateRange.startDate) {
       const format = 'MMM D, YYYY';
-      if (predefined.startDate.isSameOrAfter(predefined.endDate, 'day')) {
+      if (dateRange.startDate.isSameOrAfter(dateRange.endDate, 'day')) {
         return (
           <span className="time">
-            {moment(predefined.startDate).format(format)}
+            {moment(dateRange.startDate).format(format)}
           </span>
         );
       }
       return (
         <span className="time">
-          {moment(predefined.startDate).format(format)} - {moment(predefined.endDate).format(format)}
+          {moment(dateRange.startDate).format(format)} - {moment(dateRange.endDate).format(format)}
         </span>
       );
     }
@@ -347,7 +370,7 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
               <span className="counter pull-left">0% OF GOAL 0.49%</span>
               <Button bsStyle="primary" className="lightbox-opener pull-right" onClick={() => { this.showDateRangeModal(); }}>
                 <i className="icomoon-icon_calendar"></i>
-            Last 30 days: 08/04/16 - 09/04/16
+                {this.parseDateRange()}
               </Button>
             </div>
             <div className="graph-holder">
@@ -387,8 +410,8 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
                   }}
                   linkedCalendars
                   ranges={defaultRanges}
-                  startDate={this.state.predefined.startDate ? this.state.predefined.startDate : moment()}
-                  endDate={this.state.predefined.endDate ? this.state.predefined.endDate : moment().add(1, 'M')}
+                  startDate={this.state.dateRange.startDate ? this.state.dateRange.startDate : moment()}
+                  endDate={this.state.dateRange.endDate ? this.state.dateRange.endDate : moment().add(1, 'M')}
                   onInit={this.handleChange}
                   onChange={this.handleChange}
                 />
@@ -397,7 +420,7 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
                   <div className="right-part">
                     <div className="btn-block text-right">
                       {this.renderDateFooter()}
-                      <Button onClick={() => { this.changeRange(); }}>
+                      <Button onClick={this.changeRange}>
                         Submit
                       </Button>
                     </div>
@@ -406,14 +429,10 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
               </Modal.Body>
             </Modal>
           </div>
-          <div className="table-container">
-            <section className="patient-database">
-              <StudyList
-                studies={this.props.studies}
-                paginationOptions={this.props.paginationOptions}
-              />
-            </section>
-          </div>
+          <StudyList
+            studies={this.props.studies}
+            paginationOptions={this.props.paginationOptions}
+          />
         </section>
       </div>
     );
