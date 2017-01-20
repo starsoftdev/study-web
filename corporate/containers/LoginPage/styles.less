@@ -1,3 +1,6 @@
+@sm: 991px;
+@xs: 767px;
+
 #remember{
   position: absolute;
   height: 100%;
@@ -8,4 +11,20 @@
 }
 label[for="remember"]{
   margin: 0 0 0 4px;
+}
+
+.logo-holder{
+  &.loginPage{
+    @media screen and(max-width: @sm) {
+      z-index: -5;
+      position: absolute;
+      width: 100%;
+    }
+
+    @media screen and(max-width: @xs) {
+      z-index: -5;
+      position: absolute;
+      width: 100%;
+    }
+  }
 }

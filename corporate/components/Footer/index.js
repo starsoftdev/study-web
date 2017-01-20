@@ -20,7 +20,7 @@ export default class Footer extends React.Component { // eslint-disable-line rea
         <div className="footer-holder">
           <div className="container-fluid">
             <div className="clearfix">
-              <p className="copyright pull-left">© StudyKIK 2016. All rights reserved</p>
+              <p className="copyright pull-left">© StudyKIK 2017. All rights reserved</p>
               <FooterNavBar />
               <SocialNetworks />
             </div>
