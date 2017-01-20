@@ -178,8 +178,6 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     let isDisabled = false;
     let value = null;
 
-    console.log('Selected',selectedStudy);
-
     if (selectedStudy && selectedStudy.campaign) {
       filteredLevels = _.filter(studyLevels, (o) => (o.id > selectedStudy.campaign.level_id));
     }
