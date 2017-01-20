@@ -39,8 +39,8 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
 
   render() {
     const { index, studyInfo, siteInfo, indication } = this.props;
-    const indicationNames = map(indication, i => (<li><span>{i}</span></li>));
-    const memberNames = map(studyInfo.members, v => (<li><span>{v}</span></li>));
+    const indicationNames = map(indication, (i, index) => (<li key={index}><span>{i}</span></li>));
+    const memberNames = map(studyInfo.members, (v, index) => (<li key={index}><span>{v}</span></li>));
     return (
       <tr>
         <td>
@@ -63,7 +63,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
             <li><span>{studyInfo.id}</span></li>
             <li><span>{studyInfo.percentage}</span></li>
             {memberNames}
-            <li><span className={`color ${studyInfo.color}`}>{studyInfo.color}</span></li>
+            <li><span className={`color ${studyInfo.color.toLowerCase()}`}>{studyInfo.color}</span></li>
           </ul>
         </td>
         <td>
