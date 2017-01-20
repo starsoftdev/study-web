@@ -21,6 +21,7 @@ function Input({
   id,
   placeholder,
   componentClass,
+  bsClass,
   className,
   tooltipDisabled,
   onBlur,
@@ -59,6 +60,7 @@ function Input({
       step={step}
       defaultValue={defaultValue}
       componentClass={componentClass} // Default value is `input`
+      bsClass={bsClass || 'form-control'}
       onChange={(event) => {
         input.onChange(event);
         if (onChange) {
@@ -96,6 +98,7 @@ function Input({
 
 Input.propTypes = {
   componentClass: PropTypes.string,
+  bsClass: PropTypes.string,
   className: PropTypes.string,
   children: PropTypes.array,
   isDisabled: PropTypes.bool,
