@@ -36,6 +36,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     siteLocations: PropTypes.array,
     fetchSites: PropTypes.func,
     closeModal: PropTypes.func,
+    openModal: PropTypes.func,
     addCredits: PropTypes.func,
     currentUser: PropTypes.object,
     addCreditsOperation: PropTypes.object,
@@ -105,11 +106,14 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     this.setState({
       addCardModalOpen: false,
     });
+    this.props.openModal();
   }
 
   handleNewModalOpen() {
-    this.closeModal();
-    this.openAddCardModal();
+    this.setState({
+      addCardModalOpen: true,
+    });
+    this.props.closeModal();
   }
 
   resetState() {
@@ -127,7 +131,9 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
 
   closeModal() {
     this.props.closeModal();
-    this.resetState();
+    if (!this.state.addCardModalOpen) {
+      this.resetState();
+    }
   }
 
   handleSiteLocationChoose() {}

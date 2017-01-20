@@ -19,7 +19,6 @@ import StudyItem from './StudyItem';
 import RenewStudyForm from 'containers/HomePage/RenewStudyForm';
 import UpgradeStudyForm from 'containers/HomePage/UpgradeStudyForm';
 import EditStudyForm from 'containers/HomePage/EditStudyForm';
-import ShoppingCartForm from 'components/ShoppingCartForm';
 import AddNewCardForm from 'components/AddNewCardForm';
 import AddEmailNotificationForm from 'components/AddEmailNotificationForm';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
@@ -96,6 +95,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.handleAddEmailNotificationModal = this.handleAddEmailNotificationModal.bind(this);
     this.handleCloseEmailNotificationModal = this.handleCloseEmailNotificationModal.bind(this);
     this.handleAddEmailNotificationSubmit = this.handleAddEmailNotificationSubmit.bind(this);
+    this.showRenewModal = this.showRenewModal.bind(this);
+    this.showUpgradeModal = this.showUpgradeModal.bind(this);
   }
 
   componentDidMount() {
@@ -186,27 +187,51 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     });
   }
 
-  closeRenewModal() {
+  closeRenewModal(flag) {
+    if (flag) {
+      this.setState({
+        renewModalOpen: false,
+      });
+    } else {
+      this.setState({
+        renewModalOpen: false,
+        selectedStudyId: null,
+        selectedIndicationId: null,
+        selectedSiteId: null,
+        indicationName: null,
+        locationName: null,
+      });
+    }
+  }
+
+  showRenewModal() {
     this.setState({
-      renewModalOpen: false,
-      selectedStudyId: null,
-      selectedIndicationId: null,
-      selectedSiteId: null,
-      indicationName: null,
-      locationName: null,
+      renewModalOpen: true,
     });
   }
 
-  closeUpgradeModal() {
+  showUpgradeModal() {
     this.setState({
-      upgradeModalOpen: false,
-      selectedStudyId: null,
-      selectedIndicationId: null,
-      selectedCampaign: null,
-      selectedSiteId: null,
-      indicationName: null,
-      locationName: null,
+      upgradeModalOpen: true,
     });
+  }
+
+  closeUpgradeModal(flag) {
+    if (flag) {
+      this.setState({
+        upgradeModalOpen: false,
+      });
+    } else {
+      this.setState({
+        upgradeModalOpen: false,
+        selectedStudyId: null,
+        selectedIndicationId: null,
+        selectedCampaign: null,
+        selectedSiteId: null,
+        indicationName: null,
+        locationName: null,
+      });
+    }
   }
 
   closeEditModal() {
@@ -462,12 +487,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         />
       );
     });
-    let addOns = [];
-    if (this.state.renewModalOpen) {
-      addOns = this.generateRenewStudyShoppingCartAddOns();
-    } else if (this.state.upgradeModalOpen) {
-      addOns = this.generateUpgradeStudyShoppingCartAddOns();
-    }
 
     return (
       <div className="studies">
@@ -513,84 +532,24 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                 </tbody>
               </table>
             </div>
-            <Modal
-              className="renew-study-modal"
-              id="renew-study"
-              dialogComponentClass={CenteredModal}
+            <RenewStudyForm
+              selectedStudy={selectedStudy}
               show={this.state.renewModalOpen}
               onHide={this.closeRenewModal}
-              backdrop
-              keyboard
-            >
-              <Modal.Header>
-                <Modal.Title>Renew Study</Modal.Title>
-                <a className="lightbox-close close" onClick={this.closeRenewModal}>
-                  <i className="icomoon-icon_close" />
-                </a>
-              </Modal.Header>
-              <Modal.Body>
-                <div className="form-study">
-                  <div className="pull-left col">
-                    <div className="scroll jcf--scrollable">
-                      <div className="holder-inner">
-                        <RenewStudyForm
-                          selectedStudy={selectedStudy}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="pull-left col">
-                    <ShoppingCartForm
-                      showCards
-                      noBorder
-                      addOns={addOns}
-                      manualDisableSubmit={this.props.renewedStudy.submitting}
-                      validateAndSubmit={this.handleRenewStudyFormSubmit}
-                      showAddNewCard={this.handleNewModalOpen}
-                    />
-                  </div>
-                </div>
-              </Modal.Body>
-            </Modal>
-            <Modal
-              className="upgrade-study-modal"
-              id="upgrade-study"
-              dialogComponentClass={CenteredModal}
+              onShow={this.showRenewModal}
+              manualDisableSubmit={this.props.renewedStudy.submitting}
+              validateAndSubmit={this.handleRenewStudyFormSubmit}
+              currentUserStripeCustomerId={this.props.currentUserStripeCustomerId}
+            />
+            <UpgradeStudyForm
+              selectedStudy={selectedStudy}
               show={this.state.upgradeModalOpen}
               onHide={this.closeUpgradeModal}
-              backdrop
-              keyboard
-            >
-              <Modal.Header>
-                <Modal.Title>Upgrade Study</Modal.Title>
-                <a className="lightbox-close close" onClick={this.closeUpgradeModal}>
-                  <i className="icomoon-icon_close" />
-                </a>
-              </Modal.Header>
-              <Modal.Body>
-                <div className="form-study">
-                  <div className="pull-left col">
-                    <div className="scroll jcf--scrollable">
-                      <div className="holder-inner">
-                        <UpgradeStudyForm
-                          selectedStudy={selectedStudy}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="pull-left col">
-                    <ShoppingCartForm
-                      showCards
-                      noBorder
-                      addOns={addOns}
-                      manualDisableSubmit={this.props.upgradedStudy.submitting}
-                      validateAndSubmit={this.handleUpgradeStudyFormSubmit}
-                      showAddNewCard={this.handleNewModalOpen}
-                    />
-                  </div>
-                </div>
-              </Modal.Body>
-            </Modal>
+              onShow={this.showUpgradeModal}
+              manualDisableSubmit={this.props.upgradedStudy.submitting}
+              validateAndSubmit={this.handleUpgradeStudyFormSubmit}
+              currentUserStripeCustomerId={this.props.currentUserStripeCustomerId}
+            />
             <Modal
               className="edit-study-modal"
               id="edit-study"

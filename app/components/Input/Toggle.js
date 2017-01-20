@@ -34,7 +34,7 @@ const labelStyle = {
   paddingRight: 0,
 };
 
-function Toggle({ input, name, className, meta: { touched, error, active } }) {
+function Toggle({ input, name, className, onChange, meta: { touched, error, active } }) {
   const hasError = touched && error && !active;
   const trackColor = hasError ? 'red' : '#cdcdcd';
   const tooltip = (
@@ -55,7 +55,12 @@ function Toggle({ input, name, className, meta: { touched, error, active } }) {
     inactiveLabelStyle={labelStyle}
     thumbStyle={{ borderRadius: 0, width: '78px', height: '36px', boxShadow: 'none' }}
     trackStyle={{ borderRadius: 0, width: '160px', height: '40px', border: `2px solid ${trackColor}` }}
-    onToggle={(value) => input.onChange(!value)}
+    onToggle={(value) => {
+      input.onChange(!value);
+      if (onChange) {
+        onChange(!value);
+      }
+    }}
   />);
 
   if (hasError) {
@@ -81,6 +86,7 @@ Toggle.propTypes = {
   name: PropTypes.string.isRequired,
   className: PropTypes.string,
   meta: PropTypes.object.isRequired,
+  onChange: PropTypes.func,
 };
 
 export default Toggle;
