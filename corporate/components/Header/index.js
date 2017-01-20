@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import classNames from 'classnames';
 
 import NavBar from './NavBar';
 import studyKikLogo from 'assets/images/logo.svg';
@@ -29,6 +30,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
   render() {
     const { pathname } = this.props.location;
     const { menuCollapsed } = this.state;
+    const isLoginPage = (pathname === '/login');
     return (
       <header id="header">
         <img src={studyKikLogo} alt="Study KIK" width="260" height="38" className="visible-print-block logo-print" />
@@ -49,10 +51,10 @@ export default class Header extends React.Component { // eslint-disable-line rea
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
               </button>
-              {(pathname !== '/login') > 0 &&
+              {(!isLoginPage) > 0 &&
                 <Link to="/login" className="btn btn-default btn-login">LOGIN</Link>
               }
-              <div className="logo-holder">
+              <div className={classNames('logo-holder', {loginPage: isLoginPage})}>
                 <Link to="/" className="navbar-brand" title="Study KIK">
                   <img src={studyKikLogo} alt="Study KIK" width="150" />
                 </Link>
