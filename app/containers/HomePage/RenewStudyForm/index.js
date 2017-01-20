@@ -148,7 +148,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
               />
             </div>
           </div>
-          <div className="field-row">
+          <div className="field-row label-top">
             <strong className="label">
               <label>NOTES</label>
             </strong>
