@@ -113,7 +113,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
           {callTracking &&
             <FieldArray name="leads" component={RenderLeads} availPhoneNumbers={availPhoneNumbers} />
           }
-          <div className="field-row">
+          <div className="field-row label-top">
             <strong className="label">
               <label>NOTES</label>
             </strong>
