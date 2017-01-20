@@ -135,7 +135,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
             <button type="submit" className="btn btn-default" disabled={savedUser.saving || deleting}>
               {savedUser.saving
                 ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
-                : <span>Submit</span>
+                : <span>Update</span>
               }
             </button>
           </div>

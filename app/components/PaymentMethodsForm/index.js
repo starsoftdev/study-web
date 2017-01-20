@@ -11,9 +11,10 @@ import _ from 'lodash';
 
 class PaymentMethodsForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    clientId: PropTypes.any,
+    customerId: PropTypes.any,
     deleteCreditCard: PropTypes.func,
     creditCards: PropTypes.array,
-    customerId: PropTypes.any,
     paginationOptions: PropTypes.object,
     setActiveSort: PropTypes.func,
   }
@@ -34,7 +35,6 @@ class PaymentMethodsForm extends React.Component { // eslint-disable-line react/
       direction = null;
       sort = null;
     }
-    console.log(sort, direction);
 
     this.props.setActiveSort(sort, direction);
   }
@@ -60,6 +60,7 @@ class PaymentMethodsForm extends React.Component { // eslint-disable-line react/
         {...item}
         key={index}
         deleteCreditCard={this.props.deleteCreditCard}
+        clientId={this.props.clientId}
         customerId={this.props.customerId}
       />
     ));

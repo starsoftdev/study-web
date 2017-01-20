@@ -275,13 +275,17 @@ export function* saveCardWatcher() {
 
 export function* deleteCardWatcher() {
   while (true) {
-    const { customerId, cardId } = yield take(DELETE_CARD);
+    const { clientId, customerId, cardId } = yield take(DELETE_CARD);
     const options = {
       method: 'DELETE',
+      body: JSON.stringify({
+        customerId,
+        cardId,
+      }),
     };
 
     try {
-      const requestURL = `${API_URL}/clients/stripeCustomers/${customerId}/deleteCard/${cardId}`;
+      const requestURL = `${API_URL}/clients/${clientId}/payments/deleteCard`;
       const response = yield call(request, requestURL, options);
 
       yield put(toastrActions.success('Delete Card', 'Card deleted successfully!'));
