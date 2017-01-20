@@ -185,7 +185,6 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
   render() {
     const { customFilters, modalFilters } = this.state;
     const filters = concat(this.mapFilterValues(modalFilters), customFilters);
-    
     const pieData1 = [
       { label: 'RED', value: 179, percent: 37.61, color: '#dd0000' },
       { label: 'YELLOW', value: 107, percent: 22.48, color: '#f9ce15' },
@@ -305,22 +304,17 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
               </li>
             </ul>
             <ul className="list-unstyled info-list pull-left">
-              <li>
-                <strong className="heading">RED: </strong>
-                <span className="number">179 <span>(37.61%)</span></span>
-              </li>
-              <li>
-                <strong className="heading">YELLOW: </strong>
-                <span className="number">107 <span>(22.48%)</span></span>
-              </li>
-              <li>
-                <strong className="heading">GREEN: </strong>
-                <span className="number">165 <span>(34.66%)</span></span>
-              </li>
-              <li>
-                <strong className="heading">PURPLE: </strong>
-                <span className="number">25 <span>(5.25%)</span></span>
-              </li>
+              {
+                map(pieData1, (data, index) => {
+                  const colorClass = data.label.toLowerCase();
+                  return (
+                    <li key={index}>
+                      <strong className={`heading color ${colorClass}`}>{data.label}: </strong>
+                      <span className="number">{data.value} <span>({data.percent})</span></span>
+                    </li>
+                  );
+                })
+              }
             </ul>
             <div className="chart pull-left">
               <PieChart
@@ -332,25 +326,22 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
                 sectorBorderColor="white"
                 showOuterLabels={false}
                 showInnerLabels={false}
+                colors={(data) => data.color}
+                colorAccessor={(data) => data}
               />
             </div>
             <ul className="list-unstyled info-list pull-left">
-              <li>
-                <strong className="heading">TIER 1: </strong>
-                <span className="number">261 <span>(58.52%)</span></span>
-              </li>
-              <li>
-                <strong className="heading">TIER 2: </strong>
-                <span className="number">78 <span>(17.49%)</span></span>
-              </li>
-              <li>
-                <strong className="heading">TIER 3: </strong>
-                <span className="number">65 <span>(14.57%)</span></span>
-              </li>
-              <li>
-                <strong className="heading">TIER 4: </strong>
-                <span className="number">42 <span>(9.42%)</span></span>
-              </li>
+              {
+                map(pieData2, (data, index) => {
+                  const colorClass = data.label.toLowerCase().replace(' ', '');
+                  return (
+                    <li key={index}>
+                      <strong className={`heading color ${colorClass}`}>{data.label}: </strong>
+                      <span className="number">{data.value} <span>({data.percent})</span></span>
+                    </li>
+                  );
+                })
+              }
             </ul>
             <div className="chart pull-left">
               <PieChart
@@ -362,6 +353,8 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
                 sectorBorderColor="white"
                 showOuterLabels={false}
                 showInnerLabels={false}
+                colors={(data) => data.color}
+                colorAccessor={(data) => data}
               />
             </div>
           </div>
