@@ -106,37 +106,43 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                 </div>
                 <ul className="list-unstyled list-radios">
                   <li>
-                    <Field
-                      name="redemption_type"
-                      type="radio"
-                      component={RadioButton}
-                      className=""
-                      value="1"
-                      checked={this.state.card === '1'}
-                    />
-                    <div className="text">75 KIKs = $25 Starbucks Gift Card</div>
+                    <label>
+                      <Field
+                        name="redemption_type"
+                        type="radio"
+                        component={RadioButton}
+                        className=""
+                        value="1"
+                        checked={this.state.card === '1'}
+                      />
+                      <div className="text">75 KIKs = $25 Starbucks Gift Card</div>
+                    </label>
                   </li>
                   <li>
-                    <Field
-                      name="redemption_type"
-                      type="radio"
-                      component={RadioButton}
-                      className=""
-                      value="2"
-                      checked={this.state.card === '2'}
-                    />
-                    <div className="text">225 KIKs = $75 Amazon Gift Card</div>
+                    <label>
+                      <Field
+                        name="redemption_type"
+                        type="radio"
+                        component={RadioButton}
+                        className=""
+                        value="2"
+                        checked={this.state.card === '2'}
+                      />
+                      <div className="text">225 KIKs = $75 Amazon Gift Card</div>
+                    </label>
                   </li>
                   <li>
-                    <Field
-                      name="redemption_type"
-                      type="radio"
-                      component={RadioButton}
-                      className=""
-                      value="3"
-                      checked={this.state.card === '3'}
-                    />
-                    <div className="text"> 1,559 KIKs = $1,559 StudyKIK Platinum Listing</div>
+                    <label>
+                      <Field
+                        name="redemption_type"
+                        type="radio"
+                        component={RadioButton}
+                        className=""
+                        value="3"
+                        checked={this.state.card === '3'}
+                      />
+                      <div className="text"> 1,559 KIKs = $1,559 StudyKIK Platinum Listing</div>
+                    </label>
                   </li>
                 </ul>
                 <div className="btn-block text-right">
