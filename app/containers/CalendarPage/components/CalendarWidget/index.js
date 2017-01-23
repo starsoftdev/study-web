@@ -2,7 +2,7 @@
 
 import React, { PropTypes } from 'react';
 import BigCalendar from 'react-big-calendar';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import { getLocalTime } from 'utils/time';
 
@@ -21,7 +21,7 @@ class CalendarWidget extends React.Component {
     handleShowAll: PropTypes.func.isRequired,
   }
 
-  currentDate = new Date()
+  currentDate = moment()
 
   render() {
     const { currentUser } = this.props;
@@ -51,6 +51,7 @@ class CalendarWidget extends React.Component {
           selectable
           events={eventsList}
           defaultDate={this.currentDate}
+          culture="en"
           onNavigate={(date) => {
             this.currentDate = date;
           }}
