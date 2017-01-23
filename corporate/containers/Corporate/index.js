@@ -12,8 +12,6 @@ export default class Corporate extends React.Component { // eslint-disable-line 
 
   constructor(props) {
     super(props);
-
-    console.log('Corporate');
   }
 
   componentWillMount() {}

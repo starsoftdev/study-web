@@ -9,6 +9,7 @@
   margin: 0px;
   opacity: 0;
 }
+
 label[for="remember"]{
   margin: 0 0 0 4px;
 }
@@ -16,15 +17,17 @@ label[for="remember"]{
 .logo-holder{
   &.loginPage{
     @media screen and(max-width: @sm) {
-      z-index: -5;
       position: absolute;
       width: 100%;
     }
 
     @media screen and(max-width: @xs) {
-      z-index: -5;
       position: absolute;
       width: 100%;
     }
   }
+}
+
+button.navbar-toggle{
+  z-index: 5;
 }

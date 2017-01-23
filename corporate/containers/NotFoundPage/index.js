@@ -6,8 +6,6 @@ export default class NotFound extends React.Component { // eslint-disable-line r
 
   constructor(props) {
     super(props);
-
-    console.log('NotFound');
   }
 
   componentWillMount() {}
