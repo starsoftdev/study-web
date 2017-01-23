@@ -13,6 +13,7 @@ import { default as Corporate } from './containers/Corporate';
 import { default as Home } from './containers/HomePage';
 import { default as LoginPage } from './containers/LoginPage';
 import { default as ContactPage } from './containers/ContactPage';
+import { default as LandingPage } from './containers/LandingPage';
 import { default as NotFound } from './containers/NotFoundPage';
 
 import './assets/less/main.less';
@@ -35,6 +36,7 @@ const routes = {
   childRoutes: [
     { path: '/login', component: LoginPage },
     { path: '/contact', component: ContactPage },
+    { path: '/landing', component: LandingPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },
     { path: '*', component: NotFound },
   ],

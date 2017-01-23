@@ -193,6 +193,7 @@
   "devDependencies": {
     "babel-preset-react-hmre": "1.1.1",
     "eventsource-polyfill": "0.9.6",
+    "in-viewport": "^3.4.2",
     "minimist": "1.2.0",
     "plop": "1.5.0",
     "psi": "2.0.4",

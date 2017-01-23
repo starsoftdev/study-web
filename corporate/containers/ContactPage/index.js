@@ -12,8 +12,6 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
 
   constructor(props) {
     super(props);
-
-    console.log('Contact');
   }
 
   componentWillMount() {

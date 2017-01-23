@@ -8,8 +8,6 @@ export default class Home extends React.Component { // eslint-disable-line react
 
   constructor(props) {
     super(props);
-
-    console.log('Home');
   }
 
   componentWillMount() {}
