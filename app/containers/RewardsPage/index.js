@@ -123,10 +123,10 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
           <div className="row images-area">
             <div className="col-xs-4 pull-left">
-              <a className="option2" data-for="radio-option2" onClick={() => this.openRewardModal('2')}><img role="presentation" src={cardAmazon} /></a>
+              <a className="option1" data-for="radio-option1" onClick={() => this.openRewardModal('1')}><img role="presentation" src={cardStarbucks} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a className="option1" data-for="radio-option1" onClick={() => this.openRewardModal('1')}><img role="presentation" src={cardStarbucks} /></a>
+              <a className="option2" data-for="radio-option2" onClick={() => this.openRewardModal('2')}><img role="presentation" src={cardAmazon} /></a>
             </div>
             <div className="col-xs-4 pull-left">
               <a className="option3" data-for="radio-option3" onClick={() => this.openRewardModal('3')}><img role="presentation" src={cardStudykik} /></a>
@@ -160,8 +160,8 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
             </aside>
 
             <div className="detail">
-              <div className="infoarea row">
-                <div className="col-sm-3 column diamond">
+              <div className="infoarea row table-parent">
+                <div className="col-sm-3 column diamond table-child">
                   <div>
                     <div className="box">
                       <div className="box-holder">
@@ -180,7 +180,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                   <div className="package-img diamond"><img className="ruby-img" src={ruby} alt="RUBY LISTING" width="135" /></div>
                 </div>
 
-                <div className="col-sm-3 column">
+                <div className="col-sm-3 column table-child">
                   <div>
                     <div className="box">
                       <div className="box-holder">
@@ -199,7 +199,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                   <div className="package-img diamond"><img src={diamond} alt="DIAMOND LISTING" width="115" height="102" /></div>
                 </div>
 
-                <div className="col-sm-3 msg-info column">
+                <div className="col-sm-3 msg-info column table-child">
                   <div>
                     <div className="box">
                       <div className="box-holder">
@@ -218,7 +218,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                   <div className="package-img platinum"><img src={platinum} alt="PLATINUM LISTING" width="108" height="115" /></div>
                 </div>
 
-                <div className="col-sm-3 rewards-info column">
+                <div className="col-sm-3 rewards-info column table-child">
                   <div>
                     <div className="box">
                       <div className="box-holder">
