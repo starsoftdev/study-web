@@ -7,6 +7,8 @@ import { selectSelectedUser } from 'containers/App/selectors';
 import defaultUserImage from 'assets/images/Default-User-Img.png';
 import defaultUserImageGirl from 'assets/images/Default-User-Img-Girl.png';
 
+import moment from 'moment';
+
 class PatientItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     patientData: PropTypes.object,
@@ -27,7 +29,8 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
   render() {
     const { patientData, patientSelected } = this.props;
 
-    const lastDate = (new Date(patientData.twtm_max_date_created ? patientData.twtm_max_date_created : patientData.created_at)).toLocaleString();
+    const lastDate = (new Date(patientData.twtm_max_date_created ? patientData.twtm_max_date_created : patientData.created_at));
+    const lastDateFormatted = moment(lastDate).format('MM/DD/YY [at] h:mm A');
     return (
       <li className={patientSelected === true ? 'active' : ''} onClick={this.selectPatient}>
         <a className="tab-opener">
@@ -37,7 +40,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
           <strong className="name">{patientData.first_name} {patientData.last_name}</strong>
           <p>{patientData.last_message_body ? patientData.last_message_body : 'No message yet'}</p>
           <time>
-            {lastDate}
+            {lastDateFormatted}
             {patientData.count_unread > 0
               ? <span className="counter-circle">{patientData.count_unread}</span>
               : ''

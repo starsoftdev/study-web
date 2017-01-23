@@ -176,7 +176,7 @@ export class RequestProposalCart extends Component {
                         <td className="right">
                           <Money value={product.price / 100} />
                         </td>
-                        <td>{product.quantity}</td>
+                        <td className="right">{product.quantity}</td>
                         <td className="right">
                           <Money value={product.total / 100} className="price" />
                         </td>
