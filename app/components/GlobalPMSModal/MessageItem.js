@@ -18,7 +18,7 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
   render() {
     const { messageData, currentUser } = this.props;
     const cts = messageData.twilioTextMessage.dateCreated;
-    const cdate = getLocalTime(cts, currentUser.timezone).format('M/DD/YYYY, H:mm:ss A');
+    const cdate = getLocalTime(cts, currentUser.timezone).format('MM/DD/YYYY [at] H:mm A');
 
     let addon = '';
     let containerClassName = 'post-holder';
