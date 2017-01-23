@@ -212,6 +212,15 @@ export default function homePageReducer(state = initialState, action) {
           startDate: '',
           endDate: '',
           orderNumber: (index + 1),
+          irbName: studyIterator.irbName,
+          irbEmail: studyIterator.irbEmail,
+          croContactName: studyIterator.croContactName,
+          croContactEmail: studyIterator.croContactEmail,
+          image: studyIterator.image,
+          sponsorContacts: studyIterator.sponsorContacts,
+          studyNotificationEmails: studyIterator.studyNotificationEmails,
+          condenseTwoWeeks: studyIterator.condenseTwoWeeks,
+          recruitmentPhone: studyIterator.recruitmentPhone,
         };
         if (studyIterator.sponsors && studyIterator.sponsors.length > 0) {
           const sponsorContacts = map(studyIterator.sponsors, sponsorContactIterator => sponsorContactIterator.name);
