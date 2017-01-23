@@ -49,7 +49,7 @@ const selectUserSites = () => createSelector(
   selectGlobal(),
   (substate) => {
     const currentUser = get(substate, 'userData');
-    const siteId = currentUser.site_id;
+    const siteId = currentUser.roleForClient.site_id;
     let sites = get(substate, 'baseData.sites', []);
     if (siteId) {
       sites = filter(sites, e => e.id === siteId);
@@ -68,8 +68,9 @@ const selectUserSiteLocations = () => createSelector(
   selectGlobal(),
   (substate) => {
     const currentUser = get(substate, 'userData');
-    const siteId = currentUser.site_id;
+    const siteId = currentUser.roleForClient.site_id;
     const sites = get(substate, 'baseData.sites', []);
+
     let userSites = [];
     if (siteId) {
       userSites = filter(sites, e => e.id === siteId);
