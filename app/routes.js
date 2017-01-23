@@ -449,6 +449,27 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
+      path: '/app/report',
+      name: 'reportPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/ReportViewPage/reducer'),
+          System.import('containers/ReportViewPage/sagas'),
+          System.import('containers/ReportViewPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '/app*',
       name: 'notfound',
       getComponent(nextState, cb) {
