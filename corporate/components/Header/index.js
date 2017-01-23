@@ -27,12 +27,12 @@ export default class Header extends React.Component { // eslint-disable-line rea
   componentWillReceiveProps(newProps) {
     const { cachePathname } = this.state;
     if (newProps.location && cachePathname !== newProps.location.pathname) {
-      this.setState({cachePathname: newProps.location.pathname}, () => {
+      this.setState({ cachePathname: newProps.location.pathname }, () => {
         if (!this.button.classList.contains('collapsed')) {
           this.button.classList.add('collapsed');
           this.setState({ menuCollapsed: true });
         }
-      })
+      });
     }
   }
 

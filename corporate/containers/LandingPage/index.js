@@ -11,7 +11,7 @@ export default class LandingPage extends React.Component { // eslint-disable-lin
   constructor(props) {
     super(props);
 
-    this.checkVisible = this.checkVisible.bind(this)
+    this.checkVisible = this.checkVisible.bind(this);
   }
 
   componentWillMount() {
@@ -94,7 +94,7 @@ export default class LandingPage extends React.Component { // eslint-disable-lin
                 data-view="slideInLeft"
               >
                 <div className="img-holder">
-                  <img src={img9} width="854" height="444" alt="image description" className="img-responsive" />
+                  <img src={img9} width="854" height="444" className="img-responsive" />
                 </div>
                 <div className="social-area clearfix">
                   <h3 className="pull-left">Share this study:</h3>
