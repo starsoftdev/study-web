@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import _ from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import { SchedulePatientModalType } from 'common/constants';
 
