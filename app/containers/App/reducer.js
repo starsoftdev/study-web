@@ -223,12 +223,14 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SET_USER_DATA:
-      if (payload.userData.roleForSponsor) {
-        userRoleType = 'sponsor';
-      } else if (payload.userData.roleForClient) {
-        userRoleType = 'client';
-      } else {
-        userRoleType = '';
+      if (payload.userData) {
+        if (payload.userData.roleForSponsor) {
+          userRoleType = 'sponsor';
+        } else if (payload.userData.roleForClient) {
+          userRoleType = 'client';
+        } else {
+          userRoleType = '';
+        }
       }
       resultState = {
         ...state,
