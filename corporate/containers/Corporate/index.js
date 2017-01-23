@@ -10,10 +10,6 @@ export default class Corporate extends React.Component { // eslint-disable-line 
     children: React.PropTypes.node,
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   componentWillMount() {}
 
   componentWillReceiveProps() {}

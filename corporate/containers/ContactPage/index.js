@@ -10,10 +10,6 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
 
   static propTypes = {};
 
-  constructor(props) {
-    super(props);
-  }
-
   componentWillMount() {
   }
 

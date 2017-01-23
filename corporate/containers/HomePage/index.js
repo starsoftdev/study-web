@@ -6,10 +6,6 @@ export default class Home extends React.Component { // eslint-disable-line react
 
   static propTypes = {};
 
-  constructor(props) {
-    super(props);
-  }
-
   componentWillMount() {}
 
   componentDidMount() {
