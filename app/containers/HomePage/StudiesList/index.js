@@ -311,9 +311,11 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       return;
     }
     const studyLevel = _.find(this.props.studyLevels, { id: renewStudyFormValues.exposureLevel });
+    const selectedStudy = _.find(this.props.studies.details, (o) => (o.studyId === this.state.selectedStudyId));
 
     renewStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...renewStudyFormValues,
+      ...selectedStudy,
       stripeCustomerId: currentUserStripeCustomerId,
       selectedIndicationId: this.state.selectedIndicationId,
       selectedSiteId: this.state.selectedSiteId,
@@ -335,9 +337,11 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     }
 
     const studyLevel = _.find(this.props.studyLevels, { id: upgradeStudyFormValues.level });
+    const selectedStudy = _.find(this.props.studies.details, (o) => (o.studyId === this.state.selectedStudyId));
 
     upgradeStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...upgradeStudyFormValues,
+      ...selectedStudy,
       stripeCustomerId: currentUserStripeCustomerId,
       selectedIndicationId: this.state.selectedIndicationId,
       selectedCampaignId: this.state.selectedCampaign.id,

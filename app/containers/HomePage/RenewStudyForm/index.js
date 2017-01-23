@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change, reset } from 'redux-form';
 import { Modal } from 'react-bootstrap';
+import { Calendar } from 'react-date-range';
 import moment from 'moment';
 
 import CenteredModal from '../../../components/CenteredModal/index';
@@ -63,6 +64,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     this.handlePatientChoose = this.handlePatientChoose.bind(this);
     this.handleCallChoose = this.handleCallChoose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDatePickerClose = this.handleDatePickerClose.bind(this);
+    this.handleDateSelect = this.handleDateSelect.bind(this);
+    this.navigateToday = this.navigateToday.bind(this);
     this.state = {
       exposureLevel: null,
       campaignLength: null,
@@ -70,6 +74,11 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       patientMessagingSuite: false,
       callTracking: false,
       addCardModalOpen: false,
+      showDatePicker: false,
+      initDate: moment(),
+      minDate: 'none',
+      dateStyle: 'MM/DD/YY',
+      isReset: false,
     };
   }
 
@@ -79,10 +88,49 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
         this.props.dispatch(change('renewStudy', 'condenseToTwoWeeks', false));
       }
     }
+
+    if (newProps.selectedStudy && newProps.selectedStudy.maxCampaign && newProps.selectedStudy.maxCampaign.dateTo && !this.state.isReset) {
+      const minDate = moment.utc(newProps.selectedStudy.maxCampaign.dateTo).add(1, 'days');
+      this.setState({
+        minDate: moment.utc(newProps.selectedStudy.maxCampaign.dateTo).add(1, 'days'),
+      });
+
+      if (this.state.initDate <= minDate) {
+        this.setState({
+          initDate: _.cloneDeep(minDate),
+        });
+      }
+    }
   }
 
   onSaveCard(params) {
     this.props.saveCard(this.props.currentUserStripeCustomerId, params);
+  }
+
+  setToBeDetermined = () => {
+    this.setState({
+      initDate: null,
+    });
+    this.props.dispatch(change('renewStudy', 'startDate', null));
+  }
+
+  handleDateSelect(date) {
+    this.setState({
+      initDate: date,
+    });
+    this.props.dispatch(change('renewStudy', 'startDate', date));
+    this.handleDatePickerClose(false);
+  }
+
+  navigateToday() {
+    const today = moment();
+    const todayYear = today.year();
+    const todayMonth = today.month();
+    const calendarYear = this.calendar.getShownDate().year();
+    const calendarMonth = this.calendar.getShownDate().month();
+    const monthDiff = ((todayYear - calendarYear) * 12) + (todayMonth - calendarMonth);
+
+    this.calendar.changeMonth(monthDiff, { preventDefault: _.noop });
   }
 
   closeAddCardModal() {
@@ -99,6 +147,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       condenseToTwoWeeks: false,
       patientMessagingSuite: false,
       callTracking: false,
+      initDate: moment(),
+      minDate: 'none',
+      isReset: false,
     };
 
     this.setState(resetState, () => {
@@ -153,6 +204,18 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     this.props.validateAndSubmit();
   }
 
+  handleDatePickerClose(flag) {
+    this.setState({
+      isReset: true,
+      showDatePicker: flag,
+    });
+    if (flag) {
+      this.props.onHide(true);
+    } else {
+      this.props.onShow();
+    }
+  }
+
   generateRenewStudyShoppingCartAddOns() {
     const { studyLevels, selectedIndicationLevelPrice } = this.props;
     const { exposureLevel, campaignLength, condenseToTwoWeeks,
@@ -194,17 +257,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { studyLevels, campaignLength, selectedIndicationLevelPrice, selectedStudy } = this.props;
+    const { studyLevels, campaignLength, selectedIndicationLevelPrice } = this.props;
 
-    let initDate = moment();
-    let minDate = 'none';
-
-    if (selectedStudy && selectedStudy.maxCampaign && selectedStudy.maxCampaign.dateTo) {
-      minDate = moment.utc(selectedStudy.maxCampaign.dateTo).add(1, 'days');
-      if (initDate <= minDate) {
-        initDate = _.cloneDeep(minDate);
-      }
-    }
+    const currentDate = moment();
 
     const addOns = this.generateRenewStudyShoppingCartAddOns();
 
@@ -320,8 +375,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                               name="startDate"
                               component={DatePicker}
                               className="form-control datepicker-input"
-                              initialDate={initDate}
-                              minDate={minDate}
+                              initialDate={this.state.initDate}
+                              minDate={this.state.minDate}
+                              onClick={() => { this.handleDatePickerClose(true); }}
                             />
                           </div>
                         </div>
@@ -371,6 +427,38 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
           </Modal.Header>
           <Modal.Body>
             <AddNewCardForm onSubmit={this.onSaveCard} />
+          </Modal.Body>
+        </Modal>
+        <Modal
+          className="datepicker-modal"
+          dialogComponentClass={CenteredModal}
+          show={this.state.showDatePicker}
+          onHide={() => {
+            this.handleDatePickerClose(false);
+          }}
+          backdrop
+          keyboard
+        >
+          <Modal.Header>
+            <Modal.Title>Choose Start Date</Modal.Title>
+            <a className="lightbox-close close" onClick={() => { this.handleDatePickerClose(false); }}>
+              <i className="icomoon-icon_close" />
+            </a>
+          </Modal.Header>
+          <Modal.Body>
+            <Calendar
+              date={this.state.initDate}
+              onChange={this.handleDateSelect}
+              className="calendar custom-calendar"
+              ref={(calendar) => { this.calendar = calendar; }}
+              minDate={this.state.minDate || 'none'}
+            />
+            <div className="current-date" onClick={this.navigateToday}>
+              Today: {currentDate.format('dddd, MMMM Do, YYYY')}
+            </div>
+            <div className="link-holder text-center">
+              <a onClick={() => { this.setToBeDetermined(); this.handleDatePickerClose(false); }}>To Be Determined</a>
+            </div>
           </Modal.Body>
         </Modal>
       </div>

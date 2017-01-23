@@ -225,7 +225,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
             <td>{invoiceIdLink}</td>
             <td>{source.protocol_number || '-'}</td>
             <td>card</td>
-            <td><Money value={source.total / 100} className="price total-price" /></td>
+            <td><Money value={source.total / 100} className="price" /></td>
           </tr>
         );
       }
