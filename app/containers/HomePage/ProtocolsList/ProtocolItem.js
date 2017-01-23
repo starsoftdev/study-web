@@ -14,6 +14,7 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
     inactiveCount: PropTypes.string,
     patientMessagingSuiteCount: PropTypes.string,
     unreadMessageCount: PropTypes.string,
+    push: PropTypes.func,
   };
 
   constructor(props) {
@@ -23,7 +24,7 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
       buttonsShown: false,
     };
 
-    // this.onViewClick = this.onViewClick.bind(this);
+    this.onViewClick = this.onViewClick.bind(this);
     // this.onRenewClick = this.onRenewClick.bind(this);
     // this.onUpgradeClick = this.onUpgradeClick.bind(this);
     // this.onEditClick = this.onEditClick.bind(this);
@@ -31,10 +32,10 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
     this.hideButtons = this.hideButtons.bind(this);
   }
 
-  // onViewClick() {
-  //   const { push, studyId } = this.props;
-  //   push(`/studies/${studyId}/sites/1`);
-  // }
+  onViewClick() {
+    const { push } = this.props;
+    push(`/app/report?protocol=${this.props.protocolNumber}`);
+  }
 
   // onRenewClick() {
   //   const { studyId, indication, onRenew, campaign } = this.props;
@@ -113,7 +114,7 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
           <div className="btns-slide">
             <div className="btns">
               <div className="area">
-                <a href="#" className="btn btn-default">View Report</a>
+                <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Report</Button>
                 <a href="#renew-study" className="btn btn-primary lightbox-opener">Renew</a>
                 <a href="#add-site-popup" className="btn btn-danger lightbox-opener">Add Site</a>
                 <label className="check-switcher">
