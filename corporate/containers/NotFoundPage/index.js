@@ -4,10 +4,6 @@ export default class NotFound extends React.Component { // eslint-disable-line r
 
   static propTypes = {};
 
-  constructor(props) {
-    super(props);
-  }
-
   componentWillMount() {}
 
   componentWillReceiveProps() {}
