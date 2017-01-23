@@ -61,7 +61,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
               </div>
             </div>
 
-            <NavBar menuCollapsed={menuCollapsed} />
+            <NavBar menuCollapsed={menuCollapsed} location={this.props.location} />
           </div>
         </nav>
       </header>

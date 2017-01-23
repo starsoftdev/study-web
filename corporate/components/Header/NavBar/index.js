@@ -10,10 +10,11 @@ const menuItems = [
   { text: 'Contact', link: '/contact' },
 ];
 
-export default class NavBar extends React.Component {
+export default class NavBar extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     menuCollapsed: React.PropTypes.any,
+    location: React.PropTypes.any,
   };
 
   componentDidMount() {}
@@ -23,6 +24,7 @@ export default class NavBar extends React.Component {
   render() {
     // TODO: add 'collapsing' state to show menu opening animation
     const { menuCollapsed } = this.props;
+    const { pathname } = this.props.location;
     return (
       <div
         ref={(menu) => { this.menu = menu; }}
@@ -32,8 +34,14 @@ export default class NavBar extends React.Component {
         <ul className="nav navbar-nav">
           {
             menuItems.map((item, index) =>
-              <li key={index}>
-                <Link to={item.link} title={item.text}>
+              <li
+                key={index}
+                className={classNames({ active: (pathname === item.link) })}
+              >
+                <Link
+                  to={item.link}
+                  title={item.text}
+                >
                   <div>{item.text.toUpperCase()}</div>
                 </Link>
               </li>
