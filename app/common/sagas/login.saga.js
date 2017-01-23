@@ -7,7 +7,7 @@
 import {
   take, call, put, cancel, cancelled, fork, select,
 } from 'redux-saga/effects';
-import { replace, push } from 'react-router-redux';
+import { push } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { selectLocationState } from 'containers/App/selectors';
