@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 
 import { selectSelectedUser, selectCurrentUser } from '../../containers/App/selectors';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 class CallItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     messageData: PropTypes.object,

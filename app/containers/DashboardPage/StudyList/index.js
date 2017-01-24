@@ -9,7 +9,7 @@ import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { Modal } from 'react-bootstrap';
 import CenteredModal from 'components/CenteredModal';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
 
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
