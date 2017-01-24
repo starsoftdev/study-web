@@ -4,17 +4,24 @@ import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 import { Modal } from 'react-bootstrap';
 import Button from 'react-bootstrap/lib/Button';
-import { map } from 'lodash';
-
+import ReactSelect from 'components/Input/ReactSelect';
+import { map, find } from 'lodash';
+import { Field, reduxForm } from 'redux-form';
 import CenteredModal from '../../components/CenteredModal/index';
 import EditSiteForm from 'components/EditSiteForm';
 import EditUserForm from 'components/EditUserForm';
 import ClientSitesList from 'components/ClientSitesList';
 import ClientRolesList from 'components/ClientRolesList';
-import { selectCurrentUserClientId, selectClientSites,
-  selectClientRoles, selectSavedSite, selectSavedUser } from 'containers/App/selectors';
+import {
+  selectCurrentUserClientId,
+  selectClientSites,
+  selectClientRoles,
+  selectSavedSite,
+  selectSavedUser,
+} from 'containers/App/selectors';
 import { fetchClientSites, fetchClientRoles, saveSite, saveUser } from 'containers/App/actions';
 
+@reduxForm({ form: 'manageSiteUser' })
 export class SitesUsersPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUserClientId: PropTypes.number,
@@ -119,10 +126,17 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     this.filterClientRoles(this.state.userName);
   }
 
-  handleSiteQueryChange(event) {
-    this.setState({
-      siteName: event.target.value,
-    });
+  handleSiteQueryChange(index) {
+    const sel = parseInt(index);
+    if (sel === 0) {
+      this.setState({
+        siteName: '',
+      }, () => { this.filterClientSites(this.state.siteName); });
+    } else {
+      this.setState({
+        siteName: this.props.clientSites.details[sel - 1].name,
+      }, () => { this.filterClientSites(this.state.siteName); });
+    }
   }
 
   handleUserQueryChange(event) {
@@ -190,15 +204,19 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                     <Button className="btn-enter" type="submit">
                       <i className="icomoon-icon_search2" />
                     </Button>
-                    <input onChange={this.handleSiteQueryChange} type="text" className="form-control keyword-search" placeholder="Search Site Name..." />
+                    <input onChange={this.handleUserQueryChange} type="text" className="form-control keyword-search" placeholder="Search User Name..." />
                   </div>
                 </div>
                 <div className="search-area pull-left">
                   <div className="field">
-                    <Button className="btn-enter" type="submit">
-                      <i className="icomoon-icon_search2" />
-                    </Button>
-                    <input onChange={this.handleUserQueryChange} type="text" className="form-control keyword-search" placeholder="Search User Name..." />
+                    <Field
+                      name="siteLocation"
+                      component={ReactSelect}
+                      placeholder="Select Site Location"
+                      options={siteOptions}
+                      className="field"
+                      onChange={this.handleSiteQueryChange}
+                    />
                   </div>
                 </div>
               </div>
