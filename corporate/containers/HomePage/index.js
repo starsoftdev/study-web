@@ -9,34 +9,28 @@ export default class Home extends React.Component { // eslint-disable-line react
 
   constructor(props) {
     super(props);
+    this.watcherA = null;
+    this.watcherB = null;
 
     this.setVisible = this.setVisible.bind(this);
-
-    this.state = {
-      watcherA: null,
-      watcherB: null,
-    }
   }
 
   componentWillMount() {}
 
   componentDidMount() {
-    this.setState({
-      watcherA: inViewport(this.animatedH2, this.setVisible),
-      watcherB: inViewport(this.animatedForm, this.setVisible),
-    })
+    this.watcherA = inViewport(this.animatedH2, this.setVisible);
+    this.watcherB = inViewport(this.animatedForm, this.setVisible);
   }
 
   componentWillReceiveProps() {}
 
   componentWillUnmount() {
-    const { watcherA, watcherB } = this.state;
-    watcherA.dispose();
-    watcherB.dispose();
+    this.watcherA.dispose();
+    this.watcherB.dispose();
   }
 
   setVisible(el) {
-    const viewAtr =  el.getAttribute('data-view');
+    const viewAtr = el.getAttribute('data-view');
     el.classList.add('in-viewport', viewAtr);
   }
 
