@@ -13,33 +13,27 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
 
   constructor(props) {
     super(props);
+    this.watcher = null;
 
     this.setVisible = this.setVisible.bind(this);
-
-    this.state = {
-      watcher: null,
-    }
   }
 
   componentWillMount() {
   }
 
   componentDidMount() {
-    this.setState({
-      watcher: inViewport(this.animatedForm, this.setVisible),
-    })
+    this.watcher = inViewport(this.animatedForm, this.setVisible);
   }
 
   componentWillReceiveProps() {
   }
 
   componentWillUnmount() {
-    const { watcher } = this.state;
-    watcher.dispose();
+    this.watcher.dispose();
   }
 
   setVisible(el) {
-    const viewAtr =  el.getAttribute('data-view');
+    const viewAtr = el.getAttribute('data-view');
     el.classList.add('in-viewport', viewAtr);
   }
 

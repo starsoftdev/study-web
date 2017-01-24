@@ -11,39 +11,33 @@ export default class LandingPage extends React.Component { // eslint-disable-lin
 
   constructor(props) {
     super(props);
+    this.watcherA = null;
+    this.watcherB = null;
+    this.watcherC = null;
 
     this.setVisible = this.setVisible.bind(this);
-
-    this.state = {
-      watcherA: null,
-      watcherB: null,
-      watcherC: null,
-    }
   }
 
   componentWillMount() {
   }
 
   componentDidMount() {
-    this.setState({
-      watcherA: inViewport(this.animatedFormContent, this.setVisible),
-      watcherB: inViewport(this.slideInLeft, this.setVisible),
-      watcherC: inViewport(this.slideInRight, this.setVisible),
-    })
+    this.watcherA = inViewport(this.animatedFormContent, this.setVisible);
+    this.watcherB = inViewport(this.slideInLeft, this.setVisible);
+    this.watcherC = inViewport(this.slideInRight, this.setVisible);
   }
 
   componentWillReceiveProps() {
   }
 
   componentWillUnmount() {
-    const { watcherA, watcherB, watcherC } = this.state;
-    watcherA.dispose();
-    watcherB.dispose();
-    watcherC.dispose();
+    this.watcherA.dispose();
+    this.watcherB.dispose();
+    this.watcherC.dispose();
   }
 
   setVisible(el) {
-    const viewAtr =  el.getAttribute('data-view');
+    const viewAtr = el.getAttribute('data-view');
     el.classList.add('in-viewport', viewAtr);
   }
 

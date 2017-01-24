@@ -19,35 +19,28 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      watcher: null,
-    }
+    this.watcher = null;
 
     this.toggleCheckbox = this.toggleCheckbox.bind(this);
     this.setVisible = this.setVisible.bind(this);
   }
 
   componentDidMount() {
-    // TODO: find or implement analog of JQuery in-viewport in react
-    this.setState({
-      watcher: inViewport(this.animatedForm, this.setVisible),
-    })
+    this.watcher = inViewport(this.animatedForm, this.setVisible);
   }
 
   componentWillUnmount() {
-    const { watcher } = this.state;
-    watcher.dispose();
+    this.watcher.dispose();
+  }
+
+  setVisible(el) {
+    const viewAtr = el.getAttribute('data-view');
+    el.classList.add('in-viewport', viewAtr);
   }
 
   toggleCheckbox() {
     this.checkbox.classList.toggle('jcf-unchecked');
     this.checkbox.classList.toggle('jcf-checked');
-  }
-
-  setVisible(el) {
-    const viewAtr =  el.getAttribute('data-view');
-    el.classList.add('in-viewport', viewAtr);
   }
 
   render() {
