@@ -1,4 +1,5 @@
 import React from 'react';
+import inViewport from 'in-viewport';
 
 import img17 from '../../assets/images/img17.svg';
 import img18 from '../../assets/images/img18.svg';
@@ -10,15 +11,36 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
 
   static propTypes = {};
 
+  constructor(props) {
+    super(props);
+
+    this.setVisible = this.setVisible.bind(this);
+
+    this.state = {
+      watcher: null,
+    }
+  }
+
   componentWillMount() {
   }
 
   componentDidMount() {
-    // TODO: find or implement analog of JQuery in-viewport in react
-    this.animatedForm.classList.add('in-viewport', 'fadeInUp');
+    this.setState({
+      watcher: inViewport(this.animatedForm, this.setVisible),
+    })
   }
 
   componentWillReceiveProps() {
+  }
+
+  componentWillUnmount() {
+    const { watcher } = this.state;
+    watcher.dispose();
+  }
+
+  setVisible(el) {
+    const viewAtr =  el.getAttribute('data-view');
+    el.classList.add('in-viewport', viewAtr);
   }
 
   render() {

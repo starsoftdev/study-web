@@ -1,4 +1,5 @@
 import React from 'react';
+import inViewport from 'in-viewport';
 
 import './styles.less';
 
@@ -6,15 +7,38 @@ export default class Home extends React.Component { // eslint-disable-line react
 
   static propTypes = {};
 
+  constructor(props) {
+    super(props);
+
+    this.setVisible = this.setVisible.bind(this);
+
+    this.state = {
+      watcherA: null,
+      watcherB: null,
+    }
+  }
+
   componentWillMount() {}
 
   componentDidMount() {
-    // TODO: find or implement analog of JQuery in-viewport in react
-    this.animatedH2.classList.add('in-viewport', 'fadeInUp');
-    this.animatedForm.classList.add('in-viewport', 'fadeInUp');
+    this.setState({
+      watcherA: inViewport(this.animatedH2, this.setVisible),
+      watcherB: inViewport(this.animatedForm, this.setVisible),
+    })
   }
 
   componentWillReceiveProps() {}
+
+  componentWillUnmount() {
+    const { watcherA, watcherB } = this.state;
+    watcherA.dispose();
+    watcherB.dispose();
+  }
+
+  setVisible(el) {
+    const viewAtr =  el.getAttribute('data-view');
+    el.classList.add('in-viewport', viewAtr);
+  }
 
   render() {
     return (
