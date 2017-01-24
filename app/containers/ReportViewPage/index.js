@@ -13,13 +13,29 @@ import ReportViewTotals from 'containers/ReportViewPage/ReportViewTotals';
 import ReportViewSearch from 'containers/ReportViewPage/ReportViewSearch';
 import ReportViewTable from 'containers/ReportViewPage/ReportViewTable';
 
+import { selectCurrentUser } from 'containers/App/selectors';
+import { getReportsList } from 'containers/ReportViewPage/actions';
+import { selectReportsList } from 'containers/ReportViewPage/selectors';
+
 export class ReportViewPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     location: PropTypes.object,
+    getReportsList: PropTypes.func,
+    reportsList: PropTypes.object,
   };
 
+  constructor(props) {
+    super(props);
+  }
+
+  componentWillMount() {
+    const { currentUser } = this.props;
+    this.props.getReportsList({ sponsorRoleId: currentUser.roleForSponsor.id });
+  }
+
   render() {
+    console.log(123, this.props);
     const protocolNumber = this.props.location.query.protocol || null;
     return (
       <div className="container-fluid sponsor-portal report-view-page">
@@ -35,11 +51,14 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
   }
 }
 
-const mapStateToProps = createStructuredSelector({});
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
+  reportsList: selectReportsList(),
+});
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    getReportsList: searchParams => dispatch(getReportsList(searchParams)),
   };
 }
 
