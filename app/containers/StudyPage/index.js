@@ -14,7 +14,7 @@ import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
 import PatientBoard from './PatientBoard/index';
 import * as Selector from './selectors';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId } from './actions';
 import {
   selectSocket,

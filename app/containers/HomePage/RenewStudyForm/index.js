@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change, reset } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import { Calendar } from 'react-date-range';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from 'components/Input';

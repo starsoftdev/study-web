@@ -12,7 +12,7 @@ import formValidator from './validator';
 import ReactSelect from 'components/Input/ReactSelect';
 import { Field, FieldArray, reduxForm, change } from 'redux-form';
 import _ from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import CenteredModal from '../../components/CenteredModal/index';
 import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
