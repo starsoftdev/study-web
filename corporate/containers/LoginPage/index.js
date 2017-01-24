@@ -20,13 +20,13 @@ export class LoginPage extends Component {
     this.onSubmitForm = this.props.onSubmitForm.bind(this);
 
     this.state = {
-      loginError: null
+      loginError: null,
     };
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.loginError && newProps.loginError.code === 'LOGIN_FAILED') {
-      this.setState({loginError: true});
+      this.setState({ loginError: true });
     }
   }
 
@@ -35,7 +35,7 @@ export class LoginPage extends Component {
     return (
       <div className="login-page-wrapper">
         <div className="container">
-          <LoginForm onSubmit={this.onSubmitForm} loginError={loginError}/>
+          <LoginForm onSubmit={this.onSubmitForm} loginError={loginError} />
         </div>
       </div>
     );
