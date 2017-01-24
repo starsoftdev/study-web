@@ -1,11 +1,9 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Modal } from 'react-bootstrap';
 import _, { countBy, find, filter, sumBy } from 'lodash';
 import { touch } from 'redux-form';
 
-import CenteredModal from '../../../components/CenteredModal/index';
 import { fetchLevels, saveCard } from 'containers/App/actions';
 import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients } from 'containers/App/selectors';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
@@ -90,6 +88,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.sortBy = this.sortBy.bind(this);
     this.showRenewModal = this.showRenewModal.bind(this);
     this.showUpgradeModal = this.showUpgradeModal.bind(this);
+    this.showEditModal = this.showEditModal.bind(this);
   }
 
   componentDidMount() {
@@ -227,11 +226,23 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     }
   }
 
-  closeEditModal() {
+  closeEditModal(flag) {
+    if (flag) {
+      this.setState({
+        editModalOpen: false,
+      });
+    } else {
+      this.setState({
+        editModalOpen: false,
+        selectedStudyId: null,
+        selectedSiteUsers: null,
+      });
+    }
+  }
+
+  showEditModal() {
     this.setState({
-      editModalOpen: false,
-      selectedStudyId: null,
-      selectedSiteUsers: null,
+      editModalOpen: true,
     });
   }
 
@@ -520,31 +531,13 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               validateAndSubmit={this.handleUpgradeStudyFormSubmit}
               currentUserStripeCustomerId={this.props.currentUserStripeCustomerId}
             />
-            <Modal
-              className="edit-study-modal"
-              id="edit-study"
-              dialogComponentClass={CenteredModal}
+            <EditStudyForm
+              siteUsers={this.state.selectedSiteUsers}
+              onSubmit={this.handleEditStudyFormSubmit}
               show={this.state.editModalOpen}
               onHide={this.closeEditModal}
-              backdrop
-              keyboard
-            >
-              <Modal.Header>
-                <Modal.Title>Edit Information</Modal.Title>
-                <a className="lightbox-close close" onClick={this.closeEditModal}>
-                  <i className="icomoon-icon_close" />
-                </a>
-              </Modal.Header>
-              <Modal.Body>
-                <div className="form-study">
-                  <div className="scroll jcf--scrollable">
-                    <div className="holder-inner">
-                      <EditStudyForm siteUsers={this.state.selectedSiteUsers} onSubmit={this.handleEditStudyFormSubmit} />
-                    </div>
-                  </div>
-                </div>
-              </Modal.Body>
-            </Modal>
+              onShow={this.showEditModal}
+            />
           </div>
         </div>
       </div>
