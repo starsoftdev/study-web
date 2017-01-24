@@ -204,7 +204,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                     <Button className="btn-enter" type="submit">
                       <i className="icomoon-icon_search2" />
                     </Button>
-                    <input onChange={this.handleUserQueryChange} type="text" className="form-control keyword-search" placeholder="Search User Name..." />
+                    <input onChange={this.handleUserQueryChange} type="text" className="form-control keyword-search" placeholder="Search" />
                   </div>
                 </div>
                 <div className="search-area pull-left">
