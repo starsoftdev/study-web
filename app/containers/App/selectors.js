@@ -115,12 +115,14 @@ const selectStudyLevels = () => createSelector(
   selectGlobal(),
   (substate) => {
     const levels = get(substate, 'baseData.levels', []);
+    console.log(levels);
     return map(levels, e => (
       {
         id: e.id,
         label: `${e.name}`,
         type: e.name,
         stripeProductId: e.stripe_product_id,
+        isTop: e.isTop,
       }
     ));
   }

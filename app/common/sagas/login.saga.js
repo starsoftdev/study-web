@@ -7,7 +7,7 @@
 import {
   take, call, put, cancel, cancelled, fork, select,
 } from 'redux-saga/effects';
-import { replace, push } from 'react-router-redux';
+import { push } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { selectLocationState } from 'containers/App/selectors';
@@ -102,11 +102,15 @@ export function* logoutSaga() {
   while (true) {
     yield take(LOGOUT_REQUEST);
 
+    // Redirect to login page before setting auth state.
+    // This way no components will attempt to re-render using
+    // absent user data.
+    // manually push the location state to the login URL, since replace will try to update redux state, which we do not want
+    yield call(() => { location.href = '/login'; });
     yield call(logout);
+
     yield put(setAuthState(false));
     yield put(setUserData(null));
-    // redirect to login page
-    yield put(replace('/app/login'));
   }
 }
 

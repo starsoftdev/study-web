@@ -174,6 +174,8 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   render() {
     const { studyLevels, selectedIndicationLevelPrice, callTracking, availPhoneNumbers, selectedStudy } = this.props;
 
+    _.reverse(studyLevels);
+
     let filteredLevels = studyLevels;
     let isDisabled = false;
     let value = null;
@@ -183,8 +185,9 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     }
 
     if (filteredLevels.length === 0 && selectedStudy) {
-      filteredLevels.push(studyLevels[studyLevels.length - 1]);
-      value = studyLevels[studyLevels.length - 1].id;
+      const topLevel = _.find(studyLevels, o => o.isTop);
+      filteredLevels.push(topLevel);
+      value = topLevel.id;
       isDisabled = true;
     }
 
