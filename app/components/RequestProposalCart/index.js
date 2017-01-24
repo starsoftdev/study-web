@@ -107,7 +107,7 @@ export class RequestProposalCart extends Component {
       });
     }
 
-    if (formValues.addPatientMessagingSuite) {
+    if (formValues.patientMessagingSuite) {
       products.push({
         title: 'Patient Messaging Suite',
         price: MESSAGING_SUITE_PRICE,

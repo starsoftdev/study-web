@@ -28,6 +28,7 @@ export const Currencies = {
 };
 
 export const MESSAGING_SUITE_PRICE = 24700;
+export const QUALIFICATION_SUITE_PRICE = 84900;
 export const CALL_TRACKING_PRICE = 24700;
 
 export const MONTH_OPTIONS = [

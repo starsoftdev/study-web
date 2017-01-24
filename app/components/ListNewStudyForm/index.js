@@ -75,6 +75,23 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     if (newProps.leadsCount === 0 && this.props.leadsCount === 1) {
       this.props.dispatch(change('listNewStudy', 'callTracking', false));
     }
+
+    let messagingSuiteToggled = false;
+    let qualificationSuiteToggled = false;
+
+    if (newProps.formValues.patientQualificationSuite === true &&
+        this.props.formValues.patientQualificationSuite == undefined) {
+      qualificationSuiteToggled = true;
+    } else if (newProps.formValues.patientMessagingSuite === true &&
+               this.props.formValues.patientMessagingSuite == undefined) {
+      messagingSuiteToggled = true;
+    }
+
+    if (qualificationSuiteToggled && newProps.formValues.patientMessagingSuite === true) {
+      this.props.dispatch(change('listNewStudy', 'patientMessagingSuite', false));
+    } else if (messagingSuiteToggled && newProps.formValues.patientQualificationSuite === true) {
+      this.props.dispatch(change('listNewStudy', 'patientQualificationSuite', false));
+    }
   }
 
   closeAddSiteModal() {
@@ -302,7 +319,19 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             <strong className="label"><label>Patient messaging <br />
             Suite: $247</label></strong>
             <Field
-              name="addPatientMessagingSuite"
+              name="patientMessagingSuite"
+              component={Toggle}
+              className="field"
+            />
+          </div>
+
+          <div className="field-row">
+            <strong className="label"><label>Patient qualification <br />
+              Suite: $894 <br />
+              <span className="label-blue">(Includes patient <br />
+              messaging suite)</span></label></strong>
+            <Field
+              name="patientQualificationSuite"
               component={Toggle}
               className="field"
             />
