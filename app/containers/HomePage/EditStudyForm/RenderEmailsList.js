@@ -1,7 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import { Field, change } from 'redux-form';
-import { Modal } from 'react-bootstrap';
-import AddEmailNotificationForm from 'components/AddEmailNotificationForm';
 import Checkbox from 'components/Input/Checkbox';
 import { forEach, filter } from 'lodash';
 
@@ -11,6 +9,9 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
     dispatch: PropTypes.func.isRequired,
     formValues: PropTypes.object.isRequired,
     fields: PropTypes.object,
+    addEmailNotification: PropTypes.func,
+    closeEmailNotification: PropTypes.func,
+    emailFields: PropTypes.object,
   };
 
   constructor(props) {
@@ -18,27 +19,39 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
 
     this.addEmailNotificationClick = this.addEmailNotificationClick.bind(this);
     this.closeAddEmailModal = this.closeAddEmailModal.bind(this);
-    this.addEmailNotificationSubmit = this.addEmailNotificationSubmit.bind(this);
     this.selectAll = this.selectAll.bind(this);
     this.selectEmail = this.selectEmail.bind(this);
+    this.addEmailNotificationFields = this.addEmailNotificationFields.bind(this);
+    this.addNewFileds = this.addNewFileds.bind(this);
 
     this.state = {
       addEmailModalShow: false,
     };
   }
 
-  addEmailNotificationClick() {
-    this.setState({ addEmailModalShow: true });
+  componentWillMount() {
+    this.addNewFileds(this.props.emailFields);
   }
 
-  closeAddEmailModal() {
-    this.setState({ addEmailModalShow: false });
+  addNewFileds(values) {
+    if (values) {
+      this.props.fields.push(values);
+    }
+    this.props.dispatch(change('editStudy', 'checkAllInput', false));
   }
 
-  addEmailNotificationSubmit(values) {
+  addEmailNotificationFields(values) {
     this.props.fields.push(values);
     this.closeAddEmailModal();
     this.props.dispatch(change('editStudy', 'checkAllInput', false));
+  }
+
+  addEmailNotificationClick() {
+    this.props.addEmailNotification();
+  }
+
+  closeAddEmailModal() {
+    this.props.closeEmailNotification();
   }
 
   selectAll(e) {
@@ -95,18 +108,6 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
         <div className="btn-holder">
           <a className="add-new-email lightbox-opener" onClick={this.addEmailNotificationClick}>Add Email Notification</a>
         </div>
-
-        <Modal className="custom-modal" show={this.state.addEmailModalShow} onHide={this.closeAddEmailModal}>
-          <Modal.Header>
-            <Modal.Title>ADD EMAIL NOTIFICATION</Modal.Title>
-            <a className="lightbox-close close" onClick={this.closeAddEmailModal}>
-              <i className="icomoon-icon_close" />
-            </a>
-          </Modal.Header>
-          <Modal.Body>
-            <AddEmailNotificationForm onSubmit={this.addEmailNotificationSubmit} />
-          </Modal.Body>
-        </Modal>
       </div>
     );
   }
