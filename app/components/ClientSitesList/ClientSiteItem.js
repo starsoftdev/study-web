@@ -76,7 +76,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
               <i className="pencil-square" />
             </a>
           }
-        </span>
+          </span>
         </div>
       ));
     }
