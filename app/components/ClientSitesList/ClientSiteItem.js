@@ -30,6 +30,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
 
     this.toggleAssignedUsers = this.toggleAssignedUsers.bind(this);
     this.editSite = this.editSite.bind(this);
+    this.renderUserRoles = this.renderUserRoles.bind(this);
   }
 
   toggleAssignedUsers() {
@@ -57,19 +58,33 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     return (selectedUser.fetching && selectedUser.id === assignedUser.id);
   }
 
-  render() {
-    const { name, piFirstName, piLastName, phone, address, roles } = this.props;
-    const assignedUsersContent = roles.map((item, index) => (
-      <div className="assigned-user" key={index}>
-        <span>{item.user.firstName} {item.user.lastName}</span>
-        <span className="edit-assigned-user">
+  renderUserRoles() {
+    const { roles } = this.props;
+    if (roles) {
+      return roles.map((item, index) => (
+        <div className="assigned-user" key={index}>
+          <span>{item.user.firstName} {item.user.lastName}</span>
+          <span className="edit-assigned-user">
           {(this.assignedUserIsBeingFetched(item))
             ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-assigned-user" /></span>
-            : <a className="btn edit-icon" onClick={() => { this.editAssignedUser(item); }}><i className="pencil-square" /></a>
+            : <a
+              className="btn edit-icon"
+              onClick={() => {
+                this.editAssignedUser(item);
+              }}
+            >
+              <i className="pencil-square" />
+            </a>
           }
         </span>
-      </div>
-    ));
+        </div>
+      ));
+    }
+    return null;
+  }
+
+  render() {
+    const { name, piFirstName, piLastName, phone, address } = this.props;
 
     return (
       <tr className="client-site-container">
@@ -94,7 +109,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
             }
           </div>
           {!this.state.assignedUsersCollapsed &&
-            <div className="assigned-users-list">{assignedUsersContent}</div>
+            <div className="assigned-users-list">{this.renderUserRoles()}</div>
           }
         </td>
         <td className="action">
