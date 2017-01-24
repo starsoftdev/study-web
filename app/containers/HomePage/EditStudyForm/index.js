@@ -104,10 +104,17 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   addEmailNotificationSubmit(values) {
-    this.closeAddEmailModal();
+    let addFields = this.state.emailFields;
+    if (!addFields) {
+      addFields = [values];
+    } else {
+      addFields.push(values);
+    }
     this.setState({
-      emailFields: values,
+      emailFields: addFields,
     });
+    this.props.dispatch(reset('editStudy', 'emailNotifications'));
+    this.closeAddEmailModal();
   }
 
   selectAll(e) {

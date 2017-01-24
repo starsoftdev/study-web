@@ -11,7 +11,7 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
     fields: PropTypes.object,
     addEmailNotification: PropTypes.func,
     closeEmailNotification: PropTypes.func,
-    emailFields: PropTypes.object,
+    emailFields: PropTypes.array,
   };
 
   constructor(props) {
@@ -29,14 +29,14 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.addNewFileds(this.props.emailFields);
   }
 
   addNewFileds(values) {
-    if (values) {
-      this.props.fields.push(values);
-    }
+    forEach(values, (Object) => {
+      this.props.fields.push(Object);
+    });
     this.props.dispatch(change('editStudy', 'checkAllInput', false));
   }
 
@@ -75,6 +75,18 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
 
   render() {
     const { fields, formValues } = this.props;
+    const fLength = fields.length;
+    let frLength;
+    if (formValues.emailNotifications) {
+      frLength = formValues.emailNotifications.length;
+    } else {
+      frLength = 0;
+    }
+    if (fLength !== frLength && fields.length !== 0) {
+      return (
+        <div></div>
+      );
+    }
     return (
       <div>
         <div className={fields.length === 0 ? 'heading-area-no-border' : 'heading-area'}>
