@@ -1,4 +1,5 @@
 import React from 'react';
+import inViewport from 'in-viewport';
 
 import img9 from '../../assets/images/buildings/img9.jpg';
 
@@ -11,24 +12,39 @@ export default class LandingPage extends React.Component { // eslint-disable-lin
   constructor(props) {
     super(props);
 
-    this.checkVisible = this.checkVisible.bind(this);
+    this.setVisible = this.setVisible.bind(this);
+
+    this.state = {
+      watcherA: null,
+      watcherB: null,
+      watcherC: null,
+    }
   }
 
   componentWillMount() {
   }
 
   componentDidMount() {
-    // TODO: find or implement analog of JQuery in-viewport in react
-    this.animatedFormContent.classList.add('in-viewport', 'fadeInUp');
-    this.slideInLeft.classList.add('in-viewport', 'slideInLeft');
-    this.slideInRight.classList.add('in-viewport', 'slideInRight');
+    this.setState({
+      watcherA: inViewport(this.animatedFormContent, this.setVisible),
+      watcherB: inViewport(this.slideInLeft, this.setVisible),
+      watcherC: inViewport(this.slideInRight, this.setVisible),
+    })
   }
 
   componentWillReceiveProps() {
   }
 
-  checkVisible() {
-    console.log('checkVisible');
+  componentWillUnmount() {
+    const { watcherA, watcherB, watcherC } = this.state;
+    watcherA.dispose();
+    watcherB.dispose();
+    watcherC.dispose();
+  }
+
+  setVisible(el) {
+    const viewAtr =  el.getAttribute('data-view');
+    el.classList.add('in-viewport', viewAtr);
   }
 
   render() {
