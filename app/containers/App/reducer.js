@@ -102,11 +102,16 @@ import {
 } from './constants';
 
 import {
+  LOGIN_ERROR,
+} from 'containers/LoginPage/constants';
+
+import {
   CHANGE_IMAGE_SUCCESS,
 } from 'containers/ProfilePage/constants';
 
 const initialState = {
   loggedIn: !!getItem('auth_token'),
+  loginError: null,
   userData: null,
   pageEvents: null,
   baseData: {
@@ -220,6 +225,12 @@ export default function appReducer(state = initialState, action) {
       resultState = {
         ...state,
         loggedIn: payload.newAuthState,
+      };
+      break;
+    case LOGIN_ERROR:
+      resultState = {
+        ...state,
+        loginError: payload,
       };
       break;
     case SET_USER_DATA:

@@ -2,6 +2,7 @@ import React from 'react';
 import inViewport from 'in-viewport';
 import { Field, reduxForm } from 'redux-form';
 import loginFormValidator from './validator';
+import { Alert } from 'react-bootstrap';
 
 import Input from 'components/Input';
 
@@ -13,6 +14,7 @@ import Input from 'components/Input';
 export class LoginForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
+    loginError: React.PropTypes.any,
     handleSubmit: React.PropTypes.func.isRequired,
     submitting: React.PropTypes.bool.isRequired,
   };
@@ -44,7 +46,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { handleSubmit, submitting } = this.props;
+    const { handleSubmit, submitting, loginError } = this.props;
 
     return (
       <form
@@ -57,6 +59,11 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
         onSubmit={handleSubmit}
       >
         <h2 className="main-heading">ACCOUNT LOGIN</h2>
+        {loginError &&
+          <Alert bsStyle="danger">
+            <p>The email or password is incorrect!</p>
+          </Alert>
+        }
         <Field
           name="email"
           type="text"
