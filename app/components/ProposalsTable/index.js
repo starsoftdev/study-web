@@ -331,7 +331,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
   mapProposals(raw, result) {
     _.map(raw, (source, key) => {
-      const dateWrapper = moment(source.created).tz(this.props. currentUser.timezone).format('MM/DD/YY');
+      const dateWrapper = moment(source.created).tz(this.props.currentUser.timezone).format('MM/DD/YY');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
 
       let proposalLink = source.proposalNumber;

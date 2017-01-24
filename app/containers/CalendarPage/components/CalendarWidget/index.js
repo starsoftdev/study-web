@@ -19,7 +19,7 @@ class CalendarWidget extends React.Component {
     handleShowAll: PropTypes.func.isRequired,
   }
 
-  currentDate = moment()
+  currentDate = moment().toDate()
 
   render() {
     const eventsList = this.props.schedules.map(s => {

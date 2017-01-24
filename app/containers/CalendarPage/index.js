@@ -191,7 +191,7 @@ export class CalendarPage extends React.Component {
       if (data.date) {
         updatedDate = data.date.startOf('day');
       } else {  // React Datepicker doesn't submit its initial value
-        updatedDate = moment(new Date(this.selectedCellInfo.data.time)).startOf('day');
+        updatedDate = moment(this.selectedCellInfo.data.time).startOf('day');
       }
       const nn = updatedDate.clone().add(data.period === 'AM' ?
           data.hour % 12 :
