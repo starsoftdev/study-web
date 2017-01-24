@@ -16,6 +16,11 @@ const selectCurrentUser = () => createSelector(
   (substate) => substate.userData
 );
 
+const selectLoginError = () => createSelector(
+  selectGlobal(),
+  (substate) => substate.loginError
+);
+
 const selectUserRoleType = () => createSelector(
   selectGlobal(),
   (substate) => substate.userRoleType
@@ -272,6 +277,7 @@ export {
   selectAuthState,
   selectEvents,
   selectCurrentUser,
+  selectLoginError,
   selectUserRoleType,
   selectCurrentUserClientId,
   selectCurrentUserStripeCustomerId,
