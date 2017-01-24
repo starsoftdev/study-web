@@ -203,7 +203,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
             <strong className="label"><label>Patient messaging <br />
             Suite: $247</label></strong>
             <Field
-              name="addPatientMessagingSuite"
+              name="patientMessagingSuite"
               component={Toggle}
               className="field"
             />
