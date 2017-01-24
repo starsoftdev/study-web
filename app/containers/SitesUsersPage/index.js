@@ -5,7 +5,7 @@ import Helmet from 'react-helmet';
 import { Modal } from 'react-bootstrap';
 import Button from 'react-bootstrap/lib/Button';
 import ReactSelect from 'components/Input/ReactSelect';
-import { map, find } from 'lodash';
+import { map } from 'lodash';
 import { Field, reduxForm } from 'redux-form';
 import CenteredModal from '../../components/CenteredModal/index';
 import EditSiteForm from 'components/EditSiteForm';
