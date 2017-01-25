@@ -14,22 +14,16 @@ label[for="remember"]{
   margin: 0 0 0 4px;
 }
 
-.logo-holder{
-  &.loginPage{
-    @media screen and(max-width: @sm) {
-      position: absolute;
-      width: 100%;
-    }
-
-    @media screen and(max-width: @xs) {
-      position: absolute;
-      width: 100%;
-    }
-  }
-}
-
 button.navbar-toggle{
   z-index: 5;
+}
+
+button{
+  &.btn-login{
+    .invisible{
+      visibility: hidden;
+    }
+  }
 }
 
 .alert {
