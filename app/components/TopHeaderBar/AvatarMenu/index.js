@@ -33,6 +33,7 @@ class AvatarMenu extends React.Component {
 
   render() {
     const avatarMenuClassName = this.state.avatarMenuOpen ? 'avatar-menu-open' : 'avatar-menu-close';
+    const userName = this.props.currentUser.firstName + ' ' + this.props.currentUser.lastName;
 
     return (
       <div className="logged-user-area open-close pull-right">
@@ -40,7 +41,7 @@ class AvatarMenu extends React.Component {
           <div className="img-circle">
             <img src={this.props.currentUser.profileImageURL || defaultImage} width="43" height="43" alt="Bruce Wayne" />
           </div>
-          <span className="text margin-left-5px margin-right-5px">Bruce Wayne</span>
+          <span className="text margin-left-5px margin-right-5px">{userName}</span>
           <i className="caret" />
         </a>
         <div className={`logged-user-drop avatar-menu ${avatarMenuClassName}`}>
