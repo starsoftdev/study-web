@@ -183,7 +183,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                 onClick={() => { this.showDateRangeModal(); }}
               >
                 <i className="icomoon-icon_calendar"></i>
-                Date Range
+                &nbsp;Date Range
               </Button>
               <Button
                 bsStyle="primary"
@@ -191,7 +191,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                 onClick={() => {}}
               >
                 <i className="icomoon-icon_download"></i>
-                Download
+                &nbsp;Download
               </Button>
             </div>
             <Modal
