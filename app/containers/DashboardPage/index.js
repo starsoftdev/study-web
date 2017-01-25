@@ -375,7 +375,7 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
                 viewBoxObject={{
                   x: 0,
                   y: 0,
-                  width: 1200,
+                  width: 1800,
                   height: 150,
                 }}
               />
