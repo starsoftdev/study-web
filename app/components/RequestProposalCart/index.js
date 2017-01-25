@@ -15,6 +15,7 @@ import Money from 'components/Money';
 import {
   CAMPAIGN_LENGTH_LIST,
   MESSAGING_SUITE_PRICE,
+  QUALIFICATION_SUITE_PRICE,
   CALL_TRACKING_PRICE,
 } from 'common/constants';
 import {
@@ -113,6 +114,15 @@ export class RequestProposalCart extends Component {
         price: MESSAGING_SUITE_PRICE,
         quantity: 1,
         total: MESSAGING_SUITE_PRICE,
+      });
+    }
+
+    if (formValues.patientQualificationSuite) {
+      products.push({
+        title: 'Patient Qualification Suite',
+        price: QUALIFICATION_SUITE_PRICE,
+        quantity: 1,
+        total: QUALIFICATION_SUITE_PRICE,
       });
     }
 
