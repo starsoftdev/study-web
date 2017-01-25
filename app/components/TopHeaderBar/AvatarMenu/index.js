@@ -34,7 +34,8 @@ class AvatarMenu extends React.Component {
   render() {
     const avatarMenuClassName = this.state.avatarMenuOpen ? 'avatar-menu-open' : 'avatar-menu-close';
     const { currentUser } = this.props;
-    const userName = currentUser.firstName + ' ' + currentUser.lastName;
+    const { firstName, lastName } = currentUser;
+    const userName = `${firstName} ${lastName}`;
 
     return (
       <div className="logged-user-area open-close pull-right">
