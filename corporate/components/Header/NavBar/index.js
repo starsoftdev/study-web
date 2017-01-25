@@ -26,7 +26,7 @@ export default class NavBar extends React.Component { // eslint-disable-line rea
     const { menuCollapsed } = this.props;
     const { pathname } = this.props.location;
     return (
-      <Collapse className="holder" in={!menuCollapsed}>
+      <Collapse className="navbar-collapse holder" in={!menuCollapsed}>
         <Well>
           <ul className="nav navbar-nav">
             {
