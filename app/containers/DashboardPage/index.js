@@ -287,7 +287,7 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
           <div className="d-stats clearfix">
             <ul className="list-unstyled info-list  pull-left">
               <li>
-                <strong className="heading">TODAY:</strong>
+                <strong className="heading">TODAY: </strong>
                 <span className="number">308</span>
               </li>
               <li>
@@ -375,7 +375,7 @@ export class DashboardPage extends Component { // eslint-disable-line react/pref
                 viewBoxObject={{
                   x: 0,
                   y: 0,
-                  width: 1200,
+                  width: 1800,
                   height: 150,
                 }}
               />
