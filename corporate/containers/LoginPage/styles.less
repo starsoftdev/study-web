@@ -13,15 +13,18 @@
 label[for="remember"]{
   margin: 0 0 0 4px;
 }
+.navbar-header{
+  button{
+    &.navbar-toggle{
+      &:focus{
+        background-color: #fff !important;
+      }
+    }
 
-button.navbar-toggle{
-  z-index: 5;
-}
-
-button{
-  &.btn-login{
-    .invisible{
-      visibility: hidden;
+    &.btn-login{
+      .invisible{
+        visibility: hidden;
+      }
     }
   }
 }
