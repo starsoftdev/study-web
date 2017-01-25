@@ -38,7 +38,6 @@ export default class Header extends React.Component { // eslint-disable-line rea
 
   handleClick() {
     this.button.classList.toggle('collapsed');
-    this.button.setAttribute('aria-expanded', !this.button.classList.contains('collapsed'));
     this.setState({ menuCollapsed: this.button.classList.contains('collapsed') });
   }
 
@@ -57,9 +56,6 @@ export default class Header extends React.Component { // eslint-disable-line rea
                 onClick={this.handleClick}
                 type="button"
                 className="navbar-toggle collapsed"
-                data-toggle="collapse"
-                data-target="#bs-example-navbar-collapse-1"
-                aria-expanded="false"
               >
                 <span className="sr-only">Toggle navigation</span>
                 <span className="icon-bar"></span>
