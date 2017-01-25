@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 import { Well, Collapse } from 'react-bootstrap';
 
 export default class FormSubscribe extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -19,12 +18,12 @@ export default class FormSubscribe extends React.Component { // eslint-disable-l
     ev.preventDefault();
     this.setState({ open: !this.state.open }, () => {
       this.button.classList.toggle('collapsed');
-    })
+    });
   }
 
   render() {
     return (
-      <form className='form-subscribe' data-formvalidation="true">
+      <form className="form-subscribe" data-formvalidation="true">
         <div className="container">
           <strong className="title pull-left">
             <a
