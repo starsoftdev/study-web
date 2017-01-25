@@ -38,6 +38,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
 
   handleClick() {
     this.button.classList.toggle('collapsed');
+    this.button.setAttribute('aria-expanded', !this.button.classList.contains('collapsed'));
     this.setState({ menuCollapsed: this.button.classList.contains('collapsed') });
   }
 

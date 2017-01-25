@@ -59,6 +59,10 @@
 		background: #fff;
 		position: relative;
 		border: #f78e1e solid 2px;
+
+		@media screen and(max-width: 620px) {
+			margin:0 15px;
+		}
 	}
 	
 	
@@ -124,9 +128,29 @@
 .form-lightbox {
     padding: 25px;
 	
+	@media screen and(max-width: @xs) {
+		padding: 15px;
+	}
+
 	.field-row {
 		> * {
 			font-size: 18px;
+
+			@media screen and (max-width: @psd) {
+				font-size: 15px;
+			}
+
+			@media screen and(max-width: @sm) {
+				font-size: 16px;
+			}
+
+			@media screen and(max-width: @xs) {
+				font-size: 14px;
+			}
+		}
+
+		.field {
+			padding: 0;
 		}
 	}
 }
