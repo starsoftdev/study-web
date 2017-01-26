@@ -53,7 +53,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
     return (
       <header id="header">
         {isLoggedIn &&
-          <LoggedUserMenu user={userDataFetched} logout={this.props.logout}/>
+          <LoggedUserMenu user={userDataFetched} logout={this.props.logout} />
         }
         <img src={studyKikLogo} alt="Study KIK" width="260" height="38" className="visible-print-block logo-print" />
         <nav className="navbar navbar-default">

@@ -60,9 +60,9 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
       >
         <h2 className="main-heading">ACCOUNT LOGIN</h2>
         {loginError &&
-        <Alert bsStyle="danger">
-          <p>The email or password is incorrect!</p>
-        </Alert>
+          <Alert bsStyle="danger">
+            <p>The email or password is incorrect!</p>
+          </Alert>
         }
         <Field
           name="email"
