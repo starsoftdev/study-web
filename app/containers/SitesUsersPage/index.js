@@ -266,7 +266,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
             <ClientRolesList filterMethod={this.state.roleFilterMethod} />
           </section>
           <section className="table-holder form-group client-sites-holder">
-            <ClientSitesList filterMethod={this.state.siteFilterMethod} />
+            <ClientSitesList filterMethod={this.state.siteFilterMethod} userFilterQuery={this.state.userName} />
           </section>
         </div>
       </div>
