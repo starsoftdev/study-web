@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
+import { find } from 'lodash';
 import { selectSelectedSite, selectSelectedUser } from 'containers/App/selectors';
 import { fetchSite, fetchUser } from 'containers/App/actions';
 import LoadingSpinner from 'components/LoadingSpinner';
@@ -19,11 +19,11 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     selectedUser: PropTypes.object,
     fetchSite: PropTypes.func,
     fetchUser: PropTypes.func,
+    userFilter: PropTypes.any,
   };
 
   constructor(props) {
     super(props);
-
     this.state = {
       assignedUsersCollapsed: true,
     };
@@ -58,7 +58,13 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { name, piFirstName, piLastName, phone, address, roles } = this.props;
+    const { name, piFirstName, piLastName, phone, address, roles, userFilter } = this.props;
+
+    const filteredUser = find(roles, (item) => {
+      const userName = item.user.firstName + item.user.lastName;
+      return userName.indexOf(userFilter) > -1;
+    });
+    
     const assignedUsersContent = roles.map((item, index) => (
       <div className="assigned-user" key={index}>
         <span>{item.user.firstName} {item.user.lastName}</span>
@@ -88,12 +94,12 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
         <td className="assigned-users">
           <div className="toggle-assigned-users">
             <span>ASSIGNED USERS</span>
-            {this.state.assignedUsersCollapsed
+            {(this.state.assignedUsersCollapsed || filteredUser)
               ? <a className="btn toggle toggle-plus" onClick={this.toggleAssignedUsers}></a>
               : <a className="btn toggle toggle-minus" onClick={this.toggleAssignedUsers}></a>
             }
           </div>
-          {!this.state.assignedUsersCollapsed &&
+          {(!this.state.assignedUsersCollapsed || filteredUser) &&
             <div className="assigned-users-list">{assignedUsersContent}</div>
           }
         </td>
