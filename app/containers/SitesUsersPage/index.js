@@ -127,7 +127,8 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
   }
 
   handleSiteQueryChange(index) {
-    const sel = parseInt(isNaN(index) ? index : 0);
+    const sel = parseInt(index !== null ? index : 0);
+    console.log('sel', sel);
     if (sel === 0) {
       this.setState({
         siteName: '',
