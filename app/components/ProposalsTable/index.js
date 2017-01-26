@@ -148,26 +148,20 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     const proposalsArr = this.props.proposals;
 
     if (site !== null && searchBy !== null) {
-      const number = parseInt(searchBy, 10);
       for (const proposal of proposalsArr) {
         if (proposal.site === site.name) {
-          if (!_.isNaN(number)) {
-            if (number === proposal.id) {
-              proposalsMatch.push(proposal);
-            }
-          } else if (number === proposal.proposalNumber || number === proposal.protocol) {
+          const proposalNumber = String(proposal.proposalNumber);
+          const protocalNumber = String(proposal.protocol);
+          if (proposalNumber.includes(searchBy) || protocalNumber.includes(searchBy)) {
             proposalsMatch.push(proposal);
           }
         }
       }
     } else if (searchBy !== null) {
       for (const proposal of proposalsArr) {
-        const number = parseInt(searchBy, 10);
-        if (!_.isNaN(number)) {
-          if (number === proposal.id) {
-            proposalsMatch.push(proposal);
-          }
-        } else if (number === proposal.proposalNumber || number === proposal.protocol) {
+        const proposalNumber = String(proposal.proposalNumber);
+        const protocalNumber = String(proposal.protocol);
+        if (proposalNumber.includes(searchBy) || protocalNumber.includes(searchBy)) {
           proposalsMatch.push(proposal);
         }
       }

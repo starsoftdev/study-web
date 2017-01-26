@@ -235,7 +235,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                     <Modal.Body>
                       <div className="holder clearfix">
                         <div className="form-lightbox">
-                          <EditUserForm siteOptions={siteOptions} onSubmit={this.addUser} />
+                          <EditUserForm siteOptions={siteOptions} onSubmit={this.addUser} isEdit={false} />
                         </div>
                       </div>
                     </Modal.Body>

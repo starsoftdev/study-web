@@ -48,14 +48,14 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 
   getPercentageObject(item) {
     const result = {
-      count_contacted_p: parseInt(item.count_total) ? (parseInt(item.count_contacted) / parseInt(item.count_total)) * 100 : 0,
-      count_not_contacted_p: parseInt(item.count_total) ? (parseInt(item.count_not_contacted) / parseInt(item.count_total)) * 100 : 0,
-      dnq_p: parseInt(item.count_total) ? (parseInt(item.dnq) / parseInt(item.count_total)) * 100 : 0,
-      scheduled_p: parseInt(item.count_total) ? (parseInt(item.scheduled) / parseInt(item.count_total)) * 100 : 0,
-      consented_p: parseInt(item.count_total) ? (parseInt(item.consented) / parseInt(item.count_total)) * 100 : 0,
-      screen_failed_p: parseInt(item.count_total) ? (parseInt(item.screen_failed) / parseInt(item.count_total)) * 100 : 0,
-      randomized_p: parseInt(item.count_total) ? (parseInt(item.randomized) / parseInt(item.count_total)) * 100 : 0,
-      call_attempted_p: parseInt(item.count_total) ? (parseInt(item.call_attempted) / parseInt(item.count_total)) * 100 : 0,
+      count_contacted_p: parseInt(item.count_total) ? Math.round(((parseInt(item.count_contacted) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
+      count_not_contacted_p: parseInt(item.count_total) ? Math.round(((parseInt(item.count_not_contacted) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
+      dnq_p: parseInt(item.count_total) ? Math.round(((parseInt(item.dnq) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
+      scheduled_p: parseInt(item.count_total) ? Math.round(((parseInt(item.scheduled) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
+      consented_p: parseInt(item.count_total) ? Math.round(((parseInt(item.consented) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
+      screen_failed_p: parseInt(item.count_total) ? Math.round(((parseInt(item.screen_failed) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
+      randomized_p: parseInt(item.count_total) ? Math.round(((parseInt(item.randomized) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
+      call_attempted_p: parseInt(item.count_total) ? Math.round(((parseInt(item.call_attempted) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
     };
 
     return result;
@@ -73,6 +73,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
   }
 
   render() {
+    console.log(123, this.props);
     const protocolNumber = this.props.location.query.protocol || null;
     return (
       <div className="container-fluid sponsor-portal report-view-page">

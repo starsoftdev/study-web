@@ -251,6 +251,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                       deleting={deletedUser.deleting}
                       onDelete={this.deleteUser}
                       onSubmit={this.updateUser}
+                      isEdit
                     />
                   </div>
                 </div>
