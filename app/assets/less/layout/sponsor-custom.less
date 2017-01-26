@@ -10,6 +10,71 @@
 	  		z-index: 81;
 		}
 	}
+
+  .search-controls{
+    .fields-holder{
+      width: calc(~'100% - 670px');
+    }
+  }
+
+  .fixed-table-head-relative{
+    position: relative !important;
+  }
+
+  .report-view-fixed-header{
+    top: 71px!important;
+    z-index: 5;
+  }
+
+  .report-view-fixed-header[style*=" fixed;"] {
+    border-bottom: 2px solid #ccc;
+  }
+
+  .report-view-header-container{
+    position: relative;
+
+    .table-left{
+      width: 844px;
+      background: #fff;
+      .table {
+        margin-bottom: 15px;
+      }
+    }
+
+    .table-right{
+      width: calc(~'100% - 844px');
+      left: 844px;
+      overflow: hidden;
+      background: #fff;
+      .table-right-inner{
+        overflow-x: scroll;
+        overflow-y: hidden;
+        margin-bottom: -17px;
+      }
+      .table {
+        width: 2239px;
+        max-width: none;
+        margin-bottom: 15px;
+      }
+    }
+
+
+
+    @media screen and (max-width: @psd) {
+
+      .table-left { width: 644px; }
+
+      .table-right .table {
+        width: 1666px;
+      }
+
+      .table-right{
+        width: calc(~'100% - 644px');
+        left: 644px;
+      }
+    }
+
+  }
 }
 	
 

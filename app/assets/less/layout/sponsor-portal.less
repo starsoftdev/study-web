@@ -325,7 +325,6 @@
 			top: 0;
 			left: 0;
 			width: 844px;
-			position: absolute;
 			
 			.table .number {
 				line-height: 20px;
@@ -370,7 +369,10 @@
 		}
 		
 		.table-right {
-			position: relative;
+			position: absolute;
+      width: calc(~'100% - 844px');
+      left: 844px;
+      overflow-x: scroll;
 			
 			.table {
 				width: 2239px;
@@ -527,6 +529,11 @@
 			.table-right .table {
 				width: 1666px;
 			}
+
+      .table-right{
+        width: calc(~'100% - 644px');
+        left: 644px;
+      }
 		}
 	}
 
