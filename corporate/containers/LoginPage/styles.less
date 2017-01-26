@@ -12,24 +12,31 @@
 
 label[for="remember"]{
   margin: 0 0 0 4px;
-}
+  line-height: 23px;
 
-.logo-holder{
-  &.loginPage{
-    @media screen and(max-width: @sm) {
-      position: absolute;
-      width: 100%;
-    }
+  @media screen and (max-width: @sm) {
+    line-height: 25px;
+  }
 
-    @media screen and(max-width: @xs) {
-      position: absolute;
-      width: 100%;
-    }
+  @media screen and (max-width: @xs) {
+    line-height: 23px;
   }
 }
 
-button.navbar-toggle{
-  z-index: 5;
+.navbar-header{
+  button{
+    &.navbar-toggle{
+      &:focus{
+        background-color: #fff !important;
+      }
+    }
+
+    &.btn-login{
+      .invisible{
+        visibility: hidden;
+      }
+    }
+  }
 }
 
 .alert {

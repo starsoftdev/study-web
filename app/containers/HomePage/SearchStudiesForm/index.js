@@ -39,12 +39,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
     const params = this.props.formValues;
     if (e && e.target) {
       params[e.target.name] = e.target.value;
-      if (this.state.searchTimer) {
-        clearTimeout(this.state.searchTimer);
-        this.setState({ searchTimer: null });
-      }
-      const timerH = setTimeout(() => { this.props.onSubmit(params, true); }, 500);
-      this.setState({ searchTimer: timerH });
+      this.props.onSubmit(params, true);
     } else {
       params[name] = e;
       this.props.onSubmit(params);
@@ -72,6 +67,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
               <Field
                 name="name"
                 component={Input}
+                onChange={(e) => this.performSearch(e, 'name')}
                 type="text"
                 className="keyword-search"
                 placeholder="Search"
