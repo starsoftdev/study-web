@@ -73,6 +73,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
   }
 
   render() {
+    console.log(123, this.props);
     const protocolNumber = this.props.location.query.protocol || null;
     return (
       <div className="container-fluid sponsor-portal report-view-page">
