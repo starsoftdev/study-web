@@ -3,11 +3,16 @@ import { Link } from 'react-router';
 import classNames from 'classnames';
 
 import NavBar from './NavBar';
+import LoggedUserMenu from './LoggedUserMenu';
+
 import studyKikLogo from 'assets/images/logo.svg';
 
 export default class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    isLoggedIn: React.PropTypes.bool,
+    userDataFetched: React.PropTypes.object,
     location: React.PropTypes.any,
+    logout: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -42,11 +47,14 @@ export default class Header extends React.Component { // eslint-disable-line rea
   }
 
   render() {
-    const { pathname } = this.props.location;
+    const { isLoggedIn, userDataFetched, location } = this.props;
     const { menuCollapsed } = this.state;
-    const isLoginPage = (pathname === '/login');
+    const isLoginPage = (location.pathname === '/login');
     return (
       <header id="header">
+        {isLoggedIn &&
+          <LoggedUserMenu user={userDataFetched} logout={this.props.logout}/>
+        }
         <img src={studyKikLogo} alt="Study KIK" width="260" height="38" className="visible-print-block logo-print" />
         <nav className="navbar navbar-default">
           <div className="container-fluid">
@@ -62,7 +70,9 @@ export default class Header extends React.Component { // eslint-disable-line rea
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
               </button>
-              <Link to="/login" className={classNames('btn btn-default btn-login', { invisible: isLoginPage })}>LOGIN</Link>
+              {!isLoggedIn &&
+                <Link to="/login" className={classNames('btn btn-default btn-login', { invisible: isLoginPage })}>LOGIN</Link>
+              }
               <div className={classNames('logo-holder', { loginPage: isLoginPage })}>
                 <Link to="/" className="navbar-brand" title="Study KIK">
                   <img src={studyKikLogo} alt="Study KIK" width="150" />
