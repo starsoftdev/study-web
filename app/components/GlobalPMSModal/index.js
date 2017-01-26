@@ -152,10 +152,11 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   handleKeyPress(e) {
-    const params = this.props.formValues;
-    console.log('Params', this.props.formValues);
-    this.props.searchSitePatients(params.name);
-    this.setState({ patientLoaded: true });
+    if (e) {
+      const params = this.props.formValues;
+      this.props.searchSitePatients(params.name);
+      this.setState({patientLoaded: true});
+    }
   }
 
   render() {
