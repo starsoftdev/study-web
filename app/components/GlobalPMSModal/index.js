@@ -6,10 +6,15 @@
 
 import React from 'react';
 import Sound from 'react-sound';
+import Form from 'react-bootstrap/lib/Form';
+import Button from 'react-bootstrap/lib/Button';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router';
 
+import Input from 'components/Input';
+import formValidator from './validator';
+import { selectGlobalPMSFormValues, selectGlobalPMSFormError } from './selectors';
 import CenteredModal from '../../components/CenteredModal/index';
 import Modal from 'react-bootstrap/lib/Modal';
 import {
@@ -24,7 +29,7 @@ import CallItem from './CallItem';
 import PatientItem from './PatientItem';
 
 import ChatForm from './ChatForm';
-import { change } from 'redux-form';
+import { change, Field, reduxForm } from 'redux-form';
 
 import {
   fetchSitePatients,
@@ -46,6 +51,9 @@ import _ from 'lodash';
 
 import alertSound from './sounds/message_received.wav';
 
+@reduxForm({ form: 'globalPMS', validate: formValidator })
+@connect(mapStateToProps, null)
+
 class GlobalPMSModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
@@ -64,6 +72,9 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     setChatTextValue: React.PropTypes.func,
     clientCredits: React.PropTypes.object,
     fetchClientCredits: React.PropTypes.func,
+    handleSubmit: React.PropTypes.func,
+    hasError: React.PropTypes.bool,
+    formValues: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -141,11 +152,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   handleKeyPress(e) {
-    const searchKey = this.searchKey;
-    if (e.key === 'Enter') {
-      this.props.searchSitePatients(searchKey.value);
-      this.setState({ patientLoaded: true });
-    }
+    const params = this.props.formValues;
+    console.log('Params', this.props.formValues);
+    this.props.searchSitePatients(params.name);
+    this.setState({ patientLoaded: true });
   }
 
   render() {
@@ -183,81 +193,87 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       protocolNumber = 'Protocol: '.concat(this.state.selectedPatient.protocol_number);
     }
     return (
-      <div>
-        <Sound
-          url={alertSound}
-          playStatus={this.state.playSound}
-          onFinishedPlaying={this.onSoundFinished}
-        />
-        <Modal
-          className="custom-modal global-pms"
-          id="chart-popup"
-          dialogComponentClass={CenteredModal}
-          show={this.props.showModal}
-          onHide={this.props.closeModal}
-          backdrop
-          keyboard
-        >
-          <Modal.Header>
-            <Modal.Title>PATIENT MESSAGING SUITE</Modal.Title>
-            <a className="lightbox-close close" onClick={this.props.closeModal}>
-              <i className="icomoon-icon_close" />
-            </a>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="holder clearfix">
-              <aside className="aside-chat">
-                <div className="scroll-holder">
-                  <div className="custom-select-drop">
-                    <div className="search-holder">
-                      <input
-                        className="form-control keyword-search"
-                        type="search"
-                        placeholder="Search"
-                        onKeyPress={this.handleKeyPress}
-                        ref={(searchKey) => {
-                          this.searchKey = searchKey;
-                        }}
-                      />
-                      <i className="icomoon-icon_search2" />
+      <Form className="form-search form-search-studies pull-left" onSubmit={this.props.handleSubmit}>
+        <div>
+          <Sound
+            url={alertSound}
+            playStatus={this.state.playSound}
+            onFinishedPlaying={this.onSoundFinished}
+          />
+          <Modal
+            className="custom-modal global-pms"
+            id="chart-popup"
+            dialogComponentClass={CenteredModal}
+            show={this.props.showModal}
+            onHide={this.props.closeModal}
+            backdrop
+            keyboard
+          >
+            <Modal.Header>
+              <Modal.Title>PATIENT MESSAGING SUITE</Modal.Title>
+              <a className="lightbox-close close" onClick={this.props.closeModal}>
+                <i className="icomoon-icon_close" />
+              </a>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="holder clearfix">
+                <aside className="aside-chat">
+                  <div className="scroll-holder">
+                    <div className="custom-select-drop">
+                      <div className="field">
+                        <Button className="btn-enter" type="submit">
+                          <i className="icomoon-icon_search2" />
+                        </Button>
+                        <Field
+                          name="name"
+                          component={Input}
+                          onChange={(e) => this.handleKeyPress(e)}
+                          type="text"
+                          className="keyword-search"
+                          placeholder="Search"
+                          ref={(searchKey) => {
+                            this.searchKey = searchKey;
+                          }}
+                        />
+                      </div>
                     </div>
+                    <ul className="tabset list-unstyled">
+                      {sitePatientsListContents}
+                    </ul>
                   </div>
-                  <ul className="tabset list-unstyled">
-                    {sitePatientsListContents}
-                  </ul>
+                </aside>
+                <div className="chatroom">
+                  <section className="chat-area" id="chat-room1">
+                    <header>
+                      <strong className="name">{this.state.selectedPatient.first_name} {this.state.selectedPatient.last_name}</strong>
+                      <Link to={`/app/studies/${this.state.selectedPatient.study_id}/sites/${this.state.selectedPatient.site_id}`} onClick={this.props.closeModal}>
+                        <span className="protocol">{protocolNumber}</span>
+                      </Link>
+                    </header>
+                    <div
+                      className="scroll-holder"
+                      ref={(scrollable) => {
+                        this.scrollable = scrollable;
+                      }}
+                    >
+                      <article className="post-msg">
+                        {patientMessageListContents}
+                      </article>
+                    </div>
+                    <footer>
+                      <ChatForm
+                        clientCredits={clientCredits}
+                        selectedPatient={this.state.selectedPatient}
+                        sendStudyPatientMessages={sendStudyPatientMessages}
+                      />
+                    </footer>
+                  </section>
                 </div>
-              </aside>
-              <div className="chatroom">
-                <section className="chat-area" id="chat-room1">
-                  <header>
-                    <strong className="name">{this.state.selectedPatient.first_name} {this.state.selectedPatient.last_name}</strong>
-                    <Link to={`/app/studies/${this.state.selectedPatient.study_id}/sites/${this.state.selectedPatient.site_id}`} onClick={this.props.closeModal}>
-                      <span className="protocol">{protocolNumber}</span>
-                    </Link>
-                  </header>
-                  <div
-                    className="scroll-holder"
-                    ref={(scrollable) => {
-                      this.scrollable = scrollable;
-                    }}
-                  >
-                    <article className="post-msg">
-                      {patientMessageListContents}
-                    </article>
-                  </div>
-                  <footer>
-                    <ChatForm
-                      clientCredits={clientCredits}
-                      selectedPatient={this.state.selectedPatient}
-                      sendStudyPatientMessages={sendStudyPatientMessages}
-                    />
-                  </footer>
-                </section>
               </div>
-            </div>
-          </Modal.Body>
-        </Modal>
-      </div>
+            </Modal.Body>
+          </Modal>
+        </div>
+      </Form>
     );
   }
 }
@@ -268,6 +284,8 @@ const mapStateToProps = createStructuredSelector({
   patientMessages: selectPatientMessages(),
   clientCredits: selectClientCredits(),
   socket: selectSocket(),
+  hasError: selectGlobalPMSFormError(),
+  formValues: selectGlobalPMSFormValues(),
 });
 
 function mapDispatchToProps(dispatch) {
