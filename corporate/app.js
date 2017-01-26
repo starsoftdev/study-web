@@ -11,7 +11,7 @@ import configureStore from '../app/store';
 
 import { default as Corporate } from './containers/Corporate';
 import { default as Home } from './containers/HomePage';
-import { default as LoginPage } from './containers/LoginPage';
+import { default as LoginPage } from '../app/containers/LoginPage';
 import { default as ContactPage } from './containers/ContactPage';
 import { default as LandingPage } from './containers/LandingPage';
 import { default as NotFound } from './containers/NotFoundPage';
