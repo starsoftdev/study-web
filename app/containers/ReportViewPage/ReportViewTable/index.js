@@ -141,8 +141,8 @@ export class ReportViewTable extends React.Component {
       const percentage = this.props.getPercentageObject(item);
 
       return (<tr className="" key={index}>
-        <td>{item.level_date_from}</td>
-        <td>{item.level_date_to}</td>
+        <td>{item.levelDateFrom}</td>
+        <td>{item.levelDateTo}</td>
         <td>{ (item.last_login_time ? moment.utc(item.last_login_time).tz('EST').format('MM/DD/YY [at] HH:mm A') : '')}</td>
         <td>{item.count_total}</td>
         <td><span className="text">{item.count_contacted}<span className="small">{`(${percentage.count_contacted_p}%)`}</span></span></td>
