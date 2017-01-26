@@ -203,7 +203,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             <button type="submit" className="btn btn-default btn-add-row" disabled={savedSite.saving}>
               {savedSite.saving
                 ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
-                : <span>Update</span>
+                : <span>{isEdit ? 'Update' : 'Submit'}</span>
               }
             </button>
           </div>
