@@ -120,7 +120,6 @@ const selectStudyLevels = () => createSelector(
   selectGlobal(),
   (substate) => {
     const levels = get(substate, 'baseData.levels', []);
-    console.log(levels);
     return map(levels, e => (
       {
         id: e.id,

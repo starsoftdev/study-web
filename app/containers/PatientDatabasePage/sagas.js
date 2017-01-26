@@ -109,6 +109,14 @@ export function* fetchPatientsWatcher() {
                 lastName: {
                   like: `%${searchParams.name}%`,
                 },
+              }, {
+                email: {
+                  like: `%${searchParams.name}%`,
+                },
+              }, {
+                phone: {
+                  like: `%${searchParams.name}%`,
+                },
               },
             ],
           });
