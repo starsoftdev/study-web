@@ -89,6 +89,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       patientLoaded: true,
       socketBinded: false,
       playSound: Sound.status.STOPPED,
+      searchTimer: null,
     };
   }
 
@@ -152,11 +153,20 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   handleKeyPress(e) {
-    if (e) {
-      const params = this.props.formValues;
-      this.props.searchSitePatients(params.name);
-      this.setState({ patientLoaded: true });
+    let value;
+    if (e && e.target) {
+      value = e.target.value;
+    } else {
+      value = e;
     }
+    if (this.state.searchTimer) {
+      clearTimeout(this.state.searchTimer);
+      this.setState({ searchTimer: null });
+    }
+    this.props.searchSitePatients(value);
+    const timerH = setTimeout(() => { this.setState({ patientLoaded: true }); }, 500);
+    this.setState({ searchTimer: timerH });
+
   }
 
   render() {

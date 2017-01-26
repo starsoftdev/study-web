@@ -283,15 +283,19 @@ class TextBlastModal extends React.Component {
                 <div className="sub-holder">
                   <div className="custom-select-drop">
                     <div className="search-holder">
-                      <Field
-                        name="search"
-                        type="search"
-                        component={Input}
-                        onChange={this.filterPatients}
-                        className="keyword-search"
-                      />
-                      <i className="icomoon-icon_search2" />
-                      {this.renderPatientSearchList()}
+                      <div className="field">
+                        <Field
+                          name="search"
+                          type="search"
+                          component={Input}
+                          onChange={this.filterPatients}
+                          className="keyword-search"
+                        />
+                        <Button className="btn-enter" type="submit">
+                          <i className="icomoon-icon_search2" />
+                        </Button>
+                        {this.renderPatientSearchList()}
+                      </div>
                     </div>
                   </div>
                   <div className="category">
