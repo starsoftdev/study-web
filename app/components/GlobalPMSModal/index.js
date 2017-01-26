@@ -155,7 +155,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     if (e) {
       const params = this.props.formValues;
       this.props.searchSitePatients(params.name);
-      this.setState({patientLoaded: true});
+      this.setState({ patientLoaded: true });
     }
   }
 
