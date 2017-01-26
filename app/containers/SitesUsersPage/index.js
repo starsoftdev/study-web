@@ -127,7 +127,8 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
   }
 
   handleSiteQueryChange(index) {
-    const sel = parseInt(index);
+    const sel = parseInt(index !== null ? index : 0);
+    console.log('sel', sel);
     if (sel === 0) {
       this.setState({
         siteName: '',
@@ -266,7 +267,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
             <ClientRolesList filterMethod={this.state.roleFilterMethod} />
           </section>
           <section className="table-holder form-group client-sites-holder">
-            <ClientSitesList filterMethod={this.state.siteFilterMethod} />
+            <ClientSitesList filterMethod={this.state.siteFilterMethod} userFilterQuery={this.state.userName} />
           </section>
         </div>
       </div>
