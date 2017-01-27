@@ -108,7 +108,6 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     const { siteLocations, indications, studyLevels, callTracking, formValues } = this.props;
     const { fileName } = this.state;
 
-    _.reverse(studyLevels);
     if (!_.find(siteLocations, (o) => (o.id === 'add-new-location'))) {
       siteLocations.push({
         id: 'add-new-location',
