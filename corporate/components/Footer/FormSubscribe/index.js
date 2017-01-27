@@ -8,6 +8,10 @@ export default class FormSubscribe extends React.Component { // eslint-disable-l
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
+    this.onMouseOverHandler = this.onMouseOverHandler.bind(this);
+    this.onMouseOutHandler = this.onMouseOutHandler.bind(this);
+    this.handleCollapseProcess = this.handleCollapseProcess.bind(this);
+    this.handleCollapseEnd = this.handleCollapseEnd.bind(this);
 
     this.state = {
       open: false,
@@ -21,22 +25,48 @@ export default class FormSubscribe extends React.Component { // eslint-disable-l
     });
   }
 
+  // TODO: need to refactor DOM operations below
+  handleCollapseProcess(ev) {
+    document.getElementById('closeFormButton').classList.add('focused');
+  }
+
+  handleCollapseEnd(ev) {
+    document.getElementById('closeFormButton').classList.remove('focused');
+  }
+
+  onMouseOverHandler(ev) {
+    document.getElementById('closeFormButton').classList.add('focused');
+  }
+
+  onMouseOutHandler(ev) {
+    document.getElementById('closeFormButton').classList.remove('focused');
+  }
+
   render() {
     return (
       <form className="form-subscribe" data-formvalidation="true">
         <div className="container">
           <strong className="title pull-left">
-            <a
+            <button
               className="btn btn-primary close collapsed pull-right visible-xs"
-              href="#"
               ref={(button) => { this.button = button; }}
+              id="closeFormButton"
               onClick={this.handleClick}
+              onMouseOut={this.onMouseOutHandler}
+              onMouseOver={this.onMouseOverHandler}
             >
               <span className="plus"></span>
-            </a>
+            </button>
             Learn About Future Clinical Trials
           </strong>
-          <Collapse className="holder" in={this.state.open}>
+          <Collapse
+            className="holder"
+            in={this.state.open}
+            onEnter={this.handleCollapseProcess}
+            onExit={this.handleCollapseProcess}
+            onEntered={this.handleCollapseEnd}
+            onExited={this.handleCollapseEnd}
+          >
             <Well>
               <input type="submit" className="btn btn-default pull-right" value="submit" />
               <div className="fields-area">
