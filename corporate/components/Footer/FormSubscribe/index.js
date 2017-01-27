@@ -22,19 +22,19 @@ export default class FormSubscribe extends React.Component {
   }
 
   // TODO: need to refactor DOM operations below
-  handleCollapseProcess() {
-    document.getElementById('closeFormButton').classList.add('focused');
-  }
-
-  handleCollapseEnd() {
-    document.getElementById('closeFormButton').classList.remove('focused');
-  }
-
   onMouseOverHandler() {
     document.getElementById('closeFormButton').classList.add('focused');
   }
 
   onMouseOutHandler() {
+    document.getElementById('closeFormButton').classList.remove('focused');
+  }
+
+  handleCollapseProcess() {
+    document.getElementById('closeFormButton').classList.add('focused');
+  }
+
+  handleCollapseEnd() {
     document.getElementById('closeFormButton').classList.remove('focused');
   }
 
