@@ -38,6 +38,9 @@
       background: #fff;
       .table {
         margin-bottom: 15px;
+        > thead > tr > th {
+          vertical-align: top;
+        }
       }
     }
 
@@ -55,6 +58,9 @@
         width: 2239px;
         max-width: none;
         margin-bottom: 15px;
+        > thead > tr > th {
+          vertical-align: top;
+        }
       }
     }
 
@@ -75,7 +81,25 @@
     }
 
   }
+
+
+  .table-area{
+    .active-table-row{
+      background: #f1f1f1 !important;
+      font-weight: bold;
+      &:hover {
+        > td{
+          background: #f1f1f1 !important;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
 }
+
+
+
 	
 
 	

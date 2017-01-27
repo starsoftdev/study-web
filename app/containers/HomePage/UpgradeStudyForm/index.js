@@ -174,7 +174,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   render() {
     const { studyLevels, selectedIndicationLevelPrice, callTracking, availPhoneNumbers, selectedStudy } = this.props;
 
-    _.reverse(studyLevels);
+    console.log(studyLevels);
 
     let filteredLevels = studyLevels;
     let isDisabled = false;

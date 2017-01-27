@@ -22,7 +22,6 @@ import {
   selectLeadsCount,
 } from './selectors';
 import formValidator from './validator';
-import _ from 'lodash';
 
 const mapStateToProps = createStructuredSelector({
   callTracking: selectCallTracking(),
@@ -63,7 +62,6 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
   render() {
     const { siteLocations, indications, studyLevels } = this.props;
     const { callTracking } = this.props;
-    _.reverse(studyLevels);
 
     return (
       <div className="form-study">
