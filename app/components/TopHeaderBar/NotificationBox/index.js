@@ -102,7 +102,7 @@ class NotificationBox extends React.Component {
                 </ul>
               </div>
               <div className="btn-block text-center">
-                <Link onClick={this.seeAllClick} className="hover-underline" to="/notifications">
+                <Link onClick={this.seeAllClick} className="hover-underline" to="/app/notifications">
                   See All
                 </Link>
               </div>
