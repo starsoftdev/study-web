@@ -214,15 +214,23 @@
 /* logged-user-area */
 .logged-user-area {
 	top: 0;
-	right: 0;
-	z-index: 2;
-	position: absolute;
-	
+  right: 0;
+  z-index: 2;
+  width: 239px;
+  position: absolute;
+
 	.opener {
 		.font(18px);
 		color: #101010;
 		display: block;
-		padding: 17px 20px 18px;
+		padding: 20px 11px 15px 19px;
+
+    span.text{
+      width: 120px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 		
 		> * {
 			.align(@align: middle);
@@ -311,6 +319,7 @@
 	
 	@media screen and (max-width: @xs) {
 		right: auto;
+    width: 100%;
 		position: relative;
 		
 		.opener {
@@ -318,6 +327,13 @@
 			font-weight: 700;
 			background: #00afef;
 			padding: 6px 20px 10px;
+
+      span.text{
+        width: auto;
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: clip;
+      }
 			
 			.caret { border-top-color: #fff; }
 		}
