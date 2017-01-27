@@ -1,7 +1,10 @@
+/* eslint-disable react/prefer-stateless-function */
+/* eslint-disable jsx-a11y/mouse-events-have-key-events */
+
 import React from 'react';
 import { Well, Collapse } from 'react-bootstrap';
 
-export default class FormSubscribe extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export default class FormSubscribe extends React.Component {
   static propTypes = {};
 
   constructor(props) {
@@ -18,28 +21,28 @@ export default class FormSubscribe extends React.Component { // eslint-disable-l
     };
   }
 
+  // TODO: need to refactor DOM operations below
+  handleCollapseProcess() {
+    document.getElementById('closeFormButton').classList.add('focused');
+  }
+
+  handleCollapseEnd() {
+    document.getElementById('closeFormButton').classList.remove('focused');
+  }
+
+  onMouseOverHandler() {
+    document.getElementById('closeFormButton').classList.add('focused');
+  }
+
+  onMouseOutHandler() {
+    document.getElementById('closeFormButton').classList.remove('focused');
+  }
+
   handleClick(ev) {
     ev.preventDefault();
     this.setState({ open: !this.state.open }, () => {
       this.button.classList.toggle('collapsed');
     });
-  }
-
-  // TODO: need to refactor DOM operations below
-  handleCollapseProcess(ev) {
-    document.getElementById('closeFormButton').classList.add('focused');
-  }
-
-  handleCollapseEnd(ev) {
-    document.getElementById('closeFormButton').classList.remove('focused');
-  }
-
-  onMouseOverHandler(ev) {
-    document.getElementById('closeFormButton').classList.add('focused');
-  }
-
-  onMouseOutHandler(ev) {
-    document.getElementById('closeFormButton').classList.remove('focused');
   }
 
   render() {
