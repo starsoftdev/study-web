@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
+import { getLocalTime } from 'utils/time';
 
 import defaultImage from 'assets/images/Default-User-Img-Dr.png';
 
@@ -9,15 +10,19 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
     points: PropTypes.number,
     balance: PropTypes.number,
     site_id: PropTypes.number,
-    userName: PropTypes.string,
+    rewardData: PropTypes.string,
     userImageURL: PropTypes.string,
-    description: PropTypes.string,
-    date: PropTypes.string,
-    time: PropTypes.string,
+    created: PropTypes.string,
+    timezone: PropTypes.string,
   };
 
   render() {
-    const { balance, points, userName, userImageURL, description, date, time } = this.props;
+    const { balance, points, userImageURL, rewardData, created, timezone } = this.props;
+    const localTime = getLocalTime(created, timezone);
+    const date = localTime.format('MM/DD/YYYY');
+    const time = localTime.format('hh:mm A');
+    console.log ('---rewardData', rewardData);
+    
     let content = null;
     content = (
       <tr>
@@ -27,13 +32,13 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
               <img src={userImageURL || defaultImage} alt="" />
             </div>
             <div className="desc">
-              <p><strong>{ userName }</strong> { description }</p>
+              <p><strong></strong></p>
             </div>
           </div>
         </td>
         <td>{ date }</td>
         <td>{ time } </td>
-        <td>{ points }</td>
+        <td>{ points > 0 ? `+${points}` : points }</td>
         <td>{ balance }</td>
       </tr>
     );
