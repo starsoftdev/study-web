@@ -4,13 +4,11 @@ import { createStructuredSelector } from 'reselect';
 
 import RewardModal from 'components/RewardModal';
 
-import { selectCurrentUser, selectSitePatients, selectUserSiteLocations } from 'containers/App/selectors';
-import { submitForm } from 'containers/RewardsPage/actions';
+import { selectCurrentUser, selectSitePatients, selectUserSiteLocations, selectRewardsBalance } from 'containers/App/selectors';
+import { submitForm, fetchRewardsBalance } from 'containers/RewardsPage/actions';
 
 import { fetchPatientSignUps, fetchPatientMessages } from '../actions';
 import { selectPatientSignUps, selectPatientMessages } from '../selectors';
-import { fetchRewardsBalance } from 'containers/App/actions';
-import { selectRewardsBalance } from 'containers/App/selectors';
 
 import graph from 'assets/images/graph.svg';
 

@@ -348,7 +348,6 @@ export function* homePageSaga() {
   if (options.payload.pathname !== '/') {
     yield cancel(watcherA);
     yield cancel(watcherB);
-    yield cancel(watcherC);
     yield cancel(watcherD);
     yield cancel(watcherE);
     yield cancel(watcherF);
