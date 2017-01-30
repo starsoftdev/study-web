@@ -4,8 +4,6 @@ export const FETCH_PATIENT_SIGN_UPS                      = 'HomePage/Dashboard/F
 export const FETCH_PATIENT_SIGN_UPS_SUCCEESS             = 'HomePage/Dashboard/FETCH_PATIENT_SIGN_UPS_SUCCEESS';
 export const FETCH_PATIENT_MESSAGES                      = 'HomePage/Dashboard/FETCH_PATIENT_MESSAGES';
 export const FETCH_PATIENT_MESSAGES_SUCCEESS             = 'HomePage/Dashboard/FETCH_PATIENT_MESSAGES_SUCCEESS';
-export const FETCH_REWARDS_POINT                         = 'HomePage/Dashboard/FETCH_REWARDS_POINT';
-export const FETCH_REWARDS_POINT_SUCCEESS                = 'HomePage/Dashboard/FETCH_REWARDS_POINT_SUCCEESS';
 export const FETCH_PRINCIPAL_INVESTIGATOR_TOTALS         = 'HomePage/Dashboard/FETCH_PRINCIPAL_INVESTIGATOR_TOTALS';
 export const FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS	= 'HomePage/Dashboard/FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS';
 

@@ -143,6 +143,11 @@ const selectRewards = () => createSelector(
   (substate) => get(substate, 'baseData.rewards', [])
 );
 
+const selectRewardsBalance = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.rewardsBalance', [])
+);
+
 const selectCards = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.cards', {})
@@ -292,6 +297,7 @@ export {
   selectStudyLevels,
   selectCoupon,
   selectRewards,
+  selectRewardsBalance,
   selectCards,
   selectSavedCard,
   selectDeletedCard,

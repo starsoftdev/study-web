@@ -13,6 +13,7 @@ import {
   FETCH_LEVELS,
   FETCH_COUPON,
   FETCH_REWARDS,
+  FETCH_REWARDS_BALANCE,
   FETCH_CARDS,
   SAVE_CARD,
   DELETE_CARD,
@@ -51,6 +52,8 @@ import {
   couponFetchingError,
   rewardsFetched,
   rewardsFetchingError,
+  rewardsBalanceFetched,
+  rewardsBalanceFetchingError,
   cardsFetched,
   cardsFetchingError,
   cardSaved,
@@ -102,6 +105,7 @@ export default function* baseDataSaga() {
   yield fork(fetchCouponWatcher);
   yield fork(fetchCardsWatcher);
   yield fork(fetchRewardsWatcher);
+  yield fork(fetchRewardsBalanceWatcher);
   yield fork(saveCardWatcher);
   yield fork(deleteCardWatcher);
   yield fork(addCreditsWatcher);
@@ -224,14 +228,37 @@ export function* fetchCouponWatcher() {
 export function* fetchRewardsWatcher() {
   while (true) {
     try {
-      yield take(FETCH_REWARDS);
-
-      const requestURL = `${API_URL}/rewardBalances/get_aggregated_reward_balances`;
-      const response = yield call(request, requestURL);
+      let { siteId } = yield take(FETCH_REWARDS);
+      let options = {};
+      const requestURL = `${API_URL}/rewards`;
+      if (siteId) {
+        options = {
+          query: { filter: `{"where":{"site_id":${siteId}}}` },
+        };
+      }
+      const response = yield call(request, requestURL, options);
 
       yield put(rewardsFetched(response));
     } catch (err) {
       yield put(rewardsFetchingError(err));
+    }
+  }
+}
+
+export function* fetchRewardsBalanceWatcher() {
+  while (true) {
+    try {
+      let { siteId } = yield take(FETCH_REWARDS_BALANCE);
+      siteId = siteId || 0;
+      const requestURL = `${API_URL}/rewards/balance`;
+      const options = {
+        query: { siteId },
+      };
+      const response = yield call(request, requestURL, options);
+
+      yield put(rewardsBalanceFetched(response));
+    } catch (err) {
+      yield put(rewardsBalanceFetchingError(err));
     }
   }
 }

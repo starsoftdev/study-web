@@ -12,7 +12,6 @@ import composeQueryString from 'utils/composeQueryString';
 import {
   FETCH_PATIENT_SIGN_UPS,
   FETCH_PATIENT_MESSAGES,
-  FETCH_REWARDS_POINT,
   FETCH_PRINCIPAL_INVESTIGATOR_TOTALS,
   FETCH_STUDIES,
   FETCH_PROTOCOLS,
@@ -28,7 +27,6 @@ import {
 import {
   fetchPatientSignUpsSucceeded,
   fetchPatientMessagesSucceeded,
-  fetchRewardsPointSucceeded,
   fetchPrincipalInvestigatorTotalsSucceeded,
   studiesFetched,
   studiesFetchingError,
@@ -115,22 +113,6 @@ export function* fetchPatientMessagesWorker(action) {
     yield put(fetchPatientMessagesSucceeded(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patient messages');
-    yield put(toastrActions.error('', errorMessage));
-  }
-}
-
-export function* fetchRewardsPointWatcher() {
-  yield* takeLatest(FETCH_REWARDS_POINT, fetchRewardsPointWorker);
-}
-
-export function* fetchRewardsPointWorker(action) {
-  try {
-    const requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}`;
-    const response = yield call(request, requestURL);
-
-    yield put(fetchRewardsPointSucceeded(response));
-  } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching rewards.');
     yield put(toastrActions.error('', errorMessage));
   }
 }
@@ -350,7 +332,6 @@ export function* editStudyWorker(action) {
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   const watcherB = yield fork(fetchPatientMessagesWatcher);
-  const watcherC = yield fork(fetchRewardsPointWatcher);
   const watcherD = yield fork(fetchStudiesWatcher);
   const watcherE = yield fork(fetchIndicationLevelPriceWatcher);
   const watcherF = yield fork(renewStudyWatcher);
