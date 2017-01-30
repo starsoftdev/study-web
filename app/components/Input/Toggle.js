@@ -88,7 +88,7 @@ Toggle.propTypes = {
   className: PropTypes.string,
   meta: PropTypes.object.isRequired,
   onChange: PropTypes.func,
-  disabled: PropTypes.boolean,
+  disabled: PropTypes.bool,
 };
 
 export default Toggle;
