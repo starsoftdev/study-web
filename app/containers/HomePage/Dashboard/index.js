@@ -5,7 +5,8 @@ import { createStructuredSelector } from 'reselect';
 import RewardModal from 'components/RewardModal';
 
 import { selectCurrentUser, selectSitePatients, selectUserSiteLocations, selectRewardsBalance } from 'containers/App/selectors';
-import { submitForm, fetchRewardsBalance } from 'containers/RewardsPage/actions';
+import { fetchRewardsBalance } from 'containers/App/actions';
+import { submitForm } from 'containers/RewardsPage/actions';
 
 import { fetchPatientSignUps, fetchPatientMessages } from '../actions';
 import { selectPatientSignUps, selectPatientMessages } from '../selectors';
