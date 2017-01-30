@@ -40,6 +40,10 @@ import {
   SEND_STUDY_PATIENT_MESSAGES,
 } from 'containers/GlobalNotifications/constants';
 
+import {
+  FETCH_REWARDS_SUCCESS,
+} from 'containers/app/constants';
+
 const initialState = {
   patientSignUps: {
     today: 0,
@@ -130,10 +134,10 @@ export default function homePageReducer(state = initialState, action) {
           total: payload.total,
         },
       };
-    case FETCH_REWARDS_POINT_SUCCEESS:
+    case FETCH_REWARDS_SUCCESS:
       return {
         ...state,
-        rewardsPoint: action.payload.rewardPoints,
+        rewardsPoint: action.payload,
       };
     case FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS:
       return {

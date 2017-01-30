@@ -29,6 +29,10 @@ import {
   FETCH_REWARDS_SUCCESS,
   FETCH_REWARDS_ERROR,
 
+  FETCH_REWARDS_BALANCE,
+  FETCH_REWARDS_BALANCE_SUCCESS,
+  FETCH_REWARDS_BALANCE_ERROR,
+
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
@@ -274,10 +278,10 @@ export function clearCoupon() {
 // ///////////////////////////////////////////
 // fetch rewards
 // ///////////////////////////////////////////
-export function fetchRewards(customerId) {
+export function fetchRewards(siteId) {
   return {
     type: FETCH_REWARDS,
-    customerId,
+    siteId,
   };
 }
 
@@ -291,6 +295,30 @@ export function rewardsFetched(payload) {
 export function rewardsFetchingError(payload) {
   return {
     type: FETCH_REWARDS_ERROR,
+    payload,
+  };
+}
+
+// ///////////////////////////////////////////
+// fetch rewards balance
+// ///////////////////////////////////////////
+export function fetchRewardsBalance(siteId) {
+  return {
+    type: FETCH_REWARDS_BALANCE,
+    siteId,
+  };
+}
+
+export function rewardsBalanceFetched(payload) {
+  return {
+    type: FETCH_REWARDS_BALANCE_SUCCESS,
+    payload,
+  };
+}
+
+export function rewardsBalanceFetchingError(payload) {
+  return {
+    type: FETCH_REWARDS_BALANCE_ERROR,
     payload,
   };
 }
