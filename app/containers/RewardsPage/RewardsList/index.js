@@ -5,6 +5,7 @@ import RewardListItem from './RewardListItem';
 
 class RewardsList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    currentUser: PropTypes.object,
     rewards: PropTypes.array,
     paginationOptions: PropTypes.object,
     setActiveSort: PropTypes.func,
@@ -32,7 +33,7 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { rewards } = this.props;
+    const { currentUser, rewards } = this.props;
     let rewardsListContents = null;
 
     if (rewards.length > 0) {
@@ -46,6 +47,7 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
       rewardsListContents = sorted.map((item, index) => (
         <RewardListItem
           {...item}
+          timezone={currentUser.timezone}
           key={index}
           index={index}
         />

@@ -112,7 +112,8 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     return null;
   }
   render() {
-    const { siteLocations, pickReward } = this.props;
+    const { siteLocations, pickReward, currentUser } = this.props;
+
     return (
       <div className="container-fluid">
         <Helmet title="Rewards - StudyKIK" />
@@ -274,6 +275,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
           <section className="table-holder">
             <RewardsList
+              currentUser={currentUser}
               rewards={this.props.rewards}
               paginationOptions={this.props.paginationOptions}
               setActiveSort={this.props.setActiveSort}
