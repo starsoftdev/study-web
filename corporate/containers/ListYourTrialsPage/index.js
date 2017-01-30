@@ -35,10 +35,6 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
 
   static propTypes = {};
 
-  constructor(props) {
-    super(props);
-  }
-
   componentWillMount() {
   }
 
@@ -67,7 +63,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                 <a href="#" className="btn btn-deep btn-block">LIST NOW!</a>
                 <a href="#" className="btn btn-deep btn-block small">GET PROPOSAL</a>
                 <div className="img-holder">
-                  <image src={img1} alt="imag1" width="200" height="284" className="img-responsive svg" />
+                  <img src={img1} alt="img1" width="200" height="284" className="img-responsive svg" />
                 </div>
               </div>
             </div>
