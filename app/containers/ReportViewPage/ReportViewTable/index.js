@@ -22,8 +22,15 @@ export class ReportViewTable extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      hoveredRowIndex: null,
+    };
+
     this.handleScroll = this.handleScroll.bind(this);
     this.sortBy = this.sortBy.bind(this);
+
+    this.mouseOverRow = this.mouseOverRow.bind(this);
+    this.mouseOutRow = this.mouseOutRow.bind(this);
   }
 
   componentDidMount() {
@@ -60,6 +67,14 @@ export class ReportViewTable extends React.Component {
       return o[sort || defaultSort];
     }], [dir]);
     this.props.sortReportsSuccess(sortedPatients);
+  }
+
+  mouseOverRow(e, index) {
+    this.setState({ hoveredRowIndex: index });
+  }
+
+  mouseOutRow() {
+    this.setState({ hoveredRowIndex: null });
   }
 
 
@@ -115,24 +130,34 @@ export class ReportViewTable extends React.Component {
         inActive++;
       }
 
-      return (<tr key={index}>
-        <td>{item.site_name}</td>
-        <td>
-          <span className="name" data-placement="top" data-toggle="tooltip" title="" data-original-title="Palmer Tech">{`${item.principalinvestigatorfirstname} ${item.principalinvestigatorlastname}`}</span>
-        </td>
-        <td>{item.level}</td>
-        <td>
-          <Field
-            name={`status_${item.site_id}_${item.study_id}`}
-            component={Toggle}
-            className="field"
-          />
-        </td>
-        <td>
-          <span className="number">{item.credits}</span>
-          <a href="#add-credits" className="lightbox-opener btn-plus">+</a>
-        </td>
-      </tr>);
+      return (
+        <tr
+          onMouseOver={(e) => this.mouseOverRow(e, index)}
+          onMouseOut={this.mouseOutRow}
+          onFocus={(e) => this.mouseOverRow(e, index)}
+          onBlur={this.mouseOutRow}
+          key={index}
+
+          className={(this.state.hoveredRowIndex === index) ? 'active-table-row' : ''}
+        >
+          <td>{item.site_name}</td>
+          <td>
+            <span className="name" data-placement="top" data-toggle="tooltip" title="" data-original-title="Palmer Tech">{`${item.principalinvestigatorfirstname} ${item.principalinvestigatorlastname}`}</span>
+          </td>
+          <td>{item.level}</td>
+          <td>
+            <Field
+              name={`status_${item.site_id}_${item.study_id}`}
+              component={Toggle}
+              className="field"
+            />
+          </td>
+          <td>
+            <span className="number">{item.credits}</span>
+            <a disabled className="btn lightbox-opener btn-plus">+</a>
+          </td>
+        </tr>
+      );
     }
 
     );
@@ -140,25 +165,35 @@ export class ReportViewTable extends React.Component {
     const rightPartTable = reportsList.details.map((item, index) => {
       const percentage = this.props.getPercentageObject(item);
 
-      return (<tr className="" key={index}>
-        <td>{item.levelDateFrom}</td>
-        <td>{item.levelDateTo}</td>
-        <td>{ (item.last_login_time ? moment.utc(item.last_login_time).tz('EST').format('MM/DD/YY [at] HH:mm A') : '')}</td>
-        <td>{item.count_total}</td>
-        <td><span className="text">{item.count_contacted}<span className="small">{`(${percentage.count_contacted_p}%)`}</span></span></td>
-        <td><span className="text">{item.count_not_contacted}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></td>
-        <td><span className="text">{item.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></td>
-        <td><span className="text">{item.scheduled}<span className="small">{`(${percentage.scheduled_p}%)`}</span></span></td>
-        <td><span className="text">{item.consented}<span className="small">{`(${percentage.consented_p}%)`}</span></span></td>
-        <td><span className="text">{item.screen_failed}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span></td>
-        <td><span className="text">{item.randomized}<span className="small">{`(${percentage.randomized_p}%)`}</span></span></td>
+      return (
+        <tr
+          onMouseOver={(e) => this.mouseOverRow(e, index)}
+          onMouseOut={this.mouseOutRow}
+          onFocus={(e) => this.mouseOverRow(e, index)}
+          onBlur={this.mouseOutRow}
+          key={index}
+
+          className={(this.state.hoveredRowIndex === index) ? 'active-table-row' : ''}
+        >
+          <td>{item.levelDateFrom}</td>
+          <td>{item.levelDateTo}</td>
+          <td>{ (item.last_login_time ? moment.utc(item.last_login_time).tz('EST').format('MM/DD/YY [at] HH:mm A') : '')}</td>
+          <td>{item.count_total}</td>
+          <td><span className="text">{item.count_contacted}<span className="small">{`(${percentage.count_contacted_p}%)`}</span></span></td>
+          <td><span className="text">{item.count_not_contacted}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></td>
+          <td><span className="text">{item.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></td>
+          <td><span className="text">{item.scheduled}<span className="small">{`(${percentage.scheduled_p}%)`}</span></span></td>
+          <td><span className="text">{item.consented}<span className="small">{`(${percentage.consented_p}%)`}</span></span></td>
+          <td><span className="text">{item.screen_failed}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span></td>
+          <td><span className="text">{item.randomized}<span className="small">{`(${percentage.randomized_p}%)`}</span></span></td>
 
 
-        <td>{item.outbound_text}</td>
-        <td>{item.inbound_text}</td>
-        <td>{item.unread_text}</td>
-        <td>{item.outbound_emails}</td>
-      </tr>);
+          <td>{item.outbound_text}</td>
+          <td>{item.inbound_text}</td>
+          <td>{item.unread_text}</td>
+          <td>{item.outbound_emails}</td>
+        </tr>
+      );
     }
     );
 
