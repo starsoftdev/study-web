@@ -83,7 +83,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     if (currentUser) {
       this.props.fetchRewards(currentUser.roleForClient.site_id);
       this.props.fetchRewardsBalance(currentUser.roleForClient.site_id);
-    }    
+    }
   }
 
   openRewardModal(value) {

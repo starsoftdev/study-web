@@ -228,7 +228,7 @@ export function* fetchCouponWatcher() {
 export function* fetchRewardsWatcher() {
   while (true) {
     try {
-      let { siteId } = yield take(FETCH_REWARDS);
+      const { siteId } = yield take(FETCH_REWARDS);
       let options = {};
       const requestURL = `${API_URL}/rewards`;
       if (siteId) {
