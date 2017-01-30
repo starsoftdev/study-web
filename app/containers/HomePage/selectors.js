@@ -17,11 +17,6 @@ const selectPatientMessages = () => createSelector(
   substate => substate.patientMessages
 );
 
-const selectRewardsPoint = () => createSelector(
-  selectHomePageDomain(),
-  substate => substate.rewardsPoint
-);
-
 const selectPrincipalInvestigatorTotals = () => createSelector(
   selectHomePageDomain(),
   substate => substate.principalInvestigatorTotals
@@ -77,7 +72,6 @@ export {
   selectHomePageDomain,
   selectPatientSignUps,
   selectPatientMessages,
-  selectRewardsPoint,
   selectPrincipalInvestigatorTotals,
   selectStudies,
   selectProtocols,
