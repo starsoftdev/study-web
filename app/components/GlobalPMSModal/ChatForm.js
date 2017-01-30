@@ -66,8 +66,9 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
   }
 
   render() {
-    const { handleSubmit, clientCredits } = this.props;
+    const { handleSubmit, clientCredits, selectedPatient } = this.props;
     const disabled = (clientCredits.details.customerCredits === 0 || clientCredits.details.customerCredits === null);
+    const unsubscribed = (selectedPatient) ? selectedPatient.unsubscribed : null;
     return (
       <Form onSubmit={handleSubmit(this.sendMessage)}>
         <fieldset>
@@ -77,9 +78,9 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
             className="form-control"
             placeholder="Type a message..."
             maxLength="160"
-            disabled={this.props.selectedPatient.id <= 0}
+            disabled={disabled || unsubscribed || this.props.selectedPatient.id <= 0}
           />
-          <Button type="submit" disabled={disabled || this.props.selectedPatient.id <= 0}>
+          <Button type="submit" disabled={disabled || unsubscribed || this.props.selectedPatient.id <= 0}>
             Send
           </Button>
         </fieldset>
