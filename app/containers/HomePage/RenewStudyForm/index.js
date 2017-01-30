@@ -259,8 +259,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   render() {
     const { studyLevels, campaignLength, selectedIndicationLevelPrice } = this.props;
 
-    _.reverse(studyLevels);
-
     const currentDate = moment();
 
     const addOns = this.generateRenewStudyShoppingCartAddOns();
