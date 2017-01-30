@@ -34,9 +34,10 @@ const labelStyle = {
   paddingRight: 0,
 };
 
-function Toggle({ input, name, className, onChange, meta: { touched, error, active } }) {
+function Toggle({ input, name, className, onChange, disabled, meta: { touched, error, active } }) {
   const hasError = touched && error && !active;
   const trackColor = hasError ? 'red' : '#cdcdcd';
+  const toggleDisabled = disabled ? 'toggleDisabled' : null;
   const tooltip = (
     <Tooltip
       id={`${name}-tooltip`}
@@ -75,7 +76,7 @@ function Toggle({ input, name, className, onChange, meta: { touched, error, acti
   }
 
   return (
-    <div className={classNames([className, 'toggle'])}>
+    <div className={classNames([className, 'toggle', toggleDisabled])}>
       {inputComponent}
     </div>
   );
@@ -87,6 +88,7 @@ Toggle.propTypes = {
   className: PropTypes.string,
   meta: PropTypes.object.isRequired,
   onChange: PropTypes.func,
+  disabled: PropTypes.boolean,
 };
 
 export default Toggle;
