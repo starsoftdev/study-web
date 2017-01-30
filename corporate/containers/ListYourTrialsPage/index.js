@@ -37,13 +37,6 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      background: {
-        height: "1000px",
-        backgroundImage: bg1
-      }
-    }
   }
 
   componentWillMount() {
@@ -74,35 +67,35 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                 <a href="#" className="btn btn-deep btn-block">LIST NOW!</a>
                 <a href="#" className="btn btn-deep btn-block small">GET PROPOSAL</a>
                 <div className="img-holder">
-                  <img src={img1} alt="image" width="200" height="284" className="img-responsive svg" />
+                  <image src={img1} alt="imag1" width="200" height="284" className="img-responsive svg" />
                 </div>
               </div>
             </div>
           </div>
           <form action="#" className="form-find-location">
-          <div className="container">
-            <h2>FIND OUT HOW MANY PATIENTS ARE NEAR YOUR SITE</h2>
-            <div className="form-holder">
-              <input type="text" data-required="true" placeholder="* Full Name" className="form-control input-lg" />
-              <input type="email" data-required="true" placeholder="* Email" className="form-control input-lg" />
-              <input type="text" placeholder="Company" className="form-control input-lg" />
-              <input type="text" data-type="number" data-required="true" placeholder="* Postal Code" className="form-control input-lg" />
-              <input type="text" data-required="true" placeholder="* Indication" className="form-control input-lg" />
-              <input type="submit" className="btn btn-block input-lg" value="RECEIVE REPORT" />
-              <div className="images">
-                <div className="img-holder left">
-                  <img src={img2} alt="image" width="232" height="279" className="img-responsive" />
-                </div>
-                <div className="img-holder right">
-                  <img src={img3} alt="image" width="193" height="302" className="img-responsive" />
+            <div className="container">
+              <h2>FIND OUT HOW MANY PATIENTS ARE NEAR YOUR SITE</h2>
+              <div className="form-holder">
+                <input type="text" data-required="true" placeholder="* Full Name" className="form-control input-lg" />
+                <input type="email" data-required="true" placeholder="* Email" className="form-control input-lg" />
+                <input type="text" placeholder="Company" className="form-control input-lg" />
+                <input type="text" data-type="number" data-required="true" placeholder="* Postal Code" className="form-control input-lg" />
+                <input type="text" data-required="true" placeholder="* Indication" className="form-control input-lg" />
+                <input type="submit" className="btn btn-block input-lg" value="RECEIVE REPORT" />
+                <div className="images">
+                  <div className="img-holder left">
+                    <img src={img2} alt="img2" width="232" height="279" className="img-responsive" />
+                  </div>
+                  <div className="img-holder right">
+                    <img src={img3} alt="img3" width="193" height="302" className="img-responsive" />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="bg-parallax">
-            <img src={bg1} alt="&nbsp;" />
-          </div>
-        </form>
+            <div className="bg-parallax">
+              <img src={bg1} alt="&nbsp;" />
+            </div>
+          </form>
         </div>
         <section className="about-us text-center">
           <div className="container">
@@ -116,18 +109,20 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
             <h2>Scroll down to view our various patient enrollment listing options.</h2>
             <div className="video" data-view-del="fadeInUp">
               <div>
-                <img src={videoPlaceholder} width="608" height="283"  alt="video" className="video-placeholder" />
+                <img src={videoPlaceholder} width="608" height="283" alt="video" className="video-placeholder" />
                 <iframe width="854" height="480" src="https://www.youtube.com/embed/bF2YU7zWmH4"></iframe>
               </div>
             </div>
-            <p>StudyKIK is a website where patients can find and sign up for clinical trials with ease. These patients find StudyKIK
+            <p>
+              StudyKIK is a website where patients can find and sign up for clinical trials with ease. These patients find StudyKIK
               through our robust social community pages on Facebook, Twitter, Instagram, Pinterest, and more! Patients also find
               your Clinical Research Recruitment through search engines like Google, Bing, &amp; Yahoo. Every clinical trial listed on
               StudyKIK benefits from the millions of patients across social media and search engines in almost every therapeutic
               area in all phases including: Respiratory, Immunology, CNS, Cardiology, Endocrinology, Gastroenterology, Healthy
               Volunteer, Dermatology, Rheumatology, Urology, and much more! Patient traffic is filtered using our proprietary
               targeting software so that only patients in a geographic radius of your site that match your inclusion &amp; exclusion
-              criteria will find your clinical trial.</p>
+              criteria will find your clinical trial.
+            </p>
           </div>
         </section>
         <section className="steps text-center">
@@ -143,7 +138,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
           <div className="container">
             <div className="step">
               <span className="arrow">
-                <img src={arrow}  alt="&nbsp;" width="33" height="79" className="svg" />
+                <img src={arrow} alt="&nbsp;" width="33" height="79" className="svg" />
               </span>
               <div className="box">
                 <h2>Patient Communities on <br /> Social Media</h2>
@@ -155,7 +150,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                 criteria &amp; patient demographic.
               </p>
               <div className="img-holder">
-                <img src={img4} width="709" height="323" alt="image description" className="img-responsive" />
+                <img src={img4} width="709" height="323" alt="img4" className="img-responsive" />
                 <div className="hidden">
                   <span className="icon-twitter-shape"><span className="path1"></span><span className="path2"></span></span>
                   <span className="icon-facebook-shape"><span className="path1"></span><span className="path2"></span></span>
@@ -167,7 +162,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
             </div>
             <div className="step">
               <span className="arrow blue">
-                <img src={arrow}  alt="&nbsp;" width="33" height="79" className="svg" />
+                <img src={arrow} alt="&nbsp;" width="33" height="79" className="svg" />
               </span>
               <div className="box">
                 <h2>
@@ -182,12 +177,12 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                 studies and are sent to mobile StudyKIK listing pages with IRB approved information.
               </p>
               <div className="img-holder">
-                <img src={img6} width="687" height="494" alt="image description" className="img-responsive" />
+                <img src={img6} width="687" height="494" alt="img6" className="img-responsive" />
               </div>
             </div>
             <div className="step">
               <span className="arrow blue">
-                <img src={arrow}  alt="&nbsp;" width="33" height="79" className="svg" />
+                <img src={arrow} alt="&nbsp;" width="33" height="79" className="svg" />
               </span>
               <div className="box">
                 <h2>
@@ -199,12 +194,12 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                 as well as added to you “MyStudyKIK Portal”. Patient receives site contact via text message &amp; email.
               </p>
               <div className="img-holder">
-                <img src={img7} width="1038" height="510" alt="image description" className="img-responsive img-group" />
+                <img src={img7} width="1038" height="510" alt="img7" className="img-responsive img-group" />
               </div>
             </div>
             <div className="step">
               <span className="arrow blue">
-                <img src={arrow}  alt="&nbsp;" width="33" height="79" className="svg" />
+                <img src={arrow} alt="&nbsp;" width="33" height="79" className="svg" />
               </span>
               <div className="box">
                 <div className="logo-holder">
@@ -222,13 +217,13 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                 message all through your MyStudyKIK Portal!
               </p>
               <div className="img-holder">
-                <img src={img8} width="588" height="470" alt="image description" className="img-responsive pull-left" />
-                <img src={computerImg} width="1000" alt="image description" className="img-responsive pull-right" />
+                <img src={img8} width="588" height="470" alt="img8" className="img-responsive pull-left" />
+                <img src={computerImg} width="1000" alt="computerImg" className="img-responsive pull-right" />
               </div>
             </div>
             <div className="step">
               <span className="arrow blue">
-                <img src={arrow}  alt="&nbsp;" width="33" height="79" className="svg" />
+                <img src={arrow} alt="&nbsp;" width="33" height="79" className="svg" />
               </span>
               <div className="box">
                 <h2>Patient becomes enrolled</h2>
@@ -238,12 +233,12 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                 with the tools needed to make that process as easy as possible.
               </p>
               <div className="img-holder">
-                <img src={img10} width="942" height="593" alt="image description" className="img-responsive" />
+                <img src={img10} width="942" height="593" alt="img10" className="img-responsive" />
               </div>
             </div>
             <div className="step">
               <span className="arrow blue">
-                <img src={arrow}  alt="&nbsp;" width="33" height="79" className="svg" />
+                <img src={arrow} alt="&nbsp;" width="33" height="79" className="svg" />
               </span>
               <div className="box">
                 <h2>
@@ -251,7 +246,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                 </h2>
               </div>
               <div className="img-holder map">
-                <img src={map} width="1403" height="750" alt="image description" className="img-responsive" />
+                <img src={map} width="1403" height="750" alt="map" className="img-responsive" />
               </div>
             </div>
           </div>
@@ -268,7 +263,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               </a>
               <div className="dropdown-menu" aria-labelledby="dLabel">
                 <div className="img-holder">
-                  <img src={img11} alt="image description" width="563" className="img-responsive" />
+                  <img src={img11} alt="img11" width="563" className="img-responsive" />
                 </div>
                 <div className="area">
                   <strong className="h3">Exposure to StudyKIK Patient Enrollment Search</strong>
@@ -289,7 +284,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               </a>
               <div className="dropdown-menu" aria-labelledby="dLabel">
                 <div className="img-holder">
-                  <img src={img12} alt="image description" width="509" className="img-responsive" />
+                  <img src={img12} alt="img12" width="509" className="img-responsive" />
                 </div>
                 <div className="area">
                   <strong className="h3">
@@ -310,7 +305,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               </a>
               <div className="dropdown-menu" aria-labelledby="dLabel">
                 <div className="img-holder">
-                  <img src={img13} alt="image description" width="509" className="img-responsive" />
+                  <img src={img13} alt="img13" width="509" className="img-responsive" />
                 </div>
                 <div className="area">
                   <strong className="h3">Instant Patient Email and Text Message w/Site Phone</strong>
@@ -331,7 +326,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               </a>
               <div className="dropdown-menu" aria-labelledby="dLabel">
                 <div className="img-holder">
-                  <img src={img14} alt="image description" width="350" className="img-responsive center-block" />
+                  <img src={img14} alt="img14" width="350" className="img-responsive center-block" />
                 </div>
                 <div className="area">
                   <strong className="h3">
@@ -355,7 +350,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               </a>
               <div className="dropdown-menu" aria-labelledby="dLabel">
                 <div className="img-holder">
-                  <img src={img15} alt="image description" width="334" className="img-responsive center-block" />
+                  <img src={img15} alt="img15" width="334" className="img-responsive center-block" />
                 </div>
                 <div className="area">
                   <strong className="h3">
@@ -375,7 +370,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               </a>
               <div className="dropdown-menu" aria-labelledby="dLabel">
                 <div className="img-holder">
-                  <img src={img16} alt="image description" width="350" className="img-responsive center-block" />
+                  <img src={img16} alt="img16" width="350" className="img-responsive center-block" />
                 </div>
                 <div className="area">
                   <strong className="h3">
@@ -432,7 +427,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                   <h2>DIAMOND</h2>
                   <p>60 Posts</p>
                   <strong className="price">
-                    $3059  <span>/MONTH</span>
+                    $3059 <span>/MONTH</span>
                   </strong>
                   <div className="btn-block text-center">
                     <span className="btn-default btn">List Now</span>
@@ -446,7 +441,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                   </div>
                   <h2>PLATINUM</h2>
                   <p>30 Posts</p>
-                  <strong className="price">$1559  <span>/MONTH</span></strong>
+                  <strong className="price">$1559 <span>/MONTH</span></strong>
                   <div className="btn-block text-center">
                     <span className="btn-default btn">List Now</span>
                   </div>
@@ -459,7 +454,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                   </div>
                   <h2>GOLD</h2>
                   <p>10 Posts</p>
-                  <strong className="price">$559  <span>/MONTH</span></strong>
+                  <strong className="price">$559 <span>/MONTH</span></strong>
                   <div className="btn-block text-center">
                     <span className="btn-default btn">List Now</span>
                   </div>
@@ -472,7 +467,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                   </div>
                   <h2>SILVER</h2>
                   <p>3 Posts</p>
-                  <strong className="price">$209  <span>/MONTH</span></strong>
+                  <strong className="price">$209 <span>/MONTH</span></strong>
                   <div className="btn-block text-center">
                     <span className="btn-default btn">List Now</span>
                   </div>
@@ -485,7 +480,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                   </div>
                   <h2>BRONZE</h2>
                   <p>1 Posts</p>
-                  <strong className="price">$59  <span>/MONTH</span></strong>
+                  <strong className="price">$59 <span>/MONTH</span></strong>
                   <div className="btn-block text-center">
                     <span className="btn-default btn">List Now</span>
                   </div>
