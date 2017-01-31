@@ -73,12 +73,16 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
   }
 
   render() {
-    console.log(123, this.props);
     const protocolNumber = this.props.location.query.protocol || null;
     return (
       <div className="container-fluid sponsor-portal report-view-page">
         <section className="reports">
-          <h2 className="main-heading">{protocolNumber}</h2>
+          <div className="individual-study">
+            <div className="main-head">
+              <h2 className="main-heading">{protocolNumber}</h2>
+              <p><span className="info-cell">Indication: {this.props.reportsList.details.length > 0 ? this.props.reportsList.details[0].indication_name : ''}</span> <span className="info-cell">CRO: {this.props.reportsList.details.length > 0 ? this.props.reportsList.details[0].cro_name : ''}</span></p>
+            </div>
+          </div>
         </section>
         <ReportViewInfo
           reportsList={this.props.reportsList}
