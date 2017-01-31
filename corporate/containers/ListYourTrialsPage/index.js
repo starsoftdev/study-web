@@ -446,7 +446,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
           </div>
         </section>
         <section className="get-start text-center">
-          <Parallax bgImage={bg1} strength={800}>
+          <Parallax bgImage={bg1} strength={500}>
             <div className="container">
               <header>
                 <h1>
