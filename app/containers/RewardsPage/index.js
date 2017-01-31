@@ -12,12 +12,15 @@ import {
   fetchSites,
   fetchClientSites,
   fetchRewards,
+  fetchRewardsBalance,
 } from 'containers/App/actions';
 
 import {
+  selectCurrentUser,
   selectCurrentUserClientId,
   selectUserSiteLocations,
   selectRewards,
+  selectRewardsBalance,
 } from 'containers/App/selectors';
 
 import { selectSiteLocation } from 'components/RewardForm/selectors';
@@ -42,9 +45,11 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     currentUser: PropTypes.object,
     currentUserClientId: PropTypes.number,
     rewards: PropTypes.array,
+    rewardsBalance: PropTypes.any,
     fetchSites: PropTypes.func,
     fetchClientSites: PropTypes.func,
     fetchRewards: PropTypes.func,
+    fetchRewardsBalance: PropTypes.func,
     onSubmitForm: PropTypes.func,
     pickReward: PropTypes.func,
     selectedSite: PropTypes.object,
@@ -63,6 +68,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     this.closeRewardModal = this.closeRewardModal.bind(this);
     this.onSubmitForm = this.props.onSubmitForm.bind(this);
   }
+
   componentWillMount() {
     this.props.fetchSites();
     const { currentUserClientId } = this.props;
@@ -72,7 +78,12 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
   }
 
   componentDidMount() {
-    this.props.fetchRewards();
+    const { currentUser } = this.props;
+
+    if (currentUser) {
+      this.props.fetchRewards(currentUser.roleForClient.site_id);
+      this.props.fetchRewardsBalance(currentUser.roleForClient.site_id);
+    }
   }
 
   openRewardModal(value) {
@@ -277,9 +288,11 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 }
 
 const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
   currentUserClientId: selectCurrentUserClientId(),
   siteLocations: selectUserSiteLocations(),
   rewards: selectRewards(),
+  rewardsBalance: selectRewardsBalance(),
   selectedSite: selectSiteLocation(),
   paginationOptions: selectPaginationOptions(),
 });
@@ -288,7 +301,8 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchSites: () => dispatch(fetchSites()),
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
-    fetchRewards: () => dispatch(fetchRewards()),
+    fetchRewards: (siteId) => dispatch(fetchRewards(siteId)),
+    fetchRewardsBalance: (siteId) => dispatch(fetchRewardsBalance(siteId)),
     onSubmitForm: (values) => dispatch(submitForm(values)),
     pickReward: (value) => dispatch(pickReward(value)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),

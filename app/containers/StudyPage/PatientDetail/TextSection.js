@@ -47,6 +47,7 @@ class TextSection extends React.Component {
   constructor(props) {
     super(props);
     this.renderText = this.renderText.bind(this);
+    this.renderTextArea = this.renderTextArea.bind(this);
     this.submitText = this.submitText.bind(this);
     this.textAreaChange = this.textAreaChange.bind(this);
     this.initStudyPatientMessagesFetch = this.initStudyPatientMessagesFetch.bind(this);
@@ -181,6 +182,36 @@ class TextSection extends React.Component {
     );
   }
 
+  renderTextArea(disabled) {
+    const { maxCharacters } = this.state;
+
+    if (disabled) {
+      return (
+        <textarea
+          className="form-control test"
+          placeholder="Type a message..."
+          onChange={this.textAreaChange}
+          maxLength={maxCharacters}
+          disabled
+          ref={(textarea) => {
+            this.textarea = textarea;
+          }}
+        />
+      );
+    }
+    return (
+      <textarea
+        className="form-control test"
+        placeholder="Type a message..."
+        onChange={this.textAreaChange}
+        maxLength={maxCharacters}
+        ref={(textarea) => {
+          this.textarea = textarea;
+        }}
+      />
+    );
+  }
+
   render() {
     const { currentPatient, active } = this.props;
     const clientCredits = this.props.clientCredits.details.customerCredits;
@@ -192,15 +223,7 @@ class TextSection extends React.Component {
       <div className={classNames('item text', { active })}>
         {this.renderText()}
         <div className="textarea">
-          <textarea
-            className="form-control test"
-            placeholder="Type a message..."
-            onChange={this.textAreaChange}
-            maxLength={maxCharacters}
-            ref={(textarea) => {
-              this.textarea = textarea;
-            }}
-          />
+          {this.renderTextArea(disabled || unsubscribed)}
           <span className="remaining-counter">
             {`${maxCharacters - enteredCharactersLength}`}
           </span>
