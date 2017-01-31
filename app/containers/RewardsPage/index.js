@@ -7,7 +7,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { find } from 'lodash';
+import { find, reject } from 'lodash';
 import classNames from 'classnames';
 
 import {
@@ -126,7 +126,8 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
   }
   render() {
     const { siteLocations, pickReward, currentUser } = this.props;
-    const isAdmin = !currentUser.roleForClient.site_id;
+    const redeemable = currentUser.roleForClient.canRedeemRewards;
+    const redeemableSiteLocations = reject(siteLocations, { id: 0 });
 
     return (
       <div className="container-fluid">
@@ -147,19 +148,19 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
           <header className="sub-header clearfix">
             {this.renderHeaderText()}
-            <a className={classNames('btn bgn-chat pull-right', { disabled: !isAdmin })} data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal} />
-            <RewardModal siteLocations={siteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} onSubmit={this.onSubmitForm} pickReward={pickReward} />
+            <a className={classNames('btn bgn-chat pull-right', { disabled: !redeemable })} data-text="Redeem" data-hovertext="Redeem Now" onClick={() => this.openRewardModal()} />
+            <RewardModal siteLocations={redeemableSiteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} onSubmit={this.onSubmitForm} pickReward={pickReward} />
           </header>
 
           <div className="row images-area">
             <div className="col-xs-4 pull-left">
-              <a className="option1" data-for="radio-option1" onClick={() => this.openRewardModal('1')}><img role="presentation" src={cardStarbucks} /></a>
+              <a className="option1" data-for="radio-option1" onClick={() => redeemable && this.openRewardModal('1')}><img role="presentation" src={cardStarbucks} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a className="option2" data-for="radio-option2" onClick={() => this.openRewardModal('2')}><img role="presentation" src={cardAmazon} /></a>
+              <a className="option2" data-for="radio-option2" onClick={() => redeemable && this.openRewardModal('2')}><img role="presentation" src={cardAmazon} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a className="option3" data-for="radio-option3" onClick={() => this.openRewardModal('3')}><img role="presentation" src={cardStudykik} /></a>
+              <a className="option3" data-for="radio-option3" onClick={() => redeemable && this.openRewardModal('3')}><img role="presentation" src={cardStudykik} /></a>
             </div>
 
 
