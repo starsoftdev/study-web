@@ -180,6 +180,7 @@
 			width: 25%;
 			float: left;
 			padding: 0 10px;
+      cursor: default;
 			
 			&:last-child {
 				float: right;
@@ -208,6 +209,16 @@
 			padding: 0;
 			display: table-cell;
 			vertical-align: top;
+
+      &:nth-child(1) {
+        cursor: default;
+      }
+      &:nth-child(2) {
+        cursor: default;
+      }
+      &:nth-child(3) {
+        cursor: default;
+      }
 		}
 		
 		li.hover,
@@ -543,7 +554,7 @@
 	.table-left {
 		td,
 		th {
-			&:first-child { width: 110px; }
+			&:first-child { width: 125px; }
 			&:nth-child(2) { width: 270px; }
 			&:nth-child(3) { width: 175px; }
 			&:nth-child(4) { width: 186px; }
@@ -553,7 +564,7 @@
 		@media screen and(max-width: @psd) {
 			td,
 			th {
-				&:first-child { width: 85px; }
+				&:first-child { width: 105px; }
 				&:nth-child(2) { width: 135px; }
 				&:nth-child(3) { width: 135px; }
 				&:nth-child(4) { width: 186px; }
