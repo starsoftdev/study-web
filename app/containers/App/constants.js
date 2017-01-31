@@ -34,6 +34,10 @@ export const FETCH_REWARDS                 		     = 'App/FETCH_REWARDS';
 export const FETCH_REWARDS_SUCCESS         		     = 'App/FETCH_REWARDS_SUCCESS';
 export const FETCH_REWARDS_ERROR           		     = 'App/FETCH_REWARDS_ERROR';
 
+export const FETCH_REWARDS_BALANCE                 = 'App/FETCH_REWARDS_BALANCE';
+export const FETCH_REWARDS_BALANCE_SUCCESS         = 'App/FETCH_REWARDS_BALANCE_SUCCESS';
+export const FETCH_REWARDS_BALANCE_ERROR           = 'App/FETCH_REWARDS_BALANCE_ERROR';
+
 export const FETCH_CARDS                 		       = 'App/FETCH_CARDS';
 export const FETCH_CARDS_SUCCESS         		       = 'App/FETCH_CARDS_SUCCESS';
 export const FETCH_CARDS_ERROR           		       = 'App/FETCH_CARDS_ERROR';
