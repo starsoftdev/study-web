@@ -110,17 +110,15 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
         <section className="about-us text-center">
           <div className="container">
             <h1>
-              WHAT IS
-              <strong className="sub-logo">
+              WHAT IS <strong className="sub-logo">
                 <img src={logo2} alt="StudyKiK" width="274" height="42" className="img-responsive" />
-              </strong>
-              ?
+              </strong> ?
             </h1>
             <h2>Scroll down to view our various patient enrollment listing options.</h2>
             <div className="video" data-view-del="fadeInUp">
               <div>
                 <img src={videoPlaceholder} width="608" height="283" alt="video" className="video-placeholder" />
-                <iframe width="854" height="480" src="https://www.youtube.com/embed/bF2YU7zWmH4"></iframe>
+                <iframe width="854" height="480" frameBorder="0" allowFullScreen={true} src="https://www.youtube.com/embed/bF2YU7zWmH4"></iframe>
               </div>
             </div>
             <p>
@@ -138,11 +136,9 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
         <section className="steps text-center">
           <header>
             <h1>
-              How
-              <strong className="sub-logo">
+              How <strong className="sub-logo">
                 <img src={logo2} alt="StudyKiK" width="274" height="42" className="img-responsive" />
-              </strong>
-              Works
+              </strong> Works
             </h1>
           </header>
           <div className="container">
@@ -176,10 +172,8 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               </span>
               <div className="box">
                 <h2>
-                  PatientS LEARN about clinical trials <br /> and ARE redirected to
-                  <span className="logo">
-                    <img src={logo} alt="StudyKiK" />
-                  </span>
+                  PatientS LEARN about clinical trials <br /> and
+                  ARE redirected to <span className="logo"><img src={logo} alt="StudyKiK" /></span>
                 </h2>
               </div>
               <p>
