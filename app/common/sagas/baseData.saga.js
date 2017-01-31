@@ -230,12 +230,18 @@ export function* fetchCouponWatcher() {
 export function* fetchRewardsWatcher() {
   while (true) {
     try {
-      const { siteId } = yield take(FETCH_REWARDS);
+      const { siteId, clientId } = yield take(FETCH_REWARDS);
+      let requestURL;
       let options = {};
-      const requestURL = `${API_URL}/rewards`;
       if (siteId) {
+        requestURL = `${API_URL}/rewards`;
         options = {
           query: { filter: `{"where":{"site_id":${siteId}}}` },
+        };
+      } else {
+        requestURL = `${API_URL}/rewards/byClient`;
+        options = {
+          query: { clientId },
         };
       }
       const response = yield call(request, requestURL, options);
@@ -250,11 +256,10 @@ export function* fetchRewardsWatcher() {
 export function* fetchRewardsBalanceWatcher() {
   while (true) {
     try {
-      let { siteId } = yield take(FETCH_REWARDS_BALANCE);
-      siteId = siteId || 0;
+      const { siteId, clientId } = yield take(FETCH_REWARDS_BALANCE);
       const requestURL = `${API_URL}/rewards/balance`;
       const options = {
-        query: { siteId },
+        query: { siteId, clientId },
       };
       const response = yield call(request, requestURL, options);
 

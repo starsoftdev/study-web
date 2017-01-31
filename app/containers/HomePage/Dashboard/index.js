@@ -35,7 +35,7 @@ export class Dashboard extends React.Component {
     const { currentUser } = this.props;
     this.props.fetchPatientSignUps(currentUser);
     this.props.fetchPatientMessages(currentUser);
-    this.props.fetchRewardsBalance(currentUser.roleForClient.site_id);
+    this.props.fetchRewardsBalance(currentUser.roleForClient.client_id, currentUser.roleForClient.site_id);
   }
 
   openRewardModal = () => {

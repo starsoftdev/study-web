@@ -7,6 +7,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { find } from 'lodash';
+import classNames from 'classnames';
 
 import {
   fetchSites,
@@ -21,6 +23,7 @@ import {
   selectUserSiteLocations,
   selectRewards,
   selectRewardsBalance,
+  selectSites,
 } from 'containers/App/selectors';
 
 import { selectSiteLocation } from 'components/RewardForm/selectors';
@@ -46,13 +49,14 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     currentUserClientId: PropTypes.number,
     rewards: PropTypes.array,
     rewardsBalance: PropTypes.any,
+    sites: PropTypes.array,
     fetchSites: PropTypes.func,
     fetchClientSites: PropTypes.func,
     fetchRewards: PropTypes.func,
     fetchRewardsBalance: PropTypes.func,
     onSubmitForm: PropTypes.func,
     pickReward: PropTypes.func,
-    selectedSite: PropTypes.object,
+    selectedSite: PropTypes.number,
     paginationOptions: PropTypes.object,
     setActiveSort: PropTypes.func,
   };
@@ -81,8 +85,18 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     const { currentUser } = this.props;
 
     if (currentUser) {
-      this.props.fetchRewards(currentUser.roleForClient.site_id);
-      this.props.fetchRewardsBalance(currentUser.roleForClient.site_id);
+      this.props.fetchRewards(currentUser.roleForClient.client_id, currentUser.roleForClient.site_id);
+      this.props.fetchRewardsBalance(currentUser.roleForClient.client_id, currentUser.roleForClient.site_id);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { selectedSite, fetchRewardsBalance, currentUser } = nextProps;
+
+    if (this.props.selectedSite !== selectedSite) {
+      if (typeof (selectedSite) === 'number') {
+        fetchRewardsBalance(currentUser.roleForClient.client_id, selectedSite);
+      }
     }
   }
 
@@ -97,22 +111,22 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
   }
 
   renderHeaderText() {
-    const { selectedSite } = this.props;
-    if (typeof (selectedSite) === 'number') {
-      if (selectedSite === 0) {
-        return (
-          <h3 className="pull-left">'Client' Has <strong>450 KIKs</strong></h3>
-        );
-      }
+    const { selectedSite, rewardsBalance } = this.props;
+
+    if (selectedSite) {
+      const siteDetail = find(this.props.sites, { id: selectedSite });
       return (
-        <h3 className="pull-left">'Site' Has <strong>450 KIKs</strong></h3>
+        <h3 className="pull-left">{siteDetail.location} Has <strong>{rewardsBalance} KIKs</strong></h3>
       );
     }
-    // shouldn't ever display this, since the site should be pre-populated, depending on whether they're a site user or an admin. If they're an admin, pre-select all sites
-    return null;
+
+    return (
+      <h3 className="pull-left">'Client' Has <strong>{rewardsBalance} KIKs</strong></h3>
+    );
   }
   render() {
     const { siteLocations, pickReward, currentUser } = this.props;
+    const isAdmin = !currentUser.roleForClient.site_id;
 
     return (
       <div className="container-fluid">
@@ -121,15 +135,19 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
           <h2 className="main-heading">REWARDS</h2>
           <div className="form-search clearfix">
             <div className="pull-left custom-select">
-              <RewardForm
-                siteLocations={siteLocations}
-              />
+              {siteLocations.length > 0 &&
+                <RewardForm
+                  currentUser={currentUser}
+                  siteLocations={siteLocations}
+                  initialValues={{ site: siteLocations[0].id }}
+                />
+              }
             </div>
           </div>
 
           <header className="sub-header clearfix">
             {this.renderHeaderText()}
-            <a className="btn bgn-chat pull-right" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal} />
+            <a className={classNames('btn bgn-chat pull-right', { disabled: !isAdmin })} data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal} />
             <RewardModal siteLocations={siteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} onSubmit={this.onSubmitForm} pickReward={pickReward} />
           </header>
 
@@ -297,14 +315,15 @@ const mapStateToProps = createStructuredSelector({
   rewardsBalance: selectRewardsBalance(),
   selectedSite: selectSiteLocation(),
   paginationOptions: selectPaginationOptions(),
+  sites: selectSites(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchSites: () => dispatch(fetchSites()),
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
-    fetchRewards: (siteId) => dispatch(fetchRewards(siteId)),
-    fetchRewardsBalance: (siteId) => dispatch(fetchRewardsBalance(siteId)),
+    fetchRewards: (clientId, siteId) => dispatch(fetchRewards(clientId, siteId)),
+    fetchRewardsBalance: (clientId, siteId) => dispatch(fetchRewardsBalance(clientId, siteId)),
     onSubmitForm: (values) => dispatch(submitForm(values)),
     pickReward: (value) => dispatch(pickReward(value)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
