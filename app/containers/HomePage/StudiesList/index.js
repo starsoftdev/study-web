@@ -313,8 +313,13 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       return;
     }
 
-    const studyLevel = _.find(this.props.studyLevels, { id: upgradeStudyFormValues.level });
     const selectedStudy = _.find(this.props.studies.details, (o) => (o.studyId === this.state.selectedStudyId));
+
+    if (!upgradeStudyFormValues.level) {
+      upgradeStudyFormValues.level = selectedStudy.campaign.level_id;
+    }
+
+    const studyLevel = _.find(this.props.studyLevels, { id: upgradeStudyFormValues.level });
 
     upgradeStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...selectedStudy,
