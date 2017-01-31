@@ -1,4 +1,5 @@
 import React from 'react';
+import { Parallax } from 'react-parallax';
 
 import bg1 from '../../assets/images/bg1.jpg';
 import img1 from '../../assets/images/img1.svg';
@@ -83,28 +84,27 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
             </div>
           </div>
           <form action="#" className="form-find-location">
-            <div className="container">
-              <h2>FIND OUT HOW MANY PATIENTS ARE NEAR YOUR SITE</h2>
-              <div className="form-holder">
-                <input type="text" data-required="true" placeholder="* Full Name" className="form-control input-lg" />
-                <input type="email" data-required="true" placeholder="* Email" className="form-control input-lg" />
-                <input type="text" placeholder="Company" className="form-control input-lg" />
-                <input type="text" data-type="number" data-required="true" placeholder="* Postal Code" className="form-control input-lg" />
-                <input type="text" data-required="true" placeholder="* Indication" className="form-control input-lg" />
-                <input type="submit" className="btn btn-block input-lg" value="RECEIVE REPORT" />
-                <div className="images">
-                  <div className="img-holder left">
-                    <img src={img2} alt="img2" width="232" height="279" className="img-responsive" />
-                  </div>
-                  <div className="img-holder right">
-                    <img src={img3} alt="img3" width="193" height="302" className="img-responsive" />
+            <Parallax bgImage={bg1} strength={800}>
+              <div className="container">
+                <h2>FIND OUT HOW MANY PATIENTS ARE NEAR YOUR SITE</h2>
+                <div className="form-holder">
+                  <input type="text" data-required="true" placeholder="* Full Name" className="form-control input-lg" />
+                  <input type="email" data-required="true" placeholder="* Email" className="form-control input-lg" />
+                  <input type="text" placeholder="Company" className="form-control input-lg" />
+                  <input type="text" data-type="number" data-required="true" placeholder="* Postal Code" className="form-control input-lg" />
+                  <input type="text" data-required="true" placeholder="* Indication" className="form-control input-lg" />
+                  <input type="submit" className="btn btn-block input-lg" value="RECEIVE REPORT" />
+                  <div className="images">
+                    <div className="img-holder left">
+                      <img src={img2} alt="img2" width="232" height="279" className="img-responsive" />
+                    </div>
+                    <div className="img-holder right">
+                      <img src={img3} alt="img3" width="193" height="302" className="img-responsive" />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="bg-parallax">
-              <img src={bg1} alt="&nbsp;" />
-            </div>
+            </Parallax>
           </form>
         </div>
         <section className="about-us text-center">
@@ -446,113 +446,112 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
           </div>
         </section>
         <section className="get-start text-center">
-          <div className="container">
-            <header>
-              <h1>
-                TO GET STARTED
-              </h1>
-              <p>
-                Choose the number of posts on StudyKIK's social communities you would
-                like your study <br /> to receive, each post receives 1 to 2 patient referrals on average*.
-              </p>
-            </header>
-            <div className="row">
-              <div className="col-xs-6 col-sm-4 col-lg-2">
-                <a href="#" className="package">
-                  <div className="img-holder">
-                    <img src={diamond1} width="85" alt="package description" />
-                  </div>
-                  <h2>RUBY</h2>
-                  <p>100 Posts</p>
-                  <strong className="price">
-                    $5059 <span>/MONTH</span>
-                  </strong>
-                  <div className="note">
+          <Parallax bgImage={bg1} strength={800}>
+            <div className="container">
+              <header>
+                <h1>
+                  TO GET STARTED
+                </h1>
+                <p>
+                  Choose the number of posts on StudyKIK's social communities you would
+                  like your study <br /> to receive, each post receives 1 to 2 patient referrals on average*.
+                </p>
+              </header>
+              <div className="row">
+                <div className="col-xs-6 col-sm-4 col-lg-2">
+                  <a href="#" className="package">
+                    <div className="img-holder">
+                      <img src={diamond1} width="85" alt="package description" />
+                    </div>
+                    <h2>RUBY</h2>
+                    <p>100 Posts</p>
+                    <strong className="price">
+                      $5059 <span>/MONTH</span>
+                    </strong>
+                    <div className="note">
                     <span>
                       Most <br /> Exposure &amp; <br /> Patients
                     </span>
-                  </div>
-                  <div className="btn-block text-center">
-                    <span className="btn-default btn">List Now</span>
-                  </div>
-                </a>
+                    </div>
+                    <div className="btn-block text-center">
+                      <span className="btn-default btn">List Now</span>
+                    </div>
+                  </a>
+                </div>
+                <div className="col-xs-6 col-sm-4 col-lg-2 diamond">
+                  <a href="#" className="package">
+                    <div className="img-holder">
+                      <img src={diamond2} width="91" alt="package description" className="img2" />
+                    </div>
+                    <h2>DIAMOND</h2>
+                    <p>60 Posts</p>
+                    <strong className="price">
+                      $3059 <span>/MONTH</span>
+                    </strong>
+                    <div className="btn-block text-center">
+                      <span className="btn-default btn">List Now</span>
+                    </div>
+                  </a>
+                </div>
+                <div className="col-xs-6 col-sm-4 col-lg-2 platinum">
+                  <a href="#" className="package">
+                    <div className="img-holder">
+                      <img src={diamond3} width="79" alt="package description" className="img3" />
+                    </div>
+                    <h2>PLATINUM</h2>
+                    <p>30 Posts</p>
+                    <strong className="price">$1559 <span>/MONTH</span></strong>
+                    <div className="btn-block text-center">
+                      <span className="btn-default btn">List Now</span>
+                    </div>
+                  </a>
+                </div>
+                <div className="col-xs-6 col-sm-4 col-lg-2 gold">
+                  <a href="#" className="package">
+                    <div className="img-holder">
+                      <img src={diamond4} width="72" alt="package description" className="img4" />
+                    </div>
+                    <h2>GOLD</h2>
+                    <p>10 Posts</p>
+                    <strong className="price">$559 <span>/MONTH</span></strong>
+                    <div className="btn-block text-center">
+                      <span className="btn-default btn">List Now</span>
+                    </div>
+                  </a>
+                </div>
+                <div className="col-xs-6 col-sm-4 col-lg-2 silver">
+                  <a href="#" className="package">
+                    <div className="img-holder">
+                      <img src={diamond5} width="70" alt="package description" className="img5" />
+                    </div>
+                    <h2>SILVER</h2>
+                    <p>3 Posts</p>
+                    <strong className="price">$209 <span>/MONTH</span></strong>
+                    <div className="btn-block text-center">
+                      <span className="btn-default btn">List Now</span>
+                    </div>
+                  </a>
+                </div>
+                <div className="col-xs-6 col-sm-4 col-lg-2 bronze">
+                  <a href="#" className="package">
+                    <div className="img-holder">
+                      <img src={diamond6} width="70" alt="package description" className="img6" />
+                    </div>
+                    <h2>BRONZE</h2>
+                    <p>1 Posts</p>
+                    <strong className="price">$59 <span>/MONTH</span></strong>
+                    <div className="btn-block text-center">
+                      <span className="btn-default btn">List Now</span>
+                    </div>
+                  </a>
+                </div>
               </div>
-              <div className="col-xs-6 col-sm-4 col-lg-2 diamond">
-                <a href="#" className="package">
-                  <div className="img-holder">
-                    <img src={diamond2} width="91" alt="package description" className="img2" />
-                  </div>
-                  <h2>DIAMOND</h2>
-                  <p>60 Posts</p>
-                  <strong className="price">
-                    $3059 <span>/MONTH</span>
-                  </strong>
-                  <div className="btn-block text-center">
-                    <span className="btn-default btn">List Now</span>
-                  </div>
-                </a>
-              </div>
-              <div className="col-xs-6 col-sm-4 col-lg-2 platinum">
-                <a href="#" className="package">
-                  <div className="img-holder">
-                    <img src={diamond3} width="79" alt="package description" className="img3" />
-                  </div>
-                  <h2>PLATINUM</h2>
-                  <p>30 Posts</p>
-                  <strong className="price">$1559 <span>/MONTH</span></strong>
-                  <div className="btn-block text-center">
-                    <span className="btn-default btn">List Now</span>
-                  </div>
-                </a>
-              </div>
-              <div className="col-xs-6 col-sm-4 col-lg-2 gold">
-                <a href="#" className="package">
-                  <div className="img-holder">
-                    <img src={diamond4} width="72" alt="package description" className="img4" />
-                  </div>
-                  <h2>GOLD</h2>
-                  <p>10 Posts</p>
-                  <strong className="price">$559 <span>/MONTH</span></strong>
-                  <div className="btn-block text-center">
-                    <span className="btn-default btn">List Now</span>
-                  </div>
-                </a>
-              </div>
-              <div className="col-xs-6 col-sm-4 col-lg-2 silver">
-                <a href="#" className="package">
-                  <div className="img-holder">
-                    <img src={diamond5} width="70" alt="package description" className="img5" />
-                  </div>
-                  <h2>SILVER</h2>
-                  <p>3 Posts</p>
-                  <strong className="price">$209 <span>/MONTH</span></strong>
-                  <div className="btn-block text-center">
-                    <span className="btn-default btn">List Now</span>
-                  </div>
-                </a>
-              </div>
-              <div className="col-xs-6 col-sm-4 col-lg-2 bronze">
-                <a href="#" className="package">
-                  <div className="img-holder">
-                    <img src={diamond6} width="70" alt="package description" className="img6" />
-                  </div>
-                  <h2>BRONZE</h2>
-                  <p>1 Posts</p>
-                  <strong className="price">$59 <span>/MONTH</span></strong>
-                  <div className="btn-block text-center">
-                    <span className="btn-default btn">List Now</span>
-                  </div>
-                </a>
-              </div>
+              <a href="#" className="btn btn-deep">LIST NOW!</a>
+              <p>
+                *30 day listings, no contracts. Results may vary based on location and indication.
+              </p>
             </div>
-            <a href="#" className="btn btn-deep">LIST NOW!</a>
-            <p>
-              *30 day listings, no contracts. Results may vary based on location and indication.
-            </p>
-          </div>
-          <div className="bg-parallax">
-            <img src={bg1} alt="&nbsp;" />
-          </div>
+          </Parallax>
         </section>
       </div>
     );
