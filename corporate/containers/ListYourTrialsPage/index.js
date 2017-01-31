@@ -57,13 +57,13 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
   componentWillUnmount() {
   }
 
-  handleClick(ev) {
-    ev.preventDefault();
-  }
-
   setVisible(el) {
     const viewAtr = el.getAttribute('data-view');
     el.classList.add('in-viewport', viewAtr);
+  }
+
+  handleClick(ev) {
+    ev.preventDefault();
   }
 
   render() {
