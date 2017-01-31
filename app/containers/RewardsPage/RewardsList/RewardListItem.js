@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { getLocalTime } from 'utils/time';
@@ -9,20 +10,23 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
     id: PropTypes.number,
     points: PropTypes.number,
     balance: PropTypes.number,
-    site_id: PropTypes.number,
-    rewardData: PropTypes.string,
+    reward_data: PropTypes.string,
+    rewardData: PropTypes.object,
     userImageURL: PropTypes.string,
     created: PropTypes.string,
     timezone: PropTypes.string,
   };
 
   render() {
-    const { balance, points, userImageURL, rewardData, created, timezone } = this.props;
+    const { balance, points, userImageURL, reward_data, created, timezone } = this.props;
+    let { rewardData } = this.props;
     const localTime = getLocalTime(created, timezone);
     const date = localTime.format('MM/DD/YYYY');
     const time = localTime.format('hh:mm A');
-    console.log ('---rewardData', rewardData);
-    
+    if (reward_data) {
+      rewardData = JSON.parse(reward_data);
+    }
+    console.log('---rewardData', rewardData);
     let content = null;
     content = (
       <tr>
@@ -31,9 +35,16 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
             <div className="img-holder">
               <img src={userImageURL || defaultImage} alt="" />
             </div>
-            <div className="desc">
-              <p><strong></strong></p>
-            </div>
+            { points > 0 ?
+              <div className="desc">
+                <p><strong>{rewardData.siteLocationName}</strong> Earned {points} KIKs</p>
+                <p>{rewardData.description}</p>
+              </div>
+              :
+              <div className="desc">
+                <p><strong>{rewardData.username}</strong> Redeemed {rewardData.rewardType} for {-points} KIKs</p>
+              </div>
+            }
           </div>
         </td>
         <td>{ date }</td>
