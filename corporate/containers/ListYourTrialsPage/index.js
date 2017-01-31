@@ -84,7 +84,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
             </div>
           </div>
           <form action="#" className="form-find-location">
-            <Parallax bgImage={bg1} strength={800}>
+            <Parallax bgImage={bg1} bgWidth="auto" bgHeight="1090px" strength={800}>
               <div className="container">
                 <h2>FIND OUT HOW MANY PATIENTS ARE NEAR YOUR SITE</h2>
                 <div className="form-holder">
@@ -446,7 +446,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
           </div>
         </section>
         <section className="get-start text-center">
-          <Parallax bgImage={bg1} strength={500}>
+          <Parallax bgImage={bg1} bgWidth="auto" bgHeight="1090px" strength={500}>
             <div className="container">
               <header>
                 <h1>
@@ -469,9 +469,9 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                       $5059 <span>/MONTH</span>
                     </strong>
                     <div className="note">
-                    <span>
-                      Most <br /> Exposure &amp; <br /> Patients
-                    </span>
+                      <span>
+                        Most <br /> Exposure &amp; <br /> Patients
+                      </span>
                     </div>
                     <div className="btn-block text-center">
                       <span className="btn-default btn">List Now</span>
