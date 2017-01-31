@@ -94,7 +94,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     if (newProps.selectedStudy) {
       const { patientMessagingSuite, patientQualificationSuite } = newProps.selectedStudy;
 
-      if (patientMessagingSuite === 'On' && patientMessagingSuite === 'Off') {
+      if (patientMessagingSuite === 'On' && patientQualificationSuite === 'Off') {
         this.props.dispatch(change('renewStudy', 'addPatientMessagingSuite', true));
       }
 
@@ -255,8 +255,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       patientMessagingSuite, patientQualificationSuite, callTracking } = this.state;
     const addOns = [];
 
-    console.log('Selected Study', selectedStudy);
-
     if (exposureLevel && campaignLength) {
       if (!selectedIndicationLevelPrice.fetching && selectedIndicationLevelPrice.details) {
         const foundExposureLevel = find(studyLevels, { id: exposureLevel });
@@ -280,12 +278,21 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       });
     }
     if (patientQualificationSuite) {
-      addOns.push({
-        title: 'Patient Qualification Suite',
-        price: QUALIFICATION_SUITE_PRICE,
-        quantity: 1,
-        total: QUALIFICATION_SUITE_PRICE,
-      });
+      if (selectedStudy && selectedStudy.patientMessagingSuite === 'On') {
+        addOns.push({
+          title: 'Upgrade to Patient Qualification Suite',
+          price: QUALIFICATION_SUITE_UPGRADE_PRICE,
+          quantity: 1,
+          total: QUALIFICATION_SUITE_UPGRADE_PRICE,
+        });
+      } else {
+        addOns.push({
+          title: 'Patient Qualification Suite',
+          price: QUALIFICATION_SUITE_PRICE,
+          quantity: 1,
+          total: QUALIFICATION_SUITE_PRICE,
+        });
+      }
     }
     if (callTracking) {
       addOns.push({
@@ -412,7 +419,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                         </div>
                         <div className="field-row">
                           <strong className="label"><label>Patient qualification <br />
-                            Suite: $894 <br />
+                            Suite: ${qualificationSuitePrice / 100} <br />
                             <span className="label-blue">(Includes patient <br />
                             messaging suite)</span></label></strong>
                           <div className="field">
