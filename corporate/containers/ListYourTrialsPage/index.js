@@ -35,6 +35,16 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
 
   static propTypes = {};
 
+  constructor(props) {
+    super(props);
+
+    this.handleClick = this.handleClick.bind(this);
+
+    this.state = {
+      open: false,
+    };
+  }
+
   componentWillMount() {
   }
 
@@ -45,6 +55,10 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
   }
 
   componentWillUnmount() {
+  }
+
+  handleClick(ev) {
+    ev.preventDefault();
   }
 
   setVisible(el) {
@@ -251,7 +265,15 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
           <h2>EACH LISTING INCLUDES</h2>
           <div className="row">
             <div className="col-xs-12 col-sm-6 blue dropdown">
-              <a href="#" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a
+                href="#"
+                id="dLabel"
+                type="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onClick={this.handleClick}
+              >
                 <i className="icon-search"></i>
                 <h3>
                   <span>Exposure to StudyKIK Patient<br /> Enrollment Search</span>
@@ -270,7 +292,15 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               </div>
             </div>
             <div className="col-xs-12 col-sm-6 light-blue dropdown">
-              <a href="#" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a
+                href="#"
+                id="dLabel"
+                type="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onClick={this.handleClick}
+              >
                 <i className="icon-sign"></i>
                 <h3>
                   <span>
@@ -293,7 +323,15 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               </div>
             </div>
             <div className="col-xs-12 col-sm-6 light-orange dropdown">
-              <a href="#" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a
+                href="#"
+                id="dLabel"
+                type="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onClick={this.handleClick}
+              >
                 <i className="icon-right"></i>
                 <h3>
                   <span>Instant Patient Email and <br /> Text Message w/Site Phone</span>
@@ -314,7 +352,15 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               </div>
             </div>
             <div className="col-xs-12 col-sm-6 orange dropdown">
-              <a href="#" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a
+                href="#"
+                id="dLabel"
+                type="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onClick={this.handleClick}
+              >
                 <i className="icon-mobile"></i>
                 <h3>
                   <span>Mobile Friendly Study Page</span>
@@ -336,7 +382,15 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               </div>
             </div>
             <div className="col-xs-12 col-sm-6 green dropdown">
-              <a href="#" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a
+                href="#"
+                id="dLabel"
+                type="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onClick={this.handleClick}
+              >
                 <i className="icon-lock2"></i>
                 <h3>
                   <span>
@@ -360,7 +414,15 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               </div>
             </div>
             <div className="col-xs-12 col-sm-6 light-green dropdown">
-              <a href="#" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a
+                href="#"
+                id="dLabel"
+                type="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onClick={this.handleClick}
+              >
                 <i className="icon-time"></i>
                 <h3><span>Patient Call Tracking</span></h3>
               </a>
