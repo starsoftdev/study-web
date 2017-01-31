@@ -278,10 +278,11 @@ export function clearCoupon() {
 // ///////////////////////////////////////////
 // fetch rewards
 // ///////////////////////////////////////////
-export function fetchRewards(siteId) {
+export function fetchRewards(clientId, siteId) {
   return {
     type: FETCH_REWARDS,
     siteId,
+    clientId,
   };
 }
 
@@ -302,10 +303,11 @@ export function rewardsFetchingError(payload) {
 // ///////////////////////////////////////////
 // fetch rewards balance
 // ///////////////////////////////////////////
-export function fetchRewardsBalance(siteId) {
+export function fetchRewardsBalance(clientId, siteId) {
   return {
     type: FETCH_REWARDS_BALANCE,
     siteId,
+    clientId,
   };
 }
 

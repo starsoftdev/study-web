@@ -5,7 +5,7 @@ const selectRewardForm = () => state => state.form.reward;
 
 const selectSiteLocation = () => createSelector(
   selectRewardForm(),
-  (substate) => get(substate, 'values.site', {})
+  (substate) => get(substate, 'values.site', 0)
 );
 
 export default selectRewardForm;
