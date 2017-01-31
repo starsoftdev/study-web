@@ -13,7 +13,7 @@ import ListNewStudyForm from 'components/ListNewStudyForm';
 import { selectListNewStudyPageDomain, selectFormSubmissionStatus, selectShowSubmitFormModal, selectIndicationLevelPrice } from 'containers/ListNewStudyPage/selectors';
 import { selectListNewStudyFormValues, selectListNewStudyFormError } from 'components/ListNewStudyForm/selectors';
 import { fields as newStudyFields } from 'components/ListNewStudyForm/validator';
-import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
+import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from 'common/constants';
 import _, { find } from 'lodash';
 import { submitForm, hideSubmitFormModal, clearFormSubmissionData } from 'containers/ListNewStudyPage/actions';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
@@ -174,12 +174,21 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       });
     }
 
-    if (formValues.addPatientMessagingSuite) {
+    if (formValues.patientMessagingSuite) {
       addOns.push({
         title: 'Patient Messaging Suite',
         price: MESSAGING_SUITE_PRICE,
         quantity: 1,
         total: MESSAGING_SUITE_PRICE,
+      });
+    }
+
+    if (formValues.patientQualificationSuite) {
+      addOns.push({
+        title: 'Patient Qualification Suite',
+        price: QUALIFICATION_SUITE_PRICE,
+        quantity: 1,
+        total: QUALIFICATION_SUITE_PRICE,
       });
     }
 

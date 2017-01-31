@@ -199,6 +199,7 @@ export default function homePageReducer(state = initialState, action) {
           sponsor: '',
           protocol: studyIterator.protocolNumber,
           patientMessagingSuite: (studyIterator.patientMessagingSuite) ? 'On' : 'Off',
+          patientQualificationSuite: (studyIterator.patientQualificationSuite) ? 'On' : 'Off',
           status: studyIterator.status,
           callTracking: studyIterator.callTracking,
           siteUsers: null,
