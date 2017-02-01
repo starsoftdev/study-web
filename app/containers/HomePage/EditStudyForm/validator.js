@@ -5,4 +5,8 @@ const schema = {
   studyAd: { presence: true },
 };
 
+const editStudyFields = Object.keys(schema);
+
+export { editStudyFields };
+
 export default validatorFactory(schema);
