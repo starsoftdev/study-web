@@ -18,7 +18,7 @@ export class Dashboard extends React.Component {
     currentUser: PropTypes.any,
     patientSignUps: PropTypes.object,
     patientMessages: PropTypes.object,
-    rewardsBalance: PropTypes.any,
+    rewardsBalance: PropTypes.object,
     fetchPatientSignUps: PropTypes.func,
     fetchPatientMessages: PropTypes.func,
     fetchRewardsBalance: PropTypes.func,
@@ -35,7 +35,7 @@ export class Dashboard extends React.Component {
     const { currentUser } = this.props;
     this.props.fetchPatientSignUps(currentUser);
     this.props.fetchPatientMessages(currentUser);
-    this.props.fetchRewardsBalance(currentUser.roleForClient.site_id);
+    this.props.fetchRewardsBalance(currentUser.roleForClient.client_id, currentUser.roleForClient.site_id);
   }
 
   openRewardModal = () => {
@@ -47,7 +47,7 @@ export class Dashboard extends React.Component {
   }
 
   render() {
-    const { patientSignUps, patientMessages, rewardsBalance, siteLocations, submitForm } = this.props;
+    const { currentUser, patientSignUps, patientMessages, rewardsBalance, siteLocations, submitForm } = this.props;
     return (
       <section className="row infoarea text-uppercase">
         <h2 className="hidden">Statics</h2>
@@ -98,7 +98,7 @@ export class Dashboard extends React.Component {
             <div className="textbox">
               <h2>REWARDS</h2>
               <a className="btn btn-info lightbox-opener" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal}>Redeem</a>
-              <span className="counter">{rewardsBalance || ''} KIK<span className="small text-lowercase">s</span></span>
+              <span className="counter">{rewardsBalance[currentUser.roleForClient.site_id || 0]} KIK<span className="small text-lowercase">s</span></span>
             </div>
           </div>
           <div className="box">
