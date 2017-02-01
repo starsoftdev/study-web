@@ -48,7 +48,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     currentUser: PropTypes.object,
     currentUserClientId: PropTypes.number,
     rewards: PropTypes.array,
-    rewardsBalance: PropTypes.any,
+    rewardsBalance: PropTypes.object,
     sites: PropTypes.array,
     fetchSites: PropTypes.func,
     fetchClientSites: PropTypes.func,
@@ -110,20 +110,31 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     this.setState({ rewardModalOpen: false });
   }
 
+  redeem = (data) => {
+    const { currentUser, onSubmitForm } = this.props;
+    onSubmitForm({
+      ...data,
+      userId: currentUser.id,
+      userName: `${currentUser.firstName} ${currentUser.lastName}`,
+    });
+  }
+
   renderHeaderText() {
     const { selectedSite, rewardsBalance } = this.props;
 
     if (selectedSite) {
       const siteDetail = find(this.props.sites, { id: selectedSite });
       return (
-        <h3 className="pull-left">{siteDetail.location} Has <strong>{rewardsBalance} KIKs</strong></h3>
+        <h3 className="pull-left">{siteDetail.location} Has <strong>{rewardsBalance[selectedSite]} KIKs</strong></h3>
       );
     }
 
     return (
-      <h3 className="pull-left">'Client' Has <strong>{rewardsBalance} KIKs</strong></h3>
+      <h3 className="pull-left">'Client' Has <strong>{rewardsBalance[0]} KIKs</strong></h3>
     );
   }
+
+
   render() {
     const { siteLocations, pickReward, currentUser } = this.props;
     const redeemable = currentUser.roleForClient.canRedeemRewards;
@@ -149,7 +160,14 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
           <header className="sub-header clearfix">
             {this.renderHeaderText()}
             <a className={classNames('btn bgn-chat pull-right', { disabled: !redeemable })} data-text="Redeem" data-hovertext="Redeem Now" onClick={() => this.openRewardModal()} />
-            <RewardModal siteLocations={redeemableSiteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} onSubmit={this.onSubmitForm} pickReward={pickReward} />
+            <RewardModal
+              currentUser={currentUser}
+              siteLocations={redeemableSiteLocations}
+              showModal={this.state.rewardModalOpen}
+              closeModal={this.closeRewardModal}
+              onSubmit={this.redeem}
+              pickReward={pickReward}
+            />
           </header>
 
           <div className="row images-area">

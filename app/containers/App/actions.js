@@ -311,9 +311,10 @@ export function fetchRewardsBalance(clientId, siteId) {
   };
 }
 
-export function rewardsBalanceFetched(payload) {
+export function rewardsBalanceFetched(siteId, payload) {
   return {
     type: FETCH_REWARDS_BALANCE_SUCCESS,
+    siteId,
     payload,
   };
 }

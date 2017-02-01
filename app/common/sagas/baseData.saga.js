@@ -263,7 +263,7 @@ export function* fetchRewardsBalanceWatcher() {
       };
       const response = yield call(request, requestURL, options);
 
-      yield put(rewardsBalanceFetched(response));
+      yield put(rewardsBalanceFetched(siteId, response));
     } catch (err) {
       yield put(rewardsBalanceFetchingError(err));
     }

@@ -25,16 +25,12 @@ export function* submitFormWatcher() {
   while (true) {
     // listen for the SUBMIT_FORM action dispatched on form submit
     const { payload } = yield take(SUBMIT_FORM);
-    const redemption = {
-      redemption_type_id: payload.redemption_type,
-      site_id: payload.site,
-    };
 
     try {
-      const requestURL = `${API_URL}/rewardRedemptions`;
+      const requestURL = `${API_URL}/rewards/redeem`;
       const params = {
         method: 'POST',
-        body: JSON.stringify(redemption),
+        body: JSON.stringify(payload),
       };
       const response = yield call(request, requestURL, params);
 

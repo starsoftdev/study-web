@@ -7,7 +7,7 @@ export default function rewardForm(state = {}, action) {
         ...state,
         values: {
           ...state.values,
-          redemption_type: action.value,
+          redemptionType: action.value,
         },
       };
     default:

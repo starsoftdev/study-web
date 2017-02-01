@@ -20,9 +20,7 @@ import {
   FETCH_REWARDS_SUCCESS,
   FETCH_REWARDS_ERROR,
 
-  FETCH_REWARDS_BALANCE,
   FETCH_REWARDS_BALANCE_SUCCESS,
-  FETCH_REWARDS_BALANCE_ERROR,
 
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
@@ -169,7 +167,7 @@ const initialState = {
       error: null,
     },
     rewards: [],
-    rewardsBalance: null,
+    rewardsBalance: {},
     clientRoles: {
       details: [],
       fetching: false,
@@ -337,21 +335,16 @@ export default function appReducer(state = initialState, action) {
         rewards: [],
       };
       break;
-    case FETCH_REWARDS_BALANCE:
+    case FETCH_REWARDS_BALANCE_SUCCESS: {
+      const { siteId } = action;
       baseDataInnerState = {
-        rewardsBalance: null,
+        rewardsBalance: {
+          ...state.baseData.rewardsBalance,
+          [siteId || 0]: payload,
+        }
       };
       break;
-    case FETCH_REWARDS_BALANCE_SUCCESS:
-      baseDataInnerState = {
-        rewardsBalance: payload,
-      };
-      break;
-    case FETCH_REWARDS_BALANCE_ERROR:
-      baseDataInnerState = {
-        rewardsBalance: null,
-      };
-      break;
+    }
     case FETCH_CARDS:
       baseDataInnerState = {
         cards: {
