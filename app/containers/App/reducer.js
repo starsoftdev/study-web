@@ -341,7 +341,7 @@ export default function appReducer(state = initialState, action) {
         rewardsBalance: {
           ...state.baseData.rewardsBalance,
           [siteId || 0]: payload,
-        }
+        },
       };
       break;
     }
