@@ -347,6 +347,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       indicationName: this.state.indicationName,
       locationName: this.state.locationName,
       exposureLevelName: studyLevel.label,
+      campaignlength: selectedStudy.campaignlength,
       name: '',
     });
   }
