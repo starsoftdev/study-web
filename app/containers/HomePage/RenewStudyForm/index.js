@@ -7,12 +7,12 @@ import { Calendar } from 'react-date-range';
 import moment from 'moment';
 
 import CenteredModal from '../../../components/CenteredModal/index';
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
-import DatePicker from 'components/Input/DatePicker';
-import Toggle from 'components/Input/Toggle';
-import ShoppingCartForm from 'components/ShoppingCartForm';
-import AddNewCardForm from 'components/AddNewCardForm';
+import Input from '../../../components/Input';
+import ReactSelect from '../../../components/Input/ReactSelect';
+import DatePicker from '../../../components/Input/DatePicker';
+import Toggle from '../../../components/Input/Toggle';
+import ShoppingCartForm from '../../../components/ShoppingCartForm';
+import AddNewCardForm from '../../../components/AddNewCardForm';
 import {
   selectRenewStudyFormCampaignLengthValue,
 } from './selectors';
@@ -24,14 +24,8 @@ import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 import _, { find } from 'lodash';
 
-const mapStateToProps = createStructuredSelector({
-  studyLevels: selectStudyLevels(),
-  selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
-  campaignLength: selectRenewStudyFormCampaignLengthValue(),
-});
 
 @reduxForm({ form: 'renewStudy', validate: formValidator })
-
 class RenewStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -233,7 +227,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   }
 
   handleSubmit() {
-    this.resetState();
     this.props.validateAndSubmit();
   }
 
@@ -543,11 +536,15 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
-    resetForm: () => dispatch(reset('renewStudy')),
-  };
-}
+const mapStateToProps = createStructuredSelector({
+  studyLevels: selectStudyLevels(),
+  selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
+  campaignLength: selectRenewStudyFormCampaignLengthValue(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+  resetForm: () => dispatch(reset('renewStudy')),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(RenewStudyForm);

@@ -20,16 +20,7 @@ import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 import _, { find } from 'lodash';
 
-const mapStateToProps = createStructuredSelector({
-  studyLevels: selectStudyLevels(),
-  selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
-  callTracking: selectUpgradeStudyFormCallTrackingValue(),
-  leadsCount: selectUpgradeStudyFormLeadsCount(),
-  availPhoneNumbers: selectAvailPhoneNumbers(),
-});
-
 @reduxForm({ form: 'upgradeStudy', validate: formValidator })
-
 class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -164,7 +155,6 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   handleSubmit() {
-    this.resetState();
     this.props.validateAndSubmit();
   }
 
@@ -399,11 +389,17 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
-    resetForm: () => dispatch(reset('upgradeStudy')),
-  };
-}
+const mapStateToProps = createStructuredSelector({
+  studyLevels: selectStudyLevels(),
+  selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
+  callTracking: selectUpgradeStudyFormCallTrackingValue(),
+  leadsCount: selectUpgradeStudyFormLeadsCount(),
+  availPhoneNumbers: selectAvailPhoneNumbers(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+  resetForm: () => dispatch(reset('upgradeStudy')),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpgradeStudyForm);
