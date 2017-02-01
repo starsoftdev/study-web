@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
+import { find } from 'lodash';
+
 import CenteredModal from '../../components/CenteredModal/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import RadioButton from '../../components/Input/RadioButton';
@@ -17,31 +19,48 @@ import cardAmazon from 'assets/images/img8.png';
 import cardStarbucks from 'assets/images/img7.png';
 
 import {
-  selectUserSiteLocations,
+  fetchRewardsBalance,
+} from 'containers/App/actions';
+
+import {
   selectCurrentUserClientId,
+  selectSites,
+  selectRewardsBalance,
 } from 'containers/App/selectors';
+
+import { selectSiteId } from './selectors';
 
 import validator from './validator';
 
 const mapStateToProps = createStructuredSelector({
-  siteLocations : selectUserSiteLocations(),
   currentUserClientId: selectCurrentUserClientId(),
+  sites: selectSites(),
+  selectedSite: selectSiteId(),
+  rewardsBalance: selectRewardsBalance(),
 });
+const mapDispatchToProps = {
+  fetchRewardsBalance,
+};
 
 @reduxForm({
   form: 'rewardForm',
   validate: validator,
 })
-@connect(mapStateToProps, null)
+@connect(mapStateToProps, mapDispatchToProps)
 class RewardModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
+    currentUser: React.PropTypes.object,
     showModal: React.PropTypes.bool,
     siteLocations: React.PropTypes.array,
     closeModal: React.PropTypes.func,
     handleSubmit: React.PropTypes.func.isRequired,
     currentUserClientId: React.PropTypes.number,
-    pickReward: React.PropTypes.pickReward,
+    pickReward: React.PropTypes.func,
+    sites: React.PropTypes.array,
+    selectedSite: React.PropTypes.number,
+    rewardsBalance: React.PropTypes.object,
+    fetchRewardsBalance: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -54,6 +73,16 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
     this.selectCard = this.selectCard.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { selectedSite, fetchRewardsBalance, currentUser } = nextProps;
+
+    if (this.props.selectedSite !== selectedSite) {
+      if (typeof (selectedSite) === 'number') {
+        fetchRewardsBalance(currentUser.roleForClient.client_id, selectedSite);
+      }
+    }
+  }
+
   selectCard(value) {
     const { pickReward } = this.props;
     pickReward(value);
@@ -61,8 +90,14 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
 
   render() {
     const { handleSubmit } = this.props;
+    const { sites, selectedSite, rewardsBalance } = this.props;
+    let siteDetail = {};
+    if (selectedSite) {
+      siteDetail = find(sites, { id: selectedSite });
+    }
+
     return (
-      <form onSubmit={handleSubmit}>
+      <form>
         <Modal
           className="reward-modal"
           id="select-reward-form"
@@ -84,14 +119,16 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                 <div className="field-row full">
                   <div className="field">
                     <Field
-                      name="site"
+                      name="siteId"
                       component={ReactSelect}
                       placeholder="Select Site Location"
                       options={this.props.siteLocations}
                       className="field"
                     />
                   </div>
-                  <strong className="label"><label htmlFor="select-rewards" className="text-capitalize">Wayne Enterprise Has <strong>450 KIKs</strong></label></strong>
+                  <strong className="label">
+                    <label htmlFor="select-rewards" className="text-capitalize">{siteDetail.location} Has <strong>{rewardsBalance[selectedSite]} KIKs</strong></label>
+                  </strong>
                 </div>
                 <div className="row images-area">
                   <div className="col-xs-4 pull-left">
@@ -108,7 +145,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                   <li>
                     <label>
                       <Field
-                        name="redemption_type"
+                        name="redemptionType"
                         type="radio"
                         component={RadioButton}
                         className=""
@@ -121,7 +158,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                   <li>
                     <label>
                       <Field
-                        name="redemption_type"
+                        name="redemptionType"
                         type="radio"
                         component={RadioButton}
                         className=""
@@ -134,7 +171,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                   <li>
                     <label>
                       <Field
-                        name="redemption_type"
+                        name="redemptionType"
                         type="radio"
                         component={RadioButton}
                         className=""
