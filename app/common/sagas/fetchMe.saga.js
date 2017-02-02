@@ -36,7 +36,11 @@ export function* fetchMeFromToken() {
     const currentPath = yield select(selectCurrentPath);
     const pathsToRedirect = ['/login'];
     if (pathsToRedirect.indexOf(currentPath) > -1) {
-      yield put(push('/app'));
+      if (response.roleForClient) {
+        yield put(push('/app'));
+      } else {
+        yield put(push('/app/dashboard'));
+      }
     }
   } catch (e) {
     yield put(setAuthState(false));
