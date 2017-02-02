@@ -33,8 +33,9 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
   }
 
   onViewClick() {
+    console.log(this.props);
     const { push } = this.props;
-    push(`/app/report?protocol=${this.props.protocolNumber}`);
+    push(`/app/report?protocol=${this.props.protocolNumber}&indication=${this.props.indication}&cro=${this.props.croName}`);
   }
 
   // onRenewClick() {
