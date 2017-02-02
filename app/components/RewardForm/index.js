@@ -13,11 +13,13 @@ import formValidator from './validator';
 @reduxForm({ form: 'reward', validate: formValidator })
 class RewardForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    currentUser: PropTypes.object,
     siteLocations: PropTypes.array,
   };
 
   render() {
-    const { siteLocations } = this.props;
+    const { currentUser, siteLocations } = this.props;
+    const isAdmin = !currentUser.roleForClient.site_id;
 
     return (
       <div>
@@ -27,6 +29,7 @@ class RewardForm extends Component { // eslint-disable-line react/prefer-statele
           placeholder="Select Site Location"
           options={siteLocations}
           className="field"
+          disabled={!isAdmin}
         />
       </div>
     );

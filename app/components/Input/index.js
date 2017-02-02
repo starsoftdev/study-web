@@ -37,7 +37,6 @@ function Input({
   defaultValue,
 }) {
   const hasError = touched && error && !active;
-  const errorClass = hasError ? 'has-error' : '';
   const tooltip = (
     <Tooltip
       id={`${name}-tooltip`}
@@ -90,7 +89,7 @@ function Input({
   }
 
   return (
-    <div className={classNames(className, errorClass)}>
+    <div className={classNames(className, { 'has-error': hasError })}>
       {inputComponent}
     </div>
   );

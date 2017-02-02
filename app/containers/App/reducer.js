@@ -20,6 +20,8 @@ import {
   FETCH_REWARDS_SUCCESS,
   FETCH_REWARDS_ERROR,
 
+  FETCH_REWARDS_BALANCE_SUCCESS,
+
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
@@ -165,6 +167,7 @@ const initialState = {
       error: null,
     },
     rewards: [],
+    rewardsBalance: {},
     clientRoles: {
       details: [],
       fetching: false,
@@ -239,6 +242,8 @@ export default function appReducer(state = initialState, action) {
           userRoleType = 'sponsor';
         } else if (payload.userData.roleForClient) {
           userRoleType = 'client';
+        } else if (payload.userData.roles.length > 0) {
+          userRoleType = 'dashboard';
         } else {
           userRoleType = '';
         }
@@ -332,6 +337,16 @@ export default function appReducer(state = initialState, action) {
         rewards: [],
       };
       break;
+    case FETCH_REWARDS_BALANCE_SUCCESS: {
+      const { siteId } = action;
+      baseDataInnerState = {
+        rewardsBalance: {
+          ...state.baseData.rewardsBalance,
+          [siteId || 0]: payload,
+        },
+      };
+      break;
+    }
     case FETCH_CARDS:
       baseDataInnerState = {
         cards: {

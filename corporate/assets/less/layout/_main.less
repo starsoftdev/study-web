@@ -1172,6 +1172,7 @@ input[type=submit].input-lg,
 		width: 200px;
 		margin: 0 20px 0 0;
 		position: absolute;
+    z-index: 1;
 		
 		@media screen and (max-width: (@desktop - 1)) {
 			display: none;
@@ -1243,7 +1244,13 @@ input[type=submit].input-lg,
 .form-find-location {
 	margin: 0 -10px;
 	position: relative;
-	padding: 65px 0;
+
+  .react-parallax{
+
+    .react-parallax-content{
+      padding: 65px 0;
+    }
+  }
 	
 	h2 {
 		color: #9fcf68;
@@ -1890,8 +1897,14 @@ section.listings {
 /* get-atart */
 section.get-start {
 	margin: 0 -10px;
-	padding: 65px 10px;
 	position: relative;
+
+  .react-parallax{
+
+    .react-parallax-content{
+      padding: 65px 10px;
+    }
+  }
 	
 	.container {
 		max-width: 1204px;
