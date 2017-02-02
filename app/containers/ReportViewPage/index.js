@@ -42,8 +42,10 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
   componentWillMount() {
     const { currentUser } = this.props;
     const protocolNumber = this.props.location.query.protocol || null;
+    const indication = this.props.location.query.indication || null;
+    const cro = this.props.location.query.cro || null;
 
-    this.props.getReportsList({ sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber });
+    this.props.getReportsList({ sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro });
   }
 
   getPercentageObject(item) {
@@ -64,8 +66,10 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
   searchReports(searchFilter) {
     const { currentUser } = this.props;
     const protocolNumber = this.props.location.query.protocol || null;
+    const indication = this.props.location.query.indication || null;
+    const cro = this.props.location.query.cro || null;
 
-    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber };
+    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro };
 
     filters = _.assign(filters, this.props.formValues, searchFilter);
 
@@ -74,13 +78,16 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 
   render() {
     const protocolNumber = this.props.location.query.protocol || null;
+    const indication = this.props.location.query.indication || null;
+    const cro = this.props.location.query.cro || null;
+
     return (
       <div className="container-fluid sponsor-portal report-view-page">
         <section className="reports">
           <div className="individual-study">
             <div className="main-head">
               <h2 className="main-heading">{protocolNumber}</h2>
-              <p><span className="info-cell">Indication: {this.props.reportsList.details.length > 0 ? this.props.reportsList.details[0].indication_name : ''}</span> <span className="info-cell">CRO: {this.props.reportsList.details.length > 0 ? this.props.reportsList.details[0].cro_name : ''}</span></p>
+              <p><span className="info-cell">Indication: {indication}</span> <span className="info-cell">CRO: {cro}</span></p>
             </div>
           </div>
         </section>
