@@ -12,7 +12,25 @@ import SponsorManageUsersSearch from 'containers/SponsorManageUsers/SponsorManag
 import SponsorManageUsersAdminsTable from 'containers/SponsorManageUsers/AdminsTable';
 import SponsorManageUsersProtocolsTable from 'containers/SponsorManageUsers/ProtocolsTable';
 
+import { selectCurrentUser } from 'containers/App/selectors';
+
 export class SponsorManageUsers extends React.Component { // eslint-disable-line react/prefer-stateless-function
+
+  static propTypes = {
+    currentUser: React.PropTypes.object,
+  };
+
+  constructor(props) {
+    super(props);
+
+  }
+
+  componentWillMount() {
+    const { currentUser } = this.props;
+
+    //this.props.getReportsList({ sponsorRoleId: currentUser.roleForSponsor.id });
+  }
+
   render() {
     return (
       <div className="container-fluid">
@@ -27,7 +45,9 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
   }
 }
 
-const mapStateToProps = createStructuredSelector({});
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
+});
 
 function mapDispatchToProps(dispatch) {
   return {
