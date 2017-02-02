@@ -14,22 +14,13 @@ import { selectStudyLevels, selectAvailPhoneNumbers } from 'containers/App/selec
 import { saveCard } from 'containers/App/actions';
 import { selectSelectedIndicationLevelPrice } from 'containers/HomePage/selectors';
 import { selectUpgradeStudyFormCallTrackingValue, selectUpgradeStudyFormLeadsCount } from './selectors';
-import { MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
+import { MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE, QUALIFICATION_SUITE_UPGRADE_PRICE } from 'common/constants';
 import RenderLeads from './renderLeads';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 import _, { find } from 'lodash';
 
-const mapStateToProps = createStructuredSelector({
-  studyLevels: selectStudyLevels(),
-  selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
-  callTracking: selectUpgradeStudyFormCallTrackingValue(),
-  leadsCount: selectUpgradeStudyFormLeadsCount(),
-  availPhoneNumbers: selectAvailPhoneNumbers(),
-});
-
 @reduxForm({ form: 'upgradeStudy', validate: formValidator })
-
 class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -60,11 +51,13 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     this.resetState = this.resetState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleExposureChoose = this.handleExposureChoose.bind(this);
-    this.handlePatientChoose = this.handlePatientChoose.bind(this);
+    this.handleMessagingChoose = this.handleMessagingChoose.bind(this);
+    this.handleQualificationChoose = this.handleQualificationChoose.bind(this);
     this.handleCallChoose = this.handleCallChoose.bind(this);
     this.state = {
       level: null,
       patientMessagingSuite: false,
+      patientQualificationSuite: false,
       callTracking: false,
       addCardModalOpen: false,
     };
@@ -73,6 +66,19 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   componentWillReceiveProps(newProps) {
     if (newProps.leadsCount === 0 && this.props.leadsCount === 1) {
       this.props.dispatch(change('upgradeStudy', 'callTracking', false));
+    }
+
+    if (newProps.selectedStudy) {
+      const { patientMessagingSuite, patientQualificationSuite } = newProps.selectedStudy;
+
+      if (patientMessagingSuite === 'On' && patientQualificationSuite === 'Off') {
+        this.props.dispatch(change('upgradeStudy', 'addPatientMessagingSuite', true));
+      }
+
+      if (patientQualificationSuite === 'On') {
+        this.props.dispatch(change('upgradeStudy', 'addPatientQualificationSuite', true));
+        this.props.dispatch(change('upgradeStudy', 'addPatientMessagingSuite', false));
+      }
     }
   }
 
@@ -91,6 +97,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     const resetState = {
       level: null,
       patientMessagingSuite: false,
+      patientQualificationSuite: false,
       callTracking: false,
     };
 
@@ -117,9 +124,27 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     });
   }
 
-  handlePatientChoose(e) {
+  handleMessagingChoose(e) {
+    let { patientQualificationSuite } = this.state;
+    if (e && this.state.patientQualificationSuite) {
+      patientQualificationSuite = false;
+      this.props.dispatch(change('upgradeStudy', 'addPatientQualificationSuite', false));
+    }
     this.setState({
       patientMessagingSuite: e,
+      patientQualificationSuite,
+    });
+  }
+
+  handleQualificationChoose(e) {
+    let { patientMessagingSuite } = this.state;
+    if (e && this.state.patientMessagingSuite) {
+      patientMessagingSuite = false;
+      this.props.dispatch(change('upgradeStudy', 'addPatientMessagingSuite', false));
+    }
+    this.setState({
+      patientQualificationSuite: e,
+      patientMessagingSuite,
     });
   }
 
@@ -130,13 +155,12 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   handleSubmit() {
-    this.resetState();
     this.props.validateAndSubmit();
   }
 
   generateUpgradeStudyShoppingCartAddOns() {
-    const { studyLevels, selectedIndicationLevelPrice } = this.props;
-    const { level, patientMessagingSuite, callTracking } = this.state;
+    const { studyLevels, selectedIndicationLevelPrice, selectedStudy } = this.props;
+    const { level, patientMessagingSuite, callTracking, patientQualificationSuite } = this.state;
     const addOns = [];
 
     if (level) {
@@ -159,6 +183,23 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
         total: MESSAGING_SUITE_PRICE,
       });
     }
+    if (patientQualificationSuite) {
+      if (selectedStudy.patientMessagingSuite === 'On') {
+        addOns.push({
+          title: 'Upgrade to Patient Qualification Suite',
+          price: QUALIFICATION_SUITE_UPGRADE_PRICE,
+          quantity: 1,
+          total: QUALIFICATION_SUITE_UPGRADE_PRICE,
+        });
+      } else {
+        addOns.push({
+          title: 'Patient Qualification Suite',
+          price: QUALIFICATION_SUITE_PRICE,
+          quantity: 1,
+          total: QUALIFICATION_SUITE_PRICE,
+        });
+      }
+    }
     if (callTracking) {
       addOns.push({
         title: 'Call Tracking',
@@ -173,15 +214,25 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
 
   render() {
     const { studyLevels, selectedIndicationLevelPrice, callTracking, availPhoneNumbers, selectedStudy } = this.props;
-
-    console.log(studyLevels);
+    let patientQualificationSuite = false;
+    let qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
+    let patientMessagingSuite = false;
 
     let filteredLevels = studyLevels;
     let isDisabled = false;
     let value = null;
 
-    if (selectedStudy && selectedStudy.campaign) {
-      filteredLevels = _.filter(studyLevels, (o) => (o.id > selectedStudy.campaign.level_id));
+    if (selectedStudy) {
+      patientQualificationSuite = selectedStudy.patientQualificationSuite;
+      patientMessagingSuite = selectedStudy.patientMessagingSuite;
+
+      if (patientMessagingSuite === 'On' && patientQualificationSuite === 'Off') {
+        qualificationSuitePrice = QUALIFICATION_SUITE_UPGRADE_PRICE;
+      }
+
+      if (selectedStudy.campaign) {
+        filteredLevels = _.filter(studyLevels, (o) => (o.id > selectedStudy.campaign.level_id));
+      }
     }
 
     if (filteredLevels.length === 0 && selectedStudy) {
@@ -247,9 +298,24 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                           </strong>
                           <div className="field">
                             <Field
-                              name="patientMessagingSuite"
+                              name="addPatientMessagingSuite"
+                              disabled={patientMessagingSuite === 'On' || patientQualificationSuite === 'On'}
                               component={Toggle}
-                              onChange={this.handlePatientChoose}
+                              onChange={this.handleMessagingChoose}
+                            />
+                          </div>
+                        </div>
+                        <div className="field-row">
+                          <strong className="label"><label>Patient qualification <br />
+                            Suite: ${qualificationSuitePrice / 100} <br />
+                            <span className="label-blue">(Includes patient <br />
+                            messaging suite)</span></label></strong>
+                          <div className="field">
+                            <Field
+                              name="addPatientQualificationSuite"
+                              disabled={patientQualificationSuite === 'On'}
+                              component={Toggle}
+                              onChange={this.handleQualificationChoose}
                             />
                           </div>
                         </div>
@@ -323,11 +389,17 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
-    resetForm: () => dispatch(reset('upgradeStudy')),
-  };
-}
+const mapStateToProps = createStructuredSelector({
+  studyLevels: selectStudyLevels(),
+  selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
+  callTracking: selectUpgradeStudyFormCallTrackingValue(),
+  leadsCount: selectUpgradeStudyFormLeadsCount(),
+  availPhoneNumbers: selectAvailPhoneNumbers(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+  resetForm: () => dispatch(reset('upgradeStudy')),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpgradeStudyForm);

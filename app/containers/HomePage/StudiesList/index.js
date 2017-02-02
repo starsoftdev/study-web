@@ -4,54 +4,58 @@ import { createStructuredSelector } from 'reselect';
 import _, { countBy, find, filter, sumBy } from 'lodash';
 import { touch } from 'redux-form';
 
-import { fetchLevels, saveCard } from 'containers/App/actions';
-import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients } from 'containers/App/selectors';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
-import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy,
-  selectUpgradedStudy, selectEditedStudy, selectPaginationOptions } from 'containers/HomePage/selectors';
-import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from 'containers/HomePage/constants';
+import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../../components/ShoppingCartForm/selectors';
+import { fetchLevels, saveCard } from '../../../containers/App/actions';
+import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../../../containers/HomePage/constants';
+import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients } from '../../../containers/App/selectors';
 import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice } from 'containers/HomePage/actions';
-import { selectRenewStudyFormValues, selectRenewStudyFormError } from 'containers/HomePage/RenewStudyForm/selectors';
-import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError } from 'containers/HomePage/UpgradeStudyForm/selectors';
-import StudyItem from './StudyItem';
-import RenewStudyForm from 'containers/HomePage/RenewStudyForm';
-import UpgradeStudyForm from 'containers/HomePage/UpgradeStudyForm';
-import EditStudyForm from 'containers/HomePage/EditStudyForm';
-import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
-import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
+import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions } from '../../../containers/HomePage/selectors';
+import { selectEditStudyFormValues, selectEditStudyFormError } from '../../../containers/HomePage/EditStudyForm/selectors';
+import { selectRenewStudyFormValues, selectRenewStudyFormError } from '../../../containers/HomePage/RenewStudyForm/selectors';
+import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError } from '../../../containers/HomePage/UpgradeStudyForm/selectors';
+import RenewStudyForm from '../../../containers/HomePage/RenewStudyForm/index';
+import UpgradeStudyForm from '../../../containers/HomePage/UpgradeStudyForm/index';
+import EditStudyForm from '../../../containers/HomePage/EditStudyForm/index';
+import { shoppingCartFields } from '../../../components/ShoppingCartForm/validator';
 import { upgradeStudyFields } from '../UpgradeStudyForm/validator';
 import { renewStudyFields } from '../RenewStudyForm/validator';
+import { editStudyFields } from '../EditStudyForm/validator';
+import StudyItem from './StudyItem';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    clearIndicationLevelPrice: PropTypes.func,
     currentUserStripeCustomerId: PropTypes.string,
     currentUser: PropTypes.object,
-    studies: PropTypes.object,
-    studyLevels: PropTypes.array,
-    selectedIndicationLevelPrice: PropTypes.object,
-    renewStudyFormValues: PropTypes.object,
-    renewStudyFormError: PropTypes.bool,
-    upgradeStudyFormValues: PropTypes.object,
-    upgradeStudyFormError: PropTypes.bool,
-    renewedStudy: PropTypes.object,
-    upgradedStudy: PropTypes.object,
-    editedStudy: PropTypes.object,
     fetchLevels: PropTypes.func,
     fetchIndicationLevelPrice: PropTypes.func,
     fetchUpgradeStudyPrice: PropTypes.func,
-    clearIndicationLevelPrice: PropTypes.func,
-    renewStudy: PropTypes.func,
-    upgradeStudy: PropTypes.func,
     editStudy: PropTypes.func,
-    sitePatients: React.PropTypes.object,
+    editedStudy: PropTypes.object,
+    editStudyFormError: PropTypes.bool,
+    editStudyFormValues: PropTypes.object,
     paginationOptions: React.PropTypes.object,
+    renewStudyFormError: PropTypes.bool,
+    renewStudyFormValues: PropTypes.object,
+    renewedStudy: PropTypes.object,
+    renewStudy: PropTypes.func,
+    selectedIndicationLevelPrice: PropTypes.object,
     setActiveSort: PropTypes.func,
-    sortSuccess: PropTypes.func,
-    shoppingCartFormError: PropTypes.object,
+    shoppingCartFormError: PropTypes.bool,
     shoppingCartFormValues: PropTypes.object,
-    touchUpgradeStudy: PropTypes.func,
+    sitePatients: React.PropTypes.object,
+    sortSuccess: PropTypes.func,
+    studies: PropTypes.object,
+    studyLevels: PropTypes.array,
+    touchEditStudy: PropTypes.func,
     touchRenewStudy: PropTypes.func,
+    touchUpgradeStudy: PropTypes.func,
     touchShoppingCart: PropTypes.func,
+    upgradeStudy: PropTypes.func,
+    upgradedStudy: PropTypes.object,
+    upgradeStudyFormValues: PropTypes.object,
+    upgradeStudyFormError: PropTypes.bool,
     saveCard: PropTypes.func,
   };
 
@@ -313,8 +317,13 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       return;
     }
 
-    const studyLevel = _.find(this.props.studyLevels, { id: upgradeStudyFormValues.level });
     const selectedStudy = _.find(this.props.studies.details, (o) => (o.studyId === this.state.selectedStudyId));
+
+    if (!upgradeStudyFormValues.level) {
+      upgradeStudyFormValues.level = selectedStudy.campaign.level_id;
+    }
+
+    const studyLevel = _.find(this.props.studyLevels, { id: upgradeStudyFormValues.level });
 
     upgradeStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...selectedStudy,
@@ -330,8 +339,15 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     });
   }
 
-  handleEditStudyFormSubmit(infoParams) {
-    this.props.editStudy(this.state.selectedStudyId, infoParams);
+  handleEditStudyFormSubmit() {
+    const { editStudyFormError, editStudyFormValues, touchEditStudy } = this.props;
+
+    if (editStudyFormError) {
+      touchEditStudy();
+      return;
+    }
+
+    this.props.editStudy(this.state.selectedStudyId, editStudyFormValues);
   }
 
   generateRenewStudyShoppingCartAddOns() {
@@ -548,37 +564,40 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
-  studies: selectStudies(),
-  studyLevels: selectStudyLevels(),
-  selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
+  editedStudy: selectEditedStudy(),
+  editStudyFormValues: selectEditStudyFormValues(),
+  editStudyFormError: selectEditStudyFormError(),
+  paginationOptions: selectPaginationOptions(),
+  renewedStudy: selectRenewedStudy(),
   renewStudyFormValues: selectRenewStudyFormValues(),
   renewStudyFormError: selectRenewStudyFormError(),
-  upgradeStudyFormValues: selectUpgradeStudyFormValues(),
-  upgradeStudyFormError: selectUpgradeStudyFormError(),
-  renewedStudy: selectRenewedStudy(),
-  upgradedStudy: selectUpgradedStudy(),
-  editedStudy: selectEditedStudy(),
-  sitePatients: selectSitePatients(),
-  paginationOptions: selectPaginationOptions(),
+  selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
   shoppingCartFormError: selectShoppingCartFormError(),
   shoppingCartFormValues: selectShoppingCartFormValues(),
+  sitePatients: selectSitePatients(),
+  studies: selectStudies(),
+  studyLevels: selectStudyLevels(),
+  upgradeStudyFormValues: selectUpgradeStudyFormValues(),
+  upgradeStudyFormError: selectUpgradeStudyFormError(),
+  upgradedStudy: selectUpgradedStudy(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
+    clearIndicationLevelPrice: () => dispatch(clearIndicationLevelPrice()),
     fetchLevels: () => dispatch(fetchLevels()),
     fetchIndicationLevelPrice: (levelId, indicationId) => dispatch(fetchIndicationLevelPrice(levelId, indicationId)),
     fetchUpgradeStudyPrice: (fromLevel, toLevel) => dispatch(fetchUpgradeStudyPrice(fromLevel, toLevel)),
-    clearIndicationLevelPrice: () => dispatch(clearIndicationLevelPrice()),
-    renewStudy: (studyId, cartValues, formValues) => dispatch(renewStudy(studyId, cartValues, formValues)),
-    upgradeStudy: (studyId, cartValues, formValues) => dispatch(upgradeStudy(studyId, cartValues, formValues)),
     editStudy: (formValues) => dispatch(editStudy(formValues)),
+    renewStudy: (studyId, cartValues, formValues) => dispatch(renewStudy(studyId, cartValues, formValues)),
+    saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
     sortSuccess: (payload) => dispatch(sortSuccess(payload)),
-    touchUpgradeStudy: () => dispatch(touch('upgradeStudy', ...upgradeStudyFields)),
+    touchEditStudy: () => dispatch(touch('editStudy', ...editStudyFields)),
     touchRenewStudy: () => dispatch(touch('renewStudy', ...renewStudyFields)),
+    touchUpgradeStudy: () => dispatch(touch('upgradeStudy', ...upgradeStudyFields)),
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
-    saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+    upgradeStudy: (studyId, cartValues, formValues) => dispatch(upgradeStudy(studyId, cartValues, formValues)),
   };
 }
 

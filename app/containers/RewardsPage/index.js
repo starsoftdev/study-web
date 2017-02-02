@@ -7,17 +7,23 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { find, reject } from 'lodash';
+import classNames from 'classnames';
 
 import {
   fetchSites,
   fetchClientSites,
   fetchRewards,
+  fetchRewardsBalance,
 } from 'containers/App/actions';
 
 import {
+  selectCurrentUser,
   selectCurrentUserClientId,
   selectUserSiteLocations,
   selectRewards,
+  selectRewardsBalance,
+  selectSites,
 } from 'containers/App/selectors';
 
 import { selectSiteLocation } from 'components/RewardForm/selectors';
@@ -42,12 +48,15 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     currentUser: PropTypes.object,
     currentUserClientId: PropTypes.number,
     rewards: PropTypes.array,
+    rewardsBalance: PropTypes.object,
+    sites: PropTypes.array,
     fetchSites: PropTypes.func,
     fetchClientSites: PropTypes.func,
     fetchRewards: PropTypes.func,
+    fetchRewardsBalance: PropTypes.func,
     onSubmitForm: PropTypes.func,
     pickReward: PropTypes.func,
-    selectedSite: PropTypes.object,
+    selectedSite: PropTypes.number,
     paginationOptions: PropTypes.object,
     setActiveSort: PropTypes.func,
   };
@@ -63,6 +72,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     this.closeRewardModal = this.closeRewardModal.bind(this);
     this.onSubmitForm = this.props.onSubmitForm.bind(this);
   }
+
   componentWillMount() {
     this.props.fetchSites();
     const { currentUserClientId } = this.props;
@@ -72,7 +82,22 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
   }
 
   componentDidMount() {
-    this.props.fetchRewards();
+    const { currentUser } = this.props;
+
+    if (currentUser) {
+      this.props.fetchRewards(currentUser.roleForClient.client_id, currentUser.roleForClient.site_id);
+      this.props.fetchRewardsBalance(currentUser.roleForClient.client_id, currentUser.roleForClient.site_id);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { selectedSite, fetchRewardsBalance, currentUser } = nextProps;
+
+    if (this.props.selectedSite !== selectedSite) {
+      if (typeof (selectedSite) === 'number') {
+        fetchRewardsBalance(currentUser.roleForClient.client_id, selectedSite);
+      }
+    }
   }
 
   openRewardModal(value) {
@@ -85,23 +110,36 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     this.setState({ rewardModalOpen: false });
   }
 
+  redeem = (data) => {
+    const { currentUser, onSubmitForm } = this.props;
+    onSubmitForm({
+      ...data,
+      userId: currentUser.id,
+      userName: `${currentUser.firstName} ${currentUser.lastName}`,
+    });
+  }
+
   renderHeaderText() {
-    const { selectedSite } = this.props;
-    if (typeof (selectedSite) === 'number') {
-      if (selectedSite === 0) {
-        return (
-          <h3 className="pull-left">'Client' Has <strong>450 KIKs</strong></h3>
-        );
-      }
+    const { selectedSite, rewardsBalance } = this.props;
+
+    if (selectedSite) {
+      const siteDetail = find(this.props.sites, { id: selectedSite });
       return (
-        <h3 className="pull-left">'Site' Has <strong>450 KIKs</strong></h3>
+        <h3 className="pull-left">{siteDetail.location} Has <strong>{rewardsBalance[selectedSite]} KIKs</strong></h3>
       );
     }
-    // shouldn't ever display this, since the site should be pre-populated, depending on whether they're a site user or an admin. If they're an admin, pre-select all sites
-    return null;
+
+    return (
+      <h3 className="pull-left">'Client' Has <strong>{rewardsBalance[0]} KIKs</strong></h3>
+    );
   }
+
+
   render() {
-    const { siteLocations, pickReward } = this.props;
+    const { siteLocations, pickReward, currentUser } = this.props;
+    const redeemable = currentUser.roleForClient.canRedeemRewards;
+    const redeemableSiteLocations = reject(siteLocations, { id: 0 });
+
     return (
       <div className="container-fluid">
         <Helmet title="Rewards - StudyKIK" />
@@ -109,27 +147,38 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
           <h2 className="main-heading">REWARDS</h2>
           <div className="form-search clearfix">
             <div className="pull-left custom-select">
-              <RewardForm
-                siteLocations={siteLocations}
-              />
+              {siteLocations.length > 0 &&
+                <RewardForm
+                  currentUser={currentUser}
+                  siteLocations={siteLocations}
+                  initialValues={{ site: siteLocations[0].id }}
+                />
+              }
             </div>
           </div>
 
           <header className="sub-header clearfix">
             {this.renderHeaderText()}
-            <a className="btn bgn-chat pull-right" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal} />
-            <RewardModal siteLocations={siteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} onSubmit={this.onSubmitForm} pickReward={pickReward} />
+            <a className={classNames('btn bgn-chat pull-right', { disabled: !redeemable })} data-text="Redeem" data-hovertext="Redeem Now" onClick={() => this.openRewardModal()} />
+            <RewardModal
+              currentUser={currentUser}
+              siteLocations={redeemableSiteLocations}
+              showModal={this.state.rewardModalOpen}
+              closeModal={this.closeRewardModal}
+              onSubmit={this.redeem}
+              pickReward={pickReward}
+            />
           </header>
 
           <div className="row images-area">
             <div className="col-xs-4 pull-left">
-              <a className="option1" data-for="radio-option1" onClick={() => this.openRewardModal('1')}><img role="presentation" src={cardStarbucks} /></a>
+              <a className="option1" data-for="radio-option1" onClick={() => redeemable && this.openRewardModal('1')}><img role="presentation" src={cardStarbucks} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a className="option2" data-for="radio-option2" onClick={() => this.openRewardModal('2')}><img role="presentation" src={cardAmazon} /></a>
+              <a className="option2" data-for="radio-option2" onClick={() => redeemable && this.openRewardModal('2')}><img role="presentation" src={cardAmazon} /></a>
             </div>
             <div className="col-xs-4 pull-left">
-              <a className="option3" data-for="radio-option3" onClick={() => this.openRewardModal('3')}><img role="presentation" src={cardStudykik} /></a>
+              <a className="option3" data-for="radio-option3" onClick={() => redeemable && this.openRewardModal('3')}><img role="presentation" src={cardStudykik} /></a>
             </div>
 
 
@@ -263,6 +312,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
           <section className="table-holder">
             <RewardsList
+              currentUser={currentUser}
               rewards={this.props.rewards}
               paginationOptions={this.props.paginationOptions}
               setActiveSort={this.props.setActiveSort}
@@ -277,18 +327,22 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 }
 
 const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
   currentUserClientId: selectCurrentUserClientId(),
   siteLocations: selectUserSiteLocations(),
   rewards: selectRewards(),
+  rewardsBalance: selectRewardsBalance(),
   selectedSite: selectSiteLocation(),
   paginationOptions: selectPaginationOptions(),
+  sites: selectSites(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchSites: () => dispatch(fetchSites()),
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
-    fetchRewards: () => dispatch(fetchRewards()),
+    fetchRewards: (clientId, siteId) => dispatch(fetchRewards(clientId, siteId)),
+    fetchRewardsBalance: (clientId, siteId) => dispatch(fetchRewardsBalance(clientId, siteId)),
     onSubmitForm: (values) => dispatch(submitForm(values)),
     pickReward: (value) => dispatch(pickReward(value)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),

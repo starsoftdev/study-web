@@ -83,10 +83,11 @@ const selectUserSiteLocations = () => createSelector(
       const clientId = get(substate, 'userData.roleForClient.client.id', null);
       if (clientId) {
         userSites = get(substate, 'baseData.clientSites.details', {});
+        userSites = [{ id: 0, name: 'All' }, ...userSites];
       }
     }
     const returnArray = map(userSites, e => pick(e, ['id', 'name']));
-    returnArray.push({ id: 0, name: 'All' });
+
     return returnArray;
   }
 );
@@ -140,6 +141,11 @@ const selectCoupon = () => createSelector(
 const selectRewards = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.rewards', [])
+);
+
+const selectRewardsBalance = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.rewardsBalance', [])
 );
 
 const selectCards = () => createSelector(
@@ -291,6 +297,7 @@ export {
   selectStudyLevels,
   selectCoupon,
   selectRewards,
+  selectRewardsBalance,
   selectCards,
   selectSavedCard,
   selectDeletedCard,
