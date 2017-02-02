@@ -242,6 +242,8 @@ export default function appReducer(state = initialState, action) {
           userRoleType = 'sponsor';
         } else if (payload.userData.roleForClient) {
           userRoleType = 'client';
+        } else if (payload.userData.roles.length > 0) {
+          userRoleType = 'dashboard';
         } else {
           userRoleType = '';
         }
