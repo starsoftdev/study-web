@@ -21,7 +21,7 @@ import TopHeaderBar2 from 'components/TopHeaderBar2';
 import LoadingSpinner from 'components/LoadingSpinner';
 import GlobalNotifications from 'containers/GlobalNotifications';
 import { fetchMeFromToken } from './actions';
-import { selectAuthState, selectCurrentUser, selectEvents } from './selectors';
+import { selectAuthState, selectCurrentUser, selectEvents, selectUserRoleType } from './selectors';
 
 import './styles.less';
 
@@ -34,6 +34,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     pageEvents: React.PropTypes.any,
     fetchMeFromToken: React.PropTypes.func,
     location: React.PropTypes.object,
+    currentUserRoleType: React.PropTypes.string,
   };
 
   componentWillMount() {
@@ -44,8 +45,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
   componentWillReceiveProps() {}
 
   render() {
-    const { isLoggedIn, userDataFetched, pageEvents, location } = this.props;
-    const { pathname } = location;
+    const { isLoggedIn, userDataFetched, pageEvents, currentUserRoleType } = this.props;
 
     if (!isLoggedIn) {
       return (
@@ -67,26 +67,28 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       );
     }
 
-    if (pathname === '/dashboard') {
+    console.log('userDataFetched', userDataFetched);
+
+    if (currentUserRoleType === 'client') {
       return (
-        <div id="wrapper" className="dashboard">
-          <TopHeaderBar2 />
+        <div id="wrapper">
+          <TopHeaderBar />
+          <SideNavBar />
+
           <main id="main">
             {React.Children.toArray(this.props.children)}
           </main>
+          <GlobalNotifications {...this.props} events={pageEvents} />
         </div>
       );
     }
 
     return (
-      <div id="wrapper">
-        <TopHeaderBar />
-        <SideNavBar />
-
+      <div id="wrapper" className="dashboard">
+        <TopHeaderBar2 />
         <main id="main">
           {React.Children.toArray(this.props.children)}
         </main>
-        <GlobalNotifications {...this.props} events={pageEvents} />
       </div>
     );
   }
@@ -96,6 +98,7 @@ const mapStateToProps = createStructuredSelector({
   isLoggedIn: selectAuthState(),
   userDataFetched: selectCurrentUser(),
   pageEvents: selectEvents(),
+  currentUserRoleType: selectUserRoleType(),
 });
 
 function mapDispatchToProps(dispatch) {
