@@ -153,7 +153,7 @@ export class ReportViewTable extends React.Component {
             />
           </td>
           <td>
-            <span className="number">{item.credits}</span>
+            <span className="number">{item.customer_credits || 0}</span>
             <a disabled className="btn lightbox-opener btn-plus">+</a>
           </td>
         </tr>
