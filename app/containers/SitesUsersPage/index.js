@@ -128,7 +128,6 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
 
   handleSiteQueryChange(index) {
     const sel = parseInt(index !== null ? index : 0);
-    console.log('sel', sel);
     if (sel === 0) {
       this.setState({
         siteName: '',
@@ -143,7 +142,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
   handleUserQueryChange(event) {
     this.setState({
       userName: event.target.value,
-    });
+    }, () => this.filterClientRoles(this.state.userName));
   }
 
   addSite(siteData) {
