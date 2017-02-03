@@ -67,14 +67,11 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       );
     }
 
-    console.log('userDataFetched', userDataFetched);
-
     if (currentUserRoleType === 'client') {
       return (
         <div id="wrapper">
           <TopHeaderBar />
           <SideNavBar />
-
           <main id="main">
             {React.Children.toArray(this.props.children)}
           </main>
