@@ -272,6 +272,11 @@ const selectChangeTimezoneState = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.changeUsersTimezoneState', {})
 );
+
+const selectLanding = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.landing', {})
+);
 // end
 
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
@@ -321,4 +326,6 @@ export {
   selectCreditsPrice,
 
   selectChangeTimezoneState,
+
+  selectLanding,
 };

@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import inViewport from 'in-viewport';
 
 import img9 from '../../assets/images/buildings/img9.jpg';
 
+import { selectCurrentUser, selectLanding } from '../../../app/containers/App/selectors';
+import { fetchLanding } from '../../../app/containers/App/actions';
+
 import './styles.less';
 
-export default class LandingPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class LandingPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
-  static propTypes = {};
+  static propTypes = {
+    studyId: PropTypes.any,
+    siteLocation: PropTypes.any,
+    fetchLanding:  PropTypes.func.isRequired,
+    currentUser: PropTypes.any,
+    landing: PropTypes.object,
+  };
 
   constructor(props) {
     super(props);
@@ -16,18 +27,31 @@ export default class LandingPage extends React.Component { // eslint-disable-lin
     this.watcherC = null;
 
     this.setVisible = this.setVisible.bind(this);
+
+    this.props = {
+      study: null,
+    }
   }
 
   componentWillMount() {
+    this.props.fetchLanding(this.props.params.studyId);
   }
 
   componentDidMount() {
     this.watcherA = inViewport(this.animatedFormContent, this.setVisible);
     this.watcherB = inViewport(this.slideInLeft, this.setVisible);
     this.watcherC = inViewport(this.slideInRight, this.setVisible);
+    
+    console.log(this.props.params.studyId, this.props.params.siteLocation);
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(newProps) {
+    console.log('componentWillReceiveProps', newProps);
+
+    if (newProps.landing && newProps.landing.study) {
+      console.log(1);
+      this.setState({study: newProps.landing.study})
+    }
   }
 
   componentWillUnmount() {
@@ -42,11 +66,15 @@ export default class LandingPage extends React.Component { // eslint-disable-lin
   }
 
   render() {
+    let name = '';
+    /*if (this.state.study) {
+      name  = this.state.study.name
+    }*/
     return (
       <div id="main">
         <div className="container">
           <form action="#" className="form-study text-center">
-            <h1 className="main-heading">Migraine Study</h1>
+            <h1 className="main-heading">{name}</h1>
             <h2 className="txt-orange">
               <i className="icon-map-marker"></i> Seattle, WA
             </h2>
@@ -143,3 +171,16 @@ export default class LandingPage extends React.Component { // eslint-disable-lin
     );
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
+  landing: selectLanding(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LandingPage);
