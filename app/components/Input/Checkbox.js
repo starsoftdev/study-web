@@ -7,21 +7,26 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
-function Checkbox({ input, className, children, onChange, ...rest }) {
+function Checkbox({ input, className, children, onChange, disabled, ...rest }) {
   const restProps = Object.assign({}, rest);
   delete restProps.meta;
 
   return (
     <div className={classNames(className)}>
       <span className={`jcf-checkbox ${input.checked ? 'jcf-checked' : 'jcf-unchecked'}`}>
-        <span
-          onClick={() => {
-            input.onChange(!input.checked);
-            if (onChange) {
-              onChange(!input.checked);
-            }
-          }}
-        />
+        {(!disabled)
+          ?
+          <span
+            onClick={() => {
+              input.onChange(!input.checked);
+              if (onChange) {
+                onChange(!input.checked);
+              }
+            }}
+          />
+          :
+          <span disabled="disabled" />
+        }
         <input
           {...input}
           {...restProps}
@@ -42,6 +47,7 @@ Checkbox.propTypes = {
   checked: PropTypes.bool,
   onChange: PropTypes.func,
   rest: PropTypes.object,
+  disabled: PropTypes.bool,
 };
 
 export default Checkbox;
