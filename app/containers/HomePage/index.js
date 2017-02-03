@@ -20,6 +20,7 @@ import { fetchStudies, fetchProtocols, fetchProtocolNumbers, fetchIndications } 
 
 import Dashboard from './Dashboard';
 import SponsorDashboard from './SponsorDashboard';
+import AdminDashboard from './AdminDashboard';
 import SearchStudiesForm from './SearchStudiesForm';
 import SearchProtocolsForm from './SearchProtocolsForm';
 import ProtocolsList from './ProtocolsList';
@@ -115,6 +116,11 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
               <ProtocolsList />
             </section>
           </div>
+          )
+        }
+        {userRoleType === 'dashboard' &&
+          (
+          <AdminDashboard />
           )
         }
       </div>
