@@ -22,7 +22,7 @@ const PieChart = rd3.PieChart;
 const LineChart = rd3.LineChart;
 
 @reduxForm({ form: 'filterPanel', destroyOnUnmount: false })
-export class DashboardPage extends Component { // eslint-disable-line react/prefer-stateless-function
+export class AdminDashboard extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     filtersFormValues: PropTypes.object,
     paginationOptions: PropTypes.object,
@@ -439,4 +439,4 @@ const mapStateToProps = createStructuredSelector({
   paginationOptions: selectPaginationOptions(),
 });
 
-export default connect(mapStateToProps)(DashboardPage);
+export default connect(mapStateToProps)(AdminDashboard);
