@@ -84,12 +84,14 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     this.startSound = this.startSound.bind(this);
     this.selectPatient = this.selectPatient.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleClose = this.handleClose.bind(this);
     this.state = {
       selectedPatient: { id: 0 },
       patientLoaded: true,
       socketBinded: false,
       playSound: Sound.status.STOPPED,
       searchTimer: null,
+      newOpen: false,
     };
   }
 
@@ -108,6 +110,23 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         }
       });
       this.setState({ socketBinded: true });
+    }
+    if (newProps.showModal === true && this.state.newOpen) {
+      newProps.fetchSitePatients(currentUser.id);
+      this.setState({
+        newOpen: false,
+      });
+    }
+    if (newProps.sitePatients !== this.props.sitePatients) {
+      let selectedPatient = { id: 0 };
+      _.forEach(newProps.sitePatients.details, (item) => {
+        if (item.show === undefined || (item.show && item.show === true)) {
+          selectedPatient = item;
+          return false;
+        }
+        return true;
+      });
+      this.selectPatient(selectedPatient, true);
     }
     if (newProps.showModal === true && newProps.sitePatients.details.length > 0 && this.state.patientLoaded === true) {
       let selectedPatient = { id: 0 };
@@ -168,6 +187,13 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     this.setState({ searchTimer: timerH });
   }
 
+  handleClose() {
+    this.setState({
+      newOpen: true,
+    });
+    this.props.closeModal();
+  }
+
   render() {
     const { sitePatients, patientMessages, sendStudyPatientMessages } = this.props;
     const clientCredits = this.props.clientCredits;
@@ -215,13 +241,13 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
             id="chart-popup"
             dialogComponentClass={CenteredModal}
             show={this.props.showModal}
-            onHide={this.props.closeModal}
+            onHide={this.handleClose}
             backdrop
             keyboard
           >
             <Modal.Header>
               <Modal.Title>PATIENT MESSAGING SUITE</Modal.Title>
-              <a className="lightbox-close close" onClick={this.props.closeModal}>
+              <a className="lightbox-close close" onClick={this.handleClose}>
                 <i className="icomoon-icon_close" />
               </a>
             </Modal.Header>
@@ -256,7 +282,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                   <section className="chat-area" id="chat-room1">
                     <header>
                       <strong className="name">{this.state.selectedPatient.first_name} {this.state.selectedPatient.last_name}</strong>
-                      <Link to={`/app/studies/${this.state.selectedPatient.study_id}/sites/${this.state.selectedPatient.site_id}`} onClick={this.props.closeModal}>
+                      <Link to={`/app/studies/${this.state.selectedPatient.study_id}/sites/${this.state.selectedPatient.site_id}`} onClick={this.handleClose}>
                         <span className="protocol">{protocolNumber}</span>
                       </Link>
                     </header>
