@@ -207,7 +207,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     ];
 
     return (
-      <div className="dashboard-page container-fluid">
+      <div className="container-fluid admin-dashboard">
         <Helmet title="STUDYKIK DASHBOARD" />
         <div className="fixed-header clearfix">
           <h2 className="main-heading pull-left">STUDYKIK DASHBOARD</h2>
