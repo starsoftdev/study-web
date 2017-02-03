@@ -35,6 +35,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     fetchPatient: PropTypes.func,
     openChat: PropTypes.func,
     orderNumber: PropTypes.number,
+    unsubscribed: PropTypes.bool,
     patients: PropTypes.object,
     formValues: PropTypes.object,
   };
@@ -50,6 +51,14 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     this.openChat = this.openChat.bind(this);
     this.currentPatientIsBeingFetched = this.currentPatientIsBeingFetched.bind(this);
     this.togglePatientForTextBlast = this.togglePatientForTextBlast.bind(this);
+  }
+
+  componentDidMount() {
+    const { unsubscribed, change, id, removePatientFromTextBlast } = this.props;
+    if (unsubscribed) {
+      removePatientFromTextBlast([{ id }]);
+      change(`patient-${id}`, false);
+    }
   }
 
   showHover() {
@@ -97,15 +106,22 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { id, orderNumber, firstName, lastName, email, phone, age, gender, bmi, indications, source, studyPatientCategory } = this.props;
+    let checkClassName = 'pull-left';
+    if (unsubscribed) {
+      checkClassName += ' none-event';
+    }
+    const { id, orderNumber, firstName, lastName, email, phone, age, gender, bmi, indications, source, studyPatientCategory, unsubscribed } = this.props;
     const indicationNames = map(indications, indicationIterator => indicationIterator.name).join(', ');
 
     return (
       <div className={classNames('tr', 'patient-container', { 'tr-active': this.state.hover })} onMouseEnter={this.showHover} onMouseLeave={this.hideHover}>
         <div className="td">
           <Field
+            className={checkClassName}
             name={`patient-${id}`}
             type="checkbox"
+            disabled={unsubscribed}
+            checked={unsubscribed}
             component={Checkbox}
             onChange={this.togglePatientForTextBlast}
           />
