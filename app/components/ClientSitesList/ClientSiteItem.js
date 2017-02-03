@@ -73,15 +73,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { name, piFirstName, piLastName, phone, address, roles, userFilter } = this.props;
-
-    // const filteredUser = find(roles, (item) => {
-    //   if (userFilter.trim() === '') {
-    //     return false;
-    //   }
-    //   const fullName = `${item.user.firstName} ${item.user.lastName}`;
-    //   return (fullName.toUpperCase().includes(userFilter.toUpperCase()));
-    // });
+    const { name, piFirstName, piLastName, phone, address, roles } = this.props;
 
     const assignedUsersContent = roles.map((item, index) => (
       <div className="assigned-user" key={index}>
