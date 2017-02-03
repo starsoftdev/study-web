@@ -103,6 +103,8 @@ import {
   CHANGE_USERS_TIMEZONE,
   CHANGE_USERS_TIMEZONE_SUCCESS,
   CHANGE_USERS_TIMEZONE_ERROR,
+
+  FETCH_LANDING_SUCCESS,
 } from './constants';
 
 import {
@@ -121,6 +123,7 @@ const initialState = {
   baseData: {
     sites: [],
     indications: [],
+    landing: {},
     sources: [],
     levels: [],
     coupon: {
@@ -274,6 +277,12 @@ export default function appReducer(state = initialState, action) {
     case FETCH_INDICATIONS_SUCCESS:
       baseDataInnerState = {
         indications: payload,
+      };
+      break;
+    case FETCH_LANDING_SUCCESS:
+      console.log(FETCH_LANDING_SUCCESS, payload);
+      baseDataInnerState = {
+        landing: payload,
       };
       break;
     case FETCH_SOURCES_SUCCESS:

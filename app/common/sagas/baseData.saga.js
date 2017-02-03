@@ -36,6 +36,8 @@ import {
   FETCH_INDICATION_LEVEL_PRICE,
 
   CHANGE_USERS_TIMEZONE,
+
+  FETCH_LANDING,
 } from 'containers/App/constants';
 
 
@@ -95,6 +97,7 @@ import {
   fetchIndicationLevelPriceError,
   changeUsersTimezoneSuccess,
   changeUsersTimezoneError,
+  landingFetched,
 } from 'containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -126,6 +129,7 @@ export default function* baseDataSaga() {
   yield fork(fetchCreditsPrice);
   yield fork(fetchIndicationLevelPriceWatcher);
   yield fork(changeUsersTimezoneWatcher);
+  yield fork(fetchLandingStudy);
 }
 
 export function* fetchSitesWatcher() {
@@ -703,5 +707,34 @@ export function* changeUsersTimezoneWatcher() {
       yield put(toastrActions.error('', errorMessage));
       yield put(changeUsersTimezoneError(err));
     }
+  }
+}
+
+function* fetchLandingStudy() {
+  // listen for the FETCH_LANDING_STUDY action
+  const { studyId } = yield take(FETCH_LANDING);
+  const filter = JSON.stringify({
+    where: {
+      study_id: studyId
+    },
+    include: [
+      {
+        relation: 'study',
+        scope: {
+          include: 'sites',
+        },
+      },
+    ],
+  });
+  // put the fetching study action in case of a navigation action
+  try {
+    const requestURL = `${API_URL}/landingPages/${studyId}?filter=${filter}`;
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    yield put(landingFetched(response));
+  } catch (e) {
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching study information. Please try again later.');
+    yield put(toastrActions.error('', errorMessage));
   }
 }

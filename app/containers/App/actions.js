@@ -120,6 +120,9 @@ import {
   CHANGE_USERS_TIMEZONE,
   CHANGE_USERS_TIMEZONE_SUCCESS,
   CHANGE_USERS_TIMEZONE_ERROR,
+
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -824,5 +827,21 @@ export function changeUsersTimezoneError(payload) {
   return {
     type: CHANGE_USERS_TIMEZONE_ERROR,
     payload,
+  };
+}
+
+export function fetchLanding(studyId) {
+  console.log('fetchLandingStudy', studyId);
+  return {
+    type: FETCH_LANDING,
+    studyId
+  };
+}
+
+export function landingFetched(payload) {
+  console.log('landingFetched', payload);
+  return {
+    type: FETCH_LANDING_SUCCESS,
+    payload
   };
 }

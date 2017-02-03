@@ -38,7 +38,7 @@ const routes = {
     { path: '/login', component: LoginPage },
     { path: '/contact', component: ContactPage },
     { path: '/list-your-trials', component: ListYourTrialsPage },
-    { path: '/landing', component: LandingPage },
+    { path: '/:studyId/:siteLocation', component: LandingPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },
     { path: '*', component: NotFound },
   ],
