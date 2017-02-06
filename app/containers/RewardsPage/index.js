@@ -115,7 +115,6 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     onSubmitForm({
       ...data,
       userId: currentUser.id,
-      userName: `${currentUser.firstName} ${currentUser.lastName}`,
     });
   }
 
@@ -130,7 +129,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     }
 
     return (
-      <h3 className="pull-left">'Client' Has <strong>{rewardsBalance[0]} KIKs</strong></h3>
+      <h3 className="pull-left"><strong>{rewardsBalance[0]} Total KIKs</strong></h3>
     );
   }
 
