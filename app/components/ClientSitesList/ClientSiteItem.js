@@ -24,12 +24,27 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
 
   constructor(props) {
     super(props);
+
     this.state = {
       assignedUsersCollapsed: true,
     };
 
     this.toggleAssignedUsers = this.toggleAssignedUsers.bind(this);
     this.editSite = this.editSite.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { roles, userFilter } = newProps;
+
+    const filteredUser = find(roles, (item) => {
+      if (userFilter.trim() === '') {
+        return false;
+      }
+      const fullName = `${item.user.firstName} ${item.user.lastName}`;
+      return (fullName.toUpperCase().includes(userFilter.toUpperCase()));
+    });
+
+    this.setState({ assignedUsersCollapsed: !filteredUser });
   }
 
   toggleAssignedUsers() {
@@ -58,15 +73,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { name, piFirstName, piLastName, phone, address, roles, userFilter } = this.props;
-
-    const filteredUser = find(roles, (item) => {
-      if (userFilter.trim() === '') {
-        return false;
-      }
-      const userName = item.user.firstName + item.user.lastName;
-      return userName.indexOf(userFilter) > -1;
-    });
+    const { name, piFirstName, piLastName, phone, address, roles } = this.props;
 
     const assignedUsersContent = roles.map((item, index) => (
       <div className="assigned-user" key={index}>
@@ -97,12 +104,12 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
         <td className="assigned-users">
           <div className="toggle-assigned-users">
             <span>ASSIGNED USERS</span>
-            {(this.state.assignedUsersCollapsed || filteredUser)
+            {(this.state.assignedUsersCollapsed)
               ? <a className="btn toggle toggle-plus" onClick={this.toggleAssignedUsers}></a>
               : <a className="btn toggle toggle-minus" onClick={this.toggleAssignedUsers}></a>
             }
           </div>
-          {(!this.state.assignedUsersCollapsed || filteredUser) &&
+          {(!this.state.assignedUsersCollapsed) &&
             <div className="assigned-users-list">{assignedUsersContent}</div>
           }
         </td>

@@ -4,8 +4,8 @@ import { Field } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import { map } from 'lodash';
 
-import Checkbox from '../../../components/Input/Checkbox';
-import Toggle from '../../../components/Input/Toggle';
+import Checkbox from 'components/Input/Checkbox';
+import Toggle from 'components/Input/Toggle';
 
 class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

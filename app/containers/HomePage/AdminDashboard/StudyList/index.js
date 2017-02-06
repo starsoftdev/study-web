@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
-import Checkbox from '../../../components/Input/Checkbox';
+import Checkbox from '../../../../components/Input/Checkbox';
 import ReactSelect from 'components/Input/ReactSelect';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
