@@ -401,7 +401,7 @@ export class BillingPage extends Component {
                       <tr className={classNames({ 'no-item': (this.state.irb === 0) })}>
                         <td data-label="Product"><div>
                           <div className="img extra">
-                            <img src={irb} width="62" alt="irb"/>
+                            <img src={irb} width="62" alt="irb" />
                           </div>
                           <div className="textbox">
                             <strong className="name">IRB Ad Creation</strong>
