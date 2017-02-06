@@ -105,6 +105,8 @@ import {
   CHANGE_USERS_TIMEZONE_ERROR,
 
   FETCH_LANDING_SUCCESS,
+  PATIENT_SUBSCRIBED,
+  PATIENT_SUBSCRIPTION_ERROR,
 } from './constants';
 
 import {
@@ -118,12 +120,14 @@ import {
 const initialState = {
   loggedIn: !!getItem('auth_token'),
   loginError: null,
+  subscriptionError: null,
   userData: null,
   pageEvents: null,
   baseData: {
     sites: [],
     indications: [],
     landing: {},
+    subscribedFromLanding: null,
     sources: [],
     levels: [],
     coupon: {
@@ -283,6 +287,21 @@ export default function appReducer(state = initialState, action) {
       console.log(FETCH_LANDING_SUCCESS, payload);
       baseDataInnerState = {
         landing: payload,
+      };
+      break;
+    case PATIENT_SUBSCRIBED:
+      baseDataInnerState = {
+        subscribedFromLanding: payload,
+      };
+      resultState = {
+        ...state,
+        subscriptionError: null,
+      };
+      break;
+    case PATIENT_SUBSCRIPTION_ERROR:
+      resultState = {
+        ...state,
+        subscriptionError: payload,
       };
       break;
     case FETCH_SOURCES_SUCCESS:

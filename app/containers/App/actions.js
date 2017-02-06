@@ -123,6 +123,10 @@ import {
 
   FETCH_LANDING,
   FETCH_LANDING_SUCCESS,
+  SUBSCRIBE_FROM_LANDING,
+  PATIENT_SUBSCRIBED,
+  PATIENT_SUBSCRIPTION_ERROR,
+  CLEAR_FORM_SUBSCRIBE,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -830,8 +834,14 @@ export function changeUsersTimezoneError(payload) {
   };
 }
 
+export function subscribeFromLanding(params) {
+  return {
+    type: SUBSCRIBE_FROM_LANDING,
+    params
+  };
+}
+
 export function fetchLanding(studyId) {
-  console.log('fetchLandingStudy', studyId);
   return {
     type: FETCH_LANDING,
     studyId
@@ -839,9 +849,28 @@ export function fetchLanding(studyId) {
 }
 
 export function landingFetched(payload) {
-  console.log('landingFetched', payload);
   return {
     type: FETCH_LANDING_SUCCESS,
     payload
+  };
+}
+
+export function patientSubscribed(payload) {
+  return {
+    type: PATIENT_SUBSCRIBED,
+    payload
+  };
+}
+
+export function patientSubscriptionError(payload) {
+  return {
+    type: PATIENT_SUBSCRIPTION_ERROR,
+    payload
+  };
+}
+
+export function clearForm() {
+  return {
+    type: CLEAR_FORM_SUBSCRIBE,
   };
 }
