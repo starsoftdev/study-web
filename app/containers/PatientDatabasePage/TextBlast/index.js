@@ -17,7 +17,7 @@ import Input from '../../../components/Input/index';
 import { removePatientsFromTextBlast, submitTextBlast } from '../actions';
 import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
 import { actions as toastrActions } from 'react-redux-toastr';
-import { selectCurrentUser, selectClientCredits } from 'containers/App/selectors';
+import { selectClientCredits } from 'containers/App/selectors';
 
 const formName = 'PatientDatabase.TextBlastModal';
 
