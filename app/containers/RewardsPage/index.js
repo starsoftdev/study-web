@@ -121,7 +121,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
   renderHeaderText() {
     const { selectedSite, rewardsBalance } = this.props;
 
-    if (selectedSite) {
+    if (selectedSite && selectedSite !== '0') {
       const siteDetail = find(this.props.sites, { id: selectedSite });
       return (
         <h3 className="pull-left">{siteDetail.location} Has <strong>{rewardsBalance[selectedSite]} KIKs</strong></h3>
