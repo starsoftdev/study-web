@@ -134,7 +134,6 @@ export default function* baseDataSaga() {
   yield fork(fetchIndicationLevelPriceWatcher);
   yield fork(changeUsersTimezoneWatcher);
   yield fork(fetchLandingStudy);
-  //yield fork(subscribeFromLanding);
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
 }
 
@@ -726,7 +725,7 @@ function* fetchLandingStudy() {
   const { studyId } = yield take(FETCH_LANDING);
   const filter = JSON.stringify({
     where: {
-      study_id: studyId
+      study_id: studyId,
     },
     include: [
       {
