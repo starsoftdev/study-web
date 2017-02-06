@@ -24,6 +24,7 @@ import { clearSelectedPatient,
   disableChat,
   addPatientsToTextBlast,
   removePatientsFromTextBlast,
+  removePatientFromTextBlast,
   setActiveSort,
   sortPatientsSuccess } from '../actions';
 import PatientItem from './PatientItem';
@@ -39,6 +40,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     addPatientsToTextBlast: PropTypes.func,
     change: PropTypes.func,
     removePatientsFromTextBlast: PropTypes.func,
+    removePatientFromTextBlast: PropTypes.func,
     patients: PropTypes.object,
     selectedPatient: PropTypes.object,
     selectedPatientDetailsForForm: PropTypes.object,
@@ -109,14 +111,20 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   }
 
   toggleAllPatientSelection(checked) {
-    const { addPatientsToTextBlast, change, patients, removePatientsFromTextBlast } = this.props;
+    const { addPatientsToTextBlast, change, patients, removePatientsFromTextBlast, removePatientFromTextBlast } = this.props;
     if (checked) {
       addPatientsToTextBlast(patients.details);
     } else {
       removePatientsFromTextBlast(patients.details);
     }
     for (const patient of patients.details) {
-      change(`patient-${patient.id}`, checked);
+      if (patient.unsubscribed && checked) {
+        const { id } = patient;
+        change('all-patients', false);
+        removePatientFromTextBlast([{ id }]);
+      } else {
+        change(`patient-${patient.id}`, checked);
+      }
     }
   }
 
@@ -286,6 +294,7 @@ function mapDispatchToProps(dispatch) {
     addPatientsToTextBlast: (patients) => dispatch(addPatientsToTextBlast(patients)),
     change: (field, value) => dispatch(change(formName, field, value)),
     removePatientsFromTextBlast: (patients) => dispatch(removePatientsFromTextBlast(patients)),
+    removePatientFromTextBlast: (patient) => dispatch(removePatientFromTextBlast(patient)),
     clearSelectedPatient: () => dispatch(clearSelectedPatient()),
     savePatient: (id, data) => dispatch(savePatient(id, data)),
     initChat: (payload) => dispatch(initChat(payload)),

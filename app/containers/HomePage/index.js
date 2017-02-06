@@ -14,12 +14,13 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
-import { selectUserRoleType, selectCurrentUserClientId, selectCurrentUser } from 'containers/App/selectors';
-import { fetchClientSites, fetchLevels, getAvailPhoneNumbers } from 'containers/App/actions';
+import { selectUserRoleType, selectCurrentUserClientId, selectCurrentUser } from '../../containers/App/selectors';
+import { fetchClientSites, fetchLevels, getAvailPhoneNumbers } from '../../containers/App/actions';
 import { fetchStudies, fetchProtocols, fetchProtocolNumbers, fetchIndications } from './actions';
 
 import Dashboard from './Dashboard';
 import SponsorDashboard from './SponsorDashboard';
+import AdminDashboard from './AdminDashboard';
 import SearchStudiesForm from './SearchStudiesForm';
 import SearchProtocolsForm from './SearchProtocolsForm';
 import ProtocolsList from './ProtocolsList';
@@ -115,6 +116,11 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
               <ProtocolsList />
             </section>
           </div>
+          )
+        }
+        {userRoleType === 'dashboard' &&
+          (
+          <AdminDashboard />
           )
         }
       </div>

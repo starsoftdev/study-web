@@ -3,31 +3,25 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, FieldArray, change, reduxForm, reset } from 'redux-form';
 import { Modal } from 'react-bootstrap';
-
-import Input from 'components/Input';
-import AddEmailNotificationForm from 'components/AddEmailNotificationForm';
-import CenteredModal from '../../../components/CenteredModal/index';
-import { selectCurrentUserClientId } from 'containers/App/selectors';
-import { selectEditStudyFormValues } from './selectors';
-import { selectEditedStudy } from 'containers/HomePage/selectors';
-import RenderEmailsList from './RenderEmailsList';
-import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
 import { forEach, filter } from 'lodash';
 
-const mapStateToProps = createStructuredSelector({
-  currentUserClientId: selectCurrentUserClientId(),
-  formValues: selectEditStudyFormValues(),
-  editedStudy: selectEditedStudy(),
-});
+import Input from '../../../components/Input';
+import AddEmailNotificationForm from '../../../components/AddEmailNotificationForm';
+import CenteredModal from '../../../components/CenteredModal/index';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import { selectCurrentUserClientId } from '../../../containers/App/selectors';
+import { selectEditStudyFormValues, selectEditStudyFormError, selectEditStudyFormErrors } from './selectors';
+import { selectEditedStudy } from '../../../containers/HomePage/selectors';
+import RenderEmailsList from './RenderEmailsList';
+import formValidator from './validator';
 
 @reduxForm({ form: 'editStudy', validate: formValidator })
-@connect(mapStateToProps)
-
 class EditStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     currentUserClientId: PropTypes.number,
+    formError: PropTypes.bool,
+    formErrors: PropTypes.object,
     formValues: PropTypes.object,
     editedStudy: PropTypes.object,
     siteUsers: PropTypes.array,
@@ -45,7 +39,6 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     this.resetState = this.resetState.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.handleShowModal = this.handleShowModal.bind(this);
     this.renderEmailList = this.renderEmailList.bind(this);
     this.addEmailNotificationClick = this.addEmailNotificationClick.bind(this);
     this.closeAddEmailModal = this.closeAddEmailModal.bind(this);
@@ -78,19 +71,15 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     });
   }
 
-
   handleCloseModal() {
     this.props.onHide(false);
     this.resetState();
   }
 
-  handleShowModal() {
-
-  }
-
-  handleFormSubmit() {
-    this.resetState();
-    this.props.onSubmit();
+  handleFormSubmit(event) {
+    event.preventDefault();
+    const { onSubmit } = this.props;
+    onSubmit();
   }
 
   addEmailNotificationClick() {
@@ -213,6 +202,11 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
                             type="file"
                             className="hidden"
                           />
+                          {/* TODO need to put an error message up so that people know to upload a file. */}
+                          {/* formError
+                          ? <div className="has-error">{formErrors.studyAd}</div>
+                          : null
+                          */}
                         </div>
                       </div>
                       <div className="clearfix">
@@ -246,10 +240,16 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    resetForm: () => dispatch(reset('editStudy')),
-  };
-}
+const mapStateToProps = createStructuredSelector({
+  currentUserClientId: selectCurrentUserClientId(),
+  formError: selectEditStudyFormError(),
+  formErrors: selectEditStudyFormErrors(),
+  formValues: selectEditStudyFormValues(),
+  editedStudy: selectEditedStudy(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  resetForm: () => dispatch(reset('editStudy')),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditStudyForm);

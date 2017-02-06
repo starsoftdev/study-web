@@ -48,11 +48,11 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
 
   render() {
     const { clientSites, studies, hasError, handleSubmit } = this.props;
-    const siteOptions = [{ label: 'All', id: 0 }].concat(map(clientSites.details, siteIterator => ({
+    const siteOptions = [{ label: 'All', value: '0' }].concat(map(clientSites.details, siteIterator => ({
       label: siteIterator.name,
       value: siteIterator.id,
     })));
-    const statusOptions = [{ label: 'All', id: 0 },
+    const statusOptions = [{ label: 'All', value: '0' },
                            { label: 'Active', value: ACTIVE_STATUS_VALUE },
                            { label: 'Inactive', value: INACTIVE_STATUS_VALUE }];
 

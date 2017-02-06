@@ -83,10 +83,11 @@ const selectUserSiteLocations = () => createSelector(
       const clientId = get(substate, 'userData.roleForClient.client.id', null);
       if (clientId) {
         userSites = get(substate, 'baseData.clientSites.details', {});
+        userSites = [{ id: 0, name: 'All' }, ...userSites];
       }
     }
     const returnArray = map(userSites, e => pick(e, ['id', 'name']));
-    returnArray.push({ id: 0, name: 'All' });
+
     return returnArray;
   }
 );

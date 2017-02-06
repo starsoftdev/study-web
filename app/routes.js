@@ -29,14 +29,16 @@ export default function createRoutes(store) {
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           System.import('containers/HomePage/reducer'),
+          System.import('containers/HomePage/AdminDashboard/reducer'),
           System.import('containers/HomePage/sagas'),
           System.import('containers/HomePage'),
         ]);
 
         const renderRoute = loadModule(cb);
 
-        importModules.then(([reducer, sagas, component]) => {
+        importModules.then(([reducer, dashboardReducer, sagas, component]) => {
           injectReducer('homePage', reducer.default);
+          injectReducer('dashboardPage', dashboardReducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });
@@ -431,25 +433,6 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/app/dashboard',
-      name: 'dashboardPage',
-      getComponent(nextState, cb) {
-        const importModules = Promise.all([
-          System.import('containers/DashboardPage/reducer'),
-          System.import('containers/DashboardPage'),
-        ]);
-
-        const renderRoute = loadModule(cb);
-
-        importModules.then(([reducer, component]) => {
-          injectReducer('dashboardPage', reducer.default);
-          renderRoute(component);
-        });
-
-        importModules.catch(errorLoading);
-      },
-    }, {
-      onEnter: redirectToLogin,
       path: '/app/report',
       name: 'reportPage',
       getComponent(nextState, cb) {
@@ -463,6 +446,27 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('reportPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/app/protocol-users',
+      name: 'sponsorManageUsersPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/SponsorManageUsers/reducer'),
+          System.import('containers/SponsorManageUsers/sagas'),
+          System.import('containers/SponsorManageUsers'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('sponsorManageUsersPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });
