@@ -6,8 +6,17 @@
 		}
 
 		.form-search-protocols {
-	  		width: calc(~'100% - 450px');
-	  		z-index: 81;
+	  	width: 100%;
+      z-index: 81;
+      .fields-holder{
+        width: calc(~'100% - 600px');
+      }
+
+      @media screen and (max-width: @psd) {
+        .fields-holder{
+          width: 100%;
+        }
+      }
 		}
 	}
 
@@ -95,6 +104,37 @@
       }
     }
   }
+
+  .disabled-toggle-container{
+    margin-left: 10px;
+
+    .disabled-toggle{
+      div{
+        cursor: not-allowed !important;
+        &:hover {
+          cursor: not-allowed !important;
+        }
+      }
+    }
+  }
+
+  .patient-messaging-suite{
+    &.off{
+      color: #f78e1e;
+    }
+    color: #a0cf67;
+  }
+}
+
+.tooltop-inner{
+  padding: 7px 5px;
+  min-width: 132px;
+  font-size: 18px;
+  line-height: 23px;
+  text-align: center;
+  border-radius: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .protocol-study-img{
