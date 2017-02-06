@@ -3,6 +3,7 @@
 import { take, call, put, fork } from 'redux-saga/effects';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
+import { takeLatest } from 'redux-saga';
 
 import request from 'utils/request';
 import composeQueryString from 'utils/composeQueryString';
@@ -38,6 +39,7 @@ import {
   CHANGE_USERS_TIMEZONE,
 
   FETCH_LANDING,
+  SUBSCRIBE_FROM_LANDING,
 } from 'containers/App/constants';
 
 
@@ -98,6 +100,8 @@ import {
   changeUsersTimezoneSuccess,
   changeUsersTimezoneError,
   landingFetched,
+  patientSubscribed,
+  patientSubscriptionError,
 } from 'containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -130,6 +134,8 @@ export default function* baseDataSaga() {
   yield fork(fetchIndicationLevelPriceWatcher);
   yield fork(changeUsersTimezoneWatcher);
   yield fork(fetchLandingStudy);
+  //yield fork(subscribeFromLanding);
+  yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
 }
 
 export function* fetchSitesWatcher() {
@@ -721,7 +727,7 @@ function* fetchLandingStudy() {
       {
         relation: 'study',
         scope: {
-          include: 'sites',
+          include: ['sites', 'sources'],
         },
       },
     ],
@@ -734,7 +740,23 @@ function* fetchLandingStudy() {
     });
     yield put(landingFetched(response));
   } catch (e) {
-    const errorMessage = get(e, 'message', 'Something went wrong while fetching study information. Please try again later.');
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching landing information. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+function* subscribeFromLanding(action) {
+  try {
+    const params = action.params;
+    const requestURL = `${API_URL}/patients`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(patientSubscribed(response));
+  } catch (err) {
+    yield put(patientSubscriptionError(err));
   }
 }

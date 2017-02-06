@@ -15,6 +15,8 @@ import { default as LoginPage } from '../app/containers/LoginPage';
 import { default as ContactPage } from './containers/ContactPage';
 import { default as ListYourTrialsPage } from './containers/ListYourTrialsPage';
 import { default as LandingPage } from './containers/LandingPage';
+import { default as BillingPage } from './containers/BillingPage';
+import { default as OrderPage } from './containers/OrderPage';
 import { default as NotFound } from './containers/NotFoundPage';
 
 import './assets/less/main.less';
@@ -38,8 +40,10 @@ const routes = {
     { path: '/login', component: LoginPage },
     { path: '/contact', component: ContactPage },
     { path: '/list-your-trials', component: ListYourTrialsPage },
-    { path: '/:studyId/:siteLocation', component: LandingPage },
+    { path: '/billing', component: BillingPage },
+    { path: '/order', component: OrderPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },
+    { path: '/:studyId/:siteLocation', component: LandingPage },
     { path: '*', component: NotFound },
   ],
 };
