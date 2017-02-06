@@ -1,3 +1,6 @@
+/* eslint-disable react/prefer-stateless-function */
+/* eslint-disable prefer-template */
+
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -17,10 +20,11 @@ import { fetchLanding, subscribeFromLanding, clearForm } from '../../../app/cont
 
 import './styles.less';
 
-export class LandingPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class LandingPage extends React.Component {
 
   // TODO: use siteLocation to study request filter
   static propTypes = { params: PropTypes.object,
+    param: PropTypes.any,
     studyId: PropTypes.any,
     siteLocation: PropTypes.any,
     fetchLanding:  PropTypes.func.isRequired,
@@ -90,7 +94,7 @@ export class LandingPage extends React.Component { // eslint-disable-line react/
   }
 
   render() {
-    const { subscriptionError } = this.props
+    const { subscriptionError } = this.props;
     let landing = null;
     let study = null;
     if (this.props.landing) {
@@ -112,15 +116,15 @@ export class LandingPage extends React.Component { // eslint-disable-line react/
     let fullAddress = (study && study.sites[0].address) ? study.sites[0].address : '';
 
     if (city.length) {
-      fullAddress += ', ' + city
+      fullAddress += ', ' + city;
     }
 
     if (state.length) {
-      fullAddress += ', ' + state
+      fullAddress += ', ' + state;
     }
 
     if (state.zip) {
-      fullAddress += ', ' + zip
+      fullAddress += ', ' + zip;
     }
 
     return (

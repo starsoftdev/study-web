@@ -56,9 +56,9 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
         >
           <h3>Enter your information to join!</h3>
           {subscriptionError &&
-          <Alert bsStyle="danger">
-            <p>{subscriptionError.message}</p>
-          </Alert>
+            <Alert bsStyle="danger">
+              <p>{subscriptionError.message}</p>
+            </Alert>
           }
           <Field
             name="name"
