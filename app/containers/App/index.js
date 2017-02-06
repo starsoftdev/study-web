@@ -67,7 +67,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       );
     }
 
-    if (currentUserRoleType === 'client') {
+    if (currentUserRoleType === 'client' || currentUserRoleType === 'sponsor') {
       return (
         <div id="wrapper">
           <TopHeaderBar />
