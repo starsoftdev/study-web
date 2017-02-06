@@ -453,6 +453,27 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
+      path: '/app/protocol-users',
+      name: 'sponsorManageUsersPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/SponsorManageUsers/reducer'),
+          System.import('containers/SponsorManageUsers/sagas'),
+          System.import('containers/SponsorManageUsers'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('sponsorManageUsersPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '/app*',
       name: 'notfound',
       getComponent(nextState, cb) {
