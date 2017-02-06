@@ -840,35 +840,35 @@ export function changeUsersTimezoneError(payload) {
 export function subscribeFromLanding(params) {
   return {
     type: SUBSCRIBE_FROM_LANDING,
-    params
+    params,
   };
 }
 
 export function fetchLanding(studyId) {
   return {
     type: FETCH_LANDING,
-    studyId
+    studyId,
   };
 }
 
 export function landingFetched(payload) {
   return {
     type: FETCH_LANDING_SUCCESS,
-    payload
+    payload,
   };
 }
 
 export function patientSubscribed(payload) {
   return {
     type: PATIENT_SUBSCRIBED,
-    payload
+    payload,
   };
 }
 
 export function patientSubscriptionError(payload) {
   return {
     type: PATIENT_SUBSCRIPTION_ERROR,
-    payload
+    payload,
   };
 }
 

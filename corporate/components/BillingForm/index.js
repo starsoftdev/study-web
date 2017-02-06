@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import billingFormValidator from './validator';
-import Input from 'components/Input';
 
 @reduxForm({
   form: 'billing',
@@ -13,10 +12,6 @@ export class BillingForm extends React.Component { // eslint-disable-line react/
   static propTypes = {
     handleSubmit: PropTypes.func.isRequired,
   };
-
-  constructor(props) {
-    super(props);
-  }
 
   componentDidMount() {
   }

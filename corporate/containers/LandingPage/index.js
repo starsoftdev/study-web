@@ -20,7 +20,7 @@ import './styles.less';
 export class LandingPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   // TODO: use siteLocation to study request filter
-  static propTypes = {
+  static propTypes = { params: PropTypes.object,
     studyId: PropTypes.any,
     siteLocation: PropTypes.any,
     fetchLanding:  PropTypes.func.isRequired,
@@ -42,31 +42,28 @@ export class LandingPage extends React.Component { // eslint-disable-line react/
 
     this.props = {
       study: null,
-    }
+    };
   }
 
   componentWillMount() {
-    this.props.fetchLanding(this.props.params.studyId);
+    const { studyId } = this.props.param;
+    this.props.fetchLanding(studyId);
   }
 
   componentDidMount() {
+    const { studyId, siteLocation } = this.props.param;
     this.watcherA = inViewport(this.slideInLeft, this.setVisible);
     this.watcherB = inViewport(this.slideInRight, this.setVisible);
-    
-    console.log(this.props.params.studyId, this.props.params.siteLocation);
+
+    console.log(studyId, siteLocation);
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
   }
 
   componentWillUnmount() {
     this.watcherA.dispose();
     this.watcherB.dispose();
-  }
-
-  setVisible(el) {
-    const viewAtr = el.getAttribute('data-view');
-    el.classList.add('in-viewport', viewAtr);
   }
 
   onSubmitForm(params) {
@@ -81,10 +78,15 @@ export class LandingPage extends React.Component { // eslint-disable-line react/
       updatedAt: now,
       unsubscribed: false,
       study_patient_category_id: landing.study_patient_category_id,
-      source_id: landing.study.sources[0].id
+      source_id: landing.study.sources[0].id,
     };
 
     this.props.subscribeFromLanding(data);
+  }
+
+  setVisible(el) {
+    const viewAtr = el.getAttribute('data-view');
+    el.classList.add('in-viewport', viewAtr);
   }
 
   render() {
@@ -92,8 +94,8 @@ export class LandingPage extends React.Component { // eslint-disable-line react/
     let landing = null;
     let study = null;
     if (this.props.landing) {
-      landing  = this.props.landing
-      study  = landing.study
+      landing = this.props.landing;
+      study = landing.study;
     }
 
     const name = (study) ? study.name : '';
@@ -120,8 +122,6 @@ export class LandingPage extends React.Component { // eslint-disable-line react/
     if (state.zip) {
       fullAddress += ', ' + zip
     }
-    
-    console.log(landing, imgSrc);
 
     return (
       <div id="main">
@@ -135,11 +135,6 @@ export class LandingPage extends React.Component { // eslint-disable-line react/
                 data-view="slideInRight"
               >
                 <h2>{description}</h2>
-                {/*<ul className="list-unstyled list-arrow">
-                  <li>Ages 18-75?</li>
-                  <li>Have at least a one year history of migraines?</li>
-                  <li>Have had 2-8 migraines per month?</li>
-                </ul>*/}
                 <p>
                   {landingDescription}
                 </p>

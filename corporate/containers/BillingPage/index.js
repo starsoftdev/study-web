@@ -50,8 +50,4 @@ export class BillingPage extends Component {
 
 const mapStateToProps = createStructuredSelector({});
 
-function mapDispatchToProps(dispatch) {
-  return {};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(BillingPage);
+export default connect(mapStateToProps, null)(BillingPage);

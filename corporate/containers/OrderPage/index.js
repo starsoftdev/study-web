@@ -1,3 +1,6 @@
+/* eslint-disable react/jsx-no-bind */
+/* eslint-disable no-script-url */
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -58,9 +61,9 @@ export class BillingPage extends Component {
     ev.preventDefault();
   }
 
-  //TODO: calculate offsets
+  // TODO: calculate offsets
   handleScroll(event) {
-    let scrollTop = event.srcElement.body.scrollTop;
+    const scrollTop = event.srcElement.body.scrollTop;
 
     if (scrollTop >= 45) {
       this.tHead.classList.add('range-over');
@@ -72,32 +75,32 @@ export class BillingPage extends Component {
       this.form.classList.remove('range-over');
     }
 
-    this.setState({scrollTop})
+    this.setState({ scrollTop });
   }
 
   incQuantity(type) {
     if (this.state[type] < 999) {
-      this.setState({[type]: this.state[type] + 1})
+      this.setState({ [type]: this.state[type] + 1 });
     }
   }
 
   decQuantity(type) {
-    if (this.state[type]  > 1) {
-      this.setState({[type]: this.state[type] - 1})
+    if (this.state[type] > 1) {
+      this.setState({ [type]: this.state[type] - 1 });
     }
   }
 
   resetQuantity(type) {
-    this.setState({[type]: 0})
+    this.setState({ [type]: 0 });
   }
 
-  //TODO: calculate offsets
+  // TODO: calculate offsets
   render() {
     const { scrollTop } = this.state;
 
     const headerStyle = {
       position: 'absolute',
-      top: (scrollTop >= 50) ? scrollTop - 52 + 'px' : '0px',
+      top: (scrollTop >= 50) ? (scrollTop - 52) + 'px' : '0px',
       left: '0',
     };
 
@@ -133,308 +136,308 @@ export class BillingPage extends Component {
                   >
                     <table className="table table-order">
                       <thead>
-                      <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                      </tr>
+                        <tr>
+                          <th>Product</th>
+                          <th>Price</th>
+                          <th>Quantity</th>
+                          <th>Total</th>
+                        </tr>
                       </thead>
                     </table>
                   </div>
                   <table className="table table-order">
                     <tbody>
-                    <tr className={classNames({ 'no-item': (this.state.ruby === 0) })}>
-                      <td data-label="Product">
-                        <div>
+                      <tr className={classNames({ 'no-item': (this.state.ruby === 0) })}>
+                        <td data-label="Product">
+                          <div>
+                            <div className="img normal">
+                              <img src={diamond1} width="70" alt="diamond1" />
+                            </div>
+                            <div className="textbox">
+                              <strong className="name">Ruby Listing</strong>
+                              <p>100 Posts</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td data-label="Price">
+                          <div>
+                            <strong className="price">$5,059.00</strong>
+                          </div>
+                        </td>
+                        <td data-label="Quantity">
+                          <div className="jcf-number parent-active">
+                            <input
+                              type="number"
+                              value={this.state.ruby}
+                              id="quantity"
+                              className="form-control jcf-real-element field-active"
+                              name="quantity"
+                              readOnly
+                            />
+                            <span className="jcf-btn-inc" onClick={this.incQuantity.bind(this, 'ruby')} />
+                            <span className="jcf-btn-dec" onClick={this.decQuantity.bind(this, 'ruby')} />
+                          </div>
+                        </td>
+                        <td data-label="Total"><div>
+                          <strong className="price">$0.00</strong>
+                          <a
+                            href="javascript:void(0);"
+                            className="btn-reset"
+                            onClick={this.resetQuantity.bind(this, 'ruby')}
+                          >
+                            <i className="icon-icon_trash"></i>
+                          </a>
+                        </div></td>
+                      </tr>
+                      <tr className={classNames({ 'no-item': (this.state.diamond === 0) })}>
+                        <td data-label="Product"><div>
                           <div className="img normal">
-                            <img src={diamond1} width="70" />
+                            <img src={diamond2} width="70" alt="diamond2" />
                           </div>
                           <div className="textbox">
-                            <strong className="name">Ruby Listing</strong>
-                            <p>100 Posts</p>
+                            <strong className="name">Diamond Listing</strong>
+                            <p>60 Posts</p>
                           </div>
-                        </div>
-                      </td>
-                      <td data-label="Price">
-                        <div>
-                          <strong className="price">$5,059.00</strong>
-                        </div>
-                      </td>
-                      <td data-label="Quantity">
-                        <div className="jcf-number parent-active">
-                          <input
-                            type="number"
-                            value={this.state.ruby}
-                            id="quantity"
-                            className="form-control jcf-real-element field-active"
-                            name="quantity"
-                            readOnly
-                          />
-                          <span className="jcf-btn-inc" onClick={this.incQuantity.bind(this, 'ruby')} />
-                          <span className="jcf-btn-dec" onClick={this.decQuantity.bind(this, 'ruby')} />
-                        </div>
-                      </td>
-                      <td data-label="Total"><div>
-                        <strong className="price">$0.00</strong>
-                        <a
-                          href="javascript:void(0);"
-                          className="btn-reset"
-                          onClick={this.resetQuantity.bind(this, 'ruby')}
-                        >
-                          <i className="icon-icon_trash"></i>
-                        </a>
-                      </div></td>
-                    </tr>
-                    <tr className={classNames({ 'no-item': (this.state.diamond === 0) })}>
-                      <td data-label="Product"><div>
-                        <div className="img normal">
-                          <img src={diamond2} width="70" />
-                        </div>
-                        <div className="textbox">
-                          <strong className="name">Diamond Listing</strong>
-                          <p>60 Posts</p>
-                        </div>
-                      </div></td>
-                      <td data-label="Price">
-                        <div>
-                          <strong className="price">$3,059.00</strong>
-                        </div>
-                      </td>
-                      <td data-label="Quantity">
-                        <div className="jcf-number parent-active">
-                          <input
-                            type="number"
-                            value={this.state.diamond}
-                            id="quantity"
-                            className="form-control jcf-real-element field-active"
-                            name="quantity"
-                            readOnly
-                          />
-                          <span className="jcf-btn-inc" onClick={this.incQuantity.bind(this, 'diamond')} />
-                          <span className="jcf-btn-dec" onClick={this.decQuantity.bind(this, 'diamond')} />
-                        </div>
-                      </td>
-                      <td data-label="Total"><div>
-                        <strong className="price">$6,118.00</strong>
-                        <a
-                          href="javascript:void(0);"
-                          className="btn-reset"
-                          onClick={this.resetQuantity.bind(this, 'diamond')}
-                        >
-                          <i className="icon-icon_trash"></i>
-                        </a>
-                      </div></td>
-                    </tr>
-                    <tr className={classNames({ 'no-item': (this.state.platinum === 0) })}>
-                      <td data-label="Product"><div>
-                        <div className="img normal">
-                          <img src={diamond3} width="70" />
-                        </div>
-                        <div className="textbox">
-                          <strong className="name">Platinum Listing</strong>
-                          <p>30 Posts</p>
-                        </div>
-                      </div></td>
-                      <td data-label="Price">
-                        <div>
-                          <strong className="price">$1,559.00</strong>
-                        </div>
-                      </td>
-                      <td data-label="Quantity">
-                        <div className="jcf-number parent-active">
-                          <input
-                            type="number"
-                            value={this.state.platinum}
-                            id="quantity"
-                            className="form-control jcf-real-element field-active"
-                            name="quantity"
-                            readOnly
-                          />
-                          <span className="jcf-btn-inc" onClick={this.incQuantity.bind(this, 'platinum')} />
-                          <span className="jcf-btn-dec" onClick={this.decQuantity.bind(this, 'platinum')} />
-                        </div>
-                      </td>
-                      <td data-label="Total">
-                        <div>
-                          <strong className="price">$0.00</strong>
+                        </div></td>
+                        <td data-label="Price">
+                          <div>
+                            <strong className="price">$3,059.00</strong>
+                          </div>
+                        </td>
+                        <td data-label="Quantity">
+                          <div className="jcf-number parent-active">
+                            <input
+                              type="number"
+                              value={this.state.diamond}
+                              id="quantity"
+                              className="form-control jcf-real-element field-active"
+                              name="quantity"
+                              readOnly
+                            />
+                            <span className="jcf-btn-inc" onClick={this.incQuantity.bind(this, 'diamond')} />
+                            <span className="jcf-btn-dec" onClick={this.decQuantity.bind(this, 'diamond')} />
+                          </div>
+                        </td>
+                        <td data-label="Total"><div>
+                          <strong className="price">$6,118.00</strong>
                           <a
                             href="javascript:void(0);"
                             className="btn-reset"
-                            onClick={this.resetQuantity.bind(this, 'platinum')}
+                            onClick={this.resetQuantity.bind(this, 'diamond')}
                           >
                             <i className="icon-icon_trash"></i>
                           </a>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr className={classNames({ 'no-item': (this.state.gold === 0) })}>
-                      <td data-label="Product"><div>
-                        <div className="img normal">
-                          <img src={diamond4} width="70" />
-                        </div>
-                        <div className="textbox">
-                          <strong className="name">Gold Listing</strong>
-                          <p>10 Posts</p>
-                        </div>
-                      </div></td>
-                      <td data-label="Price">
-                        <div>
-                          <strong className="price">$559.00</strong>
-                        </div>
-                      </td>
-                      <td data-label="Quantity">
-                        <div className="jcf-number parent-active">
-                          <input
-                            type="number"
-                            value={this.state.gold}
-                            id="quantity"
-                            className="form-control jcf-real-element field-active"
-                            name="quantity"
-                            readOnly
-                          />
-                          <span className="jcf-btn-inc" onClick={this.incQuantity.bind(this, 'gold')} />
-                          <span className="jcf-btn-dec" onClick={this.decQuantity.bind(this, 'gold')} />
-                        </div>
-                      </td>
-                      <td data-label="Total">
-                        <div>
-                          <strong className="price">$559.00</strong>
-                          <a
-                            href="javascript:void(0);"
-                            className="btn-reset"
-                            onClick={this.resetQuantity.bind(this, 'gold')}
-                          >
-                            <i className="icon-icon_trash"></i>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr className={classNames({ 'no-item': (this.state.silver === 0) })}>
-                      <td data-label="Product"><div>
-                        <div className="img normal">
-                          <img src={diamond5} width="70" />
-                        </div>
-                        <div className="textbox">
-                          <strong className="name">Silver Listing</strong>
-                          <p>3 Posts</p>
-                        </div>
-                      </div></td>
-                      <td data-label="Price">
-                        <div>
-                          <strong className="price">$209.00</strong>
-                        </div>
-                      </td>
-                      <td data-label="Quantity">
-                        <div className="jcf-number parent-active">
-                          <input
-                            type="number"
-                            value={this.state.silver}
-                            id="quantity"
-                            className="form-control jcf-real-element field-active"
-                            name="quantity"
-                            readOnly
-                          />
-                          <span className="jcf-btn-inc" onClick={this.incQuantity.bind(this, 'silver')} />
-                          <span className="jcf-btn-dec" onClick={this.decQuantity.bind(this, 'silver')} />
-                        </div>
-                      </td>
-                      <td data-label="Total">
-                        <div>
-                          <strong className="price">$0.00</strong>
-                          <a
-                            href="javascript:void(0);"
-                            className="btn-reset"
-                            onClick={this.resetQuantity.bind(this, 'silver')}
-                          >
-                            <i className="icon-icon_trash"></i>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr className={classNames({ 'no-item': (this.state.bronze === 0) })}>
-                      <td data-label="Product"><div>
-                        <div className="img normal">
-                          <img src={diamond6} width="70" />
-                        </div>
-                        <div className="textbox">
-                          <strong className="name">Bronze Listing</strong>
-                          <p>1 Posts</p>
-                        </div>
-                      </div></td>
-                      <td data-label="Price">
-                        <div>
-                          <strong className="price">$59.00</strong>
-                        </div>
-                      </td>
-                      <td data-label="Quantity">
-                        <div className="jcf-number parent-active">
-                          <input
-                            type="number"
-                            value={this.state.bronze}
-                            id="quantity"
-                            className="form-control jcf-real-element field-active"
-                            name="quantity"
-                            readOnly
-                          />
-                          <span className="jcf-btn-inc" onClick={this.incQuantity.bind(this, 'bronze')} />
-                          <span className="jcf-btn-dec" onClick={this.decQuantity.bind(this, 'bronze')} />
-                        </div>
-                      </td>
-                      <td data-label="Total">
-                        <div>
-                          <strong className="price">$0.00</strong>
-                          <a
-                            href="javascript:void(0);"
-                            className="btn-reset"
-                            onClick={this.resetQuantity.bind(this, 'bronze')}
-                          >
-                            <i className="icon-icon_trash"></i>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr className={classNames({ 'no-item': (this.state.irb === 0) })}>
-                      <td data-label="Product"><div>
-                        <div className="img extra">
-                          <img src={irb} width="62" />
-                        </div>
-                        <div className="textbox">
-                          <strong className="name">IRB Ad Creation</strong>
-                        </div>
-                      </div></td>
-                      <td data-label="Price">
-                        <div>
-                          <strong className="price">$177.00</strong>
-                        </div>
-                      </td>
-                      <td data-label="Quantity">
-                        <div className="jcf-number parent-active">
-                          <input
-                            type="number"
-                            value={this.state.irb}
-                            id="quantity"
-                            className="form-control jcf-real-element field-active"
-                            name="quantity"
-                            readOnly
-                          />
-                          <span className="jcf-btn-inc" onClick={this.incQuantity.bind(this, 'irb')} />
-                          <span className="jcf-btn-dec" onClick={this.decQuantity.bind(this, 'irb')} />
-                        </div>
-                      </td>
-                      <td data-label="Total">
-                        <div>
-                          <strong className="price">$354.00</strong>
-                          <a
-                            href="javascript:void(0);"
-                            className="btn-reset"
-                            onClick={this.resetQuantity.bind(this, 'irb')}
-                          >
-                            <i className="icon-icon_trash"></i>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
+                        </div></td>
+                      </tr>
+                      <tr className={classNames({ 'no-item': (this.state.platinum === 0) })}>
+                        <td data-label="Product"><div>
+                          <div className="img normal">
+                            <img src={diamond3} width="70" alt="diamond2" />
+                          </div>
+                          <div className="textbox">
+                            <strong className="name">Platinum Listing</strong>
+                            <p>30 Posts</p>
+                          </div>
+                        </div></td>
+                        <td data-label="Price">
+                          <div>
+                            <strong className="price">$1,559.00</strong>
+                          </div>
+                        </td>
+                        <td data-label="Quantity">
+                          <div className="jcf-number parent-active">
+                            <input
+                              type="number"
+                              value={this.state.platinum}
+                              id="quantity"
+                              className="form-control jcf-real-element field-active"
+                              name="quantity"
+                              readOnly
+                            />
+                            <span className="jcf-btn-inc" onClick={this.incQuantity.bind(this, 'platinum')} />
+                            <span className="jcf-btn-dec" onClick={this.decQuantity.bind(this, 'platinum')} />
+                          </div>
+                        </td>
+                        <td data-label="Total">
+                          <div>
+                            <strong className="price">$0.00</strong>
+                            <a
+                              href="javascript:void(0);"
+                              className="btn-reset"
+                              onClick={this.resetQuantity.bind(this, 'platinum')}
+                            >
+                              <i className="icon-icon_trash"></i>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr className={classNames({ 'no-item': (this.state.gold === 0) })}>
+                        <td data-label="Product"><div>
+                          <div className="img normal">
+                            <img src={diamond4} width="70" alt="diamond2" />
+                          </div>
+                          <div className="textbox">
+                            <strong className="name">Gold Listing</strong>
+                            <p>10 Posts</p>
+                          </div>
+                        </div></td>
+                        <td data-label="Price">
+                          <div>
+                            <strong className="price">$559.00</strong>
+                          </div>
+                        </td>
+                        <td data-label="Quantity">
+                          <div className="jcf-number parent-active">
+                            <input
+                              type="number"
+                              value={this.state.gold}
+                              id="quantity"
+                              className="form-control jcf-real-element field-active"
+                              name="quantity"
+                              readOnly
+                            />
+                            <span className="jcf-btn-inc" onClick={this.incQuantity.bind(this, 'gold')} />
+                            <span className="jcf-btn-dec" onClick={this.decQuantity.bind(this, 'gold')} />
+                          </div>
+                        </td>
+                        <td data-label="Total">
+                          <div>
+                            <strong className="price">$559.00</strong>
+                            <a
+                              href="javascript:void(0);"
+                              className="btn-reset"
+                              onClick={this.resetQuantity.bind(this, 'gold')}
+                            >
+                              <i className="icon-icon_trash"></i>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr className={classNames({ 'no-item': (this.state.silver === 0) })}>
+                        <td data-label="Product"><div>
+                          <div className="img normal">
+                            <img src={diamond5} width="70" alt="diamond2" />
+                          </div>
+                          <div className="textbox">
+                            <strong className="name">Silver Listing</strong>
+                            <p>3 Posts</p>
+                          </div>
+                        </div></td>
+                        <td data-label="Price">
+                          <div>
+                            <strong className="price">$209.00</strong>
+                          </div>
+                        </td>
+                        <td data-label="Quantity">
+                          <div className="jcf-number parent-active">
+                            <input
+                              type="number"
+                              value={this.state.silver}
+                              id="quantity"
+                              className="form-control jcf-real-element field-active"
+                              name="quantity"
+                              readOnly
+                            />
+                            <span className="jcf-btn-inc" onClick={this.incQuantity.bind(this, 'silver')} />
+                            <span className="jcf-btn-dec" onClick={this.decQuantity.bind(this, 'silver')} />
+                          </div>
+                        </td>
+                        <td data-label="Total">
+                          <div>
+                            <strong className="price">$0.00</strong>
+                            <a
+                              href="javascript:void(0);"
+                              className="btn-reset"
+                              onClick={this.resetQuantity.bind(this, 'silver')}
+                            >
+                              <i className="icon-icon_trash"></i>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr className={classNames({ 'no-item': (this.state.bronze === 0) })}>
+                        <td data-label="Product"><div>
+                          <div className="img normal">
+                            <img src={diamond6} width="70" alt="diamond2" />
+                          </div>
+                          <div className="textbox">
+                            <strong className="name">Bronze Listing</strong>
+                            <p>1 Posts</p>
+                          </div>
+                        </div></td>
+                        <td data-label="Price">
+                          <div>
+                            <strong className="price">$59.00</strong>
+                          </div>
+                        </td>
+                        <td data-label="Quantity">
+                          <div className="jcf-number parent-active">
+                            <input
+                              type="number"
+                              value={this.state.bronze}
+                              id="quantity"
+                              className="form-control jcf-real-element field-active"
+                              name="quantity"
+                              readOnly
+                            />
+                            <span className="jcf-btn-inc" onClick={this.incQuantity.bind(this, 'bronze')} />
+                            <span className="jcf-btn-dec" onClick={this.decQuantity.bind(this, 'bronze')} />
+                          </div>
+                        </td>
+                        <td data-label="Total">
+                          <div>
+                            <strong className="price">$0.00</strong>
+                            <a
+                              href="javascript:void(0);"
+                              className="btn-reset"
+                              onClick={this.resetQuantity.bind(this, 'bronze')}
+                            >
+                              <i className="icon-icon_trash"></i>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr className={classNames({ 'no-item': (this.state.irb === 0) })}>
+                        <td data-label="Product"><div>
+                          <div className="img extra">
+                            <img src={irb} width="62" />
+                          </div>
+                          <div className="textbox">
+                            <strong className="name">IRB Ad Creation</strong>
+                          </div>
+                        </div></td>
+                        <td data-label="Price">
+                          <div>
+                            <strong className="price">$177.00</strong>
+                          </div>
+                        </td>
+                        <td data-label="Quantity">
+                          <div className="jcf-number parent-active">
+                            <input
+                              type="number"
+                              value={this.state.irb}
+                              id="quantity"
+                              className="form-control jcf-real-element field-active"
+                              name="quantity"
+                              readOnly
+                            />
+                            <span className="jcf-btn-inc" onClick={this.incQuantity.bind(this, 'irb')} />
+                            <span className="jcf-btn-dec" onClick={this.decQuantity.bind(this, 'irb')} />
+                          </div>
+                        </td>
+                        <td data-label="Total">
+                          <div>
+                            <strong className="price">$354.00</strong>
+                            <a
+                              href="javascript:void(0);"
+                              className="btn-reset"
+                              onClick={this.resetQuantity.bind(this, 'irb')}
+                            >
+                              <i className="icon-icon_trash"></i>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -672,8 +675,4 @@ export class BillingPage extends Component {
 
 const mapStateToProps = createStructuredSelector({});
 
-function mapDispatchToProps(dispatch) {
-  return {};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(BillingPage);
+export default connect(mapStateToProps, null)(BillingPage);
