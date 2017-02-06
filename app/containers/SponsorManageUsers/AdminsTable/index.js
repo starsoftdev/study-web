@@ -1,62 +1,100 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm, change } from 'redux-form';
+import RowItem from './RowItem';
+import LoadingSpinner from 'components/LoadingSpinner';
+import { selectPaginationOptionsAdmin, selectSearchSponsorsFormValues } from 'containers/SponsorManageUsers/selectors';
+import { setActiveAdminSort } from 'containers/SponsorManageUsers/actions';
 
-import Input from 'components/Input';
-import Button from 'react-bootstrap/lib/Button';
-import ReactSelect from 'components/Input/ReactSelect';
-import { defaultRanges, DateRange } from 'react-date-range';
-import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from 'components/CenteredModal/index';
-
-import moment from 'moment';
-
+import _ from 'lodash';
 export class SponsorManageUsersAdminsTable extends React.Component {
   static propTypes = {
+    manageSponsorUsersData: PropTypes.object,
+    editUser: PropTypes.func,
+    deleteUser: PropTypes.func,
+    paginationOptionsAdmin: PropTypes.object,
+    setActiveAdminSort: PropTypes.func,
+    searchFormValues: React.PropTypes.object,
   }
 
   constructor(props) {
     super(props);
 
+    this.sortBy = this.sortBy.bind(this);
+  }
+
+  sortBy(ev) {
+    ev.preventDefault();
+    let sort = ev.currentTarget.dataset.sort;
+    let direction = 'up';
+
+
+    if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
+      direction = 'down';
+    } else if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1) {
+      direction = null;
+      sort = null;
+    }
+
+    this.props.setActiveAdminSort(sort, direction);
   }
 
   render() {
+    let adminsList = this.props.manageSponsorUsersData.adminsList;
+
+    if (this.props.searchFormValues.name) {
+      adminsList = _.filter(adminsList, (item) => (`${item.first_name} ${item.last_name}`.indexOf(this.props.searchFormValues.name) !== -1));
+    }
+
+    if (this.props.paginationOptionsAdmin.activeDirection && this.props.paginationOptionsAdmin.activeSort) {
+      const dir = ((this.props.paginationOptionsAdmin.activeDirection === 'down') ? 'desc' : 'asc');
+      adminsList = _.orderBy(adminsList, [(o) => (o[this.props.paginationOptionsAdmin.activeSort])], [dir]);
+    }
 
     return (
       <div className="table-holder table-responsive">
-        <table className="table-manage-user table">
-          <caption>
-            ADMINS
-          </caption>
+        {(this.props.manageSponsorUsersData.fetching)
+          ?
+          <div className="text-center">
+            <LoadingSpinner showOnlyIcon size={20} />
+          </div>
+          :
+          <table className="table-manage-user table">
+            <caption>
+              ADMINS
+            </caption>
 
-          <thead>
-          <tr>
-            <th>NAME  <i className="caret-arrow"></i></th>
-            <th>EMAIL  <i className="caret-arrow"></i></th>
-            <th></th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr className="tr">
-            <td><span className="first-name">Bruce</span> <span className="last-name">Wayne</span></td>
-            <td>bruce.wayne@wayneenterprise.com</td>
-            <td>
-              <div className="btn-holder">
-                <span className="access hidden" data-access="Admin"></span>
-                <a href="#manage-edit-user" className="btn btn-primary right lightbox-opener hidden">edit</a>
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+            <thead>
+              <tr>
+                <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'first_name') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>NAME<i className="caret-arrow"></i></th>
+                <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'email') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>EMAIL<i className="caret-arrow"></i></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+            {
+              adminsList.map((item, index) => (
+                <RowItem key={index} item={item} editUser={this.props.editUser} deleteUser={this.props.deleteUser} />
+              ))
+            }
+            </tbody>
+          </table>
+        }
       </div>
     );
   }
 }
 
-const mapStateToProps = createStructuredSelector({});
-const mapDispatchToProps = {};
+const mapStateToProps = createStructuredSelector({
+  paginationOptionsAdmin: selectPaginationOptionsAdmin(),
+  searchFormValues: selectSearchSponsorsFormValues(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setActiveAdminSort: (sort, direction) => dispatch(setActiveAdminSort(sort, direction)),
+  };
+}
 
 export default connect(
   mapStateToProps,
