@@ -13,7 +13,7 @@ function Checkbox({ input, className, children, onChange, disabled, ...rest }) {
 
   return (
     <div className={classNames(className)}>
-      <span className={`jcf-checkbox ${input.checked ? 'jcf-checked' : 'jcf-unchecked'}`}>
+      <span className={`jcf-checkbox ${input.checked ? 'jcf-checked' : 'jcf-unchecked'}`} disabled={disabled}>
         {(!disabled)
           ?
           <span
