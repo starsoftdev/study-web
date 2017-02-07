@@ -244,7 +244,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         break;
       case 'protocol':
         proposalsArr.sort((a, b) => {
-          console.log(a);
           if (a.protocol > b.protocol) {
             return directionUnits.more;
           }
