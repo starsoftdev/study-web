@@ -11,8 +11,8 @@ import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input/index';
-import { submitPatientImport, clearForm } from '../actions';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import { submitPatientImport, clearForm } from '../actions';
 
 @reduxForm({ form: 'importPatients' })
 class ImportPatientsModal extends React.Component {
@@ -86,11 +86,8 @@ class ImportPatientsModal extends React.Component {
                 />
               </span>
             </label>
-
           </div>
-
         </Form>
-
         <span className="or">
           <span>or</span>
         </span>
@@ -118,6 +115,7 @@ class ImportPatientsModal extends React.Component {
         {...props}
         id="import-info"
         dialogComponentClass={CenteredModal}
+        onHide={onHide}
         backdrop
         keyboard
       >

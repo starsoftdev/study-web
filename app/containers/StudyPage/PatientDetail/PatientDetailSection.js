@@ -12,7 +12,7 @@ import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/index';
 import { submitPatientUpdate } from '../actions';
 import formValidator from './detailValidator';
-import { normalizePhone, normalizePhoneDisplay } from '../helper/functions';
+import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSyncErrors, selectValues, selectFormDidChange } from '../../../common/selectors/form.selector';
 import { createStructuredSelector } from 'reselect';
 
