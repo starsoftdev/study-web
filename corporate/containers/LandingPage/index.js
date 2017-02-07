@@ -57,7 +57,6 @@ export class LandingPage extends React.Component {
   }
 
   componentDidMount() {
-    const { studyId, siteLocation } = this.props.params;
     this.watcherA = inViewport(this.slideInLeft, this.setVisible);
     this.watcherB = inViewport(this.slideInRight, this.setVisible);
   }
@@ -69,7 +68,7 @@ export class LandingPage extends React.Component {
     if (newProps.landing) {
       const { study } = newProps.landing;
       if (study) {
-        for (let site of study.sites) {
+        for (const site of study.sites) {
           if (site.location.toLowerCase().replace(/ /ig, '-') === siteLocation) {
             invalidSite = null;
           }
@@ -143,76 +142,7 @@ export class LandingPage extends React.Component {
       fullAddress += ', ' + zip;
     }
 
-    if (!invalidSite) {
-      return (
-        <div id="main">
-          <div className="container">
-            <LandingForm name={name} city={city} state={state} onSubmit={this.onSubmitForm} subscriptionError={subscriptionError} />
-            <article className="post">
-              <div className="row">
-                <div
-                  ref={(slideInRight) => { this.slideInRight = slideInRight; }}
-                  className="col-xs-12 col-sm-6 pull-right"
-                  data-view="slideInRight"
-                >
-                  <h2>{description}</h2>
-                  <p>
-                    {landingDescription}
-                  </p>
-                  <strong className="title text-uppercase">{siteName}</strong>
-                  <address>{fullAddress}</address>
-                  <p className="text-underline">
-                    If interested, enter information above to sign up!
-                  </p>
-                  <p className="note">
-                    By signing up you agree to receive text messages and emails about this and similar studies near you.
-                    You can unsubscribe at any time.
-                  </p>
-                </div>
-                <div
-                  ref={(slideInLeft) => { this.slideInLeft = slideInLeft; }}
-                  className="col-xs-12 col-sm-6"
-                  data-view="slideInLeft"
-                >
-                  <div className="img-holder">
-                    <img src={imgSrc} width="854" height="444" alt="preview" className="img-responsive" />
-                  </div>
-                  <div className="social-area clearfix">
-                    <h3 className="pull-left">Share this study:</h3>
-                    <ul className="social-networks pull-left list-inline">
-                      <li className="facebook">
-                        <a href="#">
-                          <i className="icon-facebook-square"></i>
-                        </a></li>
-                      <li className="instagram">
-                        <a href="#">
-                          <i className="icon-instagram2"></i>
-                        </a>
-                      </li>
-                      <li className="twitter">
-                        <a href="#">
-                          <i className="icon-twitter-square"></i>
-                        </a>
-                      </li>
-                      <li className="pinterest">
-                        <a href="#">
-                          <i className="icon-pinterest-square"></i>
-                        </a>
-                      </li>
-                      <li className="gmail">
-                        <a href="#">
-                          <i className="icon-envelope-square"></i>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
-      );
-    } else {
+    if (invalidSite) {
       return (
         <div id="main">
           <div className="container">
@@ -223,6 +153,75 @@ export class LandingPage extends React.Component {
         </div>
       );
     }
+
+    return (
+      <div id="main">
+        <div className="container">
+          <LandingForm name={name} city={city} state={state} onSubmit={this.onSubmitForm} subscriptionError={subscriptionError} />
+          <article className="post">
+            <div className="row">
+              <div
+                ref={(slideInRight) => { this.slideInRight = slideInRight; }}
+                className="col-xs-12 col-sm-6 pull-right"
+                data-view="slideInRight"
+              >
+                <h2>{description}</h2>
+                <p>
+                  {landingDescription}
+                </p>
+                <strong className="title text-uppercase">{siteName}</strong>
+                <address>{fullAddress}</address>
+                <p className="text-underline">
+                  If interested, enter information above to sign up!
+                </p>
+                <p className="note">
+                  By signing up you agree to receive text messages and emails about this and similar studies near you.
+                  You can unsubscribe at any time.
+                </p>
+              </div>
+              <div
+                ref={(slideInLeft) => { this.slideInLeft = slideInLeft; }}
+                className="col-xs-12 col-sm-6"
+                data-view="slideInLeft"
+              >
+                <div className="img-holder">
+                  <img src={imgSrc} width="854" height="444" alt="preview" className="img-responsive" />
+                </div>
+                <div className="social-area clearfix">
+                  <h3 className="pull-left">Share this study:</h3>
+                  <ul className="social-networks pull-left list-inline">
+                    <li className="facebook">
+                      <a href="#">
+                        <i className="icon-facebook-square"></i>
+                      </a></li>
+                    <li className="instagram">
+                      <a href="#">
+                        <i className="icon-instagram2"></i>
+                      </a>
+                    </li>
+                    <li className="twitter">
+                      <a href="#">
+                        <i className="icon-twitter-square"></i>
+                      </a>
+                    </li>
+                    <li className="pinterest">
+                      <a href="#">
+                        <i className="icon-pinterest-square"></i>
+                      </a>
+                    </li>
+                    <li className="gmail">
+                      <a href="#">
+                        <i className="icon-envelope-square"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    );
   }
 }
 
