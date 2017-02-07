@@ -85,7 +85,6 @@ export function* fetchPrincipalInvestigatorTotalsWatcher() {
 
 export function* fetchPrincipalInvestigatorTotalsWorker(action) {
   try {
-    console.log(action.currentUser);
     const requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/principalInvestigators`;
 
     const params = {

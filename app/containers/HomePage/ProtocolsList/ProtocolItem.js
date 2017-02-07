@@ -35,7 +35,6 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
   }
 
   onViewClick() {
-    console.log(this.props);
     const { push } = this.props;
     push(`/app/report?protocol=${this.props.protocolNumber}&indication=${this.props.indication}&cro=${this.props.croName}`);
   }
@@ -118,31 +117,28 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
           <div className="btns-slide">
             <div className="btns">
               <div className="area">
-                <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Report</Button>
-                <Button disabled className="btn btn-primary lightbox-opener">Renew</Button>
-                <Button disabled className="btn btn-danger lightbox-opener">Add Site</Button>
-                <OverlayTrigger
-                  placement="top"
-                  overlay={tooltip}
-                >
-                  <div className="disabled-toggle-container pull-right">
-                    <Toggle
-                      name="purchase"
-                      meta={{ touched:false, error:false, active:false }}
-                      input={{}}
-                      className="disabled-toggle"
-                    />
-                  </div>
-                </OverlayTrigger>
 
-                {/* <label className="check-switcher">
-                  <input disabled type="checkbox" id="messaging4" />
-                  <span data-off="OFF" data-on="ON" className="text"></span>
-                  <div className="tooltip custom top">
-                    <div className="tooltop-arrow"></div>
-                    <div data-deactive="MESSAGING SUITE" data-active="MESSAGING SUITE" className="tooltop-inner"></div>
-                  </div>
-                </label>*/}
+                <div className="pull-right">
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={tooltip}
+                  >
+                    <div className="disabled-toggle-container">
+                      <Toggle
+                        name="purchase"
+                        meta={{ touched:false, error:false, active:false }}
+                        input={{}}
+                        className="disabled-toggle"
+                      />
+                    </div>
+                  </OverlayTrigger>
+                </div>
+
+                <div className="pull-right">
+                  <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Report</Button>
+                  <Button disabled className="btn btn-primary lightbox-opener">Renew</Button>
+                  <Button disabled className="btn btn-danger lightbox-opener">Add Site</Button>
+                </div>
               </div>
             </div>
           </div>
