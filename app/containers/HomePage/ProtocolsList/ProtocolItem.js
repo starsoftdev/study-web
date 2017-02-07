@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
+import Toggle from 'components/Input/Toggle';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 class ProtocolItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -33,7 +35,6 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
   }
 
   onViewClick() {
-    console.log(this.props);
     const { push } = this.props;
     push(`/app/report?protocol=${this.props.protocolNumber}&indication=${this.props.indication}&cro=${this.props.croName}`);
   }
@@ -77,6 +78,15 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
       patientMessagingSuite = 'On';
     }
 
+    const tooltip = (
+      <Tooltip
+        id={'ms-tooltip'}
+        className="tooltop-inner"
+      >
+        {'MESSAGING SUITE'}
+      </Tooltip>
+    );
+
     return (
       <tr
         className={classNames('study-container', { 'tr-active': buttonsShown, 'tr-inactive': !buttonsShown })}
@@ -100,32 +110,35 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
         <td>
           <span>{activeCount}</span>
         </td>
-        <td>
+        <td className="patient-messaging-suite off">
           <span>{inactiveCount}</span>
-          <div className="btns-slide pull-right">
-            <div className="btns">
-              <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>
-              <Button bsStyle="primary" className="btn-renew" onClick={this.onRenewClick}>Renew</Button>
-              <Button bsStyle="danger" className="btn-upgrade" onClick={this.onUpgradeClick}>Upgrade</Button>
-              <Button bsStyle="info" className="btn-edit" onClick={this.onEditClick}>Edit</Button>
-            </div>
-          </div>
         </td>
         <td>
           <div className="btns-slide">
             <div className="btns">
               <div className="area">
-                <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Report</Button>
-                <a href="#renew-study" className="btn btn-primary lightbox-opener">Renew</a>
-                <a href="#add-site-popup" className="btn btn-danger lightbox-opener">Add Site</a>
-                <label className="check-switcher">
-                  <input type="checkbox" id="messaging4" />
-                  <span data-off="OFF" data-on="ON" className="text"></span>
-                  <div className="tooltip custom top">
-                    <div className="tooltop-arrow"></div>
-                    <div data-deactive="MESSAGING SUITE" data-active="MESSAGING SUITE" className="tooltop-inner"></div>
-                  </div>
-                </label>
+
+                <div className="pull-right">
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={tooltip}
+                  >
+                    <div className="disabled-toggle-container">
+                      <Toggle
+                        name="purchase"
+                        meta={{ touched:false, error:false, active:false }}
+                        input={{}}
+                        className="disabled-toggle"
+                      />
+                    </div>
+                  </OverlayTrigger>
+                </div>
+
+                <div className="pull-right">
+                  <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Report</Button>
+                  <Button disabled className="btn btn-primary lightbox-opener">Renew</Button>
+                  <Button disabled className="btn btn-danger lightbox-opener">Add Site</Button>
+                </div>
               </div>
             </div>
           </div>

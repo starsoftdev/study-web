@@ -2,11 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import Form from 'react-bootstrap/lib/Form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import Button from 'react-bootstrap/lib/Button';
 import { Field, reduxForm } from 'redux-form';
 import { map } from 'lodash';
-
-import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
 import { selectSearchProtocolsFormError } from './selectors';
 import { selectProtocols, selectProtocolNumbers, selectIndications } from 'containers/HomePage/selectors';
@@ -32,6 +29,7 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
     indications: PropTypes.object,
     hasError: PropTypes.bool,
     handleSubmit: PropTypes.func,
+    onSubmit: PropTypes.func,
   };
 
   render() {
@@ -45,24 +43,24 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
       value: row.id,
     })));
 
+    const croOptions = [{ label: 'All', value: null }].concat(map(protocols.details, row => ({
+      label: row.croName,
+      value: row.croName,
+    })));
+
     return (
+
       <Form className="form-search form-search-protocols pull-left" onSubmit={handleSubmit}>
-        <div className="fields-holder clearfix">
-          <div className="search-area pull-left">
-            <div className="field">
-              <Button className="btn-enter" type="submit">
-                <i className="icomoon-icon_search2" />
-              </Button>
-              <Field
-                name="search"
-                component={Input}
-                type="text"
-                className="keyword-search"
-                placeholder="Search..."
-                disabled={protocols.fetching}
-              />
-            </div>
+
+        <div className="btns-popups pull-right">
+          <div className="col pull-right">
+            <button disabled className="btn btn-primary download"><i className="icomoon-icon_creditcard"></i> ADD CREDITS</button>
           </div>
+          <div className="col pull-right">
+            <button disabled className="btn btn-primary download">+ List New Protocol</button>
+          </div>
+        </div>
+        <div className="fields-holder clearfix">
           <div className="pull-left custom-select">
             <Field
               name="protocol"
@@ -70,6 +68,7 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
               placeholder="Select Protocol"
               options={protocolNumberOptions}
               disabled={protocols.fetching}
+              onChange={(e) => { this.props.onSubmit({ protocol: e }); }}
             />
           </div>
           <div className="pull-left custom-select">
@@ -79,6 +78,17 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
               placeholder="Select Indication"
               options={indicationOptions}
               disabled={protocols.fetching}
+              onChange={(e) => { this.props.onSubmit({ indication: e }); }}
+            />
+          </div>
+          <div className="pull-left custom-select">
+            <Field
+              name="cro"
+              component={ReactSelect}
+              placeholder="Select CRO"
+              options={croOptions}
+              disabled={protocols.fetching}
+              onChange={(e) => { this.props.onSubmit({ cro: e }); }}
             />
           </div>
           <div className="hidden">
@@ -91,6 +101,7 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
           </div>
         </div>
       </Form>
+
     );
   }
 }
