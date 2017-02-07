@@ -34,16 +34,16 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
 
   render() {
     const { protocols, hasError, handleSubmit, protocolNumbers, indications } = this.props;
-    const protocolNumberOptions = [{ label: 'All', value: null }].concat(map(protocolNumbers.details, row => ({
+    const protocolNumberOptions = [{ label: 'All', value: 'all' }].concat(map(protocolNumbers.details, row => ({
       label: row.protocolNumber,
       value: row.protocolNumber,
     })));
-    const indicationOptions = [{ label: 'All', value: null }].concat(map(indications.details, row => ({
+    const indicationOptions = [{ label: 'All', value: 'all' }].concat(map(indications.details, row => ({
       label: row.name,
       value: row.id,
     })));
 
-    const croOptions = [{ label: 'All', value: null }].concat(map(protocols.details, row => ({
+    const croOptions = [{ label: 'All', value: 'all' }].concat(map(protocols.details, row => ({
       label: row.croName,
       value: row.croName,
     })));
