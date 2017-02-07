@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import inViewport from 'in-viewport';
 import moment from 'moment-timezone';
+import { Alert } from 'react-bootstrap';
 
 import LandingForm from '../../components/LandingForm';
 import img9 from '../../assets/images/buildings/img9.jpg';
@@ -44,25 +45,38 @@ export class LandingPage extends React.Component {
     this.setVisible = this.setVisible.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
 
-    this.props = {
+    this.state = {
+      invalidSite: null,
       study: null,
     };
   }
 
   componentWillMount() {
-    const { studyId } = this.props.param;
+    const { studyId } = this.props.params;
     this.props.fetchLanding(studyId);
   }
 
   componentDidMount() {
-    const { studyId, siteLocation } = this.props.param;
+    const { studyId, siteLocation } = this.props.params;
     this.watcherA = inViewport(this.slideInLeft, this.setVisible);
     this.watcherB = inViewport(this.slideInRight, this.setVisible);
-
-    console.log(studyId, siteLocation);
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(newProps) {
+    const { siteLocation } = this.props.params;
+    let invalidSite = true;
+
+    if (newProps.landing) {
+      const { study } = newProps.landing;
+      if (study) {
+        for (let site of study.sites) {
+          if (site.location.toLowerCase().replace(/ /ig, '-') === siteLocation) {
+            invalidSite = null;
+          }
+        }
+        this.setState({ invalidSite });
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -95,6 +109,8 @@ export class LandingPage extends React.Component {
 
   render() {
     const { subscriptionError } = this.props;
+    const { invalidSite } = this.state;
+
     let landing = null;
     let study = null;
     if (this.props.landing) {
@@ -127,74 +143,86 @@ export class LandingPage extends React.Component {
       fullAddress += ', ' + zip;
     }
 
-    return (
-      <div id="main">
-        <div className="container">
-          <LandingForm name={name} city={city} state={state} onSubmit={this.onSubmitForm} subscriptionError={subscriptionError} />
-          <article className="post">
-            <div className="row">
-              <div
-                ref={(slideInRight) => { this.slideInRight = slideInRight; }}
-                className="col-xs-12 col-sm-6 pull-right"
-                data-view="slideInRight"
-              >
-                <h2>{description}</h2>
-                <p>
-                  {landingDescription}
-                </p>
-                <strong className="title text-uppercase">{siteName}</strong>
-                <address>{fullAddress}</address>
-                <p className="text-underline">
-                  If interested, enter information above to sign up!
-                </p>
-                <p className="note">
-                  By signing up you agree to receive text messages and emails about this and similar studies near you.
-                  You can unsubscribe at any time.
-                </p>
-              </div>
-              <div
-                ref={(slideInLeft) => { this.slideInLeft = slideInLeft; }}
-                className="col-xs-12 col-sm-6"
-                data-view="slideInLeft"
-              >
-                <div className="img-holder">
-                  <img src={imgSrc} width="854" height="444" alt="preview" className="img-responsive" />
+    if (!invalidSite) {
+      return (
+        <div id="main">
+          <div className="container">
+            <LandingForm name={name} city={city} state={state} onSubmit={this.onSubmitForm} subscriptionError={subscriptionError} />
+            <article className="post">
+              <div className="row">
+                <div
+                  ref={(slideInRight) => { this.slideInRight = slideInRight; }}
+                  className="col-xs-12 col-sm-6 pull-right"
+                  data-view="slideInRight"
+                >
+                  <h2>{description}</h2>
+                  <p>
+                    {landingDescription}
+                  </p>
+                  <strong className="title text-uppercase">{siteName}</strong>
+                  <address>{fullAddress}</address>
+                  <p className="text-underline">
+                    If interested, enter information above to sign up!
+                  </p>
+                  <p className="note">
+                    By signing up you agree to receive text messages and emails about this and similar studies near you.
+                    You can unsubscribe at any time.
+                  </p>
                 </div>
-                <div className="social-area clearfix">
-                  <h3 className="pull-left">Share this study:</h3>
-                  <ul className="social-networks pull-left list-inline">
-                    <li className="facebook">
-                      <a href="#">
-                        <i className="icon-facebook-square"></i>
-                      </a></li>
-                    <li className="instagram">
-                      <a href="#">
-                        <i className="icon-instagram2"></i>
-                      </a>
-                    </li>
-                    <li className="twitter">
-                      <a href="#">
-                        <i className="icon-twitter-square"></i>
-                      </a>
-                    </li>
-                    <li className="pinterest">
-                      <a href="#">
-                        <i className="icon-pinterest-square"></i>
-                      </a>
-                    </li>
-                    <li className="gmail">
-                      <a href="#">
-                        <i className="icon-envelope-square"></i>
-                      </a>
-                    </li>
-                  </ul>
+                <div
+                  ref={(slideInLeft) => { this.slideInLeft = slideInLeft; }}
+                  className="col-xs-12 col-sm-6"
+                  data-view="slideInLeft"
+                >
+                  <div className="img-holder">
+                    <img src={imgSrc} width="854" height="444" alt="preview" className="img-responsive" />
+                  </div>
+                  <div className="social-area clearfix">
+                    <h3 className="pull-left">Share this study:</h3>
+                    <ul className="social-networks pull-left list-inline">
+                      <li className="facebook">
+                        <a href="#">
+                          <i className="icon-facebook-square"></i>
+                        </a></li>
+                      <li className="instagram">
+                        <a href="#">
+                          <i className="icon-instagram2"></i>
+                        </a>
+                      </li>
+                      <li className="twitter">
+                        <a href="#">
+                          <i className="icon-twitter-square"></i>
+                        </a>
+                      </li>
+                      <li className="pinterest">
+                        <a href="#">
+                          <i className="icon-pinterest-square"></i>
+                        </a>
+                      </li>
+                      <li className="gmail">
+                        <a href="#">
+                          <i className="icon-envelope-square"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div id="main">
+          <div className="container">
+            <Alert bsStyle="danger">
+              <p>Wrong name of site.</p>
+            </Alert>
+          </div>
+        </div>
+      );
+    }
   }
 }
 
