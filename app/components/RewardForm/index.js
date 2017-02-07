@@ -20,14 +20,19 @@ class RewardForm extends Component { // eslint-disable-line react/prefer-statele
   render() {
     const { currentUser, siteLocations } = this.props;
     const isAdmin = !currentUser.roleForClient.site_id;
-
+    const nSiteLocation = siteLocations.map((s) => ((
+      {
+        label: s.name,
+        value: s.id === 0 ? '0' : s.id,
+      }
+    )));
     return (
       <div>
         <Field
           name="site"
           component={ReactSelect}
           placeholder="Select Site Location"
-          options={siteLocations}
+          options={nSiteLocation}
           className="field"
           disabled={!isAdmin}
         />

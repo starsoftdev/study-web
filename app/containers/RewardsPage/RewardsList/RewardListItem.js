@@ -26,7 +26,7 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
     if (reward_data) {
       rewardData = JSON.parse(reward_data);
     }
-    console.log('---rewardData', rewardData);
+
     let content = null;
     content = (
       <tr>

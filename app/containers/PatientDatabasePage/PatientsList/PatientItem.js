@@ -61,6 +61,14 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     }
   }
 
+  componentWillReceiveProps(newProps) {
+    const { unsubscribed, change, id, removePatientFromTextBlast } = newProps;
+    if (unsubscribed && this.props.unsubscribed !== unsubscribed) {
+      removePatientFromTextBlast([{ id }]);
+      change(`patient-${id}`, false);
+    }
+  }
+
   showHover() {
     this.setState({ hover: true });
   }
@@ -110,7 +118,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     if (unsubscribed) {
       checkClassName += ' none-event';
     }
-    const { id, orderNumber, firstName, lastName, email, phone, age, gender, bmi, indications, source, studyPatientCategory, unsubscribed } = this.props;
+    const { id, index, firstName, lastName, email, phone, age, gender, bmi, indications, source, studyPatientCategory, unsubscribed } = this.props;
     const indicationNames = map(indications, indicationIterator => indicationIterator.name).join(', ');
 
     return (
@@ -121,13 +129,13 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
             name={`patient-${id}`}
             type="checkbox"
             disabled={unsubscribed}
-            checked={unsubscribed}
+            checked={!unsubscribed}
             component={Checkbox}
             onChange={this.togglePatientForTextBlast}
           />
         </div>
         <div className="td index">
-          {orderNumber}
+          {index + 1}
         </div>
         <div className="td name">
           <span>{firstName} {lastName}</span>

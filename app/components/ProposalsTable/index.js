@@ -54,8 +54,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       checkAll: false,
       proposals: false,
       filteredProposals: null,
-      activeSort: 'date',
-      activeDirection: 'down',
+      activeSort: null,
+      activeDirection: null,
     };
   }
 
@@ -324,6 +324,23 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   }
 
   mapProposals(raw, result) {
+    if (this.state.activeSort === null) {
+      const directionUnits = {
+        more: 1,
+        less: -1,
+      };
+      raw.sort((a, b) => {
+        const aDate = new Date(a.created).getTime();
+        const bDate = new Date(b.created).getTime();
+        if (aDate > bDate) {
+          return directionUnits.more;
+        }
+        if (aDate < bDate) {
+          return directionUnits.less;
+        }
+        return 0;
+      });
+    }
     _.map(raw, (source, key) => {
       const dateWrapper = getLocalTime(source.created, this.props.currentUser.timezone).format('MM/DD/YY');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
