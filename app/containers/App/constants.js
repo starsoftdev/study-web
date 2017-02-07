@@ -124,6 +124,7 @@ export const CHANGE_USERS_TIMEZONE_ERROR           = 'App/CHANGE_USERS_TIMEZONE_
 
 export const FETCH_LANDING                         = 'App/FETCH_LANDING';
 export const FETCH_LANDING_SUCCESS                 = 'App/FETCH_LANDING_SUCCESS';
+export const FETCH_LANDING_ERROR                   = 'App/FETCH_LANDING_ERROR';
 export const SUBSCRIBE_FROM_LANDING                = 'App/SUBSCRIBE_FROM_LANDING';
 export const PATIENT_SUBSCRIBED                    = 'App/PATIENT_SUBSCRIBED';
 export const CLEAR_FORM_SUBSCRIBE                  = 'App/CLEAR_FORM_SUBSCRIBE';

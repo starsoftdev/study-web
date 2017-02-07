@@ -100,6 +100,7 @@ import {
   changeUsersTimezoneSuccess,
   changeUsersTimezoneError,
   landingFetched,
+  fetchLandingError,
   patientSubscribed,
   patientSubscriptionError,
 } from 'containers/App/actions';
@@ -743,9 +744,8 @@ function* fetchLandingStudy() {
       method: 'GET',
     });
     yield put(landingFetched(response));
-  } catch (e) {
-    const errorMessage = get(e, 'message', 'Something went wrong while fetching landing information. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
+  } catch (err) {
+    yield put(fetchLandingError(err));
   }
 }
 
