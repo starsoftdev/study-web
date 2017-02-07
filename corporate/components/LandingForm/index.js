@@ -55,7 +55,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             <i className="icon-map-marker"></i>
           }
           {cityAndState}
-          </h2>
+        </h2>
         <div
           ref={(animatedFormContent) => { this.animatedFormContent = animatedFormContent; }}
           data-view="fadeInUp"
