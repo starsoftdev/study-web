@@ -123,6 +123,7 @@ import {
 
   FETCH_LANDING,
   FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
   SUBSCRIBE_FROM_LANDING,
   PATIENT_SUBSCRIBED,
   PATIENT_SUBSCRIPTION_ERROR,
@@ -837,13 +838,6 @@ export function changeUsersTimezoneError(payload) {
   };
 }
 
-export function subscribeFromLanding(params) {
-  return {
-    type: SUBSCRIBE_FROM_LANDING,
-    params,
-  };
-}
-
 export function fetchLanding(studyId) {
   return {
     type: FETCH_LANDING,
@@ -855,6 +849,20 @@ export function landingFetched(payload) {
   return {
     type: FETCH_LANDING_SUCCESS,
     payload,
+  };
+}
+
+export function fetchLandingError(payload) {
+  return {
+    type: FETCH_LANDING_ERROR,
+    payload,
+  };
+}
+
+export function subscribeFromLanding(params) {
+  return {
+    type: SUBSCRIBE_FROM_LANDING,
+    params,
   };
 }
 

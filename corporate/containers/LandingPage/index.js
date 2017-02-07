@@ -14,6 +14,7 @@ import img9 from '../../assets/images/buildings/img9.jpg';
 import {
   selectCurrentUser,
   selectLanding,
+  selectLandingError,
   selectSubscribedFromLanding,
   selectSubscriptionError,
 } from '../../../app/containers/App/selectors';
@@ -32,6 +33,7 @@ export class LandingPage extends React.Component {
     subscribeFromLanding:  PropTypes.func.isRequired,
     subscribedFromLanding:  PropTypes.object,
     subscriptionError:  PropTypes.object,
+    landingError:  PropTypes.object,
     clearForm:  PropTypes.func.isRequired,
     currentUser: PropTypes.any,
     landing: PropTypes.object,
@@ -46,6 +48,7 @@ export class LandingPage extends React.Component {
     this.onSubmitForm = this.onSubmitForm.bind(this);
 
     this.state = {
+      invalidStudy: null,
       invalidSite: null,
       study: null,
     };
@@ -62,6 +65,7 @@ export class LandingPage extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
+    console.log('componentWillReceiveProps', newProps);
     const { siteLocation } = this.props.params;
     let invalidSite = true;
 
@@ -107,8 +111,9 @@ export class LandingPage extends React.Component {
   }
 
   render() {
-    const { subscriptionError } = this.props;
+    const { subscriptionError, landingError } = this.props;
     const { invalidSite } = this.state;
+    let errMessage = '';
 
     let landing = null;
     let study = null;
@@ -141,13 +146,21 @@ export class LandingPage extends React.Component {
     if (state.zip) {
       fullAddress += ', ' + zip;
     }
-
+    
     if (invalidSite) {
+      errMessage = `Unknown "site" location "${this.props.params.siteLocation}".`;
+    }
+
+    if (landingError) {
+      errMessage = landingError.message;
+    }
+
+    if (invalidSite || landingError) {
       return (
         <div id="main">
           <div className="container">
             <Alert bsStyle="danger">
-              <p>Wrong name of site.</p>
+              <p>{errMessage}</p>
             </Alert>
           </div>
         </div>
@@ -228,6 +241,7 @@ export class LandingPage extends React.Component {
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   subscribedFromLanding: selectSubscribedFromLanding(),
+  landingError: selectLandingError(),
   subscriptionError: selectSubscriptionError(),
   landing: selectLanding(),
 });
