@@ -15,7 +15,8 @@ import StudyStats from './StudyStats';
 import PatientBoard from './PatientBoard/index';
 import * as Selector from './selectors';
 import moment from 'moment';
-import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId } from './actions';
+import _ from 'lodash';
+import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId, updatePatientSuccess } from './actions';
 import {
   selectSocket,
 } from 'containers/GlobalNotifications/selectors';
@@ -40,6 +41,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     study: PropTypes.object,
     stats: PropTypes.object,
     socket: React.PropTypes.any,
+    updatePatientSuccess: React.PropTypes.func,
   };
 
   static defaultProps = {
@@ -67,8 +69,23 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   componentWillReceiveProps() {
     const { params, socket } = this.props;
     if (socket && this.state.socketBinded === false) {
-      socket.on('notifyMessage', () => {
+      socket.on('notifyMessage', (message) => {
+        let curCategoryId = null;
+
+        _.forEach(this.props.patientCategories, (item) => {
+          _.forEach(item.patients, (patient) => {
+            if (patient.id === message.patient_id) {
+              curCategoryId = item.id;
+            }
+          });
+        });
+
         this.props.fetchStudy(params.id, params.siteId);
+        this.props.updatePatientSuccess({
+          patientId: message.patient_id,
+          patientCategoryId: curCategoryId,
+          lastTextMessage: { body: message.twilioTextMessage.body, dateSent: message.twilioTextMessage.dateUpdated, dateUpdated: message.twilioTextMessage.dateUpdated },
+        });
       });
       this.setState({ socketBinded: true });
     }
@@ -156,6 +173,7 @@ function mapDispatchToProps(dispatch) {
     fetchStudy: (studyId, siteId) => dispatch(fetchStudy(studyId, siteId)),
     setStudyId: (id) => dispatch(setStudyId(id)),
     setSiteId: (id) => dispatch(setSiteId(id)),
+    updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
   };
 }
 

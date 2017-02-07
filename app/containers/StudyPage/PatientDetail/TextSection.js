@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
-import { submitPatientText, readStudyPatientMessages } from '../actions';
+import { submitPatientText, readStudyPatientMessages, updatePatientSuccess } from '../actions';
 import CallItem from 'components/GlobalPMSModal/CallItem';
 import { fetchClientCredits, markAsReadPatientMessages } from 'containers/App/actions';
 
@@ -42,6 +42,7 @@ class TextSection extends React.Component {
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
     fetchClientCredits: React.PropTypes.func,
+    updatePatientSuccess: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -133,9 +134,11 @@ class TextSection extends React.Component {
       body: textarea.value,
       to: currentPatient.phone,
     };
-    console.log('submitText', options);
-    this.props.sendStudyPatientMessages(options, (err) => {
+    this.props.sendStudyPatientMessages(options, (err, data) => {
       if (!err) {
+        this.props.updatePatientSuccess({
+          lastTextMessage: { body: data.body, dateSent: data.dateUpdated, dateUpdated: data.dateUpdated },
+        });
         this.setState({ enteredCharactersLength: 0 }, () => {
           textarea.value = '';
         });
@@ -251,6 +254,7 @@ const mapDispatchToProps = (dispatch) => ({
   readStudyPatientMessages: (patientId, studyId) => dispatch(readStudyPatientMessages(patientId, studyId)),
   markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
   fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
+  updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextSection);
