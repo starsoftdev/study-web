@@ -120,6 +120,13 @@ import {
   CHANGE_USERS_TIMEZONE,
   CHANGE_USERS_TIMEZONE_SUCCESS,
   CHANGE_USERS_TIMEZONE_ERROR,
+
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
+  SUBSCRIBE_FROM_LANDING,
+  PATIENT_SUBSCRIBED,
+  PATIENT_SUBSCRIPTION_ERROR,
+  CLEAR_FORM_SUBSCRIBE,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -827,5 +834,46 @@ export function changeUsersTimezoneError(payload) {
   return {
     type: CHANGE_USERS_TIMEZONE_ERROR,
     payload,
+  };
+}
+
+export function subscribeFromLanding(params) {
+  return {
+    type: SUBSCRIBE_FROM_LANDING,
+    params,
+  };
+}
+
+export function fetchLanding(studyId) {
+  return {
+    type: FETCH_LANDING,
+    studyId,
+  };
+}
+
+export function landingFetched(payload) {
+  return {
+    type: FETCH_LANDING_SUCCESS,
+    payload,
+  };
+}
+
+export function patientSubscribed(payload) {
+  return {
+    type: PATIENT_SUBSCRIBED,
+    payload,
+  };
+}
+
+export function patientSubscriptionError(payload) {
+  return {
+    type: PATIENT_SUBSCRIPTION_ERROR,
+    payload,
+  };
+}
+
+export function clearForm() {
+  return {
+    type: CLEAR_FORM_SUBSCRIBE,
   };
 }

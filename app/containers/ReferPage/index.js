@@ -88,8 +88,8 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
                   </strong>
                   <p>
                     When they list a Platinum Study or<br />
-                    higher, you will receive 100 reward <br />
-                    KIK’s. If they list a multi-site (10+) <br />
+                    higher, you will receive 100 reward.<br />
+                    If they list a multi-site (10+) <br />
                     central recruitment you will <br />
                     receive 300 <br />
                     reward KIKs!
