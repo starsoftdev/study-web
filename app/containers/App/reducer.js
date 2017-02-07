@@ -284,7 +284,6 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case FETCH_LANDING_SUCCESS:
-      console.log(FETCH_LANDING_SUCCESS, payload);
       baseDataInnerState = {
         landing: payload,
       };

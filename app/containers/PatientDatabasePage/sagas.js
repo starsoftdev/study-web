@@ -15,6 +15,7 @@ import {
   SAVE_PATIENT,
   SUBMIT_TEXT_BLAST,
   IMPORT_PATIENTS,
+  SUBMIT_ADD_PATIENT,
 } from './constants';
 
 import {
@@ -29,6 +30,8 @@ import {
   downloadComplete,
   importPatientsSuccess,
   importPatientsError,
+  submitAddPatientSuccess,
+  submitAddPatientFailure,
   clearPatientsList,
 } from './actions';
 
@@ -39,6 +42,7 @@ export function* patientDatabasePageSaga() {
   const watcherD = yield fork(savePatientWatcher);
   const watcherE = yield fork(submitTextBlast);
   const watcherF = yield fork(importPatients);
+  const watcherG = yield fork(submitAddPatient);
 
   yield take(LOCATION_CHANGE);
 
@@ -50,6 +54,7 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherD);
   yield cancel(watcherE);
   yield cancel(watcherF);
+  yield cancel(watcherG);
 }
 
 // Bootstrap sagas
@@ -291,22 +296,49 @@ function* submitTextBlast() {
 
 function* importPatients() {
   while (true) {
-    const { payload } = yield take(IMPORT_PATIENTS);
+    const { payload, onClose } = yield take(IMPORT_PATIENTS);
     const formData = new FormData();
     formData.append('file', payload);
     try {
       const requestURL = `${API_URL}/patients/importPatients`;
-      yield call(request, requestURL, {
+      const response = yield call(request, requestURL, {
         useDefaultContentType: 'multipart/form-data',
         method: 'POST',
         body: formData,
       });
+      onClose();
       yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
-      yield put(importPatientsSuccess(payload.name));
+      yield put(submitAddPatientSuccess(response, payload.name));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
-      yield put(importPatientsError(e));
+      yield put(submitAddPatientFailure());
+    }
+  }
+}
+
+function* submitAddPatient() {
+  while (true) {
+    // listen for the SUBMIT_ADD_PATIENT action
+    const { patient, onClose } = yield take(SUBMIT_ADD_PATIENT);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/patients`;
+      const response = yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify(patient),
+      });
+      onClose();
+      yield put(toastrActions.success('Add Patient', 'Patient added successfully!'));
+      yield put(submitAddPatientSuccess(response));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while adding a patient. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(submitAddPatientFailure());
     }
   }
 }

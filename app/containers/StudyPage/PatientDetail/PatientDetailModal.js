@@ -16,7 +16,7 @@ import NotesSection from './NotesSection';
 import TextSection from './TextSection';
 import EmailSection from './EmailSection';
 import OtherSection from './OtherSection';
-import { normalizePhoneDisplay } from '../helper/functions';
+import { normalizePhoneDisplay } from '../../../common/helper/functions';
 import {
   fetchPatientDetails,
   switchToNoteSectionDetail,

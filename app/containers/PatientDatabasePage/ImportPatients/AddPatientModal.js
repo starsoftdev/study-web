@@ -12,10 +12,10 @@ import formValidator from './validator';
 import Input from '../../../components/Input/index';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { submitAddPatient } from '../actions';
-import { selectStudyId, selectAddPatientStatus } from '../selectors';
+import { selectAddPatientStatus } from '../selectors';
 import { selectSyncErrors, selectValues } from '../../../common/selectors/form.selector';
 import { createStructuredSelector } from 'reselect';
-import { normalizePhone } from '../helper/functions';
+import { normalizePhone } from '../../../common/helper/functions';
 
 const formName = 'addPatient';
 
@@ -25,7 +25,6 @@ class AddPatient extends React.Component {
     errorList: React.PropTypes.object.isRequired,
     newPatient: React.PropTypes.object,
     show: React.PropTypes.bool.isRequired,
-    studyId: React.PropTypes.number.isRequired,
     submitAddPatient: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
@@ -38,18 +37,17 @@ class AddPatient extends React.Component {
 
   addPatient(event) {
     event.preventDefault();
-    const { submitAddPatient, onClose, newPatient, studyId, errorList } = this.props;
+    const { submitAddPatient, onClose, newPatient, errorList } = this.props;
     /* will only submit the form if the error list is empty */
     if (Object.keys(errorList).length === 0) {
       /* normalizing the phone number */
       newPatient.phone = normalizePhone(newPatient.phone);
-      submitAddPatient(studyId, newPatient, onClose);
+      submitAddPatient(newPatient, onClose);
     }
   }
 
   render() {
     const { addPatientStatus, onHide, ...props } = this.props;
-    console.log(addPatientStatus);
     return (
       <Modal
         {...props}
@@ -137,13 +135,12 @@ class AddPatient extends React.Component {
 const mapStateToProps = createStructuredSelector({
   newPatient: selectValues(formName),
   errorList: selectSyncErrors(formName),
-  studyId: selectStudyId(),
   addPatientStatus: selectAddPatientStatus(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    submitAddPatient: (studyId, patient, onClose) => dispatch(submitAddPatient(studyId, patient, onClose)),
+    submitAddPatient: (patient, onClose) => dispatch(submitAddPatient(patient, onClose)),
   };
 }
 

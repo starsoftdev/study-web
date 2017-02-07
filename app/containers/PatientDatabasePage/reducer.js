@@ -23,12 +23,14 @@ import {
   DISABLE_CHAT,
   SET_ACTIVE_SORT,
   SORT_PATIENTS_SUCCESS,
-  DOWNLOAD_COMPLETE,
-  CLEAR_PATIENTS_LIST,
-
   IMPORT_PATIENTS,
-  IMPORT_PATIENTS_SUCCESS,
-  IMPORT_PATIENTS_ERROR,
+  SUBMIT_ADD_PATIENT,
+  SUBMIT_ADD_PATIENT_FAILURE,
+  SUBMIT_ADD_PATIENT_SUCCESS,
+  SET_ADD_PATIENT_STATUS,
+  DOWNLOAD_COMPLETE,
+
+  CLEAR_PATIENTS_LIST,
   CLEAR_IMPORT_FORM,
 } from './constants';
 
@@ -69,6 +71,9 @@ const initialState = {
     uploadStart: false,
     fileUploaded: null,
   },
+  addPatientStatus:{
+    adding: false,
+  },
 };
 
 export default function patientDatabasePageReducer(state = initialState, action) {
@@ -93,20 +98,62 @@ export default function patientDatabasePageReducer(state = initialState, action)
           fileUploaded: null,
         },
       };
-    case IMPORT_PATIENTS_SUCCESS:
+    case SUBMIT_ADD_PATIENT:
+      return {
+        ...state,
+        addPatientStatus: {
+          adding: true,
+        },
+      };
+    case SUBMIT_ADD_PATIENT_SUCCESS:
       return {
         ...state,
         importPatientsStatus: {
           uploadStart: false,
           fileUploaded: action.fileName,
         },
+        patientCategories: state.patientCategories.map(category => {
+          if (category.name === 'New Patient') {
+            if (!category.patients) {
+              return {
+                ...category,
+                patients: [...action.patients],
+              };
+            } else if (Array.isArray(action.patients)) {
+              return {
+                ...category,
+                patients: [
+                  ...category.patients,
+                  ...action.patients,
+                ],
+              };
+            }
+            return {
+              ...category,
+              patients: [
+                ...category.patients,
+                action.patients,
+              ],
+            };
+          }
+          return category;
+        }),
       };
-    case IMPORT_PATIENTS_ERROR:
+    case SUBMIT_ADD_PATIENT_FAILURE:
       return {
         ...state,
         importPatientsStatus: {
           uploadStart: false,
-          fileUploaded: null,
+        },
+        addPatientStatus:{
+          adding: false,
+        },
+      };
+    case SET_ADD_PATIENT_STATUS:
+      return {
+        ...state,
+        addPatientStatus:{
+          adding: action.status,
         },
       };
     case DOWNLOAD_COMPLETE:
