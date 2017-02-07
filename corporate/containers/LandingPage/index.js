@@ -146,7 +146,7 @@ export class LandingPage extends React.Component {
     if (state.zip) {
       fullAddress += ', ' + zip;
     }
-    
+
     if (invalidSite) {
       errMessage = `Unknown "site" location "${this.props.params.siteLocation}".`;
     }
