@@ -103,6 +103,7 @@ import {
   CHANGE_USERS_TIMEZONE_ERROR,
 
   FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
   PATIENT_SUBSCRIBED,
   PATIENT_SUBSCRIPTION_ERROR,
 } from './constants';
@@ -119,6 +120,7 @@ const initialState = {
   loggedIn: !!getItem('auth_token'),
   loginError: null,
   subscriptionError: null,
+  landingError: null,
   userData: null,
   pageEvents: null,
   baseData: {
@@ -301,6 +303,12 @@ export default function appReducer(state = initialState, action) {
       resultState = {
         ...state,
         subscriptionError: payload,
+      };
+      break;
+    case FETCH_LANDING_ERROR:
+      resultState = {
+        ...state,
+        landingError: payload,
       };
       break;
     case FETCH_SOURCES_SUCCESS:

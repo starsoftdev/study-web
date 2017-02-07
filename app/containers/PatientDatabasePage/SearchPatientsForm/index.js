@@ -123,7 +123,6 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
       label: patientCategoryIterator.name,
       value: patientCategoryIterator.id,
     })));
-    console.log('Op', sourceOptions);
     const genderOptions = [
       {
         label: 'All',
