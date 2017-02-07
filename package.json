@@ -40,7 +40,7 @@
     "lint:css": "stylelint ./app/**/*.less",
     "pretest": "npm run test:clean && npm run lint",
     "test:clean": "rimraf ./coverage",
-    "test#disabled": "cross-env NODE_ENV=test karma start internals/testing/karma.conf.js --single-run",
+    "test#disabled": "karma start internals/testing/karma.conf.js --single-run",
     "test:watch": "npm run test -- --auto-watch --no-single-run",
     "test:firefox": "npm run test -- --browsers Firefox",
     "test:safari": "npm run test -- --browsers Safari",
@@ -189,6 +189,7 @@
     "validate.js": "^0.10.0",
     "warning": "3.0.0",
     "webpack": "2.1.0-beta.15",
+    "webpack-dev-middleware": "1.6.1",
     "webpack-hot-middleware": "2.12.2",
     "whatwg-fetch": "1.0.0"
   },
@@ -200,8 +201,7 @@
     "psi": "2.0.4",
     "shelljs": "0.7.3",
     "stylelint": "7.1.0",
-    "stylelint-config-standard": "12.0.0",
-    "webpack-dev-middleware": "1.6.1"
+    "stylelint-config-standard": "12.0.0"
   },
   "pre-commit#develop": [
     "lint:fix"
