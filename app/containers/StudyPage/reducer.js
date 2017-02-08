@@ -112,7 +112,7 @@ function studyPageReducer(state = initialState, action) {
     case UPDATE_PATIENT_SUCCESS:
       return {
         ...state,
-        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),
+        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId || action.payload.patientId, state.currentPatientId || action.payload.patientCategoryId, action),
       };
     case CLEAR_FORM_UPLOAD:
       return {
