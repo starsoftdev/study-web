@@ -116,6 +116,10 @@ import {
   CHANGE_IMAGE_SUCCESS,
 } from 'containers/ProfilePage/constants';
 
+import {
+  REDEEM_SUCCESS,
+} from 'containers/RewardsPage/constants';
+
 const initialState = {
   loggedIn: !!getItem('auth_token'),
   loginError: null,
@@ -382,6 +386,15 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     }
+    case REDEEM_SUCCESS:
+    console.log('------', payload)
+      baseDataInnerState = {
+        rewardsBalance: {
+          ...state.baseData.rewardsBalance,
+          [payload.siteId]: payload.balance,
+        },
+      };
+      break;
     case FETCH_CARDS:
       baseDataInnerState = {
         cards: {

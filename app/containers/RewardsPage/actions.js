@@ -5,30 +5,30 @@
  */
 
 import {
-  SUBMIT_FORM,
-  SUBMIT_FORM_SUCCESS,
-  SUBMIT_FORM_ERROR,
+  REDEEM,
+  REDEEM_SUCCESS,
+  REDEEM_ERROR,
   PICK_REWARD,
   SET_ACTIVE_SORT,
 } from './constants';
 
-export function submitForm(payload) {
+export function redeem(payload) {
   return {
-    type: SUBMIT_FORM,
+    type: REDEEM,
     payload,
   };
 }
 
-export function formSubmitted(payload) {
+export function redeemSuccess(payload) {
   return {
-    type: SUBMIT_FORM_SUCCESS,
+    type: REDEEM_SUCCESS,
     payload,
   };
 }
 
-export function formSubmissionError(payload) {
+export function redeemError(payload) {
   return {
-    type: SUBMIT_FORM_ERROR,
+    type: REDEEM_ERROR,
     payload,
   };
 }
