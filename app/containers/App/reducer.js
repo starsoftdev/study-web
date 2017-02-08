@@ -21,6 +21,7 @@ import {
   FETCH_REWARDS_ERROR,
 
   FETCH_REWARDS_BALANCE_SUCCESS,
+  REDEEM_SUCCESS,
 
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
@@ -115,10 +116,6 @@ import {
 import {
   CHANGE_IMAGE_SUCCESS,
 } from 'containers/ProfilePage/constants';
-
-import {
-  REDEEM_SUCCESS,
-} from 'containers/RewardsPage/constants';
 
 const initialState = {
   loggedIn: !!getItem('auth_token'),
@@ -386,15 +383,17 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     }
-    case REDEEM_SUCCESS:
-    console.log('------', payload)
+    case REDEEM_SUCCESS: {
+      const { siteId, balance, points } = payload;
       baseDataInnerState = {
         rewardsBalance: {
           ...state.baseData.rewardsBalance,
-          [payload.siteId]: payload.balance,
+          [siteId]: balance,
+          0: parseInt(state.baseData.rewardsBalance[0]) + parseInt(points),
         },
       };
       break;
+    }
     case FETCH_CARDS:
       baseDataInnerState = {
         cards: {

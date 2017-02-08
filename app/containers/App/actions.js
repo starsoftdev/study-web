@@ -33,6 +33,10 @@ import {
   FETCH_REWARDS_BALANCE_SUCCESS,
   FETCH_REWARDS_BALANCE_ERROR,
 
+  REDEEM,
+  REDEEM_SUCCESS,
+  REDEEM_ERROR,
+
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
@@ -334,6 +338,26 @@ export function rewardsBalanceFetchingError(payload) {
   };
 }
 
+export function redeem(payload) {
+  return {
+    type: REDEEM,
+    payload,
+  };
+}
+
+export function redeemSuccess(payload) {
+  return {
+    type: REDEEM_SUCCESS,
+    payload,
+  };
+}
+
+export function redeemError(payload) {
+  return {
+    type: REDEEM_ERROR,
+    payload,
+  };
+}
 // ///////////////////////////////////////////
 // fetch cards
 // ///////////////////////////////////////////
