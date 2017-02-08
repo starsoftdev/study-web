@@ -276,12 +276,17 @@ const selectChangeTimezoneState = () => createSelector(
 
 const selectLanding = () => createSelector(
   selectGlobal(),
-  (substate) => get(substate, 'baseData.landing', {})
+  (substate) => get(substate, 'baseData.landing.details', {})
+);
+
+const selectLandingIsFetching = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.landing.fetching', {})
 );
 
 const selectLandingError = () => createSelector(
   selectGlobal(),
-  (substate) => substate.landingError
+  (substate) => get(substate, 'baseData.landing.error', {})
 );
 
 const selectSubscribedFromLanding = () => createSelector(
@@ -344,6 +349,7 @@ export {
   selectChangeTimezoneState,
 
   selectLanding,
+  selectLandingIsFetching,
   selectLandingError,
   selectSubscribedFromLanding,
   selectSubscriptionError,
