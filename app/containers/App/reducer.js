@@ -21,6 +21,7 @@ import {
   FETCH_REWARDS_ERROR,
 
   FETCH_REWARDS_BALANCE_SUCCESS,
+  REDEEM_SUCCESS,
 
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
@@ -378,6 +379,17 @@ export default function appReducer(state = initialState, action) {
         rewardsBalance: {
           ...state.baseData.rewardsBalance,
           [siteId || 0]: payload,
+        },
+      };
+      break;
+    }
+    case REDEEM_SUCCESS: {
+      const { siteId, balance, points } = payload;
+      baseDataInnerState = {
+        rewardsBalance: {
+          ...state.baseData.rewardsBalance,
+          [siteId]: balance,
+          0: parseInt(state.baseData.rewardsBalance[0]) + parseInt(points),
         },
       };
       break;
