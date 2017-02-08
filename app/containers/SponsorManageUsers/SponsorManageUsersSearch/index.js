@@ -99,7 +99,7 @@ export class SponsorManageUsersSearch extends React.Component {
                 name="protocol"
                 component={ReactSelect}
                 placeholder="Select Protocol"
-                options={options}
+                options={[{ label: 'All', value: 'all' }].concat(options)}
               />
             </div>
           </div>
