@@ -36,6 +36,10 @@ class FilterStudyPatientsForm extends Component {
   constructor(props) {
     super(props);
     this.searchPatient = this.searchPatient.bind(this);
+
+    this.state = {
+      campaign: null,
+    };
   }
 
   componentWillMount() {
@@ -63,6 +67,9 @@ class FilterStudyPatientsForm extends Component {
       }
     } else {
       /* -1 means all was selected */
+      this.setState({
+        campaign: event,
+      });
       if (event === -1) {
         fetchPatients(studyId, siteId, search, null, newSource);
       }
@@ -129,7 +136,7 @@ class FilterStudyPatientsForm extends Component {
               component={ReactSelect}
               className="field"
               options={sourceOptions}
-              disabled={submitting || loading}
+              disabled={submitting || loading || !this.state.campaign}
               placeholder="Select Source"
               onChange={event => this.searchPatient(event, 'source')}
             />

@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { reject } from 'lodash';
 
 import RewardModal from 'components/RewardModal';
 
 import { selectCurrentUser, selectSitePatients, selectUserSiteLocations, selectRewardsBalance } from 'containers/App/selectors';
-import { fetchRewardsBalance } from 'containers/App/actions';
-import { submitForm } from 'containers/RewardsPage/actions';
+import { fetchRewardsBalance, redeem } from 'containers/App/actions';
 
 import { fetchPatientSignUps, fetchPatientMessages } from '../actions';
 import { selectPatientSignUps, selectPatientMessages } from '../selectors';
@@ -24,7 +24,7 @@ export class Dashboard extends React.Component {
     fetchRewardsBalance: PropTypes.func,
     sitePatients: React.PropTypes.object,
     siteLocations: PropTypes.array,
-    submitForm: PropTypes.func,
+    redeem: PropTypes.func,
   }
 
   state = {
@@ -46,8 +46,19 @@ export class Dashboard extends React.Component {
     this.setState({ rewardModalOpen: false });
   }
 
+  handleRedeem = (data) => {
+    const { currentUser } = this.props;
+
+    this.props.redeem({
+      ...data,
+      userId: currentUser.id,
+    });
+  }
+
   render() {
-    const { currentUser, patientSignUps, patientMessages, rewardsBalance, siteLocations, submitForm } = this.props;
+    const { currentUser, patientSignUps, patientMessages, rewardsBalance, siteLocations } = this.props;
+    const redeemableSiteLocations = reject(siteLocations, { id: 0 });
+
     return (
       <section className="row infoarea text-uppercase">
         <h2 className="hidden">Statics</h2>
@@ -112,7 +123,13 @@ export class Dashboard extends React.Component {
             </div>
           </div>
         </article>
-        <RewardModal siteLocations={siteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} onSubmit={submitForm} />
+        <RewardModal
+          currentUser={currentUser}
+          siteLocations={redeemableSiteLocations}
+          showModal={this.state.rewardModalOpen}
+          closeModal={this.closeRewardModal}
+          onSubmit={this.handleRedeem}
+        />
       </section>
     );
   }
@@ -130,7 +147,7 @@ const mapDispatchToProps = {
   fetchPatientSignUps,
   fetchPatientMessages,
   fetchRewardsBalance,
-  submitForm,
+  redeem,
 };
 
 export default connect(

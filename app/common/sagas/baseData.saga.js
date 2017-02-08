@@ -4,6 +4,7 @@ import { take, call, put, fork } from 'redux-saga/effects';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { takeLatest } from 'redux-saga';
+import { reset } from 'redux-form';
 
 import request from 'utils/request';
 import composeQueryString from 'utils/composeQueryString';
@@ -15,6 +16,7 @@ import {
   FETCH_COUPON,
   FETCH_REWARDS,
   FETCH_REWARDS_BALANCE,
+  REDEEM,
   FETCH_CARDS,
   SAVE_CARD,
   DELETE_CARD,
@@ -42,7 +44,6 @@ import {
   SUBSCRIBE_FROM_LANDING,
 } from 'containers/App/constants';
 
-
 import {
   sitesFetched,
   sitesFetchingError,
@@ -58,6 +59,8 @@ import {
   rewardsFetchingError,
   rewardsBalanceFetched,
   rewardsBalanceFetchingError,
+  redeemSuccess,
+  redeemError,
   cardsFetched,
   cardsFetchingError,
   cardSaved,
@@ -114,6 +117,7 @@ export default function* baseDataSaga() {
   yield fork(fetchCardsWatcher);
   yield fork(fetchRewardsWatcher);
   yield fork(fetchRewardsBalanceWatcher);
+  yield fork(redeemWatcher);
   yield fork(saveCardWatcher);
   yield fork(deleteCardWatcher);
   yield fork(addCreditsWatcher);
@@ -277,6 +281,32 @@ export function* fetchRewardsBalanceWatcher() {
       yield put(rewardsBalanceFetched(siteId, response));
     } catch (err) {
       yield put(rewardsBalanceFetchingError(err));
+    }
+  }
+}
+
+export function* redeemWatcher() {
+  while (true) {
+    // listen for the SUBMIT_FORM action dispatched on form submit
+    const { payload } = yield take(REDEEM);
+
+    try {
+      const requestURL = `${API_URL}/rewards/redeem`;
+      const params = {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      };
+      const response = yield call(request, requestURL, params);
+
+      yield put(toastrActions.success('RewardRedemption', 'The request has been submitted successfully'));
+      yield put(redeemSuccess(response));
+
+      // Clear the form values
+      yield put(reset('rewardRedemptions'));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(redeemError(err));
     }
   }
 }

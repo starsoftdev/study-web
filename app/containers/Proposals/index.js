@@ -66,6 +66,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
       processPDF: false,
       proposals: null,
       filteredProposals: null,
+      showAlertModal: false,
     };
   }
 

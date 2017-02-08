@@ -15,6 +15,7 @@ import {
   fetchClientSites,
   fetchRewards,
   fetchRewardsBalance,
+  redeem,
 } from 'containers/App/actions';
 
 import {
@@ -28,7 +29,7 @@ import {
 
 import { selectSiteLocation } from 'components/RewardForm/selectors';
 import { selectPaginationOptions } from './selectors';
-import { submitForm, pickReward, setActiveSort } from 'containers/RewardsPage/actions';
+import { pickReward, setActiveSort } from 'containers/RewardsPage/actions';
 import RewardModal from '../../components/RewardModal';
 import RewardForm from '../../components/RewardForm';
 import RewardsList from './RewardsList/index';
@@ -342,7 +343,7 @@ function mapDispatchToProps(dispatch) {
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchRewards: (clientId, siteId) => dispatch(fetchRewards(clientId, siteId)),
     fetchRewardsBalance: (clientId, siteId) => dispatch(fetchRewardsBalance(clientId, siteId)),
-    onSubmitForm: (values) => dispatch(submitForm(values)),
+    onSubmitForm: (values) => dispatch(redeem(values)),
     pickReward: (value) => dispatch(pickReward(value)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
   };

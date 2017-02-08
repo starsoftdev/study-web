@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/lib/Form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import { map } from 'lodash';
+import _, { map } from 'lodash';
 import ReactSelect from 'components/Input/ReactSelect';
 import { selectSearchProtocolsFormError } from './selectors';
 import { selectProtocols, selectProtocolNumbers, selectIndications } from 'containers/HomePage/selectors';
@@ -43,16 +43,18 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
       value: row.id,
     })));
 
-    const croOptions = [{ label: 'All', value: 'all' }].concat(map(protocols.details, row => ({
+    let croOptions = [{ label: 'All', value: 'all' }].concat(map(protocols.details, row => ({
       label: row.croName,
       value: row.croName,
     })));
+
+    croOptions = _.uniqBy(croOptions, 'value');
 
     return (
 
       <Form className="form-search form-search-protocols pull-left" onSubmit={handleSubmit}>
 
-        <div className="btns-popups pull-right">
+        <div className="btns-popups pull-right disabled-buttons-container">
           <div className="col pull-right">
             <button disabled className="btn btn-primary download"><i className="icomoon-icon_creditcard"></i> ADD CREDITS</button>
           </div>

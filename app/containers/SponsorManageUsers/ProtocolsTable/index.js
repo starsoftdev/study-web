@@ -43,7 +43,7 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
   render() {
     let studiesList = this.props.manageSponsorUsersData.studiesList;
 
-    if (this.props.searchFormValues.protocol) {
+    if (this.props.searchFormValues.protocol && this.props.searchFormValues.protocol !== 'all') {
       studiesList = _.filter(studiesList, (item) => (item.id === this.props.searchFormValues.protocol));
     }
 

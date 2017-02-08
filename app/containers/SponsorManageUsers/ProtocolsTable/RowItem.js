@@ -63,7 +63,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     let shouldBeOpened = false;
 
     const assignedUsersContent = this.props.item.sponsorUsers.map((item, index) => {
-      if (this.props.searchFormValues.name && `${item.user.firstName} ${item.user.lastName}`.indexOf(this.props.searchFormValues.name) !== -1) {
+      if (this.props.searchFormValues.name && `${item.user.firstName} ${item.user.lastName}`.toLowerCase().indexOf(this.props.searchFormValues.name.toLowerCase()) !== -1) {
         shouldBeOpened = true;
       }
       return (
