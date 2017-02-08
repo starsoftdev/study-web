@@ -10,6 +10,9 @@ import {
   GET_REPORTS_LIST_ERROR,
   SET_ACTIVE_SORT,
   SORT_REPORTS_SUCCESS,
+  CHANGE_PROTOCOL_STATUS,
+  CHANGE_PROTOCOL_STATUS_SUCCESS,
+  CHANGE_PROTOCOL_STATUS_ERROR,
 } from './constants';
 
 export function getReportsList(searchParams) {
@@ -45,5 +48,26 @@ export function sortReportsSuccess(reports) {
   return {
     type: SORT_REPORTS_SUCCESS,
     reports,
+  };
+}
+
+export function changeProtocolStatus(payload) {
+  return {
+    type: CHANGE_PROTOCOL_STATUS,
+    payload,
+  };
+}
+
+export function changeProtocolStatusSuccess(payload) {
+  return {
+    type: CHANGE_PROTOCOL_STATUS_SUCCESS,
+    payload,
+  };
+}
+
+export function changeProtocolStatusError(payload) {
+  return {
+    type: CHANGE_PROTOCOL_STATUS_ERROR,
+    payload,
   };
 }

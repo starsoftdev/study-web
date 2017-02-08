@@ -42,6 +42,10 @@ const selectPaginationOptions = () => createSelector(
   substate => substate.paginationOptions
 );
 
+const selectChangeProtocolStatusProcess = () => createSelector(
+  selectReportViewPageDomain(),
+  substate => substate.changeProtocolStatusProcess
+);
 
 export default selectReportViewPage;
 export {
@@ -50,4 +54,5 @@ export {
   selectSearchReportsFormValues,
   selectPaginationOptions,
   selectTableFormValues,
+  selectChangeProtocolStatusProcess,
 };

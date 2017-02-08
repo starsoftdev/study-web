@@ -14,7 +14,7 @@ import ReportViewSearch from 'containers/ReportViewPage/ReportViewSearch';
 import ReportViewTable from 'containers/ReportViewPage/ReportViewTable';
 
 import { selectCurrentUser } from 'containers/App/selectors';
-import { getReportsList, setActiveSort, sortReportsSuccess } from 'containers/ReportViewPage/actions';
+import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus } from 'containers/ReportViewPage/actions';
 import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues } from 'containers/ReportViewPage/selectors';
 
 import _ from 'lodash';
@@ -31,6 +31,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     paginationOptions: PropTypes.object,
     formTableValues: PropTypes.object,
     currentUser: PropTypes.object,
+    changeProtocolStatus: PropTypes.func,
   };
 
   constructor(props) {
@@ -77,6 +78,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
   }
 
   render() {
+    console.log(123, this.props);
     const protocolNumber = this.props.location.query.protocol || null;
     const indication = this.props.location.query.indication || null;
     const cro = this.props.location.query.cro || null;
@@ -109,6 +111,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           sortReportsSuccess={this.props.sortReportsSuccess}
           paginationOptions={this.props.paginationOptions}
           formTableValues={this.props.formTableValues}
+          changeProtocolStatus={this.props.changeProtocolStatus}
         />
       </div>
     );
@@ -128,6 +131,7 @@ function mapDispatchToProps(dispatch) {
     getReportsList: searchParams => dispatch(getReportsList(searchParams)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
     sortReportsSuccess: (reports) => dispatch(sortReportsSuccess(reports)),
+    changeProtocolStatus: (payload) => dispatch(changeProtocolStatus(payload)),
   };
 }
 
