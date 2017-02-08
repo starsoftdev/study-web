@@ -81,7 +81,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
         <span className="edit-assigned-user">
           {(this.assignedUserIsBeingFetched(item))
             ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-assigned-user" /></span>
-            : <a className="btn edit-icon" onClick={() => { this.editAssignedUser(item); }}><i className="pencil-square" /></a>
+            : <a className="btn toggle edit-icon" onClick={() => { this.editAssignedUser(item); }}><i className="pencil-square" /></a>
           }
         </span>
       </div>
