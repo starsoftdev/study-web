@@ -244,7 +244,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         break;
       case 'protocol':
         proposalsArr.sort((a, b) => {
-          console.log(a);
           if (a.protocol > b.protocol) {
             return directionUnits.more;
           }
@@ -376,8 +375,12 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     const proposals = [];
     const heads = [];
 
-    this.mapHeaders(headers, state, heads);
-    this.mapProposals(proposalsArr, proposals);
+    if (headers) {
+      this.mapHeaders(headers, state, heads);
+    }
+    if (proposalsArr) {
+      this.mapProposals(proposalsArr, proposals);
+    }
 
     return (
       <div className="table-holder">

@@ -17,6 +17,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     sponsor: PropTypes.string,
     protocol: PropTypes.string,
     patientMessagingSuite: PropTypes.string,
+    patientQualificationSuite: PropTypes.string,
     unreadMessageCount: PropTypes.number,
     status: PropTypes.string,
     siteUsers: PropTypes.array,
@@ -82,7 +83,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   render() {
-    const { currentUser, indication, location, sponsor, protocol, patientMessagingSuite, status,
+    const { currentUser, indication, location, sponsor, protocol, patientMessagingSuite, patientQualificationSuite, status,
       startDate, endDate, unreadMessageCount, orderNumber } = this.props;
     const buttonsShown = this.state.buttonsShown;
     let messageCountContent = null;
@@ -91,7 +92,6 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
         <span className="counter-circle">{unreadMessageCount}</span>
       );
     }
-
     return (
       <tr
         className={classNames('study-container', { 'tr-active': buttonsShown, 'tr-inactive': !buttonsShown })}
@@ -112,7 +112,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
         <td className="protocol">
           <span>{protocol}</span>
         </td>
-        <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off') })}>
+        <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off' && patientQualificationSuite === 'Off') })}>
           <span className="patient-messaging-suite-status">{patientMessagingSuite}</span>
           <span>{messageCountContent}</span>
         </td>

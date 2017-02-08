@@ -17,6 +17,12 @@
           width: 100%;
         }
       }
+
+      @media screen and (max-width: @psd) {
+        .btns-popups{
+          margin-bottom: 30px;
+        }
+      }
 		}
 	}
 
@@ -123,6 +129,39 @@
       color: #f78e1e;
     }
     color: #a0cf67;
+  }
+
+  .disabled-buttons-container{
+    button{
+      opacity: 0.65;
+    }
+  }
+
+  .table-manage-user{
+    tr{
+      &:hover {
+        > td{
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .table-manage-user.alt {
+    tr{
+      td{
+        vertical-align: top;
+      }
+    }
+    .assigned-users-list{
+      margin-top: 5px;
+      .assigned-user{
+        padding: 5px 0;
+        a{
+          margin-left: 8px;
+        }
+      }
+    }
   }
 }
 

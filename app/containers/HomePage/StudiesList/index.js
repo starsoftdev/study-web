@@ -25,7 +25,7 @@ import StudyItem from './StudyItem';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    clearIndicationLevelPrice: PropTypes.func,
+    clearIndicaoionLevelPrice: PropTypes.func,
     currentUserStripeCustomerId: PropTypes.string,
     currentUser: PropTypes.object,
     fetchLevels: PropTypes.func,
@@ -57,6 +57,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     upgradeStudyFormValues: PropTypes.object,
     upgradeStudyFormError: PropTypes.bool,
     saveCard: PropTypes.func,
+    clearIndicationLevelPrice: PropTypes.func,
   };
 
   constructor(props) {
@@ -470,7 +471,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         }
         return parseInt(sitePatient.count_unread);
       });
-
       return (
         <StudyItem
           {...item}
