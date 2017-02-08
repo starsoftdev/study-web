@@ -15,6 +15,7 @@ import {
   fetchClientSites,
   fetchRewards,
   fetchRewardsBalance,
+  redeem,
 } from 'containers/App/actions';
 
 import {
@@ -28,7 +29,7 @@ import {
 
 import { selectSiteLocation } from 'components/RewardForm/selectors';
 import { selectPaginationOptions } from './selectors';
-import { redeem, pickReward, setActiveSort } from 'containers/RewardsPage/actions';
+import { pickReward, setActiveSort } from 'containers/RewardsPage/actions';
 import RewardModal from '../../components/RewardModal';
 import RewardForm from '../../components/RewardForm';
 import RewardsList from './RewardsList/index';
