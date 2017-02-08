@@ -1,3 +1,5 @@
+/* eslint-disable prefer-template */
+
 import React, { PropTypes } from 'react';
 import inViewport from 'in-viewport';
 
