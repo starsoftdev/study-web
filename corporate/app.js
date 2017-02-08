@@ -43,7 +43,7 @@ const routes = {
     { path: '/billing', component: BillingPage },
     { path: '/order', component: OrderPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },
-    { path: '/:studyId/:siteLocation', component: LandingPage },
+    { path: '/*-:siteLocation', component: LandingPage },
     { path: '*', component: NotFound },
   ],
 };

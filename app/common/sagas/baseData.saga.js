@@ -134,7 +134,8 @@ export default function* baseDataSaga() {
   yield fork(fetchCreditsPrice);
   yield fork(fetchIndicationLevelPriceWatcher);
   yield fork(changeUsersTimezoneWatcher);
-  yield fork(fetchLandingStudy);
+  //yield fork(fetchLandingStudy);
+  yield fork(takeLatest, FETCH_LANDING, fetchLandingStudy);
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
 }
 
@@ -721,9 +722,8 @@ export function* changeUsersTimezoneWatcher() {
   }
 }
 
-function* fetchLandingStudy() {
-  // listen for the FETCH_LANDING_STUDY action
-  const { studyId } = yield take(FETCH_LANDING);
+function* fetchLandingStudy(action) {
+  const { studyId } = action;
   const filter = JSON.stringify({
     where: {
       study_id: studyId,
