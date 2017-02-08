@@ -1,5 +1,4 @@
 /* eslint-disable react/prefer-stateless-function */
-/* eslint-disable prefer-template */
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
@@ -110,7 +109,7 @@ export class LandingPage extends React.Component {
     if (landingError) {
       errMessage = landingError.message;
     }
-    
+
     if ((landingIsFetching || landing === null) && (!invalidSite && !landingError)) {
       return (
         <div id="main">
