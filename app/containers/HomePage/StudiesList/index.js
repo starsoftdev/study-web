@@ -9,7 +9,7 @@ import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../..
 import { fetchLevels, saveCard } from '../../../containers/App/actions';
 import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../../../containers/HomePage/constants';
 import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients } from '../../../containers/App/selectors';
-import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice } from 'containers/HomePage/actions';
+import { fetchIndicationLevelPrice, clearIndicationLeveuclPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice } from 'containers/HomePage/actions';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions } from '../../../containers/HomePage/selectors';
 import { selectEditStudyFormValues, selectEditStudyFormError } from '../../../containers/HomePage/EditStudyForm/selectors';
 import { selectRenewStudyFormValues, selectRenewStudyFormError } from '../../../containers/HomePage/RenewStudyForm/selectors';
@@ -25,7 +25,7 @@ import StudyItem from './StudyItem';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    clearIndicationLevelPrice: PropTypes.func,
+    clearIndicaoionLevelPrice: PropTypes.func,
     currentUserStripeCustomerId: PropTypes.string,
     currentUser: PropTypes.object,
     fetchLevels: PropTypes.func,
@@ -470,7 +470,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         }
         return parseInt(sitePatient.count_unread);
       });
-
       return (
         <StudyItem
           {...item}
