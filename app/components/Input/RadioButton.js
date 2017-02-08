@@ -9,25 +9,31 @@ import classNames from 'classnames';
 
 function RadioButton({ input, className, children, onChange }) {
   return (
-    <div className={classNames(className)}>
-      <span className={`jcf-radio ${input.checked ? 'parent-active input-checked-parent jcf-checked' : ' parent-active jcf-unchecked'}`}>
-        <span
-          onClick={() => {
-            input.onChange(!input.checked);
-            if (onChange) {
-              onChange(!input.checked);
-            }
-          }}
-        />
-        <input
-          {...input}
-          checked={input.checked}
-          type="radio"
-          value={input.value}
-        />
-        {children}
-      </span>
-    </div>
+    <span
+      className={
+        classNames(className,
+          'jcf-radio parent-active',
+          { 'input-checked-parent jcf-checked': input.checked, 'jcf-unchecked': !input.checked },
+        )
+      }
+      style={{ overflow: 'visible' }}
+    >
+      <span
+        onClick={() => {
+          input.onChange(!input.checked);
+          if (onChange) {
+            onChange(!input.checked);
+          }
+        }}
+      />
+      <input
+        {...input}
+        checked={input.checked}
+        type="radio"
+        value={input.value}
+      />
+      {children}
+    </span>
   );
 }
 
