@@ -104,7 +104,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
           this.startSound();
         }
         this.props.updateSitePatients(newMessage);
-        if (this.state.selectedPatient && this.state.selectedPatient.study_id) {
+        if (this.props.showModal === true && this.state.selectedPatient && this.state.selectedPatient.study_id && this.state.selectedPatient.id === newMessage.patient_id) {
           this.props.fetchPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
           this.props.markAsReadPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
         }
@@ -112,21 +112,25 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       this.setState({ socketBinded: true });
     }
     if (newProps.showModal === true && this.state.newOpen) {
+      if (this.state.selectedPatient && this.state.selectedPatient.study_id) {
+        this.props.fetchPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
+        this.props.markAsReadPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
+      }
       newProps.fetchSitePatients(currentUser.id);
       this.setState({
         newOpen: false,
       });
     }
     if (newProps.sitePatients !== this.props.sitePatients) {
-      let selectedPatient = { id: 0 };
+      // let selectedPatient = { id: 0 };
       _.forEach(newProps.sitePatients.details, (item) => {
         if (item.show === undefined || (item.show && item.show === true)) {
-          selectedPatient = item;
+          // selectedPatient = item;
           return false;
         }
         return true;
       });
-      this.selectPatient(selectedPatient, true);
+      // this.selectPatient(selectedPatient, true);
     }
     if (newProps.showModal === true && newProps.sitePatients.details.length > 0 && this.state.patientLoaded === true) {
       let selectedPatient = { id: 0 };
