@@ -1,4 +1,4 @@
-const upgradeStudyFields = ['level', 'patientMessagingSuite', 'callTracking', 'notes'];
+const upgradeStudyFields = ['level', 'addPatientMessagingSuite', 'addPatientQualificationSuite', 'notes'];
 export { upgradeStudyFields };
 
 export default values => {
