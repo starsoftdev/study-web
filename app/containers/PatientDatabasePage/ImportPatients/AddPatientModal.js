@@ -5,30 +5,34 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
-import formValidator from './validator';
+import { selectSyncErrors, selectValues } from '../../../common/selectors/form.selector';
+import { normalizePhone } from '../../../common/helper/functions';
+import { selectSources } from '../../App/selectors';
 import Input from '../../../components/Input/index';
+import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { submitAddPatient } from '../actions';
 import { selectAddPatientStatus } from '../selectors';
-import { selectSyncErrors, selectValues } from '../../../common/selectors/form.selector';
-import { createStructuredSelector } from 'reselect';
-import { normalizePhone } from '../../../common/helper/functions';
+import formValidator from './validator';
+
 
 const formName = 'addPatient';
 
 @reduxForm({ form: formName, validate: formValidator })
 class AddPatient extends React.Component {
   static propTypes = {
+    addPatientStatus: React.PropTypes.object,
     errorList: React.PropTypes.object.isRequired,
     newPatient: React.PropTypes.object,
     show: React.PropTypes.bool.isRequired,
+    sources: React.PropTypes.array.isRequired,
     submitAddPatient: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
-    addPatientStatus: React.PropTypes.object,
   };
   constructor(props) {
     super(props);
@@ -37,7 +41,7 @@ class AddPatient extends React.Component {
 
   addPatient(event) {
     event.preventDefault();
-    const { submitAddPatient, onClose, newPatient, errorList } = this.props;
+    const { errorList, newPatient, onClose, submitAddPatient } = this.props;
     /* will only submit the form if the error list is empty */
     if (Object.keys(errorList).length === 0) {
       /* normalizing the phone number */
@@ -47,12 +51,17 @@ class AddPatient extends React.Component {
   }
 
   render() {
-    const { addPatientStatus, onHide, ...props } = this.props;
+    const { addPatientStatus, onHide, sources, ...props } = this.props;
+    const sourceOptions = sources.map(source => ({
+      label: source.type,
+      value: source.id,
+    }));
     return (
       <Modal
         {...props}
         id="add-patient-info-import"
         dialogComponentClass={CenteredModal}
+        onHide={onHide}
         backdrop
         keyboard
       >
@@ -120,6 +129,18 @@ class AddPatient extends React.Component {
                   required
                 />
               </div>
+              <div className="field-row">
+                <strong className="label">
+                  <label>Source</label>
+                </strong>
+                <Field
+                  name="source"
+                  component={ReactSelect}
+                  className="field"
+                  placeholder="Select Source"
+                  options={sourceOptions}
+                />
+              </div>
               <div className="text-right">
                 <Button disabled={addPatientStatus.adding} onClick={(event) => this.addPatient(event)}>Submit</Button>
               </div>
@@ -133,9 +154,10 @@ class AddPatient extends React.Component {
 
 
 const mapStateToProps = createStructuredSelector({
-  newPatient: selectValues(formName),
-  errorList: selectSyncErrors(formName),
   addPatientStatus: selectAddPatientStatus(),
+  errorList: selectSyncErrors(formName),
+  newPatient: selectValues(formName),
+  sources: selectSources(),
 });
 
 function mapDispatchToProps(dispatch) {

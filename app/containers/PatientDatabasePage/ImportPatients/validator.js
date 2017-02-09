@@ -12,7 +12,7 @@ const schema = {
       message: '^Phone number must be all numbers',
     },
     length: {
-      minimum:10,
+      minimum: 10,
       message: '^Phone number too short',
     },
   },
