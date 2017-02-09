@@ -103,6 +103,7 @@ import {
   CHANGE_USERS_TIMEZONE_SUCCESS,
   CHANGE_USERS_TIMEZONE_ERROR,
 
+  FETCH_LANDING,
   FETCH_LANDING_SUCCESS,
   FETCH_LANDING_ERROR,
   PATIENT_SUBSCRIBED,
@@ -121,16 +122,19 @@ const initialState = {
   loggedIn: !!getItem('auth_token'),
   loginError: null,
   subscriptionError: null,
-  landingError: null,
   userData: null,
   pageEvents: null,
   baseData: {
     sites: [],
     indications: [],
-    landing: {},
     subscribedFromLanding: null,
     sources: [],
     levels: [],
+    landing: {
+      details: null,
+      fetching: false,
+      error: null,
+    },
     coupon: {
       details: null,
       fetching: false,
@@ -286,9 +290,32 @@ export default function appReducer(state = initialState, action) {
         indications: payload,
       };
       break;
+    case FETCH_LANDING:
+      baseDataInnerState = {
+        landing: {
+          details: null,
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
     case FETCH_LANDING_SUCCESS:
       baseDataInnerState = {
-        landing: payload,
+        landing: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_LANDING_ERROR:
+      console.log(FETCH_LANDING_ERROR, payload);
+      baseDataInnerState = {
+        landing: {
+          details: null,
+          fetching: false,
+          error: payload,
+        },
       };
       break;
     case PATIENT_SUBSCRIBED:
@@ -304,12 +331,6 @@ export default function appReducer(state = initialState, action) {
       resultState = {
         ...state,
         subscriptionError: payload,
-      };
-      break;
-    case FETCH_LANDING_ERROR:
-      resultState = {
-        ...state,
-        landingError: payload,
       };
       break;
     case FETCH_SOURCES_SUCCESS:
