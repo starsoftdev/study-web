@@ -6,19 +6,19 @@ import _, { map } from 'lodash';
 import moment from 'moment-timezone';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
+import Overlay from 'react-bootstrap/lib/Overlay';
 
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
-import { selectEditPatientFormError } from './selectors';
-import { selectPatientCategories, selectSavedPatient } from 'containers/PatientDatabasePage/selectors';
-import { selectIndications, selectSources } from 'containers/App/selectors';
-import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
+import { selectValues } from '../../../common/selectors/form.selector';
+import Input from '../../../components/Input';
+import ReactSelect from '../../../components/Input/ReactSelect';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import Checkbox from '../../../components/Input/Checkbox';
 import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
-import { selectValues } from '../../../common/selectors/form.selector';
-import Overlay from 'react-bootstrap/lib/Overlay';
-import IndicationOverlay from 'containers/StudyPage/PatientDetail/IndicationOverlay';
+import { selectIndications, selectSources } from '../../App/selectors';
+import IndicationOverlay from '../../StudyPage/PatientDetail/IndicationOverlay';
+import { selectPatientCategories, selectSavedPatient } from '../selectors';
+import { selectEditPatientFormError } from './selectors';
+import formValidator from './validator';
 
 const formName = 'editPatient';
 
@@ -298,7 +298,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <label>SOURCE</label>
+            <label>Source</label>
           </strong>
           <Field
             name="source"
