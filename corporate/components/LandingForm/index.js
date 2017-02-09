@@ -13,9 +13,7 @@ import { Alert } from 'react-bootstrap';
 export class LandingForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    name: PropTypes.any,
-    city: PropTypes.any,
-    state: PropTypes.any,
+    study: PropTypes.object,
     subscriptionError: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
   };
@@ -41,7 +39,12 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
   }
 
   render() {
-    const { name, city, state, handleSubmit, subscriptionError } = this.props;
+    const { study, handleSubmit, subscriptionError } = this.props;
+
+    const name = (study) ? study.name : '';
+    const city = (study && study.sites[0].city) ? study.sites[0].city : '';
+    const state = (study && study.sites[0].state) ? study.sites[0].state : '';
+
     const cityAndState = (city && state) ? ` ${city}, ${state}` : '';
     return (
       <form
