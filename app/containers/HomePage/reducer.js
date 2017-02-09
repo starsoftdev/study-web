@@ -4,7 +4,6 @@ import _, { forEach, map } from 'lodash';
 import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
   FETCH_PATIENT_MESSAGES_SUCCEESS,
-  FETCH_REWARDS_POINT_SUCCEESS,
   FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS,
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
@@ -56,7 +55,6 @@ const initialState = {
     unreadEmails: 0,
     total: 0,
   },
-  rewardsPoint: 0,
   studies: {
     details: [],
     fetching: false,
@@ -130,11 +128,6 @@ export default function homePageReducer(state = initialState, action) {
           total: payload.total,
         },
       };
-    case FETCH_REWARDS_POINT_SUCCEESS:
-      return {
-        ...state,
-        rewardsPoint: action.payload.rewardPoints,
-      };
     case FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS:
       return {
         ...state,
@@ -206,6 +199,7 @@ export default function homePageReducer(state = initialState, action) {
           sponsor: '',
           protocol: studyIterator.protocolNumber,
           patientMessagingSuite: (studyIterator.patientMessagingSuite) ? 'On' : 'Off',
+          patientQualificationSuite: (studyIterator.patientQualificationSuite) ? 'On' : 'Off',
           status: studyIterator.status,
           callTracking: studyIterator.callTracking,
           siteUsers: null,

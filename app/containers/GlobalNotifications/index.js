@@ -49,7 +49,6 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
         cb: (err, socket) => {
           if (!err) {
             socket.on('notification', (notification) => {
-              console.log(notification);
               this.props.receiveNotification(notification);
             });
             socket.on('connect', () => {

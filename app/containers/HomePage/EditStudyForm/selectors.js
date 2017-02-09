@@ -25,6 +25,11 @@ const selectEditStudyFormError = () => createSelector(
   }
 );
 
+const selectEditStudyFormErrors = () => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, 'editStudy.syncErrors', null)
+);
+
 const selectEditStudyFormRecruitmentPhoneValue = () => createSelector(
   selectFormDomain(),
   substate => get(substate, 'editStudy.values.recruitmentPhone', null)
@@ -39,6 +44,7 @@ export default selectFormDomain;
 export {
   selectEditStudyFormValues,
   selectEditStudyFormError,
+  selectEditStudyFormErrors,
   selectEditStudyFormRecruitmentPhoneValue,
   selectEditStudyFormStudyAdValue,
 };

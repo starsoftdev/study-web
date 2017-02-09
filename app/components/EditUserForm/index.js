@@ -28,10 +28,11 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
     handleSubmit: PropTypes.func,
     onDelete: PropTypes.func,
     deleting: PropTypes.bool,
+    isEdit: PropTypes.bool,
   };
 
   render() {
-    const { savedUser, siteOptions, site, handleSubmit, onDelete, deleting } = this.props;
+    const { savedUser, siteOptions, site, handleSubmit, onDelete, deleting, isEdit } = this.props;
     let clientRolePanelContent = null;
 
     if (site === '0') {
@@ -135,7 +136,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
             <button type="submit" className="btn btn-default" disabled={savedUser.saving || deleting}>
               {savedUser.saving
                 ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
-                : <span>Update</span>
+                : <span>{isEdit ? 'Update' : 'Submit'}</span>
               }
             </button>
           </div>

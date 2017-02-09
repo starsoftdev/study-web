@@ -171,6 +171,12 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
       touchAddCredits,
     } = this.props;
 
+    if (addCreditsFormError || shoppingCartFormError) {
+      touchAddCredits();
+      touchShoppingCart();
+      return;
+    }
+
     const siteLocationName = _.find(this.props.siteLocations, { id: addCreditsFormValues.siteLocation });
     const data = {
       quantity: this.state.quantity,
@@ -180,12 +186,6 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
       site: addCreditsFormValues.siteLocation,
       siteLocationName: siteLocationName.name,
     };
-
-    if (addCreditsFormError || shoppingCartFormError) {
-      touchAddCredits();
-      touchShoppingCart();
-      return;
-    }
 
     addCredits(currentUser.roleForClient.client.stripeCustomerId, data);
   }

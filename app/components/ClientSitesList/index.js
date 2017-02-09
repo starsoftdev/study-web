@@ -30,6 +30,8 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
     deleteUser: PropTypes.func,
     saveSite: PropTypes.func,
     saveUser: PropTypes.func,
+    filterMethod: PropTypes.func,
+    userFilterQuery: PropTypes.string,
   };
 
   constructor(props) {
@@ -172,10 +174,10 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { selectedSiteDetailsForForm, selectedUserDetailsForForm, deletedUser } = this.props;
-    const sortedClientSites = this.getSortedClientSites();
+    const { selectedSiteDetailsForForm, selectedUserDetailsForForm, deletedUser, filterMethod, userFilterQuery } = this.props;
+    const sortedClientSites = this.getSortedClientSites().filter(filterMethod);
     const clientSitesListContents = sortedClientSites.map((item, index) => (
-      <ClientSiteItem {...item} key={index} />
+      <ClientSiteItem {...item} key={index} userFilter={userFilterQuery} />
     ));
     const siteOptions = map(sortedClientSites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
@@ -250,6 +252,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                       deleting={deletedUser.deleting}
                       onDelete={this.deleteUser}
                       onSubmit={this.updateUser}
+                      isEdit
                     />
                   </div>
                 </div>

@@ -34,6 +34,14 @@ export const FETCH_REWARDS                 		     = 'App/FETCH_REWARDS';
 export const FETCH_REWARDS_SUCCESS         		     = 'App/FETCH_REWARDS_SUCCESS';
 export const FETCH_REWARDS_ERROR           		     = 'App/FETCH_REWARDS_ERROR';
 
+export const FETCH_REWARDS_BALANCE                 = 'App/FETCH_REWARDS_BALANCE';
+export const FETCH_REWARDS_BALANCE_SUCCESS         = 'App/FETCH_REWARDS_BALANCE_SUCCESS';
+export const FETCH_REWARDS_BALANCE_ERROR           = 'App/FETCH_REWARDS_BALANCE_ERROR';
+
+export const REDEEM                                 = 'App/REDEEM';
+export const REDEEM_SUCCESS                         = 'App/REDEEM_SUCCESS';
+export const REDEEM_ERROR                           = 'App/REDEEM_ERROR';
+
 export const FETCH_CARDS                 		       = 'App/FETCH_CARDS';
 export const FETCH_CARDS_SUCCESS         		       = 'App/FETCH_CARDS_SUCCESS';
 export const FETCH_CARDS_ERROR           		       = 'App/FETCH_CARDS_ERROR';
@@ -117,3 +125,11 @@ export const FETCH_INDICATION_LEVEL_PRICE_ERROR    = 'App/FETCH_INDICATION_LEVEL
 export const CHANGE_USERS_TIMEZONE                 = 'App/CHANGE_USERS_TIMEZONE';
 export const CHANGE_USERS_TIMEZONE_SUCCESS         = 'App/CHANGE_USERS_TIMEZONE_SUCCESS';
 export const CHANGE_USERS_TIMEZONE_ERROR           = 'App/CHANGE_USERS_TIMEZONE_ERROR';
+
+export const FETCH_LANDING                         = 'App/FETCH_LANDING';
+export const FETCH_LANDING_SUCCESS                 = 'App/FETCH_LANDING_SUCCESS';
+export const FETCH_LANDING_ERROR                   = 'App/FETCH_LANDING_ERROR';
+export const SUBSCRIBE_FROM_LANDING                = 'App/SUBSCRIBE_FROM_LANDING';
+export const PATIENT_SUBSCRIBED                    = 'App/PATIENT_SUBSCRIBED';
+export const CLEAR_FORM_SUBSCRIBE                  = 'App/CLEAR_FORM_SUBSCRIBE';
+export const PATIENT_SUBSCRIPTION_ERROR            = 'App/PATIENT_SUBSCRIPTION_ERROR';

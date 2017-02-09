@@ -1,16 +1,15 @@
 {
-  "name": "react-boilerplate",
-  "version": "3.1.0",
-  "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
+  "name": "studykik-api",
+  "version": "1.0.0",
+  "description": "Web client for StudyKik API, built off React Boilerplate",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mxstbr/react-boilerplate.git"
+    "url": "https://github.com/studykik/web.git"
   },
   "engines": {
-    "node": ">= 6.2.0"
+    "node": ">= 7.0.0"
   },
-  "author": "Max Stoiber",
-  "license": "MIT",
+  "author": "StudyKik",
   "scripts": {
     "analyze:clean": "rimraf stats.json",
     "preanalyze": "npm run analyze:clean",
@@ -40,7 +39,7 @@
     "lint:css": "stylelint ./app/**/*.less",
     "pretest": "npm run test:clean && npm run lint",
     "test:clean": "rimraf ./coverage",
-    "test#disabled": "cross-env NODE_ENV=test karma start internals/testing/karma.conf.js --single-run",
+    "test#disabled": "karma start internals/testing/karma.conf.js --single-run",
     "test:watch": "npm run test -- --auto-watch --no-single-run",
     "test:firefox": "npm run test -- --browsers Firefox",
     "test:safari": "npm run test -- --browsers Safari",
@@ -119,6 +118,7 @@
     "html-webpack-plugin": "2.22.0",
     "image-webpack-loader": "2.0.0",
     "imports-loader": "0.6.5",
+    "in-viewport": "^3.4.2",
     "intl": "1.2.4",
     "invariant": "2.2.1",
     "ip": "1.1.3",
@@ -152,7 +152,7 @@
     "react-avatar-editor": "^6.0.0",
     "react-big-calendar": "git+https://github.com/studykik/kik-react-big-calendar.git#3cdb215430c97c397fbbcaa7e44ae9820f65bbc1",
     "react-bootstrap": "^0.30.3",
-    "react-click-outside": "^2.1.0",
+    "react-click-outside": "^2.2.0",
     "react-d3": "^0.4.0",
     "react-date-range": "git+https://github.com/studykik/react-date-range.git#0b79ad4b4e96ddfd450f4e63d24aad1823398c2e",
     "react-dnd": "^2.1.4",
@@ -163,6 +163,7 @@
     "react-icons": "^2.2.1",
     "react-infinite-scroller": "^1.0.1",
     "react-intl": "2.1.3",
+    "react-parallax": "^1.2.2",
     "react-redux": "4.4.5",
     "react-redux-toastr": "3.6.4",
     "react-router": "2.6.1",
@@ -187,20 +188,19 @@
     "validate.js": "^0.10.0",
     "warning": "3.0.0",
     "webpack": "2.1.0-beta.15",
+    "webpack-dev-middleware": "1.6.1",
     "webpack-hot-middleware": "2.12.2",
     "whatwg-fetch": "1.0.0"
   },
   "devDependencies": {
     "babel-preset-react-hmre": "1.1.1",
     "eventsource-polyfill": "0.9.6",
-    "in-viewport": "^3.4.2",
     "minimist": "1.2.0",
     "plop": "1.5.0",
     "psi": "2.0.4",
     "shelljs": "0.7.3",
     "stylelint": "7.1.0",
-    "stylelint-config-standard": "12.0.0",
-    "webpack-dev-middleware": "1.6.1"
+    "stylelint-config-standard": "12.0.0"
   },
   "pre-commit#develop": [
     "lint:fix"

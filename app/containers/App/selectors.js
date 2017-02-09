@@ -16,6 +16,11 @@ const selectCurrentUser = () => createSelector(
   (substate) => substate.userData
 );
 
+const selectLoginError = () => createSelector(
+  selectGlobal(),
+  (substate) => substate.loginError
+);
+
 const selectUserRoleType = () => createSelector(
   selectGlobal(),
   (substate) => substate.userRoleType
@@ -78,10 +83,11 @@ const selectUserSiteLocations = () => createSelector(
       const clientId = get(substate, 'userData.roleForClient.client.id', null);
       if (clientId) {
         userSites = get(substate, 'baseData.clientSites.details', {});
+        userSites = [{ id: 0, name: 'All' }, ...userSites];
       }
     }
     const returnArray = map(userSites, e => pick(e, ['id', 'name']));
-    returnArray.push({ id: 0, name: 'All' });
+
     return returnArray;
   }
 );
@@ -121,6 +127,7 @@ const selectStudyLevels = () => createSelector(
         label: `${e.name}`,
         type: e.name,
         stripeProductId: e.stripe_product_id,
+        isTop: e.isTop,
       }
     ));
   }
@@ -134,6 +141,11 @@ const selectCoupon = () => createSelector(
 const selectRewards = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.rewards', [])
+);
+
+const selectRewardsBalance = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.rewardsBalance', [])
 );
 
 const selectCards = () => createSelector(
@@ -261,6 +273,31 @@ const selectChangeTimezoneState = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.changeUsersTimezoneState', {})
 );
+
+const selectLanding = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.landing.details', {})
+);
+
+const selectLandingIsFetching = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.landing.fetching', {})
+);
+
+const selectLandingError = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.landing.error', {})
+);
+
+const selectSubscribedFromLanding = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.subscribedFromLanding', {})
+);
+
+const selectSubscriptionError = () => createSelector(
+  selectGlobal(),
+  (substate) => substate.subscriptionError
+);
 // end
 
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
@@ -270,6 +307,7 @@ export {
   selectAuthState,
   selectEvents,
   selectCurrentUser,
+  selectLoginError,
   selectUserRoleType,
   selectCurrentUserClientId,
   selectCurrentUserStripeCustomerId,
@@ -284,6 +322,7 @@ export {
   selectStudyLevels,
   selectCoupon,
   selectRewards,
+  selectRewardsBalance,
   selectCards,
   selectSavedCard,
   selectDeletedCard,
@@ -308,4 +347,10 @@ export {
   selectCreditsPrice,
 
   selectChangeTimezoneState,
+
+  selectLanding,
+  selectLandingIsFetching,
+  selectLandingError,
+  selectSubscribedFromLanding,
+  selectSubscriptionError,
 };

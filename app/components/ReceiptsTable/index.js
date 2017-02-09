@@ -168,7 +168,6 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
       sort = null;
     }
 
-    console.log(sort, direction);
     if (sort === 'orderNumber') {
       const dir = ((direction === 'down') ? 'desc' : 'asc');
       const sortedProposals = _.orderBy(this.props.receipts, [function (o) {

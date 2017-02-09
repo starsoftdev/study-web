@@ -29,6 +29,14 @@ import {
   FETCH_REWARDS_SUCCESS,
   FETCH_REWARDS_ERROR,
 
+  FETCH_REWARDS_BALANCE,
+  FETCH_REWARDS_BALANCE_SUCCESS,
+  FETCH_REWARDS_BALANCE_ERROR,
+
+  REDEEM,
+  REDEEM_SUCCESS,
+  REDEEM_ERROR,
+
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
@@ -116,6 +124,14 @@ import {
   CHANGE_USERS_TIMEZONE,
   CHANGE_USERS_TIMEZONE_SUCCESS,
   CHANGE_USERS_TIMEZONE_ERROR,
+
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
+  SUBSCRIBE_FROM_LANDING,
+  PATIENT_SUBSCRIBED,
+  PATIENT_SUBSCRIPTION_ERROR,
+  CLEAR_FORM_SUBSCRIBE,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -274,10 +290,11 @@ export function clearCoupon() {
 // ///////////////////////////////////////////
 // fetch rewards
 // ///////////////////////////////////////////
-export function fetchRewards(customerId) {
+export function fetchRewards(clientId, siteId) {
   return {
     type: FETCH_REWARDS,
-    customerId,
+    siteId,
+    clientId,
   };
 }
 
@@ -295,6 +312,52 @@ export function rewardsFetchingError(payload) {
   };
 }
 
+// ///////////////////////////////////////////
+// fetch rewards balance
+// ///////////////////////////////////////////
+export function fetchRewardsBalance(clientId, siteId) {
+  return {
+    type: FETCH_REWARDS_BALANCE,
+    siteId,
+    clientId,
+  };
+}
+
+export function rewardsBalanceFetched(siteId, payload) {
+  return {
+    type: FETCH_REWARDS_BALANCE_SUCCESS,
+    siteId,
+    payload,
+  };
+}
+
+export function rewardsBalanceFetchingError(payload) {
+  return {
+    type: FETCH_REWARDS_BALANCE_ERROR,
+    payload,
+  };
+}
+
+export function redeem(payload) {
+  return {
+    type: REDEEM,
+    payload,
+  };
+}
+
+export function redeemSuccess(payload) {
+  return {
+    type: REDEEM_SUCCESS,
+    payload,
+  };
+}
+
+export function redeemError(payload) {
+  return {
+    type: REDEEM_ERROR,
+    payload,
+  };
+}
 // ///////////////////////////////////////////
 // fetch cards
 // ///////////////////////////////////////////
@@ -796,5 +859,53 @@ export function changeUsersTimezoneError(payload) {
   return {
     type: CHANGE_USERS_TIMEZONE_ERROR,
     payload,
+  };
+}
+
+export function fetchLanding(studyId) {
+  return {
+    type: FETCH_LANDING,
+    studyId,
+  };
+}
+
+export function landingFetched(payload) {
+  return {
+    type: FETCH_LANDING_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchLandingError(payload) {
+  return {
+    type: FETCH_LANDING_ERROR,
+    payload,
+  };
+}
+
+export function subscribeFromLanding(params) {
+  return {
+    type: SUBSCRIBE_FROM_LANDING,
+    params,
+  };
+}
+
+export function patientSubscribed(payload) {
+  return {
+    type: PATIENT_SUBSCRIBED,
+    payload,
+  };
+}
+
+export function patientSubscriptionError(payload) {
+  return {
+    type: PATIENT_SUBSCRIPTION_ERROR,
+    payload,
+  };
+}
+
+export function clearForm() {
+  return {
+    type: CLEAR_FORM_SUBSCRIBE,
   };
 }

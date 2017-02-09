@@ -1,14 +1,15 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { reject } from 'lodash';
 
 import RewardModal from 'components/RewardModal';
 
-import { selectCurrentUser, selectSitePatients, selectUserSiteLocations } from 'containers/App/selectors';
-import { submitForm } from 'containers/RewardsPage/actions';
+import { selectCurrentUser, selectSitePatients, selectUserSiteLocations, selectRewardsBalance } from 'containers/App/selectors';
+import { fetchRewardsBalance, redeem } from 'containers/App/actions';
 
-import { fetchPatientSignUps, fetchPatientMessages, fetchRewardsPoint } from '../actions';
-import { selectPatientSignUps, selectPatientMessages, selectRewardsPoint } from '../selectors';
+import { fetchPatientSignUps, fetchPatientMessages } from '../actions';
+import { selectPatientSignUps, selectPatientMessages } from '../selectors';
 
 import graph from 'assets/images/graph.svg';
 
@@ -17,13 +18,13 @@ export class Dashboard extends React.Component {
     currentUser: PropTypes.any,
     patientSignUps: PropTypes.object,
     patientMessages: PropTypes.object,
-    rewardsPoint: PropTypes.number,
+    rewardsBalance: PropTypes.object,
     fetchPatientSignUps: PropTypes.func,
     fetchPatientMessages: PropTypes.func,
-    fetchRewardsPoint: PropTypes.func,
+    fetchRewardsBalance: PropTypes.func,
     sitePatients: React.PropTypes.object,
     siteLocations: PropTypes.array,
-    submitForm: PropTypes.func,
+    redeem: PropTypes.func,
   }
 
   state = {
@@ -34,7 +35,7 @@ export class Dashboard extends React.Component {
     const { currentUser } = this.props;
     this.props.fetchPatientSignUps(currentUser);
     this.props.fetchPatientMessages(currentUser);
-    this.props.fetchRewardsPoint(currentUser);
+    this.props.fetchRewardsBalance(currentUser.roleForClient.client_id, currentUser.roleForClient.site_id);
   }
 
   openRewardModal = () => {
@@ -45,8 +46,19 @@ export class Dashboard extends React.Component {
     this.setState({ rewardModalOpen: false });
   }
 
+  handleRedeem = (data) => {
+    const { currentUser } = this.props;
+
+    this.props.redeem({
+      ...data,
+      userId: currentUser.id,
+    });
+  }
+
   render() {
-    const { patientSignUps, patientMessages, rewardsPoint, siteLocations, submitForm } = this.props;
+    const { currentUser, patientSignUps, patientMessages, rewardsBalance, siteLocations } = this.props;
+    const redeemableSiteLocations = reject(siteLocations, { id: 0 });
+
     return (
       <section className="row infoarea text-uppercase">
         <h2 className="hidden">Statics</h2>
@@ -97,7 +109,7 @@ export class Dashboard extends React.Component {
             <div className="textbox">
               <h2>REWARDS</h2>
               <a className="btn btn-info lightbox-opener" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal}>Redeem</a>
-              <span className="counter">{rewardsPoint} KIK<span className="small text-lowercase">s</span></span>
+              <span className="counter">{rewardsBalance[currentUser.roleForClient.site_id || 0]} KIK<span className="small text-lowercase">s</span></span>
             </div>
           </div>
           <div className="box">
@@ -111,7 +123,13 @@ export class Dashboard extends React.Component {
             </div>
           </div>
         </article>
-        <RewardModal siteLocations={siteLocations} showModal={this.state.rewardModalOpen} closeModal={this.closeRewardModal} onSubmit={submitForm} />
+        <RewardModal
+          currentUser={currentUser}
+          siteLocations={redeemableSiteLocations}
+          showModal={this.state.rewardModalOpen}
+          closeModal={this.closeRewardModal}
+          onSubmit={this.handleRedeem}
+        />
       </section>
     );
   }
@@ -121,15 +139,15 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   patientSignUps: selectPatientSignUps(),
   patientMessages: selectPatientMessages(),
-  rewardsPoint: selectRewardsPoint(),
+  rewardsBalance: selectRewardsBalance(),
   sitePatients: selectSitePatients(),
   siteLocations: selectUserSiteLocations(),
 });
 const mapDispatchToProps = {
   fetchPatientSignUps,
   fetchPatientMessages,
-  fetchRewardsPoint,
-  submitForm,
+  fetchRewardsBalance,
+  redeem,
 };
 
 export default connect(

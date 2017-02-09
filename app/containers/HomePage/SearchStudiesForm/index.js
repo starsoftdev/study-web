@@ -8,7 +8,7 @@ import { map } from 'lodash';
 
 import Input from 'components/Input';
 import ReactSelect from 'components/Input/ReactSelect';
-import { selectSearchStudiesFormError } from './selectors';
+import { selectSearchStudiesFormError, selectSearchStudiesFormValues } from './selectors';
 import { selectClientSites } from 'containers/App/selectors';
 import { selectStudies } from 'containers/HomePage/selectors';
 import formValidator from './validator';
@@ -19,6 +19,7 @@ const mapStateToProps = createStructuredSelector({
   clientSites: selectClientSites(),
   studies: selectStudies(),
   hasError: selectSearchStudiesFormError(),
+  formValues: selectSearchStudiesFormValues(),
 });
 
 @reduxForm({ form: 'searchStudies', validate: formValidator })
@@ -30,22 +31,28 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
     studies: PropTypes.object,
     hasError: PropTypes.bool,
     handleSubmit: PropTypes.func,
+    onSubmit: PropTypes.func,
+    formValues: PropTypes.object,
   };
 
-  // performSearch(event) {
-  //   const queryParams = {
-  //     name: event.target.value,
-  //     siteId:
-  //   }
-  // }
+  performSearch(e, name) {
+    const params = this.props.formValues;
+    if (e && e.target) {
+      params[e.target.name] = e.target.value;
+      this.props.onSubmit(params, true);
+    } else {
+      params[name] = e;
+      this.props.onSubmit(params);
+    }
+  }
 
   render() {
     const { clientSites, studies, hasError, handleSubmit } = this.props;
-    const siteOptions = [{ label: 'All', id: 0 }].concat(map(clientSites.details, siteIterator => ({
+    const siteOptions = [{ label: 'All', value: '0' }].concat(map(clientSites.details, siteIterator => ({
       label: siteIterator.name,
       value: siteIterator.id,
     })));
-    const statusOptions = [{ label: 'All', id: 0 },
+    const statusOptions = [{ label: 'All', value: '0' },
                            { label: 'Active', value: ACTIVE_STATUS_VALUE },
                            { label: 'Inactive', value: INACTIVE_STATUS_VALUE }];
 
@@ -60,6 +67,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
               <Field
                 name="name"
                 component={Input}
+                onChange={(e) => this.performSearch(e, 'name')}
                 type="text"
                 className="keyword-search"
                 placeholder="Search"
@@ -73,6 +81,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
               component={ReactSelect}
               placeholder="Select Site Location"
               options={siteOptions}
+              onChange={(e) => this.performSearch(e, 'site')}
               disabled={clientSites.fetching || studies.fetching}
             />
           </div>
@@ -82,6 +91,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
               component={ReactSelect}
               placeholder="Select Status"
               options={statusOptions}
+              onChange={(e) => this.performSearch(e, 'status')}
               disabled={clientSites.fetching || studies.fetching}
             />
           </div>
