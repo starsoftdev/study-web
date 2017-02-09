@@ -20,6 +20,9 @@ import {
   FETCH_REWARDS_SUCCESS,
   FETCH_REWARDS_ERROR,
 
+  FETCH_REWARDS_BALANCE_SUCCESS,
+  REDEEM_SUCCESS,
+
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
@@ -99,7 +102,17 @@ import {
   CHANGE_USERS_TIMEZONE,
   CHANGE_USERS_TIMEZONE_SUCCESS,
   CHANGE_USERS_TIMEZONE_ERROR,
+
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
+  PATIENT_SUBSCRIBED,
+  PATIENT_SUBSCRIPTION_ERROR,
 } from './constants';
+
+import {
+  LOGIN_ERROR,
+} from 'containers/LoginPage/constants';
 
 import {
   CHANGE_IMAGE_SUCCESS,
@@ -107,13 +120,21 @@ import {
 
 const initialState = {
   loggedIn: !!getItem('auth_token'),
+  loginError: null,
+  subscriptionError: null,
   userData: null,
   pageEvents: null,
   baseData: {
     sites: [],
     indications: [],
+    subscribedFromLanding: null,
     sources: [],
     levels: [],
+    landing: {
+      details: null,
+      fetching: false,
+      error: null,
+    },
     coupon: {
       details: null,
       fetching: false,
@@ -160,6 +181,7 @@ const initialState = {
       error: null,
     },
     rewards: [],
+    rewardsBalance: {},
     clientRoles: {
       details: [],
       fetching: false,
@@ -222,13 +244,23 @@ export default function appReducer(state = initialState, action) {
         loggedIn: payload.newAuthState,
       };
       break;
+    case LOGIN_ERROR:
+      resultState = {
+        ...state,
+        loginError: payload,
+      };
+      break;
     case SET_USER_DATA:
-      if (payload.userData.roleForSponsor) {
-        userRoleType = 'sponsor';
-      } else if (payload.userData.roleForClient) {
-        userRoleType = 'client';
-      } else {
-        userRoleType = '';
+      if (payload.userData) {
+        if (payload.userData.roleForSponsor) {
+          userRoleType = 'sponsor';
+        } else if (payload.userData.roleForClient) {
+          userRoleType = 'client';
+        } else if (payload.userData.roles && payload.userData.roles.length > 0) {
+          userRoleType = 'dashboard';
+        } else {
+          userRoleType = '';
+        }
       }
       resultState = {
         ...state,
@@ -256,6 +288,49 @@ export default function appReducer(state = initialState, action) {
     case FETCH_INDICATIONS_SUCCESS:
       baseDataInnerState = {
         indications: payload,
+      };
+      break;
+    case FETCH_LANDING:
+      baseDataInnerState = {
+        landing: {
+          details: null,
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_LANDING_SUCCESS:
+      baseDataInnerState = {
+        landing: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_LANDING_ERROR:
+      console.log(FETCH_LANDING_ERROR, payload);
+      baseDataInnerState = {
+        landing: {
+          details: null,
+          fetching: false,
+          error: payload,
+        },
+      };
+      break;
+    case PATIENT_SUBSCRIBED:
+      baseDataInnerState = {
+        subscribedFromLanding: payload,
+      };
+      resultState = {
+        ...state,
+        subscriptionError: null,
+      };
+      break;
+    case PATIENT_SUBSCRIPTION_ERROR:
+      resultState = {
+        ...state,
+        subscriptionError: payload,
       };
       break;
     case FETCH_SOURCES_SUCCESS:
@@ -319,6 +394,27 @@ export default function appReducer(state = initialState, action) {
         rewards: [],
       };
       break;
+    case FETCH_REWARDS_BALANCE_SUCCESS: {
+      const { siteId } = action;
+      baseDataInnerState = {
+        rewardsBalance: {
+          ...state.baseData.rewardsBalance,
+          [siteId || 0]: payload,
+        },
+      };
+      break;
+    }
+    case REDEEM_SUCCESS: {
+      const { siteId, balance, points } = payload;
+      baseDataInnerState = {
+        rewardsBalance: {
+          ...state.baseData.rewardsBalance,
+          [siteId]: balance,
+          0: parseInt(state.baseData.rewardsBalance[0]) + parseInt(points),
+        },
+      };
+      break;
+    }
     case FETCH_CARDS:
       baseDataInnerState = {
         cards: {

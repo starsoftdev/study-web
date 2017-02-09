@@ -223,6 +223,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
                       deleting={deletedClientRole.deleting}
                       onDelete={this.deleteClientRole}
                       onSubmit={this.updateUser}
+                      isEdit
                     />
                   </div>
                 </div>

@@ -54,8 +54,8 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       checkAll: false,
       proposals: false,
       filteredProposals: null,
-      activeSort: 'date',
-      activeDirection: 'down',
+      activeSort: null,
+      activeDirection: null,
     };
   }
 
@@ -148,26 +148,20 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     const proposalsArr = this.props.proposals;
 
     if (site !== null && searchBy !== null) {
-      const number = parseInt(searchBy, 10);
       for (const proposal of proposalsArr) {
         if (proposal.site === site.name) {
-          if (!_.isNaN(number)) {
-            if (number === proposal.id) {
-              proposalsMatch.push(proposal);
-            }
-          } else if (number === proposal.proposalNumber || number === proposal.protocol) {
+          const proposalNumber = String(proposal.proposalNumber);
+          const protocalNumber = String(proposal.protocol);
+          if (proposalNumber.includes(searchBy) || protocalNumber.includes(searchBy)) {
             proposalsMatch.push(proposal);
           }
         }
       }
     } else if (searchBy !== null) {
       for (const proposal of proposalsArr) {
-        const number = parseInt(searchBy, 10);
-        if (!_.isNaN(number)) {
-          if (number === proposal.id) {
-            proposalsMatch.push(proposal);
-          }
-        } else if (number === proposal.proposalNumber || number === proposal.protocol) {
+        const proposalNumber = String(proposal.proposalNumber);
+        const protocalNumber = String(proposal.protocol);
+        if (proposalNumber.includes(searchBy) || protocalNumber.includes(searchBy)) {
           proposalsMatch.push(proposal);
         }
       }
@@ -250,7 +244,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         break;
       case 'protocol':
         proposalsArr.sort((a, b) => {
-          console.log(a);
           if (a.protocol > b.protocol) {
             return directionUnits.more;
           }
@@ -330,6 +323,23 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   }
 
   mapProposals(raw, result) {
+    if (this.state.activeSort === null) {
+      const directionUnits = {
+        more: 1,
+        less: -1,
+      };
+      raw.sort((a, b) => {
+        const aDate = new Date(a.created).getTime();
+        const bDate = new Date(b.created).getTime();
+        if (aDate > bDate) {
+          return directionUnits.more;
+        }
+        if (aDate < bDate) {
+          return directionUnits.less;
+        }
+        return 0;
+      });
+    }
     _.map(raw, (source, key) => {
       const dateWrapper = moment(source.created).tz(this.props.currentUser.timezone).format('MM/DD/YY');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
@@ -365,8 +375,12 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     const proposals = [];
     const heads = [];
 
-    this.mapHeaders(headers, state, heads);
-    this.mapProposals(proposalsArr, proposals);
+    if (headers) {
+      this.mapHeaders(headers, state, heads);
+    }
+    if (proposalsArr) {
+      this.mapProposals(proposalsArr, proposals);
+    }
 
     return (
       <div className="table-holder">

@@ -14,7 +14,7 @@ import AvatarMenu from './AvatarMenu';
 
 import { fetchSitePatients, fetchClientCredits } from 'containers/App/actions';
 import { logout } from 'containers/LoginPage/actions';
-
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import {
   selectSocket,
 } from 'containers/GlobalNotifications/selectors';
@@ -169,6 +169,16 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
         </header>
       );
     }
+
+    const tooltip = (
+      <Tooltip
+        id={'ms-tooltip'}
+        className="tooltop-inner"
+      >
+        {'Coming Soon'}
+      </Tooltip>
+    );
+
     return (
       <header id="header">
         <div className="container-fluid">
@@ -181,28 +191,38 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
           <NotificationBox currentUser={this.props.currentUser} />
 
-          <div className="emails pull-left">
-            <a
-              className="opener"
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Coming Soon"
-            >
-              <i className="icomoon-envelop" />
-              <span className="counter">1</span>
-            </a>
-          </div>
+          <OverlayTrigger
+            placement="bottom"
+            overlay={tooltip}
+          >
+            <div className="emails pull-left">
+              <a
+                className="opener"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Coming Soon"
+              >
+                <i className="icomoon-envelop" />
+                <span className="counter">1</span>
+              </a>
+            </div>
+          </OverlayTrigger>
 
-          <div className="open-close help-drop pull-left">
-            <a
-              className="link-help pull-left opener"
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Coming Soon"
-            >
-              ?
-            </a>
-          </div>
+          <OverlayTrigger
+            placement="bottom"
+            overlay={tooltip}
+          >
+            <div className="open-close help-drop pull-left">
+              <a
+                className="link-help pull-left opener"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Coming Soon"
+              >
+                ?
+              </a>
+            </div>
+          </OverlayTrigger>
           <AvatarMenu handleLogoutClick={this.handleLogoutClick} currentUser={this.props.currentUser} />
         </div>
       </header>

@@ -796,7 +796,7 @@ input[type=text]:-ms-input-placeholder {
     }
     > td {
       border-color: #fff;
-      vertical-align: middle;
+      vertical-align: top;
       padding: 20px 13px;
     }
   }
@@ -989,13 +989,17 @@ th, .th {
 		text-transform: uppercase;
 	}
 
+  .label-blue {
+    color: #00afef;
+  }
+
   .lfilename {
     width: 52%;
   }
 
 	.label-top {
 		> * {
-			vertical-align: top;
+			vertical-align: top !important;
 		}
 	}
 
@@ -2315,7 +2319,7 @@ th, .th {
   }
   .table-holder {
     header {
-      padding: 14px 18px 16px 15px;
+      padding: 12px 16px 16px;
     }
   }
   .table {
@@ -4399,6 +4403,9 @@ th, .th {
 @import "../../../containers/HomePage/Dashboard/styles.less";
 @import "../../../containers/HomePage/SponsorDashboard/styles.less";
 @import "../../../containers/HomePage/StudiesList/styles.less";
+@import "../../../containers/HomePage/AdminDashboard/styles.less";
+@import "../../../containers/HomePage/AdminDashboard/FiltersForm/styles.less";
+@import "../../../containers/HomePage/AdminDashboard/StudyList/styles.less";
 /*****************/
 /* List New Study page  */
 /*****************/
@@ -4443,12 +4450,7 @@ th, .th {
 /*****************/
 @import "../../../containers/StudyPage/styles";
 
-/*****************/
-/* Dashboard page  */
-/*****************/
-@import "../../../containers/DashboardPage/styles.less";
-@import "../../../containers/DashboardPage/FiltersForm/styles.less";
-@import "../../../containers/DashboardPage/StudyList/styles.less";
+
 
 /* Components */
 
@@ -4533,3 +4535,4 @@ th, .th {
 /* Filter Component  */
 /*****************/
 @import "../../../components/Filter/styles.less";
+@import '../layout/_multi-select-checkbox';

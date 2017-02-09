@@ -110,6 +110,12 @@ function studyPageReducer(state = initialState, action) {
     case REMOVE_PATIENT_INDICATION_SUCCESS:
     case SUBMIT_DELETE_NOTE_SUCCESS:
     case UPDATE_PATIENT_SUCCESS:
+      if (action.payload.lastTextMessage) {
+        return {
+          ...state,
+          patientCategories: patientCategories(state.patientCategories, action.payload.patientId, action.payload.patientCategoryId, action),
+        };
+      }
       return {
         ...state,
         patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),

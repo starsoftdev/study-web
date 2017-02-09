@@ -102,7 +102,7 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const siteLocations = [{ id: 0, name: 'All' }].concat(this.props.siteLocations);
+    const siteLocations = [{ name: 'All', value: '0' }].concat(this.props.siteLocations);
     const state = this.state;
     return (
       <form

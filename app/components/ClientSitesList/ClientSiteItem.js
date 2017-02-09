@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
+import { find } from 'lodash';
 import { selectSelectedSite, selectSelectedUser } from 'containers/App/selectors';
 import { fetchSite, fetchUser } from 'containers/App/actions';
 import LoadingSpinner from 'components/LoadingSpinner';
@@ -19,6 +19,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     selectedUser: PropTypes.object,
     fetchSite: PropTypes.func,
     fetchUser: PropTypes.func,
+    userFilter: PropTypes.any,
   };
 
   constructor(props) {
@@ -30,6 +31,20 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
 
     this.toggleAssignedUsers = this.toggleAssignedUsers.bind(this);
     this.editSite = this.editSite.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { roles, userFilter } = newProps;
+
+    const filteredUser = find(roles, (item) => {
+      if (userFilter.trim() === '') {
+        return false;
+      }
+      const fullName = `${item.user.firstName} ${item.user.lastName}`;
+      return (fullName.toUpperCase().includes(userFilter.toUpperCase()));
+    });
+
+    this.setState({ assignedUsersCollapsed: !filteredUser });
   }
 
   toggleAssignedUsers() {
@@ -59,13 +74,14 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
 
   render() {
     const { name, piFirstName, piLastName, phone, address, roles } = this.props;
+
     const assignedUsersContent = roles.map((item, index) => (
       <div className="assigned-user" key={index}>
         <span>{item.user.firstName} {item.user.lastName}</span>
         <span className="edit-assigned-user">
           {(this.assignedUserIsBeingFetched(item))
             ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-assigned-user" /></span>
-            : <a className="btn edit-icon" onClick={() => { this.editAssignedUser(item); }}><i className="pencil-square" /></a>
+            : <a className="btn toggle edit-icon" onClick={() => { this.editAssignedUser(item); }}><i className="pencil-square" /></a>
           }
         </span>
       </div>
@@ -88,12 +104,12 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
         <td className="assigned-users">
           <div className="toggle-assigned-users">
             <span>ASSIGNED USERS</span>
-            {this.state.assignedUsersCollapsed
+            {(this.state.assignedUsersCollapsed)
               ? <a className="btn toggle toggle-plus" onClick={this.toggleAssignedUsers}></a>
               : <a className="btn toggle toggle-minus" onClick={this.toggleAssignedUsers}></a>
             }
           </div>
-          {!this.state.assignedUsersCollapsed &&
+          {(!this.state.assignedUsersCollapsed) &&
             <div className="assigned-users-list">{assignedUsersContent}</div>
           }
         </td>

@@ -62,6 +62,17 @@ div.toggle > div:first-child {
 div.toggle.has-error > div:first-child {
   border: solid 1px red;
 }
+.toggleDisabled:after {
+  content: '';
+  position: absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width: 160px;
+  background-color: grey;
+  opacity: 0.3;
+  cursor: not-allowed;
+}
 
 .chat-text {
   width: 100%;

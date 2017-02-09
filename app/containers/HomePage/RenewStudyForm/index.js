@@ -7,31 +7,25 @@ import { Calendar } from 'react-date-range';
 import moment from 'moment-timezone';
 
 import CenteredModal from '../../../components/CenteredModal/index';
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
-import DatePicker from 'components/Input/DatePicker';
-import Toggle from 'components/Input/Toggle';
-import ShoppingCartForm from 'components/ShoppingCartForm';
-import AddNewCardForm from 'components/AddNewCardForm';
+import Input from '../../../components/Input';
+import ReactSelect from '../../../components/Input/ReactSelect';
+import DatePicker from '../../../components/Input/DatePicker';
+import Toggle from '../../../components/Input/Toggle';
+import ShoppingCartForm from '../../../components/ShoppingCartForm';
+import AddNewCardForm from '../../../components/AddNewCardForm';
 import {
   selectRenewStudyFormCampaignLengthValue,
 } from './selectors';
 import { selectStudyLevels } from 'containers/App/selectors';
 import { saveCard } from 'containers/App/actions';
 import { selectSelectedIndicationLevelPrice } from 'containers/HomePage/selectors';
-import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
+import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_UPGRADE_PRICE } from 'common/constants';
 import formValidator from './validator';
 import LoadingSpinner from 'components/LoadingSpinner';
 import _, { find } from 'lodash';
 
-const mapStateToProps = createStructuredSelector({
-  studyLevels: selectStudyLevels(),
-  selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
-  campaignLength: selectRenewStudyFormCampaignLengthValue(),
-});
 
 @reduxForm({ form: 'renewStudy', validate: formValidator })
-
 class RenewStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -61,7 +55,8 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     this.handleExposureChoose = this.handleExposureChoose.bind(this);
     this.handleLengthChoose = this.handleLengthChoose.bind(this);
     this.handleCondenseChoose = this.handleCondenseChoose.bind(this);
-    this.handlePatientChoose = this.handlePatientChoose.bind(this);
+    this.handleMessagingChoose = this.handleMessagingChoose.bind(this);
+    this.handleQualificationChoose = this.handleQualificationChoose.bind(this);
     this.handleCallChoose = this.handleCallChoose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDatePickerClose = this.handleDatePickerClose.bind(this);
@@ -72,6 +67,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       campaignLength: null,
       condenseToTwoWeeks: false,
       patientMessagingSuite: false,
+      patientQualificationSuite: false,
       callTracking: false,
       addCardModalOpen: false,
       showDatePicker: false,
@@ -86,6 +82,19 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     if (newProps.campaignLength !== this.props.campaignLength) {
       if (newProps.campaignLength !== 1) {
         this.props.dispatch(change('renewStudy', 'condenseToTwoWeeks', false));
+      }
+    }
+
+    if (newProps.selectedStudy) {
+      const { patientMessagingSuite, patientQualificationSuite } = newProps.selectedStudy;
+
+      if (patientMessagingSuite === 'On' && patientQualificationSuite === 'Off') {
+        this.props.dispatch(change('renewStudy', 'addPatientMessagingSuite', true));
+      }
+
+      if (patientQualificationSuite === 'On') {
+        this.props.dispatch(change('renewStudy', 'addPatientQualificationSuite', true));
+        this.props.dispatch(change('renewStudy', 'addPatientMessagingSuite', false));
       }
     }
 
@@ -187,9 +196,27 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     });
   }
 
-  handlePatientChoose(e) {
+  handleMessagingChoose(e) {
+    let { patientQualificationSuite } = this.state;
+    if (e && this.state.patientQualificationSuite) {
+      patientQualificationSuite = false;
+      this.props.dispatch(change('renewStudy', 'addPatientQualificationSuite', false));
+    }
     this.setState({
       patientMessagingSuite: e,
+      patientQualificationSuite,
+    });
+  }
+
+  handleQualificationChoose(e) {
+    let { patientMessagingSuite } = this.state;
+    if (e && this.state.patientMessagingSuite) {
+      patientMessagingSuite = false;
+      this.props.dispatch(change('renewStudy', 'addPatientMessagingSuite', false));
+    }
+    this.setState({
+      patientQualificationSuite: e,
+      patientMessagingSuite,
     });
   }
 
@@ -200,7 +227,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   }
 
   handleSubmit() {
-    this.resetState();
     this.props.validateAndSubmit();
   }
 
@@ -217,9 +243,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   }
 
   generateRenewStudyShoppingCartAddOns() {
-    const { studyLevels, selectedIndicationLevelPrice } = this.props;
+    const { studyLevels, selectedIndicationLevelPrice, selectedStudy } = this.props;
     const { exposureLevel, campaignLength, condenseToTwoWeeks,
-      patientMessagingSuite, callTracking } = this.state;
+      patientMessagingSuite, patientQualificationSuite, callTracking } = this.state;
     const addOns = [];
 
     if (exposureLevel && campaignLength) {
@@ -244,6 +270,23 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
         total: MESSAGING_SUITE_PRICE,
       });
     }
+    if (patientQualificationSuite) {
+      if (selectedStudy && selectedStudy.patientMessagingSuite === 'On') {
+        addOns.push({
+          title: 'Upgrade to Patient Qualification Suite',
+          price: QUALIFICATION_SUITE_UPGRADE_PRICE,
+          quantity: 1,
+          total: QUALIFICATION_SUITE_UPGRADE_PRICE,
+        });
+      } else {
+        addOns.push({
+          title: 'Patient Qualification Suite',
+          price: QUALIFICATION_SUITE_PRICE,
+          quantity: 1,
+          total: QUALIFICATION_SUITE_PRICE,
+        });
+      }
+    }
     if (callTracking) {
       addOns.push({
         title: 'Call Tracking',
@@ -257,7 +300,19 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { studyLevels, campaignLength, selectedIndicationLevelPrice } = this.props;
+    const { studyLevels, campaignLength, selectedIndicationLevelPrice, selectedStudy } = this.props;
+    let patientQualificationSuite = false;
+    let qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
+    let patientMessagingSuite = false;
+
+    if (selectedStudy) {
+      patientQualificationSuite = selectedStudy.patientQualificationSuite;
+      patientMessagingSuite = selectedStudy.patientMessagingSuite;
+
+      if (patientMessagingSuite === 'On' && patientQualificationSuite === 'Off') {
+        qualificationSuitePrice = QUALIFICATION_SUITE_UPGRADE_PRICE;
+      }
+    }
 
     const currentDate = moment();
 
@@ -346,9 +401,24 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                           </strong>
                           <div className="field">
                             <Field
-                              name="patientMessagingSuite"
+                              name="addPatientMessagingSuite"
+                              disabled={patientQualificationSuite === 'On' || patientMessagingSuite === 'On'}
                               component={Toggle}
-                              onChange={this.handlePatientChoose}
+                              onChange={this.handleMessagingChoose}
+                            />
+                          </div>
+                        </div>
+                        <div className="field-row">
+                          <strong className="label"><label>Patient qualification <br />
+                            Suite: ${qualificationSuitePrice / 100} <br />
+                            <span className="label-blue">(Includes patient <br />
+                            messaging suite)</span></label></strong>
+                          <div className="field">
+                            <Field
+                              name="addPatientQualificationSuite"
+                              disabled={patientQualificationSuite === 'On'}
+                              component={Toggle}
+                              onChange={this.handleQualificationChoose}
                             />
                           </div>
                         </div>
@@ -466,11 +536,15 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
-    resetForm: () => dispatch(reset('renewStudy')),
-  };
-}
+const mapStateToProps = createStructuredSelector({
+  studyLevels: selectStudyLevels(),
+  selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
+  campaignLength: selectRenewStudyFormCampaignLengthValue(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+  resetForm: () => dispatch(reset('renewStudy')),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(RenewStudyForm);

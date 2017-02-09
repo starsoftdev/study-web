@@ -52,7 +52,11 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
   initSearch(e, name) {
     const params = this.props.formValues;
     if (e && e.target) {
-      params[e.target.name] = e.target.value;
+      if (e.target.value === '0') {
+        params[e.target.name] = 0;
+      } else {
+        params[e.target.name] = e.target.value;
+      }
       if (this.state.searchTimer) {
         clearTimeout(this.state.searchTimer);
         this.setState({ searchTimer: null });
@@ -60,7 +64,11 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
       const timerH = setTimeout(() => { this.props.onSubmit(params, true); }, 500);
       this.setState({ searchTimer: timerH });
     } else {
-      params[name] = e;
+      if (e === '0') {
+        params[name] = 0;
+      } else {
+        params[name] = e;
+      }
       this.props.onSubmit(params, true);
     }
   }
@@ -107,11 +115,11 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     finalExcludeIndication = _.concat(finalExcludeIndication, excludeIndicationArr);
 
 
-    const sourceOptions = [{ id: 0, label: 'All', value: null }].concat(map(sources, sourceIterator => ({
+    const sourceOptions = [{ label: 'All', value: '0' }].concat(map(sources, sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
     })));
-    const statusOptions = [{ id: 0, label: 'All', value: null }].concat(map(patientCategories.details, patientCategoryIterator => ({
+    const statusOptions = [{ label: 'All', value: '0' }].concat(map(patientCategories.details, patientCategoryIterator => ({
       label: patientCategoryIterator.name,
       value: patientCategoryIterator.id,
     })));

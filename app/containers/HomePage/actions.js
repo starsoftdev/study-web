@@ -3,8 +3,6 @@ import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
   FETCH_PATIENT_MESSAGES,
   FETCH_PATIENT_MESSAGES_SUCCEESS,
-  FETCH_REWARDS_POINT,
-  FETCH_REWARDS_POINT_SUCCEESS,
   FETCH_PRINCIPAL_INVESTIGATOR_TOTALS,
   FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS,
   FETCH_STUDIES,
@@ -63,20 +61,6 @@ export function fetchPatientMessages(currentUser) {
 export function fetchPatientMessagesSucceeded(payload) {
   return {
     type: FETCH_PATIENT_MESSAGES_SUCCEESS,
-    payload,
-  };
-}
-
-export function fetchRewardsPoint(currentUser) {
-  return {
-    type: FETCH_REWARDS_POINT,
-    currentUser,
-  };
-}
-
-export function fetchRewardsPointSucceeded(payload) {
-  return {
-    type: FETCH_REWARDS_POINT_SUCCEESS,
     payload,
   };
 }

@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
-import { submitPatientText, readStudyPatientMessages } from '../actions';
+import { submitPatientText, readStudyPatientMessages, updatePatientSuccess } from '../actions';
 import CallItem from 'components/GlobalPMSModal/CallItem';
 import { fetchClientCredits, markAsReadPatientMessages } from 'containers/App/actions';
 
@@ -42,11 +42,13 @@ class TextSection extends React.Component {
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
     fetchClientCredits: React.PropTypes.func,
+    updatePatientSuccess: React.PropTypes.func,
   };
 
   constructor(props) {
     super(props);
     this.renderText = this.renderText.bind(this);
+    this.renderTextArea = this.renderTextArea.bind(this);
     this.submitText = this.submitText.bind(this);
     this.textAreaChange = this.textAreaChange.bind(this);
     this.initStudyPatientMessagesFetch = this.initStudyPatientMessagesFetch.bind(this);
@@ -132,9 +134,11 @@ class TextSection extends React.Component {
       body: textarea.value,
       to: currentPatient.phone,
     };
-    console.log('submitText', options);
-    this.props.sendStudyPatientMessages(options, (err) => {
+    this.props.sendStudyPatientMessages(options, (err, data) => {
       if (!err) {
+        this.props.updatePatientSuccess({
+          lastTextMessage: { body: data.body, dateSent: data.dateUpdated, dateUpdated: data.dateUpdated },
+        });
         this.setState({ enteredCharactersLength: 0 }, () => {
           textarea.value = '';
         });
@@ -181,6 +185,36 @@ class TextSection extends React.Component {
     );
   }
 
+  renderTextArea(disabled) {
+    const { maxCharacters } = this.state;
+
+    if (disabled) {
+      return (
+        <textarea
+          className="form-control test"
+          placeholder="Type a message..."
+          onChange={this.textAreaChange}
+          maxLength={maxCharacters}
+          disabled
+          ref={(textarea) => {
+            this.textarea = textarea;
+          }}
+        />
+      );
+    }
+    return (
+      <textarea
+        className="form-control test"
+        placeholder="Type a message..."
+        onChange={this.textAreaChange}
+        maxLength={maxCharacters}
+        ref={(textarea) => {
+          this.textarea = textarea;
+        }}
+      />
+    );
+  }
+
   render() {
     const { currentPatient, active } = this.props;
     const clientCredits = this.props.clientCredits.details.customerCredits;
@@ -192,15 +226,7 @@ class TextSection extends React.Component {
       <div className={classNames('item text', { active })}>
         {this.renderText()}
         <div className="textarea">
-          <textarea
-            className="form-control test"
-            placeholder="Type a message..."
-            onChange={this.textAreaChange}
-            maxLength={maxCharacters}
-            ref={(textarea) => {
-              this.textarea = textarea;
-            }}
-          />
+          {this.renderTextArea(disabled || unsubscribed)}
           <span className="remaining-counter">
             {`${maxCharacters - enteredCharactersLength}`}
           </span>
@@ -228,6 +254,7 @@ const mapDispatchToProps = (dispatch) => ({
   readStudyPatientMessages: (patientId, studyId) => dispatch(readStudyPatientMessages(patientId, studyId)),
   markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
   fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
+  updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextSection);

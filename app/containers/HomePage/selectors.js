@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { get } from 'lodash';
 
 const selectHomePageDomain = () => state => state.homePage;
 
@@ -15,11 +16,6 @@ const selectPatientSignUps = () => createSelector(
 const selectPatientMessages = () => createSelector(
   selectHomePageDomain(),
   substate => substate.patientMessages
-);
-
-const selectRewardsPoint = () => createSelector(
-  selectHomePageDomain(),
-  substate => substate.rewardsPoint
 );
 
 const selectPrincipalInvestigatorTotals = () => createSelector(
@@ -72,12 +68,18 @@ const selectPaginationOptions = () => createSelector(
   substate => substate.paginationOptions
 );
 
+const selectFormDomain = () => state => state.form;
+
+const selectSearchProtocolsFormValues = () => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, 'searchProtocols.values', {})
+);
+
 export default selectHomePage;
 export {
   selectHomePageDomain,
   selectPatientSignUps,
   selectPatientMessages,
-  selectRewardsPoint,
   selectPrincipalInvestigatorTotals,
   selectStudies,
   selectProtocols,
@@ -88,4 +90,5 @@ export {
   selectUpgradedStudy,
   selectEditedStudy,
   selectPaginationOptions,
+  selectSearchProtocolsFormValues,
 };
