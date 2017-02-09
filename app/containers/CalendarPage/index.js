@@ -180,10 +180,9 @@ export class CalendarPage extends React.Component {
         protocolNumber: data.protocol.label,
         patientId: data.patient.value,
         userId: currentUser.id,
-        time: getUTCTime(moment(this.selectedCellInfo.selectedDate).clone().add(data.period === 'AM' ?
+        time: moment(this.selectedCellInfo.selectedDate).add(data.period === 'AM' ?
           data.hour % 12 :
-          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').format('YYYY-MM-DD HH:mm'),
-          currentUser.timezone).format(),
+          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes'),
         textReminder: data.textReminder,
       };
     } else { // UPDATE
@@ -198,10 +197,9 @@ export class CalendarPage extends React.Component {
           (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes');
       submitData = {
         id: this.selectedCellInfo.data.id,
-        time: getUTCTime(updatedDate.clone().add(data.period === 'AM' ?
+        time: updatedDate.clone().add(data.period === 'AM' ?
           data.hour % 12 :
-          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').format('YYYY-MM-DD HH:mm'),
-          currentUser.timezone).format(),
+          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes'),
         userId: currentUser.id,
       };
     }
@@ -305,6 +303,7 @@ export class CalendarPage extends React.Component {
             ref={(c) => { this.calendarWidget = c; }}
           />
           <SchedulePatientModal
+            currentUser={currentUser}
             siteLocationOptions={siteLocationOptions}
             isAdmin={isAdmin}
             sites={sites}
