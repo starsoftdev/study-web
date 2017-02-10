@@ -54,7 +54,7 @@ export class LandingPage extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { landingError, subscribedFromLanding } = newProps;
+    const { subscribedFromLanding } = newProps;
     const { siteLocation } = newProps.params;
     let invalidSite = false;
 

@@ -77,7 +77,7 @@ export class LandingArticle extends React.Component {
         <div className="row">
           <div
             ref={(slideInRight) => { this.slideInRight = slideInRight; }}
-            className={classNames({ 'col-xs-12 col-sm-6 pull-right': imgSrc, 'centered': !imgSrc })}
+            className={classNames({ 'col-xs-12 col-sm-6 pull-right': imgSrc, centered: !imgSrc })}
             data-view={dataView}
           >
             <h2 className={classNames({ nodesc: !imgSrc })}>
