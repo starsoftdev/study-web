@@ -67,7 +67,7 @@ export class LandingArticle extends React.Component {
 
     md.set({
       html: true,
-      breaks: true
+      breaks: true,
     });
 
     const markdown = md.render(landingDescription);
@@ -84,7 +84,7 @@ export class LandingArticle extends React.Component {
               {indication}
             </h2>
             {landingDescription &&
-              <div dangerouslySetInnerHTML={{__html: markdown}} />
+              <div dangerouslySetInnerHTML={{ __html: markdown }} />
             }
             <strong className="title text-uppercase">{siteName}</strong>
             <address>{address}</address>
@@ -96,7 +96,7 @@ export class LandingArticle extends React.Component {
               You can unsubscribe at any time.
             </p>
             {!imgSrc &&
-              <SocialArea alignCenter={true} />
+              <SocialArea alignCenter />
             }
           </div>
           <div
@@ -106,7 +106,7 @@ export class LandingArticle extends React.Component {
           >
             {imgSrc &&
               <div className="img-holder">
-                <img src={imgSrc} width="854" height="444" alt="preview" className="img-responsive"/>
+                <img src={imgSrc} width="854" height="444" alt="preview" className="img-responsive" />
               </div>
             }
             {imgSrc &&
