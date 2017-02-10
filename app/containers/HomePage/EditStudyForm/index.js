@@ -58,7 +58,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     const resetState = {
       exposureLevel: null,
       campaignLength: null,
-      condenseToTwoWeeks: false,
+      condenseTwoWeeks: false,
       patientMessagingSuite: false,
       callTracking: false,
       minDate: 'none',
