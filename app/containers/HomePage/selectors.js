@@ -68,6 +68,11 @@ const selectPaginationOptions = () => createSelector(
   substate => substate.paginationOptions
 );
 
+const selectAddNotificationProcess = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.addNotificationProcess
+);
+
 const selectFormDomain = () => state => state.form;
 
 const selectSearchProtocolsFormValues = () => createSelector(
@@ -91,4 +96,5 @@ export {
   selectEditedStudy,
   selectPaginationOptions,
   selectSearchProtocolsFormValues,
+  selectAddNotificationProcess,
 };

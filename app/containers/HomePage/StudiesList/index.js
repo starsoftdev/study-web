@@ -342,11 +342,12 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
   handleEditStudyFormSubmit() {
     const { editStudyFormError, editStudyFormValues, touchEditStudy } = this.props;
-
     if (editStudyFormError) {
       touchEditStudy();
       return;
     }
+
+    console.log(312, this.state.selectedStudyId, editStudyFormValues);
 
     this.props.editStudy(this.state.selectedStudyId, editStudyFormValues);
   }
@@ -461,6 +462,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const totalCount = studies.details.length;
 
     let selectedStudy = null;
+    let selectedSite = null;
     const studiesListContents = studies.details.map((item, index) => {
       if (item.studyId === this.state.selectedStudyId) {
         selectedStudy = item;
@@ -548,6 +550,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               currentUserStripeCustomerId={this.props.currentUserStripeCustomerId}
             />
             <EditStudyForm
+              selectedStudy={selectedStudy}
               siteUsers={this.state.selectedSiteUsers}
               onSubmit={this.handleEditStudyFormSubmit}
               show={this.state.editModalOpen}
@@ -588,7 +591,7 @@ function mapDispatchToProps(dispatch) {
     fetchLevels: () => dispatch(fetchLevels()),
     fetchIndicationLevelPrice: (levelId, indicationId) => dispatch(fetchIndicationLevelPrice(levelId, indicationId)),
     fetchUpgradeStudyPrice: (fromLevel, toLevel) => dispatch(fetchUpgradeStudyPrice(fromLevel, toLevel)),
-    editStudy: (formValues) => dispatch(editStudy(formValues)),
+    editStudy: (studyId, formValues) => dispatch(editStudy(studyId, formValues)),
     renewStudy: (studyId, cartValues, formValues) => dispatch(renewStudy(studyId, cartValues, formValues)),
     saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
