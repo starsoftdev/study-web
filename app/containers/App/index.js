@@ -14,6 +14,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import ReactGA from 'react-ga';
 
 import SideNavBar from 'components/SideNavBar';
 import TopHeaderBar from 'components/TopHeaderBar';
@@ -42,7 +43,17 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     this.props.fetchMeFromToken();
   }
 
-  componentWillReceiveProps() {}
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.userDataFetched && nextProps.userDataFetched) {
+      ReactGA.initialize('UA-91568063-1', {
+        debug: true,
+      });
+    }
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      ReactGA.set({ page: window.location.pathname });
+      ReactGA.pageview(window.location.pathname);
+    }
+  }
 
   render() {
     const { isLoggedIn, userDataFetched, pageEvents, currentUserRoleType } = this.props;
