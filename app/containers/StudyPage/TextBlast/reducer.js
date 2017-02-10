@@ -25,19 +25,19 @@ export default function TextBlastModal(state, action) {
     case FILTER_PATIENTS_TEXT_BLAST: {
       // separate the first and last name apart
       const search = _.trim(action.text);
-      const firstNameEndIndex = search.indexOf(' ');
-      let firstName = search;
-      let lastName;
-      if (firstNameEndIndex !== -1) {
-        firstName = search.slice(0, firstNameEndIndex);
-        lastName = search.slice(firstNameEndIndex + 1);
-      }
+      // const firstNameEndIndex = search.indexOf(' ');
+      // let firstName = search;
+      // let lastName;
+      // if (firstNameEndIndex !== -1) {
+      //   firstName = search.slice(0, firstNameEndIndex);
+      //   lastName = search.slice(firstNameEndIndex + 1);
+      // }
       return {
         ...state,
         values: {
           ...state.values,
           filteredPatientSearchValues: state.values.patientSearchValues.filter(patient => (
-            _.startsWith(patient.firstName.toUpperCase(), firstName.toUpperCase()) || (lastName && _.startsWith(patient.lastName.toUpperCase(), lastName.toUpperCase()))
+            _.includes(patient.firstName.toUpperCase(), search.toUpperCase()) || (_.includes(patient.lastName.toUpperCase(), search.toUpperCase()))
           )),
         },
       };

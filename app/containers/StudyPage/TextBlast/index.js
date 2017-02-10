@@ -63,7 +63,6 @@ class TextBlastModal extends React.Component {
     this.selectSource = this.selectSource.bind(this);
     this.filterPatients = this.filterPatients.bind(this);
     this.submitTextBlast = this.submitTextBlast.bind(this);
-    this.renderPatientSearchList = this.renderPatientSearchList.bind(this);
     this.renderPatients = this.renderPatients.bind(this);
     this.renderPatientCount = this.renderPatientCount.bind(this);
     this.textAreaChange = this.textAreaChange.bind(this);
@@ -166,6 +165,15 @@ class TextBlastModal extends React.Component {
     const { formValues, filterPatients } = this.props;
     if (formValues.patientSearchValues) {
       filterPatients(event.target.value, formValues.patients);
+      // formValues.patients.map((patient) => {
+      //   const firstname = patient.firstName.toUpperCase();
+      //   const lastname = patient.lastName.toUpperCase();
+      //   if (firstname.includes(event.target.value.toUpperCase() || lastname.includes(event.target.value.toUpperCase()))) {
+      //     this.props.removePatient(patient.id);
+      //   } else {
+      //     this.props.addPatients(patient.id);
+      //   }
+      // });
     }
   }
 
@@ -184,33 +192,12 @@ class TextBlastModal extends React.Component {
     }
   }
 
-  renderPatientSearchList() {
-    const { activeField, addPatients, formValues } = this.props;
-    if (formValues.filteredPatientSearchValues) {
-      return (
-        <ul className={classNames('list list-unstyled', { active: activeField === 'search' })}>
-          {formValues.filteredPatientSearchValues.map(patient => (
-            <li
-              key={patient.id}
-              onClick={() => {
-                addPatients([patient]);
-              }}
-            >
-              {patient.firstName} {patient.lastName}
-            </li>
-          ))}
-        </ul>
-      );
-    }
-    return null;
-  }
-
   renderPatients() {
     const { formValues, removePatient } = this.props;
-    if (formValues.patients) {
+    if (formValues.filteredPatientSearchValues) {
       return (
         <div className="selected-patients-list">
-          {formValues.patients.map(patient => (
+          {formValues.filteredPatientSearchValues.map(patient => (
             <div className="patient" key={patient.id}>
               <span className="name">{patient.firstName} {patient.lastName}</span>
               <a
@@ -231,10 +218,10 @@ class TextBlastModal extends React.Component {
 
   renderPatientCount() {
     const { formValues, removePatients } = this.props;
-    if (formValues.patients && formValues.patients.length > 0) {
+    if (formValues.filteredPatientSearchValues && formValues.filteredPatientSearchValues.length > 0) {
       return (
         <span className="emails-counter">
-          <span className="counter">{formValues.patients.length}</span>
+          <span className="counter">{formValues.filteredPatientSearchValues.length}</span>
           <span className="text"> Patients</span>
           <a className="btn-close">
             <i className="icomoon-icon_close" onClick={removePatients} />
@@ -294,7 +281,6 @@ class TextBlastModal extends React.Component {
                         <Button className="btn-enter" type="submit">
                           <i className="icomoon-icon_search2" />
                         </Button>
-                        {this.renderPatientSearchList()}
                       </div>
                     </div>
                   </div>
