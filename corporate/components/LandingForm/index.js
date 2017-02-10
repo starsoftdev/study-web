@@ -53,12 +53,12 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
         onSubmit={handleSubmit}
       >
         <h1 className="main-heading">{name}</h1>
-        <h2 className="txt-orange">
           {city &&
-            <i className="icon-map-marker"></i>
+            <h2 className="txt-orange">
+              <i className="icon-map-marker"></i>
+              {cityAndState}
+            </h2>
           }
-          {cityAndState}
-        </h2>
         <div
           ref={(animatedFormContent) => { this.animatedFormContent = animatedFormContent; }}
           data-view="fadeInUp"
@@ -66,7 +66,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
           <h3>Enter your information to join!</h3>
           {subscriptionError &&
             <Alert bsStyle="danger">
-              <p>{subscriptionError.message}</p>
+              <p>Phone or Email is not unique.</p>
             </Alert>
           }
           <Field

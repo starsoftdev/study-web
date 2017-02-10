@@ -121,12 +121,12 @@ import {
 const initialState = {
   loggedIn: !!getItem('auth_token'),
   loginError: null,
-  subscriptionError: null,
   userData: null,
   pageEvents: null,
   baseData: {
     sites: [],
     indications: [],
+    subscriptionError: null,
     subscribedFromLanding: null,
     sources: [],
     levels: [],
@@ -292,6 +292,7 @@ export default function appReducer(state = initialState, action) {
       break;
     case FETCH_LANDING:
       baseDataInnerState = {
+        subscriptionError: null,
         landing: {
           details: null,
           fetching: true,
@@ -309,7 +310,6 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case FETCH_LANDING_ERROR:
-      console.log(FETCH_LANDING_ERROR, payload);
       baseDataInnerState = {
         landing: {
           details: null,
@@ -322,14 +322,9 @@ export default function appReducer(state = initialState, action) {
       baseDataInnerState = {
         subscribedFromLanding: payload,
       };
-      resultState = {
-        ...state,
-        subscriptionError: null,
-      };
       break;
     case PATIENT_SUBSCRIPTION_ERROR:
-      resultState = {
-        ...state,
+      baseDataInnerState = {
         subscriptionError: payload,
       };
       break;

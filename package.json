@@ -179,6 +179,7 @@
     "redux": "3.5.2",
     "redux-form": "~6.1.1",
     "redux-saga": "0.11.0",
+    "remarkable": "^1.7.1",
     "reselect": "2.5.3",
     "rimraf": "2.5.4",
     "sanitize.css": "4.1.0",
