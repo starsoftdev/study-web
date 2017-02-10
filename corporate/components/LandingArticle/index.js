@@ -80,7 +80,7 @@ export class LandingArticle extends React.Component {
             className={classNames({ 'col-xs-12 col-sm-6 pull-right': imgSrc, centered: !imgSrc })}
             data-view={dataView}
           >
-            <h2 className={classNames({ nodesc: !imgSrc })}>
+            <h2 className={classNames({ nodesc: !landingDescription })}>
               {indication}
             </h2>
             {landingDescription &&

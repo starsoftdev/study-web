@@ -84,14 +84,16 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 
   render() {
     const { currentUser, indication, location, sponsor, protocol, patientMessagingSuite, patientQualificationSuite, status,
-      startDate, endDate, unreadMessageCount, orderNumber } = this.props;
+      startDate, endDate, unreadMessageCount, orderNumber, studyId } = this.props;
     const buttonsShown = this.state.buttonsShown;
+    const landingHref = `/${studyId}-${location.toLowerCase().replace(/ /ig, '-')}`;
     let messageCountContent = null;
     if (unreadMessageCount > 0) {
       messageCountContent = (
         <span className="counter-circle">{unreadMessageCount}</span>
       );
     }
+
     return (
       <tr
         className={classNames('study-container', { 'tr-active': buttonsShown, 'tr-inactive': !buttonsShown })}
@@ -101,7 +103,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <span>{orderNumber}</span>
         </td>
         <td className="indication">
-          <span>{indication.name}</span>
+          <a href={landingHref} className="landig-link" target="_blank">{indication.name}</a>
         </td>
         <td className="location">
           <span>{location}</span>
