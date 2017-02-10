@@ -1,10 +1,10 @@
 /* eslint-disable react/prefer-stateless-function */
 
+import { browserHistory } from 'react-router';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import moment from 'moment-timezone';
-import { Alert } from 'react-bootstrap';
 
 import LandingForm from '../../components/LandingForm';
 import LandingArticle from '../../components/LandingArticle';
@@ -23,7 +23,6 @@ import './styles.less';
 
 export class LandingPage extends React.Component {
 
-  // TODO: use siteLocation to study request filter
   static propTypes = { params: PropTypes.object,
     param: PropTypes.any,
     siteLocation: PropTypes.any,
@@ -45,7 +44,6 @@ export class LandingPage extends React.Component {
 
     this.state = {
       invalidStudy: null,
-      invalidSite: null,
       study: null,
     };
   }
@@ -56,19 +54,25 @@ export class LandingPage extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { siteLocation } = this.props.params;
-    let invalidSite = true;
+    const { landingError, subscribedFromLanding } = newProps;
+    const { siteLocation } = newProps.params;
+    let invalidSite = false;
 
     if (newProps.landing) {
-      const { study } = newProps.landing;
-      if (study) {
-        for (const site of study.sites) {
-          if (site.location.toLowerCase().replace(/ /ig, '-') === siteLocation) {
-            invalidSite = null;
+      const { landing } = newProps;
+      if (!landing.landingPages.length){
+        browserHistory.push('/');
+      } else {
+        for (const site of landing.sites) {
+          if (site.location.toLowerCase().replace(/ /ig, '-') !== siteLocation) {
+            invalidSite = true;
           }
         }
-        this.setState({ invalidSite });
       }
+    }
+
+    if (invalidSite || subscribedFromLanding){
+      browserHistory.push('/');
     }
   }
 
@@ -76,6 +80,7 @@ export class LandingPage extends React.Component {
     const now = moment();
     const landing = this.props.landing;
     // TODO: figure out about source key
+    console.log(params, landing.landingPages[0].study_patient_category_id, landing.sources);
     const data = {
       firstName: params.name,
       email: params.email,
@@ -83,50 +88,28 @@ export class LandingPage extends React.Component {
       createdAt: now,
       updatedAt: now,
       unsubscribed: false,
-      study_patient_category_id: landing.study_patient_category_id,
-      source_id: landing.study.sources[0].id,
+      study_patient_category_id: landing.landingPages[0].study_patient_category_id,
+      source_id: (landing.sources.length) ? landing.sources[0].id : null,
     };
 
+    console.log(data);
     this.props.subscribeFromLanding(data);
   }
 
   render() {
-    const { subscriptionError, landingError, landingIsFetching } = this.props;
-    const { invalidSite } = this.state;
-    let errMessage = '';
-
+    const { subscriptionError, landingIsFetching } = this.props;
     let landing = null;
     let study = null;
     if (this.props.landing) {
-      landing = this.props.landing;
-      study = landing.study;
+      study = this.props.landing;
+      landing = study.landingPages[0];
     }
 
-    if (invalidSite) {
-      errMessage = `Unknown "landingPage" id "${study.id}" with "site" location "${this.props.params.siteLocation}".`;
-    }
-
-    if (landingError) {
-      errMessage = landingError.message;
-    }
-
-    if ((landingIsFetching || landing === null) && (!invalidSite && !landingError)) {
+    if (landingIsFetching || landing === null) {
       return (
         <div id="main">
           <div className="container">
             <p className="invisible"></p>
-          </div>
-        </div>
-      );
-    }
-
-    if (invalidSite || landingError) {
-      return (
-        <div id="main">
-          <div className="container">
-            <Alert bsStyle="danger">
-              <p>{errMessage}</p>
-            </Alert>
           </div>
         </div>
       );

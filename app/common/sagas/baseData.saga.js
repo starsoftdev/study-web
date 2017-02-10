@@ -754,21 +754,11 @@ export function* changeUsersTimezoneWatcher() {
 function* fetchLandingStudy(action) {
   const { studyId } = action;
   const filter = JSON.stringify({
-    where: {
-      study_id: studyId,
-    },
-    include: [
-      {
-        relation: 'study',
-        scope: {
-          include: ['sites', 'sources'],
-        },
-      },
-    ],
+    include: ['sites', 'sources', 'indication', 'landingPages'],
   });
   // put the fetching study action in case of a navigation action
   try {
-    const requestURL = `${API_URL}/landingPages/${studyId}?filter=${filter}`;
+    const requestURL = `${API_URL}/studies/${studyId}?filter=${filter}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });

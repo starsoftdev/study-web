@@ -1,11 +1,14 @@
+/* eslint-disable react/prefer-stateless-function */
 /* eslint-disable prefer-template */
 
 import React, { PropTypes } from 'react';
 import inViewport from 'in-viewport';
+import classNames from 'classnames';
+import Remarkable from 'remarkable';
 
-import img9 from '../../assets/images/buildings/img9.jpg';
+import SocialArea from '../SocialArea';
 
-export class LandingArticle extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class LandingArticle extends React.Component {
 
   static propTypes = {
     study: PropTypes.object,
@@ -37,45 +40,54 @@ export class LandingArticle extends React.Component { // eslint-disable-line rea
 
   render() {
     const { study, landing } = this.props;
+    const md = new Remarkable();
+    const imgSrc = (landing && landing.imgSrc) ? landing.imgSrc : null;
+    const dataView = (imgSrc) ? 'slideInRight' : 'fadeInUp';
+    const indication = study.indication.name;
+    const siteName = study.sites[0].name;
 
-    const description = (study) ? study.description : '';
-    const landingDescription = (landing && landing.description) ? landing.description : '';
-    // TODO: remove img9 when seed data will be updated
-    const imgSrc = (landing && landing.imgSrc) ? landing.imgSrc : img9;
-    const city = (study && study.sites[0].city) ? study.sites[0].city : '';
-    const state = (study && study.sites[0].state) ? study.sites[0].state : '';
-    const address = (study && study.sites[0].address) ? study.sites[0].address : '';
-    const siteName = (study && study.sites[0].name) ? study.sites[0].name : '';
-    const zip = (study && study.sites[0].zip) ? study.sites[0].zip : '';
+    const landingDescription = (landing.description && landing.description !== 'seed') ? landing.description : null;
 
-    let fullAddress = (study && study.sites[0].address) ? study.sites[0].address : '';
+    let address = study.sites[0].address;
+    const city = study.sites[0].city;
+    const state = study.sites[0].state;
+    const zip = study.sites[0].zip;
 
-    if (city.length) {
-      fullAddress += ', ' + city;
+    if (city) {
+      address += ', ' + city;
     }
 
-    if (state.length) {
-      fullAddress += ', ' + state;
+    if (state) {
+      address += ', ' + state;
     }
 
-    if (state.zip) {
-      fullAddress += ', ' + zip;
+    if (zip) {
+      address += ', ' + zip;
     }
+
+    md.set({
+      html: true,
+      breaks: true
+    });
+
+    const markdown = md.render(landingDescription);
 
     return (
-      <article className="post">
+      <article className="landing post">
         <div className="row">
           <div
             ref={(slideInRight) => { this.slideInRight = slideInRight; }}
-            className="col-xs-12 col-sm-6 pull-right"
-            data-view="slideInRight"
+            className={classNames({ 'col-xs-12 col-sm-6 pull-right': imgSrc, 'centered': !imgSrc })}
+            data-view={dataView}
           >
-            <h2>{description}</h2>
-            <p>
-              {landingDescription}
-            </p>
+            <h2 className={classNames({ nodesc: !imgSrc })}>
+              {indication}
+            </h2>
+            {landingDescription &&
+              <div dangerouslySetInnerHTML={{__html: markdown}} />
+            }
             <strong className="title text-uppercase">{siteName}</strong>
-            <address>{fullAddress}</address>
+            <address>{address}</address>
             <p className="text-underline">
               If interested, enter information above to sign up!
             </p>
@@ -83,44 +95,23 @@ export class LandingArticle extends React.Component { // eslint-disable-line rea
               By signing up you agree to receive text messages and emails about this and similar studies near you.
               You can unsubscribe at any time.
             </p>
+            {!imgSrc &&
+              <SocialArea alignCenter={true} />
+            }
           </div>
           <div
             ref={(slideInLeft) => { this.slideInLeft = slideInLeft; }}
             className="col-xs-12 col-sm-6"
             data-view="slideInLeft"
           >
-            <div className="img-holder">
-              <img src={imgSrc} width="854" height="444" alt="preview" className="img-responsive" />
-            </div>
-            <div className="social-area clearfix">
-              <h3 className="pull-left">Share this study:</h3>
-              <ul className="social-networks pull-left list-inline">
-                <li className="facebook">
-                  <a href="#">
-                    <i className="icon-facebook-square"></i>
-                  </a></li>
-                <li className="instagram">
-                  <a href="#">
-                    <i className="icon-instagram2"></i>
-                  </a>
-                </li>
-                <li className="twitter">
-                  <a href="#">
-                    <i className="icon-twitter-square"></i>
-                  </a>
-                </li>
-                <li className="pinterest">
-                  <a href="#">
-                    <i className="icon-pinterest-square"></i>
-                  </a>
-                </li>
-                <li className="gmail">
-                  <a href="#">
-                    <i className="icon-envelope-square"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
+            {imgSrc &&
+              <div className="img-holder">
+                <img src={imgSrc} width="854" height="444" alt="preview" className="img-responsive"/>
+              </div>
+            }
+            {imgSrc &&
+              <SocialArea />
+            }
           </div>
         </div>
       </article>
