@@ -353,7 +353,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
   generateRenewStudyShoppingCartAddOns() {
     const { studyLevels, selectedIndicationLevelPrice } = this.props;
-    const { exposureLevel, campaignLength, condenseToTwoWeeks,
+    const { exposureLevel, campaignLength, condenseTwoWeeks,
       patientMessagingSuite, callTracking } = this.props.renewStudyFormValues;
     const addOns = [];
 
@@ -361,7 +361,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       if (!selectedIndicationLevelPrice.fetching && selectedIndicationLevelPrice.details) {
         const foundExposureLevel = find(studyLevels, { id: exposureLevel });
         const monthLength = find(CAMPAIGN_LENGTH_LIST, { value: campaignLength });
-        const durationString = (condenseToTwoWeeks) ? '2 Weeks' : monthLength.label;
+        const durationString = (condenseTwoWeeks) ? '2 Weeks' : monthLength.label;
 
         addOns.push({
           title: `${durationString} ${foundExposureLevel.type}`,
