@@ -50,8 +50,8 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       });
     }
     if (this.props.location.pathname !== nextProps.location.pathname) {
-      ReactGA.set({ page: window.location.pathname });
-      ReactGA.pageview(window.location.pathname);
+      ReactGA.set({ page: nextProps.location.pathname });
+      ReactGA.pageview(nextProps.location.pathname);
     }
   }
 
