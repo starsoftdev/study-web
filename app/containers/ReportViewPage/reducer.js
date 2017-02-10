@@ -10,6 +10,9 @@ import {
   GET_REPORTS_LIST_ERROR,
   SET_ACTIVE_SORT,
   SORT_REPORTS_SUCCESS,
+  CHANGE_PROTOCOL_STATUS,
+  CHANGE_PROTOCOL_STATUS_SUCCESS,
+  CHANGE_PROTOCOL_STATUS_ERROR,
 } from './constants';
 
 import _ from 'lodash';
@@ -25,10 +28,16 @@ const initialState = {
     activeSort: null,
     activeDirection: null,
   },
+  changeProtocolStatusProcess: {
+    saving: false,
+    error: null,
+  },
 };
 
 function reportViewPageReducer(state = initialState, action) {
   const reports = [];
+  let foundIndex = null;
+  let copy = null;
   switch (action.type) {
     case GET_REPORTS_LIST:
       return {
@@ -93,6 +102,38 @@ function reportViewPageReducer(state = initialState, action) {
           details: action.reports,
           fetching: false,
           error: null,
+        },
+      };
+    case CHANGE_PROTOCOL_STATUS:
+      foundIndex = _.findIndex(state.reportsList.details, (o) => (o.study_id === action.payload.studyId));
+      copy = _.cloneDeep(state.reportsList.details);
+      copy.splice(foundIndex, 1, { ...copy[foundIndex], is_active: action.payload.status });
+      return {
+        ...state,
+        reportsList: {
+          details: copy,
+          fetching: false,
+          error: null,
+        },
+        changeProtocolStatusProcess: {
+          saving: true,
+          error: null,
+        },
+      };
+    case CHANGE_PROTOCOL_STATUS_SUCCESS:
+      return {
+        ...state,
+        changeProtocolStatusProcess: {
+          saving: false,
+          error: null,
+        },
+      };
+    case CHANGE_PROTOCOL_STATUS_ERROR:
+      return {
+        ...state,
+        changeProtocolStatusProcess: {
+          saving: false,
+          error: action.payload,
         },
       };
     default:

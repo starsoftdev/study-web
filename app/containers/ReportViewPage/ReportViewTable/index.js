@@ -4,8 +4,9 @@ import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
 import moment from 'moment';
 import Toggle from 'components/Input/Toggle';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import _ from 'lodash';
+import { selectChangeProtocolStatusProcess } from 'containers/ReportViewPage/selectors';
 
 @reduxForm({ form: 'reportListForm' })
 
@@ -17,6 +18,8 @@ export class ReportViewTable extends React.Component {
     sortReportsSuccess: PropTypes.func,
     paginationOptions: PropTypes.object,
     formTableValues: PropTypes.object,
+    changeProtocolStatus: PropTypes.func,
+    changeProtocolStatusProcess: PropTypes.object,
   }
 
   constructor(props) {
@@ -31,6 +34,7 @@ export class ReportViewTable extends React.Component {
 
     this.mouseOverRow = this.mouseOverRow.bind(this);
     this.mouseOutRow = this.mouseOutRow.bind(this);
+    this.changeStatus = this.changeStatus.bind(this);
   }
 
   componentDidMount() {
@@ -75,6 +79,13 @@ export class ReportViewTable extends React.Component {
 
   mouseOutRow() {
     this.setState({ hoveredRowIndex: null });
+  }
+
+  changeStatus(status, studyId) {
+    console.log(this.props.changeProtocolStatusProcess);
+    if (!this.props.changeProtocolStatusProcess.saving) {
+      this.props.changeProtocolStatus({ status, studyId });
+    }
   }
 
 
@@ -146,10 +157,10 @@ export class ReportViewTable extends React.Component {
           </td>
           <td>{item.level}</td>
           <td>
-            <Field
+            <Toggle
               name={`status_${item.site_id}_${item.study_id}`}
-              component={Toggle}
-              className="field"
+              meta={{ touched:false, error:false, active:false }}
+              input={{ value: item.is_active, onChange: (value) => { this.changeStatus(value, item.study_id); } }}
             />
           </td>
           <td>
@@ -280,7 +291,9 @@ export class ReportViewTable extends React.Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({});
+const mapStateToProps = createStructuredSelector({
+  changeProtocolStatusProcess: selectChangeProtocolStatusProcess(),
+});
 const mapDispatchToProps = {};
 
 export default connect(
