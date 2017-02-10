@@ -83,6 +83,11 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
     }
   }
 
+  selectCard(value) {
+    const { pickReward } = this.props;
+    pickReward(value);
+  }
+
   renderHeaderText() {
     const { selectedSite, rewardsBalance } = this.props;
 
@@ -96,11 +101,6 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
     return (
       <label htmlFor="select-rewards" className="text-capitalize"><strong>{rewardsBalance[0]} Total KIKs</strong></label>
     );
-  }
-
-  selectCard(value) {
-    const { pickReward } = this.props;
-    pickReward(value);
   }
 
   render() {
