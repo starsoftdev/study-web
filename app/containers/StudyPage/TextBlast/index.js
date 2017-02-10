@@ -63,7 +63,6 @@ class TextBlastModal extends React.Component {
     this.selectSource = this.selectSource.bind(this);
     this.filterPatients = this.filterPatients.bind(this);
     this.submitTextBlast = this.submitTextBlast.bind(this);
-    this.renderPatientSearchList = this.renderPatientSearchList.bind(this);
     this.renderPatients = this.renderPatients.bind(this);
     this.renderPatientCount = this.renderPatientCount.bind(this);
     this.textAreaChange = this.textAreaChange.bind(this);
@@ -193,27 +192,6 @@ class TextBlastModal extends React.Component {
     }
   }
 
-  renderPatientSearchList() {
-    const { activeField, addPatients, formValues } = this.props;
-    if (formValues.filteredPatientSearchValues) {
-      return (
-        <ul className={classNames('list list-unstyled', { active: activeField === 'search' })}>
-          {formValues.filteredPatientSearchValues.map(patient => (
-            <li
-              key={patient.id}
-              onClick={() => {
-                addPatients([patient]);
-              }}
-            >
-              {patient.firstName} {patient.lastName}
-            </li>
-          ))}
-        </ul>
-      );
-    }
-    return null;
-  }
-
   renderPatients() {
     const { formValues, removePatient } = this.props;
     if (formValues.filteredPatientSearchValues) {
@@ -303,7 +281,6 @@ class TextBlastModal extends React.Component {
                         <Button className="btn-enter" type="submit">
                           <i className="icomoon-icon_search2" />
                         </Button>
-                        {/*{this.renderPatientSearchList()}*/}
                       </div>
                     </div>
                   </div>
