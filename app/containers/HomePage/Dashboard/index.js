@@ -7,6 +7,7 @@ import RewardModal from 'components/RewardModal';
 
 import { selectCurrentUser, selectSitePatients, selectUserSiteLocations, selectRewardsBalance } from 'containers/App/selectors';
 import { fetchRewardsBalance, redeem } from 'containers/App/actions';
+import { pickReward } from 'containers/RewardsPage/actions';
 
 import { fetchPatientSignUps, fetchPatientMessages } from '../actions';
 import { selectPatientSignUps, selectPatientMessages } from '../selectors';
@@ -25,6 +26,7 @@ export class Dashboard extends React.Component {
     sitePatients: React.PropTypes.object,
     siteLocations: PropTypes.array,
     redeem: PropTypes.func,
+    pickReward: PropTypes.func,
   }
 
   state = {
@@ -56,7 +58,7 @@ export class Dashboard extends React.Component {
   }
 
   render() {
-    const { currentUser, patientSignUps, patientMessages, rewardsBalance, siteLocations } = this.props;
+    const { currentUser, patientSignUps, patientMessages, rewardsBalance, siteLocations, pickReward } = this.props;
     const redeemableSiteLocations = reject(siteLocations, { id: 0 });
 
     return (
@@ -129,6 +131,7 @@ export class Dashboard extends React.Component {
           showModal={this.state.rewardModalOpen}
           closeModal={this.closeRewardModal}
           onSubmit={this.handleRedeem}
+          pickReward={pickReward}
         />
       </section>
     );
@@ -148,6 +151,7 @@ const mapDispatchToProps = {
   fetchPatientMessages,
   fetchRewardsBalance,
   redeem,
+  pickReward,
 };
 
 export default connect(

@@ -297,7 +297,7 @@ export function* redeemWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      yield put(toastrActions.success('RewardRedemption', 'The request has been submitted successfully'));
+      yield put(toastrActions.success('Redeem Reward', 'The request has been submitted successfully'));
       yield put(redeemSuccess(response));
 
       // Clear the form values
