@@ -81,6 +81,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         });
 
         this.props.fetchStudy(params.id, params.siteId);
+        console.log(1);
         this.props.updatePatientSuccess({
           patientId: message.patient_id,
           patientCategoryId: curCategoryId,
