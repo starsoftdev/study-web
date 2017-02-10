@@ -83,6 +83,21 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
     }
   }
 
+  renderHeaderText() {
+    const { selectedSite, rewardsBalance } = this.props;
+
+    if (selectedSite && selectedSite !== '0') {
+      const siteDetail = find(this.props.sites, { id: selectedSite });
+      return (
+        <label htmlFor="select-rewards" className="text-capitalize">{siteDetail.location} Has <strong>{rewardsBalance[selectedSite]} KIKs</strong></label>
+      );
+    }
+
+    return (
+      <label htmlFor="select-rewards" className="text-capitalize"><strong>{rewardsBalance[0]} Total KIKs</strong></label>
+    );
+  }
+
   selectCard(value) {
     const { pickReward } = this.props;
     pickReward(value);
@@ -90,11 +105,6 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
 
   render() {
     const { handleSubmit } = this.props;
-    const { sites, selectedSite, rewardsBalance } = this.props;
-    let siteDetail = {};
-    if (selectedSite) {
-      siteDetail = find(sites, { id: selectedSite });
-    }
 
     return (
       <form>
@@ -127,7 +137,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                     />
                   </div>
                   <strong className="label">
-                    <label htmlFor="select-rewards" className="text-capitalize">{siteDetail.location} Has <strong>{rewardsBalance[selectedSite]} KIKs</strong></label>
+                    { this.renderHeaderText() }
                   </strong>
                 </div>
                 <div className="row images-area">
