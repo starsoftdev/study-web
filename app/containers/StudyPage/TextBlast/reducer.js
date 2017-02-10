@@ -35,7 +35,6 @@ export default function TextBlastModal(state, action) {
       if (search) {
         search = search.toUpperCase();
       }
-      console.log('Search', search);
       return {
         ...state,
         values: {
@@ -43,15 +42,13 @@ export default function TextBlastModal(state, action) {
           filteredPatientSearchValues: state.values.patientSearchValues.filter(patient => {
             let firstname = patient.firstName;
             let lastname = patient.lastName;
-            console.log('Firstname', firstname);
-            console.log('Lastname', lastname);
             if (firstname) {
               firstname = firstname.toUpperCase();
             }
             if (lastname) {
               lastname = lastname.toUpperCase();
             }
-            return _.includes(firstname, search) || (_.includes(lastname, search));
+            return (firstname && _.includes(firstname, search)) || (lastname && _.includes(lastname, search));
           }),
         },
       };
