@@ -60,7 +60,7 @@ export class LandingPage extends React.Component {
 
     if (newProps.landing) {
       const { landing } = newProps;
-      if (!landing.landingPages.length){
+      if (!landing.landingPages.length) {
         browserHistory.push('/');
       } else {
         for (const site of landing.sites) {
@@ -71,7 +71,7 @@ export class LandingPage extends React.Component {
       }
     }
 
-    if (invalidSite || subscribedFromLanding){
+    if (invalidSite || subscribedFromLanding) {
       browserHistory.push('/');
     }
   }
