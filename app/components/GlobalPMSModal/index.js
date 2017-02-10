@@ -47,8 +47,6 @@ import {
   sendStudyPatientMessages,
 } from 'containers/GlobalNotifications/actions';
 
-import _ from 'lodash';
-
 import alertSound from './sounds/message_received.wav';
 
 @reduxForm({ form: 'globalPMS', validate: formValidator })
@@ -75,6 +73,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     handleSubmit: React.PropTypes.func,
     hasError: React.PropTypes.bool,
     formValues: React.PropTypes.object,
+    change: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -87,11 +86,12 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     this.handleClose = this.handleClose.bind(this);
     this.state = {
       selectedPatient: { id: 0 },
-      patientLoaded: true,
+      // patientLoaded: true,
       socketBinded: false,
       playSound: Sound.status.STOPPED,
-      searchTimer: null,
+      // searchTimer: null,
       newOpen: false,
+      searchBy: null,
     };
   }
 
@@ -121,29 +121,29 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         newOpen: false,
       });
     }
-    if (newProps.sitePatients !== this.props.sitePatients) {
-      // let selectedPatient = { id: 0 };
-      _.forEach(newProps.sitePatients.details, (item) => {
-        if (item.show === undefined || (item.show && item.show === true)) {
-          // selectedPatient = item;
-          return false;
-        }
-        return true;
-      });
-      // this.selectPatient(selectedPatient, true);
-    }
-    if (newProps.showModal === true && newProps.sitePatients.details.length > 0 && this.state.patientLoaded === true) {
-      let selectedPatient = { id: 0 };
-      _.forEach(newProps.sitePatients.details, (item) => {
-        if (item.show === undefined || (item.show && item.show === true)) {
-          selectedPatient = item;
-          return false;
-        }
-        return true;
-      });
-      this.selectPatient(selectedPatient, true);
-      this.setState({ patientLoaded: false });
-    }
+    // if (newProps.sitePatients !== this.props.sitePatients) {
+    //   // let selectedPatient = { id: 0 };
+    //   _.forEach(newProps.sitePatients.details, (item) => {
+    //     if (item.show === undefined || (item.show && item.show === true)) {
+    //       // selectedPatient = item;
+    //       return false;
+    //     }
+    //     return true;
+    //   });
+    //   // this.selectPatient(selectedPatient, true);
+    // }
+    // if (newProps.showModal === true && newProps.sitePatients.details.length > 0) {
+    //   let selectedPatient = { id: 0 };
+    //   _.forEach(newProps.sitePatients.details, (item) => {
+    //     if (item.show === undefined || (item.show && item.show === true)) {
+    //       selectedPatient = item;
+    //       return false;
+    //     }
+    //     return true;
+    //   });
+    //   this.selectPatient(selectedPatient, true);
+    //   // this.setState({ patientLoaded: false });
+    // }
   }
 
   componentDidUpdate() {
@@ -172,6 +172,8 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       if (!initialSelect) {
         this.props.setChatTextValue('');
       }
+      this.props.change('name', '');
+      this.handleKeyPress('');
     }
   }
 
@@ -182,13 +184,16 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     } else {
       value = e;
     }
-    if (this.state.searchTimer) {
-      clearTimeout(this.state.searchTimer);
-      this.setState({ searchTimer: null });
-    }
+    this.setState({
+      searchBy: value,
+    });
+    // if (this.state.searchTimer) {
+    //   clearTimeout(this.state.searchTimer);
+    //   this.setState({ searchTimer: null });
+    // }
     this.props.searchSitePatients(value);
-    const timerH = setTimeout(() => { this.setState({ patientLoaded: true }); }, 500);
-    this.setState({ searchTimer: timerH });
+    // const timerH = setTimeout(() => { this.setState({ patientLoaded: true }); }, 500);
+    // this.setState({ searchTimer: timerH });
   }
 
   handleClose() {
@@ -207,14 +212,19 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         sitePatientArray.push(item);
       }
     });
-    const sitePatientsListContents = sitePatientArray.map((item, index) => (
-      <PatientItem
-        patientData={item}
-        key={index}
-        onSelectPatient={this.selectPatient}
-        patientSelected={this.state.selectedPatient.id === item.id}
-      />
-    ));
+    const sitePatientsListContents = sitePatients.details.map((item, index) => {
+      const firstname = item.first_name.toUpperCase();
+      const lastname = item.last_name.toUpperCase();
+      if (!this.state.searchBy || firstname.includes(this.state.searchBy.toUpperCase()) || lastname.includes(this.state.searchBy.toUpperCase())) {
+        return (<PatientItem
+          patientData={item}
+          key={index}
+          onSelectPatient={this.selectPatient}
+          patientSelected={this.state.selectedPatient.id === item.id}
+        />);
+      }
+      return '';
+    });
     const patientMessageListContents = patientMessages.details.map((item, index) => {
       if (item.text_message_id) {
         return (<MessageItem
@@ -338,6 +348,7 @@ function mapDispatchToProps(dispatch) {
     sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
     setChatTextValue: (value) => dispatch(change('chatPatient', 'body', value)),
     fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
+    change: (field, value) => dispatch(change('globalPMS', field, value)),
   };
 }
 
