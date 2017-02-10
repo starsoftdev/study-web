@@ -111,9 +111,10 @@ function studyPageReducer(state = initialState, action) {
     case SUBMIT_DELETE_NOTE_SUCCESS:
     case UPDATE_PATIENT_SUCCESS:
       if (action.payload.lastTextMessage) {
+        console.log(2, action.payload);
         return {
           ...state,
-          patientCategories: patientCategories(state.patientCategories, action.payload.patientId, action.payload.patientCategoryId, action),
+          patientCategories: patientCategories(state.patientCategories, action.payload.patientCategoryId, action.payload.patientId, action),
         };
       }
       return {
@@ -344,11 +345,16 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
     case FETCH_PATIENT_DETAILS_SUCCESS:
     case UPDATE_PATIENT_SUCCESS:
       return state.map(patientCategory => {
+        console.log(3);
         if (patientCategory.id === currentPatientCategoryId) {
+          console.log(4);
+          console.log(patientCategory);
           return {
             ...patientCategory,
             patients: patientCategory.patients.map(patient => {
+              console.log(5);
               if (patient.id === currentPatientId) {
+                console.log(6);
                 return {
                   ...patient,
                   ...action.payload,
