@@ -24,6 +24,9 @@ import {
   FETCH_UPGRADE_STUDY_PRICE,
 } from './constants';
 
+import { ADD_EMAIL_NOTIFICATION_USER } from 'containers/App/constants';
+import { addEmailNotificationUserSuccess, addEmailNotificationUserError, fetchClientSites } from 'containers/App/actions';
+
 import {
   fetchPatientSignUpsSucceeded,
   fetchPatientMessagesSucceeded,
@@ -308,6 +311,7 @@ export function* editStudyWatcher() {
 export function* editStudyWorker(action) {
   try {
     const { studyId, formValues } = action;
+    console.log('saga', studyId, formValues);
     const requestURL = `${API_URL}/studies/${studyId}`;
 
     const params = {
@@ -328,6 +332,34 @@ export function* editStudyWorker(action) {
   }
 }
 
+export function* addEmailNotificationUserWatcher() {
+  yield* takeLatest(ADD_EMAIL_NOTIFICATION_USER, addEmailNotificationUserWorker);
+}
+
+export function* addEmailNotificationUserWorker(action) {
+
+  const { payload } = action;
+  console.log('saga', payload );
+  try {
+    const clientId = payload.clientId;
+    delete payload.clientId;
+
+    const requestURL = `${API_URL}/clients/${clientId}/addUserWithClientRole`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchClientSites(clientId, {}));
+    yield put(addEmailNotificationUserSuccess(response.user));
+  } catch (err) {
+    yield put(addEmailNotificationUserError(err));
+  }
+
+}
+
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   const watcherB = yield fork(fetchPatientMessagesWatcher);
@@ -341,6 +373,8 @@ export function* homePageSaga() {
   const fetchProtocolsWatcher1 = yield fork(fetchProtocolsWatcher);
   const fetchProtocolNumbersWatcher1 = yield fork(fetchProtocolNumbersWatcher);
   const fetchIndicationsWatcher1 = yield fork(fetchIndicationsWatcher);
+  const addEmailNotificationUserWatcher1 = yield fork(addEmailNotificationUserWatcher);
+  
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
@@ -357,5 +391,6 @@ export function* homePageSaga() {
     yield cancel(fetchProtocolsWatcher1);
     yield cancel(fetchProtocolNumbersWatcher1);
     yield cancel(fetchIndicationsWatcher1);
+    yield cancel(addEmailNotificationUserWatcher1);
   }
 }

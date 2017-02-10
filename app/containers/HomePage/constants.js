@@ -50,3 +50,6 @@ export const FETCH_UPGRADE_STUDY_PRICE                   = 'HomePage/Viewport/FE
 export const FETCH_UPGRADE_STUDY_PRICE_SUCCESS           = 'HomePage/Viewport/FETCH_UPGRADE_STUDY_PRICE_SUCCESS';
 export const FETCH_UPGRADE_STUDY_PRICE_ERROR             = 'HomePage/Viewport/FETCH_UPGRADE_STUDY_PRICE_ERROR';
 
+
+
+

@@ -9,11 +9,12 @@ import Input from '../../../components/Input';
 import AddEmailNotificationForm from '../../../components/AddEmailNotificationForm';
 import CenteredModal from '../../../components/CenteredModal/index';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import { selectCurrentUserClientId } from '../../../containers/App/selectors';
+import { selectCurrentUserClientId, selectClientSites } from '../../../containers/App/selectors';
 import { selectEditStudyFormValues, selectEditStudyFormError, selectEditStudyFormErrors } from './selectors';
-import { selectEditedStudy } from '../../../containers/HomePage/selectors';
+import { selectEditedStudy, selectAddNotificationProcess } from '../../../containers/HomePage/selectors';
 import RenderEmailsList from './RenderEmailsList';
 import formValidator from './validator';
+import { addEmailNotificationUser } from 'containers/App/actions';
 
 @reduxForm({ form: 'editStudy', validate: formValidator })
 class EditStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -32,6 +33,10 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     resetForm: PropTypes.func,
     onSubmit: PropTypes.func,
     fields: PropTypes.object,
+    selectedStudy: PropTypes.object,
+    clientSites: PropTypes.object,
+    addEmailNotificationUser: PropTypes.func,
+    addNotificationProcess: PropTypes.object,
   };
   constructor(props) {
     super(props);
@@ -54,6 +59,49 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   componentWillMount() {
     this.props.dispatch(change('editStudy', 'emailNotifications', this.props.siteUsers));
   }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.selectedStudy && newProps.selectedStudy !== this.props.selectedStudy){
+      this.props.dispatch(change('editStudy', 'recruitmentPhone', newProps.selectedStudy.recruitmentPhone));
+    }
+
+    if ( (newProps.selectedStudy && !this.props.selectedStudy) ){
+      console.log(888);
+      let fields = [];
+      _.forEach(this.props.clientSites.details, (site) => {
+        if (site.id === newProps.selectedStudy.siteId){
+          _.forEach(site.roles, (role) => {
+            let isChecked = _.find(newProps.selectedStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
+            fields.push({
+              firstName: role.user.firstName,
+              lastName: role.user.lastName,
+              userId: role.user.id,
+              isChecked: isChecked,
+            });
+          });
+        }
+      });
+      this.props.dispatch(change('editStudy', `emailNotifications`, fields));
+    }
+
+    if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser){
+      console.log(4444);
+      let addFields = this.props.formValues.emailNotifications;
+      const values = {
+        firstName: newProps.addNotificationProcess.savedUser.firstName,
+        lastName: newProps.addNotificationProcess.savedUser.lastName,
+        userId: newProps.addNotificationProcess.savedUser.id,
+        isChecked: true,
+      }
+      if (!addFields) {
+        addFields = [values];
+      } else {
+        addFields.push(values);
+      }
+      this.props.dispatch(change('editStudy', `emailNotifications`, addFields));
+    }
+  }
+
   resetState() {
     const resetState = {
       exposureLevel: null,
@@ -93,16 +141,19 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   addEmailNotificationSubmit(values) {
-    let addFields = this.state.emailFields;
-    if (!addFields) {
-      addFields = [values];
-    } else {
-      addFields.push(values);
-    }
-    this.setState({
-      emailFields: addFields,
+
+    console.log(888, this.props.selectedStudy);
+
+    this.props.addEmailNotificationUser({
+      ...values,
+      clientId: this.props.currentUserClientId,
+      addForNotification: true,
+      studyId: this.props.selectedStudy.studyId,
+      clientRole:{
+        siteId: this.props.selectedStudy.siteId,
+      }
     });
-    this.props.dispatch(reset('editStudy', 'emailNotifications'));
+
     this.closeAddEmailModal();
   }
 
@@ -144,6 +195,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
+    console.log(123, this.props)
     const { editedStudy } = this.props;
 
     return (
@@ -246,10 +298,13 @@ const mapStateToProps = createStructuredSelector({
   formErrors: selectEditStudyFormErrors(),
   formValues: selectEditStudyFormValues(),
   editedStudy: selectEditedStudy(),
+  clientSites: selectClientSites(),
+  addNotificationProcess: selectAddNotificationProcess(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   resetForm: () => dispatch(reset('editStudy')),
+  addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditStudyForm);
