@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-vars */
 
 import React, { PropTypes } from 'react';
+import moment from 'moment-timezone';
+import _ from 'lodash';
+import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -10,11 +13,7 @@ import EditScheduleModal from './components/EditScheduleModal';
 import FilterBar from './components/FilterBar';
 import AllEventsModal from './components/AllEventsModal';
 
-import moment from 'moment';
-import _ from 'lodash';
-import Helmet from 'react-helmet';
-
-import { getLocalTime, getUTCTime } from 'utils/time';
+import { getUTCTime } from 'utils/time';
 
 import {
   fetchSites,
@@ -82,7 +81,7 @@ export class CalendarPage extends React.Component {
     deleteSchedule: PropTypes.func.isRequired,
     paginationOptions: PropTypes.object,
     setActiveSort: PropTypes.func,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -109,7 +108,7 @@ export class CalendarPage extends React.Component {
     allModalDeferred: false,
     filteredSchedules: [],
     localSchedules: [],
-  }
+  };
 
   componentDidMount() {
     const { currentUser } = this.props;
@@ -124,7 +123,7 @@ export class CalendarPage extends React.Component {
       const timezone = nextProps.currentUser.timezone;
       const localSchedules = nextProps.schedules.data.map(s => ({
         ...s,
-        time: getLocalTime(s.time, timezone),
+        time: moment(s.time).tz(timezone),
       }));
       this.setState({
         localSchedules,
@@ -181,10 +180,9 @@ export class CalendarPage extends React.Component {
         protocolNumber: data.protocol.label,
         patientId: data.patient.value,
         userId: currentUser.id,
-        time: getUTCTime(moment(this.selectedCellInfo.selectedDate).clone().add(data.period === 'AM' ?
+        time: moment(this.selectedCellInfo.selectedDate).add(data.period === 'AM' ?
           data.hour % 12 :
-          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').format('YYYY-MM-DD HH:mm'),
-          currentUser.timezone).format(),
+          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes'),
         textReminder: data.textReminder,
       };
     } else { // UPDATE
@@ -192,17 +190,16 @@ export class CalendarPage extends React.Component {
       if (data.date) {
         updatedDate = data.date.startOf('day');
       } else {  // React Datepicker doesn't submit its initial value
-        updatedDate = moment(new Date(this.selectedCellInfo.data.time)).startOf('day');
+        updatedDate = moment(this.selectedCellInfo.data.time).startOf('day');
       }
       const nn = updatedDate.clone().add(data.period === 'AM' ?
           data.hour % 12 :
           (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes');
       submitData = {
         id: this.selectedCellInfo.data.id,
-        time: getUTCTime(updatedDate.clone().add(data.period === 'AM' ?
+        time: updatedDate.clone().add(data.period === 'AM' ?
           data.hour % 12 :
-          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').format('YYYY-MM-DD HH:mm'),
-          currentUser.timezone).format(),
+          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes'),
         userId: currentUser.id,
       };
     }
@@ -306,6 +303,7 @@ export class CalendarPage extends React.Component {
             ref={(c) => { this.calendarWidget = c; }}
           />
           <SchedulePatientModal
+            currentUser={currentUser}
             siteLocationOptions={siteLocationOptions}
             isAdmin={isAdmin}
             sites={sites}

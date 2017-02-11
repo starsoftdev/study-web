@@ -6,6 +6,8 @@
 
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
+import moment from 'moment-timezone';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from 'containers/App/selectors';
@@ -14,8 +16,6 @@ import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
 import PatientBoard from './PatientBoard/index';
 import * as Selector from './selectors';
-import moment from 'moment';
-import _ from 'lodash';
 import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId, updatePatientSuccess } from './actions';
 import {
   selectSocket,

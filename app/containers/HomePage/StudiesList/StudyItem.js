@@ -1,10 +1,9 @@
 import React, { PropTypes, Component } from 'react';
+import moment from 'moment-timezone';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
-
-import { getLocalTime } from 'utils/time';
 
 class StudyItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -79,7 +78,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     if (!date) {
       return '';
     }
-    return getLocalTime(date, timezone).format('MM/DD/YYYY');
+    return moment(date).tz(timezone).format('MM/DD/YYYY');
   }
 
   render() {

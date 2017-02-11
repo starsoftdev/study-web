@@ -150,7 +150,7 @@
     "react-addons-shallow-compare": "^15.4.1",
     "react-addons-update": "15.3.0",
     "react-avatar-editor": "^6.0.0",
-    "react-big-calendar": "git+https://github.com/studykik/kik-react-big-calendar.git#3cdb215430c97c397fbbcaa7e44ae9820f65bbc1",
+    "react-big-calendar": "git+https://github.com/studykik/kik-react-big-calendar.git#a48b27511956bb4cdbbfe62668b39ba9bfd5c7c0",
     "react-bootstrap": "^0.30.3",
     "react-click-outside": "^2.2.0",
     "react-d3": "^0.4.0",
