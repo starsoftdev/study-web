@@ -4,7 +4,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { orderBy } from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import classnames from 'classnames';
 import { push } from 'react-router-redux';
 import Helmet from 'react-helmet';
