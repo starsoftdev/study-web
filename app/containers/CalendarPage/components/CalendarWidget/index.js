@@ -60,7 +60,7 @@ class CalendarWidget extends React.Component {
       };
     });
 
-    this.currentDate = new Date();
+    this.currentDate = moment().toDate();
 
     return (
       <div className="calendar-box calendar-slider">
