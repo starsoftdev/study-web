@@ -8,6 +8,8 @@ import { reset } from 'redux-form';
 
 import request from 'utils/request';
 import composeQueryString from 'utils/composeQueryString';
+import { normalizePhone } from '../../containers/StudyPage/helper/functions';
+
 import {
   FETCH_SITES,
   FETCH_INDICATIONS,
@@ -783,7 +785,17 @@ function* fetchLandingStudy(action) {
 
 function* subscribeFromLanding(action) {
   try {
-    const params = action.params;
+    const { createdAt, email, firstName, phone, source_id, study_patient_category_id, unsubscribed, updatedAt, } = action.params;
+    const params = {
+      createdAt,
+      email,
+      firstName,
+      phone: normalizePhone(phone),
+      source_id,
+      study_patient_category_id,
+      unsubscribed,
+      updatedAt
+    };
     const requestURL = `${API_URL}/patients`;
     const options = {
       method: 'POST',
