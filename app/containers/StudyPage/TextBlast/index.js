@@ -96,7 +96,7 @@ class TextBlastModal extends React.Component {
       for (const category of patientCategories) {
         change(`category-${category.id}`, checked);
       }
-      if (checked || sourceIds.length) {
+      if (checked || (sourceIds && sourceIds.length)) {
         findPatients(studyId, null, null, sourceIds);
       } else {
         removePatients();
