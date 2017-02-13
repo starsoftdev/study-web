@@ -15,7 +15,7 @@ import Filter from 'components/Filter';
 // import { selectFilterFormValues } from './FiltersForm/selectors';
 import { selectStudies, selectFilterFormValues, selectPaginationOptions } from './selectors';
 import rd3 from 'react-d3';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
 
 const PieChart = rd3.PieChart;
