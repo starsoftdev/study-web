@@ -3,17 +3,18 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, FieldArray, change, reduxForm, reset } from 'redux-form';
 import { Modal } from 'react-bootstrap';
-import { forEach, filter } from 'lodash';
+import _, { forEach, filter } from 'lodash';
 
 import Input from '../../../components/Input';
 import AddEmailNotificationForm from '../../../components/AddEmailNotificationForm';
 import CenteredModal from '../../../components/CenteredModal/index';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import { selectCurrentUserClientId } from '../../../containers/App/selectors';
+import { selectCurrentUserClientId, selectClientSites } from '../../../containers/App/selectors';
 import { selectEditStudyFormValues, selectEditStudyFormError, selectEditStudyFormErrors } from './selectors';
-import { selectEditedStudy } from '../../../containers/HomePage/selectors';
+import { selectEditedStudy, selectAddNotificationProcess } from '../../../containers/HomePage/selectors';
 import RenderEmailsList from './RenderEmailsList';
 import formValidator from './validator';
+import { addEmailNotificationUser } from 'containers/App/actions';
 
 @reduxForm({ form: 'editStudy', validate: formValidator })
 class EditStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -32,6 +33,11 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     resetForm: PropTypes.func,
     onSubmit: PropTypes.func,
     fields: PropTypes.object,
+    selectedStudyId: PropTypes.number,
+    selectedSiteId: PropTypes.number,
+    clientSites: PropTypes.object,
+    addEmailNotificationUser: PropTypes.func,
+    addNotificationProcess: PropTypes.object,
   };
   constructor(props) {
     super(props);
@@ -46,6 +52,8 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     this.selectAll = this.selectAll.bind(this);
     this.selectEmail = this.selectEmail.bind(this);
 
+    this.handleFileChange = this.handleFileChange.bind(this);
+
     this.state = {
       addEmailModalShow: false,
     };
@@ -54,6 +62,64 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   componentWillMount() {
     this.props.dispatch(change('editStudy', 'emailNotifications', this.props.siteUsers));
   }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.selectedStudyId && newProps.selectedStudyId !== this.props.selectedStudyId) {
+      const fields = [];
+      let currentStudy = null;
+      let isAllChecked = true;
+      _.forEach(this.props.clientSites.details, (site) => {
+        if (site.id === newProps.selectedSiteId) {
+          _.forEach(site.studies, (study) => {
+            if (study.id === newProps.selectedStudyId) {
+              currentStudy = study;
+              this.setState({ currentStudy });
+            }
+          });
+          _.forEach(site.roles, (role) => {
+            const isChecked = _.find(currentStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
+            if (!isChecked) {
+              isAllChecked = false;
+            }
+            fields.push({
+              firstName: role.user.firstName,
+              lastName: role.user.lastName,
+              userId: role.user.id,
+              isChecked,
+            });
+          });
+        }
+      });
+      this.props.dispatch(change('editStudy', 'recruitmentPhone', currentStudy.recruitmentPhone));
+      this.props.dispatch(change('editStudy', 'emailNotifications', fields));
+      this.props.dispatch(change('editStudy', 'checkAllInput', isAllChecked));
+
+      this.setState({ fileSrc: currentStudy.image || null });
+    }
+
+    if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
+      let addFields = this.props.formValues.emailNotifications;
+      const values = {
+        firstName: newProps.addNotificationProcess.savedUser.firstName,
+        lastName: newProps.addNotificationProcess.savedUser.lastName,
+        userId: newProps.addNotificationProcess.savedUser.id,
+        isChecked: true,
+      };
+      if (!addFields) {
+        addFields = [values];
+      } else {
+        addFields.push(values);
+      }
+      this.props.dispatch(change('editStudy', 'emailNotifications', addFields));
+    }
+  }
+
+  handleFileChange(e) {
+    if (e.target.files[0]) {
+      this.setState({ fileName: e.target.files[0].name, fileSrc: URL.createObjectURL(e.target.files[0]) });
+    }
+  }
+
   resetState() {
     const resetState = {
       exposureLevel: null,
@@ -93,16 +159,16 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   addEmailNotificationSubmit(values) {
-    let addFields = this.state.emailFields;
-    if (!addFields) {
-      addFields = [values];
-    } else {
-      addFields.push(values);
-    }
-    this.setState({
-      emailFields: addFields,
+    this.props.addEmailNotificationUser({
+      ...values,
+      clientId: this.props.currentUserClientId,
+      addForNotification: true,
+      studyId: this.props.selectedStudyId,
+      clientRole:{
+        siteId: this.props.selectedSiteId,
+      },
     });
-    this.props.dispatch(reset('editStudy', 'emailNotifications'));
+
     this.closeAddEmailModal();
   }
 
@@ -194,6 +260,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
                           <label>STUDY AD</label>
                         </strong>
                         <div className="field">
+                          { this.state.fileSrc && <img alt="" className="protocol-study-img" src={this.state.fileSrc} /> }
                           <label htmlFor="study-ad" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn"></label>
                           <Field
                             id="study-ad"
@@ -201,6 +268,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
                             component={Input}
                             type="file"
                             className="hidden"
+                            onChange={this.handleFileChange}
                           />
                           {/* TODO need to put an error message up so that people know to upload a file. */}
                           {/* formError
@@ -246,10 +314,13 @@ const mapStateToProps = createStructuredSelector({
   formErrors: selectEditStudyFormErrors(),
   formValues: selectEditStudyFormValues(),
   editedStudy: selectEditedStudy(),
+  clientSites: selectClientSites(),
+  addNotificationProcess: selectAddNotificationProcess(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   resetForm: () => dispatch(reset('editStudy')),
+  addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditStudyForm);

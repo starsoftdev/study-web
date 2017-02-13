@@ -30,7 +30,7 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
   }
 
   componentDidMount() {
-    this.addNewFileds(this.props.emailFields);
+    // this.addNewFileds(this.props.emailFields);
   }
 
   addNewFileds(values) {

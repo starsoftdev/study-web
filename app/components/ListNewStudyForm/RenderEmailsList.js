@@ -23,6 +23,8 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
     formValues: PropTypes.object.isRequired,
     listNewStudyState: PropTypes.object.isRequired,
     fields: PropTypes.object,
+    addEmailNotificationUser: PropTypes.func,
+    currentUserClientId: PropTypes.number,
   };
 
   constructor(props) {
@@ -39,9 +41,18 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
   }
 
   addEmailNotificationSubmit(values) {
-    this.props.fields.push(values);
-    this.props.dispatch(hideAddEmailModal());
-    this.props.dispatch(change('listNewStudy', 'checkAllInput', false));
+    this.props.addEmailNotificationUser({
+      ...values,
+      clientId: this.props.currentUserClientId,
+      clientRole:{
+        siteId: this.props.formValues.siteLocation,
+      },
+    });
+
+    // this.props.fields.push(values);
+    // this.props.dispatch(change('listNewStudy', 'checkAllInput', false));
+
+    // this.props.dispatch(hideAddEmailModal());
   }
 
   closeAddEmailModal() {

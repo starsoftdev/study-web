@@ -34,6 +34,8 @@ import {
   SORT_SUCCESS,
 } from './constants';
 
+import { ADD_EMAIL_NOTIFICATION_USER, ADD_EMAIL_NOTIFICATION_USER_SUCCESS, ADD_EMAIL_NOTIFICATION_USER_ERROR } from 'containers/App/constants';
+
 import {
   RECEIVE_NOTIFICATION,
   SEND_STUDY_PATIENT_MESSAGES,
@@ -98,6 +100,11 @@ const initialState = {
   paginationOptions: {
     activeSort: null,
     activeDirection: null,
+  },
+  addNotificationProcess: {
+    saving: false,
+    error: null,
+    savedUser: null,
   },
 };
 
@@ -486,6 +493,33 @@ export default function homePageReducer(state = initialState, action) {
           details: payload,
           fetching: false,
           error: null,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: true,
+          error: null,
+          savedUser: null,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER_SUCCESS:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: false,
+          error: null,
+          savedUser: action.payload,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER_ERROR:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: false,
+          error: action.payload,
+          savedUser: null,
         },
       };
     default:

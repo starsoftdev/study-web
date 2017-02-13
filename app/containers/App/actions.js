@@ -132,6 +132,10 @@ import {
   PATIENT_SUBSCRIBED,
   PATIENT_SUBSCRIPTION_ERROR,
   CLEAR_FORM_SUBSCRIBE,
+
+  ADD_EMAIL_NOTIFICATION_USER,
+  ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+  ADD_EMAIL_NOTIFICATION_USER_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -907,5 +911,26 @@ export function patientSubscriptionError(payload) {
 export function clearForm() {
   return {
     type: CLEAR_FORM_SUBSCRIBE,
+  };
+}
+
+export function addEmailNotificationUser(payload) {
+  return {
+    type: ADD_EMAIL_NOTIFICATION_USER,
+    payload,
+  };
+}
+
+export function addEmailNotificationUserSuccess(payload) {
+  return {
+    type: ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+    payload,
+  };
+}
+
+export function addEmailNotificationUserError(payload) {
+  return {
+    type: ADD_EMAIL_NOTIFICATION_USER_ERROR,
+    payload,
   };
 }

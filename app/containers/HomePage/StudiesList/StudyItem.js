@@ -63,7 +63,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   onEditClick() {
-    this.props.onEdit(this.props.studyId, this.props.siteUsers);
+    this.props.onEdit(this.props.studyId, this.props.siteUsers, this.props.siteId);
   }
 
   showButtons() {
