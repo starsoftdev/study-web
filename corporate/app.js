@@ -15,6 +15,7 @@ import { default as LoginPage } from '../app/containers/LoginPage';
 import { default as ContactPage } from './containers/ContactPage';
 import { default as ListYourTrialsPage } from './containers/ListYourTrialsPage';
 import { default as TermsAndConditionsPage } from './containers/TermsAndConditionsPage';
+import { default as PrivacyPolicyPage } from './containers/PrivacyPolicyPage';
 import { default as LandingPage } from './containers/LandingPage';
 import { default as BillingPage } from './containers/BillingPage';
 import { default as OrderPage } from './containers/OrderPage';
@@ -43,6 +44,7 @@ const routes = {
     { path: '/list-your-trials', component: ListYourTrialsPage },
     { path: '/billing', component: BillingPage },
     { path: '/order', component: OrderPage },
+    { path: '/privacy-policy', component: PrivacyPolicyPage },
     { path: '/terms-and-conditions', component: TermsAndConditionsPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },
     { path: '/*-:siteLocation', component: LandingPage },
