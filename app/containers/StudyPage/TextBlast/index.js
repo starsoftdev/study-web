@@ -113,16 +113,21 @@ class TextBlastModal extends React.Component {
           categoryIds.push(category.id);
         }
       }
-      if (categoryIds.length || sourceIds.length) {
+      if ((categoryId && categoryIds.length) || (sourceIds && sourceIds.length)) {
+        // if (sourceIds) {
         findPatients(studyId, null, categoryIds, sourceIds);
+        // } else {
+        //   findPatients(studyId, null, categoryIds, []);
+        // }
       } else {
         removePatients();
       }
     }
     if (!checked) {
       if (categoryId === 0) {
+        change('source', false);
         for (const source of sources) {
-          change(`source-${source.id}`, checked);
+          change(`source-${source.id}`, false);
         }
         this.setState({
           sourceDisable: true,
@@ -138,8 +143,9 @@ class TextBlastModal extends React.Component {
             }
           }
         }
+        change('source', false);
         for (const source of sources) {
-          change(`source-${source.id}`, checked);
+          change(`source-${source.id}`, false);
         }
         this.setState({
           sourceDisable: true,
