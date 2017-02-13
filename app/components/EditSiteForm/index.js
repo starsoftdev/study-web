@@ -73,6 +73,16 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
         }
       }
       this.props.dispatch(change('editSite', 'address', e.label));
+    } else {
+      const addressArr = e.label.split(',');
+      if (addressArr[1]) {
+        this.props.dispatch(change('editSite', 'city', addressArr[1]));
+      }
+      if (addressArr[2]) {
+        this.props.dispatch(change('editSite', 'state', addressArr[2]));
+      }
+      this.geoSuggest.update(`${addressArr[0]}`);
+      this.props.dispatch(change('editSite', 'address', `${addressArr[0]}`));
     }
   }
 
@@ -153,7 +163,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                 return (<Field
                   name="address"
                   component={FormGeosuggest}
-                  ref={(el) => { this.geoSuggest = el; }}
+                  refObj={(el) => { this.geoSuggest = el; }}
                   onSuggestSelect={this.onSuggestSelect}
                   placeholder=""
                 />);

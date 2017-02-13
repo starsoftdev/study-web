@@ -19,6 +19,9 @@ import {
 import {
   FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
   FETCH_INDICATION_LEVEL_PRICE,
+  ADD_EMAIL_NOTIFICATION_USER,
+  ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+  ADD_EMAIL_NOTIFICATION_USER_ERROR,
 } from 'containers/App/constants';
 
 const initialState = {
@@ -30,6 +33,11 @@ const initialState = {
     submitting: false,
     error: null,
     response: null,
+  },
+  addNotificationProcess: {
+    saving: false,
+    error: null,
+    savedUser: null,
   },
 };
 
@@ -104,6 +112,33 @@ function listNewStudyPageReducer(state = initialState, action) {
           submitting: false,
           error: null,
           response: null,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: true,
+          error: null,
+          savedUser: null,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER_SUCCESS:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: false,
+          error: null,
+          savedUser: action.payload,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER_ERROR:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: false,
+          error: action.payload,
+          savedUser: null,
         },
       };
     default:

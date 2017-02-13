@@ -31,21 +31,23 @@ import {
   saveSite,
   getAvailPhoneNumbers,
   fetchIndicationLevelPrice,
+  fetchClientSites,
 } from 'containers/App/actions';
 import {
   selectSiteLocations,
   selectIndications,
   selectStudyLevels,
-  selectSites,
   selectCurrentUser,
   selectAvailPhoneNumbers,
+  selectCurrentUserClientId,
+  selectClientSites,
 } from 'containers/App/selectors';
 
 export class ListNewStudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     siteLocations: PropTypes.array,
-    fullSiteLocations: PropTypes.array,
+    fullSiteLocations: PropTypes.object,
     indications: PropTypes.array,
     studyLevels: PropTypes.array,
     fetchSites: PropTypes.func,
@@ -70,6 +72,8 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     shoppingCartFormError: PropTypes.object,
     touchNewStudy: PropTypes.func,
     touchShoppingCart: PropTypes.func,
+    fetchClientSites: PropTypes.func,
+    currentUserClientId: PropTypes.number,
   }
 
   constructor(props) {
@@ -85,6 +89,8 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
   componentDidMount() {
     this.props.fetchSites();
+    this.props.fetchClientSites(this.props.currentUserClientId, {});
+
     this.props.fetchIndications();
     this.props.fetchLevels();
     this.props.getAvailPhoneNumbers();
@@ -104,8 +110,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
   onSubmitForm() {
     const { hasErrors, shoppingCartFormValues, shoppingCartFormError, touchNewStudy, touchShoppingCart } = this.props;
-    console.log(shoppingCartFormValues);
-
     if (hasErrors || shoppingCartFormError) {
       touchNewStudy();
       touchShoppingCart();
@@ -115,7 +119,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     const filteredEmails = [];
     _.forEach(this.props.formValues.emailNotifications, (item) => {
       if (item.isChecked) {
-        filteredEmails.push({ firstName: item.firstName, lastName: item.lastName, email: item.email });
+        filteredEmails.push({ userId: item.userId, firstName: item.firstName, lastName: item.lastName, email: item.email });
       }
     });
 
@@ -158,7 +162,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
   }
 
   render() {
-    const { siteLocations, indications, studyLevels, formValues, fullSiteLocations, indicationLevelPrice } = this.props;
+    const { indications, studyLevels, formValues, fullSiteLocations, indicationLevelPrice } = this.props;
     const { uniqueId } = this.state;
 
     const addOns = [];
@@ -215,7 +219,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
                 key={uniqueId}
                 formValues={formValues}
                 fullSiteLocations={fullSiteLocations}
-                siteLocations={siteLocations}
                 indications={indications}
                 studyLevels={studyLevels}
                 listNewStudyState={this.props.listNewStudyState}
@@ -273,7 +276,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
 const mapStateToProps = createStructuredSelector({
   siteLocations : selectSiteLocations(),
-  fullSiteLocations : selectSites(),
+  fullSiteLocations : selectClientSites(),
   indications   : selectIndications(),
   studyLevels   : selectStudyLevels(),
   listNewStudyState : selectListNewStudyPageDomain(),
@@ -286,11 +289,13 @@ const mapStateToProps = createStructuredSelector({
   indicationLevelPrice: selectIndicationLevelPrice(),
   shoppingCartFormValues: selectShoppingCartFormValues(),
   shoppingCartFormError: selectShoppingCartFormError(),
+  currentUserClientId: selectCurrentUserClientId(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchSites:       () => dispatch(fetchSites()),
+    fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchIndications: () => dispatch(fetchIndications()),
     fetchLevels:      () => dispatch(fetchLevels()),
     submitForm:     (cartValues, formValues) => dispatch(submitForm(cartValues, formValues)),
