@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, FieldArray, change, reduxForm, reset } from 'redux-form';
 import { Modal } from 'react-bootstrap';
-import { forEach, filter } from 'lodash';
+import _, { forEach, filter } from 'lodash';
 
 import Input from '../../../components/Input';
 import AddEmailNotificationForm from '../../../components/AddEmailNotificationForm';
@@ -33,7 +33,8 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     resetForm: PropTypes.func,
     onSubmit: PropTypes.func,
     fields: PropTypes.object,
-    selectedStudy: PropTypes.object,
+    selectedStudyId: PropTypes.number,
+    selectedSiteId: PropTypes.number,
     clientSites: PropTypes.object,
     addEmailNotificationUser: PropTypes.func,
     addNotificationProcess: PropTypes.object,
@@ -51,6 +52,8 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     this.selectAll = this.selectAll.bind(this);
     this.selectEmail = this.selectEmail.bind(this);
 
+    this.handleFileChange = this.handleFileChange.bind(this);
+
     this.state = {
       addEmailModalShow: false,
     };
@@ -61,44 +64,59 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.selectedStudy && newProps.selectedStudy !== this.props.selectedStudy){
-      this.props.dispatch(change('editStudy', 'recruitmentPhone', newProps.selectedStudy.recruitmentPhone));
-    }
-
-    if ( (newProps.selectedStudy && !this.props.selectedStudy) ){
-      console.log(888);
-      let fields = [];
+    if (newProps.selectedStudyId && newProps.selectedStudyId !== this.props.selectedStudyId) {
+      const fields = [];
+      let currentStudy = null;
+      let isAllChecked = true;
       _.forEach(this.props.clientSites.details, (site) => {
-        if (site.id === newProps.selectedStudy.siteId){
+        if (site.id === newProps.selectedSiteId) {
+          _.forEach(site.studies, (study) => {
+            if (study.id === newProps.selectedStudyId) {
+              currentStudy = study;
+              this.setState({ currentStudy });
+            }
+          });
           _.forEach(site.roles, (role) => {
-            let isChecked = _.find(newProps.selectedStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
+            const isChecked = _.find(currentStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
+            if (!isChecked) {
+              isAllChecked = false;
+            }
             fields.push({
               firstName: role.user.firstName,
               lastName: role.user.lastName,
               userId: role.user.id,
-              isChecked: isChecked,
+              isChecked,
             });
           });
         }
       });
-      this.props.dispatch(change('editStudy', `emailNotifications`, fields));
+      this.props.dispatch(change('editStudy', 'recruitmentPhone', currentStudy.recruitmentPhone));
+      this.props.dispatch(change('editStudy', 'emailNotifications', fields));
+      this.props.dispatch(change('editStudy', 'checkAllInput', isAllChecked));
+
+      this.setState({ fileSrc: currentStudy.image || null });
     }
 
-    if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser){
-      console.log(4444);
+    if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
       let addFields = this.props.formValues.emailNotifications;
       const values = {
         firstName: newProps.addNotificationProcess.savedUser.firstName,
         lastName: newProps.addNotificationProcess.savedUser.lastName,
         userId: newProps.addNotificationProcess.savedUser.id,
         isChecked: true,
-      }
+      };
       if (!addFields) {
         addFields = [values];
       } else {
         addFields.push(values);
       }
-      this.props.dispatch(change('editStudy', `emailNotifications`, addFields));
+      this.props.dispatch(change('editStudy', 'emailNotifications', addFields));
+    }
+  }
+
+  handleFileChange(e) {
+    if (e.target.files[0]) {
+      this.setState({ fileName: e.target.files[0].name, fileSrc: URL.createObjectURL(e.target.files[0]) });
     }
   }
 
@@ -141,17 +159,14 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   addEmailNotificationSubmit(values) {
-
-    console.log(888, this.props.selectedStudy);
-
     this.props.addEmailNotificationUser({
       ...values,
       clientId: this.props.currentUserClientId,
       addForNotification: true,
-      studyId: this.props.selectedStudy.studyId,
+      studyId: this.props.selectedStudyId,
       clientRole:{
-        siteId: this.props.selectedStudy.siteId,
-      }
+        siteId: this.props.selectedSiteId,
+      },
     });
 
     this.closeAddEmailModal();
@@ -195,7 +210,6 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    console.log(123, this.props)
     const { editedStudy } = this.props;
 
     return (
@@ -246,6 +260,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
                           <label>STUDY AD</label>
                         </strong>
                         <div className="field">
+                          { this.state.fileSrc && <img alt="" className="protocol-study-img" src={this.state.fileSrc} /> }
                           <label htmlFor="study-ad" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn"></label>
                           <Field
                             id="study-ad"
@@ -253,6 +268,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
                             component={Input}
                             type="file"
                             className="hidden"
+                            onChange={this.handleFileChange}
                           />
                           {/* TODO need to put an error message up so that people know to upload a file. */}
                           {/* formError

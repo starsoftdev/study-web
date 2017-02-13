@@ -5,7 +5,7 @@ import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
-import { get } from 'lodash';
+import _, { get } from 'lodash';
 
 import request from 'utils/request';
 import composeQueryString from 'utils/composeQueryString';
@@ -310,17 +310,31 @@ export function* editStudyWatcher() {
 
 export function* editStudyWorker(action) {
   try {
-    const { studyId, formValues } = action;
-    console.log('saga', studyId, formValues);
-    const requestURL = `${API_URL}/studies/${studyId}`;
+    const { studyId } = action;
+
+    const requestURL = `${API_URL}/sponsorRoles/editProtocol`;
+
+    const data = new FormData();
+    _.forEach(action.formValues, (value, index) => {
+      if (index !== 'studyAd' && index !== 'emailNotifications') {
+        data.append(index, value);
+      }
+    });
+    data.append('id', studyId);
+    data.append('emailNotifications', JSON.stringify(action.formValues.emailNotifications));
+
+    if (action.formValues.studyAd && action.formValues.studyAd[0]) {
+      data.append('file', action.formValues.studyAd[0]);
+    }
 
     const params = {
-      method: 'PUT',
-      body: JSON.stringify({
-        formValues,
-      }),
+      method: 'POST',
+      body: data,
+      useDefaultContentType: true,
     };
     const response = yield call(request, requestURL, params);
+
+    yield put(fetchClientSites(action.formValues.clientId, {}));
 
     yield put(toastrActions.success('Edit Study', 'The request has been submitted successfully'));
     yield put(studyEdited(response));
@@ -337,9 +351,8 @@ export function* addEmailNotificationUserWatcher() {
 }
 
 export function* addEmailNotificationUserWorker(action) {
-
   const { payload } = action;
-  console.log('saga', payload );
+  console.log('saga', payload);
   try {
     const clientId = payload.clientId;
     delete payload.clientId;
@@ -357,7 +370,6 @@ export function* addEmailNotificationUserWorker(action) {
   } catch (err) {
     yield put(addEmailNotificationUserError(err));
   }
-
 }
 
 export function* homePageSaga() {
@@ -374,7 +386,7 @@ export function* homePageSaga() {
   const fetchProtocolNumbersWatcher1 = yield fork(fetchProtocolNumbersWatcher);
   const fetchIndicationsWatcher1 = yield fork(fetchIndicationsWatcher);
   const addEmailNotificationUserWatcher1 = yield fork(addEmailNotificationUserWatcher);
-  
+
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);

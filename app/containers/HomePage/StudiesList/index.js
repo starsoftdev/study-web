@@ -8,7 +8,7 @@ import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../../components/ShoppingCartForm/selectors';
 import { fetchLevels, saveCard } from '../../../containers/App/actions';
 import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../../../containers/HomePage/constants';
-import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients } from '../../../containers/App/selectors';
+import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients, selectCurrentUserClientId } from '../../../containers/App/selectors';
 import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice } from 'containers/HomePage/actions';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions } from '../../../containers/HomePage/selectors';
 import { selectEditStudyFormValues, selectEditStudyFormError } from '../../../containers/HomePage/EditStudyForm/selectors';
@@ -58,6 +58,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     upgradeStudyFormError: PropTypes.bool,
     saveCard: PropTypes.func,
     clearIndicationLevelPrice: PropTypes.func,
+    currentUserClientId: PropTypes.number,
   };
 
   constructor(props) {
@@ -170,11 +171,12 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     });
   }
 
-  openEditModal(studyId, siteUsers) {
+  openEditModal(studyId, siteUsers, siteId) {
     this.setState({
       editModalOpen: true,
       selectedStudyId: studyId,
       selectedSiteUsers: siteUsers,
+      selectedSiteId: siteId,
     });
   }
 
@@ -241,6 +243,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         editModalOpen: false,
         selectedStudyId: null,
         selectedSiteUsers: null,
+        selectedSiteId: null,
       });
     }
   }
@@ -347,9 +350,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       return;
     }
 
-    console.log(312, this.state.selectedStudyId, editStudyFormValues);
-
-    this.props.editStudy(this.state.selectedStudyId, editStudyFormValues);
+    this.props.editStudy(this.state.selectedStudyId, { ...editStudyFormValues, clientId: this.props.currentUserClientId });
   }
 
   generateRenewStudyShoppingCartAddOns() {
@@ -462,7 +463,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const totalCount = studies.details.length;
 
     let selectedStudy = null;
-    let selectedSite = null;
     const studiesListContents = studies.details.map((item, index) => {
       if (item.studyId === this.state.selectedStudyId) {
         selectedStudy = item;
@@ -550,7 +550,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               currentUserStripeCustomerId={this.props.currentUserStripeCustomerId}
             />
             <EditStudyForm
-              selectedStudy={selectedStudy}
+              selectedStudyId={this.state.selectedStudyId}
+              selectedSiteId={this.state.selectedSiteId}
               siteUsers={this.state.selectedSiteUsers}
               onSubmit={this.handleEditStudyFormSubmit}
               show={this.state.editModalOpen}
@@ -583,6 +584,7 @@ const mapStateToProps = createStructuredSelector({
   upgradeStudyFormValues: selectUpgradeStudyFormValues(),
   upgradeStudyFormError: selectUpgradeStudyFormError(),
   upgradedStudy: selectUpgradedStudy(),
+  currentUserClientId: selectCurrentUserClientId(),
 });
 
 function mapDispatchToProps(dispatch) {
