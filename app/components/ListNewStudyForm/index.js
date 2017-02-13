@@ -163,10 +163,11 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     const { indications, studyLevels, callTracking, formValues } = this.props;
     const { fileName } = this.state;
 
-    const siteLocations = [{ id: 'add-new-location', name: 'Add New Location' }].concat(_.map(this.props.fullSiteLocations.details, row => ({
+    const siteLocations = _.map(this.props.fullSiteLocations.details, row => ({
       id: row.id,
       name: row.name,
-    })));
+    }));
+    siteLocations.push({ id: 'add-new-location', name: 'Add New Location' });
 
     return (
       <div className="form-study">
