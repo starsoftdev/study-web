@@ -51,7 +51,11 @@ export class LandingPage extends React.Component {
 
   componentWillMount() {
     const { splat } = this.props.params;
-    this.props.fetchLanding(splat);
+    if (!isNaN(parseInt(splat))) {
+      this.props.fetchLanding(splat);
+    } else {
+      browserHistory.push('/');
+    }
   }
 
   componentWillReceiveProps(newProps) {
