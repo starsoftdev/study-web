@@ -8,6 +8,7 @@ import moment from 'moment-timezone';
 
 import LandingForm from '../../components/LandingForm';
 import LandingArticle from '../../components/LandingArticle';
+import { normalizePhone } from '../../../app/containers/StudyPage/helper/functions';
 
 import {
   selectCurrentUser,
@@ -84,7 +85,7 @@ export class LandingPage extends React.Component {
     const data = {
       firstName: params.name,
       email: params.email,
-      phone: params.phone,
+      phone: normalizePhone(params.phone),
       createdAt: now,
       updatedAt: now,
       unsubscribed: false,
