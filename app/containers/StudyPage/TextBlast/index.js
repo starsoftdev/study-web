@@ -68,6 +68,7 @@ class TextBlastModal extends React.Component {
     this.textAreaChange = this.textAreaChange.bind(this);
     this.state = {
       enteredCharactersLength: 0,
+      sourceDisable: true,
     };
   }
 
@@ -117,6 +118,37 @@ class TextBlastModal extends React.Component {
       } else {
         removePatients();
       }
+    }
+    if (!checked) {
+      if (categoryId === 0) {
+        for (const source of sources) {
+          change(`source-${source.id}`, checked);
+        }
+        this.setState({
+          sourceDisable: true,
+        });
+      } else {
+        for (const category of patientCategories) {
+          if (category.id !== categoryId) {
+            if (formValues[`category-${category.id}`]) {
+              this.setState({
+                sourceDisable: false,
+              });
+              return;
+            }
+          }
+        }
+        for (const source of sources) {
+          change(`source-${source.id}`, checked);
+        }
+        this.setState({
+          sourceDisable: true,
+        });
+      }
+    } else {
+      this.setState({
+        sourceDisable: false,
+      });
     }
   }
 
@@ -194,10 +226,16 @@ class TextBlastModal extends React.Component {
 
   renderPatients() {
     const { formValues, removePatient } = this.props;
-    if (formValues.filteredPatientSearchValues) {
+    let newPatientsArr = [];
+    if (formValues.patients && formValues.filteredPatientSearchValues) {
+      newPatientsArr = formValues.patients.filter((v) => (
+        formValues.filteredPatientSearchValues.indexOf(v) !== -1
+       ));
+    }
+    if (newPatientsArr) {
       return (
         <div className="selected-patients-list">
-          {formValues.filteredPatientSearchValues.map(patient => (
+          {newPatientsArr.map(patient => (
             <div className="patient" key={patient.id}>
               <span className="name">{patient.firstName} {patient.lastName}</span>
               <a
@@ -218,10 +256,16 @@ class TextBlastModal extends React.Component {
 
   renderPatientCount() {
     const { formValues, removePatients } = this.props;
-    if (formValues.filteredPatientSearchValues && formValues.filteredPatientSearchValues.length > 0) {
+    let newPatientsArr = [];
+    if (formValues.patients && formValues.filteredPatientSearchValues) {
+      newPatientsArr = formValues.patients.filter((v) => (
+        formValues.filteredPatientSearchValues.indexOf(v) !== -1
+      ));
+    }
+    if (newPatientsArr && newPatientsArr.length > 0) {
       return (
         <span className="emails-counter">
-          <span className="counter">{formValues.filteredPatientSearchValues.length}</span>
+          <span className="counter">{newPatientsArr.length}</span>
           <span className="text"> Patients</span>
           <a className="btn-close">
             <i className="icomoon-icon_close" onClick={removePatients} />
@@ -322,6 +366,7 @@ class TextBlastModal extends React.Component {
                         <Field
                           name="source"
                           type="checkbox"
+                          disabled={this.state.sourceDisable}
                           component={Checkbox}
                           className="pull-left"
                           onChange={(checked) => {
@@ -335,6 +380,7 @@ class TextBlastModal extends React.Component {
                           <Field
                             name={`source-${source.id}`}
                             type="checkbox"
+                            disabled={this.state.sourceDisable}
                             component={Checkbox}
                             className="pull-left"
                             onChange={(checked) => {

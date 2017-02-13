@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import ReactSelect from '../../components/Input/ReactSelect';
-import { Field, reduxForm, touch, reset } from 'redux-form';
+import { Field, reduxForm, touch, reset, change } from 'redux-form';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import ShoppingCartForm from 'components/ShoppingCartForm';
@@ -51,6 +51,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     touchAddCredits: PropTypes.func,
     saveCard: PropTypes.func,
     currentUserStripeCustomerId: PropTypes.string,
+    validateChange: PropTypes.func,
   };
 
   constructor(props) {
@@ -117,6 +118,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
   }
 
   resetState() {
+    this.props.validateChange();
     const resetState = {
       quantity: 1,
       credits: 100,
@@ -347,6 +349,7 @@ function mapDispatchToProps(dispatch) {
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
     resetForm: () => dispatch(reset('addCredits')),
     saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+    validateChange: () => dispatch(change('addCredits', 'siteLocation', '200')),
   };
 }
 
