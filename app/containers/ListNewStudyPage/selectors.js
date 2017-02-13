@@ -34,10 +34,16 @@ const selectIndicationLevelPrice = () => createSelector(
   (substate) => substate.indicationLevelPrice
 );
 
+const selectAddNotificationProcess = () => createSelector(
+  selectListNewStudyPageDomain(),
+  (substate) => substate.addNotificationProcess
+);
+
 export default selectListNewStudyPage;
 export {
   selectListNewStudyPageDomain,
   selectFormSubmissionStatus,
   selectShowSubmitFormModal,
   selectIndicationLevelPrice,
+  selectAddNotificationProcess,
 };
