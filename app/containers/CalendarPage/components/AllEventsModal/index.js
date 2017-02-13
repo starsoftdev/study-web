@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Modal } from 'react-bootstrap';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import _ from 'lodash';
 
 import CenteredModal from '../../../../components/CenteredModal';

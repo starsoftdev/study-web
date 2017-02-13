@@ -7,7 +7,7 @@ import { selectSelectedUser } from 'containers/App/selectors';
 import defaultUserImage from 'assets/images/Default-User-Img.png';
 import defaultUserImageGirl from 'assets/images/Default-User-Img-Girl.png';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 class PatientItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

@@ -38,6 +38,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     manualDisableSubmit: PropTypes.bool,
     validateAndSubmit: PropTypes.func,
     currentUserStripeCustomerId: PropTypes.string,
+    ValidationChange: PropTypes.func,
   };
 
   constructor(props) {
@@ -94,6 +95,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   resetState() {
+    this.props.ValidationChange();
     const resetState = {
       level: null,
       patientMessagingSuite: false,
@@ -400,6 +402,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
   resetForm: () => dispatch(reset('upgradeStudy')),
+  ValidationChange: () => dispatch(change('upgradeStudy', 'addPatientMessagingSuite', true)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpgradeStudyForm);

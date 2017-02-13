@@ -1,10 +1,9 @@
 import React, { PropTypes, Component } from 'react';
+import moment from 'moment-timezone';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
-
-import { getLocalTime } from 'utils/time';
 
 class StudyItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -64,7 +63,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   onEditClick() {
-    this.props.onEdit(this.props.studyId, this.props.siteUsers);
+    this.props.onEdit(this.props.studyId, this.props.siteUsers, this.props.siteId);
   }
 
   showButtons() {
@@ -79,7 +78,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     if (!date) {
       return '';
     }
-    return getLocalTime(date, timezone).format('MM/DD/YYYY');
+    return moment(date).tz(timezone).format('MM/DD/YYYY');
   }
 
   render() {
@@ -115,7 +114,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <span>{protocol}</span>
         </td>
         <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off' && patientQualificationSuite === 'Off') })}>
-          <span className="patient-messaging-suite-status">{patientMessagingSuite}</span>
+          <span className="patient-messaging-suite-status">{(patientMessagingSuite === 'Off' && patientQualificationSuite === 'Off') ? 'Off' : 'On'}</span>
           <span>{messageCountContent}</span>
         </td>
         <td className={classNames('status', { inactive: (status === 'Inactive') })}>

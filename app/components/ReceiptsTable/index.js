@@ -6,8 +6,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
+import moment from 'moment-timezone';
 import InfiniteScroll from 'react-infinite-scroller';
-import { getLocalTime } from 'utils/time';
 import Money from 'components/Money';
 
 const headers = [
@@ -199,7 +199,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   mapReceipts(raw, result) {
     let invoiceId = null;
     _.map(raw, (source, key) => {
-      const dateWrapper = getLocalTime(source.created, this.props.currentUser.timezone).format('MM/DD/YY');
+      const dateWrapper = moment(source.created).tz(this.props.currentUser.timezone).format('MM/DD/YY');
       let siteName = source.site_name || '-';
 
       let invoiceIdLink = source.invoice_id;
@@ -223,7 +223,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
             <td>{siteName}</td>
             <td>{invoiceIdLink}</td>
             <td>{source.protocol_number || '-'}</td>
-            <td>card</td>
+            <td>{source.payment_type}</td>
             <td><Money value={source.total / 100} className="price" /></td>
           </tr>
         );

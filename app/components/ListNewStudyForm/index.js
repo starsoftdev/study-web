@@ -12,7 +12,7 @@ import formValidator from './validator';
 import ReactSelect from 'components/Input/ReactSelect';
 import { Field, FieldArray, reduxForm, change } from 'redux-form';
 import _ from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import CenteredModal from '../../components/CenteredModal/index';
 import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
@@ -20,12 +20,13 @@ import { connect } from 'react-redux';
 import RenderLeads from 'components/RenderLeads';
 import RenderEmailsList from './RenderEmailsList';
 import EditSiteForm from '../../components/EditSiteForm/index';
-import { selectCurrentUserClientId } from 'containers/App/selectors';
+import { selectCurrentUserClientId, selectSavedSite } from 'containers/App/selectors';
+import { selectAddNotificationProcess } from 'containers/ListNewStudyPage/selectors';
 import {
   selectCallTracking,
   selectLeadsCount,
 } from './selectors';
-
+import { addEmailNotificationUser } from 'containers/App/actions';
 import { CAMPAIGN_LENGTH_LIST } from 'common/constants';
 
 import {
@@ -37,25 +38,33 @@ const mapStateToProps = createStructuredSelector({
   callTracking: selectCallTracking(),
   leadsCount: selectLeadsCount(),
   currentUserClientId: selectCurrentUserClientId(),
+  addNotificationProcess: selectAddNotificationProcess(),
+  savedSite: selectSavedSite(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
 });
 
 @reduxForm({ form: 'listNewStudy', validate: formValidator })
-@connect(mapStateToProps)
+@connect(mapStateToProps, mapDispatchToProps)
 class ListNewStudyForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    siteLocations: PropTypes.array,
     indications: PropTypes.array,
     studyLevels: PropTypes.array,
     listNewStudyState: PropTypes.object,
     callTracking: PropTypes.bool,
     leadsCount: PropTypes.number,
-    fullSiteLocations: PropTypes.array,
+    fullSiteLocations: PropTypes.object,
     formValues: PropTypes.object,
     saveSite: PropTypes.func,
     currentUserClientId: PropTypes.number,
     availPhoneNumbers: PropTypes.array,
+    addEmailNotificationUser: PropTypes.func,
+    addNotificationProcess: PropTypes.object,
+    savedSite: PropTypes.object,
   };
 
   constructor(props) {
@@ -90,6 +99,27 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     } else if (messagingSuiteToggled && newProps.formValues.patientQualificationSuite === true) {
       this.props.dispatch(change('listNewStudy', 'patientQualificationSuite', false));
     }
+
+    if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
+      let addFields = this.props.formValues.emailNotifications;
+      const values = {
+        firstName: newProps.addNotificationProcess.savedUser.firstName,
+        lastName: newProps.addNotificationProcess.savedUser.lastName,
+        userId: newProps.addNotificationProcess.savedUser.id,
+      };
+      if (!addFields) {
+        addFields = [values];
+      } else {
+        addFields.push(values);
+      }
+      this.props.dispatch(change('listNewStudy', 'checkAllInput', false));
+      this.props.dispatch(change('listNewStudy', 'emailNotifications', addFields));
+    }
+
+    if (this.props.savedSite.saving && !newProps.addNotificationProcess.saving) {
+      this.closeAddSiteModal();
+      this.props.dispatch(change('listNewStudy', 'siteLocation', null));
+    }
   }
 
   closeAddSiteModal() {
@@ -106,9 +136,19 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     } else {
       this.props.dispatch(change('listNewStudy', 'siteLocation', e));
 
-      const fullSiteLocation = _.find(this.props.fullSiteLocations, (o) => (o.id === e));
+      const fullSiteLocation = _.find(this.props.fullSiteLocations.details, (o) => (o.id === e));
       if (fullSiteLocation) {
-        this.props.dispatch(change('listNewStudy', 'emailNotifications', fullSiteLocation.users));
+        const fields = [];
+        _.forEach(fullSiteLocation.roles, (role) => {
+          fields.push({
+            firstName: role.user.firstName,
+            lastName: role.user.lastName,
+            userId: role.user.id,
+            isChecked: false,
+          });
+        });
+
+        this.props.dispatch(change('listNewStudy', 'emailNotifications', fields));
       }
     }
   }
@@ -120,15 +160,14 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { siteLocations, indications, studyLevels, callTracking, formValues } = this.props;
+    const { indications, studyLevels, callTracking, formValues } = this.props;
     const { fileName } = this.state;
 
-    if (!_.find(siteLocations, (o) => (o.id === 'add-new-location'))) {
-      siteLocations.push({
-        id: 'add-new-location',
-        name: 'Add New Location',
-      });
-    }
+    const siteLocations = _.map(this.props.fullSiteLocations.details, row => ({
+      id: row.id,
+      name: row.name,
+    }));
+    siteLocations.push({ id: 'add-new-location', name: 'Add New Location' });
 
     return (
       <div className="form-study">
@@ -146,7 +185,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           {(() => {
-            if (this.props.formValues.siteLocation) {
+            if (this.props.formValues.siteLocation && this.props.formValues.siteLocation !== 'add-new-location') {
               return (
                 <div className="field-row label-top">
                   <strong className="label"><label>EMAIL NOTIFICATIONS</label></strong>
@@ -158,6 +197,8 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
                         formValues={formValues}
                         listNewStudyState={this.props.listNewStudyState}
                         dispatch={this.props.dispatch}
+                        addEmailNotificationUser={this.props.addEmailNotificationUser}
+                        currentUserClientId={this.props.currentUserClientId}
                       />
                     </div>
 
