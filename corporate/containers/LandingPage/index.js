@@ -8,7 +8,7 @@ import moment from 'moment-timezone';
 
 import LandingForm from '../../components/LandingForm';
 import LandingArticle from '../../components/LandingArticle';
-import { normalizePhone } from '../../../app/containers/StudyPage/helper/functions';
+import { normalizePhone } from '../../../app/common/helper/functions';
 
 import {
   selectCurrentUser,
