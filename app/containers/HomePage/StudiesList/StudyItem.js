@@ -114,7 +114,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <span>{protocol}</span>
         </td>
         <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off' && patientQualificationSuite === 'Off') })}>
-          <span className="patient-messaging-suite-status">{patientMessagingSuite}</span>
+          <span className="patient-messaging-suite-status">{(patientMessagingSuite === 'Off' && patientQualificationSuite === 'Off') ? 'Off' : 'On'}</span>
           <span>{messageCountContent}</span>
         </td>
         <td className={classNames('status', { inactive: (status === 'Inactive') })}>
