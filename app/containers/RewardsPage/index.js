@@ -159,7 +159,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
           <header className="sub-header clearfix">
             {this.renderHeaderText()}
-            <a className={classNames('btn bgn-chat pull-right', { disabled: !redeemable })} data-text="Redeem" data-hovertext="Redeem Now" onClick={() => this.openRewardModal()} />
+            <a className={classNames('btn bgn-chat pull-right', { disabled: !redeemable })} data-text="Redeem" data-hovertext="Redeem Now" onClick={() => (redeemable ? this.openRewardModal() : null)} />
             <RewardModal
               currentUser={currentUser}
               siteLocations={redeemableSiteLocations}

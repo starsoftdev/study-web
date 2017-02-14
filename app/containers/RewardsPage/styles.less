@@ -63,6 +63,16 @@
 
       &:hover:before { content: attr(data-hovertext); }
     }
+
+    .disabled{
+      pointer-events: visible !important;
+      cursor: not-allowed;
+      &:before {
+        content: attr(data-text);
+      }
+
+      &:hover:before { content: attr(data-text); }
+    }
   }
 
   .images-area {

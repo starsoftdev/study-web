@@ -106,14 +106,17 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
         firstName: newProps.addNotificationProcess.savedUser.firstName,
         lastName: newProps.addNotificationProcess.savedUser.lastName,
         userId: newProps.addNotificationProcess.savedUser.id,
+        isChecked: true,
       };
       if (!addFields) {
         addFields = [values];
       } else {
         addFields.push(values);
       }
-      this.props.dispatch(change('listNewStudy', 'checkAllInput', false));
       this.props.dispatch(change('listNewStudy', 'emailNotifications', addFields));
+      if (addFields.length === 1) {
+        this.props.dispatch(change('listNewStudy', 'checkAllInput', true));
+      }
     }
 
     if (this.props.savedSite.saving && !newProps.addNotificationProcess.saving) {
@@ -144,11 +147,14 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             firstName: role.user.firstName,
             lastName: role.user.lastName,
             userId: role.user.id,
-            isChecked: false,
+            isChecked: true,
           });
         });
 
         this.props.dispatch(change('listNewStudy', 'emailNotifications', fields));
+        if (fields.length > 0) {
+          this.props.dispatch(change('listNewStudy', 'checkAllInput', true));
+        }
       }
     }
   }

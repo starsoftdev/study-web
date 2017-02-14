@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 import {
   selectCurrentUserClientId,
   selectUserRoleType,
+  selectCurrentUser,
 } from 'containers/App/selectors';
 
 import sideNavLogo from 'assets/images/logo2.png';
@@ -14,13 +15,18 @@ class SideNavBar extends React.Component {
   static propTypes = {
     currentUserClientId: React.PropTypes.number,
     userRoleType: React.PropTypes.string,
+    currentUser: React.PropTypes.any,
   };
 
   componentDidMount() {
   }
 
   render() {
-    const { userRoleType } = this.props;
+    const { userRoleType, currentUser } = this.props;
+    let purchasable = true;
+    if (userRoleType === 'client') {
+      purchasable = currentUser.roleForClient.canPurchase;
+    }
     let menuItemsGroupA;
     let menuItemsGroupB;
     if (userRoleType === 'client') {
@@ -56,15 +62,24 @@ class SideNavBar extends React.Component {
         <div className="sidebar-holder">
           <nav className="sidenav">
             <ul className="list-unstyled">
-              {menuItemsGroupA.map((item, index) =>
-                <li key={index}>
-                  <Link to={item.link} activeClassName="active">
-                    <i className={item.icon} />
-                    <div>{item.upperText}</div>
-                    <div>{item.lowerText}</div>
-                  </Link>
-                </li>
-              )}
+              {menuItemsGroupA.map((item, index) => (
+                index === 1 || index === 2 ?
+                  <li key={index} disabled={!purchasable}>
+                    <Link to={item.link} activeClassName="active">
+                      <i className={item.icon} />
+                      <div>{item.upperText}</div>
+                      <div>{item.lowerText}</div>
+                    </Link>
+                  </li>
+                :
+                  <li key={index}>
+                    <Link to={item.link} activeClassName="active">
+                      <i className={item.icon} />
+                      <div>{item.upperText}</div>
+                      <div>{item.lowerText}</div>
+                    </Link>
+                  </li>
+              ))}
             </ul>
             <ul className="list-unstyled">
               {menuItemsGroupB.map((item, index) =>
@@ -99,6 +114,7 @@ class SideNavBar extends React.Component {
 const mapStateToProps = createStructuredSelector({
   currentUserClientId: selectCurrentUserClientId(),
   userRoleType: selectUserRoleType(),
+  currentUser: selectCurrentUser(),
 });
 
 const mapDispatchToProps = () => ({
