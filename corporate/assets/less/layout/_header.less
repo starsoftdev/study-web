@@ -36,9 +36,7 @@
 		}
 	}
 	
-	.logo-holder {
-		overflow: hidden;
-	}
+	.logo-holder {}
 }
 
 .logo {
@@ -79,7 +77,7 @@
 		margin: 0 auto;
 		
 		@media screen and (max-width: @small) {
-			margin: 8px auto 0;
+			margin: 10px auto 0;
 		}
 	}
 	
@@ -91,15 +89,19 @@
 		max-width: 260px;
 		
 		@media screen and (max-width: @xs) {
-			max-width: 240px;
+      max-width: 240px;
 		}
 		
 		@media screen and (max-width: @small) {
-			max-width: 148px;
+			max-width: 120px;
 		}
 		
 		img {
 			.img;
+
+      @media screen and (max-width: @small) {
+        margin-left: -10%;
+      }
 		}
 	}
 	
