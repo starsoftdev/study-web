@@ -23,7 +23,10 @@ class SideNavBar extends React.Component {
 
   render() {
     const { userRoleType, currentUser } = this.props;
-    const purchasable = currentUser.roleForClient.canPurchase;
+    let purchasable = true;
+    if (userRoleType === 'client') {
+      purchasable = currentUser.roleForClient.canPurchase;
+    }
     let menuItemsGroupA;
     let menuItemsGroupB;
     if (userRoleType === 'client') {
