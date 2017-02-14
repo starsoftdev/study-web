@@ -46,7 +46,7 @@ export class LandingArticle extends React.Component {
     const indication = study.indication.name;
     const siteName = study.sites[0].name;
 
-    const landingDescription = (landing.description && landing.description !== 'seed') ? landing.description : null;
+    const landingDescription = (landing && landing.description && landing.description !== 'seed') ? landing.description : null;
 
     let address = study.sites[0].address;
     const city = study.sites[0].city;
