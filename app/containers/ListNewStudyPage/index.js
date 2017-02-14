@@ -18,7 +18,7 @@ import _, { find } from 'lodash';
 import { submitForm, hideSubmitFormModal, clearFormSubmissionData } from 'containers/ListNewStudyPage/actions';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
-
+import { ComingSoon } from 'components/ComingSoon';
 import { touch } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import LoadingSpinner from 'components/LoadingSpinner';
@@ -41,6 +41,7 @@ import {
   selectAvailPhoneNumbers,
   selectCurrentUserClientId,
   selectClientSites,
+  selectUserRoleType,
 } from 'containers/App/selectors';
 
 export class ListNewStudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -74,6 +75,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     touchShoppingCart: PropTypes.func,
     fetchClientSites: PropTypes.func,
     currentUserClientId: PropTypes.number,
+    userRoleType: PropTypes.string,
   }
 
   constructor(props) {
@@ -162,7 +164,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
   }
 
   render() {
-    const { indications, studyLevels, formValues, fullSiteLocations, indicationLevelPrice } = this.props;
+    const { indications, studyLevels, formValues, fullSiteLocations, indicationLevelPrice, userRoleType } = this.props;
     const { uniqueId } = this.state;
 
     const addOns = [];
@@ -204,72 +206,98 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
         total: CALL_TRACKING_PRICE,
       });
     }
-
     return (
-      <StickyContainer className="container-fluid">
-        <Helmet title="List New Study - StudyKIK" />
-        <section className="study-portal">
+      <div>
+        { userRoleType === 'client' &&
+          <StickyContainer className="container-fluid">
+            <Helmet title="List New Study - StudyKIK" />
+            <section className="study-portal">
 
-          <h2 className="main-heading">LIST NEW STUDY</h2>
+              <h2 className="main-heading">LIST NEW STUDY</h2>
 
-          <div className="row form-study">
+              <div className="row form-study">
 
-            <div className="col-xs-6 form-holder">
-              <ListNewStudyForm
-                key={uniqueId}
-                formValues={formValues}
-                fullSiteLocations={fullSiteLocations}
-                indications={indications}
-                studyLevels={studyLevels}
-                listNewStudyState={this.props.listNewStudyState}
-                saveSite={this.props.saveSite}
-                availPhoneNumbers={this.props.availPhoneNumbers}
-              />
-            </div>
+                <div className="col-xs-6 form-holder">
+                  <ListNewStudyForm
+                    key={uniqueId}
+                    formValues={formValues}
+                    fullSiteLocations={fullSiteLocations}
+                    indications={indications}
+                    studyLevels={studyLevels}
+                    listNewStudyState={this.props.listNewStudyState}
+                    saveSite={this.props.saveSite}
+                    availPhoneNumbers={this.props.availPhoneNumbers}
+                  />
+                </div>
 
-            <div className="fixed-block">
-              <div className="fixed-block-holder">
-                <div className="order-summery-container">
-                  <Sticky className="sticky-shopping-cart">
-                    {<ShoppingCartForm showCards addOns={addOns} validateAndSubmit={this.onSubmitForm} />}
-                  </Sticky>
+                <div className="fixed-block">
+                  <div className="fixed-block-holder">
+                    <div className="order-summery-container">
+                      <Sticky className="sticky-shopping-cart">
+                        {<ShoppingCartForm showCards addOns={addOns} validateAndSubmit={this.onSubmitForm} />}
+                      </Sticky>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-        <Modal className="custom-modal" show={this.props.showSubmitFormModal}>
-          <Modal.Header>
-            <Modal.Title>Processing payment</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {(() => {
-              if (this.props.formSubmissionStatus.submitting) {
-                return (
-                  <div className="text-center"><span><LoadingSpinner showOnlyIcon size={20} /></span></div>
-                );
-              }
-              if (this.props.formSubmissionStatus.response) {
-                return (
-                  <div className="text-center">
-                    <div className="study-submit-form-modal-text alert alert-success" role="alert">Study has been listed successfully.</div>
-                    <button onClick={this.goToStudyPage} type="button" className="study-submit-form-modal-button btn btn-success">Go To Study Page</button>
-                  </div>
-                );
-              }
-              if (this.props.formSubmissionStatus.error) {
-                return (
-                  <div className="text-center">
-                    <div className="study-submit-form-modal-text alert alert-danger" role="alert">{`Error occurred while submitting your request. ${this.props.formSubmissionStatus.error.message}`}</div>
-                    <button onClick={this.closeSubmitFormModal} type="button" className="study-submit-form-modal-button btn btn-danger">OK</button>
-                  </div>
-                );
-              }
-              return false;
-            })()}
-          </Modal.Body>
-        </Modal>
-      </StickyContainer>
+            </section>
+            <Modal className="custom-modal" show={this.props.showSubmitFormModal}>
+              <Modal.Header>
+                <Modal.Title>Processing payment</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                {(() => {
+                  if (this.props.formSubmissionStatus.submitting) {
+                    return (
+                      <div className="text-center"><span><LoadingSpinner showOnlyIcon size={20} /></span></div>
+                    );
+                  }
+                  if (this.props.formSubmissionStatus.response) {
+                    return (
+                      <div className="text-center">
+                        <div className="study-submit-form-modal-text alert alert-success" role="alert">Study has been
+                          listed successfully.
+                        </div>
+                        <button
+                          onClick={this.goToStudyPage}
+                          type="button"
+                          className="study-submit-form-modal-button btn btn-success"
+                        >
+                          Go To Study Page
+                        </button>
+                      </div>
+                    );
+                  }
+                  if (this.props.formSubmissionStatus.error) {
+                    return (
+                      <div className="text-center">
+                        <div
+                          className="study-submit-form-modal-text alert alert-danger"
+                          role="alert"
+                        >
+                          {`Error occurred while submitting your request. ${this.props.formSubmissionStatus.error.message}`}
+                        </div>
+                        <button
+                          onClick={this.closeSubmitFormModal}
+                          type="button"
+                          className="study-submit-form-modal-button btn btn-danger"
+                        >
+                          OK
+                        </button>
+                      </div>
+                    );
+                  }
+                  return false;
+                })()}
+              </Modal.Body>
+            </Modal>
+          </StickyContainer>
+        }
+        {
+          userRoleType === 'sponsor' &&
+            <ComingSoon />
+        }
+      </div>
     );
   }
 }
@@ -290,6 +318,7 @@ const mapStateToProps = createStructuredSelector({
   shoppingCartFormValues: selectShoppingCartFormValues(),
   shoppingCartFormError: selectShoppingCartFormError(),
   currentUserClientId: selectCurrentUserClientId(),
+  userRoleType: selectUserRoleType(),
 });
 
 function mapDispatchToProps(dispatch) {
