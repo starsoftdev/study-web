@@ -115,7 +115,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           }
         </td>
         <td className="action">
-          <button type="button" className="btn btn-primary btn-edit-site pull-right" onClick={this.editSite} disabled={(this.currentSiteIsBeingFetched())}>
+          <button type="button" className="btn btn-primary btn-edit-site pull-right" onClick={this.editSite} disabled={(this.currentSiteIsBeingFetched() || this.props.bDisabled)}>
             {(this.currentSiteIsBeingFetched())
               ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
               : <span>Edit</span>
