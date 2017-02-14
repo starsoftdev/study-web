@@ -74,21 +74,18 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
 
   render() {
     const { name, piFirstName, piLastName, redirectPhone, address, roles } = this.props;
-
-    let assignedUsersContent = null;
-    if (roles) {
-      assignedUsersContent = roles.map((item, index) => (
-        <div className="assigned-user" key={index}>
-          <span>{item.user.firstName} {item.user.lastName}</span>
-          <span className="edit-assigned-user">
-            {(this.assignedUserIsBeingFetched(item))
-              ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-assigned-user" /></span>
-              : <a className="btn toggle edit-icon" onClick={() => { this.editAssignedUser(item); }}><i className="pencil-square" /></a>
-            }
-          </span>
-        </div>
-      ));
-    }
+    
+    const assignedUsersContent = (roles) ? roles.map((item, index) => (
+      <div className="assigned-user" key={index}>
+        <span>{item.user.firstName} {item.user.lastName}</span>
+        <span className="edit-assigned-user">
+          {(this.assignedUserIsBeingFetched(item))
+            ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-assigned-user" /></span>
+            : <a className="btn toggle edit-icon" onClick={() => { this.editAssignedUser(item); }}><i className="pencil-square" /></a>
+          }
+        </span>
+      </div>
+    )) : null;
 
     return (
       <tr className="client-site-container">
