@@ -99,7 +99,10 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
   render() {
     const { userRoleType } = this.props;
-    const purchasable = this.props.currentUser.roleForClient.canPurchase;
+    let purchasable = true;
+    if (userRoleType === 'client') {
+      purchasable = this.props.currentUser.roleForClient.canPurchase;
+    }
     if (userRoleType === 'client') {
       const unreadMessagesCount = sumBy(this.props.sitePatients.details, (item) => parseInt(item.count_unread ? item.count_unread : 0));
       const credits = this.props.clientCredits.details.customerCredits || 0;
