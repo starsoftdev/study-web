@@ -73,7 +73,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
               </button>
               <Link to="/login" className={classNames('btn btn-default btn-login', { invisible: isLoginPage || isLoggedIn })}>
                 <span className="hidden-xs">LOGIN</span>
-                <Glyphicon bsClass="glyphicon glyphicon-log-in visible-xs-* hidden-sm hidden-md hidden-lg" />
+                <Glyphicon glyph="log-in" className="visible-xs-* hidden-sm hidden-md hidden-lg" />
               </Link>
               <div className={classNames('logo-holder', { loginPage: isLoginPage })}>
                 <Link to="/" className="navbar-brand" title="Study KIK">
