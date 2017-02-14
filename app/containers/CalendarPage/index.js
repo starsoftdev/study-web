@@ -258,7 +258,7 @@ export class CalendarPage extends React.Component {
     const { showAll, localSchedules } = this.state;
     const fetchingSites = sites.isFetching;
     const fetchingPatientsByStudy = patientsByStudy.isFetching;
-    const isAdmin = currentUser && currentUser.roleForClient.name === 'Super Admin';
+    const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
 
     let siteLocationOptions = [];
     if (isAdmin) {

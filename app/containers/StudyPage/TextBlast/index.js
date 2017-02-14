@@ -66,10 +66,18 @@ class TextBlastModal extends React.Component {
     this.renderPatients = this.renderPatients.bind(this);
     this.renderPatientCount = this.renderPatientCount.bind(this);
     this.textAreaChange = this.textAreaChange.bind(this);
+    this.closeModal = this.closeModal.bind(this);
     this.state = {
       enteredCharactersLength: 0,
       sourceDisable: true,
     };
+  }
+
+  closeModal() {
+    this.setState({
+      sourceDisable: true,
+    });
+    this.props.onHide();
   }
 
   textAreaChange() {
@@ -283,7 +291,7 @@ class TextBlastModal extends React.Component {
   }
 
   render() {
-    const { patientCategories, sources, show, role, bsClass, dialogClassName, className, style, onHide } = this.props;
+    const { patientCategories, sources, show, role, bsClass, dialogClassName, className, style } = this.props;
     const { enteredCharactersLength } = this.state;
     const clientCredits = this.props.clientCredits.details.customerCredits;
     const disabled = (clientCredits === 0 || clientCredits === null);
@@ -309,7 +317,7 @@ class TextBlastModal extends React.Component {
           <Modal.Title>
             <strong className="title">Text Blast</strong>
           </Modal.Title>
-          <a className="close" onClick={onHide}>
+          <a className="close" onClick={this.closeModal}>
             <i className="icomoon-icon_close" />
           </a>
         </Modal.Header>

@@ -15,7 +15,7 @@ import { submitAddPatient } from '../actions';
 import { selectStudyId, selectAddPatientStatus } from '../selectors';
 import { selectSyncErrors, selectValues } from '../../../common/selectors/form.selector';
 import { createStructuredSelector } from 'reselect';
-import { normalizePhone } from '../helper/functions';
+import { normalizePhone } from '../../../common/helper/functions';
 
 const formName = 'addPatient';
 

@@ -85,6 +85,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     const { currentUser, indication, location, sponsor, protocol, patientMessagingSuite, patientQualificationSuite, status,
       startDate, endDate, unreadMessageCount, orderNumber, studyId } = this.props;
     const buttonsShown = this.state.buttonsShown;
+    const purchasable = (currentUser.roleForClient && currentUser.roleForClient.canPurchase);
     const landingHref = `/${studyId}-${location.toLowerCase().replace(/ /ig, '-')}`;
     let messageCountContent = null;
     if (unreadMessageCount > 0) {
@@ -128,8 +129,8 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <div className="btns-slide pull-right">
             <div className="btns">
               <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>
-              <Button bsStyle="primary" className="btn-renew" onClick={this.onRenewClick}>Renew</Button>
-              <Button bsStyle="danger" className="btn-upgrade" onClick={this.onUpgradeClick}>Upgrade</Button>
+              <Button bsStyle="primary" className="btn-renew" disabled={!purchasable} onClick={this.onRenewClick}>Renew</Button>
+              <Button bsStyle="danger" className="btn-upgrade" disabled={!purchasable} onClick={this.onUpgradeClick}>Upgrade</Button>
               <Button bsStyle="info" className="btn-edit" onClick={this.onEditClick}>Edit</Button>
             </div>
           </div>

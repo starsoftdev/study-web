@@ -24,6 +24,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     savedSite: PropTypes.object,
     handleSubmit: PropTypes.func,
     isEdit: PropTypes.bool,
+    initialValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -138,7 +139,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </strong>
             <div className="field">
               <Field
-                name="phone"
+                name="redirectPhone"
                 component={Input}
                 type="text"
                 disabled={savedSite.saving}
@@ -150,24 +151,14 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
               <label>SITE ADDRESS</label>
             </strong>
             <div className="field">
-              {(() => {
-                if (isEdit) {
-                  return (<Field
-                    name="address"
-                    component={Input}
-                    disabled={savedSite.saving}
-                    onChange={this.addressChanged}
-                  />);
-                }
-
-                return (<Field
-                  name="address"
-                  component={FormGeosuggest}
-                  refObj={(el) => { this.geoSuggest = el; }}
-                  onSuggestSelect={this.onSuggestSelect}
-                  placeholder=""
-                />);
-              })()}
+              <Field
+                name="address"
+                component={FormGeosuggest}
+                refObj={(el) => { this.geoSuggest = el; }}
+                onSuggestSelect={this.onSuggestSelect}
+                initialValue={isEdit ? this.props.initialValues.address : ''}
+                placeholder=""
+              />
             </div>
           </div>
           <div className="field-row">

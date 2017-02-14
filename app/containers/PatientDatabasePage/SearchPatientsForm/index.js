@@ -181,7 +181,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 name="includeIndication"
                 component={ReactMultiSelect}
                 placeholder="Select Indication"
-                searchPlaceholder="Search Indication"
+                searchPlaceholder="Search"
                 searchable
                 optionLabelKey="label"
                 multiple
@@ -204,7 +204,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 name="excludeIndication"
                 component={ReactMultiSelect}
                 placeholder="Select Indication"
-                searchPlaceholder="Search Indication"
+                searchPlaceholder="Search"
                 searchable
                 optionLabelKey="label"
                 multiple
