@@ -6,7 +6,7 @@ import { Modal } from 'react-bootstrap';
 import Button from 'react-bootstrap/lib/Button';
 import ReactSelect from 'components/Input/ReactSelect';
 import { map } from 'lodash';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import CenteredModal from '../../components/CenteredModal/index';
 import EditSiteForm from 'components/EditSiteForm';
 import EditUserForm from 'components/EditUserForm';
@@ -18,12 +18,14 @@ import {
   selectClientRoles,
   selectSavedSite,
   selectSavedUser,
+  selectCurrentUser,
 } from 'containers/App/selectors';
 import { fetchClientSites, fetchClientRoles, saveSite, saveUser } from 'containers/App/actions';
 
 @reduxForm({ form: 'manageSiteUser' })
 export class SitesUsersPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    dispatch: PropTypes.func.isRequired,
     currentUserClientId: PropTypes.number,
     clientSites: PropTypes.object,
     clientRoles: PropTypes.object,
@@ -33,6 +35,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     fetchClientRoles: PropTypes.func,
     saveSite: PropTypes.func,
     saveUser: PropTypes.func,
+    currentUser: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -65,6 +68,19 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     if (currentUserClientId) {
       this.props.fetchClientSites(currentUserClientId, {});
       this.props.fetchClientRoles(currentUserClientId, {});
+    }
+  }
+
+  componentDidMount() {
+    const { currentUser } = this.props;
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+      if (bDisabled) {
+        const nLocation = currentUser.roleForClient.site_id ? currentUser.roleForClient.site_id.toString() : null;
+        this.props.dispatch(change('manageSiteUser', 'siteLocation', nLocation));
+        this.handleSiteQueryChange(currentUser.roleForClient.site_id);
+      }
     }
   }
 
@@ -174,7 +190,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
   }
 
   render() {
-    const { currentUserClientId, clientSites } = this.props;
+    const { currentUserClientId, clientSites, currentUser } = this.props;
     if (!currentUserClientId) {
       return (
         <div className="sites-users-page">
@@ -187,7 +203,10 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
         </div>
       );
     }
-
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+    }
     const siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
 
@@ -214,6 +233,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                       component={ReactSelect}
                       placeholder="Select Site Location"
                       options={siteOptions}
+                      disabled={bDisabled}
                       className="field"
                       onChange={this.handleSiteQueryChange}
                     />
@@ -222,7 +242,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
               </div>
               <section className="btns-area pull-right">
                 <div className="col pull-right">
-                  <button type="button" className="btn btn-primary" onClick={this.openAddUserModal}>
+                  <button type="button" className="btn btn-primary" onClick={this.openAddUserModal} disabled={bDisabled}>
                     + Add User
                   </button>
                   <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
@@ -242,7 +262,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                   </Modal>
                 </div>
                 <div className="col pull-right">
-                  <button type="button" className="btn btn-primary" onClick={this.openAddSiteModal}>
+                  <button type="button" className="btn btn-primary" onClick={this.openAddSiteModal} disabled={bDisabled}>
                     + Add Site Location
                   </button>
                   <Modal dialogComponentClass={CenteredModal} className="new-site" id="new-site" show={this.state.addSiteModalOpen} onHide={this.closeAddSiteModal}>
@@ -263,10 +283,10 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
             </form>
           </div>
           <section className="table-holder form-group client-roles-holder">
-            <ClientRolesList filterMethod={this.state.roleFilterMethod} />
+            <ClientRolesList filterMethod={this.state.roleFilterMethod} currentUser={currentUser} />
           </section>
           <section className="table-holder form-group client-sites-holder">
-            <ClientSitesList filterMethod={this.state.siteFilterMethod} userFilterQuery={this.state.userName} />
+            <ClientSitesList filterMethod={this.state.siteFilterMethod} userFilterQuery={this.state.userName} currentUser={currentUser} />
           </section>
         </div>
       </div>
@@ -280,6 +300,7 @@ const mapStateToProps = createStructuredSelector({
   clientRoles: selectClientRoles(),
   savedSite: selectSavedSite(),
   savedUser: selectSavedUser(),
+  currentUser: selectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {

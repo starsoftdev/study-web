@@ -24,6 +24,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     clearSelectedUser: PropTypes.func,
     deleteClientRole: PropTypes.func,
     saveUser: PropTypes.func,
+    currentUser: PropTypes.object,
   };
 
   constructor(props) {
@@ -172,10 +173,14 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { clientSites, selectedUserDetailsForForm, deletedClientRole, filterMethod, selectedUser } = this.props;
+    const { clientSites, selectedUserDetailsForForm, deletedClientRole, filterMethod, selectedUser, currentUser } = this.props;
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+    }
     const sortedClientRoles = this.getSortedClientRoles();
     const clientRolesListContents = sortedClientRoles.filter(filterMethod).map((item, index) => (
-      item.canPurchase || item.canRedeemRewards || item.name === 'Super Admin' ? <ClientRoleItem {...item} key={index} /> : null
+      item.canPurchase || item.canRedeemRewards || item.name === 'Super Admin' ? <ClientRoleItem {...item} key={index} bDisabled={bDisabled} /> : null
     )
     );
     const siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));

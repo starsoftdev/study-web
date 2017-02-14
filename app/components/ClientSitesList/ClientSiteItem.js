@@ -20,6 +20,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     fetchSite: PropTypes.func,
     fetchUser: PropTypes.func,
     userFilter: PropTypes.any,
+    bDisabled: PropTypes.bool,
   };
 
   constructor(props) {
@@ -74,14 +75,14 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
 
   render() {
     const { name, piFirstName, piLastName, redirectPhone, address, roles } = this.props;
-    
+
     const assignedUsersContent = (roles) ? roles.map((item, index) => (
       <div className="assigned-user" key={index}>
         <span>{item.user.firstName} {item.user.lastName}</span>
         <span className="edit-assigned-user">
           {(this.assignedUserIsBeingFetched(item))
             ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-assigned-user" /></span>
-            : <a className="btn toggle edit-icon" onClick={() => { this.editAssignedUser(item); }}><i className="pencil-square" /></a>
+            : <a disabled={this.props.bDisabled} className="btn toggle edit-icon" onClick={() => (this.props.bDisabled ? null : this.editAssignedUser(item))}><i className="pencil-square" /></a>
           }
         </span>
       </div>

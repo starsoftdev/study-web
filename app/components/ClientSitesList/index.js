@@ -17,6 +17,7 @@ import ClientSiteItem from './ClientSiteItem';
 class ClientSitesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUserClientId: PropTypes.number,
+    currentUser: PropTypes.object,
     clientSites: PropTypes.object,
     selectedSite: PropTypes.object,
     selectedSiteDetailsForForm: PropTypes.object,
@@ -174,10 +175,14 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { selectedSiteDetailsForForm, selectedUserDetailsForForm, deletedUser, filterMethod, userFilterQuery, selectedUser } = this.props;
+    const { selectedSiteDetailsForForm, selectedUserDetailsForForm, deletedUser, filterMethod, userFilterQuery, selectedUser, currentUser } = this.props;
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+    }
     const sortedClientSites = this.getSortedClientSites().filter(filterMethod);
     const clientSitesListContents = sortedClientSites.map((item, index) => (
-      <ClientSiteItem {...item} key={index} userFilter={userFilterQuery} />
+      <ClientSiteItem {...item} key={index} userFilter={userFilterQuery} bDisabled={bDisabled} />
     ));
     const siteOptions = map(sortedClientSites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
