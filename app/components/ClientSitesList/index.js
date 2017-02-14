@@ -174,7 +174,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { selectedSiteDetailsForForm, selectedUserDetailsForForm, deletedUser, filterMethod, userFilterQuery } = this.props;
+    const { selectedSiteDetailsForForm, selectedUserDetailsForForm, deletedUser, filterMethod, userFilterQuery, selectedUser } = this.props;
     const sortedClientSites = this.getSortedClientSites().filter(filterMethod);
     const clientSitesListContents = sortedClientSites.map((item, index) => (
       <ClientSiteItem {...item} key={index} userFilter={userFilterQuery} />
@@ -184,6 +184,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
 
     const editSiteModalShown = this.editSiteModalShouldBeShown();
     const editUserModalShown = this.editUserModalShouldBeShown();
+    const siteLocation = (selectedUser && selectedUser.details && selectedUser.details.roleForClient) ? selectedUser.details.roleForClient.site_id : null;
 
     return (
       <div className="client-sites">
@@ -252,6 +253,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                       deleting={deletedUser.deleting}
                       onDelete={this.deleteUser}
                       onSubmit={this.updateUser}
+                      newSiteLocation={siteLocation}
                       isEdit
                     />
                   </div>
