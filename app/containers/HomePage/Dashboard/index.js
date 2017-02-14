@@ -13,6 +13,7 @@ import { fetchPatientSignUps, fetchPatientMessages } from '../actions';
 import { selectPatientSignUps, selectPatientMessages } from '../selectors';
 
 import graph from 'assets/images/graph.svg';
+import classNames from 'classnames';
 
 export class Dashboard extends React.Component {
   static propTypes = {
@@ -59,6 +60,7 @@ export class Dashboard extends React.Component {
 
   render() {
     const { currentUser, patientSignUps, patientMessages, rewardsBalance, siteLocations, pickReward } = this.props;
+    const redeemable = currentUser.roleForClient.canRedeemRewards;
     const redeemableSiteLocations = reject(siteLocations, { id: 0 });
 
     return (
@@ -110,7 +112,7 @@ export class Dashboard extends React.Component {
             <i className="icomoon-gift pull-left" />
             <div className="textbox">
               <h2>REWARDS</h2>
-              <a className="btn btn-info lightbox-opener" data-text="Redeem" data-hovertext="Redeem Now" onClick={this.openRewardModal}>Redeem</a>
+              <a className={classNames('btn btn-info lightbox-opener', { disabled: !redeemable })} data-text="Redeem" data-hovertext="Redeem Now" onClick={redeemable ? this.openRewardModal : null}>Redeem</a>
               <span className="counter">{rewardsBalance[currentUser.roleForClient.site_id || 0]} KIK<span className="small text-lowercase">s</span></span>
             </div>
           </div>

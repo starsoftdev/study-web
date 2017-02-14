@@ -99,6 +99,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
   render() {
     const { userRoleType } = this.props;
+    const purchasable = this.props.currentUser.roleForClient.canPurchase;
     if (userRoleType === 'client') {
       const unreadMessagesCount = sumBy(this.props.sitePatients.details, (item) => parseInt(item.count_unread ? item.count_unread : 0));
       const credits = this.props.clientCredits.details.customerCredits || 0;
@@ -150,7 +151,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
             <div className="get-credits pull-left">
               <span>{credits} Credits</span>
-              <Button onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
+              <Button disabled={!purchasable} onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
             </div>
 
             <AvatarMenu handleLogoutClick={this.handleLogoutClick} currentUser={this.props.currentUser} />

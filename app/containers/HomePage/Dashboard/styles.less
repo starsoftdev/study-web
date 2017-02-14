@@ -4,4 +4,16 @@
   .number-label {
     font-weight: 400;
   }
+
+  .textbox{
+    .disabled{
+      pointer-events: visible !important;
+      cursor: not-allowed;
+      &:before {
+        content: attr(data-text);
+      }
+
+      &:hover:before { content: attr(data-text); }
+    }
+  }
 }
