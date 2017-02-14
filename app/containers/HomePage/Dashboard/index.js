@@ -60,7 +60,7 @@ export class Dashboard extends React.Component {
 
   render() {
     const { currentUser, patientSignUps, patientMessages, rewardsBalance, siteLocations, pickReward } = this.props;
-    const redeemable = currentUser.roleForClient.canRedeemRewards;
+    const redeemable = (currentUser.roleForClient && currentUser.roleForClient.canRedeemRewards);
     const redeemableSiteLocations = reject(siteLocations, { id: 0 });
 
     return (
