@@ -12,7 +12,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     name: PropTypes.string,
     piFirstName: PropTypes.string,
     piLastName: PropTypes.string,
-    phone: PropTypes.string,
+    redirectPhone: PropTypes.string,
     address: PropTypes.string,
     roles: PropTypes.array,
     selectedSite: PropTypes.object,
@@ -73,9 +73,9 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { name, piFirstName, piLastName, phone, address, roles } = this.props;
+    const { name, piFirstName, piLastName, redirectPhone, address, roles } = this.props;
 
-    const assignedUsersContent = roles.map((item, index) => (
+    const assignedUsersContent = (roles) ? roles.map((item, index) => (
       <div className="assigned-user" key={index}>
         <span>{item.user.firstName} {item.user.lastName}</span>
         <span className="edit-assigned-user">
@@ -85,7 +85,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           }
         </span>
       </div>
-    ));
+    )) : null;
 
     return (
       <tr className="client-site-container">
@@ -96,7 +96,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           <span>{piFirstName} {piLastName}</span>
         </td>
         <td className="phone">
-          <span>{phone}</span>
+          <span>{redirectPhone}</span>
         </td>
         <td className="address">
           <span>{address}</span>

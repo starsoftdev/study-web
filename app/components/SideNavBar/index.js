@@ -63,8 +63,8 @@ class SideNavBar extends React.Component {
           <nav className="sidenav">
             <ul className="list-unstyled">
               {menuItemsGroupA.map((item, index) => (
-                index === 1 || index === 2 ?
-                  <li key={index} disabled={!purchasable}>
+                ((index === 1 || index === 2) && !purchasable) ?
+                  <li key={index} className="disabled-li">
                     <Link to={item.link} activeClassName="active">
                       <i className={item.icon} />
                       <div>{item.upperText}</div>
