@@ -12,6 +12,7 @@ import SchedulePatientModal from './components/SchedulePatientModal';
 import EditScheduleModal from './components/EditScheduleModal';
 import FilterBar from './components/FilterBar';
 import AllEventsModal from './components/AllEventsModal';
+import { ComingSoon } from 'components/ComingSoon';
 
 import { getUTCTime } from 'utils/time';
 
@@ -23,6 +24,7 @@ import {
   selectCurrentUser,
   selectSites,
   selectIndications,
+  selectUserRoleType,
 } from 'containers/App/selectors';
 
 import {
@@ -81,6 +83,7 @@ export class CalendarPage extends React.Component {
     deleteSchedule: PropTypes.func.isRequired,
     paginationOptions: PropTypes.object,
     setActiveSort: PropTypes.func,
+    userRoleType: PropTypes.string,
   };
 
   constructor(props) {
@@ -254,7 +257,7 @@ export class CalendarPage extends React.Component {
   }
 
   render() {
-    const { currentUser, sites, indications, patientsByStudy } = this.props;
+    const { currentUser, sites, indications, patientsByStudy, userRoleType } = this.props;
     const { showAll, localSchedules } = this.state;
     const fetchingSites = sites.isFetching;
     const fetchingPatientsByStudy = patientsByStudy.isFetching;
@@ -280,72 +283,80 @@ export class CalendarPage extends React.Component {
     }
 
     return (
-      <div className="container-fluid">
-        <Helmet title="Calendar - StudyKIK" />
-        <section className="calendar-section">
-          <h2 className="main-heading">CALENDAR</h2>
-          <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
-          <FilterBar
-            siteLocationOptions={siteLocationOptions}
-            isAdmin={isAdmin}
-            sites={sites}
-            indications={indications}
-            schedules={localSchedules}
-            fetchingSites={fetchingSites}
-            filter={this.state.filter}
-            updateFilter={this.updateFilter}
-          />
-          <CalendarWidget
-            currentUser={currentUser}
-            schedules={this.state.filteredSchedules}
-            handleOpenModal={this.handleModalVisibility}
-            handleShowAll={this.handleShowAll}
-            ref={(c) => { this.calendarWidget = c; }}
-          />
-          <SchedulePatientModal
-            currentUser={currentUser}
-            siteLocationOptions={siteLocationOptions}
-            isAdmin={isAdmin}
-            sites={sites}
-            indications={indications}
-            onSubmit={this.handleSubmit}
-            handleCloseModal={this.handleCloseModal}
-            submitting={false}
-            selectedCellInfo={this.selectedCellInfo}
-            modalType={this.state.modalType}
-            patientsByStudy={patientsByStudy}
-            schedules={localSchedules}
-            fetchingSites={fetchingSites}
-            fetchingPatientsByStudy={fetchingPatientsByStudy}
-            fetchPatientsByStudy={this.props.fetchPatientsByStudy}
-            hourOptions={hourOptions}
-            minuteOptions={minuteOptions}
-            periodOptions={periodOptions}
-            initialValues={{ hour: '0' }}
-          />
-          <EditScheduleModal
-            currentUser={currentUser}
-            onSubmit={this.handleSubmit}
-            handleCloseModal={this.handleCloseModal}
-            handleDelete={this.handleDelete}
-            submitting={false}
-            selectedCellInfo={this.selectedCellInfo}
-            modalType={this.state.modalType}
-            hourOptions={hourOptions}
-            minuteOptions={minuteOptions}
-            periodOptions={periodOptions}
-          />
-          <AllEventsModal
-            visible={showAll.visible}
-            date={showAll.date}
-            events={showAll.events}
-            handleCloseModal={() => this.handleShowAll(false)}
-            handleEdit={this.handleModalVisibility}
-            setAllModalDeferred={this.setAllModalDeferred}
-            sortBy={this.sortBy}
-            paginationOptions={this.props.paginationOptions}
-          />
-        </section>
+      <div>
+        { userRoleType === 'client' &&
+          <div className="container-fluid">
+            <Helmet title="Calendar - StudyKIK" />
+            <section className="calendar-section">
+              <h2 className="main-heading">CALENDAR</h2>
+              <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
+              <FilterBar
+                siteLocationOptions={siteLocationOptions}
+                isAdmin={isAdmin}
+                sites={sites}
+                indications={indications}
+                schedules={localSchedules}
+                fetchingSites={fetchingSites}
+                filter={this.state.filter}
+                updateFilter={this.updateFilter}
+              />
+              <CalendarWidget
+                currentUser={currentUser}
+                schedules={this.state.filteredSchedules}
+                handleOpenModal={this.handleModalVisibility}
+                handleShowAll={this.handleShowAll}
+                ref={(c) => { this.calendarWidget = c; }}
+              />
+              <SchedulePatientModal
+                currentUser={currentUser}
+                siteLocationOptions={siteLocationOptions}
+                isAdmin={isAdmin}
+                sites={sites}
+                indications={indications}
+                onSubmit={this.handleSubmit}
+                handleCloseModal={this.handleCloseModal}
+                submitting={false}
+                selectedCellInfo={this.selectedCellInfo}
+                modalType={this.state.modalType}
+                patientsByStudy={patientsByStudy}
+                schedules={localSchedules}
+                fetchingSites={fetchingSites}
+                fetchingPatientsByStudy={fetchingPatientsByStudy}
+                fetchPatientsByStudy={this.props.fetchPatientsByStudy}
+                hourOptions={hourOptions}
+                minuteOptions={minuteOptions}
+                periodOptions={periodOptions}
+                initialValues={{ hour: '0' }}
+              />
+              <EditScheduleModal
+                currentUser={currentUser}
+                onSubmit={this.handleSubmit}
+                handleCloseModal={this.handleCloseModal}
+                handleDelete={this.handleDelete}
+                submitting={false}
+                selectedCellInfo={this.selectedCellInfo}
+                modalType={this.state.modalType}
+                hourOptions={hourOptions}
+                minuteOptions={minuteOptions}
+                periodOptions={periodOptions}
+              />
+              <AllEventsModal
+                visible={showAll.visible}
+                date={showAll.date}
+                events={showAll.events}
+                handleCloseModal={() => this.handleShowAll(false)}
+                handleEdit={this.handleModalVisibility}
+                setAllModalDeferred={this.setAllModalDeferred}
+                sortBy={this.sortBy}
+                paginationOptions={this.props.paginationOptions}
+              />
+            </section>
+          </div>
+        }
+        {
+          userRoleType === 'sponsor' &&
+            <ComingSoon />
+        }
       </div>
     );
   }
@@ -358,6 +369,7 @@ const mapStateToProps = createStructuredSelector({
   schedules: selectSchedules,
   patientsByStudy: selectPatientsByStudy,
   paginationOptions: selectPaginationOptions,
+  userRoleType: selectUserRoleType(),
 });
 
 const mapDispatchToProps = {

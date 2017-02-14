@@ -474,6 +474,48 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
+      path: '/app/find-out-how-many-sites-are-listing-your-protocol',
+      name: 'searchByProtocolPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/SearchByProtocolPage/reducer'),
+          System.import('containers/SearchByProtocolPage/sagas'),
+          System.import('containers/SearchByProtocolPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('searchByProtocolPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/app/project-agreements',
+      name: 'projectAgreementsPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/ProjectAgreementsPage/reducer'),
+          System.import('containers/ProjectAgreementsPage/sagas'),
+          System.import('containers/ProjectAgreementsPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('projectAgreementsPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '/app*',
       name: 'notfound',
       getComponent(nextState, cb) {
