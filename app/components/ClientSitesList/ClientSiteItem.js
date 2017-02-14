@@ -74,7 +74,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
 
   render() {
     const { name, piFirstName, piLastName, redirectPhone, address, roles } = this.props;
-
+    
     const assignedUsersContent = (roles) ? roles.map((item, index) => (
       <div className="assigned-user" key={index}>
         <span>{item.user.firstName} {item.user.lastName}</span>
@@ -95,7 +95,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
         <td className="principal-investigator">
           <span>{piFirstName} {piLastName}</span>
         </td>
-        <td className="phone">
+        <td className="redirectPhone">
           <span>{redirectPhone}</span>
         </td>
         <td className="address">
