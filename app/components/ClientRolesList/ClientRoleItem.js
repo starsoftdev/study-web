@@ -15,6 +15,7 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
     user: PropTypes.object,
     selectedUser: PropTypes.object,
     fetchUser: PropTypes.func,
+    bDisabled: PropTypes.bool,
   };
 
   constructor(props) {
@@ -63,7 +64,7 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
         </td>
         <td className="action">
           {!isSuperAdmin &&
-            <button type="button" className="btn btn-primary btn-edit-user pull-right" onClick={this.editUser} disabled={(this.currentUserIsBeingFetched())}>
+            <button type="button" className="btn btn-primary btn-edit-user pull-right" onClick={this.editUser} disabled={(this.currentUserIsBeingFetched() || this.props.bDisabled)}>
               {(this.currentUserIsBeingFetched())
                 ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                 : <span>Edit</span>
