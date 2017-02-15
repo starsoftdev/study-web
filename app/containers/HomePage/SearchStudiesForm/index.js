@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import { map } from 'lodash';
 
 import Input from 'components/Input';
@@ -33,7 +33,22 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
     handleSubmit: PropTypes.func,
     onSubmit: PropTypes.func,
     formValues: PropTypes.object,
+    currentUser: PropTypes.object,
+    dispatch: PropTypes.func.isRequired,
   };
+
+  componentDidMount() {
+    const { currentUser } = this.props;
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+      if (bDisabled) {
+        const nLocation = currentUser.roleForClient.site_id ? currentUser.roleForClient.site_id : null;
+        this.props.dispatch(change('searchStudies', 'site', nLocation));
+        this.performSearch(currentUser.roleForClient.site_id, 'site');
+      }
+    }
+  }
 
   performSearch(e, name) {
     const params = this.props.formValues;
@@ -47,7 +62,11 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
   }
 
   render() {
-    const { clientSites, studies, hasError, handleSubmit } = this.props;
+    const { clientSites, studies, hasError, handleSubmit, currentUser } = this.props;
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+    }
     const siteOptions = [{ label: 'All', value: '0' }].concat(map(clientSites.details, siteIterator => ({
       label: siteIterator.name,
       value: siteIterator.id,
@@ -82,7 +101,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
               placeholder="Select Site Location"
               options={siteOptions}
               onChange={(e) => this.performSearch(e, 'site')}
-              disabled={clientSites.fetching || studies.fetching}
+              disabled={clientSites.fetching || studies.fetching || bDisabled}
             />
           </div>
           <div className="pull-left custom-select">
