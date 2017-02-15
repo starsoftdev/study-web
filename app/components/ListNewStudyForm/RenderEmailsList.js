@@ -5,11 +5,13 @@
  */
 
 import React, { PropTypes } from 'react';
+import _ from 'lodash';
 import { Field, change } from 'redux-form';
 import { Modal } from 'react-bootstrap';
+
+import CenteredModal from '../../components/CenteredModal/index';
 import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
 import Checkbox from '../../components/Input/Checkbox';
-import _ from 'lodash';
 
 import {
   showAddEmailModal,
@@ -116,7 +118,13 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
           <a className="add-new-email lightbox-opener" onClick={this.addEmailNotificationClick}>Add Email Notification</a>
         </div>
 
-        <Modal className="custom-modal" show={this.props.listNewStudyState.showAddEmailModal} onHide={this.closeAddEmailModal}>
+        <Modal
+          dialogComponentClass={CenteredModal}
+          show={this.props.listNewStudyState.showAddEmailModal}
+          onHide={this.closeAddEmailModal}
+          backdrop
+          keyboard
+        >
           <Modal.Header>
             <Modal.Title>ADD EMAIL NOTIFICATION</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddEmailModal}>
