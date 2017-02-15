@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, reset, touch } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
@@ -17,8 +17,8 @@ import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { submitAddPatient } from '../actions';
 import { selectAddPatientStatus } from '../selectors';
-import formValidator from './validator';
-
+import formValidator, { fields } from './validator';
+import sanitizeProps from '../../../utils/sanitizeProps';
 
 const formName = 'addPatient';
 
@@ -28,40 +28,64 @@ class AddPatient extends React.Component {
     addPatientStatus: React.PropTypes.object,
     errorList: React.PropTypes.object.isRequired,
     newPatient: React.PropTypes.object,
+    onClose: React.PropTypes.func.isRequired,
+    onHide: React.PropTypes.func.isRequired,
     show: React.PropTypes.bool.isRequired,
     sources: React.PropTypes.array.isRequired,
     submitAddPatient: React.PropTypes.func.isRequired,
-    onClose: React.PropTypes.func.isRequired,
-    onHide: React.PropTypes.func.isRequired,
+    resetForm: React.PropTypes.func.isRequired,
+    touchFields: React.PropTypes.func.isRequired,
   };
   constructor(props) {
     super(props);
     this.addPatient = this.addPatient.bind(this);
+    this.onClose = this.onClose.bind(this);
+    this.onHide = this.onHide.bind(this);
+  }
+
+  onClose() {
+    const { onClose, resetForm } = this.props;
+    resetForm();
+    onClose();
+  }
+
+  onHide() {
+    const { onHide, resetForm } = this.props;
+    resetForm();
+    onHide();
   }
 
   addPatient(event) {
     event.preventDefault();
-    const { errorList, newPatient, onClose, submitAddPatient } = this.props;
+    const { errorList, newPatient, submitAddPatient, touchFields } = this.props;
+    touchFields();
     /* will only submit the form if the error list is empty */
     if (Object.keys(errorList).length === 0) {
       /* normalizing the phone number */
       newPatient.phone = normalizePhone(newPatient.phone);
-      submitAddPatient(newPatient, onClose);
+      submitAddPatient(newPatient, this.onClose);
     }
   }
 
   render() {
-    const { addPatientStatus, onHide, sources, ...props } = this.props;
+    const { addPatientStatus, sources, ...props } = this.props;
     const sourceOptions = sources.map(source => ({
       label: source.type,
       value: source.id,
     }));
+    const sanitizedProps = sanitizeProps(props);
+    delete sanitizedProps.errorList;
+    delete sanitizedProps.onClose;
+    delete sanitizedProps.newPatient;
+    delete sanitizedProps.resetForm;
+    delete sanitizedProps.submitAddPatient;
+    delete sanitizedProps.touchFields;
     return (
       <Modal
-        {...props}
+        {...sanitizedProps}
         id="add-patient-info-import"
         dialogComponentClass={CenteredModal}
-        onHide={onHide}
+        onHide={this.onHide}
         backdrop
         keyboard
       >
@@ -69,7 +93,7 @@ class AddPatient extends React.Component {
           <Modal.Title>
             <strong>Import</strong>
           </Modal.Title>
-          <a className="close" onClick={onHide}>
+          <a className="close" onClick={this.onHide}>
             <i className="icomoon-icon_close" />
           </a>
         </Modal.Header>
@@ -162,7 +186,9 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    resetForm: () => dispatch(reset(formName)),
     submitAddPatient: (patient, onClose) => dispatch(submitAddPatient(patient, onClose)),
+    touchFields: () => dispatch(touch(formName, ...fields)),
   };
 }
 
