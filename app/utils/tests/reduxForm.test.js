@@ -8,7 +8,7 @@ const schema = {
 
 const validator = validatorFactory(schema);
 
-describe('utils/reduxForm', () => {
+describe('../../utils/reduxForm', () => {
   describe('validator', () => {
     it('should be a function itself', () => {
       expect(validator).toBeA('function');

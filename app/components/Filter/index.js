@@ -5,7 +5,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import ReactSelect from '../Input/ReactSelect';
-import Input from 'components/Input';
+import Input from '../../components/Input';
 
 class Filter extends React.Component {
   static propTypes = {

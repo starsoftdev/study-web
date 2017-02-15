@@ -1,7 +1,7 @@
 // import SetNewPasswordPage from '../index';
 
 import expect from 'expect';
-import { SetNewPasswordPage } from 'containers/SetNewPasswordPage';
+import SetNewPasswordPage from '../index';
 import { ReduxForm } from 'redux-form';
 import { shallow } from 'enzyme';
 import React from 'react';

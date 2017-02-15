@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
+import { actions as toastrActions } from 'react-redux-toastr';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
@@ -16,8 +17,7 @@ import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input/index';
 import { removePatientsFromTextBlast, submitTextBlast } from '../actions';
 import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
-import { actions as toastrActions } from 'react-redux-toastr';
-import { selectClientCredits } from 'containers/App/selectors';
+import { selectClientCredits } from '../../App/selectors';
 
 const formName = 'PatientDatabase.TextBlastModal';
 

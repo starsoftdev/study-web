@@ -9,9 +9,9 @@ import EditSiteForm from '../../components/EditSiteForm';
 import EditUserForm from '../../components/EditUserForm';
 import { selectCurrentUserClientId, selectClientSites, selectSelectedSite,
   selectSelectedSiteDetailsForForm, selectSelectedUser, selectSelectedUserDetailsForForm,
-  selectDeletedUser, selectSavedSite, selectSavedUser } from 'containers/App/selectors';
+  selectDeletedUser, selectSavedSite, selectSavedUser } from '../../containers/App/selectors';
 import { clearSelectedSite, clearSelectedUser,
-  deleteUser, saveSite, saveUser } from 'containers/App/actions';
+  deleteUser, saveSite, saveUser } from '../../containers/App/actions';
 import ClientSiteItem from './ClientSiteItem';
 
 class ClientSitesList extends Component { // eslint-disable-line react/prefer-stateless-function

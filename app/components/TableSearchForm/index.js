@@ -13,8 +13,8 @@ import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../CenteredModal/index';
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
+import Input from '../../components/Input';
+import ReactSelect from '../../components/Input/ReactSelect';
 
 const mapStateToProps = createStructuredSelector({});
 

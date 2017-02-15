@@ -7,14 +7,14 @@
 import React, { PropTypes } from 'react';
 import { Field, change } from 'redux-form';
 import { Modal } from 'react-bootstrap';
-import AddEmailNotificationForm from 'components/AddEmailNotificationForm';
-import Checkbox from 'components/Input/Checkbox';
+import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
+import Checkbox from '../../components/Input/Checkbox';
 import _ from 'lodash';
 
 import {
   showAddEmailModal,
   hideAddEmailModal,
-} from 'containers/ListNewStudyPage/actions';
+} from '../../containers/ListNewStudyPage/actions';
 
 class RenderEmailsList extends React.Component { // eslint-disable-line react/prefer-stateless-function
 

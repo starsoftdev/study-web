@@ -16,7 +16,7 @@ import {
   FETCH_PROPOSAL,
   FETCH_PROPOSAL_SUCCESS,
   FETCH_PROPOSAL_ERROR,
-} from 'containers/RequestProposalPage/constants';
+} from '../../containers/RequestProposalPage/constants';
 
 export function submitForm(payload) {
   return {

@@ -5,11 +5,11 @@ import { take, call, put, select } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import moment from 'moment-timezone';
 
-import request from 'utils/request';
-import { getItem, removeItem } from 'utils/localStorage';
-import { FETCH_ME_FROM_TOKEN } from 'containers/App/constants';
-import { setAuthState, setUserData } from 'containers/App/actions';
-import { selectCurrentPath } from 'common/selectors/router.selector';
+import request from '../../utils/request';
+import { getItem, removeItem } from '../../utils/localStorage';
+import { FETCH_ME_FROM_TOKEN } from '../../containers/App/constants';
+import { setAuthState, setUserData } from '../../containers/App/actions';
+import { selectCurrentPath } from '../../common/selectors/router.selector';
 
 export default function* fetchMeSaga() {
   while (true) {

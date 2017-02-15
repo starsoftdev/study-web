@@ -2,8 +2,9 @@ import React, { PropTypes } from 'react';
 import inViewport from 'in-viewport';
 import { Field, reduxForm } from 'redux-form';
 import landingFormValidator from './validator';
-import Input from 'components/Input';
-import { Alert } from 'react-bootstrap';
+import Alert from 'react-bootstrap/lib/Alert';
+
+import Input from '../../../app/components/Input';
 
 @reduxForm({
   form: 'landing',

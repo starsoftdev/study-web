@@ -7,6 +7,7 @@ import { Calendar } from 'react-date-range';
 import classnames from 'classnames';
 import moment from 'moment-timezone';
 
+import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_UPGRADE_PRICE } from '../../../common/constants';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
@@ -14,15 +15,14 @@ import DatePicker from '../../../components/Input/DatePicker';
 import Toggle from '../../../components/Input/Toggle';
 import ShoppingCartForm from '../../../components/ShoppingCartForm';
 import AddNewCardForm from '../../../components/AddNewCardForm';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import {
   selectRenewStudyFormCampaignLengthValue,
 } from './selectors';
-import { selectStudyLevels } from 'containers/App/selectors';
-import { saveCard } from 'containers/App/actions';
-import { selectSelectedIndicationLevelPrice } from 'containers/HomePage/selectors';
-import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_UPGRADE_PRICE } from 'common/constants';
+import { selectStudyLevels } from '../../App/selectors';
+import { saveCard } from '../../App/actions';
+import { selectSelectedIndicationLevelPrice } from '../selectors';
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
 import _, { find } from 'lodash';
 
 

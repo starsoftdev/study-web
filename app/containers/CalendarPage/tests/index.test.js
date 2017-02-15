@@ -3,11 +3,11 @@ import { shallow, mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import React from 'react';
 
-import configureStore from 'store';
-import { CalendarPage } from 'containers/CalendarPage';
-import FilterBar from 'containers/CalendarPage/components/FilterBar';
-import CalendarWidget from 'containers/CalendarPage/components/CalendarWidget';
-import SchedulePatientModal from 'containers/CalendarPage/components/SchedulePatientModal';
+import configureStore from '../../../store';
+import { CalendarPage } from '../index';
+import FilterBar from '../components/FilterBar';
+import CalendarWidget from '../components/CalendarWidget';
+import SchedulePatientModal from '../components/SchedulePatientModal';
 
 describe('CalendarPage/index component', () => {
   let setup;

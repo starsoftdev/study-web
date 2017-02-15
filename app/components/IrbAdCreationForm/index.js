@@ -5,10 +5,10 @@
 */
 
 import React, { PropTypes } from 'react';
-import ReactSelect from 'components/Input/ReactSelect';
+import ReactSelect from '../../components/Input/ReactSelect';
 import { Field, reduxForm } from 'redux-form';
 import formValidator from './validator';
-import Input from 'components/Input';
+import Input from '../../components/Input';
 
 @reduxForm({ form: 'irbAdCreation', validate: formValidator })
 class IrbAdCreationForm extends React.Component { // eslint-disable-line react/prefer-stateless-function

@@ -2,13 +2,13 @@ import expect from 'expect';
 import { take, call, fork } from 'redux-saga/effects';
 import loginSaga, { authorize } from '../../../common/sagas/login.saga';
 
-import { fetchMeFromToken } from 'containers/App/actions';
+import { fetchMeFromToken } from '../../App/actions';
 
 import {
   LOGIN_REQUEST,
 } from '../constants';
 
-import request from 'utils/request';
+import request from '../../../utils/request';
 
 describe('LoginPage/sagas', () => {
   describe('loginSaga', () => {

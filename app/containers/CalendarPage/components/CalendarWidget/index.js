@@ -4,7 +4,7 @@ import React, { PropTypes } from 'react';
 import Calendar from 'react-big-calendar';
 import moment from 'moment-timezone';
 
-import { SchedulePatientModalType } from 'common/constants';
+import { SchedulePatientModalType } from '../../../../common/constants';
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.

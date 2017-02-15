@@ -14,17 +14,17 @@ import {
   fetchNotifications,
   fetchUnreadNotificationsCount,
   markNotificationsRead,
-} from 'containers/GlobalNotifications/actions';
+} from '../../../containers/GlobalNotifications/actions';
 
 import {
   selectNotifications,
   selectUnreadNotificationsCount,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../../containers/GlobalNotifications/selectors';
 
 import {
   getRedirectionUrl,
   getAvatarUrl,
-} from 'containers/NotificationsPage';
+} from '../../../containers/NotificationsPage';
 
 
 class NotificationBox extends React.Component {

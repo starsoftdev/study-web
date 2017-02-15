@@ -3,19 +3,19 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import _, { get } from 'lodash';
 
-import request from 'utils/request';
+import request from '../../utils/request';
 
 import {
   fetchSourcesSuccess,
   fetchSourcesError,
   sourceFormSubmitted,
   sourceFormSubmissionError,
-} from 'containers/ManageTransferNumberPage/actions';
+} from '../../containers/ManageTransferNumberPage/actions';
 
 import {
   FETCH_SOURCES,
   SUBMIT_SOURCES_FORM,
-} from 'containers/ManageTransferNumberPage/constants';
+} from '../../containers/ManageTransferNumberPage/constants';
 
 export function* fetchSourcesWatcher() {
   while (true) {

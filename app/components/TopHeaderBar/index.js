@@ -5,19 +5,19 @@ import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 
-import studykikLogo from 'assets/images/logo.svg';
-import AddCreditsModal from 'components/AddCreditsModal';
-import GlobalPMSModal from 'components/GlobalPMSModal';
+import studykikLogo from '../../assets/images/logo.svg';
+import AddCreditsModal from '../../components/AddCreditsModal';
+import GlobalPMSModal from '../../components/GlobalPMSModal';
 
 import NotificationBox from './NotificationBox';
 import AvatarMenu from './AvatarMenu';
 
-import { fetchSitePatients, fetchClientCredits } from 'containers/App/actions';
-import { logout } from 'containers/LoginPage/actions';
+import { fetchSitePatients, fetchClientCredits } from '../../containers/App/actions';
+import { logout } from '../../containers/LoginPage/actions';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import {
   selectSocket,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../containers/GlobalNotifications/selectors';
 
 import {
   selectCurrentUser,
@@ -25,7 +25,7 @@ import {
   selectSitePatients,
   selectClientCredits,
   selectUserRoleType,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
 import { sumBy } from 'lodash';
 

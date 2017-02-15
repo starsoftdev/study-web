@@ -10,22 +10,22 @@ import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 import { touch } from 'redux-form';
 
-import ReferForm from 'components/ReferForm';
-import { selectReferFormError } from 'components/ReferForm/selectors';
-import { fields } from 'components/ReferForm/validator';
+import ReferForm from '../../components/ReferForm';
+import { selectReferFormError } from '../../components/ReferForm/selectors';
+import { fields } from '../../components/ReferForm/validator';
 
-import { selectCompanyTypes } from 'containers/ReferPage/selectors';
-import { submitForm, fetchCompanyTypes } from 'containers/ReferPage/actions';
+import { selectCompanyTypes } from '../../containers/ReferPage/selectors';
+import { submitForm, fetchCompanyTypes } from '../../containers/ReferPage/actions';
 import {
   fetchSites,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 import {
   selectSiteLocations,
   selectCurrentUser,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
-import manImage from 'assets/images/man.svg';
-import shadowImage from 'assets/images/shadow.png';
+import manImage from '../../assets/images/man.svg';
+import shadowImage from '../../assets/images/shadow.png';
 
 import _ from 'lodash';
 

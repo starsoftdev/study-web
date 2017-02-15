@@ -5,7 +5,7 @@ import { Field, reduxForm } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import moment from 'moment-timezone';
 
-import { SchedulePatientModalType } from 'common/constants';
+import { SchedulePatientModalType } from '../../../../common/constants';
 
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import DatePicker from '../../../../components/Input/DatePicker';

@@ -10,31 +10,31 @@ import { createStructuredSelector } from 'reselect';
 import { find, sumBy } from 'lodash';
 import { touch } from 'redux-form';
 
-import LoadingSpinner from 'components/LoadingSpinner';
-import Money from 'components/Money';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import Money from '../../components/Money';
 import {
   CAMPAIGN_LENGTH_LIST,
   MESSAGING_SUITE_PRICE,
   QUALIFICATION_SUITE_PRICE,
   CALL_TRACKING_PRICE,
-} from 'common/constants';
+} from '../../common/constants';
 import {
   selectProposalFormValues,
   selectProposalFormError,
-} from 'components/RequestProposalForm/selectors';
-import { fields } from 'components/RequestProposalForm/validator';
+} from '../../components/RequestProposalForm/selectors';
+import { fields } from '../../components/RequestProposalForm/validator';
 import {
   selectLevels,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 import {
   submitForm, fetchCoupon,
-} from 'containers/RequestProposalPage/actions';
+} from '../../containers/RequestProposalPage/actions';
 import {
   selectCoupon,
   selectIndicationLevelPrice,
-} from 'containers/RequestProposalPage/selectors';
+} from '../../containers/RequestProposalPage/selectors';
 
-import { fetchIndicationLevelPrice } from 'containers/App/actions';
+import { fetchIndicationLevelPrice } from '../../containers/App/actions';
 
 export class RequestProposalCart extends Component {
   static propTypes = {

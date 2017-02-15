@@ -16,11 +16,11 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import ReactGA from 'react-ga';
 
-import SideNavBar from 'components/SideNavBar';
-import TopHeaderBar from 'components/TopHeaderBar';
-import TopHeaderBar2 from 'components/TopHeaderBar2';
-import LoadingSpinner from 'components/LoadingSpinner';
-import GlobalNotifications from 'containers/GlobalNotifications';
+import SideNavBar from '../../components/SideNavBar';
+import TopHeaderBar from '../../components/TopHeaderBar';
+import TopHeaderBar2 from '../../components/TopHeaderBar2';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import GlobalNotifications from '../../containers/GlobalNotifications';
 import { fetchMeFromToken } from './actions';
 import { selectAuthState, selectCurrentUser, selectEvents, selectUserRoleType } from './selectors';
 
