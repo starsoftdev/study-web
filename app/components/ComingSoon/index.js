@@ -7,8 +7,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import varImage from 'assets/images/img10.svg';
-import bubbleImage from 'assets/images/foot.svg';
+import varImage from '../../assets/images/img10.svg';
+import bubbleImage from '../../assets/images/foot.svg';
 
 
 export class ComingSoon extends React.Component { // eslint-disable-line react/prefer-stateless-function
