@@ -19,6 +19,7 @@ import { default as PrivacyPolicyPage } from './containers/PrivacyPolicyPage';
 import { default as LandingPage } from './containers/LandingPage';
 import { default as BillingPage } from './containers/BillingPage';
 import { default as OrderPage } from './containers/OrderPage';
+import { default as AboutPage } from './containers/AboutPage';
 import { default as NotFound } from './containers/NotFoundPage';
 
 import './assets/less/main.less';
@@ -40,6 +41,7 @@ const routes = {
   indexRoute: { component: Home },
   childRoutes: [
     { path: '/login', component: LoginPage },
+    { path: '/about', component: AboutPage },
     { path: '/contact', component: ContactPage },
     { path: '/list-your-trials', component: ListYourTrialsPage },
     { path: '/billing', component: BillingPage },
