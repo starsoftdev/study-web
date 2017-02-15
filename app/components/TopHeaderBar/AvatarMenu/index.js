@@ -10,6 +10,7 @@ class AvatarMenu extends React.Component {
   static propTypes = {
     handleLogoutClick: PropTypes.func.isRequired,
     currentUser: PropTypes.any,
+    userRoleType: PropTypes.string,
   };
 
   constructor(props) {
@@ -33,7 +34,7 @@ class AvatarMenu extends React.Component {
 
   render() {
     const avatarMenuClassName = this.state.avatarMenuOpen ? 'avatar-menu-open' : 'avatar-menu-close';
-    const { currentUser } = this.props;
+    const { currentUser, userRoleType } = this.props;
     const { firstName, lastName } = currentUser;
     const userName = `${firstName} ${lastName}`;
 
@@ -51,8 +52,15 @@ class AvatarMenu extends React.Component {
             <ul className="list-unstyled">
               <li><Link to="/app/me/profile" onClick={() => this.handleClickOutside()}>PROFILE</Link></li>
               <li><Link to="/app/payment-information" onClick={() => this.handleClickOutside()}>PAYMENT INFORMATION</Link></li>
-              <li><Link to="/app/receipts" onClick={() => this.handleClickOutside()}>RECEIPTS</Link></li>
-              <li><Link to="/app/proposals" onClick={() => this.handleClickOutside()}>PROPOSALS</Link></li>
+              { userRoleType === 'client' &&
+                <li><Link to="/app/receipts" onClick={() => this.handleClickOutside()}>RECEIPTS</Link></li>
+              }
+              { userRoleType === 'client' &&
+                <li><Link to="/app/proposals" onClick={() => this.handleClickOutside()}>PROPOSALS</Link></li>
+              }
+              { userRoleType !== 'client' &&
+                <li><Link to="/app/project-agreements" onClick={() => this.handleClickOutside()}>RECEIPTS & PROJECT AGREEMENTS</Link></li>
+              }
               <a
                 onClick={() => {
                   this.props.handleLogoutClick();
