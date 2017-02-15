@@ -1,5 +1,6 @@
 import React from 'react';
 import inViewport from 'in-viewport';
+import { Link } from 'react-router';
 
 import img17 from '../../assets/images/img17.svg';
 import img18 from '../../assets/images/img18.svg';
@@ -43,7 +44,7 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
         <div className="container">
           <h2 className="main-heading alt text-center small-font">
             STUDYKIK IS DEDICATED TO HELPING PEOPLE FIND CLINICAL TRIALS IN THEIR AREA. IF YOU WISH TO HAVE VOLUNTEERS
-            FIND YOUR CLINICAL TRIALS, <a href="#">CLICK HERE</a>
+            FIND YOUR CLINICAL TRIALS, <Link to="/" title="find your clinical trials">CLICK HERE</Link>
           </h2>
           <form
             ref={(animatedForm) => { this.animatedForm = animatedForm; }}
