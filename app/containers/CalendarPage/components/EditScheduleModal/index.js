@@ -3,11 +3,9 @@
 import React, { Component, PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Modal } from 'react-bootstrap';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
-import { getLocalTime } from 'utils/time';
-
-import { SchedulePatientModalType } from 'common/constants';
+import { SchedulePatientModalType } from '../../../../common/constants';
 
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import DatePicker from '../../../../components/Input/DatePicker';
@@ -17,7 +15,7 @@ import CenteredModal from '../../../../components/CenteredModal';
 import validator from './validator';
 
 function getTimeComponents(strTime, timezone) {
-  const localTime = getLocalTime(strTime, timezone);
+  const localTime = moment(strTime).tz(timezone);
 
   return {
     hour: (((localTime.hour() + 11) % 12) + 1).toString(),

@@ -274,9 +274,20 @@ const selectChangeTimezoneState = () => createSelector(
   (substate) => get(substate, 'baseData.changeUsersTimezoneState', {})
 );
 
+// TODO: debug this to select study instead landing
 const selectLanding = () => createSelector(
   selectGlobal(),
-  (substate) => get(substate, 'baseData.landing', {})
+  (substate) => get(substate, 'baseData.landing.details', {})
+);
+
+const selectLandingIsFetching = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.landing.fetching', {})
+);
+
+const selectLandingError = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.landing.error', {})
 );
 
 const selectSubscribedFromLanding = () => createSelector(
@@ -286,7 +297,7 @@ const selectSubscribedFromLanding = () => createSelector(
 
 const selectSubscriptionError = () => createSelector(
   selectGlobal(),
-  (substate) => substate.subscriptionError
+  (substate) => get(substate, 'baseData.subscriptionError', {})
 );
 // end
 
@@ -339,6 +350,8 @@ export {
   selectChangeTimezoneState,
 
   selectLanding,
+  selectLandingIsFetching,
+  selectLandingError,
   selectSubscribedFromLanding,
   selectSubscriptionError,
 };

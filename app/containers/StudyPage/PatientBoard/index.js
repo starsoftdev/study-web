@@ -22,7 +22,7 @@ import {
   switchToTextSectionDetail,
   readStudyPatientMessages,
 } from '../actions';
-import { markAsReadPatientMessages } from 'containers/App/actions';
+import { markAsReadPatientMessages } from '../../App/actions';
 import { change } from 'redux-form';
 
 import Scroll from 'react-scroll';

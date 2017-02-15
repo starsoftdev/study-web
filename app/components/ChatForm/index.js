@@ -8,24 +8,24 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, reset } from 'redux-form';
-import Input from 'components/Input';
+import Input from '../../components/Input';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
 
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 import {
   selectChat,
-} from 'containers/PatientDatabasePage/selectors';
+} from '../../containers/PatientDatabasePage/selectors';
 import {
   selectSocket,
   selectProcessingStatus,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../containers/GlobalNotifications/selectors';
 import {
   fetchStudyPatientMessages,
   setProcessingStatus,
-} from 'containers/GlobalNotifications/actions';
+} from '../../containers/GlobalNotifications/actions';
 
 
 const formName = 'chatPatient';

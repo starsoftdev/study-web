@@ -93,6 +93,23 @@
               line-height: 1;
               -webkit-font-smoothing: antialiased;
 
+              &:after,
+              &:before {
+                color: #00afef;
+                transition: all 0.25s;
+              }
+
+              &:hover {
+                outline: none;
+                border-color: #76daff;
+                box-shadow: none !important;
+
+                &:after,
+                &:before {
+                  color: #76daff;
+                }
+              }
+
               &:before {
                 content: "\e920";
               }

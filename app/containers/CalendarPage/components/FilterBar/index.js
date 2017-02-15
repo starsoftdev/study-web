@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Select from 'react-select';
 import _ from 'lodash';
 
-import { addAllOption } from 'components/Input/ReactSelect';
+import { addAllOption } from '../../../../components/Input/ReactSelect';
 
 class FilterBar extends Component {
   static propTypes = {

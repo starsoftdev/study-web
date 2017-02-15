@@ -5,10 +5,10 @@ import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
-import { get } from 'lodash';
+import _, { get } from 'lodash';
 
-import request from 'utils/request';
-import composeQueryString from 'utils/composeQueryString';
+import request from '../../utils/request';
+import composeQueryString from '../../utils/composeQueryString';
 import {
   FETCH_PATIENT_SIGN_UPS,
   FETCH_PATIENT_MESSAGES,
@@ -23,6 +23,9 @@ import {
   EDIT_STUDY,
   FETCH_UPGRADE_STUDY_PRICE,
 } from './constants';
+
+import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
+import { addEmailNotificationUserSuccess, addEmailNotificationUserError, fetchClientSites } from '../../containers/App/actions';
 
 import {
   fetchPatientSignUpsSucceeded,
@@ -85,7 +88,6 @@ export function* fetchPrincipalInvestigatorTotalsWatcher() {
 
 export function* fetchPrincipalInvestigatorTotalsWorker(action) {
   try {
-    console.log(action.currentUser);
     const requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/principalInvestigators`;
 
     const params = {
@@ -308,16 +310,31 @@ export function* editStudyWatcher() {
 
 export function* editStudyWorker(action) {
   try {
-    const { studyId, formValues } = action;
-    const requestURL = `${API_URL}/studies/${studyId}`;
+    const { studyId } = action;
+
+    const requestURL = `${API_URL}/sponsorRoles/editProtocol`;
+
+    const data = new FormData();
+    _.forEach(action.formValues, (value, index) => {
+      if (index !== 'studyAd' && index !== 'emailNotifications') {
+        data.append(index, value);
+      }
+    });
+    data.append('id', studyId);
+    data.append('emailNotifications', JSON.stringify(action.formValues.emailNotifications));
+
+    if (action.formValues.studyAd && action.formValues.studyAd[0]) {
+      data.append('file', action.formValues.studyAd[0]);
+    }
 
     const params = {
-      method: 'PUT',
-      body: JSON.stringify({
-        formValues,
-      }),
+      method: 'POST',
+      body: data,
+      useDefaultContentType: true,
     };
     const response = yield call(request, requestURL, params);
+
+    yield put(fetchClientSites(action.formValues.clientId, {}));
 
     yield put(toastrActions.success('Edit Study', 'The request has been submitted successfully'));
     yield put(studyEdited(response));
@@ -326,6 +343,32 @@ export function* editStudyWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
     yield put(toastrActions.error('', errorMessage));
     yield put(studyEditingError(err));
+  }
+}
+
+export function* addEmailNotificationUserWatcher() {
+  yield* takeLatest(ADD_EMAIL_NOTIFICATION_USER, addEmailNotificationUserWorker);
+}
+
+export function* addEmailNotificationUserWorker(action) {
+  const { payload } = action;
+  console.log('saga', payload);
+  try {
+    const clientId = payload.clientId;
+    delete payload.clientId;
+
+    const requestURL = `${API_URL}/clients/${clientId}/addUserWithClientRole`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchClientSites(clientId, {}));
+    yield put(addEmailNotificationUserSuccess(response.user));
+  } catch (err) {
+    yield put(addEmailNotificationUserError(err));
   }
 }
 
@@ -342,6 +385,8 @@ export function* homePageSaga() {
   const fetchProtocolsWatcher1 = yield fork(fetchProtocolsWatcher);
   const fetchProtocolNumbersWatcher1 = yield fork(fetchProtocolNumbersWatcher);
   const fetchIndicationsWatcher1 = yield fork(fetchIndicationsWatcher);
+  const addEmailNotificationUserWatcher1 = yield fork(addEmailNotificationUserWatcher);
+
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
@@ -358,5 +403,6 @@ export function* homePageSaga() {
     yield cancel(fetchProtocolsWatcher1);
     yield cancel(fetchProtocolNumbersWatcher1);
     yield cancel(fetchIndicationsWatcher1);
+    yield cancel(addEmailNotificationUserWatcher1);
   }
 }

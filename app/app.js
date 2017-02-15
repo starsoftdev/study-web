@@ -6,14 +6,6 @@
  */
 import 'babel-polyfill';
 
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/extensions */
-// Load the manifest.json file and the .htaccess file
-import '!file?name=[name].[ext]!./manifest.json';
-import 'file?name=[name].[ext]!./.htaccess';
-/* eslint-enable import/no-unresolved */
-/* eslint-enable import/extensions */
-
 // Import all the third party stuff
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -28,11 +20,7 @@ import configureStore from './store';
 import 'sanitize.css/sanitize.css';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
-import 'assets/less/main.less';
-
-// import moment timezone and set the default timezone
-// import moment from 'moment-timezone';
-// moment.tz.setDefault('America/New_York');
+import './assets/less/main.less';
 
 // Create redux store with history
 // this uses the singleton browserHistory provided by react-router
@@ -45,7 +33,7 @@ const store = configureStore(initialState, browserHistory);
 const history = syncHistoryWithStore(browserHistory, store);
 
 // Set up the router, wrapping all Routes in the App component
-import App from 'containers/App';
+import App from './containers/App';
 import createRoutes from './routes';
 const rootRoute = {
   component: App,

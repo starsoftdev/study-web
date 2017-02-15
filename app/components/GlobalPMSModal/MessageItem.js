@@ -1,13 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import moment from 'moment-timezone';
 
-import { getLocalTime } from 'utils/time';
 import { selectSelectedUser, selectCurrentUser } from '../../containers/App/selectors';
 
-import defaultUserImage from 'assets/images/Default-User-Img.png';
-import defaultUserImageGirl from 'assets/images/Default-User-Img-Girl.png';
-import defaultUserImageDoctor from 'assets/images/Default-User-Img-Dr.png';
+import defaultUserImage from '../../assets/images/Default-User-Img.png';
+import defaultUserImageGirl from '../../assets/images/Default-User-Img-Girl.png';
+import defaultUserImageDoctor from '../../assets/images/Default-User-Img-Dr.png';
 
 class MessageItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -18,7 +18,6 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
   render() {
     const { messageData, currentUser } = this.props;
     const cts = messageData.twilioTextMessage.dateCreated;
-    const cdate = getLocalTime(cts, currentUser.timezone).format('MM/DD/YYYY [at] H:mm A');
 
     let addon = '';
     let containerClassName = 'post-holder';
@@ -61,7 +60,7 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
           </p>
         </div>
         <strong className="email">{senderName}</strong>
-        <time>{cdate}</time>
+        <time>{moment(cts).tz(currentUser.timezone).format('M/DD/YYYY [at] H:mm:ss A')}</time>
       </div>
     );
   }

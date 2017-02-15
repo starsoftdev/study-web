@@ -4,20 +4,20 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { orderBy } from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import classnames from 'classnames';
 import { push } from 'react-router-redux';
 import Helmet from 'react-helmet';
 
 import {
   selectCurrentUser,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 import {
   selectNotifications,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../containers/GlobalNotifications/selectors';
 import {
   fetchNotifications,
-} from 'containers/GlobalNotifications/actions';
+} from '../../containers/GlobalNotifications/actions';
 
 import NotificationItem from './Item';
 export const getRedirectionUrl = (notification) => {
@@ -38,13 +38,13 @@ export const getRedirectionUrl = (notification) => {
 
 export const getAvatarUrl = (notification) => {
   const { event_log } = notification;
-  let url = require('assets/images/Default-User-Img-Dr.png');
+  let url = require('../../assets/images/Default-User-Img-Dr.png');
   if (event_log.eventType === 'twilio-message') {
     const data = JSON.parse(event_log.eventData);
     if (data.patientGender === 'Female') {
-      url = require('assets/images/Default-User-Img-Girl.png');
+      url = require('../../assets/images/Default-User-Img-Girl.png');
     } else {
-      url = require('assets/images/Default-User-Img.png');
+      url = require('../../assets/images/Default-User-Img.png');
     }
   }
 

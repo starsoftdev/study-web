@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { get } from 'lodash';
 
 const selectHomePageDomain = () => state => state.homePage;
 
@@ -67,6 +68,18 @@ const selectPaginationOptions = () => createSelector(
   substate => substate.paginationOptions
 );
 
+const selectAddNotificationProcess = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.addNotificationProcess
+);
+
+const selectFormDomain = () => state => state.form;
+
+const selectSearchProtocolsFormValues = () => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, 'searchProtocols.values', {})
+);
+
 export default selectHomePage;
 export {
   selectHomePageDomain,
@@ -82,4 +95,6 @@ export {
   selectUpgradedStudy,
   selectEditedStudy,
   selectPaginationOptions,
+  selectSearchProtocolsFormValues,
+  selectAddNotificationProcess,
 };

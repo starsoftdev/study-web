@@ -1,10 +1,9 @@
 import React, { PropTypes, Component } from 'react';
+import moment from 'moment-timezone';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
-
-import { getLocalTime } from 'utils/time';
 
 class StudyItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -17,6 +16,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     sponsor: PropTypes.string,
     protocol: PropTypes.string,
     patientMessagingSuite: PropTypes.string,
+    patientQualificationSuite: PropTypes.string,
     unreadMessageCount: PropTypes.number,
     status: PropTypes.string,
     siteUsers: PropTypes.array,
@@ -63,7 +63,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   onEditClick() {
-    this.props.onEdit(this.props.studyId, this.props.siteUsers);
+    this.props.onEdit(this.props.studyId, this.props.siteUsers, this.props.siteId);
   }
 
   showButtons() {
@@ -78,13 +78,15 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     if (!date) {
       return '';
     }
-    return getLocalTime(date, timezone).format('MM/DD/YYYY');
+    return moment(date).tz(timezone).format('MM/DD/YYYY');
   }
 
   render() {
-    const { currentUser, indication, location, sponsor, protocol, patientMessagingSuite, status,
-      startDate, endDate, unreadMessageCount, orderNumber } = this.props;
+    const { currentUser, indication, location, sponsor, protocol, patientMessagingSuite, patientQualificationSuite, status,
+      startDate, endDate, unreadMessageCount, orderNumber, studyId } = this.props;
     const buttonsShown = this.state.buttonsShown;
+    const purchasable = (currentUser.roleForClient && currentUser.roleForClient.canPurchase);
+    const landingHref = `/${studyId}-${location.toLowerCase().replace(/ /ig, '-')}`;
     let messageCountContent = null;
     if (unreadMessageCount > 0) {
       messageCountContent = (
@@ -101,7 +103,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <span>{orderNumber}</span>
         </td>
         <td className="indication">
-          <span>{indication.name}</span>
+          <a href={landingHref} className="landig-link" target="_blank">{indication.name}</a>
         </td>
         <td className="location">
           <span>{location}</span>
@@ -112,8 +114,8 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
         <td className="protocol">
           <span>{protocol}</span>
         </td>
-        <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off') })}>
-          <span className="patient-messaging-suite-status">{patientMessagingSuite}</span>
+        <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off' && patientQualificationSuite === 'Off') })}>
+          <span className="patient-messaging-suite-status">{(patientMessagingSuite === 'Off' && patientQualificationSuite === 'Off') ? 'Off' : 'On'}</span>
           <span>{messageCountContent}</span>
         </td>
         <td className={classNames('status', { inactive: (status === 'Inactive') })}>
@@ -127,8 +129,8 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <div className="btns-slide pull-right">
             <div className="btns">
               <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>
-              <Button bsStyle="primary" className="btn-renew" onClick={this.onRenewClick}>Renew</Button>
-              <Button bsStyle="danger" className="btn-upgrade" onClick={this.onUpgradeClick}>Upgrade</Button>
+              <Button bsStyle="primary" className="btn-renew" disabled={!purchasable} onClick={this.onRenewClick}>Renew</Button>
+              <Button bsStyle="danger" className="btn-upgrade" disabled={!purchasable} onClick={this.onUpgradeClick}>Upgrade</Button>
               <Button bsStyle="info" className="btn-edit" onClick={this.onEditClick}>Edit</Button>
             </div>
           </div>

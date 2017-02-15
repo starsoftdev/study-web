@@ -4,8 +4,10 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change, reset } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import { Calendar } from 'react-date-range';
-import moment from 'moment';
+import classnames from 'classnames';
+import moment from 'moment-timezone';
 
+import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_UPGRADE_PRICE } from '../../../common/constants';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
@@ -13,15 +15,14 @@ import DatePicker from '../../../components/Input/DatePicker';
 import Toggle from '../../../components/Input/Toggle';
 import ShoppingCartForm from '../../../components/ShoppingCartForm';
 import AddNewCardForm from '../../../components/AddNewCardForm';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import {
   selectRenewStudyFormCampaignLengthValue,
 } from './selectors';
-import { selectStudyLevels } from 'containers/App/selectors';
-import { saveCard } from 'containers/App/actions';
-import { selectSelectedIndicationLevelPrice } from 'containers/HomePage/selectors';
-import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_UPGRADE_PRICE } from 'common/constants';
+import { selectStudyLevels } from '../../App/selectors';
+import { saveCard } from '../../App/actions';
+import { selectSelectedIndicationLevelPrice } from '../selectors';
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
 import _, { find } from 'lodash';
 
 
@@ -65,7 +66,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     this.state = {
       exposureLevel: null,
       campaignLength: null,
-      condenseToTwoWeeks: false,
+      condenseTwoWeeks: false,
       patientMessagingSuite: false,
       patientQualificationSuite: false,
       callTracking: false,
@@ -81,7 +82,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   componentWillReceiveProps(newProps) {
     if (newProps.campaignLength !== this.props.campaignLength) {
       if (newProps.campaignLength !== 1) {
-        this.props.dispatch(change('renewStudy', 'condenseToTwoWeeks', false));
+        this.props.dispatch(change('renewStudy', 'condenseTwoWeeks', false));
       }
     }
 
@@ -153,7 +154,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     const resetState = {
       exposureLevel: null,
       campaignLength: null,
-      condenseToTwoWeeks: false,
+      condenseTwoWeeks: false,
       patientMessagingSuite: false,
       callTracking: false,
       initDate: moment(),
@@ -192,7 +193,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
 
   handleCondenseChoose(e) {
     this.setState({
-      condenseToTwoWeeks: e,
+      condenseTwoWeeks: e,
     });
   }
 
@@ -244,7 +245,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
 
   generateRenewStudyShoppingCartAddOns() {
     const { studyLevels, selectedIndicationLevelPrice, selectedStudy } = this.props;
-    const { exposureLevel, campaignLength, condenseToTwoWeeks,
+    const { exposureLevel, campaignLength, condenseTwoWeeks,
       patientMessagingSuite, patientQualificationSuite, callTracking } = this.state;
     const addOns = [];
 
@@ -252,7 +253,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       if (!selectedIndicationLevelPrice.fetching && selectedIndicationLevelPrice.details) {
         const foundExposureLevel = find(studyLevels, { id: exposureLevel });
         const monthLength = find(CAMPAIGN_LENGTH_LIST, { value: campaignLength });
-        const durationString = (condenseToTwoWeeks) ? '2 Weeks' : monthLength.label;
+        const durationString = (condenseTwoWeeks) ? '2 Weeks' : monthLength.label;
 
         addOns.push({
           title: `${durationString} ${foundExposureLevel.type}`,
@@ -379,22 +380,18 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                             />
                           </div>
                         </div>
-                        {campaignLength === 1 &&
-                        (
-                          <div className="field-row">
-                            <strong className="label">
-                              <label>CONDENSE TO 2 WEEKS</label>
-                            </strong>
-                            <div className="field">
-                              <Field
-                                name="condenseToTwoWeeks"
-                                component={Toggle}
-                                onChange={this.handleCondenseChoose}
-                              />
-                            </div>
+                        <div className={classnames('field-row', { hidden: campaignLength !== 1 })}>
+                          <strong className="label">
+                            <label>CONDENSE TO 2 WEEKS</label>
+                          </strong>
+                          <div className="field">
+                            <Field
+                              name="condenseTwoWeeks"
+                              component={Toggle}
+                              onChange={this.handleCondenseChoose}
+                            />
                           </div>
-                        )
-                        }
+                        </div>
                         <div className="field-row">
                           <strong className="label">
                             <label>PATIENT MESSAGING SUITE: $247</label>

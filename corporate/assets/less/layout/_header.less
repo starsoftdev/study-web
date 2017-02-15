@@ -26,7 +26,7 @@
 		top: 0;
 		right: 36px;
 		position: absolute;
-		
+
 		@media screen and (max-width: @sm) {
 			top: auto;
 			right: auto;
@@ -34,11 +34,14 @@
 			margin: 0 0 0 12px;
 			position: relative;
 		}
+
+		@media screen and (max-width: @xs) {
+      width: 46px !important;
+      height: 36px !important;
+		}
 	}
 	
-	.logo-holder {
-		overflow: hidden;
-	}
+	.logo-holder {}
 }
 
 .logo {
@@ -91,11 +94,11 @@
 		max-width: 260px;
 		
 		@media screen and (max-width: @xs) {
-			max-width: 240px;
+      max-width: 240px;
 		}
 		
 		@media screen and (max-width: @small) {
-			max-width: 148px;
+			max-width: 140px;
 		}
 		
 		img {

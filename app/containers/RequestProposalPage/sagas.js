@@ -7,7 +7,7 @@ import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
 import { get } from 'lodash';
 
-import request from 'utils/request';
+import request from '../../utils/request';
 
 import {
   formSubmitted,
@@ -16,13 +16,13 @@ import {
   couponFetchingError,
   fetchProposalSuccess,
   fetchProposalError,
-} from 'containers/RequestProposalPage/actions';
+} from '../../containers/RequestProposalPage/actions';
 
 import {
   SUBMIT_FORM,
   FETCH_COUPON,
   FETCH_PROPOSAL,
-} from 'containers/RequestProposalPage/constants';
+} from '../../containers/RequestProposalPage/constants';
 
 // Bootstrap sagas
 export default [

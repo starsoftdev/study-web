@@ -6,19 +6,20 @@
 
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
+import moment from 'moment-timezone';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser } from 'containers/App/selectors';
+import { selectCurrentUser } from '../../containers/App/selectors';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
 import PatientBoard from './PatientBoard/index';
 import * as Selector from './selectors';
-import moment from 'moment';
-import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId, updatePatientSuccess } from './actions';
 import {
   selectSocket,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../containers/GlobalNotifications/selectors';
 
 export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -40,6 +41,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     study: PropTypes.object,
     stats: PropTypes.object,
     socket: React.PropTypes.any,
+    updatePatientSuccess: React.PropTypes.func,
   };
 
   static defaultProps = {
@@ -67,8 +69,24 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   componentWillReceiveProps() {
     const { params, socket } = this.props;
     if (socket && this.state.socketBinded === false) {
-      socket.on('notifyMessage', () => {
+      socket.on('notifyMessage', (message) => {
+        let curCategoryId = null;
+
+        _.forEach(this.props.patientCategories, (item) => {
+          _.forEach(item.patients, (patient) => {
+            if (patient.id === message.patient_id) {
+              curCategoryId = item.id;
+            }
+          });
+        });
+
         this.props.fetchStudy(params.id, params.siteId);
+        console.log(1);
+        this.props.updatePatientSuccess({
+          patientId: message.patient_id,
+          patientCategoryId: curCategoryId,
+          lastTextMessage: { body: message.twilioTextMessage.body, dateSent: message.twilioTextMessage.dateUpdated, dateUpdated: message.twilioTextMessage.dateUpdated },
+        });
       });
       this.setState({ socketBinded: true });
     }
@@ -93,7 +111,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     const pageTitle = `${study.name} - StudyKIK`;
     const campaignOptions = campaigns.map(campaign => (
       {
-        label: `${moment(campaign.dateFrom).format('MMMM Do YYYY')} - ${moment(campaign.dateTo).format('MMMM Do YYYY')}`,
+        label: `${moment(campaign.dateFrom).format('MM/DD/YYYY')} - ${moment(campaign.dateTo).format('MM/DD/YYYY')}`,
         value: campaign.id,
       }
     ));
@@ -156,6 +174,7 @@ function mapDispatchToProps(dispatch) {
     fetchStudy: (studyId, siteId) => dispatch(fetchStudy(studyId, siteId)),
     setStudyId: (id) => dispatch(setStudyId(id)),
     setSiteId: (id) => dispatch(setSiteId(id)),
+    updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
   };
 }
 

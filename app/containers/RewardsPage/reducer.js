@@ -7,7 +7,7 @@
 import {
   DEFAULT_SITES,
   SET_ACTIVE_SORT,
-} from 'containers/RewardsPage/constants';
+} from '../../containers/RewardsPage/constants';
 
 const initialState = {
   sites: DEFAULT_SITES,

@@ -4,7 +4,7 @@
 
 import { call, fork, put, take, cancel } from 'redux-saga/effects';
 import request from '../../utils/request';
-import { getItem, removeItem } from 'utils/localStorage';
+import { getItem, removeItem } from '../../utils/localStorage';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { FIND_PATIENTS_TEXT_BLAST,
   FETCH_PATIENTS,

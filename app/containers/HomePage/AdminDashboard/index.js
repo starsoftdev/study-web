@@ -8,14 +8,14 @@ import { Field, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import { map, mapKeys, concat, findIndex, pullAt } from 'lodash';
 import './styles.less';
-import CenteredModal from 'components/CenteredModal';
+import CenteredModal from '../../../components/CenteredModal';
 import FiltersForm from './FiltersForm';
 import StudyList from './StudyList';
-import Filter from 'components/Filter';
+import Filter from '../../../components/Filter';
 // import { selectFilterFormValues } from './FiltersForm/selectors';
 import { selectStudies, selectFilterFormValues, selectPaginationOptions } from './selectors';
 import rd3 from 'react-d3';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
 
 const PieChart = rd3.PieChart;

@@ -3,19 +3,20 @@
  */
 
 import React from 'react';
-import TextEmailBlastModal from './TextEmailBlastModal';
+import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { change } from 'redux-form';
-import { createStructuredSelector } from 'reselect';
-import AlertModal from 'components/AlertModal';
 import Form from 'react-bootstrap/lib/Form';
 import Modal from 'react-bootstrap/lib/Modal';
+
 import { selectValues } from '../../common/selectors/form.selector';
 import CenteredModal from '../../components/CenteredModal/index';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { selectImportPatientsStatus } from './selectors';
-import TextBlastModal from './TextBlast/index';
+import AlertModal from '../../components/AlertModal';
 import AddPatientModal from './ImportPatients/AddPatientModal';
+import TextEmailBlastModal from './TextEmailBlastModal';
+import TextBlastModal from './TextBlast/index';
 import { clearForm, importPatients, setAddPatientStatus } from './actions';
 
 class PatientActionButtons extends React.Component {

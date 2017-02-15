@@ -3,22 +3,22 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, FieldArray, reduxForm, change, reset } from 'redux-form';
 import { Modal } from 'react-bootstrap';
+import _, { find } from 'lodash';
 
+import { MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE, QUALIFICATION_SUITE_UPGRADE_PRICE } from '../../../common/constants';
 import CenteredModal from '../../../components/CenteredModal/index';
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
-import Toggle from 'components/Input/Toggle';
-import ShoppingCartForm from 'components/ShoppingCartForm';
-import AddNewCardForm from 'components/AddNewCardForm';
-import { selectStudyLevels, selectAvailPhoneNumbers } from 'containers/App/selectors';
-import { saveCard } from 'containers/App/actions';
-import { selectSelectedIndicationLevelPrice } from 'containers/HomePage/selectors';
+import Input from '../../../components/Input';
+import ReactSelect from '../../../components/Input/ReactSelect';
+import Toggle from '../../../components/Input/Toggle';
+import ShoppingCartForm from '../../../components/ShoppingCartForm';
+import AddNewCardForm from '../../../components/AddNewCardForm';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import { saveCard } from '../../App/actions';
+import { selectStudyLevels, selectAvailPhoneNumbers } from '../../App/selectors';
+import { selectSelectedIndicationLevelPrice } from '../selectors';
 import { selectUpgradeStudyFormCallTrackingValue, selectUpgradeStudyFormLeadsCount } from './selectors';
-import { MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE, QUALIFICATION_SUITE_UPGRADE_PRICE } from 'common/constants';
 import RenderLeads from './renderLeads';
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
-import _, { find } from 'lodash';
 
 @reduxForm({ form: 'upgradeStudy', validate: formValidator })
 class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -38,6 +38,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     manualDisableSubmit: PropTypes.bool,
     validateAndSubmit: PropTypes.func,
     currentUserStripeCustomerId: PropTypes.string,
+    ValidationChange: PropTypes.func,
   };
 
   constructor(props) {
@@ -94,6 +95,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   resetState() {
+    this.props.ValidationChange();
     const resetState = {
       level: null,
       patientMessagingSuite: false,
@@ -400,6 +402,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
   resetForm: () => dispatch(reset('upgradeStudy')),
+  ValidationChange: () => dispatch(change('upgradeStudy', 'addPatientMessagingSuite', true)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpgradeStudyForm);

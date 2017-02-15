@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { find } from 'lodash';
-import { selectSelectedSite, selectSelectedUser } from 'containers/App/selectors';
-import { fetchSite, fetchUser } from 'containers/App/actions';
-import LoadingSpinner from 'components/LoadingSpinner';
+import { selectSelectedSite, selectSelectedUser } from '../../containers/App/selectors';
+import { fetchSite, fetchUser } from '../../containers/App/actions';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 class ClientSiteItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -12,7 +12,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     name: PropTypes.string,
     piFirstName: PropTypes.string,
     piLastName: PropTypes.string,
-    phone: PropTypes.string,
+    redirectPhone: PropTypes.string,
     address: PropTypes.string,
     roles: PropTypes.array,
     selectedSite: PropTypes.object,
@@ -20,6 +20,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     fetchSite: PropTypes.func,
     fetchUser: PropTypes.func,
     userFilter: PropTypes.any,
+    bDisabled: PropTypes.bool,
   };
 
   constructor(props) {
@@ -73,19 +74,19 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { name, piFirstName, piLastName, phone, address, roles } = this.props;
+    const { name, piFirstName, piLastName, redirectPhone, address, roles } = this.props;
 
-    const assignedUsersContent = roles.map((item, index) => (
+    const assignedUsersContent = (roles) ? roles.map((item, index) => (
       <div className="assigned-user" key={index}>
         <span>{item.user.firstName} {item.user.lastName}</span>
         <span className="edit-assigned-user">
           {(this.assignedUserIsBeingFetched(item))
             ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-assigned-user" /></span>
-            : <a className="btn edit-icon" onClick={() => { this.editAssignedUser(item); }}><i className="pencil-square" /></a>
+            : <a disabled={this.props.bDisabled} className="btn toggle edit-icon" onClick={() => (this.props.bDisabled ? null : this.editAssignedUser(item))}><i className="pencil-square" /></a>
           }
         </span>
       </div>
-    ));
+    )) : null;
 
     return (
       <tr className="client-site-container">
@@ -95,8 +96,8 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
         <td className="principal-investigator">
           <span>{piFirstName} {piLastName}</span>
         </td>
-        <td className="phone">
-          <span>{phone}</span>
+        <td className="redirectPhone">
+          <span>{redirectPhone}</span>
         </td>
         <td className="address">
           <span>{address}</span>
@@ -114,7 +115,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           }
         </td>
         <td className="action">
-          <button type="button" className="btn btn-primary btn-edit-site pull-right" onClick={this.editSite} disabled={(this.currentSiteIsBeingFetched())}>
+          <button type="button" className="btn btn-primary btn-edit-site pull-right" onClick={this.editSite} disabled={(this.currentSiteIsBeingFetched() || this.props.bDisabled)}>
             {(this.currentSiteIsBeingFetched())
               ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
               : <span>Edit</span>

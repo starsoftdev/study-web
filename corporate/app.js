@@ -3,9 +3,7 @@ import { Router, browserHistory } from 'react-router';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
-import { getItem, removeItem } from 'utils/localStorage';
-
-import '!file?name=[name].[ext]!./manifest.json';
+import { getItem, removeItem } from '../app/utils/localStorage';
 
 import configureStore from '../app/store';
 
@@ -14,9 +12,12 @@ import { default as Home } from './containers/HomePage';
 import { default as LoginPage } from '../app/containers/LoginPage';
 import { default as ContactPage } from './containers/ContactPage';
 import { default as ListYourTrialsPage } from './containers/ListYourTrialsPage';
+import { default as TermsAndConditionsPage } from './containers/TermsAndConditionsPage';
+import { default as PrivacyPolicyPage } from './containers/PrivacyPolicyPage';
 import { default as LandingPage } from './containers/LandingPage';
 import { default as BillingPage } from './containers/BillingPage';
 import { default as OrderPage } from './containers/OrderPage';
+import { default as AboutPage } from './containers/AboutPage';
 import { default as NotFound } from './containers/NotFoundPage';
 
 import './assets/less/main.less';
@@ -38,12 +39,15 @@ const routes = {
   indexRoute: { component: Home },
   childRoutes: [
     { path: '/login', component: LoginPage },
+    { path: '/about', component: AboutPage },
     { path: '/contact', component: ContactPage },
     { path: '/list-your-trials', component: ListYourTrialsPage },
     { path: '/billing', component: BillingPage },
     { path: '/order', component: OrderPage },
+    { path: '/privacy-policy', component: PrivacyPolicyPage },
+    { path: '/terms-and-conditions', component: TermsAndConditionsPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },
-    { path: '/:studyId/:siteLocation', component: LandingPage },
+    { path: '/*-:siteLocation', component: LandingPage },
     { path: '*', component: NotFound },
   ],
 };

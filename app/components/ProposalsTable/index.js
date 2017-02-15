@@ -6,7 +6,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
-import { getLocalTime } from 'utils/time';
+import moment from 'moment-timezone';
 
 const headers = [
   {
@@ -244,7 +244,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         break;
       case 'protocol':
         proposalsArr.sort((a, b) => {
-          console.log(a);
           if (a.protocol > b.protocol) {
             return directionUnits.more;
           }
@@ -342,7 +341,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       });
     }
     _.map(raw, (source, key) => {
-      const dateWrapper = getLocalTime(source.created, this.props.currentUser.timezone).format('MM/DD/YY');
+      const dateWrapper = moment(source.created).tz(this.props.currentUser.timezone).format('MM/DD/YY');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
 
       let proposalLink = source.proposalNumber;
@@ -376,8 +375,12 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     const proposals = [];
     const heads = [];
 
-    this.mapHeaders(headers, state, heads);
-    this.mapProposals(proposalsArr, proposals);
+    if (headers) {
+      this.mapHeaders(headers, state, heads);
+    }
+    if (proposalsArr) {
+      this.mapProposals(proposalsArr, proposals);
+    }
 
     return (
       <div className="table-holder">

@@ -2,29 +2,29 @@
 
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
+import moment from 'moment-timezone';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import enhanceWithClickOutside from 'react-click-outside';
 
 import _ from 'lodash';
-import { getLocalTime } from 'utils/time';
 
 import {
   fetchNotifications,
   fetchUnreadNotificationsCount,
   markNotificationsRead,
-} from 'containers/GlobalNotifications/actions';
+} from '../../../containers/GlobalNotifications/actions';
 
 import {
   selectNotifications,
   selectUnreadNotificationsCount,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../../containers/GlobalNotifications/selectors';
 
 import {
   getRedirectionUrl,
   getAvatarUrl,
-} from 'containers/NotificationsPage';
+} from '../../../containers/NotificationsPage';
 
 
 class NotificationBox extends React.Component {
@@ -64,9 +64,7 @@ class NotificationBox extends React.Component {
   }
 
   parseNotificationTime(time, timezone) {
-    const localTime = getLocalTime(time, timezone);
-
-    return `${localTime.format('MM/DD/YY')} at ${localTime.format('h:mm A')}`;
+    return moment(time).tz(timezone).format('MM/DD/YY [at] h:mm A');
   }
 
   render() {

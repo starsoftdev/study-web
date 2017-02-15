@@ -8,7 +8,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
-import SetNewPasswordForm from 'components/SetNewPasswordForm';
+import SetNewPasswordForm from '../../components/SetNewPasswordForm';
 import { setNewPasswordRequest } from './actions';
 
 export class SetNewPasswordPage extends React.Component { // eslint-disable-line react/prefer-stateless-function

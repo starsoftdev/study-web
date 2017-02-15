@@ -2,8 +2,9 @@ import React, { PropTypes } from 'react';
 import inViewport from 'in-viewport';
 import { Field, reduxForm } from 'redux-form';
 import landingFormValidator from './validator';
-import Input from 'components/Input';
-import { Alert } from 'react-bootstrap';
+import Alert from 'react-bootstrap/lib/Alert';
+
+import Input from '../../../app/components/Input';
 
 @reduxForm({
   form: 'landing',
@@ -13,9 +14,7 @@ import { Alert } from 'react-bootstrap';
 export class LandingForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    name: PropTypes.any,
-    city: PropTypes.any,
-    state: PropTypes.any,
+    study: PropTypes.object,
     subscriptionError: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
   };
@@ -41,7 +40,13 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
   }
 
   render() {
-    const { name, city, state, handleSubmit, subscriptionError } = this.props;
+    const { study, handleSubmit, subscriptionError } = this.props;
+
+    const name = (study) ? study.name : '';
+    const city = (study && study.sites[0].city) ? study.sites[0].city : '';
+    const state = (study && study.sites[0].state) ? study.sites[0].state : '';
+
+    const cityAndState = (city && state) ? ` ${city}, ${state}` : '';
     return (
       <form
         action="#"
@@ -49,7 +54,12 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
         onSubmit={handleSubmit}
       >
         <h1 className="main-heading">{name}</h1>
-        <h2 className="txt-orange"><i className="icon-map-marker"></i> {`${city}, ${state}`}</h2>
+          {city &&
+            <h2 className="txt-orange">
+              <i className="icon-map-marker"></i>
+              {cityAndState}
+            </h2>
+          }
         <div
           ref={(animatedFormContent) => { this.animatedFormContent = animatedFormContent; }}
           data-view="fadeInUp"
@@ -57,7 +67,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
           <h3>Enter your information to join!</h3>
           {subscriptionError &&
             <Alert bsStyle="danger">
-              <p>{subscriptionError.message}</p>
+              <p>Phone or Email is not unique.</p>
             </Alert>
           }
           <Field

@@ -10,22 +10,22 @@ import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
 import Helmet from 'react-helmet';
 
-import RequestProposalForm from 'components/RequestProposalForm';
-import RequestProposalCart from 'components/RequestProposalCart';
+import RequestProposalForm from '../../components/RequestProposalForm';
+import RequestProposalCart from '../../components/RequestProposalCart';
 
 
 import {
   fetchSites,
   fetchIndications,
   fetchLevels,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 import {
   selectSiteLocations,
   selectIndications,
   selectStudyLevels,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
-import { submitForm, fetchProposal } from 'containers/RequestProposalPage/actions';
+import { submitForm, fetchProposal } from '../../containers/RequestProposalPage/actions';
 import { selectProposalDetail, selectProposalsFormError, selectProposalsFormValues } from './selectors';
 
 export class RequestProposalPage extends Component {
@@ -41,7 +41,7 @@ export class RequestProposalPage extends Component {
     fetchProposal: PropTypes.func,
     onSubmitForm: PropTypes.func.isRequired,
     location: PropTypes.any,
-    hasErrors: PropTypes.object,
+    hasErrors: PropTypes.bool,
     formValues: PropTypes.object,
   }
 

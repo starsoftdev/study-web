@@ -7,13 +7,13 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 import { Modal } from 'react-bootstrap';
-import Input from 'components/Input';
-import ChangePasswordForm from 'components/ChangePasswordForm';
-import ProfileImageForm from 'components/ProfileImageForm';
-import defaultImage from 'assets/images/Default-User-Img-Dr.png';
+import Input from '../../components/Input';
+import ChangePasswordForm from '../../components/ChangePasswordForm';
+import ProfileImageForm from '../../components/ProfileImageForm';
+import defaultImage from '../../assets/images/Default-User-Img-Dr.png';
 import 'blueimp-canvas-to-blob';
-import CenteredModal from 'components/CenteredModal/index';
-import ReactSelect from 'components/Input/ReactSelect';
+import CenteredModal from '../../components/CenteredModal/index';
+import ReactSelect from '../../components/Input/ReactSelect';
 import moment from 'moment-timezone';
 
 @reduxForm({ form: 'profile' })

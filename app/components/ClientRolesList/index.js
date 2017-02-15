@@ -5,10 +5,10 @@ import { Modal } from 'react-bootstrap';
 import { map, cloneDeep } from 'lodash';
 
 import CenteredModal from '../../components/CenteredModal/index';
-import EditUserForm from 'components/EditUserForm';
+import EditUserForm from '../../components/EditUserForm';
 import { selectCurrentUserClientId, selectClientSites, selectClientRoles, selectSelectedUser,
-  selectDeletedClientRole, selectSavedUser, selectSelectedUserDetailsForForm } from 'containers/App/selectors';
-import { clearSelectedUser, deleteClientRole, saveUser } from 'containers/App/actions';
+  selectDeletedClientRole, selectSavedUser, selectSelectedUserDetailsForForm } from '../../containers/App/selectors';
+import { clearSelectedUser, deleteClientRole, saveUser } from '../../containers/App/actions';
 import ClientRoleItem from './ClientRoleItem';
 
 class ClientRolesList extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -24,6 +24,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     clearSelectedUser: PropTypes.func,
     deleteClientRole: PropTypes.func,
     saveUser: PropTypes.func,
+    currentUser: PropTypes.object,
   };
 
   constructor(props) {
@@ -58,22 +59,20 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     } else if (sortBy === 'email') {
       return item.user.email;
     } else if (sortBy === 'access') {
-      const { name, reward, purchase } = item;
+      const { name, canRedeemRewards, canPurchase } = item;
       let accessStr = '';
       const isSuperAdmin = (name === 'Super Admin');
-
       if (isSuperAdmin) {
         accessStr = 'ADMIN';
-      } else if (purchase && reward) {
+      } else if (canPurchase && canRedeemRewards) {
         accessStr = 'ALL ACCESS';
-      } else if (purchase && !reward) {
+      } else if (canPurchase && !canRedeemRewards) {
         accessStr = 'PURCHASE';
-      } else if (!purchase && reward) {
+      } else if (!canPurchase && canRedeemRewards) {
         accessStr = 'REWARDS';
       } else {
         accessStr = 'NO ACCESS';
       }
-
       return accessStr;
     }
 
@@ -84,12 +83,26 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     const { clientRoles } = this.props;
     const listItems = cloneDeep(clientRoles.details);
 
+    const nListItems = listItems.sort((a, b) => {
+      if (a.name === 'Super Admin') {
+        return -1;
+      } else if (b.name === 'Super Admin') {
+        return 1;
+      }
+      return 0;
+    });
+
     if (!this.state.sortBy) {
-      return listItems;
+      return nListItems;
     }
 
     const sortOrder = this.state.sortOrder;
-    const sortedListItems = listItems.sort((a, b) => {
+    const sortedListItems = nListItems.sort((a, b) => {
+      if (a.name === 'Super Admin') {
+        return -1;
+      } else if (b.name === 'Super Admin') {
+        return 1;
+      }
       if (this.getListItemSortByValue(a) < this.getListItemSortByValue(b)) {
         return (sortOrder === 'asc') ? -1 : 1;
       } else if (this.getListItemSortByValue(a) > this.getListItemSortByValue(b)) {
@@ -160,14 +173,28 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { clientSites, selectedUserDetailsForForm, deletedClientRole, filterMethod } = this.props;
+    const { clientSites, selectedUserDetailsForForm, deletedClientRole, filterMethod, selectedUser, currentUser } = this.props;
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+    }
     const sortedClientRoles = this.getSortedClientRoles();
     const clientRolesListContents = sortedClientRoles.filter(filterMethod).map((item, index) => (
-      <ClientRoleItem {...item} key={index} />
-    ));
+      item.canPurchase || item.canRedeemRewards || item.name === 'Super Admin' ? <ClientRoleItem {...item} key={index} bDisabled={bDisabled} /> : null
+    )
+    );
     const siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
-
+    let siteLocation = (selectedUser && selectedUser.details && selectedUser.details.roleForClient) ? selectedUser.details.roleForClient.site_id : null;
+    let cPurchasable = false;
+    let cRedeemable = false;
+    if (selectedUser && selectedUser.details && selectedUser.details.roleForClient) {
+      if (selectedUser.details.roleForClient.canPurchase || selectedUser.details.roleForClient.canRedeemRewards || selectedUser.details.roleForClient.name === 'Super Admin') {
+        siteLocation = 0;
+        cPurchasable = selectedUser.details.roleForClient.canPurchase;
+        cRedeemable = selectedUser.details.roleForClient.canRedeemRewards;
+      }
+    }
     const editUserModalShown = this.editUserModalShouldBeShown();
 
     return (
@@ -223,6 +250,9 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
                       deleting={deletedClientRole.deleting}
                       onDelete={this.deleteClientRole}
                       onSubmit={this.updateUser}
+                      newSiteLocation={siteLocation}
+                      Purchase={cPurchasable}
+                      Redeem={cRedeemable}
                       isEdit
                     />
                   </div>

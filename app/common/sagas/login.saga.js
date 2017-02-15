@@ -10,30 +10,30 @@ import {
 import { push } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
-import { selectLocationState } from 'containers/App/selectors';
+import { selectLocationState } from '../../containers/App/selectors';
 
-import request from 'utils/request';
-import { getItem, setItem, removeItem } from 'utils/localStorage';
+import request from '../../utils/request';
+import { getItem, setItem, removeItem } from '../../utils/localStorage';
 import {
   LOGIN_REQUEST,
   LOGIN_ERROR,
   LOGOUT_REQUEST,
-} from 'containers/LoginPage/constants';
+} from '../../containers/LoginPage/constants';
 
 import {
   RESET_PASSWORD_REQUEST,
-} from 'containers/ResetPasswordPage/constants';
+} from '../../containers/ResetPasswordPage/constants';
 
 import {
   SET_NEW_PASSWORD_REQUEST,
-} from 'containers/SetNewPasswordPage/constants';
+} from '../../containers/SetNewPasswordPage/constants';
 
 import {
   CONFIRM_CHANGE_PASSWORD_REQUEST,
-} from 'containers/ProfilePage/constants';
+} from '../../containers/ProfilePage/constants';
 
-import { loginError, logout as logoutAction } from 'containers/LoginPage/actions';
-import { fetchMeFromToken, setAuthState, setUserData } from 'containers/App/actions';
+import { loginError, logout as logoutAction } from '../../containers/LoginPage/actions';
+import { fetchMeFromToken, setAuthState, setUserData } from '../../containers/App/actions';
 
 export default function* loginSaga() {
   while (true) {

@@ -2,9 +2,10 @@ import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 
-import request from 'utils/request';
-import composeQueryString from 'utils/composeQueryString';
-import _ from 'lodash';
+import request from '../../utils/request';
+import composeQueryString from '../../utils/composeQueryString';
+import _, { get } from 'lodash';
+import { actions as toastrActions } from 'react-redux-toastr';
 
 import {
   FETCH_MANAGE_SPONSOR_USERS_DATA,
@@ -75,6 +76,8 @@ export function* editSponsorUserWorker(action) {
 
     yield put(editSponsorUserSuccess(response));
   } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while editing user. Please try again later.');
+    yield put(toastrActions.error('', errorMessage));
     yield put(editSponsorUserError(err));
   }
 }
@@ -94,6 +97,8 @@ export function* deleteSponsorUserWorker(action) {
 
     yield put(deleteSponsorUserSuccess(response));
   } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while deleting user. Please try again later.');
+    yield put(toastrActions.error('', errorMessage));
     yield put(deleteSponsorUserError(err));
   }
 }
@@ -126,6 +131,8 @@ export function* editProtocolWorker(action) {
 
     yield put(editProtocolSuccess(response));
   } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while editing the protocol. Please try again later.');
+    yield put(toastrActions.error('', errorMessage));
     yield put(editProtocolError(err));
   }
 }

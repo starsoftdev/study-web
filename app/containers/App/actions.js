@@ -33,6 +33,10 @@ import {
   FETCH_REWARDS_BALANCE_SUCCESS,
   FETCH_REWARDS_BALANCE_ERROR,
 
+  REDEEM,
+  REDEEM_SUCCESS,
+  REDEEM_ERROR,
+
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
@@ -123,10 +127,15 @@ import {
 
   FETCH_LANDING,
   FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
   SUBSCRIBE_FROM_LANDING,
   PATIENT_SUBSCRIBED,
   PATIENT_SUBSCRIPTION_ERROR,
   CLEAR_FORM_SUBSCRIBE,
+
+  ADD_EMAIL_NOTIFICATION_USER,
+  ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+  ADD_EMAIL_NOTIFICATION_USER_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -333,6 +342,26 @@ export function rewardsBalanceFetchingError(payload) {
   };
 }
 
+export function redeem(payload) {
+  return {
+    type: REDEEM,
+    payload,
+  };
+}
+
+export function redeemSuccess(payload) {
+  return {
+    type: REDEEM_SUCCESS,
+    payload,
+  };
+}
+
+export function redeemError(payload) {
+  return {
+    type: REDEEM_ERROR,
+    payload,
+  };
+}
 // ///////////////////////////////////////////
 // fetch cards
 // ///////////////////////////////////////////
@@ -837,13 +866,6 @@ export function changeUsersTimezoneError(payload) {
   };
 }
 
-export function subscribeFromLanding(params) {
-  return {
-    type: SUBSCRIBE_FROM_LANDING,
-    params,
-  };
-}
-
 export function fetchLanding(studyId) {
   return {
     type: FETCH_LANDING,
@@ -855,6 +877,20 @@ export function landingFetched(payload) {
   return {
     type: FETCH_LANDING_SUCCESS,
     payload,
+  };
+}
+
+export function fetchLandingError(payload) {
+  return {
+    type: FETCH_LANDING_ERROR,
+    payload,
+  };
+}
+
+export function subscribeFromLanding(params) {
+  return {
+    type: SUBSCRIBE_FROM_LANDING,
+    params,
   };
 }
 
@@ -875,5 +911,26 @@ export function patientSubscriptionError(payload) {
 export function clearForm() {
   return {
     type: CLEAR_FORM_SUBSCRIBE,
+  };
+}
+
+export function addEmailNotificationUser(payload) {
+  return {
+    type: ADD_EMAIL_NOTIFICATION_USER,
+    payload,
+  };
+}
+
+export function addEmailNotificationUserSuccess(payload) {
+  return {
+    type: ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+    payload,
+  };
+}
+
+export function addEmailNotificationUserError(payload) {
+  return {
+    type: ADD_EMAIL_NOTIFICATION_USER_ERROR,
+    payload,
   };
 }

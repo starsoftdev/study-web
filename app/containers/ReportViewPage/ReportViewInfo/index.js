@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import graphImage from 'assets/images/graph.svg';
+import graphImage from '../../../assets/images/graph.svg';
 
 import _ from 'lodash';
 
@@ -23,15 +23,19 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
     };
 
     _.forEach(this.props.reportsList.details, (item) => {
-      totals.total += parseInt(item.principal_investigator_active) + parseInt(item.principal_investigator_inactive);
-      totals.active += parseInt(item.principal_investigator_active);
-      totals.inActive += parseInt(item.principal_investigator_inactive);
+      if (item.is_active) {
+        totals.active++;
+      } else {
+        totals.inActive++;
+      }
 
       totals.textSent += parseInt(item.outbound_text);
       totals.textReceived += parseInt(item.inbound_text);
       totals.unreadText += parseInt(item.unread_text);
       totals.emailSent += parseInt(item.outbound_emails);
     });
+
+    totals.total += this.props.reportsList.details.length;
 
 
     return (

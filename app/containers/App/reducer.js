@@ -1,4 +1,4 @@
-import { getItem } from 'utils/localStorage';
+import { getItem } from '../../utils/localStorage';
 import { forEach, map, remove, cloneDeep, findIndex, concat, sortBy, reverse } from 'lodash';
 
 import {
@@ -21,6 +21,7 @@ import {
   FETCH_REWARDS_ERROR,
 
   FETCH_REWARDS_BALANCE_SUCCESS,
+  REDEEM_SUCCESS,
 
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
@@ -102,32 +103,38 @@ import {
   CHANGE_USERS_TIMEZONE_SUCCESS,
   CHANGE_USERS_TIMEZONE_ERROR,
 
+  FETCH_LANDING,
   FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
   PATIENT_SUBSCRIBED,
   PATIENT_SUBSCRIPTION_ERROR,
 } from './constants';
 
 import {
   LOGIN_ERROR,
-} from 'containers/LoginPage/constants';
+} from '../../containers/LoginPage/constants';
 
 import {
   CHANGE_IMAGE_SUCCESS,
-} from 'containers/ProfilePage/constants';
+} from '../../containers/ProfilePage/constants';
 
 const initialState = {
   loggedIn: !!getItem('auth_token'),
   loginError: null,
-  subscriptionError: null,
   userData: null,
   pageEvents: null,
   baseData: {
     sites: [],
     indications: [],
-    landing: {},
+    subscriptionError: null,
     subscribedFromLanding: null,
     sources: [],
     levels: [],
+    landing: {
+      details: null,
+      fetching: false,
+      error: null,
+    },
     coupon: {
       details: null,
       fetching: false,
@@ -283,23 +290,41 @@ export default function appReducer(state = initialState, action) {
         indications: payload,
       };
       break;
+    case FETCH_LANDING:
+      baseDataInnerState = {
+        subscriptionError: null,
+        landing: {
+          details: null,
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
     case FETCH_LANDING_SUCCESS:
       baseDataInnerState = {
-        landing: payload,
+        landing: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_LANDING_ERROR:
+      baseDataInnerState = {
+        landing: {
+          details: null,
+          fetching: false,
+          error: payload,
+        },
       };
       break;
     case PATIENT_SUBSCRIBED:
       baseDataInnerState = {
         subscribedFromLanding: payload,
       };
-      resultState = {
-        ...state,
-        subscriptionError: null,
-      };
       break;
     case PATIENT_SUBSCRIPTION_ERROR:
-      resultState = {
-        ...state,
+      baseDataInnerState = {
         subscriptionError: payload,
       };
       break;
@@ -370,6 +395,17 @@ export default function appReducer(state = initialState, action) {
         rewardsBalance: {
           ...state.baseData.rewardsBalance,
           [siteId || 0]: payload,
+        },
+      };
+      break;
+    }
+    case REDEEM_SUCCESS: {
+      const { siteId, balance, points } = payload;
+      baseDataInnerState = {
+        rewardsBalance: {
+          ...state.baseData.rewardsBalance,
+          [siteId]: balance,
+          0: parseInt(state.baseData.rewardsBalance[0]) + parseInt(points),
         },
       };
       break;

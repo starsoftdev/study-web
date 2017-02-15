@@ -9,14 +9,15 @@ import EditSiteForm from '../../components/EditSiteForm';
 import EditUserForm from '../../components/EditUserForm';
 import { selectCurrentUserClientId, selectClientSites, selectSelectedSite,
   selectSelectedSiteDetailsForForm, selectSelectedUser, selectSelectedUserDetailsForForm,
-  selectDeletedUser, selectSavedSite, selectSavedUser } from 'containers/App/selectors';
+  selectDeletedUser, selectSavedSite, selectSavedUser } from '../../containers/App/selectors';
 import { clearSelectedSite, clearSelectedUser,
-  deleteUser, saveSite, saveUser } from 'containers/App/actions';
+  deleteUser, saveSite, saveUser } from '../../containers/App/actions';
 import ClientSiteItem from './ClientSiteItem';
 
 class ClientSitesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUserClientId: PropTypes.number,
+    currentUser: PropTypes.object,
     clientSites: PropTypes.object,
     selectedSite: PropTypes.object,
     selectedSiteDetailsForForm: PropTypes.object,
@@ -67,8 +68,8 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
       return item.name;
     } else if (sortBy === 'principalInvestigator') {
       return item.piFirstName;
-    } else if (sortBy === 'phone') {
-      return item.phone;
+    } else if (sortBy === 'redirectPhone') {
+      return item.redirectPhone;
     } else if (sortBy === 'address') {
       return item.address;
     }
@@ -174,16 +175,21 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { selectedSiteDetailsForForm, selectedUserDetailsForForm, deletedUser, filterMethod, userFilterQuery } = this.props;
+    const { selectedSiteDetailsForForm, selectedUserDetailsForForm, deletedUser, filterMethod, userFilterQuery, selectedUser, currentUser } = this.props;
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+    }
     const sortedClientSites = this.getSortedClientSites().filter(filterMethod);
     const clientSitesListContents = sortedClientSites.map((item, index) => (
-      <ClientSiteItem {...item} key={index} userFilter={userFilterQuery} />
+      <ClientSiteItem {...item} key={index} userFilter={userFilterQuery} bDisabled={bDisabled} />
     ));
     const siteOptions = map(sortedClientSites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
 
     const editSiteModalShown = this.editSiteModalShouldBeShown();
     const editUserModalShown = this.editUserModalShouldBeShown();
+    const siteLocation = (selectedUser && selectedUser.details && selectedUser.details.roleForClient) ? selectedUser.details.roleForClient.site_id : null;
 
     return (
       <div className="client-sites">
@@ -202,7 +208,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                       <span>PRINCIPAL INVESTIGATOR</span>
                       <i className="caret-arrow" />
                     </th>
-                    <th className={this.getColumnSortClassName('phone')} onClick={() => { this.clickSortHandler('phone'); }}>
+                    <th className={this.getColumnSortClassName('redirectPhone')} onClick={() => { this.clickSortHandler('redirectPhone'); }}>
                       <span>SITE PHONE</span>
                       <i className="caret-arrow" />
                     </th>
@@ -252,6 +258,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                       deleting={deletedUser.deleting}
                       onDelete={this.deleteUser}
                       onSubmit={this.updateUser}
+                      newSiteLocation={siteLocation}
                       isEdit
                     />
                   </div>

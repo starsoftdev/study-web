@@ -2,7 +2,7 @@
 // They are all wrapped in the App component, which should contain the navbar etc
 // See http://blog.mxstbr.com/2016/01/react-apps-with-pages for more information
 // about the code splitting business
-import { getAsyncInjectors } from 'utils/asyncInjectors';
+import { getAsyncInjectors } from './utils/asyncInjectors';
 
 const errorLoading = (err) => {
   console.error('Dynamic page loading failed', err); // eslint-disable-line no-console
@@ -28,10 +28,10 @@ export default function createRoutes(store) {
       name: 'homePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/HomePage/reducer'),
-          System.import('containers/HomePage/AdminDashboard/reducer'),
-          System.import('containers/HomePage/sagas'),
-          System.import('containers/HomePage'),
+          System.import('./containers/HomePage/reducer'),
+          System.import('./containers/HomePage/AdminDashboard/reducer'),
+          System.import('./containers/HomePage/sagas'),
+          System.import('./containers/HomePage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -51,9 +51,9 @@ export default function createRoutes(store) {
       name: 'calendarPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/CalendarPage/reducer'),
-          System.import('containers/CalendarPage/sagas'),
-          System.import('containers/CalendarPage'),
+          System.import('./containers/CalendarPage/reducer'),
+          System.import('./containers/CalendarPage/sagas'),
+          System.import('./containers/CalendarPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -71,7 +71,7 @@ export default function createRoutes(store) {
       path: '/confirm-password-change',
       name: 'confirmPasswordChangePage',
       getComponent(nextState, cb) {
-        System.import('components/ConfirmPasswordChangeForm')
+        System.import('./components/ConfirmPasswordChangeForm')
           .then(loadModule(cb))
           .catch(errorLoading);
       },
@@ -81,9 +81,9 @@ export default function createRoutes(store) {
       name: 'IrbAdCreationPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/IrbAdCreationPage/reducer'),
-          System.import('containers/IrbAdCreationPage/sagas'),
-          System.import('containers/IrbAdCreationPage'),
+          System.import('./containers/IrbAdCreationPage/reducer'),
+          System.import('./containers/IrbAdCreationPage/sagas'),
+          System.import('./containers/IrbAdCreationPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -102,9 +102,9 @@ export default function createRoutes(store) {
       name: 'IrbAdCreationPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/IrbAdCreationPage/reducer'),
-          System.import('containers/IrbAdCreationPage/sagas'),
-          System.import('containers/IrbAdCreationPage'),
+          System.import('./containers/IrbAdCreationPage/reducer'),
+          System.import('./containers/IrbAdCreationPage/sagas'),
+          System.import('./containers/IrbAdCreationPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -123,9 +123,9 @@ export default function createRoutes(store) {
       name: 'patientDatabasePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/PatientDatabasePage/reducer'),
-          System.import('containers/PatientDatabasePage/sagas'),
-          System.import('containers/PatientDatabasePage'),
+          System.import('./containers/PatientDatabasePage/reducer'),
+          System.import('./containers/PatientDatabasePage/sagas'),
+          System.import('./containers/PatientDatabasePage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -144,9 +144,9 @@ export default function createRoutes(store) {
       name: 'paymentInformationPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/PaymentInformationPage/reducer'),
-          System.import('containers/PaymentInformationPage/sagas'),
-          System.import('containers/PaymentInformationPage'),
+          System.import('./containers/PaymentInformationPage/reducer'),
+          System.import('./containers/PaymentInformationPage/sagas'),
+          System.import('./containers/PaymentInformationPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -165,9 +165,9 @@ export default function createRoutes(store) {
       name: 'profilePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/ProfilePage/reducer'),
-          System.import('containers/ProfilePage/sagas'),
-          System.import('containers/ProfilePage'),
+          System.import('./containers/ProfilePage/reducer'),
+          System.import('./containers/ProfilePage/sagas'),
+          System.import('./containers/ProfilePage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -186,9 +186,9 @@ export default function createRoutes(store) {
       name: 'proposals',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/Proposals/reducer'),
-          System.import('containers/Proposals/sagas'),
-          System.import('containers/Proposals'),
+          System.import('./containers/Proposals/reducer'),
+          System.import('./containers/Proposals/sagas'),
+          System.import('./containers/Proposals'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -207,9 +207,9 @@ export default function createRoutes(store) {
       name: 'referPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/ReferPage/reducer'),
-          System.import('containers/ReferPage/sagas'),
-          System.import('containers/ReferPage'),
+          System.import('./containers/ReferPage/reducer'),
+          System.import('./containers/ReferPage/sagas'),
+          System.import('./containers/ReferPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -228,7 +228,7 @@ export default function createRoutes(store) {
       name: 'badgesPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/BadgesPage'),
+          System.import('./containers/BadgesPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -245,9 +245,9 @@ export default function createRoutes(store) {
       name: 'listNewStudyPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/ListNewStudyPage/reducer'),
-          System.import('containers/ListNewStudyPage/sagas'),
-          System.import('containers/ListNewStudyPage'),
+          System.import('./containers/ListNewStudyPage/reducer'),
+          System.import('./containers/ListNewStudyPage/sagas'),
+          System.import('./containers/ListNewStudyPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -266,9 +266,9 @@ export default function createRoutes(store) {
       name: 'rewardsPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/RewardsPage/reducer'),
-          System.import('containers/RewardsPage/sagas'),
-          System.import('containers/RewardsPage'),
+          System.import('./containers/RewardsPage/reducer'),
+          System.import('./containers/RewardsPage/sagas'),
+          System.import('./containers/RewardsPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -287,9 +287,9 @@ export default function createRoutes(store) {
       name: 'requestProposalPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/RequestProposalPage/reducer'),
-          System.import('containers/RequestProposalPage/sagas'),
-          System.import('containers/RequestProposalPage'),
+          System.import('./containers/RequestProposalPage/reducer'),
+          System.import('./containers/RequestProposalPage/sagas'),
+          System.import('./containers/RequestProposalPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -308,9 +308,9 @@ export default function createRoutes(store) {
       name: 'requestProposalPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/RequestProposalPage/reducer'),
-          System.import('containers/RequestProposalPage/sagas'),
-          System.import('containers/RequestProposalPage'),
+          System.import('./containers/RequestProposalPage/reducer'),
+          System.import('./containers/RequestProposalPage/sagas'),
+          System.import('./containers/RequestProposalPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -328,7 +328,7 @@ export default function createRoutes(store) {
       path: '/app/reset-password',
       name: 'resetPasswordPage',
       getComponent(nextState, cb) {
-        System.import('containers/ResetPasswordPage')
+        System.import('./containers/ResetPasswordPage')
           .then(loadModule(cb))
           .catch(errorLoading);
       },
@@ -337,7 +337,7 @@ export default function createRoutes(store) {
       path: '/app/set-new-password',
       name: 'setNewPasswordPage',
       getComponent(nextState, cb) {
-        System.import('containers/SetNewPasswordPage')
+        System.import('./containers/SetNewPasswordPage')
           .then(loadModule(cb))
           .catch(errorLoading);
       },
@@ -347,7 +347,7 @@ export default function createRoutes(store) {
       name: 'sitesUsersPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/SitesUsersPage'),
+          System.import('./containers/SitesUsersPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -364,9 +364,9 @@ export default function createRoutes(store) {
       name: 'studyPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/StudyPage/reducer'),
-          System.import('containers/StudyPage/sagas'),
-          System.import('containers/StudyPage'),
+          System.import('./containers/StudyPage/reducer'),
+          System.import('./containers/StudyPage/sagas'),
+          System.import('./containers/StudyPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -384,9 +384,9 @@ export default function createRoutes(store) {
       name: 'manageTransferNumberPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/ManageTransferNumberPage/reducer'),
-          System.import('containers/ManageTransferNumberPage/sagas'),
-          System.import('containers/ManageTransferNumberPage'),
+          System.import('./containers/ManageTransferNumberPage/reducer'),
+          System.import('./containers/ManageTransferNumberPage/sagas'),
+          System.import('./containers/ManageTransferNumberPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -405,9 +405,9 @@ export default function createRoutes(store) {
       name: 'receipts',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/Receipts/reducer'),
-          System.import('containers/Receipts/sagas'),
-          System.import('containers/Receipts'),
+          System.import('./containers/Receipts/reducer'),
+          System.import('./containers/Receipts/sagas'),
+          System.import('./containers/Receipts'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -427,7 +427,7 @@ export default function createRoutes(store) {
       getComponent(nextState, cb) {
         const renderRoute = loadModule(cb);
 
-        System.import('containers/NotificationsPage')
+        System.import('./containers/NotificationsPage')
           .then(component => renderRoute(component))
           .catch(errorLoading);
       },
@@ -437,9 +437,9 @@ export default function createRoutes(store) {
       name: 'reportPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/ReportViewPage/reducer'),
-          System.import('containers/ReportViewPage/sagas'),
-          System.import('containers/ReportViewPage'),
+          System.import('./containers/ReportViewPage/reducer'),
+          System.import('./containers/ReportViewPage/sagas'),
+          System.import('./containers/ReportViewPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -458,9 +458,9 @@ export default function createRoutes(store) {
       name: 'sponsorManageUsersPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/SponsorManageUsers/reducer'),
-          System.import('containers/SponsorManageUsers/sagas'),
-          System.import('containers/SponsorManageUsers'),
+          System.import('./containers/SponsorManageUsers/reducer'),
+          System.import('./containers/SponsorManageUsers/sagas'),
+          System.import('./containers/SponsorManageUsers'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -474,10 +474,52 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
+      path: '/app/find-out-how-many-sites-are-listing-your-protocol',
+      name: 'searchByProtocolPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/SearchByProtocolPage/reducer'),
+          System.import('containers/SearchByProtocolPage/sagas'),
+          System.import('containers/SearchByProtocolPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('searchByProtocolPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/app/project-agreements',
+      name: 'projectAgreementsPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/ProjectAgreementsPage/reducer'),
+          System.import('containers/ProjectAgreementsPage/sagas'),
+          System.import('containers/ProjectAgreementsPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('projectAgreementsPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '/app*',
       name: 'notfound',
       getComponent(nextState, cb) {
-        System.import('containers/NotFoundPage')
+        System.import('./containers/NotFoundPage')
           .then(loadModule(cb))
           .catch(errorLoading);
       },

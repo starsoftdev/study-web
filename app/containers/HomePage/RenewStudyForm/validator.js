@@ -1,9 +1,9 @@
-import { validatorFactory } from 'utils/reduxForm';
+import { validatorFactory } from '../../../utils/reduxForm';
 
 const schema = {
   exposureLevel: { presence: true },
   campaignLength: { presence: true },
-  condenseToTwoWeeks: { presence: false },
+  condenseTwoWeeks: { presence: false },
   patientMessagingSuite: { presence: false },
   callTracking: { presence: false },
   startDate: { presence: true },
