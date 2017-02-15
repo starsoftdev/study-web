@@ -125,7 +125,7 @@ export class LandingPage extends React.Component {
       <div id="main">
         <div className="container">
           <LandingForm study={study} onSubmit={this.onSubmitForm} subscriptionError={subscriptionError} />
-          <LandingArticle study={study} landing={landing} location={location}/>
+          <LandingArticle study={study} landing={landing} location={location} />
         </div>
       </div>
     );
