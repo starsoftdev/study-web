@@ -463,6 +463,13 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const totalCount = studies.details.length;
 
     let selectedStudy = null;
+    let selectedSiteID = null;
+    if (currentUser && currentUser.roleForClient) {
+      selectedSiteID = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+      if (selectedSiteID) {
+        selectedSiteID = currentUser.roleForClient.site_id ? currentUser.roleForClient.site_id : null;
+      }
+    }
     const studiesListContents = studies.details.map((item, index) => {
       if (item.studyId === this.state.selectedStudyId) {
         selectedStudy = item;
@@ -473,6 +480,9 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         }
         return parseInt(sitePatient.count_unread);
       });
+      if (selectedSiteID && item.siteId !== selectedSiteID) {
+        return null;
+      }
       return (
         <StudyItem
           {...item}

@@ -244,8 +244,6 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
       isDisabled = true;
     }
 
-    console.log('Value', value);
-
     const addOns = this.generateUpgradeStudyShoppingCartAddOns();
 
     return (
