@@ -9,12 +9,12 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
-import { selectSavedCard } from 'containers/App/selectors';
+import Input from '../../components/Input';
+import ReactSelect from '../../components/Input/ReactSelect';
+import { selectSavedCard } from '../../containers/App/selectors';
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
-import { MONTH_OPTIONS as monthOptions, YEAR_OPTIONS as yearOptions } from 'common/constants';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import { MONTH_OPTIONS as monthOptions, YEAR_OPTIONS as yearOptions } from '../../common/constants';
 
 const mapStateToProps = createStructuredSelector({
   savedCard: selectSavedCard(),

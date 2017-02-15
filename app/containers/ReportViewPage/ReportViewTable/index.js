@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
+import moment from 'moment';
+import { reduxForm } from 'redux-form';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
-import moment from 'moment';
-import Toggle from 'components/Input/Toggle';
-import { reduxForm } from 'redux-form';
-import _ from 'lodash';
-import { selectChangeProtocolStatusProcess } from 'containers/ReportViewPage/selectors';
+import Toggle from '../../../components/Input/Toggle';
+import { selectChangeProtocolStatusProcess } from '../selectors';
 
 @reduxForm({ form: 'reportListForm' })
 

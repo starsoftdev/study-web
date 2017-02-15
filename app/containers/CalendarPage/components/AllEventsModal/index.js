@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 import CenteredModal from '../../../../components/CenteredModal';
 
-import { SchedulePatientModalType } from 'common/constants';
+import { SchedulePatientModalType } from '../../../../common/constants';
 
 const AllEventsModal = ({ visible, events, date, handleCloseModal, handleEdit, setAllModalDeferred, sortBy, paginationOptions }) => {
   let sorted = events;

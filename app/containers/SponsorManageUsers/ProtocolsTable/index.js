@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import LoadingSpinner from 'components/LoadingSpinner';
+
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import { setActiveProtocolsSort } from '../actions';
+import { selectPaginationOptionsProtocols, selectSearchSponsorsFormValues } from '../selectors';
 import RowItem from './RowItem';
-import { selectPaginationOptionsProtocols, selectSearchSponsorsFormValues } from 'containers/SponsorManageUsers/selectors';
-import { setActiveProtocolsSort } from 'containers/SponsorManageUsers/actions';
-import _ from 'lodash';
 
 export class SponsorManageUsersProtocolsTable extends React.Component {
   static propTypes = {

@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import moment from 'moment-timezone';
 import InfiniteScroll from 'react-infinite-scroller';
-import Money from 'components/Money';
+import Money from '../../components/Money';
 
 const headers = [
   {

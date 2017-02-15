@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 
-import Input from 'components/Input';
-import { selectSavedSite } from 'containers/App/selectors';
+import Input from '../../components/Input';
+import { selectSavedSite } from '../../containers/App/selectors';
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
-import FormGeosuggest from 'components/Input/Geosuggest';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import FormGeosuggest from '../../components/Input/Geosuggest';
 import './styles.less';
 import _ from 'lodash';
 

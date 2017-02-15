@@ -2,12 +2,12 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { selectCurrentUser } from 'containers/App/selectors';
+import { selectCurrentUser } from '../../App/selectors';
 
 import { fetchPatientSignUps, fetchPrincipalInvestigatorTotals, fetchProtocols } from '../actions';
 import { selectPatientSignUps, selectPrincipalInvestigatorTotals } from '../selectors';
 
-import graphImage from 'assets/images/graph.svg';
+import graphImage from '../../../assets/images/graph.svg';
 
 export class SponsorDashboard extends React.Component {
   static propTypes = {

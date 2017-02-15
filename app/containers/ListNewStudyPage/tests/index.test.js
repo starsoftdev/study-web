@@ -1,10 +1,10 @@
-import { ListNewStudyPage } from 'containers/ListNewStudyPage';
+import ListNewStudyPage from '../index';
 
 import expect from 'expect';
 import { shallow, mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import React from 'react';
-import configureStore from 'store';
+import configureStore from '../../../store';
 
 describe('<ListNewStudyPage />', () => {
   let setup;

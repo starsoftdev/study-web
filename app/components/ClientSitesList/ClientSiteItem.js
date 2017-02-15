@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { find } from 'lodash';
-import { selectSelectedSite, selectSelectedUser } from 'containers/App/selectors';
-import { fetchSite, fetchUser } from 'containers/App/actions';
-import LoadingSpinner from 'components/LoadingSpinner';
+import { selectSelectedSite, selectSelectedUser } from '../../containers/App/selectors';
+import { fetchSite, fetchUser } from '../../containers/App/actions';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 class ClientSiteItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

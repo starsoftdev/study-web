@@ -18,21 +18,21 @@ import {
   setActiveSort,
   showInvoicePdf,
   sortProposalsSuccess,
-} from 'containers/Receipts/actions';
+} from '../../containers/Receipts/actions';
 import {
   fetchSites,
   fetchEvents,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 import {
   selectSiteLocations,
   selectCurrentUser,
   selectEvents,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
 import { selectReceiptsList, selectPaginationOptions, selectSearchOptions } from './selectors';
-import ReceiptsTable from 'components/ReceiptsTable';
-import TableSearchForm from 'components/TableSearchForm';
-import AlertModal from 'components/AlertModal';
+import ReceiptsTable from '../../components/ReceiptsTable';
+import TableSearchForm from '../../components/TableSearchForm';
+import AlertModal from '../../components/AlertModal';
 
 export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

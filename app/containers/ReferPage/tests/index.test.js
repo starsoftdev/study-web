@@ -6,9 +6,9 @@ import { Provider } from 'react-redux';
 import { ReduxForm } from 'redux-form';
 import React from 'react';
 
-import configureStore from 'store';
-import { ReferPage } from 'containers/ReferPage';
-import { DEFAULT_COMPANY_TYPES } from 'containers/ReferPage/constants';
+import configureStore from '../../../store';
+import ReferPage from '../index';
+import { DEFAULT_COMPANY_TYPES } from '../constants';
 
 describe('ReferPage/index component', () => {
   let setup;
