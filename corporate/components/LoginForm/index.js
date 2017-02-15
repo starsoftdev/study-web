@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import loginFormValidator from './validator';
 import { Alert } from 'react-bootstrap';
 
-import Input from 'components/Input';
+import Input from '../../../app/components/Input';
 
 @reduxForm({
   form: 'login',

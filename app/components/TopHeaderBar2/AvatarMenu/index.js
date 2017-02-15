@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import enhanceWithClickOutside from 'react-click-outside';
 
 
-import defaultImage from 'assets/images/Default-User-Img-Dr.png';
+import defaultImage from '../../../assets/images/Default-User-Img-Dr.png';
 
 class AvatarMenu extends React.Component {
   static propTypes = {

@@ -9,16 +9,16 @@ import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import { submitPatientText, readStudyPatientMessages, updatePatientSuccess } from '../actions';
-import CallItem from 'components/GlobalPMSModal/CallItem';
-import { fetchClientCredits, markAsReadPatientMessages } from 'containers/App/actions';
+import CallItem from '../../../components/GlobalPMSModal/CallItem';
+import { fetchClientCredits, markAsReadPatientMessages } from '../../App/actions';
 
 import {
   sendStudyPatientMessages,
   fetchStudyPatientMessages,
   setProcessingStatus,
-} from 'containers/GlobalNotifications/actions';
+} from '../../GlobalNotifications/actions';
 
-import { selectClientCredits } from 'containers/App/selectors';
+import { selectClientCredits } from '../../App/selectors';
 
 import PatientText from './PatientText';
 

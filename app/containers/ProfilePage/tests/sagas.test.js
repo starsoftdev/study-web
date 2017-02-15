@@ -5,9 +5,6 @@
 import expect from 'expect';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-// import { defaultSaga } from '../sagas';
-
-// const generator = defaultSaga();
 
 import {
   changePassword,
@@ -18,13 +15,13 @@ import {
 import {
   passwordChanged,
   passwordChangingError,
-} from 'containers/ProfilePage/actions';
+} from '../actions';
 
 import {
   CHANGE_PASSWORD,
-} from 'containers/ProfilePage/constants';
+} from '../constants';
 
-import request from 'utils/request';
+import request from '../../../utils/request';
 
 describe('defaultSaga Saga', () => {
   describe('changePassword Saga', () => {

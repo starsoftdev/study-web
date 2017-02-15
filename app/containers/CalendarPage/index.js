@@ -7,25 +7,23 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+import ComingSoon from '../../components/ComingSoon/index';
 import CalendarWidget from './components/CalendarWidget';
 import SchedulePatientModal from './components/SchedulePatientModal';
 import EditScheduleModal from './components/EditScheduleModal';
 import FilterBar from './components/FilterBar';
 import AllEventsModal from './components/AllEventsModal';
-import { ComingSoon } from 'components/ComingSoon';
-
-import { getUTCTime } from 'utils/time';
 
 import {
   fetchSites,
   fetchIndications,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 import {
   selectCurrentUser,
   selectSites,
   selectIndications,
   selectUserRoleType,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
 import {
   fetchPatientsByStudy,
@@ -36,7 +34,7 @@ import {
 } from './actions';
 import { selectSchedules, selectPatientsByStudy, selectPaginationOptions } from './selectors';
 
-import { SchedulePatientModalType } from 'common/constants';
+import { SchedulePatientModalType } from '../../common/constants';
 
 const getFilteredSchedules = (schedules, filter) =>
   schedules.filter(s =>

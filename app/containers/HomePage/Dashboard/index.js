@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { reject } from 'lodash';
 
-import RewardModal from 'components/RewardModal';
+import RewardModal from '../../../components/RewardModal';
 
-import { selectCurrentUser, selectSitePatients, selectUserSiteLocations, selectRewardsBalance } from 'containers/App/selectors';
-import { fetchRewardsBalance, redeem } from 'containers/App/actions';
-import { pickReward } from 'containers/RewardsPage/actions';
+import { selectCurrentUser, selectSitePatients, selectUserSiteLocations, selectRewardsBalance } from '../../App/selectors';
+import { fetchRewardsBalance, redeem } from '../../App/actions';
+import { pickReward } from '../../../containers/RewardsPage/actions';
 
 import { fetchPatientSignUps, fetchPatientMessages } from '../actions';
 import { selectPatientSignUps, selectPatientMessages } from '../selectors';
 
-import graph from 'assets/images/graph.svg';
+import graph from '../../../assets/images/graph.svg';
 import classNames from 'classnames';
 
 export class Dashboard extends React.Component {

@@ -9,7 +9,7 @@ import { map } from 'lodash';
 import {
   DEFAULT_COMPANY_TYPES,
   FETCH_COMPANY_TYPES_SUCCESS,
-} from 'containers/ReferPage/constants';
+} from '../../containers/ReferPage/constants';
 
 const initialState = {
   companyTypes: DEFAULT_COMPANY_TYPES,

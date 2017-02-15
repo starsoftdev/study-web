@@ -6,14 +6,14 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import { map } from 'lodash';
 
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
+import Input from '../../../components/Input';
+import ReactSelect from '../../../components/Input/ReactSelect';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import { selectClientSites } from '../../App/selectors';
+import { selectStudies } from '../selectors';
 import { selectSearchStudiesFormError, selectSearchStudiesFormValues } from './selectors';
-import { selectClientSites } from 'containers/App/selectors';
-import { selectStudies } from 'containers/HomePage/selectors';
 import formValidator from './validator';
 import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../constants';
-import LoadingSpinner from 'components/LoadingSpinner';
 
 const mapStateToProps = createStructuredSelector({
   clientSites: selectClientSites(),

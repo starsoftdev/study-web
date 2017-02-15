@@ -6,7 +6,7 @@ import request from '../request';
 import sinon from 'sinon';
 import expect from 'expect';
 
-describe('utils/request', () => {
+describe('../../utils/request', () => {
   // Before each test, stub the fetch function
   beforeEach(() => {
     sinon.stub(window, 'fetch');

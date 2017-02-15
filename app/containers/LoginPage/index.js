@@ -6,9 +6,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import LoginForm from 'components/LoginForm';
+import LoginForm from '../../components/LoginForm';
 import { loginRequest } from './actions';
-import { selectLoginError } from 'containers/App/selectors';
+import { selectLoginError } from '../../containers/App/selectors';
 
 import './styles.less';
 

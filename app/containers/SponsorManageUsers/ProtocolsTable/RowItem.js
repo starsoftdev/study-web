@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from 'components/CenteredModal/index';
-import EditProtocolForm from 'containers/SponsorManageUsers/EditProtocolForm';
-import { selectProtocolsList } from 'containers/SponsorManageUsers/selectors';
+
+import CenteredModal from '../../../components/CenteredModal/index';
+import EditProtocolForm from '../EditProtocolForm';
+import { selectProtocolsList } from '../selectors';
 import ExpandedItem from './ExpandedItem';
-import _ from 'lodash';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

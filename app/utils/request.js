@@ -3,7 +3,7 @@
 import 'whatwg-fetch';
 import { pick } from 'lodash';
 
-import { getItem, removeItem } from 'utils/localStorage';
+import { getItem, removeItem } from './localStorage';
 
 /**
  * Requests a URL, returning a promise

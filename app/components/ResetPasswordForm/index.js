@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import Input from 'components/Input';
+import Input from '../../components/Input';
 import resetPasswordFormValidator from './validator';
 import { FormGroup, Col } from 'react-bootstrap';
 

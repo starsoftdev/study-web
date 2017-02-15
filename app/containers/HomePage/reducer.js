@@ -34,12 +34,12 @@ import {
   SORT_SUCCESS,
 } from './constants';
 
-import { ADD_EMAIL_NOTIFICATION_USER, ADD_EMAIL_NOTIFICATION_USER_SUCCESS, ADD_EMAIL_NOTIFICATION_USER_ERROR } from 'containers/App/constants';
+import { ADD_EMAIL_NOTIFICATION_USER, ADD_EMAIL_NOTIFICATION_USER_SUCCESS, ADD_EMAIL_NOTIFICATION_USER_ERROR } from '../../containers/App/constants';
 
 import {
   RECEIVE_NOTIFICATION,
   SEND_STUDY_PATIENT_MESSAGES,
-} from 'containers/GlobalNotifications/constants';
+} from '../../containers/GlobalNotifications/constants';
 
 const initialState = {
   patientSignUps: {

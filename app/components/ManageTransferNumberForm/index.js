@@ -10,7 +10,7 @@ import { reduxForm, FieldArray, change } from 'redux-form';
 import RenderSources from './RenderSources';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { selectMangeSourcesFormValues } from 'components/ManageTransferNumberForm/selectors';
+import { selectMangeSourcesFormValues } from '../../components/ManageTransferNumberForm/selectors';
 
 const mapStateToProps = createStructuredSelector({
   formValues: selectMangeSourcesFormValues(),

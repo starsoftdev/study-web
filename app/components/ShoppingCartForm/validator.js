@@ -1,4 +1,4 @@
-import { validatorFactory } from 'utils/reduxForm';
+import { validatorFactory } from '../../utils/reduxForm';
 
 const schema = {
   couponId: { presence: false },

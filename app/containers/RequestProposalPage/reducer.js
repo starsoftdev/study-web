@@ -9,12 +9,12 @@ import {
   FETCH_COUPON_SUCCESS,
   FETCH_COUPON_ERROR,
   FETCH_PROPOSAL_SUCCESS,
-} from 'containers/RequestProposalPage/constants';
+} from '../../containers/RequestProposalPage/constants';
 
 import {
   FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
   FETCH_INDICATION_LEVEL_PRICE,
-} from 'containers/App/constants';
+} from '../../containers/App/constants';
 
 const initialState = {
   coupon: {

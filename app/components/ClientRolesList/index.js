@@ -5,10 +5,10 @@ import { Modal } from 'react-bootstrap';
 import { map, cloneDeep } from 'lodash';
 
 import CenteredModal from '../../components/CenteredModal/index';
-import EditUserForm from 'components/EditUserForm';
+import EditUserForm from '../../components/EditUserForm';
 import { selectCurrentUserClientId, selectClientSites, selectClientRoles, selectSelectedUser,
-  selectDeletedClientRole, selectSavedUser, selectSelectedUserDetailsForForm } from 'containers/App/selectors';
-import { clearSelectedUser, deleteClientRole, saveUser } from 'containers/App/actions';
+  selectDeletedClientRole, selectSavedUser, selectSelectedUserDetailsForForm } from '../../containers/App/selectors';
+import { clearSelectedUser, deleteClientRole, saveUser } from '../../containers/App/actions';
 import ClientRoleItem from './ClientRoleItem';
 
 class ClientRolesList extends Component { // eslint-disable-line react/prefer-stateless-function

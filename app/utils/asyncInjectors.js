@@ -1,9 +1,9 @@
 import { conformsTo, isEmpty, isFunction, isObject, isString } from 'lodash';
 import invariant from 'invariant';
 import warning from 'warning';
-import createReducer from 'reducers';
-import { selectAuthState } from 'containers/App/selectors';
-import { setItem } from 'utils/localStorage';
+import createReducer from '../reducers';
+import { selectAuthState } from '../containers/App/selectors';
+import { setItem } from '../utils/localStorage';
 
 /**
  * Validate the shape of redux store

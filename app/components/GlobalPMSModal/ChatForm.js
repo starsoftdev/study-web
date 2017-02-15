@@ -10,19 +10,19 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, reset } from 'redux-form';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
-import ChatText from 'components/Input/ChatText';
+import ChatText from '../../components/Input/ChatText';
 
 import formValidator from './validator';
 
-import { setProcessingStatus } from 'containers/GlobalNotifications/actions';
+import { setProcessingStatus } from '../../containers/GlobalNotifications/actions';
 
 import {
   selectProcessingStatus,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../containers/GlobalNotifications/selectors';
 
 import {
   selectCurrentUser,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
 import './styles.less';
 

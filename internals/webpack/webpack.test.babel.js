@@ -6,6 +6,7 @@ const path = require('path');
 const webpack = require('webpack');
 const modules = [
   'app',
+  'corporate',
   'node_modules',
 ];
 
@@ -24,29 +25,64 @@ module.exports = {
       /node_modules(\\|\/)sinon/,
       /node_modules(\\|\/)acorn/,
     ],
-    preLoaders: [
-      { test: /\.js$/,
-        loader: 'isparta',
-        include: path.resolve('app/'),
+    rules: [
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: [
+          {
+            loader: 'isparta-loader'
+          },
+        ],
+        include: [
+          path.resolve(__dirname, 'app'),
+          path.resolve(__dirname, 'corporate'),
+        ],
+      }, {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'null-loader',
+          },
+        ],
+      }, {
+        test: /\.less$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'stycssle-loader',
+          },
+          {
+            loader: 'less-loader',
+          },
+        ],
       },
-    ],
-    loaders: [
-      { test: /\.json$/, loader: 'json-loader' },
-      { test: /\.css$/, loader: 'null-loader' },
-      { test: /\.less$/, loader: ['style-loader', 'css-loader', 'less-loader'] },
-
       // sinon.js--aliased for enzyme--expects/requires global vars.
       // imports-loader allows for global vars to be injected into the module.
       // See https://github.com/webpack/webpack/issues/304
       { test: /sinon(\\|\/)pkg(\\|\/)sinon\.js/,
-        loader: 'imports?define=>false,require=>false',
+        use: [
+          {
+            loader: 'imports-loader',
+            options: {
+              define: false,
+              require: false,
+            },
+          }
+        ],
       },
       { test: /\.js$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         exclude: [/node_modules/],
       },
       { test: /\.jpe?g$|\.gif$|\.png$|\.svg$/i,
-        loader: 'null-loader',
+        use: [
+          {
+            loader: 'null-loader',
+          },
+        ],
       },
     ],
   },

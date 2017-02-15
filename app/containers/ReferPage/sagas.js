@@ -8,19 +8,19 @@ import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
 import { get } from 'lodash';
 
-import request from 'utils/request';
+import request from '../../utils/request';
 
 import {
   formSubmitted,
   formSubmissionError,
   companyTypesFetched,
   companyTypesFetchingError,
-} from 'containers/ReferPage/actions';
+} from '../../containers/ReferPage/actions';
 
 import {
   SUBMIT_FORM,
   FETCH_COMPANY_TYPES,
-} from 'containers/ReferPage/constants';
+} from '../../containers/ReferPage/constants';
 
 // Bootstrap sagas
 export default [

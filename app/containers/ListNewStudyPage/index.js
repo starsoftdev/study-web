@@ -8,20 +8,22 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
-import ShoppingCartForm from 'components/ShoppingCartForm';
-import ListNewStudyForm from 'components/ListNewStudyForm';
-import { selectListNewStudyPageDomain, selectFormSubmissionStatus, selectShowSubmitFormModal, selectIndicationLevelPrice } from 'containers/ListNewStudyPage/selectors';
-import { selectListNewStudyFormValues, selectListNewStudyFormError } from 'components/ListNewStudyForm/selectors';
-import { fields as newStudyFields } from 'components/ListNewStudyForm/validator';
-import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from 'common/constants';
-import _, { find } from 'lodash';
-import { submitForm, hideSubmitFormModal, clearFormSubmissionData } from 'containers/ListNewStudyPage/actions';
-import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
-import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
-import { ComingSoon } from 'components/ComingSoon';
 import { touch } from 'redux-form';
-import { Modal } from 'react-bootstrap';
-import LoadingSpinner from 'components/LoadingSpinner';
+import Modal from 'react-bootstrap/lib/Modal';
+import _, { find } from 'lodash';
+
+import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
+import ShoppingCartForm from '../../components/ShoppingCartForm';
+import ListNewStudyForm from '../../components/ListNewStudyForm';
+import { selectListNewStudyFormValues, selectListNewStudyFormError } from '../../components/ListNewStudyForm/selectors';
+import { fields as newStudyFields } from '../../components/ListNewStudyForm/validator';
+import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
+import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
+import { ComingSoon } from '../../components/ComingSoon';
+import { submitForm, hideSubmitFormModal, clearFormSubmissionData } from '../../containers/ListNewStudyPage/actions';
+import { selectListNewStudyPageDomain, selectFormSubmissionStatus, selectShowSubmitFormModal, selectIndicationLevelPrice } from './selectors';
+
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 import Helmet from 'react-helmet';
 import {
@@ -32,7 +34,7 @@ import {
   getAvailPhoneNumbers,
   fetchIndicationLevelPrice,
   fetchClientSites,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 import {
   selectSiteLocations,
   selectIndications,
@@ -42,7 +44,7 @@ import {
   selectCurrentUserClientId,
   selectClientSites,
   selectUserRoleType,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
 export class ListNewStudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 

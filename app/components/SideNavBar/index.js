@@ -7,9 +7,9 @@ import {
   selectCurrentUserClientId,
   selectUserRoleType,
   selectCurrentUser,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
-import sideNavLogo from 'assets/images/logo2.png';
+import sideNavLogo from '../../assets/images/logo2.png';
 
 class SideNavBar extends React.Component {
   static propTypes = {

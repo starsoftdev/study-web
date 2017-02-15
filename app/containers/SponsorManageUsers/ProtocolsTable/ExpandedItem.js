@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from 'components/CenteredModal/index';
-import EditSponsorUserForm from 'containers/SponsorManageUsers/EditSponsorUserForm';
+import CenteredModal from '../../../components/CenteredModal/index';
+import EditSponsorUserForm from '../../../containers/SponsorManageUsers/EditSponsorUserForm';
 
 class ExpandedItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
