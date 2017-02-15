@@ -292,7 +292,13 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
             </div>
           </Modal.Body>
         </Modal>
-        <Modal className="custom-modal" show={this.state.addEmailModalShow} onHide={this.closeAddEmailModal}>
+        <Modal
+          dialogComponentClass={CenteredModal}
+          show={this.state.addEmailModalShow}
+          onHide={this.closeAddEmailModal}
+          backdrop
+          keyboard
+        >
           <Modal.Header>
             <Modal.Title>ADD EMAIL NOTIFICATION</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddEmailModal}>
