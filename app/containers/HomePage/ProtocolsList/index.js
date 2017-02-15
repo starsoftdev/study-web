@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import _ from 'lodash';
 
-import { selectCurrentUser } from 'containers/App/selectors';
-import { setActiveSort, sortSuccess } from 'containers/HomePage/actions';
-import { selectProtocols, selectPaginationOptions } from 'containers/HomePage/selectors';
+import { selectCurrentUser } from '../../App/selectors';
+import { setActiveSort, sortSuccess } from '../actions';
+import { selectProtocols, selectPaginationOptions } from '../selectors';
 import ProtocolItem from './ProtocolItem';
 
 class ProtocolsList extends Component { // eslint-disable-line react/prefer-stateless-function

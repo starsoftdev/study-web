@@ -38,6 +38,10 @@ export const FETCH_REWARDS_BALANCE                 = 'App/FETCH_REWARDS_BALANCE'
 export const FETCH_REWARDS_BALANCE_SUCCESS         = 'App/FETCH_REWARDS_BALANCE_SUCCESS';
 export const FETCH_REWARDS_BALANCE_ERROR           = 'App/FETCH_REWARDS_BALANCE_ERROR';
 
+export const REDEEM                                 = 'App/REDEEM';
+export const REDEEM_SUCCESS                         = 'App/REDEEM_SUCCESS';
+export const REDEEM_ERROR                           = 'App/REDEEM_ERROR';
+
 export const FETCH_CARDS                 		       = 'App/FETCH_CARDS';
 export const FETCH_CARDS_SUCCESS         		       = 'App/FETCH_CARDS_SUCCESS';
 export const FETCH_CARDS_ERROR           		       = 'App/FETCH_CARDS_ERROR';
@@ -124,7 +128,12 @@ export const CHANGE_USERS_TIMEZONE_ERROR           = 'App/CHANGE_USERS_TIMEZONE_
 
 export const FETCH_LANDING                         = 'App/FETCH_LANDING';
 export const FETCH_LANDING_SUCCESS                 = 'App/FETCH_LANDING_SUCCESS';
+export const FETCH_LANDING_ERROR                   = 'App/FETCH_LANDING_ERROR';
 export const SUBSCRIBE_FROM_LANDING                = 'App/SUBSCRIBE_FROM_LANDING';
 export const PATIENT_SUBSCRIBED                    = 'App/PATIENT_SUBSCRIBED';
 export const CLEAR_FORM_SUBSCRIBE                  = 'App/CLEAR_FORM_SUBSCRIBE';
 export const PATIENT_SUBSCRIPTION_ERROR            = 'App/PATIENT_SUBSCRIPTION_ERROR';
+
+export const ADD_EMAIL_NOTIFICATION_USER                               = 'App/ADD_EMAIL_NOTIFICATION_USER';
+export const ADD_EMAIL_NOTIFICATION_USER_SUCCESS                       = 'App/ADD_EMAIL_NOTIFICATION_USER_SUCCESS';
+export const ADD_EMAIL_NOTIFICATION_USER_ERROR                         = 'App/ADD_EMAIL_NOTIFICATION_USER_ERROR  ';

@@ -5,19 +5,19 @@ import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 
-import studykikLogo from 'assets/images/logo.svg';
-import AddCreditsModal from 'components/AddCreditsModal';
-import GlobalPMSModal from 'components/GlobalPMSModal';
+import studykikLogo from '../../assets/images/logo.svg';
+import AddCreditsModal from '../../components/AddCreditsModal';
+import GlobalPMSModal from '../../components/GlobalPMSModal';
 
 import NotificationBox from './NotificationBox';
 import AvatarMenu from './AvatarMenu';
 
-import { fetchSitePatients, fetchClientCredits } from 'containers/App/actions';
-import { logout } from 'containers/LoginPage/actions';
-
+import { fetchSitePatients, fetchClientCredits } from '../../containers/App/actions';
+import { logout } from '../../containers/LoginPage/actions';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import {
   selectSocket,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../containers/GlobalNotifications/selectors';
 
 import {
   selectCurrentUser,
@@ -25,7 +25,7 @@ import {
   selectSitePatients,
   selectClientCredits,
   selectUserRoleType,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
 import { sumBy } from 'lodash';
 
@@ -99,6 +99,10 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
   render() {
     const { userRoleType } = this.props;
+    let purchasable = true;
+    if (userRoleType === 'client') {
+      purchasable = this.props.currentUser.roleForClient.canPurchase;
+    }
     if (userRoleType === 'client') {
       const unreadMessagesCount = sumBy(this.props.sitePatients.details, (item) => parseInt(item.count_unread ? item.count_unread : 0));
       const credits = this.props.clientCredits.details.customerCredits || 0;
@@ -150,10 +154,10 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
             <div className="get-credits pull-left">
               <span>{credits} Credits</span>
-              <Button onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
+              <Button disabled={!purchasable} onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
             </div>
 
-            <AvatarMenu handleLogoutClick={this.handleLogoutClick} currentUser={this.props.currentUser} />
+            <AvatarMenu handleLogoutClick={this.handleLogoutClick} currentUser={this.props.currentUser} userRoleType={userRoleType} />
 
           </div>
           <AddCreditsModal
@@ -169,6 +173,16 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
         </header>
       );
     }
+
+    const tooltip = (
+      <Tooltip
+        id={'ms-tooltip'}
+        className="tooltop-inner"
+      >
+        {'Coming Soon'}
+      </Tooltip>
+    );
+
     return (
       <header id="header">
         <div className="container-fluid">
@@ -181,28 +195,38 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
           <NotificationBox currentUser={this.props.currentUser} />
 
-          <div className="emails pull-left">
-            <a
-              className="opener"
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Coming Soon"
-            >
-              <i className="icomoon-envelop" />
-              <span className="counter">1</span>
-            </a>
-          </div>
+          <OverlayTrigger
+            placement="bottom"
+            overlay={tooltip}
+          >
+            <div className="emails pull-left">
+              <a
+                className="opener"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Coming Soon"
+              >
+                <i className="icomoon-envelop" />
+                <span className="counter">1</span>
+              </a>
+            </div>
+          </OverlayTrigger>
 
-          <div className="open-close help-drop pull-left">
-            <a
-              className="link-help pull-left opener"
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Coming Soon"
-            >
-              ?
-            </a>
-          </div>
+          <OverlayTrigger
+            placement="bottom"
+            overlay={tooltip}
+          >
+            <div className="open-close help-drop pull-left">
+              <a
+                className="link-help pull-left opener"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Coming Soon"
+              >
+                ?
+              </a>
+            </div>
+          </OverlayTrigger>
           <AvatarMenu handleLogoutClick={this.handleLogoutClick} currentUser={this.props.currentUser} />
         </div>
       </header>

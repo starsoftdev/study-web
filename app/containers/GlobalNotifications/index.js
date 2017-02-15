@@ -8,8 +8,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import _ from 'lodash';
-import { selectCurrentUser } from 'containers/App/selectors';
-import { selectSocket } from 'containers/GlobalNotifications/selectors';
+import { selectCurrentUser } from '../../containers/App/selectors';
+import { selectSocket } from '../../containers/GlobalNotifications/selectors';
 import {
   setSocketConnection,
   subscribeToPageEvent,
@@ -17,7 +17,7 @@ import {
   unsubscribeFromAll,
   subscribeToChatEvent,
   receiveNotification,
-} from 'containers/GlobalNotifications/actions';
+} from '../../containers/GlobalNotifications/actions';
 
 export class GlobalNotifications extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

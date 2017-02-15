@@ -33,6 +33,7 @@ const mapStateToProps = createStructuredSelector({
 
 @reduxForm({ form: formName, validate: formValidator })
 @connect(mapStateToProps, null)
+
 class EditPatientForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,

@@ -5,7 +5,7 @@
 */
 
 import _ from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { Component, PropTypes } from 'react';
 import { Calendar } from 'react-date-range';
 import Modal from 'react-bootstrap/lib/Modal';

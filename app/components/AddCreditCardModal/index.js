@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Modal } from 'react-bootstrap';
-import AddNewCardForm from 'components/AddNewCardForm';
+import AddNewCardForm from '../../components/AddNewCardForm';
 import CenteredModal from '../../components/CenteredModal/index';
 
 class AddCreditCardModal extends React.Component { // eslint-disable-line react/prefer-stateless-function

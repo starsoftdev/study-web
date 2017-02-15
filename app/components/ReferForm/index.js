@@ -8,8 +8,8 @@ import React from 'react';
 
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
+import Input from '../../components/Input';
+import ReactSelect from '../../components/Input/ReactSelect';
 import referFormValidator from './validator';
 
 @reduxForm({ form: 'refer', validate: referFormValidator })

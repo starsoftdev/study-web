@@ -6,21 +6,27 @@ import { Link } from 'react-router';
 import {
   selectCurrentUserClientId,
   selectUserRoleType,
-} from 'containers/App/selectors';
+  selectCurrentUser,
+} from '../../containers/App/selectors';
 
-import sideNavLogo from 'assets/images/logo2.png';
+import sideNavLogo from '../../assets/images/logo2.png';
 
 class SideNavBar extends React.Component {
   static propTypes = {
     currentUserClientId: React.PropTypes.number,
     userRoleType: React.PropTypes.string,
+    currentUser: React.PropTypes.any,
   };
 
   componentDidMount() {
   }
 
   render() {
-    const { userRoleType } = this.props;
+    const { userRoleType, currentUser } = this.props;
+    let purchasable = true;
+    if (userRoleType === 'client') {
+      purchasable = currentUser.roleForClient.canPurchase;
+    }
     let menuItemsGroupA;
     let menuItemsGroupB;
     if (userRoleType === 'client') {
@@ -41,10 +47,10 @@ class SideNavBar extends React.Component {
     } else {
       menuItemsGroupA = [
         { upperText: 'Home', link: '/app', icon: 'icomoon-icon_house_alt' },
-        { upperText: 'List New Protocol', link: '/app/list-new-protocol', icon: 'icomoon-screen' },
+        { upperText: 'List New Protocol', link: '/app/list-new-study', icon: 'icomoon-screen' },
         { upperText: 'Order IRB Ad Creation', link: '/app/order-irb-ad-creation', icon: 'icomoon-irb' },
         { upperText: 'Request Proposal', link: '/app/request-proposal', icon: 'icomoon-doller' },
-        { upperText: 'Find Out How Many Sites Are Listing Your Protocol', link: '/app/refer', icon: 'icomoon-help-with-circle' },
+        { upperText: 'Find Out How Many Sites Are Listing Your Protocol', link: '/app/find-out-how-many-sites-are-listing-your-protocol', icon: 'icomoon-help-with-circle' },
       ];
       menuItemsGroupB = [
         { upperText: 'Calendar', link: '/app/calendar', icon: 'icomoon-icon_calendar' },
@@ -56,15 +62,24 @@ class SideNavBar extends React.Component {
         <div className="sidebar-holder">
           <nav className="sidenav">
             <ul className="list-unstyled">
-              {menuItemsGroupA.map((item, index) =>
-                <li key={index}>
-                  <Link to={item.link} activeClassName="active">
-                    <i className={item.icon} />
-                    <div>{item.upperText}</div>
-                    <div>{item.lowerText}</div>
-                  </Link>
-                </li>
-              )}
+              {menuItemsGroupA.map((item, index) => (
+                ((index === 1 || index === 2) && !purchasable) ?
+                  <li key={index} className="disabled-li">
+                    <Link to={item.link} activeClassName="active">
+                      <i className={item.icon} />
+                      <div>{item.upperText}</div>
+                      <div>{item.lowerText}</div>
+                    </Link>
+                  </li>
+                :
+                  <li key={index}>
+                    <Link to={item.link} activeClassName="active">
+                      <i className={item.icon} />
+                      <div>{item.upperText}</div>
+                      <div>{item.lowerText}</div>
+                    </Link>
+                  </li>
+              ))}
             </ul>
             <ul className="list-unstyled">
               {menuItemsGroupB.map((item, index) =>
@@ -99,6 +114,7 @@ class SideNavBar extends React.Component {
 const mapStateToProps = createStructuredSelector({
   currentUserClientId: selectCurrentUserClientId(),
   userRoleType: selectUserRoleType(),
+  currentUser: selectCurrentUser(),
 });
 
 const mapDispatchToProps = () => ({

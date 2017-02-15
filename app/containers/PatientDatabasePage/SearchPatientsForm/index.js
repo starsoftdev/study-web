@@ -51,6 +51,16 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
 
   initSearch(e, name) {
     const params = this.props.formValues;
+    const paramKeys = Object.keys(params);
+
+    // Make sure no zeroes are stored as strings
+    // Note: Zeroes represent the 'All' option for a drop down selection.
+    paramKeys.forEach(key => {
+      if (params[key] === '0') {
+        params[key] = 0;
+      }
+    });
+
     if (e && e.target) {
       if (e.target.value === '0') {
         params[e.target.name] = 0;
@@ -181,7 +191,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 name="includeIndication"
                 component={ReactMultiSelect}
                 placeholder="Select Indication"
-                searchPlaceholder="Search Indication"
+                searchPlaceholder="Search"
                 searchable
                 optionLabelKey="label"
                 multiple
@@ -204,7 +214,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 name="excludeIndication"
                 component={ReactMultiSelect}
                 placeholder="Select Indication"
-                searchPlaceholder="Search Indication"
+                searchPlaceholder="Search"
                 searchable
                 optionLabelKey="label"
                 multiple

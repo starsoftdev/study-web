@@ -8,15 +8,15 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, FieldArray, reduxForm, change } from 'redux-form';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import DatePicker from '../../components/Input/DatePicker';
 
-import Input from 'components/Input';
-import Toggle from 'components/Input/Toggle';
-import ReactSelect from 'components/Input/ReactSelect';
-import RenderLeads from 'components/RenderLeads';
+import Input from '../../components/Input';
+import Toggle from '../../components/Input/Toggle';
+import ReactSelect from '../../components/Input/ReactSelect';
+import RenderLeads from '../../components/RenderLeads';
 
-import { CAMPAIGN_LENGTH_LIST } from 'common/constants';
+import { CAMPAIGN_LENGTH_LIST } from '../../common/constants';
 import {
   selectCallTracking,
   selectLeadsCount,

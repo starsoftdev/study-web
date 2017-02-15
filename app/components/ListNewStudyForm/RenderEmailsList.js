@@ -5,16 +5,18 @@
  */
 
 import React, { PropTypes } from 'react';
+import _ from 'lodash';
 import { Field, change } from 'redux-form';
 import { Modal } from 'react-bootstrap';
-import AddEmailNotificationForm from 'components/AddEmailNotificationForm';
-import Checkbox from 'components/Input/Checkbox';
-import _ from 'lodash';
+
+import CenteredModal from '../../components/CenteredModal/index';
+import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
+import Checkbox from '../../components/Input/Checkbox';
 
 import {
   showAddEmailModal,
   hideAddEmailModal,
-} from 'containers/ListNewStudyPage/actions';
+} from '../../containers/ListNewStudyPage/actions';
 
 class RenderEmailsList extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -23,6 +25,8 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
     formValues: PropTypes.object.isRequired,
     listNewStudyState: PropTypes.object.isRequired,
     fields: PropTypes.object,
+    addEmailNotificationUser: PropTypes.func,
+    currentUserClientId: PropTypes.number,
   };
 
   constructor(props) {
@@ -39,9 +43,18 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
   }
 
   addEmailNotificationSubmit(values) {
-    this.props.fields.push(values);
-    this.props.dispatch(hideAddEmailModal());
-    this.props.dispatch(change('listNewStudy', 'checkAllInput', false));
+    this.props.addEmailNotificationUser({
+      ...values,
+      clientId: this.props.currentUserClientId,
+      clientRole:{
+        siteId: this.props.formValues.siteLocation,
+      },
+    });
+
+    // this.props.fields.push(values);
+    // this.props.dispatch(change('listNewStudy', 'checkAllInput', false));
+
+    // this.props.dispatch(hideAddEmailModal());
   }
 
   closeAddEmailModal() {
@@ -105,7 +118,13 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
           <a className="add-new-email lightbox-opener" onClick={this.addEmailNotificationClick}>Add Email Notification</a>
         </div>
 
-        <Modal className="custom-modal" show={this.props.listNewStudyState.showAddEmailModal} onHide={this.closeAddEmailModal}>
+        <Modal
+          dialogComponentClass={CenteredModal}
+          show={this.props.listNewStudyState.showAddEmailModal}
+          onHide={this.closeAddEmailModal}
+          backdrop
+          keyboard
+        >
           <Modal.Header>
             <Modal.Title>ADD EMAIL NOTIFICATION</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddEmailModal}>

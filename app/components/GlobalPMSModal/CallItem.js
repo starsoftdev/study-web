@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment-timezone';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { selectSelectedUser, selectCurrentUser } from '../../containers/App/selectors';
 
-import moment from 'moment';
 class CallItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     messageData: PropTypes.object,

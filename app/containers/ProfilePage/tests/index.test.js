@@ -5,7 +5,7 @@ import { shallow } from 'enzyme';
 import { ReduxForm } from 'redux-form';
 import React from 'react';
 
-import { ProfilePage } from 'containers/ProfilePage';
+import ProfilePage from '../index';
 
 describe('<ProfilePage /> component', () => {
   let setup;

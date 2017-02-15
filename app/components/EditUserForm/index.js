@@ -1,15 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 
-import Input from 'components/Input';
-import Toggle from 'components/Input/Toggle';
-import ReactSelect from 'components/Input/ReactSelect';
+import Input from '../../components/Input';
+import Toggle from '../../components/Input/Toggle';
+import ReactSelect from '../../components/Input/ReactSelect';
 import { selectEditUserFormSiteValue } from './selectors';
-import { selectSavedUser } from 'containers/App/selectors';
+import { selectSavedUser } from '../../containers/App/selectors';
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const mapStateToProps = createStructuredSelector({
   savedUser: selectSavedUser(),
@@ -29,13 +29,40 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
     onDelete: PropTypes.func,
     deleting: PropTypes.bool,
     isEdit: PropTypes.bool,
+    newSiteLocation: PropTypes.number,
+    Purchase: PropTypes.bool,
+    Redeem: PropTypes.bool,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.handleSelect = this.handleSelect.bind(this);
+    this.state = {
+      fFlag: true,
+    };
+  }
+
+  componentDidMount() {
+    this.props.dispatch(change('editUser', 'purchase', this.props.Purchase));
+    this.props.dispatch(change('editUser', 'reward', this.props.Redeem));
+    const nSite = (this.props.newSiteLocation || this.props.newSiteLocation === 0) ? this.props.newSiteLocation.toString() : null;
+    this.props.dispatch(change('editUser', 'site', nSite));
+  }
+
+  handleSelect() {
+    if (this.state) {
+      this.setState({
+        fFlag: false,
+      });
+    }
+  }
+
   render() {
-    const { savedUser, siteOptions, site, handleSubmit, onDelete, deleting, isEdit } = this.props;
+    const { savedUser, siteOptions, site, handleSubmit, onDelete, deleting, isEdit, newSiteLocation } = this.props;
     let clientRolePanelContent = null;
 
-    if (site === '0') {
+    if (site === '0' || (newSiteLocation && newSiteLocation === 0)) {
       clientRolePanelContent = (
         <div className="client-role">
           <div className="field-row">
@@ -120,6 +147,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
                 placeholder="Select Site Location"
                 options={siteOptions}
                 disabled={savedUser.saving || deleting}
+                onChange={this.handleSelect}
               />
             </div>
           </div>

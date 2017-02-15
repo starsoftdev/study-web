@@ -17,6 +17,7 @@ import { createStructuredSelector } from 'reselect';
 import { selectUserRoleType, selectCurrentUserClientId, selectCurrentUser } from '../../containers/App/selectors';
 import { fetchClientSites, fetchLevels, getAvailPhoneNumbers } from '../../containers/App/actions';
 import { fetchStudies, fetchProtocols, fetchProtocolNumbers, fetchIndications } from './actions';
+import { selectSearchProtocolsFormValues } from '../../containers/HomePage/selectors';
 
 import Dashboard from './Dashboard';
 import SponsorDashboard from './SponsorDashboard';
@@ -25,6 +26,7 @@ import SearchStudiesForm from './SearchStudiesForm';
 import SearchProtocolsForm from './SearchProtocolsForm';
 import ProtocolsList from './ProtocolsList';
 import StudiesList from './StudiesList';
+import _ from 'lodash';
 
 export class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -39,6 +41,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     getAvailPhoneNumbers: PropTypes.func,
     location: PropTypes.any,
     userRoleType: PropTypes.string,
+    searchProtocolsFormValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -73,13 +76,12 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
 
   searchProtocols(searchParams) {
     const { currentUser } = this.props;
-    const queryParams = {
-      sponsorRoleId: currentUser.roleForSponsor.id,
-      search: searchParams.search,
-      protocol: searchParams.protocol,
-      status: searchParams.status,
-    };
-    this.props.fetchProtocols(queryParams);
+
+    let filters = { sponsorRoleId: currentUser.roleForSponsor.id };
+
+    filters = _.assign(filters, this.props.searchProtocolsFormValues, searchParams);
+
+    this.props.fetchProtocols(filters);
   }
 
   render() {
@@ -94,7 +96,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
               <Dashboard location={this.props.location} />
             </div>
             <div className="search-studies-panel clearfix form-group">
-              <SearchStudiesForm onSubmit={this.searchStudies} />
+              <SearchStudiesForm onSubmit={this.searchStudies} currentUser={this.props.currentUser} />
               <Link to="/app/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Study</Link>
             </div>
             <div className="table-holder form-group">
@@ -132,6 +134,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   currentUserClientId: selectCurrentUserClientId(),
   userRoleType: selectUserRoleType(),
+  searchProtocolsFormValues: selectSearchProtocolsFormValues(),
 });
 
 function mapDispatchToProps(dispatch) {

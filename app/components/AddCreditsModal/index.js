@@ -10,16 +10,16 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import ReactSelect from '../../components/Input/ReactSelect';
-import { Field, reduxForm, touch, reset } from 'redux-form';
+import { Field, reduxForm, touch, reset, change } from 'redux-form';
 
 import CenteredModal from '../../components/CenteredModal/index';
-import ShoppingCartForm from 'components/ShoppingCartForm';
+import ShoppingCartForm from '../../components/ShoppingCartForm';
 import AddNewCardForm from '../../components/AddNewCardForm';
-import { addCredits, fetchSites, getCreditsPrice, saveCard } from 'containers/App/actions';
-import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice, selectCurrentUserStripeCustomerId } from 'containers/App/selectors';
-import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
+import { addCredits, fetchSites, getCreditsPrice, saveCard } from '../../containers/App/actions';
+import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice, selectCurrentUserStripeCustomerId } from '../../containers/App/selectors';
+import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
+import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
 import { selectAddCreditsFormValues, selectAddCreditsFormError } from './selectors';
-import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
 import validator, { addCreditsFields } from './validator';
 
 import _ from 'lodash';
@@ -42,7 +42,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     addCreditsOperation: PropTypes.object,
     getCreditsPrice: PropTypes.func,
     creditsPrice: PropTypes.object,
-    shoppingCartFormError: PropTypes.object,
+    shoppingCartFormError: PropTypes.bool,
     shoppingCartFormValues: PropTypes.object,
     addCreditsFormValues: PropTypes.object,
     addCreditsFormError: PropTypes.bool,
@@ -51,6 +51,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     touchAddCredits: PropTypes.func,
     saveCard: PropTypes.func,
     currentUserStripeCustomerId: PropTypes.string,
+    validateChange: PropTypes.func,
   };
 
   constructor(props) {
@@ -117,6 +118,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
   }
 
   resetState() {
+    this.props.validateChange();
     const resetState = {
       quantity: 1,
       credits: 100,
@@ -171,6 +173,12 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
       touchAddCredits,
     } = this.props;
 
+    if (addCreditsFormError || shoppingCartFormError) {
+      touchAddCredits();
+      touchShoppingCart();
+      return;
+    }
+
     const siteLocationName = _.find(this.props.siteLocations, { id: addCreditsFormValues.siteLocation });
     const data = {
       quantity: this.state.quantity,
@@ -180,12 +188,6 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
       site: addCreditsFormValues.siteLocation,
       siteLocationName: siteLocationName.name,
     };
-
-    if (addCreditsFormError || shoppingCartFormError) {
-      touchAddCredits();
-      touchShoppingCart();
-      return;
-    }
 
     addCredits(currentUser.roleForClient.client.stripeCustomerId, data);
   }
@@ -347,6 +349,7 @@ function mapDispatchToProps(dispatch) {
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
     resetForm: () => dispatch(reset('addCredits')),
     saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+    validateChange: () => dispatch(change('addCredits', 'siteLocation', '200')),
   };
 }
 

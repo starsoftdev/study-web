@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 
-import Input from 'components/Input';
-import { selectSavedSite } from 'containers/App/selectors';
+import Input from '../../components/Input';
+import { selectSavedSite } from '../../containers/App/selectors';
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
-import FormGeosuggest from 'components/Input/Geosuggest';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import FormGeosuggest from '../../components/Input/Geosuggest';
 import './styles.less';
 import _ from 'lodash';
 
@@ -24,6 +24,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     savedSite: PropTypes.object,
     handleSubmit: PropTypes.func,
     isEdit: PropTypes.bool,
+    initialValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -73,6 +74,16 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
         }
       }
       this.props.dispatch(change('editSite', 'address', e.label));
+    } else {
+      const addressArr = e.label.split(',');
+      if (addressArr[1]) {
+        this.props.dispatch(change('editSite', 'city', addressArr[1]));
+      }
+      if (addressArr[2]) {
+        this.props.dispatch(change('editSite', 'state', addressArr[2]));
+      }
+      this.geoSuggest.update(`${addressArr[0]}`);
+      this.props.dispatch(change('editSite', 'address', `${addressArr[0]}`));
     }
   }
 
@@ -128,7 +139,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </strong>
             <div className="field">
               <Field
-                name="phone"
+                name="redirectPhone"
                 component={Input}
                 type="text"
                 disabled={savedSite.saving}
@@ -140,24 +151,14 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
               <label>SITE ADDRESS</label>
             </strong>
             <div className="field">
-              {(() => {
-                if (isEdit) {
-                  return (<Field
-                    name="address"
-                    component={Input}
-                    disabled={savedSite.saving}
-                    onChange={this.addressChanged}
-                  />);
-                }
-
-                return (<Field
-                  name="address"
-                  component={FormGeosuggest}
-                  ref={(el) => { this.geoSuggest = el; }}
-                  onSuggestSelect={this.onSuggestSelect}
-                  placeholder=""
-                />);
-              })()}
+              <Field
+                name="address"
+                component={FormGeosuggest}
+                refObj={(el) => { this.geoSuggest = el; }}
+                onSuggestSelect={this.onSuggestSelect}
+                initialValue={isEdit ? this.props.initialValues.address : ''}
+                placeholder=""
+              />
             </div>
           </div>
           <div className="field-row">

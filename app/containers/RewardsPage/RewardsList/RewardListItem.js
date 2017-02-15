@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { getLocalTime } from 'utils/time';
+import moment from 'moment-timezone';
 
-import defaultImage from 'assets/images/Default-User-Img-Dr.png';
+import defaultImage from '../../../assets/images/Default-User-Img-Dr.png';
 
 class RewardListItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -20,7 +20,7 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
   render() {
     const { balance, points, userImageURL, reward_data, created, timezone } = this.props;
     let { rewardData } = this.props;
-    const localTime = getLocalTime(created, timezone);
+    const localTime = moment(created).tz(timezone);
     const date = localTime.format('MM/DD/YYYY');
     const time = localTime.format('hh:mm A');
     if (reward_data) {

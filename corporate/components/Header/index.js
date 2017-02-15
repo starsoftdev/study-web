@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { Glyphicon } from 'react-bootstrap';
 import classNames from 'classnames';
 
 import NavBar from './NavBar';
 import LoggedUserMenu from './LoggedUserMenu';
 
-import studyKikLogo from 'assets/images/logo.svg';
+import studyKikLogo from '../../assets/images/logo.svg';
 
 export default class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -70,7 +71,10 @@ export default class Header extends React.Component { // eslint-disable-line rea
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
               </button>
-              <Link to="/login" className={classNames('btn btn-default btn-login', { invisible: isLoginPage || isLoggedIn })}>LOGIN</Link>
+              <Link to="/login" className={classNames('btn btn-default btn-login', { invisible: isLoginPage || isLoggedIn })}>
+                <span className="hidden-xs">LOGIN</span>
+                <Glyphicon glyph="log-in" className="visible-xs-* hidden-sm hidden-md hidden-lg" />
+              </Link>
               <div className={classNames('logo-holder', { loginPage: isLoginPage })}>
                 <Link to="/" className="navbar-brand" title="Study KIK">
                   <img src={studyKikLogo} alt="Study KIK" width="150" />

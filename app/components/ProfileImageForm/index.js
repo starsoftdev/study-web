@@ -7,10 +7,10 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 import ReactAvatarEditor from 'react-avatar-editor';
-// import Input from 'components/Input';
+// import Input from '../../components/Input';
 import classNames from 'classnames';
 import FileUpload from './FileUpload';
-import defaultImage from 'assets/images/Default-User-Img-Dr-Full.png';
+import defaultImage from '../../assets/images/Default-User-Img-Dr-Full.png';
 
 @reduxForm(
   {

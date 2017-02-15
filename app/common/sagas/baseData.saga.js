@@ -4,9 +4,11 @@ import { take, call, put, fork } from 'redux-saga/effects';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { takeLatest } from 'redux-saga';
+import { reset } from 'redux-form';
 
-import request from 'utils/request';
-import composeQueryString from 'utils/composeQueryString';
+import request from '../../utils/request';
+import composeQueryString from '../../utils/composeQueryString';
+
 import {
   FETCH_SITES,
   FETCH_INDICATIONS,
@@ -15,6 +17,7 @@ import {
   FETCH_COUPON,
   FETCH_REWARDS,
   FETCH_REWARDS_BALANCE,
+  REDEEM,
   FETCH_CARDS,
   SAVE_CARD,
   DELETE_CARD,
@@ -40,8 +43,7 @@ import {
 
   FETCH_LANDING,
   SUBSCRIBE_FROM_LANDING,
-} from 'containers/App/constants';
-
+} from '../../containers/App/constants';
 
 import {
   sitesFetched,
@@ -58,6 +60,8 @@ import {
   rewardsFetchingError,
   rewardsBalanceFetched,
   rewardsBalanceFetchingError,
+  redeemSuccess,
+  redeemError,
   cardsFetched,
   cardsFetchingError,
   cardSaved,
@@ -100,9 +104,10 @@ import {
   changeUsersTimezoneSuccess,
   changeUsersTimezoneError,
   landingFetched,
+  fetchLandingError,
   patientSubscribed,
   patientSubscriptionError,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
   yield fork(fetchSitesWatcher);
@@ -113,6 +118,7 @@ export default function* baseDataSaga() {
   yield fork(fetchCardsWatcher);
   yield fork(fetchRewardsWatcher);
   yield fork(fetchRewardsBalanceWatcher);
+  yield fork(redeemWatcher);
   yield fork(saveCardWatcher);
   yield fork(deleteCardWatcher);
   yield fork(addCreditsWatcher);
@@ -133,7 +139,7 @@ export default function* baseDataSaga() {
   yield fork(fetchCreditsPrice);
   yield fork(fetchIndicationLevelPriceWatcher);
   yield fork(changeUsersTimezoneWatcher);
-  yield fork(fetchLandingStudy);
+  yield fork(takeLatest, FETCH_LANDING, fetchLandingStudy);
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
 }
 
@@ -145,7 +151,17 @@ export function* fetchSitesWatcher() {
       const requestURL = `${API_URL}/sites`;
 
       const filterObj = {
-        include: ['studies'],
+        include: [{
+          relation: 'roles',
+          scope: {
+            include: ['user'],
+          },
+        }, {
+          relation: 'studies',
+          scope: {
+            include: ['studyNotificationEmails'],
+          },
+        }],
       };
 
       const searchParams = action.payload || {};
@@ -279,6 +295,32 @@ export function* fetchRewardsBalanceWatcher() {
   }
 }
 
+export function* redeemWatcher() {
+  while (true) {
+    // listen for the SUBMIT_FORM action dispatched on form submit
+    const { payload } = yield take(REDEEM);
+
+    try {
+      const requestURL = `${API_URL}/rewards/redeem`;
+      const params = {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      };
+      const response = yield call(request, requestURL, params);
+
+      yield put(toastrActions.success('Redeem Reward', 'The request has been submitted successfully'));
+      yield put(redeemSuccess(response));
+
+      // Clear the form values
+      yield put(reset('rewardRedemptions'));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(redeemError(err));
+    }
+  }
+}
+
 export function* fetchCardsWatcher() {
   while (true) {
     const { customerId } = yield take(FETCH_CARDS);
@@ -376,6 +418,9 @@ export function* fetchClientSitesWatcher() {
           },
         }, {
           relation: 'studies',
+          scope: {
+            include: ['studyNotificationEmails'],
+          },
         }],
         where: {},
       };
@@ -720,32 +765,20 @@ export function* changeUsersTimezoneWatcher() {
   }
 }
 
-function* fetchLandingStudy() {
-  // listen for the FETCH_LANDING_STUDY action
-  const { studyId } = yield take(FETCH_LANDING);
+function* fetchLandingStudy(action) {
+  const { studyId } = action;
   const filter = JSON.stringify({
-    where: {
-      study_id: studyId,
-    },
-    include: [
-      {
-        relation: 'study',
-        scope: {
-          include: ['sites', 'sources'],
-        },
-      },
-    ],
+    include: ['sites', 'sources', 'indication', 'landingPages'],
   });
   // put the fetching study action in case of a navigation action
   try {
-    const requestURL = `${API_URL}/landingPages/${studyId}?filter=${filter}`;
+    const requestURL = `${API_URL}/studies/${studyId}?filter=${filter}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
     yield put(landingFetched(response));
-  } catch (e) {
-    const errorMessage = get(e, 'message', 'Something went wrong while fetching landing information. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
+  } catch (err) {
+    yield put(fetchLandingError(err));
   }
 }
 

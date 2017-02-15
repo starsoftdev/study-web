@@ -3,13 +3,13 @@
  */
 
 import React from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import classNames from 'classnames';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { selectCurrentUser } from 'containers/App/selectors';
+import { selectCurrentUser } from '../../App/selectors';
 import * as Selector from '../selectors';
 import PatientDetailSection from './PatientDetailSection';
 import NotesSection from './NotesSection';
@@ -26,10 +26,10 @@ import {
   readStudyPatientMessages,
 } from '../actions';
 
-import { markAsReadPatientMessages } from 'containers/App/actions';
+import { markAsReadPatientMessages } from '../../App/actions';
 import {
   selectSocket,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../GlobalNotifications/selectors';
 
 export class PatientDetailModal extends React.Component {
   static propTypes = {

@@ -10,30 +10,30 @@ import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer } from 'react-sticky';
 
-import LoadingSpinner from 'components/LoadingSpinner';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import {
   getProposals,
   createPDF,
   showProposalPdf,
-} from 'containers/Proposals/actions';
+} from '../../containers/Proposals/actions';
 import {
   fetchSites,
   fetchEvents,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 import {
   unsubscribeFromAll,
   unsubscribeFromPageEvent,
-} from 'containers/GlobalNotifications/actions';
+} from '../../containers/GlobalNotifications/actions';
 import {
   selectSiteLocations,
   selectCurrentUser,
   selectEvents,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 import { selectProposals } from './selectors';
 
-import ProposalsTable from 'components/ProposalsTable';
-import TableSearchForm from 'components/TableSearchForm';
-import AlertModal from 'components/AlertModal';
+import ProposalsTable from '../../components/ProposalsTable';
+import TableSearchForm from '../../components/TableSearchForm';
+import AlertModal from '../../components/AlertModal';
 
 export class Proposals extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -66,6 +66,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
       processPDF: false,
       proposals: null,
       filteredProposals: null,
+      showAlertModal: false,
     };
   }
 

@@ -1,4 +1,4 @@
-import { StudyPage } from 'containers/StudyPage';
+import StudyPage from '../index';
 import React from 'react';
 import { shallow } from 'enzyme';
 import chaiEnzyme from 'chai-enzyme';
