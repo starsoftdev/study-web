@@ -4,14 +4,14 @@ import { takeLatest } from 'redux-saga';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
-import request from 'utils/request';
+import request from '../../utils/request';
 
 import {
   connectionEstablished,
   fetchNotificationsSucceeded,
   fetchUnreadNotificationsCountSucceeded,
   setProcessingStatus,
-} from 'containers/GlobalNotifications/actions';
+} from '../../containers/GlobalNotifications/actions';
 import {
   SET_SOCKET_CONNECTION,
   SUBSCRIBE_TO_PAGE_EVENT,
@@ -23,7 +23,7 @@ import {
   FETCH_NOTIFICATIONS,
   FETCH_UNREAD_NOTIFICATIONS_COUNT,
   MARK_NOTIFICATIONS_READ,
-} from 'containers/GlobalNotifications/constants';
+} from '../../containers/GlobalNotifications/constants';
 
 let props = null;
 let socket = null;

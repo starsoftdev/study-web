@@ -1,15 +1,16 @@
 import React, { PropTypes } from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import Input from 'components/Input';
 import Button from 'react-bootstrap/lib/Button';
-import ReactSelect from 'components/Input/ReactSelect';
 import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from 'components/CenteredModal/index';
-import EditSponsorUserForm from 'containers/SponsorManageUsers/EditSponsorUserForm';
-import { selectEditUserProcess, selectProtocolsList, selectDeleteUserProcess, selectEditProtocolProcess } from 'containers/SponsorManageUsers/selectors';
-import _ from 'lodash';
+
+import Input from '../../../components/Input';
+import ReactSelect from '../../../components/Input/ReactSelect';
+import CenteredModal from '../../../components/CenteredModal/index';
+import EditSponsorUserForm from '../EditSponsorUserForm';
+import { selectEditUserProcess, selectProtocolsList, selectDeleteUserProcess, selectEditProtocolProcess } from '../selectors';
 
 @reduxForm({ form: 'searchSponsorManageUsers' })
 

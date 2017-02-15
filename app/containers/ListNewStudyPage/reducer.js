@@ -22,7 +22,7 @@ import {
   ADD_EMAIL_NOTIFICATION_USER,
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
   ADD_EMAIL_NOTIFICATION_USER_ERROR,
-} from 'containers/App/constants';
+} from '../../containers/App/constants';
 
 const initialState = {
   showAddSiteLocationModal: false,

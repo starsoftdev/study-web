@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import { getAvatarUrl } from 'containers/NotificationsPage';
+import { getAvatarUrl } from '../index';
 
 const NotificationItem = ({ notification, onClick }) => {
   const { event_log, date, time } = notification;

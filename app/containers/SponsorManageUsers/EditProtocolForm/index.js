@@ -2,10 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import Input from 'components/Input';
-import LoadingSpinner from 'components/LoadingSpinner';
+import Input from '../../../components/Input';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import { selectEditProtocolProcess } from '../selectors';
 import formValidator from './validator';
-import { selectEditProtocolProcess } from 'containers/SponsorManageUsers/selectors';
 
 const mapStateToProps = createStructuredSelector({
   editProtocolProcess: selectEditProtocolProcess(),

@@ -10,24 +10,24 @@ import { connect } from 'react-redux';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { createStructuredSelector } from 'reselect';
 import { touch } from 'redux-form';
-import IrbAdCreationForm from 'components/IrbAdCreationForm';
-import ShoppingCartForm from 'components/ShoppingCartForm';
-import { selectIrbAdCreationFormValues, selectIrbAdCreationFormError } from 'components/IrbAdCreationForm/selectors';
-import { fields as irbAdCreationFields } from 'components/IrbAdCreationForm/validator';
-import { selectIrbProductList, selectIrbAdCreationDetail } from 'containers/IrbAdCreationPage/selectors';
-import { submitForm, fetchIrbProductList, fetchIrbAdCreation } from 'containers/IrbAdCreationPage/actions';
-import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
-import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
+import IrbAdCreationForm from '../../components/IrbAdCreationForm';
+import ShoppingCartForm from '../../components/ShoppingCartForm';
+import { selectIrbAdCreationFormValues, selectIrbAdCreationFormError } from '../../components/IrbAdCreationForm/selectors';
+import { fields as irbAdCreationFields } from '../../components/IrbAdCreationForm/validator';
+import { selectIrbProductList, selectIrbAdCreationDetail } from '../../containers/IrbAdCreationPage/selectors';
+import { submitForm, fetchIrbProductList, fetchIrbAdCreation } from '../../containers/IrbAdCreationPage/actions';
+import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
+import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
 
 import {
   fetchSites,
   fetchIndications,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 import {
   selectSiteLocations,
   selectIndications,
   selectCurrentUser,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
 import _ from 'lodash';
 

@@ -2,11 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import Input from 'components/Input';
-import LoadingSpinner from 'components/LoadingSpinner';
-import MultiSelectCheckbox from 'components/Input/MultiSelectCheckbox';
+import Input from '../../../components/Input';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import MultiSelectCheckbox from '../../../components/Input/MultiSelectCheckbox';
+import { selectEditUserProcess, selectDeleteUserProcess } from '../selectors';
 import formValidator from './validator';
-import { selectEditUserProcess, selectDeleteUserProcess } from 'containers/SponsorManageUsers/selectors';
 
 const mapStateToProps = createStructuredSelector({
   editUserProcess: selectEditUserProcess(),

@@ -8,12 +8,12 @@ import React, { PropTypes } from 'react';
 
 import { Field } from 'redux-form';
 
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
+import Input from '../../components/Input';
+import ReactSelect from '../../components/Input/ReactSelect';
 
 import {
   LEAD_SOURCE_LIST,
-} from 'common/constants';
+} from '../../common/constants';
 
 
 const RenderLeads = ({ fields, availPhoneNumbers }) => (

@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { FormGroup, Col } from 'react-bootstrap';
-import { confirmChangePasswordRequest } from 'containers/ProfilePage/actions';
+import { confirmChangePasswordRequest } from '../../containers/ProfilePage/actions';
 import { connect } from 'react-redux';
 
 function mapDispatchToProps(dispatch) {

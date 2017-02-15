@@ -2,18 +2,18 @@
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
-import request from 'utils/request';
+import request from '../../utils/request';
 import _, { get } from 'lodash';
 
 import {
   receiptsReceived,
-} from 'containers/Receipts/actions';
+} from '../../containers/Receipts/actions';
 import {
   GET_RECEIPT,
   GET_PDF,
   SHOW_INVOICE_PDF,
-} from 'containers/Receipts/constants';
-import { getItem } from 'utils/localStorage';
+} from '../../containers/Receipts/constants';
+import { getItem } from '../../utils/localStorage';
 
 const serializeParams = (obj) => {
   const str = [];

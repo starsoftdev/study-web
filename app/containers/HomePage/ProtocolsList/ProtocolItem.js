@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
-import Toggle from 'components/Input/Toggle';
+import Toggle from '../../../components/Input/Toggle';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 class ProtocolItem extends Component { // eslint-disable-line react/prefer-stateless-function

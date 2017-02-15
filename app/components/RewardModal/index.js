@@ -14,19 +14,19 @@ import { find } from 'lodash';
 import CenteredModal from '../../components/CenteredModal/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import RadioButton from '../../components/Input/RadioButton';
-import cardStudykik from 'assets/images/img6.png';
-import cardAmazon from 'assets/images/img8.png';
-import cardStarbucks from 'assets/images/img7.png';
+import cardStudykik from '../../assets/images/img6.png';
+import cardAmazon from '../../assets/images/img8.png';
+import cardStarbucks from '../../assets/images/img7.png';
 
 import {
   fetchRewardsBalance,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 
 import {
   selectCurrentUserClientId,
   selectSites,
   selectRewardsBalance,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
 import { selectSiteId } from './selectors';
 

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import graphImage from 'assets/images/graph.svg';
+import graphImage from '../../../assets/images/graph.svg';
 
 import _ from 'lodash';
 

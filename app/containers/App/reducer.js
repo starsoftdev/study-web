@@ -1,4 +1,4 @@
-import { getItem } from 'utils/localStorage';
+import { getItem } from '../../utils/localStorage';
 import { forEach, map, remove, cloneDeep, findIndex, concat, sortBy, reverse } from 'lodash';
 
 import {
@@ -112,11 +112,11 @@ import {
 
 import {
   LOGIN_ERROR,
-} from 'containers/LoginPage/constants';
+} from '../../containers/LoginPage/constants';
 
 import {
   CHANGE_IMAGE_SUCCESS,
-} from 'containers/ProfilePage/constants';
+} from '../../containers/ProfilePage/constants';
 
 const initialState = {
   loggedIn: !!getItem('auth_token'),
