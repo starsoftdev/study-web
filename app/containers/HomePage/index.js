@@ -96,7 +96,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
               <Dashboard location={this.props.location} />
             </div>
             <div className="search-studies-panel clearfix form-group">
-              <SearchStudiesForm onSubmit={this.searchStudies} />
+              <SearchStudiesForm onSubmit={this.searchStudies} currentUser={this.props.currentUser} />
               <Link to="/app/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Study</Link>
             </div>
             <div className="table-holder form-group">
