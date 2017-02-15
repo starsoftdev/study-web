@@ -29,6 +29,8 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
   }
 
   render() {
+    const { study } = this.props;
+
     return (
       <div className="social-area clearfix">
         <h3 className="pull-left">Share this study:</h3>
