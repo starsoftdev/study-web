@@ -13,8 +13,9 @@ import Modal from 'react-bootstrap/lib/Modal';
 import _, { find } from 'lodash';
 
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
-import ShoppingCartForm from '../../components/ShoppingCartForm';
+import CenteredModal from '../../components/CenteredModal/index';
 import ListNewStudyForm from '../../components/ListNewStudyForm';
+import ShoppingCartForm from '../../components/ShoppingCartForm';
 import { selectListNewStudyFormValues, selectListNewStudyFormError } from '../../components/ListNewStudyForm/selectors';
 import { fields as newStudyFields } from '../../components/ListNewStudyForm/validator';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
@@ -72,7 +73,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     clearFormSubmissionData: PropTypes.func,
     history: PropTypes.object,
     shoppingCartFormValues: PropTypes.object,
-    shoppingCartFormError: PropTypes.object,
+    shoppingCartFormError: PropTypes.bool,
     touchNewStudy: PropTypes.func,
     touchShoppingCart: PropTypes.func,
     fetchClientSites: PropTypes.func,
@@ -243,7 +244,11 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
                 </div>
               </div>
             </section>
-            <Modal className="custom-modal" show={this.props.showSubmitFormModal}>
+            <Modal
+              dialogComponentClass={CenteredModal}
+              show={this.props.showSubmitFormModal}
+              backdrop
+            >
               <Modal.Header>
                 <Modal.Title>Processing payment</Modal.Title>
               </Modal.Header>

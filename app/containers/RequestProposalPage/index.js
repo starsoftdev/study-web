@@ -41,7 +41,7 @@ export class RequestProposalPage extends Component {
     fetchProposal: PropTypes.func,
     onSubmitForm: PropTypes.func.isRequired,
     location: PropTypes.any,
-    hasErrors: PropTypes.object,
+    hasErrors: PropTypes.bool,
     formValues: PropTypes.object,
   }
 

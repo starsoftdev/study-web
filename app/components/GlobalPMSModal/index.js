@@ -251,7 +251,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
             onFinishedPlaying={this.onSoundFinished}
           />
           <Modal
-            className="custom-modal global-pms"
+            className="global-pms-modal"
             id="chart-popup"
             dialogComponentClass={CenteredModal}
             show={this.props.showModal}
