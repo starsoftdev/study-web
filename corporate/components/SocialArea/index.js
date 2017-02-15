@@ -34,12 +34,18 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
         <h3 className="pull-left">Share this study:</h3>
         <ul className="social-networks pull-left list-inline">
           <li className="facebook">
-            <a href="#" onClick={this.shareFB}>
+            <a
+              href="#"
+              onClick={this.shareFB}
+            >
               <i className="icon-facebook-square"></i>
             </a>
           </li>
           <li className="twitter">
-            <a href="#" onClick={this.shareTwitter}>
+            <a
+              href="#"
+              onClick={this.shareTwitter}
+            >
               <i className="icon-twitter-square"></i>
             </a>
           </li>
