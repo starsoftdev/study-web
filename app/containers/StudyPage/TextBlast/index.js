@@ -19,8 +19,8 @@ import * as Selector from '../selectors';
 import { addPatientsToTextBlast, findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitTextBlast } from '../actions';
 import { selectActiveField, selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
 import { actions as toastrActions } from 'react-redux-toastr';
-import { fetchClientCredits } from 'containers/App/actions';
-import { selectCurrentUser, selectClientCredits } from 'containers/App/selectors';
+import { fetchClientCredits } from '../../App/actions';
+import { selectCurrentUser, selectClientCredits } from '../../App/selectors';
 
 const formName = 'StudyPage.TextBlastModal';
 

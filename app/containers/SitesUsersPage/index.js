@@ -4,14 +4,14 @@ import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 import { Modal } from 'react-bootstrap';
 import Button from 'react-bootstrap/lib/Button';
-import ReactSelect from 'components/Input/ReactSelect';
+import ReactSelect from '../../components/Input/ReactSelect';
 import { map } from 'lodash';
 import { Field, reduxForm, change } from 'redux-form';
 import CenteredModal from '../../components/CenteredModal/index';
-import EditSiteForm from 'components/EditSiteForm';
-import EditUserForm from 'components/EditUserForm';
-import ClientSitesList from 'components/ClientSitesList';
-import ClientRolesList from 'components/ClientRolesList';
+import EditSiteForm from '../../components/EditSiteForm';
+import EditUserForm from '../../components/EditUserForm';
+import ClientSitesList from '../../components/ClientSitesList';
+import ClientRolesList from '../../components/ClientRolesList';
 import {
   selectCurrentUserClientId,
   selectClientSites,
@@ -19,8 +19,8 @@ import {
   selectSavedSite,
   selectSavedUser,
   selectCurrentUser,
-} from 'containers/App/selectors';
-import { fetchClientSites, fetchClientRoles, saveSite, saveUser } from 'containers/App/actions';
+} from '../../containers/App/selectors';
+import { fetchClientSites, fetchClientRoles, saveSite, saveUser } from '../../containers/App/actions';
 
 @reduxForm({ form: 'manageSiteUser' })
 export class SitesUsersPage extends Component { // eslint-disable-line react/prefer-stateless-function

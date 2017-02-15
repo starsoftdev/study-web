@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import NavBar from './NavBar';
 import LoggedUserMenu from './LoggedUserMenu';
 
-import studyKikLogo from 'assets/images/logo.svg';
+import studyKikLogo from '../../assets/images/logo.svg';
 
 export default class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

@@ -4,20 +4,20 @@ import { createStructuredSelector } from 'reselect';
 import _, { countBy, find, filter, sumBy } from 'lodash';
 import { touch } from 'redux-form';
 
-import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from 'common/constants';
+import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from '../../../common/constants';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../../components/ShoppingCartForm/selectors';
-import { fetchLevels, saveCard } from '../../../containers/App/actions';
-import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../../../containers/HomePage/constants';
-import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients, selectCurrentUserClientId } from '../../../containers/App/selectors';
-import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice } from 'containers/HomePage/actions';
-import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions } from '../../../containers/HomePage/selectors';
-import { selectEditStudyFormValues, selectEditStudyFormError } from '../../../containers/HomePage/EditStudyForm/selectors';
-import { selectRenewStudyFormValues, selectRenewStudyFormError } from '../../../containers/HomePage/RenewStudyForm/selectors';
-import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError } from '../../../containers/HomePage/UpgradeStudyForm/selectors';
-import RenewStudyForm from '../../../containers/HomePage/RenewStudyForm/index';
-import UpgradeStudyForm from '../../../containers/HomePage/UpgradeStudyForm/index';
-import EditStudyForm from '../../../containers/HomePage/EditStudyForm/index';
 import { shoppingCartFields } from '../../../components/ShoppingCartForm/validator';
+import { fetchLevels, saveCard } from '../../App/actions';
+import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients, selectCurrentUserClientId } from '../../App/selectors';
+import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../constants';
+import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice } from '../actions';
+import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions } from '../selectors';
+import { selectEditStudyFormValues, selectEditStudyFormError } from '../EditStudyForm/selectors';
+import { selectRenewStudyFormValues, selectRenewStudyFormError } from '../RenewStudyForm/selectors';
+import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError } from '../UpgradeStudyForm/selectors';
+import RenewStudyForm from '../RenewStudyForm/index';
+import UpgradeStudyForm from '../UpgradeStudyForm/index';
+import EditStudyForm from '../EditStudyForm/index';
 import { upgradeStudyFields } from '../UpgradeStudyForm/validator';
 import { renewStudyFields } from '../RenewStudyForm/validator';
 import { editStudyFields } from '../EditStudyForm/validator';
@@ -463,6 +463,13 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const totalCount = studies.details.length;
 
     let selectedStudy = null;
+    let selectedSiteID = null;
+    if (currentUser && currentUser.roleForClient) {
+      selectedSiteID = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+      if (selectedSiteID) {
+        selectedSiteID = currentUser.roleForClient.site_id ? currentUser.roleForClient.site_id : null;
+      }
+    }
     const studiesListContents = studies.details.map((item, index) => {
       if (item.studyId === this.state.selectedStudyId) {
         selectedStudy = item;
@@ -473,6 +480,9 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         }
         return parseInt(sitePatient.count_unread);
       });
+      if (selectedSiteID && item.siteId !== selectedSiteID) {
+        return null;
+      }
       return (
         <StudyItem
           {...item}

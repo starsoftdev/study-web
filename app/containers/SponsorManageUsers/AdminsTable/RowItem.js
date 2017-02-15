@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from 'components/CenteredModal/index';
-import EditSponsorUserForm from 'containers/SponsorManageUsers/EditSponsorUserForm';
-import { selectProtocolsList } from 'containers/SponsorManageUsers/selectors';
+import CenteredModal from '../../../components/CenteredModal/index';
+import EditSponsorUserForm from '../EditSponsorUserForm';
+import { selectProtocolsList } from '../selectors';
 import _ from 'lodash';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function

@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import _, { map } from 'lodash';
-import ReactSelect from 'components/Input/ReactSelect';
+import ReactSelect from '../../../components/Input/ReactSelect';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import { selectSearchProtocolsFormError } from './selectors';
-import { selectProtocols, selectProtocolNumbers, selectIndications } from 'containers/HomePage/selectors';
+import { selectProtocols, selectProtocolNumbers, selectIndications } from '../selectors';
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
 
 const mapStateToProps = createStructuredSelector({
   // clientSites: selectClientSites(),

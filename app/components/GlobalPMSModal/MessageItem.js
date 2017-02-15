@@ -5,9 +5,9 @@ import moment from 'moment-timezone';
 
 import { selectSelectedUser, selectCurrentUser } from '../../containers/App/selectors';
 
-import defaultUserImage from 'assets/images/Default-User-Img.png';
-import defaultUserImageGirl from 'assets/images/Default-User-Img-Girl.png';
-import defaultUserImageDoctor from 'assets/images/Default-User-Img-Dr.png';
+import defaultUserImage from '../../assets/images/Default-User-Img.png';
+import defaultUserImageGirl from '../../assets/images/Default-User-Img-Girl.png';
+import defaultUserImageDoctor from '../../assets/images/Default-User-Img-Dr.png';
 
 class MessageItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
