@@ -35,6 +35,7 @@ export class LandingPage extends React.Component {
     landingIsFetching:  PropTypes.bool,
     clearForm:  PropTypes.func.isRequired,
     currentUser: PropTypes.any,
+    location: PropTypes.any,
     landing: PropTypes.object,
   };
 
@@ -102,7 +103,7 @@ export class LandingPage extends React.Component {
   }
 
   render() {
-    const { subscriptionError, landingIsFetching } = this.props;
+    const { subscriptionError, landingIsFetching, location } = this.props;
     let landing = null;
     let study = null;
     if (this.props.landing) {
@@ -124,7 +125,7 @@ export class LandingPage extends React.Component {
       <div id="main">
         <div className="container">
           <LandingForm study={study} onSubmit={this.onSubmitForm} subscriptionError={subscriptionError} />
-          <LandingArticle study={study} landing={landing} />
+          <LandingArticle study={study} landing={landing} location={location}/>
         </div>
       </div>
     );
