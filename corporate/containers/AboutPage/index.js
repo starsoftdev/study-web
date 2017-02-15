@@ -2,8 +2,6 @@ import React from 'react';
 import inViewport from 'in-viewport';
 import videoPlaceholder from '../../assets/images/video-placeholder.png';
 
-import './styles.less';
-
 export default class AboutPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {};
