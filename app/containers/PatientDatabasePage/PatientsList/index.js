@@ -173,8 +173,8 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
       selectedPatientDetailsForForm.phone = normalizePhoneDisplay(selectedPatientDetailsForForm.phone);
       if (selectedPatientDetailsForForm.dob) {
         const dob = moment(selectedPatientDetailsForForm.dob);
-        selectedPatientDetailsForForm.dobMonth = dob.month();
-        selectedPatientDetailsForForm.dobDay = dob.day();
+        selectedPatientDetailsForForm.dobMonth = dob.month() + 1;
+        selectedPatientDetailsForForm.dobDay = dob.date();
         selectedPatientDetailsForForm.dobYear = dob.year();
       }
     }
