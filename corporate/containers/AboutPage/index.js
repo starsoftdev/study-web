@@ -28,7 +28,7 @@ export default class AboutPage extends React.Component { // eslint-disable-line 
     el.classList.add('in-viewport', viewAtr);
   }
 
-  handleClick(ev) {
+  handleClick() {
     this.watcherA.dispose();
     this.watcherB.dispose();
   }
