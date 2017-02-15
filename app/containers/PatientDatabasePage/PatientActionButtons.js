@@ -4,7 +4,7 @@
 
 import React from 'react';
 import TextEmailBlastModal from './TextEmailBlastModal';
-import AlertModal from 'components/AlertModal';
+import AlertModal from '../../components/AlertModal';
 import TextBlastModal from './TextBlast/index';
 import { createStructuredSelector } from 'reselect';
 import { selectValues } from '../../common/selectors/form.selector';

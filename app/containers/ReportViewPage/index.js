@@ -8,14 +8,14 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import ReportViewInfo from 'containers/ReportViewPage/ReportViewInfo';
-import ReportViewTotals from 'containers/ReportViewPage/ReportViewTotals';
-import ReportViewSearch from 'containers/ReportViewPage/ReportViewSearch';
-import ReportViewTable from 'containers/ReportViewPage/ReportViewTable';
+import ReportViewInfo from '../../containers/ReportViewPage/ReportViewInfo';
+import ReportViewTotals from '../../containers/ReportViewPage/ReportViewTotals';
+import ReportViewSearch from '../../containers/ReportViewPage/ReportViewSearch';
+import ReportViewTable from '../../containers/ReportViewPage/ReportViewTable';
 
-import { selectCurrentUser } from 'containers/App/selectors';
-import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus } from 'containers/ReportViewPage/actions';
-import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues } from 'containers/ReportViewPage/selectors';
+import { selectCurrentUser } from '../../containers/App/selectors';
+import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus } from '../../containers/ReportViewPage/actions';
+import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues } from '../../containers/ReportViewPage/selectors';
 
 import _ from 'lodash';
 

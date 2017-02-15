@@ -7,12 +7,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser, selectCards, selectSavedCard } from 'containers/App/selectors';
-import PaymentMethodsForm from 'components/PaymentMethodsForm';
-import AddCreditCardModal from 'components/AddCreditCardModal';
-import { fetchCards, deleteCard, saveCard } from 'containers/App/actions';
-import { selectPaginationOptions } from 'containers/PaymentInformationPage/selectors';
-import { setActiveSort } from 'containers/PaymentInformationPage/actions';
+import { selectCurrentUser, selectCards, selectSavedCard } from '../../containers/App/selectors';
+import PaymentMethodsForm from '../../components/PaymentMethodsForm';
+import AddCreditCardModal from '../../components/AddCreditCardModal';
+import { fetchCards, deleteCard, saveCard } from '../../containers/App/actions';
+import { selectPaginationOptions } from '../../containers/PaymentInformationPage/selectors';
+import { setActiveSort } from '../../containers/PaymentInformationPage/actions';
 import Helmet from 'react-helmet';
 
 export class PaymentInformationPage extends React.Component { // eslint-disable-line react/prefer-stateless-function

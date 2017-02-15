@@ -1,13 +1,10 @@
 // import ResetPasswordPage from '../index';
 
 import expect from 'expect';
-import { ResetPasswordPage } from 'containers/ResetPasswordPage';
 import { ReduxForm } from 'redux-form';
 import { shallow } from 'enzyme';
 import React from 'react';
-// import ResetPasswordForm from 'components/ResetPasswordForm';
-// import { shallow } from 'enzyme';
-// import React from 'react';
+import ResetPasswordPage from '../index';
 
 describe('<ResetPasswordPage />', () => {
   let setup;

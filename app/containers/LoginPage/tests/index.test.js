@@ -1,9 +1,9 @@
-import { LoginPage } from 'containers/LoginPage';
-import { LoginForm } from 'components/LoginForm';
+import LoginPage from '../index';
+import LoginForm from '../../../components/LoginForm';
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { Provider } from 'react-redux';
-import configureStore from 'store';
+import configureStore from '../../../store';
 
 import chaiEnzyme from 'chai-enzyme';
 import expect from 'expect';

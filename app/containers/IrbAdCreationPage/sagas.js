@@ -4,7 +4,7 @@ import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
 import _, { get } from 'lodash';
 
-import request from 'utils/request';
+import request from '../../utils/request';
 
 import {
   formSubmitted,
@@ -13,13 +13,13 @@ import {
   fetchIrbProductListError,
   fetchIrbAdCreationSuccess,
   fetchIrbAdCreationError,
-} from 'containers/IrbAdCreationPage/actions';
+} from '../../containers/IrbAdCreationPage/actions';
 
 import {
   SUBMIT_FORM,
   FETCH_IRB_PRODUCT_LIST,
   FETCH_IRB_AD_CREATION,
-} from 'containers/IrbAdCreationPage/constants';
+} from '../../containers/IrbAdCreationPage/constants';
 
 export function* submitFormWatcher() {
   while (true) {

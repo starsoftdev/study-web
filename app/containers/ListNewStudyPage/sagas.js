@@ -5,20 +5,20 @@ import { reset } from 'redux-form';
 import _, { get } from 'lodash';
 import { takeLatest } from 'redux-saga';
 
-import request from 'utils/request';
+import request from '../../utils/request';
 
 import {
   formSubmitted,
   formSubmissionError,
   hideAddEmailModal,
-} from 'containers/ListNewStudyPage/actions';
+} from '../../containers/ListNewStudyPage/actions';
 
 import {
   SUBMIT_FORM,
-} from 'containers/ListNewStudyPage/constants';
+} from '../../containers/ListNewStudyPage/constants';
 
-import { ADD_EMAIL_NOTIFICATION_USER } from 'containers/App/constants';
-import { addEmailNotificationUserSuccess, addEmailNotificationUserError, fetchClientSites } from 'containers/App/actions';
+import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
+import { addEmailNotificationUserSuccess, addEmailNotificationUserError, fetchClientSites } from '../../containers/App/actions';
 
 export function* submitFormWatcher() {
   while (true) {

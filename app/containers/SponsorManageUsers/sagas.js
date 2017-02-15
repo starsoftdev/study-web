@@ -2,8 +2,8 @@ import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 
-import request from 'utils/request';
-import composeQueryString from 'utils/composeQueryString';
+import request from '../../utils/request';
+import composeQueryString from '../../utils/composeQueryString';
 import _, { get } from 'lodash';
 import { actions as toastrActions } from 'react-redux-toastr';
 

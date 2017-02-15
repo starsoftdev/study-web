@@ -13,13 +13,13 @@ import ReactSelect from '../../components/Input/ReactSelect';
 import { Field, reduxForm, touch, reset, change } from 'redux-form';
 
 import CenteredModal from '../../components/CenteredModal/index';
-import ShoppingCartForm from 'components/ShoppingCartForm';
+import ShoppingCartForm from '../../components/ShoppingCartForm';
 import AddNewCardForm from '../../components/AddNewCardForm';
-import { addCredits, fetchSites, getCreditsPrice, saveCard } from 'containers/App/actions';
-import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice, selectCurrentUserStripeCustomerId } from 'containers/App/selectors';
-import { selectShoppingCartFormError, selectShoppingCartFormValues } from 'components/ShoppingCartForm/selectors';
+import { addCredits, fetchSites, getCreditsPrice, saveCard } from '../../containers/App/actions';
+import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice, selectCurrentUserStripeCustomerId } from '../../containers/App/selectors';
+import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
+import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
 import { selectAddCreditsFormValues, selectAddCreditsFormError } from './selectors';
-import { shoppingCartFields } from 'components/ShoppingCartForm/validator';
 import validator, { addCreditsFields } from './validator';
 
 import _ from 'lodash';
@@ -42,7 +42,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     addCreditsOperation: PropTypes.object,
     getCreditsPrice: PropTypes.func,
     creditsPrice: PropTypes.object,
-    shoppingCartFormError: PropTypes.object,
+    shoppingCartFormError: PropTypes.bool,
     shoppingCartFormValues: PropTypes.object,
     addCreditsFormValues: PropTypes.object,
     addCreditsFormError: PropTypes.bool,

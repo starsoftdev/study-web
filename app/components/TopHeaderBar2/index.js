@@ -3,21 +3,21 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 
-import studykikLogo from 'assets/images/logo.svg';
+import studykikLogo from '../../assets/images/logo.svg';
 import AvatarMenu from './AvatarMenu';
 
-import { fetchSitePatients, fetchClientCredits } from 'containers/App/actions';
-import { logout } from 'containers/LoginPage/actions';
+import { fetchSitePatients, fetchClientCredits } from '../../containers/App/actions';
+import { logout } from '../../containers/LoginPage/actions';
 
 import {
   selectSocket,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../containers/GlobalNotifications/selectors';
 
 import {
   selectCurrentUser,
   selectSitePatients,
   selectClientCredits,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
 
 class TopHeaderBar2 extends React.Component { // eslint-disable-line react/prefer-stateless-function

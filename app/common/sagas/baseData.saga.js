@@ -6,8 +6,8 @@ import { get } from 'lodash';
 import { takeLatest } from 'redux-saga';
 import { reset } from 'redux-form';
 
-import request from 'utils/request';
-import composeQueryString from 'utils/composeQueryString';
+import request from '../../utils/request';
+import composeQueryString from '../../utils/composeQueryString';
 
 import {
   FETCH_SITES,
@@ -43,7 +43,7 @@ import {
 
   FETCH_LANDING,
   SUBSCRIBE_FROM_LANDING,
-} from 'containers/App/constants';
+} from '../../containers/App/constants';
 
 import {
   sitesFetched,
@@ -107,7 +107,7 @@ import {
   fetchLandingError,
   patientSubscribed,
   patientSubscriptionError,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
   yield fork(fetchSitesWatcher);

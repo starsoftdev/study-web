@@ -17,11 +17,11 @@ import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import AddNewCardForm from '../../components/AddNewCardForm';
 import { selectCouponId, selectTotal } from './selectors';
-import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSavedCard } from 'containers/App/selectors';
+import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSavedCard } from '../../containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Money from '../../components/Money';
-import { fetchCoupon, clearCoupon, fetchCards, saveCard } from 'containers/App/actions';
+import { fetchCoupon, clearCoupon, fetchCards, saveCard } from '../../containers/App/actions';
 
 const mapStateToProps = createStructuredSelector({
   couponId: selectCouponId(),

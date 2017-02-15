@@ -5,11 +5,11 @@
 */
 
 import React, { PropTypes } from 'react';
-import Input from 'components/Input';
-import Toggle from 'components/Input/Toggle';
-import DatePicker from 'components/Input/DatePicker';
+import Input from '../../components/Input';
+import Toggle from '../../components/Input/Toggle';
+import DatePicker from '../../components/Input/DatePicker';
 import formValidator from './validator';
-import ReactSelect from 'components/Input/ReactSelect';
+import ReactSelect from '../../components/Input/ReactSelect';
 import { Field, FieldArray, reduxForm, change } from 'redux-form';
 import _ from 'lodash';
 import moment from 'moment-timezone';
@@ -17,22 +17,22 @@ import CenteredModal from '../../components/CenteredModal/index';
 import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import RenderLeads from 'components/RenderLeads';
+import RenderLeads from '../../components/RenderLeads';
 import RenderEmailsList from './RenderEmailsList';
 import EditSiteForm from '../../components/EditSiteForm/index';
-import { selectCurrentUserClientId, selectSavedSite } from 'containers/App/selectors';
-import { selectAddNotificationProcess } from 'containers/ListNewStudyPage/selectors';
+import { selectCurrentUserClientId, selectSavedSite } from '../../containers/App/selectors';
+import { selectAddNotificationProcess } from '../../containers/ListNewStudyPage/selectors';
 import {
   selectCallTracking,
   selectLeadsCount,
 } from './selectors';
-import { addEmailNotificationUser } from 'containers/App/actions';
-import { CAMPAIGN_LENGTH_LIST } from 'common/constants';
+import { addEmailNotificationUser } from '../../containers/App/actions';
+import { CAMPAIGN_LENGTH_LIST } from '../../common/constants';
 
 import {
   showSiteLocationModal,
   hideSiteLocationModal,
-} from 'containers/ListNewStudyPage/actions';
+} from '../../containers/ListNewStudyPage/actions';
 
 const mapStateToProps = createStructuredSelector({
   callTracking: selectCallTracking(),

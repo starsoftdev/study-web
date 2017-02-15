@@ -16,7 +16,7 @@ import {
   fetchRewards,
   fetchRewardsBalance,
   redeem,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 
 import {
   selectCurrentUser,
@@ -25,22 +25,22 @@ import {
   selectRewards,
   selectRewardsBalance,
   selectSites,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
-import { selectSiteLocation } from 'components/RewardForm/selectors';
+import { selectSiteLocation } from '../../components/RewardForm/selectors';
 import { selectPaginationOptions } from './selectors';
-import { pickReward, setActiveSort } from 'containers/RewardsPage/actions';
+import { pickReward, setActiveSort } from '../../containers/RewardsPage/actions';
 import RewardModal from '../../components/RewardModal';
 import RewardForm from '../../components/RewardForm';
 import RewardsList from './RewardsList/index';
 
-import cardStudykik from 'assets/images/img6.png';
-import cardAmazon from 'assets/images/img8.png';
-import cardStarbucks from 'assets/images/img7.png';
-import diamond from 'assets/images/diamond.svg';
-import platinum from 'assets/images/platinum.svg';
-import gold from 'assets/images/gold.svg';
-import ruby from 'assets/images/ruby.png';
+import cardStudykik from '../../assets/images/img6.png';
+import cardAmazon from '../../assets/images/img8.png';
+import cardStarbucks from '../../assets/images/img7.png';
+import diamond from '../../assets/images/diamond.svg';
+import platinum from '../../assets/images/platinum.svg';
+import gold from '../../assets/images/gold.svg';
+import ruby from '../../assets/images/ruby.png';
 import Helmet from 'react-helmet';
 
 export class RewardsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function

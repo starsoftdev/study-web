@@ -6,7 +6,7 @@ import { Modal } from 'react-bootstrap';
 import _ from 'lodash';
 import moment from 'moment-timezone';
 
-import { SchedulePatientModalType } from 'common/constants';
+import { SchedulePatientModalType } from '../../../../common/constants';
 
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import Checkbox from '../../../../components/Input/Checkbox';

@@ -9,12 +9,12 @@ import Input from '../../../components/Input';
 import AddEmailNotificationForm from '../../../components/AddEmailNotificationForm';
 import CenteredModal from '../../../components/CenteredModal/index';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import { selectCurrentUserClientId, selectClientSites } from '../../../containers/App/selectors';
+import { addEmailNotificationUser } from '../../App/actions';
+import { selectCurrentUserClientId, selectClientSites } from '../../App/selectors';
 import { selectEditStudyFormValues, selectEditStudyFormError, selectEditStudyFormErrors } from './selectors';
 import { selectEditedStudy, selectAddNotificationProcess } from '../../../containers/HomePage/selectors';
 import RenderEmailsList from './RenderEmailsList';
 import formValidator from './validator';
-import { addEmailNotificationUser } from 'containers/App/actions';
 
 @reduxForm({ form: 'editStudy', validate: formValidator })
 class EditStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function

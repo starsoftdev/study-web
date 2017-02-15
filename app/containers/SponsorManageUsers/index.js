@@ -8,13 +8,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import SponsorManageUsersSearch from 'containers/SponsorManageUsers/SponsorManageUsersSearch';
-import SponsorManageUsersAdminsTable from 'containers/SponsorManageUsers/AdminsTable';
-import SponsorManageUsersProtocolsTable from 'containers/SponsorManageUsers/ProtocolsTable';
+import SponsorManageUsersSearch from '../../containers/SponsorManageUsers/SponsorManageUsersSearch';
+import SponsorManageUsersAdminsTable from '../../containers/SponsorManageUsers/AdminsTable';
+import SponsorManageUsersProtocolsTable from '../../containers/SponsorManageUsers/ProtocolsTable';
 
-import { selectCurrentUser } from 'containers/App/selectors';
-import { fetchManageSponsorUsersData, editSponsorUser, deleteSponsorUser, editProtocol } from 'containers/SponsorManageUsers/actions';
-import { selectManageSponsorUsersData, selectEditSponsorUserFormValues, selectEditProtocolFormValues } from 'containers/SponsorManageUsers/selectors';
+import { selectCurrentUser } from '../../containers/App/selectors';
+import { fetchManageSponsorUsersData, editSponsorUser, deleteSponsorUser, editProtocol } from '../../containers/SponsorManageUsers/actions';
+import { selectManageSponsorUsersData, selectEditSponsorUserFormValues, selectEditProtocolFormValues } from '../../containers/SponsorManageUsers/selectors';
 
 export class SponsorManageUsers extends React.Component { // eslint-disable-line react/prefer-stateless-function
 

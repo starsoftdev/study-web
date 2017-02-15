@@ -7,7 +7,7 @@ import { createStructuredSelector } from 'reselect';
 import SearchPatientsForm from '../../containers/PatientDatabasePage/SearchPatientsForm/index';
 import PatientsList from '../../containers/PatientDatabasePage/PatientsList/index';
 import PatientActionButtons from './PatientActionButtons';
-import { fetchIndications, fetchSources } from 'containers/App/actions';
+import { fetchIndications, fetchSources } from '../../containers/App/actions';
 import { fetchPatientCategories, fetchPatients, clearPatientsList } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
 

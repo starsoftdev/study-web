@@ -7,8 +7,8 @@ import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
 import _, { get } from 'lodash';
 
-import request from 'utils/request';
-import composeQueryString from 'utils/composeQueryString';
+import request from '../../utils/request';
+import composeQueryString from '../../utils/composeQueryString';
 import {
   FETCH_PATIENT_SIGN_UPS,
   FETCH_PATIENT_MESSAGES,
@@ -24,8 +24,8 @@ import {
   FETCH_UPGRADE_STUDY_PRICE,
 } from './constants';
 
-import { ADD_EMAIL_NOTIFICATION_USER } from 'containers/App/constants';
-import { addEmailNotificationUserSuccess, addEmailNotificationUserError, fetchClientSites } from 'containers/App/actions';
+import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
+import { addEmailNotificationUserSuccess, addEmailNotificationUserError, fetchClientSites } from '../../containers/App/actions';
 
 import {
   fetchPatientSignUpsSucceeded,

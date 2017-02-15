@@ -5,7 +5,7 @@
 */
 
 import React, { PropTypes } from 'react';
-import CardItem from 'components/CardItem';
+import CardItem from '../../components/CardItem';
 import moment from 'moment-timezone';
 import _ from 'lodash';
 

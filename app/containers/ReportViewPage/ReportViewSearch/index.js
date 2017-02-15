@@ -1,16 +1,16 @@
 import React, { PropTypes } from 'react';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
-
-import Input from 'components/Input';
 import Button from 'react-bootstrap/lib/Button';
-import ReactSelect from 'components/Input/ReactSelect';
-import { defaultRanges, DateRange } from 'react-date-range';
 import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from 'components/CenteredModal/index';
 
-import moment from 'moment';
+import Input from '../../../components/Input';
+import ReactSelect from '../../../components/Input/ReactSelect';
+import { defaultRanges, DateRange } from 'react-date-range';
+import CenteredModal from '../../../components/CenteredModal/index';
+
 @reduxForm({ form: 'searchReports' })
 
 export class ReportViewSearch extends React.Component {

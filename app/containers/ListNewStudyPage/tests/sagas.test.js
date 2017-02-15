@@ -14,11 +14,11 @@ import {
 import {
   formSubmitted,
   formSubmissionError,
-} from 'containers/ListNewStudyPage/actions';
+} from '../actions';
 
 import {
   SUBMIT_FORM,
-} from 'containers/ListNewStudyPage/constants';
+} from '../constants';
 
 describe('ListNewStudyPage Saga', () => {
   describe('submitFormWatcher Saga', () => {

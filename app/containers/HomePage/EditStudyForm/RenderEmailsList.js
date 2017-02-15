@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Field, change } from 'redux-form';
-import Checkbox from 'components/Input/Checkbox';
+import Checkbox from '../../../components/Input/Checkbox';
 import { forEach, filter } from 'lodash';
 
 class RenderEmailsList extends Component { // eslint-disable-line react/prefer-stateless-function

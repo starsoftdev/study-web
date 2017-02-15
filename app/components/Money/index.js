@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Currencies } from 'common/constants';
+import { Currencies } from '../../common/constants';
 
 export default class Money extends Component {
   static propTypes = {
