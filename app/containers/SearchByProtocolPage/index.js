@@ -7,7 +7,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import selectSearchByProtocolPage from './selectors';
-import { ComingSoon } from 'components/ComingSoon';
+import ComingSoon from '../../components/ComingSoon';
 
 export class SearchByProtocolPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
