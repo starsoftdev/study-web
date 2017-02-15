@@ -10,8 +10,6 @@ export default class AboutPage extends React.Component { // eslint-disable-line 
     super(props);
     this.watcherA = null;
     this.watcherB = null;
-
-    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -20,17 +18,13 @@ export default class AboutPage extends React.Component { // eslint-disable-line 
   }
 
   componentWillUnmount() {
-    this.watcher.dispose();
+    this.watcherA.dispose();
+    this.watcherB.dispose();
   }
 
   setVisible(el) {
     const viewAtr = el.getAttribute('data-view');
     el.classList.add('in-viewport', viewAtr);
-  }
-
-  handleClick() {
-    this.watcherA.dispose();
-    this.watcherB.dispose();
   }
 
   render() {
