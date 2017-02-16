@@ -37,7 +37,7 @@ export class Corporate extends React.Component { // eslint-disable-line react/pr
             {
               name: 'description',
               content: 'StudyKIK',
-            }
+            },
           ]}
         />
         <Header {...this.props} />

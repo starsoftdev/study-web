@@ -3,7 +3,7 @@
 @phone: 639px;
 
 /* coming-soon */
-.coming-soon {
+/*.coming-soon {
   position: relative;
   text-align: center;
 
@@ -96,5 +96,65 @@
       max-height: 119px;
       padding-top: 36px;
     }
+  }
+}*/
+
+.coming-soon {
+  .img-holder {
+    // left: 0;
+    // bottom: 0;
+    // padding: 0 0 20px;
+    // position: absolute;
+
+    .imgage {
+      z-index: 2;
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+
+      /*@media screen and (max-width: @xs) {
+        max-width: 292px;
+      }
+
+      @media screen and (max-width: @phone) {
+        max-width: 230px;
+        max-height: 333px;
+      }*/
+    }
+  }
+
+  .msg {
+    position: absolute;
+    font-size: 80px;
+    line-height: 1;
+    width: 480px;
+    top: 0;
+    height: 300px;
+    left: 50%;
+    /* padding: 80px 50px 100px; */
+    background: url('../../assets/images/bubble2.png') no-repeat;
+    background-size: 100% 100%;
+
+    /*@media screen and (max-width: @sm) {
+      font-size: 60px;
+      max-width: 412px;
+      max-height: 242px;
+      padding-top: 59px;
+    }
+
+    @media screen and (max-width: @xs) {
+      font-size: 55px;
+      max-width: 333px;
+      max-height: 198px;
+      padding-top: 44px;
+    }
+
+    @media screen and (max-width: @phone) {
+      font-size: 30px;
+      max-width: 220px;
+      max-height: 119px;
+      padding-top: 36px;
+    }*/
   }
 }

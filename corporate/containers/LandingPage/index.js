@@ -129,7 +129,7 @@ export class LandingPage extends React.Component {
             {
               name: 'description',
               content: study.name,
-            }
+            },
           ]}
         />
         <div className="container">
