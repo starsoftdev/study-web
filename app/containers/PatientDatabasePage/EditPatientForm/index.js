@@ -8,12 +8,12 @@ import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import Overlay from 'react-bootstrap/lib/Overlay';
 
+import { selectValues } from '../../../common/selectors/form.selector';
 import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Checkbox from '../../../components/Input/Checkbox';
 import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
-import { selectValues } from '../../../common/selectors/form.selector';
 import { selectIndications, selectSources } from '../../App/selectors';
 import IndicationOverlay from '../../StudyPage/PatientDetail/IndicationOverlay';
 import { selectPatientCategories, selectSavedPatient } from '../selectors';
@@ -33,6 +33,7 @@ const mapStateToProps = createStructuredSelector({
 
 @reduxForm({ form: formName, validate: formValidator })
 @connect(mapStateToProps, null)
+
 class EditPatientForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -66,8 +67,8 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     const { onSubmit, formValues } = this.props;
     const formattedData = formValues;
     if (formValues.dobDay && formValues.dobMonth && formValues.dobYear) {
-      const date = moment().year(formValues.dobYear).month(formValues.dobMonth).day(formValues.dobDay);
-      formattedData.dob = date;
+      const date = moment().year(formValues.dobYear).month(formValues.dobMonth - 1).date(formValues.dobDay).startOf('day');
+      formattedData.dob = date.toISOString();
     }
     onSubmit(formattedData);
   }
@@ -298,7 +299,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <label>SOURCE</label>
+            <label>Source</label>
           </strong>
           <Field
             name="source"

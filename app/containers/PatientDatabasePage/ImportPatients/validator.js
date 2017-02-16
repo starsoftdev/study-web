@@ -16,10 +16,11 @@ const schema = {
       message: '^Phone number cannot be blank',
     },
     length: {
-      minimum:10,
+      minimum: 10,
       message: '^Phone number too short',
     },
   },
+
 };
 
 const fields = Object.keys(schema);
