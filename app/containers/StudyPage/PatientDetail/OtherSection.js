@@ -82,8 +82,8 @@ class OtherSection extends React.Component {
         data.bmi = parseFloat(formValues.bmi);
       }
       if (formValues.dobDay && formValues.dobMonth && formValues.dobYear) {
-        const date = moment().year(formValues.dobYear).month(formValues.dobMonth).day(formValues.dobDay);
-        data.dob = date;
+        const date = moment().year(formValues.dobYear).month(formValues.dobMonth - 1).date(formValues.dobDay).startOf('day');
+        data.dob = date.toISOString();
       }
       submitPatientUpdate(initialValues.id, data);
       reset(formName);
