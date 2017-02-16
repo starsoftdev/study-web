@@ -14,10 +14,10 @@ import { selectSyncErrors, selectValues } from '../../../common/selectors/form.s
 import { normalizePhone } from '../../../common/helper/functions';
 import Input from '../../../components/Input/index';
 import CenteredModal from '../../../components/CenteredModal/index';
+import sanitizeProps from '../../../utils/sanitizeProps';
 import { submitAddPatient } from '../actions';
 import { selectStudyId, selectAddPatientStatus } from '../selectors';
 import formValidator, { fields } from './validator';
-import sanitizeProps from '../../../utils/sanitizeProps';
 
 const formName = 'addPatient';
 
@@ -69,6 +69,7 @@ class AddPatientModal extends React.Component {
   render() {
     const { addPatientStatus, ...props } = this.props;
     const sanitizedProps = sanitizeProps(props);
+    delete sanitizedProps.studyId;
     delete sanitizedProps.errorList;
     delete sanitizedProps.onClose;
     delete sanitizedProps.newPatient;
@@ -142,7 +143,6 @@ class AddPatientModal extends React.Component {
                   name="phone"
                   component={Input}
                   type="tel"
-                  maxLength="11"
                   className="field"
                   id="import-patient-phone"
                   required

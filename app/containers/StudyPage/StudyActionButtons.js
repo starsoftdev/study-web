@@ -51,7 +51,6 @@ class StudyActionButtons extends Component {
   }
 
   toggleAddPatientModal() {
-    this.props.resetAddPatientForm();
     this.setState({
       showImportPatientsModal: !this.state.showImportPatientsModal,
       showAddPatientModal: !this.state.showAddPatientModal,
@@ -60,7 +59,6 @@ class StudyActionButtons extends Component {
 
   closeAddPatientModal() {
     this.props.setAddPatientStatus(false);
-    this.props.resetAddPatientForm();
     this.setState({
       showImportPatientsModal: false,
       showAddPatientModal: false,
@@ -145,7 +143,6 @@ function mapDispatchToProps(dispatch) {
   return {
     exportPatients: (studyId, siteId, text, campaignId, sourceId) => dispatch(exportPatients(studyId, siteId, text, campaignId, sourceId)),
     resetTextBlastForm: () => dispatch(reset('StudyPage.TextBlastModal')),
-    resetAddPatientForm: () => dispatch(reset('addPatient')),
     setAddPatientStatus: (status) => dispatch(setAddPatientStatus(status)),
   };
 }

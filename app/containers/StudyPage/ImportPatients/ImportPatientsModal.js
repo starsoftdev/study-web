@@ -12,6 +12,7 @@ import Form from 'react-bootstrap/lib/Form';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input/index';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import sanitizeProps from '../../../utils/sanitizeProps';
 import { submitPatientImport, clearForm } from '../actions';
 
 @reduxForm({ form: 'importPatients' })
@@ -105,14 +106,18 @@ class ImportPatientsModal extends React.Component {
 
   render() {
     let { onHide, ...props } = this.props;
-    delete props.toggleAddPatient;
-    delete props.toggleAddPatient;
-    delete props.uploadStart;
-    delete props.fileUploaded;
-    delete props.clearForm;
+    const sanitizedProps = sanitizeProps(props);
+    delete sanitizedProps.toggleAddPatient;
+    delete sanitizedProps.toggleAddPatient;
+    delete sanitizedProps.uploadStart;
+    delete sanitizedProps.fileUploaded;
+    delete sanitizedProps.clearForm;
+    delete sanitizedProps.studyId;
+    delete sanitizedProps.submitPatientImport;
+    delete sanitizedProps.toastrActions;
     return (
       <Modal
-        {...props}
+        {...sanitizedProps}
         id="import-info"
         dialogComponentClass={CenteredModal}
         onHide={onHide}

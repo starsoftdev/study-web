@@ -28,8 +28,6 @@ import {
   patientSaved,
   patientSavingError,
   downloadComplete,
-  importPatientsSuccess,
-  importPatientsError,
   submitAddPatientSuccess,
   submitAddPatientFailure,
   clearPatientsList,

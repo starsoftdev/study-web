@@ -15,9 +15,6 @@ const schema = {
     presence: {
       message: '^Phone number cannot be blank',
     },
-    numericality: {
-      message: '^Phone number must be all numbers',
-    },
     length: {
       minimum:10,
       message: '^Phone number too short',
