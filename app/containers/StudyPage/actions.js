@@ -462,6 +462,7 @@ export function submitAddPatient(studyId, patient, onClose) {
     onClose,
   };
 }
+
 export function submitAddPatientSuccess(patients, fileName) {
   return {
     type: SUBMIT_ADD_PATIENT_SUCCESS,
@@ -469,11 +470,13 @@ export function submitAddPatientSuccess(patients, fileName) {
     fileName,
   };
 }
+
 export function submitAddPatientFailure() {
   return {
     type: SUBMIT_ADD_PATIENT_FAILURE,
   };
 }
+
 export function switchToNoteSectionDetail() {
   return {
     type: SWITCH_TO_NOTE_SECTION_DETAIL,
