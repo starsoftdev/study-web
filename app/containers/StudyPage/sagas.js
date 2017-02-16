@@ -65,6 +65,9 @@ export default [
 
 function* fetchStudyDetails() {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
   // listen for the FETCH_STUDY action
   const { studyId, siteId } = yield take(FETCH_STUDY);
@@ -93,7 +96,7 @@ function* fetchStudyDetails() {
     ],
   });
   try {
-    const requestURL = `${API_URL}/studies/${studyId}?access_token=${authToken}&filter=${filter}`;
+    const requestURL = `${API_URL}/studies/${studyId}?filter=${filter}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -114,12 +117,15 @@ function* fetchStudyDetails() {
 
 function* fetchStudyViewsStat() {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
   // listen for the FETCH_STUDY action
   const { studyId } = yield take(FETCH_STUDY);
 
   try {
-    const requestURL = `${API_URL}/studies/${studyId}/landingPageViews?access_token=${authToken}`;
+    const requestURL = `${API_URL}/studies/${studyId}/landingPageViews`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -132,12 +138,15 @@ function* fetchStudyViewsStat() {
 
 function* fetchPatientReferralStat() {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
   // listen for the FETCH_STUDY action
   const { studyId } = yield take(FETCH_STUDY);
 
   try {
-    const requestURL = `${API_URL}/studies/${studyId}/patients/count?access_token=${authToken}`;
+    const requestURL = `${API_URL}/studies/${studyId}/patients/count`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -150,12 +159,15 @@ function* fetchPatientReferralStat() {
 
 function* fetchStudyCallStats() {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
   // listen for the FETCH_STUDY action
   const { studyId } = yield take(FETCH_STUDY);
 
   try {
-    const requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}?access_token=${authToken}`;
+    const requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -168,12 +180,15 @@ function* fetchStudyCallStats() {
 
 function* fetchStudyTextStats() {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
   // listen for the FETCH_STUDY action
   const { studyId } = yield take(FETCH_STUDY);
 
   try {
-    const requestURL = `${API_URL}/textMessages/countStudyMessages/${studyId}?access_token=${authToken}`;
+    const requestURL = `${API_URL}/textMessages/countStudyMessages/${studyId}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -186,6 +201,9 @@ function* fetchStudyTextStats() {
 
 function* fetchPatientCategories() {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
   // listen for the FETCH_PATIENT_CATEGORIES action
   const { studyId, siteId } = yield take(FETCH_PATIENT_CATEGORIES);
@@ -194,7 +212,7 @@ function* fetchPatientCategories() {
     fields: ['name', 'id'],
   });
   try {
-    const requestURL = `${API_URL}/patientCategories?access_token=${authToken}&filter=${filter}`;
+    const requestURL = `${API_URL}/patientCategories?filter=${filter}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -230,9 +248,12 @@ export function* exportPatients() {
     // listen for the FETCH_PATIENTS action
     const { studyId, siteId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
     const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
 
     try {
-      let requestURL = `${API_URL}/studies/${studyId}/getPatientsForDB?access_token=${authToken}&siteId=${siteId}`;
+      let requestURL = `${API_URL}/studies/${studyId}/getPatientsForDB?siteId=${siteId}`;
       if (campaignId) {
         requestURL += `&campaignId=${campaignId}`;
       }
@@ -266,9 +287,12 @@ export function* fetchPatientsSaga() {
 
 function* fetchPatients(studyId, siteId, text, campaignId, sourceId) {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
   try {
-    let requestURL = `${API_URL}/studies/${studyId}/patients?access_token=${authToken}&siteId=${siteId}`;
+    let requestURL = `${API_URL}/studies/${studyId}/patients?siteId=${siteId}`;
     if (campaignId) {
       requestURL += `&campaignId=${campaignId}`;
     }
@@ -301,6 +325,7 @@ function* fetchPatientDetails() {
     if (!authToken) {
       return;
     }
+
     const filter = JSON.stringify({
       include: [
         {
@@ -357,7 +382,7 @@ function* fetchPatientDetails() {
       ],
     });
     try {
-      const requestURL = `${API_URL}/patients/${patientId}?access_token=${authToken}&filter=${filter}`;
+      const requestURL = `${API_URL}/patients/${patientId}?filter=${filter}`;
       const response = yield call(request, requestURL, {
         method: 'GET',
       });
@@ -382,6 +407,9 @@ function* fetchPatientDetails() {
 function* findPatientsSaga() {
   while (true) {
     const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
 
     // listen for the FIND_PATIENTS_TEXT_BLAST action
     const { studyId, text, categoryIds, sourceIds } = yield take(FIND_PATIENTS_TEXT_BLAST);
@@ -397,7 +425,7 @@ function* findPatientsSaga() {
     }
     filter = JSON.stringify(filter);
     try {
-      const requestURL = `${API_URL}/studies/${studyId}/findPatients?filter=${filter}&access_token=${authToken}`;
+      const requestURL = `${API_URL}/studies/${studyId}/findPatients?filter=${filter}`;
       const response = yield call(request, requestURL, {
         method: 'GET',
       });
@@ -418,8 +446,9 @@ function* submitAddPatientIndication() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/patients/${patientId}/indications/rel/${indication.id}?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patients/${patientId}/indications/rel/${indication.id}`;
       yield call(request, requestURL, {
         method: 'PUT',
       });
@@ -439,9 +468,10 @@ function* submitMovePatientBetweenCategories() {
     if (!authToken) {
       return;
     }
+
     try {
       yield put(movePatientBetweenCategoriesLoading());
-      const requestURL = `${API_URL}/patients/update_category?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patients/update_category`;
       yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
@@ -468,8 +498,9 @@ function* submitRemovePatientIndication() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/patients/${patientId}/indications/rel/${indicationId}?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patients/${patientId}/indications/rel/${indicationId}`;
       yield call(request, requestURL, {
         method: 'DELETE',
       });
@@ -489,8 +520,9 @@ function* submitPatientUpdate() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/patients/${patientId}?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patients/${patientId}`;
       const response = yield call(request, requestURL, {
         method: 'PUT',
         body: JSON.stringify(fields),
@@ -511,8 +543,9 @@ function* submitPatientNote() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/patients/${patientId}/notes?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patients/${patientId}/notes`;
       const response = yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
@@ -536,8 +569,9 @@ function* submitDeleteNote() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/patients/${patientId}/notes/${noteId}?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patients/${patientId}/notes/${noteId}`;
       yield call(request, requestURL, {
         method: 'DELETE',
       });
@@ -557,8 +591,9 @@ function* submitPatientText() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/patients/${id}/textMessages?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patients/${id}/textMessages`;
       const response = yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
@@ -582,8 +617,9 @@ function* submitTextBlast() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/twilioTextMessages/textBlast?access_token=${authToken}`;
+      const requestURL = `${API_URL}/twilioTextMessages/textBlast`;
       yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
@@ -613,8 +649,9 @@ function* submitPatientImport() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/studies/${studyId}/importPatients?access_token=${authToken}`;
+      const requestURL = `${API_URL}/studies/${studyId}/importPatients`;
       const response = yield call(request, requestURL, {
         useDefaultContentType: 'multipart/form-data',
         method: 'POST',
@@ -639,8 +676,9 @@ function* submitAddPatient() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/studies/${studyId}/addPatient?access_token=${authToken}`;
+      const requestURL = `${API_URL}/studies/${studyId}/addPatient`;
       const response = yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify(patient),
@@ -650,17 +688,14 @@ function* submitAddPatient() {
       yield put(submitAddPatientSuccess(response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding a patient. Please try again later.');
+      yield put(submitAddPatientFailure());
       yield put(toastrActions.error('', errorMessage));
+      yield put(submitAddPatientFailure());
     }
   }
 }
 
 export function* fetchStudySaga() {
-  const authToken = getItem('auth_token');
-  if (!authToken) {
-    return;
-  }
-
   try {
     const watcherA = yield fork(fetchStudyDetails);
     const watcherB = yield fork(fetchStudyViewsStat);

@@ -34,8 +34,10 @@ import {
   SORT_PATIENTS_SUCCESS,
   DOWNLOAD_COMPLETE,
   IMPORT_PATIENTS,
-  IMPORT_PATIENTS_SUCCESS,
-  IMPORT_PATIENTS_ERROR,
+  SUBMIT_ADD_PATIENT,
+  SUBMIT_ADD_PATIENT_SUCCESS,
+  SUBMIT_ADD_PATIENT_FAILURE,
+  SET_ADD_PATIENT_STATUS,
   CLEAR_PATIENTS_LIST,
   CLEAR_IMPORT_FORM,
 } from './constants';
@@ -229,24 +231,40 @@ export function sortPatientsSuccess(patients) {
   };
 }
 
-export function importPatients(payload) {
+export function importPatients(payload, onClose) {
   return {
     type: IMPORT_PATIENTS,
     payload,
+    onClose,
   };
 }
 
-export function importPatientsSuccess(fileName) {
+export function submitAddPatient(patient, onClose) {
   return {
-    type: IMPORT_PATIENTS_SUCCESS,
+    type: SUBMIT_ADD_PATIENT,
+    patient,
+    onClose,
+  };
+}
+
+export function submitAddPatientSuccess(patients, fileName) {
+  return {
+    type: SUBMIT_ADD_PATIENT_SUCCESS,
+    patients,
     fileName,
   };
 }
 
-export function importPatientsError(payload) {
+export function submitAddPatientFailure() {
   return {
-    type: IMPORT_PATIENTS_ERROR,
-    payload,
+    type: SUBMIT_ADD_PATIENT_FAILURE,
+  };
+}
+
+export function setAddPatientStatus(status) {
+  return {
+    type: SET_ADD_PATIENT_STATUS,
+    status,
   };
 }
 
