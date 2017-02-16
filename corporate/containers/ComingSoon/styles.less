@@ -1,0 +1,58 @@
+/* coming-soon */
+.coming-soon {
+  position: relative;
+  text-align: center;
+
+  .table-box {
+    display: table;
+    table-layout: fixed;
+  }
+
+  .table-cell {
+    padding: 10px;
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  .sub-holder {
+    margin:0 auto;
+    max-width: 900px;
+    position: relative;
+    padding: 0 0 280px 319px;
+  }
+
+  .img-holder {
+    left: 0;
+    bottom: 0;
+    padding: 0 0 20px;
+    position: absolute;
+
+    .imgage {
+      z-index: 2;
+      position: relative;
+    }
+
+    .bottom {
+      left: 50%;
+      z-index: 1;
+      bottom: 0;
+      width: 100%;
+      height: auto;
+      position: absolute;
+      -webkit-transform: translate(-50%, 0);
+      -moz-transform: translate(-50%, 0);
+      -ms-transform: translate(-50%, 0);
+      transform: translate(-50%, 0);
+    }
+  }
+
+  .msg {
+    font-size: 80px;
+    line-height: 1;
+    width: 556px;
+    height: 364px;
+    padding: 80px 50px 100px;
+    background: url('../../assets/images/bubble2.png') no-repeat;
+    background-size: 100% 100%
+  }
+}
