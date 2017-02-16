@@ -1,3 +1,7 @@
+@sm: 991px;
+@xs: 767px;
+@phone: 639px;
+
 /* coming-soon */
 .coming-soon {
   position: relative;
@@ -19,6 +23,14 @@
     max-width: 900px;
     position: relative;
     padding: 0 0 280px 319px;
+
+    @media screen and (max-width: @xs) {
+      padding: 0px 0 230px 290px;
+    }
+
+    @media screen and (max-width: @phone) {
+      padding: 0px 0 230px 220px;
+    }
   }
 
   .img-holder {
@@ -30,6 +42,15 @@
     .imgage {
       z-index: 2;
       position: relative;
+
+      @media screen and (max-width: @xs) {
+        max-width: 292px;
+      }
+
+      @media screen and (max-width: @phone) {
+        max-width: 230px;
+        max-height: 333px;
+      }
     }
 
     .bottom {
@@ -53,6 +74,27 @@
     height: 364px;
     padding: 80px 50px 100px;
     background: url('../../assets/images/bubble2.png') no-repeat;
-    background-size: 100% 100%
+    background-size: 100% 100%;
+
+    @media screen and (max-width: @sm) {
+      font-size: 60px;
+      max-width: 412px;
+      max-height: 242px;
+      padding-top: 59px;
+    }
+
+    @media screen and (max-width: @xs) {
+      font-size: 55px;
+      max-width: 333px;
+      max-height: 198px;
+      padding-top: 44px;
+    }
+
+    @media screen and (max-width: @phone) {
+      font-size: 30px;
+      max-width: 220px;
+      max-height: 119px;
+      padding-top: 36px;
+    }
   }
 }
