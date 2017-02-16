@@ -5,6 +5,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import moment from 'moment-timezone';
+import Helmet from 'react-helmet';
 
 import LandingForm from '../../components/LandingForm';
 import LandingArticle from '../../components/LandingArticle';
@@ -123,6 +124,11 @@ export class LandingPage extends React.Component {
 
     return (
       <div id="main">
+        <Helmet
+          meta={[
+            {name: "description", content: study.name}
+          ]}
+        />
         <div className="container">
           <LandingForm study={study} onSubmit={this.onSubmitForm} subscriptionError={subscriptionError} />
           <LandingArticle study={study} landing={landing} location={location} />
