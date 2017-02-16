@@ -15,7 +15,7 @@ export default class ComingSoon extends React.Component { // eslint-disable-line
             <div className="v-align">
               <div className="holder">
                 <div className="img-holder">
-                  <img src={main} role="presentation" className="image" /> {/*width="320" height="450"*/}
+                  <img src={main} role="presentation" className="image" />
                 </div>
                 <div className="msg">
                   <strong className="title">COMING SOON!</strong>
