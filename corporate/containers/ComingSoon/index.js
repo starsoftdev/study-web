@@ -12,15 +12,13 @@ export default class ComingSoon extends React.Component { // eslint-disable-line
       <main id="main">
         <div className="container">
           <div className="coming-soon">
-            <div className="table-box">
-              <div className="table-cell">
-                <div className="sub-holder">
-                  <div className="img-holder">
-                    <img src={main} role="presentation" className="imgage" width="323" height="447" />
-                  </div>
-                  <div className="msg">
-                    <strong className="title">COMING SOON!</strong>
-                  </div>
+            <div className="v-align">
+              <div className="holder">
+                <div className="img-holder">
+                  <img src={main} role="presentation" className="image" /> {/*width="320" height="450"*/}
+                </div>
+                <div className="msg">
+                  <strong className="title">COMING SOON!</strong>
                 </div>
               </div>
             </div>

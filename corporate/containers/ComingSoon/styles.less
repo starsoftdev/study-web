@@ -1,100 +1,79 @@
-@sm: 991px;
 @xs: 767px;
 @phone: 639px;
+@small:	480px;
 
-/* coming-soon */
 .coming-soon {
-  position: relative;
+  width: 100%;
+}
+
+.v-align {
+  padding: 10px;
   text-align: center;
+  vertical-align: middle;
+}
 
-  .table-box {
-    display: table;
-    table-layout: fixed;
-  }
-
-  .table-cell {
-    padding: 10px;
-    display: table-cell;
-    vertical-align: middle;
-  }
-
-  .sub-holder {
-    margin:0 auto;
-    max-width: 900px;
-    position: relative;
-    padding: 0 0 280px 319px;
-
-    @media screen and (max-width: @xs) {
-      padding: 0px 0 230px 290px;
-    }
-
-    @media screen and (max-width: @phone) {
-      padding: 0px 0 230px 220px;
-    }
-  }
+.holder {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
 
   .img-holder {
-    left: 0;
-    bottom: 0;
-    padding: 0 0 20px;
-    position: absolute;
-
-    .imgage {
+    .image {
       z-index: 2;
+      width: 320px;
+      height: 450px;
       position: relative;
 
       @media screen and (max-width: @xs) {
-        max-width: 292px;
+        width: 50%;
+        height: 340px;
+        float: left;
       }
-
-      @media screen and (max-width: @phone) {
-        max-width: 230px;
-        max-height: 333px;
-      }
-    }
-
-    .bottom {
-      left: 50%;
-      z-index: 1;
-      bottom: 0;
-      width: 100%;
-      height: auto;
-      position: absolute;
-      -webkit-transform: translate(-50%, 0);
-      -moz-transform: translate(-50%, 0);
-      -ms-transform: translate(-50%, 0);
-      transform: translate(-50%, 0);
     }
   }
 
   .msg {
-    font-size: 80px;
-    line-height: 1;
-    width: 556px;
-    height: 364px;
-    padding: 80px 50px 100px;
     background: url('../../assets/images/bubble2.png') no-repeat;
     background-size: 100% 100%;
 
-    @media screen and (max-width: @sm) {
-      font-size: 60px;
-      max-width: 412px;
-      max-height: 242px;
-      padding-top: 59px;
+    @media screen and (min-width: @xs) {
+      position: absolute;
+      float: none;
+      top:0;
+      left: 50%;
+      padding: 50px 10px;
+      font-size: 2em;
+      max-width: 300px;
+      margin-left: 150px;
     }
 
     @media screen and (max-width: @xs) {
-      font-size: 55px;
-      max-width: 333px;
-      max-height: 198px;
-      padding-top: 44px;
+      max-width: none;
+      position: relative;
+      float: right;
+      margin: 5% 0 0 0;
+      font-size: 3em;
+      padding: 40px 10px;
+      width: 50%;
     }
 
     @media screen and (max-width: @phone) {
-      font-size: 30px;
-      max-width: 220px;
-      max-height: 119px;
-      padding-top: 36px;
+      max-width: none;
+      position: relative;
+      float: right;
+      padding: 30px 0;
+      font-size: 2em;
+      margin: 10% 0 0 0;
+    }
+
+    @media screen and (max-width: @small) {
+      max-width: none;
+      position: relative;
+      float: right;
+      padding: 20px 10px;
+      font-size: 1em;
+      margin: 30% 0 0 0;
     }
   }
 }
