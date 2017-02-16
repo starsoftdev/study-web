@@ -1,4 +1,4 @@
-import { validatorFactory } from 'utils/reduxForm';
+import { validatorFactory } from '../../../utils/reduxForm';
 
 const schema = {
   firstName: { presence: { message: '^First name cannot be blank' } },
@@ -14,9 +14,6 @@ const schema = {
   phone: {
     presence: {
       message: '^Phone number cannot be blank',
-    },
-    numericality: {
-      message: '^Phone number must be all numbers',
     },
     length: {
       minimum: 10,

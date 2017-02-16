@@ -15,10 +15,10 @@ import { selectSources } from '../../App/selectors';
 import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
+import sanitizeProps from '../../../utils/sanitizeProps';
 import { submitAddPatient } from '../actions';
 import { selectAddPatientStatus } from '../selectors';
 import formValidator, { fields } from './validator';
-import sanitizeProps from '../../../utils/sanitizeProps';
 
 const formName = 'addPatient';
 
@@ -147,7 +147,6 @@ class AddPatient extends React.Component {
                   name="phone"
                   component={Input}
                   type="tel"
-                  maxLength="11"
                   className="field"
                   id="import-patient-phone"
                   required
