@@ -126,7 +126,7 @@ export class LandingPage extends React.Component {
       <div id="main">
         <Helmet
           meta={[
-            {name: "description", content: study.name}
+            { name: "description", content: study.name }
           ]}
         />
         <div className="container">
