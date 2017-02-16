@@ -96,8 +96,8 @@ export class PatientDetailModal extends React.Component {
       const formattedPatient = Object.assign({}, currentPatient);
       if (currentPatient.dob) {
         const dob = moment(currentPatient.dob);
-        formattedPatient.dobMonth = dob.month();
-        formattedPatient.dobDay = dob.day();
+        formattedPatient.dobMonth = dob.month() + 1;
+        formattedPatient.dobDay = dob.date();
         formattedPatient.dobYear = dob.year();
       }
       return (
