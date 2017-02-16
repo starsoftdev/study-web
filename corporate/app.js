@@ -15,6 +15,7 @@ import { default as ListYourTrialsPage } from './containers/ListYourTrialsPage';
 import { default as TermsAndConditionsPage } from './containers/TermsAndConditionsPage';
 import { default as PrivacyPolicyPage } from './containers/PrivacyPolicyPage';
 import { default as LandingPage } from './containers/LandingPage';
+import { default as ComingSoon } from './containers/ComingSoon';
 import { default as BillingPage } from './containers/BillingPage';
 import { default as OrderPage } from './containers/OrderPage';
 import { default as AboutPage } from './containers/AboutPage';
@@ -40,6 +41,9 @@ const routes = {
   childRoutes: [
     { path: '/login', component: LoginPage },
     { path: '/about', component: AboutPage },
+    { path: '/blog', component: ComingSoon },
+    { path: '/sitemap', component: ComingSoon },
+    { path: '/rss', component: ComingSoon },
     { path: '/contact', component: ContactPage },
     { path: '/list-your-trials', component: ListYourTrialsPage },
     { path: '/billing', component: BillingPage },
