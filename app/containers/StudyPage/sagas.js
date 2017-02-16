@@ -650,6 +650,7 @@ function* submitAddPatient() {
       yield put(submitAddPatientSuccess(response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding a patient. Please try again later.');
+      yield put(submitAddPatientFailure());
       yield put(toastrActions.error('', errorMessage));
     }
   }
