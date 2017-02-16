@@ -14,23 +14,24 @@ const selectPatientDatabasePage = () => createSelector(
   selectPatientDatabasePageDomain(),
   (substate) => substate
 );
+export default selectPatientDatabasePage;
 
-const selectPatients = () => createSelector(
+export const selectPatients = () => createSelector(
   selectPatientDatabasePageDomain(),
   (substate) => substate.patients
 );
 
-const selectPatientCategories = () => createSelector(
+export const selectPatientCategories = () => createSelector(
   selectPatientDatabasePageDomain(),
   (substate) => substate.patientCategories
 );
 
-const selectSelectedPatient = () => createSelector(
+export const selectSelectedPatient = () => createSelector(
   selectPatientDatabasePageDomain(),
   (substate) => substate.selectedPatient
 );
 
-const selectSelectedPatientDetailsForForm = () => createSelector(
+export const selectSelectedPatientDetailsForForm = () => createSelector(
   selectPatientDatabasePageDomain(),
   (substate) => {
     const selectedPatientDetails = substate.selectedPatient.details;
@@ -51,48 +52,38 @@ const selectSelectedPatientDetailsForForm = () => createSelector(
       status: selectedPatientDetails.studyPatientCategory ? parseInt(selectedPatientDetails.studyPatientCategory.patient_category_id, 10) : false,
       source: selectedPatientDetails.source_id,
     };
-
     return selectedPatientDetailsForForm;
   }
 );
 
-const selectSavedPatient = () => createSelector(
+export const selectSavedPatient = () => createSelector(
   selectPatientDatabasePageDomain(),
   (substate) => substate.savedPatient
 );
 
-const selectImportPatientsStatus = () => createSelector(
+export const selectImportPatientsStatus = () => createSelector(
   selectPatientDatabasePageDomain(),
   (substate) => substate.importPatientsStatus
 );
 
-const selectPaginationOptions = () => createSelector(
+export const selectPaginationOptions = () => createSelector(
   selectPatientDatabasePageDomain(),
   (substate) => substate.paginationOptions
 );
 
-const selectChat = () => createSelector(
+export const selectChat = () => createSelector(
   selectPatientDatabasePageDomain(),
   (substate) => substate.chat
 );
 
+export const selectAddPatientStatus = () => createSelector(
+  selectPatientDatabasePageDomain(),
+  (subState) => subState.addPatientStatus
+);
+
 const selectFormDomain = () => state => state.form;
 
-const selectPatientDatabaseFormValues = () => createSelector(
+export const selectPatientDatabaseFormValues = () => createSelector(
   selectFormDomain(),
   (substate) => get(substate, 'searchPatients.values', {})
 );
-
-export default selectPatientDatabasePage;
-export {
-  selectPatientDatabasePageDomain,
-  selectPatients,
-  selectPatientCategories,
-  selectSelectedPatient,
-  selectSelectedPatientDetailsForForm,
-  selectSavedPatient,
-  selectChat,
-  selectPaginationOptions,
-  selectPatientDatabaseFormValues,
-  selectImportPatientsStatus,
-};

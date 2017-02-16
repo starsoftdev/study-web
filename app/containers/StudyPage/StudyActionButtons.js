@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import ImportPatientsModal from './ImportPatients/ImportPatientsModal';
 import TextEmailBlastModal from './TextEmailBlastModal';
 import TextBlastModal from './TextBlast/index';
-import AddPatient from './ImportPatients/AddPatient';
+import AddPatientModal from './ImportPatients/AddPatientModal';
 
 import { exportPatients, setAddPatientStatus } from './actions';
 import { reset } from 'redux-form';
@@ -122,7 +122,7 @@ class StudyActionButtons extends Component {
             &nbsp;Import
           </span>
           <ImportPatientsModal show={this.state.showImportPatientsModal} onHide={this.toggleImportPatientsModal} toggleAddPatient={this.toggleAddPatientModal} />
-          <AddPatient show={this.state.showAddPatientModal} onClose={this.closeAddPatientModal} onHide={this.toggleAddPatientModal} />
+          <AddPatientModal show={this.state.showAddPatientModal} onClose={this.closeAddPatientModal} onHide={this.toggleAddPatientModal} />
         </div>
         <div className="col pull-right">
           <span className="btn btn-primary email" onClick={this.toggleTextEmailBlastModal}>

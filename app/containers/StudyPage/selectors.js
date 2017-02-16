@@ -8,6 +8,7 @@ import { createSelector } from 'reselect';
  * Direct selector to the studyPage state domain
  */
 const selectStudyPageDomain = () => state => state.studyPage;
+export default selectStudyPageDomain;
 
 /**
  * Other selectors
