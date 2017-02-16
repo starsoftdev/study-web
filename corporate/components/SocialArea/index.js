@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { EmailButton, PinterestButton } from 'react-social';
+import { PinterestButton } from 'react-social';
 
 export class SocialArea extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -7,6 +7,7 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
     alignCenter: PropTypes.bool,
     study: PropTypes.object,
     location: PropTypes.any,
+    imgSrc: PropTypes.any,
   };
 
   constructor(props) {
@@ -19,7 +20,7 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
   shareFB(ev) {
     ev.preventDefault();
     const { study } = this.props;
-    window.open(`https://www.facebook.com/dialog/share?app_id=966242223397117&display=popup&href=${location.href}&redirect_uri=https://www.facebook.com/sharer.php?`, study.name, 'width=600, height=530');
+    window.open(`http://www.facebook.com/sharer.php?u=${location.href}`, study.name, 'width=600, height=530');
   }
 
   shareTwitter(ev) {
@@ -29,8 +30,7 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
   }
 
   render() {
-    const { study } = this.props;
-
+    const { study, imgSrc } = this.props;
     return (
       <div className="social-area clearfix">
         <h3 className="pull-left">Share this study:</h3>
@@ -51,15 +51,17 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
               <i className="icon-twitter-square"></i>
             </a>
           </li>
-          <li className="pinterest">
-            <PinterestButton element="a">
-              <i className="icon-pinterest-square"></i>
-            </PinterestButton>
-          </li>
+          {imgSrc &&
+            <li className="pinterest">
+              <PinterestButton element="a" media={imgSrc}>
+                <i className="icon-pinterest-square"></i>
+              </PinterestButton>
+            </li>
+          }
           <li className="gmail">
-            <EmailButton message={study.description} element="a">
+            <a href={`mailto:?subject=${study.name}&body=${location.href}`}>
               <i className="icon-envelope-square"></i>
-            </EmailButton>
+            </a>
           </li>
         </ul>
       </div>

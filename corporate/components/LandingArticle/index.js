@@ -96,7 +96,7 @@ export class LandingArticle extends React.Component {
               You can unsubscribe at any time.
             </p>
             {!imgSrc &&
-              <SocialArea alignCenter {...this.props} />
+              <SocialArea alignCenter {...this.props} imgSrc={imgSrc} />
             }
           </div>
           <div
@@ -110,7 +110,7 @@ export class LandingArticle extends React.Component {
               </div>
             }
             {imgSrc &&
-              <SocialArea {...this.props} />
+              <SocialArea {...this.props} imgSrc={imgSrc} />
             }
           </div>
         </div>
