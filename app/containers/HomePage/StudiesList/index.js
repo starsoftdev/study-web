@@ -8,7 +8,7 @@ import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../../components/ShoppingCartForm/validator';
 import { fetchLevels, saveCard } from '../../App/actions';
-import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients, selectCurrentUserClientId } from '../../App/selectors';
+import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients, selectCurrentUserClientId, selectClientSites } from '../../App/selectors';
 import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../constants';
 import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice } from '../actions';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions } from '../selectors';
@@ -25,6 +25,7 @@ import StudyItem from './StudyItem';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    clientSites: PropTypes.object,
     clearIndicaoionLevelPrice: PropTypes.func,
     currentUserStripeCustomerId: PropTypes.string,
     currentUser: PropTypes.object,
@@ -456,7 +457,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { studies, sitePatients, currentUser } = this.props;
+    const { studies, sitePatients, currentUser, clientSites } = this.props;
     const countResult = countBy(studies.details, entityIterator => entityIterator.status);
     const activeCount = countResult[ACTIVE_STATUS_VALUE] || 0;
     const inactiveCount = countResult[INACTIVE_STATUS_VALUE] || 0;
@@ -470,6 +471,12 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         selectedSiteID = currentUser.roleForClient.site_id ? currentUser.roleForClient.site_id : null;
       }
     }
+    let siteArray = [];
+    if (clientSites && clientSites.details) {
+      siteArray = clientSites.details.map((item) =>
+        item.id
+      );
+    }
     const studiesListContents = studies.details.map((item, index) => {
       if (item.studyId === this.state.selectedStudyId) {
         selectedStudy = item;
@@ -480,7 +487,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         }
         return parseInt(sitePatient.count_unread);
       });
-      if (selectedSiteID && item.siteId !== selectedSiteID) {
+      if (siteArray.indexOf(item.siteId) === -1 || (selectedSiteID && item.siteId !== selectedSiteID)) {
         return null;
       }
       return (
@@ -595,6 +602,7 @@ const mapStateToProps = createStructuredSelector({
   upgradeStudyFormError: selectUpgradeStudyFormError(),
   upgradedStudy: selectUpgradedStudy(),
   currentUserClientId: selectCurrentUserClientId(),
+  clientSites: selectClientSites(),
 });
 
 function mapDispatchToProps(dispatch) {
