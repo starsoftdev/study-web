@@ -34,7 +34,10 @@ export class Corporate extends React.Component { // eslint-disable-line react/pr
       <div id="wrapper">
         <Helmet
           meta={[
-            { name: "description", content: 'StudyKIK' }
+            {
+              name: 'description',
+              content: 'StudyKIK',
+            }
           ]}
         />
         <Header {...this.props} />
