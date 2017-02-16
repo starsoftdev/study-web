@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import Helmet from 'react-helmet';
 
 import { default as Header } from '../../components/Header';
 import { default as Footer } from '../../components/Footer';
@@ -31,6 +32,11 @@ export class Corporate extends React.Component { // eslint-disable-line react/pr
   render() {
     return (
       <div id="wrapper">
+        <Helmet
+          meta={[
+            {name: "description", content: 'StudyKIK'}
+          ]}
+        />
         <Header {...this.props} />
         {React.Children.toArray(this.props.children)}
         <Footer {...this.props} />
