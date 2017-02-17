@@ -19,7 +19,7 @@ function ReactSelect({
   objectValue,
   onChange,
   meta: { touched, error, active },
-  ...rest,
+  ...rest
 }) {
   const hasError = touched && error && !active;
   const optionsToRender = options.map(o => (
