@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reset, blur, Field, reduxForm } from 'redux-form';
+import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
@@ -14,7 +15,6 @@ import { submitPatientUpdate } from '../actions';
 import formValidator from './detailValidator';
 import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSyncErrors, selectValues, selectFormDidChange } from '../../../common/selectors/form.selector';
-import { createStructuredSelector } from 'reselect';
 
 const formName = 'PatientDetailModal.Detail';
 
@@ -169,9 +169,9 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  blur: (field, value) => dispatch(blur(formName, field, value)),
   reset: () => dispatch(reset(formName)),
   submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),
-  blur: (field, value) => dispatch(blur(formName, field, value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientDetailSection);
