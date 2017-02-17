@@ -65,7 +65,7 @@ export class PatientDetailModal extends React.Component {
   componentWillReceiveProps(newProps) {
     const { socket, currentPatient, fetchPatientDetails } = newProps;
 
-    if (socket && this.state.socketBinded === false && newProps.currentPatient) {
+    if (socket && this.state.socketBinded === false && currentPatient) {
       socket.on('notifyUnsubscribePatient', () => {
         fetchPatientDetails(currentPatient.id);
       });
@@ -75,8 +75,21 @@ export class PatientDetailModal extends React.Component {
       });
 
       this.setState({ socketBinded: true });
+    } else if (!newProps.currentPatient && this.state.socketBinded) {
+      socket.removeAllListeners('notifyUnsubscribePatient');
+      socket.removeAllListeners('notifySubscribePatient');
+
+      this.setState({ socketBinded: false });
     }
   }
+
+  componentWillUnmount() {
+    const { socket } = this.props;
+
+    socket.removeAllListeners('notifyUnsubscribePatient');
+    socket.removeAllListeners('notifySubscribePatient');
+  }
+
 
   onSelectText() {
     const {
