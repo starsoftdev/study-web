@@ -46,6 +46,7 @@ class PatientBoard extends React.Component {
     markAsReadPatientMessages: React.PropTypes.func,
     studyId: React.PropTypes.number,
     setFormValueByName: React.PropTypes.func,
+    ePMS: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -151,7 +152,7 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal } = this.props;
+    const { patientCategories, openPatientModal, ePMS } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal })}>
@@ -162,7 +163,10 @@ class PatientBoard extends React.Component {
               ))}
             </ul>
           </nav>
-          <PatientDetailModal onClose={this.onPatientClick} />
+          <PatientDetailModal
+            onClose={this.onPatientClick}
+            ePMS={ePMS}
+          />
         </div>
         <div className="patients-form-closer" onClick={this.onPatientClick} />
       </div>
