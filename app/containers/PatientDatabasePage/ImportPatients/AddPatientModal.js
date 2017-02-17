@@ -4,13 +4,15 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, reset, touch } from 'redux-form';
+import { blur, Field, reduxForm, reset, touch } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
+
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
+
 import { selectSyncErrors, selectValues } from '../../../common/selectors/form.selector';
-import { normalizePhone } from '../../../common/helper/functions';
+import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSources } from '../../App/selectors';
 import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
@@ -26,6 +28,7 @@ const formName = 'addPatient';
 class AddPatient extends React.Component {
   static propTypes = {
     addPatientStatus: React.PropTypes.object,
+    blur: React.PropTypes.func.isRequired,
     errorList: React.PropTypes.object.isRequired,
     newPatient: React.PropTypes.object,
     onClose: React.PropTypes.func.isRequired,
@@ -57,13 +60,16 @@ class AddPatient extends React.Component {
 
   addPatient(event) {
     event.preventDefault();
-    const { errorList, newPatient, submitAddPatient, touchFields } = this.props;
+    const { blur, errorList, newPatient, submitAddPatient, touchFields } = this.props;
     touchFields();
     /* will only submit the form if the error list is empty */
     if (Object.keys(errorList).length === 0) {
+      const formattedPhoneNumber = normalizePhoneDisplay(newPatient.phone);
+      blur('phone', formattedPhoneNumber);
+      const patient = Object.assign({}, newPatient);
       /* normalizing the phone number */
-      newPatient.phone = normalizePhone(newPatient.phone);
-      submitAddPatient(newPatient, this.onClose);
+      patient.phone = normalizePhone(newPatient.phone);
+      submitAddPatient(patient, this.onClose);
     }
   }
 
@@ -185,6 +191,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    blur: (field, value) => dispatch(blur(formName, field, value)),
     resetForm: () => dispatch(reset(formName)),
     submitAddPatient: (patient, onClose) => dispatch(submitAddPatient(patient, onClose)),
     touchFields: () => dispatch(touch(formName, ...fields)),
