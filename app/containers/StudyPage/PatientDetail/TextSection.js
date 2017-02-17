@@ -227,7 +227,7 @@ class TextSection extends React.Component {
       <div className={classNames('item text', { active })}>
         {this.renderText()}
         <div className="textarea">
-          {this.renderTextArea(disabled || unsubscribed)}
+          {this.renderTextArea(disabled || unsubscribed || !ePMS)}
           <span className="remaining-counter">
             {`${maxCharacters - enteredCharactersLength}`}
           </span>
