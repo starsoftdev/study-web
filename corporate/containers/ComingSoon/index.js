@@ -1,5 +1,6 @@
 import React from 'react';
-import main from '../../assets/images/img19.svg';
+// import main from '../../assets/images/img19.svg';
+import main from '../../assets/images/comingSoon.png';
 
 import './styles.less';
 
@@ -16,9 +17,6 @@ export default class ComingSoon extends React.Component { // eslint-disable-line
               <div className="holder">
                 <div className="img-holder">
                   <img src={main} alt="" className="image" />
-                </div>
-                <div className="msg">
-                  <strong className="title">COMING SOON!</strong>
                 </div>
               </div>
             </div>
