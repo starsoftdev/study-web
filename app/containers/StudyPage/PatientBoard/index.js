@@ -56,6 +56,7 @@ class PatientBoard extends React.Component {
     };
     this.onPatientClick = this.onPatientClick.bind(this);
     this.onPatientTextClick = this.onPatientTextClick.bind(this);
+    this.closePatientModal = this.closePatientModal.bind(this);
     this.showModal = this.showModal.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.resetFormsValues = this.resetFormsValues.bind(this);
@@ -81,10 +82,6 @@ class PatientBoard extends React.Component {
       };
       scroll.scrollTo(650, options);
       switchToNoteSection();
-    } else {
-      setCurrentPatientId(-1);
-      setCurrentPatientCategoryId(-1);
-      this.resetFormsValues();
     }
     // set up the redux state for opening the modal
     setOpenPatientModal(show);
@@ -119,6 +116,16 @@ class PatientBoard extends React.Component {
     }
     // set up the redux state for opening the modal
     setOpenPatientModal(show);
+  }
+
+  closePatientModal() {
+    const { setCurrentPatientId, setCurrentPatientCategoryId, setOpenPatientModal } = this.props;
+    setCurrentPatientId(-1);
+    setCurrentPatientCategoryId(-1);
+    this.resetFormsValues();
+
+    // set up the redux state for opening the modal
+    setOpenPatientModal(false);
   }
 
   resetFormsValues() {
@@ -164,11 +171,11 @@ class PatientBoard extends React.Component {
             </ul>
           </nav>
           <PatientDetailModal
-            onClose={this.onPatientClick}
+            onClose={this.closePatientModal}
             ePMS={ePMS}
           />
         </div>
-        <div className="patients-form-closer" onClick={this.onPatientClick} />
+        <div className="patients-form-closer" onClick={this.closePatientModal} />
       </div>
     );
   }
