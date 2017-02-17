@@ -22,7 +22,7 @@ class ReactMultiCheckBox extends React.Component {
       dataSource,
       includeAllOption,
       meta: { touched, error, active },
-      ...rest,
+      ...rest
     } = this.props;
     const hasError = touched && error && !active;
     const errorClass = hasError ? 'has-error' : '';
@@ -45,7 +45,7 @@ class ReactMultiCheckBox extends React.Component {
       </div>
     );
 
-    let inputComponent = (
+    const inputComponent = (
       <ReactSuperSelect
         onChange={(event) => {
           input.onChange(event);

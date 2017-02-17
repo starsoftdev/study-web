@@ -46,16 +46,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
     };
   }
 
-  componentWillMount() {
-  }
-
   componentDidMount() {
-  }
-
-  componentWillReceiveProps() {
-  }
-
-  componentWillUnmount() {
   }
 
   setVisible(el) {
@@ -88,11 +79,11 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               <div className="container">
                 <h2>FIND OUT HOW MANY PATIENTS ARE NEAR YOUR SITE</h2>
                 <div className="form-holder">
-                  <input type="text" data-required="true" placeholder="* Full Name" className="form-control input-lg" />
-                  <input type="email" data-required="true" placeholder="* Email" className="form-control input-lg" />
+                  <input type="text" required placeholder="* Full Name" className="form-control input-lg" />
+                  <input type="email" required placeholder="* Email" className="form-control input-lg" />
                   <input type="text" placeholder="Company" className="form-control input-lg" />
-                  <input type="text" data-type="number" data-required="true" placeholder="* Postal Code" className="form-control input-lg" />
-                  <input type="text" data-required="true" placeholder="* Indication" className="form-control input-lg" />
+                  <input type="text" required placeholder="* Postal Code" className="form-control input-lg" />
+                  <input type="text" required placeholder="* Indication" className="form-control input-lg" />
                   <input type="submit" className="btn btn-block input-lg" value="RECEIVE REPORT" />
                   <div className="images">
                     <div className="img-holder left">
@@ -158,11 +149,11 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               <div className="img-holder">
                 <img src={img4} width="709" height="323" alt="img4" className="img-responsive" />
                 <div className="hidden">
-                  <span className="icon-twitter-shape"><span className="path1"></span><span className="path2"></span></span>
-                  <span className="icon-facebook-shape"><span className="path1"></span><span className="path2"></span></span>
-                  <span className="icon-giant-shape"><span className="path1"></span><span className="path2"></span></span>
-                  <span className="icon-instagram-shape"><span className="path1"></span><span className="path2"></span></span>
-                  <span className="icon-pint-shape"><span className="path1"></span><span className="path2"></span></span>
+                  <span className="icon-twitter-shape"><span className="path1" /><span className="path2" /></span>
+                  <span className="icon-facebook-shape"><span className="path1" /><span className="path2" /></span>
+                  <span className="icon-giant-shape"><span className="path1" /><span className="path2" /></span>
+                  <span className="icon-instagram-shape"><span className="path1" /><span className="path2" /></span>
+                  <span className="icon-pint-shape"><span className="path1" /><span className="path2" /></span>
                 </div>
               </div>
             </div>
@@ -173,7 +164,10 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               <div className="box">
                 <h2>
                   PatientS LEARN about clinical trials <br /> and
-                  ARE redirected to <span className="logo"><img src={logo} alt="StudyKiK" /></span>
+                  ARE redirected to
+                  <span className="logo">
+                    <img src={logo} alt="StudyKiK" />
+                  </span>
                 </h2>
               </div>
               <p>
@@ -210,7 +204,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
                   <img src={logo3} alt="StudyKiK" width="337" height="78" className="img-responsive center-block" />
                 </div>
                 <h2>
-                  The research site will use the "Patient Messaging Suite” to set up phone appointments
+                  The research site will use the "Patient Messaging Suite" to set up phone appointments
                 </h2>
               </div>
               <p>
@@ -260,20 +254,16 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
           <div className="row">
             <div className="col-xs-12 col-sm-6 blue dropdown">
               <a
-                href="#"
                 id="dLabel"
                 type="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icon-search"></i>
+                <i className="icon-search" />
                 <h3>
                   <span>Exposure to StudyKIK Patient<br /> Enrollment Search</span>
                 </h3>
               </a>
-              <div className="dropdown-menu" aria-labelledby="dLabel">
+              <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img11} alt="img11" width="563" className="img-responsive" />
                 </div>
@@ -287,22 +277,18 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
             </div>
             <div className="col-xs-12 col-sm-6 light-blue dropdown">
               <a
-                href="#"
                 id="dLabel"
                 type="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icon-sign"></i>
+                <i className="icon-sign" />
                 <h3>
                   <span>
                     Instant SIGN-UP Notifications<br /> to Your Site
                   </span>
                 </h3>
               </a>
-              <div className="dropdown-menu" aria-labelledby="dLabel">
+              <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img12} alt="img12" width="509" className="img-responsive" />
                 </div>
@@ -318,20 +304,16 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
             </div>
             <div className="col-xs-12 col-sm-6 light-orange dropdown">
               <a
-                href="#"
                 id="dLabel"
                 type="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icon-right"></i>
+                <i className="icon-right" />
                 <h3>
                   <span>Instant Patient Email and <br /> Text Message w/Site Phone</span>
                 </h3>
               </a>
-              <div className="dropdown-menu" aria-labelledby="dLabel">
+              <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img13} alt="img13" width="509" className="img-responsive" />
                 </div>
@@ -347,20 +329,16 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
             </div>
             <div className="col-xs-12 col-sm-6 orange dropdown">
               <a
-                href="#"
                 id="dLabel"
                 type="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icon-mobile"></i>
+                <i className="icon-mobile" />
                 <h3>
                   <span>Mobile Friendly Study Page</span>
                 </h3>
               </a>
-              <div className="dropdown-menu" aria-labelledby="dLabel">
+              <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img14} alt="img14" width="350" className="img-responsive center-block" />
                 </div>
@@ -377,22 +355,18 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
             </div>
             <div className="col-xs-12 col-sm-6 green dropdown">
               <a
-                href="#"
                 id="dLabel"
                 type="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icon-lock2"></i>
+                <i className="icon-lock2" />
                 <h3>
                   <span>
                     Proprietary Filtering System <br /> for Quality Patient Reach
                   </span>
                 </h3>
               </a>
-              <div className="dropdown-menu" aria-labelledby="dLabel">
+              <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img15} alt="img15" width="334" className="img-responsive center-block" />
                 </div>
@@ -409,18 +383,14 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
             </div>
             <div className="col-xs-12 col-sm-6 light-green dropdown">
               <a
-                href="#"
                 id="dLabel"
                 type="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icon-time"></i>
+                <i className="icon-time" />
                 <h3><span>Patient Call Tracking</span></h3>
               </a>
-              <div className="dropdown-menu" aria-labelledby="dLabel">
+              <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img16} alt="img16" width="350" className="img-responsive center-block" />
                 </div>
