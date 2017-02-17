@@ -627,6 +627,8 @@ export function* saveSiteWatcher() {
       let options = null;
       data.client_id = clientId;
 
+      let messageHeader = 'Save Site';
+      let message = 'Site saved successfully!';
       if (id) {
         requestURL = `${API_URL}/sites/${id}`;
         options = {
@@ -634,6 +636,8 @@ export function* saveSiteWatcher() {
           body: JSON.stringify(data),
         };
       } else {
+        messageHeader = 'Add Site Location';
+        message = 'Site Location added successfully!';
         requestURL = `${API_URL}/sites`;
         options = {
           method: 'POST',
@@ -643,7 +647,7 @@ export function* saveSiteWatcher() {
 
       const response = yield call(request, requestURL, options);
 
-      yield put(toastrActions.success('Save Site', 'Site saved successfully!'));
+      yield put(toastrActions.success(messageHeader, message));
       yield put(siteSaved(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
@@ -661,6 +665,8 @@ export function* saveUserWatcher() {
       let requestURL = null;
       let options = null;
 
+      let messageHeader = 'Save User';
+      let message = 'User saved successfully!';
       if (id) {
         data.userId = id;
         requestURL = `${API_URL}/clients/${clientId}/updateUserWithClientRole`;
@@ -669,6 +675,8 @@ export function* saveUserWatcher() {
           body: JSON.stringify(data),
         };
       } else {
+        messageHeader = 'Add User';
+        message = 'User added successfully!';
         requestURL = `${API_URL}/clients/${clientId}/addUserWithClientRole`;
         options = {
           method: 'POST',
@@ -678,7 +686,7 @@ export function* saveUserWatcher() {
 
       const response = yield call(request, requestURL, options);
 
-      yield put(toastrActions.success('Save User', 'User saved successfully!'));
+      yield put(toastrActions.success(messageHeader, message));
       yield put(userSaved(data.siteId, response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');

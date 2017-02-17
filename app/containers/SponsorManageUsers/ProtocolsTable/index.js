@@ -83,11 +83,11 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
               </tr>
             </thead>
             <tbody>
-            {
-              studiesList.map((item, index) => (
-                <RowItem key={index} item={item} editProtocol={this.props.editProtocol} editUser={this.props.editUser} deleteUser={this.props.deleteUser} searchFormValues={this.props.searchFormValues} />
-              ))
-            }
+              {
+            studiesList.map((item, index) => (
+              <RowItem key={index} item={item} editProtocol={this.props.editProtocol} editUser={this.props.editUser} deleteUser={this.props.deleteUser} searchFormValues={this.props.searchFormValues} />
+            ))
+          }
             </tbody>
           </table>
         }

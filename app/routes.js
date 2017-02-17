@@ -480,15 +480,13 @@ export default function createRoutes(store) {
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           System.import('containers/SearchByProtocolPage/reducer'),
-          System.import('containers/SearchByProtocolPage/sagas'),
           System.import('containers/SearchByProtocolPage'),
         ]);
 
         const renderRoute = loadModule(cb);
 
-        importModules.then(([reducer, sagas, component]) => {
+        importModules.then(([reducer, component]) => {
           injectReducer('searchByProtocolPage', reducer.default);
-          injectSagas(sagas.default);
           renderRoute(component);
         });
 
@@ -501,15 +499,13 @@ export default function createRoutes(store) {
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           System.import('containers/ProjectAgreementsPage/reducer'),
-          System.import('containers/ProjectAgreementsPage/sagas'),
           System.import('containers/ProjectAgreementsPage'),
         ]);
 
         const renderRoute = loadModule(cb);
 
-        importModules.then(([reducer, sagas, component]) => {
+        importModules.then(([reducer, component]) => {
           injectReducer('projectAgreementsPage', reducer.default);
-          injectSagas(sagas.default);
           renderRoute(component);
         });
 

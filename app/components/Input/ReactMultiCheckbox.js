@@ -45,7 +45,7 @@ class ReactMultiCheckBox extends React.Component {
       </div>
     );
 
-    let inputComponent = (
+    const inputComponent = (
       <ReactSuperSelect
         onChange={(event) => {
           input.onChange(event);

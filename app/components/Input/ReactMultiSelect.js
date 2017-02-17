@@ -27,7 +27,7 @@ function ReactMultiSelect({
     finalDataSource = [{ id: 0, label: 'All', value: 0 }].concat(finalDataSource);
   }
 
-  let inputComponent = (
+  const inputComponent = (
     <ReactSuperSelect
       onChange={(event) => {
         input.onChange(event);
