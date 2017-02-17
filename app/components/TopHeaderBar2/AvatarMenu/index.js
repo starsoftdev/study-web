@@ -50,6 +50,7 @@ class AvatarMenu extends React.Component {
               <li><Link to="/payment-information" onClick={() => this.handleClickOutside()}>PAYMENT INFORMATION</Link></li>
               <li><Link to="/receipts" onClick={() => this.handleClickOutside()}>RECEIPTS</Link></li>
               <li><Link to="/proposals" onClick={() => this.handleClickOutside()}>PROPOSALS</Link></li>
+              <li><Link to="/app/dashboard-sponsor" onClick={() => this.handleClickOutside()}>SPONSOR</Link></li>
               <a
                 onClick={() => {
                   this.props.handleLogoutClick();
