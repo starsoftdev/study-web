@@ -38,6 +38,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     selectAll: PropTypes.func,
     range: PropTypes.any,
     searchBy: PropTypes.any,
+    site: PropTypes.any,
     proposals: PropTypes.any,
     showProposalPdf: PropTypes.func,
   };

@@ -136,7 +136,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                            { label: '3', value: 3, id: 8 },
                            { label: '2', value: 2, id: 9 },
                            { label: 'Oldest', value: -1, id: 10 },
-                           ];
+    ];
 
     return (
       <div className="table-container">
@@ -227,7 +227,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   <div className="emit-border"><br /></div>
                   <div className="right-part">
                     <div className="btn-block text-right">
-                    {this.renderDateFooter()}
+                      {this.renderDateFooter()}
                       <Button onClick={() => { this.changeRange(); }}>
                         Submit
                       </Button>

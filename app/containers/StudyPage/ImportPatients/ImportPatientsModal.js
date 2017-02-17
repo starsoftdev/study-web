@@ -105,7 +105,7 @@ class ImportPatientsModal extends React.Component {
   }
 
   render() {
-    let { onHide, ...props } = this.props;
+    const { onHide, ...props } = this.props;
     const sanitizedProps = sanitizeProps(props);
     delete sanitizedProps.toggleAddPatient;
     delete sanitizedProps.toggleAddPatient;
