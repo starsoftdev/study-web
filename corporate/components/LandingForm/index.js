@@ -55,10 +55,10 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
       >
         <h1 className="main-heading">{name}</h1>
         {city &&
-        <h2 className="txt-orange">
-          <i className="icon-map-marker"></i>
-          {cityAndState}
-        </h2>
+          <h2 className="txt-orange">
+            <i className="icon-map-marker"></i>
+            {cityAndState}
+          </h2>
           }
         <div
           ref={(animatedFormContent) => { this.animatedFormContent = animatedFormContent; }}
