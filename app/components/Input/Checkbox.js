@@ -16,16 +16,16 @@ function Checkbox({ input, className, children, onChange, disabled, ...rest }) {
       <span className={`jcf-checkbox ${input.checked ? 'jcf-checked' : 'jcf-unchecked'}`} disabled={disabled}>
         {(!disabled)
           ?
-            <span
-              onClick={() => {
-                input.onChange(!input.checked);
-                if (onChange) {
-                  onChange(!input.checked);
-                }
-              }}
-            />
+          <span
+            onClick={() => {
+              input.onChange(!input.checked);
+              if (onChange) {
+                onChange(!input.checked);
+              }
+            }}
+          />
           :
-            <span disabled="disabled" />
+          <span disabled="disabled" />
         }
         <input
           {...input}

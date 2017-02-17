@@ -55,30 +55,30 @@ export class SponsorManageUsersAdminsTable extends React.Component {
       <div className="table-holder table-responsive">
         {(this.props.manageSponsorUsersData.fetching)
           ?
-            <div className="text-center">
-              <LoadingSpinner showOnlyIcon size={20} />
-            </div>
+          <div className="text-center">
+            <LoadingSpinner showOnlyIcon size={20} />
+          </div>
           :
-            <table className="table-manage-user table">
-              <caption>
+          <table className="table-manage-user table">
+            <caption>
               ADMINS
             </caption>
 
-              <thead>
-                <tr>
-                  <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'first_name') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>NAME<i className="caret-arrow"></i></th>
-                  <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'email') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>EMAIL<i className="caret-arrow"></i></th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {
+            <thead>
+              <tr>
+                <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'first_name') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>NAME<i className="caret-arrow"></i></th>
+                <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'email') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>EMAIL<i className="caret-arrow"></i></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {
               adminsList.map((item, index) => (
                 <RowItem key={index} item={item} editUser={this.props.editUser} deleteUser={this.props.deleteUser} />
               ))
-            }
-              </tbody>
-            </table>
+              }
+            </tbody>
+          </table>
         }
       </div>
     );
