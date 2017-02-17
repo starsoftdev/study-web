@@ -23,8 +23,8 @@ export class BadgesPage extends React.Component { // eslint-disable-line react/p
             <div className="table-cell">
               <div className="sub-holder">
                 <div className="img-holder">
-                  <img src={varImage} role="presentation" className="imgage" width="323" height="447" />
-                  <img src={bubbleImage} role="presentation" className="bottom" />
+                  <img src={varImage} alt="" className="imgage" width="323" height="447" />
+                  <img src={bubbleImage} alt="" className="bottom" />
                 </div>
                 <div className="msg">
                   <strong className="title">COMING SOON!</strong>

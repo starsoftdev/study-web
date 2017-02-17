@@ -24,12 +24,12 @@ class PatientNote extends React.Component {
     /* eslint-disable global-require */
     if (note.user.profileImageURL) {
       return (
-        <img role="presentation" src={note.user.profileImageURL} />
+        <img alt="" src={note.user.profileImageURL} />
       );
     }
     const url = require('../../../assets/images/Default-User-Img-Dr.png');
     return (
-      <img role="presentation" src={url} />
+      <img alt="" src={url} />
     );
   }
 

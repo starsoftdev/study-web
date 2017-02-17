@@ -32,7 +32,7 @@ class Filter extends React.Component {
           <i className="icomoon-icon_close"></i>
         </a>
       </div>
-      );
+    );
   }
 
   createSearchBox(options) {
@@ -50,7 +50,7 @@ class Filter extends React.Component {
           <i className="icomoon-icon_close"></i>
         </a>
       </div>
-      );
+    );
   }
 
   createComparisonBox(options) {
@@ -81,7 +81,7 @@ class Filter extends React.Component {
           <i className="icomoon-icon_close"></i>
         </a>
       </div>
-      );
+    );
   }
 
   render() {

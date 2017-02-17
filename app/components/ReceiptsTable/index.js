@@ -200,7 +200,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     let invoiceId = null;
     _.map(raw, (source, key) => {
       const dateWrapper = moment(source.created).tz(this.props.currentUser.timezone).format('MM/DD/YY');
-      let siteName = source.site_name || '-';
+      const siteName = source.site_name || '-';
 
       let invoiceIdLink = source.invoice_id;
       if (source.invoice_pdf_id) {

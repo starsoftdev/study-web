@@ -27,7 +27,7 @@ class PatientText extends React.Component {
     /* eslint-disable global-require */
     if (textMessage.user) {
       return (
-        <img role="presentation" src={textMessage.user.profileImageURL} />
+        <img alt="" src={textMessage.user.profileImageURL} />
       );
     } else if (textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound') {
       let url = require('../../../assets/images/Default-User-Img-Dr.png');
@@ -35,17 +35,17 @@ class PatientText extends React.Component {
         url = this.props.currentUser.profileImageURL;
       }
       return (
-        <img role="presentation" src={url} />
+        <img alt="" src={url} />
       );
     } else if (currentPatient.gender === 'Female') {
       const url = require('../../../assets/images/Default-User-Img-Girl.png');
       return (
-        <img role="presentation" src={url} />
+        <img alt="" src={url} />
       );
     }
     const url = require('../../../assets/images/Default-User-Img.png');
     return (
-      <img role="presentation" src={url} />
+      <img alt="" src={url} />
     );
   }
 

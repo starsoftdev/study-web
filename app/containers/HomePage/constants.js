@@ -5,7 +5,7 @@ export const FETCH_PATIENT_SIGN_UPS_SUCCEESS             = 'HomePage/Dashboard/F
 export const FETCH_PATIENT_MESSAGES                      = 'HomePage/Dashboard/FETCH_PATIENT_MESSAGES';
 export const FETCH_PATIENT_MESSAGES_SUCCEESS             = 'HomePage/Dashboard/FETCH_PATIENT_MESSAGES_SUCCEESS';
 export const FETCH_PRINCIPAL_INVESTIGATOR_TOTALS         = 'HomePage/Dashboard/FETCH_PRINCIPAL_INVESTIGATOR_TOTALS';
-export const FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS	= 'HomePage/Dashboard/FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS';
+export const FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS = 'HomePage/Dashboard/FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS';
 
 export const FETCH_STUDIES                               = 'HomePage/Viewport/FETCH_STUDIES';
 export const FETCH_STUDIES_SUCCESS                       = 'HomePage/Viewport/FETCH_STUDIES_SUCCESS';
@@ -19,9 +19,9 @@ export const FETCH_PROTOCOL_NUMBERS                      = 'HomePage/Viewport/FE
 export const FETCH_PROTOCOL_NUMBERS_SUCCESS              = 'HomePage/Viewport/FETCH_PROTOCOL_NUMBERS_SUCCESS';
 export const FETCH_PROTOCOL_NUMBERS_ERROR                = 'HomePage/Viewport/FETCH_PROTOCOL_NUMBERS_ERROR';
 
-export const FETCH_INDICATIONS                      	 = 'HomePage/Viewport/FETCH_INDICATIONS';
-export const FETCH_INDICATIONS_SUCCESS              	 = 'HomePage/Viewport/FETCH_INDICATIONS_SUCCESS';
-export const FETCH_INDICATIONS_ERROR                 	 = 'HomePage/Viewport/FETCH_INDICATIONS_ERROR';
+export const FETCH_INDICATIONS                           = 'HomePage/Viewport/FETCH_INDICATIONS';
+export const FETCH_INDICATIONS_SUCCESS                   = 'HomePage/Viewport/FETCH_INDICATIONS_SUCCESS';
+export const FETCH_INDICATIONS_ERROR                     = 'HomePage/Viewport/FETCH_INDICATIONS_ERROR';
 
 export const FETCH_INDICATION_LEVEL_PRICE                = 'HomePage/Viewport/FETCH_INDICATION_LEVEL_PRICE';
 export const FETCH_INDICATION_LEVEL_PRICE_SUCCESS        = 'HomePage/Viewport/FETCH_INDICATION_LEVEL_PRICE_SUCCESS';

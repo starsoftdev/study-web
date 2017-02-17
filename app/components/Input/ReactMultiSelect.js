@@ -17,7 +17,7 @@ function ReactMultiSelect({
   dataSource,
   includeAllOption,
   meta: { touched, error, active },
-  ...rest,
+  ...rest
 }) {
   const hasError = touched && error && !active;
   const errorClass = hasError ? 'has-error' : '';
@@ -27,7 +27,7 @@ function ReactMultiSelect({
     finalDataSource = [{ id: 0, label: 'All', value: 0 }].concat(finalDataSource);
   }
 
-  let inputComponent = (
+  const inputComponent = (
     <ReactSuperSelect
       onChange={(event) => {
         input.onChange(event);
