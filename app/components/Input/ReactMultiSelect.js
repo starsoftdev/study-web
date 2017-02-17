@@ -17,7 +17,7 @@ function ReactMultiSelect({
   dataSource,
   includeAllOption,
   meta: { touched, error, active },
-  ...rest
+  ...rest,
 }) {
   const hasError = touched && error && !active;
   const errorClass = hasError ? 'has-error' : '';

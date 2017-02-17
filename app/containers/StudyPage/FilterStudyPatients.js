@@ -28,6 +28,7 @@ class FilterStudyPatientsForm extends Component {
     source: PropTypes.number,
     siteId: PropTypes.number.isRequired,
     studyId: PropTypes.number.isRequired,
+    ePMS: PropTypes.bool,
   };
   static defaultProps = {
     submitting: false,
@@ -89,6 +90,7 @@ class FilterStudyPatientsForm extends Component {
       search,
       campaign,
       source,
+      ePMS,
     } = this.props;
     /* changing the source for display purposes only */
     return (
@@ -99,6 +101,7 @@ class FilterStudyPatientsForm extends Component {
           search={search}
           campaign={campaign}
           source={source}
+          ePMS={ePMS}
         />
         <div className="fields-holder">
           <div className="search-area pull-left">
