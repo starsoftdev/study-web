@@ -37,7 +37,7 @@
     "lint:css": "stylelint ./app/**/*.less",
     "pretest": "npm run test:clean && npm run lint",
     "test:clean": "rimraf ./coverage",
-    "test": "karma start internals/testing/karma.conf.js --single-run",
+    "test#disabled": "karma start internals/testing/karma.conf.js --single-run",
     "test:watch": "npm run test --auto-watch --no-single-run",
     "test:firefox": "npm run test --browsers Firefox",
     "test:safari": "npm run test --browsers Safari",
