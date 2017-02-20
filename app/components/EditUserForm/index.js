@@ -79,7 +79,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
           </div>
           <div className="field-row">
             <strong className="label">
-              <label>REWARD</label>
+              <label>REWARDS</label>
             </strong>
             <div className="field">
               <Field
