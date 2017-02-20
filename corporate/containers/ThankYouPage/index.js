@@ -1,3 +1,6 @@
+/* eslint-disable react/prefer-stateless-function */
+/* eslint-disable prefer-template */
+
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -11,7 +14,7 @@ import {
 } from '../../../app/containers/App/selectors';
 import { clearLanding } from '../../../app/containers/App/actions';
 
-export class ThankYouPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class ThankYouPage extends React.Component {
 
   static propTypes = {
     landing: PropTypes.object,
