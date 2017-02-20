@@ -102,7 +102,7 @@ export class LandingPage extends React.Component {
       updatedAt: now,
       unsubscribed: false,
       study_patient_category_id: landing.landingPages[0].study_patient_category_id,
-      source_id: (landing.sources.length) ? landing.sources[0].id : null,
+      source: (landing.sources.length) ? landing.sources[0].id : null,
     };
 
     this.props.subscribeFromLanding(data);
