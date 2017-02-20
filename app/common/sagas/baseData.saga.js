@@ -763,7 +763,7 @@ export function* changeUsersTimezoneWatcher() {
         body: JSON.stringify({ timezone: payload }),
       };
       const response = yield call(request, requestURL, params);
-      yield put(toastrActions.success('Profile', 'Timezone updated!'));
+      yield put(toastrActions.success('Time Zone', 'Your time zone has been updated successfully!'));
       yield put(changeUsersTimezoneSuccess(response.timezone));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Can not update timezone');
