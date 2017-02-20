@@ -19,7 +19,7 @@ import {
   selectSubscribedFromLanding,
   selectSubscriptionError,
 } from '../../../app/containers/App/selectors';
-import { fetchLanding, subscribeFromLanding, clearForm } from '../../../app/containers/App/actions';
+import { fetchLanding, subscribeFromLanding, clearLanding } from '../../../app/containers/App/actions';
 
 import './styles.less';
 
@@ -34,7 +34,7 @@ export class LandingPage extends React.Component {
     subscriptionError:  PropTypes.object,
     landingError:  PropTypes.object,
     landingIsFetching:  PropTypes.bool,
-    clearForm:  PropTypes.func.isRequired,
+    clearLanding:  PropTypes.func.isRequired,
     currentUser: PropTypes.any,
     location: PropTypes.any,
     landing: PropTypes.object,
@@ -56,6 +56,7 @@ export class LandingPage extends React.Component {
     if (!isNaN(parseInt(splat))) {
       this.props.fetchLanding(splat);
     } else {
+      this.props.clearLanding();
       browserHistory.push('/');
     }
   }
@@ -68,6 +69,7 @@ export class LandingPage extends React.Component {
     if (newProps.landing) {
       const { landing } = newProps;
       if (!landing.landingPages.length) {
+        this.props.clearLanding();
         browserHistory.push('/');
       } else {
         for (const site of landing.sites) {
@@ -78,8 +80,13 @@ export class LandingPage extends React.Component {
       }
     }
 
-    if (invalidSite || subscribedFromLanding) {
+    if (invalidSite) {
+      this.props.clearLanding();
       browserHistory.push('/');
+    }
+
+    if (subscribedFromLanding) {
+      browserHistory.push('/thankyou-page');
     }
   }
 
@@ -87,7 +94,6 @@ export class LandingPage extends React.Component {
     const now = moment();
     const landing = this.props.landing;
     // TODO: figure out about source key
-    console.log(params, landing.landingPages[0].study_patient_category_id, landing.sources);
     const data = {
       firstName: params.name,
       email: params.email,
@@ -99,7 +105,6 @@ export class LandingPage extends React.Component {
       source_id: (landing.sources.length) ? landing.sources[0].id : null,
     };
 
-    console.log(data);
     this.props.subscribeFromLanding(data);
   }
 
@@ -158,7 +163,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
     subscribeFromLanding: (params) => dispatch(subscribeFromLanding(params)),
-    clearForm: () => dispatch(clearForm()),
+    clearLanding: () => dispatch(clearLanding()),
   };
 }
 
