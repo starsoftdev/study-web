@@ -242,7 +242,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
               </div>
               <section className="btns-area pull-right">
                 <div className="col pull-right">
-                  <button type="button" className="btn btn-primary" onClick={this.openAddUserModal} disabled={bDisabled}>
+                  <button type="button" className="btn btn-primary" onClick={this.openAddUserModal} disabled={!((currentUser.roleForClient.canPurchase && currentUser.roleForClient.canRedeemRewards) || currentUser.roleForClient.name === 'Super Admin')}>
                     + Add User
                   </button>
                   <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>

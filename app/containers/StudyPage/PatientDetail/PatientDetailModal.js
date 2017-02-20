@@ -48,6 +48,7 @@ export class PatientDetailModal extends React.Component {
     switchToOtherSection: React.PropTypes.func.isRequired,
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
+    ePMS: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -64,7 +65,7 @@ export class PatientDetailModal extends React.Component {
   componentWillReceiveProps(newProps) {
     const { socket, currentPatient, fetchPatientDetails } = newProps;
 
-    if (socket && this.state.socketBinded === false && newProps.currentPatient) {
+    if (socket && this.state.socketBinded === false && currentPatient) {
       socket.on('notifyUnsubscribePatient', () => {
         fetchPatientDetails(currentPatient.id);
       });
@@ -74,8 +75,21 @@ export class PatientDetailModal extends React.Component {
       });
 
       this.setState({ socketBinded: true });
+    } else if (!newProps.currentPatient && this.state.socketBinded) {
+      socket.removeAllListeners('notifyUnsubscribePatient');
+      socket.removeAllListeners('notifySubscribePatient');
+
+      this.setState({ socketBinded: false });
     }
   }
+
+  componentWillUnmount() {
+    const { socket } = this.props;
+
+    socket.removeAllListeners('notifyUnsubscribePatient');
+    socket.removeAllListeners('notifySubscribePatient');
+  }
+
 
   onSelectText() {
     const {
@@ -121,7 +135,7 @@ export class PatientDetailModal extends React.Component {
   }
 
   render() {
-    const { carousel, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
+    const { ePMS, carousel, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
     return (
       <Collapse dimension="width" in={openPatientModal} timeout={250} className="patients-list-form">
         <div className="form-area">
@@ -146,7 +160,7 @@ export class PatientDetailModal extends React.Component {
               </ol>
               <div className="carousel-inner" role="listbox">
                 <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={currentPatient} studyId={studyId} />
-                <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={currentPatient} />
+                <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={currentPatient} ePMS={ePMS} />
                 <EmailSection active={carousel.email} />
                 {this.renderOtherSection()}
               </div>

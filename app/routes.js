@@ -479,8 +479,8 @@ export default function createRoutes(store) {
       name: 'searchByProtocolPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/SearchByProtocolPage/reducer'),
-          System.import('containers/SearchByProtocolPage'),
+          System.import('./containers/SearchByProtocolPage/reducer'),
+          System.import('./containers/SearchByProtocolPage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -498,14 +498,56 @@ export default function createRoutes(store) {
       name: 'projectAgreementsPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('containers/ProjectAgreementsPage/reducer'),
-          System.import('containers/ProjectAgreementsPage'),
+          System.import('./containers/ProjectAgreementsPage/reducer'),
+          System.import('./containers/ProjectAgreementsPage'),
         ]);
 
         const renderRoute = loadModule(cb);
 
         importModules.then(([reducer, component]) => {
           injectReducer('projectAgreementsPage', reducer.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/app/dashboard-sponsor',
+      name: 'dashboardSponsorPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardSponsorPage/reducer'),
+          System.import('./containers/DashboardSponsorPage/sagas'),
+          System.import('./containers/DashboardSponsorPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardSponsorPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/app/dashboard-client-admins',
+      name: 'dashboardClientAdminsPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardClientAdminsPage/reducer'),
+          System.import('./containers/DashboardClientAdminsPage/sagas'),
+          System.import('./containers/DashboardClientAdminsPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardClientAdminsPage', reducer.default);
+          injectSagas(sagas.default);
           renderRoute(component);
         });
 

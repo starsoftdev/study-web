@@ -99,6 +99,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 
   render() {
     const { fetchingPatientCategories, fetchingStudy, campaigns, patientCategories, site, sources, study, stats } = this.props;
+    const ePMS = (study && (study.patientMessagingSuite || study.patientQualificationSuite));
     if (fetchingStudy || fetchingPatientCategories) {
       return (
         <LoadingSpinner />
@@ -144,9 +145,13 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             campaignOptions={campaignOptions}
             sourceOptions={sourceOptions}
             handleSubmit={this.handleSubmit}
+            ePMS={ePMS}
           />
           <StudyStats stats={stats} />
-          <PatientBoard patientCategories={patientCategories} />
+          <PatientBoard
+            patientCategories={patientCategories}
+            ePMS={ePMS}
+          />
         </section>
       </div>
     );

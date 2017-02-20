@@ -43,6 +43,7 @@ class TextSection extends React.Component {
     markAsReadPatientMessages: React.PropTypes.func,
     fetchClientCredits: React.PropTypes.func,
     updatePatientSuccess: React.PropTypes.func,
+    ePMS: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -216,7 +217,7 @@ class TextSection extends React.Component {
   }
 
   render() {
-    const { currentPatient, active } = this.props;
+    const { currentPatient, active, ePMS } = this.props;
     const clientCredits = this.props.clientCredits.details.customerCredits;
     const unsubscribed = (currentPatient) ? currentPatient.unsubscribed : null;
     const { maxCharacters, enteredCharactersLength } = this.state;
@@ -226,12 +227,12 @@ class TextSection extends React.Component {
       <div className={classNames('item text', { active })}>
         {this.renderText()}
         <div className="textarea">
-          {this.renderTextArea(disabled || unsubscribed)}
+          {this.renderTextArea(disabled || unsubscribed || !ePMS)}
           <span className="remaining-counter">
             {`${maxCharacters - enteredCharactersLength}`}
           </span>
           <Button
-            disabled={disabled || unsubscribed}
+            disabled={disabled || unsubscribed || !ePMS}
             onClick={this.submitText}
           >
             Send

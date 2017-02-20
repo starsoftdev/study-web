@@ -23,6 +23,7 @@ class StudyActionButtons extends Component {
     resetTextBlastForm: PropTypes.func,
     resetAddPatientForm: PropTypes.func,
     setAddPatientStatus: PropTypes.func,
+    ePMS: PropTypes.bool,
   };
   constructor(props) {
     super(props);
@@ -131,6 +132,7 @@ class StudyActionButtons extends Component {
               show={this.state.showTextBlastModal}
               onClose={this.closeTextBlastModal}
               onHide={this.toggleTextBlastModal}
+              ePMS={this.props.ePMS}
             />
           </span>
         </div>
