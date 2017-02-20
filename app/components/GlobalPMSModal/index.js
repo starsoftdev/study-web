@@ -100,6 +100,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     };
   }
 
+  componentDidMount() {
+    this.props.fetchStudies();
+  }
+
   componentWillReceiveProps(newProps) {
     const { currentUser } = newProps;
     if (this.props.socket && this.state.socketBinded === false) {
@@ -149,10 +153,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     //   this.selectPatient(selectedPatient, true);
     //   // this.setState({ patientLoaded: false });
     // }
-  }
-
-  componentDidMount() {
-    this.props.fetchStudies();
   }
 
   componentDidUpdate() {
