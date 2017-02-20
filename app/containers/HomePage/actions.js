@@ -5,9 +5,6 @@ import {
   FETCH_PATIENT_MESSAGES_SUCCEESS,
   FETCH_PRINCIPAL_INVESTIGATOR_TOTALS,
   FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS,
-  FETCH_STUDIES,
-  FETCH_STUDIES_SUCCESS,
-  FETCH_STUDIES_ERROR,
   FETCH_PROTOCOLS,
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_PROTOCOLS_ERROR,
@@ -75,27 +72,6 @@ export function fetchPrincipalInvestigatorTotals(currentUser) {
 export function fetchPrincipalInvestigatorTotalsSucceeded(payload) {
   return {
     type: FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS,
-    payload,
-  };
-}
-
-export function fetchStudies(searchParams = null) {
-  return {
-    type: FETCH_STUDIES,
-    searchParams,
-  };
-}
-
-export function studiesFetched(payload) {
-  return {
-    type: FETCH_STUDIES_SUCCESS,
-    payload,
-  };
-}
-
-export function studiesFetchingError(payload) {
-  return {
-    type: FETCH_STUDIES_ERROR,
     payload,
   };
 }
