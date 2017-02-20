@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 const express = require('express');
 const path = require('path');
-var request = require('request');
+// const request = require('request');
 const compression = require('compression');
 
 
@@ -37,27 +37,25 @@ const addDevMiddlewares = (app, webpackConfig) => {
   });
 
   app.get('*', (req, res) => {
-    console.log();
-    const partsArr = req.url.split('-')
+    // const partsArr = req.url.split('-');
 
-    if (req.method === 'GET' && partsArr.length > 1) {
-      if (!isNaN(parseInt(partsArr[0].replace(/\//g, '')))) {
-        // const params = {
-        //   studyId: parseInt(partsArr[0].replace(/\//g, '')),
-        //   headers: req.headers,
-        //   method: req.method,
-        //   ip: req.connection.remoteAddress,
-        // };
-        
-        // console.log(`${process.env.API_URL}/landingPageViews/logView`, params);
-        // http://localhost:3000/api/v1/landingPageViews/logView
-        // request.post(`${process.env.API_URL}/landingPageViews/logView`, JSON.stringify(params), (err, httpResponse, body) => {
-        //   if (err) {
-        //     res.sendStatus(500);
-        //   }
-        // });
-      }
-    }
+    // if (req.method === 'GET' && partsArr.length > 1) {
+    //   if (!isNaN(parseInt(partsArr[0].replace(/\//g, '')))) {
+    //     const params = {
+    //       studyId: parseInt(partsArr[0].replace(/\//g, '')),
+    //       headers: req.headers,
+    //       method: req.method,
+    //       ip: req.connection.remoteAddress,
+    //     };
+    //     console.log(`${process.env.API_URL}/landingPageViews/logView`, params);
+    //     http://localhost:3000/api/v1/landingPageViews/logView
+    //     request.post(`${process.env.API_URL}/landingPageViews/logView`, JSON.stringify(params), (err, httpResponse, body) => {
+    //       if (err) {
+    //         res.sendStatus(500);
+    //       }
+    //     });
+    //   }
+    // }
 
     fs.readFile(path.join(compiler.outputPath, 'corporate.html'), (err, file) => {
       if (err) {
