@@ -16,6 +16,7 @@ class SideNavBar extends React.Component {
     currentUserClientId: React.PropTypes.number,
     userRoleType: React.PropTypes.string,
     currentUser: React.PropTypes.any,
+    location: React.PropTypes.object,
   };
 
   componentDidMount() {
