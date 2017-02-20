@@ -21,6 +21,7 @@ import { selectActiveField, selectValues, selectSyncErrors } from '../../../comm
 import { actions as toastrActions } from 'react-redux-toastr';
 import { fetchClientCredits } from '../../App/actions';
 import { selectCurrentUser, selectClientCredits } from '../../App/selectors';
+import _ from 'lodash';
 
 const formName = 'StudyPage.TextBlastModal';
 
@@ -68,6 +69,8 @@ class TextBlastModal extends React.Component {
     this.renderPatientCount = this.renderPatientCount.bind(this);
     this.textAreaChange = this.textAreaChange.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.checkCategories = this.checkCategories.bind(this);
+    this.removeSelectedPatient = this.removeSelectedPatient.bind(this);
     this.state = {
       enteredCharactersLength: 0,
       sourceDisable: true,
@@ -122,7 +125,7 @@ class TextBlastModal extends React.Component {
           categoryIds.push(category.id);
         }
       }
-      if ((categoryId && categoryIds.length) || (sourceIds && sourceIds.length)) {
+      if ((categoryIds && categoryIds.length) || (sourceIds && sourceIds.length)) {
         // if (sourceIds) {
         findPatients(studyId, null, categoryIds, sourceIds);
         // } else {
@@ -145,6 +148,10 @@ class TextBlastModal extends React.Component {
         for (const category of patientCategories) {
           if (category.id !== categoryId) {
             if (formValues[`category-${category.id}`]) {
+              if (this.state.sourceDisable) {
+                change('source', true);
+                this.selectSource(true, 0);
+              }
               this.setState({
                 sourceDisable: false,
               });
@@ -161,6 +168,10 @@ class TextBlastModal extends React.Component {
         });
       }
     } else {
+      if (this.state.sourceDisable) {
+        this.selectSource(true, 0);
+        change('source', true);
+      }
       this.setState({
         sourceDisable: false,
       });
@@ -239,13 +250,47 @@ class TextBlastModal extends React.Component {
     }
   }
 
+  checkCategories(patient) {
+    const { change, formValues, patientCategories, sources } = this.props;
+    let newPatientsArr = [];
+    if (formValues.patients && formValues.filteredPatientSearchValues) {
+      newPatientsArr = formValues.patients.filter((v) => (
+        (formValues.filteredPatientSearchValues.indexOf(v) !== -1) && (v !== patient)
+      ));
+    }
+    const fOne = _.find(newPatientsArr, { categoryId: patient.categoryId });
+    if (!fOne) {
+      change(`category-${patient.categoryId}`, false);
+
+      for (const category of patientCategories) {
+        if (category.id !== patient.categoryId) {
+          if (formValues[`category-${category.id}`]) {
+            return;
+          }
+        }
+      }
+      change('source', false);
+      for (const source of sources) {
+        change(`source-${source.id}`, false);
+      }
+      this.setState({
+        sourceDisable: true,
+      });
+    }
+  }
+
+  removeSelectedPatient(patient) {
+    this.checkCategories(patient);
+    this.props.removePatient(patient);
+  }
+
   renderPatients() {
-    const { formValues, removePatient } = this.props;
+    const { formValues } = this.props;
     let newPatientsArr = [];
     if (formValues.patients && formValues.filteredPatientSearchValues) {
       newPatientsArr = formValues.patients.filter((v) => (
         formValues.filteredPatientSearchValues.indexOf(v) !== -1
-       ));
+      ));
     }
     if (newPatientsArr) {
       return (
@@ -256,7 +301,7 @@ class TextBlastModal extends React.Component {
               <a
                 className="btn-remove"
                 onClick={() => {
-                  removePatient(patient);
+                  this.removeSelectedPatient(patient);
                 }}
               >
                 <i className="icomoon-icon_trash" />
