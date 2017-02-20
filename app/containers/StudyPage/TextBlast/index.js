@@ -55,6 +55,7 @@ class TextBlastModal extends React.Component {
     studyId: React.PropTypes.number,
     style: React.PropTypes.object,
     submitTextBlast: React.PropTypes.func.isRequired,
+    ePMS: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -291,7 +292,7 @@ class TextBlastModal extends React.Component {
   }
 
   render() {
-    const { patientCategories, sources, show, role, bsClass, dialogClassName, className, style } = this.props;
+    const { patientCategories, sources, show, role, bsClass, dialogClassName, className, style, ePMS } = this.props;
     const { enteredCharactersLength } = this.state;
     const clientCredits = this.props.clientCredits.details.customerCredits;
     const disabled = (clientCredits === 0 || clientCredits === null);
@@ -438,7 +439,7 @@ class TextBlastModal extends React.Component {
                     <Button
                       type="submit"
                       className="pull-right"
-                      disabled={disabled}
+                      disabled={disabled || !ePMS}
                       onClick={this.submitTextBlast}
                     >
                       Send

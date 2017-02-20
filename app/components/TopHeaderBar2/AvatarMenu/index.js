@@ -47,9 +47,14 @@ class AvatarMenu extends React.Component {
           <div className="well">
             <ul className="list-unstyled">
               <li><Link to="/me/profile" onClick={() => this.handleClickOutside()}>PROFILE</Link></li>
-              <li><Link to="/payment-information" onClick={() => this.handleClickOutside()}>PAYMENT INFORMATION</Link></li>
-              <li><Link to="/receipts" onClick={() => this.handleClickOutside()}>RECEIPTS</Link></li>
-              <li><Link to="/proposals" onClick={() => this.handleClickOutside()}>PROPOSALS</Link></li>
+              <li><Link to="/app/dashboard-indication" onClick={() => this.handleClickOutside()}>INDICATION</Link></li>
+              <li><Link to="/app/dashboard-protocol" onClick={() => this.handleClickOutside()}>Protocol</Link></li>
+              <li><Link to="/app/dashboard-cro" onClick={() => this.handleClickOutside()}>CRO</Link></li>
+              <li><Link to="/app/dashboard-sponsor" onClick={() => this.handleClickOutside()}>Sponsor</Link></li>
+              <li><Link to="/app/dashboard-sponsor-admins" onClick={() => this.handleClickOutside()}>Sponsor Admins</Link></li>
+              <li><Link to="/app/dashboard-client-admins" onClick={() => this.handleClickOutside()}>Client Admins</Link></li>
+              <li><Link to="/app/dashboard-manage-users" onClick={() => this.handleClickOutside()}>Manage Users</Link></li>
+              <li><Link to="/app/dashboard-portals" onClick={() => this.handleClickOutside()}>Portals</Link></li>
               <a
                 onClick={() => {
                   this.props.handleLogoutClick();

@@ -627,8 +627,8 @@ export function* saveSiteWatcher() {
       let options = null;
       data.client_id = clientId;
 
-      let messageHeader = 'Save Site';
-      let message = 'Site saved successfully!';
+      let messageHeader = 'Edit Site Location';
+      let message = 'The site location has been updated successfully!';
       if (id) {
         requestURL = `${API_URL}/sites/${id}`;
         options = {
@@ -665,8 +665,8 @@ export function* saveUserWatcher() {
       let requestURL = null;
       let options = null;
 
-      let messageHeader = 'Save User';
-      let message = 'User saved successfully!';
+      let messageHeader = 'Edit User';
+      let message = 'The user has been updated successfully!';
       if (id) {
         data.userId = id;
         requestURL = `${API_URL}/clients/${clientId}/updateUserWithClientRole`;
@@ -763,7 +763,7 @@ export function* changeUsersTimezoneWatcher() {
         body: JSON.stringify({ timezone: payload }),
       };
       const response = yield call(request, requestURL, params);
-      yield put(toastrActions.success('Profile', 'Timezone updated!'));
+      yield put(toastrActions.success('Time Zone', 'Your time zone has been updated successfully!'));
       yield put(changeUsersTimezoneSuccess(response.timezone));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Can not update timezone');

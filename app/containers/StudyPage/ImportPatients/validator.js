@@ -1,8 +1,16 @@
 import { validatorFactory } from '../../../utils/reduxForm';
 
 const schema = {
-  firstName: { presence: { message: '^First name cannot be blank' } },
-  lastName: { presence: { message: '^Last name cannot be blank' } },
+  firstName: {
+    presence: {
+      message: '^First name cannot be blank',
+    },
+  },
+  lastName: {
+    presence: {
+      message: '^Last name cannot be blank',
+    },
+  },
   email: {
     presence: {
       message: '^Email cannot be blank',
@@ -15,9 +23,10 @@ const schema = {
     presence: {
       message: '^Phone number cannot be blank',
     },
-    length: {
-      minimum:10,
-      message: '^Phone number too short',
+    format: {
+      // must be a phone in the format of (123) 456-7890 or E.164 format phone numbers
+      pattern: '^\\(\\d{3}\\)\\s?\\d{3}\\-\\d{4}|\\+?[1-9]\\d{1,14}$',
+      message: 'Invalid phone number',
     },
   },
 };

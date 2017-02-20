@@ -21,6 +21,9 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     fetchUser: PropTypes.func,
     userFilter: PropTypes.any,
     bDisabled: PropTypes.bool,
+    city: PropTypes.string,
+    state: PropTypes.string,
+    zip: PropTypes.string,
   };
 
   constructor(props) {
@@ -74,7 +77,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { name, piFirstName, piLastName, redirectPhone, address, roles } = this.props;
+    const { name, piFirstName, piLastName, redirectPhone, address, roles, city, zip, state } = this.props;
 
     const assignedUsersContent = (roles) ? roles.map((item, index) => (
       <div className="assigned-user" key={index}>
@@ -100,11 +103,11 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           <span>{redirectPhone}</span>
         </td>
         <td className="address">
-          <span>{address}</span>
+          <span>{address},{city}<br />{state},{zip}</span>
         </td>
         <td className="assigned-users">
           <div className="toggle-assigned-users">
-            <span>ASSIGNED USERS</span>
+            <span>ASSIGNED USERS ({assignedUsersContent.length ? assignedUsersContent.length : 0})</span>
             {(this.state.assignedUsersCollapsed)
               ? <a className="btn toggle toggle-plus" onClick={this.toggleAssignedUsers}></a>
               : <a className="btn toggle toggle-minus" onClick={this.toggleAssignedUsers}></a>
