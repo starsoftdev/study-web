@@ -151,17 +151,17 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
       lastName: userData.lastName,
       email: userData.email,
     };
-    if (userData.isAdmin) {
-      userInput.clientRole = {
-        siteId: parseInt(userData.site, 10),
-        canPurchase: userData.canPurchase || false,
-        canRedeemRewards: userData.canRedeemRewards || false,
-      };
-    } else {
-      userInput.clientRole = {
-        siteId: parseInt(userData.site, 10),
-      };
-    }
+    // if (userData.isAdmin) {
+    userInput.clientRole = {
+      siteId: parseInt(userData.site, 10),
+      canPurchase: userData.purchase || false,
+      canRedeemRewards: userData.reward || false,
+    };
+    // } else {
+    //   userInput.clientRole = {
+    //     siteId: parseInt(userData.site, 10),
+    //   };
+    // }
 
     this.props.saveUser(currentUserClientId, selectedUser.details.id, userInput);
   }
@@ -176,7 +176,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     const { clientSites, selectedUserDetailsForForm, deletedClientRole, filterMethod, selectedUser, currentUser } = this.props;
     let bDisabled = true;
     if (currentUser && currentUser.roleForClient) {
-      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+      bDisabled = ((currentUser.roleForClient.canPurchase && currentUser.roleForClient.canRedeemRewards) || currentUser.roleForClient.name === 'Super Admin') ? null : true;
     }
     const sortedClientRoles = this.getSortedClientRoles();
     const clientRolesListContents = sortedClientRoles.filter(filterMethod).map((item, index) => (

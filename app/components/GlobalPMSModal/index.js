@@ -23,6 +23,7 @@ import {
   selectPatientMessages,
   selectClientCredits,
 } from '../../containers/App/selectors';
+import { selectStudies } from '../../containers/HomePage/selectors';
 
 import MessageItem from './MessageItem';
 import CallItem from './CallItem';
@@ -30,6 +31,7 @@ import PatientItem from './PatientItem';
 
 import ChatForm from './ChatForm';
 import { change, Field, reduxForm } from 'redux-form';
+import _ from 'lodash';
 
 import {
   fetchSitePatients,
@@ -74,6 +76,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     hasError: React.PropTypes.bool,
     formValues: React.PropTypes.object,
     change: React.PropTypes.func,
+    studies: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -242,6 +245,8 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     if (this.state.selectedPatient.protocol_number) {
       protocolNumber = 'Protocol: '.concat(this.state.selectedPatient.protocol_number);
     }
+    const study = _.find(this.props.studies.details, { studyId: this.state.selectedPatient.study_id });
+    const ePMS = (study && (study.patientMessagingSuite || study.patientQualificationSuite));
     return (
       <Form className="form-search form-search-studies pull-left" onSubmit={this.props.handleSubmit}>
         <div>
@@ -315,6 +320,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                         clientCredits={clientCredits}
                         selectedPatient={this.state.selectedPatient}
                         sendStudyPatientMessages={sendStudyPatientMessages}
+                        ePMS={ePMS ? true : null}
                       />
                     </footer>
                   </section>
@@ -336,6 +342,7 @@ const mapStateToProps = createStructuredSelector({
   socket: selectSocket(),
   hasError: selectGlobalPMSFormError(),
   formValues: selectGlobalPMSFormValues(),
+  studies: selectStudies(),
 });
 
 function mapDispatchToProps(dispatch) {
