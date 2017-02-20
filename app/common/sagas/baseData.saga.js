@@ -10,6 +10,7 @@ import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 
 import {
+  FETCH_STUDIES,
   FETCH_SITES,
   FETCH_INDICATIONS,
   FETCH_SOURCES,
@@ -48,6 +49,8 @@ import {
 import {
   sitesFetched,
   sitesFetchingError,
+  studiesFetched,
+  studiesFetchingError,
   indicationsFetched,
   indicationsFetchingError,
   sourcesFetched,
@@ -110,6 +113,7 @@ import {
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
+  yield fork(fetchStudiesWatcher);
   yield fork(fetchSitesWatcher);
   yield fork(fetchIndicationsWatcher);
   yield fork(fetchSourcesWatcher);
@@ -141,6 +145,28 @@ export default function* baseDataSaga() {
   yield fork(changeUsersTimezoneWatcher);
   yield fork(takeLatest, FETCH_LANDING, fetchLandingStudy);
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
+}
+
+export function* fetchStudiesWatcher() {
+  yield* takeLatest(FETCH_STUDIES, fetchStudiesWorker);
+}
+
+export function* fetchStudiesWorker(action) {
+  try {
+    let queryString;
+    let requestURL;
+    if (action.searchParams) {
+      queryString = composeQueryString(action.searchParams);
+      requestURL = `${API_URL}/studies/get_filtered_studies?${queryString}`;
+    } else {
+      requestURL = `${API_URL}/studies/get_filtered_studies`;
+    }
+    const response = yield call(request, requestURL);
+
+    yield put(studiesFetched(response));
+  } catch (err) {
+    yield put(studiesFetchingError(err));
+  }
 }
 
 export function* fetchSitesWatcher() {

@@ -15,8 +15,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import { selectUserRoleType, selectCurrentUserClientId, selectCurrentUser } from '../../containers/App/selectors';
-import { fetchClientSites, fetchLevels, getAvailPhoneNumbers } from '../../containers/App/actions';
-import { fetchStudies, fetchProtocols, fetchProtocolNumbers, fetchIndications } from './actions';
+import { fetchStudies, fetchClientSites, fetchLevels, getAvailPhoneNumbers } from '../../containers/App/actions';
+import { fetchProtocols, fetchProtocolNumbers, fetchIndications } from './actions';
 import { selectSearchProtocolsFormValues } from '../../containers/HomePage/selectors';
 
 import Dashboard from './Dashboard';
