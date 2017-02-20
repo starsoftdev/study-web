@@ -1,13 +1,9 @@
 /* eslint-disable comma-dangle, no-case-declarations */
-import _, { forEach, map } from 'lodash';
 
 import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
   FETCH_PATIENT_MESSAGES_SUCCEESS,
   FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS,
-  FETCH_STUDIES,
-  FETCH_STUDIES_SUCCESS,
-  FETCH_STUDIES_ERROR,
   FETCH_PROTOCOLS,
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_PROTOCOLS_ERROR,
@@ -31,7 +27,6 @@ import {
   EDIT_STUDY_SUCCESS,
   EDIT_STUDY_ERROR,
   SET_ACTIVE_SORT,
-  SORT_SUCCESS,
 } from './constants';
 
 import { ADD_EMAIL_NOTIFICATION_USER, ADD_EMAIL_NOTIFICATION_USER_SUCCESS, ADD_EMAIL_NOTIFICATION_USER_ERROR } from '../../containers/App/constants';
@@ -56,11 +51,6 @@ const initialState = {
     unreadTexts: 0,
     unreadEmails: 0,
     total: 0,
-  },
-  studies: {
-    details: [],
-    fetching: false,
-    error: null,
   },
   protocols: {
     details: [],
@@ -111,10 +101,6 @@ const initialState = {
 export default function homePageReducer(state = initialState, action) {
   const { payload } = action;
   let newState;
-  let entity;
-  let entitiesCollection;
-  let startDate = '';
-  let endDate = '';
 
   switch (action.type) {
     case FETCH_PATIENT_SIGN_UPS_SUCCEESS:
@@ -186,92 +172,6 @@ export default function homePageReducer(state = initialState, action) {
           break;
       }
       return newState;
-    case FETCH_STUDIES:
-      return {
-        ...state,
-        studies: {
-          details: [],
-          fetching: true,
-          error: null,
-        },
-      };
-    case FETCH_STUDIES_SUCCESS:
-      entitiesCollection = [];
-
-      forEach(payload, (studyIterator, index) => {
-        entity = {
-          studyId: studyIterator.id,
-          indication: studyIterator.indication,
-          location: '',
-          sponsor: '',
-          protocol: studyIterator.protocolNumber,
-          patientMessagingSuite: (studyIterator.patientMessagingSuite) ? 'On' : 'Off',
-          patientQualificationSuite: (studyIterator.patientQualificationSuite) ? 'On' : 'Off',
-          status: studyIterator.status,
-          callTracking: studyIterator.callTracking,
-          siteUsers: null,
-          startDate: '',
-          endDate: '',
-          orderNumber: (index + 1),
-          irbName: studyIterator.irbName,
-          irbEmail: studyIterator.irbEmail,
-          croContactName: studyIterator.croContactName,
-          croContactEmail: studyIterator.croContactEmail,
-          image: studyIterator.image,
-          sponsorContacts: studyIterator.sponsorContacts,
-          studyNotificationEmails: studyIterator.studyNotificationEmails,
-          condenseTwoWeeks: studyIterator.condenseTwoWeeks,
-          recruitmentPhone: studyIterator.recruitmentPhone,
-        };
-        if (studyIterator.sponsors && studyIterator.sponsors.length > 0) {
-          const sponsorContacts = map(studyIterator.sponsors, sponsorContactIterator => sponsorContactIterator.name);
-          const sponsorContactsStr = sponsorContacts.join(', ');
-          entity.sponsor = sponsorContactsStr;
-        }
-        if (!studyIterator.sites || studyIterator.sites.length === 0) {
-          entitiesCollection.push(entity);
-          return true;
-        }
-        forEach(studyIterator.sites, (siteIterator) => {
-          startDate = '';
-          endDate = '';
-
-          if (siteIterator.campaigns && siteIterator.campaigns.length > 0 && siteIterator.campaigns[0]) {
-            startDate = siteIterator.campaigns[0].dateFrom;
-            endDate = siteIterator.campaigns[0].dateTo;
-          }
-          entity = {
-            ...entity,
-            location: siteIterator.location,
-            status: siteIterator.status,
-            campaign: siteIterator.campaigns[0],
-            siteUsers: siteIterator.users,
-            startDate,
-            endDate,
-            maxCampaign: siteIterator.maxCampaign,
-            siteId: siteIterator.id,
-          };
-          entitiesCollection.push(entity);
-        });
-        return true;
-      });
-      return {
-        ...state,
-        studies: {
-          details: entitiesCollection,
-          fetching: false,
-          error: null,
-        },
-      };
-    case FETCH_STUDIES_ERROR:
-      return {
-        ...state,
-        studies: {
-          details: [],
-          fetching: false,
-          error: payload,
-        },
-      };
     case FETCH_PROTOCOLS:
       return {
         ...state,
@@ -426,16 +326,8 @@ export default function homePageReducer(state = initialState, action) {
         },
       };
     case UPGRADE_STUDY_SUCCESS:
-      const studies = _.cloneDeep(state.studies.details);
-      const study = _.find(studies, (o) => (o.studyId === payload.studyId));
-      study.campaign.level_id = payload.newLevelId;
       return {
         ...state,
-        studies: {
-          details: studies,
-          fetching: false,
-          error: null,
-        },
         upgradedStudy: {
           details: payload,
           submitting: false,
@@ -484,15 +376,6 @@ export default function homePageReducer(state = initialState, action) {
         paginationOptions: {
           activeSort: action.sort,
           activeDirection: action.direction,
-        },
-      };
-    case SORT_SUCCESS:
-      return {
-        ...state,
-        studies: {
-          details: payload,
-          fetching: false,
-          error: null,
         },
       };
     case ADD_EMAIL_NOTIFICATION_USER:
