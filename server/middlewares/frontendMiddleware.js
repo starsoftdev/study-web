@@ -1,9 +1,40 @@
 /* eslint-disable global-require */
 const express = require('express');
 const path = require('path');
-// const request = require('request');
+const request = require('request');
 const compression = require('compression');
 
+const logView = (req) => {
+  const partsArr = req.url.split('-');
+
+  if (req.method === 'GET' && partsArr.length > 1) {
+    if (!isNaN(parseInt(partsArr[0].replace(/\//g, '')))) {
+      const options = {
+        uri: `${process.env.API_URL}/landingPageViews/logView`,
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        json: {
+          studyId: parseInt(partsArr[0].replace(/\//g, '')),
+          host: req.headers.host,
+          connection: req.headers.connection,
+          'cache-control': req.headers['cache-control'],
+          'user-agent': req.headers['user-agent'],
+          cookie: req.headers.cookie,
+          method: req.method,
+          ip: req.connection.remoteAddress,
+        },
+      };
+
+      request(options, (error, response) => {
+        if (error && response.statusCode !== 200) {
+          console.trace(error);
+        }
+      });
+    }
+  }
+};
 
 const addDevMiddlewares = (app, webpackConfig) => {
 // Dev middleware
@@ -37,26 +68,7 @@ const addDevMiddlewares = (app, webpackConfig) => {
   });
 
   app.get('*', (req, res) => {
-    // const partsArr = req.url.split('-');
-
-    // if (req.method === 'GET' && partsArr.length > 1) {
-    //   if (!isNaN(parseInt(partsArr[0].replace(/\//g, '')))) {
-    //     const params = {
-    //       studyId: parseInt(partsArr[0].replace(/\//g, '')),
-    //       headers: req.headers,
-    //       method: req.method,
-    //       ip: req.connection.remoteAddress,
-    //     };
-    //     console.log(`${process.env.API_URL}/landingPageViews/logView`, params);
-    //     http://localhost:3000/api/v1/landingPageViews/logView
-    //     request.post(`${process.env.API_URL}/landingPageViews/logView`, JSON.stringify(params), (err, httpResponse, body) => {
-    //       if (err) {
-    //         res.sendStatus(500);
-    //       }
-    //     });
-    //   }
-    // }
-
+    logView(req);
     fs.readFile(path.join(compiler.outputPath, 'corporate.html'), (err, file) => {
       if (err) {
         res.sendStatus(404);
@@ -79,7 +91,10 @@ const addProdMiddlewares = (app, options) => {
   app.use(publicPath, express.static(outputPath));
 
   app.get('/app*', (req, res) => res.sendFile(path.resolve(outputPath, 'app.html')));
-  app.get('*', (req, res) => res.sendFile(path.resolve(outputPath, 'corporate.html')));
+  app.get('*', (req, res) => {
+    logView(req);
+    res.sendFile(path.resolve(outputPath, 'corporate.html'));
+  });
 };
 
 /**
