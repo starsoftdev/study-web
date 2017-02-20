@@ -82,7 +82,9 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       return (
         <div id="wrapper">
           <TopHeaderBar />
-          <SideNavBar />
+          <SideNavBar
+            location={this.props.location}
+          />
           <main id="main">
             {React.Children.toArray(this.props.children)}
           </main>

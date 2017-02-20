@@ -1,40 +1,38 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import Input from '../../../components/Input';
+import ReactSelect from '../../../components/Input/ReactSelect';
 
-@reduxForm({ form: 'dashboardAddSponsorForm' })
+@reduxForm({ form: 'dashboardAddMessagingNumberForm' })
 
-export class AddSponsorForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class AddMessagingNumberForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    isEdit: PropTypes.bool,
   }
 
   render() {
+    const messagingNumberOptions = [{ label: '(524) 999-1234', value: 1 }, { label: '(524) 999-1234', value: 2 }, { label: '(524) 999-1234', value: 3 }];
+
     return (
       <form action="#" className="form-lightbox dashboard-lightbox">
 
         <div className="field-row">
           <strong className="label required">
-            <label className="add-exposure-level">Sponsor</label>
+            <label className="add-exposure-level">MESSAGING NUMBER</label>
           </strong>
           <div className="field">
             <Field
-              name="sponsor"
-              component={Input}
-              type="text"
+              name="messagingNumber"
+              component={ReactSelect}
+              placeholder="Select Messaging Number"
+              options={messagingNumberOptions}
             />
           </div>
         </div>
 
         <div className="field-row text-right no-margins">
-          {this.props.isEdit &&
-            <a className="btn btn-gray-outline">Delete</a>
-          }
           <button type="submit" className="btn btn-primary">Submit</button>
         </div>
-
       </form>
     );
   }
@@ -47,4 +45,4 @@ const mapDispatchToProps = {};
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddSponsorForm);
+)(AddMessagingNumberForm);
