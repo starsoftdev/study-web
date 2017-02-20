@@ -554,6 +554,48 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
+      path: '/app/dashboard-manage-users',
+      name: 'dashboardManageUsersPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardManageUsers/reducer'),
+          System.import('./containers/DashboardManageUsers/sagas'),
+          System.import('./containers/DashboardManageUsers'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardManageUsersPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/app/dashboard-portals',
+      name: 'dashboardPortalsPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardPortalsPage/reducer'),
+          System.import('./containers/DashboardPortalsPage/sagas'),
+          System.import('./containers/DashboardPortalsPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardPortalsPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '/app*',
       name: 'notfound',
       getComponent(nextState, cb) {
