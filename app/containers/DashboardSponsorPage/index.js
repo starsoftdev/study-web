@@ -14,7 +14,7 @@ import { DashboardSponsorTable } from './DashboardSponsorTable';
 export class DashboardSponsorPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
-      <div className="container-fluid">
+      <div className="container-fluid dashboard-sponsor">
         <h2 className="main-heading">Sponsor</h2>
 
         <DashboardSponsorSearch />
