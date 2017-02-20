@@ -106,6 +106,7 @@ import {
   FETCH_LANDING,
   FETCH_LANDING_SUCCESS,
   FETCH_LANDING_ERROR,
+  CLEAR_LANDING,
   PATIENT_SUBSCRIBED,
   PATIENT_SUBSCRIPTION_ERROR,
 } from './constants';
@@ -315,6 +316,17 @@ export default function appReducer(state = initialState, action) {
           details: null,
           fetching: false,
           error: payload,
+        },
+      };
+      break;
+    case CLEAR_LANDING:
+      baseDataInnerState = {
+        subscriptionError: null,
+        subscribedFromLanding: null,
+        landing: {
+          details: null,
+          fetching: false,
+          error: null,
         },
       };
       break;

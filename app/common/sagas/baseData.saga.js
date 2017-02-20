@@ -776,7 +776,7 @@ export function* changeUsersTimezoneWatcher() {
 function* fetchLandingStudy(action) {
   const { studyId } = action;
   const filter = JSON.stringify({
-    include: ['sites', 'sources', 'indication', 'landingPages'],
+    include: ['sources', 'indication', 'landingPages', { sites: ['phone'] }],
   });
   // put the fetching study action in case of a navigation action
   try {

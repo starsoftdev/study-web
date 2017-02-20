@@ -131,7 +131,7 @@ import {
   SUBSCRIBE_FROM_LANDING,
   PATIENT_SUBSCRIBED,
   PATIENT_SUBSCRIPTION_ERROR,
-  CLEAR_FORM_SUBSCRIBE,
+  CLEAR_LANDING,
 
   ADD_EMAIL_NOTIFICATION_USER,
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
@@ -908,9 +908,9 @@ export function patientSubscriptionError(payload) {
   };
 }
 
-export function clearForm() {
+export function clearLanding() {
   return {
-    type: CLEAR_FORM_SUBSCRIBE,
+    type: CLEAR_LANDING,
   };
 }
 

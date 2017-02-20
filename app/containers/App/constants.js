@@ -131,7 +131,7 @@ export const FETCH_LANDING_SUCCESS                 = 'App/FETCH_LANDING_SUCCESS'
 export const FETCH_LANDING_ERROR                   = 'App/FETCH_LANDING_ERROR';
 export const SUBSCRIBE_FROM_LANDING                = 'App/SUBSCRIBE_FROM_LANDING';
 export const PATIENT_SUBSCRIBED                    = 'App/PATIENT_SUBSCRIBED';
-export const CLEAR_FORM_SUBSCRIBE                  = 'App/CLEAR_FORM_SUBSCRIBE';
+export const CLEAR_LANDING                         = 'App/CLEAR_LANDING';
 export const PATIENT_SUBSCRIPTION_ERROR            = 'App/PATIENT_SUBSCRIPTION_ERROR';
 
 export const ADD_EMAIL_NOTIFICATION_USER                               = 'App/ADD_EMAIL_NOTIFICATION_USER';

@@ -20,6 +20,7 @@ import { default as BillingPage } from './containers/BillingPage';
 import { default as OrderPage } from './containers/OrderPage';
 import { default as AboutPage } from './containers/AboutPage';
 import { default as NotFound } from './containers/NotFoundPage';
+import { default as ThankYouPage } from './containers/ThankYouPage';
 
 import './assets/less/main.less';
 
@@ -51,6 +52,7 @@ const routes = {
     { path: '/privacy-policy', component: PrivacyPolicyPage },
     { path: '/terms-and-conditions', component: TermsAndConditionsPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },
+    { path: '/thankyou-page', component: ThankYouPage },
     { path: '/*-:siteLocation', component: LandingPage },
     { path: '*', component: NotFound },
   ],
