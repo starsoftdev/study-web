@@ -22,8 +22,8 @@ import {
   selectSitePatients,
   selectPatientMessages,
   selectClientCredits,
+  selectStudies,
 } from '../../containers/App/selectors';
-import { selectStudies } from '../../containers/HomePage/selectors';
 
 import MessageItem from './MessageItem';
 import CallItem from './CallItem';
@@ -40,6 +40,7 @@ import {
   markAsReadPatientMessages,
   updateSitePatients,
   fetchClientCredits,
+  fetchStudies,
 } from '../../containers/App/actions';
 import {
   selectSocket,
@@ -77,6 +78,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     formValues: React.PropTypes.object,
     change: React.PropTypes.func,
     studies: React.PropTypes.object,
+    fetchStudies: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -147,6 +149,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     //   this.selectPatient(selectedPatient, true);
     //   // this.setState({ patientLoaded: false });
     // }
+  }
+
+  componentDidMount() {
+    this.props.fetchStudies();
   }
 
   componentDidUpdate() {
@@ -347,6 +353,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchStudies: searchParams => dispatch(fetchStudies(searchParams)),
     fetchSitePatients: (siteId) => dispatch(fetchSitePatients(siteId)),
     searchSitePatients: (keyword) => dispatch(searchSitePatients(keyword)),
     updateSitePatients: (newMessage) => dispatch(updateSitePatients(newMessage)),

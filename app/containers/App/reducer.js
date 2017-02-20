@@ -1,5 +1,5 @@
 import { getItem } from '../../utils/localStorage';
-import { forEach, map, remove, cloneDeep, findIndex, concat, sortBy, reverse } from 'lodash';
+import _, { forEach, map, remove, cloneDeep, findIndex, concat, sortBy, reverse } from 'lodash';
 
 import {
   SET_AUTH_STATE,
@@ -69,6 +69,10 @@ import {
   FETCH_CLIENT_ROLES_SUCCESS,
   FETCH_CLIENT_ROLES_ERROR,
 
+  FETCH_STUDIES,
+  FETCH_STUDIES_SUCCESS,
+  FETCH_STUDIES_ERROR,
+
   FETCH_SITE,
   FETCH_SITE_SUCCESS,
   FETCH_SITE_ERROR,
@@ -119,12 +123,22 @@ import {
   CHANGE_IMAGE_SUCCESS,
 } from '../../containers/ProfilePage/constants';
 
+import {
+  UPGRADE_STUDY_SUCCESS,
+  SORT_SUCCESS,
+} from '../../containers/HomePage/constants';
+
 const initialState = {
   loggedIn: !!getItem('auth_token'),
   loginError: null,
   userData: null,
   pageEvents: null,
   baseData: {
+    studies: {
+      details: [],
+      fetching: false,
+      error: null,
+    },
     sites: [],
     indications: [],
     subscriptionError: null,
@@ -289,6 +303,118 @@ export default function appReducer(state = initialState, action) {
     case FETCH_INDICATIONS_SUCCESS:
       baseDataInnerState = {
         indications: payload,
+      };
+      break;
+    case FETCH_STUDIES:
+      baseDataInnerState = {
+        studies: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_STUDIES_SUCCESS: {
+      let entity;
+      const entitiesCollection = [];
+      let startDate = '';
+      let endDate = '';
+
+      forEach(payload, (studyIterator, index) => {
+        entity = {
+          studyId: studyIterator.id,
+          indication: studyIterator.indication,
+          location: '',
+          sponsor: '',
+          protocol: studyIterator.protocolNumber,
+          patientMessagingSuite: (studyIterator.patientMessagingSuite) ? 'On' : 'Off',
+          patientQualificationSuite: (studyIterator.patientQualificationSuite) ? 'On' : 'Off',
+          status: studyIterator.status,
+          callTracking: studyIterator.callTracking,
+          siteUsers: null,
+          startDate: '',
+          endDate: '',
+          orderNumber: (index + 1),
+          irbName: studyIterator.irbName,
+          irbEmail: studyIterator.irbEmail,
+          croContactName: studyIterator.croContactName,
+          croContactEmail: studyIterator.croContactEmail,
+          image: studyIterator.image,
+          sponsorContacts: studyIterator.sponsorContacts,
+          studyNotificationEmails: studyIterator.studyNotificationEmails,
+          condenseTwoWeeks: studyIterator.condenseTwoWeeks,
+          recruitmentPhone: studyIterator.recruitmentPhone,
+        };
+        if (studyIterator.sponsors && studyIterator.sponsors.length > 0) {
+          const sponsorContacts = map(studyIterator.sponsors, sponsorContactIterator => sponsorContactIterator.name);
+          const sponsorContactsStr = sponsorContacts.join(', ');
+          entity.sponsor = sponsorContactsStr;
+        }
+        if (!studyIterator.sites || studyIterator.sites.length === 0) {
+          entitiesCollection.push(entity);
+          return true;
+        }
+        forEach(studyIterator.sites, (siteIterator) => {
+          startDate = '';
+          endDate = '';
+
+          if (siteIterator.campaigns && siteIterator.campaigns.length > 0 && siteIterator.campaigns[0]) {
+            startDate = siteIterator.campaigns[0].dateFrom;
+            endDate = siteIterator.campaigns[0].dateTo;
+          }
+          entity = {
+            ...entity,
+            location: siteIterator.location,
+            status: siteIterator.status,
+            campaign: siteIterator.campaigns[0],
+            siteUsers: siteIterator.users,
+            startDate,
+            endDate,
+            maxCampaign: siteIterator.maxCampaign,
+            siteId: siteIterator.id,
+          };
+          entitiesCollection.push(entity);
+        });
+        return true;
+      });
+      baseDataInnerState = {
+        studies: {
+          details: entitiesCollection,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    }
+    case FETCH_STUDIES_ERROR:
+      baseDataInnerState = {
+        studies: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
+      };
+      break;
+    case UPGRADE_STUDY_SUCCESS: {
+      const studies = _.cloneDeep(state.baseData.studies.details);
+      const study = _.find(studies, (o) => (o.studyId === payload.studyId));
+      study.campaign.level_id = payload.newLevelId;
+      baseDataInnerState = {
+        studies: {
+          details: studies,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    }
+    case SORT_SUCCESS:
+      baseDataInnerState = {
+        studies: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
       };
       break;
     case FETCH_LANDING:
