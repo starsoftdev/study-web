@@ -4,12 +4,12 @@ import { Link } from 'react-router';
 function SocialNetworks() {
   return (
     <ul className="social-networks pull-right list-inline">
-      <li><Link to="#"><i className="icon-facebook"></i></Link></li>
-      <li><Link to="#"><i className="icon-instagram"></i></Link></li>
-      <li><Link to="#"><i className="icon-twitter"></i></Link></li>
-      <li><Link to="#"><i className="icon-google-plus"></i></Link></li>
-      <li><Link to="#"><i className="icon-linkedin"></i></Link></li>
-      <li><Link to="#"><i className="icon-pinterest-p"></i></Link></li>
+      <li><a target="_blank" href="https://www.facebook.com/StudyKIK/"><i className="icon-facebook"></i></a></li>
+      <li><a target="_blank" href="https://www.instagram.com/studykik/"><i className="icon-instagram"></i></a></li>
+      <li><a target="_blank" href="https://twitter.com/studykik"><i className="icon-twitter"></i></a></li>
+      <li><a target="_blank" href="https://plus.google.com/115488773798119322354"><i className="icon-google-plus"></i></a></li>
+      <li><a target="_blank" href="https://www.linkedin.com/company/studykik"><i className="icon-linkedin"></i></a></li>
+      <li><a target="_blank" href="https://www.pinterest.com/studykik/"><i className="icon-pinterest-p"></i></a></li>
     </ul>
   );
 }
