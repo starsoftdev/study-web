@@ -12,6 +12,8 @@ import GlobalPMSModal from '../../components/GlobalPMSModal';
 import NotificationBox from './NotificationBox';
 import AvatarMenu from './AvatarMenu';
 
+import { fetchPatientMessages } from '../../containers/HomePage/actions';
+import { selectPatientMessages } from '../../containers/HomePage/selectors';
 import { fetchSitePatients, fetchClientCredits } from '../../containers/App/actions';
 import { logout } from '../../containers/LoginPage/actions';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
@@ -27,8 +29,6 @@ import {
   selectUserRoleType,
 } from '../../containers/App/selectors';
 
-import { sumBy } from 'lodash';
-
 class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     clientCredits: React.PropTypes.object,
@@ -36,10 +36,12 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     currentUserClientId: PropTypes.number,
     fetchSitePatients: React.PropTypes.func,
     fetchClientCredits: React.PropTypes.func,
+    fetchPatientMessages: PropTypes.func,
     logout: React.PropTypes.func,
     sitePatients: React.PropTypes.object,
     socket: React.PropTypes.any,
     userRoleType: PropTypes.string,
+    patientMessages: PropTypes.object,
   };
 
   constructor(props) {
@@ -63,6 +65,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
       this.props.fetchSitePatients(currentUser.id);
       this.props.fetchClientCredits(currentUser.id);
     }
+    this.props.fetchPatientMessages(currentUser);
   }
 
   componentWillReceiveProps() {
@@ -98,13 +101,12 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
   }
 
   render() {
-    const { userRoleType } = this.props;
+    const { userRoleType, patientMessages } = this.props;
     let purchasable = true;
     if (userRoleType === 'client') {
       purchasable = this.props.currentUser.roleForClient.canPurchase;
     }
     if (userRoleType === 'client') {
-      const unreadMessagesCount = sumBy(this.props.sitePatients.details, (item) => parseInt(item.count_unread ? item.count_unread : 0));
       const credits = this.props.clientCredits.details.customerCredits || 0;
       return (
         <header id="header">
@@ -145,8 +147,8 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
               className={classNames('opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
               onClick={this.showGlobalPMSModal}
             >
-              {unreadMessagesCount > 0
-                ? <span className="counter">{unreadMessagesCount}</span>
+              {patientMessages.unreadTexts > 0
+                ? <span className="counter">{patientMessages.unreadTexts}</span>
                 : ''
               }
               <i className="icomoon-credit" />
@@ -241,12 +243,14 @@ const mapStateToProps = createStructuredSelector({
   sitePatients: selectSitePatients(),
   socket: selectSocket(),
   userRoleType: selectUserRoleType(),
+  patientMessages: selectPatientMessages(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchSitePatients: (userId) => dispatch(fetchSitePatients(userId)),
   fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
   logout: () => dispatch(logout()),
+  fetchPatientMessages,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopHeaderBar);
