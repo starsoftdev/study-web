@@ -39,7 +39,6 @@ export const IMPORT_PATIENTS    = 'PatientDatabasePage/IMPORT_PATIENTS';
 export const SUBMIT_ADD_PATIENT    = 'PatientDatabasePage/SUBMIT_ADD_PATIENT';
 export const SUBMIT_ADD_PATIENT_SUCCESS    = 'PatientDatabasePage/SUBMIT_ADD_PATIENT_SUCCESS';
 export const SUBMIT_ADD_PATIENT_FAILURE    = 'PatientDatabasePage/SUBMIT_ADD_PATIENT_FAILURE';
-export const SET_ADD_PATIENT_STATUS = 'PatientDatabasePage/SET_ADD_PATIENT_STATUS';
 export const EXPORT_PATIENTS    = 'PatientDatabasePage/EXPORT_PATIENTS';
 export const DOWNLOAD_COMPLETE    = 'PatientDatabasePage/DOWNLOAD_COMPLETE';
 
