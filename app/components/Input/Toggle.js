@@ -55,7 +55,7 @@ function Toggle({ input, name, className, onChange, disabled, meta: { touched, e
     activeLabelStyle={labelStyle}
     inactiveLabelStyle={labelStyle}
     thumbStyle={{ borderRadius: 0, width: '78px', height: '36px', boxShadow: 'none' }}
-    trackStyle={{ borderRadius: 0, width: '160px', height: '40px', border: `2px solid ${trackColor}` }}
+    trackStyle={{ borderRadius: 0, width: '162px', height: '40px', border: `2px solid ${trackColor}` }}
     onToggle={(value) => {
       input.onChange(!value);
       if (onChange) {
