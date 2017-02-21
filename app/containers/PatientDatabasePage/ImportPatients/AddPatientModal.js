@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 
-import { selectSyncErrors, selectValues } from '../../../common/selectors/form.selector';
+import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSources } from '../../App/selectors';
 import Input from '../../../components/Input/index';
@@ -29,7 +29,7 @@ class AddPatient extends React.Component {
   static propTypes = {
     addPatientStatus: React.PropTypes.object,
     blur: React.PropTypes.func.isRequired,
-    errorList: React.PropTypes.object.isRequired,
+    formError: React.PropTypes.bool.isRequired,
     newPatient: React.PropTypes.object,
     onClose: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
@@ -60,17 +60,19 @@ class AddPatient extends React.Component {
 
   addPatient(event) {
     event.preventDefault();
-    const { blur, errorList, newPatient, submitAddPatient, touchFields } = this.props;
-    touchFields();
-    /* will only submit the form if the error list is empty */
-    if (Object.keys(errorList).length === 0) {
-      const formattedPhoneNumber = normalizePhoneDisplay(newPatient.phone);
-      blur('phone', formattedPhoneNumber);
-      const patient = Object.assign({}, newPatient);
-      /* normalizing the phone number */
-      patient.phone = normalizePhone(newPatient.phone);
-      submitAddPatient(patient, this.onClose);
+    const { blur, formError, newPatient, submitAddPatient, touchFields } = this.props;
+
+    if (formError) {
+      touchFields();
+      return;
     }
+
+    const formattedPhoneNumber = normalizePhoneDisplay(newPatient.phone);
+    blur('phone', formattedPhoneNumber);
+    const patient = Object.assign({}, newPatient);
+    /* normalizing the phone number */
+    patient.phone = normalizePhone(newPatient.phone);
+    submitAddPatient(patient, this.onClose);
   }
 
   render() {
@@ -80,7 +82,7 @@ class AddPatient extends React.Component {
       value: source.id,
     }));
     const sanitizedProps = sanitizeProps(props);
-    delete sanitizedProps.errorList;
+    delete sanitizedProps.formError;
     delete sanitizedProps.onClose;
     delete sanitizedProps.newPatient;
     delete sanitizedProps.resetForm;
@@ -105,7 +107,7 @@ class AddPatient extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <div className="scroll-holder jcf--scrollable">
-            <Form className="form-lightbox" noValidate="novalidate">
+            <Form className="form-lightbox" onSubmit={this.addPatient} noValidate="novalidate">
               <div className="field-row">
                 <strong className="label required">
                   <label htmlFor="import-patient-first-name">Patient Name</label></strong>
@@ -159,19 +161,19 @@ class AddPatient extends React.Component {
                 />
               </div>
               <div className="field-row">
-                <strong className="label">
+                <strong className="label required">
                   <label>Source</label>
                 </strong>
                 <Field
                   name="source"
                   component={ReactSelect}
-                  className="field"
+                  className="field required"
                   placeholder="Select Source"
                   options={sourceOptions}
                 />
               </div>
               <div className="text-right">
-                <Button disabled={addPatientStatus.adding} onClick={(event) => this.addPatient(event)}>Submit</Button>
+                <Button type="submit" disabled={addPatientStatus.adding}>Submit</Button>
               </div>
             </Form>
           </div>
@@ -184,7 +186,7 @@ class AddPatient extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   addPatientStatus: selectAddPatientStatus(),
-  errorList: selectSyncErrors(formName),
+  formError: selectSyncErrorBool(formName),
   newPatient: selectValues(formName),
   sources: selectSources(),
 });

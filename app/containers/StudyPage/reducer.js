@@ -40,7 +40,6 @@ import {
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
   SUBMIT_ADD_PATIENT,
-  SET_ADD_PATIENT_STATUS,
 } from './constants';
 import _ from 'lodash';
 
@@ -136,6 +135,9 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         uploadStarted: null,
         fileUploaded: action.fileName,
+        addPatientStatus: {
+          adding: false,
+        },
         patientCategories: state.patientCategories.map(category => {
           if (category.name === 'New Patient') {
             if (!category.patients) {
@@ -167,15 +169,8 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         uploadStarted: null,
-        addPatientStatus:{
+        addPatientStatus: {
           adding: false,
-        },
-      };
-    case SET_ADD_PATIENT_STATUS:
-      return {
-        ...state,
-        addPatientStatus:{
-          adding: action.status,
         },
       };
     case MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS:
