@@ -304,6 +304,11 @@ const selectSubscriptionError = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.subscriptionError', {})
 );
+
+const selectFindOutPosted = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.findOutPosted', {})
+);
 // end
 
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
@@ -359,6 +364,7 @@ export {
   selectLandingError,
   selectSubscribedFromLanding,
   selectSubscriptionError,
+  selectFindOutPosted,
 
   selectStudies,
 };
