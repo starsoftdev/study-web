@@ -137,6 +137,10 @@ import {
   PATIENT_SUBSCRIPTION_ERROR,
   CLEAR_LANDING,
 
+  FIND_OUT_PATIENTS,
+  FIND_OUT_PATIENTS_POSTED,
+  FIND_OUT_PATIENTS_ERROR,
+
   ADD_EMAIL_NOTIFICATION_USER,
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
   ADD_EMAIL_NOTIFICATION_USER_ERROR,
@@ -957,5 +961,26 @@ export function addEmailNotificationUserError(payload) {
   return {
     type: ADD_EMAIL_NOTIFICATION_USER_ERROR,
     payload,
+  };
+}
+
+export function findOutPatients(params) {
+  return {
+    type: FIND_OUT_PATIENTS,
+    params,
+  };
+}
+
+export function findOutPatientsPosted(params) {
+  return {
+    type: FIND_OUT_PATIENTS_POSTED,
+    params,
+  };
+}
+
+export function findOutPatientsError(params) {
+  return {
+    type: FIND_OUT_PATIENTS_ERROR,
+    params,
   };
 }
