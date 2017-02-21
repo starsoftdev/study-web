@@ -185,6 +185,7 @@ export class CalendarPage extends React.Component {
           data.hour % 12 :
           (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes'),
         textReminder: data.textReminder,
+        timezone: currentUser.timezone,
       };
     } else { // UPDATE
       let updatedDate;
@@ -203,6 +204,7 @@ export class CalendarPage extends React.Component {
           (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes'),
         userId: currentUser.id,
         textReminder: data.textReminder,
+        timezone: currentUser.timezone,
       };
     }
 
