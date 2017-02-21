@@ -1,10 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { reset } from 'redux-form';
+import { createStructuredSelector } from 'reselect';
 import { Parallax } from 'react-parallax';
+
+import { findOutPatients } from '../../../app/containers/App/actions';
 
 import bg1 from '../../assets/images/bg1.jpg';
 import img1 from '../../assets/images/img1.svg';
-import img2 from '../../assets/images/img2.svg';
-import img3 from '../../assets/images/img3.svg';
 import img4 from '../../assets/images/img4.svg';
 import img6 from '../../assets/images/img6.svg';
 import img7 from '../../assets/images/img7.svg';
@@ -30,16 +33,27 @@ import diamond6 from '../../assets/images/diamond6.png';
 import videoPlaceholder from '../../assets/images/video-placeholder.png';
 import computerImg from '../../assets/images/computer-img.png';
 
+import FindOutPatientsForm from '../../components/FindOutPatientsForm';
+
+import {
+  selectFindOutPosted,
+} from '../../../app/containers/App/selectors';
+
 import './styles.less';
 
-export default class ListYourTrialsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class ListYourTrialsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
-  static propTypes = {};
+  static propTypes = {
+    onSubmitForm: React.PropTypes.func,
+    clearForm: React.PropTypes.func,
+    findOutPosted: React.PropTypes.any,
+  };
 
   constructor(props) {
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
+    this.onSubmitForm = this.props.onSubmitForm.bind(this);
 
     this.state = {
       open: false,
@@ -47,6 +61,12 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
   }
 
   componentDidMount() {
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.findOutPosted) {
+      this.props.clearForm();
+    }
   }
 
   setVisible(el) {
@@ -74,29 +94,7 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
               </div>
             </div>
           </div>
-          <form action="#" className="form-find-location">
-            <Parallax bgImage={bg1} bgWidth="auto" bgHeight="1090px" strength={800}>
-              <div className="container">
-                <h2>FIND OUT HOW MANY PATIENTS ARE NEAR YOUR SITE</h2>
-                <div className="form-holder">
-                  <input type="text" required placeholder="* Full Name" className="form-control input-lg" />
-                  <input type="email" required placeholder="* Email" className="form-control input-lg" />
-                  <input type="text" placeholder="Company" className="form-control input-lg" />
-                  <input type="text" required placeholder="* Postal Code" className="form-control input-lg" />
-                  <input type="text" required placeholder="* Indication" className="form-control input-lg" />
-                  <input type="submit" className="btn btn-block input-lg" value="RECEIVE REPORT" />
-                  <div className="images">
-                    <div className="img-holder left">
-                      <img src={img2} alt="img2" width="232" height="279" className="img-responsive" />
-                    </div>
-                    <div className="img-holder right">
-                      <img src={img3} alt="img3" width="193" height="302" className="img-responsive" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Parallax>
-          </form>
+          <FindOutPatientsForm onSubmit={this.onSubmitForm} />
         </div>
         <section className="about-us text-center">
           <div className="container">
@@ -521,3 +519,16 @@ export default class ListYourTrialsPage extends React.Component { // eslint-disa
     );
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  findOutPosted: selectFindOutPosted(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onSubmitForm: (values) => dispatch(findOutPatients(values)),
+    clearForm: () => dispatch(reset('find-location')),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListYourTrialsPage);

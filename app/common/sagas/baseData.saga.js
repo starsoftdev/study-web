@@ -44,6 +44,7 @@ import {
 
   FETCH_LANDING,
   SUBSCRIBE_FROM_LANDING,
+  FIND_OUT_PATIENTS,
 } from '../../containers/App/constants';
 
 import {
@@ -110,6 +111,8 @@ import {
   fetchLandingError,
   patientSubscribed,
   patientSubscriptionError,
+  findOutPatientsPosted,
+  findOutPatientsError,
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -145,6 +148,7 @@ export default function* baseDataSaga() {
   yield fork(changeUsersTimezoneWatcher);
   yield fork(takeLatest, FETCH_LANDING, fetchLandingStudy);
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
+  yield fork(takeLatest, FIND_OUT_PATIENTS, postFindOutPatients);
 }
 
 export function* fetchStudiesWatcher() {
@@ -829,5 +833,21 @@ function* subscribeFromLanding(action) {
     yield put(patientSubscribed(response));
   } catch (err) {
     yield put(patientSubscriptionError(err));
+  }
+}
+
+function* postFindOutPatients(action) {
+  try {
+    const params = action.params;
+    const requestURL = `${API_URL}/findOutPatients`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(findOutPatientsPosted(response));
+  } catch (err) {
+    yield put(findOutPatientsError(err));
   }
 }
