@@ -11,6 +11,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../containers/App/selectors';
+import { fetchSources } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
@@ -42,6 +43,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     stats: PropTypes.object,
     socket: React.PropTypes.any,
     updatePatientSuccess: React.PropTypes.func,
+    fetchSources: PropTypes.func,
   };
 
   static defaultProps = {
@@ -64,6 +66,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     setSiteId(parseInt(params.siteId));
     fetchStudy(params.id, params.siteId);
     fetchPatientCategories(params.id, params.siteId);
+    this.props.fetchSources();
   }
 
   componentWillReceiveProps() {
@@ -180,6 +183,7 @@ function mapDispatchToProps(dispatch) {
     setStudyId: (id) => dispatch(setStudyId(id)),
     setSiteId: (id) => dispatch(setSiteId(id)),
     updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
+    fetchSources: () => dispatch(fetchSources()),
   };
 }
 
