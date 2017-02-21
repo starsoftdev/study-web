@@ -17,7 +17,7 @@ import AlertModal from '../../components/AlertModal';
 import AddPatientModal from './ImportPatients/AddPatientModal';
 import TextEmailBlastModal from './TextEmailBlastModal';
 import TextBlastModal from './TextBlast/index';
-import { clearForm, importPatients, setAddPatientStatus } from './actions';
+import { clearForm, importPatients } from './actions';
 
 class PatientActionButtons extends React.Component {
   static propTypes = {
@@ -28,7 +28,6 @@ class PatientActionButtons extends React.Component {
     importPatientsStatus: React.PropTypes.object,
     paginationOptions: React.PropTypes.object,
     searchPatients: React.PropTypes.func,
-    setAddPatientStatus: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -75,7 +74,6 @@ class PatientActionButtons extends React.Component {
   }
 
   closeAddPatientModal() {
-    this.props.setAddPatientStatus(false);
     this.setState({
       showImportPatientsModal: false,
       showAddPatientModal: false,
@@ -257,7 +255,6 @@ function mapDispatchToProps(dispatch) {
     clearForm: () => (dispatch(clearForm())),
     clearTextBlastMessage: () => dispatch(change(formName, 'message', '')),
     importPatients: payload => dispatch(importPatients(payload)),
-    setAddPatientStatus: (status) => dispatch(setAddPatientStatus(status)),
   };
 }
 

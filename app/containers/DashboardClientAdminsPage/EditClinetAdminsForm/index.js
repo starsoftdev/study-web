@@ -103,7 +103,7 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
             <Field
               name="bd"
               component={ReactSelect}
-              placeholder="Select Messaging Number"
+              placeholder="Select DB"
               options={bdOptions}
             />
           </div>
@@ -117,7 +117,7 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
             <Field
               name="ae"
               component={ReactSelect}
-              placeholder="Select Messaging Number"
+              placeholder="Select AE"
               options={aeOptions}
             />
           </div>
