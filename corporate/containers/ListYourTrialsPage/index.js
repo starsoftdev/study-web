@@ -61,12 +61,10 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
   }
 
   componentDidMount() {
-    console.log('componentDidMount', this.props);
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.findOutPosted) {
-      console.log('componentWillReceiveProps', newProps);
       this.props.clearForm();
     }
   }
