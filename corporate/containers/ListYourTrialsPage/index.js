@@ -1,8 +1,8 @@
 import React from 'react';
-import { Parallax } from 'react-parallax';
-
 import { connect } from 'react-redux';
+import { reset } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
+import { Parallax } from 'react-parallax';
 
 import { findOutPatients } from '../../../app/containers/App/actions';
 
@@ -35,12 +35,18 @@ import computerImg from '../../assets/images/computer-img.png';
 
 import FindOutPatientsForm from '../../components/FindOutPatientsForm';
 
+import {
+  selectFindOutPosted,
+} from '../../../app/containers/App/selectors';
+
 import './styles.less';
 
 export class ListYourTrialsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     onSubmitForm: React.PropTypes.func,
+    clearForm: React.PropTypes.func,
+    findOutPosted: React.PropTypes.any,
   };
 
   constructor(props) {
@@ -55,6 +61,14 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
   }
 
   componentDidMount() {
+    console.log('componentDidMount', this.props);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.findOutPosted) {
+      console.log('componentWillReceiveProps', newProps);
+      this.props.clearForm();
+    }
   }
 
   setVisible(el) {
@@ -509,11 +523,13 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
 }
 
 const mapStateToProps = createStructuredSelector({
+  findOutPosted: selectFindOutPosted(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     onSubmitForm: (values) => dispatch(findOutPatients(values)),
+    clearForm: (values) => dispatch(reset('find-location')),
   };
 }
 
