@@ -27,7 +27,6 @@ import {
   SUBMIT_ADD_PATIENT,
   SUBMIT_ADD_PATIENT_FAILURE,
   SUBMIT_ADD_PATIENT_SUCCESS,
-  SET_ADD_PATIENT_STATUS,
   DOWNLOAD_COMPLETE,
 
   CLEAR_PATIENTS_LIST,
@@ -112,32 +111,9 @@ export default function patientDatabasePageReducer(state = initialState, action)
           uploadStart: false,
           fileUploaded: action.fileName,
         },
-        patientCategories: state.patientCategories.map(category => {
-          if (category.name === 'New Patient') {
-            if (!category.patients) {
-              return {
-                ...category,
-                patients: [...action.patients],
-              };
-            } else if (Array.isArray(action.patients)) {
-              return {
-                ...category,
-                patients: [
-                  ...category.patients,
-                  ...action.patients,
-                ],
-              };
-            }
-            return {
-              ...category,
-              patients: [
-                ...category.patients,
-                action.patients,
-              ],
-            };
-          }
-          return category;
-        }),
+        addPatientStatus: {
+          adding: false,
+        },
       };
     case SUBMIT_ADD_PATIENT_FAILURE:
       return {
@@ -147,13 +123,6 @@ export default function patientDatabasePageReducer(state = initialState, action)
         },
         addPatientStatus:{
           adding: false,
-        },
-      };
-    case SET_ADD_PATIENT_STATUS:
-      return {
-        ...state,
-        addPatientStatus:{
-          adding: action.status,
         },
       };
     case DOWNLOAD_COMPLETE:

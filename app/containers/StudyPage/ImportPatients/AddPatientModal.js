@@ -1,17 +1,14 @@
 /**
  * Created by mike on 10/9/16.
  */
-
 import React from 'react';
 import { connect } from 'react-redux';
 import { blur, Field, reduxForm, reset, touch } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
-
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
-
-import { selectSyncErrors, selectValues } from '../../../common/selectors/form.selector';
+import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
 import Input from '../../../components/Input/index';
 import CenteredModal from '../../../components/CenteredModal/index';
@@ -27,7 +24,7 @@ class AddPatientModal extends React.Component {
   static propTypes = {
     addPatientStatus: React.PropTypes.object,
     blur: React.PropTypes.func.isRequired,
-    errorList: React.PropTypes.object.isRequired,
+    formError: React.PropTypes.bool.isRequired,
     newPatient: React.PropTypes.object,
     show: React.PropTypes.bool.isRequired,
     studyId: React.PropTypes.number.isRequired,
@@ -58,24 +55,26 @@ class AddPatientModal extends React.Component {
 
   addPatient(event) {
     event.preventDefault();
-    const { blur, submitAddPatient, newPatient, studyId, errorList, touchFields } = this.props;
-    touchFields();
-    /* will only submit the form if the error list is empty */
-    if (Object.keys(errorList).length === 0) {
-      const formattedPhoneNumber = normalizePhoneDisplay(newPatient.phone);
-      blur('phone', formattedPhoneNumber);
-      const patient = Object.assign({}, newPatient);
-      /* normalizing the phone number */
-      patient.phone = normalizePhone(newPatient.phone);
-      submitAddPatient(studyId, patient, this.onClose);
+    const { blur, formError, newPatient, studyId, submitAddPatient, touchFields } = this.props;
+
+    if (formError) {
+      touchFields();
+      return;
     }
+
+    const formattedPhoneNumber = normalizePhoneDisplay(newPatient.phone);
+    blur('phone', formattedPhoneNumber);
+    const patient = Object.assign({}, newPatient);
+    /* normalizing the phone number */
+    patient.phone = normalizePhone(newPatient.phone);
+    submitAddPatient(studyId, patient, this.onClose);
   }
 
   render() {
     const { addPatientStatus, ...props } = this.props;
     const sanitizedProps = sanitizeProps(props);
     delete sanitizedProps.studyId;
-    delete sanitizedProps.errorList;
+    delete sanitizedProps.formError;
     delete sanitizedProps.onClose;
     delete sanitizedProps.newPatient;
     delete sanitizedProps.resetForm;
@@ -100,7 +99,7 @@ class AddPatientModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <div className="scroll-holder jcf--scrollable">
-            <Form className="form-lightbox" noValidate="novalidate">
+            <Form className="form-lightbox" onSubmit={this.addPatient} noValidate="novalidate">
               <div className="field-row">
                 <strong className="label required">
                   <label htmlFor="import-patient-first-name">Patient Name</label></strong>
@@ -154,7 +153,7 @@ class AddPatientModal extends React.Component {
                 />
               </div>
               <div className="text-right">
-                <Button disabled={addPatientStatus.adding} onClick={(event) => this.addPatient(event)}>Submit</Button>
+                <Button type="submit" disabled={addPatientStatus.adding}>Submit</Button>
               </div>
             </Form>
           </div>
@@ -167,7 +166,7 @@ class AddPatientModal extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   newPatient: selectValues(formName),
-  errorList: selectSyncErrors(formName),
+  formError: selectSyncErrorBool(formName),
   studyId: selectStudyId(),
   addPatientStatus: selectAddPatientStatus(),
 });
