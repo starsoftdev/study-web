@@ -113,6 +113,7 @@ import {
   CLEAR_LANDING,
   PATIENT_SUBSCRIBED,
   PATIENT_SUBSCRIPTION_ERROR,
+  FIND_OUT_PATIENTS_POSTED,
 } from './constants';
 
 import {
@@ -143,6 +144,7 @@ const initialState = {
     indications: [],
     subscriptionError: null,
     subscribedFromLanding: null,
+    findOutPosted: null,
     sources: [],
     levels: [],
     landing: {
@@ -459,6 +461,11 @@ export default function appReducer(state = initialState, action) {
     case PATIENT_SUBSCRIBED:
       baseDataInnerState = {
         subscribedFromLanding: payload,
+      };
+      break;
+    case FIND_OUT_PATIENTS_POSTED:
+      baseDataInnerState = {
+        findOutPosted: payload,
       };
       break;
     case PATIENT_SUBSCRIPTION_ERROR:

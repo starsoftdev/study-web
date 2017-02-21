@@ -137,6 +137,9 @@ export const SUBSCRIBE_FROM_LANDING                = 'App/SUBSCRIBE_FROM_LANDING
 export const PATIENT_SUBSCRIBED                    = 'App/PATIENT_SUBSCRIBED';
 export const CLEAR_LANDING                         = 'App/CLEAR_LANDING';
 export const PATIENT_SUBSCRIPTION_ERROR            = 'App/PATIENT_SUBSCRIPTION_ERROR';
+export const FIND_OUT_PATIENTS                     = 'App/FIND_OUT_PATIENTS';
+export const FIND_OUT_PATIENTS_POSTED              = 'App/FIND_OUT_PATIENTS_POSTED';
+export const FIND_OUT_PATIENTS_ERROR               = 'App/FIND_OUT_PATIENTS_ERROR';
 
 export const ADD_EMAIL_NOTIFICATION_USER                               = 'App/ADD_EMAIL_NOTIFICATION_USER';
 export const ADD_EMAIL_NOTIFICATION_USER_SUCCESS                       = 'App/ADD_EMAIL_NOTIFICATION_USER_SUCCESS';
