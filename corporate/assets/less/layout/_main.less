@@ -1272,19 +1272,16 @@ input[type=submit].input-lg,
 		
 	}
 	
-	.input-lg {
-		
-		+ .input-lg {
-			margin: 30px 0 0;
-			
-			@media screen and (max-width: @desktop) {
-				margin: 20px 0 0;
-			}
-			
-			@media screen and (max-width: @xs) {
-				margin: 15px 0 0;
-			}
-		}
+	div > .input-lg {
+    margin: 30px 0 0;
+
+    @media screen and (max-width: @desktop) {
+      margin: 20px 0 0;
+    }
+
+    @media screen and (max-width: @xs) {
+      margin: 15px 0 0;
+    }
 		
 		&:focus,
 		&:hover {
