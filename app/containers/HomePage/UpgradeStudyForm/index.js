@@ -81,7 +81,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
       if (patientQualificationSuite === 'On') {
         this.props.dispatch(change('upgradeStudy', 'addPatientQualificationSuite', true));
         this.props.dispatch(change('upgradeStudy', 'addPatientMessagingSuite', false));
-        this.state({
+        this.setState({
           patientQualificationSuite: true,
         });
       }
