@@ -3,6 +3,15 @@
   .custom-select{
     width: 25%;
   }
+  .table{
+    tr{
+      &:hover {
+        > td{
+          font-weight: 600;
+        }
+      }
+    }
+  }
 }
 .dashboard-lightbox{
   .no-margins{
@@ -38,6 +47,13 @@
     width: 25%;
   }
   .client-admins{
+    tr{
+      &:hover {
+        > td{
+          font-weight: 600;
+        }
+      }
+    }
     td,
     th {
       &:nth-child(1) { width: 14%; }
@@ -46,6 +62,45 @@
       &:nth-child(4) { width: 17%; }
       &:nth-child(5) { width: 13%; }
       &:nth-child(6) { width: auto; }
+    }
+  }
+}
+
+//dashboard-manage-users
+.dashboard-manage-users{
+  .custom-select{
+    width: 25%;
+  }
+  .table-manage-user{
+    tr{
+      &:hover {
+        > td{
+          font-weight: 600;
+        }
+      }
+    }
+    td,
+    th {
+      &:nth-child(1) { width: 24%; }
+      &:nth-child(2) { width: 34%; }
+      &:nth-child(3) { width: 20%; }
+      &:nth-child(4) { width: 15%; }
+      &:nth-child(6) { width: auto; }
+    }
+  }
+}
+
+//dashboard-portals
+.dashboard-portals{
+  .custom-select{
+    width: 25%;
+  }
+  .first-custom-select{
+    z-index: 6;
+  }
+  .selects-form{
+    .second-row{
+      margin-top: 30px;
     }
   }
 }

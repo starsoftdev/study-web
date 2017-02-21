@@ -2,7 +2,7 @@
 
 // Individual exports for testing
 export function* defaultSaga() {
-  console.log('dashboard client admin saga');
+  return 1;
 }
 
 // All sagas to be loaded
