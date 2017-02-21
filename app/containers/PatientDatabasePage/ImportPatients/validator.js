@@ -29,6 +29,11 @@ const schema = {
       message: 'Invalid phone number',
     },
   },
+  source: {
+    presence: {
+      message: '^You need to select a source',
+    },
+  },
 };
 
 const fields = Object.keys(schema);

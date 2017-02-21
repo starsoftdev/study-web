@@ -687,9 +687,19 @@ function* submitAddPatient() {
       yield put(toastrActions.success('Add Patient', 'Patient added successfully!'));
       yield put(submitAddPatientSuccess(response));
     } catch (e) {
-      const errorMessage = get(e, 'message', 'Something went wrong while adding a patient. Please try again later.');
-      yield put(submitAddPatientFailure());
-      yield put(toastrActions.error('', errorMessage));
+      let errorMessages;
+      if (e.details.messages) {
+        if (e.details.messages.email) {
+          errorMessages = e.details.messages.email[0];
+        } else if (e.details.messages.phone) {
+          errorMessages = e.details.messages.phone[0];
+        } else {
+          errorMessages = e.details.messages[0];
+        }
+      } else {
+        errorMessages = 'Something went wrong while adding a patient. Please try again later.';
+      }
+      yield put(toastrActions.error('', errorMessages));
       yield put(submitAddPatientFailure());
     }
   }
