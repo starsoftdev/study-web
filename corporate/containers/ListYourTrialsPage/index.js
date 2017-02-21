@@ -529,7 +529,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     onSubmitForm: (values) => dispatch(findOutPatients(values)),
-    clearForm: (values) => dispatch(reset('find-location')),
+    clearForm: () => dispatch(reset('find-location')),
   };
 }
 
