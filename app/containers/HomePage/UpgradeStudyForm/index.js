@@ -71,14 +71,19 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
 
     if (newProps.selectedStudy) {
       const { patientMessagingSuite, patientQualificationSuite } = newProps.selectedStudy;
-
       if (patientMessagingSuite === 'On' && patientQualificationSuite === 'Off') {
         this.props.dispatch(change('upgradeStudy', 'addPatientMessagingSuite', true));
+        this.setState({
+          patientMessagingSuite: true,
+        });
       }
 
       if (patientQualificationSuite === 'On') {
         this.props.dispatch(change('upgradeStudy', 'addPatientQualificationSuite', true));
         this.props.dispatch(change('upgradeStudy', 'addPatientMessagingSuite', false));
+        this.state({
+          patientQualificationSuite: true,
+        });
       }
     }
   }
@@ -124,6 +129,18 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     this.setState({
       level: e,
     });
+    if (this.props.selectedStudy && !e) {
+      const { patientMessagingSuite, patientQualificationSuite } = this.props.selectedStudy;
+      const pMS = patientMessagingSuite === 'On';
+      const pQS = patientQualificationSuite === 'On';
+      if (pMS === this.state.patientMessagingSuite && pQS === this.state.patientQualificationSuite) {
+        this.props.dispatch(change('upgradeStudy', 'validateToggle', false));
+      } else {
+        this.props.dispatch(change('upgradeStudy', 'validateToggle', true));
+      }
+    } else {
+      this.props.dispatch(change('upgradeStudy', 'validateToggle', true));
+    }
   }
 
   handleMessagingChoose(e) {
@@ -136,6 +153,17 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
       patientMessagingSuite: e,
       patientQualificationSuite,
     });
+    if (this.props.selectedStudy && !e) {
+      const { patientQualificationSuite } = this.props.selectedStudy;
+      const pQS = patientQualificationSuite === 'On';
+      if (pQS === this.state.patientQualificationSuite && !this.state.level) {
+        this.props.dispatch(change('upgradeStudy', 'validateToggle', false));
+      } else {
+        this.props.dispatch(change('upgradeStudy', 'validateToggle', true));
+      }
+    } else {
+      this.props.dispatch(change('upgradeStudy', 'validateToggle', true));
+    }
   }
 
   handleQualificationChoose(e) {
@@ -148,6 +176,17 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
       patientQualificationSuite: e,
       patientMessagingSuite,
     });
+    if (this.props.selectedStudy && !e) {
+      const { patientMessagingSuite } = this.props.selectedStudy;
+      const pMS = patientMessagingSuite === 'On';
+      if (pMS === this.state.patientMessagingSuite && !this.state.level) {
+        this.props.dispatch(change('upgradeStudy', 'validateToggle', false));
+      } else {
+        this.props.dispatch(change('upgradeStudy', 'validateToggle', true));
+      }
+    } else {
+      this.props.dispatch(change('upgradeStudy', 'validateToggle', true));
+    }
   }
 
   handleCallChoose(e) {
@@ -303,6 +342,13 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                               name="addPatientMessagingSuite"
                               disabled={patientMessagingSuite === 'On' || patientQualificationSuite === 'On'}
                               component={Toggle}
+                              onChange={this.handleMessagingChoose}
+                            />
+                            <Field
+                              name="validateToggle"
+                              className="validate-toggle"
+                              component={Toggle}
+                              visible="false"
                               onChange={this.handleMessagingChoose}
                             />
                           </div>
