@@ -37,7 +37,6 @@ import {
   SUBMIT_ADD_PATIENT,
   SUBMIT_ADD_PATIENT_SUCCESS,
   SUBMIT_ADD_PATIENT_FAILURE,
-  SET_ADD_PATIENT_STATUS,
   CLEAR_PATIENTS_LIST,
   CLEAR_IMPORT_FORM,
 } from './constants';
@@ -258,13 +257,6 @@ export function submitAddPatientSuccess(patients, fileName) {
 export function submitAddPatientFailure() {
   return {
     type: SUBMIT_ADD_PATIENT_FAILURE,
-  };
-}
-
-export function setAddPatientStatus(status) {
-  return {
-    type: SET_ADD_PATIENT_STATUS,
-    status,
   };
 }
 

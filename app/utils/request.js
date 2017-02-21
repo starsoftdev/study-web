@@ -84,7 +84,7 @@ function checkStatus(response) {
   return response.json()
     .then(json => {
       // details from actual error response
-      throw Object.assign(err, pick(json.error, ['code', 'message', 'status']));
+      throw Object.assign(err, pick(json.error, ['code', 'details', 'message', 'status']));
     }, () => {
       throw Object.assign(err, { message: 'Failed to parse JSON' });
     });
