@@ -10,7 +10,9 @@ import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
+import { selectSources } from '../../App/selectors';
 import Input from '../../../components/Input/index';
+import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import sanitizeProps from '../../../utils/sanitizeProps';
 import { submitAddPatient } from '../actions';
@@ -32,8 +34,10 @@ class AddPatientModal extends React.Component {
     onClose: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
     resetForm: React.PropTypes.func.isRequired,
+    sources: React.PropTypes.array.isRequired,
     touchFields: React.PropTypes.func.isRequired,
   };
+
   constructor(props) {
     super(props);
     this.addPatient = this.addPatient.bind(this);
@@ -67,11 +71,17 @@ class AddPatientModal extends React.Component {
     const patient = Object.assign({}, newPatient);
     /* normalizing the phone number */
     patient.phone = normalizePhone(newPatient.phone);
+    patient.source_id = newPatient.source;
+    delete patient.source;
     submitAddPatient(studyId, patient, this.onClose);
   }
 
   render() {
-    const { addPatientStatus, ...props } = this.props;
+    const { addPatientStatus, sources, ...props } = this.props;
+    const sourceOptions = sources.map(source => ({
+      label: source.type,
+      value: source.id,
+    }));
     const sanitizedProps = sanitizeProps(props);
     delete sanitizedProps.studyId;
     delete sanitizedProps.formError;
@@ -152,6 +162,18 @@ class AddPatientModal extends React.Component {
                   required
                 />
               </div>
+              <div className="field-row">
+                <strong className="label required">
+                  <label>Source</label>
+                </strong>
+                <Field
+                  name="source"
+                  component={ReactSelect}
+                  className="field required"
+                  placeholder="Select Source"
+                  options={sourceOptions}
+                />
+              </div>
               <div className="text-right">
                 <Button type="submit" disabled={addPatientStatus.adding}>Submit</Button>
               </div>
@@ -165,10 +187,11 @@ class AddPatientModal extends React.Component {
 
 
 const mapStateToProps = createStructuredSelector({
-  newPatient: selectValues(formName),
-  formError: selectSyncErrorBool(formName),
-  studyId: selectStudyId(),
   addPatientStatus: selectAddPatientStatus(),
+  formError: selectSyncErrorBool(formName),
+  newPatient: selectValues(formName),
+  studyId: selectStudyId(),
+  sources: selectSources(),
 });
 
 function mapDispatchToProps(dispatch) {

@@ -13,7 +13,7 @@ export class AddUserForm extends React.Component { // eslint-disable-line react/
   }
 
   render() {
-    const options = [{ label: 'Admin', value: 'Admin' }, { label: 'SM', value: 'SM' }, { label: 'AE', value: 'AE' }, { label: 'BD', value: 'BD' }];
+    const options = [{ label: 'Admin', value: 'Admin' }, { label: 'SM', value: 'SM' }, { label: 'BD', value: 'BD' }, { label: 'AE', value: 'AE' }];
 
     return (
       <form action="#" className="form-lightbox dashboard-lightbox">

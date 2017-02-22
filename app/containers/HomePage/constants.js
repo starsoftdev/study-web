@@ -45,3 +45,5 @@ export const SORT_SUCCESS                                = 'HomePage/Dashboard/S
 export const FETCH_UPGRADE_STUDY_PRICE                   = 'HomePage/Viewport/FETCH_UPGRADE_STUDY_PRICE';
 export const FETCH_UPGRADE_STUDY_PRICE_SUCCESS           = 'HomePage/Viewport/FETCH_UPGRADE_STUDY_PRICE_SUCCESS';
 export const FETCH_UPGRADE_STUDY_PRICE_ERROR             = 'HomePage/Viewport/FETCH_UPGRADE_STUDY_PRICE_ERROR';
+
+export const NEW_MESSAGE_FOR_PROTOCOL                    = 'HomePage/Viewport/NEW_MESSAGE_FOR_PROTOCOL';

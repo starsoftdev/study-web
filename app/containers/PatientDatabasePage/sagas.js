@@ -304,9 +304,9 @@ function* importPatients() {
         method: 'POST',
         body: formData,
       });
-      onClose();
       yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
       yield put(submitAddPatientSuccess(response, payload.name));
+      onClose();
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
