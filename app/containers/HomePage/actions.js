@@ -32,6 +32,7 @@ import {
   FETCH_UPGRADE_STUDY_PRICE,
   FETCH_UPGRADE_STUDY_PRICE_SUCCESS,
   FETCH_UPGRADE_STUDY_PRICE_ERROR,
+  NEW_MESSAGE_FOR_PROTOCOL,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser) {
@@ -269,5 +270,12 @@ export function fetchUpgradeStudyError(payload) {
   return {
     type: FETCH_UPGRADE_STUDY_PRICE_ERROR,
     payload,
+  };
+}
+
+export function addNewMessageForProtocol(protocolNumber) {
+  return {
+    type: NEW_MESSAGE_FOR_PROTOCOL,
+    protocolNumber,
   };
 }

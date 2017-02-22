@@ -20,7 +20,7 @@ import { addPatientsToTextBlast, findPatientsForTextBlast, filterPatientsForText
 import { selectActiveField, selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { fetchClientCredits } from '../../App/actions';
-import { selectCurrentUser, selectClientCredits } from '../../App/selectors';
+import { selectCurrentUser, selectClientCredits, selectSources } from '../../App/selectors';
 import _ from 'lodash';
 
 const formName = 'StudyPage.TextBlastModal';
@@ -135,47 +135,6 @@ class TextBlastModal extends React.Component {
         removePatients();
       }
     }
-    if (!checked) {
-      if (categoryId === 0) {
-        change('source', false);
-        for (const source of sources) {
-          change(`source-${source.id}`, false);
-        }
-        this.setState({
-          sourceDisable: true,
-        });
-      } else {
-        for (const category of patientCategories) {
-          if (category.id !== categoryId) {
-            if (formValues[`category-${category.id}`]) {
-              if (this.state.sourceDisable) {
-                change('source', true);
-                this.selectSource(true, 0);
-              }
-              this.setState({
-                sourceDisable: false,
-              });
-              return;
-            }
-          }
-        }
-        change('source', false);
-        for (const source of sources) {
-          change(`source-${source.id}`, false);
-        }
-        this.setState({
-          sourceDisable: true,
-        });
-      }
-    } else {
-      if (this.state.sourceDisable) {
-        this.selectSource(true, 0);
-        change('source', true);
-      }
-      this.setState({
-        sourceDisable: false,
-      });
-    }
   }
 
   selectSource(checked, sourceId) {
@@ -251,31 +210,19 @@ class TextBlastModal extends React.Component {
   }
 
   checkCategories(patient) {
-    const { change, formValues, patientCategories, sources } = this.props;
+    const { change, formValues, patientCategories } = this.props;
     let newPatientsArr = [];
     if (formValues.patients && formValues.filteredPatientSearchValues) {
       newPatientsArr = formValues.patients.filter((v) => (
         (formValues.filteredPatientSearchValues.indexOf(v) !== -1) && (v !== patient)
       ));
     }
-    const fOne = _.find(newPatientsArr, { categoryId: patient.categoryId });
-    if (!fOne) {
-      change(`category-${patient.categoryId}`, false);
-
-      for (const category of patientCategories) {
-        if (category.id !== patient.categoryId) {
-          if (formValues[`category-${category.id}`]) {
-            return;
-          }
-        }
+    for (const category of patientCategories) {
+      const fOne = _.find(newPatientsArr, { categoryId: category.id });
+      if (!fOne) {
+        change('category', false);
+        change(`category-${category.id}`, false);
       }
-      change('source', false);
-      for (const source of sources) {
-        change(`source-${source.id}`, false);
-      }
-      this.setState({
-        sourceDisable: true,
-      });
     }
   }
 
@@ -508,7 +455,7 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectValues(formName),
   formSyncErrors: selectSyncErrors(formName),
   patientCategories: Selector.selectPatientCategories(),
-  sources: Selector.selectSources(),
+  sources: selectSources(),
   studyId: Selector.selectStudyId(),
 });
 
