@@ -49,8 +49,8 @@ export class Home extends React.Component { // eslint-disable-line react/prefer-
     this.watcher = inViewport(this.animatedH2, this.setVisible);
   }
 
-  componentWillReceiveProps(newProps) {
-    console.log('componentWillReceiveProps', newProps);
+  componentWillReceiveProps() {
+    // console.log('componentWillReceiveProps', newProps);
   }
 
   componentWillUnmount() {
@@ -87,7 +87,7 @@ export class Home extends React.Component { // eslint-disable-line react/prefer-
         } else if (item.city || item.state) {
           addr = `${item.city || item.state}`;
         }
-        console.log('item', item);
+
         return (
           <article key={index} className="col-xs-6 col-lg-3 col-md-4 post in-viewport" data-view="zoomIn">
             <a target="_blank" href={landingHref}>

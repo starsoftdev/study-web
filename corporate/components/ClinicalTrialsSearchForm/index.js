@@ -69,7 +69,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
           type="text"
           maxLength="5"
           component={Input}
-          placeholder="* Postal Code"
+          placeholder="Postal Code"
           className="field-row"
           bsClass="form-control input-lg"
         />
