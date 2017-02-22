@@ -66,9 +66,7 @@ export class Home extends React.Component { // eslint-disable-line react/prefer-
     this.setState({ distance: ev });
   }
 
-  handleIndicationChoose(ev) {
-    console.log('handleIndicationChoose', ev);
-  }
+  handleIndicationChoose() {}
 
   render() {
     const { distance } = this.state;
@@ -77,7 +75,10 @@ export class Home extends React.Component { // eslint-disable-line react/prefer-
     let studiesList = [];
 
     if (trials && trials.length > 0) {
-      h3Text = `There are ${trials.length} studies within ${distance || 0} miles of 90804`;
+      h3Text = `There are ${trials.length} studies within ${distance} miles of 90804`;
+      if (!distance) {
+        h3Text = `There are ${trials.length} studies of 90804`;
+      }
       studiesList = trials.map((item, index) => {
         const landingHref = `/${item.study_id}-${item.location.toLowerCase().replace(/ /ig, '-')}`;
         let addr = null;
@@ -103,7 +104,7 @@ export class Home extends React.Component { // eslint-disable-line react/prefer-
                   </address>
                 }
                 <p className="distance">
-                  <i className="icon-car"></i> 10.8 Miles
+                  <i className="icon-car"></i> {item.distance} Miles
                 </p>
                 <span className="tel">
                   <i className="icon-phone"></i> {item.phone_number}
@@ -133,7 +134,12 @@ export class Home extends React.Component { // eslint-disable-line react/prefer-
           >
             <span className="text">INSTANTLY SEARCH FOR A CLINICAL TRIAL!</span>
           </h2>
-          <ClinicalTrialsSearchForm indications={indications} handleDistanceChoose={this.handleDistanceChoose} handleIndicationChoose={this.handleIndicationChoose} onSubmit={this.onSubmitForm} />
+          <ClinicalTrialsSearchForm
+            indications={indications}
+            handleDistanceChoose={this.handleDistanceChoose}
+            handleIndicationChoose={this.handleIndicationChoose}
+            onSubmit={this.onSubmitForm}
+          />
           <div className="articles-holder hidden"></div>
           <div className={classNames('articles-holder', { hidden: (!trials || trials.length <= 0) })}>
             <h3 className="text-center text-uppercase">{h3Text}</h3>

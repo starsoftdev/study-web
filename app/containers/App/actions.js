@@ -976,7 +976,6 @@ export function findOutPatients(params) {
 }
 
 export function clinicalTrialsSearch(params) {
-  console.log('clinicalTrialsSearch', params);
   return {
     type: CLINICAL_TRIALS_SEARCH,
     params,
