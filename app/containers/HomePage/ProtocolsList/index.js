@@ -4,9 +4,12 @@ import { createStructuredSelector } from 'reselect';
 import _ from 'lodash';
 
 import { selectCurrentUser } from '../../App/selectors';
-import { setActiveSort, sortSuccess } from '../actions';
+import { setActiveSort, sortSuccess, addNewMessageForProtocol } from '../actions';
 import { selectProtocols, selectPaginationOptions } from '../selectors';
 import ProtocolItem from './ProtocolItem';
+import {
+  selectSocket,
+} from '../../../containers/GlobalNotifications/selectors';
 
 class ProtocolsList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -15,14 +18,30 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
     paginationOptions: React.PropTypes.object,
     setActiveSort: PropTypes.func,
     sortSuccess: PropTypes.func,
+    socket: React.PropTypes.any,
+    addNewMessageForProtocol: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      socketBinded: false,
+    };
+
     this.sortBy = this.sortBy.bind(this);
   }
 
   componentDidMount() {
+  }
+
+  componentWillReceiveProps() {
+    if (this.props.socket && this.state.socketBinded === false) {
+      this.props.socket.on('notifyMessage', (newMessage) => {
+        this.props.addNewMessageForProtocol(newMessage.study.protocolNumber);
+      });
+      this.setState({ socketBinded: true });
+    }
   }
 
   sortBy(ev) {
@@ -95,11 +114,13 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   protocols: selectProtocols(),
   paginationOptions: selectPaginationOptions(),
+  socket: selectSocket(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
   sortSuccess: (payload) => dispatch(sortSuccess(payload)),
+  addNewMessageForProtocol: (protocolNumber) => dispatch(addNewMessageForProtocol(protocolNumber)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProtocolsList);
