@@ -865,7 +865,7 @@ function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
       requestURL += `&distance=${distance}`;
     }
     if (indicationId) {
-      requestURL += `&indication_id=${indicationId}`;
+      requestURL += `&indicationId=${indicationId}`;
     }
     const response = yield call(request, requestURL, {
       method: 'GET',
