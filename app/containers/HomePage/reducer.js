@@ -27,6 +27,7 @@ import {
   EDIT_STUDY_SUCCESS,
   EDIT_STUDY_ERROR,
   SET_ACTIVE_SORT,
+  NEW_MESSAGE_FOR_PROTOCOL,
 } from './constants';
 
 import { ADD_EMAIL_NOTIFICATION_USER, ADD_EMAIL_NOTIFICATION_USER_SUCCESS, ADD_EMAIL_NOTIFICATION_USER_ERROR } from '../../containers/App/constants';
@@ -35,6 +36,8 @@ import {
   RECEIVE_NOTIFICATION,
   SEND_STUDY_PATIENT_MESSAGES,
 } from '../../containers/GlobalNotifications/constants';
+
+import _ from 'lodash';
 
 const initialState = {
   patientSignUps: {
@@ -101,6 +104,7 @@ const initialState = {
 export default function homePageReducer(state = initialState, action) {
   const { payload } = action;
   let newState;
+  let protocols;
 
   switch (action.type) {
     case FETCH_PATIENT_SIGN_UPS_SUCCEESS:
@@ -403,6 +407,21 @@ export default function homePageReducer(state = initialState, action) {
           saving: false,
           error: action.payload,
           savedUser: null,
+        },
+      };
+    case NEW_MESSAGE_FOR_PROTOCOL:
+      protocols = _.cloneDeep(state.protocols.details);
+      _.forEach(protocols, (item, index) => {
+        if (item.protocolNumber === action.protocolNumber) {
+          protocols[index].unreadMessageCount = item.unreadMessageCount ? (parseInt(item.unreadMessageCount) + 1).toString() : '1';
+        }
+      });
+      return {
+        ...state,
+        protocols: {
+          details: protocols,
+          fetching: false,
+          error: null,
         },
       };
     default:
