@@ -1,32 +1,60 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import inViewport from 'in-viewport';
+import classNames from 'classnames';
+
+import ClinicalTrialsSearchForm from '../../components/ClinicalTrialsSearchForm';
+
+import {
+  fetchIndications,
+  clinicalTrialsSearch,
+} from '../../../app/containers/App/actions';
+import {
+  selectIndications,
+  selectTrials,
+} from '../../../app/containers/App/selectors';
 
 import './styles.less';
 
-export default class Home extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class Home extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
-  static propTypes = {};
+  static propTypes = {
+    onSubmitForm: React.PropTypes.func,
+    indications: PropTypes.array,
+    trials: PropTypes.array,
+    posts: PropTypes.array,
+    fetchIndications: PropTypes.func,
+  };
 
   constructor(props) {
     super(props);
-    this.watcherA = null;
-    this.watcherB = null;
+    this.watcher = null;
 
     this.setVisible = this.setVisible.bind(this);
+    this.onSubmitForm = this.props.onSubmitForm.bind(this);
+    this.handleDistanceChoose = this.handleDistanceChoose.bind(this);
+    this.handleIndicationChoose = this.handleIndicationChoose.bind(this);
+
+    this.state = {
+      distance: 0,
+      indication: null,
+    };
   }
 
   componentWillMount() {}
 
   componentDidMount() {
-    this.watcherA = inViewport(this.animatedH2, this.setVisible);
-    this.watcherB = inViewport(this.animatedForm, this.setVisible);
+    this.props.fetchIndications();
+    this.watcher = inViewport(this.animatedH2, this.setVisible);
   }
 
-  componentWillReceiveProps() {}
+  componentWillReceiveProps(newProps) {
+    console.log('componentWillReceiveProps', newProps);
+  }
 
   componentWillUnmount() {
-    this.watcherA.dispose();
-    this.watcherB.dispose();
+    this.watcher.dispose();
   }
 
   setVisible(el) {
@@ -34,9 +62,69 @@ export default class Home extends React.Component { // eslint-disable-line react
     el.classList.add('in-viewport', viewAtr);
   }
 
+  handleDistanceChoose(ev) {
+    this.setState({ distance: ev });
+  }
+
+  handleIndicationChoose(ev) {
+    console.log('handleIndicationChoose', ev);
+  }
+
   render() {
+    const { distance } = this.state;
+    const { indications, trials } = this.props;
+    let h3Text;
+    let studiesList = [];
+
+    if (trials && trials.length > 0) {
+      h3Text = `There are ${trials.length} studies within ${distance || 0} miles of 90804`;
+      studiesList = trials.map((item, index) => {
+        const landingHref = `/${item.study_id}-${item.location.toLowerCase().replace(/ /ig, '-')}`;
+        let addr = null;
+        if (item.city && item.state) {
+          addr = `${item.city}, ${item.state}`;
+        } else if (item.city || item.state) {
+          addr = `${item.city || item.state}`;
+        }
+        console.log('item', item);
+        return (
+          <article key={index} className="col-xs-6 col-lg-3 col-md-4 post in-viewport" data-view="zoomIn">
+            <a target="_blank" href={landingHref}>
+              <div className="img-holder">
+                {item.image &&
+                  <img src={item.image} width="854" height="444" className="img-responsive" alt="description" />
+                }
+              </div>
+              <div className="info">
+                <h4>{item.name}</h4>
+                {addr &&
+                  <address>
+                    <i className="icon-map-marker"></i> {addr}
+                  </address>
+                }
+                <p className="distance">
+                  <i className="icon-car"></i> 10.8 Miles
+                </p>
+                <span className="tel">
+                  <i className="icon-phone"></i> {item.phone_number}
+                </span>
+              </div>
+              <div className="desc">
+                <p>
+                  {item.description}
+                </p>
+              </div>
+              <div className="btn-holder">
+                <span className="btn btn-default">Learn More</span>
+              </div>
+            </a>
+          </article>
+        );
+      });
+    }
+
     return (
-      <div id="main">
+      <div id="main" className="visible-overflow">
         <div className="container">
           <h2
             ref={(animatedH2) => { this.animatedH2 = animatedH2; }}
@@ -45,65 +133,30 @@ export default class Home extends React.Component { // eslint-disable-line react
           >
             <span className="text">INSTANTLY SEARCH FOR A CLINICAL TRIAL!</span>
           </h2>
-          <form
-            ref={(animatedForm) => { this.animatedForm = animatedForm; }}
-            action="#"
-            className="form-find-studies"
-            data-formvalidation=""
-            data-view="fadeInUp"
-          >
-            <div className="field-row">
-              <input type="text" placeholder="Postal Code" className="form-control input-lg" data-required="true" />
-            </div>
-            <div className="field-row">
-              <select className="data-search select-large hidden" data-required="true">
-                <option>Select Distance</option>
-                <option>10 Miles</option>
-                <option>50 Miles</option>
-                <option>100 Miles</option>
-                <option>250 Miles</option>
-              </select>
-              <span className="jcf-select jcf-unselectable jcf-select-data-search jcf-select-select-large">
-                <span className="jcf-select-text">
-                  <span className="">Select Distance</span>
-                </span>
-                <span className="jcf-select-opener"></span>
-              </span>
-            </div>
-            <div className="field-row">
-              <select className="data-search select-large hidden" data-required="true">
-                <option>Select Indication</option>
-                <option>Abnormal bleeding</option>
-                <option>Acid Reflux</option>
-                <option>Acne</option>
-                <option>Acne – Body</option>
-                <option>Acne – Teen – Body</option>
-                <option>Actinic Keratosis</option>
-                <option>Acute Otitis Externa</option>
-                <option>Addiction</option>
-                <option>Addiction – Opioid</option>
-                <option>ADHD</option>
-                <option>ADHD – Child</option>
-                <option>Age Spot</option>
-                <option>Aids</option>
-                <option>Allergies</option>
-                <option>Allergies – Child</option>
-              </select>
-              <span className="jcf-select jcf-unselectable jcf-select-data-search jcf-select-select-large">
-                <span className="jcf-select-text">
-                  <span className="">Select Indication</span>
-                </span>
-                <span className="jcf-select-opener"></span>
-              </span>
-            </div>
-            <div className="field-row">
-              <input type="reset" className="btn btn-default hidden input-lg" value="Reset" />
-              <input type="submit" className="btn btn-default btn-block input-lg" value="FIND Trials!" />
-            </div>
-          </form>
+          <ClinicalTrialsSearchForm indications={indications} handleDistanceChoose={this.handleDistanceChoose} handleIndicationChoose={this.handleIndicationChoose} onSubmit={this.onSubmitForm} />
           <div className="articles-holder hidden"></div>
+          <div className={classNames('articles-holder', { hidden: (!trials || trials.length <= 0) })}>
+            <h3 className="text-center text-uppercase">{h3Text}</h3>
+            <div className="row">
+              {(trials && trials.length > 0) && studiesList}
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  indications: selectIndications(),
+  trials: selectTrials(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchIndications: () => dispatch(fetchIndications()),
+    onSubmitForm: (values) => dispatch(clinicalTrialsSearch(values)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

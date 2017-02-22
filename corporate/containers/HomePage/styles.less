@@ -15,3 +15,123 @@ html {
     }
   }
 }
+
+@import "~react-select/less/select.less";
+@import "../../assets/less/_custom.less";
+
+.visible-overflow{
+  overflow: visible !important;
+}
+
+/* react-select styles */
+.Select.form-control {
+  padding: 0 !important;
+  height: 60px;
+
+  &:hover{
+    color: #c0e890 !important;
+    border-color: #c0e890 !important;
+  }
+}
+
+.Select-control {
+  border: none !important;
+  height: 100%;
+  cursor: pointer;
+
+  &:hover{
+    box-shadow: none !important;
+  }
+}
+
+.Select.is-disabled > .Select-control {
+  background-color: #eee;
+  cursor: not-allowed;
+}
+
+.Select-placeholder {
+  color: #99cc66 !important;
+  padding-left: 15px !important;
+  top: 10px !important;
+}
+
+.Select-value {
+  color: #99cc66 !important;
+  padding-left: 15px !important;
+  top: 10px !important;
+
+  span{
+    color: #c0e890 !important;
+  }
+}
+
+.Select-menu-outer {
+  margin: 2px 0 0 -2px;
+  box-sizing: initial !important;
+  border: 2px solid #CCC;
+  max-height: 300px;
+  div {
+    margin: 1px;
+  }
+}
+
+.Select-option:last-child {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.top-positioned .Select-menu-outer {
+  top: auto;
+  bottom: 100%;
+}
+
+.Select-arrow-zone {
+  padding-right: 10px;
+}
+
+.Select-option.is-focused {
+  background-color: #00AFEF;
+  color: #FFF;
+}
+
+/* react-toggle-button styles */
+
+div.toggle > div:first-child {
+  width: 160px !important;
+
+  > div {
+    color: red;
+  }
+}
+div.toggle.has-error > div:first-child {
+  border: solid 1px red;
+}
+.toggleDisabled:after {
+  content: '';
+  position: absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width: 160px;
+  background-color: grey;
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.chat-text {
+  width: 100%;
+  position: relative;
+}
+
+.remaining-counter {
+  font-size: 18px;
+  font-weight: 600;
+  color: #a0cf67;
+  position: absolute;
+  top: 30px;
+  right: 123px;
+}
+
+.has-error .geosuggest__input {
+  border: solid 2px red !important;
+}
