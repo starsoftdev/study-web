@@ -114,6 +114,8 @@ import {
   PATIENT_SUBSCRIBED,
   PATIENT_SUBSCRIPTION_ERROR,
   FIND_OUT_PATIENTS_POSTED,
+
+  CLINICAL_TRIALS_SEARCH_SUCCESS,
 } from './constants';
 
 import {
@@ -158,6 +160,11 @@ const initialState = {
       error: null,
     },
     cards: {
+      details: null,
+      fetching: false,
+      error: null,
+    },
+    trials: {
       details: null,
       fetching: false,
       error: null,
@@ -453,6 +460,15 @@ export default function appReducer(state = initialState, action) {
         subscribedFromLanding: null,
         landing: {
           details: null,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case CLINICAL_TRIALS_SEARCH_SUCCESS:
+      baseDataInnerState = {
+        trials: {
+          details: payload,
           fetching: false,
           error: null,
         },

@@ -4,8 +4,6 @@ import { reset } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import { Parallax } from 'react-parallax';
 
-import { findOutPatients } from '../../../app/containers/App/actions';
-
 import bg1 from '../../assets/images/bg1.jpg';
 import img1 from '../../assets/images/img1.svg';
 import img4 from '../../assets/images/img4.svg';
@@ -34,6 +32,8 @@ import videoPlaceholder from '../../assets/images/video-placeholder.png';
 import computerImg from '../../assets/images/computer-img.png';
 
 import FindOutPatientsForm from '../../components/FindOutPatientsForm';
+
+import { findOutPatients } from '../../../app/containers/App/actions';
 
 import {
   selectFindOutPosted,

@@ -45,6 +45,7 @@ import {
   FETCH_LANDING,
   SUBSCRIBE_FROM_LANDING,
   FIND_OUT_PATIENTS,
+  CLINICAL_TRIALS_SEARCH,
 } from '../../containers/App/constants';
 
 import {
@@ -113,6 +114,8 @@ import {
   patientSubscriptionError,
   findOutPatientsPosted,
   findOutPatientsError,
+  clinicalTrialsSearchSuccess,
+  clinicalTrialsSearchError,
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -149,6 +152,7 @@ export default function* baseDataSaga() {
   yield fork(takeLatest, FETCH_LANDING, fetchLandingStudy);
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
   yield fork(takeLatest, FIND_OUT_PATIENTS, postFindOutPatients);
+  yield fork(takeLatest, CLINICAL_TRIALS_SEARCH, searchClinicalTrials);
 }
 
 export function* fetchStudiesWatcher() {
@@ -849,5 +853,26 @@ function* postFindOutPatients(action) {
     yield put(findOutPatientsPosted(response));
   } catch (err) {
     yield put(findOutPatientsError(err));
+  }
+}
+
+function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
+  try {
+    const { postalCode, distance } = action.params;
+    const indicationId = action.params.indication_id;
+    let requestURL = `${API_URL}/studies/getNearbyStudies?zipcode=${postalCode}`;
+    if (distance) {
+      requestURL += `&distance=${distance}`;
+    }
+    if (indicationId) {
+      requestURL += `&indication_id=${indicationId}`;
+    }
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    console.log('searchClinicalTrials', response);
+    yield put(clinicalTrialsSearchSuccess(response));
+  } catch (err) {
+    yield put(clinicalTrialsSearchError(err));
   }
 }

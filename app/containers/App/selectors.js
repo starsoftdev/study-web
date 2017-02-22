@@ -309,6 +309,11 @@ const selectFindOutPosted = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.findOutPosted', {})
 );
+
+const selectTrials = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.trials.details', {})
+);
 // end
 
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
@@ -367,4 +372,5 @@ export {
   selectFindOutPosted,
 
   selectStudies,
+  selectTrials,
 };
