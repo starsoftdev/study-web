@@ -55,7 +55,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
       { id: 250, name: '250 Miles' },
     ];
     if (indications.length > 0 && indications[0].id !== 0) {
-      indications.unshift({ id: 0, name: 'All' })
+      indications.unshift({ id: 0, name: 'All' });
     }
 
     return (
