@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
+import studyKikLogo from '../../assets/images/logo.svg';
 
 import ClinicalTrialsSearchForm from '../../components/ClinicalTrialsSearchForm';
 
@@ -92,9 +93,7 @@ export class Home extends React.Component { // eslint-disable-line react/prefer-
           <article key={index} className="col-xs-6 col-lg-3 col-md-4 post in-viewport" data-view="zoomIn">
             <a target="_blank" href={landingHref}>
               <div className="img-holder">
-                {item.image &&
-                  <img src={item.image} width="854" height="444" className="img-responsive" alt="description" />
-                }
+                <img src={item.image || studyKikLogo} width="854" height="444" alt="description" className={classNames('img-responsive', { placeholder: !item.image })} />
               </div>
               <div className="info">
                 <h4>{item.name}</h4>
