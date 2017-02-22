@@ -870,9 +870,20 @@ function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
-    console.log('searchClinicalTrials', response);
     yield put(clinicalTrialsSearchSuccess(response));
   } catch (err) {
     yield put(clinicalTrialsSearchError(err));
   }
 }
+
+/* function* getStudysCount(action) { // eslint-disable-line prefer-template
+  try {
+    let requestURL = `${API_URL}/studies/count`;
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    yield put(getStudysCountSuccess(response));
+  } catch (err) {
+    yield put(getStudysCountError(err));
+  }
+}*/

@@ -1,3 +1,5 @@
+@import "../../assets/less/variables.less";
+
 html {
   -webkit-text-size-adjust: none !important;
 }
@@ -32,6 +34,14 @@ html {
     color: #c0e890 !important;
     border-color: #c0e890 !important;
   }
+
+  @media screen and (max-width: @sm) {
+    height: 50px;
+  }
+
+  @media screen and (max-width: @xs) {
+    height: 40px;
+  }
 }
 
 .Select-control {
@@ -52,16 +62,26 @@ html {
 .Select-placeholder {
   color: #99cc66 !important;
   padding-left: 15px !important;
-  top: 10px !important;
 }
 
 .Select-value {
   color: #99cc66 !important;
   padding-left: 15px !important;
-  top: 10px !important;
 
   span{
     color: #c0e890 !important;
+  }
+}
+
+.Select-placeholder, .Select-value {
+  top: 10px !important;
+
+  @media screen and (max-width: @sm) {
+    top: 5px !important;
+  }
+
+  @media screen and (max-width: @xs) {
+    top: 0px !important;
   }
 }
 
