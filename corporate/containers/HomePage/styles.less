@@ -105,8 +105,77 @@ html {
   bottom: 100%;
 }
 
+.is-open {
+
+  & > .Select-control {
+
+    .Select-arrow-zone {
+      padding-right: 15px;
+
+      &:hover {
+
+        .Select-arrow {
+          border-color: transparent transparent #c0e890 !important;
+        }
+      }
+
+      .Select-arrow {
+        border-color: transparent transparent #99cc66 !important;
+        border-width: 0 14px 14px;
+
+        @media screen and (max-width: @desktop) {
+          margin: -5px 0 0;
+          border-width: 0 10px 10px;
+        }
+
+        @media screen and (max-width: @xs) {
+          margin: -3px 0 0;
+          border-width: 0 6px 6px;
+        }
+      }
+    }
+  }
+}
+
 .Select-arrow-zone {
-  padding-right: 10px;
+  padding-right: 15px;
+
+  &:hover{
+
+    .Select-arrow {
+      border-top-color: #c0e890;
+    }
+  }
+
+  .Select-arrow {
+    margin: -7px 0 0;
+    border-top-color: #99cc66;
+    border-width: 14px 14px 0;
+
+    @media screen and (max-width: @desktop) {
+      margin: -5px 0 0;
+      border-width: 10px 10px 0;
+    }
+
+    @media screen and (max-width: @xs) {
+      margin: -3px 0 0;
+      border-width: 6px 6px 0;
+    }
+  }
+}
+
+.Select-input{
+
+  input {
+
+    @media screen and (min-width: @xs) {
+      padding: 12px 0 12px;
+    }
+
+    @media screen and (min-width: @desktop) {
+      padding: 14px 0 14px;
+    }
+  }
 }
 
 .Select-option.is-focused {
