@@ -9,7 +9,8 @@ import { map } from 'lodash';
 import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import { selectClientSites, selectStudies } from '../../App/selectors';
+import { selectClientSites } from '../../App/selectors';
+import { selectStudies } from '../selectors';
 import { selectSearchStudiesFormError, selectSearchStudiesFormValues } from './selectors';
 import formValidator from './validator';
 import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../constants';
@@ -64,7 +65,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
     const { clientSites, studies, hasError, handleSubmit, currentUser } = this.props;
     let bDisabled = true;
     if (currentUser && currentUser.roleForClient) {
-      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+      bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
     }
     const siteOptions = [{ label: 'All', value: '0' }].concat(map(clientSites.details, siteIterator => ({
       label: siteIterator.name,

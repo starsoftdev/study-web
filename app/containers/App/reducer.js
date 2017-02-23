@@ -58,7 +58,8 @@ import {
   FETCH_PATIENT_MESSAGES_ERROR,
   UPDATE_PATIENT_MESSAGES,
 
-  SEARCH_SITE_PATIENTS,
+  FETCH_PATIENT_MESSAGE_UNREAD_COUNT_SUCCESS,
+
   SEARCH_SITE_PATIENTS_SUCCESS,
   SEARCH_SITE_PATIENTS_ERROR,
 
@@ -68,10 +69,6 @@ import {
   FETCH_CLIENT_ROLES,
   FETCH_CLIENT_ROLES_SUCCESS,
   FETCH_CLIENT_ROLES_ERROR,
-
-  FETCH_STUDIES,
-  FETCH_STUDIES_SUCCESS,
-  FETCH_STUDIES_ERROR,
 
   FETCH_SITE,
   FETCH_SITE_SUCCESS,
@@ -313,96 +310,6 @@ export default function appReducer(state = initialState, action) {
     case FETCH_INDICATIONS_SUCCESS:
       baseDataInnerState = {
         indications: payload,
-      };
-      break;
-    case FETCH_STUDIES:
-      baseDataInnerState = {
-        studies: {
-          details: [],
-          fetching: true,
-          error: null,
-        },
-      };
-      break;
-    case FETCH_STUDIES_SUCCESS: {
-      let entity;
-      const entitiesCollection = [];
-      let startDate = '';
-      let endDate = '';
-
-      forEach(payload, (studyIterator, index) => {
-        entity = {
-          studyId: studyIterator.id,
-          indication: studyIterator.indication,
-          location: '',
-          sponsor: '',
-          protocol: studyIterator.protocolNumber,
-          patientMessagingSuite: (studyIterator.patientMessagingSuite) ? 'On' : 'Off',
-          patientQualificationSuite: (studyIterator.patientQualificationSuite) ? 'On' : 'Off',
-          status: studyIterator.status,
-          callTracking: studyIterator.callTracking,
-          siteUsers: null,
-          startDate: '',
-          endDate: '',
-          orderNumber: (index + 1),
-          irbName: studyIterator.irbName,
-          irbEmail: studyIterator.irbEmail,
-          croContactName: studyIterator.croContactName,
-          croContactEmail: studyIterator.croContactEmail,
-          image: studyIterator.image,
-          sponsorContacts: studyIterator.sponsorContacts,
-          studyNotificationEmails: studyIterator.studyNotificationEmails,
-          condenseTwoWeeks: studyIterator.condenseTwoWeeks,
-          recruitmentPhone: studyIterator.recruitmentPhone,
-        };
-        if (studyIterator.sponsors && studyIterator.sponsors.length > 0) {
-          const sponsorContacts = map(studyIterator.sponsors, sponsorContactIterator => sponsorContactIterator.name);
-          const sponsorContactsStr = sponsorContacts.join(', ');
-          entity.sponsor = sponsorContactsStr;
-        }
-        if (!studyIterator.sites || studyIterator.sites.length === 0) {
-          entitiesCollection.push(entity);
-          return true;
-        }
-        forEach(studyIterator.sites, (siteIterator) => {
-          startDate = '';
-          endDate = '';
-
-          if (siteIterator.campaigns && siteIterator.campaigns.length > 0 && siteIterator.campaigns[0]) {
-            startDate = siteIterator.campaigns[0].dateFrom;
-            endDate = siteIterator.campaigns[0].dateTo;
-          }
-          entity = {
-            ...entity,
-            location: siteIterator.location,
-            status: siteIterator.status,
-            campaign: siteIterator.campaigns[0],
-            siteUsers: siteIterator.users,
-            startDate,
-            endDate,
-            maxCampaign: siteIterator.maxCampaign,
-            siteId: siteIterator.id,
-          };
-          entitiesCollection.push(entity);
-        });
-        return true;
-      });
-      baseDataInnerState = {
-        studies: {
-          details: entitiesCollection,
-          fetching: false,
-          error: null,
-        },
-      };
-      break;
-    }
-    case FETCH_STUDIES_ERROR:
-      baseDataInnerState = {
-        studies: {
-          details: [],
-          fetching: false,
-          error: payload,
-        },
       };
       break;
     case UPGRADE_STUDY_SUCCESS: {
@@ -784,8 +691,7 @@ export default function appReducer(state = initialState, action) {
       break;
     case MARK_AS_READ_PATIENT_MESSAGES:
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
-        let patientData = null;
-        patientData = item;
+        const patientData = Object.assign({}, item);
         if (patientData.id === action.patientId && patientData.study_id === action.studyId) {
           patientData.count_unread = 0;
         }
@@ -829,6 +735,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_PATIENT_MESSAGES:
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: [],
           fetching: true,
           error: null,
@@ -838,6 +745,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_PATIENT_MESSAGES_SUCCESS:
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: payload,
           fetching: false,
           error: null,
@@ -849,6 +757,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_PATIENT_MESSAGES_ERROR:
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: [],
           fetching: false,
           error: payload,
@@ -859,6 +768,7 @@ export default function appReducer(state = initialState, action) {
       patientMessagesCollection = concat(state.baseData.patientMessages.details, action.newMessage);
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: patientMessagesCollection,
           fetching: false,
           error: null,
@@ -866,14 +776,21 @@ export default function appReducer(state = initialState, action) {
       };
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: patientMessagesCollection,
           fetching: false,
           error: null,
         },
       };
       break;
-    case SEARCH_SITE_PATIENTS:
-      return state;
+    case FETCH_PATIENT_MESSAGE_UNREAD_COUNT_SUCCESS:
+      baseDataInnerState = {
+        patientMessages: {
+          ...state.baseData.patientMessages,
+          stats: action.payload,
+        },
+      };
+      break;
     case SEARCH_SITE_PATIENTS_SUCCESS:
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
         let patientData = null;

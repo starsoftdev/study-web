@@ -102,7 +102,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
   }
 
   componentWillReceiveProps(newProps) {
-    // indication cahnge
+    // indication change
     if (
       ((newProps.formValues.indication_id !== this.props.formValues.indication_id) ||
       (newProps.formValues.exposureLevel !== this.props.formValues.exposureLevel)) &&

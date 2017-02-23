@@ -1,9 +1,13 @@
 /* eslint-disable comma-dangle, no-case-declarations */
+import _ from 'lodash';
 
 import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
   FETCH_PATIENT_MESSAGES_SUCCEESS,
   FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS,
+  FETCH_STUDIES,
+  FETCH_STUDIES_SUCCESS,
+  FETCH_STUDIES_ERROR,
   FETCH_PROTOCOLS,
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_PROTOCOLS_ERROR,
@@ -28,6 +32,7 @@ import {
   EDIT_STUDY_ERROR,
   SET_ACTIVE_SORT,
   NEW_MESSAGE_FOR_PROTOCOL,
+  SORT_SUCCESS,
 } from './constants';
 
 import { ADD_EMAIL_NOTIFICATION_USER, ADD_EMAIL_NOTIFICATION_USER_SUCCESS, ADD_EMAIL_NOTIFICATION_USER_ERROR } from '../../containers/App/constants';
@@ -36,8 +41,6 @@ import {
   RECEIVE_NOTIFICATION,
   SEND_STUDY_PATIENT_MESSAGES,
 } from '../../containers/GlobalNotifications/constants';
-
-import _ from 'lodash';
 
 const initialState = {
   patientSignUps: {
@@ -54,6 +57,11 @@ const initialState = {
     unreadTexts: 0,
     unreadEmails: 0,
     total: 0,
+  },
+  studies: {
+    details: [],
+    fetching: false,
+    error: null,
   },
   protocols: {
     details: [],
@@ -176,6 +184,49 @@ export default function homePageReducer(state = initialState, action) {
           break;
       }
       return newState;
+    case FETCH_STUDIES:
+      return {
+        ...state,
+        studies: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_STUDIES_SUCCESS: {
+      const entitiesCollection = payload.map((studyObject, index) => ({
+        studyId: studyObject.id,
+        indication: studyObject.indication,
+        location: studyObject.site.location,
+        sponsor: studyObject.sponsor.name,
+        protocol: studyObject.protocolNumber,
+        patientMessagingSuite: studyObject.patientMessagingSuite ? 'On' : 'Off',
+        patientQualificationSuite: studyObject.patientQualificationSuite ? 'On' : 'Off',
+        status: studyObject.status,
+        callTracking: studyObject.callTracking,
+        startDate: studyObject.campaigns[0].dateFrom,
+        endDate: studyObject.campaigns[0].dateTo,
+        orderNumber: (index + 1),
+        siteId: studyObject.site.id
+      }));
+      return {
+        ...state,
+        studies: {
+          details: entitiesCollection,
+          fetching: false,
+          error: null,
+        },
+      };
+    }
+    case FETCH_STUDIES_ERROR:
+      return {
+        ...state,
+        studies: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
+      };
     case FETCH_PROTOCOLS:
       return {
         ...state,
@@ -330,8 +381,16 @@ export default function homePageReducer(state = initialState, action) {
         },
       };
     case UPGRADE_STUDY_SUCCESS:
+      const studies = _.cloneDeep(state.studies.details);
+      const study = _.find(studies, (o) => (o.studyId === payload.studyId));
+      study.campaign.level_id = payload.newLevelId;
       return {
         ...state,
+        studies: {
+          details: studies,
+          fetching: false,
+          error: null,
+        },
         upgradedStudy: {
           details: payload,
           submitting: false,
@@ -380,6 +439,15 @@ export default function homePageReducer(state = initialState, action) {
         paginationOptions: {
           activeSort: action.sort,
           activeDirection: action.direction,
+        },
+      };
+    case SORT_SUCCESS:
+      return {
+        ...state,
+        studies: {
+          details: payload,
+          fetching: false,
+          error: null,
         },
       };
     case ADD_EMAIL_NOTIFICATION_USER:

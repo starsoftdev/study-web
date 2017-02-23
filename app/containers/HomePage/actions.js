@@ -5,6 +5,9 @@ import {
   FETCH_PATIENT_MESSAGES_SUCCEESS,
   FETCH_PRINCIPAL_INVESTIGATOR_TOTALS,
   FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS,
+  FETCH_STUDIES,
+  FETCH_STUDIES_SUCCESS,
+  FETCH_STUDIES_ERROR,
   FETCH_PROTOCOLS,
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_PROTOCOLS_ERROR,
@@ -30,8 +33,6 @@ import {
   SET_ACTIVE_SORT,
   SORT_SUCCESS,
   FETCH_UPGRADE_STUDY_PRICE,
-  FETCH_UPGRADE_STUDY_PRICE_SUCCESS,
-  FETCH_UPGRADE_STUDY_PRICE_ERROR,
   NEW_MESSAGE_FOR_PROTOCOL,
 } from './constants';
 
@@ -77,7 +78,29 @@ export function fetchPrincipalInvestigatorTotalsSucceeded(payload) {
   };
 }
 
-export function fetchProtocols(searchParams = null) {
+export function fetchStudies(currentUser, searchParams) {
+  return {
+    type: FETCH_STUDIES,
+    currentUser,
+    searchParams,
+  };
+}
+
+export function studiesFetched(payload) {
+  return {
+    type: FETCH_STUDIES_SUCCESS,
+    payload,
+  };
+}
+
+export function studiesFetchingError(payload) {
+  return {
+    type: FETCH_STUDIES_ERROR,
+    payload,
+  };
+}
+
+export function fetchProtocols(searchParams) {
   return {
     type: FETCH_PROTOCOLS,
     searchParams,
@@ -256,20 +279,6 @@ export function fetchUpgradeStudyPrice(fromLevel, toLevel) {
     type: FETCH_UPGRADE_STUDY_PRICE,
     fromLevel,
     toLevel,
-  };
-}
-
-export function fetchUpgradeStudySuccess(payload) {
-  return {
-    type: FETCH_UPGRADE_STUDY_PRICE_SUCCESS,
-    payload,
-  };
-}
-
-export function fetchUpgradeStudyError(payload) {
-  return {
-    type: FETCH_UPGRADE_STUDY_PRICE_ERROR,
-    payload,
   };
 }
 

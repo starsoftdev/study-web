@@ -15,8 +15,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import { selectUserRoleType, selectCurrentUserClientId, selectCurrentUser } from '../../containers/App/selectors';
-import { fetchStudies, fetchClientSites, fetchLevels, getAvailPhoneNumbers } from '../../containers/App/actions';
-import { fetchProtocols, fetchProtocolNumbers, fetchIndications } from './actions';
+import { fetchClientSites, fetchLevels, getAvailPhoneNumbers } from '../../containers/App/actions';
+import { fetchStudies, fetchProtocols, fetchProtocolNumbers, fetchIndications } from './actions';
 import { selectSearchProtocolsFormValues } from '../../containers/HomePage/selectors';
 
 import Dashboard from './Dashboard';
@@ -57,7 +57,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
       this.props.fetchClientSites(currentUserClientId, {});
       this.props.fetchLevels();
       this.props.getAvailPhoneNumbers();
-      setTimeout(this.props.fetchStudies, 0);
+      this.props.fetchStudies(currentUser);
     } else if (currentUser && userRoleType === 'sponsor') {
       this.props.fetchProtocols({ sponsorRoleId: currentUser.roleForSponsor.id });
       this.props.fetchProtocolNumbers(currentUser);
@@ -141,10 +141,10 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchLevels: () => dispatch(fetchLevels()),
-    fetchStudies: searchParams => dispatch(fetchStudies(searchParams)),
-    fetchProtocols: searchParams => dispatch(fetchProtocols(searchParams)),
-    fetchProtocolNumbers: currentUser => dispatch(fetchProtocolNumbers(currentUser)),
-    fetchIndications: currentUser => dispatch(fetchIndications(currentUser)),
+    fetchStudies: (currentUser, searchParams) => dispatch(fetchStudies(currentUser, searchParams)),
+    fetchProtocols: (searchParams) => dispatch(fetchProtocols(searchParams)),
+    fetchProtocolNumbers: (currentUser) => dispatch(fetchProtocolNumbers(currentUser)),
+    fetchIndications: (currentUser) => dispatch(fetchIndications(currentUser)),
     getAvailPhoneNumbers: () => dispatch(getAvailPhoneNumbers()),
   };
 }

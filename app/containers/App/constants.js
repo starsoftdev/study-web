@@ -4,35 +4,23 @@ export const FETCH_ME_FROM_TOKEN                   = 'App/FETCH_ME_FROM_TOKEN';
 export const SET_AUTH_STATE                        = 'App/SET_AUTH_STATE';
 export const SET_USER_DATA                         = 'App/SET_USER_DATA';
 
-export const FETCH_STUDIES                         = 'App/FETCH_STUDIES';
-export const FETCH_STUDIES_SUCCESS                 = 'App/FETCH_STUDIES_SUCCESS';
-export const FETCH_STUDIES_ERROR                   = 'App/FETCH_STUDIES_ERROR';
-
-export const FETCH_SITES                           = 'App/FETCH_SITES';
-export const FETCH_SITES_SUCCESS                   = 'App/FETCH_SITES_SUCCESS';
-export const FETCH_SITES_ERROR                     = 'App/FETCH_SITES_ERROR';
-
 export const FETCH_CLIENT_CREDITS                  = 'App/FETCH_CLIENT_CREDITS';
 export const FETCH_CLIENT_CREDITS_SUCCESS          = 'App/FETCH_CLIENT_CREDITS_SUCCESS';
 export const FETCH_CLIENT_CREDITS_ERROR            = 'App/FETCH_CLIENT_CREDITS_ERROR';
-
-export const FETCH_INDICATIONS                     = 'App/FETCH_INDICATIONS';
-export const FETCH_INDICATIONS_SUCCESS             = 'App/FETCH_INDICATIONS_SUCCESS';
-export const FETCH_INDICATIONS_ERROR               = 'App/FETCH_INDICATIONS_ERROR';
-
-export const FETCH_SOURCES                         = 'App/FETCH_SOURCES';
-export const FETCH_SOURCES_SUCCESS                 = 'App/FETCH_SOURCES_SUCCESS';
-export const FETCH_SOURCES_ERROR                   = 'App/FETCH_SOURCES_ERROR';
-
-export const FETCH_LEVELS                          = 'App/FETCH_LEVELS';
-export const FETCH_LEVELS_SUCCESS                  = 'App/FETCH_LEVELS_SUCCESS';
-export const FETCH_LEVELS_ERROR                    = 'App/FETCH_LEVELS_ERROR';
 
 export const FETCH_COUPON                          = 'App/FETCH_COUPON';
 export const FETCH_COUPON_SUCCESS                  = 'App/FETCH_COUPON_SUCCESS';
 export const FETCH_COUPON_ERROR                    = 'App/FETCH_COUPON_ERROR';
 
 export const CLEAR_COUPON                          = 'App/CLEAR_COUPON';
+
+export const FETCH_INDICATIONS                     = 'App/FETCH_INDICATIONS';
+export const FETCH_INDICATIONS_SUCCESS             = 'App/FETCH_INDICATIONS_SUCCESS';
+export const FETCH_INDICATIONS_ERROR               = 'App/FETCH_INDICATIONS_ERROR';
+
+export const FETCH_LEVELS                          = 'App/FETCH_LEVELS';
+export const FETCH_LEVELS_SUCCESS                  = 'App/FETCH_LEVELS_SUCCESS';
+export const FETCH_LEVELS_ERROR                    = 'App/FETCH_LEVELS_ERROR';
 
 export const FETCH_REWARDS                         = 'App/FETCH_REWARDS';
 export const FETCH_REWARDS_SUCCESS                 = 'App/FETCH_REWARDS_SUCCESS';
@@ -41,6 +29,45 @@ export const FETCH_REWARDS_ERROR                   = 'App/FETCH_REWARDS_ERROR';
 export const FETCH_REWARDS_BALANCE                 = 'App/FETCH_REWARDS_BALANCE';
 export const FETCH_REWARDS_BALANCE_SUCCESS         = 'App/FETCH_REWARDS_BALANCE_SUCCESS';
 export const FETCH_REWARDS_BALANCE_ERROR           = 'App/FETCH_REWARDS_BALANCE_ERROR';
+
+export const FETCH_SOURCES                         = 'App/FETCH_SOURCES';
+export const FETCH_SOURCES_SUCCESS                 = 'App/FETCH_SOURCES_SUCCESS';
+export const FETCH_SOURCES_ERROR                   = 'App/FETCH_SOURCES_ERROR';
+
+export const FETCH_SITES                           = 'App/FETCH_SITES';
+export const FETCH_SITES_SUCCESS                   = 'App/FETCH_SITES_SUCCESS';
+export const FETCH_SITES_ERROR                     = 'App/FETCH_SITES_ERROR';
+
+export const FETCH_SITE                            = 'App/FETCH_SITE';
+export const FETCH_SITE_SUCCESS                    = 'App/FETCH_SITE_SUCCESS';
+export const FETCH_SITE_ERROR                      = 'App/FETCH_SITE_ERROR';
+
+export const FETCH_CLIENT_SITES                    = 'App/FETCH_CLIENT_SITES';
+export const FETCH_CLIENT_SITES_SUCCESS            = 'App/FETCH_CLIENT_SITES_SUCCESS';
+export const FETCH_CLIENT_SITES_ERROR              = 'App/FETCH_CLIENT_SITES_ERROR';
+
+export const FETCH_SITE_PATIENTS                   = 'App/FETCH_SITE_PATIENTS';
+export const FETCH_SITE_PATIENTS_SUCCESS           = 'App/FETCH_SITE_PATIENTS_SUCCESS';
+export const FETCH_SITE_PATIENTS_ERROR             = 'App/FETCH_SITE_PATIENTS_ERROR';
+export const UPDATE_SITE_PATIENTS                  = 'App/UPDATE_SITE_PATIENTS';
+
+export const FETCH_PATIENT_MESSAGE_UNREAD_COUNT    = 'App/FETCH_PATIENT_MESSAGE_UNREAD_COUNT';
+export const FETCH_PATIENT_MESSAGE_UNREAD_COUNT_SUCCESS = 'App/FETCH_PATIENT_MESSAGE_UNREAD_COUNT_SUCCESS';
+
+export const SEARCH_SITE_PATIENTS                  = 'App/SEARCH_SITE_PATIENTS';
+export const SEARCH_SITE_PATIENTS_SUCCESS          = 'App/SEARCH_SITE_PATIENTS_SUCCESS';
+export const SEARCH_SITE_PATIENTS_ERROR            = 'App/SEARCH_SITE_PATIENTS_ERROR';
+
+export const MARK_AS_READ_PATIENT_MESSAGES         = 'App/MARK_AS_READ_PATIENT_MESSAGES';
+
+export const FETCH_PATIENT_MESSAGES                = 'App/FETCH_PATIENT_MESSAGES';
+export const FETCH_PATIENT_MESSAGES_SUCCESS        = 'App/FETCH_PATIENT_MESSAGES_SUCCESS';
+export const FETCH_PATIENT_MESSAGES_ERROR          = 'App/FETCH_PATIENT_MESSAGES_ERROR';
+export const UPDATE_PATIENT_MESSAGES               = 'App/UPDATE_PATIENT_MESSAGES';
+
+export const FETCH_CLIENT_ROLES                    = 'App/FETCH_CLIENT_ROLES';
+export const FETCH_CLIENT_ROLES_SUCCESS            = 'App/FETCH_CLIENT_ROLES_SUCCESS';
+export const FETCH_CLIENT_ROLES_ERROR              = 'App/FETCH_CLIENT_ROLES_ERROR';
 
 export const REDEEM                                = 'App/REDEEM';
 export const REDEEM_SUCCESS                        = 'App/REDEEM_SUCCESS';
@@ -62,34 +89,6 @@ export const ADD_CREDITS                           = 'App/ADD_CREDITS';
 export const ADD_CREDITS_SUCCESS                   = 'App/ADD_CREDITS_SUCCESS';
 export const ADD_CREDITS_ERROR                     = 'App/ADD_CREDITS_ERROR';
 export const FETCH_EVENTS                          = 'App/FETCH_EVENTS';
-
-export const FETCH_CLIENT_SITES                    = 'App/FETCH_CLIENT_SITES';
-export const FETCH_CLIENT_SITES_SUCCESS            = 'App/FETCH_CLIENT_SITES_SUCCESS';
-export const FETCH_CLIENT_SITES_ERROR              = 'App/FETCH_CLIENT_SITES_ERROR';
-
-export const FETCH_SITE_PATIENTS                   = 'App/FETCH_SITE_PATIENTS';
-export const FETCH_SITE_PATIENTS_SUCCESS           = 'App/FETCH_SITE_PATIENTS_SUCCESS';
-export const FETCH_SITE_PATIENTS_ERROR             = 'App/FETCH_SITE_PATIENTS_ERROR';
-export const UPDATE_SITE_PATIENTS                  = 'App/UPDATE_SITE_PATIENTS';
-
-export const SEARCH_SITE_PATIENTS                  = 'App/SEARCH_SITE_PATIENTS';
-export const SEARCH_SITE_PATIENTS_SUCCESS          = 'App/SEARCH_SITE_PATIENTS_SUCCESS';
-export const SEARCH_SITE_PATIENTS_ERROR            = 'App/SEARCH_SITE_PATIENTS_ERROR';
-
-export const MARK_AS_READ_PATIENT_MESSAGES         = 'App/MARK_AS_READ_PATIENT_MESSAGES';
-
-export const FETCH_PATIENT_MESSAGES                = 'App/FETCH_PATIENT_MESSAGES';
-export const FETCH_PATIENT_MESSAGES_SUCCESS        = 'App/FETCH_PATIENT_MESSAGES_SUCCESS';
-export const FETCH_PATIENT_MESSAGES_ERROR          = 'App/FETCH_PATIENT_MESSAGES_ERROR';
-export const UPDATE_PATIENT_MESSAGES               = 'App/UPDATE_PATIENT_MESSAGES';
-
-export const FETCH_CLIENT_ROLES                    = 'App/FETCH_CLIENT_ROLES';
-export const FETCH_CLIENT_ROLES_SUCCESS            = 'App/FETCH_CLIENT_ROLES_SUCCESS';
-export const FETCH_CLIENT_ROLES_ERROR              = 'App/FETCH_CLIENT_ROLES_ERROR';
-
-export const FETCH_SITE                            = 'App/FETCH_SITE';
-export const FETCH_SITE_SUCCESS                    = 'App/FETCH_SITE_SUCCESS';
-export const FETCH_SITE_ERROR                      = 'App/FETCH_SITE_ERROR';
 
 export const FETCH_USER                            = 'App/FETCH_USER';
 export const FETCH_USER_SUCCESS                    = 'App/FETCH_USER_SUCCESS';

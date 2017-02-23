@@ -7,6 +7,10 @@ export const FETCH_PATIENT_MESSAGES_SUCCEESS             = 'HomePage/Dashboard/F
 export const FETCH_PRINCIPAL_INVESTIGATOR_TOTALS         = 'HomePage/Dashboard/FETCH_PRINCIPAL_INVESTIGATOR_TOTALS';
 export const FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS = 'HomePage/Dashboard/FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS';
 
+export const FETCH_STUDIES                               = 'HomePage/Viewport/FETCH_STUDIES';
+export const FETCH_STUDIES_SUCCESS                       = 'HomePage/Viewport/FETCH_STUDIES_SUCCESS';
+export const FETCH_STUDIES_ERROR                         = 'HomePage/Viewport/FETCH_STUDIES_ERROR';
+
 export const FETCH_PROTOCOLS                             = 'HomePage/Viewport/FETCH_PROTOCOLS';
 export const FETCH_PROTOCOLS_SUCCESS                     = 'HomePage/Viewport/FETCH_PROTOCOLS_SUCCESS';
 export const FETCH_PROTOCOLS_ERROR                       = 'HomePage/Viewport/FETCH_PROTOCOLS_ERROR';
@@ -43,7 +47,5 @@ export const SET_ACTIVE_SORT                             = 'HomePage/Dashboard/S
 export const SORT_SUCCESS                                = 'HomePage/Dashboard/SORT_SUCCESS';
 
 export const FETCH_UPGRADE_STUDY_PRICE                   = 'HomePage/Viewport/FETCH_UPGRADE_STUDY_PRICE';
-export const FETCH_UPGRADE_STUDY_PRICE_SUCCESS           = 'HomePage/Viewport/FETCH_UPGRADE_STUDY_PRICE_SUCCESS';
-export const FETCH_UPGRADE_STUDY_PRICE_ERROR             = 'HomePage/Viewport/FETCH_UPGRADE_STUDY_PRICE_ERROR';
 
 export const NEW_MESSAGE_FOR_PROTOCOL                    = 'HomePage/Viewport/NEW_MESSAGE_FOR_PROTOCOL';
