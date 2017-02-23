@@ -5,7 +5,7 @@ import { reject } from 'lodash';
 
 import RewardModal from '../../../components/RewardModal';
 
-import { selectCurrentUser, selectSitePatients, selectUserSiteLocations, selectRewardsBalance } from '../../App/selectors';
+import { selectCurrentUser, selectSitePatients, selectUserSiteLocations, selectRewardsBalance, selectPatientMessageUnreadCount } from '../../App/selectors';
 import { fetchRewardsBalance, redeem } from '../../App/actions';
 import { pickReward } from '../../../containers/RewardsPage/actions';
 
@@ -28,6 +28,7 @@ export class Dashboard extends React.Component {
     siteLocations: PropTypes.array,
     redeem: PropTypes.func,
     pickReward: PropTypes.func,
+    patientMessageUnreadCount: PropTypes.number,
   }
 
   state = {
@@ -59,7 +60,7 @@ export class Dashboard extends React.Component {
   }
 
   render() {
-    const { currentUser, patientSignUps, patientMessages, rewardsBalance, siteLocations, pickReward } = this.props;
+    const { currentUser, patientSignUps, patientMessages, rewardsBalance, siteLocations, pickReward, patientMessageUnreadCount } = this.props;
     const redeemable = (currentUser.roleForClient && currentUser.roleForClient.canRedeemRewards);
     const redeemableSiteLocations = reject(siteLocations, { id: 0 });
 
@@ -103,7 +104,7 @@ export class Dashboard extends React.Component {
             </div>
             <div className="col pull-right">
               <span className="sub-title">UNREAD<br /> TEXTS</span>
-              <strong className="number"><i className="icomoon-icon_chat_alt" /> {patientMessages.unreadTexts}</strong>
+              <strong className="number"><i className="icomoon-icon_chat_alt" /> {patientMessageUnreadCount}</strong>
             </div>
           </div>
         </article>
@@ -147,6 +148,7 @@ const mapStateToProps = createStructuredSelector({
   rewardsBalance: selectRewardsBalance(),
   sitePatients: selectSitePatients(),
   siteLocations: selectUserSiteLocations(),
+  patientMessageUnreadCount: selectPatientMessageUnreadCount(),
 });
 const mapDispatchToProps = {
   fetchPatientSignUps,
