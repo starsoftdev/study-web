@@ -49,11 +49,6 @@ const selectSites = () => createSelector(
   (substate) => get(substate, 'baseData.sites', [])
 );
 
-const selectStudies = () => createSelector(
-  selectGlobal(),
-  (substate) => get(substate, 'baseData.studies', {})
-);
-
 // get user's sites based on siteId and ClientId
 const selectUserSites = () => createSelector(
   selectGlobal(),
@@ -371,6 +366,5 @@ export {
   selectSubscriptionError,
   selectFindOutPosted,
 
-  selectStudies,
   selectTrials,
 };

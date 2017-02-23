@@ -30,12 +30,12 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
   static propTypes = {
     children: React.PropTypes.node,
-    isLoggedIn: React.PropTypes.bool,
-    userDataFetched: React.PropTypes.object,
-    pageEvents: React.PropTypes.any,
-    fetchMeFromToken: React.PropTypes.func,
-    location: React.PropTypes.object,
     currentUserRoleType: React.PropTypes.string,
+    fetchMeFromToken: React.PropTypes.func.isRequired,
+    isLoggedIn: React.PropTypes.bool.isRequired,
+    location: React.PropTypes.object,
+    pageEvents: React.PropTypes.any,
+    userData: React.PropTypes.object,
   };
 
   componentWillMount() {
@@ -44,7 +44,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.userDataFetched && nextProps.userDataFetched) {
+    if (!this.props.userData && nextProps.userData) {
       ReactGA.initialize('UA-91568063-1', {
         debug: true,
       });
@@ -56,7 +56,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
   }
 
   render() {
-    const { isLoggedIn, userDataFetched, pageEvents, currentUserRoleType } = this.props;
+    const { isLoggedIn, userData, pageEvents, currentUserRoleType } = this.props;
 
     if (!isLoggedIn) {
       return (
@@ -66,7 +66,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       );
     }
 
-    if (!userDataFetched) {
+    if (!userData) {
       return (
         <div className="container-fluid">
           <div className="row">
@@ -106,7 +106,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
 const mapStateToProps = createStructuredSelector({
   isLoggedIn: selectAuthState(),
-  userDataFetched: selectCurrentUser(),
+  userData: selectCurrentUser(),
   pageEvents: selectEvents(),
   currentUserRoleType: selectUserRoleType(),
 });

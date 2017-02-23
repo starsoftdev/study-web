@@ -3,10 +3,6 @@ import {
   SET_AUTH_STATE,
   SET_USER_DATA,
 
-  FETCH_STUDIES,
-  FETCH_STUDIES_SUCCESS,
-  FETCH_STUDIES_ERROR,
-
   FETCH_SITES,
   FETCH_SITES_SUCCESS,
   FETCH_SITES_ERROR,
@@ -174,27 +170,6 @@ export function setUserData(userData) {
     payload: {
       userData,
     },
-  };
-}
-
-export function fetchStudies(searchParams = null) {
-  return {
-    type: FETCH_STUDIES,
-    searchParams,
-  };
-}
-
-export function studiesFetched(payload) {
-  return {
-    type: FETCH_STUDIES_SUCCESS,
-    payload,
-  };
-}
-
-export function studiesFetchingError(payload) {
-  return {
-    type: FETCH_STUDIES_ERROR,
-    payload,
   };
 }
 
