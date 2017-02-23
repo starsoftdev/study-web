@@ -149,7 +149,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchIndications: () => dispatch(fetchIndications()),
     onSubmitForm: (values) => dispatch(clinicalTrialsSearch(values)),
-    resetForm: () => dispatch(reset('find-location')),
+    resetForm: () => dispatch(reset('find-studies')),
     clearTrialsList: () => dispatch(clearClinicalTrialsSearch()),
   };
 }

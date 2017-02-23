@@ -1,25 +1,34 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import { reset } from 'redux-form';
 import { Glyphicon } from 'react-bootstrap';
 import classNames from 'classnames';
 
 import NavBar from './NavBar';
 import LoggedUserMenu from './LoggedUserMenu';
 
+import {
+  clearClinicalTrialsSearch,
+} from '../../../app/containers/App/actions';
+
 import studyKikLogo from '../../assets/images/logo.svg';
 
-export default class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     isLoggedIn: React.PropTypes.bool,
     userDataFetched: React.PropTypes.object,
     location: React.PropTypes.any,
     logout: React.PropTypes.func,
+    resetForm: React.PropTypes.func,
+    clearTrialsList: React.PropTypes.func,
   };
 
   constructor(props) {
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
+    this.handleLogoClick = this.handleLogoClick.bind(this);
 
     this.state = {
       menuCollapsed: true,
@@ -45,6 +54,22 @@ export default class Header extends React.Component { // eslint-disable-line rea
   handleClick() {
     this.button.classList.toggle('collapsed');
     this.setState({ menuCollapsed: this.button.classList.contains('collapsed') });
+  }
+
+  handleLogoClick(ev) {
+    let target;
+    const location = window.location;
+    if (ev.target.tagName === 'IMG') {
+      target = ev.target.parentElement.href;
+    } else {
+      target = ev.target.href;
+    }
+
+    if (location.toString() === target) {
+      // document.querySelector('.form-find-studies').reset();
+      this.props.resetForm();
+      this.props.clearTrialsList();
+    }
   }
 
   render() {
@@ -76,7 +101,12 @@ export default class Header extends React.Component { // eslint-disable-line rea
                 <Glyphicon glyph="log-in" className="visible-xs-* hidden-sm hidden-md hidden-lg" />
               </Link>
               <div className={classNames('logo-holder', { loginPage: isLoginPage })}>
-                <Link to="/" className="navbar-brand" title="Study KIK">
+                <Link
+                  to="/"
+                  className="navbar-brand"
+                  title="Study KIK"
+                  onClick={this.handleLogoClick}
+                >
                   <img src={studyKikLogo} alt="Study KIK" width="150" />
                 </Link>
               </div>
@@ -89,3 +119,12 @@ export default class Header extends React.Component { // eslint-disable-line rea
     );
   }
 }
+
+function mapDispatchToProps(dispatch) {
+  return {
+    resetForm: () => dispatch(reset('find-studies')),
+    clearTrialsList: () => dispatch(clearClinicalTrialsSearch()),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(Header);
