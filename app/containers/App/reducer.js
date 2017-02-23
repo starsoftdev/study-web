@@ -690,9 +690,11 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case MARK_AS_READ_PATIENT_MESSAGES:
+      let unread_count = 0;
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
         const patientData = Object.assign({}, item);
         if (patientData.id === action.patientId && patientData.study_id === action.studyId) {
+          unread_count = patientData.count_unread;
           patientData.count_unread = 0;
         }
         return patientData;
@@ -702,6 +704,16 @@ export default function appReducer(state = initialState, action) {
           details: sitePatientsCollection,
           fetching: false,
           error: null,
+        },
+        patientMessages: {
+          details: state.baseData.patientMessages.details,
+          fetching: false,
+          error: null,
+          stats: {
+            total: state.baseData.patientMessages.stats.total,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails,
+            unreadTexts: state.baseData.patientMessages.stats.unreadTexts - unread_count,
+          },
         },
       };
       break;
