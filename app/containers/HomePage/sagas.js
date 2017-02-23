@@ -129,10 +129,9 @@ export function* fetchStudiesWorker(action) {
     let requestURL;
     if (action.searchParams) {
       queryString = composeQueryString(action.searchParams);
-      // TODO fix this
-      requestURL = `${API_URL}/clients/1/homePageStudies?${queryString}`;
+      requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/studiesForHomePage?${queryString}`;
     } else {
-      requestURL = `${API_URL}/clients/1/homePageStudies`;
+      requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/studiesForHomePage`;
     }
     const response = yield call(request, requestURL);
 

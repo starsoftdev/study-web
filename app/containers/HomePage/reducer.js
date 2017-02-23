@@ -113,10 +113,6 @@ export default function homePageReducer(state = initialState, action) {
   const { payload } = action;
   let newState;
   let protocols;
-  let entity;
-  let entitiesCollection;
-  let startDate = '';
-  let endDate = '';
 
   switch (action.type) {
     case FETCH_PATIENT_SIGN_UPS_SUCCEESS:
@@ -197,66 +193,22 @@ export default function homePageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case FETCH_STUDIES_SUCCESS:
-      entitiesCollection = [];
-
-      _.forEach(payload, (studyIterator, index) => {
-        entity = {
-          studyId: studyIterator.id,
-          indication: studyIterator.indication,
-          location: '',
-          sponsor: '',
-          protocol: studyIterator.protocolNumber,
-          patientMessagingSuite: (studyIterator.patientMessagingSuite) ? 'On' : 'Off',
-          patientQualificationSuite: (studyIterator.patientQualificationSuite) ? 'On' : 'Off',
-          status: studyIterator.status,
-          callTracking: studyIterator.callTracking,
-          siteUsers: null,
-          startDate: '',
-          endDate: '',
-          orderNumber: (index + 1),
-          irbName: studyIterator.irbName,
-          irbEmail: studyIterator.irbEmail,
-          croContactName: studyIterator.croContactName,
-          croContactEmail: studyIterator.croContactEmail,
-          image: studyIterator.image,
-          sponsorContacts: studyIterator.sponsorContacts,
-          studyNotificationEmails: studyIterator.studyNotificationEmails,
-          condenseTwoWeeks: studyIterator.condenseTwoWeeks,
-          recruitmentPhone: studyIterator.recruitmentPhone,
-        };
-        if (studyIterator.sponsors && studyIterator.sponsors.length > 0) {
-          const sponsorContacts = _.map(studyIterator.sponsors, sponsorContactIterator => sponsorContactIterator.name);
-          const sponsorContactsStr = sponsorContacts.join(', ');
-          entity.sponsor = sponsorContactsStr;
-        }
-        if (!studyIterator.sites || studyIterator.sites.length === 0) {
-          entitiesCollection.push(entity);
-          return true;
-        }
-        _.forEach(studyIterator.sites, (siteIterator) => {
-          startDate = '';
-          endDate = '';
-
-          if (siteIterator.campaigns && siteIterator.campaigns.length > 0 && siteIterator.campaigns[0]) {
-            startDate = siteIterator.campaigns[0].dateFrom;
-            endDate = siteIterator.campaigns[0].dateTo;
-          }
-          entity = {
-            ...entity,
-            location: siteIterator.location,
-            status: siteIterator.status,
-            campaign: siteIterator.campaigns[0],
-            siteUsers: siteIterator.users,
-            startDate,
-            endDate,
-            maxCampaign: siteIterator.maxCampaign,
-            siteId: siteIterator.id,
-          };
-          entitiesCollection.push(entity);
-        });
-        return true;
-      });
+    case FETCH_STUDIES_SUCCESS: {
+      const entitiesCollection = payload.map((studyObject, index) => ({
+        studyId: studyObject.id,
+        indication: studyObject.indication,
+        location: studyObject.site.location,
+        sponsor: studyObject.sponsor.name,
+        protocol: studyObject.protocolNumber,
+        patientMessagingSuite: studyObject.patientMessagingSuite ? 'On' : 'Off',
+        patientQualificationSuite: studyObject.patientQualificationSuite ? 'On' : 'Off',
+        status: studyObject.status,
+        callTracking: studyObject.callTracking,
+        startDate: studyObject.campaigns[0].dateFrom,
+        endDate: studyObject.campaigns[0].dateTo,
+        orderNumber: (index + 1),
+        siteId: studyObject.site.id
+      }));
       return {
         ...state,
         studies: {
@@ -265,6 +217,7 @@ export default function homePageReducer(state = initialState, action) {
           error: null,
         },
       };
+    }
     case FETCH_STUDIES_ERROR:
       return {
         ...state,

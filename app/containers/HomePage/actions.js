@@ -78,9 +78,10 @@ export function fetchPrincipalInvestigatorTotalsSucceeded(payload) {
   };
 }
 
-export function fetchStudies(searchParams = null) {
+export function fetchStudies(currentUser, searchParams) {
   return {
     type: FETCH_STUDIES,
+    currentUser,
     searchParams,
   };
 }
@@ -99,7 +100,7 @@ export function studiesFetchingError(payload) {
   };
 }
 
-export function fetchProtocols(searchParams = null) {
+export function fetchProtocols(searchParams) {
   return {
     type: FETCH_PROTOCOLS,
     searchParams,
