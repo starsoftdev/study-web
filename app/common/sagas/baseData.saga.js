@@ -10,7 +10,6 @@ import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 
 import {
-  FETCH_STUDIES,
   FETCH_SITES,
   FETCH_INDICATIONS,
   FETCH_SOURCES,
@@ -29,6 +28,7 @@ import {
   FETCH_CLIENT_CREDITS,
   SEARCH_SITE_PATIENTS,
   FETCH_PATIENT_MESSAGES,
+  FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
   FETCH_CLIENT_ROLES,
   FETCH_SITE,
   FETCH_USER,
@@ -51,8 +51,6 @@ import {
 import {
   sitesFetched,
   sitesFetchingError,
-  studiesFetched,
-  studiesFetchingError,
   indicationsFetched,
   indicationsFetchingError,
   sourcesFetched,
@@ -86,6 +84,7 @@ import {
   sitePatientsSearchingError,
   patientMessagesFetched,
   patientMessagesFetchingError,
+  patientMessageUnreadCountFetched,
   clientRolesFetched,
   clientRolesFetchingError,
   siteFetched,
@@ -119,7 +118,6 @@ import {
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
-  yield fork(fetchStudiesWatcher);
   yield fork(fetchSitesWatcher);
   yield fork(fetchIndicationsWatcher);
   yield fork(fetchSourcesWatcher);
@@ -138,6 +136,7 @@ export default function* baseDataSaga() {
   yield fork(fetchClientCreditsWatcher);
   yield fork(searchSitePatientsWatcher);
   yield fork(fetchPatientMessagesWatcher);
+  yield fork(fetchPatientMessageUnreadCountWatcher);
   yield fork(fetchClientRolesWatcher);
   yield fork(fetchSiteWatcher);
   yield fork(fetchUserWatcher);
@@ -153,28 +152,6 @@ export default function* baseDataSaga() {
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
   yield fork(takeLatest, FIND_OUT_PATIENTS, postFindOutPatients);
   yield fork(takeLatest, CLINICAL_TRIALS_SEARCH, searchClinicalTrials);
-}
-
-export function* fetchStudiesWatcher() {
-  yield* takeLatest(FETCH_STUDIES, fetchStudiesWorker);
-}
-
-export function* fetchStudiesWorker(action) {
-  try {
-    let queryString;
-    let requestURL;
-    if (action.searchParams) {
-      queryString = composeQueryString(action.searchParams);
-      requestURL = `${API_URL}/studies/get_filtered_studies?${queryString}`;
-    } else {
-      requestURL = `${API_URL}/studies/get_filtered_studies`;
-    }
-    const response = yield call(request, requestURL);
-
-    yield put(studiesFetched(response));
-  } catch (err) {
-    yield put(studiesFetchingError(err));
-  }
 }
 
 export function* fetchSitesWatcher() {
@@ -487,7 +464,7 @@ export function* fetchSitePatientsWatcher() {
     const { userId } = yield take(FETCH_SITE_PATIENTS);
 
     try {
-      const requestURL = `${API_URL}/patients/getPatientsByUser?userId=${userId}`;
+      const requestURL = `${API_URL}/patients/patientsForUser?userId=${userId}`;
       const response = yield call(request, requestURL);
 
       yield put(sitePatientsFetched(response));
@@ -541,6 +518,19 @@ export function* fetchPatientMessagesWatcher() {
       }
     } else {
       yield put(patientMessagesFetched([]));
+    }
+  }
+}
+
+export function* fetchPatientMessageUnreadCountWatcher() {
+  while (true) {
+    const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
+    try {
+      const requestURL = `${API_URL}/clients/${currentUser.roleForClient.client_id}/patientMessageStats`;
+      const response = yield call(request, requestURL);
+      yield put(patientMessageUnreadCountFetched(response));
+    } catch (err) {
+      console.log(err);
     }
   }
 }

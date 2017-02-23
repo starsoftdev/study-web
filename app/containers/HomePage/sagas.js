@@ -13,6 +13,7 @@ import {
   FETCH_PATIENT_SIGN_UPS,
   FETCH_PATIENT_MESSAGES,
   FETCH_PRINCIPAL_INVESTIGATOR_TOTALS,
+  FETCH_STUDIES,
   FETCH_PROTOCOLS,
   FETCH_PROTOCOL_NUMBERS,
   FETCH_INDICATIONS,
@@ -30,6 +31,8 @@ import {
   fetchPatientSignUpsSucceeded,
   fetchPatientMessagesSucceeded,
   fetchPrincipalInvestigatorTotalsSucceeded,
+  studiesFetched,
+  studiesFetchingError,
   protocolsFetched,
   protocolsFetchingError,
   protocolNumbersFetched,
@@ -106,13 +109,35 @@ export function* fetchPatientMessagesWatcher() {
 
 export function* fetchPatientMessagesWorker(action) {
   try {
-    const requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/patientMessages`;
+    const requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/patientMessageStats`;
     const response = yield call(request, requestURL);
 
     yield put(fetchPatientMessagesSucceeded(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patient messages');
     yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+export function* fetchStudiesWatcher() {
+  yield* takeLatest(FETCH_STUDIES, fetchStudiesWorker);
+}
+
+export function* fetchStudiesWorker(action) {
+  try {
+    let queryString;
+    let requestURL;
+    if (action.searchParams) {
+      queryString = composeQueryString(action.searchParams);
+      requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/studiesForHomePage?${queryString}`;
+    } else {
+      requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/studiesForHomePage`;
+    }
+    const response = yield call(request, requestURL);
+
+    yield put(studiesFetched(response));
+  } catch (err) {
+    yield put(studiesFetchingError(err));
   }
 }
 
@@ -350,6 +375,7 @@ export function* addEmailNotificationUserWorker(action) {
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   const watcherB = yield fork(fetchPatientMessagesWatcher);
+  const watcherD = yield fork(fetchStudiesWatcher);
   const watcherE = yield fork(fetchIndicationLevelPriceWatcher);
   const watcherF = yield fork(renewStudyWatcher);
   const watcherG = yield fork(upgradeStudyWatcher);
@@ -367,6 +393,7 @@ export function* homePageSaga() {
   if (options.payload.pathname !== '/') {
     yield cancel(watcherA);
     yield cancel(watcherB);
+    yield cancel(watcherD);
     yield cancel(watcherE);
     yield cancel(watcherF);
     yield cancel(watcherG);

@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
 
 import studykikLogo from '../../assets/images/logo.svg';
 import AddCreditsModal from '../../components/AddCreditsModal';
@@ -12,22 +14,19 @@ import GlobalPMSModal from '../../components/GlobalPMSModal';
 import NotificationBox from './NotificationBox';
 import AvatarMenu from './AvatarMenu';
 
-import { fetchPatientMessages } from '../../containers/HomePage/actions';
-import { selectPatientMessages } from '../../containers/HomePage/selectors';
-import { fetchSitePatients, fetchClientCredits } from '../../containers/App/actions';
-import { logout } from '../../containers/LoginPage/actions';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import {
-  selectSocket,
-} from '../../containers/GlobalNotifications/selectors';
-
+import { fetchClientCredits, fetchPatientMessageUnreadCount, fetchSitePatients } from '../../containers/App/actions';
 import {
   selectCurrentUser,
   selectCurrentUserClientId,
   selectSitePatients,
+  selectPatientMessageUnreadCount,
   selectClientCredits,
   selectUserRoleType,
 } from '../../containers/App/selectors';
+import {
+  selectSocket,
+} from '../../containers/GlobalNotifications/selectors';
+import { logout } from '../../containers/LoginPage/actions';
 
 class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -36,12 +35,12 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     currentUserClientId: PropTypes.number,
     fetchSitePatients: React.PropTypes.func,
     fetchClientCredits: React.PropTypes.func,
-    fetchPatientMessages: PropTypes.func,
+    fetchPatientMessageUnreadCount: PropTypes.func,
     logout: React.PropTypes.func,
     sitePatients: React.PropTypes.object,
     socket: React.PropTypes.any,
     userRoleType: PropTypes.string,
-    patientMessages: PropTypes.object,
+    patientMessageUnreadCount: PropTypes.number,
   };
 
   constructor(props) {
@@ -63,9 +62,9 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     const { currentUser, currentUserClientId, userRoleType } = this.props;
     if (currentUserClientId && userRoleType === 'client') {
       this.props.fetchSitePatients(currentUser.id);
+      this.props.fetchPatientMessageUnreadCount(currentUser);
       this.props.fetchClientCredits(currentUser.id);
     }
-    this.props.fetchPatientMessages(currentUser);
   }
 
   componentWillReceiveProps() {
@@ -101,7 +100,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
   }
 
   render() {
-    const { userRoleType, patientMessages } = this.props;
+    const { userRoleType, patientMessageUnreadCount } = this.props;
     let purchasable = true;
     if (userRoleType === 'client') {
       purchasable = this.props.currentUser.roleForClient.canPurchase;
@@ -147,9 +146,9 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
               className={classNames('opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
               onClick={this.showGlobalPMSModal}
             >
-              {patientMessages.unreadTexts > 0
-                ? <span className="counter">{patientMessages.unreadTexts}</span>
-                : ''
+              {patientMessageUnreadCount > 0
+                ? <span className="counter">{patientMessageUnreadCount}</span>
+                : null
               }
               <i className="icomoon-credit" />
             </a>
@@ -259,14 +258,14 @@ const mapStateToProps = createStructuredSelector({
   sitePatients: selectSitePatients(),
   socket: selectSocket(),
   userRoleType: selectUserRoleType(),
-  patientMessages: selectPatientMessages(),
+  patientMessageUnreadCount: selectPatientMessageUnreadCount(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchSitePatients: (userId) => dispatch(fetchSitePatients(userId)),
   fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
   logout: () => dispatch(logout()),
-  fetchPatientMessages,
+  fetchPatientMessageUnreadCount: (currentUser) => dispatch(fetchPatientMessageUnreadCount(currentUser)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopHeaderBar);

@@ -129,8 +129,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     sourceOptions.unshift({ label: 'All', value: -1 });
     const siteLocation = site.location;
     let sponsor = 'None';
-    if (study.sponsors && study.sponsors[0]) {
-      sponsor = study.sponsors[0].name;
+    if (study.sponsor) {
+      sponsor = study.sponsor.name;
     }
     return (
       <div className="container-fluid">

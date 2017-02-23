@@ -83,7 +83,7 @@ function* fetchStudyDetails() {
         relation: 'sources',
       },
       {
-        relation: 'sponsors',
+        relation: 'sponsor',
       },
       {
         relation: 'sites',

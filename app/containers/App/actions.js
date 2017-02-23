@@ -3,10 +3,6 @@ import {
   SET_AUTH_STATE,
   SET_USER_DATA,
 
-  FETCH_STUDIES,
-  FETCH_STUDIES_SUCCESS,
-  FETCH_STUDIES_ERROR,
-
   FETCH_SITES,
   FETCH_SITES_SUCCESS,
   FETCH_SITES_ERROR,
@@ -66,6 +62,9 @@ import {
   FETCH_SITE_PATIENTS_SUCCESS,
   FETCH_SITE_PATIENTS_ERROR,
   UPDATE_SITE_PATIENTS,
+
+  FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
+  FETCH_PATIENT_MESSAGE_UNREAD_COUNT_SUCCESS,
 
   FETCH_CLIENT_CREDITS,
   FETCH_CLIENT_CREDITS_SUCCESS,
@@ -175,27 +174,6 @@ export function setUserData(userData) {
     payload: {
       userData,
     },
-  };
-}
-
-export function fetchStudies(searchParams = null) {
-  return {
-    type: FETCH_STUDIES,
-    searchParams,
-  };
-}
-
-export function studiesFetched(payload) {
-  return {
-    type: FETCH_STUDIES_SUCCESS,
-    payload,
-  };
-}
-
-export function studiesFetchingError(payload) {
-  return {
-    type: FETCH_STUDIES_ERROR,
-    payload,
   };
 }
 
@@ -566,6 +544,20 @@ export function sitePatientsFetched(payload) {
 export function sitePatientsFetchingError(payload) {
   return {
     type: FETCH_SITE_PATIENTS_ERROR,
+    payload,
+  };
+}
+
+export function fetchPatientMessageUnreadCount(currentUser) {
+  return {
+    type: FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
+    currentUser,
+  };
+}
+
+export function patientMessageUnreadCountFetched(payload) {
+  return {
+    type: FETCH_PATIENT_MESSAGE_UNREAD_COUNT_SUCCESS,
     payload,
   };
 }

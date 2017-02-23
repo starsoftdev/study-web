@@ -8,10 +8,10 @@ import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../../components/ShoppingCartForm/validator';
 import { fetchLevels, saveCard } from '../../App/actions';
-import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients, selectCurrentUserClientId, selectClientSites, selectStudies } from '../../App/selectors';
+import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients, selectCurrentUserClientId, selectClientSites } from '../../App/selectors';
 import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../constants';
 import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice } from '../actions';
-import { selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions } from '../selectors';
+import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions } from '../selectors';
 import { selectEditStudyFormValues, selectEditStudyFormError } from '../EditStudyForm/selectors';
 import { selectRenewStudyFormValues, selectRenewStudyFormError } from '../RenewStudyForm/selectors';
 import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError } from '../UpgradeStudyForm/selectors';

@@ -49,11 +49,6 @@ const selectSites = () => createSelector(
   (substate) => get(substate, 'baseData.sites', [])
 );
 
-const selectStudies = () => createSelector(
-  selectGlobal(),
-  (substate) => get(substate, 'baseData.studies', {})
-);
-
 // get user's sites based on siteId and ClientId
 const selectUserSites = () => createSelector(
   selectGlobal(),
@@ -192,6 +187,11 @@ const selectClientCredits = () => createSelector(
 const selectPatientMessages = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.patientMessages', {})
+);
+
+const selectPatientMessageUnreadCount = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.patientMessages.stats.unreadTexts', 0)
 );
 
 const selectClientRoles = () => createSelector(
@@ -348,6 +348,7 @@ export {
   selectSitePatients,
   selectClientCredits,
   selectPatientMessages,
+  selectPatientMessageUnreadCount,
   selectClientRoles,
   selectSelectedSite,
   selectSelectedSiteDetailsForForm,
@@ -371,6 +372,5 @@ export {
   selectSubscriptionError,
   selectFindOutPosted,
 
-  selectStudies,
   selectTrials,
 };
