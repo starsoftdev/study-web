@@ -37,7 +37,6 @@ export class TrialsArticle extends Component {
   }
 
   render() {
-    console.log(this.props);
     const { index, addr, trial } = this.props;
     const landingHref = `/${trial.study_id}-${trial.location.toLowerCase().replace(/ /ig, '-')}`;
 
