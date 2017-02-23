@@ -116,6 +116,7 @@ import {
   FIND_OUT_PATIENTS_POSTED,
 
   CLINICAL_TRIALS_SEARCH_SUCCESS,
+  CLEAR_CLINICAL_TRIALS_SEARCH,
 } from './constants';
 
 import {
@@ -469,6 +470,15 @@ export default function appReducer(state = initialState, action) {
       baseDataInnerState = {
         trials: {
           details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case CLEAR_CLINICAL_TRIALS_SEARCH:
+      baseDataInnerState = {
+        trials: {
+          details: null,
           fetching: false,
           error: null,
         },

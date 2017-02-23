@@ -135,14 +135,16 @@ export const FETCH_LANDING_SUCCESS                 = 'App/FETCH_LANDING_SUCCESS'
 export const FETCH_LANDING_ERROR                   = 'App/FETCH_LANDING_ERROR';
 export const SUBSCRIBE_FROM_LANDING                = 'App/SUBSCRIBE_FROM_LANDING';
 export const PATIENT_SUBSCRIBED                    = 'App/PATIENT_SUBSCRIBED';
-export const CLEAR_LANDING                         = 'App/CLEAR_LANDING';
 export const PATIENT_SUBSCRIPTION_ERROR            = 'App/PATIENT_SUBSCRIPTION_ERROR';
+export const CLEAR_LANDING                         = 'App/CLEAR_LANDING';
 export const FIND_OUT_PATIENTS                     = 'App/FIND_OUT_PATIENTS';
 export const FIND_OUT_PATIENTS_POSTED              = 'App/FIND_OUT_PATIENTS_POSTED';
 export const FIND_OUT_PATIENTS_ERROR               = 'App/FIND_OUT_PATIENTS_ERROR';
+
 export const CLINICAL_TRIALS_SEARCH                = 'App/CLINICAL_TRIALS_SEARCH';
 export const CLINICAL_TRIALS_SEARCH_SUCCESS        = 'App/CLINICAL_TRIALS_SEARCH_SUCCESS';
 export const CLINICAL_TRIALS_SEARCH_ERROR          = 'App/CLINICAL_TRIALS_SEARCH_ERROR';
+export const CLEAR_CLINICAL_TRIALS_SEARCH          = 'App/CLEAR_CLINICAL_TRIALS_SEARCH';
 
 export const ADD_EMAIL_NOTIFICATION_USER                               = 'App/ADD_EMAIL_NOTIFICATION_USER';
 export const ADD_EMAIL_NOTIFICATION_USER_SUCCESS                       = 'App/ADD_EMAIL_NOTIFICATION_USER_SUCCESS';
