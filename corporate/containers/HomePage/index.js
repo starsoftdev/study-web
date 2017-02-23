@@ -1,15 +1,18 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { reset } from 'redux-form';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
-import studyKikLogo from '../../assets/images/logo.svg';
+
+import TrialsArticle from './components/TrialsArticle';
 
 import ClinicalTrialsSearchForm from '../../components/ClinicalTrialsSearchForm';
 
 import {
   fetchIndications,
   clinicalTrialsSearch,
+  clearClinicalTrialsSearch,
 } from '../../../app/containers/App/actions';
 import {
   selectIndications,
@@ -18,12 +21,14 @@ import {
 
 import './styles.less';
 
-export class Home extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class Home extends Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     onSubmitForm: React.PropTypes.func,
     indications: PropTypes.array,
     trials: PropTypes.array,
+    resetForm: React.PropTypes.func,
+    clearTrialsList: React.PropTypes.func,
     posts: PropTypes.array,
     fetchIndications: PropTypes.func,
   };
@@ -34,13 +39,13 @@ export class Home extends React.Component { // eslint-disable-line react/prefer-
 
     this.setVisible = this.setVisible.bind(this);
     this.onSubmitForm = this.props.onSubmitForm.bind(this);
+    this.handleZipChoose = this.handleZipChoose.bind(this);
     this.handleDistanceChoose = this.handleDistanceChoose.bind(this);
     this.handleIndicationChoose = this.handleIndicationChoose.bind(this);
 
-    this.state = {
-      distance: 0,
-      indication: null,
-    };
+    this.distance = 0;
+    this.indication = null;
+    this.zip = null;
   }
 
   componentWillMount() {}
@@ -51,11 +56,12 @@ export class Home extends React.Component { // eslint-disable-line react/prefer-
   }
 
   componentWillReceiveProps() {
-    // console.log('componentWillReceiveProps', newProps);
   }
 
   componentWillUnmount() {
     this.watcher.dispose();
+    this.props.resetForm();
+    this.props.clearTrialsList();
   }
 
   setVisible(el) {
@@ -64,24 +70,28 @@ export class Home extends React.Component { // eslint-disable-line react/prefer-
   }
 
   handleDistanceChoose(ev) {
-    this.setState({ distance: ev });
+    this.distance = ev;
   }
 
-  handleIndicationChoose() {}
+  handleIndicationChoose(ev) {
+    this.indication = ev;
+  }
+
+  handleZipChoose(ev) {
+    this.zip = ev.target.value;
+  }
 
   render() {
-    const { distance } = this.state;
     const { indications, trials } = this.props;
-    let h3Text;
     let studiesList = [];
+    let h3Text;
 
     if (trials && trials.length > 0) {
-      h3Text = `There are ${trials.length} studies within ${distance} miles of 90804`;
-      if (!distance) {
-        h3Text = `There are ${trials.length} studies of 90804`;
+      h3Text = `There are ${trials.length} ${(trials.length > 1) ? 'studies' : 'study'}`;
+      if (this.zip) {
+        h3Text = `There are ${trials.length} ${(trials.length > 1) ? 'studies' : 'study'} within ${this.distance || 50} miles of ${this.zip}`;
       }
       studiesList = trials.map((item, index) => {
-        const landingHref = `/${item.study_id}-${item.location.toLowerCase().replace(/ /ig, '-')}`;
         let addr = null;
         if (item.city && item.state) {
           addr = `${item.city}, ${item.state}`;
@@ -90,35 +100,13 @@ export class Home extends React.Component { // eslint-disable-line react/prefer-
         }
 
         return (
-          <article key={index} className="col-xs-6 col-lg-3 col-md-4 post in-viewport" data-view="zoomIn">
-            <a target="_blank" href={landingHref}>
-              <div className="img-holder">
-                <img src={item.image || studyKikLogo} width="854" height="444" alt="description" className={classNames('img-responsive', { placeholder: !item.image })} />
-              </div>
-              <div className="info">
-                <h4>{item.name}</h4>
-                {addr &&
-                  <address>
-                    <i className="icon-map-marker"></i> {addr}
-                  </address>
-                }
-                <p className="distance">
-                  <i className="icon-car"></i> {item.distance} Miles
-                </p>
-                <span className="tel">
-                  <i className="icon-phone"></i> {item.phone_number}
-                </span>
-              </div>
-              <div className="desc">
-                <p>
-                  {item.description}
-                </p>
-              </div>
-              <div className="btn-holder">
-                <span className="btn btn-default">Learn More</span>
-              </div>
-            </a>
-          </article>
+          <TrialsArticle
+            {...item}
+            trial={item}
+            key={index}
+            index={index}
+            addr={addr}
+          />
         );
       });
     }
@@ -135,9 +123,10 @@ export class Home extends React.Component { // eslint-disable-line react/prefer-
           </h2>
           <ClinicalTrialsSearchForm
             indications={indications}
+            onSubmit={this.onSubmitForm}
+            handleZipChoose={this.handleZipChoose}
             handleDistanceChoose={this.handleDistanceChoose}
             handleIndicationChoose={this.handleIndicationChoose}
-            onSubmit={this.onSubmitForm}
           />
           <div className="articles-holder hidden"></div>
           <div className={classNames('articles-holder', { hidden: (!trials || trials.length <= 0) })}>
@@ -161,6 +150,8 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchIndications: () => dispatch(fetchIndications()),
     onSubmitForm: (values) => dispatch(clinicalTrialsSearch(values)),
+    resetForm: () => dispatch(reset('find-location')),
+    clearTrialsList: () => dispatch(clearClinicalTrialsSearch()),
   };
 }
 

@@ -144,6 +144,7 @@ import {
   CLINICAL_TRIALS_SEARCH,
   CLINICAL_TRIALS_SEARCH_SUCCESS,
   CLINICAL_TRIALS_SEARCH_ERROR,
+  CLEAR_CLINICAL_TRIALS_SEARCH,
 
   ADD_EMAIL_NOTIFICATION_USER,
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
@@ -975,6 +976,20 @@ export function findOutPatients(params) {
   };
 }
 
+export function findOutPatientsPosted(params) {
+  return {
+    type: FIND_OUT_PATIENTS_POSTED,
+    params,
+  };
+}
+
+export function findOutPatientsError(params) {
+  return {
+    type: FIND_OUT_PATIENTS_ERROR,
+    params,
+  };
+}
+
 export function clinicalTrialsSearch(params) {
   return {
     type: CLINICAL_TRIALS_SEARCH,
@@ -996,16 +1011,8 @@ export function clinicalTrialsSearchError(payload) {
   };
 }
 
-export function findOutPatientsPosted(params) {
+export function clearClinicalTrialsSearch() {
   return {
-    type: FIND_OUT_PATIENTS_POSTED,
-    params,
-  };
-}
-
-export function findOutPatientsError(params) {
-  return {
-    type: FIND_OUT_PATIENTS_ERROR,
-    params,
+    type: CLEAR_CLINICAL_TRIALS_SEARCH,
   };
 }
