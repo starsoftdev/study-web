@@ -65,7 +65,7 @@ export class TrialsArticle extends Component {
             </address>
             }
             <p className="distance">
-              <i className="icon-car"></i> {trial.distance || 'N/A'} Miles
+              <i className="icon-car"></i> {(trial.distance !== null) ? trial.distance : 'N/A'} Miles
             </p>
             <span className="tel">
               <i className="icon-phone"></i> {trial.phone_number}
