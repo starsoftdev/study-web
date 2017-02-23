@@ -75,7 +75,6 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
   }
 
   handleDistanceChoose(ev) {
-    console.log(ev);
     this.distance = ev;
   }
 
