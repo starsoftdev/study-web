@@ -23,6 +23,11 @@ const selectPrincipalInvestigatorTotals = () => createSelector(
   substate => substate.principalInvestigatorTotals
 );
 
+const selectStudies = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.studies
+);
+
 const selectProtocols = () => createSelector(
   selectHomePageDomain(),
   substate => substate.protocols
@@ -81,6 +86,7 @@ export {
   selectPatientSignUps,
   selectPatientMessages,
   selectPrincipalInvestigatorTotals,
+  selectStudies,
   selectProtocols,
   selectProtocolNumbers,
   selectIndications,

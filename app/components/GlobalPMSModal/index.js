@@ -22,7 +22,6 @@ import {
   selectSitePatients,
   selectPatientMessages,
   selectClientCredits,
-  selectStudies,
 } from '../../containers/App/selectors';
 
 import MessageItem from './MessageItem';
@@ -31,7 +30,6 @@ import PatientItem from './PatientItem';
 
 import ChatForm from './ChatForm';
 import { change, Field, reduxForm } from 'redux-form';
-import _ from 'lodash';
 
 import {
   fetchSitePatients,
@@ -40,7 +38,6 @@ import {
   markAsReadPatientMessages,
   updateSitePatients,
   fetchClientCredits,
-  fetchStudies,
 } from '../../containers/App/actions';
 import {
   selectSocket,
@@ -77,8 +74,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     hasError: React.PropTypes.bool,
     formValues: React.PropTypes.object,
     change: React.PropTypes.func,
-    studies: React.PropTypes.object,
-    fetchStudies: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -91,17 +86,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     this.handleClose = this.handleClose.bind(this);
     this.state = {
       selectedPatient: { id: 0 },
-      // patientLoaded: true,
       socketBinded: false,
       playSound: Sound.status.STOPPED,
-      // searchTimer: null,
-      newOpen: false,
       searchBy: null,
     };
-  }
-
-  componentDidMount() {
-    this.props.fetchStudies();
   }
 
   componentWillReceiveProps(newProps) {
@@ -120,39 +108,13 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       });
       this.setState({ socketBinded: true });
     }
-    if (newProps.showModal === true && this.state.newOpen) {
+    if (!this.props.showModal && newProps.showModal) {
       if (this.state.selectedPatient && this.state.selectedPatient.study_id) {
         this.props.fetchPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
         this.props.markAsReadPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
       }
-      newProps.fetchSitePatients(currentUser.id);
-      this.setState({
-        newOpen: false,
-      });
+      this.props.fetchSitePatients(currentUser.id);
     }
-    // if (newProps.sitePatients !== this.props.sitePatients) {
-    //   // let selectedPatient = { id: 0 };
-    //   _.forEach(newProps.sitePatients.details, (item) => {
-    //     if (item.show === undefined || (item.show && item.show === true)) {
-    //       // selectedPatient = item;
-    //       return false;
-    //     }
-    //     return true;
-    //   });
-    //   // this.selectPatient(selectedPatient, true);
-    // }
-    // if (newProps.showModal === true && newProps.sitePatients.details.length > 0) {
-    //   let selectedPatient = { id: 0 };
-    //   _.forEach(newProps.sitePatients.details, (item) => {
-    //     if (item.show === undefined || (item.show && item.show === true)) {
-    //       selectedPatient = item;
-    //       return false;
-    //     }
-    //     return true;
-    //   });
-    //   this.selectPatient(selectedPatient, true);
-    //   // this.setState({ patientLoaded: false });
-    // }
   }
 
   componentDidUpdate() {
@@ -175,6 +137,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   selectPatient(item, initialSelect = false) {
     if (item.id !== this.state.selectedPatient.id) {
       this.setState({ selectedPatient: item });
+      // TODO remove this later
       this.props.fetchPatientMessages(item.id, item.study_id);
       this.props.markAsReadPatientMessages(item.id, item.study_id);
 
@@ -206,9 +169,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   handleClose() {
-    this.setState({
-      newOpen: true,
-    });
     this.props.closeModal();
   }
 
@@ -251,8 +211,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     if (this.state.selectedPatient.protocol_number) {
       protocolNumber = 'Protocol: '.concat(this.state.selectedPatient.protocol_number);
     }
-    const study = _.find(this.props.studies.details, { studyId: this.state.selectedPatient.study_id });
-    const ePMS = (study && (study.patientMessagingSuite || study.patientQualificationSuite));
+    const ePMS = this.state.selectedPatient && (this.state.selectedPatient.patientMessagingSuite || this.state.selectedPatient.patientQualificationSuite);
     return (
       <Form className="form-search form-search-studies pull-left" onSubmit={this.props.handleSubmit}>
         <div>
@@ -326,7 +285,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                         clientCredits={clientCredits}
                         selectedPatient={this.state.selectedPatient}
                         sendStudyPatientMessages={sendStudyPatientMessages}
-                        ePMS={ePMS ? true : null}
+                        ePMS={ePMS}
                       />
                     </footer>
                   </section>
@@ -348,12 +307,10 @@ const mapStateToProps = createStructuredSelector({
   socket: selectSocket(),
   hasError: selectGlobalPMSFormError(),
   formValues: selectGlobalPMSFormValues(),
-  studies: selectStudies(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchStudies: searchParams => dispatch(fetchStudies(searchParams)),
     fetchSitePatients: (siteId) => dispatch(fetchSitePatients(siteId)),
     searchSitePatients: (keyword) => dispatch(searchSitePatients(keyword)),
     updateSitePatients: (newMessage) => dispatch(updateSitePatients(newMessage)),
