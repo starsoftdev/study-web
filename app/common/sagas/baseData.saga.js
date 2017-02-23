@@ -28,6 +28,7 @@ import {
   FETCH_CLIENT_CREDITS,
   SEARCH_SITE_PATIENTS,
   FETCH_PATIENT_MESSAGES,
+  FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
   FETCH_CLIENT_ROLES,
   FETCH_SITE,
   FETCH_USER,
@@ -83,6 +84,7 @@ import {
   sitePatientsSearchingError,
   patientMessagesFetched,
   patientMessagesFetchingError,
+  patientMessageUnreadCountFetched,
   clientRolesFetched,
   clientRolesFetchingError,
   siteFetched,
@@ -134,6 +136,7 @@ export default function* baseDataSaga() {
   yield fork(fetchClientCreditsWatcher);
   yield fork(searchSitePatientsWatcher);
   yield fork(fetchPatientMessagesWatcher);
+  yield fork(fetchPatientMessageUnreadCountWatcher);
   yield fork(fetchClientRolesWatcher);
   yield fork(fetchSiteWatcher);
   yield fork(fetchUserWatcher);
@@ -515,6 +518,19 @@ export function* fetchPatientMessagesWatcher() {
       }
     } else {
       yield put(patientMessagesFetched([]));
+    }
+  }
+}
+
+export function* fetchPatientMessageUnreadCountWatcher() {
+  while (true) {
+    const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
+    try {
+      const requestURL = `${API_URL}/clients/${currentUser.roleForClient.client_id}/patientMessageStats`;
+      const response = yield call(request, requestURL);
+      yield put(patientMessageUnreadCountFetched(response));
+    } catch (err) {
+      console.log(err);
     }
   }
 }

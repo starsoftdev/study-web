@@ -33,8 +33,6 @@ import {
   SET_ACTIVE_SORT,
   SORT_SUCCESS,
   FETCH_UPGRADE_STUDY_PRICE,
-  FETCH_UPGRADE_STUDY_PRICE_SUCCESS,
-  FETCH_UPGRADE_STUDY_PRICE_ERROR,
   NEW_MESSAGE_FOR_PROTOCOL,
 } from './constants';
 
@@ -280,20 +278,6 @@ export function fetchUpgradeStudyPrice(fromLevel, toLevel) {
     type: FETCH_UPGRADE_STUDY_PRICE,
     fromLevel,
     toLevel,
-  };
-}
-
-export function fetchUpgradeStudySuccess(payload) {
-  return {
-    type: FETCH_UPGRADE_STUDY_PRICE_SUCCESS,
-    payload,
-  };
-}
-
-export function fetchUpgradeStudyError(payload) {
-  return {
-    type: FETCH_UPGRADE_STUDY_PRICE_ERROR,
-    payload,
   };
 }
 

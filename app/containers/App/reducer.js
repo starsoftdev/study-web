@@ -58,7 +58,8 @@ import {
   FETCH_PATIENT_MESSAGES_ERROR,
   UPDATE_PATIENT_MESSAGES,
 
-  SEARCH_SITE_PATIENTS,
+  FETCH_PATIENT_MESSAGE_UNREAD_COUNT_SUCCESS,
+
   SEARCH_SITE_PATIENTS_SUCCESS,
   SEARCH_SITE_PATIENTS_ERROR,
 
@@ -680,8 +681,7 @@ export default function appReducer(state = initialState, action) {
       break;
     case MARK_AS_READ_PATIENT_MESSAGES:
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
-        let patientData = null;
-        patientData = item;
+        const patientData = Object.assign({}, item);
         if (patientData.id === action.patientId && patientData.study_id === action.studyId) {
           patientData.count_unread = 0;
         }
@@ -725,6 +725,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_PATIENT_MESSAGES:
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: [],
           fetching: true,
           error: null,
@@ -734,6 +735,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_PATIENT_MESSAGES_SUCCESS:
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: payload,
           fetching: false,
           error: null,
@@ -745,6 +747,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_PATIENT_MESSAGES_ERROR:
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: [],
           fetching: false,
           error: payload,
@@ -755,6 +758,7 @@ export default function appReducer(state = initialState, action) {
       patientMessagesCollection = concat(state.baseData.patientMessages.details, action.newMessage);
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: patientMessagesCollection,
           fetching: false,
           error: null,
@@ -762,14 +766,21 @@ export default function appReducer(state = initialState, action) {
       };
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: patientMessagesCollection,
           fetching: false,
           error: null,
         },
       };
       break;
-    case SEARCH_SITE_PATIENTS:
-      return state;
+    case FETCH_PATIENT_MESSAGE_UNREAD_COUNT_SUCCESS:
+      baseDataInnerState = {
+        patientMessages: {
+          ...state.baseData.patientMessages,
+          stats: action.payload,
+        },
+      };
+      break;
     case SEARCH_SITE_PATIENTS_SUCCESS:
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
         let patientData = null;
