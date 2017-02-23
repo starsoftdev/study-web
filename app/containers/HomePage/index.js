@@ -57,7 +57,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
       this.props.fetchClientSites(currentUserClientId, {});
       this.props.fetchLevels();
       this.props.getAvailPhoneNumbers();
-      setTimeout(this.props.fetchStudies, 0);
+      this.props.fetchStudies();
     } else if (currentUser && userRoleType === 'sponsor') {
       this.props.fetchProtocols({ sponsorRoleId: currentUser.roleForSponsor.id });
       this.props.fetchProtocolNumbers(currentUser);

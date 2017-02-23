@@ -63,6 +63,9 @@ import {
   FETCH_SITE_PATIENTS_ERROR,
   UPDATE_SITE_PATIENTS,
 
+  FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
+  FETCH_PATIENT_MESSAGE_UNREAD_COUNT_SUCCESS,
+
   FETCH_CLIENT_CREDITS,
   FETCH_CLIENT_CREDITS_SUCCESS,
   FETCH_CLIENT_CREDITS_ERROR,
@@ -540,6 +543,20 @@ export function sitePatientsFetched(payload) {
 export function sitePatientsFetchingError(payload) {
   return {
     type: FETCH_SITE_PATIENTS_ERROR,
+    payload,
+  };
+}
+
+export function fetchPatientMessageUnreadCount(currentUser) {
+  return {
+    type: FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
+    currentUser,
+  };
+}
+
+export function patientMessageUnreadCountFetched(payload) {
+  return {
+    type: FETCH_PATIENT_MESSAGE_UNREAD_COUNT_SUCCESS,
     payload,
   };
 }
