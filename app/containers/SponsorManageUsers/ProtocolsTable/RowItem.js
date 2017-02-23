@@ -108,7 +108,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         </td>
         <td className="col6">
 
-          <span>ASSIGNED USERS</span>
+          <span>ASSIGNED USERS ({assignedUsersContent.length ? assignedUsersContent.length : 0})</span>
           {(this.state.assignedUsersCollapsed && !shouldBeOpened)
             ? <a className="btn add-more-trs" onClick={this.toggleAssignedUsers}></a>
             : <a className="btn add-more-trs active " onClick={this.toggleAssignedUsers}></a>
