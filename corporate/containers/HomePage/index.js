@@ -128,9 +128,9 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
             handleDistanceChoose={this.handleDistanceChoose}
             handleIndicationChoose={this.handleIndicationChoose}
           />
-          <div className={classNames('articles-holder', { hidden: (!trials || trials.length <= 0) })}>
+          <div className={classNames('articles-holder relative', { hidden: (!trials || trials.length <= 0) })}>
             <h3 className="text-center text-uppercase">{h3Text}</h3>
-            <div className="row relative">
+            <div className="row">
               {(trials && trials.length > 0) && studiesList}
             </div>
           </div>

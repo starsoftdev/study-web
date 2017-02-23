@@ -90,7 +90,6 @@ html {
   box-sizing: initial !important;
   border: 2px solid #CCC;
   max-height: 300px;
-  z-index: 10 !important;
   div {
     margin: 1px;
   }
@@ -166,8 +165,10 @@ html {
 }
 
 .Select-input{
+  padding-left: 15px;
 
   input {
+    color: #99cc66;
 
     @media screen and (min-width: @xs) {
       padding: 12px 0 12px;
@@ -228,12 +229,15 @@ div.toggle.has-error > div:first-child {
 
 .articles-holder {
 
-  .row {
-     &.relative {
-       position: relative;
-       z-index: 1;
-     }
+  &.relative {
+    position: relative;
+    z-index: 1;
   }
+}
+
+.form-find-studies{
+  position: relative;
+  z-index: 2;
 }
 
 .post {
