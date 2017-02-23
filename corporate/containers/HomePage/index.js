@@ -55,7 +55,12 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
     this.watcher = inViewport(this.animatedH2, this.setVisible);
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(newProps) {
+    if (newProps.trials === null) {
+      this.distance = 0;
+      this.indication = null;
+      this.zip = null;
+    }
   }
 
   componentWillUnmount() {
@@ -70,6 +75,7 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
   }
 
   handleDistanceChoose(ev) {
+    console.log(ev);
     this.distance = ev;
   }
 
