@@ -41,9 +41,9 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
     const { currentUser } = this.props;
     let bDisabled = true;
     if (currentUser && currentUser.roleForClient) {
-      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+      bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
       if (bDisabled) {
-        const nLocation = currentUser.roleForClient.site_id ? currentUser.roleForClient.site_id : null;
+        const nLocation = currentUser.roleForClient.site_id || false;
         this.props.dispatch(change('searchStudies', 'site', nLocation));
         this.performSearch(currentUser.roleForClient.site_id, 'site');
       }
