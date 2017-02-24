@@ -60,7 +60,7 @@ export class TrialsArticle extends Component {
           <div className="info">
             <h4>{trial.name}</h4>
             <address>
-              <i className="icomoon-map-marker"></i> {(addr) ? addr : 'N/A'}
+              <i className="icomoon-map-marker"></i> {(addr !== null) ? addr : 'N/A'}
             </address>
             <p className="distance">
               <i className="icomoon-car"></i> {(trial.distance !== null) ? trial.distance : 'N/A'} Miles
