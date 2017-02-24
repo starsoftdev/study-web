@@ -1125,7 +1125,7 @@ export default function appReducer(state = initialState, action) {
         //   foundIndex = findIndex(clientSitesCollection, { id: payload.userResultData.siteId });
         //   clientSitesCollection[foundIndex].roles.push(payload.userResultData.user);
         // } else {
-          clientRolesCollection.push(payload.userResultData);
+        clientRolesCollection.push(payload.userResultData);
         // }
       }
 
