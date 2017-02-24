@@ -1088,12 +1088,12 @@ export default function appReducer(state = initialState, action) {
         });
       } else if (payload.userType === 'nonAdmin') {
         forEach(clientSitesCollection, item => {
-          foundIndex = findIndex(item.users, { id: payload.userResultData.user.id });
+          foundIndex = findIndex(item.roles, { id: payload.userResultData.user.id });
           if (foundIndex > -1) {
             if (item.id === payload.userResultData.siteId) {
-              item.users[foundIndex] = payload.userResultData.user; // eslint-disable-line
+              item.roles[foundIndex].user = payload.userResultData.user; // eslint-disable-line
             } else {
-              item.users.splice(foundIndex, 1);
+              item.roles.splice(foundIndex, 1);
               foundIndex = -1;
             }
             return false;
@@ -1103,11 +1103,10 @@ export default function appReducer(state = initialState, action) {
         if (foundIndex < 0) {
           foundIndex = findIndex(clientSitesCollection, { id: payload.userResultData.siteId });
           if (foundIndex > -1) {
-            clientSitesCollection[foundIndex].users.push(payload.userResultData.user);
+            clientSitesCollection[foundIndex].roles.push(payload.userResultData);
           }
         }
       }
-
       foundIndex = findIndex(clientRolesCollection, (item) => (item.user.id === payload.userResultData.user.id));
       if (payload.userType === 'admin') {
         if (foundIndex < 0) {
@@ -1117,8 +1116,17 @@ export default function appReducer(state = initialState, action) {
         }
       } else if (payload.userType === 'nonAdmin') {
         if (foundIndex > -1) {
-          clientRolesCollection.splice(foundIndex, 1);
+          clientRolesCollection[foundIndex] = payload.userResultData;
         }
+      }
+      if (payload.userResultData.header === 'Add User') {
+        // console.log('New', payload.userResultData);
+        // if (payload.userResultData.siteId && payload.userResultData.siteId !== '0') {
+        //   foundIndex = findIndex(clientSitesCollection, { id: payload.userResultData.siteId });
+        //   clientSitesCollection[foundIndex].roles.push(payload.userResultData.user);
+        // } else {
+          clientRolesCollection.push(payload.userResultData);
+        // }
       }
 
       baseDataInnerState = {

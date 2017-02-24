@@ -71,7 +71,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
       } else if (!canPurchase && canRedeemRewards) {
         accessStr = 'REWARDS';
       } else {
-        accessStr = 'NO ACCESS';
+        accessStr = 'SITE LOCATION';
       }
       return accessStr;
     }
@@ -180,7 +180,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     }
     const sortedClientRoles = this.getSortedClientRoles();
     const clientRolesListContents = sortedClientRoles.filter(filterMethod).map((item, index) => (
-      item.canPurchase || item.canRedeemRewards || item.name === 'Super Admin' ? <ClientRoleItem {...item} key={index} bDisabled={bDisabled} /> : null
+      item.canPurchase || item.canRedeemRewards || item.name === 'Super Admin' || !item.site_id || item.site_id === 0 ? <ClientRoleItem {...item} key={index} bDisabled={bDisabled} /> : null
     )
     );
     const siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));

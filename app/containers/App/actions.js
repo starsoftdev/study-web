@@ -783,12 +783,13 @@ export function saveUser(clientId, id, data) {
   };
 }
 
-export function userSaved(siteId, payload) {
+export function userSaved(siteId, payload, messageHeader) {
   const userType = (siteId === 0) ? 'admin' : 'nonAdmin';
   const userResultData = {
     siteId,
     ...payload.clientRole,
     user: payload.user,
+    header: messageHeader,
   };
   const result = {
     userType,

@@ -711,7 +711,7 @@ export function* saveUserWatcher() {
       const response = yield call(request, requestURL, options);
 
       yield put(toastrActions.success(messageHeader, message));
-      yield put(userSaved(data.siteId, response));
+      yield put(userSaved(data.clientRole.siteId, response, messageHeader));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));
