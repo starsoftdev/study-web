@@ -41,9 +41,10 @@ class AddPatient extends React.Component {
   };
   constructor(props) {
     super(props);
-    this.addPatient = this.addPatient.bind(this);
     this.onClose = this.onClose.bind(this);
     this.onHide = this.onHide.bind(this);
+    this.onPhoneBlur = this.onPhoneBlur.bind(this);
+    this.addPatient = this.addPatient.bind(this);
   }
 
   onClose() {
@@ -58,17 +59,21 @@ class AddPatient extends React.Component {
     onHide();
   }
 
+  onPhoneBlur(event) {
+    const { blur } = this.props;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur('phone', formattedPhoneNumber);
+  }
+
   addPatient(event) {
     event.preventDefault();
-    const { blur, formError, newPatient, submitAddPatient, touchFields } = this.props;
+    const { formError, newPatient, submitAddPatient, touchFields } = this.props;
 
     if (formError) {
       touchFields();
       return;
     }
 
-    const formattedPhoneNumber = normalizePhoneDisplay(newPatient.phone);
-    blur('phone', formattedPhoneNumber);
     const patient = Object.assign({}, newPatient);
     /* normalizing the phone number */
     patient.phone = normalizePhone(newPatient.phone);
@@ -160,6 +165,7 @@ class AddPatient extends React.Component {
                   className="field"
                   id="import-patient-phone"
                   required
+                  onBlur={this.onPhoneBlur}
                 />
               </div>
               <div className="field-row">
