@@ -576,6 +576,50 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/app/dashboard-protocol',
+      name: 'dashboardProtocolPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardProtocolPage/reducer'),
+          System.import('./containers/DashboardProtocolPage/sagas'),
+          System.import('./containers/DashboardProtocolPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardProtocolPage', reducer.default);
+          injectReducer('dashboardProtocolPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/app/dashboard-cro',
+      name: 'dashboardCROPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardCROPage/reducer'),
+          System.import('./containers/DashboardCROPage/sagas'),
+          System.import('./containers/DashboardCROPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardCROPage', reducer.default);
+          injectReducer('dashboardCROPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/app/dashboard-portals',
       name: 'dashboardPortalsPage',
       getComponent(nextState, cb) {
