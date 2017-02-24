@@ -24,6 +24,7 @@ import {
 import {
   getRedirectionUrl,
   getAvatarUrl,
+  eventMessage,
 } from '../../../containers/NotificationsPage';
 
 
@@ -90,8 +91,8 @@ class NotificationBox extends React.Component {
                     _.take(this.props.notifications, 3).map(n => (
                       <li key={n.id}>
                         <a href={getRedirectionUrl(n)}>
-                          <div className="img-circle"><img src={getAvatarUrl(n)} width="43" height="43" alt="Avatar" /></div>
-                          <p dangerouslySetInnerHTML={{ __html: n.event_log.eventMessage }} />
+                          <div className="img-circle bg-gray"><img src={getAvatarUrl(n)} width="43" height="43" alt="Avatar" /></div>
+                          <p dangerouslySetInnerHTML={{ __html: eventMessage(n.event_log) }} />
                           <time>{this.parseNotificationTime(n.event_log.created, currentUser.timezone)}</time>
                         </a>
                       </li>

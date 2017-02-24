@@ -38,17 +38,31 @@ export const getRedirectionUrl = (notification) => {
 
 export const getAvatarUrl = (notification) => {
   const { event_log } = notification;
+  const data = JSON.parse(event_log.eventData);
   let url = require('../../assets/images/Default-User-Img-Dr.png');
   if (event_log.eventType === 'twilio-message') {
-    const data = JSON.parse(event_log.eventData);
     if (data.patientGender === 'Female') {
       url = require('../../assets/images/Default-User-Img-Girl.png');
     } else {
       url = require('../../assets/images/Default-User-Img.png');
     }
+  } else if (event_log.eventType === 'earn-rewards' && data.type === 'enroll') {
+    url = require('../../assets/images/site_location.png');
   }
 
   return url;
+};
+
+export const eventMessage = (eventLog) => {
+  if (eventLog.eventType === 'create-call_reminder') {
+    const data = JSON.parse(eventLog.eventData);
+    const userTime = moment(data.time).tz(data.timezone);
+    const date = userTime.format('MM/DD/YY');
+    const time = userTime.format('h:mm A');
+    return `${eventLog.eventMessage} at ${time} on ${date}`;
+  }
+
+  return eventLog.eventMessage;
 };
 
 const sanitize = (notifications) => notifications.map(n => {
