@@ -79,6 +79,8 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   render() {
     const { name, piFirstName, piLastName, redirectPhone, address, roles, city, zip, state } = this.props;
 
+    const addressArr = address.split(',');
+
     const assignedUsersContent = (roles) ? roles.map((item, index) => (
       <div className="assigned-user" key={index}>
         <span>{item.user.firstName} {item.user.lastName}</span>
@@ -103,7 +105,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           <span>{redirectPhone}</span>
         </td>
         <td className="address">
-          <span>{address},{city}<br />{state},{zip}</span>
+          <span>{addressArr[0]}<br />{city}, {state} {zip}</span>
         </td>
         <td className="assigned-users">
           <div className="toggle-assigned-users">
