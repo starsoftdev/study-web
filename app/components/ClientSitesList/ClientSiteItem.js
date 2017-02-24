@@ -61,7 +61,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   editAssignedUser(assignedUser) {
-    this.props.fetchUser(assignedUser.id);
+    this.props.fetchUser(assignedUser.user.id);
   }
 
   currentSiteIsBeingFetched() {

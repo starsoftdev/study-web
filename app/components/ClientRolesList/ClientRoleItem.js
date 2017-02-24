@@ -48,7 +48,7 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
     } else if (!canPurchase && canRedeemRewards) {
       accessStr = 'REWARDS';
     } else {
-      accessStr = 'NO ACCESS';
+      accessStr = 'SITE LOCATION';
     }
 
     return (
