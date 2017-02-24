@@ -186,7 +186,7 @@ export class BillingPage extends Component {
                             className="btn-reset"
                             onClick={this.resetQuantity.bind(this, 'ruby')}
                           >
-                            <i className="icon-icon_trash"></i>
+                            <i className="icomoon-icon_trash"></i>
                           </a>
                         </div></td>
                       </tr>
@@ -226,7 +226,7 @@ export class BillingPage extends Component {
                             className="btn-reset"
                             onClick={this.resetQuantity.bind(this, 'diamond')}
                           >
-                            <i className="icon-icon_trash"></i>
+                            <i className="icomoon-icon_trash"></i>
                           </a>
                         </div></td>
                       </tr>
@@ -267,7 +267,7 @@ export class BillingPage extends Component {
                               className="btn-reset"
                               onClick={this.resetQuantity.bind(this, 'platinum')}
                             >
-                              <i className="icon-icon_trash"></i>
+                              <i className="icomoon-icon_trash"></i>
                             </a>
                           </div>
                         </td>
@@ -309,7 +309,7 @@ export class BillingPage extends Component {
                               className="btn-reset"
                               onClick={this.resetQuantity.bind(this, 'gold')}
                             >
-                              <i className="icon-icon_trash"></i>
+                              <i className="icomoon-icon_trash"></i>
                             </a>
                           </div>
                         </td>
@@ -351,7 +351,7 @@ export class BillingPage extends Component {
                               className="btn-reset"
                               onClick={this.resetQuantity.bind(this, 'silver')}
                             >
-                              <i className="icon-icon_trash"></i>
+                              <i className="icomoon-icon_trash"></i>
                             </a>
                           </div>
                         </td>
@@ -393,7 +393,7 @@ export class BillingPage extends Component {
                               className="btn-reset"
                               onClick={this.resetQuantity.bind(this, 'bronze')}
                             >
-                              <i className="icon-icon_trash"></i>
+                              <i className="icomoon-icon_trash"></i>
                             </a>
                           </div>
                         </td>
@@ -434,7 +434,7 @@ export class BillingPage extends Component {
                               className="btn-reset"
                               onClick={this.resetQuantity.bind(this, 'irb')}
                             >
-                              <i className="icon-icon_trash"></i>
+                              <i className="icomoon-icon_trash"></i>
                             </a>
                           </div>
                         </td>
@@ -498,7 +498,7 @@ export class BillingPage extends Component {
                 aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icon-search"></i>
+                <i className="icomoon-search"></i>
                 <h3>
                   <span>Exposure to StudyKIK Patient<br /> Enrollment Search</span>
                 </h3>
@@ -525,7 +525,7 @@ export class BillingPage extends Component {
                 aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icon-sign"></i>
+                <i className="icomoon-sign"></i>
                 <h3>
                   <span>
                     Instant SIGN-UP Notifications<br /> to Your Site
@@ -556,7 +556,7 @@ export class BillingPage extends Component {
                 aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icon-right"></i>
+                <i className="icomoon-right"></i>
                 <h3>
                   <span>Instant Patient Email and <br /> Text Message w/Site Phone</span>
                 </h3>
@@ -585,7 +585,7 @@ export class BillingPage extends Component {
                 aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icon-mobile"></i>
+                <i className="icomoon-mobile"></i>
                 <h3>
                   <span>Mobile Friendly Study Page</span>
                 </h3>
@@ -615,7 +615,7 @@ export class BillingPage extends Component {
                 aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icon-lock2"></i>
+                <i className="icomoon-lock2"></i>
                 <h3>
                   <span>
                     Proprietary Filtering System <br /> for Quality Patient Reach
@@ -647,7 +647,7 @@ export class BillingPage extends Component {
                 aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icon-time"></i>
+                <i className="icomoon-time"></i>
                 <h3><span>Patient Call Tracking</span></h3>
               </a>
               <div className="dropdown-menu" aria-labelledby="dLabel">

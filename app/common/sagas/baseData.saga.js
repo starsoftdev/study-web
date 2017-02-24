@@ -840,8 +840,11 @@ function* postFindOutPatients(action) {
     };
 
     const response = yield call(request, requestURL, options);
+    yield put(toastrActions.success('', 'Thank you for submitting your information.'));
     yield put(findOutPatientsPosted(response));
   } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
+    yield put(toastrActions.error('', errorMessage));
     yield put(findOutPatientsError(err));
   }
 }

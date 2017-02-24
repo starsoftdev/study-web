@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import ReduxToastr from 'react-redux-toastr';
 import Helmet from 'react-helmet';
 
 import { default as Header } from '../../components/Header';
@@ -11,6 +12,8 @@ import { selectAuthState, selectCurrentUser } from '../../../app/containers/App/
 import { logout } from '../../../app/containers/LoginPage/actions';
 
 import './styles.less';
+
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
 export class Corporate extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -43,6 +46,11 @@ export class Corporate extends React.Component { // eslint-disable-line react/pr
         <Header {...this.props} />
         {React.Children.toArray(this.props.children)}
         <Footer {...this.props} />
+        <ReduxToastr
+          timeOut={6000}
+          newestOnTop={false}
+          position="top-right"
+        />
       </div>
     );
   }

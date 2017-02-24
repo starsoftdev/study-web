@@ -40,7 +40,7 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
               href="#"
               onClick={this.shareFB}
             >
-              <i className="icon-facebook-square"></i>
+              <i className="icomoon-facebook-square"></i>
             </a>
           </li>
           <li className="twitter">
@@ -48,19 +48,19 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
               href="#"
               onClick={this.shareTwitter}
             >
-              <i className="icon-twitter-square"></i>
+              <i className="icomoon-twitter-square"></i>
             </a>
           </li>
           {imgSrc &&
             <li className="pinterest">
               <PinterestButton element="a" media={imgSrc}>
-                <i className="icon-pinterest-square"></i>
+                <i className="icomoon-pinterest-square"></i>
               </PinterestButton>
             </li>
           }
           <li className="gmail">
             <a href={`mailto:?subject=${study.name}&body=${location.href}`}>
-              <i className="icon-envelope-square"></i>
+              <i className="icomoon-envelope-square"></i>
             </a>
           </li>
         </ul>

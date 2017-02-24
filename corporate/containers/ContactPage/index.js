@@ -57,16 +57,16 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
               <p className="text-center txt-green">To speak with one of our friendly staff members, please contact us.</p>
               <div className="row contact-info">
                 <div className="col-xs-4">
-                  <h3 className="txt-orange"><i className="icon-phone txt-orange"></i> PHONE</h3>
+                  <h3 className="txt-orange"><i className="icomoon-phone txt-orange"></i> PHONE</h3>
                   <a href="tel:8776272509">877.627.2509</a>
                 </div>
                 <div className="col-xs-4">
-                  <h3 className="txt-orange"><i className="icon-map-marker txt-orange"></i> LOCATION</h3>
+                  <h3 className="txt-orange"><i className="icomoon-map-marker txt-orange"></i> LOCATION</h3>
                   <address>1675 Scenic Ave <br /> Suite 150 <br /> Costa Mesa, Ca 92626</address>
                 </div>
                 <div className="col-xs-4 pull-right col">
 
-                  <h3 className="txt-orange"><i className="icon-envelope txt-orange"></i> EMAIL</h3>
+                  <h3 className="txt-orange"><i className="icomoon-envelope txt-orange"></i> EMAIL</h3>
                   <a href="mailto:info@studykik.com" className="email">info@studykik.com</a>
                 </div>
               </div>

@@ -147,11 +147,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
               <div className="img-holder">
                 <img src={img4} width="709" height="323" alt="img4" className="img-responsive" />
                 <div className="hidden">
-                  <span className="icon-twitter-shape"><span className="path1" /><span className="path2" /></span>
-                  <span className="icon-facebook-shape"><span className="path1" /><span className="path2" /></span>
-                  <span className="icon-giant-shape"><span className="path1" /><span className="path2" /></span>
-                  <span className="icon-instagram-shape"><span className="path1" /><span className="path2" /></span>
-                  <span className="icon-pint-shape"><span className="path1" /><span className="path2" /></span>
+                  <span className="icomoon-twitter-shape"><span className="path1" /><span className="path2" /></span>
+                  <span className="icomoon-facebook-shape"><span className="path1" /><span className="path2" /></span>
+                  <span className="icomoon-giant-shape"><span className="path1" /><span className="path2" /></span>
+                  <span className="icomoon-instagram-shape"><span className="path1" /><span className="path2" /></span>
+                  <span className="icomoon-pint-shape"><span className="path1" /><span className="path2" /></span>
                 </div>
               </div>
             </div>
@@ -256,7 +256,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 type="button"
                 onClick={this.handleClick}
               >
-                <i className="icon-search" />
+                <i className="icomoon-search" />
                 <h3>
                   <span>Exposure to StudyKIK Patient<br /> Enrollment Search</span>
                 </h3>
@@ -279,7 +279,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 type="button"
                 onClick={this.handleClick}
               >
-                <i className="icon-sign" />
+                <i className="icomoon-sign" />
                 <h3>
                   <span>
                     Instant SIGN-UP Notifications<br /> to Your Site
@@ -306,7 +306,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 type="button"
                 onClick={this.handleClick}
               >
-                <i className="icon-right" />
+                <i className="icomoon-right" />
                 <h3>
                   <span>Instant Patient Email and <br /> Text Message w/Site Phone</span>
                 </h3>
@@ -331,7 +331,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 type="button"
                 onClick={this.handleClick}
               >
-                <i className="icon-mobile" />
+                <i className="icomoon-mobile" />
                 <h3>
                   <span>Mobile Friendly Study Page</span>
                 </h3>
@@ -357,7 +357,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 type="button"
                 onClick={this.handleClick}
               >
-                <i className="icon-lock2" />
+                <i className="icomoon-lock2" />
                 <h3>
                   <span>
                     Proprietary Filtering System <br /> for Quality Patient Reach
@@ -385,7 +385,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 type="button"
                 onClick={this.handleClick}
               >
-                <i className="icon-time" />
+                <i className="icomoon-time" />
                 <h3><span>Patient Call Tracking</span></h3>
               </a>
               <div className="dropdown-menu">

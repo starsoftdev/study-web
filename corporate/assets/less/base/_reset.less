@@ -599,8 +599,6 @@ textarea.form-control {
 	
 	.field-row {
 		.font(0,0);
-		
-		
 	} 
 	
 	> * {
@@ -617,6 +615,12 @@ textarea.form-control {
 		@media screen and(max-width: @xs) {
 			font-size: 14px;
 		} 
+	}
+	
+	.btn[type] {
+		font-size: 18px;
+		
+		.font-responsive; 
 	}
 	
 	
@@ -696,8 +700,13 @@ textarea.form-control {
 	
 	.upload-btn + .jcf-file {
 		@media screen and (max-width: @xs) {
-			display: block;
+			display: none;
 			margin: 15px 0 0;
+			
+			&[class^="jcf-extension-"],
+			&[class*=" jcf-extension-"] {
+				display: block;
+			}
 		}
 		
 		.jcf-fake-input {
