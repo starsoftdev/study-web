@@ -96,7 +96,6 @@ class EditProtocolForm extends Component { // eslint-disable-line react/prefer-s
               name="irb"
               component={Input}
               type="text"
-              placeholder="IRB"
             />
           </div>
         </div>
@@ -110,7 +109,6 @@ class EditProtocolForm extends Component { // eslint-disable-line react/prefer-s
               name="iwrs"
               component={Input}
               type="text"
-              placeholder="IWRS"
             />
           </div>
         </div>
