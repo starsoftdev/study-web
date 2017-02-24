@@ -576,6 +576,27 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/app/dashboard-protocol',
+      name: 'dashboardProtocolPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardProtocolPage/reducer'),
+          System.import('./containers/DashboardProtocolPage/sagas'),
+          System.import('./containers/DashboardProtocolPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardProtocolPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/app/dashboard-portals',
       name: 'dashboardPortalsPage',
       getComponent(nextState, cb) {
