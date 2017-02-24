@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import { getAvatarUrl } from '../index';
+import { getAvatarUrl, eventMessage } from '../index';
 
 const NotificationItem = ({ notification, onClick }) => {
   const { event_log, date, time } = notification;
@@ -10,12 +10,12 @@ const NotificationItem = ({ notification, onClick }) => {
     <tr className="" onClick={onClick}>
       <td>
         <div className="info clearfix">
-          <div className="img-holder">
+          <div className="img-holder bg-gray">
             <img alt="description" src={url} />
           </div>
           <div className="desc">
             <p>
-              <span dangerouslySetInnerHTML={{ __html: event_log.eventMessage }} />
+              <span dangerouslySetInnerHTML={{ __html: eventMessage(event_log) }} />
             </p>
           </div>
         </div>
