@@ -61,14 +61,14 @@ export class TrialsArticle extends Component {
             <h4>{trial.name}</h4>
             {addr &&
             <address>
-              <i className="icon-map-marker"></i> {addr}
+              <i className="icomoon-map-marker"></i> {addr}
             </address>
             }
             <p className="distance">
-              <i className="icon-car"></i> {(trial.distance !== null) ? trial.distance : 'N/A'} Miles
+              <i className="icomoon-car"></i> {(trial.distance !== null) ? trial.distance : 'N/A'} Miles
             </p>
             <span className="tel">
-              <i className="icon-phone"></i> {trial.phone_number}
+              <i className="icomoon-phone"></i> {trial.phone_number}
             </span>
           </div>
           <div className="desc">
