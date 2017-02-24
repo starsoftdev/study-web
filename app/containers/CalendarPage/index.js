@@ -180,6 +180,7 @@ export class CalendarPage extends React.Component {
         indication: data.protocol.indication,
         protocolNumber: data.protocol.label,
         patientId: data.patient.value,
+        patientName: data.patient.label,
         userId: currentUser.id,
         time: moment(this.selectedCellInfo.selectedDate).add(data.period === 'AM' ?
           data.hour % 12 :
