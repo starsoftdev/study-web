@@ -53,7 +53,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
         if (!state) {
           state = _.find(val.types, (o) => (o === 'administrative_area_level_1'));
           if (state) {
-            this.props.dispatch(change('editSite', 'state', val.long_name));
+            this.props.dispatch(change('editSite', 'state', val.short_name));
           }
         }
         if (!postalCode) {
