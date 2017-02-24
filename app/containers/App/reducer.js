@@ -1029,12 +1029,13 @@ export default function appReducer(state = initialState, action) {
       break;
     case SAVE_SITE_SUCCESS:
       foundIndex = findIndex(clientSitesCollection, { id: payload.id });
-      if (!payload.users) {
-        payload.users = [];
+      if (!payload.roles) {
+        payload.roles = [];
       }
       if (foundIndex < 0) {
         clientSitesCollection.push(payload);
       } else {
+        payload.roles = clientSitesCollection[foundIndex].roles;
         clientSitesCollection[foundIndex] = payload;
       }
       baseDataInnerState = {
