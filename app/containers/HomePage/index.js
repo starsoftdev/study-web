@@ -66,12 +66,13 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
   }
 
   searchStudies(searchParams) {
+    const { currentUser } = this.props;
     const queryParams = {
       name: searchParams.name,
       siteId: searchParams.site,
       status: searchParams.status,
     };
-    this.props.fetchStudies(queryParams);
+    this.props.fetchStudies(currentUser, queryParams);
   }
 
   searchProtocols(searchParams) {
