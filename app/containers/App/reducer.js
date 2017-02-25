@@ -259,6 +259,7 @@ export default function appReducer(state = initialState, action) {
   let baseDataInnerState = null;
   let resultState = null;
   let userRoleType = '';
+  let temRoleID = null;
 
   switch (action.type) {
     case SET_AUTH_STATE:
@@ -938,11 +939,30 @@ export default function appReducer(state = initialState, action) {
       break;
     case DELETE_USER_SUCCESS:
       forEach(clientSitesCollection, item => {
-        if (remove(item.users, { id: payload.id }).length > 0) {
+        forEach(item.roles, role => {
+          if (role.user.id === payload.id) {
+            temRoleID = role.id;
+            return false;
+          }
+          return true;
+        });
+      });
+      forEach(clientSitesCollection, item => {
+        if (remove(item.roles, { id: temRoleID }).length > 0) {
           return false;
         }
         return true;
       });
+
+      forEach(clientRolesCollection, item => {
+        if (item.user.id === payload.id) {
+          temRoleID = item.id;
+          return false;
+        }
+        return true;
+      });
+      remove(clientRolesCollection, { id: temRoleID });
+
       baseDataInnerState = {
         deletedUser: {
           details: payload,
@@ -951,6 +971,11 @@ export default function appReducer(state = initialState, action) {
         },
         clientSites: {
           details: clientSitesCollection,
+          fetching: false,
+          error: null,
+        },
+        clientRoles: {
+          details: clientRolesCollection,
           fetching: false,
           error: null,
         },
@@ -1082,6 +1107,7 @@ export default function appReducer(state = initialState, action) {
     case SAVE_USER_SUCCESS:
       if (payload.userType === 'admin') {
         forEach(clientSitesCollection, item => {
+          foundIndex = findIndex(clientRolesCollection, (item) => (item.user.id === payload.userResultData.user.id));
           if (remove(item.users, { id: payload.userResultData.user.id }).length > 0) {
             return false;
           }
@@ -1120,15 +1146,15 @@ export default function appReducer(state = initialState, action) {
           clientRolesCollection[foundIndex] = payload.userResultData;
         }
       }
-      if (payload.userResultData.header === 'Add User') {
-        // console.log('New', payload.userResultData);
-        // if (payload.userResultData.siteId && payload.userResultData.siteId !== '0') {
-        //   foundIndex = findIndex(clientSitesCollection, { id: payload.userResultData.siteId });
-        //   clientSitesCollection[foundIndex].roles.push(payload.userResultData.user);
-        // } else {
-        clientRolesCollection.push(payload.userResultData);
-        // }
-      }
+      // if (payload.userResultData.header === 'Add User') {
+      //   // console.log('New', payload.userResultData);
+      //   // if (payload.userResultData.siteId && payload.userResultData.siteId !== '0') {
+      //   //   foundIndex = findIndex(clientSitesCollection, { id: payload.userResultData.siteId });
+      //   //   clientSitesCollection[foundIndex].roles.push(payload.userResultData.user);
+      //   // } else {
+      //   clientRolesCollection.push(payload.userResultData);
+      //   // }
+      // }
 
       baseDataInnerState = {
         savedUser: {

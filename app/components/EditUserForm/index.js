@@ -48,6 +48,9 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
     this.props.dispatch(change('editUser', 'reward', this.props.Redeem));
     const nSite = (this.props.newSiteLocation || this.props.newSiteLocation === 0) ? this.props.newSiteLocation.toString() : null;
     this.props.dispatch(change('editUser', 'site', nSite));
+    // if (!this.props.site) {
+    //   this.props.dispatch(change('editUser', 'site', '0'));
+    // }
   }
 
   handleSelect() {
@@ -62,7 +65,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
     const { savedUser, siteOptions, site, handleSubmit, onDelete, deleting, isEdit, newSiteLocation } = this.props;
     let clientRolePanelContent = null;
 
-    if (site === '0' || (newSiteLocation && newSiteLocation === 0)) {
+    if (!site || site === '0' || (newSiteLocation && newSiteLocation === 0)) {
       clientRolePanelContent = (
         <div className="client-role">
           <div className="field-row">

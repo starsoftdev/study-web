@@ -608,6 +608,9 @@ export function* deleteUserWatcher() {
       const requestURL = `${API_URL}/users/${id}`;
       const options = {
         method: 'DELETE',
+        body: JSON.stringify({
+          id,
+        }),
       };
       const response = yield call(request, requestURL, options);
 
@@ -629,6 +632,9 @@ export function* deleteClientRoleWatcher() {
       const requestURL = `${API_URL}/clientRoles/${id}`;
       const options = {
         method: 'DELETE',
+        body: JSON.stringify({
+          id,
+        }),
       };
       const response = yield call(request, requestURL, options);
 
