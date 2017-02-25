@@ -8,7 +8,7 @@ import CenteredModal from '../../components/CenteredModal/index';
 import EditUserForm from '../../components/EditUserForm';
 import { selectCurrentUserClientId, selectClientSites, selectClientRoles, selectSelectedUser,
   selectDeletedClientRole, selectSavedUser, selectSelectedUserDetailsForForm } from '../../containers/App/selectors';
-import { clearSelectedUser, deleteClientRole, saveUser } from '../../containers/App/actions';
+import { clearSelectedUser, deleteClientRole, saveUser, deleteUser } from '../../containers/App/actions';
 import ClientRoleItem from './ClientRoleItem';
 
 class ClientRolesList extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -23,6 +23,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     savedUser: PropTypes.object,
     clearSelectedUser: PropTypes.func,
     deleteClientRole: PropTypes.func,
+    deleteUser: PropTypes.func,
     saveUser: PropTypes.func,
     currentUser: PropTypes.object,
   };
@@ -162,14 +163,12 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     //     siteId: parseInt(userData.site, 10),
     //   };
     // }
-
     this.props.saveUser(currentUserClientId, selectedUser.details.id, userInput);
   }
 
   deleteClientRole() {
     const { selectedUser } = this.props;
-
-    this.props.deleteClientRole(selectedUser.details.roleForClient.id);
+    this.props.deleteUser(selectedUser.details.id);
   }
 
   render() {
@@ -180,7 +179,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     }
     const sortedClientRoles = this.getSortedClientRoles();
     const clientRolesListContents = sortedClientRoles.filter(filterMethod).map((item, index) => (
-      item.canPurchase || item.canRedeemRewards || item.name === 'Super Admin' || !item.site_id || item.site_id === 0 ? <ClientRoleItem {...item} key={index} bDisabled={bDisabled} /> : null
+      ((item.canPurchase || item.canRedeemRewards || item.name === 'Super Admin' || !item.site_id || item.site_id === 0 || item.isAdmin) && !item.user.isArchived) ? <ClientRoleItem {...item} key={index} bDisabled={bDisabled} /> : null
     )
     );
     const siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
@@ -189,7 +188,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     let cPurchasable = false;
     let cRedeemable = false;
     if (selectedUser && selectedUser.details && selectedUser.details.roleForClient) {
-      if (selectedUser.details.roleForClient.canPurchase || selectedUser.details.roleForClient.canRedeemRewards || selectedUser.details.roleForClient.name === 'Super Admin') {
+      if (selectedUser.details.roleForClient.canPurchase || selectedUser.details.roleForClient.canRedeemRewards || selectedUser.details.roleForClient.name === 'Super Admin' || selectedUser.details.roleForClient.name === 'Admin') {
         siteLocation = 0;
         cPurchasable = selectedUser.details.roleForClient.canPurchase;
         cRedeemable = selectedUser.details.roleForClient.canRedeemRewards;
@@ -281,6 +280,7 @@ function mapDispatchToProps(dispatch) {
     clearSelectedUser: () => dispatch(clearSelectedUser()),
     deleteClientRole: (id) => dispatch(deleteClientRole(id)),
     saveUser: (clientId, id, data) => dispatch(saveUser(clientId, id, data)),
+    deleteUser: (id) => dispatch(deleteUser(id)),
   };
 }
 

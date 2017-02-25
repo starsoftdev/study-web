@@ -80,19 +80,23 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     const { name, piFirstName, piLastName, redirectPhone, address, roles, city, zip, state } = this.props;
 
     const addressArr = address.split(',');
-
-    const assignedUsersContent = (roles) ? roles.map((item, index) => (
-      <div className="assigned-user" key={index}>
-        <span>{item.user.firstName} {item.user.lastName}</span>
-        <span className="edit-assigned-user">
-          {(this.assignedUserIsBeingFetched(item))
-            ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-assigned-user" /></span>
-            : <a disabled={this.props.bDisabled} className="btn toggle edit-icon" onClick={() => (this.props.bDisabled ? null : this.editAssignedUser(item))}><i className="pencil-square" /></a>
-          }
-        </span>
-      </div>
+    let assignedUsersContent = (roles) ? roles.map((item, index) => (
+      !item.user.isArchived && !item.isAdmin
+        ? <div className="assigned-user" key={index}>
+          <span>{item.user.firstName} {item.user.lastName}</span>
+          <span className="edit-assigned-user">
+            {(this.assignedUserIsBeingFetched(item))
+              ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-assigned-user" /></span>
+              : <a disabled={this.props.bDisabled} className="btn toggle edit-icon" onClick={() => (this.props.bDisabled ? null : this.editAssignedUser(item))}><i className="pencil-square" /></a>
+            }
+          </span>
+        </div>
+        : null
     )) : null;
 
+    assignedUsersContent = assignedUsersContent.filter((item) => {
+      return (item !== null)
+    });
     return (
       <tr className="client-site-container">
         <td className="name">
