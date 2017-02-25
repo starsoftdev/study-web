@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
+import { map } from 'lodash';
 import Modal from 'react-bootstrap/lib/Modal';
-import ReactSelect from '../../../components/Input/ReactSelect';
+import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddIndicationForm } from './AddIndicationForm';
 import { AddExposureLevelForm } from './AddExposureLevelForm';
@@ -53,6 +54,19 @@ export class DashboardIndicationSearch extends React.Component {
       { id: 4, name: 'Leg Pain', tier: '4', ruby: '4', diamond: '100', platinum: '60', gold: '40', silver: '20', bronze: '5' },
     ];
 
+    const itemTemplate = (controlSelectedValue) => (
+      <div key={controlSelectedValue.value}>
+        {controlSelectedValue.label}
+        <i className="close-icon icomoon-icon_close" />
+      </div>
+    );
+
+    const selectedItemsTemplate = (controlSelectedValue) => (
+      <div>
+        {controlSelectedValue.length} item(s) selected
+      </div>
+    );
+
     return (
       <form action="#" className="form-search clearfix">
         <div className="btns-area row pull-right">
@@ -74,9 +88,22 @@ export class DashboardIndicationSearch extends React.Component {
             <div className="has-feedback ">
               <Field
                 name="indication"
-                component={ReactSelect}
+                component={ReactMultiSelect}
                 placeholder="Select Indication"
-                options={options}
+                searchPlaceholder="Search"
+                searchable
+                optionLabelKey="label"
+                multiple
+                includeAllOption
+                onChange={(e) => console.log('init search', e)}
+                customOptionTemplateFunction={itemTemplate}
+                customSelectedValueTemplateFunction={selectedItemsTemplate}
+                dataSource={map(options, (option) => ({
+                  ...option,
+                  label: option.name,
+                  value: option.name,
+                }))}
+                customSearchIconClass="icomoon-icon_search2"
               />
             </div>
           </div>
