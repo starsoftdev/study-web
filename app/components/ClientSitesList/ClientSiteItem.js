@@ -94,9 +94,9 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
         : null
     )) : null;
 
-    assignedUsersContent = assignedUsersContent.filter((item) => {
-      return (item !== null);
-    });
+    assignedUsersContent = assignedUsersContent.filter(item => (
+      item !== null
+    ));
     return (
       <tr className="client-site-container">
         <td className="name">
