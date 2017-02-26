@@ -325,7 +325,7 @@ function* submitAddPatient() {
     }
 
     try {
-      const requestURL = `${API_URL}/patients`;
+      const requestURL = `${API_URL}/patients/addPatient`;
       const response = yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify(patient),
