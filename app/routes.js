@@ -642,6 +642,28 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/app/dashboard-sponsor-admins',
+      name: 'dashboardSponsorAdminPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardSponsorAdminPage/reducer'),
+          System.import('./containers/DashboardSponsorAdminPage/sagas'),
+          System.import('./containers/DashboardSponsorAdminPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardSponsorAdminPage', reducer.default);
+          injectReducer('dashboardSponsorAdminPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/app/dashboard-portals',
       name: 'dashboardPortalsPage',
       getComponent(nextState, cb) {
