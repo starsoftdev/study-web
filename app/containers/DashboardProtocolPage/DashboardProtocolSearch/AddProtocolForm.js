@@ -32,7 +32,7 @@ export class AddProtocolForm extends React.Component { // eslint-disable-line re
           {this.props.isEdit &&
             <a className="btn btn-gray-outline">Delete</a>
           }
-          <button type="submit" className="btn btn-primary">Submit</button>
+          <button type="submit" className="btn btn-primary">{this.props.isEdit ? 'Update' : 'Submit'}</button>
         </div>
 
       </form>
