@@ -415,7 +415,7 @@ export function fetchStudyTextNewStats(studyId) {
   return {
     type: FETCH_STUDY_NEW_TEXTS,
     studyId,
-  }
+  };
 }
 
 export function submitPatientNote(studyId, patientId, currentUser, note) {

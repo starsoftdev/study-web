@@ -71,8 +71,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     this.props.fetchSources();
   }
 
-  componentWillReceiveProps(newProps) {
-    const { params, socket, sitePatients } = this.props;
+  componentWillReceiveProps() {
+    const { params, socket } = this.props;
     if (socket && this.state.socketBinded === false) {
       socket.on('notifyMessage', (message) => {
         let curCategoryId = null;
