@@ -320,6 +320,11 @@ const selectLearnAboutFutureTrialsSuccess = () => createSelector(
   (substate) => get(substate, 'baseData.learnAboutFutureTrialsSuccess', {})
 );
 
+const selectNewContactSuccess = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.newContactsSuccess', {})
+);
+
 const selectTrials = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.trials.details', {})
@@ -383,6 +388,7 @@ export {
   selectFindOutPosted,
   selectListSiteNowSuccess,
   selectLearnAboutFutureTrialsSuccess,
+  selectNewContactSuccess,
 
   selectTrials,
 };

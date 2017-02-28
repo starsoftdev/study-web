@@ -1,4 +1,21 @@
 import React from 'react';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { Field, reduxForm, reset, touch } from 'redux-form';
+import { normalizePhone } from '../../../app/common/helper/functions';
+import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
+
+import {
+  selectNewContactSuccess,
+} from '../../../app/containers/App/selectors';
+
+import Input from '../../../app/components/Input/index';
+
+import {
+  newContact,
+  resetNewContactSuccess,
+} from '../../../app/containers/App/actions';
+
 import inViewport from 'in-viewport';
 import { Link } from 'react-router';
 
@@ -8,15 +25,31 @@ import imgWifi from '../../assets/images/wifi.svg';
 
 import './styles.less';
 
-export default class ContactPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+const formName = 'contactForm';
+import formValidator, { fields } from './validator';
+@reduxForm({
+  form: formName,
+  validate: formValidator,
+})
 
-  static propTypes = {};
+export class ContactPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+
+  static propTypes = {
+    submitForm: React.PropTypes.func.isRequired,
+    formError: React.PropTypes.bool.isRequired,
+    resetForm: React.PropTypes.func.isRequired,
+    newContact: React.PropTypes.any,
+    touchFields: React.PropTypes.func.isRequired,
+    newContactSuccess: React.PropTypes.any,
+    resetNewContactSuccess: React.PropTypes.func,
+  };
 
   constructor(props) {
     super(props);
     this.watcher = null;
 
     this.setVisible = this.setVisible.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -26,7 +59,11 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
     this.watcher = inViewport(this.animatedForm, this.setVisible);
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(newProps) {
+    if (newProps.newContactSuccess) {
+      this.props.resetForm();
+      this.props.resetNewContactSuccess();
+    }
   }
 
   componentWillUnmount() {
@@ -36,6 +73,21 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
   setVisible(el) {
     const viewAtr = el.getAttribute('data-view');
     el.classList.add('in-viewport', viewAtr);
+  }
+
+  handleSubmit(ev) {
+    ev.preventDefault();
+    const { formError, newContact, touchFields, submitForm } = this.props;
+    if (formError) {
+      touchFields();
+      return;
+    }
+
+    const contact = Object.assign({}, newContact);
+    /* normalizing the phone number */
+    contact.phone = normalizePhone(newContact.phone);
+
+    submitForm(contact);
   }
 
   render() {
@@ -50,8 +102,9 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
             ref={(animatedForm) => { this.animatedForm = animatedForm; }}
             action="#"
             className="form-contact"
-            data-formvalidation="true"
+            noValidate="novalidate"
             data-view="fadeInUp"
+            onSubmit={this.handleSubmit}
           >
             <div className="form-holder">
               <p className="text-center txt-green">To speak with one of our friendly staff members, please contact us.</p>
@@ -70,10 +123,44 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
                   <a href="mailto:info@studykik.com" className="email">info@studykik.com</a>
                 </div>
               </div>
-              <input type="text" className="form-control input-lg" placeholder="* Full Name" data-required="true" />
-              <input type="email" className="form-control input-lg" placeholder="* Email" data-required="true" />
-              <input type="text" data-type="number" className="form-control input-lg" placeholder="* Mobile Phone" data-required="true" />
-              <textarea className="form-control input-lg" placeholder="* Message" data-required="true"></textarea>
+              <Field
+                name="name"
+                placeholder="* Full Name"
+                component={Input}
+                type="text"
+                className="field"
+                bsClass="form-control input-lg"
+                id=""
+                required
+              />
+              <Field
+                name="email"
+                placeholder="* Email"
+                component={Input}
+                type="email"
+                className="field"
+                bsClass="form-control input-lg"
+                id=""
+                required
+              />
+              <Field
+                name="phone"
+                placeholder="* Mobile Phone"
+                component={Input}
+                type="tel"
+                className="field"
+                bsClass="form-control input-lg"
+                id=""
+                required
+              />
+              <Field
+                name="message"
+                placeholder="* Message"
+                component={Input}
+                className="field"
+                bsClass="form-control input-lg"
+                componentClass="textarea"
+              />
               <input type="submit" className="btn btn-default btn-block input-lg" value="Submit" />
               <div className="image left">
                 <img src={img17} alt="&nbsp;" width="351" height="437" className="svg" />
@@ -91,3 +178,20 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
     );
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  formError: selectSyncErrorBool(formName),
+  newContact: selectValues(formName),
+  newContactSuccess: selectNewContactSuccess(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    submitForm: (values) => dispatch(newContact(values)),
+    resetForm: () => dispatch(reset(formName)),
+    touchFields: () => dispatch(touch(formName, ...fields)),
+    resetNewContactSuccess: () => dispatch(resetNewContactSuccess()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactPage);
