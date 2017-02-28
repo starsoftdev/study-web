@@ -1,15 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, reset } from 'redux-form';
+import { createStructuredSelector } from 'reselect';
+import { Field, reduxForm, reset, touch } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import Input from '../../../app/components/Input/index';
 import CenteredModal from '../../../app/components/CenteredModal/index';
+import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
+import { normalizePhone } from '../../../app/common/helper/functions';
+import formValidator, { fields } from './validator';
 
-import formValidator from './validator';
-
-const formName = 'listNow';
+const formName = 'listNowForm';
 
 @reduxForm({
   form: formName,
@@ -18,15 +20,19 @@ const formName = 'listNow';
 
 class ListNowModal extends React.Component {
   static propTypes = {
-    handleSubmit: React.PropTypes.func.isRequired,
+    onSubmit: React.PropTypes.func.isRequired,
     resetForm: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
     show: React.PropTypes.bool.isRequired,
+    formError: React.PropTypes.bool.isRequired,
+    newList: React.PropTypes.any,
+    touchFields: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.onHide = this.onHide.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   onHide() {
@@ -35,8 +41,23 @@ class ListNowModal extends React.Component {
     onHide();
   }
 
+  handleSubmit(ev) {
+    ev.preventDefault();
+    const { formError, newList, touchFields, onSubmit } = this.props;
+
+    if (formError) {
+      touchFields();
+      return;
+    }
+
+    const list = Object.assign({}, newList);
+    /* normalizing the phone number */
+    list.phone = normalizePhone(newList.phone);
+
+    onSubmit(list);
+  }
+
   render() {
-    const { handleSubmit } = this.props;
     return (
       <Modal
         show={this.props.show}
@@ -61,7 +82,7 @@ class ListNowModal extends React.Component {
             </span>
             <Form
               className="form-lightbox"
-              onSubmit={handleSubmit}
+              onSubmit={this.handleSubmit}
               noValidate="novalidate"
             >
               <div className="field-row">
@@ -110,7 +131,7 @@ class ListNowModal extends React.Component {
                 <Field
                   name="phone"
                   component={Input}
-                  type="tel"
+                  type="text"
                   className="field"
                   id=""
                   required
@@ -127,10 +148,16 @@ class ListNowModal extends React.Component {
   }
 }
 
+const mapStateToProps = createStructuredSelector({
+  formError: selectSyncErrorBool(formName),
+  newList: selectValues(formName),
+});
+
 function mapDispatchToProps(dispatch) {
   return {
     resetForm: () => dispatch(reset(formName)),
+    touchFields: () => dispatch(touch(formName, ...fields)),
   };
 }
 
-export default connect(null, mapDispatchToProps)(ListNowModal);
+export default connect(mapStateToProps, mapDispatchToProps)(ListNowModal);
