@@ -36,7 +36,6 @@ import ListNowModal from '../../components/ListNowModal';
 
 import {
   findOutPatients,
-  listSiteNow,
   resetListSiteNowSuccess,
 } from '../../../app/containers/App/actions';
 
@@ -51,7 +50,6 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
 
   static propTypes = {
     onSubmitForm: React.PropTypes.func,
-    onSubmitListNow: React.PropTypes.func,
     resetListSiteNowSuccess: React.PropTypes.func,
     clearForm: React.PropTypes.func,
     clearListNowForm: React.PropTypes.func,
@@ -65,7 +63,6 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
     this.handleClick = this.handleClick.bind(this);
     this.toggleListNow = this.toggleListNow.bind(this);
     this.onSubmitForm = this.props.onSubmitForm.bind(this);
-    this.onSubmitListNow = this.props.onSubmitListNow.bind(this);
 
     this.state = {
       open: false,
@@ -608,7 +605,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
           </Parallax>
         </section>
 
-        <ListNowModal show={this.state.listNowOpen} onHide={this.toggleListNow} onSubmit={this.onSubmitListNow} />
+        <ListNowModal show={this.state.listNowOpen} onHide={this.toggleListNow} />
       </div>
     );
   }
@@ -622,7 +619,6 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     onSubmitForm: (values) => dispatch(findOutPatients(values)),
-    onSubmitListNow: (values) => dispatch(listSiteNow(values)),
     clearForm: () => dispatch(reset('find-location')),
     clearListNowForm: () => dispatch(reset('listNow')),
     resetListSiteNowSuccess: () => dispatch(resetListSiteNowSuccess()),
