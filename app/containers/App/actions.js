@@ -148,6 +148,14 @@ import {
   ADD_EMAIL_NOTIFICATION_USER,
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
   ADD_EMAIL_NOTIFICATION_USER_ERROR,
+
+  LIST_SITE_NOW,
+  LIST_SITE_NOW_SUCCESS,
+  RESET_LIST_SITE_NOW_SUCCESS,
+
+  LEARN_ABOUT_FUTURE_TRIALS,
+  LEARN_ABOUT_FUTURE_TRIALS_SUCCESS,
+  RESET_LEARN_ABOUT_FUTURE_TRIALS,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -1007,5 +1015,47 @@ export function clinicalTrialsSearchError(payload) {
 export function clearClinicalTrialsSearch() {
   return {
     type: CLEAR_CLINICAL_TRIALS_SEARCH,
+  };
+}
+
+export function listSiteNow(params) {
+  return {
+    type: LIST_SITE_NOW,
+    params,
+  };
+}
+
+export function listSiteNowSuccess(payload) {
+  return {
+    type: LIST_SITE_NOW_SUCCESS,
+    payload,
+  };
+}
+
+export function resetListSiteNowSuccess(payload) {
+  return {
+    type: RESET_LIST_SITE_NOW_SUCCESS,
+    payload,
+  };
+}
+
+export function learnAboutFutureTrials(params) {
+  return {
+    type: LEARN_ABOUT_FUTURE_TRIALS,
+    params,
+  };
+}
+
+export function learnAboutFutureTrialsSuccess(payload) {
+  return {
+    type: LEARN_ABOUT_FUTURE_TRIALS_SUCCESS,
+    payload,
+  };
+}
+
+export function resetLearnAboutFutureTrialsSuccess(payload) {
+  return {
+    type: RESET_LEARN_ABOUT_FUTURE_TRIALS,
+    payload,
   };
 }

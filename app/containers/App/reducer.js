@@ -114,6 +114,10 @@ import {
 
   CLINICAL_TRIALS_SEARCH_SUCCESS,
   CLEAR_CLINICAL_TRIALS_SEARCH,
+  LIST_SITE_NOW_SUCCESS,
+  RESET_LIST_SITE_NOW_SUCCESS,
+  LEARN_ABOUT_FUTURE_TRIALS_SUCCESS,
+  RESET_LEARN_ABOUT_FUTURE_TRIALS,
 } from './constants';
 
 import {
@@ -145,6 +149,8 @@ const initialState = {
     subscriptionError: null,
     subscribedFromLanding: null,
     findOutPosted: null,
+    listSiteNowSuccess: null,
+    learnAboutFutureTrialsSuccess: null,
     sources: [],
     levels: [],
     landing: {
@@ -400,6 +406,26 @@ export default function appReducer(state = initialState, action) {
     case FIND_OUT_PATIENTS_POSTED:
       baseDataInnerState = {
         findOutPosted: payload,
+      };
+      break;
+    case LIST_SITE_NOW_SUCCESS:
+      baseDataInnerState = {
+        listSiteNowSuccess: true,
+      };
+      break;
+    case RESET_LIST_SITE_NOW_SUCCESS:
+      baseDataInnerState = {
+        listSiteNowSuccess: null,
+      };
+      break;
+    case LEARN_ABOUT_FUTURE_TRIALS_SUCCESS:
+      baseDataInnerState = {
+        learnAboutFutureTrialsSuccess: true,
+      };
+      break;
+    case RESET_LEARN_ABOUT_FUTURE_TRIALS:
+      baseDataInnerState = {
+        learnAboutFutureTrialsSuccess: null,
       };
       break;
     case PATIENT_SUBSCRIPTION_ERROR:
