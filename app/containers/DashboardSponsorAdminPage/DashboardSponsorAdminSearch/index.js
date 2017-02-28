@@ -46,12 +46,12 @@ export class DashboardSponsorAdminSearch extends React.Component {
   }
 
   render() {
-    // const options = [
-    //   { id: 1, name: 'Bruce Wayne', company: 'Pfizer', email: 'bruce.wayne@wayneenterprise.com', bd: 'Kobe Byant', ae: 'Michael Grimm' },
-    //   { id: 2, name: 'Ray Palmer', company: 'Company 1', email: 'ray.palmer@palmertech.com', bd: 'Bianca Ryan', ae: 'Cas Haley' },
-    //   { id: 3, name: 'Will Graham', company: 'Company 2', email: 'will.graham@wayneenterprise.com', bd: 'Terry Fator', ae: 'Eli Mattson' },
-    //   { id: 4, name: 'Jon Snow', company: 'Company 3', email: 'jon.snow@wayneenterprise.com', bd: 'Kevin Skinner', ae: 'Tom Cotter' },
-    // ];
+    const options = [
+      { id: 1, name: 'Bruce Wayne', company: 'Pfizer', email: 'bruce.wayne@wayneenterprise.com', bd: 'Kobe Byant', ae: 'Michael Grimm' },
+      { id: 2, name: 'Ray Palmer', company: 'Company 1', email: 'ray.palmer@palmertech.com', bd: 'Bianca Ryan', ae: 'Cas Haley' },
+      { id: 3, name: 'Will Graham', company: 'Company 2', email: 'will.graham@wayneenterprise.com', bd: 'Terry Fator', ae: 'Eli Mattson' },
+      { id: 4, name: 'Jon Snow', company: 'Company 3', email: 'jon.snow@wayneenterprise.com', bd: 'Kevin Skinner', ae: 'Tom Cotter' },
+    ];
 
     return (
       <form action="#" className="form-search clearfix">
@@ -82,14 +82,14 @@ export class DashboardSponsorAdminSearch extends React.Component {
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addSponsorAdminModalOpen} onHide={this.closeAddSponsorAdminModal}>
           <Modal.Header>
-            <Modal.Title>Add SponsorAdmin</Modal.Title>
+            <Modal.Title>Add Sponsor Admin</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddSponsorAdminModal}>
               <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <AddSponsorAdminForm />
+              <AddSponsorAdminForm sponsorData={options} />
             </div>
           </Modal.Body>
         </Modal>
