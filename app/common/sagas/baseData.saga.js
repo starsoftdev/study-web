@@ -887,15 +887,20 @@ function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
 function* listNowSite(action) {
   try {
     const params = action.params;
+    const size = Object.keys(params).length;
     const requestURL = `${API_URL}/sites/listNowFormRequest`;
     const options = {
       method: 'POST',
       body: JSON.stringify(params),
     };
 
-    const response = yield call(request, requestURL, options);
-    yield put(toastrActions.success('', 'Thank you for submitting your information.'));
-    yield put(listSiteNowSuccess(response));
+    if (size === 4) {
+      const response = yield call(request, requestURL, options);
+      yield put(toastrActions.success('', 'Thank you for submitting your information.'));
+      yield put(listSiteNowSuccess(response));
+    } else {
+      yield put(toastrActions.error('', 'All fields required.'));
+    }
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
     yield put(toastrActions.error('', errorMessage));

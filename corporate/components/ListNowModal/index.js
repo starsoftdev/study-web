@@ -11,6 +11,10 @@ import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors
 import { normalizePhone } from '../../../app/common/helper/functions';
 import formValidator, { fields } from './validator';
 
+import {
+  listSiteNow,
+} from '../../../app/containers/App/actions';
+
 const formName = 'listNowForm';
 
 @reduxForm({
@@ -20,7 +24,7 @@ const formName = 'listNowForm';
 
 class ListNowModal extends React.Component {
   static propTypes = {
-    onSubmit: React.PropTypes.func.isRequired,
+    submitForm: React.PropTypes.func.isRequired,
     resetForm: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
     show: React.PropTypes.bool.isRequired,
@@ -43,8 +47,7 @@ class ListNowModal extends React.Component {
 
   handleSubmit(ev) {
     ev.preventDefault();
-    const { formError, newList, touchFields, onSubmit } = this.props;
-
+    const { formError, newList, touchFields, submitForm } = this.props;
     if (formError) {
       touchFields();
       return;
@@ -54,7 +57,7 @@ class ListNowModal extends React.Component {
     /* normalizing the phone number */
     list.phone = normalizePhone(newList.phone);
 
-    onSubmit(list);
+    submitForm(list);
   }
 
   render() {
@@ -155,6 +158,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    submitForm: (values) => dispatch(listSiteNow(values)),
     resetForm: () => dispatch(reset(formName)),
     touchFields: () => dispatch(touch(formName, ...fields)),
   };
