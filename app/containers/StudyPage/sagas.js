@@ -22,6 +22,7 @@ import { FIND_PATIENTS_TEXT_BLAST,
   SUBMIT_PATIENT_NOTE,
   SUBMIT_DELETE_NOTE,
   SUBMIT_PATIENT_TEXT,
+  FETCH_STUDY_NEW_TEXTS,
   SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
 } from './constants';
 import { actions as toastrActions } from 'react-redux-toastr';
@@ -31,7 +32,6 @@ import {
   addPatientsToTextBlast,
   campaignsFetched,
   deletePatientNoteSuccess,
-  fetchingStudy,
   findPatientsForTextBlastSuccess,
   patientCategoriesFetched,
   patientsFetched,
@@ -73,7 +73,6 @@ function* fetchStudyDetails() {
   const { studyId, siteId } = yield take(FETCH_STUDY);
 
   // put the fetching study action in case of a navigation action
-  yield put(fetchingStudy());
   const filter = JSON.stringify({
     include: [
       {
@@ -196,6 +195,27 @@ function* fetchStudyTextStats() {
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+function* fetchStudyTextNewStats() {
+  while (true) {
+    // listen for the FETCH_STUDY action
+    const { studyId } = yield take(FETCH_STUDY_NEW_TEXTS);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+    try {
+      const requestURL = `${API_URL}/textMessages/countStudyMessages/${studyId}`;
+      const response = yield call(request, requestURL, {
+        method: 'GET',
+      });
+      yield put(textStatsFetched(response));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+    }
   }
 }
 
@@ -728,6 +748,7 @@ export function* fetchStudySaga() {
     const watcherS = yield fork(submitPatientNote);
     const watcherT = yield fork(submitDeleteNote);
     const watcherU = yield fork(submitPatientText);
+    const watcherZ = yield fork(fetchStudyTextNewStats);
 
     yield take(LOCATION_CHANGE);
     yield cancel(watcherA);
@@ -751,6 +772,7 @@ export function* fetchStudySaga() {
     yield cancel(watcherS);
     yield cancel(watcherT);
     yield cancel(watcherU);
+    yield cancel(watcherZ);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

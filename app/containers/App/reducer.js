@@ -265,6 +265,7 @@ export default function appReducer(state = initialState, action) {
   let baseDataInnerState = null;
   let resultState = null;
   let userRoleType = '';
+  let temRoleID = null;
 
   switch (action.type) {
     case SET_AUTH_STATE:
@@ -692,15 +693,24 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case UPDATE_SITE_PATIENTS:
+      unreadCount = 0;
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
         let patientData = null;
         patientData = item;
         if (patientData.id === action.newMessage.patient_id && patientData.study_id === action.newMessage.study_id) {
           const countUnread = patientData.count_unread;
           if (countUnread) {
-            patientData.count_unread = parseInt(countUnread) + 1;
+            if (action.newMessage.twilioTextMessage.direction === 'outbound-api') {
+              patientData.count_unread = parseInt(countUnread);
+            } else {
+              patientData.count_unread = parseInt(countUnread) + 1;
+              unreadCount = 1;
+            }
+          } else if (action.newMessage.twilioTextMessage.direction === 'outbound-api') {
+            patientData.count_unread = 0;
           } else {
             patientData.count_unread = 1;
+            unreadCount = 1;
           }
           patientData.twtm_max_date_created = action.newMessage.twilioTextMessage.dateCreated;
           patientData.last_message_body = action.newMessage.twilioTextMessage.body;
@@ -713,6 +723,16 @@ export default function appReducer(state = initialState, action) {
           details: sitePatientsCollection,
           fetching: false,
           error: null,
+        },
+        patientMessages: {
+          details: state.baseData.patientMessages.details,
+          fetching: false,
+          error: null,
+          stats: {
+            total: state.baseData.patientMessages.stats.total,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails,
+            unreadTexts: state.baseData.patientMessages.stats.unreadTexts + unreadCount,
+          },
         },
       };
       break;
@@ -964,11 +984,30 @@ export default function appReducer(state = initialState, action) {
       break;
     case DELETE_USER_SUCCESS:
       forEach(clientSitesCollection, item => {
-        if (remove(item.users, { id: payload.id }).length > 0) {
+        forEach(item.roles, role => {
+          if (role.user.id === payload.id) {
+            temRoleID = role.id;
+            return false;
+          }
+          return true;
+        });
+      });
+      forEach(clientSitesCollection, item => {
+        if (remove(item.roles, { id: temRoleID }).length > 0) {
           return false;
         }
         return true;
       });
+
+      forEach(clientRolesCollection, item => {
+        if (item.user.id === payload.id) {
+          temRoleID = item.id;
+          return false;
+        }
+        return true;
+      });
+      remove(clientRolesCollection, { id: temRoleID });
+
       baseDataInnerState = {
         deletedUser: {
           details: payload,
@@ -977,6 +1016,11 @@ export default function appReducer(state = initialState, action) {
         },
         clientSites: {
           details: clientSitesCollection,
+          fetching: false,
+          error: null,
+        },
+        clientRoles: {
+          details: clientRolesCollection,
           fetching: false,
           error: null,
         },
@@ -1106,9 +1150,13 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SAVE_USER_SUCCESS:
+      console.log('payload', payload);
       if (payload.userType === 'admin') {
         forEach(clientSitesCollection, item => {
-          if (remove(item.users, { id: payload.userResultData.user.id }).length > 0) {
+          foundIndex = findIndex(item.roles, { id: payload.userResultData.user.id });
+          if (foundIndex > -1) {
+            item.roles.splice(foundIndex, 1);
+            foundIndex = -1;
             return false;
           }
           return true;
@@ -1146,15 +1194,15 @@ export default function appReducer(state = initialState, action) {
           clientRolesCollection[foundIndex] = payload.userResultData;
         }
       }
-      if (payload.userResultData.header === 'Add User') {
-        // console.log('New', payload.userResultData);
-        // if (payload.userResultData.siteId && payload.userResultData.siteId !== '0') {
-        //   foundIndex = findIndex(clientSitesCollection, { id: payload.userResultData.siteId });
-        //   clientSitesCollection[foundIndex].roles.push(payload.userResultData.user);
-        // } else {
-        clientRolesCollection.push(payload.userResultData);
-        // }
-      }
+      // if (payload.userResultData.header === 'Add User') {
+      //   // console.log('New', payload.userResultData);
+      //   // if (payload.userResultData.siteId && payload.userResultData.siteId !== '0') {
+      //   //   foundIndex = findIndex(clientSitesCollection, { id: payload.userResultData.siteId });
+      //   //   clientSitesCollection[foundIndex].roles.push(payload.userResultData.user);
+      //   // } else {
+      //   clientRolesCollection.push(payload.userResultData);
+      //   // }
+      // }
 
       baseDataInnerState = {
         savedUser: {

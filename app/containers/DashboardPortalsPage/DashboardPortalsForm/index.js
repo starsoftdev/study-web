@@ -1,16 +1,72 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import ReactSelect from '../../../components/Input/ReactSelect';
+import { submitToClientPortal, submitToSponsorsPortal } from '../actions';
+
+import _ from 'lodash';
+
+const mapStateToProps = createStructuredSelector({});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    submitToClientPortal: (id) => dispatch(submitToClientPortal(id)),
+    submitToSponsorsPortal: (id) => dispatch(submitToSponsorsPortal(id)),
+  };
+}
 
 @reduxForm({ form: 'dashboardPortalsForm' })
+@connect(mapStateToProps, mapDispatchToProps)
 
 export class DashboardPortalsForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
-  render() {
-    const clients = [{ label: 'Will Graham', value: 1 }, { label: 'Alan Walker', value: 2 }, { label: 'Penny Worth', value: 3 }, { label: 'Bruce Wayne', value: 4 }];
 
-    const sponsors = [{ label: 'Pfizer', value: 1 }, { label: 'Company 1', value: 2 }, { label: 'Company 2', value: 3 }];
+  static propTypes = {
+    clients: PropTypes.object,
+    sponsors: PropTypes.object,
+    formValues: PropTypes.object,
+    submitToClientPortal: PropTypes.func,
+    submitToSponsorsPortal: PropTypes.func,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.submitClient = this.submitClient.bind(this);
+    this.submitSponsor = this.submitSponsor.bind(this);
+  }
+
+  submitSponsor() {
+    if (this.props.formValues.sponsor) {
+      this.props.submitToSponsorsPortal(this.props.formValues.sponsor);
+    }
+  }
+
+  submitClient() {
+    if (this.props.formValues.client) {
+      this.props.submitToClientPortal(this.props.formValues.client);
+    }
+  }
+
+  render() {
+    const clientsOptions = [];
+    _.forEach(this.props.clients.details, (item) => {
+      clientsOptions.push(
+        {
+          label: `${item.first_name} ${item.last_name}`,
+          value: item.user_id,
+        }
+      );
+    });
+    const sponsorsOptions = [];
+    _.forEach(this.props.sponsors.details, (item) => {
+      sponsorsOptions.push(
+        {
+          label: `${item.first_name} ${item.last_name}`,
+          value: item.user_id,
+        }
+      );
+    });
 
     return (
       <form className="form-search selects-form clearfix">
@@ -20,11 +76,11 @@ export class DashboardPortalsForm extends React.Component { // eslint-disable-li
               name="client"
               component={ReactSelect}
               placeholder="Select Client"
-              options={clients}
+              options={clientsOptions}
             />
           </div>
           <div className="pull-left col">
-            <button className="btn btn-default">Submit</button>
+            <a className="btn btn-default" onClick={this.submitClient}>Submit</a>
           </div>
         </div>
 
@@ -34,11 +90,11 @@ export class DashboardPortalsForm extends React.Component { // eslint-disable-li
               name="sponsor"
               component={ReactSelect}
               placeholder="Select Sponsor"
-              options={sponsors}
+              options={sponsorsOptions}
             />
           </div>
           <div className="pull-left col">
-            <button className="btn btn-default">Submit</button>
+            <a className="btn btn-default" onClick={this.submitSponsor}>Submit</a>
           </div>
         </div>
       </form>
@@ -46,12 +102,4 @@ export class DashboardPortalsForm extends React.Component { // eslint-disable-li
   }
 }
 
-const mapStateToProps = createStructuredSelector({});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardPortalsForm);
+export default DashboardPortalsForm;
