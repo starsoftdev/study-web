@@ -10,7 +10,7 @@ import moment from 'moment-timezone';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser } from '../../containers/App/selectors';
+import { selectCurrentUser, selectSitePatients } from '../../containers/App/selectors';
 import { fetchSources } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
@@ -44,6 +44,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     socket: React.PropTypes.any,
     updatePatientSuccess: React.PropTypes.func,
     fetchSources: PropTypes.func,
+    sitePatients: React.PropTypes.object,
   };
 
   static defaultProps = {
@@ -69,8 +70,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     this.props.fetchSources();
   }
 
-  componentWillReceiveProps() {
-    const { params, socket } = this.props;
+  componentWillReceiveProps(newProps) {
+    const { params, socket, sitePatients } = this.props;
     if (socket && this.state.socketBinded === false) {
       socket.on('notifyMessage', (message) => {
         let curCategoryId = null;
@@ -92,6 +93,10 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         });
       });
       this.setState({ socketBinded: true });
+    }
+
+    if (sitePatients && (sitePatients !== newProps.sitePatients)) {
+      this.props.fetchStudy(params.id, params.siteId);
     }
   }
 
@@ -173,6 +178,7 @@ const mapStateToProps = createStructuredSelector({
   stats: Selector.selectStudyStats(),
   currentUser: selectCurrentUser(),
   socket: selectSocket(),
+  sitePatients: selectSitePatients(),
 });
 
 function mapDispatchToProps(dispatch) {
