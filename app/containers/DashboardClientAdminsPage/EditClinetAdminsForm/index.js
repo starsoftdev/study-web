@@ -151,7 +151,7 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
 
         <div className="field-row text-right no-margins">
           <a className="btn btn-gray-outline">Delete</a>
-          <button type="submit" className="btn btn-primary">Submit</button>
+          <button type="submit" className="btn btn-primary">Update</button>
         </div>
 
       </form>
