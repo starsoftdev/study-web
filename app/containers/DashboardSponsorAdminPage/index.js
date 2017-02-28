@@ -15,7 +15,7 @@ export class DashboardSponsorAdminPage extends React.Component { // eslint-disab
   render() {
     return (
       <div className="container-fluid dashboard-sponsor-admin">
-        <h2 className="main-heading">SponsorAdmin</h2>
+        <h2 className="main-heading">Sponsor Admin</h2>
 
         <DashboardSponsorAdminSearch />
         <DashboardSponsorAdminTable />

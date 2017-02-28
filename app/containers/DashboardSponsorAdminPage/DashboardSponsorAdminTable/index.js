@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { map } from 'lodash';
 import { createStructuredSelector } from 'reselect';
 import RowItem from './RowItem';
 
@@ -33,7 +34,7 @@ export class DashboardSponsorAdminTable extends React.Component { // eslint-disa
           <tbody>
             {
             sponsorAdmins.map((item, index) => (
-              <RowItem key={index} item={item} />
+              <RowItem key={index} item={item} sponsorData={sponsorAdmins} />
             ))
           }
           </tbody>
