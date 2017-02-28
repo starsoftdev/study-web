@@ -17,7 +17,7 @@ import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
 import PatientBoard from './PatientBoard/index';
 import * as Selector from './selectors';
-import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId, updatePatientSuccess } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId, updatePatientSuccess, fetchStudyTextNewStats } from './actions';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
@@ -45,6 +45,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     updatePatientSuccess: React.PropTypes.func,
     fetchSources: PropTypes.func,
     sitePatients: React.PropTypes.object,
+    fetchStudyTextNewStats: React.PropTypes.func,
   };
 
   static defaultProps = {
@@ -85,6 +86,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         });
 
         this.props.fetchStudy(params.id, params.siteId);
+        this.props.fetchStudyTextNewStats(params.id);
         console.log(1);
         this.props.updatePatientSuccess({
           patientId: message.patient_id,
@@ -93,10 +95,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         });
       });
       this.setState({ socketBinded: true });
-    }
-
-    if (sitePatients && (sitePatients !== newProps.sitePatients)) {
-      this.props.fetchStudy(params.id, params.siteId);
     }
   }
 
@@ -190,6 +188,7 @@ function mapDispatchToProps(dispatch) {
     setSiteId: (id) => dispatch(setSiteId(id)),
     updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
     fetchSources: () => dispatch(fetchSources()),
+    fetchStudyTextNewStats: (studyId) => dispatch(fetchStudyTextNewStats(studyId)),
   };
 }
 
