@@ -680,13 +680,11 @@ export default function appReducer(state = initialState, action) {
               patientData.count_unread = parseInt(countUnread) + 1;
               unreadCount = 1;
             }
-          } else {
-            if (action.newMessage.twilioTextMessage.isBlastMessage) {
+          } else if (action.newMessage.twilioTextMessage.isBlastMessage) {
               patientData.count_unread = 0;
-            } else {
-              patientData.count_unread = 1;
-              unreadCount = 1;
-            }
+          } else {
+            patientData.count_unread = 1;
+            unreadCount = 1;
           }
           patientData.twtm_max_date_created = action.newMessage.twilioTextMessage.dateCreated;
           patientData.last_message_body = action.newMessage.twilioTextMessage.body;
