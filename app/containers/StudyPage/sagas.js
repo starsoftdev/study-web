@@ -32,7 +32,6 @@ import {
   addPatientsToTextBlast,
   campaignsFetched,
   deletePatientNoteSuccess,
-  fetchingStudy,
   findPatientsForTextBlastSuccess,
   patientCategoriesFetched,
   patientsFetched,
@@ -202,7 +201,7 @@ function* fetchStudyTextStats() {
 function* fetchStudyTextNewStats() {
   while (true) {
     // listen for the FETCH_STUDY action
-    const {studyId} = yield take(FETCH_STUDY_NEW_TEXTS);
+    const { studyId } = yield take(FETCH_STUDY_NEW_TEXTS);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
