@@ -8,6 +8,7 @@ import { AddSponsorAdminForm } from '../DashboardSponsorAdminSearch/AddSponsorAd
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     item: PropTypes.object,
+    sponsorData: PropTypes.array,
   };
 
   constructor(props) {
@@ -63,7 +64,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addSponsorAdminModalOpen} onHide={this.closeAddSponsorAdminModal}>
           <Modal.Header>
-            <Modal.Title>Edit SponsorAdmin</Modal.Title>
+            <Modal.Title>Edit Sponsor Admin</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddSponsorAdminModal}>
               <i className="icomoon-icon_close" />
             </a>
@@ -73,6 +74,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
               <AddSponsorAdminForm
                 {...initialValues}
                 isEdit
+                sponsorData={this.props.sponsorData}
               />
             </div>
           </Modal.Body>
