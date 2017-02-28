@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import RowItem from './RowItem';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
-import EditClientAdminsForm from '../EditClinetAdminsForm';
+import EditClientAdminsForm from '../EditClientAdminsForm';
 import AddMessagingNumberForm from '../AddMessagingNumberForm';
 
 export class DashboardClientAdminsTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
