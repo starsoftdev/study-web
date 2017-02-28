@@ -674,13 +674,13 @@ export default function appReducer(state = initialState, action) {
         if (patientData.id === action.newMessage.patient_id && patientData.study_id === action.newMessage.study_id) {
           const countUnread = patientData.count_unread;
           if (countUnread) {
-            if (action.newMessage.twilioTextMessage.isBlastMessage) {
+            if (action.newMessage.twilioTextMessage.direction === 'outbound-api') {
               patientData.count_unread = parseInt(countUnread);
             } else {
               patientData.count_unread = parseInt(countUnread) + 1;
               unreadCount = 1;
             }
-          } else if (action.newMessage.twilioTextMessage.isBlastMessage) {
+          } else if (action.newMessage.twilioTextMessage.direction === 'outbound-api') {
             patientData.count_unread = 0;
           } else {
             patientData.count_unread = 1;
