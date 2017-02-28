@@ -667,15 +667,26 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case UPDATE_SITE_PATIENTS:
+      unreadCount = 0;
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
         let patientData = null;
         patientData = item;
         if (patientData.id === action.newMessage.patient_id && patientData.study_id === action.newMessage.study_id) {
           const countUnread = patientData.count_unread;
           if (countUnread) {
-            patientData.count_unread = parseInt(countUnread) + 1;
+            if (action.newMessage.twilioTextMessage.isBlastMessage) {
+              patientData.count_unread = parseInt(countUnread);
+            } else {
+              patientData.count_unread = parseInt(countUnread) + 1;
+              unreadCount = 1;
+            }
           } else {
-            patientData.count_unread = 1;
+            if (action.newMessage.twilioTextMessage.isBlastMessage) {
+              patientData.count_unread = 0;
+            } else {
+              patientData.count_unread = 1;
+              unreadCount = 1;
+            }
           }
           patientData.twtm_max_date_created = action.newMessage.twilioTextMessage.dateCreated;
           patientData.last_message_body = action.newMessage.twilioTextMessage.body;
@@ -688,6 +699,16 @@ export default function appReducer(state = initialState, action) {
           details: sitePatientsCollection,
           fetching: false,
           error: null,
+        },
+        patientMessages: {
+          details: state.baseData.patientMessages.details,
+          fetching: false,
+          error: null,
+          stats: {
+            total: state.baseData.patientMessages.stats.total,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails,
+            unreadTexts: state.baseData.patientMessages.stats.unreadTexts + unreadCount,
+          },
         },
       };
       break;
