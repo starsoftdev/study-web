@@ -453,7 +453,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
               </header>
               <div className="row">
                 <div className="col-xs-6 col-sm-4 col-lg-2">
-                  <a href="#" className="package">
+                  <a
+                    href="#"
+                    className="package"
+                    onClick={this.toggleListNow}
+                  >
                     <div className="img-holder">
                       <img src={diamond1} width="85" alt="package description" />
                     </div>
@@ -478,7 +482,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                   </a>
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 diamond">
-                  <a href="#" className="package">
+                  <a
+                    href="#"
+                    className="package"
+                    onClick={this.toggleListNow}
+                  >
                     <div className="img-holder">
                       <img src={diamond2} width="91" alt="package description" className="img2" />
                     </div>
@@ -498,7 +506,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                   </a>
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 platinum">
-                  <a href="#" className="package">
+                  <a
+                    href="#"
+                    className="package"
+                    onClick={this.toggleListNow}
+                  >
                     <div className="img-holder">
                       <img src={diamond3} width="79" alt="package description" className="img3" />
                     </div>
@@ -516,7 +528,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                   </a>
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 gold">
-                  <a href="#" className="package">
+                  <a
+                    href="#"
+                    className="package"
+                    onClick={this.toggleListNow}
+                  >
                     <div className="img-holder">
                       <img src={diamond4} width="72" alt="package description" className="img4" />
                     </div>
@@ -534,7 +550,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                   </a>
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 silver">
-                  <a href="#" className="package">
+                  <a
+                    href="#"
+                    className="package"
+                    onClick={this.toggleListNow}
+                  >
                     <div className="img-holder">
                       <img src={diamond5} width="70" alt="package description" className="img5" />
                     </div>
@@ -552,7 +572,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                   </a>
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 bronze">
-                  <a href="#" className="package">
+                  <a
+                    href="#"
+                    className="package"
+                    onClick={this.toggleListNow}
+                  >
                     <div className="img-holder">
                       <img src={diamond6} width="70" alt="package description" className="img6" />
                     </div>
