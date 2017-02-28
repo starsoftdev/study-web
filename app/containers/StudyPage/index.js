@@ -10,14 +10,14 @@ import moment from 'moment-timezone';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser } from '../../containers/App/selectors';
+import { selectCurrentUser, selectSitePatients } from '../../containers/App/selectors';
 import { fetchSources } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
 import PatientBoard from './PatientBoard/index';
 import * as Selector from './selectors';
-import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId, updatePatientSuccess } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId, updatePatientSuccess, fetchStudyTextNewStats } from './actions';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
@@ -44,6 +44,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     socket: React.PropTypes.any,
     updatePatientSuccess: React.PropTypes.func,
     fetchSources: PropTypes.func,
+    sitePatients: React.PropTypes.object,
+    fetchStudyTextNewStats: React.PropTypes.func,
   };
 
   static defaultProps = {
@@ -84,6 +86,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         });
 
         this.props.fetchStudy(params.id, params.siteId);
+        this.props.fetchStudyTextNewStats(params.id);
         console.log(1);
         this.props.updatePatientSuccess({
           patientId: message.patient_id,
@@ -173,6 +176,7 @@ const mapStateToProps = createStructuredSelector({
   stats: Selector.selectStudyStats(),
   currentUser: selectCurrentUser(),
   socket: selectSocket(),
+  sitePatients: selectSitePatients(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -184,6 +188,7 @@ function mapDispatchToProps(dispatch) {
     setSiteId: (id) => dispatch(setSiteId(id)),
     updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
     fetchSources: () => dispatch(fetchSources()),
+    fetchStudyTextNewStats: (studyId) => dispatch(fetchStudyTextNewStats(studyId)),
   };
 }
 

@@ -7,12 +7,27 @@ import Button from 'react-bootstrap/lib/Button';
 import Input from '../../../components/Input';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddUserForm } from '../../DashboardManageUsers/DashboardManageUsersAddUserForm';
+import { editDashboardUser } from '../actions';
+import { selectDashboardEditUserProcess } from '../selectors';
+
+const mapStateToProps = createStructuredSelector({
+  editUserProcess: selectDashboardEditUserProcess(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    editDashboardUser: (payload) => dispatch(editDashboardUser(payload)),
+  };
+}
+
 
 @reduxForm({ form: 'dashboardManageUsersSearchForm' })
-
+@connect(mapStateToProps, mapDispatchToProps)
 export class DashboardManageUsersSearch extends React.Component {
   static propTypes = {
-
+    editDashboardUser: React.PropTypes.func,
+    editUserProcess: React.PropTypes.object,
+    roles: React.PropTypes.object,
   }
 
   constructor(props) {
@@ -24,6 +39,15 @@ export class DashboardManageUsersSearch extends React.Component {
 
     this.closeAddUserModal = this.closeAddUserModal.bind(this);
     this.openAddUserModal = this.openAddUserModal.bind(this);
+
+    this.addUser = this.addUser.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if ((!newProps.editUserProcess.saving && this.props.editUserProcess.saving) /* ||
+      (!newProps.deleteUserProcess.deleting && this.props.deleteUserProcess.deleting)*/) {
+      this.closeAddUserModal();
+    }
   }
 
   closeAddUserModal() {
@@ -32,6 +56,11 @@ export class DashboardManageUsersSearch extends React.Component {
 
   openAddUserModal() {
     this.setState({ addUserModalOpen: true });
+  }
+
+  addUser(params) {
+    console.log('add user', params);
+    this.props.editDashboardUser(params);
   }
 
   render() {
@@ -70,7 +99,11 @@ export class DashboardManageUsersSearch extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <AddUserForm />
+              <AddUserForm
+                onSubmit={this.addUser}
+                saving={this.props.editUserProcess.saving}
+                roles={this.props.roles}
+              />
             </div>
           </Modal.Body>
         </Modal>
@@ -79,11 +112,4 @@ export class DashboardManageUsersSearch extends React.Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
-});
-const mapDispatchToProps = {};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DashboardManageUsersSearch);
+export default DashboardManageUsersSearch;

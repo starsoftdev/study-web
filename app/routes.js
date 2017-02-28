@@ -620,6 +620,28 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/app/dashboard-indication',
+      name: 'dashboardIndicationPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardIndicationPage/reducer'),
+          System.import('./containers/DashboardIndicationPage/sagas'),
+          System.import('./containers/DashboardIndicationPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardIndicationPage', reducer.default);
+          injectReducer('dashboardIndicationPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/app/dashboard-portals',
       name: 'dashboardPortalsPage',
       getComponent(nextState, cb) {

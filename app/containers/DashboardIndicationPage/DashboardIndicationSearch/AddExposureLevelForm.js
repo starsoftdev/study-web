@@ -4,9 +4,9 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Input from '../../../components/Input';
 
-@reduxForm({ form: 'dashboardAddProtocolForm' })
+@reduxForm({ form: 'dashboardAddExposureLevelForm' })
 
-export class AddProtocolForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class AddExposureLevelForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     isEdit: PropTypes.bool,
   }
@@ -17,11 +17,11 @@ export class AddProtocolForm extends React.Component { // eslint-disable-line re
 
         <div className="field-row">
           <strong className="label required">
-            <label className="add-exposure-level">Protocol</label>
+            <label className="add-exposure-level">Exposure Level</label>
           </strong>
           <div className="field">
             <Field
-              name="protocol"
+              name="exposureLevel"
               component={Input}
               type="text"
             />
@@ -32,7 +32,7 @@ export class AddProtocolForm extends React.Component { // eslint-disable-line re
           {this.props.isEdit &&
             <a className="btn btn-gray-outline">Delete</a>
           }
-          <button type="submit" className="btn btn-primary">{this.props.isEdit ? 'Update' : 'Submit'}</button>
+          <button type="submit" className="btn btn-primary">Submit</button>
         </div>
 
       </form>
@@ -47,4 +47,4 @@ const mapDispatchToProps = {};
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddProtocolForm);
+)(AddExposureLevelForm);

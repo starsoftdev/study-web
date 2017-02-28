@@ -63,6 +63,7 @@ import {
   SWITCH_TO_TEXT_SECTION_DETAIL,
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
+  FETCH_STUDY_NEW_TEXTS,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -407,6 +408,13 @@ export function submitTextBlast(patients, message, currentUserId, onClose) {
     message,
     currentUserId,
     onClose,
+  };
+}
+
+export function fetchStudyTextNewStats(studyId) {
+  return {
+    type: FETCH_STUDY_NEW_TEXTS,
+    studyId,
   };
 }
 
