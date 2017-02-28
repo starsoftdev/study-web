@@ -63,7 +63,7 @@ export class DashboardIndicationSearch extends React.Component {
 
     const selectedItemsTemplate = (controlSelectedValue) => (
       <div>
-        {controlSelectedValue.length} item(s) selected
+        {controlSelectedValue[0].name}
       </div>
     );
 
@@ -93,7 +93,6 @@ export class DashboardIndicationSearch extends React.Component {
                 searchPlaceholder="Search"
                 searchable
                 optionLabelKey="label"
-                multiple
                 includeAllOption
                 onChange={(e) => console.log('init search', e)}
                 customOptionTemplateFunction={itemTemplate}
