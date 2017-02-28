@@ -310,6 +310,16 @@ const selectFindOutPosted = () => createSelector(
   (substate) => get(substate, 'baseData.findOutPosted', {})
 );
 
+const selectListSiteNowSuccess = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.listSiteNowSuccess', {})
+);
+
+const selectLearnAboutFutureTrialsSuccess = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.learnAboutFutureTrialsSuccess', {})
+);
+
 const selectTrials = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.trials.details', {})
@@ -371,6 +381,8 @@ export {
   selectSubscribedFromLanding,
   selectSubscriptionError,
   selectFindOutPosted,
+  selectListSiteNowSuccess,
+  selectLearnAboutFutureTrialsSuccess,
 
   selectTrials,
 };

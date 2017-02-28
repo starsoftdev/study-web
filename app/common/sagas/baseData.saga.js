@@ -46,6 +46,8 @@ import {
   SUBSCRIBE_FROM_LANDING,
   FIND_OUT_PATIENTS,
   CLINICAL_TRIALS_SEARCH,
+  LIST_SITE_NOW,
+  LEARN_ABOUT_FUTURE_TRIALS,
 } from '../../containers/App/constants';
 
 import {
@@ -115,6 +117,8 @@ import {
   findOutPatientsError,
   clinicalTrialsSearchSuccess,
   clinicalTrialsSearchError,
+  listSiteNowSuccess,
+  learnAboutFutureTrialsSuccess,
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -152,6 +156,8 @@ export default function* baseDataSaga() {
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
   yield fork(takeLatest, FIND_OUT_PATIENTS, postFindOutPatients);
   yield fork(takeLatest, CLINICAL_TRIALS_SEARCH, searchClinicalTrials);
+  yield fork(takeLatest, LIST_SITE_NOW, listNowSite);
+  yield fork(takeLatest, LEARN_ABOUT_FUTURE_TRIALS, learnAboutFutureTrials);
 }
 
 export function* fetchSitesWatcher() {
@@ -866,5 +872,41 @@ function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
     yield put(clinicalTrialsSearchSuccess(response));
   } catch (err) {
     yield put(clinicalTrialsSearchError(err));
+  }
+}
+
+function* listNowSite(action) {
+  try {
+    const params = action.params;
+    const requestURL = `${API_URL}/sites/listNowFormRequest`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(toastrActions.success('', 'Thank you for submitting your information.'));
+    yield put(listSiteNowSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+function* learnAboutFutureTrials(action) {
+  try {
+    const params = action.params;
+    const requestURL = `${API_URL}/futureClinicalTrials`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(toastrActions.success('', 'Thank you for submitting your information.'));
+    yield put(learnAboutFutureTrialsSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
+    yield put(toastrActions.error('', errorMessage));
   }
 }
