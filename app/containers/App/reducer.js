@@ -1105,10 +1105,13 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SAVE_USER_SUCCESS:
+      console.log('payload', payload);
       if (payload.userType === 'admin') {
         forEach(clientSitesCollection, item => {
-          foundIndex = findIndex(clientRolesCollection, (item) => (item.user.id === payload.userResultData.user.id));
-          if (remove(item.users, { id: payload.userResultData.user.id }).length > 0) {
+          foundIndex = findIndex(item.roles, { id: payload.userResultData.user.id });
+          if (foundIndex > -1) {
+            item.roles.splice(foundIndex, 1);
+            foundIndex = -1;
             return false;
           }
           return true;
