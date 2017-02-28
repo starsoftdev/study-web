@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import Button from 'react-bootstrap/lib/Button';
 import Input from '../../../components/Input';
 import CenteredModal from '../../../components/CenteredModal/index';
-import { AddClientAdminsForm } from '../../DashboardClientAdminsPage/AddClinetAdminsForm/index';
+import { AddClientAdminsForm } from '../../DashboardClientAdminsPage/AddClientAdminsForm/index';
 
 @reduxForm({ form: 'dashboardClientAdminsSearchForm' })
 
