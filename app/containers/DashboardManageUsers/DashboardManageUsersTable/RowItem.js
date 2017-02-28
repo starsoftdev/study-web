@@ -12,7 +12,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     return (
       <tr>
         <td>
-          {`${this.props.item.firstName} ${this.props.item.lastName}`}
+          {`${this.props.item.first_name} ${this.props.item.last_name}`}
         </td>
         <td>
           {this.props.item.email}
@@ -20,8 +20,8 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         <td>
           {this.props.item.phone}
         </td>
-        <td>
-          {this.props.item.role}
+        <td className="text-uppercase">
+          {this.props.item.role_name}
         </td>
         <td>
           <a className="btn btn-primary btn-edit-site pull-right" onClick={() => { this.props.editUserClick(this.props.item); }}>

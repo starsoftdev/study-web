@@ -16,7 +16,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-
 @reduxForm({ form: 'dashboardPortalsForm' })
 @connect(mapStateToProps, mapDispatchToProps)
 
@@ -54,7 +53,7 @@ export class DashboardPortalsForm extends React.Component { // eslint-disable-li
     _.forEach(this.props.clients.details, (item) => {
       clientsOptions.push(
         {
-          label: `${item.name}`,
+          label: `${item.first_name} ${item.last_name}`,
           value: item.user_id,
         }
       );
@@ -63,7 +62,7 @@ export class DashboardPortalsForm extends React.Component { // eslint-disable-li
     _.forEach(this.props.sponsors.details, (item) => {
       sponsorsOptions.push(
         {
-          label: `${item.name}`,
+          label: `${item.first_name} ${item.last_name}`,
           value: item.user_id,
         }
       );

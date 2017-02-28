@@ -46,7 +46,7 @@ export function* submitToSponsorPortalWorker(action) {
     yield put(setUserData(response));
     yield put(push('/app'));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
+    const errorMessage = get(err, 'message', 'Something went wrong');
     yield put(toastrActions.error('', errorMessage));
   }
 }
@@ -63,7 +63,7 @@ export function* submitToClientPortalWorker(action) {
     yield put(setUserData(response));
     yield put(push('/app'));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
+    const errorMessage = get(err, 'message', 'Something went wrong');
     yield put(toastrActions.error('', errorMessage));
   }
 }
@@ -83,7 +83,7 @@ export function* fetchClientsWorker() {
 
     yield put(fetchClientsSuccess(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching clients');
     yield put(toastrActions.error('', errorMessage));
     yield put(fetchClientsError(err));
   }
@@ -104,7 +104,7 @@ export function* fetchSponsorsWorker() {
 
     yield put(fetchSponsorsSuccess(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching sponsors');
     yield put(toastrActions.error('', errorMessage));
     yield put(fetchSponsorsError(err));
   }
