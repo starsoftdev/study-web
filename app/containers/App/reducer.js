@@ -681,7 +681,7 @@ export default function appReducer(state = initialState, action) {
               unreadCount = 1;
             }
           } else if (action.newMessage.twilioTextMessage.isBlastMessage) {
-              patientData.count_unread = 0;
+            patientData.count_unread = 0;
           } else {
             patientData.count_unread = 1;
             unreadCount = 1;
