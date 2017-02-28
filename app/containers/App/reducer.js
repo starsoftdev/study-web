@@ -118,6 +118,8 @@ import {
   RESET_LIST_SITE_NOW_SUCCESS,
   LEARN_ABOUT_FUTURE_TRIALS_SUCCESS,
   RESET_LEARN_ABOUT_FUTURE_TRIALS,
+  NEW_CONTACT_SUCCESS,
+  RESET_NEW_CONTACT_SUCCESS,
 } from './constants';
 
 import {
@@ -151,6 +153,7 @@ const initialState = {
     findOutPosted: null,
     listSiteNowSuccess: null,
     learnAboutFutureTrialsSuccess: null,
+    newContactsSuccess: null,
     sources: [],
     levels: [],
     landing: {
@@ -427,6 +430,16 @@ export default function appReducer(state = initialState, action) {
     case RESET_LEARN_ABOUT_FUTURE_TRIALS:
       baseDataInnerState = {
         learnAboutFutureTrialsSuccess: null,
+      };
+      break;
+    case NEW_CONTACT_SUCCESS:
+      baseDataInnerState = {
+        newContactsSuccess: true,
+      };
+      break;
+    case RESET_NEW_CONTACT_SUCCESS:
+      baseDataInnerState = {
+        newContactsSuccess: null,
       };
       break;
     case PATIENT_SUBSCRIPTION_ERROR:

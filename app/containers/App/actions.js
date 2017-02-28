@@ -156,6 +156,10 @@ import {
   LEARN_ABOUT_FUTURE_TRIALS,
   LEARN_ABOUT_FUTURE_TRIALS_SUCCESS,
   RESET_LEARN_ABOUT_FUTURE_TRIALS,
+
+  NEW_CONTACT,
+  NEW_CONTACT_SUCCESS,
+  RESET_NEW_CONTACT_SUCCESS,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -1056,6 +1060,27 @@ export function learnAboutFutureTrialsSuccess(payload) {
 export function resetLearnAboutFutureTrialsSuccess(payload) {
   return {
     type: RESET_LEARN_ABOUT_FUTURE_TRIALS,
+    payload,
+  };
+}
+
+export function newContact(params) {
+  return {
+    type: NEW_CONTACT,
+    params,
+  };
+}
+
+export function newContactSuccess(payload) {
+  return {
+    type: NEW_CONTACT_SUCCESS,
+    payload,
+  };
+}
+
+export function resetNewContactSuccess(payload) {
+  return {
+    type: RESET_NEW_CONTACT_SUCCESS,
     payload,
   };
 }
