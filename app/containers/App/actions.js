@@ -160,6 +160,10 @@ import {
   NEW_CONTACT,
   NEW_CONTACT_SUCCESS,
   RESET_NEW_CONTACT_SUCCESS,
+
+  FETCH_CLIENT_ADMINS,
+  FETCH_CLIENT_ADMINS_SUCCESS,
+  FETCH_CLIENT_ADMINS_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -1081,6 +1085,27 @@ export function newContactSuccess(payload) {
 export function resetNewContactSuccess(payload) {
   return {
     type: RESET_NEW_CONTACT_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchClientAdmins(payload) {
+  return {
+    type: FETCH_CLIENT_ADMINS,
+    payload,
+  };
+}
+
+export function fetchClientAdminsSuccess(payload) {
+  return {
+    type: FETCH_CLIENT_ADMINS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchClientAdminsError(payload) {
+  return {
+    type: FETCH_CLIENT_ADMINS_ERROR,
     payload,
   };
 }

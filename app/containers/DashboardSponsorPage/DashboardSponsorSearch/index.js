@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
@@ -6,12 +6,20 @@ import Modal from 'react-bootstrap/lib/Modal';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddSponsorForm } from './AddSponsorForm';
+import _ from 'lodash';
 
-@reduxForm({ form: 'dashboardSponsorForm' })
 
+const mapStateToProps = createStructuredSelector({
+});
+const mapDispatchToProps = {};
+
+@reduxForm({ form: 'dashboardSponsorSearchForm' })
+@connect(mapStateToProps, mapDispatchToProps)
 export class DashboardSponsorSearch extends React.Component {
   static propTypes = {
-
+    sponsors: PropTypes.object,
+    addSponsor: PropTypes.func,
+    editSponsorProcess: PropTypes.object,
   }
 
   constructor(props) {
@@ -23,6 +31,13 @@ export class DashboardSponsorSearch extends React.Component {
 
     this.closeAddSponsorModal = this.closeAddSponsorModal.bind(this);
     this.openAddSponsorModal = this.openAddSponsorModal.bind(this);
+    this.addSponsor = this.addSponsor.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!newProps.editSponsorProcess.saving && this.props.editSponsorProcess.saving) {
+      this.closeAddSponsorModal();
+    }
   }
 
   closeAddSponsorModal() {
@@ -33,8 +48,17 @@ export class DashboardSponsorSearch extends React.Component {
     this.setState({ addSponsorModalOpen: true });
   }
 
+  addSponsor(params) {
+    this.props.addSponsor(params);
+  }
+
   render() {
-    const options = [{ label: 'First', value: 1 }, { label: 'Second', value: 2 }, { label: 'Third', value: 3 }];
+    const options = [];
+    _.forEach(this.props.sponsors.details, (item) => {
+      options.push({
+        label: item.name, value: item.id,
+      });
+    });
 
     return (
       <form action="#" className="form-search clearfix">
@@ -67,7 +91,10 @@ export class DashboardSponsorSearch extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <AddSponsorForm />
+              <AddSponsorForm
+                onSubmit={this.addSponsor}
+                saving={this.props.editSponsorProcess.saving}
+              />
             </div>
           </Modal.Body>
         </Modal>
@@ -76,11 +103,4 @@ export class DashboardSponsorSearch extends React.Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
-});
-const mapDispatchToProps = {};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DashboardSponsorSearch);
+export default DashboardSponsorSearch;
