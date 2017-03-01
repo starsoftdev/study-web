@@ -22,6 +22,9 @@ import {
   ADD_EMAIL_NOTIFICATION_USER,
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
   ADD_EMAIL_NOTIFICATION_USER_ERROR,
+  FETCH_CLIENT_ADMINS,
+  FETCH_CLIENT_ADMINS_SUCCESS,
+  FETCH_CLIENT_ADMINS_ERROR,
 } from '../../containers/App/constants';
 
 const initialState = {
@@ -38,6 +41,11 @@ const initialState = {
     saving: false,
     error: null,
     savedUser: null,
+  },
+  clientAdmins: {
+    details: [],
+    fetching: false,
+    error: null,
   },
 };
 
@@ -139,6 +147,33 @@ function listNewStudyPageReducer(state = initialState, action) {
           saving: false,
           error: action.payload,
           savedUser: null,
+        },
+      };
+    case FETCH_CLIENT_ADMINS:
+      return {
+        ...state,
+        clientAdmins: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_CLIENT_ADMINS_SUCCESS:
+      return {
+        ...state,
+        clientAdmins: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_CLIENT_ADMINS_ERROR:
+      return {
+        ...state,
+        clientAdmins: {
+          details: [],
+          fetching: false,
+          error: action.payload,
         },
       };
     default:

@@ -38,6 +38,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     clientSites: PropTypes.object,
     addEmailNotificationUser: PropTypes.func,
     addNotificationProcess: PropTypes.object,
+    clientAdmins: PropTypes.object,
   };
   constructor(props) {
     super(props);
@@ -76,6 +77,20 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
               this.setState({ currentStudy });
             }
           });
+          // add admin users to the list
+          _.forEach(this.props.clientAdmins.details, (role) => {
+            const isChecked = _.find(currentStudy.studyNotificationEmails, (item) => (item.user_id === role.user_id));
+            if (!isChecked) {
+              isAllChecked = false;
+            }
+            fields.push({
+              firstName: role.first_name,
+              lastName: role.last_name,
+              userId: role.user_id,
+              isChecked,
+            });
+          });
+          // add site users to the list
           _.forEach(site.roles, (role) => {
             const isChecked = _.find(currentStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
             if (!isChecked) {
@@ -210,6 +225,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
+    console.log(123, this.props);
     const { editedStudy } = this.props;
 
     return (

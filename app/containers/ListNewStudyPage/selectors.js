@@ -39,6 +39,11 @@ const selectAddNotificationProcess = () => createSelector(
   (substate) => substate.addNotificationProcess
 );
 
+const selectListNewStudyClientAdmins = () => createSelector(
+  selectListNewStudyPageDomain(),
+  substate => substate.clientAdmins
+);
+
 export default selectListNewStudyPage;
 export {
   selectListNewStudyPageDomain,
@@ -46,4 +51,5 @@ export {
   selectShowSubmitFormModal,
   selectIndicationLevelPrice,
   selectAddNotificationProcess,
+  selectListNewStudyClientAdmins,
 };

@@ -49,6 +49,7 @@ import {
   LIST_SITE_NOW,
   LEARN_ABOUT_FUTURE_TRIALS,
   NEW_CONTACT,
+  FETCH_CLIENT_ADMINS,
 } from '../../containers/App/constants';
 
 import {
@@ -121,6 +122,8 @@ import {
   listSiteNowSuccess,
   learnAboutFutureTrialsSuccess,
   newContactSuccess,
+  fetchClientAdminsSuccess,
+  fetchClientAdminsError,
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -154,6 +157,7 @@ export default function* baseDataSaga() {
   yield fork(fetchCreditsPrice);
   yield fork(fetchIndicationLevelPriceWatcher);
   yield fork(changeUsersTimezoneWatcher);
+  yield fork(fetchClientAdminsWatcher);
   yield fork(takeLatest, FETCH_LANDING, fetchLandingStudy);
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
   yield fork(takeLatest, FIND_OUT_PATIENTS, postFindOutPatients);
@@ -809,6 +813,30 @@ export function* changeUsersTimezoneWatcher() {
       yield put(toastrActions.error('', errorMessage));
       yield put(changeUsersTimezoneError(err));
     }
+  }
+}
+
+export function* fetchClientAdminsWatcher() {
+  yield* takeLatest(FETCH_CLIENT_ADMINS, fetchClientAdminsWorker);
+}
+
+export function* fetchClientAdminsWorker(action) {
+  try {
+    const requestURL = `${API_URL}/clients/fetchAllClientAdminsById`;
+
+    const params = {
+      method: 'GET',
+      query: {
+        id: action.payload,
+      },
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchClientAdminsSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching clients admins');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(fetchClientAdminsError(err));
   }
 }
 
