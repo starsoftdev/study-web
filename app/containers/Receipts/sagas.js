@@ -52,12 +52,12 @@ export function* getReceipts() {
         sortParams = `&orderBy=${orderBy}&orderDir=${((orderDir === 'down') ? 'DESC' : 'ASC')}`;
       }
       if (!payload) {
-        requestURL = `${API_URL}/invoices/getReceipts?limit=${limit}&skip=${offset}&access_token=${authToken}${sortParams}`;
+        requestURL = `${API_URL}/invoices/getReceipts?limit=${limit}&skip=${offset}&${sortParams}`;
       } else {
         payload.limit = limit;
         payload.skip = offset;
         const options = JSON.stringify(payload);
-        requestURL = `${API_URL}/invoices/getReceipts?options=${options}&limit=${limit}&skip=${offset}&access_token=${authToken}${sortParams}`;
+        requestURL = `${API_URL}/invoices/getReceipts?options=${options}&limit=${limit}&skip=${offset}&${sortParams}`;
       }
 
       const response = yield call(request, requestURL);
