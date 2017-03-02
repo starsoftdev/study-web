@@ -4,7 +4,6 @@ import { createSelector } from 'reselect';
  * Direct selector to the dashboardIndicationPage state domain
  */
 const selectDashboardIndicationPageDomain = () => state => state.dashboardIndicationPage;
-
 /**
  * Other specific selectors
  */
@@ -19,7 +18,13 @@ const selectDashboardIndicationPage = () => createSelector(
   (substate) => substate
 );
 
+const selectIndications = () => createSelector(
+  selectDashboardIndicationPageDomain(),
+  (substate) => substate.indications
+);
+
 export default selectDashboardIndicationPage;
 export {
   selectDashboardIndicationPageDomain,
+  selectIndications,
 };
