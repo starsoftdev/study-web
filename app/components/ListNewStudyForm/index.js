@@ -65,6 +65,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     addEmailNotificationUser: PropTypes.func,
     addNotificationProcess: PropTypes.object,
     savedSite: PropTypes.object,
+    clientAdmins: PropTypes.object,
   };
 
   constructor(props) {
@@ -142,6 +143,16 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
       const fullSiteLocation = _.find(this.props.fullSiteLocations.details, (o) => (o.id === e));
       if (fullSiteLocation) {
         const fields = [];
+        // add admin users
+        _.forEach(this.props.clientAdmins.details, (role) => {
+          fields.push({
+            firstName: role.first_name,
+            lastName: role.last_name,
+            userId: role.user_id,
+            isChecked: true,
+          });
+        });
+        // add site users
         _.forEach(fullSiteLocation.roles, (role) => {
           fields.push({
             firstName: role.user.firstName,

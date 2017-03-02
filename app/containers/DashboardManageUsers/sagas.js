@@ -116,9 +116,9 @@ export function* deleteDashboardUserWorker(action) {
       body: JSON.stringify(action.payload),
     };
 
-    const response = yield call(request, requestURL, params);
+    yield call(request, requestURL, params);
 
-    yield put(deleteDashboardUserSuccess(response));
+    yield put(deleteDashboardUserSuccess(action.payload));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong');
     yield put(toastrActions.error('', errorMessage));

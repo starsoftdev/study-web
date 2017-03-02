@@ -22,7 +22,7 @@ import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../..
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
 import { ComingSoon } from '../../components/ComingSoon';
 import { submitForm, hideSubmitFormModal, clearFormSubmissionData } from '../../containers/ListNewStudyPage/actions';
-import { selectListNewStudyPageDomain, selectFormSubmissionStatus, selectShowSubmitFormModal, selectIndicationLevelPrice } from './selectors';
+import { selectListNewStudyPageDomain, selectFormSubmissionStatus, selectShowSubmitFormModal, selectIndicationLevelPrice, selectListNewStudyClientAdmins } from './selectors';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
 
@@ -35,6 +35,7 @@ import {
   getAvailPhoneNumbers,
   fetchIndicationLevelPrice,
   fetchClientSites,
+  fetchClientAdmins,
 } from '../../containers/App/actions';
 import {
   selectSiteLocations,
@@ -79,6 +80,8 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     fetchClientSites: PropTypes.func,
     currentUserClientId: PropTypes.number,
     userRoleType: PropTypes.string,
+    fetchClientAdmins: PropTypes.func,
+    clientAdmins: PropTypes.object,
   }
 
   constructor(props) {
@@ -99,6 +102,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     this.props.fetchIndications();
     this.props.fetchLevels();
     this.props.getAvailPhoneNumbers();
+    this.props.fetchClientAdmins(this.props.currentUserClientId);
   }
 
   componentWillReceiveProps(newProps) {
@@ -230,6 +234,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
                     listNewStudyState={this.props.listNewStudyState}
                     saveSite={this.props.saveSite}
                     availPhoneNumbers={this.props.availPhoneNumbers}
+                    clientAdmins={this.props.clientAdmins}
                   />
                 </div>
 
@@ -326,6 +331,7 @@ const mapStateToProps = createStructuredSelector({
   shoppingCartFormError: selectShoppingCartFormError(),
   currentUserClientId: selectCurrentUserClientId(),
   userRoleType: selectUserRoleType(),
+  clientAdmins: selectListNewStudyClientAdmins(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -340,6 +346,7 @@ function mapDispatchToProps(dispatch) {
     hideSubmitFormModal:  () => dispatch(hideSubmitFormModal()),
     fetchIndicationLevelPrice: (indicationId, levelId) => dispatch(fetchIndicationLevelPrice(indicationId, levelId)),
     clearFormSubmissionData: () => (dispatch(clearFormSubmissionData())),
+    fetchClientAdmins: (payload) => dispatch(fetchClientAdmins(payload)),
     touchNewStudy: () => (dispatch(touch('listNewStudy', ...newStudyFields))),
     touchShoppingCart: () => (dispatch(touch('shoppingCart', ...shoppingCartFields))),
   };
