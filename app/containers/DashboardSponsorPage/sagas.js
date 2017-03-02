@@ -67,7 +67,7 @@ export function* addSponsorWorker(action) {
 
     const params = {
       method: 'POST',
-      body: JSON.stringify({ ...action.payload, stripeCustomerId:1 }),
+      body: JSON.stringify(action.payload),
     };
     const response = yield call(request, requestURL, params);
 
