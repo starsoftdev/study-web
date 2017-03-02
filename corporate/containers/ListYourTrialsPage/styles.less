@@ -1,8 +1,14 @@
-@xs: 767px;
+@import "../../assets/less/variables.less";
 
 .react-parallax-bgimage {
   @media screen and (max-width: @xs) {
     height: 1700px !important;
+  }
+}
+
+.modal-content {
+  @media screen and (max-width: @phone) {
+    margin: 0 15px !important;
   }
 }
 
@@ -24,6 +30,12 @@
     padding: 20px 25px 0px;
     width: 100%;
     display: inline-block;
+  }
+
+  input.form-control {
+    @media screen and (max-width: @phone) {
+      font-size: 16px !important;
+    }
   }
 }
 
