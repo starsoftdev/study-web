@@ -60,6 +60,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     saveCard: PropTypes.func,
     clearIndicationLevelPrice: PropTypes.func,
     currentUserClientId: PropTypes.number,
+    clientAdmins: PropTypes.object,
   };
 
   constructor(props) {
@@ -575,6 +576,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               show={this.state.editModalOpen}
               onHide={this.closeEditModal}
               onShow={this.showEditModal}
+              clientAdmins={this.props.clientAdmins}
             />
           </div>
         </div>

@@ -3,9 +3,40 @@
 
 import React from 'react';
 import { Well, Collapse } from 'react-bootstrap';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { Field, reduxForm, reset, touch } from 'redux-form';
+import { normalizePhone } from '../../../../app/common/helper/functions';
+import { selectSyncErrorBool, selectValues } from '../../../../app/common/selectors/form.selector';
 
-export default class FormSubscribe extends React.Component {
-  static propTypes = {};
+import {
+  selectLearnAboutFutureTrialsSuccess,
+} from '../../../../app/containers/App/selectors';
+
+import Input from '../../../../app/components/Input/index';
+
+import {
+  learnAboutFutureTrials,
+  resetLearnAboutFutureTrialsSuccess,
+} from '../../../../app/containers/App/actions';
+
+const formName = 'learnAboutFuture';
+import formValidator, { fields } from './validator';
+@reduxForm({
+  form: formName,
+  validate: formValidator,
+})
+
+export class FormSubscribe extends React.Component {
+  static propTypes = {
+    submitForm: React.PropTypes.func.isRequired,
+    formError: React.PropTypes.bool.isRequired,
+    resetForm: React.PropTypes.func.isRequired,
+    newSubscriber: React.PropTypes.any,
+    touchFields: React.PropTypes.func.isRequired,
+    learnAboutFutureTrialsSuccess: React.PropTypes.any,
+    resetLearnAboutFutureTrialsSuccess: React.PropTypes.func,
+  };
 
   constructor(props) {
     super(props);
@@ -15,10 +46,18 @@ export default class FormSubscribe extends React.Component {
     this.onMouseOutHandler = this.onMouseOutHandler.bind(this);
     this.handleCollapseProcess = this.handleCollapseProcess.bind(this);
     this.handleCollapseEnd = this.handleCollapseEnd.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
       open: false,
     };
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.learnAboutFutureTrialsSuccess) {
+      this.props.resetForm();
+      this.props.resetLearnAboutFutureTrialsSuccess();
+    }
   }
 
   // TODO: need to refactor DOM operations below
@@ -45,9 +84,29 @@ export default class FormSubscribe extends React.Component {
     });
   }
 
+  handleSubmit(ev) {
+    ev.preventDefault();
+    const { formError, newSubscriber, touchFields, submitForm } = this.props;
+    if (formError) {
+      touchFields();
+      return;
+    }
+
+    const subscriber = Object.assign({}, newSubscriber);
+    /* normalizing the phone number */
+    subscriber.phone = normalizePhone(newSubscriber.phone);
+
+    submitForm(subscriber);
+  }
+
   render() {
     return (
-      <form className="form-subscribe" data-formvalidation="true">
+      <form
+        className="form-subscribe"
+        action="#"
+        noValidate="novalidate"
+        onSubmit={this.handleSubmit}
+      >
         <div className="container">
           <strong className="title pull-left">
             <button
@@ -74,13 +133,37 @@ export default class FormSubscribe extends React.Component {
               <input type="submit" className="btn btn-default pull-right" value="submit" />
               <div className="fields-area">
                 <div className="col-xs-4">
-                  <input type="text" placeholder="* Full Name" data-required="true" className="form-control" />
+                  <Field
+                    name="name"
+                    placeholder="* Full Name"
+                    component={Input}
+                    type="text"
+                    className="field"
+                    id=""
+                    required
+                  />
                 </div>
                 <div className="col-xs-4">
-                  <input type="email" placeholder="* Email" data-required="true" className="form-control" />
+                  <Field
+                    name="email"
+                    placeholder="* Email"
+                    component={Input}
+                    type="email"
+                    className="field"
+                    id=""
+                    required
+                  />
                 </div>
                 <div className="col-xs-4">
-                  <input type="text" data-type="number" placeholder="* Mobile Phone" data-required="true" className="form-control" />
+                  <Field
+                    name="phone"
+                    placeholder="* Mobile Phone"
+                    component={Input}
+                    type="tel"
+                    className="field"
+                    id=""
+                    required
+                  />
                 </div>
               </div>
             </Well>
@@ -90,3 +173,20 @@ export default class FormSubscribe extends React.Component {
     );
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  formError: selectSyncErrorBool(formName),
+  newSubscriber: selectValues(formName),
+  learnAboutFutureTrialsSuccess: selectLearnAboutFutureTrialsSuccess(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    submitForm: (values) => dispatch(learnAboutFutureTrials(values)),
+    resetForm: () => dispatch(reset(formName)),
+    touchFields: () => dispatch(touch(formName, ...fields)),
+    resetLearnAboutFutureTrialsSuccess: () => dispatch(resetLearnAboutFutureTrialsSuccess()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FormSubscribe);

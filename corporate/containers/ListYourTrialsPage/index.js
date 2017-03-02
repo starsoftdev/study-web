@@ -32,11 +32,16 @@ import videoPlaceholder from '../../assets/images/video-placeholder.png';
 import computerImg from '../../assets/images/computer-img.png';
 
 import FindOutPatientsForm from '../../components/FindOutPatientsForm';
+import ListNowModal from '../../components/ListNowModal';
 
-import { findOutPatients } from '../../../app/containers/App/actions';
+import {
+  findOutPatients,
+  resetListSiteNowSuccess,
+} from '../../../app/containers/App/actions';
 
 import {
   selectFindOutPosted,
+  selectListSiteNowSuccess,
 } from '../../../app/containers/App/selectors';
 
 import './styles.less';
@@ -45,18 +50,23 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
 
   static propTypes = {
     onSubmitForm: React.PropTypes.func,
+    resetListSiteNowSuccess: React.PropTypes.func,
     clearForm: React.PropTypes.func,
+    clearListNowForm: React.PropTypes.func,
     findOutPosted: React.PropTypes.any,
+    listSiteNowSuccess: React.PropTypes.any,
   };
 
   constructor(props) {
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
+    this.toggleListNow = this.toggleListNow.bind(this);
     this.onSubmitForm = this.props.onSubmitForm.bind(this);
 
     this.state = {
       open: false,
+      listNowOpen: false,
     };
   }
 
@@ -66,6 +76,12 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
   componentWillReceiveProps(newProps) {
     if (newProps.findOutPosted) {
       this.props.clearForm();
+    }
+    if (newProps.listSiteNowSuccess) {
+      this.setState({ listNowOpen: false }, () => {
+        this.props.clearListNowForm();
+        this.props.resetListSiteNowSuccess();
+      });
     }
   }
 
@@ -78,6 +94,13 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
     ev.preventDefault();
   }
 
+  toggleListNow(ev) {
+    if (ev) {
+      ev.preventDefault();
+    }
+    this.setState({ listNowOpen: !this.state.listNowOpen });
+  }
+
   render() {
     return (
       <div id="main" className="clinical-trils-page">
@@ -86,7 +109,13 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
             <div className="container">
               <h2 className="main-heading text-center"><span className="text">LIST YOUR CLINICAL TRIALS</span></h2>
               <div className="info">
-                <a href="#" className="btn btn-deep btn-block">LIST NOW!</a>
+                <a
+                  href="#"
+                  className="btn btn-deep btn-block"
+                  onClick={this.toggleListNow}
+                >
+                  LIST NOW!
+                </a>
                 <a href="#" className="btn btn-deep btn-block small">GET PROPOSAL</a>
                 <div className="img-holder">
                   <img src={img1} alt="img1" width="200" height="284" className="img-responsive svg" />
@@ -421,7 +450,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
               </header>
               <div className="row">
                 <div className="col-xs-6 col-sm-4 col-lg-2">
-                  <a href="#" className="package">
+                  <a
+                    href="#"
+                    className="package"
+                    onClick={this.toggleListNow}
+                  >
                     <div className="img-holder">
                       <img src={diamond1} width="85" alt="package description" />
                     </div>
@@ -436,12 +469,21 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                       </span>
                     </div>
                     <div className="btn-block text-center">
-                      <span className="btn-default btn">List Now</span>
+                      <span
+                        className="btn-default btn"
+                        onClick={this.toggleListNow}
+                      >
+                        List Now
+                      </span>
                     </div>
                   </a>
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 diamond">
-                  <a href="#" className="package">
+                  <a
+                    href="#"
+                    className="package"
+                    onClick={this.toggleListNow}
+                  >
                     <div className="img-holder">
                       <img src={diamond2} width="91" alt="package description" className="img2" />
                     </div>
@@ -451,12 +493,21 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                       $3059 <span>/MONTH</span>
                     </strong>
                     <div className="btn-block text-center">
-                      <span className="btn-default btn">List Now</span>
+                      <span
+                        className="btn-default btn"
+                        onClick={this.toggleListNow}
+                      >
+                        List Now
+                      </span>
                     </div>
                   </a>
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 platinum">
-                  <a href="#" className="package">
+                  <a
+                    href="#"
+                    className="package"
+                    onClick={this.toggleListNow}
+                  >
                     <div className="img-holder">
                       <img src={diamond3} width="79" alt="package description" className="img3" />
                     </div>
@@ -464,12 +515,21 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <p>30 Posts</p>
                     <strong className="price">$1559 <span>/MONTH</span></strong>
                     <div className="btn-block text-center">
-                      <span className="btn-default btn">List Now</span>
+                      <span
+                        className="btn-default btn"
+                        onClick={this.toggleListNow}
+                      >
+                        List Now
+                      </span>
                     </div>
                   </a>
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 gold">
-                  <a href="#" className="package">
+                  <a
+                    href="#"
+                    className="package"
+                    onClick={this.toggleListNow}
+                  >
                     <div className="img-holder">
                       <img src={diamond4} width="72" alt="package description" className="img4" />
                     </div>
@@ -477,12 +537,21 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <p>10 Posts</p>
                     <strong className="price">$559 <span>/MONTH</span></strong>
                     <div className="btn-block text-center">
-                      <span className="btn-default btn">List Now</span>
+                      <span
+                        className="btn-default btn"
+                        onClick={this.toggleListNow}
+                      >
+                        List Now
+                      </span>
                     </div>
                   </a>
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 silver">
-                  <a href="#" className="package">
+                  <a
+                    href="#"
+                    className="package"
+                    onClick={this.toggleListNow}
+                  >
                     <div className="img-holder">
                       <img src={diamond5} width="70" alt="package description" className="img5" />
                     </div>
@@ -490,12 +559,21 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <p>3 Posts</p>
                     <strong className="price">$209 <span>/MONTH</span></strong>
                     <div className="btn-block text-center">
-                      <span className="btn-default btn">List Now</span>
+                      <span
+                        className="btn-default btn"
+                        onClick={this.toggleListNow}
+                      >
+                        List Now
+                      </span>
                     </div>
                   </a>
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 bronze">
-                  <a href="#" className="package">
+                  <a
+                    href="#"
+                    className="package"
+                    onClick={this.toggleListNow}
+                  >
                     <div className="img-holder">
                       <img src={diamond6} width="70" alt="package description" className="img6" />
                     </div>
@@ -503,18 +581,31 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <p>1 Posts</p>
                     <strong className="price">$59 <span>/MONTH</span></strong>
                     <div className="btn-block text-center">
-                      <span className="btn-default btn">List Now</span>
+                      <span
+                        className="btn-default btn"
+                        onClick={this.toggleListNow}
+                      >
+                        List Now
+                      </span>
                     </div>
                   </a>
                 </div>
               </div>
-              <a href="#" className="btn btn-deep">LIST NOW!</a>
+              <a
+                href="#"
+                className="btn btn-deep"
+                onClick={this.toggleListNow}
+              >
+                LIST NOW!
+              </a>
               <p>
                 *30 day listings, no contracts. Results may vary based on location and indication.
               </p>
             </div>
           </Parallax>
         </section>
+
+        <ListNowModal show={this.state.listNowOpen} onHide={this.toggleListNow} />
       </div>
     );
   }
@@ -522,12 +613,15 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
 
 const mapStateToProps = createStructuredSelector({
   findOutPosted: selectFindOutPosted(),
+  listSiteNowSuccess: selectListSiteNowSuccess(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     onSubmitForm: (values) => dispatch(findOutPatients(values)),
     clearForm: () => dispatch(reset('find-location')),
+    clearListNowForm: () => dispatch(reset('listNow')),
+    resetListSiteNowSuccess: () => dispatch(resetListSiteNowSuccess()),
   };
 }
 

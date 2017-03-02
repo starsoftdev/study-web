@@ -114,6 +114,12 @@ import {
 
   CLINICAL_TRIALS_SEARCH_SUCCESS,
   CLEAR_CLINICAL_TRIALS_SEARCH,
+  LIST_SITE_NOW_SUCCESS,
+  RESET_LIST_SITE_NOW_SUCCESS,
+  LEARN_ABOUT_FUTURE_TRIALS_SUCCESS,
+  RESET_LEARN_ABOUT_FUTURE_TRIALS,
+  NEW_CONTACT_SUCCESS,
+  RESET_NEW_CONTACT_SUCCESS,
 } from './constants';
 
 import {
@@ -145,6 +151,9 @@ const initialState = {
     subscriptionError: null,
     subscribedFromLanding: null,
     findOutPosted: null,
+    listSiteNowSuccess: null,
+    learnAboutFutureTrialsSuccess: null,
+    newContactsSuccess: null,
     sources: [],
     levels: [],
     landing: {
@@ -401,6 +410,36 @@ export default function appReducer(state = initialState, action) {
     case FIND_OUT_PATIENTS_POSTED:
       baseDataInnerState = {
         findOutPosted: payload,
+      };
+      break;
+    case LIST_SITE_NOW_SUCCESS:
+      baseDataInnerState = {
+        listSiteNowSuccess: true,
+      };
+      break;
+    case RESET_LIST_SITE_NOW_SUCCESS:
+      baseDataInnerState = {
+        listSiteNowSuccess: null,
+      };
+      break;
+    case LEARN_ABOUT_FUTURE_TRIALS_SUCCESS:
+      baseDataInnerState = {
+        learnAboutFutureTrialsSuccess: true,
+      };
+      break;
+    case RESET_LEARN_ABOUT_FUTURE_TRIALS:
+      baseDataInnerState = {
+        learnAboutFutureTrialsSuccess: null,
+      };
+      break;
+    case NEW_CONTACT_SUCCESS:
+      baseDataInnerState = {
+        newContactsSuccess: true,
+      };
+      break;
+    case RESET_NEW_CONTACT_SUCCESS:
+      baseDataInnerState = {
+        newContactsSuccess: null,
       };
       break;
     case PATIENT_SUBSCRIPTION_ERROR:
@@ -674,13 +713,13 @@ export default function appReducer(state = initialState, action) {
         if (patientData.id === action.newMessage.patient_id && patientData.study_id === action.newMessage.study_id) {
           const countUnread = patientData.count_unread;
           if (countUnread) {
-            if (action.newMessage.twilioTextMessage.isBlastMessage) {
+            if (action.newMessage.twilioTextMessage.direction === 'outbound-api') {
               patientData.count_unread = parseInt(countUnread);
             } else {
               patientData.count_unread = parseInt(countUnread) + 1;
               unreadCount = 1;
             }
-          } else if (action.newMessage.twilioTextMessage.isBlastMessage) {
+          } else if (action.newMessage.twilioTextMessage.direction === 'outbound-api') {
             patientData.count_unread = 0;
           } else {
             patientData.count_unread = 1;
