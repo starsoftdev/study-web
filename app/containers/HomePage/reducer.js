@@ -218,6 +218,7 @@ export default function homePageReducer(state = initialState, action) {
         callTracking: studyObject.callTracking,
         startDate: studyObject.campaigns[0].dateFrom,
         endDate: studyObject.campaigns[0].dateTo,
+        level_id: studyObject.campaigns[0].level_id,
         orderNumber: (index + 1),
         siteId: studyObject.site.id
       }));

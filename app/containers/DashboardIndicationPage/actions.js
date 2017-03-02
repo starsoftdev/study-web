@@ -5,11 +5,27 @@
  */
 
 import {
-  DEFAULT_ACTION,
+  FETCH_INDICATIONS,
+  FETCH_INDICATIONS_SUCCESS,
+  FETCH_INDICATIONS_ERROR,
 } from './constants';
 
-export function defaultAction() {
+export function fetchIndications() {
   return {
-    type: DEFAULT_ACTION,
+    type: FETCH_INDICATIONS,
+  };
+}
+
+export function fetchIndicationsSuccess(payload) {
+  return {
+    type: FETCH_INDICATIONS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchIndicationsError(payload) {
+  return {
+    type: FETCH_INDICATIONS_ERROR,
+    payload,
   };
 }
