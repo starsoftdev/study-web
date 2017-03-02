@@ -65,7 +65,7 @@ export function* changeImage() {
       };
       const response = yield call(request, requestURL, params);
       yield put(imageChanged(response));
-      yield put(toastrActions.success('', 'Success! Image uploaded.'));
+      yield put(toastrActions.success('', 'You have successfully updated your profile image!'));
     } catch (err) {
       yield put(imageChangingError(err));
       yield put(toastrActions.error('Error!'));
