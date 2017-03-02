@@ -18,7 +18,7 @@ export class DashboardSponsorAdminTable extends React.Component { // eslint-disa
     return (
       <div className="table-responsive table-holder table-sponsor-admin alt">
         <table className="table-manage-user table">
-          <caption>&nbsp;</caption>
+          <caption>Admins</caption>
 
           <thead>
             <tr>

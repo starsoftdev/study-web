@@ -8,6 +8,9 @@ import { AddSponsorForm } from '../DashboardSponsorSearch/AddSponsorForm';
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     item: PropTypes.object,
+    editSponsor: PropTypes.func,
+    deleteSponsor: PropTypes.func,
+    editSponsorProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -19,6 +22,16 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
     this.closeAddSponsorModal = this.closeAddSponsorModal.bind(this);
     this.openAddSponsorModal = this.openAddSponsorModal.bind(this);
+    this.editSponsor = this.editSponsor.bind(this);
+    this.deleteSponsor = this.deleteSponsor.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if ((!newProps.editSponsorProcess.saving && this.props.editSponsorProcess.saving) ||
+         (!newProps.editSponsorProcess.deleting && this.props.editSponsorProcess.deleting)
+      ) {
+      this.closeAddSponsorModal();
+    }
   }
 
   closeAddSponsorModal() {
@@ -29,10 +42,18 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     this.setState({ addSponsorModalOpen: true });
   }
 
+  editSponsor(params) {
+    this.props.editSponsor(params);
+  }
+
+  deleteSponsor(params) {
+    this.props.deleteSponsor(params);
+  }
+
   render() {
     const initialValues = {
       initialValues: {
-        sponsor: this.props.item.name,
+        name: this.props.item.name,
         id: this.props.item.id,
       },
     };
@@ -60,6 +81,10 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
               <AddSponsorForm
                 {...initialValues}
                 isEdit
+                onSubmit={this.editSponsor}
+                onDelete={this.deleteSponsor}
+                saving={this.props.editSponsorProcess.saving}
+                deleting={this.props.editSponsorProcess.deleting}
               />
             </div>
           </Modal.Body>

@@ -73,12 +73,18 @@ const selectAddNotificationProcess = () => createSelector(
   substate => substate.addNotificationProcess
 );
 
+const selectHomePageClientAdmins = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.clientAdmins
+);
+
 const selectFormDomain = () => state => state.form;
 
 const selectSearchProtocolsFormValues = () => createSelector(
   selectFormDomain(),
   (substate) => get(substate, 'searchProtocols.values', {})
 );
+
 
 export default selectHomePage;
 export {
@@ -97,4 +103,5 @@ export {
   selectPaginationOptions,
   selectSearchProtocolsFormValues,
   selectAddNotificationProcess,
+  selectHomePageClientAdmins,
 };

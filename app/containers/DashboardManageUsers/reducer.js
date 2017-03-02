@@ -113,10 +113,7 @@ function dashboardManageUsersReducer(state = initialState, action) {
         },
       };
     case EDIT_DASHBOARD_USER_SUCCESS:
-      console.log(newAdmins);
-      console.log(action);
       foundUserIndex = _.findIndex(newAdmins, item => (item.user_id === action.payload.user_id));
-      console.log('reducer', foundUserIndex);
       if (foundUserIndex !== -1) {
         newAdmins.splice(foundUserIndex, 1, action.payload);
       } else {
