@@ -38,7 +38,6 @@ export function* fetchPatientsByStudyWatcher() {
 }
 
 export function* fetchPatientsByStudyWorker(action) {
-  const authToken = getItem('auth_token');
   const { studyId, siteId } = action;
 
   try {
