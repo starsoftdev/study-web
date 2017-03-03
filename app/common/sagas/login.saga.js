@@ -117,7 +117,7 @@ export function* logoutSaga() {
 export function* logout() {
   try {
     const authToken = getItem('auth_token');
-    const requestURL = `${API_URL}/users/logout?access_token=${authToken}`;
+    const requestURL = `${API_URL}/users/logout`;
     const params = {
       method: 'POST',
     };

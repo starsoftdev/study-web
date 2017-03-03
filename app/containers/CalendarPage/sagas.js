@@ -42,7 +42,7 @@ export function* fetchPatientsByStudyWorker(action) {
   const { studyId, siteId } = action;
 
   try {
-    const requestURL = `${API_URL}/studies/${studyId}/patients?access_token=${authToken}&siteId=${siteId}`;
+    const requestURL = `${API_URL}/studies/${studyId}/patients?siteId=${siteId}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });

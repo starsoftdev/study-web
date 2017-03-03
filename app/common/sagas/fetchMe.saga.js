@@ -28,7 +28,7 @@ export function* fetchMeFromToken() {
   }
 
   try {
-    const requestURL = `${API_URL}/users/${userId}/get-full-user-info?access_token=${authToken}`;
+    const requestURL = `${API_URL}/users/${userId}/get-full-user-info`;
     const response = yield call(request, requestURL);
     moment.tz.setDefault(response.timezone);
 
