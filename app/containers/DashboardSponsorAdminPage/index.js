@@ -10,18 +10,21 @@ import { createStructuredSelector } from 'reselect';
 
 import { DashboardSponsorAdminSearch } from './DashboardSponsorAdminSearch/index';
 import { DashboardSponsorAdminTable } from './DashboardSponsorAdminTable';
-import { fetchSponsors } from './actions';
-import { selectDashboardSponsorAdminsSponsors } from './selectors';
+import { fetchSponsors, fetchSponsorsWithoutAdmin } from './actions';
+import { selectDashboardSponsorAdminsSponsors, selectDashboardSponsorAdminsSponsorsWithoutAdmin } from './selectors';
 
 export class DashboardSponsorAdminPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     fetchSponsors: PropTypes.func,
     sponsors: PropTypes.object,
+    fetchSponsorsWithoutAdmin: PropTypes.func,
+    sponsorsWithoutAdmin: PropTypes.object,
   };
 
   componentWillMount() {
     this.props.fetchSponsors();
+    this.props.fetchSponsorsWithoutAdmin();
   }
 
   render() {
@@ -39,11 +42,13 @@ export class DashboardSponsorAdminPage extends React.Component { // eslint-disab
 
 const mapStateToProps = createStructuredSelector({
   sponsors: selectDashboardSponsorAdminsSponsors(),
+  sponsorsWithoutAdmin: selectDashboardSponsorAdminsSponsorsWithoutAdmin(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchSponsors: () => dispatch(fetchSponsors()),
+    fetchSponsorsWithoutAdmin: () => dispatch(fetchSponsorsWithoutAdmin()),
   };
 }
 
