@@ -122,10 +122,10 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <span>{status}</span>
         </td>
         <td className="start-date">
-          <span>{this.parseDate(startDate, currentUser.timezone)}</span>
+          <span>{startDate ? this.parseDate(startDate, currentUser.timezone) : 'TBD'}</span>
         </td>
         <td className="end-date">
-          <span>{this.parseDate(endDate, currentUser.timezone)}</span>
+          <span>{endDate ? this.parseDate(endDate, currentUser.timezone) : 'TBD'}</span>
           <div className="btns-slide pull-right">
             <div className="btns">
               <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>
