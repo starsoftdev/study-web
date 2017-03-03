@@ -271,8 +271,8 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
         qualificationSuitePrice = QUALIFICATION_SUITE_UPGRADE_PRICE;
       }
 
-      if (selectedStudy.campaign) {
-        filteredLevels = _.filter(studyLevels, (o) => (o.id > selectedStudy.campaign.level_id));
+      if (selectedStudy.level_id) {
+        filteredLevels = _.filter(studyLevels, (o) => (o.id > selectedStudy.level_id));
       }
     }
 

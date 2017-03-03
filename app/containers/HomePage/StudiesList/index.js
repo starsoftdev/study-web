@@ -138,7 +138,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     if (newLevelOfUpgradeStudy !== oldLevelOfUpgradeStudy) {
       if (newLevelOfUpgradeStudy) {
         const selectedStudy = _.find(this.props.studies.details, (o) => (o.studyId === this.state.selectedStudyId));
-        this.props.fetchUpgradeStudyPrice(selectedStudy.campaign.level_id, newLevelOfUpgradeStudy);
+        this.props.fetchUpgradeStudyPrice(selectedStudy.level_id, newLevelOfUpgradeStudy);
       } else {
         this.props.clearIndicationLevelPrice();
       }

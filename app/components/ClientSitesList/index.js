@@ -67,7 +67,17 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
     if (sortBy === 'name') {
       return item.name;
     } else if (sortBy === 'principalInvestigator') {
-      return item.piFirstName;
+      if (item.piFirstName) {
+        return item.piFirstName;
+      }
+      if (item.principalInvestigators) {
+        for (const pi of item.principalInvestigators) {
+          if (pi.active) {
+            return pi.firstName;
+          }
+        }
+      }
+      return null;
     } else if (sortBy === 'redirectPhone') {
       return item.redirectPhone;
     } else if (sortBy === 'address') {
@@ -190,6 +200,15 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
     const editSiteModalShown = this.editSiteModalShouldBeShown();
     const editUserModalShown = this.editUserModalShouldBeShown();
     const siteLocation = (selectedUser && selectedUser.details && selectedUser.details.roleForClient) ? selectedUser.details.roleForClient.site_id : null;
+
+    if (selectedSiteDetailsForForm) {
+      for (const pi of selectedSiteDetailsForForm.principalInvestigators) {
+        if (pi.active) {
+          selectedSiteDetailsForForm.piFirstName = pi.firstName;
+          selectedSiteDetailsForForm.piLastName = pi.lastName;
+        }
+      }
+    }
 
     return (
       <div className="client-sites">

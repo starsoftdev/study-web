@@ -447,6 +447,8 @@ export function* fetchClientSitesWatcher() {
           scope: {
             include: ['studyNotificationEmails'],
           },
+        }, {
+          relation: 'principalInvestigators',
         }],
         where: {},
       };
@@ -588,7 +590,17 @@ export function* fetchSiteWatcher() {
     const { id } = yield take(FETCH_SITE);
 
     try {
-      const requestURL = `${API_URL}/sites/${id}`;
+      const filterObj = {
+        include: [{
+          relation: 'principalInvestigators',
+        }],
+      };
+
+      const queryParams = {
+        filter: JSON.stringify(filterObj),
+      };
+      const queryString = composeQueryString(queryParams);
+      const requestURL = `${API_URL}/sites/${id}?${queryString}`;
       const response = yield call(request, requestURL);
 
       yield put(siteFetched(response));
