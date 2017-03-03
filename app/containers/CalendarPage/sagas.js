@@ -7,7 +7,7 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
-import { getItem, removeItem } from '../../utils/localStorage';
+import { removeItem } from '../../utils/localStorage';
 import request from '../../utils/request';
 
 import {

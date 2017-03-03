@@ -13,7 +13,7 @@ import { get } from 'lodash';
 import { selectLocationState } from '../../containers/App/selectors';
 
 import request from '../../utils/request';
-import { getItem, setItem, removeItem } from '../../utils/localStorage';
+import { setItem, removeItem } from '../../utils/localStorage';
 import {
   LOGIN_REQUEST,
   LOGIN_ERROR,
