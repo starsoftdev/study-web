@@ -45,8 +45,6 @@ export function* getReceipts() {
     const { limit, offset, receipts, orderBy, orderDir, payload } = yield take(GET_RECEIPT);
     try {
       let requestURL;
-      const authToken = getItem('auth_token');
-
       let sortParams = '';
       if (orderBy && orderDir && orderBy !== 'orderNumber') {
         sortParams = `&orderBy=${orderBy}&orderDir=${((orderDir === 'down') ? 'DESC' : 'ASC')}`;
