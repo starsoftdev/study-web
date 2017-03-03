@@ -185,6 +185,18 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
         ],
         raw: { pathname: this.props.location.pathname },
       },
+      {
+        events: [
+          'change-patient-info',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
+          'change-permissions',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
     ];
 
     if (events) {
