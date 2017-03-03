@@ -116,7 +116,7 @@ export class AddUserForm extends React.Component { // eslint-disable-line react/
           <button type="submit" className="btn btn-primary">
             {this.props.saving
               ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
-              : <span>{'Submit'}</span>
+              : <span>{this.props.isEdit ? 'Update' : 'Submit'}</span>
             }
           </button>
         </div>
