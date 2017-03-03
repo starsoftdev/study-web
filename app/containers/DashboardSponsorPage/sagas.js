@@ -107,10 +107,10 @@ export function* deleteSponsorWatcher() {
 
 export function* deleteSponsorWorker(action) {
   try {
-    const requestURL = `${API_URL}/sponsors/${action.payload}`;
+    const requestURL = `${API_URL}/sponsors/${action.payload}/deleteSponsor`;
 
     const params = {
-      method: 'DELETE',
+      method: 'GET',
     };
     yield call(request, requestURL, params);
 
