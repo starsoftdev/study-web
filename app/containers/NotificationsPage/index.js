@@ -59,7 +59,7 @@ export const eventMessage = (eventLog) => {
     const userTime = moment(data.time).tz(data.timezone);
     const date = userTime.format('MM/DD/YY');
     const time = userTime.format('h:mm A');
-    return `${eventLog.eventMessage} at ${time} on ${date}`;
+    return `${eventLog.eventMessage} at ${time} on ${date}.`;
   }
 
   return eventLog.eventMessage;
