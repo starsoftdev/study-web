@@ -14,7 +14,7 @@ import {
 } from '../../../app/containers/App/selectors';
 import {
   clearLanding,
-  sendThankYouEmail
+  sendThankYouEmail,
 } from '../../../app/containers/App/actions';
 
 export class ThankYouPage extends React.Component {
@@ -46,7 +46,7 @@ export class ThankYouPage extends React.Component {
         landing: this.props.landing,
         subscribedFromLanding: this.props.subscribedFromLanding,
       }, () => {
-        this.props.sendThankYouEmail(this.props.subscribedFromLanding)
+        this.props.sendThankYouEmail(this.props.subscribedFromLanding);
         this.props.clearLanding();
       });
     }

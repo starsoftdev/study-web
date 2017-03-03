@@ -994,7 +994,7 @@ function* sendThankYouEmail(action) {
       body: JSON.stringify(params),
     };
 
-    const response = yield call(request, requestURL, options);
+    yield call(request, requestURL, options);
     yield put(toastrActions.success('', 'Thank you for subscribe.'));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong.');
