@@ -215,8 +215,8 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 </h2>
               </div>
               <p>
-                Once patient signs up, their contact information is sent to your site via email
-                as well as added to you “MyStudyKIK Portal”. Patient receives site contact via text message &amp; email.
+                Once a patient signs up, their contact information is sent to your site via email
+                as well as added to your “MyStudyKIK Portal”. Patient receives site contact via text message &amp; email.
               </p>
               <div className="img-holder">
                 <img src={img7} width="1038" height="510" alt="img7" className="img-responsive img-group" />

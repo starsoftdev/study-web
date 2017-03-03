@@ -93,7 +93,7 @@ export class LandingArticle extends React.Component {
             </p>
             <p className="note">
               By signing up you agree to receive text messages and emails about this and similar studies near you.
-              You can unsubscribe at any time.
+              You can unsubscribe at any time. Text messages and data rates may apply.
             </p>
             {!imgSrc &&
               <SocialArea alignCenter {...this.props} imgSrc={imgSrc} />

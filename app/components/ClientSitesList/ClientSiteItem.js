@@ -15,6 +15,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     redirectPhone: PropTypes.string,
     address: PropTypes.string,
     roles: PropTypes.array,
+    principalInvestigators: PropTypes.array,
     selectedSite: PropTypes.object,
     selectedUser: PropTypes.object,
     fetchSite: PropTypes.func,
@@ -77,7 +78,19 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { name, piFirstName, piLastName, redirectPhone, address, roles, city, zip, state } = this.props;
+    const { name, piFirstName, piLastName, redirectPhone, address, roles, city, zip, state, principalInvestigators } = this.props;
+    let piNode = '';
+    if (principalInvestigators) {
+      for (const pi of principalInvestigators) {
+        if (pi.active) {
+          piNode = <span>{pi.firstName} {pi.lastName}<br /></span>;
+        }
+      }
+    }
+
+    if (piFirstName && piLastName) {
+      piNode = <span>{piFirstName} {piLastName}<br /></span>;
+    }
 
     const addressArr = address.split(',');
     let assignedUsersContent = (roles) ? roles.map((item, index) => (
@@ -103,7 +116,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           <span>{name}</span>
         </td>
         <td className="principal-investigator">
-          <span>{piFirstName} {piLastName}</span>
+          {piNode}
         </td>
         <td className="redirectPhone">
           <span>{redirectPhone}</span>
