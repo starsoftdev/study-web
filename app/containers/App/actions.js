@@ -164,6 +164,8 @@ import {
   FETCH_CLIENT_ADMINS,
   FETCH_CLIENT_ADMINS_SUCCESS,
   FETCH_CLIENT_ADMINS_ERROR,
+
+  SEND_THANK_YOU_EMAIL,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -1106,6 +1108,13 @@ export function fetchClientAdminsSuccess(payload) {
 export function fetchClientAdminsError(payload) {
   return {
     type: FETCH_CLIENT_ADMINS_ERROR,
+    payload,
+  };
+}
+
+export function sendThankYouEmail(payload) {
+  return {
+    type: SEND_THANK_YOU_EMAIL,
     payload,
   };
 }

@@ -12,7 +12,10 @@ import {
   selectLanding,
   selectSubscribedFromLanding,
 } from '../../../app/containers/App/selectors';
-import { clearLanding } from '../../../app/containers/App/actions';
+import {
+  clearLanding,
+  sendThankYouEmail
+} from '../../../app/containers/App/actions';
 
 export class ThankYouPage extends React.Component {
 
@@ -20,6 +23,7 @@ export class ThankYouPage extends React.Component {
     landing: PropTypes.object,
     currentUser: PropTypes.any,
     clearLanding:  PropTypes.func.isRequired,
+    sendThankYouEmail:  PropTypes.func.isRequired,
     subscribedFromLanding:  PropTypes.object,
   };
 
@@ -42,6 +46,7 @@ export class ThankYouPage extends React.Component {
         landing: this.props.landing,
         subscribedFromLanding: this.props.subscribedFromLanding,
       }, () => {
+        this.props.sendThankYouEmail(this.props.subscribedFromLanding)
         this.props.clearLanding();
       });
     }
@@ -112,6 +117,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     clearLanding: () => dispatch(clearLanding()),
+    sendThankYouEmail: (params) => dispatch(sendThankYouEmail(params)),
   };
 }
 

@@ -50,6 +50,7 @@ import {
   LEARN_ABOUT_FUTURE_TRIALS,
   NEW_CONTACT,
   FETCH_CLIENT_ADMINS,
+  SEND_THANK_YOU_EMAIL,
 } from '../../containers/App/constants';
 
 import {
@@ -165,6 +166,7 @@ export default function* baseDataSaga() {
   yield fork(takeLatest, LIST_SITE_NOW, listNowSite);
   yield fork(takeLatest, LEARN_ABOUT_FUTURE_TRIALS, learnAboutFutureTrials);
   yield fork(takeLatest, NEW_CONTACT, newContact);
+  yield fork(takeLatest, SEND_THANK_YOU_EMAIL, sendThankYouEmail);
 }
 
 export function* fetchSitesWatcher() {
@@ -967,6 +969,23 @@ function* newContact(action) {
     yield put(newContactSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+function* sendThankYouEmail(action) {
+  try {
+    const params = action.payload;
+    const requestURL = `${API_URL}/landingPages/sendThankYouEmail`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(toastrActions.success('', 'Thank you for subscribe.'));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong.');
     yield put(toastrActions.error('', errorMessage));
   }
 }
