@@ -24,8 +24,14 @@ const selectDashboardSponsorAdminsSponsors = () => createSelector(
   (substate) => substate.sponsors
 );
 
+const selectDashboardSponsorAdminsSponsorsWithoutAdmin = () => createSelector(
+  selectDashboardSponsorAdminPage(),
+  (substate) => substate.sponsorsWithoutAdmin
+);
+
 export default selectDashboardSponsorAdminPage;
 export {
   selectDashboardSponsorAdminPageDomain,
   selectDashboardSponsorAdminsSponsors,
+  selectDashboardSponsorAdminsSponsorsWithoutAdmin,
 };
