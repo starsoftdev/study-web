@@ -5,11 +5,27 @@
  */
 
 import {
-  DEFAULT_ACTION,
+  FETCH_SPONSORS,
+  FETCH_SPONSORS_SUCCESS,
+  FETCH_SPONSORS_ERROR,
 } from './constants';
 
-export function defaultAction() {
+export function fetchSponsors() {
   return {
-    type: DEFAULT_ACTION,
+    type: FETCH_SPONSORS,
+  };
+}
+
+export function fetchSponsorsSuccess(payload) {
+  return {
+    type: FETCH_SPONSORS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchSponsorsError(payload) {
+  return {
+    type: FETCH_SPONSORS_ERROR,
+    payload,
   };
 }
