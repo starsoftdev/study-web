@@ -8,6 +8,9 @@ import { AddCROForm } from '../DashboardCROSearch/AddCROForm';
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     item: PropTypes.object,
+    editCro: PropTypes.func,
+    deleteCro: PropTypes.func,
+    editCroProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -19,6 +22,16 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
     this.closeAddCROModal = this.closeAddCROModal.bind(this);
     this.openAddCROModal = this.openAddCROModal.bind(this);
+    this.editCro = this.editCro.bind(this);
+    this.deleteCro = this.deleteCro.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if ((!newProps.editCroProcess.saving && this.props.editCroProcess.saving) ||
+      (!newProps.editCroProcess.deleting && this.props.editCroProcess.deleting)
+    ) {
+      this.closeAddCROModal();
+    }
   }
 
   closeAddCROModal() {
@@ -29,10 +42,18 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     this.setState({ addCROModalOpen: true });
   }
 
+  editCro(params) {
+    this.props.editCro(params);
+  }
+
+  deleteCro(params) {
+    this.props.deleteCro(params);
+  }
+
   render() {
     const initialValues = {
       initialValues: {
-        cro: this.props.item.name,
+        name: this.props.item.name,
         id: this.props.item.id,
       },
     };
@@ -60,6 +81,10 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
               <AddCROForm
                 {...initialValues}
                 isEdit
+                onSubmit={this.editCro}
+                onDelete={this.deleteCro}
+                saving={this.props.editCroProcess.saving}
+                deleting={this.props.editCroProcess.deleting}
               />
             </div>
           </Modal.Body>

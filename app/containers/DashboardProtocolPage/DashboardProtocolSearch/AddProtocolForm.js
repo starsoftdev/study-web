@@ -3,17 +3,24 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Input from '../../../components/Input';
+import formValidator from './validator';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
-@reduxForm({ form: 'dashboardAddProtocolForm' })
+@reduxForm({ form: 'dashboardAddProtocolForm', validate: formValidator })
 
 export class AddProtocolForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     isEdit: PropTypes.bool,
+    initialValues: PropTypes.object,
+    handleSubmit: PropTypes.func,
+    saving: PropTypes.bool,
+    deleting: PropTypes.bool,
+    onDelete: PropTypes.func,
   }
 
   render() {
     return (
-      <form action="#" className="form-lightbox dashboard-lightbox">
+      <form action="#" className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
 
         <div className="field-row">
           <strong className="label required">
@@ -21,7 +28,7 @@ export class AddProtocolForm extends React.Component { // eslint-disable-line re
           </strong>
           <div className="field">
             <Field
-              name="protocol"
+              name="number"
               component={Input}
               type="text"
             />
@@ -30,9 +37,19 @@ export class AddProtocolForm extends React.Component { // eslint-disable-line re
 
         <div className="field-row text-right no-margins">
           {this.props.isEdit &&
-            <a className="btn btn-gray-outline">Delete</a>
+            <a className="btn btn-gray-outline" onClick={() => { this.props.onDelete(this.props.initialValues.id); }}>
+              {this.props.deleting
+                ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+                : <span>{'Delete'}</span>
+              }
+            </a>
           }
-          <button type="submit" className="btn btn-primary">{this.props.isEdit ? 'Update' : 'Submit'}</button>
+          <button type="submit" className="btn btn-primary">
+            {this.props.saving
+              ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+              : <span>{this.props.isEdit ? 'Update' : 'Submit'}</span>
+            }
+          </button>
         </div>
 
       </form>
