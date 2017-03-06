@@ -97,6 +97,12 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
       },
       {
         events: [
+          'add-patient',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
           'create-irb_ad_creation',
         ],
         raw: { pathname: this.props.location.pathname },
@@ -202,7 +208,19 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
           'change-site-info',
         ],
         raw: { pathname: this.props.location.pathname },
-      }
+      },
+      {
+        events: [
+          'new-patient',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
+          'purchase-credits',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
     ];
 
     if (events) {
