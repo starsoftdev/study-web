@@ -5,57 +5,67 @@
 */
 
 import React, { PropTypes } from 'react';
-import Input from 'components/Input';
-import Toggle from 'components/Input/Toggle';
-import DatePicker from 'components/Input/DatePicker';
+import Input from '../../components/Input';
+import Toggle from '../../components/Input/Toggle';
+import DatePicker from '../../components/Input/DatePicker';
 import formValidator from './validator';
-import ReactSelect from 'components/Input/ReactSelect';
+import ReactSelect from '../../components/Input/ReactSelect';
 import { Field, FieldArray, reduxForm, change } from 'redux-form';
 import _ from 'lodash';
-import moment from 'moment';
-import { Modal } from 'react-bootstrap';
+import moment from 'moment-timezone';
+import CenteredModal from '../../components/CenteredModal/index';
+import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import RenderLeads from 'components/RenderLeads';
+import RenderLeads from '../../components/RenderLeads';
 import RenderEmailsList from './RenderEmailsList';
-import EditSiteForm from 'components/EditSiteForm';
-import { selectCurrentUserClientId } from 'containers/App/selectors';
+import EditSiteForm from '../../components/EditSiteForm/index';
+import { selectCurrentUserClientId, selectSavedSite } from '../../containers/App/selectors';
+import { selectAddNotificationProcess } from '../../containers/ListNewStudyPage/selectors';
 import {
   selectCallTracking,
   selectLeadsCount,
 } from './selectors';
-
-import { CAMPAIGN_LENGTH_LIST } from 'common/constants';
+import { addEmailNotificationUser } from '../../containers/App/actions';
+import { CAMPAIGN_LENGTH_LIST } from '../../common/constants';
 
 import {
   showSiteLocationModal,
   hideSiteLocationModal,
-} from 'containers/ListNewStudyPage/actions';
-import './styles.less';
+} from '../../containers/ListNewStudyPage/actions';
 
 const mapStateToProps = createStructuredSelector({
   callTracking: selectCallTracking(),
   leadsCount: selectLeadsCount(),
   currentUserClientId: selectCurrentUserClientId(),
+  addNotificationProcess: selectAddNotificationProcess(),
+  savedSite: selectSavedSite(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
 });
 
 @reduxForm({ form: 'listNewStudy', validate: formValidator })
-@connect(mapStateToProps)
+@connect(mapStateToProps, mapDispatchToProps)
 class ListNewStudyForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    siteLocations: PropTypes.array,
     indications: PropTypes.array,
     studyLevels: PropTypes.array,
     listNewStudyState: PropTypes.object,
     callTracking: PropTypes.bool,
     leadsCount: PropTypes.number,
-    fullSiteLocations: PropTypes.array,
+    fullSiteLocations: PropTypes.object,
     formValues: PropTypes.object,
     saveSite: PropTypes.func,
     currentUserClientId: PropTypes.number,
     availPhoneNumbers: PropTypes.array,
+    addEmailNotificationUser: PropTypes.func,
+    addNotificationProcess: PropTypes.object,
+    savedSite: PropTypes.object,
+    clientAdmins: PropTypes.object,
   };
 
   constructor(props) {
@@ -64,6 +74,10 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     this.handleSiteLocationChoose = this.handleSiteLocationChoose.bind(this);
     this.closeAddSiteModal = this.closeAddSiteModal.bind(this);
     this.addSite = this.addSite.bind(this);
+    this.handleFileChange = this.handleFileChange.bind(this);
+    this.state = {
+      fileName: '',
+    };
   }
 
   componentWillReceiveProps(newProps) {
@@ -71,10 +85,53 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     if (newProps.leadsCount === 0 && this.props.leadsCount === 1) {
       this.props.dispatch(change('listNewStudy', 'callTracking', false));
     }
+
+    let messagingSuiteToggled = false;
+    let qualificationSuiteToggled = false;
+
+    if (newProps.formValues.patientQualificationSuite === true && typeof this.props.formValues.patientQualificationSuite === 'undefined') {
+      qualificationSuiteToggled = true;
+    } else if (newProps.formValues.patientMessagingSuite === true && typeof this.props.formValues.patientMessagingSuite === 'undefined') {
+      messagingSuiteToggled = true;
+    }
+
+    if (qualificationSuiteToggled && newProps.formValues.patientMessagingSuite === true) {
+      this.props.dispatch(change('listNewStudy', 'patientMessagingSuite', false));
+    } else if (messagingSuiteToggled && newProps.formValues.patientQualificationSuite === true) {
+      this.props.dispatch(change('listNewStudy', 'patientQualificationSuite', false));
+    }
+
+    if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
+      let addFields = this.props.formValues.emailNotifications;
+      const values = {
+        firstName: newProps.addNotificationProcess.savedUser.firstName,
+        lastName: newProps.addNotificationProcess.savedUser.lastName,
+        userId: newProps.addNotificationProcess.savedUser.id,
+        isChecked: true,
+      };
+      if (!addFields) {
+        addFields = [values];
+      } else {
+        addFields.push(values);
+      }
+      this.props.dispatch(change('listNewStudy', 'emailNotifications', addFields));
+      if (addFields.length === 1) {
+        this.props.dispatch(change('listNewStudy', 'checkAllInput', true));
+      }
+    }
+
+    if (this.props.savedSite.saving && !newProps.addNotificationProcess.saving) {
+      this.closeAddSiteModal();
+      this.props.dispatch(change('listNewStudy', 'siteLocation', null));
+    }
   }
 
   closeAddSiteModal() {
     this.props.dispatch(hideSiteLocationModal());
+  }
+
+  handleFileChange(e) {
+    this.setState({ fileName: e.target.files[0].name });
   }
 
   handleSiteLocationChoose(e) {
@@ -83,9 +140,32 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     } else {
       this.props.dispatch(change('listNewStudy', 'siteLocation', e));
 
-      const fullSiteLocation = _.find(this.props.fullSiteLocations, (o) => (o.id === e));
+      const fullSiteLocation = _.find(this.props.fullSiteLocations.details, (o) => (o.id === e));
       if (fullSiteLocation) {
-        this.props.dispatch(change('listNewStudy', 'emailNotifications', fullSiteLocation.users));
+        const fields = [];
+        // add admin users
+        _.forEach(this.props.clientAdmins.details, (role) => {
+          fields.push({
+            firstName: role.first_name,
+            lastName: role.last_name,
+            userId: role.user_id,
+            isChecked: true,
+          });
+        });
+        // add site users
+        _.forEach(fullSiteLocation.roles, (role) => {
+          fields.push({
+            firstName: role.user.firstName,
+            lastName: role.user.lastName,
+            userId: role.user.id,
+            isChecked: true,
+          });
+        });
+
+        this.props.dispatch(change('listNewStudy', 'emailNotifications', fields));
+        if (fields.length > 0) {
+          this.props.dispatch(change('listNewStudy', 'checkAllInput', true));
+        }
       }
     }
   }
@@ -97,14 +177,14 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { siteLocations, indications, studyLevels, callTracking, formValues } = this.props;
+    const { indications, studyLevels, callTracking, formValues } = this.props;
+    const { fileName } = this.state;
 
-    if (!_.find(siteLocations, (o) => (o.id === 'add-new-location'))) {
-      siteLocations.push({
-        id: 'add-new-location',
-        name: 'Add New Location',
-      });
-    }
+    const siteLocations = _.map(this.props.fullSiteLocations.details, row => ({
+      id: row.id,
+      name: row.name,
+    }));
+    siteLocations.push({ id: 'add-new-location', name: 'Add New Location' });
 
     return (
       <div className="form-study">
@@ -122,7 +202,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           {(() => {
-            if (this.props.formValues.siteLocation) {
+            if (this.props.formValues.siteLocation && this.props.formValues.siteLocation !== 'add-new-location') {
               return (
                 <div className="field-row label-top">
                   <strong className="label"><label>EMAIL NOTIFICATIONS</label></strong>
@@ -134,6 +214,8 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
                         formValues={formValues}
                         listNewStudyState={this.props.listNewStudyState}
                         dispatch={this.props.dispatch}
+                        addEmailNotificationUser={this.props.addEmailNotificationUser}
+                        currentUserClientId={this.props.currentUserClientId}
                       />
                     </div>
 
@@ -173,8 +255,10 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
                 id="study_file"
                 name="file"
                 component={Input}
+                onChange={this.handleFileChange}
                 type="file"
               />
+              <strong className="label lfilename"><label className="filename" htmlFor="irb_filename">{fileName}</label></strong>
             </div>
           </div>
 
@@ -266,7 +350,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
               component={ReactSelect}
               placeholder="Select Campaign Length"
               options={CAMPAIGN_LENGTH_LIST}
-              className="field top-positioned"
+              className="field"
             />
           </div>
 
@@ -290,7 +374,19 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             <strong className="label"><label>Patient messaging <br />
             Suite: $247</label></strong>
             <Field
-              name="addPatientMessagingSuite"
+              name="patientMessagingSuite"
+              component={Toggle}
+              className="field"
+            />
+          </div>
+
+          <div className="field-row">
+            <strong className="label"><label>Patient qualification <br />
+              Suite: $894 <br />
+              <span className="label-blue">(Includes patient <br />
+              messaging suite)</span></label></strong>
+            <Field
+              name="patientQualificationSuite"
               component={Toggle}
               className="field"
             />
@@ -338,9 +434,9 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
 
         </div>
 
-        <Modal className="custom-modal" show={this.props.listNewStudyState.showAddSiteLocationModal} onHide={this.closeAddSiteModal}>
+        <Modal dialogComponentClass={CenteredModal} show={this.props.listNewStudyState.showAddSiteLocationModal} onHide={this.closeAddSiteModal}>
           <Modal.Header>
-            <Modal.Title>ADD CREDITS</Modal.Title>
+            <Modal.Title>ADD SITE LOCATION</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddSiteModal}>
               <i className="icomoon-icon_close" />
             </a>

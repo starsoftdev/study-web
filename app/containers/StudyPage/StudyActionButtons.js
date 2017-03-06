@@ -4,12 +4,13 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import ImportPatientsModal from './ImportPatientsModal/index';
+import ImportPatientsModal from './ImportPatients/index';
 import TextEmailBlastModal from './TextEmailBlastModal';
 import TextBlastModal from './TextBlast/index';
-import AddPatient from './ImportPatientsModal/AddPatient';
+import AddPatientModal from './ImportPatients/AddPatientModal';
 
 import { exportPatients } from './actions';
+import { reset } from 'redux-form';
 
 class StudyActionButtons extends Component {
   static propTypes = {
@@ -19,6 +20,9 @@ class StudyActionButtons extends Component {
     siteId: PropTypes.number.isRequired,
     studyId: PropTypes.number.isRequired,
     exportPatients: PropTypes.func,
+    resetTextBlastForm: PropTypes.func,
+    resetAddPatientForm: PropTypes.func,
+    ePMS: PropTypes.bool,
   };
   constructor(props) {
     super(props);
@@ -67,6 +71,7 @@ class StudyActionButtons extends Component {
   }
 
   toggleTextBlastModal() {
+    this.props.resetTextBlastForm();
     this.setState({
       showTextEmailBlastModal: !this.state.showTextEmailBlastModal,
       showTextBlastModal: !this.state.showTextBlastModal,
@@ -114,7 +119,7 @@ class StudyActionButtons extends Component {
             &nbsp;Import
           </span>
           <ImportPatientsModal show={this.state.showImportPatientsModal} onHide={this.toggleImportPatientsModal} toggleAddPatient={this.toggleAddPatientModal} />
-          <AddPatient show={this.state.showAddPatientModal} onClose={this.closeAddPatientModal} onHide={this.toggleAddPatientModal} />
+          <AddPatientModal show={this.state.showAddPatientModal} onClose={this.closeAddPatientModal} onHide={this.toggleAddPatientModal} />
         </div>
         <div className="col pull-right">
           <span className="btn btn-primary email" onClick={this.toggleTextEmailBlastModal}>
@@ -125,6 +130,7 @@ class StudyActionButtons extends Component {
               show={this.state.showTextBlastModal}
               onClose={this.closeTextBlastModal}
               onHide={this.toggleTextBlastModal}
+              ePMS={this.props.ePMS}
             />
           </span>
         </div>
@@ -136,6 +142,7 @@ class StudyActionButtons extends Component {
 function mapDispatchToProps(dispatch) {
   return {
     exportPatients: (studyId, siteId, text, campaignId, sourceId) => dispatch(exportPatients(studyId, siteId, text, campaignId, sourceId)),
+    resetTextBlastForm: () => dispatch(reset('StudyPage.TextBlastModal')),
   };
 }
 

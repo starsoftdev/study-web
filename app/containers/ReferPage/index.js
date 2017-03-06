@@ -8,33 +8,66 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
+import { touch } from 'redux-form';
 
-import ReferForm from 'components/ReferForm';
+import ReferForm from '../../components/ReferForm';
+import { selectReferFormError } from '../../components/ReferForm/selectors';
+import { fields } from '../../components/ReferForm/validator';
 
-import { selectCompanyTypes } from 'containers/ReferPage/selectors';
-import { submitForm, fetchCompanyTypes } from 'containers/ReferPage/actions';
+import { selectCompanyTypes } from '../../containers/ReferPage/selectors';
+import { submitForm, fetchCompanyTypes } from '../../containers/ReferPage/actions';
+import {
+  fetchSites,
+} from '../../containers/App/actions';
+import {
+  selectSiteLocations,
+  selectCurrentUser,
+} from '../../containers/App/selectors';
 
-import manImage from 'assets/images/man.svg';
-import shadowImage from 'assets/images/shadow.png';
+import manImage from '../../assets/images/man.svg';
+import shadowImage from '../../assets/images/shadow.png';
+
+import _ from 'lodash';
 
 export class ReferPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    siteLocations: PropTypes.array,
+    fetchSites: PropTypes.func,
     companyTypes: PropTypes.array,
+    currentUser: PropTypes.object,
+    hasErrors: PropTypes.bool,
     fetchCompanyTypes: PropTypes.func,
-    onSubmitForm: PropTypes.func,
-  }
-
-  constructor(props) {
-    super(props);
-    this.onSubmitForm = this.props.onSubmitForm.bind(this);
+    submitForm: PropTypes.func,
+    touchRefer: PropTypes.func,
   }
 
   componentDidMount() {
+    this.props.fetchSites();
     this.props.fetchCompanyTypes();
   }
 
+  onSubmitForm = (values) => {
+    if (this.props.hasErrors) {
+      this.props.touchRefer();
+      return;
+    }
+    const siteLocation = _.find(this.props.siteLocations, { id: values.siteLocation });
+    const newValues = {
+      siteLocationName: siteLocation.name,
+      user_id: this.props.currentUser.id,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      companyType: values.companyType,
+      companyName: values.companyName,
+      siteLocation: values.siteLocation,
+      message: values.message,
+    };
+    this.props.submitForm(newValues);
+  }
+
   render() {
-    const { companyTypes } = this.props;
+    const { siteLocations, companyTypes } = this.props;
 
     return (
       <div className="container-fluid">
@@ -44,7 +77,6 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
           <h2 className="main-heading">REFER</h2>
 
           <div className="row form-study">
-
             <div className="refer-info pull-right">
               <div className="refer-holder">
                 <div className="textbox text-center pull-left">
@@ -57,7 +89,7 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
                   <p>
                     When they list a Platinum Study or<br />
                     higher, you will receive 100 reward <br />
-                    KIK’s. If they list a multi-site (10+) <br />
+                    KIKs. If they list a multi-site (10+) <br />
                     central recruitment you will <br />
                     receive 300 <br />
                     reward KIKs!
@@ -71,7 +103,7 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
             </div>
 
             <div className="form-holder ovh">
-              <ReferForm companyTypes={companyTypes} onSubmit={this.onSubmitForm} />
+              <ReferForm siteLocations={siteLocations} companyTypes={companyTypes} onSubmit={this.onSubmitForm} />
             </div>
 
           </div>
@@ -82,13 +114,18 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
 }
 
 const mapStateToProps = createStructuredSelector({
+  siteLocations : selectSiteLocations(),
+  currentUser: selectCurrentUser(),
   companyTypes: selectCompanyTypes(),
+  hasErrors: selectReferFormError(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchSites:       () => dispatch(fetchSites()),
     fetchCompanyTypes: () => dispatch(fetchCompanyTypes()),
-    onSubmitForm: (values) => dispatch(submitForm(values)),
+    submitForm: (values) => dispatch(submitForm(values)),
+    touchRefer: () => dispatch(touch('refer', ...fields)),
   };
 }
 

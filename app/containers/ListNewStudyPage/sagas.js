@@ -3,42 +3,22 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { reset } from 'redux-form';
 import _, { get } from 'lodash';
+import { takeLatest } from 'redux-saga';
 
-import request from 'utils/request';
+import request from '../../utils/request';
 
 import {
   formSubmitted,
   formSubmissionError,
-  fetchIndicationLevelPriceSuccess,
-  fetchIndicationLevelPriceError,
-} from 'containers/ListNewStudyPage/actions';
+  hideAddEmailModal,
+} from '../../containers/ListNewStudyPage/actions';
 
 import {
   SUBMIT_FORM,
-  FETCH_INDICATION_LEVEL_PRICE,
-} from 'containers/ListNewStudyPage/constants';
+} from '../../containers/ListNewStudyPage/constants';
 
-export function* fetchIndicationLevelPriceWatcher() {
-  while (true) {
-    const { indicationId, levelId } = yield take(FETCH_INDICATION_LEVEL_PRICE);
-
-    try {
-      const requestURL = `${API_URL}/indicationLevelSkus/getPrice`;
-      const params = {
-        query: {
-          levelId,
-          indicationId,
-        },
-      };
-      const response = yield call(request, requestURL, params);
-      yield put(fetchIndicationLevelPriceSuccess(response));
-    } catch (err) {
-      const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
-      yield put(toastrActions.error('', errorMessage));
-      yield put(fetchIndicationLevelPriceError(err));
-    }
-  }
-}
+import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
+import { addEmailNotificationUserSuccess, addEmailNotificationUserError, fetchClientSites } from '../../containers/App/actions';
 
 export function* submitFormWatcher() {
   while (true) {
@@ -78,9 +58,36 @@ export function* submitFormWatcher() {
   }
 }
 
+export function* addEmailNotificationUserWatcher() {
+  yield* takeLatest(ADD_EMAIL_NOTIFICATION_USER, addEmailNotificationUserWorker);
+}
+
+export function* addEmailNotificationUserWorker(action) {
+  const { payload } = action;
+  try {
+    const clientId = payload.clientId;
+    delete payload.clientId;
+
+    const requestURL = `${API_URL}/clients/${clientId}/addUserWithClientRole`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchClientSites(clientId, {}));
+    yield put(hideAddEmailModal());
+
+    yield put(addEmailNotificationUserSuccess(response.user));
+  } catch (err) {
+    yield put(addEmailNotificationUserError(err));
+  }
+}
+
 export function* listNewStudyPageSaga() {
   const watcherA = yield fork(submitFormWatcher);
-  const watcherB = yield fork(fetchIndicationLevelPriceWatcher);
+  const watcherB = yield fork(addEmailNotificationUserWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);

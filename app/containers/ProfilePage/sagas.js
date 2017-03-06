@@ -5,7 +5,7 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
-import request from 'utils/request';
+import request from '../../utils/request';
 
 import {
   passwordChanged,
@@ -14,12 +14,12 @@ import {
   imageChangingError,
   fetchOtherUserSuccess,
   fetchOtherUserError,
-} from 'containers/ProfilePage/actions';
+} from '../../containers/ProfilePage/actions';
 import {
   CHANGE_PASSWORD,
   CHANGE_IMAGE,
   FETCH_OTHER_USER_REQUEST,
-} from 'containers/ProfilePage/constants';
+} from '../../containers/ProfilePage/constants';
 
 // Bootstrap sagas
 export default [
@@ -65,7 +65,7 @@ export function* changeImage() {
       };
       const response = yield call(request, requestURL, params);
       yield put(imageChanged(response));
-      yield put(toastrActions.success('', 'Success! Image uploaded.'));
+      yield put(toastrActions.success('', 'You have successfully updated your profile image!'));
     } catch (err) {
       yield put(imageChangingError(err));
       yield put(toastrActions.error('Error!'));

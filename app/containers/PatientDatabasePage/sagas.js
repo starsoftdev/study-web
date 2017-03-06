@@ -4,10 +4,10 @@ import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
-import { getItem } from 'utils/localStorage';
+import { getItem } from '../../utils/localStorage';
 
-import request from 'utils/request';
-import composeQueryString from 'utils/composeQueryString';
+import request from '../../utils/request';
+import composeQueryString from '../../utils/composeQueryString';
 import {
   FETCH_PATIENTS,
   FETCH_PATIENT_CATEGORIES,
@@ -15,6 +15,7 @@ import {
   SAVE_PATIENT,
   SUBMIT_TEXT_BLAST,
   IMPORT_PATIENTS,
+  SUBMIT_ADD_PATIENT,
 } from './constants';
 
 import {
@@ -27,6 +28,9 @@ import {
   patientSaved,
   patientSavingError,
   downloadComplete,
+  submitAddPatientSuccess,
+  submitAddPatientFailure,
+  clearPatientsList,
 } from './actions';
 
 export function* patientDatabasePageSaga() {
@@ -36,14 +40,19 @@ export function* patientDatabasePageSaga() {
   const watcherD = yield fork(savePatientWatcher);
   const watcherE = yield fork(submitTextBlast);
   const watcherF = yield fork(importPatients);
+  const watcherG = yield fork(submitAddPatient);
 
   yield take(LOCATION_CHANGE);
+
+  yield put(clearPatientsList());
+
   yield cancel(watcherA);
   yield cancel(watcherB);
   yield cancel(watcherC);
   yield cancel(watcherD);
   yield cancel(watcherE);
   yield cancel(watcherF);
+  yield cancel(watcherG);
 }
 
 // Bootstrap sagas
@@ -101,6 +110,14 @@ export function* fetchPatientsWatcher() {
                 },
               }, {
                 lastName: {
+                  like: `%${searchParams.name}%`,
+                },
+              }, {
+                email: {
+                  like: `%${searchParams.name}%`,
+                },
+              }, {
+                phone: {
                   like: `%${searchParams.name}%`,
                 },
               },
@@ -165,7 +182,7 @@ export function* fetchPatientsWatcher() {
       // const requestURL = `${API_URL}/patients?${queryString}`;
       const requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
       if (isExport) {
-        location.replace(`${requestURL}&access_token=${getItem('auth_token')}`);
+        location.replace(`${requestURL}`);
         yield put(downloadComplete());
       } else {
         const response = yield call(request, requestURL);
@@ -200,11 +217,10 @@ export function* fetchPatientWatcher() {
     const { id } = yield take(FETCH_PATIENT);
 
     try {
-      const queryParams = { filter: '{"include": ["indications", "source", {"studyPatientCategory": "patientCategory"}]}' };
+      const queryParams = { filter: '{"include": [{"relation": "patientIndications", "scope": {"include": "indication"}}, "source", {"studyPatientCategory": "patientCategory"}]}' };
       const queryString = composeQueryString(queryParams);
       const requestURL = `${API_URL}/patients/${id}?${queryString}`;
       const response = yield call(request, requestURL);
-
       yield put(patientFetched(response));
     } catch (err) {
       yield put(patientFetchingError(err));
@@ -257,7 +273,7 @@ function* submitTextBlast() {
       return;
     }
     try {
-      const requestURL = `${API_URL}/twilioTextMessages/textBlast?access_token=${authToken}`;
+      const requestURL = `${API_URL}/twilioTextMessages/textBlast`;
       yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
@@ -278,20 +294,60 @@ function* submitTextBlast() {
 
 function* importPatients() {
   while (true) {
-    const { payload } = yield take(IMPORT_PATIENTS);
+    const { payload, onClose } = yield take(IMPORT_PATIENTS);
     const formData = new FormData();
     formData.append('file', payload);
     try {
       const requestURL = `${API_URL}/patients/importPatients`;
-      yield call(request, requestURL, {
+      const response = yield call(request, requestURL, {
         useDefaultContentType: 'multipart/form-data',
         method: 'POST',
         body: formData,
       });
-      yield put(toastrActions.success('Import Patients', 'We are processing your request. Patients will be added soon.'));
+      yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
+      yield put(submitAddPatientSuccess(response, payload.name));
+      onClose();
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
+      yield put(submitAddPatientFailure());
+    }
+  }
+}
+
+function* submitAddPatient() {
+  while (true) {
+    // listen for the SUBMIT_ADD_PATIENT action
+    const { patient, onClose } = yield take(SUBMIT_ADD_PATIENT);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/patients/addPatient`;
+      const response = yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify(patient),
+      });
+      onClose();
+      yield put(toastrActions.success('Add Patient', 'Patient added successfully!'));
+      yield put(submitAddPatientSuccess(response));
+    } catch (e) {
+      let errorMessages;
+      if (e.details.messages) {
+        if (e.details.messages.email) {
+          errorMessages = e.details.messages.email[0];
+        } else if (e.details.messages.phone) {
+          errorMessages = e.details.messages.phone[0];
+        } else {
+          errorMessages = e.details.messages[0];
+        }
+      } else {
+        errorMessages = 'Something went wrong while adding a patient. Please try again later.';
+      }
+      yield put(toastrActions.error('', errorMessages));
+      yield put(submitAddPatientFailure());
     }
   }
 }

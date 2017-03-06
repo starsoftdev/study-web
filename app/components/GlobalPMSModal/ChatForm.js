@@ -10,19 +10,19 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, reset } from 'redux-form';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
-import ChatText from 'components/Input/ChatText';
+import ChatText from '../../components/Input/ChatText';
 
 import formValidator from './validator';
 
-import { setProcessingStatus } from 'containers/GlobalNotifications/actions';
+import { setProcessingStatus } from '../../containers/GlobalNotifications/actions';
 
 import {
   selectProcessingStatus,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../containers/GlobalNotifications/selectors';
 
 import {
   selectCurrentUser,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
 import './styles.less';
 
@@ -33,12 +33,14 @@ const formName = 'chatPatient';
 class ChatForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUser: PropTypes.object,
+    clientCredits: PropTypes.object,
     isSaving: PropTypes.any,
     setProcessingStatus: PropTypes.func,
     handleSubmit: PropTypes.func,
     selectedPatient: PropTypes.object,
     sendStudyPatientMessages: PropTypes.func,
     reset: PropTypes.func,
+    ePMS: PropTypes.bool,
   };
 
   constructor(props) {
@@ -65,7 +67,9 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, clientCredits, selectedPatient, ePMS } = this.props;
+    const disabled = (clientCredits.details.customerCredits === 0 || clientCredits.details.customerCredits === null);
+    const unsubscribed = (selectedPatient) ? selectedPatient.unsubscribed : null;
     return (
       <Form onSubmit={handleSubmit(this.sendMessage)}>
         <fieldset>
@@ -75,9 +79,9 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
             className="form-control"
             placeholder="Type a message..."
             maxLength="160"
-            disabled={this.props.selectedPatient.id <= 0}
+            disabled={!ePMS || disabled || unsubscribed || this.props.selectedPatient.id <= 0}
           />
-          <Button type="submit" disabled={this.props.selectedPatient.id <= 0}>
+          <Button type="submit" disabled={!ePMS || disabled || unsubscribed || this.props.selectedPatient.id <= 0}>
             Send
           </Button>
         </fieldset>

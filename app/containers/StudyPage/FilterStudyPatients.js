@@ -6,8 +6,10 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import Input from '../../components/Input/index';
+import Button from 'react-bootstrap/lib/Button';
 import ReactSelect from '../../components/Input/ReactSelect';
 import StudyActionButtons from './StudyActionButtons';
+import { Debounce } from 'react-throttle';
 
 import { fetchPatients } from './actions';
 
@@ -26,6 +28,7 @@ class FilterStudyPatientsForm extends Component {
     source: PropTypes.number,
     siteId: PropTypes.number.isRequired,
     studyId: PropTypes.number.isRequired,
+    ePMS: PropTypes.bool,
   };
   static defaultProps = {
     submitting: false,
@@ -34,6 +37,10 @@ class FilterStudyPatientsForm extends Component {
   constructor(props) {
     super(props);
     this.searchPatient = this.searchPatient.bind(this);
+
+    this.state = {
+      campaign: null,
+    };
   }
 
   componentWillMount() {
@@ -61,6 +68,9 @@ class FilterStudyPatientsForm extends Component {
       }
     } else {
       /* -1 means all was selected */
+      this.setState({
+        campaign: event,
+      });
       if (event === -1) {
         fetchPatients(studyId, siteId, search, null, newSource);
       }
@@ -80,6 +90,7 @@ class FilterStudyPatientsForm extends Component {
       search,
       campaign,
       source,
+      ePMS,
     } = this.props;
     /* changing the source for display purposes only */
     return (
@@ -90,20 +101,25 @@ class FilterStudyPatientsForm extends Component {
           search={search}
           campaign={campaign}
           source={source}
+          ePMS={ePMS}
         />
         <div className="fields-holder">
           <div className="search-area pull-left">
             <div className="field">
-              <button className="btn btn-default btn-enter"><i className="icomoon-icon_search2" /></button>
-              <Field
-                component={Input}
-                type="text"
-                name="search"
-                id="search"
-                className="keyword-search"
-                placeholder="Search"
-                onChange={(event) => this.searchPatient(event, 'search')}
-              />
+              <Button className="btn-enter">
+                <i className="icomoon-icon_search2" />
+              </Button>
+              <Debounce time="200" handler="onChange">
+                <Field
+                  component={Input}
+                  type="text"
+                  name="search"
+                  id="search"
+                  className="keyword-search"
+                  placeholder="Search"
+                  onChange={(event) => this.searchPatient(event, 'search')}
+                />
+              </Debounce>
             </div>
           </div>
           <div className="custom-select pull-left">
@@ -123,7 +139,7 @@ class FilterStudyPatientsForm extends Component {
               component={ReactSelect}
               className="field"
               options={sourceOptions}
-              disabled={submitting || loading}
+              disabled={submitting || loading || !this.state.campaign}
               placeholder="Select Source"
               onChange={event => this.searchPatient(event, 'source')}
             />

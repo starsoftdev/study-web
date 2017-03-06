@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import classNames from 'classnames';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Modal from 'react-bootstrap/lib/Modal';
@@ -12,16 +12,17 @@ import ModalHeader from 'react-bootstrap/lib/ModalHeader';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import ScheduledPatientModal from '../ScheduledPatientModal';
-import { selectCurrentUser } from 'containers/App/selectors';
+import { selectCurrentUser } from '../../App/selectors';
 import * as Selector from '../selectors';
 import PatientDetailSection from './PatientDetailSection';
 import NotesSection from './NotesSection';
 import TextSection from './TextSection';
 import EmailSection from './EmailSection';
 import OtherSection from './OtherSection';
-import { normalizePhoneDisplay } from '../helper/functions';
+import { normalizePhoneDisplay } from '../../../common/helper/functions';
 import {
   showScheduledModal,
+  fetchPatientDetails,
   switchToNoteSectionDetail,
   switchToTextSectionDetail,
   switchToEmailSectionDetail,
@@ -29,10 +30,10 @@ import {
   readStudyPatientMessages,
 } from '../actions';
 
-import { markAsReadPatientMessages } from 'containers/App/actions';
+import { markAsReadPatientMessages } from '../../App/actions';
 import {
   selectSocket,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../GlobalNotifications/selectors';
 
 export class PatientDetailModal extends React.Component {
   static propTypes = {
@@ -42,6 +43,7 @@ export class PatientDetailModal extends React.Component {
     currentUser: React.PropTypes.object,
     openPatientModal: React.PropTypes.bool.isRequired,
     openScheduledModal: React.PropTypes.bool.isRequired,
+    fetchPatientDetails: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
     showScheduledModal: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number.isRequired,
@@ -52,6 +54,7 @@ export class PatientDetailModal extends React.Component {
     switchToOtherSection: React.PropTypes.func.isRequired,
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
+    ePMS: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -63,7 +66,41 @@ export class PatientDetailModal extends React.Component {
     this.state = {
       showScheduledPatientModal: false,
     };
+    this.onSelectText = this.onSelectText.bind(this);
+
+    this.state = {
+      socketBinded: false,
+    };
   }
+
+  componentWillReceiveProps(newProps) {
+    const { socket, currentPatient, fetchPatientDetails } = newProps;
+
+    if (socket && this.state.socketBinded === false && currentPatient) {
+      socket.on('notifyUnsubscribePatient', () => {
+        fetchPatientDetails(currentPatient.id);
+      });
+
+      socket.on('notifySubscribePatient', () => {
+        fetchPatientDetails(currentPatient.id);
+      });
+
+      this.setState({ socketBinded: true });
+    } else if (!newProps.currentPatient && this.state.socketBinded) {
+      socket.removeAllListeners('notifyUnsubscribePatient');
+      socket.removeAllListeners('notifySubscribePatient');
+
+      this.setState({ socketBinded: false });
+    }
+  }
+
+  componentWillUnmount() {
+    const { socket } = this.props;
+
+    socket.removeAllListeners('notifyUnsubscribePatient');
+    socket.removeAllListeners('notifySubscribePatient');
+  }
+
 
   onSelectText() {
     const {
@@ -84,8 +121,8 @@ export class PatientDetailModal extends React.Component {
       const formattedPatient = Object.assign({}, currentPatient);
       if (currentPatient.dob) {
         const dob = moment(currentPatient.dob);
-        formattedPatient.dobMonth = dob.month();
-        formattedPatient.dobDay = dob.day();
+        formattedPatient.dobMonth = dob.month() + 1;
+        formattedPatient.dobDay = dob.date();
         formattedPatient.dobYear = dob.year();
       }
       return (
@@ -124,7 +161,7 @@ export class PatientDetailModal extends React.Component {
   }
 
   render() {
-    const { carousel, openScheduledModal, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
+    const { ePMS, carousel, openScheduledModal, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
     return (
       <Collapse dimension="width" in={openPatientModal} timeout={250} className={ openScheduledModal ? 'patients-list-form-OnSchedule' : 'patients-list-form'}>
         <div className="form-area">
@@ -146,7 +183,7 @@ export class PatientDetailModal extends React.Component {
               </ol>
               <div className="carousel-inner" role="listbox">
                 <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={currentPatient} studyId={studyId} />
-                <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={currentPatient} />
+                <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={currentPatient} ePMS={ePMS} />
                 <EmailSection active={carousel.email} />
                 {this.renderOtherSection()}
               </div>
@@ -171,6 +208,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   showScheduledModal: () => dispatch(showScheduledModal()),
+  fetchPatientDetails: (patientId) => dispatch(fetchPatientDetails(patientId)),
   switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
   switchToTextSection: () => dispatch(switchToTextSectionDetail()),
   switchToEmailSection: () => dispatch(switchToEmailSectionDetail()),

@@ -2,19 +2,20 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { selectSelectedUser } from 'containers/App/selectors';
-import { fetchUser } from 'containers/App/actions';
-import LoadingSpinner from 'components/LoadingSpinner';
+import { selectSelectedUser } from '../../containers/App/selectors';
+import { fetchUser } from '../../containers/App/actions';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 class ClientRoleItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
-    reward: PropTypes.bool,
-    purchase: PropTypes.bool,
+    canRedeemRewards: PropTypes.bool,
+    canPurchase: PropTypes.bool,
     user: PropTypes.object,
     selectedUser: PropTypes.object,
     fetchUser: PropTypes.func,
+    bDisabled: PropTypes.bool,
   };
 
   constructor(props) {
@@ -34,20 +35,20 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { name, reward, purchase, user } = this.props;
+    const { name, canRedeemRewards, canPurchase, user } = this.props;
     let accessStr = '';
     const isSuperAdmin = (name === 'Super Admin');
 
     if (isSuperAdmin) {
       accessStr = 'ADMIN';
-    } else if (purchase && reward) {
+    } else if (canPurchase && canRedeemRewards) {
       accessStr = 'ALL ACCESS';
-    } else if (purchase && !reward) {
+    } else if (canPurchase && !canRedeemRewards) {
       accessStr = 'PURCHASE';
-    } else if (!purchase && reward) {
+    } else if (!canPurchase && canRedeemRewards) {
       accessStr = 'REWARDS';
     } else {
-      accessStr = 'NO ACCESS';
+      accessStr = 'SITE LOCATION';
     }
 
     return (
@@ -63,9 +64,9 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
         </td>
         <td className="action">
           {!isSuperAdmin &&
-            <button type="button" className="btn btn-primary btn-edit-user pull-right" onClick={this.editUser} disabled={(this.currentUserIsBeingFetched())}>
+            <button type="button" className="btn btn-primary btn-edit-user pull-right" onClick={this.editUser} disabled={(this.currentUserIsBeingFetched() || this.props.bDisabled)}>
               {(this.currentUserIsBeingFetched())
-                ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-user" /></span>
+                ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                 : <span>Edit</span>
               }
             </button>

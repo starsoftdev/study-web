@@ -34,7 +34,11 @@ import {
   SORT_PATIENTS_SUCCESS,
   DOWNLOAD_COMPLETE,
   IMPORT_PATIENTS,
+  SUBMIT_ADD_PATIENT,
+  SUBMIT_ADD_PATIENT_SUCCESS,
+  SUBMIT_ADD_PATIENT_FAILURE,
   CLEAR_PATIENTS_LIST,
+  CLEAR_IMPORT_FORM,
 } from './constants';
 import _ from 'lodash';
 
@@ -51,31 +55,6 @@ export function fetchPatients(searchParams = {}, patients = {}, searchFilter = {
 export function patientsFetched(searchParams, payload, patients, searchFilter) {
   const result = payload;
   const initResult = payload;
-  /* if (searchParams.includeIndication) {
-    const includeIndications = searchParams.includeIndication.split(',');
-    result = filter(result, patientIterator => {
-      const foundIndications = filter(includeIndications, includeIterator => {
-        const foundIndex = findIndex(patientIterator.indications, { id: parseInt(includeIterator, 10) });
-        return (foundIndex > -1);
-      });
-      return foundIndications.length;
-    });
-  }
-
-  if (searchParams.excludeIndication) {
-    const excludeIndications = searchParams.excludeIndication.split(',');
-    result = filter(result, patientIterator => {
-      const foundIndications = filter(excludeIndications, excludeIterator => {
-        const foundIndex = findIndex(patientIterator.indications, { id: parseInt(excludeIterator, 10) });
-        return (foundIndex > -1);
-      });
-      return !foundIndications.length;
-    });
-  }*/
-
-  /* if (searchParams.status) {
-    result = filter(result, patientIterator => (patientIterator.studyPatientCategory.patient_category_id === searchParams.status));
-  }*/
 
   let resultArr = [];
   if (searchParams.skip === 0) {
@@ -251,10 +230,33 @@ export function sortPatientsSuccess(patients) {
   };
 }
 
-export function importPatients(payload) {
+export function importPatients(payload, onClose) {
   return {
     type: IMPORT_PATIENTS,
     payload,
+    onClose,
+  };
+}
+
+export function submitAddPatient(patient, onClose) {
+  return {
+    type: SUBMIT_ADD_PATIENT,
+    patient,
+    onClose,
+  };
+}
+
+export function submitAddPatientSuccess(patients, fileName) {
+  return {
+    type: SUBMIT_ADD_PATIENT_SUCCESS,
+    patients,
+    fileName,
+  };
+}
+
+export function submitAddPatientFailure() {
+  return {
+    type: SUBMIT_ADD_PATIENT_FAILURE,
   };
 }
 
@@ -267,5 +269,11 @@ export function downloadComplete() {
 export function clearPatientsList() {
   return {
     type: CLEAR_PATIENTS_LIST,
+  };
+}
+
+export function clearForm() {
+  return {
+    type: CLEAR_IMPORT_FORM,
   };
 }

@@ -1,47 +1,85 @@
 /* eslint-disable prefer-template, no-unused-vars */
 
 import React, { PropTypes } from 'react';
-import BigCalendar from 'react-big-calendar';
-import moment from 'moment';
+import Calendar from 'react-big-calendar';
+import moment from 'moment-timezone';
 
-import { SchedulePatientModalType } from 'common/constants';
+import { SchedulePatientModalType } from '../../../../common/constants';
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
-BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+Calendar.momentLocalizer(moment); // or globalizeLocalizer
+import 'react-big-calendar/lib/less/styles.less';
 
 class CalendarWidget extends React.Component {
   static propTypes = {
+    currentUser: PropTypes.object,
     schedules: PropTypes.array.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
     handleShowAll: PropTypes.func.isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+    this.getTimezoneDate = this.getTimezoneDate.bind(this);
   }
 
-  currentDate = new Date()
+  getTimezoneDate(date) {
+    const { currentUser } = this.props;
+    // we need to compensate for big calendar using a local date offset instead of an international one
+    const offset = moment().local().utcOffset() - moment().tz(currentUser.timezone).utcOffset();
+    let selectedDate;
+    if (offset > 0) {
+      selectedDate = moment(date).add(offset, 'minute');
+    } else if (offset === 0) {
+      selectedDate = moment(date);
+    } else {
+      selectedDate = moment(date).subtract(-offset, 'minute');
+    }
+    return selectedDate;
+  }
 
   render() {
-    const eventsList = this.props.schedules.map(s => ({
-      data: s,
-      title: s.patient.firstName + ' ' + s.patient.lastName + ' ' + moment(s.time).format('h:mm A'),
-      start: s.time,
-      end: s.time,
-    }));
+    const { currentUser, schedules } = this.props;
+
+    const eventsList = schedules.map(s => {
+      const localTime = s.time;
+      const browserTime = moment()
+        .year(localTime.year())
+        .month(localTime.month())
+        .date(localTime.date())
+        .hour(localTime.hour())
+        .minute(localTime.minute())
+        .seconds(0);
+
+      return {
+        data: s,
+        title: s.patient.firstName + ' ' + s.patient.lastName + ' ' + localTime.format('h:mm A'),
+        start: browserTime,
+        end: browserTime,
+      };
+    });
+
+    this.currentDate = moment().toDate();
 
     return (
       <div className="calendar-box calendar-slider">
-        <BigCalendar
+        <Calendar
           selectable
           events={eventsList}
           defaultDate={this.currentDate}
+          culture="en"
+          timezone={currentUser.timezone}
           onNavigate={(date) => {
             this.currentDate = date;
           }}
           eventPropGetter={(event, start, end, isSelected) => ({
           })}
+          eventOffset={300}
           onSelectSlot={({ start, end, slots }) => {
-            if (slots.length === 1 && moment(this.currentDate).month() === moment(start).month()) {
-              this.props.handleOpenModal(SchedulePatientModalType.CREATE, { selectedDate: start });
+            if (slots.length === 1) {
+              const selectedDate = this.getTimezoneDate(start);
+              this.props.handleOpenModal(SchedulePatientModalType.CREATE, { selectedDate });
             }
           }}
           onSelectDate={(label, date) => {

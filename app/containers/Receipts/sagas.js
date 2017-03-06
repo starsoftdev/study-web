@@ -2,18 +2,18 @@
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
-import request from 'utils/request';
-import { get } from 'lodash';
+import request from '../../utils/request';
+import _, { get } from 'lodash';
 
 import {
   receiptsReceived,
-} from 'containers/Receipts/actions';
+} from '../../containers/Receipts/actions';
 import {
   GET_RECEIPT,
   GET_PDF,
   SHOW_INVOICE_PDF,
-} from 'containers/Receipts/constants';
-import { getItem } from 'utils/localStorage';
+} from '../../containers/Receipts/constants';
+import { getItem } from '../../utils/localStorage';
 
 const serializeParams = (obj) => {
   const str = [];
@@ -45,28 +45,40 @@ export function* getReceipts() {
     const { limit, offset, receipts, orderBy, orderDir, payload } = yield take(GET_RECEIPT);
     try {
       let requestURL;
-      const authToken = getItem('auth_token');
-
       let sortParams = '';
-      if (orderBy && orderDir) {
+      if (orderBy && orderDir && orderBy !== 'orderNumber') {
         sortParams = `&orderBy=${orderBy}&orderDir=${((orderDir === 'down') ? 'DESC' : 'ASC')}`;
       }
       if (!payload) {
-        requestURL = `${API_URL}/invoices/getReceipts?limit=${limit}&skip=${offset}&access_token=${authToken}${sortParams}`;
+        requestURL = `${API_URL}/invoices/getReceipts?limit=${limit}&skip=${offset}&${sortParams}`;
       } else {
         payload.limit = limit;
         payload.skip = offset;
         const options = JSON.stringify(payload);
-        requestURL = `${API_URL}/invoices/getReceipts?options=${options}&limit=${limit}&skip=${offset}&access_token=${authToken}${sortParams}`;
+        requestURL = `${API_URL}/invoices/getReceipts?options=${options}&limit=${limit}&skip=${offset}&${sortParams}`;
       }
 
       const response = yield call(request, requestURL);
 
       let resultArr = [];
       if (payload && offset === 0) {
+        _.forEach(response, (item, index) => {
+          response[index].orderNumber = index + 1;
+        });
         resultArr = response;
       } else {
+        const proposalsCount = receipts.length;
+        _.forEach(response, (item, index) => {
+          response[index].orderNumber = proposalsCount + index + 1;
+        });
         resultArr = receipts.concat(response);
+      }
+
+      if (orderBy && orderBy === 'orderNumber') {
+        const dir = ((orderDir === 'down') ? 'desc' : 'asc');
+        resultArr = _.orderBy(resultArr, [function (o) {
+          return o.orderNumber;
+        }], [dir]);
       }
 
       let hasMore = true;

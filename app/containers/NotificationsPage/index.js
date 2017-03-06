@@ -4,22 +4,22 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { orderBy } from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import classnames from 'classnames';
 import { push } from 'react-router-redux';
+import Helmet from 'react-helmet';
 
 import {
   selectCurrentUser,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 import {
   selectNotifications,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../containers/GlobalNotifications/selectors';
 import {
   fetchNotifications,
-} from 'containers/GlobalNotifications/actions';
+} from '../../containers/GlobalNotifications/actions';
 
 import NotificationItem from './Item';
-
 export const getRedirectionUrl = (notification) => {
   const data = JSON.parse(notification.event_log.eventData);
   switch (notification.event_log.eventType) {
@@ -38,17 +38,31 @@ export const getRedirectionUrl = (notification) => {
 
 export const getAvatarUrl = (notification) => {
   const { event_log } = notification;
-  let url = require('assets/images/Default-User-Img-Dr.png');
+  const data = JSON.parse(event_log.eventData);
+  let url = require('../../assets/images/Default-User-Img-Dr.png');
   if (event_log.eventType === 'twilio-message') {
-    const data = JSON.parse(event_log.eventData);
     if (data.patientGender === 'Female') {
-      url = require('assets/images/Default-User-Img-Girl.png');
+      url = require('../../assets/images/Default-User-Img-Girl.png');
     } else {
-      url = require('assets/images/Default-User-Img.png');
+      url = require('../../assets/images/Default-User-Img.png');
     }
+  } else if (event_log.eventType === 'earn-rewards' && data.type === 'enroll') {
+    url = require('../../assets/images/site_location.png');
   }
 
   return url;
+};
+
+export const eventMessage = (eventLog) => {
+  if (eventLog.eventType === 'create-call_reminder') {
+    const data = JSON.parse(eventLog.eventData);
+    const userTime = moment(data.time).tz(data.timezone);
+    const date = userTime.format('MM/DD/YY');
+    const time = userTime.format('h:mm A');
+    return `${eventLog.eventMessage} at ${time} on ${date}.`;
+  }
+
+  return eventLog.eventMessage;
 };
 
 const sanitize = (notifications) => notifications.map(n => {
@@ -105,6 +119,9 @@ export class NotificationsPage extends React.Component {
   sortBy = (field) => {
     let { notifications } = this.state;
     let sortField;
+    let sortDescription = 0;
+    let sortDate = 0;
+    let sortTime = 0;
     if (field === 'description') {
       sortField = 'sortDescription';
     } else if (field === 'date') {
@@ -115,22 +132,31 @@ export class NotificationsPage extends React.Component {
 
     const sortVal = (this.state[sortField] + 1) % 3;
     if (sortVal === 0) {
-      notifications = orderBy(notifications, ['event_log_id'], ['asc']);
+      notifications = orderBy(notifications, ['id'], ['desc']);
     } else if (sortVal !== 0) {
       notifications = orderBy(notifications, [field], [sortVal === 1 ? 'asc' : 'desc']);
     }
 
+    if (field === 'description') {
+      sortDescription = sortVal;
+    } else if (field === 'date') {
+      sortDate = sortVal;
+    } else {
+      sortTime = sortVal;
+    }
     this.setState({
       notifications,
-      [sortField]: sortVal,
+      sortDescription,
+      sortDate,
+      sortTime,
     });
   }
 
   render() {
     const { sortDescription, sortDate, sortTime } = this.state;
-
     return (
       <div className="container-fluid">
+        <Helmet title="Notifications - StudyKIK" />
         <section className="rewards">
           <h2 className="main-heading">NOTIFICATIONS</h2>
 
@@ -146,9 +172,9 @@ export class NotificationsPage extends React.Component {
               </colgroup>
               <thead>
                 <tr>
-                  <th className={classnames({ up: sortDescription === 1, down: sortDescription === 2 })} onClick={() => { this.sortBy('description'); }}>DESCRIPTION <i className="caret-arrow"></i></th>
-                  <th className={classnames({ up: sortDate === 1, down: sortDate === 2 })} onClick={() => { this.sortBy('date'); }}>DATE <i className="caret-arrow"></i></th>
-                  <th className={classnames({ up: sortTime === 1, down: sortTime === 2 })} onClick={() => { this.sortBy('time'); }}>TIME <i className="caret-arrow"></i></th>
+                  <th className={classnames({ up: sortDescription === 1, down: sortDescription === 2 })} onClick={() => { this.sortBy('description'); }}>DESCRIPTION <i className="caret-arrow" /></th>
+                  <th className={classnames({ up: sortDate === 1, down: sortDate === 2 })} onClick={() => { this.sortBy('date'); }}>DATE <i className="caret-arrow" /></th>
+                  <th className={classnames({ up: sortTime === 1, down: sortTime === 2 })} onClick={() => { this.sortBy('time'); }}>TIME <i className="caret-arrow" /></th>
                 </tr>
               </thead>
               <tbody>

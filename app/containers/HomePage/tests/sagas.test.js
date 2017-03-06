@@ -24,7 +24,7 @@ import {
   FETCH_PATIENT_MESSAGES,
 } from '../constants';
 
-import request from 'utils/request';
+import request from '../../../utils/request';
 
 describe('HomePage/sagas', () => {
   describe('fetchPatientSignUpsWatcher Saga', () => {

@@ -14,13 +14,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import ReactGA from 'react-ga';
 
-import SideNavBar from 'components/SideNavBar';
-import TopHeaderBar from 'components/TopHeaderBar';
-import LoadingSpinner from 'components/LoadingSpinner';
-import GlobalNotifications from 'containers/GlobalNotifications';
+import SideNavBar from '../../components/SideNavBar';
+import TopHeaderBar from '../../components/TopHeaderBar';
+import TopHeaderBar2 from '../../components/TopHeaderBar2';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import GlobalNotifications from '../../containers/GlobalNotifications';
 import { fetchMeFromToken } from './actions';
-import { selectAuthState, selectCurrentUser, selectEvents } from './selectors';
+import { selectAuthState, selectCurrentUser, selectEvents, selectUserRoleType } from './selectors';
 
 import './styles.less';
 
@@ -28,10 +30,12 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
   static propTypes = {
     children: React.PropTypes.node,
-    isLoggedIn: React.PropTypes.bool,
-    userDataFetched: React.PropTypes.object,
+    currentUserRoleType: React.PropTypes.string,
+    fetchMeFromToken: React.PropTypes.func.isRequired,
+    isLoggedIn: React.PropTypes.bool.isRequired,
+    location: React.PropTypes.object,
     pageEvents: React.PropTypes.any,
-    fetchMeFromToken: React.PropTypes.func,
+    userData: React.PropTypes.object,
   };
 
   componentWillMount() {
@@ -39,10 +43,20 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     this.props.fetchMeFromToken();
   }
 
-  componentWillReceiveProps() {}
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.userData && nextProps.userData) {
+      ReactGA.initialize('UA-91568063-1', {
+        debug: true,
+      });
+    }
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      ReactGA.set({ page: nextProps.location.pathname });
+      ReactGA.pageview(nextProps.location.pathname);
+    }
+  }
 
   render() {
-    const { isLoggedIn, userDataFetched, pageEvents } = this.props;
+    const { isLoggedIn, userData, pageEvents, currentUserRoleType } = this.props;
 
     if (!isLoggedIn) {
       return (
@@ -52,23 +66,39 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       );
     }
 
-    if (!userDataFetched) {
+    if (!userData) {
       return (
-        <div className="text-center">
-          <LoadingSpinner showOnlyIcon size={30} className="loading-user-data" />
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-xs-12 text-center spinner-container">
+              <LoadingSpinner showOnlyIcon />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (currentUserRoleType === 'client' || currentUserRoleType === 'sponsor') {
+      return (
+        <div id="wrapper">
+          <TopHeaderBar />
+          <SideNavBar
+            location={this.props.location}
+          />
+          <main id="main">
+            {React.Children.toArray(this.props.children)}
+          </main>
+          <GlobalNotifications {...this.props} events={pageEvents} />
         </div>
       );
     }
 
     return (
-      <div id="wrapper">
-        <TopHeaderBar />
-        <SideNavBar />
-
+      <div id="wrapper" className="dashboard">
+        <TopHeaderBar2 />
         <main id="main">
           {React.Children.toArray(this.props.children)}
         </main>
-        <GlobalNotifications {...this.props} events={pageEvents} />
       </div>
     );
   }
@@ -76,8 +106,9 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
 const mapStateToProps = createStructuredSelector({
   isLoggedIn: selectAuthState(),
-  userDataFetched: selectCurrentUser(),
+  userData: selectCurrentUser(),
   pageEvents: selectEvents(),
+  currentUserRoleType: selectUserRoleType(),
 });
 
 function mapDispatchToProps(dispatch) {

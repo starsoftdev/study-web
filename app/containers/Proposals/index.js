@@ -10,29 +10,30 @@ import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer } from 'react-sticky';
 
-import LoadingSpinner from 'components/LoadingSpinner';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import {
   getProposals,
   createPDF,
   showProposalPdf,
-} from 'containers/Proposals/actions';
+} from '../../containers/Proposals/actions';
 import {
   fetchSites,
   fetchEvents,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 import {
   unsubscribeFromAll,
   unsubscribeFromPageEvent,
-} from 'containers/GlobalNotifications/actions';
+} from '../../containers/GlobalNotifications/actions';
 import {
   selectSiteLocations,
   selectCurrentUser,
   selectEvents,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 import { selectProposals } from './selectors';
 
-import ProposalsTable from 'components/ProposalsTable';
-import TableSearchForm from 'components/TableSearchForm';
+import ProposalsTable from '../../components/ProposalsTable';
+import TableSearchForm from '../../components/TableSearchForm';
+import AlertModal from '../../components/AlertModal';
 
 export class Proposals extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -65,6 +66,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
       processPDF: false,
       proposals: null,
       filteredProposals: null,
+      showAlertModal: false,
     };
   }
 
@@ -96,7 +98,6 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log('componentWillReceiveProps', nextProps);
     if (nextProps.proposals) {
       for (const proposal of nextProps.proposals) {
         proposal.selected = false;
@@ -141,17 +142,22 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     });
   }
 
-  search(value) {
+  search(value, type) {
     const { siteLocations } = this.props;
 
-    if (value.search || value.site) {
-      const searchBy = (value.search.length) ? value.search : null;
-      const site = siteLocations[value.site - 1] || null;
+    if (type === 'search') {
+      const searchBy = (value.target.value.length) ? value.target.value : null;
+
+      this.setState({
+        searchBy,
+      });
+    }
+
+    if (type === 'site') {
+      const site = siteLocations[value - 1] || null;
 
       this.setState({
         site,
-        range : null,
-        searchBy,
       });
     }
   }
@@ -159,7 +165,17 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
   createPdf() {
     if (this.selectedProposal) {
       this.props.createPDF(this.selectedProposal);
+    } else {
+      this.setState({
+        showAlertModal: true,
+      });
     }
+  }
+
+  hideAlertModal = () => {
+    this.setState({
+      showAlertModal: false,
+    });
   }
 
   render() {
@@ -175,7 +191,9 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
             createPdf={this.createPdf}
             {...this.props}
           />
+          <AlertModal show={this.state.showAlertModal} onHide={this.hideAlertModal} name="proposal" />
           <ProposalsTable
+            currentUser={this.props.currentUser}
             selectCurrent={this.selectCurrent}
             selectAll={this.selectAll}
             range={this.state.range}
@@ -187,12 +205,12 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
           />
           {processPDF
             ?
-            <div>
-              <div className="loading-bacground"></div>
-              <div className="loading-container">
-                <LoadingSpinner showOnlyIcon size={20} className="saving-card" />
+              <div>
+                <div className="loading-bacground"></div>
+                <div className="loading-container">
+                  <LoadingSpinner showOnlyIcon size={20} />
+                </div>
               </div>
-            </div>
             : null
           }
         </section>

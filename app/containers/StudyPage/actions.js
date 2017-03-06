@@ -12,6 +12,7 @@ import {
   ADD_PATIENTS_TO_TEXT_BLAST,
   REMOVE_PATIENT_FROM_TEXT_BLAST,
   REMOVE_PATIENTS_FROM_TEXT_BLAST,
+  FETCHING_STUDY,
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
@@ -64,6 +65,7 @@ import {
   SWITCH_TO_TEXT_SECTION_DETAIL,
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
+  FETCH_STUDY_NEW_TEXTS,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -72,11 +74,19 @@ export function campaignsFetched(payload) {
     payload,
   };
 }
+
 export function clearForm() {
   return {
     type: CLEAR_FORM_UPLOAD,
   };
 }
+
+export function fetchingStudy() {
+  return {
+    type: FETCHING_STUDY,
+  };
+}
+
 export function findPatientsForTextBlast(studyId, text, categoryIds, sourceIds) {
   return {
     type: FIND_PATIENTS_TEXT_BLAST,
@@ -403,17 +413,27 @@ export function movePatientBetweenCategoriesFailed() {
   };
 }
 
+
 export function showScheduledModal() {
   return {
     type: SHOW_SCHEDULED_MODAL,
   };
 }
-export function submitTextBlast(patients, message, onClose) {
+
+export function submitTextBlast(patients, message, currentUserId, onClose) {
   return {
     type: SUBMIT_TEXT_BLAST,
     patients,
     message,
+    currentUserId,
     onClose,
+  };
+}
+
+export function fetchStudyTextNewStats(studyId) {
+  return {
+    type: FETCH_STUDY_NEW_TEXTS,
+    studyId,
   };
 }
 
@@ -468,6 +488,7 @@ export function submitAddPatient(studyId, patient, onClose) {
     onClose,
   };
 }
+
 export function submitAddPatientSuccess(patients, fileName) {
   return {
     type: SUBMIT_ADD_PATIENT_SUCCESS,
@@ -475,11 +496,13 @@ export function submitAddPatientSuccess(patients, fileName) {
     fileName,
   };
 }
+
 export function submitAddPatientFailure() {
   return {
     type: SUBMIT_ADD_PATIENT_FAILURE,
   };
 }
+
 export function switchToNoteSectionDetail() {
   return {
     type: SWITCH_TO_NOTE_SECTION_DETAIL,

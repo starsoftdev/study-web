@@ -115,6 +115,7 @@ a.hover-underline {
 
 .table-responsive {
   overflow-x: hidden;
+  overflow-y: hidden;
 
   .table {
     thead {
@@ -140,7 +141,7 @@ label {
 
 .form-control {
 	border-width: 2px;
-	padding: 6px 15px;
+	padding: 5px 15px;
 
 	&:focus {
 		color: #949ca1;
@@ -181,12 +182,15 @@ input[type=number] {
 }
 
 #wrapper {
-	overflow: hidden;
 	position: relative;
 	padding: 102px 0 0 261px;
 
 	.home-page & {
 		padding-top: 101px;
+	}
+
+	&.dashboard {
+		padding-left: 0;
 	}
 }
 
@@ -194,6 +198,10 @@ input[type=number] {
 
 	#wrapper {
 		padding-left: 220px;
+
+		&.dashboard {
+			padding-left: 0;
+		}
 	}
 }
 

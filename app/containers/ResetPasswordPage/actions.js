@@ -7,6 +7,7 @@
 import {
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
+  CLEAR_RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_ERROR,
 } from './constants';
 
@@ -20,6 +21,13 @@ export function resetPasswordRequest(payload) {
 export function resetPasswordSuccess(payload) {
   return {
     type: RESET_PASSWORD_SUCCESS,
+    payload,
+  };
+}
+
+export function clearResetPasswordSuccess(payload) {
+  return {
+    type: CLEAR_RESET_PASSWORD_SUCCESS,
     payload,
   };
 }

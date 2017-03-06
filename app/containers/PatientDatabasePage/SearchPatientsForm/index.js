@@ -12,7 +12,6 @@ import { selectPatientCategories, selectPatients, selectPatientDatabaseFormValue
 import { selectIndications, selectSources } from '../../../containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import './styles.less';
 
 import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
 
@@ -52,8 +51,22 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
 
   initSearch(e, name) {
     const params = this.props.formValues;
+    const paramKeys = Object.keys(params);
+
+    // Make sure no zeroes are stored as strings
+    // Note: Zeroes represent the 'All' option for a drop down selection.
+    paramKeys.forEach(key => {
+      if (params[key] === '0') {
+        params[key] = 0;
+      }
+    });
+
     if (e && e.target) {
-      params[e.target.name] = e.target.value;
+      if (e.target.value === '0') {
+        params[e.target.name] = 0;
+      } else {
+        params[e.target.name] = e.target.value;
+      }
       if (this.state.searchTimer) {
         clearTimeout(this.state.searchTimer);
         this.setState({ searchTimer: null });
@@ -61,7 +74,11 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
       const timerH = setTimeout(() => { this.props.onSubmit(params, true); }, 500);
       this.setState({ searchTimer: timerH });
     } else {
-      params[name] = e;
+      if (e === '0') {
+        params[name] = 0;
+      } else {
+        params[name] = e;
+      }
       this.props.onSubmit(params, true);
     }
   }
@@ -108,14 +125,14 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     finalExcludeIndication = _.concat(finalExcludeIndication, excludeIndicationArr);
 
 
-    const sourceOptions = map(sources, sourceIterator => ({
+    const sourceOptions = [{ label: 'All', value: '0' }].concat(map(sources, sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
-    }));
-    const statusOptions = map(patientCategories.details, patientCategoryIterator => ({
+    })));
+    const statusOptions = [{ label: 'All', value: '0' }].concat(map(patientCategories.details, patientCategoryIterator => ({
       label: patientCategoryIterator.name,
       value: patientCategoryIterator.id,
-    }));
+    })));
     const genderOptions = [
       {
         label: 'All',
@@ -132,7 +149,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     const itemTemplate = (controlSelectedValue) => (
       <div key={controlSelectedValue.value}>
         {controlSelectedValue.label}
-        <i className="close-icon icomoon-icon_close"></i>
+        <i className="close-icon icomoon-icon_close" />
       </div>
     );
 
@@ -150,6 +167,9 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
             <span className="title">
             </span>
             <div className="field">
+              <Button className="btn-enter">
+                <i className="icomoon-icon_search2" />
+              </Button>
               <Field
                 name="name"
                 component={Input}
@@ -159,9 +179,6 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 disabled={patients.fetching}
                 onChange={(e) => this.initSearch(e, 'name')}
               />
-              <label htmlFor="search">
-                <i className="icomoon-icon_search2" />
-              </label>
             </div>
           </div>
 
@@ -174,10 +191,11 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 name="includeIndication"
                 component={ReactMultiSelect}
                 placeholder="Select Indication"
-                searchPlaceholder="Search Indication"
+                searchPlaceholder="Search"
                 searchable
                 optionLabelKey="label"
                 multiple
+                includeAllOption
                 onChange={(e) => this.initSearch(e, 'includeIndication')}
                 customOptionTemplateFunction={itemTemplate}
                 customSelectedValueTemplateFunction={selectedItemsTemplate}
@@ -196,10 +214,11 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
                 name="excludeIndication"
                 component={ReactMultiSelect}
                 placeholder="Select Indication"
-                searchPlaceholder="Search Indication"
+                searchPlaceholder="Search"
                 searchable
                 optionLabelKey="label"
                 multiple
+                includeAllOption
                 onChange={(e) => this.initSearch(e, 'excludeIndication')}
                 customOptionTemplateFunction={itemTemplate}
                 customSelectedValueTemplateFunction={selectedItemsTemplate}
@@ -321,7 +340,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
           <div className="hidden">
             <Button type="submit" bsStyle="primary" className="btn-search" disabled={patients.fetching || hasError}>
               {(patients.fetching)
-                ? <LoadingSpinner showOnlyIcon size={20} className="fetching-patients" />
+                ? <LoadingSpinner showOnlyIcon size={20} />
                 : <span>Search</span>
               }
             </Button>

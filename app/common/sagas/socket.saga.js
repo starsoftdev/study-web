@@ -4,14 +4,14 @@ import { takeLatest } from 'redux-saga';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
-import request from 'utils/request';
+import request from '../../utils/request';
 
 import {
   connectionEstablished,
   fetchNotificationsSucceeded,
   fetchUnreadNotificationsCountSucceeded,
   setProcessingStatus,
-} from 'containers/GlobalNotifications/actions';
+} from '../../containers/GlobalNotifications/actions';
 import {
   SET_SOCKET_CONNECTION,
   SUBSCRIBE_TO_PAGE_EVENT,
@@ -22,7 +22,8 @@ import {
   SEND_STUDY_PATIENT_MESSAGES,
   FETCH_NOTIFICATIONS,
   FETCH_UNREAD_NOTIFICATIONS_COUNT,
-} from 'containers/GlobalNotifications/constants';
+  MARK_NOTIFICATIONS_READ,
+} from '../../containers/GlobalNotifications/constants';
 
 let props = null;
 let socket = null;
@@ -38,6 +39,7 @@ export function* GlobalNotificationsSaga() {
   yield fork(sendStudyPatientMessages);
   yield fork(takeLatest, FETCH_NOTIFICATIONS, fetchNotifications);
   yield fork(takeLatest, FETCH_UNREAD_NOTIFICATIONS_COUNT, fetchUnreadNotificationsCount);
+  yield fork(markNotificationsReadWorker);
 }
 
 export function* setSocketConnection() {
@@ -50,12 +52,9 @@ export function* setSocketConnection() {
         const nsp = window.io(requestURL);
         socket = nsp;
         yield put(connectionEstablished(nsp));
-        yield put(toastrActions.success('', 'Connected to socket.'));
         payload.cb(null, socket);
       }
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
       payload.cb(err, null);
     }
   }
@@ -182,6 +181,21 @@ export function* fetchUnreadNotificationsCount(action) {
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching unreadNotificationsCount');
     yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+export function* markNotificationsReadWorker() {
+  while (true) {
+    const { userId } = yield take(MARK_NOTIFICATIONS_READ);
+    const requestURL = `${API_URL}/users/${userId}/markAllAsRead`;
+    const params = { method: 'PUT' };
+
+    try {
+      yield call(request, requestURL, params);
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong marking notifications read');
+      yield put(toastrActions.error('', errorMessage));
+    }
   }
 }
 

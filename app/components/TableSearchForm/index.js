@@ -8,12 +8,13 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-
+import Button from 'react-bootstrap/lib/Button';
+import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
-// import Modal from 'react-bootstrap/lib/Modal';
-// import CenteredModal from '../CenteredModal/index';
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
+import Modal from 'react-bootstrap/lib/Modal';
+import CenteredModal from '../CenteredModal/index';
+import Input from '../../components/Input';
+import ReactSelect from '../../components/Input/ReactSelect';
 
 const mapStateToProps = createStructuredSelector({});
 
@@ -35,6 +36,7 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
     this.hidePopup = this.hidePopup.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this, 'predefined');
+    this.renderDateFooter = this.renderDateFooter.bind(this);
 
     this.state = {
       showPopup: false,
@@ -42,11 +44,12 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
       linked : {},
       datePicker : null,
       firstDayOfWeek : null,
-      predefined : {},
+      predefined : {
+        startDate: moment().clone().subtract(30, 'days'),
+        endDate: moment(),
+      },
     };
   }
-
-  componentWillReceiveProps() {}
 
   handleChange(which, payload) {
     this.setState({
@@ -78,10 +81,29 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
     this.hidePopup();
   }
 
-  render() {
-    const { siteLocations } = this.props;
-    const state = this.state;
+  renderDateFooter() {
+    const { predefined } = this.state;
+    if (predefined.startDate) {
+      const format = 'MMM D, YYYY';
+      if (predefined.startDate.isSameOrAfter(predefined.endDate, 'day')) {
+        return (
+          <span className="time">
+            {moment(predefined.startDate).format(format)}
+          </span>
+        );
+      }
+      return (
+        <span className="time">
+          {moment(predefined.startDate).format(format)} - {moment(predefined.endDate).format(format)}
+        </span>
+      );
+    }
+    return null;
+  }
 
+  render() {
+    const siteLocations = [{ name: 'All', value: '0' }].concat(this.props.siteLocations);
+    const state = this.state;
     return (
       <form
         className="form-search clearfix"
@@ -89,7 +111,6 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
         <div className="btns-area pull-right">
           <div className="col pull-right">
             <button
-              type="submit"
               className="btn btn-primary pull-right"
               onClick={this.createPdf}
             >
@@ -99,7 +120,6 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
 
           <div className="col pull-right">
             <a
-              href="#date-range"
               className="btn btn-primary lightbox-opener"
               onClick={this.showPopup}
             >
@@ -107,10 +127,12 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
             </a>
           </div>
         </div>
-
         <div className="fields-holder">
           <div className="search-area pull-left">
             <div className="field">
+              <Button className="btn-enter">
+                <i className="icomoon-icon_search2" />
+              </Button>
               <Field
                 type="search"
                 component={Input}
@@ -132,82 +154,48 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
             />
           </div>
         </div>
-
-        {/* <Modal
-          show={state.showPopup}
+        <Modal
+          id="date-range"
+          className="date-range-modal"
           dialogComponentClass={CenteredModal}
+          show={state.showPopup}
+          onHide={this.hidePopup}
+          backdrop
+          keyboard
         >
           <Modal.Header>
-            <div className="head">
-              <Modal.Title>
-                <strong className="title">DATE RANGE</strong>
-              </Modal.Title>
-              <a className="lightbox-close close" onClick={this.hidePopup}><i className="icomoon-icon_close" /></a>
-            </div>
+            <Modal.Title>Date Range</Modal.Title>
+            <a className="lightbox-close close" onClick={this.hidePopup}>
+              <i className="icomoon-icon_close" />
+            </a>
           </Modal.Header>
           <Modal.Body>
-            <div className="holder">
-              <DateRange
-                linkedCalendars
-                ranges={defaultRanges}
-                onInit={this.handleChange}
-                onChange={this.handleChange}
-              />
-              <div className="dateRange-helper">
-                <div className="emit-border"></div>
-                <div className="right-part">
-                  <span className="left">{ predefined.startDate && predefined.startDate.format(format).toString() }</span>
-                  <span className="right">{ predefined.endDate && predefined.endDate.format(format).toString() }</span>
-                  <div className="btn-block text-right">
-                    <a
-                      href="#"
-                      className="btn btn-default lightbox-close"
-                      onClick={this.changeRange}
-                    >
-                      submit
-                    </a>
-                  </div>
+            <DateRange
+              theme={{
+                DateRange: {
+                  display: 'inline-grid',
+                },
+              }}
+              linkedCalendars
+              ranges={defaultRanges}
+              startDate={this.state.predefined.startDate ? this.state.predefined.startDate : moment()}
+              endDate={this.state.predefined.endDate ? this.state.predefined.endDate : moment().add(1, 'M')}
+              onInit={this.handleChange}
+              onChange={this.handleChange}
+            />
+            <div className="dateRange-helper">
+              <div className="emit-border"><br /></div>
+              <div className="right-part">
+                <div className="btn-block text-right">
+                  {this.renderDateFooter()}
+                  <Button onClick={this.changeRange}>
+                    Submit
+                  </Button>
                 </div>
               </div>
             </div>
           </Modal.Body>
-        </Modal> */}
-
-        <div id="date-range" className={(state.showPopup) ? 'lightbox fixed-popup lightbox-active' : 'lightbox fixed-popup'}>
-          <div className="lightbox-holder">
-            <div className="lightbox-frame">
-              <div className="lightbox-content">
-                <div className="head">
-                  <strong className="title">DATE RANGE</strong>
-                  <a className="lightbox-close close" href="#" onClick={this.hidePopup}><i className="icomoon-icon_close" /></a>
-                </div>
-                <div className="holder">
-                  <DateRange
-                    linkedCalendars
-                    ranges={defaultRanges}
-                    onInit={this.handleChange}
-                    onChange={this.handleChange}
-                  />
-                  <div className="dateRange-helper">
-                    <div className="emit-border"><br /></div>
-                    <div className="right-part">
-                      <div className="btn-block text-right">
-                        <a
-                          href="#"
-                          className="btn btn-default lightbox-close"
-                          onClick={this.changeRange}
-                        >
-                          submit
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <a href="#" className="overlay lightbox-close" onClick={this.hidePopup} />
-        </div>
+        </Modal>
       </form>
     );
   }

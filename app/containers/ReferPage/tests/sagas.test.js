@@ -18,14 +18,14 @@ import {
   formSubmissionError,
   companyTypesFetched,
   companyTypesFetchingError,
-} from 'containers/ReferPage/actions';
+} from '../actions';
 
 import {
   SUBMIT_FORM,
   FETCH_COMPANY_TYPES,
-} from 'containers/ReferPage/constants';
+} from '../constants';
 
-import request from 'utils/request';
+import request from '../../../utils/request';
 
 describe('ReferPage/sagas', () => {
   describe('fetchCompanyTypesWatcher Saga', () => {

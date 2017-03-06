@@ -24,21 +24,32 @@ export default function TextBlastModal(state, action) {
       };
     case FILTER_PATIENTS_TEXT_BLAST: {
       // separate the first and last name apart
-      const search = _.trim(action.text);
-      const firstNameEndIndex = search.indexOf(' ');
-      let firstName = search;
-      let lastName;
-      if (firstNameEndIndex !== -1) {
-        firstName = search.slice(0, firstNameEndIndex);
-        lastName = search.slice(firstNameEndIndex + 1);
+      let search = _.trim(action.text);
+      // const firstNameEndIndex = search.indexOf(' ');
+      // let firstName = search;
+      // let lastName;
+      // if (firstNameEndIndex !== -1) {
+      //   firstName = search.slice(0, firstNameEndIndex);
+      //   lastName = search.slice(firstNameEndIndex + 1);
+      // }
+      if (search) {
+        search = search.toUpperCase();
       }
       return {
         ...state,
         values: {
           ...state.values,
-          filteredPatientSearchValues: state.values.patientSearchValues.filter(patient => (
-            _.startsWith(patient.firstName.toUpperCase(), firstName.toUpperCase()) || (lastName && _.startsWith(patient.lastName.toUpperCase(), lastName.toUpperCase()))
-          )),
+          filteredPatientSearchValues: state.values.patientSearchValues.filter(patient => {
+            let firstname = patient.firstName;
+            let lastname = patient.lastName;
+            if (firstname) {
+              firstname = firstname.toUpperCase();
+            }
+            if (lastname) {
+              lastname = lastname.toUpperCase();
+            }
+            return (firstname && _.includes(firstname, search)) || (lastname && _.includes(lastname, search));
+          }),
         },
       };
     }

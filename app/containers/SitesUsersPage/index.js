@@ -3,19 +3,29 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 import { Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
+import ReactSelect from '../../components/Input/ReactSelect';
 import { map } from 'lodash';
+import { Field, reduxForm, change } from 'redux-form';
+import CenteredModal from '../../components/CenteredModal/index';
+import EditSiteForm from '../../components/EditSiteForm';
+import EditUserForm from '../../components/EditUserForm';
+import ClientSitesList from '../../components/ClientSitesList';
+import ClientRolesList from '../../components/ClientRolesList';
+import {
+  selectCurrentUserClientId,
+  selectClientSites,
+  selectClientRoles,
+  selectSavedSite,
+  selectSavedUser,
+  selectCurrentUser,
+} from '../../containers/App/selectors';
+import { fetchClientSites, fetchClientRoles, saveSite, saveUser } from '../../containers/App/actions';
 
-import EditSiteForm from 'components/EditSiteForm';
-import EditUserForm from 'components/EditUserForm';
-import ClientSitesList from 'components/ClientSitesList';
-import ClientRolesList from 'components/ClientRolesList';
-import { selectCurrentUserClientId, selectClientSites,
-  selectClientRoles, selectSavedSite, selectSavedUser } from 'containers/App/selectors';
-import { fetchClientSites, fetchClientRoles, saveSite, saveUser } from 'containers/App/actions';
-import './styles.less';
-
+@reduxForm({ form: 'manageSiteUser' })
 export class SitesUsersPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    dispatch: PropTypes.func.isRequired,
     currentUserClientId: PropTypes.number,
     clientSites: PropTypes.object,
     clientRoles: PropTypes.object,
@@ -25,6 +35,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     fetchClientRoles: PropTypes.func,
     saveSite: PropTypes.func,
     saveUser: PropTypes.func,
+    currentUser: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -33,14 +44,21 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     this.state = {
       addSiteModalOpen: false,
       addUserModalOpen: false,
+      roleFilterMethod: () => true,
+      siteFilterMethod: () => true,
+      siteName: '',
+      userName: '',
     };
 
     this.openAddSiteModal = this.openAddSiteModal.bind(this);
     this.closeAddSiteModal = this.closeAddSiteModal.bind(this);
     this.openAddUserModal = this.openAddUserModal.bind(this);
     this.closeAddUserModal = this.closeAddUserModal.bind(this);
-    this.searchClientRoles = this.searchClientRoles.bind(this);
-    this.searchClientSites = this.searchClientSites.bind(this);
+    this.filterClientRoles = this.filterClientRoles.bind(this);
+    this.filterClientSites = this.filterClientSites.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSiteQueryChange = this.handleSiteQueryChange.bind(this);
+    this.handleUserQueryChange = this.handleUserQueryChange.bind(this);
     this.addSite = this.addSite.bind(this);
     this.addUser = this.addUser.bind(this);
   }
@@ -50,6 +68,19 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     if (currentUserClientId) {
       this.props.fetchClientSites(currentUserClientId, {});
       this.props.fetchClientRoles(currentUserClientId, {});
+    }
+  }
+
+  componentDidMount() {
+    const { currentUser } = this.props;
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+      if (bDisabled) {
+        const nLocation = currentUser.roleForClient.site_id ? currentUser.roleForClient.site_id.toString() : null;
+        this.props.dispatch(change('manageSiteUser', 'siteLocation', nLocation));
+        this.handleSiteQueryChange(currentUser.roleForClient.site_id);
+      }
     }
   }
 
@@ -78,20 +109,56 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     this.setState({ addUserModalOpen: false });
   }
 
-  searchClientSites(event) {
-    if (event.key === 'Enter') {
-      const { currentUserClientId } = this.props;
-      const searchFilter = { name: event.target.value };
-      this.props.fetchClientSites(currentUserClientId, searchFilter);
+  filterClientSites(searchQuery) {
+    if (searchQuery !== '') {
+      this.setState({
+        siteFilterMethod: (clientSite) => clientSite.name.toUpperCase().includes(searchQuery.toUpperCase()),
+      });
+    } else {
+      this.setState({
+        siteFilterMethod: () => true,
+      });
     }
   }
 
-  searchClientRoles(event) {
-    if (event.key === 'Enter') {
-      const { currentUserClientId } = this.props;
-      const searchFilter = { name: event.target.value };
-      this.props.fetchClientRoles(currentUserClientId, searchFilter);
+  filterClientRoles(searchQuery) {
+    if (searchQuery !== '') {
+      this.setState({
+        roleFilterMethod: (clientRole) => {
+          const fullName = `${clientRole.user.firstName} ${clientRole.user.lastName}`;
+          return (fullName.toUpperCase().includes(searchQuery.toUpperCase()));
+        },
+      });
+    } else {
+      this.setState({
+        roleFilterMethod: () => true,
+      });
     }
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.filterClientSites(this.state.siteName);
+    this.filterClientRoles(this.state.userName);
+  }
+
+  handleSiteQueryChange(index) {
+    const sel = parseInt(index !== null ? index : 0);
+    if (sel === 0) {
+      this.setState({
+        siteName: '',
+      }, () => { this.filterClientSites(this.state.siteName); });
+    } else {
+      this.setState({
+        siteName: this.props.clientSites.details[sel - 1].name,
+      }, () => { this.filterClientSites(this.state.siteName); });
+    }
+  }
+
+  handleUserQueryChange(event) {
+    this.setState({
+      userName: event.target.value,
+    }, () => this.filterClientRoles(this.state.userName));
   }
 
   addSite(siteData) {
@@ -106,20 +173,18 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
-      siteId: parseInt(userData.site, 10),
     };
-    if (userData.site === '0') {
-      userInput.clientRole = {
-        purchase: userData.purchase || false,
-        reward: userData.reward || false,
-      };
-    }
+    userInput.clientRole = {
+      siteId: parseInt(userData.site, 10),
+      canPurchase: userData.purchase || false,
+      canRedeemRewards: userData.reward || false,
+    };
 
     this.props.saveUser(currentUserClientId, null, userInput);
   }
 
   render() {
-    const { currentUserClientId, clientSites } = this.props;
+    const { currentUserClientId, clientSites, currentUser } = this.props;
     if (!currentUserClientId) {
       return (
         <div className="sites-users-page">
@@ -132,7 +197,10 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
         </div>
       );
     }
-
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+    }
     const siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
 
@@ -142,56 +210,65 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
           <Helmet title="Manage Sites / Users - StudyKIK" />
           <h2 className="main-heading">MANAGE SITES / USERS</h2>
           <div className="search-sites-users-panel form-group">
-            <form className="form-search clearfix">
+            <form className="form-search clearfix" onSubmit={this.handleSubmit}>
               <div className="fields-holder pull-left">
                 <div className="search-area pull-left">
                   <div className="field">
-                    <input type="text" className="form-control keyword-search" placeholder="Search Site Name..." onKeyPress={this.searchClientSites} />
-                    <label htmlFor="search">
+                    <Button className="btn-enter" type="submit">
                       <i className="icomoon-icon_search2" />
-                    </label>
+                    </Button>
+                    <input onChange={this.handleUserQueryChange} type="text" className="form-control keyword-search" placeholder="Search" />
                   </div>
                 </div>
                 <div className="search-area pull-left">
                   <div className="field">
-                    <input type="text" className="form-control keyword-search" placeholder="Search User Name..." onKeyPress={this.searchClientRoles} />
-                    <label htmlFor="search">
-                      <i className="icomoon-icon_search2" />
-                    </label>
+                    <Field
+                      name="siteLocation"
+                      component={ReactSelect}
+                      placeholder="Select Site Location"
+                      options={siteOptions}
+                      disabled={bDisabled}
+                      className="field"
+                      onChange={this.handleSiteQueryChange}
+                    />
                   </div>
                 </div>
               </div>
               <section className="btns-area pull-right">
                 <div className="col pull-right">
-                  <button type="button" className="btn btn-primary" onClick={this.openAddUserModal}>
+                  <button type="button" className="btn btn-primary" onClick={this.openAddUserModal} disabled={!((currentUser.roleForClient.canPurchase && currentUser.roleForClient.canRedeemRewards) || currentUser.roleForClient.name === 'Super Admin')}>
                     + Add User
                   </button>
-                  <Modal className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
-                    <Modal.Header closeButton>
+                  <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
+                    <Modal.Header>
                       <Modal.Title>New User</Modal.Title>
+                      <a className="lightbox-close close" onClick={this.closeAddUserModal}>
+                        <i className="icomoon-icon_close" />
+                      </a>
                     </Modal.Header>
                     <Modal.Body>
                       <div className="holder clearfix">
                         <div className="form-lightbox">
-                          <EditUserForm siteOptions={siteOptions} onSubmit={this.addUser} />
+                          <EditUserForm siteOptions={siteOptions} onSubmit={this.addUser} isEdit={false} />
                         </div>
                       </div>
                     </Modal.Body>
                   </Modal>
                 </div>
                 <div className="col pull-right">
-                  <button type="button" className="btn btn-primary" onClick={this.openAddSiteModal}>
+                  <button type="button" className="btn btn-primary" onClick={this.openAddSiteModal} disabled={bDisabled}>
                     + Add Site Location
                   </button>
-                  <Modal className="new-site" id="new-site" show={this.state.addSiteModalOpen} onHide={this.closeAddSiteModal}>
-                    <Modal.Header closeButton>
+                  <Modal dialogComponentClass={CenteredModal} className="new-site" id="new-site" show={this.state.addSiteModalOpen} onHide={this.closeAddSiteModal}>
+                    <Modal.Header>
                       <Modal.Title>New Site</Modal.Title>
+                      <a className="lightbox-close close" onClick={this.closeAddSiteModal}>
+                        <i className="icomoon-icon_close" />
+                      </a>
                     </Modal.Header>
                     <Modal.Body>
-                      <div className="holder clearfix">
-                        <div className="form-lightbox">
-                          <EditSiteForm onSubmit={this.addSite} />
-                        </div>
+                      <div className="holder clearfix edit-site-holder">
+                        <EditSiteForm onSubmit={this.addSite} />
                       </div>
                     </Modal.Body>
                   </Modal>
@@ -200,10 +277,10 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
             </form>
           </div>
           <section className="table-holder form-group client-roles-holder">
-            <ClientRolesList />
+            <ClientRolesList filterMethod={this.state.roleFilterMethod} currentUser={currentUser} />
           </section>
           <section className="table-holder form-group client-sites-holder">
-            <ClientSitesList />
+            <ClientSitesList filterMethod={this.state.siteFilterMethod} userFilterQuery={this.state.userName} currentUser={currentUser} />
           </section>
         </div>
       </div>
@@ -217,6 +294,7 @@ const mapStateToProps = createStructuredSelector({
   clientRoles: selectClientRoles(),
   savedSite: selectSavedSite(),
   savedUser: selectSavedUser(),
+  currentUser: selectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {

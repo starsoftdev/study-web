@@ -7,9 +7,9 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { fetchSources, submitSourceForm } from 'containers/ManageTransferNumberPage/actions';
-import { selectSources } from 'containers/ManageTransferNumberPage/selectors';
-import ManageTransferNumberForm from 'components/ManageTransferNumberForm';
+import { fetchSources, submitSourceForm } from '../../containers/ManageTransferNumberPage/actions';
+import { selectSources } from '../../containers/ManageTransferNumberPage/selectors';
+import ManageTransferNumberForm from '../../components/ManageTransferNumberForm';
 
 export class ManageTransferNumberPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
