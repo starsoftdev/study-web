@@ -325,15 +325,6 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToDashboard,
-      path: '/app/reset-password',
-      name: 'resetPasswordPage',
-      getComponent(nextState, cb) {
-        System.import('./containers/ResetPasswordPage')
-          .then(loadModule(cb))
-          .catch(errorLoading);
-      },
-    }, {
-      onEnter: redirectToDashboard,
       path: '/app/set-new-password',
       name: 'setNewPasswordPage',
       getComponent(nextState, cb) {
