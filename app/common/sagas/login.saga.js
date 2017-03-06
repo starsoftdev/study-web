@@ -25,6 +25,10 @@ import {
 } from '../../containers/ResetPasswordPage/constants';
 
 import {
+  resetPasswordSuccess,
+} from '../../containers/ResetPasswordPage/actions';
+
+import {
   SET_NEW_PASSWORD_REQUEST,
 } from '../../containers/SetNewPasswordPage/constants';
 
@@ -140,6 +144,7 @@ export function* resetPassword() {
       const requestURL = `${API_URL}/users/reset`;
       yield call(request, requestURL, params);
       yield put(toastrActions.success('Reset password', 'The request has been submitted successfully'));
+      yield put(resetPasswordSuccess());
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));

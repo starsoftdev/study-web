@@ -10,6 +10,7 @@ import { reducer as toastrReducer } from 'react-redux-toastr';
 import { default as textBlastModalReducer } from './containers/StudyPage/TextBlast/reducer';
 import { default as patientsListReducer } from './containers/PatientDatabasePage/TextBlast/reducer';
 import { default as rewardForm } from './containers/RewardsPage/RewardModal/reducer';
+import { default as resetPasswordPageReducer } from './containers/ResetPasswordPage/reducer';
 import appReducer from './containers/App/reducer';
 import globalNotificationsReducer from './containers/GlobalNotifications/reducer';
 
@@ -26,6 +27,7 @@ export default function createReducer(asyncReducers) {
     }),
     toastr: toastrReducer,
     globalNotifications: globalNotificationsReducer,
+    resetPasswordPage: resetPasswordPageReducer,
     global: appReducer,
     ...asyncReducers,
   });
