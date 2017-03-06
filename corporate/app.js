@@ -11,6 +11,7 @@ import { default as Corporate } from './containers/Corporate';
 import { default as Home } from './containers/HomePage';
 import { default as LoginPage } from '../app/containers/LoginPage';
 import { default as ConfirmResetPasswordPage } from './containers/ConfirmResetPasswordPage';
+import { default as ResetPasswordPage } from '../app/containers/ResetPasswordPage';
 import { default as ContactPage } from './containers/ContactPage';
 import { default as ListYourTrialsPage } from './containers/ListYourTrialsPage';
 import { default as TermsAndConditionsPage } from './containers/TermsAndConditionsPage';
@@ -42,6 +43,7 @@ const routes = {
   indexRoute: { component: Home },
   childRoutes: [
     { path: '/login', component: LoginPage },
+    { path: '/reset-password', component: ResetPasswordPage },
     { path: '/confirm-reset-password', component: ConfirmResetPasswordPage },
     { path: '/about', component: AboutPage },
     { path: '/blog', component: ComingSoon },

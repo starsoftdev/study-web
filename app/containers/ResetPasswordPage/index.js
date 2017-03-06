@@ -25,8 +25,7 @@ export class ResetPasswordPage extends React.Component { // eslint-disable-line 
   }
   render() {
     return (
-      <div className="reset-pwd container">
-        <Helmet title="Reset Password" />
+      <div className="container">
         <ResetPasswordForm onSubmit={this.onSubmitForm} />
       </div>
     );

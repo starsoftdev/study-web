@@ -5,6 +5,7 @@
 */
 
 import React from 'react';
+import inViewport from 'in-viewport';
 import { Field, reduxForm } from 'redux-form';
 import Input from '../../components/Input';
 import resetPasswordFormValidator from './validator';
@@ -20,11 +21,34 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
     submitting: React.PropTypes.bool.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.watcher = null;
+
+    this.setVisible = this.setVisible.bind(this);
+  }
+
+  componentDidMount() {
+    this.watcher = inViewport(this.animatedForm, this.setVisible);
+  }
+
+  componentWillUnmount() {
+    this.watcher.dispose();
+  }
+
+  setVisible(el) {
+    const viewAtr = el.getAttribute('data-view');
+    el.classList.add('in-viewport', viewAtr);
+  }
+
   render() {
     const { handleSubmit, submitting } = this.props;
 
     return (
       <form
+        ref={(animatedForm) => {
+          this.animatedForm = animatedForm;
+        }}
         onSubmit={handleSubmit}
         className="form-login"
         data-formvalidation="true"
