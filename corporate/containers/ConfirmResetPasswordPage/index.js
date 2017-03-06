@@ -7,27 +7,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import { resetPasswordRequest } from './actions';
-import ResetPasswordForm from '../../components/ResetPasswordForm';
-// import '../../containers/LoginPage/styles.less';
-
-import './styles.less';
+import { setNewPasswordRequest } from '../../../app/containers/SetNewPasswordPage/actions';
 
 export class ResetPasswordPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    onSubmitForm: React.PropTypes.func,
+    setNewPasswordRequest: React.PropTypes.func,
   };
 
   constructor(props) {
     super(props);
-    this.onSubmitForm = this.props.onSubmitForm.bind(this);
+    this.setNewPasswordRequest = this.props.setNewPasswordRequest.bind(this);
   }
+
+  componentDidMount () {
+    this.setNewPasswordRequest()
+  }
+
   render() {
     return (
       <div className="reset-pwd container">
-        <Helmet title="Reset Password" />
-        <ResetPasswordForm onSubmit={this.onSubmitForm} />
+        <Helmet title="Confirm Reset Password" />
+        <h3 className="text-center">The password soon will be changed. Please wait.</h3>
       </div>
     );
   }
@@ -35,7 +36,7 @@ export class ResetPasswordPage extends React.Component { // eslint-disable-line 
 
 function mapDispatchToProps(dispatch) {
   return {
-    onSubmitForm: (values) => dispatch(resetPasswordRequest(values)),
+    setNewPasswordRequest: (values) => dispatch(setNewPasswordRequest(values)),
   };
 }
 
