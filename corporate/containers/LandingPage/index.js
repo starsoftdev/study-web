@@ -93,16 +93,20 @@ export class LandingPage extends React.Component {
   onSubmitForm(params) {
     const now = moment();
     const landing = this.props.landing;
+    const separateNames = params.name.split(' ');
     // TODO: figure out about source key
     const data = {
-      firstName: params.name,
+      firstName: separateNames[0],
+      lastName: separateNames[1],
       email: params.email,
       phone: normalizePhone(params.phone),
       createdAt: now,
       updatedAt: now,
       unsubscribed: false,
       study_patient_category_id: landing.landingPages[0].study_patient_category_id,
-      source: (landing.sources.length) ? landing.sources[0].id : null,
+      source_id: (landing.sources.length) ? landing.sources[0].id : null,
+      indicationName: landing.indication.name,
+      protocolNumber: landing.protocolNumber,
     };
 
     this.props.subscribeFromLanding(data);
@@ -110,6 +114,7 @@ export class LandingPage extends React.Component {
 
   render() {
     const { subscriptionError, landingIsFetching, location } = this.props;
+
     let landing = null;
     let study = null;
     if (this.props.landing) {
