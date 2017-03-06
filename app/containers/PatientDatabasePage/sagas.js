@@ -182,7 +182,7 @@ export function* fetchPatientsWatcher() {
       // const requestURL = `${API_URL}/patients?${queryString}`;
       const requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
       if (isExport) {
-        location.replace(`${requestURL}&access_token=${getItem('auth_token')}`);
+        location.replace(`${requestURL}`);
         yield put(downloadComplete());
       } else {
         const response = yield call(request, requestURL);
@@ -273,7 +273,7 @@ function* submitTextBlast() {
       return;
     }
     try {
-      const requestURL = `${API_URL}/twilioTextMessages/textBlast?access_token=${authToken}`;
+      const requestURL = `${API_URL}/twilioTextMessages/textBlast`;
       yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
