@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
@@ -6,12 +6,15 @@ import Modal from 'react-bootstrap/lib/Modal';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddProtocolForm } from './AddProtocolForm';
+import _ from 'lodash';
 
 @reduxForm({ form: 'dashboardProtocolForm' })
 
 export class DashboardProtocolSearch extends React.Component {
   static propTypes = {
-
+    protocol: PropTypes.object,
+    addProtocol: PropTypes.func,
+    editProtocolProcess: PropTypes.object,
   }
 
   constructor(props) {
@@ -23,6 +26,13 @@ export class DashboardProtocolSearch extends React.Component {
 
     this.closeAddProtocolModal = this.closeAddProtocolModal.bind(this);
     this.openAddProtocolModal = this.openAddProtocolModal.bind(this);
+    this.addProtocol = this.addProtocol.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!newProps.editProtocolProcess.saving && this.props.editProtocolProcess.saving) {
+      this.closeAddProtocolModal();
+    }
   }
 
   closeAddProtocolModal() {
@@ -33,12 +43,17 @@ export class DashboardProtocolSearch extends React.Component {
     this.setState({ addProtocolModalOpen: true });
   }
 
+  addProtocol(params) {
+    this.props.addProtocol(params);
+  }
+
   render() {
-    const options = [
-      { id: 1, name: 'ALK-502' },
-      { id: 2, name: 'A40910259' },
-      { id: 3, name: 'Col Mig-302' },
-    ];
+    const options = [];
+    _.forEach(this.props.protocol.details, (item) => {
+      options.push({
+        label: item.number, value: item.id,
+      });
+    });
 
     return (
       <form action="#" className="form-search clearfix">
@@ -71,7 +86,10 @@ export class DashboardProtocolSearch extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <AddProtocolForm />
+              <AddProtocolForm
+                onSubmit={this.addProtocol}
+                saving={this.props.editProtocolProcess.saving}
+              />
             </div>
           </Modal.Body>
         </Modal>

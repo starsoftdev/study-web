@@ -7,7 +7,7 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 
-import { getItem, removeItem } from '../../utils/localStorage';
+import { removeItem } from '../../utils/localStorage';
 import request from '../../utils/request';
 
 import {
@@ -38,11 +38,10 @@ export function* fetchPatientsByStudyWatcher() {
 }
 
 export function* fetchPatientsByStudyWorker(action) {
-  const authToken = getItem('auth_token');
   const { studyId, siteId } = action;
 
   try {
-    const requestURL = `${API_URL}/studies/${studyId}/patients?access_token=${authToken}&siteId=${siteId}`;
+    const requestURL = `${API_URL}/studies/${studyId}/patients?siteId=${siteId}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });

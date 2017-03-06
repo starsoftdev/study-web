@@ -8,6 +8,9 @@ import { AddProtocolForm } from '../DashboardProtocolSearch/AddProtocolForm';
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     item: PropTypes.object,
+    editProtocol: PropTypes.func,
+    deleteProtocol: PropTypes.func,
+    editProtocolProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -19,6 +22,16 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
     this.closeAddProtocolModal = this.closeAddProtocolModal.bind(this);
     this.openAddProtocolModal = this.openAddProtocolModal.bind(this);
+    this.editProtocol = this.editProtocol.bind(this);
+    this.deleteProtocol = this.deleteProtocol.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if ((!newProps.editProtocolProcess.saving && this.props.editProtocolProcess.saving) ||
+      (!newProps.editProtocolProcess.deleting && this.props.editProtocolProcess.deleting)
+    ) {
+      this.closeAddProtocolModal();
+    }
   }
 
   closeAddProtocolModal() {
@@ -29,10 +42,18 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     this.setState({ addProtocolModalOpen: true });
   }
 
+  editProtocol(params) {
+    this.props.editProtocol(params);
+  }
+
+  deleteProtocol(params) {
+    this.props.deleteProtocol(params);
+  }
+
   render() {
     const initialValues = {
       initialValues: {
-        protocol: this.props.item.name,
+        number: this.props.item.number,
         id: this.props.item.id,
       },
     };
@@ -40,7 +61,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     return (
       <tr>
         <td>
-          {this.props.item.name}
+          {this.props.item.number}
         </td>
         <td>
           <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openAddProtocolModal}>
@@ -60,6 +81,10 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
               <AddProtocolForm
                 {...initialValues}
                 isEdit
+                onSubmit={this.editProtocol}
+                onDelete={this.deleteProtocol}
+                saving={this.props.editProtocolProcess.saving}
+                deleting={this.props.editProtocolProcess.deleting}
               />
             </div>
           </Modal.Body>

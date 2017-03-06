@@ -13,7 +13,7 @@ import { get } from 'lodash';
 import { selectLocationState } from '../../containers/App/selectors';
 
 import request from '../../utils/request';
-import { getItem, setItem, removeItem } from '../../utils/localStorage';
+import { setItem, removeItem } from '../../utils/localStorage';
 import {
   LOGIN_REQUEST,
   LOGIN_ERROR,
@@ -116,8 +116,7 @@ export function* logoutSaga() {
 
 export function* logout() {
   try {
-    const authToken = getItem('auth_token');
-    const requestURL = `${API_URL}/users/logout?access_token=${authToken}`;
+    const requestURL = `${API_URL}/users/logout`;
     const params = {
       method: 'POST',
     };
