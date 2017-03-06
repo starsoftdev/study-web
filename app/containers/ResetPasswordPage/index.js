@@ -6,10 +6,8 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import Helmet from 'react-helmet';
 import { resetPasswordRequest } from './actions';
 import ResetPasswordForm from '../../components/ResetPasswordForm';
-// import '../../containers/LoginPage/styles.less';
 
 import './styles.less';
 

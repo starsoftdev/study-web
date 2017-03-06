@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import inViewport from 'in-viewport';
 import { Field, reduxForm } from 'redux-form';
 import loginFormValidator from './validator';
@@ -97,9 +98,13 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
             </span>
             <label htmlFor="remember">Remember Me</label>
           </div>
-          <a href="/reset-password" className="link pull-right" title="Forgot Password?">
+          <Link
+            to="/reset-password"
+            className="link pull-right"
+            title="Forgot Password?"
+          >
             Forgot Password?
-          </a>
+          </Link>
         </div>
         <div className="field-row">
           <input disabled={submitting} type="submit" value="submit" className="btn btn-default btn-block input-lg" />
