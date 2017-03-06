@@ -86,7 +86,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
       startDate, endDate, unreadMessageCount, orderNumber, studyId } = this.props;
     const buttonsShown = this.state.buttonsShown;
     const purchasable = (currentUser.roleForClient && currentUser.roleForClient.canPurchase);
-    const landingHref = `/${studyId}-${location.toLowerCase().replace(/ /ig, '-')}`;
+    const landingHref = location ? `/${studyId}-${location.toLowerCase().replace(/ /ig, '-')}` : '';
     let messageCountContent = null;
     if (unreadMessageCount > 0) {
       messageCountContent = (
