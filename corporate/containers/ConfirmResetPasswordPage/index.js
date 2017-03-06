@@ -1,9 +1,3 @@
-/*
- *
- * ResetPasswordPage
- *
- */
-
 import React from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
@@ -20,8 +14,8 @@ export class ResetPasswordPage extends React.Component { // eslint-disable-line 
     this.setNewPasswordRequest = this.props.setNewPasswordRequest.bind(this);
   }
 
-  componentDidMount () {
-    this.setNewPasswordRequest()
+  componentDidMount() {
+    this.setNewPasswordRequest();
   }
 
   render() {
