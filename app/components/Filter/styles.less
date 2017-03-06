@@ -1,65 +1,91 @@
 
-.filter-area {
-  padding: 5px 12px;
-  background: #f1f1f1;
-  margin: 0 12px 12px 0;
-  border: solid 2px #ccc;
+// .filter-area {
+//   padding: 5px 12px;
+//   background: #f1f1f1;
+//   margin: 0 12px 12px 0;
+//   border: solid 2px #ccc;
 
-  >* {
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0 8px 0 0;
-  }
+//   >* {
+//     display: inline-block;
+//     vertical-align: middle;
+//     margin: 0 8px 0 0;
+//   }
 
-  .title {
-    line-height: 40px !important;
-  }
-  strong {
-    line-height: 40px;
-    text-transform: uppercase;
-  }
+//   .title {
+//     line-height: 40px !important;
+//   }
+//   strong {
+//     line-height: 40px;
+//     text-transform: uppercase;
+//   }
 
-  .form-control {
-    width: 150px;
-  }
+//   .form-control {
+//     width: 150px;
+//   }
 
-  &.value-box {
-    .title {
-      margin-right: 2px !important;
-    }
+//   &.value-box {
+//     .title {
+//       margin-right: 2px !important;
+//     }
 
-    .value-control {
-      text-transform: capitalize;
-      font-size: 18px;
-      line-height: 1.25;
-      padding: 9px 5px 9px 0px;
-      height: 40px;
-    }
-  }
+//     .value-control {
+//       text-transform: capitalize;
+//       font-size: 18px;
+//       line-height: 1.25;
+//       padding: 9px 5px 9px 0px;
+//       height: 40px;
+//     }
+//   }
 
-  &.compare-box {
-    max-width: 520px;
-  }
+//   &.compare-box {
+//     max-width: 520px;
+//   }
 
+
+
+//   .btn-close {
+//     top: auto;
+//     margin: 0;
+//     left: auto;
+//     right: auto;
+//     transform: none;
+//     -ms-transform: none;
+//     position: relative;
+//     font-size: 18px;
+//     line-height: 16px;
+//     text-align: center;
+//     border: solid 2px #00afef;
+//   }
+  
+
+// }
+
+.filters-bar {
   .select {
+    min-width: 90px !important;
+    
     .form-control {
       width: 90px;
     }
   }
-
-  .btn-close {
-    top: auto;
-    margin: 0;
-    left: auto;
-    right: auto;
-    transform: none;
-    -ms-transform: none;
-    position: relative;
-    font-size: 18px;
-    line-height: 16px;
-    text-align: center;
-    border: solid 2px #00afef;
-  }
+}
   
 
-}
+
+.btn-close {
+    top: 50%;
+    right: 15px;
+    .size(20px);
+    color: #00afef;
+    margin: -10px 0 0;
+    background: #fff;
+    .font(11px, 16px);
+    position: absolute;
+    text-align: center;
+    border: solid 2px #00afef;
+    
+    &:hover {
+      color: #76daff;
+      border-color: #76daff;
+    }
+  }
