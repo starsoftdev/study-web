@@ -27,33 +27,27 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
     return (
       <form
         onSubmit={handleSubmit}
-        className="form-horizontal"
+        className="form-login"
+        data-formvalidation="true"
+        data-view="fadeInUp"
       >
-        <FormGroup>
-          <Field
-            name="email"
-            type="text"
-            component={Input}
-            placeholder="Email"
-            className="col-sm-12"
+        <h2 className="main-heading">Reset Password</h2>
+        <Field
+          name="email"
+          type="text"
+          component={Input}
+          placeholder="* Email"
+          className="field-row"
+          bsClass="form-control input-lg"
+        />
+        <div className="field-row">
+          <input
+            type="submit"
+            value="submit"
+            className="btn btn-default btn-block input-lg"
+            disabled={submitting}
           />
-        </FormGroup>
-
-        <FormGroup>
-
-          <Col sm={6} smPush={6}>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="btn btn-default pull-right"
-            >
-              Submit
-            </button>
-          </Col>
-
-
-        </FormGroup>
-
+        </div>
       </form>
     );
   }
