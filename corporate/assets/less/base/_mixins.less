@@ -1,0 +1,89 @@
+//	custom mixins
+
+.font(@size, @line: 1.25) {
+	font-size: @size;
+	line-height: @line;
+}
+
+.transform(@value) {
+	transform: @value;
+	-ms-transform: @value;
+}
+
+.color(@color) {
+	color: @color;
+	
+	&:hover {
+		color: darken(@color, 15%);
+	}
+}
+
+.color-l(@color) {
+	color: @color;
+	
+	&:hover {
+		color: lighten(@color, 15%);
+	}
+}
+
+.bg(@color) {
+	background: @color;
+	
+	&:hover {
+		background: darken(@color, 15%);
+	}
+}
+
+.bg-l(@color) {
+	background: @color;
+	
+	&:hover {
+		background: lighten(@color, 15%);
+	}
+}
+
+.size(@width, @height: @width) {
+	width: @width;
+	height: @height;
+}
+
+.size-min(@width, @height: @width) {
+	min-width: @width;
+	min-height: @height;
+}
+
+.align(@display: inline-block, @align: top) {
+	display: @display;
+	vertical-align: @align;
+}
+
+.arrow(@width) {
+	content: '';
+	position: absolute;
+	border: solid transparent;
+	border-width: @width;
+}
+
+.img {
+	display: block;
+	max-width: none;
+	.size(100%, auto);
+}
+
+.position(@x) {
+	top: @x;
+	left: @x;
+	right: @x;
+	bottom: @x;
+	position: absolute;
+}
+
+.font-responsive {
+	@media screen and(max-width: @sm) {
+		font-size: 16px;
+	}
+	
+	@media screen and(max-width: @xs) {
+		font-size: 14px;
+	}
+}

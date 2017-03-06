@@ -14,7 +14,7 @@ import {
   FETCH_IRB_AD_CREATION,
   FETCH_IRB_AD_CREATION_SUCCESS,
   FETCH_IRB_AD_CREATION_ERROR,
-} from 'containers/IrbAdCreationPage/constants';
+} from '../../containers/IrbAdCreationPage/constants';
 
 export function submitForm(cartValues, formValues) {
   return {

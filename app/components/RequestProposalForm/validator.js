@@ -1,4 +1,4 @@
-import { validatorFactory } from 'utils/reduxForm';
+import { validatorFactory } from '../../utils/reduxForm';
 
 const schema = {
   site: { presence: { message: '^You need to select site location' } },
@@ -11,5 +11,7 @@ const schema = {
   campaignLength: { presence: { message: '^You need to select campaign length' } },
   startDate: { presence: true },
 };
+const fields = Object.keys(schema);
 
+export { fields };
 export default validatorFactory(schema);

@@ -5,10 +5,10 @@
 */
 
 import React from 'react';
+import inViewport from 'in-viewport';
 import { Field, reduxForm } from 'redux-form';
-import Input from 'components/Input';
+import Input from '../../components/Input';
 import resetPasswordFormValidator from './validator';
-import { FormGroup, Col } from 'react-bootstrap';
 
 @reduxForm({
   form: 'resetPassword',
@@ -21,39 +21,56 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
     submitting: React.PropTypes.bool.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.watcher = null;
+
+    this.setVisible = this.setVisible.bind(this);
+  }
+
+  componentDidMount() {
+    this.watcher = inViewport(this.animatedForm, this.setVisible);
+  }
+
+  componentWillUnmount() {
+    this.watcher.dispose();
+  }
+
+  setVisible(el) {
+    const viewAtr = el.getAttribute('data-view');
+    el.classList.add('in-viewport', viewAtr);
+  }
+
   render() {
     const { handleSubmit, submitting } = this.props;
 
     return (
       <form
+        ref={(animatedForm) => {
+          this.animatedForm = animatedForm;
+        }}
         onSubmit={handleSubmit}
-        className="form-horizontal"
+        className="form-login"
+        data-formvalidation="true"
+        data-view="fadeInUp"
       >
-        <FormGroup>
-          <Field
-            name="email"
-            type="text"
-            component={Input}
-            placeholder="Email"
-            className="col-sm-12"
+        <h2 className="main-heading">Reset Password</h2>
+        <Field
+          name="email"
+          type="text"
+          component={Input}
+          placeholder="* Email"
+          className="field-row"
+          bsClass="form-control input-lg"
+        />
+        <div className="field-row">
+          <input
+            type="submit"
+            value="submit"
+            className="btn btn-default btn-block input-lg"
+            disabled={submitting}
           />
-        </FormGroup>
-
-        <FormGroup>
-
-          <Col sm={6} smPush={6}>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="btn btn-default pull-right"
-            >
-              Submit
-            </button>
-          </Col>
-
-
-        </FormGroup>
-
+        </div>
       </form>
     );
   }

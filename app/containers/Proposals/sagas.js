@@ -1,21 +1,21 @@
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
-import request from 'utils/request';
+import request from '../../utils/request';
 import { get } from 'lodash';
-import composeQueryString from 'utils/composeQueryString';
+import composeQueryString from '../../utils/composeQueryString';
 
 import {
   proposalsReceived,
   pdfCreated,
-} from 'containers/Proposals/actions';
+} from '../../containers/Proposals/actions';
 import {
   GET_PROPOSALS,
   CREATE_PDF,
   GET_PDF,
   SHOW_PROPOSAL_PDF,
-} from 'containers/Proposals/constants';
-import { getItem } from 'utils/localStorage';
+} from '../../containers/Proposals/constants';
+import { getItem } from '../../utils/localStorage';
 
 const serializeParams = (obj) => {
   const str = [];

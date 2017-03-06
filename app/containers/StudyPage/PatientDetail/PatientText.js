@@ -27,7 +27,7 @@ class PatientText extends React.Component {
     /* eslint-disable global-require */
     if (textMessage.user) {
       return (
-        <img role="presentation" src={textMessage.user.profileImageURL} />
+        <img alt="" src={textMessage.user.profileImageURL} />
       );
     } else if (textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound') {
       let url = require('../../../assets/images/Default-User-Img-Dr.png');
@@ -35,17 +35,17 @@ class PatientText extends React.Component {
         url = this.props.currentUser.profileImageURL;
       }
       return (
-        <img role="presentation" src={url} />
+        <img alt="" src={url} />
       );
     } else if (currentPatient.gender === 'Female') {
       const url = require('../../../assets/images/Default-User-Img-Girl.png');
       return (
-        <img role="presentation" src={url} />
+        <img alt="" src={url} />
       );
     }
     const url = require('../../../assets/images/Default-User-Img.png');
     return (
-      <img role="presentation" src={url} />
+      <img alt="" src={url} />
     );
   }
 
@@ -64,6 +64,13 @@ class PatientText extends React.Component {
   render() {
     const { currentUser, textMessage } = this.props;
     if (textMessage) {
+      let addon = '';
+
+      if (textMessage.isStopMessage) {
+        addon = <span className="stop-list-notification">This patient no longer wants to receive text messages. The ability to text him/her through your portal has been removed. You may still call or email to see if he/she qualifies for the study.</span>;
+      } else if (textMessage.isStartMessage) {
+        addon = <span className="stop-list-notification">This patient is able to receive text messages.</span>;
+      }
       return (
         <div className={classNames('post-msg', { reply: textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound' })}>
           <div className="img-holder">
@@ -72,9 +79,10 @@ class PatientText extends React.Component {
           <div className="post-content">
             <p>
               {textMessage.body}
-              {(textMessage.isStopMessage) ?
-                <span className="stop-list-notification">
-                  This patient no longer wants to receive text messages. The ability to text him/her through your portal has been removed. You may still call or email to see if he/she qualifies for the study.
+              {addon}
+              {(textMessage.isBlastMessage) ?
+                <span className="blast-message-notification"><br />
+                  Text STOP to stop.
                 </span> : '' }
             </p>
             <a className="btn-trash">

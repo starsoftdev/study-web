@@ -6,20 +6,21 @@
 
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
+import moment from 'moment-timezone';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser } from 'containers/App/selectors';
+import { selectCurrentUser, selectSitePatients } from '../../containers/App/selectors';
+import { fetchSources } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
 import PatientBoard from './PatientBoard/index';
 import * as Selector from './selectors';
-import moment from 'moment';
-import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, setSiteId, updatePatientSuccess, fetchStudyTextNewStats } from './actions';
 import {
   selectSocket,
-} from 'containers/GlobalNotifications/selectors';
-import './styles.less';
+} from '../../containers/GlobalNotifications/selectors';
 
 export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -41,6 +42,10 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     study: PropTypes.object,
     stats: PropTypes.object,
     socket: React.PropTypes.any,
+    updatePatientSuccess: React.PropTypes.func,
+    fetchSources: PropTypes.func,
+    sitePatients: React.PropTypes.object,
+    fetchStudyTextNewStats: React.PropTypes.func,
   };
 
   static defaultProps = {
@@ -63,15 +68,31 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     setSiteId(parseInt(params.siteId));
     fetchStudy(params.id, params.siteId);
     fetchPatientCategories(params.id, params.siteId);
+    this.props.fetchSources();
   }
 
   componentWillReceiveProps() {
     const { params, socket } = this.props;
     if (socket && this.state.socketBinded === false) {
-      socket.on('notifyMessage', () => {
-        console.log('notify');
-        console.log('params', params);
+      socket.on('notifyMessage', (message) => {
+        let curCategoryId = null;
+
+        _.forEach(this.props.patientCategories, (item) => {
+          _.forEach(item.patients, (patient) => {
+            if (patient.id === message.patient_id) {
+              curCategoryId = item.id;
+            }
+          });
+        });
+
         this.props.fetchStudy(params.id, params.siteId);
+        this.props.fetchStudyTextNewStats(params.id);
+        console.log(1);
+        this.props.updatePatientSuccess({
+          patientId: message.patient_id,
+          patientCategoryId: curCategoryId,
+          lastTextMessage: { body: message.twilioTextMessage.body, dateSent: message.twilioTextMessage.dateUpdated, dateUpdated: message.twilioTextMessage.dateUpdated },
+        });
       });
       this.setState({ socketBinded: true });
     }
@@ -84,6 +105,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 
   render() {
     const { fetchingPatientCategories, fetchingStudy, campaigns, patientCategories, site, sources, study, stats } = this.props;
+    const ePMS = (study && (study.patientMessagingSuite || study.patientQualificationSuite));
     if (fetchingStudy || fetchingPatientCategories) {
       return (
         <LoadingSpinner />
@@ -96,7 +118,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     const pageTitle = `${study.name} - StudyKIK`;
     const campaignOptions = campaigns.map(campaign => (
       {
-        label: `${moment(campaign.dateFrom).format('MMMM Do YYYY')} - ${moment(campaign.dateTo).format('MMMM Do YYYY')}`,
+        label: `${moment(campaign.dateFrom).format('MM/DD/YYYY')} - ${moment(campaign.dateTo).format('MM/DD/YYYY')}`,
         value: campaign.id,
       }
     ));
@@ -129,9 +151,13 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             campaignOptions={campaignOptions}
             sourceOptions={sourceOptions}
             handleSubmit={this.handleSubmit}
+            ePMS={ePMS}
           />
           <StudyStats stats={stats} />
-          <PatientBoard patientCategories={patientCategories} />
+          <PatientBoard
+            patientCategories={patientCategories}
+            ePMS={ePMS}
+          />
         </section>
       </div>
     );
@@ -150,6 +176,7 @@ const mapStateToProps = createStructuredSelector({
   stats: Selector.selectStudyStats(),
   currentUser: selectCurrentUser(),
   socket: selectSocket(),
+  sitePatients: selectSitePatients(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -159,6 +186,9 @@ function mapDispatchToProps(dispatch) {
     fetchStudy: (studyId, siteId) => dispatch(fetchStudy(studyId, siteId)),
     setStudyId: (id) => dispatch(setStudyId(id)),
     setSiteId: (id) => dispatch(setSiteId(id)),
+    updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
+    fetchSources: () => dispatch(fetchSources()),
+    fetchStudyTextNewStats: (studyId) => dispatch(fetchStudyTextNewStats(studyId)),
   };
 }
 

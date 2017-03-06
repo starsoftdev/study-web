@@ -1,47 +1,69 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { reject } from 'lodash';
 
-import { selectCurrentUser, selectSitePatients } from 'containers/App/selectors';
+import RewardModal from '../../../components/RewardModal';
 
-import { fetchPatientSignUps, fetchPatientMessages, fetchRewardsPoint } from '../actions';
-import { selectPatientSignUps, selectPatientMessages, selectRewardsPoint } from '../selectors';
+import { selectCurrentUser, selectSitePatients, selectUserSiteLocations, selectRewardsBalance, selectPatientMessageUnreadCount } from '../../App/selectors';
+import { fetchRewardsBalance, redeem } from '../../App/actions';
+import { pickReward } from '../../../containers/RewardsPage/actions';
 
-import './styles.less';
-import { sumBy } from 'lodash';
-import graph from 'assets/images/graph.svg';
+import { fetchPatientSignUps, fetchPatientMessages } from '../actions';
+import { selectPatientSignUps, selectPatientMessages } from '../selectors';
+
+import graph from '../../../assets/images/graph.svg';
+import classNames from 'classnames';
 
 export class Dashboard extends React.Component {
   static propTypes = {
     currentUser: PropTypes.any,
     patientSignUps: PropTypes.object,
     patientMessages: PropTypes.object,
-    rewardsPoint: PropTypes.number,
+    rewardsBalance: PropTypes.object,
     fetchPatientSignUps: PropTypes.func,
     fetchPatientMessages: PropTypes.func,
-    fetchRewardsPoint: PropTypes.func,
+    fetchRewardsBalance: PropTypes.func,
     sitePatients: React.PropTypes.object,
+    siteLocations: PropTypes.array,
+    redeem: PropTypes.func,
+    pickReward: PropTypes.func,
+    patientMessageUnreadCount: PropTypes.number,
+  }
+
+  state = {
+    rewardModalOpen: false,
   }
 
   componentDidMount() {
     const { currentUser } = this.props;
     this.props.fetchPatientSignUps(currentUser);
     this.props.fetchPatientMessages(currentUser);
-    this.props.fetchRewardsPoint(currentUser);
+    this.props.fetchRewardsBalance(currentUser.roleForClient.client_id, currentUser.roleForClient.site_id);
   }
 
-  handleRedeemClick = () => {
-    console.log('redeem clicked');
+  openRewardModal = () => {
+    this.setState({ rewardModalOpen: true });
+  }
+
+  closeRewardModal = () => {
+    this.setState({ rewardModalOpen: false });
+  }
+
+  handleRedeem = (data) => {
+    const { currentUser } = this.props;
+
+    this.props.redeem({
+      ...data,
+      userId: currentUser.id,
+    });
   }
 
   render() {
-    const { patientSignUps, patientMessages, rewardsPoint, sitePatients } = this.props;
-    const unreadTexts = sumBy(sitePatients.details, (sitePatient) => {
-      if (sitePatient.count_unread == null) {
-        return 0;
-      }
-      return parseInt(sitePatient.count_unread);
-    });
+    const { currentUser, patientSignUps, patientMessages, rewardsBalance, siteLocations, pickReward, patientMessageUnreadCount } = this.props;
+    const redeemable = (currentUser.roleForClient && currentUser.roleForClient.canRedeemRewards);
+    const redeemableSiteLocations = reject(siteLocations, { id: 0 });
+
     return (
       <section className="row infoarea text-uppercase">
         <h2 className="hidden">Statics</h2>
@@ -50,49 +72,49 @@ export class Dashboard extends React.Component {
             <div className="img-holder pull-left"><img src={graph} width="141" height="119" alt=" " /></div>
             <div className="textbox">
               <h2>PATIENT <br /> SIGN UPS</h2>
-              <span className="counter">TOTAL {patientSignUps.today + patientSignUps.yesterday}</span>
+              <span className="counter">TOTAL {patientSignUps.total}</span>
             </div>
           </div>
           <div className="box">
             <div className="col pull-left">
               <span className="sub-title">Yesterday</span>
-              <strong className="number">{patientSignUps.yesterday} <span className="caret-holder"><i className="caret"></i></span></strong>
+              <strong className="number">{patientSignUps.yesterday} <span className="caret-holder"><i className="caret" /></span></strong>
             </div>
             <div className="col pull-right">
               <span className="sub-title">Today</span>
-              <strong className="number">{patientSignUps.today} <span className="caret-holder"><i className="caret"></i><i className="caret"></i></span></strong>
+              <strong className="number">{patientSignUps.today} <span className="caret-holder"><i className="caret" /><i className="caret" /></span></strong>
             </div>
           </div>
         </article>
         <article className="col-xs-4 msg-info">
           <div className="box">
             <div className="messages-counter pull-left">
-              <i className="icomoon-icon_comment_alt"></i>
+              <i className="icomoon-icon_comment_alt" />
               <strong className="number hidden">72</strong>
             </div>
             <div className="textbox">
               <h2>PATIENT<br /> MESSAGES</h2>
-              <span className="counter">TOTAL {unreadTexts + patientMessages.unreadEmails}</span>
+              <span className="counter">TOTAL {patientMessages.total}</span>
             </div>
           </div>
           <div className="box">
             <div className="col pull-left">
               <span className="sub-title">UNREAD<br /> EMAILS</span>
-              <strong className="number"><i className="icomoon-envelop"></i> {patientMessages.unreadEmails}</strong>
+              <strong className="number"><i className="icomoon-envelop" /> {patientMessages.unreadEmails}</strong>
             </div>
             <div className="col pull-right">
               <span className="sub-title">UNREAD<br /> TEXTS</span>
-              <strong className="number"><i className="icomoon-icon_chat_alt"></i> {unreadTexts}</strong>
+              <strong className="number"><i className="icomoon-icon_chat_alt" /> {patientMessageUnreadCount}</strong>
             </div>
           </div>
         </article>
         <article className="col-xs-4 rewards-info">
           <div className="box">
-            <i className="icomoon-gift pull-left"></i>
+            <i className="icomoon-gift pull-left" />
             <div className="textbox">
               <h2>REWARDS</h2>
-              <a href="#popup-rewards" className="btn btn-info lightbox-opener" data-text="Redeem" data-hovertext="Redeem Now" onClick={() => this.handleRedeemClick()}>Redeem</a>
-              <span className="counter">{rewardsPoint} KIK<span className="small text-lowercase">s</span></span>
+              <a className={classNames('btn btn-info lightbox-opener', { disabled: !redeemable })} data-text="Redeem" data-hovertext="Redeem Now" onClick={redeemable ? this.openRewardModal : null}>Redeem</a>
+              <span className="counter">{rewardsBalance[currentUser.roleForClient.site_id || 0]} KIK<span className="small text-lowercase">s</span></span>
             </div>
           </div>
           <div className="box">
@@ -106,6 +128,14 @@ export class Dashboard extends React.Component {
             </div>
           </div>
         </article>
+        <RewardModal
+          currentUser={currentUser}
+          siteLocations={redeemableSiteLocations}
+          showModal={this.state.rewardModalOpen}
+          closeModal={this.closeRewardModal}
+          onSubmit={this.handleRedeem}
+          pickReward={pickReward}
+        />
       </section>
     );
   }
@@ -115,13 +145,17 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   patientSignUps: selectPatientSignUps(),
   patientMessages: selectPatientMessages(),
-  rewardsPoint: selectRewardsPoint(),
+  rewardsBalance: selectRewardsBalance(),
   sitePatients: selectSitePatients(),
+  siteLocations: selectUserSiteLocations(),
+  patientMessageUnreadCount: selectPatientMessageUnreadCount(),
 });
 const mapDispatchToProps = {
   fetchPatientSignUps,
   fetchPatientMessages,
-  fetchRewardsPoint,
+  fetchRewardsBalance,
+  redeem,
+  pickReward,
 };
 
 export default connect(

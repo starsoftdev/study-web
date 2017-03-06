@@ -24,9 +24,15 @@ const selectSites = () => createSelector(
   (substate) => substate.sites
 );
 
+const selectPaginationOptions = () => createSelector(
+  selectRewardsPageDomain(),
+  (substate) => substate.paginationOptions
+);
+
 
 export default selectRewardsPage;
 export {
   selectRewardsPageDomain,
   selectSites,
+  selectPaginationOptions,
 };

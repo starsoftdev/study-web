@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reset, blur, Field, reduxForm } from 'redux-form';
+import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
@@ -12,9 +13,8 @@ import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/index';
 import { submitPatientUpdate } from '../actions';
 import formValidator from './detailValidator';
-import { normalizePhone, normalizePhoneDisplay } from '../helper/functions';
+import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSyncErrors, selectValues, selectFormDidChange } from '../../../common/selectors/form.selector';
-import { createStructuredSelector } from 'reselect';
 
 const formName = 'PatientDetailModal.Detail';
 
@@ -78,7 +78,11 @@ class PatientDetailSection extends React.Component {
   }
 
   render() {
-    const { submitting } = this.props;
+    const { submitting, initialValues } = this.props;
+    let unsubscribedClassName = 'pull-left';
+    if (initialValues.isUnsubscribedByPatient) {
+      unsubscribedClassName += ' none-event';
+    }
     return (
       <Form className="form-lightbox form-patients-list" onSubmit={this.onSubmit}>
         <div className="field-row">
@@ -146,7 +150,7 @@ class PatientDetailSection extends React.Component {
               name="unsubscribed"
               type="checkbox"
               component={Checkbox}
-              className="pull-left"
+              className={unsubscribedClassName}
             />
             <label htmlFor="unsubscribed">Unsubscribe</label>
           </div>
@@ -165,9 +169,9 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  blur: (field, value) => dispatch(blur(formName, field, value)),
   reset: () => dispatch(reset(formName)),
   submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),
-  blur: (field, value) => dispatch(blur(formName, field, value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientDetailSection);

@@ -1,15 +1,48 @@
 /* eslint-disable global-require */
 const express = require('express');
 const path = require('path');
+const request = require('request');
 const compression = require('compression');
-const pkg = require(path.resolve(process.cwd(), 'package.json'));
 
-// Dev middleware
+const logView = (req) => {
+  const partsArr = req.url.split('-');
+
+  if (req.method === 'GET' && partsArr.length > 1) {
+    if (!isNaN(parseInt(partsArr[0].replace(/\//g, '')))) {
+      const options = {
+        uri: `${process.env.API_URL}/landingPageViews/logView`,
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        json: {
+          studyId: parseInt(partsArr[0].replace(/\//g, '')),
+          host: req.headers.host,
+          connection: req.headers.connection,
+          'cache-control': req.headers['cache-control'],
+          'user-agent': req.headers['user-agent'],
+          cookie: req.headers.cookie,
+          method: req.method,
+          ip: req.connection.remoteAddress,
+        },
+      };
+
+      request(options, (error, response) => {
+        if (error && response.statusCode !== 200) {
+          console.trace(error);
+        }
+      });
+    }
+  }
+};
+
 const addDevMiddlewares = (app, webpackConfig) => {
+// Dev middleware
   const webpack = require('webpack');
   const webpackDevMiddleware = require('webpack-dev-middleware');
   const webpackHotMiddleware = require('webpack-hot-middleware');
   const compiler = webpack(webpackConfig);
+
   const middleware = webpackDevMiddleware(compiler, {
     noInfo: true,
     publicPath: webpackConfig.output.publicPath,
@@ -24,15 +57,19 @@ const addDevMiddlewares = (app, webpackConfig) => {
   // artifacts, we use it instead
   const fs = middleware.fileSystem;
 
-  if (pkg.dllPlugin) {
-    app.get(/\.dll\.js$/, (req, res) => {
-      const filename = req.path.replace(/^\//, '');
-      res.sendFile(path.join(process.cwd(), pkg.dllPlugin.path, filename));
+  app.get('/app*', (req, res) => {
+    fs.readFile(path.join(compiler.outputPath, 'app.html'), (err, file) => {
+      if (err) {
+        res.sendStatus(404);
+      } else {
+        res.send(file.toString());
+      }
     });
-  }
+  });
 
   app.get('*', (req, res) => {
-    fs.readFile(path.join(compiler.outputPath, 'index.html'), (err, file) => {
+    logView(req);
+    fs.readFile(path.join(compiler.outputPath, 'corporate.html'), (err, file) => {
       if (err) {
         res.sendStatus(404);
       } else {
@@ -53,7 +90,11 @@ const addProdMiddlewares = (app, options) => {
   app.use(compression());
   app.use(publicPath, express.static(outputPath));
 
-  app.get('*', (req, res) => res.sendFile(path.resolve(outputPath, 'index.html')));
+  app.get('/app*', (req, res) => res.sendFile(path.resolve(outputPath, 'app.html')));
+  app.get('*', (req, res) => {
+    logView(req);
+    res.sendFile(path.resolve(outputPath, 'corporate.html'));
+  });
 };
 
 /**

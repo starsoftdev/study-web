@@ -15,3 +15,5 @@ export const SUBMIT_SCHEDULE_ERROR   = 'CalendarPage/SUBMIT_SCHEDULE_ERROR';
 export const DELETE_SCHEDULE         = 'CalendarPage/DELETE_SCHEDULE';
 export const DELETE_SCHEDULE_SUCCESS = 'CalendarPage/DELETE_SCHEDULE_SUCCESS';
 export const DELETE_SCHEDULE_ERROR   = 'CalendarPage/DELETE_SCHEDULE_ERROR';
+
+export const SET_ACTIVE_SORT   = 'CalendarPage/SET_ACTIVE_SORT';

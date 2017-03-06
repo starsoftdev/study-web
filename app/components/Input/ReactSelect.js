@@ -9,8 +9,6 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Select from 'react-select';
 import classNames from 'classnames';
 
-import './styles.less';
-
 function ReactSelect({
   input,
   name,
@@ -21,10 +19,9 @@ function ReactSelect({
   objectValue,
   onChange,
   meta: { touched, error, active },
-  ...rest,
+  ...rest
 }) {
   const hasError = touched && error && !active;
-  const errorClass = hasError ? 'has-error' : '';
   const optionsToRender = options.map(o => (
     { ...o, value: (o.value || o.id), label: (o.label || o.name) }
   ));
@@ -68,7 +65,7 @@ function ReactSelect({
   }
 
   return (
-    <div className={classNames([className, errorClass].join(' '))}>
+    <div className={classNames(className, { 'has-error': hasError })}>
       {inputComponent}
     </div>
   );

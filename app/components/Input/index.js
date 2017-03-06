@@ -21,6 +21,7 @@ function Input({
   id,
   placeholder,
   componentClass,
+  bsClass,
   className,
   tooltipDisabled,
   onBlur,
@@ -36,7 +37,6 @@ function Input({
   defaultValue,
 }) {
   const hasError = touched && error && !active;
-  const errorClass = hasError ? 'has-error' : '';
   const tooltip = (
     <Tooltip
       id={`${name}-tooltip`}
@@ -59,6 +59,7 @@ function Input({
       step={step}
       defaultValue={defaultValue}
       componentClass={componentClass} // Default value is `input`
+      bsClass={bsClass || 'form-control'}
       onChange={(event) => {
         input.onChange(event);
         if (onChange) {
@@ -88,7 +89,7 @@ function Input({
   }
 
   return (
-    <div className={classNames(className, errorClass)}>
+    <div className={classNames(className, { 'has-error': hasError })}>
       {inputComponent}
     </div>
   );
@@ -96,6 +97,7 @@ function Input({
 
 Input.propTypes = {
   componentClass: PropTypes.string,
+  bsClass: PropTypes.string,
   className: PropTypes.string,
   children: PropTypes.array,
   isDisabled: PropTypes.bool,

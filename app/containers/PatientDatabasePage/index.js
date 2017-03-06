@@ -7,10 +7,9 @@ import { createStructuredSelector } from 'reselect';
 import SearchPatientsForm from '../../containers/PatientDatabasePage/SearchPatientsForm/index';
 import PatientsList from '../../containers/PatientDatabasePage/PatientsList/index';
 import PatientActionButtons from './PatientActionButtons';
-import { fetchIndications, fetchSources } from 'containers/App/actions';
+import { fetchIndications, fetchSources } from '../../containers/App/actions';
 import { fetchPatientCategories, fetchPatients, clearPatientsList } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
-import './styles.less';
 
 export class PatientDatabasePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -61,7 +60,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
       queryParams.direction = this.props.paginationOptions.activeDirection;
     }
 
-    if (queryParams.status || queryParams.source || queryParams.includeIndication || queryParams.name ||
+    if (queryParams.status != null || queryParams.source != null || queryParams.includeIndication || queryParams.name ||
       queryParams.excludeIndication || queryParams.gender || queryParams.ageFrom || queryParams.ageTo || queryParams.bmiFrom || queryParams.bmiTo) {
       this.props.fetchPatients(queryParams, this.props.patients.details, searchFilter, isExport);
     } else {

@@ -1,13 +1,22 @@
 /* eslint-disable comma-dangle, no-case-declarations */
-import { forEach, map } from 'lodash';
+import _ from 'lodash';
 
 import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
   FETCH_PATIENT_MESSAGES_SUCCEESS,
-  FETCH_REWARDS_POINT_SUCCEESS,
+  FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS,
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
+  FETCH_PROTOCOLS,
+  FETCH_PROTOCOLS_SUCCESS,
+  FETCH_PROTOCOLS_ERROR,
+  FETCH_PROTOCOL_NUMBERS,
+  FETCH_PROTOCOL_NUMBERS_SUCCESS,
+  FETCH_PROTOCOL_NUMBERS_ERROR,
+  FETCH_INDICATIONS,
+  FETCH_INDICATIONS_SUCCESS,
+  FETCH_INDICATIONS_ERROR,
   FETCH_INDICATION_LEVEL_PRICE,
   FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
   FETCH_INDICATION_LEVEL_PRICE_ERROR,
@@ -21,23 +30,57 @@ import {
   EDIT_STUDY,
   EDIT_STUDY_SUCCESS,
   EDIT_STUDY_ERROR,
+  SET_ACTIVE_SORT,
+  NEW_MESSAGE_FOR_PROTOCOL,
+  SORT_SUCCESS,
 } from './constants';
 
 import {
+  ADD_EMAIL_NOTIFICATION_USER,
+  ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+  ADD_EMAIL_NOTIFICATION_USER_ERROR,
+  FETCH_CLIENT_ADMINS,
+  FETCH_CLIENT_ADMINS_SUCCESS,
+  FETCH_CLIENT_ADMINS_ERROR,
+} from '../../containers/App/constants';
+
+import {
   RECEIVE_NOTIFICATION,
-} from 'containers/GlobalNotifications/constants';
+  SEND_STUDY_PATIENT_MESSAGES,
+} from '../../containers/GlobalNotifications/constants';
 
 const initialState = {
   patientSignUps: {
     today: 0,
     yesterday: 0,
+    total: 0,
+  },
+  principalInvestigatorTotals: {
+    active: 0,
+    inactive: 0,
+    total: 0,
   },
   patientMessages: {
     unreadTexts: 0,
     unreadEmails: 0,
+    total: 0,
   },
-  rewardsPoint: 0,
   studies: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  protocols: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  protocolNumbers: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  indications: {
     details: [],
     fetching: false,
     error: null,
@@ -62,15 +105,26 @@ const initialState = {
     submitting: false,
     error: null,
   },
+  paginationOptions: {
+    activeSort: null,
+    activeDirection: null,
+  },
+  addNotificationProcess: {
+    saving: false,
+    error: null,
+    savedUser: null,
+  },
+  clientAdmins: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
 };
 
 export default function homePageReducer(state = initialState, action) {
   const { payload } = action;
   let newState;
-  let entity;
-  let entitiesCollection;
-  let startDateStr = '';
-  let endDateStr = '';
+  let protocols;
 
   switch (action.type) {
     case FETCH_PATIENT_SIGN_UPS_SUCCEESS:
@@ -79,6 +133,7 @@ export default function homePageReducer(state = initialState, action) {
         patientSignUps: {
           today: payload.today,
           yesterday: payload.yesterday,
+          total: payload.total,
         },
       };
     case FETCH_PATIENT_MESSAGES_SUCCEESS:
@@ -87,12 +142,27 @@ export default function homePageReducer(state = initialState, action) {
         patientMessages: {
           unreadTexts: payload.unreadTexts,
           unreadEmails: payload.unreadEmails,
+          total: payload.total,
         },
       };
-    case FETCH_REWARDS_POINT_SUCCEESS:
+    case FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS:
       return {
         ...state,
-        rewardsPoint: action.payload.rewardPoints,
+        principalInvestigatorTotals: {
+          active: payload.active,
+          inactive: payload.inactive,
+          total: payload.total,
+        },
+      };
+    case SEND_STUDY_PATIENT_MESSAGES:
+      newState = state;
+      return {
+        ...state,
+        patientMessages: {
+          unreadTexts: newState.patientMessages.unreadTexts,
+          unreadEmails: newState.patientMessages.unreadEmails,
+          total: newState.patientMessages.total + 1,
+        },
       };
     case RECEIVE_NOTIFICATION:
       newState = state;
@@ -112,6 +182,7 @@ export default function homePageReducer(state = initialState, action) {
             patientMessages: {
               unreadTexts: newState.patientMessages.unreadTexts + 1,
               unreadEmails: newState.patientMessages.unreadEmails,
+              total: newState.patientMessages.total + 1,
             },
           };
           break;
@@ -134,52 +205,23 @@ export default function homePageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case FETCH_STUDIES_SUCCESS:
-      entitiesCollection = [];
-
-      forEach(payload, (studyIterator) => {
-        entity = {
-          studyId: studyIterator.id,
-          indication: studyIterator.indication,
-          location: '',
-          sponsor: '',
-          protocol: studyIterator.protocolNumber,
-          patientMessagingSuite: (studyIterator.patientMessagingSuite) ? 'On' : 'Off',
-          status: studyIterator.status,
-          callTracking: studyIterator.callTracking,
-          siteUsers: null,
-          startDate: '',
-          endDate: '',
-        };
-        if (studyIterator.sponsors && studyIterator.sponsors.length > 0) {
-          const sponsorContacts = map(studyIterator.sponsors, sponsorContactIterator => sponsorContactIterator.name);
-          const sponsorContactsStr = sponsorContacts.join(', ');
-          entity.sponsor = sponsorContactsStr;
-        }
-        if (!studyIterator.sites || studyIterator.sites.length === 0) {
-          entitiesCollection.push(entity);
-          return true;
-        }
-        forEach(studyIterator.sites, (siteIterator) => {
-          startDateStr = '';
-          endDateStr = '';
-          if (siteIterator.campaigns && siteIterator.campaigns.length > 0) {
-            startDateStr = new Date(siteIterator.campaigns[0].dateFrom).toLocaleDateString();
-            endDateStr = new Date(siteIterator.campaigns[0].dateTo).toLocaleDateString();
-          }
-          entity = {
-            ...entity,
-            location: siteIterator.location,
-            status: siteIterator.status,
-            campaign: siteIterator.campaigns[0],
-            siteUsers: siteIterator.users,
-            startDate: startDateStr,
-            endDate: endDateStr,
-          };
-          entitiesCollection.push(entity);
-        });
-        return true;
-      });
+    case FETCH_STUDIES_SUCCESS: {
+      const entitiesCollection = payload.map((studyObject, index) => ({
+        studyId: studyObject.id,
+        indication: studyObject.indication,
+        location: studyObject.site.location,
+        sponsor: studyObject.sponsor.name,
+        protocol: studyObject.protocolNumber,
+        patientMessagingSuite: studyObject.patientMessagingSuite ? 'On' : 'Off',
+        patientQualificationSuite: studyObject.patientQualificationSuite ? 'On' : 'Off',
+        status: studyObject.status,
+        callTracking: studyObject.callTracking,
+        startDate: studyObject.campaigns[0].dateFrom,
+        endDate: studyObject.campaigns[0].dateTo,
+        level_id: studyObject.campaigns[0].level_id,
+        orderNumber: (index + 1),
+        siteId: studyObject.site.id
+      }));
       return {
         ...state,
         studies: {
@@ -188,10 +230,92 @@ export default function homePageReducer(state = initialState, action) {
           error: null,
         },
       };
+    }
     case FETCH_STUDIES_ERROR:
       return {
         ...state,
         studies: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
+      };
+    case FETCH_PROTOCOLS:
+      return {
+        ...state,
+        protocols: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_PROTOCOLS_SUCCESS:
+      return {
+        ...state,
+        protocols: {
+          details: payload.protocols,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_PROTOCOLS_ERROR:
+      return {
+        ...state,
+        protocols: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
+      };
+    case FETCH_PROTOCOL_NUMBERS:
+      return {
+        ...state,
+        protocolNumbers: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_PROTOCOL_NUMBERS_SUCCESS:
+      return {
+        ...state,
+        protocolNumbers: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_PROTOCOL_NUMBERS_ERROR:
+      return {
+        ...state,
+        protocolNumbers: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
+      };
+    case FETCH_INDICATIONS:
+      return {
+        ...state,
+        indications: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_INDICATIONS_SUCCESS:
+      return {
+        ...state,
+        indications: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_INDICATIONS_ERROR:
+      return {
+        ...state,
+        indications: {
           details: [],
           fetching: false,
           error: payload,
@@ -270,8 +394,16 @@ export default function homePageReducer(state = initialState, action) {
         },
       };
     case UPGRADE_STUDY_SUCCESS:
+      const studies = _.cloneDeep(state.studies.details);
+      const study = _.find(studies, (o) => (o.studyId === payload.studyId));
+      study.campaign.level_id = payload.newLevelId;
       return {
         ...state,
+        studies: {
+          details: studies,
+          fetching: false,
+          error: null,
+        },
         upgradedStudy: {
           details: payload,
           submitting: false,
@@ -312,6 +444,92 @@ export default function homePageReducer(state = initialState, action) {
           details: null,
           submitting: false,
           error: payload,
+        },
+      };
+    case SET_ACTIVE_SORT:
+      return {
+        ...state,
+        paginationOptions: {
+          activeSort: action.sort,
+          activeDirection: action.direction,
+        },
+      };
+    case SORT_SUCCESS:
+      return {
+        ...state,
+        studies: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: true,
+          error: null,
+          savedUser: null,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER_SUCCESS:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: false,
+          error: null,
+          savedUser: action.payload,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER_ERROR:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: false,
+          error: action.payload,
+          savedUser: null,
+        },
+      };
+    case NEW_MESSAGE_FOR_PROTOCOL:
+      protocols = _.cloneDeep(state.protocols.details);
+      _.forEach(protocols, (item, index) => {
+        if (item.protocolNumber === action.protocolNumber) {
+          protocols[index].unreadMessageCount = item.unreadMessageCount ? (parseInt(item.unreadMessageCount) + 1).toString() : '1';
+        }
+      });
+      return {
+        ...state,
+        protocols: {
+          details: protocols,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_CLIENT_ADMINS:
+      return {
+        ...state,
+        clientAdmins: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_CLIENT_ADMINS_SUCCESS:
+      return {
+        ...state,
+        clientAdmins: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_CLIENT_ADMINS_ERROR:
+      return {
+        ...state,
+        clientAdmins: {
+          details: [],
+          fetching: false,
+          error: action.payload,
         },
       };
     default:

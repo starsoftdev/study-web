@@ -10,7 +10,7 @@ import {
   CHANGE_PASSWORD_ERROR,
   FETCH_OTHER_USER_SUCCESS,
   FETCH_OTHER_USER_ERROR,
-} from 'containers/ProfilePage/constants';
+} from '../../containers/ProfilePage/constants';
 
 const initialState = {
   changePasswordResult: {

@@ -1,0 +1,51 @@
+@import "../../assets/less/variables.less";
+
+.react-parallax-bgimage {
+  @media screen and (max-width: @xs) {
+    height: 1700px !important;
+  }
+}
+
+.modal-content {
+  @media screen and (max-width: @phone) {
+    margin: 0 15px !important;
+  }
+}
+
+.modal-header {
+
+  a.close {
+    margin: -11px -2px 0 0 !important;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.modal-body {
+  padding: 0 !important;
+
+  span {
+    padding: 20px 25px 0px;
+    width: 100%;
+    display: inline-block;
+  }
+
+  input.form-control {
+    @media screen and (max-width: @phone) {
+      font-size: 16px !important;
+    }
+  }
+}
+
+.field-row + .field-row {
+  margin: 15px 0 0 !important;
+}
+
+form {
+
+  .text-right {
+    margin-top: 15px;
+  }
+}

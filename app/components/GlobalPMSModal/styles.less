@@ -1,21 +1,20 @@
-.custom-modal {
-  &.global-pms{
-    .modal-dialog{
-      width: auto;
+.global-pms-modal {
+  .modal-dialog{
+    width: auto;
 
-      .modal-content {
-        max-width: 1100px;
+    .modal-content {
+      max-width: 1100px;
 
-        .modal-body{
-          margin-top: -1px;
-          .holder{
-            /*max-height: 64vh;*/
-          }
+      .modal-body{
+        margin-top: -1px;
+        overflow: hidden;
+        .holder{
+          /*max-height: 64vh;*/
         }
       }
     }
   }
-} 
+}
 .aside-chat {
   top: 0px;
   left: 0;
@@ -28,6 +27,11 @@
 
     padding: 0;
     max-height: 100%;
+
+    li:hover {
+      cursor: pointer;
+    }
+
     .custom-select-drop {
       position: relative;
       padding: 25px 25px 15px;
@@ -50,6 +54,9 @@
     margin: 0;
     border: 0;
     min-width: 0;
+  }
+  header a {
+    cursor: pointer;
   }
   .scroll-holder {
     max-height: 64vh;

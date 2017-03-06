@@ -7,13 +7,14 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 import { Modal } from 'react-bootstrap';
-import Input from 'components/Input';
-import ChangePasswordForm from 'components/ChangePasswordForm';
-import ProfileImageForm from 'components/ProfileImageForm';
-import defaultImage from 'assets/images/Default-User-Img-Dr.png';
-import './styles.less';
+import Input from '../../components/Input';
+import ChangePasswordForm from '../../components/ChangePasswordForm';
+import ProfileImageForm from '../../components/ProfileImageForm';
+import defaultImage from '../../assets/images/Default-User-Img-Dr.png';
 import 'blueimp-canvas-to-blob';
-import CenteredModal from 'components/CenteredModal/index';
+import CenteredModal from '../../components/CenteredModal/index';
+import ReactSelect from '../../components/Input/ReactSelect';
+import moment from 'moment-timezone';
 
 @reduxForm({ form: 'profile' })
 class ProfileForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -23,6 +24,9 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     changeImage: React.PropTypes.func,
     changePasswordResult: React.PropTypes.object,
     me: React.PropTypes.bool,
+    formValues: React.PropTypes.object,
+    changeUsersTimezone: React.PropTypes.func,
+    changeTimezoneState: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -33,15 +37,63 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     this.closeProfileImageModal = this.closeProfileImageModal.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
 
+
+    const timezones = moment.tz.names();
+    const regionOptions = [];
+    const regionWithTimezones = [];
+
+    for (const tz of timezones) {
+      const parsedRegion = tz.substr(0, tz.indexOf('/'));
+      const parsedTimezone = tz.substr(tz.indexOf('/') + 1);
+
+      if (!parsedRegion) {
+        regionWithTimezones[parsedTimezone] = [];
+
+        regionWithTimezones[parsedTimezone].push({
+          label: parsedTimezone.replace(/_/g, ' '),
+          value: parsedTimezone,
+        });
+
+        regionOptions.push({
+          label: parsedTimezone.replace(/_/g, ' '),
+          value: parsedTimezone,
+        });
+      } else if (regionWithTimezones[parsedRegion]) {
+        regionWithTimezones[parsedRegion].push({
+          label: parsedTimezone.replace(/_/g, ' '),
+          value: parsedTimezone,
+        });
+      } else {
+        regionWithTimezones[parsedRegion] = [];
+
+        regionWithTimezones[parsedRegion].push({
+          label: parsedTimezone.replace(/_/g, ' '),
+          value: parsedTimezone,
+        });
+
+        regionOptions.push({
+          label: parsedRegion,
+          value: parsedRegion,
+        });
+      }
+    }
+
     this.state = {
       passwordResetModalOpen: false,
       profileImageModalOpen: false,
+      regionOptions,
+      regionWithTimezones,
     };
   }
 
   componentWillReceiveProps(newProps) {
     if (!newProps.changePasswordResult.passwordChanging && this.props.changePasswordResult.passwordChanging) {
       this.closeResetPasswordModal();
+    }
+
+    if (newProps.formValues.selectedRegion && newProps.formValues.selectedTimezone && (newProps.formValues.selectedTimezone !== this.props.formValues.selectedTimezone) && (this.props.formValues.selectedRegion)) {
+      const newTimezone = (newProps.formValues.selectedRegion === newProps.formValues.selectedTimezone) ? newProps.formValues.selectedRegion : `${newProps.formValues.selectedRegion}/${newProps.formValues.selectedTimezone}`;
+      this.props.changeUsersTimezone(this.props.currentUser.id, newTimezone);
     }
   }
 
@@ -70,15 +122,19 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
 
   render() {
     const { me } = this.props;
+    let timezoneOptions = [];
+
+    if (this.props.formValues.selectedRegion) {
+      timezoneOptions = this.state.regionWithTimezones[this.props.formValues.selectedRegion];
+    }
+
     const initialValues = {
       initialValues: {
         user_id: this.props.currentUser.id,
       },
     };
     return (
-      <form className="form-study">
-
-
+      <form>
         <div className="field-row label-top file-img active">
           <strong className="label"><label htmlFor="profile-img">PROFILE IMAGE</label></strong>
           <div className="field">
@@ -93,9 +149,9 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         </div>
 
         <div className="field-row">
-          <strong className="label"></strong>
+          <strong className="label" />
           <div className="field">
-            <a href="#" className="btn btn-gray upload-btn lightbox-opener" onClick={this.openProfileImageModal}>Update Profile Image</a>
+            <a className="btn btn-gray upload-btn" onClick={this.openProfileImageModal}>Update Profile Image</a>
           </div>
         </div>
 
@@ -136,28 +192,62 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         </div>
 
         <div className="field-row">
-          <strong className="label"><label>PASSWORD</label></strong>
-          <a className="btn btn-primary lightbox-opener profile-page-edit-password-btn" onClick={this.openResetPasswordModal} disabled={!me}>EDIT</a>
+          <strong className="label"><label>Time Zone</label></strong>
+          <Field
+            name="selectedRegion"
+            component={ReactSelect}
+            placeholder="Select Region"
+            options={this.state.regionOptions}
+            disabled={!me || this.props.changeTimezoneState.saving}
+            className="field"
+          />
+        </div>
+        <div className="field-row">
+          <strong className="label"><label></label></strong>
+          <Field
+            name="selectedTimezone"
+            component={ReactSelect}
+            placeholder="Select Time Zone"
+            options={timezoneOptions}
+            disabled={!me || !this.props.formValues.selectedRegion || this.props.changeTimezoneState.saving}
+            className="field"
+          />
         </div>
 
-
-        <Modal className="custom-modal" dialogComponentClass={CenteredModal} show={this.state.passwordResetModalOpen} onHide={this.closeResetPasswordModal}>
+        <div className="field-row">
+          <strong className="label"><label>PASSWORD</label></strong>
+          <a className="btn btn-primary" onClick={this.openResetPasswordModal} disabled={!me}>EDIT</a>
+        </div>
+        <Modal
+          className="profile-page-modal"
+          dialogComponentClass={CenteredModal}
+          show={this.state.passwordResetModalOpen}
+          onHide={this.closeResetPasswordModal}
+          backdrop
+          keyboard
+        >
           <Modal.Header>
             <Modal.Title>CHANGE PASSWORD</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeResetPasswordModal}>
-              <i className="icomoon-icon_close"></i>
+              <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>
             <ChangePasswordForm {...initialValues} onSubmit={this.props.changePassword} />
           </Modal.Body>
         </Modal>
-
-        <Modal className="custom-modal avatar-modal" dialogComponentClass={CenteredModal} show={this.state.profileImageModalOpen} onHide={this.closeProfileImageModal}>
+        <Modal
+          className="profile-page-modal avatar-modal"
+          dialogComponentClass={CenteredModal}
+          show={this.state.profileImageModalOpen}
+          onHide={this.closeProfileImageModal}
+          backdrop
+          keyboard
+        >
           <Modal.Header>
             <Modal.Title>UPDATE PROFILE IMAGE</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeProfileImageModal}>
-              <i className="icomoon-icon_close"></i>
+              <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>

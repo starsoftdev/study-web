@@ -17,20 +17,22 @@ import {
   setSearchOptions,
   setActiveSort,
   showInvoicePdf,
-} from 'containers/Receipts/actions';
+  sortProposalsSuccess,
+} from '../../containers/Receipts/actions';
 import {
   fetchSites,
   fetchEvents,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 import {
   selectSiteLocations,
   selectCurrentUser,
   selectEvents,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 
 import { selectReceiptsList, selectPaginationOptions, selectSearchOptions } from './selectors';
-import ReceiptsTable from 'components/ReceiptsTable';
-import TableSearchForm from 'components/TableSearchForm';
+import ReceiptsTable from '../../components/ReceiptsTable';
+import TableSearchForm from '../../components/TableSearchForm';
+import AlertModal from '../../components/AlertModal';
 
 export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -47,6 +49,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     setSearchOptions: PropTypes.func,
     setActiveSort: PropTypes.func,
     showInvoicePdf: PropTypes.func,
+    sortProposalsSuccess: PropTypes.func,
   };
 
   constructor(props, context) {
@@ -64,6 +67,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
       processPDF: false,
       receipts: null,
       filteredReceipts: null,
+      showAlertModal: false,
     };
   }
 
@@ -72,14 +76,20 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     this.props.getReceipts(15, 0, this.props.receipts);
   }
 
-  componentWillReceiveProps() {
-    // console.log('componentWillReceiveProps', nextProps);
-  }
-
   getPDF() {
     if (this.selectedReceipts) {
       this.props.getPDF(this.selectedReceipts);
+    } else {
+      this.setState({
+        showAlertModal: true,
+      });
     }
+  }
+
+  hideAlertModal = () => {
+    this.setState({
+      showAlertModal: false,
+    });
   }
 
   get selectedReceipts() {
@@ -147,7 +157,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
   render() {
     return (
       <StickyContainer className="container-fluid">
-        <Helmet title="Proposals - StudyKIK" />
+        <Helmet title="Receipts - StudyKIK" />
         <section className="receipts">
           <h2 className="main-heading">RECEIPTS</h2>
           <TableSearchForm
@@ -156,7 +166,9 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
             createPdf={this.getPDF}
             {...this.props}
           />
+          <AlertModal show={this.state.showAlertModal} onHide={this.hideAlertModal} name="receipt" />
           <ReceiptsTable
+            currentUser={this.props.currentUser}
             selectCurrent={this.selectCurrent}
             selectAll={this.selectAll}
             getReceipts={this.props.getReceipts}
@@ -165,6 +177,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
             searchOptions={this.props.searchOptions}
             setActiveSort={this.props.setActiveSort}
             showInvoicePdf={this.props.showInvoicePdf}
+            sortProposalsSuccess={this.props.sortProposalsSuccess}
             {...this.props}
           />
         </section>
@@ -191,6 +204,7 @@ function mapDispatchToProps(dispatch) {
     setSearchOptions: (payload) => dispatch(setSearchOptions(payload)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
     showInvoicePdf: (values) => dispatch(showInvoicePdf(values)),
+    sortProposalsSuccess: (values) => dispatch(sortProposalsSuccess(values)),
   };
 }
 

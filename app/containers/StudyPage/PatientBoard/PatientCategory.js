@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { DropTarget } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
 
-import { selectCurrentUser, selectSitePatients } from 'containers/App/selectors';
+import { selectCurrentUser, selectSitePatients } from '../../App/selectors';
 import * as Selector from '../selectors';
 import DragTypes from './dragSourceTypes';
 import Patient from './Patient';

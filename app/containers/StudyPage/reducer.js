@@ -14,6 +14,7 @@ import {
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_SITE_SUCCESS,
   EXPORT_PATIENTS_SUCCESS,
+  FETCHING_STUDY,
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
@@ -39,6 +40,7 @@ import {
   SWITCH_TO_TEXT_SECTION_DETAIL,
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
+  SUBMIT_ADD_PATIENT,
 } from './constants';
 import _ from 'lodash';
 
@@ -52,6 +54,9 @@ const initialState = {
   },
   openScheduledModal: false,
   openPatientModal: false,
+  addPatientStatus:{
+    adding: false,
+  },
 };
 
 function studyPageReducer(state = initialState, action) {
@@ -64,6 +69,11 @@ function studyPageReducer(state = initialState, action) {
     case EXPORT_PATIENTS_SUCCESS:
       return {
         ...state,
+      };
+    case FETCHING_STUDY:
+      return {
+        ...state,
+        fetchingStudy: true,
       };
     case FETCH_PATIENTS_SUCCESS:
       return {
@@ -94,6 +104,12 @@ function studyPageReducer(state = initialState, action) {
     case REMOVE_PATIENT_INDICATION_SUCCESS:
     case SUBMIT_DELETE_NOTE_SUCCESS:
     case UPDATE_PATIENT_SUCCESS:
+      if (action.payload.lastTextMessage) {
+        return {
+          ...state,
+          patientCategories: patientCategories(state.patientCategories, action.payload.patientCategoryId, action.payload.patientId, action),
+        };
+      }
       return {
         ...state,
         patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),
@@ -109,16 +125,21 @@ function studyPageReducer(state = initialState, action) {
         fileUploaded: null,
         uploadStarted: true,
       };
-    case SUBMIT_ADD_PATIENT_FAILURE:
+    case SUBMIT_ADD_PATIENT:
       return {
         ...state,
-        uploadStarted: null,
+        addPatientStatus: {
+          adding: true,
+        },
       };
     case SUBMIT_ADD_PATIENT_SUCCESS:
       return {
         ...state,
         uploadStarted: null,
         fileUploaded: action.fileName,
+        addPatientStatus: {
+          adding: false,
+        },
         patientCategories: state.patientCategories.map(category => {
           if (category.name === 'New Patient') {
             if (!category.patients) {
@@ -145,6 +166,14 @@ function studyPageReducer(state = initialState, action) {
           }
           return category;
         }),
+      };
+    case SUBMIT_ADD_PATIENT_FAILURE:
+      return {
+        ...state,
+        uploadStarted: null,
+        addPatientStatus: {
+          adding: false,
+        },
       };
     case MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS:
       return {
@@ -373,9 +402,14 @@ function patients(state, currentPatientId, action) {
         if (patient.id === currentPatientId) {
           return {
             ...patient,
-            indications: [
-              ...patient.indications,
-              action.indication,
+            patientIndications: [
+              ...patient.patientIndications,
+              {
+                isOriginal: false,      // always false on manual addition of indication
+                indication: action.indication,
+                indication_id: action.indication.id,
+                patient_id: action.patientId,
+              },
             ],
           };
         }
@@ -402,8 +436,8 @@ function patients(state, currentPatientId, action) {
         if (patient.id === currentPatientId) {
           return {
             ...patient,
-            indications: patient.indications.filter(indication => (
-              indication.id !== action.indicationId
+            patientIndications: patient.patientIndications.filter(pi => (
+              pi.indication.id !== action.indicationId
             )),
           };
         }

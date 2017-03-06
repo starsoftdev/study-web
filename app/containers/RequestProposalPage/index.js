@@ -9,23 +9,25 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
 import Helmet from 'react-helmet';
+import { ComingSoon } from '../../components/ComingSoon';
+import RequestProposalForm from '../../components/RequestProposalForm';
+import RequestProposalCart from '../../components/RequestProposalCart';
 
-import RequestProposalForm from 'components/RequestProposalForm';
-import RequestProposalCart from 'components/RequestProposalCart';
 
 import {
   fetchSites,
   fetchIndications,
   fetchLevels,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 import {
   selectSiteLocations,
   selectIndications,
   selectStudyLevels,
-} from 'containers/App/selectors';
+  selectUserRoleType,
+} from '../../containers/App/selectors';
 
-import { submitForm, fetchProposal } from 'containers/RequestProposalPage/actions';
-import { selectProposalDetail } from './selectors';
+import { submitForm, fetchProposal } from '../../containers/RequestProposalPage/actions';
+import { selectProposalDetail, selectProposalsFormError, selectProposalsFormValues } from './selectors';
 
 export class RequestProposalPage extends Component {
   static propTypes = {
@@ -40,11 +42,14 @@ export class RequestProposalPage extends Component {
     fetchProposal: PropTypes.func,
     onSubmitForm: PropTypes.func.isRequired,
     location: PropTypes.any,
+    hasErrors: PropTypes.bool,
+    formValues: PropTypes.object,
+    userRoleType: PropTypes.string,
   }
 
   constructor(props) {
     super(props);
-    this.onSubmitForm = this.props.onSubmitForm.bind(this);
+    this.submitClick = this.submitClick.bind(this);
 
     if (!isNaN(props.params.id)) {
       this.props.fetchProposal(props.params.id);
@@ -57,41 +62,54 @@ export class RequestProposalPage extends Component {
     this.props.fetchLevels();
   }
 
+  submitClick() {
+    this.props.onSubmitForm(this.props.formValues);
+  }
+
   render() {
-    const { siteLocations, indications, studyLevels, proposalDetail } = this.props;
+    const { siteLocations, indications, studyLevels, proposalDetail, userRoleType } = this.props;
 
     return (
-      <StickyContainer className="container-fluid">
-        <Helmet title="Request Proposal - StudyKIK" />
-        <section className="study-portal">
+      <div>
+        { userRoleType === 'client' &&
+          <StickyContainer className="container-fluid">
+            <Helmet title="Request Proposal - StudyKIK" />
+            <section className="study-portal">
 
-          <h2 className="main-heading">REQUEST PROPOSAL</h2>
+              <h2 className="main-heading">REQUEST PROPOSAL</h2>
 
-          <div className="row form-study">
+              <div className="row form-study">
 
-            <div className="col-xs-6 form-holder">
-              <RequestProposalForm
-                siteLocations={siteLocations}
-                indications={indications}
-                studyLevels={studyLevels}
-                initialValues={proposalDetail}
-              />
-            </div>
-
-            <div className="fixed-block">
-              <div className="fixed-block-holder">
-                <div className="order-summery-container">
-                  <Sticky className="sticky-shopping-cart">
-                  {/* this will be replaced with a new shopping cart component */}
-                    <RequestProposalCart onSubmit={this.onSubmitForm} />
-                  </Sticky>
+                <div className="col-xs-6 form-holder">
+                  <RequestProposalForm
+                    siteLocations={siteLocations}
+                    indications={indications}
+                    studyLevels={studyLevels}
+                    initialValues={proposalDetail}
+                    formValues={this.props.formValues}
+                  />
                 </div>
-              </div>
-            </div>
 
-          </div>
-        </section>
-      </StickyContainer>
+                <div className="fixed-block">
+                  <div className="fixed-block-holder">
+                    <div className="order-summery-container">
+                      <Sticky className="sticky-shopping-cart">
+                        {/* this will be replaced with a new shopping cart component */}
+                        <RequestProposalCart onSubmit={this.onSubmitForm} />
+                      </Sticky>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </section>
+          </StickyContainer>
+        }
+        {
+          userRoleType === 'sponsor' &&
+            <ComingSoon />
+        }
+      </div>
     );
   }
 }
@@ -101,6 +119,9 @@ const mapStateToProps = createStructuredSelector({
   indications   : selectIndications(),
   studyLevels   : selectStudyLevels(),
   proposalDetail: selectProposalDetail(),
+  hasErrors: selectProposalsFormError(),
+  formValues: selectProposalsFormValues(),
+  userRoleType: selectUserRoleType(),
 });
 
 function mapDispatchToProps(dispatch) {

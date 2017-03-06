@@ -1,36 +1,40 @@
 /* eslint-disable no-unused-vars */
 
 import React, { PropTypes } from 'react';
+import moment from 'moment-timezone';
+import _ from 'lodash';
+import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+import ComingSoon from '../../components/ComingSoon/index';
 import CalendarWidget from './components/CalendarWidget';
 import SchedulePatientModal from './components/SchedulePatientModal';
+import EditScheduleModal from './components/EditScheduleModal';
 import FilterBar from './components/FilterBar';
 import AllEventsModal from './components/AllEventsModal';
-
-import moment from 'moment';
-import _ from 'lodash';
 
 import {
   fetchSites,
   fetchIndications,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 import {
   selectCurrentUser,
   selectSites,
   selectIndications,
-} from 'containers/App/selectors';
+  selectUserRoleType,
+} from '../../containers/App/selectors';
 
 import {
   fetchPatientsByStudy,
   fetchSchedules,
   submitSchedule,
   deleteSchedule,
+  setActiveSort,
 } from './actions';
-import { selectSchedules, selectPatientsByStudy } from './selectors';
+import { selectSchedules, selectPatientsByStudy, selectPaginationOptions } from './selectors';
 
-import { SchedulePatientModalType } from 'common/constants';
+import { SchedulePatientModalType } from '../../common/constants';
 
 const getFilteredSchedules = (schedules, filter) =>
   schedules.filter(s =>
@@ -39,6 +43,28 @@ const getFilteredSchedules = (schedules, filter) =>
       (!filter.indication || filter.indication === 'All' || s.indication === filter.indication) &&
       (!filter.protocol || filter.protocol === 'All' || s.protocolNumber === filter.protocol)
   );
+
+function numberSequenceCreator(start, end) {
+  return _.range(start, end).map(n => {
+    if (n < 10) {
+      return {
+        label: `0${n}`,
+        value: n.toString(),
+      };
+    }
+    return {
+      label: n.toString(),
+      value: n.toString(),
+    };
+  });
+}
+
+const hourOptions = numberSequenceCreator(1, 13);
+const minuteOptions = numberSequenceCreator(0, 60);
+const periodOptions = [
+  { label: 'AM', value: 'AM' },
+  { label: 'PM', value: 'PM' },
+];
 
 export class CalendarPage extends React.Component {
   static propTypes = {
@@ -53,7 +79,10 @@ export class CalendarPage extends React.Component {
     fetchSchedules: PropTypes.func.isRequired,
     submitSchedule: PropTypes.func.isRequired,
     deleteSchedule: PropTypes.func.isRequired,
-  }
+    paginationOptions: PropTypes.object,
+    setActiveSort: PropTypes.func,
+    userRoleType: PropTypes.string,
+  };
 
   constructor(props) {
     super(props);
@@ -61,6 +90,7 @@ export class CalendarPage extends React.Component {
     this.selectedCellInfo = {};
     this.updateFilter = ::this.updateFilter;
     this.handleCloseModal = this.handleModalVisibility.bind(this, SchedulePatientModalType.HIDDEN);
+    this.sortBy = this.sortBy.bind(this);
   }
 
   state = {
@@ -78,7 +108,8 @@ export class CalendarPage extends React.Component {
     },
     allModalDeferred: false,
     filteredSchedules: [],
-  }
+    localSchedules: [],
+  };
 
   componentDidMount() {
     const { currentUser } = this.props;
@@ -89,7 +120,17 @@ export class CalendarPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.filterSchedules(nextProps.schedules.data, this.state.filter);
+    if (this.props.schedules.data !== nextProps.schedules.data || this.props.currentUser.timezone !== nextProps.currentUser.timezone) {
+      const timezone = nextProps.currentUser.timezone;
+      const localSchedules = nextProps.schedules.data.map(s => ({
+        ...s,
+        time: moment(s.time).tz(timezone),
+      }));
+      this.setState({
+        localSchedules,
+      });
+      this.filterSchedules(localSchedules, this.state.filter);
+    }
   }
 
   setAllModalDeferred = (allModalDeferred) => {
@@ -131,6 +172,7 @@ export class CalendarPage extends React.Component {
 
   handleSubmit = (data) => {
     let submitData;
+    const { currentUser } = this.props;
 
     if (data.siteLocation && data.protocol) { // CREATE
       submitData = {
@@ -138,25 +180,32 @@ export class CalendarPage extends React.Component {
         indication: data.protocol.indication,
         protocolNumber: data.protocol.label,
         patientId: data.patient.value,
-        userId: this.props.currentUser.id,
+        patientName: data.patient.label,
+        userId: currentUser.id,
         time: moment(this.selectedCellInfo.selectedDate).add(data.period === 'AM' ?
           data.hour % 12 :
-          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').utc().format(),
+          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes'),
         textReminder: data.textReminder,
+        timezone: currentUser.timezone,
       };
     } else { // UPDATE
       let updatedDate;
       if (data.date) {
         updatedDate = data.date.startOf('day');
       } else {  // React Datepicker doesn't submit its initial value
-        updatedDate = moment(new Date(this.selectedCellInfo.data.time)).startOf('day');
+        updatedDate = moment(this.selectedCellInfo.data.time).startOf('day');
       }
+      const nn = updatedDate.clone().add(data.period === 'AM' ?
+          data.hour % 12 :
+          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes');
       submitData = {
         id: this.selectedCellInfo.data.id,
-        time: updatedDate.add(data.period === 'AM' ?
+        time: updatedDate.clone().add(data.period === 'AM' ?
           data.hour % 12 :
-          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes').utc().format(),
-        userId: this.props.currentUser.id,
+          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes'),
+        userId: currentUser.id,
+        textReminder: data.textReminder,
+        timezone: currentUser.timezone,
       };
     }
 
@@ -190,15 +239,31 @@ export class CalendarPage extends React.Component {
       filter: newFilter,
     });
 
-    this.filterSchedules(this.props.schedules.data, newFilter);
+    this.filterSchedules(this.state.localSchedules, newFilter);
+  }
+
+  sortBy(ev) {
+    ev.preventDefault();
+    let sort = ev.currentTarget.dataset.sort;
+    let direction = 'up';
+    const defaultSort = 'orderNumber';
+
+    if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
+      direction = 'down';
+    } else if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1) {
+      direction = null;
+      sort = null;
+    }
+
+    this.props.setActiveSort(sort, direction);
   }
 
   render() {
-    const { currentUser, sites, indications, patientsByStudy, schedules } = this.props;
-    const { showAll } = this.state;
+    const { currentUser, sites, indications, patientsByStudy, userRoleType } = this.props;
+    const { showAll, localSchedules } = this.state;
     const fetchingSites = sites.isFetching;
     const fetchingPatientsByStudy = patientsByStudy.isFetching;
-    const isAdmin = !currentUser || !currentUser.site_id;
+    const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
 
     let siteLocationOptions = [];
     if (isAdmin) {
@@ -220,52 +285,80 @@ export class CalendarPage extends React.Component {
     }
 
     return (
-      <div className="container-fluid">
-        <section className="calendar-section">
-          <h2 className="main-heading">CALENDAR</h2>
-          <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
-          <FilterBar
-            siteLocationOptions={siteLocationOptions}
-            isAdmin={isAdmin}
-            sites={sites}
-            indications={indications}
-            schedules={schedules.data}
-            fetchingSites={fetchingSites}
-            filter={this.state.filter}
-            updateFilter={this.updateFilter}
-          />
-          <CalendarWidget
-            schedules={this.state.filteredSchedules}
-            handleOpenModal={this.handleModalVisibility}
-            handleShowAll={this.handleShowAll}
-            ref={(c) => { this.calendarWidget = c; }}
-          />
-          <SchedulePatientModal
-            siteLocationOptions={siteLocationOptions}
-            isAdmin={isAdmin}
-            sites={sites}
-            indications={indications}
-            onSubmit={this.handleSubmit}
-            handleCloseModal={this.handleCloseModal}
-            handleDelete={this.handleDelete}
-            submitting={false}
-            selectedCellInfo={this.selectedCellInfo}
-            modalType={this.state.modalType}
-            patientsByStudy={patientsByStudy}
-            schedules={schedules.data}
-            fetchingSites={fetchingSites}
-            fetchingPatientsByStudy={fetchingPatientsByStudy}
-            fetchPatientsByStudy={this.props.fetchPatientsByStudy}
-          />
-          <AllEventsModal
-            visible={showAll.visible}
-            date={showAll.date}
-            events={showAll.events}
-            handleCloseModal={() => this.handleShowAll(false)}
-            handleEdit={this.handleModalVisibility}
-            setAllModalDeferred={this.setAllModalDeferred}
-          />
-        </section>
+      <div>
+        { userRoleType === 'client' &&
+          <div className="container-fluid">
+            <Helmet title="Calendar - StudyKIK" />
+            <section className="calendar-section">
+              <h2 className="main-heading">CALENDAR</h2>
+              <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
+              <FilterBar
+                siteLocationOptions={siteLocationOptions}
+                isAdmin={isAdmin}
+                sites={sites}
+                indications={indications}
+                schedules={localSchedules}
+                fetchingSites={fetchingSites}
+                filter={this.state.filter}
+                updateFilter={this.updateFilter}
+              />
+              <CalendarWidget
+                currentUser={currentUser}
+                schedules={this.state.filteredSchedules}
+                handleOpenModal={this.handleModalVisibility}
+                handleShowAll={this.handleShowAll}
+                ref={(c) => { this.calendarWidget = c; }}
+              />
+              <SchedulePatientModal
+                currentUser={currentUser}
+                siteLocationOptions={siteLocationOptions}
+                isAdmin={isAdmin}
+                sites={sites}
+                indications={indications}
+                onSubmit={this.handleSubmit}
+                handleCloseModal={this.handleCloseModal}
+                submitting={false}
+                selectedCellInfo={this.selectedCellInfo}
+                modalType={this.state.modalType}
+                patientsByStudy={patientsByStudy}
+                schedules={localSchedules}
+                fetchingSites={fetchingSites}
+                fetchingPatientsByStudy={fetchingPatientsByStudy}
+                fetchPatientsByStudy={this.props.fetchPatientsByStudy}
+                hourOptions={hourOptions}
+                minuteOptions={minuteOptions}
+                periodOptions={periodOptions}
+                initialValues={{ hour: '0' }}
+              />
+              <EditScheduleModal
+                currentUser={currentUser}
+                onSubmit={this.handleSubmit}
+                handleCloseModal={this.handleCloseModal}
+                handleDelete={this.handleDelete}
+                submitting={false}
+                selectedCellInfo={this.selectedCellInfo}
+                modalType={this.state.modalType}
+                hourOptions={hourOptions}
+                minuteOptions={minuteOptions}
+                periodOptions={periodOptions}
+              />
+              <AllEventsModal
+                visible={showAll.visible}
+                date={showAll.date}
+                events={showAll.events}
+                handleCloseModal={() => this.handleShowAll(false)}
+                handleEdit={this.handleModalVisibility}
+                setAllModalDeferred={this.setAllModalDeferred}
+                sortBy={this.sortBy}
+                paginationOptions={this.props.paginationOptions}
+              />
+            </section>
+          </div>
+        }
+        {
+          userRoleType === 'sponsor' &&
+            <ComingSoon />
+        }
       </div>
     );
   }
@@ -277,6 +370,8 @@ const mapStateToProps = createStructuredSelector({
   indications: selectIndications(),
   schedules: selectSchedules,
   patientsByStudy: selectPatientsByStudy,
+  paginationOptions: selectPaginationOptions,
+  userRoleType: selectUserRoleType(),
 });
 
 const mapDispatchToProps = {
@@ -286,6 +381,7 @@ const mapDispatchToProps = {
   fetchSchedules,
   submitSchedule,
   deleteSchedule,
+  setActiveSort,
 };
 
 export default connect(

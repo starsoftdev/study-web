@@ -8,29 +8,33 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { find, sumBy } from 'lodash';
+import { touch } from 'redux-form';
 
-import LoadingSpinner from 'components/LoadingSpinner';
-import Money from 'components/Money';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import Money from '../../components/Money';
 import {
   CAMPAIGN_LENGTH_LIST,
   MESSAGING_SUITE_PRICE,
+  QUALIFICATION_SUITE_PRICE,
   CALL_TRACKING_PRICE,
-} from 'common/constants';
+} from '../../common/constants';
 import {
   selectProposalFormValues,
   selectProposalFormError,
-} from 'components/RequestProposalForm/selectors';
+} from '../../components/RequestProposalForm/selectors';
+import { fields } from '../../components/RequestProposalForm/validator';
 import {
   selectLevels,
-} from 'containers/App/selectors';
+} from '../../containers/App/selectors';
 import {
   submitForm, fetchCoupon,
-} from 'containers/RequestProposalPage/actions';
+} from '../../containers/RequestProposalPage/actions';
 import {
   selectCoupon,
-} from 'containers/RequestProposalPage/selectors';
+  selectIndicationLevelPrice,
+} from '../../containers/RequestProposalPage/selectors';
 
-import './styles.less';
+import { fetchIndicationLevelPrice } from '../../containers/App/actions';
 
 export class RequestProposalCart extends Component {
   static propTypes = {
@@ -40,6 +44,9 @@ export class RequestProposalCart extends Component {
     hasError: PropTypes.bool,
     fetchCoupon: PropTypes.func.isRequired,
     onSubmitForm: PropTypes.func.isRequired,
+    fetchIndicationLevelPrice: PropTypes.func,
+    indicationLevelPrice: PropTypes.number,
+    touchRequestProposal: PropTypes.func,
   }
 
   constructor(props) {
@@ -53,6 +60,19 @@ export class RequestProposalCart extends Component {
     };
   }
 
+  componentWillReceiveProps(newProps) {
+    // indication cahnge
+    if (
+      ((newProps.formValues.indication_id !== this.props.formValues.indication_id) ||
+      (newProps.formValues.level_id !== this.props.formValues.level_id)) &&
+      newProps.formValues.indication_id && newProps.formValues.level_id &&
+      newProps.formValues.indication_id !== undefined && newProps.formValues.level_id !== undefined
+    ) {
+      console.log('fetch');
+      this.props.fetchIndicationLevelPrice(newProps.formValues.indication_id, newProps.formValues.level_id);
+    }
+  }
+
   onCouponChange(evt) {
     this.setState({
       couponId: evt.target.value,
@@ -60,6 +80,11 @@ export class RequestProposalCart extends Component {
   }
 
   onSubmitForm() {
+    if (this.props.hasError) {
+      this.props.touchRequestProposal();
+      return;
+    }
+
     const { formValues } = this.props;
     this.props.onSubmitForm(formValues);
   }
@@ -70,25 +95,34 @@ export class RequestProposalCart extends Component {
 
   listProducts() {
     const products = [];
-    const { formValues, levels } = this.props;
+    const { formValues, levels, indicationLevelPrice } = this.props;
 
     const level = find(levels, { id: formValues.level_id });
     const months = find(CAMPAIGN_LENGTH_LIST, { value: formValues.campaignLength });
-    if (level && months) {
+    if (level && months && indicationLevelPrice) {
       products.push({
-        title: `${months.label} ${level.type}`,
-        price: level.price,
+        title: ((formValues.condenseTwoWeeks && months.value === 1) ? `2 Weeks ${level.name}` : `${months.label} ${level.name}`),
+        price: indicationLevelPrice,
         quantity: months.value,
-        total: level.price * months.value,
+        total: indicationLevelPrice * months.value,
       });
     }
 
-    if (formValues.addPatientMessagingSuite) {
+    if (formValues.patientMessagingSuite) {
       products.push({
         title: 'Patient Messaging Suite',
         price: MESSAGING_SUITE_PRICE,
         quantity: 1,
         total: MESSAGING_SUITE_PRICE,
+      });
+    }
+
+    if (formValues.patientQualificationSuite) {
+      products.push({
+        title: 'Patient Qualification Suite',
+        price: QUALIFICATION_SUITE_PRICE,
+        quantity: 1,
+        total: QUALIFICATION_SUITE_PRICE,
       });
     }
 
@@ -106,7 +140,7 @@ export class RequestProposalCart extends Component {
 
   calculateTotal(products) {
     const { coupon } = this.props;
-    const subTotal = sumBy(products, 'total');
+    const subTotal = sumBy(products, 'total') / 100;
     let discount = 0;
     if (coupon.details) {
       if (coupon.details.amount_off) {
@@ -121,7 +155,7 @@ export class RequestProposalCart extends Component {
   }
 
   render() {
-    const { coupon, hasError } = this.props;
+    const { coupon } = this.props;
     const products = this.listProducts();
     const { subTotal, discount, total } = this.calculateTotal(products);
 
@@ -147,14 +181,14 @@ export class RequestProposalCart extends Component {
                 <tbody>
                   {products &&
                     products.map((product, index) => (
-                      <tr key={index}>
+                      <tr className="add-on" key={index}>
                         <td>{product.title}</td>
-                        <td>
-                          <Money value={product.price} />
+                        <td className="right">
+                          <Money value={product.price / 100} />
                         </td>
-                        <td>{product.quantity}</td>
-                        <td>
-                          <Money value={product.total} className="price" />
+                        <td className="right">{product.quantity}</td>
+                        <td className="right">
+                          <Money value={product.total / 100} className="price" />
                         </td>
                       </tr>
                     ))
@@ -203,7 +237,6 @@ export class RequestProposalCart extends Component {
             <input
               type="submit"
               className="btn btn-default"
-              disabled={hasError}
               value="submit"
               onClick={this.onSubmitForm}
             />
@@ -219,12 +252,15 @@ const mapStateToProps = createStructuredSelector({
   levels: selectLevels(),
   hasError: selectProposalFormError(),
   formValues: selectProposalFormValues(),
+  indicationLevelPrice: selectIndicationLevelPrice(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchCoupon: (id) => dispatch(fetchCoupon(id)),
     onSubmitForm: (values) => dispatch(submitForm(values)),
+    fetchIndicationLevelPrice: (indicationId, levelId) => dispatch(fetchIndicationLevelPrice(indicationId, levelId)),
+    touchRequestProposal: () => dispatch(touch('requestProposal', ...fields)),
   };
 }
 

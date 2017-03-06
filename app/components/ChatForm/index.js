@@ -8,26 +8,25 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, reset } from 'redux-form';
-import Input from 'components/Input';
+import Input from '../../components/Input';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
 
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 import {
   selectChat,
-} from 'containers/PatientDatabasePage/selectors';
+} from '../../containers/PatientDatabasePage/selectors';
 import {
   selectSocket,
   selectProcessingStatus,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../containers/GlobalNotifications/selectors';
 import {
   fetchStudyPatientMessages,
   setProcessingStatus,
-} from 'containers/GlobalNotifications/actions';
+} from '../../containers/GlobalNotifications/actions';
 
-import './styles.less';
 
 const formName = 'chatPatient';
 
@@ -149,7 +148,7 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
             <div className="form-group pull-right">
               <Button type="submit" className="btn-add-row" disabled={isSaving}>
                 {isSaving
-                  ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-patient" /></span>
+                  ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                   : <span>Submit</span>
                 }
               </Button>

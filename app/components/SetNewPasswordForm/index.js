@@ -7,7 +7,7 @@
 import React from 'react';
 import setNewPasswordFormValidator from './validator';
 import { Field, reduxForm } from 'redux-form';
-import Input from 'components/Input';
+import Input from '../../components/Input';
 import { FormGroup, Col } from 'react-bootstrap';
 
 

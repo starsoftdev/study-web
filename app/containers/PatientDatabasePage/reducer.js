@@ -23,8 +23,14 @@ import {
   DISABLE_CHAT,
   SET_ACTIVE_SORT,
   SORT_PATIENTS_SUCCESS,
+  IMPORT_PATIENTS,
+  SUBMIT_ADD_PATIENT,
+  SUBMIT_ADD_PATIENT_FAILURE,
+  SUBMIT_ADD_PATIENT_SUCCESS,
   DOWNLOAD_COMPLETE,
+
   CLEAR_PATIENTS_LIST,
+  CLEAR_IMPORT_FORM,
 } from './constants';
 
 const initialState = {
@@ -60,6 +66,13 @@ const initialState = {
     activeDirection: null,
     prevSearchFilter: {},
   },
+  importPatientsStatus: {
+    uploadStart: false,
+    fileUploaded: null,
+  },
+  addPatientStatus:{
+    adding: false,
+  },
 };
 
 export default function patientDatabasePageReducer(state = initialState, action) {
@@ -68,6 +81,50 @@ export default function patientDatabasePageReducer(state = initialState, action)
   let foundIndex = -1;
 
   switch (action.type) {
+    case CLEAR_IMPORT_FORM:
+      return {
+        ...state,
+        importPatientsStatus: {
+          uploadStart: false,
+          fileUploaded: null,
+        },
+      };
+    case IMPORT_PATIENTS:
+      return {
+        ...state,
+        importPatientsStatus: {
+          uploadStart: true,
+          fileUploaded: null,
+        },
+      };
+    case SUBMIT_ADD_PATIENT:
+      return {
+        ...state,
+        addPatientStatus: {
+          adding: true,
+        },
+      };
+    case SUBMIT_ADD_PATIENT_SUCCESS:
+      return {
+        ...state,
+        importPatientsStatus: {
+          uploadStart: false,
+          fileUploaded: action.fileName,
+        },
+        addPatientStatus: {
+          adding: false,
+        },
+      };
+    case SUBMIT_ADD_PATIENT_FAILURE:
+      return {
+        ...state,
+        importPatientsStatus: {
+          uploadStart: false,
+        },
+        addPatientStatus:{
+          adding: false,
+        },
+      };
     case DOWNLOAD_COMPLETE:
       return {
         ...state,

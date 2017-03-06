@@ -28,6 +28,14 @@ export const selectSyncErrors = (formName) => createSelector(
   (substate) => get(substate, `${formName}.syncErrors`, {})
 );
 
+export const selectSyncErrorBool = (formName) => createSelector(
+  selectFormDomain(),
+  (substate) => {
+    const errors = get(substate, `${formName}.syncErrors`, {});
+    return Object.keys(errors).length > 0;
+  }
+);
+
 export const selectFormDidChange = (formName) => createSelector(
   selectFormDomain(),
   (substate) => {

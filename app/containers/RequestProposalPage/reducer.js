@@ -9,7 +9,12 @@ import {
   FETCH_COUPON_SUCCESS,
   FETCH_COUPON_ERROR,
   FETCH_PROPOSAL_SUCCESS,
-} from 'containers/RequestProposalPage/constants';
+} from '../../containers/RequestProposalPage/constants';
+
+import {
+  FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+  FETCH_INDICATION_LEVEL_PRICE,
+} from '../../containers/App/constants';
 
 const initialState = {
   coupon: {
@@ -18,6 +23,7 @@ const initialState = {
     error: null,
   },
   proposalDetail: null,
+  indicationLevelPrice: null,
 };
 
 function requestProposalPageReducer(state = initialState, action) {
@@ -53,6 +59,16 @@ function requestProposalPageReducer(state = initialState, action) {
       return {
         ...state,
         proposalDetail: action.payload,
+      };
+    case FETCH_INDICATION_LEVEL_PRICE_SUCCESS:
+      return {
+        ...state,
+        indicationLevelPrice: action.payload.price,
+      };
+    case FETCH_INDICATION_LEVEL_PRICE:
+      return {
+        ...state,
+        indicationLevelPrice: null,
       };
     default:
       return state;

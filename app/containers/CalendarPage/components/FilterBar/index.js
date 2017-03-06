@@ -1,10 +1,11 @@
 /* eslint-disable react/jsx-first-prop-new-line */
 
 import React, { Component, PropTypes } from 'react';
+import Button from 'react-bootstrap/lib/Button';
 import Select from 'react-select';
 import _ from 'lodash';
 
-import { addAllOption } from 'components/Input/ReactSelect';
+import { addAllOption } from '../../../../components/Input/ReactSelect';
 
 class FilterBar extends Component {
   static propTypes = {
@@ -175,10 +176,12 @@ class FilterBar extends Component {
         <div className="fields-holder">
           <div className="search-area pull-left">
             <div className="field">
+              <Button className="btn-enter">
+                <i className="icomoon-icon_search2" />
+              </Button>
               <input type="search" id="search" className="form-control keyword-search" placeholder="Search"
                 onChange={(ev) => this.handleFilterChange('patientName', ev.target)}
               />
-              <label htmlFor="search"><i className="icomoon-icon_search2"></i></label>
             </div>
           </div>
           <div className="pull-left custom-select">

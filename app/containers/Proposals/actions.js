@@ -13,6 +13,8 @@ import {
   SHOW_PROPOSAL_PDF,
 } from './constants';
 
+import _ from 'lodash';
+
 export function defaultAction() {
   return {
     type: DEFAULT_ACTION,
@@ -20,9 +22,13 @@ export function defaultAction() {
 }
 
 export function proposalsReceived(payload) {
+  const result = payload;
+  _.forEach(result, (item, index) => {
+    result[index].order_number = index + 1;
+  });
   return {
     type: PROPOSALS_RECEIVED,
-    payload,
+    payload: result,
   };
 }
 
