@@ -225,7 +225,6 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    console.log(123, this.props);
     const { editedStudy } = this.props;
 
     return (

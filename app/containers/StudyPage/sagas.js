@@ -36,8 +36,9 @@ import {
   patientCategoriesFetched,
   patientsFetched,
   patientDetailsFetched,
-  siteFetched,
   patientsExported,
+  protocolFetched,
+  siteFetched,
   sourcesFetched,
   studyFetched,
   studyViewsStatFetched,
@@ -70,7 +71,7 @@ function* fetchStudyDetails() {
   }
 
   // listen for the FETCH_STUDY action
-  const { studyId, siteId } = yield take(FETCH_STUDY);
+  const { studyId } = yield take(FETCH_STUDY);
 
   // put the fetching study action in case of a navigation action
   const filter = JSON.stringify({
@@ -79,18 +80,16 @@ function* fetchStudyDetails() {
         relation: 'campaigns',
       },
       {
+        relation: 'protocol',
+      },
+      {
+        relation: 'site',
+      },
+      {
         relation: 'sources',
       },
       {
         relation: 'sponsor',
-      },
-      {
-        relation: 'sites',
-        scope: {
-          where: {
-            id: siteId,
-          },
-        },
       },
     ],
   });
@@ -101,11 +100,13 @@ function* fetchStudyDetails() {
     });
     // populate the campaigns and sources from the study
     yield put(campaignsFetched(response.campaigns));
+    yield put(protocolFetched(response.protocol));
+    yield put(siteFetched(response.site));
     yield put(sourcesFetched(response.sources));
-    yield put(siteFetched(response.sites[0]));
     delete response.campaigns;
+    delete response.protocol;
+    delete response.site;
     delete response.sources;
-    delete response.sites;
     // put in the study in the state
     yield put(studyFetched(response));
   } catch (e) {
@@ -226,7 +227,7 @@ function* fetchPatientCategories() {
   }
 
   // listen for the FETCH_PATIENT_CATEGORIES action
-  const { studyId, siteId } = yield take(FETCH_PATIENT_CATEGORIES);
+  const { studyId } = yield take(FETCH_PATIENT_CATEGORIES);
 
   const filter = JSON.stringify({
     fields: ['name', 'id'],
@@ -238,7 +239,7 @@ function* fetchPatientCategories() {
     });
     // populate the patient categories
     yield put(patientCategoriesFetched(response));
-    yield call(fetchPatients, studyId, siteId);
+    yield call(fetchPatients, studyId);
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching patient categories. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
@@ -266,14 +267,14 @@ function* readStudyPatientMessages() {
 export function* exportPatients() {
   while (true) {
     // listen for the FETCH_PATIENTS action
-    const { studyId, siteId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
+    const { studyId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
     }
 
     try {
-      let requestURL = `${API_URL}/studies/${studyId}/getPatientsForDB?siteId=${siteId}`;
+      let requestURL = `${API_URL}/studies/${studyId}/getPatientsForDB`;
       if (campaignId) {
         requestURL += `&campaignId=${campaignId}`;
       }
@@ -300,19 +301,19 @@ export function* exportPatients() {
 export function* fetchPatientsSaga() {
   while (true) {
     // listen for the FETCH_PATIENTS action
-    const { studyId, siteId, text, campaignId, sourceId } = yield take(FETCH_PATIENTS);
-    yield call(fetchPatients, studyId, siteId, text, campaignId, sourceId);
+    const { studyId, text, campaignId, sourceId } = yield take(FETCH_PATIENTS);
+    yield call(fetchPatients, studyId, text, campaignId, sourceId);
   }
 }
 
-function* fetchPatients(studyId, siteId, text, campaignId, sourceId) {
+function* fetchPatients(studyId, text, campaignId, sourceId) {
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
   }
 
   try {
-    let requestURL = `${API_URL}/studies/${studyId}/patients?siteId=${siteId}`;
+    let requestURL = `${API_URL}/studies/${studyId}/patients`;
     if (campaignId) {
       requestURL += `&campaignId=${campaignId}`;
     }
