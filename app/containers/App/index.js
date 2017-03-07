@@ -44,14 +44,16 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.userData && nextProps.userData) {
-      ReactGA.initialize('UA-91568063-1', {
-        debug: true,
-      });
-    }
-    if (this.props.location.pathname !== nextProps.location.pathname) {
-      ReactGA.set({ page: nextProps.location.pathname });
-      ReactGA.pageview(nextProps.location.pathname);
+    if (process.env.NODE_ENV !== 'development') {
+      if (!this.props.userData && nextProps.userData) {
+        ReactGA.initialize('UA-91568063-1', {
+          debug: true,
+        });
+      }
+      if (this.props.location.pathname !== nextProps.location.pathname) {
+        ReactGA.set({ page: nextProps.location.pathname });
+        ReactGA.pageview(nextProps.location.pathname);
+      }
     }
   }
 
