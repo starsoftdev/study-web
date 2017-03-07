@@ -78,7 +78,6 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
   }
 
   render() {
-    console.log(123, this.props);
     const protocolNumber = this.props.location.query.protocol || null;
     const indication = this.props.location.query.indication || null;
     const cro = this.props.location.query.cro || null;
