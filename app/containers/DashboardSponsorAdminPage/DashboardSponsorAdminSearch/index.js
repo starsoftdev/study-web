@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
@@ -8,11 +8,14 @@ import Input from '../../../components/Input';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddSponsorAdminForm } from './AddSponsorAdminForm';
 
-@reduxForm({ form: 'dashboardSponsorAdminForm' })
+@reduxForm({ form: 'dashboardSponsorAdminSearchForm' })
 
 export class DashboardSponsorAdminSearch extends React.Component {
   static propTypes = {
-
+    sponsorsWithoutAdmin: PropTypes.object,
+    usersByRoles: PropTypes.object,
+    addSponsorAdmin: PropTypes.func,
+    editUserProcess: PropTypes.object,
   }
 
   constructor(props) {
@@ -20,13 +23,17 @@ export class DashboardSponsorAdminSearch extends React.Component {
 
     this.state = {
       addSponsorAdminModalOpen: false,
-      addExposureLevelModalOpen: false,
     };
 
     this.closeAddSponsorAdminModal = this.closeAddSponsorAdminModal.bind(this);
     this.openAddSponsorAdminModal = this.openAddSponsorAdminModal.bind(this);
-    this.closeAddExposureLevelModal = this.closeAddExposureLevelModal.bind(this);
-    this.openAddExposureLevelModal = this.openAddExposureLevelModal.bind(this);
+    this.addSponsor = this.addSponsor.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!newProps.editUserProcess.saving && this.props.editUserProcess.saving) {
+      this.closeAddSponsorAdminModal();
+    }
   }
 
   closeAddSponsorAdminModal() {
@@ -37,22 +44,11 @@ export class DashboardSponsorAdminSearch extends React.Component {
     this.setState({ addSponsorAdminModalOpen: true });
   }
 
-  closeAddExposureLevelModal() {
-    this.setState({ addExposureLevelModalOpen: false });
-  }
-
-  openAddExposureLevelModal() {
-    this.setState({ addExposureLevelModalOpen: true });
+  addSponsor(params) {
+    this.props.addSponsorAdmin(params);
   }
 
   render() {
-    const options = [
-      { id: 1, name: 'Bruce Wayne', company: 'Pfizer', email: 'bruce.wayne@wayneenterprise.com', bd: 'Kobe Byant', ae: 'Michael Grimm' },
-      { id: 2, name: 'Ray Palmer', company: 'Company 1', email: 'ray.palmer@palmertech.com', bd: 'Bianca Ryan', ae: 'Cas Haley' },
-      { id: 3, name: 'Will Graham', company: 'Company 2', email: 'will.graham@wayneenterprise.com', bd: 'Terry Fator', ae: 'Eli Mattson' },
-      { id: 4, name: 'Jon Snow', company: 'Company 3', email: 'jon.snow@wayneenterprise.com', bd: 'Kevin Skinner', ae: 'Tom Cotter' },
-    ];
-
     return (
       <form action="#" className="form-search clearfix">
         <div className="btns-area row pull-right">
@@ -65,13 +61,12 @@ export class DashboardSponsorAdminSearch extends React.Component {
         <div className="fields-holder">
           <div className="pull-left col custom-select">
             <div className="field">
-              <Button className="btn-enter" type="submit">
+              <Button className="btn-enter">
                 <i className="icomoon-icon_search2" />
               </Button>
               <Field
                 name="name"
                 component={Input}
-                onChange={(e) => console(e)}
                 type="text"
                 className="keyword-search"
                 placeholder="Search"
@@ -89,7 +84,12 @@ export class DashboardSponsorAdminSearch extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <AddSponsorAdminForm sponsorData={options} />
+              <AddSponsorAdminForm
+                sponsorsWithoutAdmin={this.props.sponsorsWithoutAdmin}
+                usersByRoles={this.props.usersByRoles}
+                onSubmit={this.addSponsor}
+                saving={this.props.editUserProcess.saving}
+              />
             </div>
           </Modal.Body>
         </Modal>

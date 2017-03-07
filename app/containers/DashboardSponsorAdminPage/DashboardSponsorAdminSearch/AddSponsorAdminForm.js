@@ -1,63 +1,52 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { map, find } from 'lodash';
+import { map } from 'lodash';
 import { Field, reduxForm } from 'redux-form';
 import Input from '../../../components/Input';
-import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
+import ReactSelect from '../../../components/Input/ReactSelect';
+import formValidator from './validator';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
-@reduxForm({ form: 'dashboardAddSponsorAdminForm' })
+@reduxForm({ form: 'dashboardAddSponsorAdminForm', validate: formValidator })
 
 export class AddSponsorAdminForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     isEdit: PropTypes.bool,
-    sponsorData: PropTypes.array,
+    sponsorsWithoutAdmin: PropTypes.object,
+    usersByRoles: PropTypes.object,
     initialValues: PropTypes.object,
+    handleSubmit: PropTypes.func,
+    saving: PropTypes.bool,
+    deleting: PropTypes.bool,
+    onDelete: PropTypes.func,
   }
 
   render() {
-    const itemTemplate = (controlSelectedValue) => (
-      <div key={controlSelectedValue.value}>
-        {controlSelectedValue.label}
-        <i className="close-icon icomoon-icon_close" />
-      </div>
-    );
-
-    const selectedItemsTemplate = (controlSelectedValue) => (
-      <div>
-        {controlSelectedValue[0].value}
-      </div>
-    );
-
-    const sponsors = map(this.props.sponsorData, (sponsor) => ({
-      id: sponsor.id,
-      label: sponsor.company,
-      value: sponsor.company,
+    let sponsors = [];
+    sponsors = map(this.props.sponsorsWithoutAdmin.details, (sponsor) => ({
+      label: sponsor.name,
+      value: sponsor.id,
     }));
-
-    const bds = map(this.props.sponsorData, (sponsor) => ({
-      id: sponsor.id,
-      label: sponsor.bd,
-      value: sponsor.bd,
-    }));
-
-    const aes = map(this.props.sponsorData, (sponsor) => ({
-      id: sponsor.id,
-      label: sponsor.ae,
-      value: sponsor.ae,
-    }));
-    let initialSponsor;
-    let initialBD;
-    let initialAE;
-
     if (this.props.isEdit) {
-      initialSponsor = find(sponsors, { label: this.props.initialValues.company });
-      initialBD = find(bds, { label: this.props.initialValues.bd });
-      initialAE = find(aes, { label: this.props.initialValues.ae });
+      sponsors.unshift({
+        label: this.props.initialValues.name,
+        value: this.props.initialValues.id,
+      });
     }
 
+    const bds = map(this.props.usersByRoles.details.bd, (sponsor) => ({
+      label: `${sponsor.first_name} ${sponsor.last_name}`,
+      value: sponsor.id,
+    }));
+
+    const aes = map(this.props.usersByRoles.details.ae, (sponsor) => ({
+      label: `${sponsor.first_name} ${sponsor.last_name}`,
+      value: sponsor.id,
+    }));
+
     return (
-      <form action="#" className="form-lightbox dashboard-lightbox">
+      <form action="#" className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
 
         <div className="field-row">
           <strong className="label required">
@@ -65,18 +54,10 @@ export class AddSponsorAdminForm extends React.Component { // eslint-disable-lin
           </strong>
           <div className="field">
             <Field
-              name="company"
-              component={ReactMultiSelect}
+              name="sponsor"
+              component={ReactSelect}
               placeholder="Select Sponsor"
-              searchPlaceholder="Search"
-              initialValue={initialSponsor}
-              searchable
-              optionLabelKey="label"
-              onChange={(e) => console.log('init search', e)}
-              customOptionTemplateFunction={itemTemplate}
-              customSelectedValueTemplateFunction={selectedItemsTemplate}
-              dataSource={sponsors}
-              customSearchIconClass="icomoon-icon_search2"
+              options={sponsors}
             />
           </div>
         </div>
@@ -128,17 +109,9 @@ export class AddSponsorAdminForm extends React.Component { // eslint-disable-lin
               <div className="field">
                 <Field
                   name="bd"
-                  component={ReactMultiSelect}
+                  component={ReactSelect}
                   placeholder="Select BD"
-                  searchPlaceholder="Search"
-                  initialValue={initialBD}
-                  searchable
-                  optionLabelKey="label"
-                  onChange={(e) => console.log('init search', e)}
-                  customOptionTemplateFunction={itemTemplate}
-                  customSelectedValueTemplateFunction={selectedItemsTemplate}
-                  dataSource={bds}
-                  customSearchIconClass="icomoon-icon_search2"
+                  options={bds}
                 />
               </div>
             </div>
@@ -149,16 +122,9 @@ export class AddSponsorAdminForm extends React.Component { // eslint-disable-lin
               <div className="field">
                 <Field
                   name="ae"
-                  component={ReactMultiSelect}
+                  component={ReactSelect}
                   placeholder="Select AE"
-                  searchPlaceholder="Search"
-                  initialValue={initialAE}
-                  searchable
-                  optionLabelKey="label"
-                  customOptionTemplateFunction={itemTemplate}
-                  customSelectedValueTemplateFunction={selectedItemsTemplate}
-                  dataSource={aes}
-                  customSearchIconClass="icomoon-icon_search2"
+                  options={aes}
                 />
               </div>
             </div>
@@ -166,9 +132,19 @@ export class AddSponsorAdminForm extends React.Component { // eslint-disable-lin
         )}
         <div className="field-row text-right no-margins">
           {this.props.isEdit &&
-            <a className="btn btn-gray-outline">Delete</a>
+            <a className="btn btn-gray-outline" onClick={() => { this.props.onDelete(this.props.initialValues.id); }} >
+              {this.props.deleting
+                ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+                : <span>{'Delete'}</span>
+              }
+            </a>
           }
-          <button type="submit" className="btn btn-primary">{this.props.isEdit ? 'Update' : 'Submit'}</button>
+          <button type="submit" className="btn btn-primary">
+            {this.props.saving
+              ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+              : <span>{this.props.isEdit ? 'Update' : 'Submit'}</span>
+            }
+          </button>
         </div>
 
       </form>
