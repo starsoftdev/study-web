@@ -2,9 +2,14 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field } from 'redux-form';
+import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import Checkbox from '../../../../components/Input/Checkbox';
 import ReactSelect from '../../../../components/Input/ReactSelect';
+import EditInformationModal from '../EditStudyForms/EditInformationModal';
+import LandingPageModal from '../EditStudyForms/LandingPageModal';
+import ThankyouPageModal from '../EditStudyForms/ThankyouPageModal';
+import PatientThankyouPageModal from '../EditStudyForms/PatientThankyouPageModal';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { Modal } from 'react-bootstrap';
@@ -27,6 +32,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.loadItems = this.loadItems.bind(this);
     this.showDateRangeModal = this.showDateRangeModal.bind(this);
     this.hideDateRangeModal = this.hideDateRangeModal.bind(this);
+    this.showEditInformationModal = this.showEditInformationModal.bind(this);
+    this.showLandingPageModal = this.showLandingPageModal.bind(this);
+    this.showThankyouPageModal = this.showThankyouPageModal.bind(this);
+    this.showPatientThankyouPageModal = this.showPatientThankyouPageModal.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.state = {
@@ -38,6 +47,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         startDate: moment().clone().subtract(30, 'days'),
         endDate: moment(),
       },
+      showEditInformationModal: false,
+      showLandingPageModal: false,
+      showThankyouPageModal: false,
+      showPatientThankyouPageModal: false,
     };
   }
 
@@ -95,6 +108,31 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     // TODO: update filter
     this.hideDateRangeModal();
   }
+
+  showLandingPageModal(visible) {
+    this.setState({
+      showLandingPageModal: visible,
+    });
+  }
+
+  showThankyouPageModal(visible) {
+    this.setState({
+      showThankyouPageModal: visible,
+    });
+  }
+
+  showPatientThankyouPageModal(visible) {
+    this.setState({
+      showPatientThankyouPageModal: visible,
+    });
+  }
+
+  showEditInformationModal(visible) {
+    this.setState({
+      showEditInformationModal: visible,
+    });
+  }
+
   renderDateFooter() {
     const { dateRange } = this.state;
     if (dateRange.startDate) {
@@ -120,7 +158,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     const studyListLeftContents = studies.map((item, index) =>
       <StudyLeftItem {...item} key={index} />
     );
-
     const studyListRightContents = studies.map((item, index) =>
       <StudyRightItem {...item} key={index} />
     );
@@ -139,8 +176,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     ];
 
     return (
-      <div className="table-container">
-        <div className="clearfix top-head top-head-fixed">
+      <div className={classNames('table-container', { 'btns-active' : true })}>
+        <div className={classNames('clearfix', 'top-head', 'top-head-fixed', 'active')}>
           <strong className="title"><span className="studies-counter">0</span> <span className="text" data-one="STUDY" data-two="STUDIES"> SELECTED</span></strong>
           <div className="btns-area">
             <Button
@@ -158,6 +195,54 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
               onClick={this.deactivateStudies}
             >
             Deactivate
+            </Button>
+            <Button
+              bsStyle="primary"
+              className="pull-left"
+              data-class="btn-deactivate"
+              onClick={() => this.showLandingPageModal(true)}
+            >
+            Landing Page
+            </Button>
+            <Button
+              bsStyle="primary"
+              className="pull-left"
+              data-class="btn-deactivate"
+              onClick={() => this.showThankyouPageModal(true)}
+            >
+            Thank You Page
+            </Button>
+            <Button
+              bsStyle="primary"
+              className="pull-left"
+              data-class="btn-deactivate"
+              onClick={() => this.showPatientThankyouPageModal(true)}
+            >
+            Patient Thank You Page
+            </Button>
+            <Button
+              bsStyle="primary"
+              className="pull-left"
+              data-class="btn-deactivate"
+              onClick={() => this.showEditInformationModal(true)}
+            >
+            Edit
+            </Button>
+            <Button
+              bsStyle="primary"
+              className="pull-left"
+              data-class="btn-deactivate"
+              onClick={this.deactivateStudies}
+            >
+            Ad Set
+            </Button>
+            <Button
+              bsStyle="primary"
+              className="pull-left"
+              data-class="btn-deactivate"
+              onClick={this.deactivateStudies}
+            >
+            History
             </Button>
           </div>
         </div>
@@ -356,6 +441,22 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
             </div>
           </div>
         </div>
+        <EditInformationModal
+          openModal={this.state.showEditInformationModal}
+          onClose={() => { this.showEditInformationModal(false); }}
+        />
+        <LandingPageModal
+          openModal={this.state.showLandingPageModal}
+          onClose={() => { this.showLandingPageModal(false); }}
+        />
+        <ThankyouPageModal
+          openModal={this.state.showThankyouPageModal}
+          onClose={() => { this.showThankyouPageModal(false); }}
+        />
+        <PatientThankyouPageModal
+          openModal={this.state.showPatientThankyouPageModal}
+          onClose={() => { this.showPatientThankyouPageModal(false); }}
+        />
       </div>
     );
   }
