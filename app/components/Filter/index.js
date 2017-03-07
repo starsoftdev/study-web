@@ -24,11 +24,10 @@ class Filter extends React.Component {
     return (
       <div
         style={style}
-        className={classNames('filter-area', 'pull-left', className, 'value-box')}
+        className={classNames('filter-box')}
       >
-        <strong className="title">{name}:</strong>
-        <div className="value-control">{value}</div>
-        <a href="#" className="btn-close" data-remove=".filter-search-area" onClick={() => this.props.onClose()}>
+        <strong className="text-uppercase">{name}:</strong> {value}
+        <a href="#" className="btn-close" onClick={() => this.props.onClose()}>
           <i className="icomoon-icon_close"></i>
         </a>
       </div>
@@ -41,12 +40,12 @@ class Filter extends React.Component {
     return (
       <div
         style={style}
-        className={classNames('filter-area', 'pull-left', className, 'search-box')}
+        className={classNames('filter-search-area')}
       >
         <strong className="title">Search</strong>
         <input type="text" name={name} className="form-control" placeholder="Search" />
         <button className="btn btn-default">Apply</button>
-        <a href="#" className="btn-close" data-remove=".filter-search-area" onClick={() => this.props.onClose()}>
+        <a href="#" className="btn-close" onClick={() => this.props.onClose()}>
           <i className="icomoon-icon_close"></i>
         </a>
       </div>
@@ -63,7 +62,8 @@ class Filter extends React.Component {
     return (
       <div
         style={style}
-        className={classNames('filter-area', 'pull-left', className, 'compare-box')}
+        data-percentage="percentage-filter"
+        className={classNames('filter-box')}
       >
         <strong className="title">{name}:</strong>
         <ReactSelect

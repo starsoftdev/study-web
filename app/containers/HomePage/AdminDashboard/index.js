@@ -1,10 +1,9 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import Helmet from 'react-helmet';
 import { Modal } from 'react-bootstrap';
 import { Field, reduxForm } from 'redux-form';
-
+import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import { map, mapKeys, concat, findIndex, pullAt } from 'lodash';
 import './styles.less';
@@ -69,6 +68,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
       ...options,
       name: options.name + customFilters.length,
     };
+    console.log('add filter', newOptions);
     customFilters.push(newOptions);
     this.setState({ customFilters });
   }
@@ -185,6 +185,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   render() {
     const { customFilters, modalFilters } = this.state;
     const filters = concat(this.mapFilterValues(modalFilters), customFilters);
+
+    console.log('render filter', filters);
     const pieData1 = [
       { label: 'RED', value: 179, percent: 37.61, color: '#dd0000' },
       { label: 'YELLOW', value: 107, percent: 22.48, color: '#f9ce15' },
@@ -208,10 +210,9 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     return (
       <div className="container-fluid admin-dashboard">
-        <Helmet title="STUDYKIK DASHBOARD" />
         <div className="fixed-header clearfix">
           <h2 className="main-heading pull-left">STUDYKIK DASHBOARD</h2>
-          <div className="filter-btns pull-right">
+          <div className="filters-btns pull-right">
             <Button
               bsStyle="primary"
               onClick={() => this.addFilter({
@@ -242,12 +243,12 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             </Modal>
           </div>
         </div>
-        <section className="filters-section">
+        <section className={classNames('filters-section', { 'bar-active': (filters.length > 0) }, { 'filters-added': (filters.length > 0) })}>
           {(filters.length > 0) && (
             <div className="filters-bar">
-              <div className="filter-holder">
+              <div className="filters-holder search-filters">
                 <strong className="title">FILTERS</strong>
-                <div className="filter-btns pull-right">
+                <div className="btns pull-right">
                   <Button bsStyle="primary" onClick={() => this.saveFilters()}>
                     Save Filters
                   </Button>
@@ -255,35 +256,31 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
                     Clear
                   </Button>
                 </div>
-                <form className="form-search clearfix">
-                  <div className="fields-holder pull-left">
-                    {filters.map((filter, index) =>
-                      <Field
-                        name={filter.name}
-                        key={index}
-                        options={filter}
-                        className="filter-field"
-                        component={Filter}
-                        onClose={() => this.removeFilter(filter)}
-                        onChange={(e) => { console.log('onChange-filter', e); }}
-                      />
-                    )}
-                    <Button
-                      bsStyle="primary"
-                      className="pull-left btn-add-filter"
-                      onClick={() => this.addFilter({
-                        name: 'search',
-                        type: 'search',
-                        value: '',
-                      })}
-                    >+</Button>
-                  </div>
-                </form>
+                <div className="holder">
+                  {filters.map((filter, index) =>
+                    <Field
+                      name={filter.name}
+                      key={index}
+                      options={filter}
+                      component={Filter}
+                      onClose={() => this.removeFilter(filter)}
+                      onChange={(e) => { console.log('onChange-filter', e); }}
+                    />
+                  )}
+                  <Button
+                    bsStyle="primary"
+                    className="add-new-filters btn btn-primary"
+                    onClick={() => this.addFilter({
+                      name: 'search',
+                      type: 'search',
+                      value: '',
+                    })}
+                  ><i className="glyphicon glyphicon-plus"></i></Button>
+                </div>
               </div>
             </div>
           )}
-        </section>
-        <section>
+
           <div className="d-stats clearfix">
             <ul className="list-unstyled info-list  pull-left">
               <li>

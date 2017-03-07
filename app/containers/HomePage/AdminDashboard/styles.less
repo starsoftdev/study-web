@@ -1,116 +1,318 @@
-@import '../../../assets/less/_variables';
 
-.data-search .Select-menu-outer {
-  z-index: 10;
+@import "../../../assets/less/base/_mixins.less";
+@import "../../../assets/less/_variables.less";
+
+
+[data-class="overlay"] {
+	z-index: 100;
+	.position(0);
+	display: none;
+	background: rgba(51,51,51,0.001);
+	
+	.patient-thankyou-slider.in &,
+	.thankyou-slider.in &,
+	.landing-slider.in &,
+	.edit-form.in & {
+		display: block;
+	}
 }
 
-.admin-dashboard {
-  .filter-btns {
-    margin: 8px 0 0;
-    .btn {
-      margin: 0 0 0 12px;
-    }
+/* landing-slider */
+.landing-slider {
+		
+	&.in {
+    z-index: 1500;
+    width: 592px;
+    max-width: 592px;
   }
-  
-  .filters-section {
-    .filters-bar {
-      background: #fff;
-      border: solid 2px #f78e1e;
-      margin: 0 0 30px;
+}
 
-      .filter-holder {
-        overflow-y: auto;
-        padding: 15px 18px;
-        overflow-x: hidden;
-        max-height: 83px;
+.patient-thankyou-slider,
+.thankyou-slider,
+.landing-slider {
+	.slider-area {
+		background: #fff;
+		padding: 60px 0 0;
+		position: relative;
+		.size(590px, 100%);
+		border: 2px solid #f78e1e;
+	}
+	
+  .holder {
+		height: 100%;
+		overflow-x: hidden;
+		overflow-y: auto;
+		
+		.font(0,0);
+		> * {
+			.align;
+			.font(18px, 40px);
+  	}
 
-        .title {
-          float:left;
-          font-size: 18px;
-          margin: 0 12px 0 0;
-          line-height: 52px;
-        }
+    
+		
+		@media screen and (max-width: @psd) {
+			* {
+				font-size: 18px !important;
+			}
+		}
+	}
+ 
+}
 
-        .form-search {
-          clear: none;
-          width: 80%;
-          padding-left: 100px;
-        }
+.patient-thankyou-slider,
+.thankyou-slider,
+.landing-slider,
+.form-edit-information {
+	top: 80px;
+	right: 0;
+	bottom: 0;
+	z-index: 101;
+	max-width: 0;
+	overflow: hidden;
+	position: fixed;
+	transition: max-width 0.5s;
+	
+	/*
+	&.bottom-fixed {
+		bottom: 0;
+		top: auto;
+	}*/
+	
+	&.form-active {
+		
+	}
+	
+	.frame {
+		padding: 25px;
+    width: 100%;
 
-        button.btn-add-filter {
-          margin-top: 7px;
-        }
-      }
+    .label {
+      text-align: left;
     }
-  }
-    .d-stats {
-      background: #fff;
-      margin: 0 0 30px;
-      padding: 25px 0;
-      border: solid 2px #f78e1e;
+	}
+	
+	.head {
+		top: 0;
+		right: 0;
+		z-index: 10;
+		color: #fff;
+		width: 100%; 
+		position: absolute;
+		background: #f78e1e;
+		transition: width 0.5s;
+		
+	}
+	
+	.inner-head {
+		//width: 590px;
+		position: relative;
+		padding: 15px 50px 15px 18px;
+	}
+	
+	.title {
+		display: block;
+		.font(21px, 30px);
+		text-transform: uppercase;
+	}
+}
 
-      .color {
-          font-weight: 700;
-      }
-      .red {
-          color: #dd0000;
-          
-      }
+/* form-edit-information */
+.form-edit-information {
+	
+	&.in {
+		max-width: 592px;
+	}
+	
+	.form-area {
+		background: #fff;
+		padding: 60px 0 0;
+		position: relative;
+		.size(590px, 100%);
+		border: 2px solid #f78e1e;
+		
+		&:before {
+			top: 0;
+			bottom: 0;
+			width: 2px;
+			right: 100%;
+			content: '';
+			margin: 0 2px 0 0;
+			position: absolute;
+			background: #f1f1f1;
+		}
+	}
+	
+	.form-holder {
+		height: 100%;
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+	
+	.btn {
+		margin: 0 0 0 12px;
+	}
+	
+	.jcf-select .jcf-select-text {
+		margin: 0 25px 0 13px;
+	}
+	
+	.field-row.add-messaging-number-row {
+		margin: 24px 0 -5px;
+	}
+}
 
-      .yellow {
-          color: #f9ce15;
-      }
+.thankyou-slider {
+	&.in {
+		max-width: 592px;
+	}
+}
 
-      .green {
-          color: #7dbc00;
-      }
+.patient-thankyou-slider {
+	&.in {
+		max-width: 592px;
+	}
+	
+	.frame {
+		height: 100%;
+		position: relative;
+		padding-bottom: 90px;
+	}
+	
+	.field-row {
+		height: 100%;
+	}
+	
+	.field-row.btn-row {
+		right: 0;
+		bottom: 0;
+		width: 100%;
+		height: auto;
+		padding: 25px;
+		position: absolute;
+	}
+}
 
-      .purple {
-          color: #873fbd;
-      }
+.btn-right-arrow {
+	top: 50%;
+	right: 15px;
+	.size(20px);
+	color: #00afef;
+	margin: -10px 0 0;
+	background: #fff;
+	.font(11px, 16px);
+	position: absolute;
+	text-align: center;
+	border: solid 2px #00afef;
+	
+	&:hover {
+		color: #76daff;
+		border-color: #76daff;
+	}
+}
 
-      .tier1 {
-          color: #00afef;
-      }
+.auto-deactivation {
+	.datepicker-box {
+		.link-holder {
+			padding: 0 10px 8px;
+			
+			a { display: none; }
+		}
+	}
+}
 
-      .tier2 {
-          color: #f78e1e;
-      }
+.img-preview {
+	padding: 5px;
+	margin: 0 0 15px;
+	border-radius: 3px;
+	border: solid 2px #636363;
+	
+	img {
+		display: block;
+		max-width: 100%;
+		cursor: pointer;
+	}
+}
 
-      .tier3 {
-          color: #a0cf67;
-      }
+.image-preview-area {	
+	.upload-btn {
+		float: left;
+		min-width: 137px;
+		margin: 0 8px 0 0;
+	}
+	
+	.jcf-file[class^="jcf-extension-"],
+	.jcf-file[class*=" jcf-extension-"] {
+		display: block;
+		overflow: hidden;
+	}
+}
 
-      .tier4 {
-          color: #949ca1;
-      }
+.upload-btn {
+	padding: 5px 10px;
+	margin: 0 10px 0 0;
+	text-transform: uppercase;
+	
+	&:before {
+		content: attr(data-text);
+	}
+	
+	&:hover:before {
+		content: attr(data-hover-text);
+	}
+}
 
-      .info-list {
-        width: 20%;
-        color: #333;
-        padding: 0 23px;
+.color {
+	font-weight: 700;
+	
+	&.red { color: #f33; }
+	&.yellow { color: #ffe11a; }
+	&.green { color: #a0cf67; }
+	&.purple { color: #f0f; }
+}
 
-        li+li{
-          margin: 21px 0 0;
-        }
-      }
-
-      .chart {
-        width: 17%;
-        padding: 0 23px;
-      }
-    }
-  }
-
-
-
-@media screen and (max-width: 1600px) {
-  .d-stats {
-    .info-list {
-      width: 18%;
-      &:first-child {
-        width: 24%;
-      }
-    }
-  }
+.save-filters-list {
+	a {
+		color: #636363;
+		
+		&:hover {
+			color: #00afef;
+		}
+	}
+	
+	.new-list {
+		padding: 12px;
+		margin: 12px -12px -12px;
+		border-top: solid 2px #ccc;
+		
+		+ .new-list {
+			border-top-width: 0;
+		}
+		
+		&:empty { display: none; }
+		
+		li {
+			overflow: hidden;
+		}
+		
+		.saved-filters-btn {
+			float: left;
+			color: #101010;
+			max-width: 90%;
+			text-transform: capitalize;
+			
+			&:hover {
+				color: #00afef;
+			}
+		}
+		
+		.btn-remove {
+			float: right;
+			color: #636363;
+			
+			&:hover {
+				color: #999;
+			}
+		}
+	}
 }
