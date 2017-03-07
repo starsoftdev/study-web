@@ -69,9 +69,9 @@ export const selectStudyId = () => createSelector(
   (subState) => subState.studyId
 );
 
-export const selectSiteId = () => createSelector(
+export const selectProtocol = () => createSelector(
   selectStudyPageDomain(),
-  (subState) => subState.siteId
+  (subState) => subState.protocol
 );
 
 export const selectSite = () => createSelector(
