@@ -26,7 +26,6 @@ class FilterStudyPatientsForm extends Component {
     campaign: PropTypes.number,
     search: PropTypes.string,
     source: PropTypes.number,
-    siteId: PropTypes.number.isRequired,
     studyId: PropTypes.number.isRequired,
     ePMS: PropTypes.bool,
   };
@@ -47,7 +46,7 @@ class FilterStudyPatientsForm extends Component {
   }
 
   searchPatient(event, type) {
-    const { fetchPatients, siteId, studyId, campaign, source, search } = this.props;
+    const { fetchPatients, studyId, campaign, source, search } = this.props;
     let newCampaign = campaign;
     let newSource = source;
     /* nulling the values if all is selected */
@@ -58,13 +57,13 @@ class FilterStudyPatientsForm extends Component {
       newSource = null;
     }
     if (type === 'search') {
-      fetchPatients(studyId, siteId, event.target.value, newCampaign, newSource);
+      fetchPatients(studyId, event.target.value, newCampaign, newSource);
     } else if (type === 'source') {
       /* -1 means all was selected */
       if (event === -1) {
-        fetchPatients(studyId, siteId, search, newCampaign, null);
+        fetchPatients(studyId, search, newCampaign, null);
       } else {
-        fetchPatients(studyId, siteId, search, newCampaign, event);
+        fetchPatients(studyId, search, newCampaign, event);
       }
     } else {
       /* -1 means all was selected */
@@ -72,9 +71,9 @@ class FilterStudyPatientsForm extends Component {
         campaign: event,
       });
       if (event === -1) {
-        fetchPatients(studyId, siteId, search, null, newSource);
+        fetchPatients(studyId, search, null, newSource);
       }
-      fetchPatients(studyId, siteId, search, event, newSource);
+      fetchPatients(studyId, search, event, newSource);
     }
   }
 
@@ -85,7 +84,6 @@ class FilterStudyPatientsForm extends Component {
       handleSubmit,
       submitting,
       loading,
-      siteId,
       studyId,
       search,
       campaign,
@@ -96,7 +94,6 @@ class FilterStudyPatientsForm extends Component {
     return (
       <form className="form-search clearfix" onSubmit={handleSubmit}>
         <StudyActionButtons
-          siteId={siteId}
           studyId={studyId}
           search={search}
           campaign={campaign}
@@ -157,12 +154,11 @@ const mapStateToProps = (state) => ({
   source: selector(state, 'source'),
   search: selector(state, 'search'),
   studyId: state.studyPage.studyId,
-  siteId: state.studyPage.siteId,
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchPatients: (studyId, siteId, text, campaignId, sourceId) => dispatch(fetchPatients(studyId, siteId, text, campaignId, sourceId)),
+    fetchPatients: (studyId, text, campaignId, sourceId) => dispatch(fetchPatients(studyId, text, campaignId, sourceId)),
   };
 }
 

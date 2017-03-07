@@ -17,7 +17,6 @@ class StudyActionButtons extends Component {
     campaign: PropTypes.number,
     search: PropTypes.string,
     source: PropTypes.number,
-    siteId: PropTypes.number.isRequired,
     studyId: PropTypes.number.isRequired,
     exportPatients: PropTypes.func,
     resetTextBlastForm: PropTypes.func,
@@ -100,8 +99,8 @@ class StudyActionButtons extends Component {
   }
 
   download() {
-    const { exportPatients, siteId, studyId, campaign, source, search } = this.props;
-    exportPatients(studyId, siteId, search, campaign, source);
+    const { exportPatients, studyId, campaign, source, search } = this.props;
+    exportPatients(studyId, search, campaign, source);
   }
 
   render() {
@@ -141,7 +140,7 @@ class StudyActionButtons extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    exportPatients: (studyId, siteId, text, campaignId, sourceId) => dispatch(exportPatients(studyId, siteId, text, campaignId, sourceId)),
+    exportPatients: (studyId, text, campaignId, sourceId) => dispatch(exportPatients(studyId, text, campaignId, sourceId)),
     resetTextBlastForm: () => dispatch(reset('StudyPage.TextBlastModal')),
   };
 }
