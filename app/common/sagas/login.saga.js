@@ -142,7 +142,6 @@ export function* resetPassword() {
       };
       const requestURL = `${API_URL}/users/reset`;
       yield call(request, requestURL, params);
-      yield put(toastrActions.success('Reset password', 'The request has been submitted successfully'));
       yield put(resetPasswordSuccess());
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
@@ -165,13 +164,16 @@ export function* setNewPassword() {
         };
         const requestURL = `${API_URL}/users/reset-password`;
         yield call(request, requestURL, params);
-        yield put(toastrActions.success('Set new password', 'Password for your StudyKIK account has been reset successfully'));
+        yield put(toastrActions.success('Set new password', 'Success! Your password has been reset.'));
       } else {
         const errorMessage = get(null, 'message', 'Can not find auth token!');
         yield put(toastrActions.error('', errorMessage));
       }
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
+      let errorMessage = get(err, 'message', 'Something went wrong!');
+      if (err.status === 401) {
+        errorMessage = 'Error! The link is no longer valid, you have to repeat the forgot password process.'
+      }
       yield put(toastrActions.error('', errorMessage));
     }
   }

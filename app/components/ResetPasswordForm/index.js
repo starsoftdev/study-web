@@ -76,7 +76,7 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
     if (resetPasswordSuccess) {
       formContent =
         (<p className="replace-text">
-          We'we sent password reset instructions to your email. Check your inbox and follow the link.
+          We've sent password reset instructions to your email. Check your inbox and follow the link.
         </p>);
     }
 
