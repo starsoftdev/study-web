@@ -158,7 +158,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     const studyListLeftContents = studies.map((item, index) =>
       <StudyLeftItem {...item} key={index} />
     );
-
     const studyListRightContents = studies.map((item, index) =>
       <StudyRightItem {...item} key={index} />
     );
