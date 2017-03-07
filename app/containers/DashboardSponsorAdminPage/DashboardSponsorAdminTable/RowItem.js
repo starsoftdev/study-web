@@ -8,7 +8,11 @@ import { AddSponsorAdminForm } from '../DashboardSponsorAdminSearch/AddSponsorAd
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     item: PropTypes.object,
-    sponsorData: PropTypes.array,
+    sponsorsWithoutAdmin: PropTypes.object,
+    usersByRoles: PropTypes.object,
+    editUserProcess: PropTypes.object,
+    editSponsorAdmin: PropTypes.func,
+    deleteSponsorAdmin: PropTypes.func,
   };
 
   constructor(props) {
@@ -20,6 +24,15 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
     this.closeAddSponsorAdminModal = this.closeAddSponsorAdminModal.bind(this);
     this.openAddSponsorAdminModal = this.openAddSponsorAdminModal.bind(this);
+    this.editSponsor = this.editSponsor.bind(this);
+    this.deleteSponsor = this.deleteSponsor.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if ((!newProps.editUserProcess.saving && this.props.editUserProcess.saving) ||
+      (!newProps.editUserProcess.deleting && this.props.editUserProcess.deleting)) {
+      this.closeAddSponsorAdminModal();
+    }
   }
 
   closeAddSponsorAdminModal() {
@@ -30,31 +43,42 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     this.setState({ addSponsorAdminModalOpen: true });
   }
 
+  editSponsor(params) {
+    this.props.editSponsorAdmin(params);
+  }
+
+  deleteSponsor(params) {
+    this.props.deleteSponsorAdmin({ id: params });
+  }
+
   render() {
     const initialValues = {
       initialValues: {
         ...this.props.item,
-        sponsorAdmin: this.props.item.name,
-        id: this.props.item.id,
+        sponsor: this.props.item.id,
+        firstName: this.props.item.first_name,
+        lastName: this.props.item.last_name,
+        bd: this.props.item.bd_user_id,
+        ae: this.props.item.ae_user_id,
       },
     };
 
     return (
       <tr>
         <td>
-          {this.props.item.company}
+          {this.props.item.name}
         </td>
         <td>
-          {this.props.item.name}
+          {`${this.props.item.first_name} ${this.props.item.last_name}`}
         </td>
         <td>
           {this.props.item.email}
         </td>
         <td>
-          {this.props.item.bd}
+          {`${this.props.item.bd_user_first_name || ''} ${this.props.item.bd_user_last_name || ''}`}
         </td>
         <td>
-          {this.props.item.ae}
+          {`${this.props.item.ae_user_first_name || ''} ${this.props.item.ae_user_last_name || ''}`}
         </td>
         <td>
           <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openAddSponsorAdminModal}>
@@ -74,7 +98,11 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
               <AddSponsorAdminForm
                 {...initialValues}
                 isEdit
-                sponsorData={this.props.sponsorData}
+                sponsorsWithoutAdmin={this.props.sponsorsWithoutAdmin}
+                usersByRoles={this.props.usersByRoles}
+                onSubmit={this.editSponsor}
+                onDelete={this.deleteSponsor}
+                deleting={this.props.editUserProcess.deleting}
               />
             </div>
           </Modal.Body>
