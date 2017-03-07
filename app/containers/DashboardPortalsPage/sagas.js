@@ -95,7 +95,7 @@ export function* fetchSponsorsWatcher() {
 
 export function* fetchSponsorsWorker() {
   try {
-    const requestURL = `${API_URL}/clients/fetchAllSponsorsAdmins`;
+    const requestURL = `${API_URL}/sponsors/fetchAllSponsorsAdmins`;
 
     const params = {
       method: 'GET',
