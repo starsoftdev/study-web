@@ -172,7 +172,7 @@ export function* setNewPassword() {
     } catch (err) {
       let errorMessage = get(err, 'message', 'Something went wrong!');
       if (err.status === 401) {
-        errorMessage = 'Error! The link is no longer valid, you have to repeat the forgot password process.'
+        errorMessage = 'Error! The link is no longer valid, you have to repeat the forgot password process.';
       }
       yield put(toastrActions.error('', errorMessage));
     }
