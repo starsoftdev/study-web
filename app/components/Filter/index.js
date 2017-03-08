@@ -19,7 +19,7 @@ class Filter extends React.Component {
   }
 
   createValueBox(options) {
-    const { name, value, className, style } = options;
+    const { name, value, style } = options;
     // const attrName = 'data' + name;
     return (
       <div
@@ -35,7 +35,7 @@ class Filter extends React.Component {
   }
 
   createSearchBox(options) {
-    const { name, className, style } = options;
+    const { name, style } = options;
 
     return (
       <div
@@ -53,7 +53,7 @@ class Filter extends React.Component {
   }
 
   createComparisonBox(options) {
-    const { name, className, style } = options;
+    const { name, style } = options;
     const comparisonOptions = [
       { id: 0, label: '<', value: 'lt' },
       { id: 1, label: '>', value: 'gt' },
