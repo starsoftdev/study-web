@@ -163,7 +163,7 @@ const initialState = {
     }, {
       status: 'active',
       studyInfo: {
-        id: '2835543',
+        id: '2835548',
         percentage: '70%',
         members: ['James Gordon', 'Will Graham', 'Austin Baron'],
         color: 'PURPLE',
@@ -215,7 +215,7 @@ const initialState = {
     }, {
       status: 'active',
       studyInfo: {
-        id: '2835544',
+        id: '2835549',
         percentage: '80%',
         members: ['Richard Hendriks', 'Mary Stuart', 'Austin Baron'],
         color: 'RED',
