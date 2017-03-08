@@ -58,6 +58,15 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
     this.props.clearTrialsList();
   }
 
+  onSubmitForm(values) {
+    const { onSubmitForm } = this.props;
+    const newValues = Object.assign({}, values);
+    if (values.indicationId === -1) {
+      delete newValues.indicationId;
+    }
+    onSubmitForm(newValues);
+  }
+
   setVisible(el) {
     const viewAtr = el.getAttribute('data-view');
     el.classList.add('in-viewport', viewAtr);
@@ -75,17 +84,8 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
     this.zip = ev.target.value;
   }
 
-  onSubmitForm(values) {
-    const { onSubmitForm } = this.props;
-    const newValues = Object.assign({}, values);
-    if (values.indicationId === -1) {
-      delete newValues.indicationId;
-    }
-    onSubmitForm(newValues);
-  }
-
   render() {
-    const { indications, onSubmitForm, trials } = this.props;
+    const { indications, trials } = this.props;
     let studiesList = [];
     let h3Text;
 
