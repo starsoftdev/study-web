@@ -4,21 +4,10 @@ import { createStructuredSelector } from 'reselect';
 import { reset } from 'redux-form';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
-
 import TrialsArticle from './components/TrialsArticle';
-
 import ClinicalTrialsSearchForm from '../../components/ClinicalTrialsSearchForm';
-
-import {
-  fetchIndications,
-  clinicalTrialsSearch,
-  clearClinicalTrialsSearch,
-} from '../../../app/containers/App/actions';
-import {
-  selectIndications,
-  selectTrials,
-} from '../../../app/containers/App/selectors';
-
+import { fetchIndications, clinicalTrialsSearch, clearClinicalTrialsSearch } from '../../../app/containers/App/actions';
+import { selectIndications, selectTrials } from '../../../app/containers/App/selectors';
 import './styles.less';
 
 export class Home extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -38,7 +27,7 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
     this.watcher = null;
 
     this.setVisible = this.setVisible.bind(this);
-    this.onSubmitForm = this.props.onSubmitForm.bind(this);
+    this.onSubmitForm = this.onSubmitForm.bind(this);
     this.handleZipChoose = this.handleZipChoose.bind(this);
     this.handleDistanceChoose = this.handleDistanceChoose.bind(this);
     this.handleIndicationChoose = this.handleIndicationChoose.bind(this);
@@ -86,8 +75,17 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
     this.zip = ev.target.value;
   }
 
+  onSubmitForm(values) {
+    const { onSubmitForm } = this.props;
+    const newValues = Object.assign({}, values);
+    if (values.indicationId === -1) {
+      delete newValues.indicationId;
+    }
+    onSubmitForm(newValues);
+  }
+
   render() {
-    const { indications, trials } = this.props;
+    const { indications, onSubmitForm, trials } = this.props;
     let studiesList = [];
     let h3Text;
 
