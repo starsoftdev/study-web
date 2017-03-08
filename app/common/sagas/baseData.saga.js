@@ -908,15 +908,19 @@ function* postFindOutPatients(action) {
 
 function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
   try {
-    const { postalCode, distance } = action.params;
-    const indicationId = action.params.indication_id;
-    let requestURL = `${API_URL}/studies/getNearbyStudies?zipcode=${postalCode}`;
+    const { postalCode, distance, indicationId } = action.params;
+    const queryParams = {};
+    if (postalCode) {
+      queryParams.postalCode = postalCode;
+    }
     if (distance) {
-      requestURL += `&distance=${distance}`;
+      queryParams.distance = distance;
     }
     if (indicationId) {
-      requestURL += `&indicationId=${indicationId}`;
+      queryParams.indicationId = indicationId;
     }
+    const queryString = composeQueryString(queryParams);
+    const requestURL = `${API_URL}/studies/getNearbyStudies${queryString}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
