@@ -370,7 +370,7 @@ function* fetchPatientDetails() {
           },
         },
         {
-          relation: 'source',
+          relation: 'studySource',
         },
         {
           relation: 'textMessages',
