@@ -758,7 +758,7 @@ export function* getAvailPhoneNumbersWatcher() {
     yield take(GET_AVAIL_PHONE_NUMBERS);
 
     try {
-      const requestURL = `${API_URL}/sources/getAvailPhoneNumbers`;
+      const requestURL = `${API_URL}/studySources/getAvailPhoneNumbers`;
       const params = {
         query: {
           country: 'US',

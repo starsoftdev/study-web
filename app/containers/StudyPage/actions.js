@@ -21,11 +21,12 @@ import {
   FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_STUDY,
+  FETCH_PROTOCOL_SUCCESS,
+  FETCH_SITE_SUCCESS,
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
   FETCH_STUDY_TEXTS_SUCCESS,
-  FETCH_SITE_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
   EXPORT_PATIENTS,
@@ -34,7 +35,6 @@ import {
   READ_STUDY_PATIENT_MESSAGES_SUCCESS,
   READ_STUDY_PATIENT_MESSAGES_ERROR,
   SET_STUDY_ID,
-  SET_SITE_ID,
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
   SET_OPEN_PATIENT_MODAL,
@@ -131,11 +131,10 @@ export function removePatientsFromTextBlast() {
   };
 }
 
-export function fetchPatients(studyId, siteId, text, campaignId, sourceId) {
+export function fetchPatients(studyId, text, campaignId, sourceId) {
   return {
     type: FETCH_PATIENTS,
     studyId,
-    siteId,
     text,
     campaignId,
     sourceId,
@@ -143,11 +142,10 @@ export function fetchPatients(studyId, siteId, text, campaignId, sourceId) {
 }
 
 
-export function exportPatients(studyId, siteId, text, campaignId, sourceId) {
+export function exportPatients(studyId, text, campaignId, sourceId) {
   return {
     type: EXPORT_PATIENTS,
     studyId,
-    siteId,
     text,
     campaignId,
     sourceId,
@@ -163,13 +161,6 @@ export function patientsExported() {
 export function setStudyId(id) {
   return {
     type: SET_STUDY_ID,
-    id,
-  };
-}
-
-export function setSiteId(id) {
-  return {
-    type: SET_SITE_ID,
     id,
   };
 }
@@ -195,11 +186,10 @@ export function patientDetailsFetched(payload) {
   };
 }
 
-export function fetchPatientCategories(studyId, siteId) {
+export function fetchPatientCategories(studyId) {
   return {
     type: FETCH_PATIENT_CATEGORIES,
     studyId,
-    siteId,
   };
 }
 
@@ -210,11 +200,17 @@ export function patientCategoriesFetched(payload) {
   };
 }
 
-export function fetchStudy(studyId, siteId) {
+export function fetchStudy(studyId) {
   return {
     type: FETCH_STUDY,
     studyId,
-    siteId,
+  };
+}
+
+export function protocolFetched(payload) {
+  return {
+    type: FETCH_PROTOCOL_SUCCESS,
+    payload,
   };
 }
 

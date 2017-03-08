@@ -97,12 +97,14 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
   componentDidMount() {
     this.props.fetchSites();
-    this.props.fetchClientSites(this.props.currentUserClientId, {});
 
     this.props.fetchIndications();
     this.props.fetchLevels();
     this.props.getAvailPhoneNumbers();
-    this.props.fetchClientAdmins(this.props.currentUserClientId);
+    if (this.props.userRoleType === 'client') {
+      this.props.fetchClientSites(this.props.currentUserClientId, {});
+      this.props.fetchClientAdmins(this.props.currentUserClientId);
+    }
   }
 
   componentWillReceiveProps(newProps) {

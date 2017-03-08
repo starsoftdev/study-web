@@ -52,10 +52,9 @@ describe('<StudyPage />', () => {
           { id: 6, name: 'Consented' },
           { id: 7, name: 'Randomized' },
         ],
-        params: { id: '1', siteId: '1' },
+        params: { id: '1' },
         patients: [],
         setStudyId: expect.createSpy(),
-        setSiteId: expect.createSpy(),
         sources: [],
         site: {
           address: null,
