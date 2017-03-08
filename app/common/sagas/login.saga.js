@@ -164,7 +164,7 @@ export function* setNewPassword() {
         };
         const requestURL = `${API_URL}/users/reset-password`;
         yield call(request, requestURL, params);
-        yield put(toastrActions.success('Set new password', 'Success! Your password has been reset.'));
+        yield put(toastrActions.success('', 'Success! Your password has been reset, check your inbox.'));
       } else {
         const errorMessage = get(null, 'message', 'Can not find auth token!');
         yield put(toastrActions.error('', errorMessage));
