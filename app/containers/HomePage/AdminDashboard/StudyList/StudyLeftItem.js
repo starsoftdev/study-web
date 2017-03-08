@@ -9,7 +9,6 @@ import Toggle from '../../../../components/Input/Toggle';
 
 class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    index: PropTypes.number,
     status: PropTypes.string,
     studyInfo: PropTypes.object,
     siteInfo: PropTypes.object,
@@ -38,21 +37,21 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    const { index, studyInfo, siteInfo, indication } = this.props;
+    const { studyInfo, siteInfo, indication } = this.props;
     const indicationNames = map(indication, (i, index) => (<li key={index}><span>{i}</span></li>));
     const memberNames = map(studyInfo.members, (v, index) => (<li key={index}><span>{v}</span></li>));
     return (
       <tr>
         <td>
           <Field
-            name={`study-${index}`}
+            name={`study-${studyInfo.id}`}
             type="checkbox"
             component={Checkbox}
           />
         </td>
         <td>
           <Field
-            name={`status-${index}`}
+            name={`status-${studyInfo.id}`}
             component={Toggle}
             className="field"
           />

@@ -29,7 +29,7 @@ export function* fetchIndicationsWatcher() {
 
 export function* fetchIndicationsWorker() {
   try {
-    const requestURL = `${API_URL}/indications`;
+    const requestURL = `${API_URL}/indications/patientGoal`;
 
     const params = {
       method: 'GET',

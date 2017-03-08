@@ -7,7 +7,6 @@
 import {
   take, call, put, cancel, cancelled, fork, select,
 } from 'redux-saga/effects';
-import { push } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { selectLocationState } from '../../containers/App/selectors';
@@ -143,7 +142,6 @@ export function* resetPassword() {
       };
       const requestURL = `${API_URL}/users/reset`;
       yield call(request, requestURL, params);
-      yield put(toastrActions.success('Reset password', 'The request has been submitted successfully'));
       yield put(resetPasswordSuccess());
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
@@ -166,14 +164,16 @@ export function* setNewPassword() {
         };
         const requestURL = `${API_URL}/users/reset-password`;
         yield call(request, requestURL, params);
-        yield put(toastrActions.success('Set new password', 'The request has been submitted successfully'));
-        yield put(push('/login'));
+        yield put(toastrActions.success('', 'Success! Your password has been reset, check your inbox.'));
       } else {
         const errorMessage = get(null, 'message', 'Can not find auth token!');
         yield put(toastrActions.error('', errorMessage));
       }
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
+      let errorMessage = get(err, 'message', 'Something went wrong!');
+      if (err.status === 401) {
+        errorMessage = 'Error! The link is no longer valid, you have to repeat the forgot password process.';
+      }
       yield put(toastrActions.error('', errorMessage));
     }
   }

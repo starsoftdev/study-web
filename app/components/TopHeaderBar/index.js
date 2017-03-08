@@ -198,6 +198,22 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             placement="bottom"
             overlay={tooltip}
           >
+            <div className="notifications pull-left open-close">
+              <a
+                className="opener"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Coming Soon"
+              >
+                <i className="icomoon-bell" />
+              </a>
+            </div>
+          </OverlayTrigger>
+
+          <OverlayTrigger
+            placement="bottom"
+            overlay={tooltip}
+          >
             <div className="emails pull-left">
               <a
                 className="opener"
@@ -205,7 +221,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
                 data-placement="bottom"
                 title="Coming Soon"
               >
-                <NotificationBox currentUser={this.props.currentUser} />
               </a>
             </div>
 

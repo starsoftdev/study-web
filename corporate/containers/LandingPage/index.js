@@ -25,7 +25,8 @@ import './styles.less';
 
 export class LandingPage extends React.Component {
 
-  static propTypes = { params: PropTypes.object,
+  static propTypes = {
+    params: PropTypes.object,
     param: PropTypes.any,
     siteLocation: PropTypes.any,
     fetchLanding:  PropTypes.func.isRequired,

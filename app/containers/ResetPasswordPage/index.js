@@ -27,7 +27,7 @@ export class ResetPasswordPage extends React.Component { // eslint-disable-line 
     onSubmitForm: React.PropTypes.func,
     clearResetPasswordSuccess: React.PropTypes.func,
     resetForm: React.PropTypes.func,
-    resetPasswordSuccess: React.PropTypes.object,
+    resetPasswordSuccess: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -35,19 +35,10 @@ export class ResetPasswordPage extends React.Component { // eslint-disable-line 
     this.onSubmitForm = this.props.onSubmitForm.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {
-    const { resetForm, clearResetPasswordSuccess } = this.props;
-
-    if (newProps.resetPasswordSuccess) {
-      resetForm();
-      clearResetPasswordSuccess();
-    }
-  }
-
   render() {
     return (
       <div className="container">
-        <ResetPasswordForm onSubmit={this.onSubmitForm} />
+        <ResetPasswordForm onSubmit={this.onSubmitForm} {...this.props} />
       </div>
     );
   }

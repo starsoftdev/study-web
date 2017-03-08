@@ -8,13 +8,14 @@ import {
   ADD_PATIENT_INDICATION_SUCCESS,
   ADD_PATIENT_NOTE_SUCCESS,
   CLEAR_FORM_UPLOAD,
+  EXPORT_PATIENTS_SUCCESS,
+  FETCHING_STUDY,
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENT_DETAILS_SUCCESS,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
+  FETCH_PROTOCOL_SUCCESS,
   FETCH_SITE_SUCCESS,
-  EXPORT_PATIENTS_SUCCESS,
-  FETCHING_STUDY,
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
@@ -24,7 +25,6 @@ import {
   REMOVE_PATIENT_INDICATION_SUCCESS,
   SHOW_SCHEDULED_MODAL,
   SET_STUDY_ID,
-  SET_SITE_ID,
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
   SET_OPEN_PATIENT_MODAL,
@@ -191,6 +191,11 @@ function studyPageReducer(state = initialState, action) {
         }),
         fetchingPatientCategories: false,
       };
+    case FETCH_PROTOCOL_SUCCESS:
+      return {
+        ...state,
+        protocol: action.payload,
+      };
     case FETCH_SITE_SUCCESS:
       return {
         ...state,
@@ -246,11 +251,6 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         studyId: action.id,
-      };
-    case SET_SITE_ID:
-      return {
-        ...state,
-        siteId: action.id,
       };
     case SET_CURRENT_PATIENT_ID:
       return {
