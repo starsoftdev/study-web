@@ -18,6 +18,12 @@ import {
   DELETE_INDICATION_SUCCESS,
   DELETE_INDICATION_ERROR,
   SET_ACTIVE_SORT,
+  FETCH_LEVELS,
+  FETCH_LEVELS_SUCCESS,
+  FETCH_LEVELS_ERROR,
+  ADD_LEVEL,
+  ADD_LEVEL_SUCCESS,
+  ADD_LEVEL_ERROR,
 } from './constants';
 
 export function fetchIndications() {
@@ -36,6 +42,47 @@ export function fetchIndicationsSuccess(payload) {
 export function fetchIndicationsError(payload) {
   return {
     type: FETCH_INDICATIONS_ERROR,
+    payload,
+  };
+}
+
+export function fetchLevels() {
+  return {
+    type: FETCH_LEVELS,
+  };
+}
+
+export function fetchLevelsSuccess(payload) {
+  return {
+    type: FETCH_LEVELS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchLevelsError(payload) {
+  return {
+    type: FETCH_LEVELS_ERROR,
+    payload,
+  };
+}
+
+export function addLevel(payload) {
+  return {
+    type: ADD_LEVEL,
+    payload,
+  };
+}
+
+export function addLevelSuccess(payload) {
+  return {
+    type: ADD_LEVEL_SUCCESS,
+    payload,
+  };
+}
+
+export function addLevelError(payload) {
+  return {
+    type: ADD_LEVEL_ERROR,
     payload,
   };
 }
