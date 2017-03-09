@@ -72,10 +72,10 @@ export class LandingPage extends React.Component {
       if (!landing.studySources.length) {
         this.props.clearLanding();
         browserHistory.push('/');
-      } else {
-        if (landing.site.location.toLowerCase().replace(/ /ig, '-') !== siteLocation) {
-          invalidSite = true;
-        }
+      }
+
+      if (landing.site.location.toLowerCase().replace(/ /ig, '-') !== siteLocation) {
+        invalidSite = true;
       }
     }
 
