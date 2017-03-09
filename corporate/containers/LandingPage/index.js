@@ -69,14 +69,12 @@ export class LandingPage extends React.Component {
 
     if (newProps.landing) {
       const { landing } = newProps;
-      if (!landing.landingPages.length) {
+      if (!landing.studySources.length) {
         this.props.clearLanding();
         browserHistory.push('/');
       } else {
-        for (const site of landing.sites) {
-          if (site.location.toLowerCase().replace(/ /ig, '-') !== siteLocation) {
-            invalidSite = true;
-          }
+        if (landing.site.location.toLowerCase().replace(/ /ig, '-') !== siteLocation) {
+          invalidSite = true;
         }
       }
     }
@@ -120,7 +118,12 @@ export class LandingPage extends React.Component {
     let study = null;
     if (this.props.landing) {
       study = this.props.landing;
-      landing = study.landingPages[0];
+
+      for (const studySource of study.studySources) {
+        if (studySource.landingPage) {
+          landing = studySource.landingPage;
+        }
+      }
     }
 
     if (landingIsFetching || landing === null) {
