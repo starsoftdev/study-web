@@ -4,7 +4,6 @@ import { Field } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import { map } from 'lodash';
 
-import Checkbox from '../../../../components/Input/Checkbox';
 import Toggle from '../../../../components/Input/Toggle';
 
 class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -17,6 +16,8 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     exposureLevel: PropTypes.string,
     goal: PropTypes.number,
     patients: PropTypes.object,
+    selected: PropTypes.object,
+    onSelectStudy : PropTypes.func,
   };
 
   constructor(props) {
@@ -37,17 +38,19 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    const { studyInfo, siteInfo, indication } = this.props;
+    const { studyInfo, siteInfo, indication, selected, onSelectStudy } = this.props;
     const indicationNames = map(indication, (i, index) => (<li key={index}><span>{i}</span></li>));
     const memberNames = map(studyInfo.members, (v, index) => (<li key={index}><span>{v}</span></li>));
+
+    console.log('item state', studyInfo.id, selected);
     return (
       <tr>
         <td>
-          <Field
-            name={`study-${studyInfo.id}`}
-            type="checkbox"
-            component={Checkbox}
-          />
+          <span className={(this.props.selected.selected) ? 'sm-container checked' : 'sm-container'}>
+            <span className="input-style" onClick={() => { onSelectStudy(selected.studyId, !selected.selected); }}>
+              <input name="all" type="checkbox" />
+            </span>
+          </span>
         </td>
         <td>
           <Field

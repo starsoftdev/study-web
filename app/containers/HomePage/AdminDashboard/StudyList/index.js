@@ -2,9 +2,9 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field } from 'redux-form';
+import { map, find } from 'lodash';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
-import Checkbox from '../../../../components/Input/Checkbox';
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import EditInformationModal from '../EditStudyForms/EditInformationModal';
 import LandingPageModal from '../EditStudyForms/LandingPageModal';
@@ -16,18 +16,20 @@ import { Modal } from 'react-bootstrap';
 import CenteredModal from '../../../../components/CenteredModal';
 import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
+import { selectStudies, selectPaginationOptions } from '../selectors';
 
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     studies: PropTypes.array,
-    change: PropTypes.func,
     paginationOptions: PropTypes.object,
+    change: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
 
     this.toggleAllStudySelection = this.toggleAllStudySelection.bind(this);
+    this.toggleStudy = this.toggleStudy.bind(this);
     this.sortBy = this.sortBy.bind(this);
     this.loadItems = this.loadItems.bind(this);
     this.showDateRangeModal = this.showDateRangeModal.bind(this);
@@ -38,6 +40,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.showPatientThankyouPageModal = this.showPatientThankyouPageModal.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
+
     this.state = {
       showDateRangeModal: false,
       rangePicker : {},
@@ -51,14 +54,43 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       showLandingPageModal: false,
       showThankyouPageModal: false,
       showPatientThankyouPageModal: false,
+      studySelection: bindSelection(props.studies),
+      selectedAllStudies: false,
+      selectedStudyCount: 0,
     };
   }
 
   toggleAllStudySelection(checked) {
-    const { change, studies } = this.props;
-    for (const patient of studies.details) {
-      change(`patient-${patient.id}`, checked);
-    }
+    const studySelection = map(this.state.studySelection, (study) => ({
+      selected: checked,
+      studyId: study.studyId,
+    }));
+
+    this.setState({
+      selectedAllStudies: checked,
+      studySelection,
+      selectedStudyCount: checked === true ? studySelection.length : 0,
+    });
+  }
+
+  toggleStudy(studyId, checked) {
+    console.log('studyid', studyId, checked);
+    let selectedAllStudies = true;
+    let selectedStudyCount = 0;
+    const studySelection = map(this.state.studySelection, (study) => {
+      const c = study.studyId === studyId ? checked : study.selected;
+      selectedAllStudies = selectedAllStudies && c;
+      if (c === true) selectedStudyCount++;
+      return {
+        ...study,
+        selected: c,
+      };
+    });
+    this.setState({
+      selectedAllStudies,
+      studySelection,
+      selectedStudyCount,
+    });
   }
 
   loadItems() {
@@ -154,9 +186,16 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   render() {
+    console.log('state', this.state);
     const { studies } = this.props;
+    const { selectedStudyCount } = this.state;
     const studyListLeftContents = studies.map((item, index) =>
-      <StudyLeftItem {...item} key={index} />
+      <StudyLeftItem
+        {...item}
+        key={index}
+        selected={find(this.state.studySelection, { studyId: item.studyInfo.id })}
+        onSelectStudy={this.toggleStudy}
+      />
     );
     const studyListRightContents = studies.map((item, index) =>
       <StudyRightItem {...item} key={index} />
@@ -176,76 +215,84 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     ];
 
     return (
-      <div className={classNames('table-container', { 'btns-active' : true })}>
-        <div className={classNames('clearfix', 'top-head', 'top-head-fixed', 'active')}>
-          <strong className="title"><span className="studies-counter">0</span> <span className="text" data-one="STUDY" data-two="STUDIES"> SELECTED</span></strong>
-          <div className="btns-area">
-            <Button
-              bsStyle="primary"
-              className="pull-left"
-              data-class="btn-activate"
-              onClick={this.activateStudies}
-            >
-            Activate
-            </Button>
-            <Button
-              bsStyle="primary"
-              className="pull-left"
-              data-class="btn-deactivate"
-              onClick={this.deactivateStudies}
-            >
-            Deactivate
-            </Button>
-            <Button
-              bsStyle="primary"
-              className="pull-left"
-              data-class="btn-deactivate"
-              onClick={() => this.showLandingPageModal(true)}
-            >
-            Landing Page
-            </Button>
-            <Button
-              bsStyle="primary"
-              className="pull-left"
-              data-class="btn-deactivate"
-              onClick={() => this.showThankyouPageModal(true)}
-            >
-            Thank You Page
-            </Button>
-            <Button
-              bsStyle="primary"
-              className="pull-left"
-              data-class="btn-deactivate"
-              onClick={() => this.showPatientThankyouPageModal(true)}
-            >
-            Patient Thank You Page
-            </Button>
-            <Button
-              bsStyle="primary"
-              className="pull-left"
-              data-class="btn-deactivate"
-              onClick={() => this.showEditInformationModal(true)}
-            >
-            Edit
-            </Button>
-            <Button
-              bsStyle="primary"
-              className="pull-left"
-              data-class="btn-deactivate"
-              onClick={this.deactivateStudies}
-            >
-            Ad Set
-            </Button>
-            <Button
-              bsStyle="primary"
-              className="pull-left"
-              data-class="btn-deactivate"
-              onClick={this.deactivateStudies}
-            >
-            History
-            </Button>
+      <div className={classNames('table-container', { 'btns-active' : selectedStudyCount > 0 })}>
+        { selectedStudyCount > 0 &&
+          <div className={classNames('clearfix', 'top-head', 'top-head-fixed', 'active')}>
+            <strong className="title"><span className="studies-counter"> { selectedStudyCount }</span> <span className="text" data-one="STUDY" data-two="STUDIES"> SELECTED</span></strong>
+            <div className="btns-area">
+              <Button
+                bsStyle="primary"
+                className="pull-left"
+                data-class="btn-activate"
+                onClick={this.activateStudies}
+              >
+              Activate
+              </Button>
+              <Button
+                bsStyle="primary"
+                className="pull-left"
+                data-class="btn-deactivate"
+                onClick={this.deactivateStudies}
+              >
+              Deactivate
+              </Button>
+              {
+                selectedStudyCount === 1 &&
+                  <Button
+                    bsStyle="primary"
+                    className="pull-left"
+                    data-class="btn-deactivate"
+                    onClick={() => this.showLandingPageModal(true)}
+                  > Landing Page </Button>
+              }
+              {
+                selectedStudyCount === 1 &&
+                  <Button
+                    bsStyle="primary"
+                    className="pull-left"
+                    data-class="btn-deactivate"
+                    onClick={() => this.showThankyouPageModal(true)}
+                  > Thank You Page </Button>
+              }
+              {
+                selectedStudyCount === 1 &&
+                  <Button
+                    bsStyle="primary"
+                    className="pull-left"
+                    data-class="btn-deactivate"
+                    onClick={() => this.showPatientThankyouPageModal(true)}
+                  > Patient Thank You Page </Button>
+              }
+              {
+                selectedStudyCount === 1 &&
+                  <Button
+                    bsStyle="primary"
+                    className="pull-left"
+                    data-class="btn-deactivate"
+                    onClick={() => this.showEditInformationModal(true)}
+                  > Edit </Button>
+              }
+              {
+                selectedStudyCount === 1 &&
+                  <Button
+                    bsStyle="primary"
+                    className="pull-left"
+                    data-class="btn-deactivate"
+                    onClick={this.deactivateStudies}
+                  > Ad Set </Button>
+              }
+              {
+                selectedStudyCount === 1 &&
+                  <Button
+                    bsStyle="primary"
+                    className="pull-left"
+                    data-class="btn-deactivate"
+                    onClick={this.deactivateStudies}
+                  > History </Button>
+              }
+            </div>
           </div>
-        </div>
+        }
         <div className="study-tables fixed-top">
           <div className="head">
             <h2 className="pull-left">{studies.length} STUDIES</h2>
@@ -329,13 +376,11 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   <thead>
                     <tr>
                       <th>
-                        <Field
-                          name="all-studies"
-                          data-check-pattern="[name^='table-option']"
-                          type="checkbox"
-                          component={Checkbox}
-                          onChange={this.toggleAllStudySelection}
-                        />
+                        <span className={(this.state.selectedAllStudies) ? 'sm-container checked' : 'sm-container'}>
+                          <span className="input-style" onClick={() => this.toggleAllStudySelection(!this.state.selectedAllStudies)}>
+                            <input name="all" type="checkbox" />
+                          </span>
+                        </span>
                       </th>
                       <th>
                         <div>
@@ -462,7 +507,21 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 }
 
+const bindSelection = (studies) =>
+  map(studies, (study) => ({
+    selected: false,
+    studyId: study.studyInfo.id,
+  }));
+
+// const bindSelection = (studies) =>
+//   map(studies, (study) => {
+//     selected: false,
+//     studyId: study.studyInfo.id,
+//   });
+
 const mapStateToProps = createStructuredSelector({
+  studies: selectStudies(),
+  paginationOptions: selectPaginationOptions(),
 });
 
 export default connect(mapStateToProps)(StudyList);
