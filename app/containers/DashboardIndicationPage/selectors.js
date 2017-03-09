@@ -23,8 +23,26 @@ const selectIndications = () => createSelector(
   (substate) => substate.indications
 );
 
+const selectLevels = () => createSelector(
+  selectDashboardIndicationPageDomain(),
+  (substate) => substate.levels
+);
+
+const selectDashboardAddLevelProcess = () => createSelector(
+  selectDashboardIndicationPageDomain(),
+  (substate) => substate.addLevelProcess
+);
+const selectDashboardAddIndicationProcess = () => createSelector(
+  selectDashboardIndicationPageDomain(),
+  (substate) => substate.addIndicationProcess
+);
+
+
 export default selectDashboardIndicationPage;
 export {
   selectDashboardIndicationPageDomain,
   selectIndications,
+  selectLevels,
+  selectDashboardAddLevelProcess,
+  selectDashboardAddIndicationProcess,
 };

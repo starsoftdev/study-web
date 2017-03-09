@@ -6,14 +6,13 @@ import RowItem from './RowItem';
 export class DashboardIndicationTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     indications: PropTypes.object,
+    levels: PropTypes.object,
   }
 
   componentDidMount() {
   }
 
   render() {
-    const { indications } = this.props;
-    console.log('++++', indications);
     const indications1 = [
       { id: 1, name: 'Acne', tier: '4', ruby: '4', diamond: '100', platinum: '60', gold: '40', silver: '20', bronze: '5' },
       { id: 2, name: 'Ring Worm', tier: '4', ruby: '30', diamond: '10', platinum: '50', gold: '60', silver: '5', bronze: '10' },

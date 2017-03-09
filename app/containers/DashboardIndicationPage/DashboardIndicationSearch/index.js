@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
@@ -13,7 +13,11 @@ import { AddExposureLevelForm } from './AddExposureLevelForm';
 
 export class DashboardIndicationSearch extends React.Component {
   static propTypes = {
-
+    addLevel: PropTypes.func,
+    addIndication: PropTypes.func,
+    addLevelProcess: PropTypes.object,
+    addIndicationProcess: PropTypes.object,
+    levels: PropTypes.object,
   }
 
   constructor(props) {
@@ -28,6 +32,17 @@ export class DashboardIndicationSearch extends React.Component {
     this.openAddIndicationModal = this.openAddIndicationModal.bind(this);
     this.closeAddExposureLevelModal = this.closeAddExposureLevelModal.bind(this);
     this.openAddExposureLevelModal = this.openAddExposureLevelModal.bind(this);
+    this.addLevel = this.addLevel.bind(this);
+    this.addIndication = this.addIndication.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!newProps.addLevelProcess.saving && this.props.addLevelProcess.saving) {
+      this.closeAddExposureLevelModal();
+    }
+    if (!newProps.addIndicationProcess.saving && this.props.addIndicationProcess.saving) {
+      this.closeAddIndicationModal();
+    }
   }
 
   closeAddIndicationModal() {
@@ -44,6 +59,37 @@ export class DashboardIndicationSearch extends React.Component {
 
   openAddExposureLevelModal() {
     this.setState({ addExposureLevelModalOpen: true });
+  }
+
+  addLevel(param) {
+    const nParam = param;
+    nParam.isActive = true;
+    nParam.stripeProductId = 'prod_964SkmdTyEfpnZ';
+    this.props.addLevel(nParam);
+  }
+
+  addIndication(param) {
+    // const { levels } = this.props;
+    // const newParam = [];
+    // levels.details.map((item) => {
+    //   const tName = item.name;
+    //   if (eval('param.'+tName)) {
+    //     const temp = {
+    //       levelId: item.id,
+    //       levelName: item.name,
+    //       levelGoal: eval('param.'+tName),
+    //     };
+    //     newParam.push(temp);
+    //   }
+    // });
+    // const reParam = {
+    //   name: param.name,
+    //   tier: param.tier,
+    //   patientGoals: newParam,
+    // };
+
+    // this.props.addIndication(reParam);
+    this.props.addIndication(param);
   }
 
   render() {
@@ -117,7 +163,10 @@ export class DashboardIndicationSearch extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <AddIndicationForm />
+              <AddIndicationForm
+                onSubmit={this.addIndication}
+                levels={this.props.levels}
+              />
             </div>
           </Modal.Body>
         </Modal>
@@ -131,7 +180,9 @@ export class DashboardIndicationSearch extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <AddExposureLevelForm />
+              <AddExposureLevelForm
+                onSubmit={this.addLevel}
+              />
             </div>
           </Modal.Body>
         </Modal>
