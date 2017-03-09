@@ -3,7 +3,7 @@
  * DashboardIndicationPage reducer
  *
  */
-
+import _ from 'lodash';
 import {
   FETCH_INDICATIONS,
   FETCH_INDICATIONS_ERROR,
