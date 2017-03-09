@@ -9,11 +9,30 @@ import Input from '../../../components/Input';
 export class AddIndicationForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     isEdit: PropTypes.bool,
+    handleSubmit: PropTypes.func,
+    levels: PropTypes.object,
   }
 
   render() {
+    const { levels } = this.props;
+    const levelArr = levels.details.map((level) => {
+      return(
+        <div className="field-row" key={level.id}>
+          <strong className="label">
+            <label className="add-exposure-level">{level.name}</label>
+          </strong>
+          <div className="field">
+            <Field
+              name={level.name}
+              component={Input}
+              type="text"
+            />
+          </div>
+        </div>
+      )
+    });
     return (
-      <form action="#" className="form-lightbox dashboard-lightbox">
+      <form action="#" className="form-lightbox dashboard-lightbox"  onSubmit={this.props.handleSubmit}>
 
         <div className="field-row">
           <strong className="label required">
@@ -21,7 +40,7 @@ export class AddIndicationForm extends React.Component { // eslint-disable-line 
           </strong>
           <div className="field">
             <Field
-              name="indication"
+              name="name"
               component={Input}
               type="text"
             />
@@ -41,83 +60,7 @@ export class AddIndicationForm extends React.Component { // eslint-disable-line 
           </div>
         </div>
 
-        <div className="field-row">
-          <strong className="label">
-            <label className="add-exposure-level">RUBY</label>
-          </strong>
-          <div className="field">
-            <Field
-              name="ruby"
-              component={Input}
-              type="text"
-            />
-          </div>
-        </div>
-
-        <div className="field-row">
-          <strong className="label">
-            <label className="add-exposure-level">DIAMOND</label>
-          </strong>
-          <div className="field">
-            <Field
-              name="diamond"
-              component={Input}
-              type="text"
-            />
-          </div>
-        </div>
-
-        <div className="field-row">
-          <strong className="label">
-            <label className="add-exposure-level">PLATINUM</label>
-          </strong>
-          <div className="field">
-            <Field
-              name="platinum"
-              component={Input}
-              type="text"
-            />
-          </div>
-        </div>
-
-        <div className="field-row">
-          <strong className="label">
-            <label className="add-exposure-level">GOLD</label>
-          </strong>
-          <div className="field">
-            <Field
-              name="gold"
-              component={Input}
-              type="text"
-            />
-          </div>
-        </div>
-
-        <div className="field-row">
-          <strong className="label">
-            <label className="add-exposure-level">SILVER</label>
-          </strong>
-          <div className="field">
-            <Field
-              name="silver"
-              component={Input}
-              type="text"
-            />
-          </div>
-        </div>
-
-        <div className="field-row">
-          <strong className="label">
-            <label className="add-exposure-level">BRONZE</label>
-          </strong>
-          <div className="field">
-            <Field
-              name="bronze"
-              component={Input}
-              type="text"
-            />
-          </div>
-        </div>
+        {levelArr}
 
         <div className="field-row text-right no-margins">
           {this.props.isEdit &&
