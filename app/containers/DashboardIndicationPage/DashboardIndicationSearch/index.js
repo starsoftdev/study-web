@@ -8,6 +8,7 @@ import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddIndicationForm } from './AddIndicationForm';
 import { AddExposureLevelForm } from './AddExposureLevelForm';
+import _, { find } from 'lodash';
 
 @reduxForm({ form: 'dashboardIndicationForm' })
 
@@ -68,8 +69,26 @@ export class DashboardIndicationSearch extends React.Component {
   }
 
   addIndication(param) {
-    console.log('***Param', param);
-    // this.props.addIndication(param);
+    const { levels } = this.props;
+    let newParam = [];
+    levels.details.map((item) => {
+      const tName = item.name;
+      if (eval('param.'+tName)) {
+        const temp = {
+          level_id: item.id,
+          level_name: item.name,
+          level_goal: eval('param.'+tName),
+        };
+        newParam.push(temp);
+      }
+    });
+    const reParam = {
+      name: param.name,
+      tier: param.tier,
+      patientGoals: newParam,
+    }
+
+    this.props.addIndication(reParam);
   }
 
   render() {

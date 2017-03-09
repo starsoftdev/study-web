@@ -15,8 +15,7 @@ export class AddIndicationForm extends React.Component { // eslint-disable-line 
 
   render() {
     const { levels } = this.props;
-    const levelArr = levels.details.map((level) => {
-      return(
+    const levelArr = levels.details.map((level) =>
         <div className="field-row" key={level.id}>
           <strong className="label">
             <label className="add-exposure-level">{level.name}</label>
@@ -29,8 +28,7 @@ export class AddIndicationForm extends React.Component { // eslint-disable-line 
             />
           </div>
         </div>
-      )
-    });
+    );
     return (
       <form action="#" className="form-lightbox dashboard-lightbox"  onSubmit={this.props.handleSubmit}>
 

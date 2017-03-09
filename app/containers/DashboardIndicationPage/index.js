@@ -32,6 +32,7 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
 
   render() {
     const { indications, levels, addLevel, addIndication, addLevelProcess, addIndicationProcess } = this.props;
+    console.log('**indication', indications);
     return (
       <div className="container-fluid dashboard-indication">
         <h2 className="main-heading">Indication</h2>
