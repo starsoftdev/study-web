@@ -1,3 +1,78 @@
 .select {
     min-width: 200px;
 }
+.filters-section {
+    
+    .sm-mixin {
+        margin: 0 13px 4px 0;
+        display: inline-block;
+        vertical-align: middle;
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        overflow: hidden;
+        cursor: pointer;
+        position: relative;
+    }
+
+  .input-mixin {
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    display: block;
+    cursor: pointer;
+    position: relative;
+    border-radius: 2px;
+    transition: all 0.25s linear;
+    border: 2px solid #636363;
+
+    input {
+      display: none;
+    }
+
+    &:hover {
+      cursor: pointer;
+      border-color: #a0cf67;
+    }
+
+    &:before {
+      opacity: 0;
+      display: block;
+      cursor: pointer;
+      content: '\e916';
+      text-indent: -2px;
+      text-align: center;
+      font: 14px/16px 'icomoon';
+      transition: all 0.25s linear;
+    }
+  }
+
+  span.jcf-checkbox {
+    margin: 0 0 4px 0;
+    vertical-align: middle;
+  }
+
+  span.jcf-checkbox {
+        margin: 0 0 4px 0;
+    }
+
+    span.sm-container {
+        .sm-mixin;
+
+        &.checked {
+        span.input-style {
+            background: #a0cf67;
+            border-color: #a0cf67;
+
+            &:before {
+            opacity: 1;
+            }
+        }
+        }
+
+        span.input-style {
+        .input-mixin;
+        }
+    }
+
+}
