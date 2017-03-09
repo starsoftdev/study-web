@@ -8,7 +8,6 @@ import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddIndicationForm } from './AddIndicationForm';
 import { AddExposureLevelForm } from './AddExposureLevelForm';
-import _, { find } from 'lodash';
 
 @reduxForm({ form: 'dashboardIndicationForm' })
 
@@ -63,32 +62,34 @@ export class DashboardIndicationSearch extends React.Component {
   }
 
   addLevel(param) {
-    param.isActive = true;
-    param.stripeProductId = 'prod_964SkmdTyEfpnZ';
-    this.props.addLevel(param);
+    const nParam = param;
+    nParam.isActive = true;
+    nParam.stripeProductId = 'prod_964SkmdTyEfpnZ';
+    this.props.addLevel(nParam);
   }
 
   addIndication(param) {
-    const { levels } = this.props;
-    let newParam = [];
-    levels.details.map((item) => {
-      const tName = item.name;
-      if (eval('param.'+tName)) {
-        const temp = {
-          level_id: item.id,
-          level_name: item.name,
-          level_goal: eval('param.'+tName),
-        };
-        newParam.push(temp);
-      }
-    });
-    const reParam = {
-      name: param.name,
-      tier: param.tier,
-      patientGoals: newParam,
-    }
+    // const { levels } = this.props;
+    // const newParam = [];
+    // levels.details.map((item) => {
+    //   const tName = item.name;
+    //   if (eval('param.'+tName)) {
+    //     const temp = {
+    //       levelId: item.id,
+    //       levelName: item.name,
+    //       levelGoal: eval('param.'+tName),
+    //     };
+    //     newParam.push(temp);
+    //   }
+    // });
+    // const reParam = {
+    //   name: param.name,
+    //   tier: param.tier,
+    //   patientGoals: newParam,
+    // };
 
-    this.props.addIndication(reParam);
+    // this.props.addIndication(reParam);
+    this.props.addIndication(param);
   }
 
   render() {
