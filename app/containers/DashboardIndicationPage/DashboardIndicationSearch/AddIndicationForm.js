@@ -16,21 +16,21 @@ export class AddIndicationForm extends React.Component { // eslint-disable-line 
   render() {
     const { levels } = this.props;
     const levelArr = levels.details.map((level) =>
-        <div className="field-row" key={level.id}>
-          <strong className="label">
-            <label className="add-exposure-level">{level.name}</label>
-          </strong>
-          <div className="field">
-            <Field
-              name={level.name}
-              component={Input}
-              type="text"
-            />
-          </div>
+      <div className="field-row" key={level.id}>
+        <strong className="label">
+          <label className="add-exposure-level">{level.name}</label>
+        </strong>
+        <div className="field">
+          <Field
+            name={level.name}
+            component={Input}
+            type="text"
+          />
         </div>
+      </div>
     );
     return (
-      <form action="#" className="form-lightbox dashboard-lightbox"  onSubmit={this.props.handleSubmit}>
+      <form action="#" className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
 
         <div className="field-row">
           <strong className="label required">
