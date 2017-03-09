@@ -73,6 +73,7 @@ export class LandingPage extends React.Component {
         this.props.clearLanding();
         browserHistory.push('/');
       } else {
+        // ..
         if (landing.site.location.toLowerCase().replace(/ /ig, '-') !== siteLocation) {
           invalidSite = true;
         }
