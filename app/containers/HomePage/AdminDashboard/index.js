@@ -12,7 +12,7 @@ import FiltersForm from './FiltersForm';
 import StudyList from './StudyList';
 import Filter from '../../../components/Filter';
 // import { selectFilterFormValues } from './FiltersForm/selectors';
-import { selectStudies, selectFilterFormValues, selectPaginationOptions } from './selectors';
+import { selectFilterFormValues } from './selectors';
 import rd3 from 'react-d3';
 import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
@@ -420,10 +420,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
               </Modal.Body>
             </Modal>
           </div>
-          <StudyList
-            studies={this.props.studies}
-            paginationOptions={this.props.paginationOptions}
-          />
+          <StudyList />
         </section>
       </div>
     );
@@ -432,8 +429,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
 const mapStateToProps = createStructuredSelector({
   filtersFormValues: selectFilterFormValues(),
-  studies: selectStudies(),
-  paginationOptions: selectPaginationOptions(),
 });
 
 export default connect(mapStateToProps)(AdminDashboard);
