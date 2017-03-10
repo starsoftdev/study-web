@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field } from 'redux-form';
-import { map } from 'lodash';
+import { map, indexOf } from 'lodash';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import { StickyContainer, Sticky } from 'react-sticky';
@@ -67,6 +67,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     };
   }
 
+  onTableScroll(e, v) {
+    console.log('scroll', e, v);
+  }
+
   toggleAllstudies(checked) {
     const studies = map(this.state.studies, (study) => ({
       ...study,
@@ -108,48 +112,46 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       if (hasStudy) {
         return {
           ...study,
-          status: status ? 'active' : 'deactive'
-        }
+          status: status ? 'active' : 'deactive',
+        };
       }
       return study;
     });
 
     this.setState({
-      studies
+      studies,
     });
   }
 
   activateStudies() {
     const studies = map(this.state.studies, (study) => {
-      const studyId = study.studyInfo.id;
       if (study.selected) {
         return {
           ...study,
-          status: 'active'
-        }
+          status: 'active',
+        };
       }
       return study;
     });
 
     this.setState({
-      studies
+      studies,
     });
   }
 
   deactivateStudies() {
     const studies = map(this.state.studies, (study) => {
-      const studyId = study.studyInfo.id;
       if (study.selected) {
         return {
           ...study,
-          status: 'deactive'
-        }
+          status: 'deactive',
+        };
       }
       return study;
     });
 
     this.setState({
-      studies
+      studies,
     });
   }
 
@@ -206,10 +208,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   changeRange() {
     // TODO: update filter
     this.hideDateRangeModal();
-  }
-  
-  onTableScroll(e, v) {
-    console.log('scroll', e, v);
   }
 
   showLandingPageModal(visible) {
@@ -287,81 +285,81 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     return (
       <div className={classNames('table-container', { 'btns-active' : selectedStudyCount > 0 })}>
         { selectedStudyCount > 0 &&
-            <Sticky topOffset={-364} className={classNames('clearfix', 'top-head', 'top-head-fixed', 'active')}>
-              <strong className="title"><span className="studies-counter"> { selectedStudyCount }</span> <span className="text" data-one="STUDY" data-two="STUDIES"> SELECTED</span></strong>
-              <div className="btns-area">
-                <Button
-                  bsStyle="primary"
-                  className="pull-left"
-                  data-class="btn-activate"
-                  onClick={this.activateStudies}
-                >
-                Activate
-                </Button>
-                <Button
-                  bsStyle="primary"
-                  className="pull-left"
-                  data-class="btn-deactivate"
-                  onClick={this.deactivateStudies}
-                >
-                Deactivate
-                </Button>
-                {
-                  selectedStudyCount === 1 &&
-                    <Button
-                      bsStyle="primary"
-                      className="pull-left"
-                      data-class="btn-deactivate"
-                      onClick={() => this.showLandingPageModal(true)}
-                    > Landing Page </Button>
-                }
-                {
-                  selectedStudyCount === 1 &&
-                    <Button
-                      bsStyle="primary"
-                      className="pull-left"
-                      data-class="btn-deactivate"
-                      onClick={() => this.showThankyouPageModal(true)}
-                    > Thank You Page </Button>
-                }
-                {
-                  selectedStudyCount === 1 &&
-                    <Button
-                      bsStyle="primary"
-                      className="pull-left"
-                      data-class="btn-deactivate"
-                      onClick={() => this.showPatientThankyouPageModal(true)}
-                    > Patient Thank You Page </Button>
-                }
-                {
-                  selectedStudyCount === 1 &&
-                    <Button
-                      bsStyle="primary"
-                      className="pull-left"
-                      data-class="btn-deactivate"
-                      onClick={() => this.showEditInformationModal(true)}
-                    > Edit </Button>
-                }
-                {
-                  selectedStudyCount === 1 &&
-                    <Button
-                      bsStyle="primary"
-                      className="pull-left"
-                      data-class="btn-deactivate"
-                      onClick={this.adSetStudies}
-                    > Ad Set </Button>
-                }
-                {
-                  selectedStudyCount === 1 &&
-                    <Button
-                      bsStyle="primary"
-                      className="pull-left"
-                      data-class="btn-deactivate"
-                      onClick={this.historyStudies}
-                    > History </Button>
-                }
-              </div>
-            </Sticky>
+          <Sticky topOffset={-364} className={classNames('clearfix', 'top-head', 'top-head-fixed', 'active')}>
+            <strong className="title"><span className="studies-counter"> { selectedStudyCount }</span> <span className="text" data-one="STUDY" data-two="STUDIES"> SELECTED</span></strong>
+            <div className="btns-area">
+              <Button
+                bsStyle="primary"
+                className="pull-left"
+                data-class="btn-activate"
+                onClick={this.activateStudies}
+              >
+              Activate
+              </Button>
+              <Button
+                bsStyle="primary"
+                className="pull-left"
+                data-class="btn-deactivate"
+                onClick={this.deactivateStudies}
+              >
+              Deactivate
+              </Button>
+              {
+                selectedStudyCount === 1 &&
+                  <Button
+                    bsStyle="primary"
+                    className="pull-left"
+                    data-class="btn-deactivate"
+                    onClick={() => this.showLandingPageModal(true)}
+                  > Landing Page </Button>
+              }
+              {
+                selectedStudyCount === 1 &&
+                  <Button
+                    bsStyle="primary"
+                    className="pull-left"
+                    data-class="btn-deactivate"
+                    onClick={() => this.showThankyouPageModal(true)}
+                  > Thank You Page </Button>
+              }
+              {
+                selectedStudyCount === 1 &&
+                  <Button
+                    bsStyle="primary"
+                    className="pull-left"
+                    data-class="btn-deactivate"
+                    onClick={() => this.showPatientThankyouPageModal(true)}
+                  > Patient Thank You Page </Button>
+              }
+              {
+                selectedStudyCount === 1 &&
+                  <Button
+                    bsStyle="primary"
+                    className="pull-left"
+                    data-class="btn-deactivate"
+                    onClick={() => this.showEditInformationModal(true)}
+                  > Edit </Button>
+              }
+              {
+                selectedStudyCount === 1 &&
+                  <Button
+                    bsStyle="primary"
+                    className="pull-left"
+                    data-class="btn-deactivate"
+                    onClick={this.adSetStudies}
+                  > Ad Set </Button>
+              }
+              {
+                selectedStudyCount === 1 &&
+                  <Button
+                    bsStyle="primary"
+                    className="pull-left"
+                    data-class="btn-deactivate"
+                    onClick={this.historyStudies}
+                  > History </Button>
+              }
+            </div>
+          </Sticky>
         }
         <div className="study-tables fixed-top">
           <div className="head">
