@@ -17,6 +17,9 @@ import {
   ADD_INDICATION,
   ADD_INDICATION_SUCCESS,
   ADD_INDICATION_ERROR,
+  DELETE_INDICATION,
+  DELETE_INDICATION_SUCCESS,
+  DELETE_INDICATION_ERROR,
 } from './constants';
 
 const initialState = {
@@ -44,6 +47,7 @@ const initialState = {
 function dashboardIndicationPageReducer(state = initialState, action) {
   const newLevel = _.cloneDeep(state.levels.details);
   const newIndication = _.cloneDeep(state.indications.details);
+  let foundUserIndex = null;
   switch (action.type) {
     case FETCH_INDICATIONS:
       return {
@@ -153,6 +157,43 @@ function dashboardIndicationPageReducer(state = initialState, action) {
         },
       };
     case ADD_INDICATION_ERROR:
+      return {
+        ...state,
+        addIndicationProcess: {
+          saving: false,
+          deleting: false,
+          error: action.payload,
+        },
+      };
+    case DELETE_INDICATION:
+      return {
+        ...state,
+        addIndicationProcess: {
+          saving: false,
+          deleting: true,
+          error: null,
+        },
+      };
+    case DELETE_INDICATION_SUCCESS:
+      foundUserIndex = _.findIndex(newIndication, item => (item.id === action.payload.id));
+      if (foundUserIndex !== -1) {
+        newIndication.splice(foundUserIndex, 1);
+      }
+      return {
+        ...state,
+        cro: {
+          details: newIndication,
+          fetching: false,
+          error: action.payload,
+        },
+        addIndicationProcess: {
+          saving: false,
+          deleting: false,
+          error: null,
+        },
+      };
+    case DELETE_INDICATION_ERROR:
+      console.log('&&&&&&&&&&&&&$########', action.payload);
       return {
         ...state,
         addIndicationProcess: {

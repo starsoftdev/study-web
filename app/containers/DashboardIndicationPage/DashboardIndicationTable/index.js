@@ -7,6 +7,8 @@ export class DashboardIndicationTable extends React.Component { // eslint-disabl
   static propTypes = {
     indications: PropTypes.object,
     levels: PropTypes.object,
+    editIndication: PropTypes.func,
+    deleteIndication: PropTypes.func,
   }
 
   componentDidMount() {
@@ -35,7 +37,7 @@ export class DashboardIndicationTable extends React.Component { // eslint-disabl
           <tbody>
             {
             indications.details.map((item, index) => (
-              <RowItem key={index} item={item} levels={levels} />
+              <RowItem key={index} item={item} levels={levels} editIndication={this.props.editIndication} deleteIndication={this.props.deleteIndication} />
             ))
           }
           </tbody>
