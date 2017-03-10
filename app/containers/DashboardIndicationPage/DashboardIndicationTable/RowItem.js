@@ -4,10 +4,15 @@ import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddIndicationForm } from '../DashboardIndicationSearch/AddIndicationForm';
+import _, { forEach } from 'lodash';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     item: PropTypes.object,
+    levels: PropTypes.object,
+    editIndication: PropTypes.func,
+    deleteIndication: PropTypes.func,
+    editIndicationProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -19,6 +24,8 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
     this.closeAddIndicationModal = this.closeAddIndicationModal.bind(this);
     this.openAddIndicationModal = this.openAddIndicationModal.bind(this);
+    this.deleteIndication = this.deleteIndication.bind(this);
+    this.editIndication = this.editIndication.bind(this);
   }
 
   closeAddIndicationModal() {
@@ -29,12 +36,53 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     this.setState({ addIndicationModalOpen: true });
   }
 
+  deleteIndication(param) {
+    this.props.deleteIndication(param);
+  }
+
+  editIndication(param) {
+    this.props.editIndication(param);
+  }
+
   render() {
+    const { levels, item } = this.props;
+
+    const nValues = {};
+    forEach(item.patientIndicationGoals, (data) => {
+      if (item.patientIndicationGoals.length > 0) {
+        const pId = _.find(levels.details, { id: data.level_id });
+        if (pId) {
+          nValues[pId.name] = data.goal;
+        }
+      }
+    });
+
+    const gValues = levels.details.map((level) => {
+      const patientGoal = item.patientIndicationGoals;
+      const pId = _.find(patientGoal, { level_id: level.id });
+      if (pId) {
+        return (
+          <td key={level.id}>
+            {pId.goal}
+          </td>
+        );
+      }
+      return (
+        <td></td>
+      );
+    });
+
+    const tPatientGoal = item.patientIndicationGoals;
+    const tierValue = (tPatientGoal.length > 0) ? tPatientGoal[0].tierNumber : null;
+    if (tPatientGoal.length > 0) {
+      nValues.tier = tPatientGoal[0].tierNumber;
+    }
     const initialValues = {
       initialValues: {
         ...this.props.item,
         indication: this.props.item.name,
         id: this.props.item.id,
+        ...nValues,
       },
     };
 
@@ -44,26 +92,9 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           {this.props.item.name}
         </td>
         <td>
-          {this.props.item.tier}
+          {tierValue}
         </td>
-        <td>
-          {this.props.item.ruby}
-        </td>
-        <td>
-          {this.props.item.diamond}
-        </td>
-        <td>
-          {this.props.item.platinum}
-        </td>
-        <td>
-          {this.props.item.gold}
-        </td>
-        <td>
-          {this.props.item.silver}
-        </td>
-        <td>
-          {this.props.item.bronze}
-        </td>
+        {gValues}
         <td>
           <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openAddIndicationModal}>
             <span>Edit</span>
@@ -81,7 +112,10 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
             <div className="holder clearfix">
               <AddIndicationForm
                 {...initialValues}
+                levels={levels}
                 isEdit
+                onDelete={this.deleteIndication}
+                onSubmit={this.editIndication}
               />
             </div>
           </Modal.Body>

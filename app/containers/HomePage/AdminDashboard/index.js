@@ -5,6 +5,7 @@ import { Modal } from 'react-bootstrap';
 import { Field, reduxForm } from 'redux-form';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
+import { StickyContainer } from 'react-sticky';
 import { map, mapKeys, concat, findIndex, pullAt } from 'lodash';
 import './styles.less';
 import CenteredModal from '../../../components/CenteredModal';
@@ -243,7 +244,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             </Modal>
           </div>
         </div>
-        <section className={classNames('filters-section', { 'bar-active': (filters.length > 0) }, { 'filters-added': (filters.length > 0) })}>
+        <StickyContainer className={classNames('filters-section', { 'bar-active': (filters.length > 0) }, { 'filters-added': (filters.length > 0) })}>
           {(filters.length > 0) && (
             <div className="filters-bar">
               <div className="filters-holder search-filters">
@@ -421,7 +422,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             </Modal>
           </div>
           <StudyList />
-        </section>
+        </StickyContainer>
       </div>
     );
   }

@@ -10,7 +10,10 @@ export class AddIndicationForm extends React.Component { // eslint-disable-line 
   static propTypes = {
     isEdit: PropTypes.bool,
     handleSubmit: PropTypes.func,
+    initialValues: PropTypes.object,
     levels: PropTypes.object,
+    deleting: PropTypes.bool,
+    onDelete: PropTypes.func,
   }
 
   render() {
@@ -62,7 +65,7 @@ export class AddIndicationForm extends React.Component { // eslint-disable-line 
 
         <div className="field-row text-right no-margins">
           {this.props.isEdit &&
-            <a className="btn btn-gray-outline">Delete</a>
+            <a className="btn btn-gray-outline" onClick={() => { this.props.onDelete(this.props.initialValues.id); }}>Delete</a>
           }
           <button type="submit" className="btn btn-primary">{this.props.isEdit ? 'Update' : 'Submit'}</button>
         </div>
