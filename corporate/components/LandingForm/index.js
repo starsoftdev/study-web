@@ -43,8 +43,8 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     const { study, handleSubmit, subscriptionError } = this.props;
 
     const name = (study) ? study.name : '';
-    const city = (study && study.sites[0].city) ? study.sites[0].city : '';
-    const state = (study && study.sites[0].state) ? study.sites[0].state : '';
+    const city = (study && study.site.city) ? study.site.city : '';
+    const state = (study && study.site.state) ? study.site.state : '';
 
     const cityAndState = (city && state) ? ` ${city}, ${state}` : '';
     return (
