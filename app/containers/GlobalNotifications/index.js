@@ -91,6 +91,12 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
       },
       {
         events: [
+          'twilio-call',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
           'create-patient',
         ],
         raw: { pathname: this.props.location.pathname },
