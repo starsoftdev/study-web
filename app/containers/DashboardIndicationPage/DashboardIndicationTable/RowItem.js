@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddIndicationForm } from '../DashboardIndicationSearch/AddIndicationForm';
-import _, { find } from 'lodash';
+import _ from 'lodash';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -48,16 +48,15 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           <td key={level.id}>
             {pId.goal}
           </td>
-        )
-      } else {
-        return (
-          <td></td>
-        )
+        );
       }
-    })
+      return (
+        <td></td>
+      );
+    });
 
     const tPatientGoal = item.patientIndicationGoals;
-    const tierValue = (tPatientGoal.length>0) ? tPatientGoal[0].tierNumber : null;
+    const tierValue = (tPatientGoal.length > 0) ? tPatientGoal[0].tierNumber : null;
     return (
       <tr>
         <td>

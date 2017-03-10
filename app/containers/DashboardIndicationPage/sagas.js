@@ -48,7 +48,7 @@ export function* fetchIndicationsWorker() {
 
     const filterObj = {
       include: [{
-        relation: 'patientIndicationGoals'
+        relation: 'patientIndicationGoals',
       }],
     };
 
