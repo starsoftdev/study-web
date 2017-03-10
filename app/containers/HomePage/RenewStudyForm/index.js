@@ -99,15 +99,15 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       }
     }
 
-    if (newProps.selectedStudy && newProps.selectedStudy.maxCampaign && newProps.selectedStudy.maxCampaign.dateTo && !this.state.isReset) {
-      const minDate = moment.utc(newProps.selectedStudy.maxCampaign.dateTo).add(1, 'days');
+    if (newProps.selectedStudy && newProps.selectedStudy.campaignLastDate) {
+      const { selectedStudy } = newProps;
+      const minDate = moment(selectedStudy.campaignLastDate).add(1, 'days');
       this.setState({
-        minDate: moment.utc(newProps.selectedStudy.maxCampaign.dateTo).add(1, 'days'),
+        minDate,
       });
-
       if (this.state.initDate <= minDate) {
         this.setState({
-          initDate: _.cloneDeep(minDate),
+          initDate: minDate.clone(),
         });
       }
     }
