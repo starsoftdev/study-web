@@ -18,6 +18,7 @@ export class DashboardIndicationSearch extends React.Component {
     addLevelProcess: PropTypes.object,
     addIndicationProcess: PropTypes.object,
     levels: PropTypes.object,
+    indications: PropTypes.object,
   }
 
   constructor(props) {
@@ -69,27 +70,26 @@ export class DashboardIndicationSearch extends React.Component {
   }
 
   addIndication(param) {
-    // const { levels } = this.props;
-    // const newParam = [];
-    // levels.details.map((item) => {
-    //   const tName = item.name;
-    //   if (eval('param.'+tName)) {
-    //     const temp = {
-    //       levelId: item.id,
-    //       levelName: item.name,
-    //       levelGoal: eval('param.'+tName),
-    //     };
-    //     newParam.push(temp);
-    //   }
-    // });
-    // const reParam = {
-    //   name: param.name,
-    //   tier: param.tier,
-    //   patientGoals: newParam,
-    // };
+    const { levels } = this.props;
+    const newParam = [];
+    levels.details.map((item) => {
+      const tName = item.name;
+      if (param.hasOwnProperty(tName)) {
+        const temp = {
+          levelId: item.id,
+          levelName: item.name,
+          levelGoal: param[tName],
+        };
+        newParam.push(temp);
+      }
+    });
+    const reParam = {
+      name: param.name,
+      tier: param.tier,
+      patientGoals: newParam,
+    };
 
-    // this.props.addIndication(reParam);
-    this.props.addIndication(param);
+    this.props.addIndication(reParam);
   }
 
   render() {

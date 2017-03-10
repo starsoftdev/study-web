@@ -138,6 +138,7 @@ function dashboardIndicationPageReducer(state = initialState, action) {
         },
       };
     case ADD_INDICATION_SUCCESS:
+      console.log('****ADED', action.payload);
       newIndication.push(action.payload);
       return {
         ...state,

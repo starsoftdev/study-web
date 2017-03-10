@@ -44,12 +44,20 @@ export function* fetchIndicationsWatcher() {
 
 export function* fetchIndicationsWorker() {
   try {
-    const requestURL = `${API_URL}/indications/patientGoal`;
+    const requestURL = `${API_URL}/indications`;
 
-    const params = {
-      method: 'GET',
+    const filterObj = {
+      include: [{
+        relation: 'patientIndicationGoals'
+      }],
     };
-    const response = yield call(request, requestURL, params);
+
+
+    const queryParams = {
+      filter: JSON.stringify(filterObj),
+    };
+
+    const response = yield call(request, requestURL, { query: queryParams });
 
     yield put(fetchIndicationsSuccess(response));
   } catch (err) {
