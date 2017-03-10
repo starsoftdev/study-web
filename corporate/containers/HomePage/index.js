@@ -85,15 +85,29 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { indications, trials } = this.props;
+    const { indications } = this.props;
+    let { trials } = this.props;
     let studiesList = [];
-    let h3Text;
+    let h3Text = '';
 
-    if (trials && trials.length > 0) {
-      h3Text = `There are ${trials.length} ${(trials.length > 1) ? 'studies' : 'study'}`;
-      if (this.zip) {
-        h3Text = `There are ${trials.length} ${(trials.length > 1) ? 'studies' : 'study'} within ${this.distance || 50} miles of ${this.zip}`;
+    if (trials) {
+      if (trials.length > 0) {
+        h3Text = `There are ${trials.length} ${(trials.length > 1) ? 'studies' : 'study'}`;
+        if (this.zip) {
+          h3Text = `There are ${trials.length} ${(trials.length > 1) ? 'studies' : 'study'} within ${this.distance || 50} miles of ${this.zip}`;
+        }
+
+        if (trials[0].wrongPostalCode) {
+          h3Text = 'Invalid postal code';
+          trials = [];
+        }
+      } else {
+        h3Text = 'There are no studies';
+        if (this.zip) {
+          h3Text = `There are no studies within ${this.distance || 50} miles of ${this.zip}`;
+        }
       }
+
       studiesList = trials.map((item, index) => {
         let addr = null;
         if (item.city && item.state) {
@@ -131,9 +145,9 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
             handleDistanceChoose={this.handleDistanceChoose}
             handleIndicationChoose={this.handleIndicationChoose}
           />
-          <div className={classNames('articles-holder relative', { hidden: (!trials || trials.length <= 0) })}>
+          <div className="articles-holder relative">
             <h3 className="text-center text-uppercase">{h3Text}</h3>
-            <div className="row">
+            <div className={classNames('row', { hidden: (!trials || trials.length <= 0) })}>
               {(trials && trials.length > 0) && studiesList}
             </div>
           </div>
