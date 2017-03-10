@@ -44,14 +44,14 @@ export class LandingArticle extends React.Component {
     const imgSrc = (landing && landing.imgSrc) ? landing.imgSrc : null;
     const dataView = (imgSrc) ? 'slideInRight' : 'fadeInUp';
     const indication = study.indication.name;
-    const siteName = study.sites[0].name;
+    const siteName = study.site.name;
 
     const landingDescription = (landing && landing.description && landing.description !== 'seed') ? landing.description : null;
 
-    let address = study.sites[0].address;
-    const city = study.sites[0].city;
-    const state = study.sites[0].state;
-    const zip = study.sites[0].zip;
+    let address = study.site.address;
+    const city = study.site.city;
+    const state = study.site.state;
+    const zip = study.site.zip;
 
     if (city) {
       address += ', ' + city;
