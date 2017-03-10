@@ -93,17 +93,23 @@ export class LandingPage extends React.Component {
     const now = moment();
     const landing = this.props.landing;
     const separateNames = params.name.split(' ');
-    // TODO: figure out about source key
+    let studySourceId;
+
+    for (const studySource of landing.studySources) {
+      if (studySource.landingPage) {
+        studySourceId = studySource.id;
+      }
+    }
     const data = {
       firstName: separateNames[0],
-      lastName: separateNames[1],
+      lastName: separateNames[1] || null,
       email: params.email,
       phone: normalizePhone(params.phone),
       createdAt: now,
       updatedAt: now,
       unsubscribed: false,
-      study_patient_category_id: landing.landingPages[0].study_patient_category_id,
-      source_id: (landing.sources.length) ? landing.sources[0].id : null,
+      study_id: landing.id,
+      study_source_id: studySourceId,
       indicationName: landing.indication.name,
       protocolNumber: landing.protocolNumber,
     };
