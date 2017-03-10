@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field } from 'redux-form';
-import { map, find } from 'lodash';
+import { map, indexOf } from 'lodash';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import ReactSelect from '../../../../components/Input/ReactSelect';
@@ -28,8 +28,13 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   constructor(props) {
     super(props);
 
-    this.toggleAllStudySelection = this.toggleAllStudySelection.bind(this);
+    this.toggleAllstudies = this.toggleAllstudies.bind(this);
     this.toggleStudy = this.toggleStudy.bind(this);
+    this.changeStudyStatus = this.changeStudyStatus.bind(this);
+    this.activateStudies = this.activateStudies.bind(this);
+    this.deactivateStudies = this.deactivateStudies.bind(this);
+    this.adSetStudies = this.adSetStudies.bind(this);
+    this.historyStudies = this.historyStudies.bind(this);
     this.sortBy = this.sortBy.bind(this);
     this.loadItems = this.loadItems.bind(this);
     this.showDateRangeModal = this.showDateRangeModal.bind(this);
@@ -54,22 +59,22 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       showLandingPageModal: false,
       showThankyouPageModal: false,
       showPatientThankyouPageModal: false,
-      studySelection: bindSelection(props.studies),
+      studies: bindSelection(props.studies),
       selectedAllStudies: false,
       selectedStudyCount: 0,
     };
   }
 
-  toggleAllStudySelection(checked) {
-    const studySelection = map(this.state.studySelection, (study) => ({
+  toggleAllstudies(checked) {
+    const studies = map(this.state.studies, (study) => ({
+      ...study,
       selected: checked,
-      studyId: study.studyId,
     }));
 
     this.setState({
       selectedAllStudies: checked,
-      studySelection,
-      selectedStudyCount: checked === true ? studySelection.length : 0,
+      studies,
+      selectedStudyCount: checked === true ? studies.length : 0,
     });
   }
 
@@ -77,8 +82,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     console.log('studyid', studyId, checked);
     let selectedAllStudies = true;
     let selectedStudyCount = 0;
-    const studySelection = map(this.state.studySelection, (study) => {
-      const c = study.studyId === studyId ? checked : study.selected;
+    const studies = map(this.state.studies, (study) => {
+      const c = study.studyInfo.id === studyId ? checked : study.selected;
       selectedAllStudies = selectedAllStudies && c;
       if (c === true) selectedStudyCount++;
       return {
@@ -88,9 +93,69 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     });
     this.setState({
       selectedAllStudies,
-      studySelection,
+      studies,
       selectedStudyCount,
     });
+  }
+
+  changeStudyStatus(studyIds, status) {
+    console.log('studyid', studyIds, status);
+    const studies = map(this.state.studies, (study) => {
+      const studyId = study.studyInfo.id;
+      const hasStudy = indexOf(studyIds, studyId) > -1;
+      if (hasStudy) {
+        return {
+          ...study,
+          status: status ? 'active' : 'deactive'
+        }
+      }
+      return study;
+    });
+
+    this.setState({
+      studies
+    });
+  }
+
+  activateStudies() {
+    const studies = map(this.state.studies, (study) => {
+      const studyId = study.studyInfo.id;
+      if (study.selected) {
+        return {
+          ...study,
+          status: 'active'
+        }
+      }
+      return study;
+    });
+
+    this.setState({
+      studies
+    });
+  }
+
+  deactivateStudies() {
+    const studies = map(this.state.studies, (study) => {
+      const studyId = study.studyInfo.id;
+      if (study.selected) {
+        return {
+          ...study,
+          status: 'deactive'
+        }
+      }
+      return study;
+    });
+
+    this.setState({
+      studies
+    });
+  }
+
+  adSetStudies() {
+  }
+
+  historyStudies() {
+
   }
 
   loadItems() {
@@ -187,14 +252,13 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
   render() {
     console.log('state', this.state);
-    const { studies } = this.props;
-    const { selectedStudyCount } = this.state;
+    const { studies, selectedStudyCount, selectedAllStudies } = this.state;
     const studyListLeftContents = studies.map((item, index) =>
       <StudyLeftItem
         {...item}
         key={index}
-        selected={find(this.state.studySelection, { studyId: item.studyInfo.id })}
         onSelectStudy={this.toggleStudy}
+        onStatusChange={this.changeStudyStatus}
       />
     );
     const studyListRightContents = studies.map((item, index) =>
@@ -278,7 +342,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                     bsStyle="primary"
                     className="pull-left"
                     data-class="btn-deactivate"
-                    onClick={this.deactivateStudies}
+                    onClick={this.adSetStudies}
                   > Ad Set </Button>
               }
               {
@@ -287,7 +351,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                     bsStyle="primary"
                     className="pull-left"
                     data-class="btn-deactivate"
-                    onClick={this.deactivateStudies}
+                    onClick={this.historyStudies}
                   > History </Button>
               }
             </div>
@@ -376,8 +440,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   <thead>
                     <tr>
                       <th>
-                        <span className={(this.state.selectedAllStudies) ? 'sm-container checked' : 'sm-container'}>
-                          <span className="input-style" onClick={() => this.toggleAllStudySelection(!this.state.selectedAllStudies)}>
+                        <span className={selectedAllStudies ? 'sm-container checked' : 'sm-container'}>
+                          <span className="input-style" onClick={() => this.toggleAllstudies(!selectedAllStudies)}>
                             <input name="all" type="checkbox" />
                           </span>
                         </span>
@@ -509,15 +573,9 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
 const bindSelection = (studies) =>
   map(studies, (study) => ({
+    ...study,
     selected: false,
-    studyId: study.studyInfo.id,
   }));
-
-// const bindSelection = (studies) =>
-//   map(studies, (study) => {
-//     selected: false,
-//     studyId: study.studyInfo.id,
-//   });
 
 const mapStateToProps = createStructuredSelector({
   studies: selectStudies(),
