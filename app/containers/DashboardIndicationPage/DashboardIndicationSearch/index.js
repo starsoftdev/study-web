@@ -74,7 +74,7 @@ export class DashboardIndicationSearch extends React.Component {
     const newParam = [];
     levels.details.map((item) => {
       const tName = item.name;
-      if (param.hasOwnProperty(tName)) {
+      if (Object.prototype.hasOwnProperty.call(param, tName)) {
         const temp = {
           levelId: item.id,
           levelName: item.name,
@@ -82,6 +82,7 @@ export class DashboardIndicationSearch extends React.Component {
         };
         newParam.push(temp);
       }
+      return item;
     });
     const reParam = {
       name: param.name,
