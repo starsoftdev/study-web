@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 
 import ReactMultiCheckBox from '../../../../components/Input/ReactMultiCheckbox';
+import ReactMultiSelect from '../../../../components/Input/ReactMultiSelect';
 import formValidator from './validator';
 
 const formName = 'dashboardFilters';
@@ -275,18 +276,12 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
     handleSubmit: PropTypes.func,
   };
 
-  constructor(props) {
-    super(props);
-
-    console.log('initial values', props.initialValues);
-  }
   initSearch(value, key) {
     console.log('initSearch - updated filter', value, key);
   }
 
   render() {
     const { handleSubmit } = this.props;
-    console.log('render initial values', this.props.initialValues);
     return (
       <form className="form-filters" onSubmit={handleSubmit}>
         <div className="filters form-fields">
@@ -294,7 +289,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
             <Field
               name="status"
               className="filter-field"
-              component={ReactMultiCheckBox}
+              component={ReactMultiSelect}
               placeholder="STATUS"
               optionLabelKey="label"
               multiple

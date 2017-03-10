@@ -209,11 +209,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
       },
     ];
 
-    const init= {
-      status: [1, 2],
-      color: 'Red',
-    };
-
     return (
       <div className="container-fluid admin-dashboard">
         <div className="fixed-header clearfix">
