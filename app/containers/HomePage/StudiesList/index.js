@@ -310,6 +310,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       indicationName: this.state.indicationName,
       locationName: this.state.locationName,
       exposureLevelName: studyLevel.label,
+      client_id: this.props.currentUser.roleForClient.client_id,
     });
   }
 
