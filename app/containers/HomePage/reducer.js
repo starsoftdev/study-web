@@ -244,10 +244,18 @@ export default function homePageReducer(state = initialState, action) {
             if (nStartDate <= cDate && nEndDate >= cDate) {
               nEntities[foundItemIndex] = item;
             } else if (sStartDate >= cDate || sEndDate <= cDate) {
-              const sDiff = sStartDate >= cDate ? sStartDate.getTime() - cDate.getTime() : cDate.getTime() - sEndDate.getTime();
-              const nDiff = nStartDate >= cDate ? nStartDate.getTime() - cDate.getTime() : cDate.getTime() - nEndDate.getTime();
-              if (nDiff < sDiff) {
+              const sDiff = sStartDate.getTime() - cDate.getTime();
+              const nDiff = nStartDate.getTime() - cDate.getTime();
+              if (sDiff < 0 && nDiff > 0) {
                 nEntities[foundItemIndex] = item;
+              } else if (sDiff < 0 && nDiff < 0) {
+                if (nDiff > sDiff) {
+                  nEntities[foundItemIndex] = item;
+                }
+              } else if (sDiff > 0 && nDiff > 0) {
+                if (nDiff < sDiff) {
+                  nEntities[foundItemIndex] = item;
+                }
               }
             }
           }

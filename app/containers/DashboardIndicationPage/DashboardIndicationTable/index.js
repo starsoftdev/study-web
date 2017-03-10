@@ -28,7 +28,7 @@ export class DashboardIndicationTable extends React.Component { // eslint-disabl
               <th>TIER <i className="caret-arrow"></i></th>
               {
                 levels.details.map((level) =>
-                  <th>{level.name} <i className="caret-arrow"></i></th>
+                  <th key={level.id}>{level.name} <i className="caret-arrow"></i></th>
                 )
               }
               <th></th>
