@@ -495,7 +495,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       return (
         <StudyItem
           {...item}
-          orderNumber={index}
+          orderNumber={index + 1}
           currentUser={currentUser}
           key={index}
           index={index}
