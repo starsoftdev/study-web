@@ -209,6 +209,11 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
       },
     ];
 
+    const init= {
+      status: [1, 2],
+      color: 'Red',
+    };
+
     return (
       <div className="container-fluid admin-dashboard">
         <div className="fixed-header clearfix">
@@ -237,7 +242,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
               <Modal.Body>
                 <div className="holder clearfix">
                   <div className="form-lightbox">
-                    <FiltersForm handleSubmit={this.addUser} />
+                    <FiltersForm
+                      handleSubmit={this.addUser}
+                      initialValues={this.props.filtersFormValues}
+                    />
                   </div>
                 </div>
               </Modal.Body>

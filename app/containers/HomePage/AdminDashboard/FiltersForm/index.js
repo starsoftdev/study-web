@@ -275,13 +275,18 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
     handleSubmit: PropTypes.func,
   };
 
+  constructor(props) {
+    super(props);
+
+    console.log('initial values', props.initialValues);
+  }
   initSearch(value, key) {
     console.log('initSearch - updated filter', value, key);
   }
 
   render() {
     const { handleSubmit } = this.props;
-
+    console.log('render initial values', this.props.initialValues);
     return (
       <form className="form-filters" onSubmit={handleSubmit}>
         <div className="filters form-fields">
