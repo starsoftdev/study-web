@@ -58,7 +58,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
             component={Toggle}
             className="field"
             onChange={(value) => { console.log(123); onStatusChange([studyInfo.id], value); }}
-            initValue={ status === 'active'}
+            initValue={status === 'active'}
           />
         </td>
         <td></td>
