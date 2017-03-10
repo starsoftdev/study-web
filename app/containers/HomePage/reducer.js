@@ -206,6 +206,12 @@ export default function homePageReducer(state = initialState, action) {
         },
       };
     case FETCH_STUDIES_SUCCESS: {
+      const cDate = new Date();
+      // const dateFrom = campaign.dateFrom ? new Date(campaign.dateFrom) : null
+      // const dateTo = campaign.dateTo ? new Date(campaign.dateTo) : null
+      //
+      // const dateFromStr = dateFrom ? moment(dateFrom).format('MMMM Do, YYYY') : 'To Be Determined'
+      // const dateToStr = dateTo ? moment(dateTo).format('MMMM Do, YYYY') : 'To Be Determined'
       const entitiesCollection = payload.map((studyObject, index) => ({
         studyId: studyObject.id,
         indication: studyObject.indication,
@@ -222,10 +228,37 @@ export default function homePageReducer(state = initialState, action) {
         orderNumber: (index + 1),
         siteId: studyObject.site.id
       }));
+      const nEntities = [];
+      _.forEach(entitiesCollection, (item) => {
+        const foundItemIndex = _.findIndex(nEntities, { indication : item.indication, protocol : item.protocol });
+
+        if (foundItemIndex !== -1) {
+          const sItem = nEntities[foundItemIndex];
+          if (!sItem.startDate) {
+            nEntities[foundItemIndex] = item;
+          } else if (sItem.startDate && item.startDate) {
+            const sStartDate = new Date(sItem.startDate);
+            const sEndDate = new Date(sItem.endDate);
+            const nStartDate = new Date(item.startDate);
+            const nEndDate = new Date(item.endDate);
+            if (nStartDate <= cDate && nEndDate >= cDate) {
+              nEntities[foundItemIndex] = item;
+            } else if (sStartDate >= cDate || sEndDate <= cDate) {
+              const sDiff = sStartDate >= cDate ? sStartDate.getTime() - cDate.getTime() : cDate.getTime() - sEndDate.getTime();
+              const nDiff = nStartDate >= cDate ? nStartDate.getTime() - cDate.getTime() : cDate.getTime() - nEndDate.getTime();
+              if (nDiff < sDiff) {
+                nEntities[foundItemIndex] = item;
+              }
+            }
+          }
+        } else {
+          nEntities.push(item);
+        }
+      });
       return {
         ...state,
         studies: {
-          details: entitiesCollection,
+          details: nEntities,
           fetching: false,
           error: null,
         },

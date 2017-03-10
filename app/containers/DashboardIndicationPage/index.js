@@ -10,7 +10,7 @@ import { createStructuredSelector } from 'reselect';
 
 import { DashboardIndicationSearch } from './DashboardIndicationSearch/index';
 import { DashboardIndicationTable } from './DashboardIndicationTable';
-import { fetchIndications, fetchLevels, addLevel, addIndication } from './actions';
+import { fetchIndications, fetchLevels, addLevel, addIndication, deleteIndication, editIndication } from './actions';
 import { selectIndications, selectLevels, selectDashboardAddLevelProcess, selectDashboardAddIndicationProcess } from './selectors';
 
 export class DashboardIndicationPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -23,6 +23,8 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
     addIndication: PropTypes.func,
     addLevelProcess: PropTypes.object,
     addIndicationProcess: PropTypes.object,
+    editIndicatioin: PropTypes.func,
+    deleteIndication: PropTypes.func,
   };
 
   componentWillMount() {
@@ -32,7 +34,6 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
 
   render() {
     const { indications, levels, addLevel, addIndication, addLevelProcess, addIndicationProcess } = this.props;
-    console.log('**indication', indications);
     return (
       <div className="container-fluid dashboard-indication">
         <h2 className="main-heading">Indication</h2>
@@ -43,8 +44,14 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
           addLevelProcess={addLevelProcess}
           addIndicationProcess={addIndicationProcess}
           levels={levels}
+          indications={indications}
         />
-        <DashboardIndicationTable indications={indications} levels={levels} />
+        <DashboardIndicationTable
+          indications={indications}
+          levels={levels}
+          editIndication={this.props.editIndicatioin}
+          deleteIndication={this.props.deleteIndication}
+        />
       </div>
     );
   }
@@ -63,6 +70,8 @@ function mapDispatchToProps(dispatch) {
     fetchLevels: () => dispatch(fetchLevels()),
     addLevel: (payload) => dispatch(addLevel(payload)),
     addIndication: (payload) => dispatch(addIndication(payload)),
+    editIndication: (payload) => dispatch(editIndication(payload)),
+    deleteIndication: (payload) => dispatch(deleteIndication(payload)),
   };
 }
 

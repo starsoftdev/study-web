@@ -16,8 +16,9 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     exposureLevel: PropTypes.string,
     goal: PropTypes.number,
     patients: PropTypes.object,
-    selected: PropTypes.object,
-    onSelectStudy : PropTypes.func,
+    selected: PropTypes.bool,
+    onSelectStudy: PropTypes.func,
+    onStatusChange: PropTypes.func,
   };
 
   constructor(props) {
@@ -38,16 +39,15 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    const { studyInfo, siteInfo, indication, selected, onSelectStudy } = this.props;
+    const { studyInfo, siteInfo, indication, selected, onSelectStudy, onStatusChange, status } = this.props;
     const indicationNames = map(indication, (i, index) => (<li key={index}><span>{i}</span></li>));
     const memberNames = map(studyInfo.members, (v, index) => (<li key={index}><span>{v}</span></li>));
 
-    console.log('item state', studyInfo.id, selected);
     return (
       <tr>
         <td>
-          <span className={(this.props.selected.selected) ? 'sm-container checked' : 'sm-container'}>
-            <span className="input-style" onClick={() => { onSelectStudy(selected.studyId, !selected.selected); }}>
+          <span className={(this.props.selected) ? 'sm-container checked' : 'sm-container'}>
+            <span className="input-style" onClick={() => { onSelectStudy(studyInfo.id, !selected); }}>
               <input name="all" type="checkbox" />
             </span>
           </span>
@@ -57,6 +57,8 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
             name={`status-${studyInfo.id}`}
             component={Toggle}
             className="field"
+            onChange={(value) => { console.log(123); onStatusChange([studyInfo.id], value); }}
+            initValue={status === 'active'}
           />
         </td>
         <td></td>
