@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field } from 'redux-form';
-import { map, indexOf } from 'lodash';
+import { map } from 'lodash';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import { StickyContainer, Sticky } from 'react-sticky';
@@ -46,6 +46,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.showPatientThankyouPageModal = this.showPatientThankyouPageModal.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.onTableScroll = this.onTableScroll.bind(this);
 
     this.state = {
       showDateRangeModal: false,
@@ -205,6 +206,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   changeRange() {
     // TODO: update filter
     this.hideDateRangeModal();
+  }
+  
+  onTableScroll(e, v) {
+    console.log('scroll', e, v);
   }
 
   showLandingPageModal(visible) {
@@ -434,9 +439,9 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
               </Modal.Body>
             </Modal>
           </div>
-          <div className="table-area">
+          <StickyContainer className="table-area">
             <div className="table-left" data-table="">
-              <div className="table-top">
+              <Sticky topOffset={-200} className="table-top">
                 <table className="table table-study">
                   <thead>
                     <tr>
@@ -469,7 +474,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                     </tr>
                   </thead>
                 </table>
-              </div>
+              </Sticky>
               <table className="table table-study">
                 <tbody>
                   {studyListLeftContents}
@@ -478,8 +483,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
             </div>
             <div className="table-right" data-table="">
               <div className="scroll-holder jcf-scrollable">
-                <div className="table-inner">
-                  <div className="table-top">
+                <div className="table-inner" onScroll={this.onTableScroll}>
+                  <Sticky topOffset={-200} className="table-top">
                     <table className="table table-study">
                       <thead>
                         <tr>
@@ -540,7 +545,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         </tr>
                       </thead>
                     </table>
-                  </div>
+                  </Sticky>
                   <table className="table table-study">
                     <tbody>
                       {studyListRightContents}
@@ -549,7 +554,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                 </div>
               </div>
             </div>
-          </div>
+          </StickyContainer>
         </div>
         <EditInformationModal
           openModal={this.state.showEditInformationModal}
