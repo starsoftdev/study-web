@@ -4,10 +4,12 @@ import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddIndicationForm } from '../DashboardIndicationSearch/AddIndicationForm';
+import _, { find } from 'lodash';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     item: PropTypes.object,
+    levels: PropTypes.object,
   };
 
   constructor(props) {
@@ -37,33 +39,34 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         id: this.props.item.id,
       },
     };
+    const { levels, item } = this.props;
+    const gValues = levels.details.map((level) => {
+      const patientGoal = item.patientIndicationGoals;
+      const pId = _.find(patientGoal, { level_id: level.id });
+      if (pId) {
+        return (
+          <td key={level.id}>
+            {pId.goal}
+          </td>
+        )
+      } else {
+        return (
+          <td></td>
+        )
+      }
+    })
 
+    const tPatientGoal = item.patientIndicationGoals;
+    const tierValue = (tPatientGoal.length>0) ? tPatientGoal[0].tierNumber : null;
     return (
       <tr>
         <td>
           {this.props.item.name}
         </td>
         <td>
-          {this.props.item.tier}
+          {tierValue}
         </td>
-        <td>
-          {this.props.item.ruby}
-        </td>
-        <td>
-          {this.props.item.diamond}
-        </td>
-        <td>
-          {this.props.item.platinum}
-        </td>
-        <td>
-          {this.props.item.gold}
-        </td>
-        <td>
-          {this.props.item.silver}
-        </td>
-        <td>
-          {this.props.item.bronze}
-        </td>
+        {gValues}
         <td>
           <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openAddIndicationModal}>
             <span>Edit</span>
