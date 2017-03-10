@@ -920,7 +920,7 @@ function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
       queryParams.indicationId = indicationId;
     }
     const queryString = composeQueryString(queryParams);
-    const requestURL = `${API_URL}/studies/getNearbyStudies${queryString}`;
+    const requestURL = `${API_URL}/studies/getNearbyStudies?${queryString}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
