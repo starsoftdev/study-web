@@ -237,7 +237,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
               <Modal.Body>
                 <div className="holder clearfix">
                   <div className="form-lightbox">
-                    <FiltersForm handleSubmit={this.addUser} />
+                    <FiltersForm
+                      handleSubmit={this.addUser}
+                      initialValues={this.props.filtersFormValues}
+                    />
                   </div>
                 </div>
               </Modal.Body>
