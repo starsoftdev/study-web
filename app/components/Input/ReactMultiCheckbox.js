@@ -34,7 +34,7 @@ class ReactMultiCheckBox extends React.Component {
 
     const itemTemplate = (controlSelectedValue) => (
       <div>
-        <a href="#" data-status="all" className="link-all jcf-checkbox"><span></span></a>
+        <a data-status="all" className="link-all jcf-checkbox"><span></span></a>
         <span> {controlSelectedValue.label}</span>
       </div>
     );
