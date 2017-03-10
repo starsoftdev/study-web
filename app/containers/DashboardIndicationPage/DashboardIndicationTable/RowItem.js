@@ -68,7 +68,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         );
       }
       return (
-        <td></td>
+        <td key={level.id}></td>
       );
     });
 
