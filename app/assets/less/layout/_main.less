@@ -3302,6 +3302,10 @@ div[data-percentage],
 		
 		.btn { display: block; }
 	}
+
+	&.sticky{
+		top: 267px !important;
+	}
 	
 	.btn,
 	.title {
@@ -3366,6 +3370,10 @@ div[data-percentage],
 			&.range-over {
 				border-width: 0;
 			}
+
+			&.sticky {
+				top: 269px !important;
+			}
 			
 			table { background: #fff; }
 		}
@@ -3383,6 +3391,9 @@ div[data-percentage],
 					.transform(translate(0));
 				}
 				
+				&.sticky {
+					top: 342px !important;
+				}
 				//table { background: #c00; }
 			}
 		}
@@ -3485,6 +3496,11 @@ div[data-percentage],
 	}
 	
 	.table-right {
+		.table-top.sticky {
+			overflow-x: hidden;
+			overflow-y: hidden;
+		}
+
 		.table  {
 			table-layout: fixed;
 			
@@ -3777,7 +3793,7 @@ div[data-percentage],
 
 .top-head-fixed-alt.fixed-position + .study-tables.alt {
 	.table-top-alt.new-position {
-		.transform(translate(0,76px));
+		// .transform(translate(0,76px));
 	}
 }
 

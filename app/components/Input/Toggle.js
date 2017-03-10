@@ -34,7 +34,7 @@ const labelStyle = {
   paddingRight: 0,
 };
 
-function Toggle({ input, name, className, onChange, disabled, meta: { touched, error, active } }) {
+function Toggle({ input, name, initValue, className, onChange, disabled, meta: { touched, error, active } }) {
   const hasError = touched && error && !active;
   const trackColor = hasError ? 'red' : '#cdcdcd';
   const toggleDisabled = disabled ? 'toggleDisabled' : null;
@@ -48,7 +48,7 @@ function Toggle({ input, name, className, onChange, disabled, meta: { touched, e
   );
 
   let inputComponent = (<ToggleButton
-    value={input.value || false}
+    value={initValue || input.value || false}
     name={name}
     colors={backgroundColors}
     thumbAnimateRange={[0, 80]}
@@ -85,6 +85,7 @@ function Toggle({ input, name, className, onChange, disabled, meta: { touched, e
 Toggle.propTypes = {
   input: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
+  initValue: PropTypes.any,
   className: PropTypes.string,
   meta: PropTypes.object.isRequired,
   onChange: PropTypes.func,
