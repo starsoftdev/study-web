@@ -310,6 +310,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       indicationName: this.state.indicationName,
       locationName: this.state.locationName,
       exposureLevelName: studyLevel.label,
+      client_id: this.props.currentUser.roleForClient.client_id,
     });
   }
 
@@ -495,6 +496,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       return (
         <StudyItem
           {...item}
+          orderNumber={index + 1}
           currentUser={currentUser}
           key={index}
           index={index}
