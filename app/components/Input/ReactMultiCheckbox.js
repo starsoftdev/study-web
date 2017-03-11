@@ -21,6 +21,7 @@ class ReactMultiCheckBox extends React.Component {
       onChange,
       dataSource,
       includeAllOption,
+      initialValue,
       meta: { touched, error, active },
       ...rest
     } = this.props;
@@ -64,6 +65,7 @@ class ReactMultiCheckBox extends React.Component {
         customOptionTemplateFunction={itemTemplate}
         customSelectedValueTemplateFunction={selectedItemsTemplate}
         {...rest}
+        initialValue={initialValue}
       />
     );
 
@@ -81,6 +83,7 @@ ReactMultiCheckBox.propTypes = {
   placeholder: React.PropTypes.string,
   onChange: React.PropTypes.func,
   includeAllOption: React.PropTypes.bool,
+  initialValue: React.PropTypes.object || React.PropTypes.arrayOf(React.PropTypes.object),
   dataSource: React.PropTypes.array,
   meta: React.PropTypes.object.isRequired,
   className: React.PropTypes.string,
