@@ -209,9 +209,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
       },
     ];
 
-    const init= {
-      status: [1, 2],
-      color: 'Red',
+    const init = {
+      status: [{id: 1, label: 'Active', value: 'Active'}]
     };
 
     return (
@@ -244,7 +243,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
                   <div className="form-lightbox">
                     <FiltersForm
                       handleSubmit={this.addUser}
-                      initialValues={this.props.filtersFormValues}
+                      initialValues={init}
                     />
                   </div>
                 </div>

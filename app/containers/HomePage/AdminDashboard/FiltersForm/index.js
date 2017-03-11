@@ -265,28 +265,22 @@ const filterOptions = {
 
 };
 
-
 @reduxForm({ form: formName, validate: formValidator, destroyOnUnmount: false })
 @connect(mapStateToProps, null)
 
 class FiltersForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
+    initialValues: PropTypes.object || PropTypes.arrayOf(PropTypes.object),
     handleSubmit: PropTypes.func,
   };
 
-  constructor(props) {
-    super(props);
-
-    console.log('initial values', props.initialValues);
-  }
   initSearch(value, key) {
     console.log('initSearch - updated filter', value, key);
   }
 
   render() {
-    const { handleSubmit } = this.props;
-    console.log('render initial values', this.props.initialValues);
+    const { handleSubmit, initialValues } = this.props;
     return (
       <form className="form-filters" onSubmit={handleSubmit}>
         <div className="filters form-fields">
@@ -302,6 +296,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               onChange={(e) => this.initSearch(e, 'status')}
               dataSource={filterOptions.statusOptions}
               customSearchIconClass="icomoon-icon_search2"
+              initialValue={initialValues.status}
             />
           </div>
 
