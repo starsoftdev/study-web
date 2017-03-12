@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import RowItem from './RowItem';
@@ -9,6 +9,14 @@ import AddMessagingNumberForm from '../AddMessagingNumberForm';
 
 export class DashboardClientAdminsTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    clientAdmins: PropTypes.object,
+    editClientAdmin: PropTypes.func,
+    deleteClientAdmin: PropTypes.func,
+    usersByRoles: PropTypes.object,
+    editUserProcess: PropTypes.object,
+    paginationOptions: PropTypes.object,
+    clientAdminSearchFormValues: PropTypes.object,
+    setActiveSort: PropTypes.func,
   }
 
   constructor(props) {
@@ -31,7 +39,6 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
   }
 
   editAdminClick(item) {
-    console.log('editAdminClick', item);
     this.setState({ editClientAdminInitValues: {
       initialValues: {
         ...item,
@@ -64,11 +71,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
   }
 
   render() {
-    const admins = [
-      { id: 1, firstName: 'Bruce', lastName: 'Wayne', email: 'bruce.wayne@wayneenterprise.com', phone: '(524) 999-1234', messaging_number: '(524) 999-1234', bd: 'Kobe Byant', ae: 'Michael Grimm' },
-      { id: 1, firstName: 'Ray', lastName: 'Palmer', email: 'ray.palmer@palmertech.com', phone: '(524) 999-1234', messaging_number: '(524) 999-1234', bd: 'Bianca Ryan', ae: 'Cas Haley' },
-      { id: 1, firstName: 'Will', lastName: 'Graham', email: 'will.graham@wayneenterprise.com', phone: '(524) 999-1234', messaging_number: '(524) 999-1234', bd: 'Terry Fator', ae: 'Eli Mattson' },
-    ];
+    const { clientAdmins } = this.props;
 
     return (
       <div className="table-holder">
@@ -80,7 +83,6 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
               <th>Name<i className="caret-arrow"></i></th>
               <th>Email<i className="caret-arrow"></i></th>
               <th>Phone<i className="caret-arrow"></i></th>
-              <th>MESSAGING NUMBER <i className="caret-arrow"></i></th>
               <th>BD<i className="caret-arrow"></i></th>
               <th>AE<i className="caret-arrow"></i></th>
               <th>&nbsp;</th>
@@ -88,8 +90,8 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
           </thead>
           <tbody>
             {
-            admins.map((item, index) => (
-              <RowItem key={index} item={item} editAdminClick={this.editAdminClick} />
+              clientAdmins.details.map((item, index) => (
+                <RowItem key={index} item={item} editAdminClick={this.editAdminClick} />
             ))
           }
           </tbody>
@@ -106,6 +108,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
             <div className="holder clearfix">
               <EditClientAdminsForm
                 {...this.state.editClientAdminInitValues}
+                usersByRoles={this.props.usersByRoles}
                 addMessagingNumberClick={this.addMessagingNumberClick}
               />
             </div>

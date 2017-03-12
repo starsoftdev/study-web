@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
@@ -12,7 +12,9 @@ import { AddClientAdminsForm } from '../../DashboardClientAdminsPage/AddClientAd
 
 export class DashboardClientAdminsSearch extends React.Component {
   static propTypes = {
-
+    clientAdmins: PropTypes.object,
+    addClientAdmin: PropTypes.func,
+    editUserProcess: PropTypes.object,
   }
 
   constructor(props) {
@@ -24,6 +26,7 @@ export class DashboardClientAdminsSearch extends React.Component {
 
     this.closeAddClientAdminModal = this.closeAddClientAdminModal.bind(this);
     this.openAddClientAdminModal = this.openAddClientAdminModal.bind(this);
+    this.addClientAdmin = this.addClientAdmin.bind(this);
   }
 
   closeAddClientAdminModal() {
@@ -32,6 +35,10 @@ export class DashboardClientAdminsSearch extends React.Component {
 
   openAddClientAdminModal() {
     this.setState({ addClientAdminModalOpen: true });
+  }
+
+  addClientAdmin(param) {
+    this.props.addClientAdmin(param);
   }
 
   render() {
@@ -70,7 +77,10 @@ export class DashboardClientAdminsSearch extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <AddClientAdminsForm />
+              <AddClientAdminsForm
+                onSubmit={this.addClientAdmin}
+                saving={this.props.editUserProcess.saving}
+              />
             </div>
           </Modal.Body>
         </Modal>
