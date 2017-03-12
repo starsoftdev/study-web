@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
@@ -8,11 +8,13 @@ import Input from '../../../components/Input';
 
 export class AddClientAdminsForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    handleSubmit: PropTypes.func,
+    saving: PropTypes.bool,
   }
 
   render() {
     return (
-      <form action="#" className="form-lightbox dashboard-lightbox">
+      <form action="#" className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
 
         <div className="field-row">
           <strong className="label required">

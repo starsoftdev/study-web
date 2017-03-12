@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Input from '../../../components/Input';
+import { map } from 'lodash';
 import ReactSelect from '../../../components/Input/ReactSelect';
 
 @reduxForm({ form: 'dashboardEditClientAdminsForm' })
@@ -10,15 +11,21 @@ import ReactSelect from '../../../components/Input/ReactSelect';
 export class EditClientAdminsForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     addMessagingNumberClick: PropTypes.func,
+    usersByRoles: PropTypes.object,
   }
 
   render() {
     const messagingNumberOptions = [{ label: '(524) 999-1234', value: 1 }, { label: '(524) 999-1234', value: 2 }, { label: '(524) 999-1234', value: 3 }];
 
-    const bdOptions = [{ label: 'Bruce Wayne', value: 1 }, { label: 'Ray Palmer', value: 2 }, { label: 'Will Graham', value: 3 }];
+    const bds = map(this.props.usersByRoles.details.bd, (sponsor) => ({
+      label: `${sponsor.first_name} ${sponsor.last_name}`,
+      value: sponsor.id,
+    }));
 
-    const aeOptions = [{ label: 'Bruce Wayne', value: 1 }, { label: 'Ray Palmer', value: 2 }, { label: 'Will Graham', value: 3 }];
-
+    const aes = map(this.props.usersByRoles.details.ae, (sponsor) => ({
+      label: `${sponsor.first_name} ${sponsor.last_name}`,
+      value: sponsor.id,
+    }));
 
     return (
       <form action="#" className="form-lightbox dashboard-lightbox">
@@ -31,7 +38,7 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
             <div className="row">
               <div className="col pull-left">
                 <Field
-                  name="firstName"
+                  name="first_name"
                   component={Input}
                   type="text"
                   placeholder="First Name"
@@ -40,7 +47,7 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
 
               <div className="col pull-right">
                 <Field
-                  name="lastName"
+                  name="last_name"
                   component={Input}
                   type="text"
                   placeholder="Last Name"
@@ -104,7 +111,7 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
               name="bd"
               component={ReactSelect}
               placeholder="Select DB"
-              options={bdOptions}
+              options={bds}
             />
           </div>
         </div>
@@ -118,7 +125,7 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
               name="ae"
               component={ReactSelect}
               placeholder="Select AE"
-              options={aeOptions}
+              options={aes}
             />
           </div>
         </div>
