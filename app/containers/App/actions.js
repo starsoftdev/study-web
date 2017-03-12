@@ -166,6 +166,22 @@ import {
   FETCH_CLIENT_ADMINS_ERROR,
 
   SEND_THANK_YOU_EMAIL,
+
+  FETCH_SPONSORS,
+  FETCH_SPONSORS_SUCCESS,
+  FETCH_SPONSORS_ERROR,
+
+  FETCH_PROTOCOLS,
+  FETCH_PROTOCOLS_SUCCESS,
+  FETCH_PROTOCOLS_ERROR,
+
+  FETCH_CRO,
+  FETCH_CRO_SUCCESS,
+  FETCH_CRO_ERROR,
+
+  FETCH_USERS_BY_ROLE,
+  FETCH_USERS_BY_ROLE_SUCCESS,
+  FETCH_USERS_BY_ROLE_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -1115,6 +1131,86 @@ export function fetchClientAdminsError(payload) {
 export function sendThankYouEmail(payload) {
   return {
     type: SEND_THANK_YOU_EMAIL,
+    payload,
+  };
+}
+
+export function fetchSponsors() {
+  return {
+    type: FETCH_SPONSORS,
+  };
+}
+
+export function fetchSponsorsSuccess(payload) {
+  return {
+    type: FETCH_SPONSORS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchSponsorsError(payload) {
+  return {
+    type: FETCH_SPONSORS_ERROR,
+    payload,
+  };
+}
+
+export function fetchProtocols() {
+  return {
+    type: FETCH_PROTOCOLS,
+  };
+}
+
+export function fetchProtocolsSuccess(payload) {
+  return {
+    type: FETCH_PROTOCOLS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchProtocolsError(payload) {
+  return {
+    type: FETCH_PROTOCOLS_ERROR,
+    payload,
+  };
+}
+
+export function fetchCro() {
+  return {
+    type: FETCH_CRO,
+  };
+}
+
+export function fetchCroSuccess(payload) {
+  return {
+    type: FETCH_CRO_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchCroError(payload) {
+  return {
+    type: FETCH_CRO_ERROR,
+    payload,
+  };
+}
+
+export function fetchUsersByRole() {
+  return {
+    type: FETCH_USERS_BY_ROLE,
+  };
+}
+
+export function fetchUsersByRoleSuccess(payload) {
+  return {
+    type: FETCH_USERS_BY_ROLE_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchUsersByRoleError(payload) {
+  return {
+    type: FETCH_USERS_BY_ROLE_ERROR,
     payload,
   };
 }

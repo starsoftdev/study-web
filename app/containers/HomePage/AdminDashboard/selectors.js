@@ -24,6 +24,46 @@ const selectStudies = () => createSelector(
   substate => substate.studies
 );
 
+const selectLevels = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.levels
+);
+
+const selectSiteNames = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.siteNames
+);
+
+const selectSiteLocations = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.siteLocations
+);
+
+const selectIndications = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.indications
+);
+
+const selectSponsors = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.sponsors
+);
+
+const selectProtocols = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.protocols
+);
+
+const selectCro = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.cro
+);
+
+const selectUsersByRoles = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.usersByRoles
+);
+
 const selectPaginationOptions = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.paginationOptions
@@ -35,4 +75,12 @@ export {
   selectStudies,
   selectFilterFormValues,
   selectPaginationOptions,
+  selectLevels,
+  selectSiteNames,
+  selectSiteLocations,
+  selectIndications,
+  selectSponsors,
+  selectProtocols,
+  selectCro,
+  selectUsersByRoles,
 };

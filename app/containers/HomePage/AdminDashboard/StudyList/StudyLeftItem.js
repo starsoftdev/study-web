@@ -2,21 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Field } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
-import { map } from 'lodash';
 
 import Toggle from '../../../../components/Input/Toggle';
 
 class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    status: PropTypes.string,
-    studyInfo: PropTypes.object,
-    siteInfo: PropTypes.object,
-    indication: PropTypes.array,
-    location: PropTypes.string,
-    exposureLevel: PropTypes.string,
-    goal: PropTypes.number,
-    patients: PropTypes.object,
-    selected: PropTypes.bool,
+    item: PropTypes.object,
     onSelectStudy: PropTypes.func,
     onStatusChange: PropTypes.func,
   };
@@ -39,50 +30,54 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    const { studyInfo, siteInfo, indication, selected, onSelectStudy, onStatusChange, status } = this.props;
-    const indicationNames = map(indication, (i, index) => (<li key={index}><span>{i}</span></li>));
-    const memberNames = map(studyInfo.members, (v, index) => (<li key={index}><span>{v}</span></li>));
+    const { item, onSelectStudy, onStatusChange } = this.props;
 
     return (
       <tr>
         <td>
-          <span className={(this.props.selected) ? 'sm-container checked' : 'sm-container'}>
-            <span className="input-style" onClick={() => { onSelectStudy(studyInfo.id, !selected); }}>
+          <span className={(item.selected) ? 'sm-container checked' : 'sm-container'}>
+            <span className="input-style" onClick={() => { onSelectStudy(item.study_id, !item.selected); }}>
               <input name="all" type="checkbox" />
             </span>
           </span>
         </td>
         <td>
           <Field
-            name={`status-${studyInfo.id}`}
+            name={`status-${item.study_id}`}
             component={Toggle}
             className="field"
-            onChange={(value) => { console.log(123); onStatusChange([studyInfo.id], value); }}
+            onChange={(value) => { console.log(123); onStatusChange([item.study_id], value); }}
             initValue={status === 'active'}
           />
         </td>
         <td></td>
         <td className="list">
           <ul className="list-unstyled">
-            <li><span>{studyInfo.id}</span></li>
-            <li><span>{studyInfo.percentage}</span></li>
-            {memberNames}
-            <li><span className={`color ${studyInfo.color.toLowerCase()}`}>{studyInfo.color}</span></li>
+            <li><span>{item.study_id}</span></li>
+            <li><span>{'33%'}</span></li>
+
+            <li><span>{item.sm_user_first_name ? `SM: ${item.sm_user_first_name} ${item.sm_user_last_name}` : ''}</span></li>
+            <li><span>{item.bd_user_first_name ? `BD: ${item.bd_user_first_name} ${item.bd_user_last_name}` : ''}</span></li>
+            <li><span>{item.ae_user_first_name ? `AE: ${item.ae_user_first_name} ${item.ae_user_last_name}` : ''}</span></li>
+
+            {/* <li><span className={`color ${studyInfo.color.toLowerCase()}`}>{studyInfo.color}</span></li>*/}
+            <li><span className={'color red'}>{'red'}</span></li>
           </ul>
         </td>
         <td>
-          <span className="site-location">{ siteInfo.name }</span>
+          <span className="site-location">{ item.site_name }</span>
           <ul className="list-unstyled">
-            <li className="site-number">Site Number: <span>{siteInfo.siteNumber}</span></li>
-            <li className="protocol">Protocol: <span>{siteInfo.protocol}</span></li>
-            <li className="sponsor">Sponsor: <span>{siteInfo.sponsor}</span></li>
-            <li className="cro">CRO: <span>{siteInfo.cro}</span></li>
-            <li className="login-info">Last Login: <span>{siteInfo.lastLogin}</span></li>
+            <li className="site-number">Site Number: <span>{item.site_location}</span></li>
+            <li className="protocol">Protocol: <span>{item.protocol_number}</span></li>
+            <li className="sponsor">Sponsor: <span>{item.sponsor_name}</span></li>
+            <li className="cro">CRO: <span>{item.cro_name}</span></li>
+            <li className="login-info">Last Login: <span>{item.last_login_time}</span></li>
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            {indicationNames}
+            <li><span>{item.indication_name}</span></li>
+            <li><span>{item.tier_number}</span></li>
           </ul>
         </td>
       </tr>

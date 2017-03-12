@@ -51,6 +51,10 @@ import {
   NEW_CONTACT,
   FETCH_CLIENT_ADMINS,
   SEND_THANK_YOU_EMAIL,
+  FETCH_SPONSORS,
+  FETCH_PROTOCOLS,
+  FETCH_CRO,
+  FETCH_USERS_BY_ROLE,
 } from '../../containers/App/constants';
 
 import {
@@ -125,6 +129,14 @@ import {
   newContactSuccess,
   fetchClientAdminsSuccess,
   fetchClientAdminsError,
+  fetchSponsorsSuccess,
+  fetchSponsorsError,
+  fetchProtocolsSuccess,
+  fetchProtocolsError,
+  fetchCroSuccess,
+  fetchCroError,
+  fetchUsersByRoleSuccess,
+  fetchUsersByRoleError,
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -167,6 +179,10 @@ export default function* baseDataSaga() {
   yield fork(takeLatest, LEARN_ABOUT_FUTURE_TRIALS, learnAboutFutureTrials);
   yield fork(takeLatest, NEW_CONTACT, newContact);
   yield fork(takeLatest, SEND_THANK_YOU_EMAIL, sendThankYouEmail);
+  yield fork(fetchSponsorsWatcher);
+  yield fork(fetchProtocolsWatcher);
+  yield fork(fetchCroWatcher);
+  yield fork(fetchUsersByRoleWatcher);
 }
 
 export function* fetchSitesWatcher() {
@@ -1005,3 +1021,88 @@ function* sendThankYouEmail(action) {
     yield put(toastrActions.error('', errorMessage));
   }
 }
+
+export function* fetchSponsorsWatcher() {
+  while (true) {
+    yield take(FETCH_SPONSORS);
+
+    try {
+      const requestURL = `${API_URL}/sponsors`;
+
+      const params = {
+        method: 'GET',
+      };
+      const response = yield call(request, requestURL, params);
+
+      yield put(fetchSponsorsSuccess(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while fetching sponsors');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(fetchSponsorsError(err));
+    }
+  }
+}
+
+export function* fetchProtocolsWatcher() {
+  while (true) {
+    yield take(FETCH_PROTOCOLS);
+
+    try {
+      const requestURL = `${API_URL}/protocols`;
+
+      const params = {
+        method: 'GET',
+      };
+      const response = yield call(request, requestURL, params);
+
+      yield put(fetchProtocolsSuccess(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while fetching protocols');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(fetchProtocolsError(err));
+    }
+  }
+}
+
+export function* fetchCroWatcher() {
+  while (true) {
+    yield take(FETCH_CRO);
+
+    try {
+      const requestURL = `${API_URL}/cros`;
+
+      const params = {
+        method: 'GET',
+      };
+      const response = yield call(request, requestURL, params);
+
+      yield put(fetchCroSuccess(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while fetching cros');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(fetchCroError(err));
+    }
+  }
+}
+
+export function* fetchUsersByRoleWatcher() {
+  while (true) {
+    yield take(FETCH_USERS_BY_ROLE);
+
+    try {
+      const requestURL = `${API_URL}/users/fetchDashboardUsersByRole`;
+
+      const params = {
+        method: 'GET',
+      };
+      const response = yield call(request, requestURL, params);
+
+      yield put(fetchUsersByRoleSuccess(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while fetching users');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(fetchUsersByRoleError(err));
+    }
+  }
+}
+
