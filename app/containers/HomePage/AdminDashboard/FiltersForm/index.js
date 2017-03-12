@@ -4,8 +4,8 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 
 import ReactMultiCheckBox from '../../../../components/Input/ReactMultiCheckbox';
-import ReactMultiSelect from '../../../../components/Input/ReactMultiSelect';
 import formValidator from './validator';
+import _ from 'lodash';
 
 const formName = 'dashboardFilters';
 const mapStateToProps = createStructuredSelector({
@@ -16,11 +16,11 @@ const filterOptions = {
     {
       id: 1,
       label: 'Active',
-      value: 'Active',
+      value: 'active',
     }, {
       id: 2,
       label: 'Inactive',
-      value: 'Inactive',
+      value: 'inactive',
     },
   ],
 
@@ -48,43 +48,19 @@ const filterOptions = {
     {
       id: 1,
       label: 'Tier 1',
-      value: 'tier1',
+      value: '1',
     }, {
       id: 2,
       label: 'Tier 2',
-      value: 'tier2',
+      value: '2',
     }, {
       id: 3,
       label: 'Tier 3',
-      value: 'tier3',
+      value: '3',
     }, {
       id: 4,
       label: 'Tier 4',
-      value: 'tier4',
-    },
-  ],
-
-  exposureLevelOptions : [
-    {
-      id: 1,
-      label: 'Diamond',
-      value: 'Diamond',
-    }, {
-      id: 2,
-      label: 'Platinum',
-      value: 'Platinum',
-    }, {
-      id: 3,
-      label: 'Gold',
-      value: 'Gold',
-    }, {
-      id: 4,
-      label: 'Silver',
-      value: 'Silver',
-    }, {
-      id: 5,
-      label: 'Bronze',
-      value: 'Bronze',
+      value: '4',
     },
   ],
 
@@ -101,102 +77,6 @@ const filterOptions = {
       id: 3,
       label: '< 50 Miles',
       value: 50,
-    },
-  ],
-
-  siteLocationOptions : [
-    {
-      id: 1,
-      label: 'Ace Chemicals',
-      value: 'Ace Chemicals',
-    }, {
-      id: 2,
-      label: 'Acme Corporation',
-      value: 'Acme Corporation',
-    }, {
-      id: 3,
-      label: 'Kord Enterprise',
-      value: 'Kord Enterprise',
-    },
-  ],
-
-  siteNumberOptions : [
-    {
-      id: 1,
-      label: 'Option 1',
-      value: 'Option 1',
-    }, {
-      id: 2,
-      label: 'Option 2',
-      value: 'Option 2',
-    }, {
-      id: 3,
-      label: 'Option 3',
-      value: 'Option 3',
-    },
-  ],
-
-  indicationOptions : [
-    {
-      id: 1,
-      label: 'Acne',
-      value: 'Acne',
-    }, {
-      id: 2,
-      label: 'Low Back Pain',
-      value: 'Low Back Pain',
-    }, {
-      id: 3,
-      label: 'Migraine',
-      value: 'Migraine',
-    },
-  ],
-
-  protocolOptions : [
-    {
-      id: 1,
-      label: 'ALK-502',
-      value: 'ALK-502',
-    }, {
-      id: 2,
-      label: 'A40910259',
-      value: 'A40910259',
-    }, {
-      id: 3,
-      label: 'Col Mig-302',
-      value: 'Col Mig-302',
-    },
-  ],
-
-  sponsorOptions : [
-    {
-      id: 1,
-      label: 'Pfizer',
-      value: 'Pfizer',
-    }, {
-      id: 2,
-      label: 'Company 2',
-      value: 'Company 2',
-    }, {
-      id: 3,
-      label: 'Company 3',
-      value: 'Company 3',
-    },
-  ],
-
-  croOptions : [
-    {
-      id: 1,
-      label: 'Inc_Research',
-      value: 'Inc_Research',
-    }, {
-      id: 2,
-      label: 'InVentiv',
-      value: 'InVentiv',
-    }, {
-      id: 3,
-      label: 'Quintiles',
-      value: 'Quintiles',
     },
   ],
 
@@ -266,22 +146,124 @@ const filterOptions = {
 
 };
 
-
 @reduxForm({ form: formName, validate: formValidator, destroyOnUnmount: false })
-@connect(mapStateToProps, null)
+@connect(mapStateToProps)
 
 class FiltersForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func,
+    fetchStudiesAccordingToFilters: PropTypes.func,
+    initialValues: PropTypes.object,
+    levels: PropTypes.array,
+    siteNames: PropTypes.array,
+    siteLocations: PropTypes.array,
+    indications: PropTypes.array,
+    sponsors: PropTypes.array,
+    protocols: PropTypes.array,
+    cro: PropTypes.array,
+    usersByRoles: PropTypes.object,
   };
 
   initSearch(value, key) {
     console.log('initSearch - updated filter', value, key);
+    this.props.fetchStudiesAccordingToFilters(value, key);
   }
 
   render() {
     const { handleSubmit } = this.props;
+
+    const exposureLevelOptions = [];
+    _.forEach(this.props.levels, (level, key) => {
+      exposureLevelOptions.push({
+        id: (key + 1),
+        value: level.id,
+        label: level.name,
+      });
+    });
+
+    const siteNamesOptions = [];
+    _.forEach(this.props.siteNames, (item, key) => {
+      siteNamesOptions.push({
+        id: (key + 1),
+        value: item.name,
+        label: item.name,
+      });
+    });
+
+    const siteLocationsOptions = [];
+    _.forEach(this.props.siteLocations, (item, key) => {
+      siteLocationsOptions.push({
+        id: (key + 1),
+        value: item.location,
+        label: item.location,
+      });
+    });
+
+    const indicationsOptions = [];
+    _.forEach(this.props.indications, (item, key) => {
+      indicationsOptions.push({
+        id: (key + 1),
+        value: item.id,
+        label: item.name,
+      });
+    });
+
+    const sponsorsOptions = [];
+    _.forEach(this.props.sponsors, (item, key) => {
+      sponsorsOptions.push({
+        id: (key + 1),
+        value: item.id,
+        label: item.name,
+      });
+    });
+
+    const protocolsOptions = [];
+    _.forEach(this.props.protocols, (item, key) => {
+      protocolsOptions.push({
+        id: (key + 1),
+        value: item.id,
+        label: item.number,
+      });
+    });
+
+    const croOptions = [];
+    _.forEach(this.props.cro, (item, key) => {
+      croOptions.push({
+        id: (key + 1),
+        value: item.id,
+        label: item.name,
+      });
+    });
+
+    const smOptions = [];
+    _.forEach(this.props.usersByRoles.sm, (item, key) => {
+      smOptions.push({
+        id: (key + 1),
+        value: item.id,
+        label: `${item.first_name} ${item.last_name}`,
+      });
+    });
+
+    const bdOptions = [];
+    _.forEach(this.props.usersByRoles.bd, (item, key) => {
+      bdOptions.push({
+        id: (key + 1),
+        value: item.id,
+        label: `${item.first_name} ${item.last_name}`,
+      });
+    });
+
+    const aeOptions = [];
+    _.forEach(this.props.usersByRoles.ae, (item, key) => {
+      aeOptions.push({
+        id: (key + 1),
+        value: item.id,
+        label: `${item.first_name} ${item.last_name}`,
+      });
+    });
+
+
     return (
       <form className="form-filters" onSubmit={handleSubmit}>
         <div className="filters form-fields">
@@ -289,13 +271,14 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
             <Field
               name="status"
               className="filter-field"
-              component={ReactMultiSelect}
+              component={ReactMultiCheckBox}
               placeholder="STATUS"
               optionLabelKey="label"
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'status')}
               dataSource={filterOptions.statusOptions}
+              initialValue={this.props.initialValues.status}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -311,6 +294,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'color')}
               dataSource={filterOptions.colorOptions}
+              initialValue={this.props.initialValues.color}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -326,6 +310,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'tier')}
               dataSource={filterOptions.tierOptions}
+              initialValue={this.props.initialValues.tier}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -340,7 +325,8 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'exposureLevel')}
-              dataSource={filterOptions.exposureLevelOptions}
+              dataSource={exposureLevelOptions}
+              initialValue={this.props.initialValues.exposureLevel}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -372,7 +358,8 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'siteLocation')}
-              dataSource={filterOptions.siteLocationOptions}
+              dataSource={siteLocationsOptions}
+              initialValue={this.props.initialValues.siteLocation}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -389,7 +376,8 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'siteNumber')}
-              dataSource={filterOptions.siteNumberOptions}
+              dataSource={siteNamesOptions}
+              initialValue={this.props.initialValues.siteNumber}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -406,7 +394,8 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'indication')}
-              dataSource={filterOptions.indicationOptions}
+              dataSource={indicationsOptions}
+              initialValue={this.props.initialValues.indication}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -423,7 +412,8 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'protocol')}
-              dataSource={filterOptions.protocolOptions}
+              dataSource={protocolsOptions}
+              initialValue={this.props.initialValues.protocol}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -440,7 +430,8 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'sponsor')}
-              dataSource={filterOptions.sponsorOptions}
+              dataSource={sponsorsOptions}
+              initialValue={this.props.initialValues.sponsor}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -457,7 +448,8 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'cro')}
-              dataSource={filterOptions.croOptions}
+              dataSource={croOptions}
+              initialValue={this.props.initialValues.cro}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -472,6 +464,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               multiple
               onChange={(e) => this.initSearch(e, 'percentage')}
               dataSource={filterOptions.percentageOptions}
+              initialValue={this.props.initialValues.percentage}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -488,7 +481,8 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'sm')}
-              dataSource={filterOptions.smOptions}
+              dataSource={smOptions}
+              initialValue={this.props.initialValues.sm}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -503,7 +497,8 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'bd')}
-              dataSource={filterOptions.bdOptions}
+              dataSource={bdOptions}
+              initialValue={this.props.initialValues.bd}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -518,7 +513,8 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'ae')}
-              dataSource={filterOptions.bdOptions}
+              dataSource={aeOptions}
+              initialValue={this.props.initialValues.ae}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>

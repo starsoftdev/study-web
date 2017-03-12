@@ -169,3 +169,19 @@ export const FETCH_CLIENT_ADMINS_SUCCESS           = 'App/FETCH_CLIENT_ADMINS_SU
 export const FETCH_CLIENT_ADMINS_ERROR             = 'App/FETCH_CLIENT_ADMINS_ERROR';
 
 export const SEND_THANK_YOU_EMAIL                  = 'App/SEND_THANK_YOU_EMAIL';
+
+export const FETCH_PROTOCOLS                       = 'App/FETCH_PROTOCOLS';
+export const FETCH_PROTOCOLS_SUCCESS               = 'App/FETCH_PROTOCOLS_SUCCESS';
+export const FETCH_PROTOCOLS_ERROR                 = 'App/FETCH_PROTOCOLS_ERROR';
+
+export const FETCH_SPONSORS                        = 'App/FETCH_SPONSORS';
+export const FETCH_SPONSORS_SUCCESS                = 'App/FETCH_SPONSORS_SUCCESS';
+export const FETCH_SPONSORS_ERROR                  = 'App/FETCH_SPONSORS_ERROR';
+
+export const FETCH_CRO                             = 'App/FETCH_CRO';
+export const FETCH_CRO_SUCCESS                     = 'App/FETCH_CRO_SUCCESS';
+export const FETCH_CRO_ERROR                       = 'App/FETCH_CRO_ERROR';
+
+export const FETCH_USERS_BY_ROLE                   = 'App/FETCH_USERS_BY_ROLE';
+export const FETCH_USERS_BY_ROLE_SUCCESS           = 'App/FETCH_USERS_BY_ROLE_SUCCESS';
+export const FETCH_USERS_BY_ROLE_ERROR             = 'App/FETCH_USERS_BY_ROLE_ERROR';

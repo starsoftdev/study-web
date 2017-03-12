@@ -1,9 +1,39 @@
 
+import {
+  FETCH_STUDIES_DASHBOARD,
+  FETCH_STUDIES_DASHBOARD_SUCCESS,
+  FETCH_STUDIES_DASHBOARD_ERROR,
+  FETCH_SITE_NAMES_SUCCESS,
+  FETCH_SITE_LOCATIONS_SUCCESS,
+} from './constants';
+
+import {
+  FETCH_LEVELS_SUCCESS,
+  FETCH_INDICATIONS_SUCCESS,
+  FETCH_CRO_SUCCESS,
+  FETCH_SPONSORS_SUCCESS,
+  FETCH_PROTOCOLS_SUCCESS,
+  FETCH_USERS_BY_ROLE_SUCCESS,
+} from '../../App/constants';
+
 const initialState = {
   values: {
     filters: [],
   },
-  studies: [
+  studies: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  levels: [],
+  siteLocations: [],
+  siteNames: [],
+  indications: [],
+  sponsors: [],
+  protocols: [],
+  cro: [],
+  usersByRoles: {},
+  /* studies: [
     {
       status: 'active',
       studyInfo: {
@@ -265,7 +295,7 @@ const initialState = {
       consented: 9,
       randomized: 2,
     },
-  ],
+  ],*/
 
   paginationOptions: {
     hasMoreItems: true,
@@ -278,6 +308,73 @@ const initialState = {
 
 export default function dashboardPageReducer(state = initialState, action) {
   switch (action.type) {
+    case FETCH_STUDIES_DASHBOARD:
+      return {
+        ...state,
+        studies: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_STUDIES_DASHBOARD_SUCCESS:
+      return {
+        ...state,
+        studies: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_STUDIES_DASHBOARD_ERROR:
+      return {
+        ...state,
+        studies: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_LEVELS_SUCCESS:
+      return {
+        ...state,
+        levels: action.payload,
+      };
+    case FETCH_SITE_NAMES_SUCCESS:
+      return {
+        ...state,
+        siteNames: action.payload,
+      };
+    case FETCH_SITE_LOCATIONS_SUCCESS:
+      return {
+        ...state,
+        siteLocations: action.payload,
+      };
+    case FETCH_INDICATIONS_SUCCESS:
+      return {
+        ...state,
+        indications: action.payload,
+      };
+    case FETCH_SPONSORS_SUCCESS:
+      return {
+        ...state,
+        sponsors: action.payload,
+      };
+    case FETCH_PROTOCOLS_SUCCESS:
+      return {
+        ...state,
+        protocols: action.payload,
+      };
+    case FETCH_CRO_SUCCESS:
+      return {
+        ...state,
+        cro: action.payload,
+      };
+    case FETCH_USERS_BY_ROLE_SUCCESS:
+      return {
+        ...state,
+        usersByRoles: action.payload,
+      };
     default:
       return state;
   }

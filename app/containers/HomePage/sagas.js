@@ -24,6 +24,21 @@ import {
   FETCH_UPGRADE_STUDY_PRICE,
 } from './constants';
 
+import {
+  FETCH_STUDIES_DASHBOARD,
+  FETCH_SITE_LOCATIONS,
+  FETCH_SITE_NAMES,
+} from './AdminDashboard/constants';
+
+import {
+  fetchStudiesDashboardSuccess,
+  fetchStudiesDashboardError,
+  fetchSiteLocationsSuccess,
+  fetchSiteLocationsError,
+  fetchSiteNamesSuccess,
+  fetchSiteNamesError,
+} from './AdminDashboard/actions';
+
 import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
 import { addEmailNotificationUserSuccess, addEmailNotificationUserError, fetchClientSites } from '../../containers/App/actions';
 
@@ -372,6 +387,66 @@ export function* addEmailNotificationUserWorker(action) {
   }
 }
 
+export function* fetchStudiesDashboardWatcher() {
+  yield* takeLatest(FETCH_STUDIES_DASHBOARD, fetchStudiesDashboardWorker);
+}
+
+export function* fetchStudiesDashboardWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/studies/getStudiesForDashboard`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchStudiesDashboardSuccess(response));
+  } catch (err) {
+    yield put(fetchStudiesDashboardError(err));
+  }
+}
+
+export function* fetchSiteLocationsWatcher() {
+  yield* takeLatest(FETCH_SITE_LOCATIONS, fetchSiteLocationsWorker);
+}
+
+export function* fetchSiteLocationsWorker() {
+  try {
+    const requestURL = `${API_URL}/sites/getSiteLocations`;
+    const options = {
+      method: 'GET',
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchSiteLocationsSuccess(response));
+  } catch (err) {
+    yield put(fetchSiteLocationsError(err));
+  }
+}
+
+export function* fetchSiteNamesWatcher() {
+  yield* takeLatest(FETCH_SITE_NAMES, fetchSiteNamesWorker);
+}
+
+export function* fetchSiteNamesWorker() {
+  try {
+    const requestURL = `${API_URL}/sites/getSiteNames`;
+    const options = {
+      method: 'GET',
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchSiteNamesSuccess(response));
+  } catch (err) {
+    yield put(fetchSiteNamesError(err));
+  }
+}
+
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   const watcherB = yield fork(fetchPatientMessagesWatcher);
@@ -386,7 +461,9 @@ export function* homePageSaga() {
   const fetchProtocolNumbersWatcher1 = yield fork(fetchProtocolNumbersWatcher);
   const fetchIndicationsWatcher1 = yield fork(fetchIndicationsWatcher);
   const addEmailNotificationUserWatcher1 = yield fork(addEmailNotificationUserWatcher);
-
+  const fetchStudiesDashboardWatcher1 = yield fork(fetchStudiesDashboardWatcher);
+  const fetchSiteLocationsWatcher1 = yield fork(fetchSiteLocationsWatcher);
+  const fetchSiteNamesWatcher1 = yield fork(fetchSiteNamesWatcher);
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
@@ -404,5 +481,8 @@ export function* homePageSaga() {
     yield cancel(fetchProtocolNumbersWatcher1);
     yield cancel(fetchIndicationsWatcher1);
     yield cancel(addEmailNotificationUserWatcher1);
+    yield cancel(fetchStudiesDashboardWatcher1);
+    yield cancel(fetchSiteLocationsWatcher1);
+    yield cancel(fetchSiteNamesWatcher1);
   }
 }
