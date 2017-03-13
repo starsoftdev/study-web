@@ -9,11 +9,12 @@ import Input from '../../../components/Input';
 export class AddExposureLevelForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     isEdit: PropTypes.bool,
+    handleSubmit: PropTypes.func,
   }
 
   render() {
     return (
-      <form action="#" className="form-lightbox dashboard-lightbox">
+      <form action="#" className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
 
         <div className="field-row">
           <strong className="label required">
@@ -21,7 +22,7 @@ export class AddExposureLevelForm extends React.Component { // eslint-disable-li
           </strong>
           <div className="field">
             <Field
-              name="exposureLevel"
+              name="name"
               component={Input}
               type="text"
             />

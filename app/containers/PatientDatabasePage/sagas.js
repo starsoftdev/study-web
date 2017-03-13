@@ -217,7 +217,7 @@ export function* fetchPatientWatcher() {
     const { id } = yield take(FETCH_PATIENT);
 
     try {
-      const queryParams = { filter: '{"include": [{"relation": "patientIndications", "scope": {"include": "indication"}}, "source", {"studyPatientCategory": "patientCategory"}]}' };
+      const queryParams = { filter: '{"include": [{"relation": "patientIndications", "scope": {"include": "indication"}}, "studySource", {"studyPatientCategory": "patientCategory"}]}' };
       const queryString = composeQueryString(queryParams);
       const requestURL = `${API_URL}/patients/${id}?${queryString}`;
       const response = yield call(request, requestURL);

@@ -21,6 +21,7 @@ class ReactMultiCheckBox extends React.Component {
       onChange,
       dataSource,
       includeAllOption,
+      initialValue,
       meta: { touched, error, active },
       ...rest
     } = this.props;
@@ -34,7 +35,7 @@ class ReactMultiCheckBox extends React.Component {
 
     const itemTemplate = (controlSelectedValue) => (
       <div>
-        <a href="#" data-status="all" className="link-all jcf-checkbox"><span></span></a>
+        <a data-status="all" className="link-all jcf-checkbox"><span></span></a>
         <span> {controlSelectedValue.label}</span>
       </div>
     );
@@ -47,16 +48,34 @@ class ReactMultiCheckBox extends React.Component {
 
     const inputComponent = (
       <ReactSuperSelect
+        initialValue={initialValue}
         onChange={(event) => {
-          input.onChange(event);
           if (onChange) {
-            if (includeAllOption && event && _.find(event, item => item.label === 'All')) {
+            const wasAllCheckedBefore = _.find(input.value, item => item.label === 'All');
+            const isAllCheckedNow = _.find(event, item => item.label === 'All');
+
+            if (!event) {
+              onChange([]);
+              input.onChange([]);
+            } else if (!wasAllCheckedBefore && isAllCheckedNow) {
               onChange(finalDataSource);
-              input.onChange(dataSource);
+              input.onChange(finalDataSource);
+            } else if (wasAllCheckedBefore && !isAllCheckedNow) {
+              onChange([]);
+              input.onChange([]);
+            } else if (wasAllCheckedBefore && isAllCheckedNow) {
+              const withoutAll = _.remove(event, (item) => (item.label !== 'All'));
+              onChange(withoutAll);
+              input.onChange(withoutAll);
+            } else if (!wasAllCheckedBefore && event && dataSource.length === event.length) {
+              onChange(finalDataSource);
+              input.onChange(finalDataSource);
             } else {
               onChange(event);
               input.onChange(event);
             }
+          } else {
+            input.onChange(event);
           }
         }}
         dataSource={finalDataSource}
@@ -84,6 +103,7 @@ ReactMultiCheckBox.propTypes = {
   dataSource: React.PropTypes.array,
   meta: React.PropTypes.object.isRequired,
   className: React.PropTypes.string,
+  initialValue: React.PropTypes.object,
 };
 
 export default ReactMultiCheckBox;

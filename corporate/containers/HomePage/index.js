@@ -4,21 +4,10 @@ import { createStructuredSelector } from 'reselect';
 import { reset } from 'redux-form';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
-
 import TrialsArticle from './components/TrialsArticle';
-
 import ClinicalTrialsSearchForm from '../../components/ClinicalTrialsSearchForm';
-
-import {
-  fetchIndications,
-  clinicalTrialsSearch,
-  clearClinicalTrialsSearch,
-} from '../../../app/containers/App/actions';
-import {
-  selectIndications,
-  selectTrials,
-} from '../../../app/containers/App/selectors';
-
+import { fetchIndications, clinicalTrialsSearch, clearClinicalTrialsSearch } from '../../../app/containers/App/actions';
+import { selectIndications, selectTrials } from '../../../app/containers/App/selectors';
 import './styles.less';
 
 export class Home extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -38,7 +27,7 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
     this.watcher = null;
 
     this.setVisible = this.setVisible.bind(this);
-    this.onSubmitForm = this.props.onSubmitForm.bind(this);
+    this.onSubmitForm = this.onSubmitForm.bind(this);
     this.handleZipChoose = this.handleZipChoose.bind(this);
     this.handleDistanceChoose = this.handleDistanceChoose.bind(this);
     this.handleIndicationChoose = this.handleIndicationChoose.bind(this);
@@ -69,6 +58,15 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
     this.props.clearTrialsList();
   }
 
+  onSubmitForm(values) {
+    const { onSubmitForm } = this.props;
+    const newValues = Object.assign({}, values);
+    if (values.indicationId === -1) {
+      delete newValues.indicationId;
+    }
+    onSubmitForm(newValues);
+  }
+
   setVisible(el) {
     const viewAtr = el.getAttribute('data-view');
     el.classList.add('in-viewport', viewAtr);
@@ -87,15 +85,29 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { indications, trials } = this.props;
+    const { indications } = this.props;
+    let { trials } = this.props;
     let studiesList = [];
-    let h3Text;
+    let h3Text = '';
 
-    if (trials && trials.length > 0) {
-      h3Text = `There are ${trials.length} ${(trials.length > 1) ? 'studies' : 'study'}`;
-      if (this.zip) {
-        h3Text = `There are ${trials.length} ${(trials.length > 1) ? 'studies' : 'study'} within ${this.distance || 50} miles of ${this.zip}`;
+    if (trials) {
+      if (trials.length > 0) {
+        h3Text = `There are ${trials.length} ${(trials.length > 1) ? 'studies' : 'study'}`;
+        if (this.zip) {
+          h3Text = `There are ${trials.length} ${(trials.length > 1) ? 'studies' : 'study'} within ${this.distance || 50} miles of ${this.zip}`;
+        }
+
+        if (trials[0].wrongPostalCode) {
+          h3Text = 'Invalid postal code';
+          trials = [];
+        }
+      } else {
+        h3Text = 'There are no studies';
+        if (this.zip) {
+          h3Text = `There are no studies within ${this.distance || 50} miles of ${this.zip}`;
+        }
       }
+
       studiesList = trials.map((item, index) => {
         let addr = null;
         if (item.city && item.state) {
@@ -133,9 +145,9 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
             handleDistanceChoose={this.handleDistanceChoose}
             handleIndicationChoose={this.handleIndicationChoose}
           />
-          <div className={classNames('articles-holder relative', { hidden: (!trials || trials.length <= 0) })}>
+          <div className="articles-holder relative">
             <h3 className="text-center text-uppercase">{h3Text}</h3>
-            <div className="row">
+            <div className={classNames('row', { hidden: (!trials || trials.length <= 0) })}>
               {(trials && trials.length > 0) && studiesList}
             </div>
           </div>

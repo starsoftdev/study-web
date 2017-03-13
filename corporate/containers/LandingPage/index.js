@@ -69,15 +69,13 @@ export class LandingPage extends React.Component {
 
     if (newProps.landing) {
       const { landing } = newProps;
-      if (!landing.landingPages.length) {
+      if (!landing.studySources.length) {
         this.props.clearLanding();
         browserHistory.push('/');
-      } else {
-        for (const site of landing.sites) {
-          if (site.location.toLowerCase().replace(/ /ig, '-') !== siteLocation) {
-            invalidSite = true;
-          }
-        }
+      }
+
+      if (landing.site.location.toLowerCase().replace(/ /ig, '-') !== siteLocation) {
+        invalidSite = true;
       }
     }
 
@@ -95,17 +93,23 @@ export class LandingPage extends React.Component {
     const now = moment();
     const landing = this.props.landing;
     const separateNames = params.name.split(' ');
-    // TODO: figure out about source key
+    let studySourceId;
+
+    for (const studySource of landing.studySources) {
+      if (studySource.landingPage) {
+        studySourceId = studySource.id;
+      }
+    }
     const data = {
       firstName: separateNames[0],
-      lastName: separateNames[1],
+      lastName: separateNames[1] || null,
       email: params.email,
       phone: normalizePhone(params.phone),
       createdAt: now,
       updatedAt: now,
       unsubscribed: false,
-      study_patient_category_id: landing.landingPages[0].study_patient_category_id,
-      source_id: (landing.sources.length) ? landing.sources[0].id : null,
+      study_id: landing.id,
+      study_source_id: studySourceId,
       indicationName: landing.indication.name,
       protocolNumber: landing.protocolNumber,
     };
@@ -120,7 +124,12 @@ export class LandingPage extends React.Component {
     let study = null;
     if (this.props.landing) {
       study = this.props.landing;
-      landing = study.landingPages[0];
+
+      for (const studySource of study.studySources) {
+        if (studySource.landingPage) {
+          landing = studySource.landingPage;
+        }
+      }
     }
 
     if (landingIsFetching || landing === null) {

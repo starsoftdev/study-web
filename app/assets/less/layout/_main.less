@@ -2128,6 +2128,9 @@ th, .th {
 	.row { margin: 0 -6px; }
 	.col { padding: 0 6px; }
 
+	.col.hours { padding-left: 0;}
+	.col.time-mode { padding-right: 0;}
+
 	&.form-lightbox {
 		.col {
 			width: 33.3333%;
@@ -2707,43 +2710,46 @@ th, .th {
 
 .admin-dashboard {
 	padding: 82px 10px 0;
-}
-.fixed-header {
-	left: 0;
-	right: 0;
-	top: 62px;
-	z-index: 99;
-	position: fixed;
-	background: #f1f1f1;
-	padding: 42px 20px 30px;
-	
-	.main-heading {
-		margin: 0;
-	}
-}
 
-.form-search {
-	margin: 0 0 30px;
-	
-	.row {
-		margin: 0 -6px;
+	.fixed-header {
+		left: 0;
+		right: 0;
+		top: 62px;
+		z-index: 99;
+		position: fixed;
+		background: #f1f1f1;
+		padding: 42px 20px 30px;
+		
+		.main-heading {
+			margin: 0;
+		}
 	}
 	
-	.col {
-		padding: 0 6px;
-	}
-	
-	.custom-select,
-	.search-area {
-		width: 25%;
-	}
-	
-	&.selects-form {
-		.row + .row {
-			margin-top: 30px;
+	.form-search {
+		margin: 0 0 30px;
+		
+		.row {
+			margin: 0 -6px;
+		}
+		
+		.col {
+			padding: 0 6px;
+		}
+		
+		.custom-select,
+		.search-area {
+			width: 25%;
+		}
+		
+		&.selects-form {
+			.row + .row {
+				margin-top: 30px;
+			}
 		}
 	}
 }
+
+
 
 /* table-holder */
 .table-holder {
@@ -3302,6 +3308,10 @@ div[data-percentage],
 		
 		.btn { display: block; }
 	}
+
+	&.sticky{
+		top: 267px !important;
+	}
 	
 	.btn,
 	.title {
@@ -3366,6 +3376,10 @@ div[data-percentage],
 			&.range-over {
 				border-width: 0;
 			}
+
+			&.sticky {
+				top: 269px !important;
+			}
 			
 			table { background: #fff; }
 		}
@@ -3375,7 +3389,7 @@ div[data-percentage],
 		.table-inner,
 		.table-left {
 			.table-top {
-				.transform(translate(0,68px));
+				// .transform(translate(0,68px));
 				
 				
 				&.range-over {
@@ -3383,6 +3397,9 @@ div[data-percentage],
 					.transform(translate(0));
 				}
 				
+				&.sticky {
+					top: 342px !important;
+				}
 				//table { background: #c00; }
 			}
 		}
@@ -3485,6 +3502,11 @@ div[data-percentage],
 	}
 	
 	.table-right {
+		.table-top.sticky {
+			overflow-x: hidden;
+			overflow-y: hidden;
+		}
+
 		.table  {
 			table-layout: fixed;
 			
@@ -3777,7 +3799,7 @@ div[data-percentage],
 
 .top-head-fixed-alt.fixed-position + .study-tables.alt {
 	.table-top-alt.new-position {
-		.transform(translate(0,76px));
+		// .transform(translate(0,76px));
 	}
 }
 

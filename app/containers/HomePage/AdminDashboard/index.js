@@ -2,20 +2,23 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, reset } from 'redux-form';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
-import { map, mapKeys, concat, findIndex, pullAt } from 'lodash';
+import { StickyContainer } from 'react-sticky';
+import _, { map, mapKeys, concat, findIndex, pullAt } from 'lodash';
 import './styles.less';
 import CenteredModal from '../../../components/CenteredModal';
 import FiltersForm from './FiltersForm';
 import StudyList from './StudyList';
 import Filter from '../../../components/Filter';
 // import { selectFilterFormValues } from './FiltersForm/selectors';
-import { selectStudies, selectFilterFormValues, selectPaginationOptions } from './selectors';
+import { selectFilterFormValues, selectLevels, selectSiteNames, selectSiteLocations, selectIndications, selectSponsors, selectProtocols, selectCro, selectUsersByRoles } from './selectors';
 import rd3 from 'react-d3';
 import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
+import { fetchStudiesDashboard, fetchSiteNames, fetchSiteLocations } from './actions';
+import { fetchLevels, fetchIndications, fetchSponsors, fetchProtocols, fetchCro, fetchUsersByRole } from '../../App/actions';
 
 const PieChart = rd3.PieChart;
 const LineChart = rd3.LineChart;
@@ -26,6 +29,24 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     filtersFormValues: PropTypes.object,
     paginationOptions: PropTypes.object,
     studies: PropTypes.array,
+    resetForm: PropTypes.func,
+    fetchStudiesDashboard: PropTypes.func,
+    fetchLevels: PropTypes.func,
+    levels: PropTypes.array,
+    fetchSiteLocations: PropTypes.func,
+    fetchSiteNames: PropTypes.func,
+    siteNames: PropTypes.array,
+    siteLocations: PropTypes.array,
+    fetchIndications: PropTypes.func,
+    indications: PropTypes.array,
+    fetchSponsors: PropTypes.func,
+    fetchProtocols: PropTypes.func,
+    fetchCro: PropTypes.func,
+    sponsors: PropTypes.array,
+    protocols: PropTypes.array,
+    cro: PropTypes.array,
+    fetchUsersByRole: PropTypes.func,
+    usersByRoles: PropTypes.object,
   };
 
   constructor(props) {
@@ -54,6 +75,18 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.hideDateRangeModal = this.hideDateRangeModal.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.fetchStudiesAccordingToFilters = this.fetchStudiesAccordingToFilters.bind(this);
+  }
+
+  componentWillMount() {
+    this.props.fetchLevels();
+    this.props.fetchSiteNames();
+    this.props.fetchSiteLocations();
+    this.props.fetchIndications();
+    this.props.fetchSponsors();
+    this.props.fetchProtocols();
+    this.props.fetchCro();
+    this.props.fetchUsersByRole();
   }
 
   componentWillReceiveProps(newProps) {
@@ -84,6 +117,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     if (modalFilters[filter.name]) {
       pullAt(modalFilters[filter.name], findIndex(modalFilters[filter.name], ['label', filter.value]));
+      pullAt(modalFilters[filter.name], findIndex(modalFilters[filter.name], ['label', 'All']));
       this.setState({ modalFilters });
     }
   }
@@ -95,6 +129,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   clearFilters() {
     this.setState({ customFilters: [],
       modalFilters: [] });
+    this.props.resetForm();
   }
 
   openFiltersModal() {
@@ -150,16 +185,34 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   }
 
   mapFilterValues(filters) {
-    let newFilters = [];
+    const newFilters = [];
     mapKeys(filters, (filterValues, key) => {
-      newFilters = concat(newFilters, map(filterValues, (v) => ({
-        name: key,
-        type: key === 'percentage' ? 'compare' : 'value',
-        value: v.label,
-      })));
+      _.forEach(filterValues, (v) => {
+        if (v.label !== 'All') {
+          newFilters.push({
+            name: key,
+            type: key === 'percentage' ? 'compare' : 'value',
+            value: v.label,
+          });
+        }
+      });
+    });
+    return newFilters;
+  }
+
+  fetchStudiesAccordingToFilters(value, key) {
+    const newFilterValues = _.cloneDeep(value);
+    let filters = _.cloneDeep(this.props.filtersFormValues);
+    filters = { ...filters, [key]:newFilterValues };
+
+    _.forEach(filters, (filter, key) => {
+      const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
+      filters[key] = withoutAll;
     });
 
-    return newFilters;
+    console.log('fetchStudiesAccordingToFilters', filters);
+
+    this.props.fetchStudiesDashboard(filters);
   }
 
   renderDateFooter() {
@@ -186,7 +239,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     const { customFilters, modalFilters } = this.state;
     const filters = concat(this.mapFilterValues(modalFilters), customFilters);
 
-    console.log('render filter', filters);
+    console.log(123, this.props);
     const pieData1 = [
       { label: 'RED', value: 179, percent: 37.61, color: '#dd0000' },
       { label: 'YELLOW', value: 107, percent: 22.48, color: '#f9ce15' },
@@ -236,14 +289,26 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
               <Modal.Body>
                 <div className="holder clearfix">
                   <div className="form-lightbox">
-                    <FiltersForm handleSubmit={this.addUser} />
+                    <FiltersForm
+                      handleSubmit={this.addUser}
+                      initialValues={this.props.filtersFormValues}
+                      fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
+                      levels={this.props.levels}
+                      siteNames={this.props.siteNames}
+                      siteLocations={this.props.siteLocations}
+                      indications={this.props.indications}
+                      sponsors={this.props.sponsors}
+                      protocols={this.props.protocols}
+                      cro={this.props.cro}
+                      usersByRoles={this.props.usersByRoles}
+                    />
                   </div>
                 </div>
               </Modal.Body>
             </Modal>
           </div>
         </div>
-        <section className={classNames('filters-section', { 'bar-active': (filters.length > 0) }, { 'filters-added': (filters.length > 0) })}>
+        <StickyContainer className={classNames('filters-section', { 'bar-active': (filters.length > 0) }, { 'filters-added': (filters.length > 0) })}>
           {(filters.length > 0) && (
             <div className="filters-bar">
               <div className="filters-holder search-filters">
@@ -420,11 +485,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
               </Modal.Body>
             </Modal>
           </div>
-          <StudyList
-            studies={this.props.studies}
-            paginationOptions={this.props.paginationOptions}
-          />
-        </section>
+          <StudyList />
+        </StickyContainer>
       </div>
     );
   }
@@ -432,8 +494,29 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
 const mapStateToProps = createStructuredSelector({
   filtersFormValues: selectFilterFormValues(),
-  studies: selectStudies(),
-  paginationOptions: selectPaginationOptions(),
+  levels: selectLevels(),
+  siteNames: selectSiteNames(),
+  siteLocations: selectSiteLocations(),
+  indications: selectIndications(),
+  sponsors: selectSponsors(),
+  protocols: selectProtocols(),
+  cro: selectCro(),
+  usersByRoles: selectUsersByRoles(),
 });
 
-export default connect(mapStateToProps)(AdminDashboard);
+function mapDispatchToProps(dispatch) {
+  return {
+    resetForm: () => dispatch(reset('dashboardFilters')),
+    fetchStudiesDashboard: (params) => dispatch(fetchStudiesDashboard(params)),
+    fetchLevels: () => dispatch(fetchLevels()),
+    fetchSiteNames: () => dispatch(fetchSiteNames()),
+    fetchSiteLocations: () => dispatch(fetchSiteLocations()),
+    fetchIndications: () => dispatch(fetchIndications()),
+    fetchSponsors: () => dispatch(fetchSponsors()),
+    fetchProtocols: () => dispatch(fetchProtocols()),
+    fetchCro: () => dispatch(fetchCro()),
+    fetchUsersByRole: () => dispatch(fetchUsersByRole()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminDashboard);
