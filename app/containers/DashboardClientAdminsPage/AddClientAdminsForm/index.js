@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Input from '../../../components/Input';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 @reduxForm({ form: 'dashboardAddClientAdminsForm' })
 
@@ -70,7 +71,12 @@ export class AddClientAdminsForm extends React.Component { // eslint-disable-lin
         </div>
 
         <div className="field-row text-right no-margins">
-          <button type="submit" className="btn btn-primary">Submit</button>
+          <button type="submit" className="btn btn-primary">
+            {this.props.saving
+              ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+              : <span>Submit</span>
+            }
+          </button>
         </div>
 
       </form>

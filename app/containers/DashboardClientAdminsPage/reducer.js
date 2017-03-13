@@ -22,6 +22,9 @@ import {
   FETCH_USERS_BY_ROLES_SUCCESS,
   FETCH_USERS_BY_ROLES_ERROR,
   SET_ACTIVE_SORT,
+  FETCH_SITES,
+  FETCH_SITES_ERROR,
+  FETCH_SITES_SUCCESS,
 } from './constants';
 
 const initialState = {
@@ -31,6 +34,11 @@ const initialState = {
     error: null,
   },
   usersByRoles: {
+    details: {},
+    fetching: false,
+    error: null,
+  },
+  sites: {
     details: {},
     fetching: false,
     error: null,
@@ -72,6 +80,33 @@ function dashboardClientAdminsPageReducer(state = initialState, action) {
       return {
         ...state,
         clientAdmins: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_SITES:
+      return {
+        ...state,
+        sites: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_SITES_SUCCESS:
+      return {
+        ...state,
+        sites: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_SITES_ERROR:
+      return {
+        ...state,
+        sites: {
           details: [],
           fetching: false,
           error: action.payload,

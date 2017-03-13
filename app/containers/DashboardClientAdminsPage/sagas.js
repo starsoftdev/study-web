@@ -6,6 +6,7 @@ import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import request from '../../utils/request';
 import {
+  FETCH_SITES,
   FETCH_CLIENT_ADMINS,
   FETCH_USERS_BY_ROLES,
   ADD_CLIENT_ADMINS,
@@ -24,6 +25,8 @@ import {
   deleteClientAdminError,
   fetchUsersByRolesSuccess,
   fetchUsersByRolesError,
+  fetchSitesSuccess,
+  fetchSitesError,
 } from './actions';
 // Individual exports for testing
 
@@ -38,6 +41,7 @@ export function* dashboardClientAdminsSaga() {
   const watcherC = yield fork(editClientAdminWatcher);
   const watcherD = yield fork(deleteClientAdminWatcher);
   const watcherE = yield fork(fetchUsersByRolesWatcher);
+  const watcherF = yield fork(fetchSitesWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -46,7 +50,48 @@ export function* dashboardClientAdminsSaga() {
   yield cancel(watcherC);
   yield cancel(watcherD);
   yield cancel(watcherE);
+  yield cancel(watcherF);
 }
+
+export function* fetchSitesWatcher() {
+  yield* takeLatest(FETCH_SITES, fetchSitesWorker);
+}
+
+export function* fetchSitesWorker(action) {
+  try {
+    const requestURL = `${API_URL}/sites`;
+
+    const filterObj = {
+      include: [{
+        relation: 'roles',
+        scope: {
+          include: ['user'],
+        },
+      }],
+    };
+
+    const searchParams = action.payload || {};
+
+    if (searchParams.name) {
+      filterObj.where = {
+        name: {
+          like: `%${searchParams.name}%`,
+        },
+      };
+    }
+
+    const queryParams = {
+      filter: JSON.stringify(filterObj),
+    };
+
+    const response = yield call(request, requestURL, { query: queryParams });
+
+    yield put(fetchSitesSuccess(response));
+  } catch (e) {
+    yield put(fetchSitesError(e));
+  }
+}
+
 export function* fetchClientAdminWatcher() {
   yield* takeLatest(FETCH_CLIENT_ADMINS, fetchClientAdminWorker);
 }
@@ -143,13 +188,16 @@ export function* deleteClientAdminWatcher() {
 
 export function* deleteClientAdminWorker(action) {
   try {
-    const requestURL = `${API_URL}/clients/deleteDashboardClientAdmin`;
+    const { id } = action.payload;
+    const requestURL = `${API_URL}/users/${id}`;
 
-    const params = {
-      method: 'POST',
-      body: JSON.stringify(action.payload),
+    const options = {
+      method: 'DELETE',
+      body: JSON.stringify({
+        id,
+      }),
     };
-    const response = yield call(request, requestURL, params);
+    const response = yield call(request, requestURL, options);
 
     yield put(fetchClientAdmin());
 
