@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Input from '../../../components/Input';
-import { map } from 'lodash';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import { map } from 'lodash';
 
 @reduxForm({ form: 'dashboardEditClientAdminsForm' })
 
@@ -21,8 +21,6 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
   }
 
   render() {
-    const messagingNumberOptions = [{ label: '(524) 999-1234', value: 1 }, { label: '(524) 999-1234', value: 2 }, { label: '(524) 999-1234', value: 3 }];
-
     const bds = map(this.props.usersByRoles.details.bd, (sponsor) => ({
       label: `${sponsor.first_name} ${sponsor.last_name}`,
       value: sponsor.id,
@@ -89,28 +87,9 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
           </div>
         </div>
 
-        <div className="field-row no-margins">
-          <strong className="label">
-            <label className="add-exposure-level">MESSAGING NUMBER</label>
-          </strong>
-          <div className="field">
-            <Field
-              name="messagingNumber"
-              component={ReactSelect}
-              placeholder="Select Messaging Number"
-              options={messagingNumberOptions}
-            />
-          </div>
-        </div>
-
-        <div className="field-row add-messaging-number-row">
-          <strong className="label"></strong>
-          <a className="link-add-messaging-number lightbox-opener" onClick={this.props.addMessagingNumberClick}>+ Add Messaging Number</a>
-        </div>
-
         <div className="field-row">
           <strong className="label">
-            <label className="add-exposure-level">DB</label>
+            <label className="add-exposure-level">BD</label>
           </strong>
           <div className="field">
             <Field

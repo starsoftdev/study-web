@@ -31,8 +31,16 @@ export const FETCH_USERS_BY_ROLES = 'app/DashboardClientAdminsPage/FETCH_USERS_B
 export const FETCH_USERS_BY_ROLES_SUCCESS = 'app/DashboardClientAdminsPage/FETCH_USERS_BY_ROLES_SUCCESS';
 export const FETCH_USERS_BY_ROLES_ERROR = 'app/DashboardClientAdminsPage/FETCH_USERS_BY_ROLES_ERROR';
 
-export const FETCH_SITES = 'app/DashboardClientAdminsPage/FETCH_USERS_BY_ROLES';
-export const FETCH_SITES_SUCCESS = 'app/DashboardClientAdminsPage/FETCH_USERS_BY_ROLES_SUCCESS';
-export const FETCH_SITES_ERROR = 'app/DashboardClientAdminsPage/FETCH_USERS_BY_ROLES_ERROR';
+export const FETCH_SITES = 'app/DashboardClientAdminsPage/FETCH_SITES';
+export const FETCH_SITES_SUCCESS = 'app/DashboardClientAdminsPage/FETCH_SITES_SUCCESS';
+export const FETCH_SITES_ERROR = 'app/DashboardClientAdminsPage/FETCH_SITES_ERROR';
+
+export const GET_AVAIL_PHONE_NUMBERS = 'app/DashboardClientAdminsPage/GET_AVAIL_PHONE_NUMBERS';
+export const GET_AVAIL_PHONE_NUMBERS_SUCCESS = 'app/DashboardClientAdminsPage/GET_AVAIL_PHONE_NUMBERS_SUCCESS';
+export const GET_AVAIL_PHONE_NUMBERS_ERROR = 'app/DashboardClientAdminsPage/GET_AVAIL_PHONE_NUMBERS_ERROR';
+
+export const EDIT_MESSAGING_NUMBER = 'app/DashboardClientAdminsPage/EDIT_MESSAGING_NUMBER';
+export const EDIT_MESSAGING_NUMBER_SUCCESS = 'app/DashboardClientAdminsPage/EDIT_MESSAGING_NUMBER_SUCCESS';
+export const EDIT_MESSAGING_NUMBER_ERROR = 'app/DashboardClientAdminsPage/EDIT_MESSAGING_NUMBER_ERROR';
 
 export const SET_ACTIVE_SORT = 'app/DashboardClientAdminsPage/SET_ACTIVE_SORT';

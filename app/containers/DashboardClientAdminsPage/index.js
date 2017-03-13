@@ -9,26 +9,13 @@ import { connect } from 'react-redux';
 
 import { DashboardClientAdminsSearch } from './DashboardClientAdminsSearch';
 import { DashboardClientAdminsTable } from './DashboardClientAdminsTable';
-import { fetchClientAdmin, addClientAdmin, editClientAdmin, deleteClientAdmin, fetchUsersByRoles, setActiveSort } from './actions';
-import selectDashboardClientAdminsPage, { selectDashboardClientAdminsUsersByRoles, selectDashboardClientAdmins, selectDashboardClientAdminSearchFormValues, selectDashboardEditUserProcess, selectPaginationOptions } from './selectors';
-
-import {
-  fetchSites,
-  getAvailPhoneNumbers,
-  fetchClientSites,
-} from '../../containers/App/actions';
-import {
-  selectSiteLocations,
-  selectAvailPhoneNumbers,
-  selectClientSites,
-} from '../../containers/App/selectors';
+import { editMessagingNumber, getAvailPhoneNumbers, fetchSites, fetchClientAdmin, addClientAdmin, editClientAdmin, deleteClientAdmin, fetchUsersByRoles, setActiveSort } from './actions';
+import selectDashboardClientAdminsPage, { selectDashboardAvailPhoneNumbers, selectDashboardClientSites, selectDashboardClientAdminsUsersByRoles, selectDashboardClientAdmins, selectDashboardClientAdminSearchFormValues, selectDashboardEditUserProcess, selectPaginationOptions } from './selectors';
 
 export class DashboardClientAdminsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    siteLocations: PropTypes.array,
-    availPhoneNumbers: PropTypes.array,
-    fullSiteLocations: PropTypes.object,
-    fetchClientSites: PropTypes.func,
+    clientSites: PropTypes.object,
+    availPhoneNumbers: PropTypes.object,
     fetchSites: PropTypes.func,
     getAvailPhoneNumbers: PropTypes.func,
     fetchClientAdmins: PropTypes.func,
@@ -42,6 +29,7 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
     paginationOptions: PropTypes.object,
     clientAdminSearchFormValues: PropTypes.object,
     setActiveSort: PropTypes.func,
+    editMessagingNumber: PropTypes.func,
   };
 
   componentWillMount() {
@@ -50,16 +38,10 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
 
     this.props.fetchSites();
     this.props.getAvailPhoneNumbers();
-    // TODO: change client_id
-    this.props.fetchClientSites(1, {});
   }
 
   render() {
-    console.log('*********Sites*********', this.props.siteLocations);
-    console.log('*********Number*********', this.props.availPhoneNumbers);
-    console.log('*********ClientSites*****', this.props.fullSiteLocations);
-    const { usersByRoles, clientAdmins, editUserProcess, addClientAdmin, editClientAdmin, deleteClientAdmin, paginationOptions, setActiveSort, clientAdminSearchFormValues } = this.props;
-
+    const { availPhoneNumbers, editMessagingNumber, clientSites, usersByRoles, clientAdmins, editUserProcess, addClientAdmin, editClientAdmin, deleteClientAdmin, paginationOptions, setActiveSort, clientAdminSearchFormValues } = this.props;
     return (
       <div className="container-fluid dashboard-clients-admins">
         <h2 className="main-heading">CLIENT ADMINS</h2>
@@ -79,6 +61,9 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
           paginationOptions={paginationOptions}
           clientAdminSearchFormValues={clientAdminSearchFormValues}
           setActiveSort={setActiveSort}
+          clientSites={clientSites}
+          availPhoneNumbers={availPhoneNumbers}
+          editMessagingNumber={editMessagingNumber}
         />
 
       </div>
@@ -87,9 +72,8 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
 }
 
 const mapStateToProps = selectDashboardClientAdminsPage({
-  siteLocations : selectSiteLocations(),
-  fullSiteLocations : selectClientSites(),
-  availPhoneNumbers: selectAvailPhoneNumbers(),
+  clientSites : selectDashboardClientSites(),
+  availPhoneNumbers: selectDashboardAvailPhoneNumbers(),
   clientAdmins: selectDashboardClientAdmins(),
   editUserProcess: selectDashboardEditUserProcess(),
   paginationOptions: selectPaginationOptions(),
@@ -100,13 +84,13 @@ const mapStateToProps = selectDashboardClientAdminsPage({
 function mapDispatchToProps(dispatch) {
   return {
     fetchSites:       () => dispatch(fetchSites()),
-    fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     getAvailPhoneNumbers: () => dispatch(getAvailPhoneNumbers()),
     fetchClientAdmins: () => dispatch(fetchClientAdmin()),
     fetchUsersByRoles: () => dispatch(fetchUsersByRoles()),
     addClientAdmin: (payload) => dispatch(addClientAdmin(payload)),
     editClientAdmin: (payload) => dispatch(editClientAdmin(payload)),
     deleteClientAdmin: (payload) => dispatch(deleteClientAdmin(payload)),
+    editMessagingNumber: (payload) => dispatch(editMessagingNumber(payload)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
   };
 }

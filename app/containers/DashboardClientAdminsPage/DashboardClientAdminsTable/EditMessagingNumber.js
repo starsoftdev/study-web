@@ -11,27 +11,64 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
   static propTypes = {
     handleSubmit: PropTypes.func,
     saving: PropTypes.bool,
+    clientSites: PropTypes.array,
+    phoneNumber: PropTypes.object,
+    messagingNumberOptions: PropTypes.array,
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      vSelected: false,
+    };
+
+    this.messagingNumberChange = this.messagingNumberChange.bind(this);
+  }
+
+  messagingNumberChange(e) {
+    console.log('----------', e);
   }
 
   render() {
-    const messagingNumberOptions = [{ label: '(524) 999-1234', value: 1 }, { label: '(524) 999-1234', value: 2 }, { label: '(524) 999-1234', value: 3 }];
+    // const messagingNumberOptions = [{ label: '(524) 999-1234', value: 1 }, { label: '(524) 999-1234', value: 2 }, { label: '(524) 999-1234', value: 3 }];
+
+    const filteredSites = this.props.clientSites.map((item) => (
+      !this.state.vSelected
+        ? <div key={item.id} className="field-row no-margins">
+          <strong className="label">
+            <label className="add-exposure-level">{item.name}</label>
+          </strong>
+          <div className="field">
+            <Field
+              name={`site-${item.id}`}
+              component={ReactSelect}
+              placeholder="Select Messaging Number"
+              options={this.props.messagingNumberOptions}
+              onChange={this.messagingNumberChange}
+            />
+          </div>
+        </div>
+        : <div key={item.id} className="field-row no-margins">
+          <strong className="label">
+            <label className="add-exposure-level">{item.name}</label>
+          </strong>
+          <div className="field">
+            <Field
+              name={`site-${item.id}`}
+              component={ReactSelect}
+              placeholder="Select Messaging Number"
+              options={this.props.messagingNumberOptions}
+              onChange={this.messagingNumberChange}
+            />
+          </div>
+        </div>
+    ));
 
     return (
       <form action="#" className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
 
-        <div className="field-row no-margins">
-          <strong className="label">
-            <label className="add-exposure-level">MESSAGING NUMBER</label>
-          </strong>
-          <div className="field">
-            <Field
-              name="messagingNumber"
-              component={ReactSelect}
-              placeholder="Select Messaging Number"
-              options={messagingNumberOptions}
-            />
-          </div>
-        </div>
+        {filteredSites}
 
         <div className="field-row text-right no-margins">
           <button type="submit" className="btn btn-primary">
