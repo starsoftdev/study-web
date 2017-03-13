@@ -3,30 +3,31 @@
  */
 
 import { call, fork, put, take, cancel } from 'redux-saga/effects';
-import request from '../../utils/request';
-import { getItem, removeItem } from '../../utils/localStorage';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { FIND_PATIENTS_TEXT_BLAST,
-  FETCH_PATIENTS,
-  EXPORT_PATIENTS,
-  FETCH_PATIENT_DETAILS,
-  FETCH_PATIENT_CATEGORIES,
-  FETCH_STUDY,
-  READ_STUDY_PATIENT_MESSAGES,
-  SUBMIT_ADD_PATIENT_INDICATION,
-  SUBMIT_REMOVE_PATIENT_INDICATION,
-  SUBMIT_PATIENT_UPDATE,
-  SUBMIT_TEXT_BLAST,
-  SUBMIT_PATIENT_IMPORT,
-  SUBMIT_ADD_PATIENT,
-  SUBMIT_PATIENT_NOTE,
-  SUBMIT_DELETE_NOTE,
-  SUBMIT_PATIENT_TEXT,
-  FETCH_STUDY_NEW_TEXTS,
-  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
-} from './constants';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
+import request from '../../utils/request';
+import composeQueryString from '../../utils/composeQueryString';
+import { getItem, removeItem } from '../../utils/localStorage';
+import { FIND_PATIENTS_TEXT_BLAST,
+FETCH_PATIENTS,
+EXPORT_PATIENTS,
+FETCH_PATIENT_DETAILS,
+FETCH_PATIENT_CATEGORIES,
+FETCH_STUDY,
+READ_STUDY_PATIENT_MESSAGES,
+SUBMIT_ADD_PATIENT_INDICATION,
+SUBMIT_REMOVE_PATIENT_INDICATION,
+SUBMIT_PATIENT_UPDATE,
+SUBMIT_TEXT_BLAST,
+SUBMIT_PATIENT_IMPORT,
+SUBMIT_ADD_PATIENT,
+SUBMIT_PATIENT_NOTE,
+SUBMIT_DELETE_NOTE,
+SUBMIT_PATIENT_TEXT,
+FETCH_STUDY_NEW_TEXTS,
+SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
+} from './constants';
 
 import {
   addPatientsToTextBlast,
@@ -313,16 +314,18 @@ function* fetchPatients(studyId, text, campaignId, sourceId) {
   }
 
   try {
-    let requestURL = `${API_URL}/studies/${studyId}/patients`;
+    const queryParams = {};
     if (campaignId) {
-      requestURL += `&campaignId=${campaignId}`;
+      queryParams.campaignId = campaignId;
     }
     if (sourceId) {
-      requestURL += `&sourceId=${sourceId}`;
+      queryParams.sourceId = sourceId;
     }
     if (text) {
-      requestURL += `&text=${encodeURIComponent(text)}`;
+      queryParams.text = text;
     }
+    const queryString = composeQueryString(queryParams);
+    const requestURL = `${API_URL}/studies/${studyId}/patients?${queryString}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });

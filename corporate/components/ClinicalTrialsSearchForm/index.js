@@ -69,7 +69,6 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     return (
       <form
         ref={(animatedForm) => { this.animatedForm = animatedForm; }}
-        action="#"
         className="form-find-studies"
         data-formvalidation=""
         data-view="fadeInUp"
@@ -97,7 +96,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
         </div>
         <div className="field-row">
           <Field
-            name="indication_id"
+            name="indicationId"
             component={ReactSelect}
             placeholder="Select Indication"
             options={indications}

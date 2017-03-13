@@ -57,7 +57,7 @@ export class ThankYouPage extends React.Component {
 
   render() {
     const landing = (this.state.landing) ? this.state.landing : this.props.landing;
-    const site = landing.sites[0];
+    const site = landing.site;
 
     let address = `${site.address}<br />`;
     const city = site.city;
