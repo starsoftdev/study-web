@@ -14,10 +14,12 @@ import {
   DELETE_CLIENT_ADMINS,
   GET_AVAIL_PHONE_NUMBERS,
   EDIT_MESSAGING_NUMBER,
+  ADD_MESSAGING_NUMBER,
 } from './constants';
 import {
   fetchClientAdmin,
   fetchSites,
+  getAvailPhoneNumbers,
   fetchClientAdminSuccess,
   fetchClientAdminError,
   addClientAdminSuccess,
@@ -34,6 +36,8 @@ import {
   getAvailPhoneNumbersError,
   editMessagingNumberSuccess,
   editMessagingNumberError,
+  addMessagingNumberSuccess,
+  addMessagingNumberError,
 } from './actions';
 // Individual exports for testing
 
@@ -51,6 +55,7 @@ export function* dashboardClientAdminsSaga() {
   const watcherF = yield fork(fetchSitesWatcher);
   const watcherG = yield fork(getAvailPhoneNumbersWatcher);
   const watcherH = yield fork(editMessagingNumberWatcher);
+  const watcherI = yield fork(addMessagingNumberWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -62,6 +67,30 @@ export function* dashboardClientAdminsSaga() {
   yield cancel(watcherF);
   yield cancel(watcherG);
   yield cancel(watcherH);
+  yield cancel(watcherI);
+}
+
+export function* addMessagingNumberWatcher() {
+  yield* takeLatest(ADD_MESSAGING_NUMBER, addMessagingNumberWorker);
+}
+
+export function* addMessagingNumberWorker(action) {
+  try {
+    const requestURL = `${API_URL}/twilioNumbers`;
+    const params = {
+      method: 'POST',
+      body: JSON.stringify(action.payload),
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(getAvailPhoneNumbers());
+
+    yield put(addMessagingNumberSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while adding sponsor user');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(addMessagingNumberError(err));
+  }
 }
 
 export function* editMessagingNumberWatcher() {

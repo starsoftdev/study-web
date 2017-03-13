@@ -43,4 +43,8 @@ export const EDIT_MESSAGING_NUMBER = 'app/DashboardClientAdminsPage/EDIT_MESSAGI
 export const EDIT_MESSAGING_NUMBER_SUCCESS = 'app/DashboardClientAdminsPage/EDIT_MESSAGING_NUMBER_SUCCESS';
 export const EDIT_MESSAGING_NUMBER_ERROR = 'app/DashboardClientAdminsPage/EDIT_MESSAGING_NUMBER_ERROR';
 
+export const ADD_MESSAGING_NUMBER = 'app/DashboardClientAdminsPage/ADD_MESSAGING_NUMBER';
+export const ADD_MESSAGING_NUMBER_SUCCESS = 'app/DashboardClientAdminsPage/ADD_MESSAGING_NUMBER_SUCCESS';
+export const ADD_MESSAGING_NUMBER_ERROR = 'app/DashboardClientAdminsPage/ADD_MESSAGING_NUMBER_ERROR';
+
 export const SET_ACTIVE_SORT = 'app/DashboardClientAdminsPage/SET_ACTIVE_SORT';
