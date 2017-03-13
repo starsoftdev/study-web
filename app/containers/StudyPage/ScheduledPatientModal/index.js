@@ -36,9 +36,10 @@ class ScheduledPatientModal extends React.Component {
   }
   render() {
     const { onHide, currentPatient, show, ...props } = this.props;
+    console.log(currentPatient);
     if (currentPatient) {
       return (
-        <Modal className="custom-modal datepicker-modal" show={show} onHide={onHide}>
+        <Modal className="custom-modal datepicker-modal scheduled-patient-modal" show={show} onHide={onHide} dialogComponentClass={CenteredModal}>
           <div className="datepicker-box datepicker-active" style={{ display: 'block' }}>
             <div className="datepicker-holder">
               <div className="datepicker-frame">
@@ -49,7 +50,7 @@ class ScheduledPatientModal extends React.Component {
                       <i className="icomoon-icon_close"></i>
                     </a>
                   </div>
-                  <div className="scroll-holder jcf--scrollable modal-body holder">
+                  <div className="scroll-holder jcf--scrollable modal-body holder form-lightbox lightbox-card">
                     <Calendar
                       className="calendar custom-calendar"
                     />
@@ -57,45 +58,74 @@ class ScheduledPatientModal extends React.Component {
                       Today: {moment().format('dddd, MMMM DD, YYYY')}
                     </div>
                     <div className="text-center">
-                      <div className="row">
-                        <div className="col pull-left">
-                          <label>*PATIENT</label>
-                        </div>
-                        <div className="col pull-right">
-                          <label>{currentPatient.firstName}</label>
-                          <label>{currentPatient.lastName}</label>
+                      <div className="field-row patient-name-field-row">
+                        <strong className="label required">
+                          <label>PATIENT</label>
+                        </strong>
+                        <div className="field">
+                          <div className="row">
+                            <div className="col pull-left">
+                              <Field
+                                isDisabled
+                                name="firstName"
+                                placeholder={currentPatient.firstName}
+                                component={Input}
+                              />
+                            </div>
+                            <div className="col pull-left">
+                              <Field
+                                isDisabled
+                                name="lastName"
+                                placeholder={currentPatient.lastName}
+                                component={Input}
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="row">
-                        <div className="col pull-left">
-                          <label>*TIME</label>
+                      <div className="field-row time-field-row">
+                        <strong className="label required">
+                          <label>TIME</label>
+                        </strong>
+                        <div className="field time-field">
+                          <div className="col-holder row">
+                            <div className="col-small pull-left hours">
+                              <Field
+                                name="hours"
+                                placeholder="Hours"
+                                options={HOUR_OPTIONS}
+                                component={ReactSelect}
+                              />
+                            </div>
+                            <div className="col-small pull-left minutes">
+                              <Field
+                                name="minutes"
+                                placeholder="Minutes"
+                                options={MINUTES_OPTIONS}
+                                component={ReactSelect}
+                              />
+                            </div>
+                            <div className="col-small pull-left time-mode">
+                              <Field
+                                name="amPm"
+                                placeholder="AM"
+                                options={AM_PM_OPTIONS}
+                                component={ReactSelect}
+                              />
+                            </div>
+                          </div>
                         </div>
-                        <div className="col pull-right">
-                          <div className="time-selects">
-                            <Field
-                              name="hours"
-                              options={HOUR_OPTIONS}
-                              component={ReactSelect}
-                            />
-                            <Field
-                              name="minutes"
-                              options={MINUTES_OPTIONS}
-                              component={ReactSelect}
-                            />
-                            <Field
-                              name="amPm"
-                              options={AM_PM_OPTIONS}
-                              component={ReactSelect}
-                            />
-                          </div>
-                          <div className="reminder-container">
-                            <Field
-                              name="text-reminder"
-                              component={Checkbox}
-                              title="test"
-                            />
-                            <label> Text Reminder</label>
-                          </div>
+                      </div>
+                      <div className="field-row">
+                        <strong className="label">&nbsp;</strong>
+                        <div className="field reminder-field">
+                          <Field
+                            name="text-reminder"
+                            component={Checkbox}
+                            title="test"
+                            className="reminder-container"
+                          />
+                          <label className="reminder-label"> Text Reminder</label>
                         </div>
                       </div>
                       <Button className="pull-right">Submit</Button>
