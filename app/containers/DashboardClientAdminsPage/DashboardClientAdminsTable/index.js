@@ -155,10 +155,6 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
         value: cardIterator.id,
       }));
     }
-    messagingNumberOptions = messagingNumberOptions.concat([{
-      label: 'Add Messaging Number',
-      value: -1,
-    }]);
 
     return (
       <div className="table-holder">
