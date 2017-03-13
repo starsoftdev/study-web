@@ -14,6 +14,7 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
     clientSites: PropTypes.array,
     phoneNumber: PropTypes.object,
     messagingNumberOptions: PropTypes.array,
+    addMessagingNumberClick: PropTypes.func,
   }
 
   constructor(props) {
@@ -27,7 +28,9 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
   }
 
   messagingNumberChange(e) {
-    console.log('----------', e);
+    if (e === -1) {
+      this.props.addMessagingNumberClick();
+    }
   }
 
   render() {
@@ -35,7 +38,7 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
 
     const filteredSites = this.props.clientSites.map((item) => (
       !this.state.vSelected
-        ? <div key={item.id} className="field-row no-margins">
+        ? <div key={item.id} className="field-row">
           <strong className="label">
             <label className="add-exposure-level">{item.name}</label>
           </strong>
@@ -49,7 +52,7 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
             />
           </div>
         </div>
-        : <div key={item.id} className="field-row no-margins">
+        : <div key={item.id} className="field-row">
           <strong className="label">
             <label className="add-exposure-level">{item.name}</label>
           </strong>

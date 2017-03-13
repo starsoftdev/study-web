@@ -22,6 +22,9 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     clientSites: PropTypes.object,
     availPhoneNumbers: PropTypes.object,
     editMessagingNumber: PropTypes.func,
+    editMessagingProcess: PropTypes.object,
+    addMessagingNumber: PropTypes.func,
+    addMessagingProcess: PropTypes.object,
   }
 
   constructor(props) {
@@ -49,11 +52,20 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     this.closeEditMessagingNumber = this.closeEditMessagingNumber.bind(this);
     this.editMessagingClick = this.editMessagingClick.bind(this);
     this.updateMessagingNumber = this.updateMessagingNumber.bind(this);
+    this.addMessagingNumber = this.addMessagingNumber.bind(this);
   }
   componentWillReceiveProps(newProps) {
     if ((!newProps.editUserProcess.saving && this.props.editUserProcess.saving) ||
       (!newProps.editUserProcess.deleting && this.props.editUserProcess.deleting)) {
       this.closeEditAdminModal();
+    }
+    if ((!newProps.editMessagingProcess.saving && this.props.editMessagingProcess.saving) ||
+      (!newProps.editMessagingProcess.deleting && this.props.editMessagingProcess.deleting)) {
+      this.closeEditMessagingNumber();
+    }
+    if ((!newProps.addMessagingProcess.saving && this.props.addMessagingProcess.saving) ||
+      (!newProps.addMessagingProcess.deleting && this.props.addMessagingProcess.deleting)) {
+      this.closeAddMessagingNumberModal();
     }
   }
 
@@ -79,8 +91,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
   }
 
   addMessagingNumberClick() {
-    console.log('addMessagingNumberClick');
-    this.closeEditAdminModal();
+    this.closeEditMessagingNumber();
     this.openAddMessagingNumberModal();
   }
 
@@ -102,7 +113,8 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
 
   closeAddMessagingNumberModal() {
     this.setState({ addMessagingNumberModalOpen: false });
-    this.openAddSponsorModal();
+    // this.openAddSponsorModal();
+    this.openEditMessagingNumber();
   }
 
   openAddMessagingNumberModal() {
@@ -129,6 +141,9 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     this.props.editMessagingNumber(nValues);
   }
 
+  addMessagingNumber(params) {
+    this.props.addMessagingNumber(params);
+  }
 
   render() {
     const { clientAdmins, clientSites } = this.props;
@@ -140,10 +155,10 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
         value: cardIterator.id,
       }));
     }
-    messagingNumberOptions = [{
+    messagingNumberOptions = messagingNumberOptions.concat([{
       label: 'Add Messaging Number',
       value: -1,
-    }].concat(messagingNumberOptions);
+    }]);
 
     return (
       <div className="table-holder">
@@ -199,7 +214,9 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <AddMessagingNumberForm />
+              <AddMessagingNumberForm
+                onSubmit={this.addMessagingNumber}
+              />
             </div>
           </Modal.Body>
         </Modal>
@@ -217,6 +234,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
                 {...this.state.editClientMessagingNumberValues}
                 messagingNumberOptions={messagingNumberOptions}
                 onSubmit={this.updateMessagingNumber}
+                addMessagingNumberClick={this.addMessagingNumberClick}
               />
             </div>
           </Modal.Body>

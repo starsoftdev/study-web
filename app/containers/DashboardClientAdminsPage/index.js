@@ -9,8 +9,8 @@ import { connect } from 'react-redux';
 
 import { DashboardClientAdminsSearch } from './DashboardClientAdminsSearch';
 import { DashboardClientAdminsTable } from './DashboardClientAdminsTable';
-import { editMessagingNumber, getAvailPhoneNumbers, fetchSites, fetchClientAdmin, addClientAdmin, editClientAdmin, deleteClientAdmin, fetchUsersByRoles, setActiveSort } from './actions';
-import selectDashboardClientAdminsPage, { selectDashboardAvailPhoneNumbers, selectDashboardClientSites, selectDashboardClientAdminsUsersByRoles, selectDashboardClientAdmins, selectDashboardClientAdminSearchFormValues, selectDashboardEditUserProcess, selectPaginationOptions } from './selectors';
+import { addMessagingNumber, editMessagingNumber, getAvailPhoneNumbers, fetchSites, fetchClientAdmin, addClientAdmin, editClientAdmin, deleteClientAdmin, fetchUsersByRoles, setActiveSort } from './actions';
+import selectDashboardClientAdminsPage, { selectDashboardAddMessagingProcess, selectDashboardEditMessagingProcess, selectDashboardAvailPhoneNumbers, selectDashboardClientSites, selectDashboardClientAdminsUsersByRoles, selectDashboardClientAdmins, selectDashboardClientAdminSearchFormValues, selectDashboardEditUserProcess, selectPaginationOptions } from './selectors';
 
 export class DashboardClientAdminsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -22,6 +22,8 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
     clientAdmins: PropTypes.object,
     addClientAdmin: PropTypes.func,
     editUserProcess: PropTypes.object,
+    editMessagingProcess: PropTypes.object,
+    addMessagingProcess: PropTypes.object,
     fetchUsersByRoles: PropTypes.func,
     usersByRoles: PropTypes.object,
     editClientAdmin: PropTypes.func,
@@ -30,6 +32,7 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
     clientAdminSearchFormValues: PropTypes.object,
     setActiveSort: PropTypes.func,
     editMessagingNumber: PropTypes.func,
+    addMessagingNumber: PropTypes.func,
   };
 
   componentWillMount() {
@@ -41,7 +44,7 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
   }
 
   render() {
-    const { availPhoneNumbers, editMessagingNumber, clientSites, usersByRoles, clientAdmins, editUserProcess, addClientAdmin, editClientAdmin, deleteClientAdmin, paginationOptions, setActiveSort, clientAdminSearchFormValues } = this.props;
+    const { addMessagingProcess, addMessagingNumber, editMessagingProcess, availPhoneNumbers, editMessagingNumber, clientSites, usersByRoles, clientAdmins, editUserProcess, addClientAdmin, editClientAdmin, deleteClientAdmin, paginationOptions, setActiveSort, clientAdminSearchFormValues } = this.props;
     return (
       <div className="container-fluid dashboard-clients-admins">
         <h2 className="main-heading">CLIENT ADMINS</h2>
@@ -57,6 +60,7 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
           editClientAdmin={editClientAdmin}
           deleteClientAdmin={deleteClientAdmin}
           editUserProcess={editUserProcess}
+          editMessagingProcess={editMessagingProcess}
           usersByRoles={usersByRoles}
           paginationOptions={paginationOptions}
           clientAdminSearchFormValues={clientAdminSearchFormValues}
@@ -64,6 +68,8 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
           clientSites={clientSites}
           availPhoneNumbers={availPhoneNumbers}
           editMessagingNumber={editMessagingNumber}
+          addMessagingNumber={addMessagingNumber}
+          addMessagingProcess={addMessagingProcess}
         />
 
       </div>
@@ -79,6 +85,8 @@ const mapStateToProps = selectDashboardClientAdminsPage({
   paginationOptions: selectPaginationOptions(),
   usersByRoles: selectDashboardClientAdminsUsersByRoles(),
   clientAdminSearchFormValues: selectDashboardClientAdminSearchFormValues(),
+  editMessagingProcess: selectDashboardEditMessagingProcess(),
+  addMessagingProcess: selectDashboardAddMessagingProcess(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -92,6 +100,7 @@ function mapDispatchToProps(dispatch) {
     deleteClientAdmin: (payload) => dispatch(deleteClientAdmin(payload)),
     editMessagingNumber: (payload) => dispatch(editMessagingNumber(payload)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
+    addMessagingNumber: (payload) => dispatch(addMessagingNumber(payload)),
   };
 }
 

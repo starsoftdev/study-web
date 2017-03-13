@@ -31,7 +31,31 @@ import {
   EDIT_MESSAGING_NUMBER,
   EDIT_MESSAGING_NUMBER_SUCCESS,
   EDIT_MESSAGING_NUMBER_ERROR,
+  ADD_MESSAGING_NUMBER,
+  ADD_MESSAGING_NUMBER_SUCCESS,
+  ADD_MESSAGING_NUMBER_ERROR,
 } from './constants';
+
+export function addMessagingNumber(payload) {
+  return {
+    type: ADD_MESSAGING_NUMBER,
+    payload,
+  };
+}
+
+export function addMessagingNumberSuccess(payload) {
+  return {
+    type: ADD_MESSAGING_NUMBER_SUCCESS,
+    payload,
+  };
+}
+
+export function addMessagingNumberError(payload) {
+  return {
+    type: ADD_MESSAGING_NUMBER_ERROR,
+    payload,
+  };
+}
 
 export function editMessagingNumber(payload) {
   return {

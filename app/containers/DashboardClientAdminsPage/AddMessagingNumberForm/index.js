@@ -1,20 +1,18 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import ReactSelect from '../../../components/Input/ReactSelect';
-
+import Input from '../../../components/Input';
 @reduxForm({ form: 'dashboardAddMessagingNumberForm' })
 
 export class AddMessagingNumberForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    handleSubmit: PropTypes.func,
   }
 
   render() {
-    const messagingNumberOptions = [{ label: '(524) 999-1234', value: 1 }, { label: '(524) 999-1234', value: 2 }, { label: '(524) 999-1234', value: 3 }];
-
     return (
-      <form action="#" className="form-lightbox dashboard-lightbox">
+      <form action="#" className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
 
         <div className="field-row">
           <strong className="label required">
@@ -22,10 +20,9 @@ export class AddMessagingNumberForm extends React.Component { // eslint-disable-
           </strong>
           <div className="field">
             <Field
-              name="messagingNumber"
-              component={ReactSelect}
-              placeholder="Select Messaging Number"
-              options={messagingNumberOptions}
+              name="phoneNumber"
+              component={Input}
+              type="text"
             />
           </div>
         </div>

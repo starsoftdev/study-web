@@ -25,6 +25,12 @@ import {
   FETCH_SITES_ERROR,
   FETCH_SITES_SUCCESS,
   GET_AVAIL_PHONE_NUMBERS_SUCCESS,
+  EDIT_MESSAGING_NUMBER,
+  EDIT_MESSAGING_NUMBER_SUCCESS,
+  EDIT_MESSAGING_NUMBER_ERROR,
+  ADD_MESSAGING_NUMBER,
+  ADD_MESSAGING_NUMBER_SUCCESS,
+  ADD_MESSAGING_NUMBER_ERROR,
 } from './constants';
 
 const initialState = {
@@ -49,6 +55,16 @@ const initialState = {
     error: null,
   },
   editUserProcess: {
+    saving: false,
+    deleting: false,
+    error: null,
+  },
+  editMessagingProcess: {
+    saving: false,
+    deleting: false,
+    error: null,
+  },
+  addMessagingProcess: {
     saving: false,
     deleting: false,
     error: null,
@@ -148,6 +164,60 @@ function dashboardClientAdminsPageReducer(state = initialState, action) {
       return {
         ...state,
         editUserProcess: {
+          saving: false,
+          deleting: false,
+          error: action.payload,
+        },
+      };
+    case EDIT_MESSAGING_NUMBER:
+      return {
+        ...state,
+        editMessagingProcess: {
+          saving: true,
+          deleting: false,
+          error: null,
+        },
+      };
+    case EDIT_MESSAGING_NUMBER_SUCCESS:
+      return {
+        ...state,
+        editMessagingProcess: {
+          saving: false,
+          deleting: false,
+          error: null,
+        },
+      };
+    case EDIT_MESSAGING_NUMBER_ERROR:
+      return {
+        ...state,
+        editMessagingProcess: {
+          saving: false,
+          deleting: false,
+          error: action.payload,
+        },
+      };
+    case ADD_MESSAGING_NUMBER:
+      return {
+        ...state,
+        addMessagingProcess: {
+          saving: true,
+          deleting: false,
+          error: null,
+        },
+      };
+    case ADD_MESSAGING_NUMBER_SUCCESS:
+      return {
+        ...state,
+        addMessagingProcess: {
+          saving: false,
+          deleting: false,
+          error: null,
+        },
+      };
+    case ADD_MESSAGING_NUMBER_ERROR:
+      return {
+        ...state,
+        addMessagingProcess: {
           saving: false,
           deleting: false,
           error: action.payload,

@@ -30,6 +30,16 @@ const selectDashboardEditUserProcess = () => createSelector(
   (substate) => substate.editUserProcess
 );
 
+const selectDashboardEditMessagingProcess = () => createSelector(
+  selectDashboardClientAdminsPage(),
+  (substate) => substate.editMessagingProcess
+);
+
+const selectDashboardAddMessagingProcess = () => createSelector(
+  selectDashboardClientAdminsPage(),
+  (substate) => substate.addMessagingProcess
+);
+
 const selectPaginationOptions = () => createSelector(
   selectDashboardClientAdminsPage(),
   substate => substate.paginationOptions
@@ -67,4 +77,6 @@ export {
   selectDashboardClientAdminsUsersByRoles,
   selectDashboardClientSites,
   selectDashboardAvailPhoneNumbers,
+  selectDashboardEditMessagingProcess,
+  selectDashboardAddMessagingProcess,
 };
