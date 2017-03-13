@@ -7,6 +7,7 @@ import CenteredModal from '../../../components/CenteredModal/index';
 import EditClientAdminsForm from '../EditClientAdminsForm';
 import AddMessagingNumberForm from '../AddMessagingNumberForm';
 import EditMessagingNumberForm from './EditMessagingNumber';
+import { forEach, map } from 'lodash';
 
 export class DashboardClientAdminsTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -18,6 +19,9 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     paginationOptions: PropTypes.object,
     clientAdminSearchFormValues: PropTypes.object,
     setActiveSort: PropTypes.func,
+    clientSites: PropTypes.object,
+    availPhoneNumbers: PropTypes.object,
+    editMessagingNumber: PropTypes.func,
   }
 
   constructor(props) {
@@ -28,6 +32,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
       addMessagingNumberModalOpen: false,
       editMessagingNumberModalOpen: false,
       editClientAdminInitValues: {},
+      editClientMessagingNumberValues: {},
     };
 
     this.editAdminClick = this.editAdminClick.bind(this);
@@ -43,6 +48,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     this.openEditMessagingNumber = this.openEditMessagingNumber.bind(this);
     this.closeEditMessagingNumber = this.closeEditMessagingNumber.bind(this);
     this.editMessagingClick = this.editMessagingClick.bind(this);
+    this.updateMessagingNumber = this.updateMessagingNumber.bind(this);
   }
   componentWillReceiveProps(newProps) {
     if ((!newProps.editUserProcess.saving && this.props.editUserProcess.saving) ||
@@ -61,7 +67,14 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     this.openAddSponsorModal();
   }
 
-  editMessagingClick() {
+  editMessagingClick(item) {
+    const filteredClientSites = this.props.clientSites.details.filter((element) => (
+      element.client_id === item.client_id
+    ));
+    this.setState({ editClientMessagingNumberValues: {
+      clientSites: filteredClientSites,
+      phoneNumber: this.props.availPhoneNumbers,
+    } });
     this.openEditMessagingNumber();
   }
 
@@ -103,9 +116,34 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     this.props.deleteClientAdmin({ id: params });
   }
 
+  updateMessagingNumber(params) {
+    const nValues = [];
+    forEach(this.props.clientSites.details, (data) => {
+      if (params[`site-${data.id}`]) {
+        nValues.push({
+          site_id: data.id,
+          phone_id: params[`site-${data.id}`],
+        });
+      }
+    });
+    this.props.editMessagingNumber(nValues);
+  }
+
 
   render() {
-    const { clientAdmins } = this.props;
+    const { clientAdmins, clientSites } = this.props;
+
+    let messagingNumberOptions = [];
+    if (this.props.availPhoneNumbers.details) {
+      messagingNumberOptions = map(this.props.availPhoneNumbers.details, cardIterator => ({
+        label: cardIterator.phoneNumber,
+        value: cardIterator.id,
+      }));
+    }
+    messagingNumberOptions = [{
+      label: 'Add Messaging Number',
+      value: -1,
+    }].concat(messagingNumberOptions);
 
     return (
       <div className="table-holder">
@@ -125,7 +163,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
           <tbody>
             {
               clientAdmins.details.map((item, index) => (
-                <RowItem key={index} item={item} editAdminClick={this.editAdminClick} editMessagingClick={this.editMessagingClick} />
+                <RowItem key={index} item={item} editAdminClick={this.editAdminClick} editMessagingClick={this.editMessagingClick} clientSites={clientSites} />
             ))
           }
           </tbody>
@@ -175,7 +213,11 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <EditMessagingNumberForm />
+              <EditMessagingNumberForm
+                {...this.state.editClientMessagingNumberValues}
+                messagingNumberOptions={messagingNumberOptions}
+                onSubmit={this.updateMessagingNumber}
+              />
             </div>
           </Modal.Body>
         </Modal>

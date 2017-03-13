@@ -3,7 +3,6 @@
  * DashboardClientAdminsPage reducer
  *
  */
-
 import {
   DEFAULT_ACTION,
   FETCH_CLIENT_ADMINS,
@@ -25,6 +24,7 @@ import {
   FETCH_SITES,
   FETCH_SITES_ERROR,
   FETCH_SITES_SUCCESS,
+  GET_AVAIL_PHONE_NUMBERS_SUCCESS,
 } from './constants';
 
 const initialState = {
@@ -38,8 +38,13 @@ const initialState = {
     fetching: false,
     error: null,
   },
-  sites: {
-    details: {},
+  clientSites: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  availPhoneNumbers: {
+    details: [],
     fetching: false,
     error: null,
   },
@@ -58,6 +63,15 @@ function dashboardClientAdminsPageReducer(state = initialState, action) {
   switch (action.type) {
     case DEFAULT_ACTION:
       return state;
+    case GET_AVAIL_PHONE_NUMBERS_SUCCESS:
+      return {
+        ...state,
+        availPhoneNumbers: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
     case FETCH_CLIENT_ADMINS:
       return {
         ...state,
@@ -88,7 +102,7 @@ function dashboardClientAdminsPageReducer(state = initialState, action) {
     case FETCH_SITES:
       return {
         ...state,
-        sites: {
+        clientSites: {
           details: [],
           fetching: true,
           error: null,
@@ -97,7 +111,7 @@ function dashboardClientAdminsPageReducer(state = initialState, action) {
     case FETCH_SITES_SUCCESS:
       return {
         ...state,
-        sites: {
+        clientSites: {
           details: action.payload,
           fetching: false,
           error: null,
@@ -106,7 +120,7 @@ function dashboardClientAdminsPageReducer(state = initialState, action) {
     case FETCH_SITES_ERROR:
       return {
         ...state,
-        sites: {
+        clientSites: {
           details: [],
           fetching: false,
           error: action.payload,

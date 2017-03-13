@@ -25,7 +25,54 @@ import {
   FETCH_SITES,
   FETCH_SITES_SUCCESS,
   FETCH_SITES_ERROR,
+  GET_AVAIL_PHONE_NUMBERS,
+  GET_AVAIL_PHONE_NUMBERS_ERROR,
+  GET_AVAIL_PHONE_NUMBERS_SUCCESS,
+  EDIT_MESSAGING_NUMBER,
+  EDIT_MESSAGING_NUMBER_SUCCESS,
+  EDIT_MESSAGING_NUMBER_ERROR,
 } from './constants';
+
+export function editMessagingNumber(payload) {
+  return {
+    type: EDIT_MESSAGING_NUMBER,
+    payload,
+  };
+}
+
+export function editMessagingNumberSuccess(payload) {
+  return {
+    type: EDIT_MESSAGING_NUMBER_SUCCESS,
+    payload,
+  };
+}
+
+export function editMessagingNumberError(payload) {
+  return {
+    type: EDIT_MESSAGING_NUMBER_ERROR,
+    payload,
+  };
+}
+
+export function getAvailPhoneNumbers() {
+  return {
+    type: GET_AVAIL_PHONE_NUMBERS,
+  };
+}
+
+export function getAvailPhoneNumbersSuccess(payload) {
+  return {
+    type: GET_AVAIL_PHONE_NUMBERS_SUCCESS,
+    payload,
+  };
+}
+
+export function getAvailPhoneNumbersError(payload) {
+  return {
+    type: GET_AVAIL_PHONE_NUMBERS_ERROR,
+    payload,
+  };
+}
 
 export function fetchClientAdmin(payload) {
   return {

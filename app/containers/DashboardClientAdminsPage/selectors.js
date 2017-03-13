@@ -47,6 +47,16 @@ const selectDashboardClientAdminsUsersByRoles = () => createSelector(
   (substate) => substate.usersByRoles
 );
 
+const selectDashboardClientSites = () => createSelector(
+  selectDashboardClientAdminsPage(),
+  (substate) => substate.clientSites
+);
+
+const selectDashboardAvailPhoneNumbers = () => createSelector(
+  selectDashboardClientAdminsPage(),
+  (substate) => substate.availPhoneNumbers
+);
+
 export default selectDashboardClientAdminsPage;
 export {
   selectDashboardClientAdminsPageDomain,
@@ -55,4 +65,6 @@ export {
   selectPaginationOptions,
   selectDashboardClientAdminSearchFormValues,
   selectDashboardClientAdminsUsersByRoles,
+  selectDashboardClientSites,
+  selectDashboardAvailPhoneNumbers,
 };

@@ -12,9 +12,12 @@ import {
   ADD_CLIENT_ADMINS,
   EDIT_CLIENT_ADMINS,
   DELETE_CLIENT_ADMINS,
+  GET_AVAIL_PHONE_NUMBERS,
+  EDIT_MESSAGING_NUMBER,
 } from './constants';
 import {
   fetchClientAdmin,
+  fetchSites,
   fetchClientAdminSuccess,
   fetchClientAdminError,
   addClientAdminSuccess,
@@ -27,6 +30,10 @@ import {
   fetchUsersByRolesError,
   fetchSitesSuccess,
   fetchSitesError,
+  getAvailPhoneNumbersSuccess,
+  getAvailPhoneNumbersError,
+  editMessagingNumberSuccess,
+  editMessagingNumberError,
 } from './actions';
 // Individual exports for testing
 
@@ -42,6 +49,8 @@ export function* dashboardClientAdminsSaga() {
   const watcherD = yield fork(deleteClientAdminWatcher);
   const watcherE = yield fork(fetchUsersByRolesWatcher);
   const watcherF = yield fork(fetchSitesWatcher);
+  const watcherG = yield fork(getAvailPhoneNumbersWatcher);
+  const watcherH = yield fork(editMessagingNumberWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -51,6 +60,49 @@ export function* dashboardClientAdminsSaga() {
   yield cancel(watcherD);
   yield cancel(watcherE);
   yield cancel(watcherF);
+  yield cancel(watcherG);
+  yield cancel(watcherH);
+}
+
+export function* editMessagingNumberWatcher() {
+  yield* takeLatest(EDIT_MESSAGING_NUMBER, editMessagingNumberWorker);
+}
+
+export function* editMessagingNumberWorker(action) {
+  try {
+    const requestURL = `${API_URL}/clients/editDashboardSiteMessagingNumber`;
+
+    const params = {
+      method: 'POST',
+      body: JSON.stringify({ params: action.payload }),
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchSites());
+
+    yield put(editMessagingNumberSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while adding sponsor user');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(editMessagingNumberError(err));
+  }
+}
+
+export function* getAvailPhoneNumbersWatcher() {
+  yield* takeLatest(GET_AVAIL_PHONE_NUMBERS, getAvailPhoneNumbersWorker);
+}
+
+export function* getAvailPhoneNumbersWorker() {
+  try {
+    const requestURL = `${API_URL}/twilioNumbers`;
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+    yield put(getAvailPhoneNumbersSuccess(response));
+  } catch (e) {
+    yield put(getAvailPhoneNumbersError(e));
+  }
 }
 
 export function* fetchSitesWatcher() {
@@ -67,6 +119,8 @@ export function* fetchSitesWorker(action) {
         scope: {
           include: ['user'],
         },
+      }, {
+        relation: 'phone',
       }],
     };
 
@@ -92,10 +146,6 @@ export function* fetchSitesWorker(action) {
   }
 }
 
-export function* fetchClientAdminWatcher() {
-  yield* takeLatest(FETCH_CLIENT_ADMINS, fetchClientAdminWorker);
-}
-
 export function* fetchUsersByRolesWatcher() {
   yield* takeLatest(FETCH_USERS_BY_ROLES, fetchUsersByRolesWorker);
 }
@@ -115,6 +165,10 @@ export function* fetchUsersByRolesWorker() {
     yield put(toastrActions.error('', errorMessage));
     yield put(fetchUsersByRolesError(err));
   }
+}
+
+export function* fetchClientAdminWatcher() {
+  yield* takeLatest(FETCH_CLIENT_ADMINS, fetchClientAdminWorker);
 }
 
 export function* fetchClientAdminWorker() {
