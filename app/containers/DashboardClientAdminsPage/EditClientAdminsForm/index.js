@@ -5,6 +5,7 @@ import { Field, reduxForm } from 'redux-form';
 import Input from '../../../components/Input';
 import { map } from 'lodash';
 import ReactSelect from '../../../components/Input/ReactSelect';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 @reduxForm({ form: 'dashboardEditClientAdminsForm' })
 
@@ -12,6 +13,11 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
   static propTypes = {
     addMessagingNumberClick: PropTypes.func,
     usersByRoles: PropTypes.object,
+    initialValues: PropTypes.object,
+    handleSubmit: PropTypes.func,
+    saving: PropTypes.bool,
+    deleting: PropTypes.bool,
+    onDelete: PropTypes.func,
   }
 
   render() {
@@ -28,7 +34,7 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
     }));
 
     return (
-      <form action="#" className="form-lightbox dashboard-lightbox">
+      <form action="#" className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
 
         <div className="field-row">
           <strong className="label required">
@@ -157,8 +163,18 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
         </div>
 
         <div className="field-row text-right no-margins">
-          <a className="btn btn-gray-outline">Delete</a>
-          <button type="submit" className="btn btn-primary">Update</button>
+          <a className="btn btn-gray-outline" onClick={() => { this.props.onDelete(this.props.initialValues.user_id); }} >
+            {this.props.deleting
+              ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+              : <span>{'Delete'}</span>
+            }
+          </a>
+          <button type="submit" className="btn btn-primary">
+            {this.props.saving
+              ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+              : <span>Update</span>
+            }
+          </button>
         </div>
 
       </form>

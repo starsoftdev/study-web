@@ -6,6 +6,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   static propTypes = {
     item: PropTypes.object,
     editAdminClick: PropTypes.func,
+    editMessagingClick: PropTypes.func,
   };
 
   render() {
@@ -30,7 +31,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           <a className="btn btn-primary btn-edit-site pull-right" onClick={() => { this.props.editAdminClick(this.props.item); }}>
             <span>Edit</span>
           </a>
-          <a className="btn btn-primary btn-edit-site pull-right" onClick={() => { this.props.editAdminClick(this.props.item); }}>
+          <a className="btn btn-primary btn-edit-site pull-right" onClick={() => { this.props.editMessagingClick(this.props.item); }}>
             <span>Messaging Number</span>
           </a>
         </td>

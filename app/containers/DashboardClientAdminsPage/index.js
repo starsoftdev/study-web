@@ -12,8 +12,25 @@ import { DashboardClientAdminsTable } from './DashboardClientAdminsTable';
 import { fetchClientAdmin, addClientAdmin, editClientAdmin, deleteClientAdmin, fetchUsersByRoles, setActiveSort } from './actions';
 import selectDashboardClientAdminsPage, { selectDashboardClientAdminsUsersByRoles, selectDashboardClientAdmins, selectDashboardClientAdminSearchFormValues, selectDashboardEditUserProcess, selectPaginationOptions } from './selectors';
 
+import {
+  fetchSites,
+  getAvailPhoneNumbers,
+  fetchClientSites,
+} from '../../containers/App/actions';
+import {
+  selectSiteLocations,
+  selectAvailPhoneNumbers,
+  selectClientSites,
+} from '../../containers/App/selectors';
+
 export class DashboardClientAdminsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    siteLocations: PropTypes.array,
+    availPhoneNumbers: PropTypes.array,
+    fullSiteLocations: PropTypes.object,
+    fetchClientSites: PropTypes.func,
+    fetchSites: PropTypes.func,
+    getAvailPhoneNumbers: PropTypes.func,
     fetchClientAdmins: PropTypes.func,
     clientAdmins: PropTypes.object,
     addClientAdmin: PropTypes.func,
@@ -30,9 +47,17 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
   componentWillMount() {
     this.props.fetchClientAdmins();
     this.props.fetchUsersByRoles();
+
+    this.props.fetchSites();
+    this.props.getAvailPhoneNumbers();
+    // TODO: change client_id
+    this.props.fetchClientSites(1, {});
   }
 
   render() {
+    console.log('*********Sites*********', this.props.siteLocations);
+    console.log('*********Number*********', this.props.availPhoneNumbers);
+    console.log('*********ClientSites*****', this.props.fullSiteLocations);
     const { usersByRoles, clientAdmins, editUserProcess, addClientAdmin, editClientAdmin, deleteClientAdmin, paginationOptions, setActiveSort, clientAdminSearchFormValues } = this.props;
 
     return (
@@ -62,6 +87,9 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
 }
 
 const mapStateToProps = selectDashboardClientAdminsPage({
+  siteLocations : selectSiteLocations(),
+  fullSiteLocations : selectClientSites(),
+  availPhoneNumbers: selectAvailPhoneNumbers(),
   clientAdmins: selectDashboardClientAdmins(),
   editUserProcess: selectDashboardEditUserProcess(),
   paginationOptions: selectPaginationOptions(),
@@ -71,6 +99,9 @@ const mapStateToProps = selectDashboardClientAdminsPage({
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchSites:       () => dispatch(fetchSites()),
+    fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
+    getAvailPhoneNumbers: () => dispatch(getAvailPhoneNumbers()),
     fetchClientAdmins: () => dispatch(fetchClientAdmin()),
     fetchUsersByRoles: () => dispatch(fetchUsersByRoles()),
     addClientAdmin: (payload) => dispatch(addClientAdmin(payload)),

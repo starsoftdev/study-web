@@ -22,6 +22,9 @@ import {
   FETCH_USERS_BY_ROLES_SUCCESS,
   FETCH_USERS_BY_ROLES_ERROR,
   SET_ACTIVE_SORT,
+  FETCH_SITES,
+  FETCH_SITES_SUCCESS,
+  FETCH_SITES_ERROR,
 } from './constants';
 
 export function fetchClientAdmin(payload) {
@@ -41,6 +44,27 @@ export function fetchClientAdminSuccess(payload) {
 export function fetchClientAdminError(payload) {
   return {
     type: FETCH_CLIENT_ADMINS_ERROR,
+    payload,
+  };
+}
+
+export function fetchSites(payload) {
+  return {
+    type: FETCH_SITES,
+    payload,
+  };
+}
+
+export function fetchSitesSuccess(payload) {
+  return {
+    type: FETCH_SITES_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchSitesError(payload) {
+  return {
+    type: FETCH_SITES_ERROR,
     payload,
   };
 }

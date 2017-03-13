@@ -29,6 +29,12 @@ export class DashboardClientAdminsSearch extends React.Component {
     this.addClientAdmin = this.addClientAdmin.bind(this);
   }
 
+  componentWillReceiveProps(newProps) {
+    if (!newProps.editUserProcess.saving && this.props.editUserProcess.saving) {
+      this.closeAddClientAdminModal();
+    }
+  }
+
   closeAddClientAdminModal() {
     this.setState({ addClientAdminModalOpen: false });
   }
