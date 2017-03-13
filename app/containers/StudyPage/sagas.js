@@ -325,7 +325,7 @@ function* fetchPatients(studyId, text, campaignId, sourceId) {
       queryParams.text = text;
     }
     const queryString = composeQueryString(queryParams);
-    const requestURL = `${API_URL}/studies/${studyId}/patients${queryString}`;
+    const requestURL = `${API_URL}/studies/${studyId}/patients?${queryString}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
