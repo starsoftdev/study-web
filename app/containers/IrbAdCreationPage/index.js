@@ -156,7 +156,6 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
                 <Helmet title="Order IRB Ad Creation - StudyKIK" />
                 <ComingSoon />
               </div>
-              
           }
         </div>
       );
