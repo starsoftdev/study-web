@@ -95,7 +95,7 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
             <Field
               name="bd"
               component={ReactSelect}
-              placeholder="Select DB"
+              placeholder="Select BD"
               options={bds}
             />
           </div>
