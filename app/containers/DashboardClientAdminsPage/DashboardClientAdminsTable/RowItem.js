@@ -30,12 +30,12 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         <td>
           <div className="btns-area row pull-right">
             <div className="col pull-left">
-              <a className="btn btn-primary btn-edit-site pull-right" onClick={() => { this.props.editMessagingClick(this.props.item); }}>
+              <a className="btn btn-primary btn-edit-site" onClick={() => { this.props.editMessagingClick(this.props.item); }}>
                 <span>Messaging Number</span>
               </a>
             </div>
             <div className="col pull-left">
-              <a className="btn btn-primary btn-edit-site pull-right" onClick={() => { this.props.editAdminClick(this.props.item); }}>
+              <a className="btn btn-primary btn-edit-site" onClick={() => { this.props.editAdminClick(this.props.item); }}>
                 <span>Edit</span>
               </a>
             </div>
