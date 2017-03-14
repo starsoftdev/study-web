@@ -25,6 +25,10 @@ import {
 
   CLEAR_COUPON,
 
+  FETCH_PROTOCOLS,
+  FETCH_PROTOCOLS_SUCCESS,
+  FETCH_PROTOCOLS_ERROR,
+
   FETCH_REWARDS,
   FETCH_REWARDS_SUCCESS,
   FETCH_REWARDS_ERROR,
@@ -1115,6 +1119,26 @@ export function fetchClientAdminsError(payload) {
 export function sendThankYouEmail(payload) {
   return {
     type: SEND_THANK_YOU_EMAIL,
+    payload,
+  };
+}
+
+export function fetchProtocols() {
+  return {
+    type: FETCH_PROTOCOLS,
+  };
+}
+
+export function protocolsFetched(payload) {
+  return {
+    type: FETCH_PROTOCOLS_SUCCESS,
+    payload,
+  };
+}
+
+export function protocolsFetchingError(payload) {
+  return {
+    type: FETCH_PROTOCOLS_ERROR,
     payload,
   };
 }
