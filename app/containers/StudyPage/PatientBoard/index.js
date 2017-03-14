@@ -35,6 +35,7 @@ class PatientBoard extends React.Component {
   static propTypes = {
     currentPatientId: React.PropTypes.number,
     currentPatientCategoryId: React.PropTypes.number,
+    currentPatient: React.PropTypes.object,
     fetchPatientDetails: React.PropTypes.func.isRequired,
     openPatientModal: React.PropTypes.bool.isRequired,
     openScheduledModal: React.PropTypes.bool.isRequired,
@@ -61,6 +62,7 @@ class PatientBoard extends React.Component {
     };
     this.onPatientClick = this.onPatientClick.bind(this);
     this.onPatientTextClick = this.onPatientTextClick.bind(this);
+    this.onPatientDraggedToScheduled = this.onPatientDraggedToScheduled.bind(this);
     this.closePatientModal = this.closePatientModal.bind(this);
     this.showModal = this.showModal.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
@@ -90,6 +92,13 @@ class PatientBoard extends React.Component {
     }
     // set up the redux state for opening the modal
     setOpenPatientModal(show);
+  }
+
+  onPatientDraggedToScheduled(patientId, patientCategoryId) {
+    const { setCurrentPatientId, setCurrentPatientCategoryId, showScheduledModal } = this.props;
+    setCurrentPatientId(patientId);
+    setCurrentPatientCategoryId(patientCategoryId);
+    showScheduledModal();
   }
 
   onPatientTextClick(category, patient) {
@@ -164,14 +173,14 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, studyId, openScheduledModal, showScheduledModal, ePMS } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, showScheduledModal, ePMS, currentPatient } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !showScheduledModal })}>
           <nav className="nav-status">
             <ul className={classNames('list-inline', { stick: this.state.stick })}>
               {patientCategories.map(patientCategory => (
-                <PatientCategory key={patientCategory.id} category={patientCategory} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} />
+                <PatientCategory key={patientCategory.id} category={patientCategory} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} onPatientDraggedToScheduled={this.onPatientDraggedToScheduled} />
               ))}
             </ul>
           </nav>
@@ -179,7 +188,7 @@ class PatientBoard extends React.Component {
             onClose={this.closePatientModal}
             ePMS={ePMS}
           />
-          <ScheduledPatientModal show={openScheduledModal} onHide={showScheduledModal} />
+          <ScheduledPatientModal show={openScheduledModal && currentPatient != null} onHide={showScheduledModal} />
         </div>
         <div className="patients-form-closer" onClick={this.closePatientModal} />
       </div>
@@ -189,6 +198,7 @@ class PatientBoard extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentPatientId: Selector.selectCurrentPatientId(),
+  currentPatient: Selector.selectCurrentPatient(),
   currentPatientCategoryId: Selector.selectCurrentPatientCategoryId(),
   carousel: Selector.selectCarousel(),
   openPatientModal: Selector.selectOpenPatientModal(),
