@@ -59,7 +59,7 @@ class AvatarMenu extends React.Component {
                 <li><Link to="/app/proposals" onClick={() => this.handleClickOutside()}>PROPOSALS</Link></li>
               }
               { userRoleType !== 'client' &&
-                <li><Link to="/app/project-agreements" onClick={() => this.handleClickOutside()}>RECEIPTS & PROJECT AGREEMENTS</Link></li>
+                <li><Link to="/app/receipts-project-agreements" onClick={() => this.handleClickOutside()}>RECEIPTS & PROJECT AGREEMENTS</Link></li>
               }
               <a
                 onClick={() => {

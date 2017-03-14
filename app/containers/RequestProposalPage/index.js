@@ -107,7 +107,10 @@ export class RequestProposalPage extends Component {
         }
         {
           userRoleType === 'sponsor' &&
-            <ComingSoon />
+            <div>
+              <Helmet title="Request Proposal - StudyKIK" />
+              <ComingSoon />
+            </div>
         }
       </div>
     );
