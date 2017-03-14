@@ -29,12 +29,12 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
 
   componentWillMount() {
     if (this.props.clientSites) {
-      const vSelected = this.props.clientSites.map((item, index) => (
+      const selectedSites = this.props.clientSites.map((item) => (
         item.phone_id
-      ))
+      ));
       this.setState({
-        vSelected: vSelected,
-      })
+        vSelected: selectedSites,
+      });
     }
   }
 
@@ -42,11 +42,11 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
     if (e === -1) {
       this.props.addMessagingNumberClick();
     } else {
-      const vSelected = this.state.vSelected;
-      vSelected[index] = e;
+      const selectedSites = this.state.vSelected;
+      selectedSites[index] = e;
       this.setState({
-        vSelected: vSelected,
-      })
+        vSelected: selectedSites,
+      });
     }
   }
 
