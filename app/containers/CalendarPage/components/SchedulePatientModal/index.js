@@ -22,6 +22,7 @@ export default class SchedulePatientModal extends Component {
     isAdmin: PropTypes.bool.isRequired,
     sites: PropTypes.array.isRequired,
     indications: PropTypes.array.isRequired,
+    protocols: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     handleCloseModal: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
@@ -94,13 +95,18 @@ export default class SchedulePatientModal extends Component {
       if (!selectedSite) {
         throw new Error('SiteLocation options are not properly populated.');
       }
-      const protocolOptions = selectedSite.studies.map(study => ({
-        label: study.protocolNumber,
-        value: study.protocolNumber,
-        indication: _.find(this.props.indications, { id: study.indication_id }).name,
-        studyId: study.id,
-        siteId: siteLocationOption.siteId,
-      }));
+
+      const protocolOptions = selectedSite.studies.map(study => {
+        const protocolNumber = _.find(this.props.protocols, { id: study.protocol_id }).number;
+
+        return {
+          label: protocolNumber,
+          value: protocolNumber,
+          indication: _.find(this.props.indications, { id: study.indication_id }).name,
+          studyId: study.id,
+          siteId: siteLocationOption.siteId,
+        };
+      });
       this.setState({
         siteLocation: siteLocationOption,
         protocol: null,

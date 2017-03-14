@@ -94,6 +94,10 @@ export const FETCH_USER                            = 'App/FETCH_USER';
 export const FETCH_USER_SUCCESS                    = 'App/FETCH_USER_SUCCESS';
 export const FETCH_USER_ERROR                      = 'App/FETCH_USER_ERROR';
 
+export const FETCH_PROTOCOLS                       = 'App/FETCH_PROTOCOLS';
+export const FETCH_PROTOCOLS_SUCCESS               = 'App/FETCH_PROTOCOLS_SUCCESS';
+export const FETCH_PROTOCOLS_ERROR                 = 'App/FETCH_PROTOCOLS_ERROR';
+
 export const CLEAR_SELECTED_SITE                   = 'App/CLEAR_SELECTED_SITE';
 export const CLEAR_SELECTED_USER                   = 'App/CLEAR_SELECTED_USER';
 

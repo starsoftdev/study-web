@@ -17,6 +17,7 @@ import {
   FETCH_COUPON,
   FETCH_REWARDS,
   FETCH_REWARDS_BALANCE,
+  FETCH_PROTOCOLS,
   REDEEM,
   FETCH_CARDS,
   SAVE_CARD,
@@ -64,6 +65,8 @@ import {
   levelsFetchingError,
   couponFetched,
   couponFetchingError,
+  protocolsFetched,
+  protocolsFetchingError,
   rewardsFetched,
   rewardsFetchingError,
   rewardsBalanceFetched,
@@ -134,6 +137,7 @@ export default function* baseDataSaga() {
   yield fork(fetchLevelsWatcher);
   yield fork(fetchCouponWatcher);
   yield fork(fetchCardsWatcher);
+  yield fork(fetchProtocolsWatcher);
   yield fork(fetchRewardsWatcher);
   yield fork(fetchRewardsBalanceWatcher);
   yield fork(redeemWatcher);
@@ -274,6 +278,20 @@ export function* fetchCouponWatcher() {
       yield put(couponFetched(response));
     } catch (err) {
       yield put(couponFetchingError(err));
+    }
+  }
+}
+
+export function* fetchProtocolsWatcher() {
+  while (true) {
+    try {
+      yield take(FETCH_PROTOCOLS);
+      const requestURL = `${API_URL}/protocols`;
+      const response = yield call(request, requestURL);
+
+      yield put(protocolsFetched(response));
+    } catch (err) {
+      yield put(protocolsFetchingError(err));
     }
   }
 }
