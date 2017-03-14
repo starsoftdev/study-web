@@ -49,6 +49,7 @@ function ReactSelect({
       placeholder={placeholder}
       className="form-control"
       simpleValue={!objectValue}
+      autosize={false}
       {...rest}
     />
   );
