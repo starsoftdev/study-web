@@ -9,6 +9,7 @@ export class DashboardIndicationTable extends React.Component { // eslint-disabl
     levels: PropTypes.object,
     editIndication: PropTypes.func,
     deleteIndication: PropTypes.func,
+    addIndicationProcess: PropTypes.object,
   }
 
   componentDidMount() {
@@ -26,18 +27,13 @@ export class DashboardIndicationTable extends React.Component { // eslint-disabl
             <tr>
               <th>Indication<i className="caret-arrow"></i></th>
               <th>TIER <i className="caret-arrow"></i></th>
-              {
-                levels.details.map((level) =>
-                  <th key={level.id}>{level.name} <i className="caret-arrow"></i></th>
-                )
-              }
               <th></th>
             </tr>
           </thead>
           <tbody>
             {
             indications.details.map((item, index) => (
-              <RowItem key={index} item={item} levels={levels} editIndication={this.props.editIndication} deleteIndication={this.props.deleteIndication} />
+              <RowItem key={index} item={item} levels={levels} editIndication={this.props.editIndication} deleteIndication={this.props.deleteIndication} addIndicationProcess={this.props.addIndicationProcess} />
             ))
           }
           </tbody>

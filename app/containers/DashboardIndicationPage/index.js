@@ -23,7 +23,7 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
     addIndication: PropTypes.func,
     addLevelProcess: PropTypes.object,
     addIndicationProcess: PropTypes.object,
-    editIndicatioin: PropTypes.func,
+    editIndication: PropTypes.func,
     deleteIndication: PropTypes.func,
   };
 
@@ -49,8 +49,9 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
         <DashboardIndicationTable
           indications={indications}
           levels={levels}
-          editIndication={this.props.editIndicatioin}
+          editIndication={this.props.editIndication}
           deleteIndication={this.props.deleteIndication}
+          addIndicationProcess={addIndicationProcess}
         />
       </div>
     );
