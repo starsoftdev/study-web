@@ -357,7 +357,10 @@ export class CalendarPage extends React.Component {
         }
         {
           userRoleType === 'sponsor' &&
-            <ComingSoon />
+            <div>
+              <Helmet title="Calendar - StudyKIK" />
+              <ComingSoon />
+            </div>
         }
       </div>
     );
