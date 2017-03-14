@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 import selectProjectAgreementsPage from './selectors';
 import ComingSoon from '../../components/ComingSoon';
 
@@ -13,6 +14,7 @@ export class ProjectAgreementsPage extends React.Component { // eslint-disable-l
   render() {
     return (
       <div>
+        <Helmet title="Receipts & Project Agreements - StudyKIK" />
         <ComingSoon />
       </div>
     );

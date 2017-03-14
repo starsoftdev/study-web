@@ -152,7 +152,11 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
           }
           {
             userRoleType === 'sponsor' &&
-              <ComingSoon />
+              <div>
+                <Helmet title="Order IRB Ad Creation - StudyKIK" />
+                <ComingSoon />
+              </div>
+              
           }
         </div>
       );
