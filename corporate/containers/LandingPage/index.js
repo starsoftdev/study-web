@@ -110,8 +110,7 @@ export class LandingPage extends React.Component {
       unsubscribed: false,
       study_id: landing.id,
       study_source_id: studySourceId,
-      indicationName: landing.indication.name,
-      protocolNumber: landing.protocolNumber,
+      indicationName: landing.indication.name
     };
 
     this.props.subscribeFromLanding(data);
