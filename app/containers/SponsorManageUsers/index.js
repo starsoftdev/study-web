@@ -7,7 +7,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
+import Helmet from 'react-helmet';
 import SponsorManageUsersSearch from '../../containers/SponsorManageUsers/SponsorManageUsersSearch';
 import SponsorManageUsersAdminsTable from '../../containers/SponsorManageUsers/AdminsTable';
 import SponsorManageUsersProtocolsTable from '../../containers/SponsorManageUsers/ProtocolsTable';
@@ -90,6 +90,7 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
   render() {
     return (
       <div className="container-fluid sponsor-portal">
+        <Helmet title="Manage Users - StudyKIK" />
         <section className="manage-sponsor-user">
           <h2 className="main-heading">MANAGE USERS</h2>
           <SponsorManageUsersSearch

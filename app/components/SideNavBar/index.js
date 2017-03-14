@@ -48,14 +48,14 @@ class SideNavBar extends React.Component {
     } else {
       menuItemsGroupA = [
         { upperText: 'Home', link: '/app', icon: 'icomoon-icon_house_alt' },
-        { upperText: 'List New Protocol', link: '/app/list-new-study', icon: 'icomoon-screen' },
+        { upperText: 'List New Protocol', link: '/app/list-new-protocol', icon: 'icomoon-screen' },
         { upperText: 'Order IRB Ad Creation', link: '/app/order-irb-ad-creation', icon: 'icomoon-irb' },
         { upperText: 'Request Proposal', link: '/app/request-proposal', icon: 'icomoon-doller' },
         { upperText: 'Find Out How Many Sites Are Listing Your Protocol', link: '/app/find-out-how-many-sites-are-listing-your-protocol', icon: 'icomoon-help-with-circle' },
       ];
       menuItemsGroupB = [
         { upperText: 'Calendar', link: '/app/calendar', icon: 'icomoon-icon_calendar' },
-        { upperText: 'Manage Users', lowerText: '', link: '/app/protocol-users', icon: 'icomoon-icon_group' },
+        { upperText: 'Manage Users', lowerText: '', link: '/app/manage-users', icon: 'icomoon-icon_group' },
       ];
     }
     return (
