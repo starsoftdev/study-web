@@ -39,7 +39,7 @@ export function* changePassword() {
       const response = yield call(request, requestURL, params);
 
       yield put(passwordChanged(response));
-      yield put(toastrActions.success('', 'Success! Check your email to confirm password change.'));
+      yield put(toastrActions.success('', 'You have successfully changed your password.'));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
