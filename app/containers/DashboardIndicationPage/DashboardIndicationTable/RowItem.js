@@ -12,7 +12,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     levels: PropTypes.object,
     editIndication: PropTypes.func,
     deleteIndication: PropTypes.func,
-    editIndicationProcess: PropTypes.object,
+    addIndicationProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -28,6 +28,13 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     this.editIndication = this.editIndication.bind(this);
   }
 
+  componentWillReceiveProps(newProps) {
+    if ((!newProps.addIndicationProcess.saving && this.props.addIndicationProcess.saving) || (!newProps.addIndicationProcess.deleting && this.props.addIndicationProcess.deleting)) {
+      this.closeAddIndicationModal();
+    }
+  }
+
+
   closeAddIndicationModal() {
     this.setState({ addIndicationModalOpen: false });
   }
@@ -41,7 +48,27 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   }
 
   editIndication(param) {
-    this.props.editIndication(param);
+    const { levels } = this.props;
+    const newParam = [];
+    levels.details.map((item) => {
+      const tName = item.name;
+      if (Object.prototype.hasOwnProperty.call(param, tName)) {
+        const temp = {
+          levelId: item.id,
+          levelName: item.name,
+          levelGoal: param[tName],
+        };
+        newParam.push(temp);
+      }
+      return item;
+    });
+    const reParam = {
+      id: param.id,
+      name: param.name,
+      tier: param.tier,
+      patientGoals: newParam,
+    };
+    this.props.editIndication(reParam);
   }
 
   render() {
@@ -49,7 +76,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
     const nValues = {};
     forEach(item.patientIndicationGoals, (data) => {
-      if (item.patientIndicationGoals.length > 0) {
+      if (item.patientIndicationGoals && item.patientIndicationGoals.length && item.patientIndicationGoals.length > 0) {
         const pId = _.find(levels.details, { id: data.level_id });
         if (pId) {
           nValues[pId.name] = data.goal;
@@ -57,24 +84,9 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
       }
     });
 
-    const gValues = levels.details.map((level) => {
-      const patientGoal = item.patientIndicationGoals;
-      const pId = _.find(patientGoal, { level_id: level.id });
-      if (pId) {
-        return (
-          <td key={level.id}>
-            {pId.goal}
-          </td>
-        );
-      }
-      return (
-        <td key={level.id}></td>
-      );
-    });
-
     const tPatientGoal = item.patientIndicationGoals;
-    const tierValue = (tPatientGoal.length > 0) ? tPatientGoal[0].tierNumber : null;
-    if (tPatientGoal.length > 0) {
+    const tierValue = (tPatientGoal && tPatientGoal.length && tPatientGoal.length > 0) ? tPatientGoal[0].tierNumber : null;
+    if (tPatientGoal && tPatientGoal.length && tPatientGoal.length > 0) {
       nValues.tier = tPatientGoal[0].tierNumber;
     }
     const initialValues = {
@@ -94,7 +106,6 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         <td>
           {tierValue}
         </td>
-        {gValues}
         <td>
           <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openAddIndicationModal}>
             <span>Edit</span>
