@@ -22,21 +22,20 @@ class ScheduledPatientModal extends React.Component {
   static propTypes = {
     onHide: React.PropTypes.func,
     show: React.PropTypes.bool.isRequired,
+    currentPatient: React.PropTypes.object,
   };
+
   constructor(props) {
     super(props);
     this.state = {
     };
   }
+
   componentDidMount() {
   }
 
-  changeDate(e) {
-    this.setState({ date: e });
-  }
   render() {
     const { onHide, currentPatient, show, ...props } = this.props;
-    console.log(currentPatient);
     if (currentPatient) {
       return (
         <Modal className="custom-modal datepicker-modal scheduled-patient-modal" show={show} onHide={onHide} dialogComponentClass={CenteredModal}>
@@ -46,7 +45,7 @@ class ScheduledPatientModal extends React.Component {
                 <div className="datepicker-inner lightbox-content">
                   <div className="modal-header head">
                     <strong>SCHEDULE PATIENT</strong>
-                    <a className="lightbox-close close" onClick={() => { this.toggleModal(false); }}>
+                    <a className="lightbox-close close" onClick={onHide}>
                       <i className="icomoon-icon_close"></i>
                     </a>
                   </div>
@@ -121,9 +120,10 @@ class ScheduledPatientModal extends React.Component {
                         <div className="field reminder-field">
                           <Field
                             name="text-reminder"
+                            type="checkbox"
                             component={Checkbox}
                             title="test"
-                            className="reminder-container"
+                            className={'reminder-container'}
                           />
                           <label className="reminder-label"> Text Reminder</label>
                         </div>
