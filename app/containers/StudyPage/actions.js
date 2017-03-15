@@ -328,11 +328,12 @@ export function submitPatientUpdate(patientId, fields) {
   };
 }
 
-export function addPatientIndicationSuccess(patientId, indication) {
+export function addPatientIndicationSuccess(patientId, indication, isOriginal) {
   return {
     type: ADD_PATIENT_INDICATION_SUCCESS,
     patientId,
     indication,
+    isOriginal,
   };
 }
 
