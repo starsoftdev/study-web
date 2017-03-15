@@ -41,6 +41,7 @@ import {
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
   SUBMIT_ADD_PATIENT,
+  CHANGE_SCHEDULED_DATE,
 } from './constants';
 import _ from 'lodash';
 
@@ -320,6 +321,14 @@ function studyPageReducer(state = initialState, action) {
           text: false,
           email: false,
           other: true,
+        },
+      };
+    case CHANGE_SCHEDULED_DATE:
+      console.log(action);
+      return {
+        ...state,
+        ScheduledModal: {
+          selectedDate: action.date.startOf('day'),
         },
       };
     default:

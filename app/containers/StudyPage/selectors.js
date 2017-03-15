@@ -129,3 +129,8 @@ export const selectAddPatientStatus = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.addPatientStatus
 );
+
+export const selectSelectedDate = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.ScheduledModal ? subState.ScheduledModal.selectedDate : null
+)
