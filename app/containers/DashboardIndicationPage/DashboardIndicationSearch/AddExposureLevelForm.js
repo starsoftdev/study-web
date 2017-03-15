@@ -2,14 +2,17 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
+import formValidator from './validatorLevel';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import Input from '../../../components/Input';
 
-@reduxForm({ form: 'dashboardAddExposureLevelForm' })
+@reduxForm({ form: 'dashboardAddExposureLevelForm', validate: formValidator })
 
 export class AddExposureLevelForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     isEdit: PropTypes.bool,
     handleSubmit: PropTypes.func,
+    saving: PropTypes.bool,
   }
 
   render() {
@@ -33,7 +36,12 @@ export class AddExposureLevelForm extends React.Component { // eslint-disable-li
           {this.props.isEdit &&
             <a className="btn btn-gray-outline">Delete</a>
           }
-          <button type="submit" className="btn btn-primary">Submit</button>
+          <button type="submit" className="btn btn-primary">
+            {this.props.saving
+              ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+              : <span>Submit</span>
+            }
+          </button>
         </div>
 
       </form>

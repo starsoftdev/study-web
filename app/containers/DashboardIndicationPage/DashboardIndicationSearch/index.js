@@ -2,12 +2,12 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import { map } from 'lodash';
 import Modal from 'react-bootstrap/lib/Modal';
-import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
+import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddIndicationForm } from './AddIndicationForm';
 import { AddExposureLevelForm } from './AddExposureLevelForm';
+import _ from 'lodash';
 
 @reduxForm({ form: 'dashboardIndicationForm' })
 
@@ -94,25 +94,12 @@ export class DashboardIndicationSearch extends React.Component {
   }
 
   render() {
-    const options = [
-      { id: 1, name: 'Acne', tier: '4', ruby: '4', diamond: '100', platinum: '60', gold: '40', silver: '20', bronze: '5' },
-      { id: 2, name: 'Ring Worm', tier: '4', ruby: '30', diamond: '10', platinum: '50', gold: '60', silver: '5', bronze: '10' },
-      { id: 3, name: 'Back Pain', tier: '1', ruby: '50', diamond: '100', platinum: '60', gold: '40', silver: '50', bronze: '30' },
-      { id: 4, name: 'Leg Pain', tier: '4', ruby: '4', diamond: '100', platinum: '60', gold: '40', silver: '20', bronze: '5' },
-    ];
-
-    const itemTemplate = (controlSelectedValue) => (
-      <div key={controlSelectedValue.value}>
-        {controlSelectedValue.label}
-        <i className="close-icon icomoon-icon_close" />
-      </div>
-    );
-
-    const selectedItemsTemplate = (controlSelectedValue) => (
-      <div>
-        {controlSelectedValue[0].name}
-      </div>
-    );
+    const options = [];
+    _.forEach(this.props.indications.details, (item) => {
+      options.push({
+        label: item.name, value: item.id,
+      });
+    });
 
     return (
       <form action="#" className="form-search clearfix">
@@ -135,21 +122,9 @@ export class DashboardIndicationSearch extends React.Component {
             <div className="has-feedback ">
               <Field
                 name="indication"
-                component={ReactMultiSelect}
+                component={ReactSelect}
                 placeholder="Select Indication"
-                searchPlaceholder="Search"
-                searchable
-                optionLabelKey="label"
-                includeAllOption
-                onChange={(e) => console.log('init search', e)}
-                customOptionTemplateFunction={itemTemplate}
-                customSelectedValueTemplateFunction={selectedItemsTemplate}
-                dataSource={map(options, (option) => ({
-                  ...option,
-                  label: option.name,
-                  value: option.name,
-                }))}
-                customSearchIconClass="icomoon-icon_search2"
+                options={options}
               />
             </div>
           </div>
@@ -167,6 +142,7 @@ export class DashboardIndicationSearch extends React.Component {
               <AddIndicationForm
                 onSubmit={this.addIndication}
                 levels={this.props.levels}
+                saving={this.props.addIndicationProcess.saving}
               />
             </div>
           </Modal.Body>
@@ -183,6 +159,7 @@ export class DashboardIndicationSearch extends React.Component {
             <div className="holder clearfix">
               <AddExposureLevelForm
                 onSubmit={this.addLevel}
+                saving={this.props.addLevelProcess.saving}
               />
             </div>
           </Modal.Body>

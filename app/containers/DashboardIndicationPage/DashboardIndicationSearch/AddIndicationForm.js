@@ -2,9 +2,11 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
+import formValidator from './validatorIndication';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import Input from '../../../components/Input';
 
-@reduxForm({ form: 'dashboardAddIndicationForm' })
+@reduxForm({ form: 'dashboardAddIndicationForm', validate: formValidator })
 
 export class AddIndicationForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -13,6 +15,7 @@ export class AddIndicationForm extends React.Component { // eslint-disable-line 
     initialValues: PropTypes.object,
     levels: PropTypes.object,
     deleting: PropTypes.bool,
+    saving: PropTypes.bool,
     onDelete: PropTypes.func,
   }
 
@@ -65,9 +68,19 @@ export class AddIndicationForm extends React.Component { // eslint-disable-line 
 
         <div className="field-row text-right no-margins">
           {this.props.isEdit &&
-            <a className="btn btn-gray-outline" onClick={() => { this.props.onDelete(this.props.initialValues.id); }}>Delete</a>
+            <a className="btn btn-gray-outline" onClick={() => { this.props.onDelete(this.props.initialValues.id); }}>
+              {this.props.deleting
+                ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+                : <span>{'Delete'}</span>
+              }
+            </a>
           }
-          <button type="submit" className="btn btn-primary">{this.props.isEdit ? 'Update' : 'Submit'}</button>
+          <button type="submit" className="btn btn-primary">
+            {this.props.saving
+              ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+              : <span>{this.props.isEdit ? 'Update' : 'Submit'}</span>
+            }
+          </button>
         </div>
 
       </form>
