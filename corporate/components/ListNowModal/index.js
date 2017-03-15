@@ -81,7 +81,7 @@ class ListNowModal extends React.Component {
         <Modal.Body>
           <div className="scroll-holder jcf--scrollable">
             <span>
-              Please provide your information below and a StudyKIK Project Manager will contact you shortly!
+              Please provide your information below and a StudyKIK Project Manager will contact you shortly to get your study listed!
             </span>
             <Form
               className="form-lightbox"

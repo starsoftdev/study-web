@@ -20,6 +20,7 @@ class FilterStudyPatientsForm extends Component {
     campaignOptions: PropTypes.array.isRequired,
     sourceOptions: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    fetchStudy: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     fetchPatients: PropTypes.func.isRequired,
@@ -46,7 +47,7 @@ class FilterStudyPatientsForm extends Component {
   }
 
   searchPatient(event, type) {
-    const { fetchPatients, studyId, campaign, source, search } = this.props;
+    const { fetchPatients, fetchStudy, studyId, campaign, source, search } = this.props;
     let newCampaign = campaign;
     let newSource = source;
     /* nulling the values if all is selected */
@@ -74,6 +75,7 @@ class FilterStudyPatientsForm extends Component {
         fetchPatients(studyId, search, null, newSource);
       }
       fetchPatients(studyId, search, event, newSource);
+      fetchStudy(studyId, event);
     }
   }
 
