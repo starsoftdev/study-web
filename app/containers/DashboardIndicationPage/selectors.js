@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { get } from 'lodash';
 
 /**
  * Direct selector to the dashboardIndicationPage state domain
@@ -8,7 +9,7 @@ const selectDashboardIndicationPageDomain = () => state => state.dashboardIndica
  * Other specific selectors
  */
 
-
+const selectFormDomain = () => state => state.form;
 /**
  * Default selector used by DashboardIndicationPage
  */
@@ -37,6 +38,10 @@ const selectDashboardAddIndicationProcess = () => createSelector(
   (substate) => substate.addIndicationProcess
 );
 
+const selectDashboardIndicationSearchFormValues = () => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, 'dashboardIndicationForm.values', {})
+);
 
 export default selectDashboardIndicationPage;
 export {
@@ -45,4 +50,5 @@ export {
   selectLevels,
   selectDashboardAddLevelProcess,
   selectDashboardAddIndicationProcess,
+  selectDashboardIndicationSearchFormValues,
 };

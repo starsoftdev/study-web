@@ -20,6 +20,9 @@ import {
   DELETE_INDICATION,
   DELETE_INDICATION_SUCCESS,
   DELETE_INDICATION_ERROR,
+  EDIT_INDICATION,
+  EDIT_INDICATION_ERROR,
+  EDIT_INDICATION_SUCCESS,
 } from './constants';
 
 const initialState = {
@@ -46,8 +49,6 @@ const initialState = {
 
 function dashboardIndicationPageReducer(state = initialState, action) {
   const newLevel = _.cloneDeep(state.levels.details);
-  const newIndication = _.cloneDeep(state.indications.details);
-  let foundUserIndex = null;
   switch (action.type) {
     case FETCH_INDICATIONS:
       return {
@@ -142,14 +143,8 @@ function dashboardIndicationPageReducer(state = initialState, action) {
         },
       };
     case ADD_INDICATION_SUCCESS:
-      console.log('****ADED', action.payload);
-      newIndication.push(action.payload);
       return {
         ...state,
-        indications: {
-          details: newIndication,
-          error: action.payload,
-        },
         addIndicationProcess: {
           saving: false,
           deleting: false,
@@ -175,17 +170,8 @@ function dashboardIndicationPageReducer(state = initialState, action) {
         },
       };
     case DELETE_INDICATION_SUCCESS:
-      foundUserIndex = _.findIndex(newIndication, item => (item.id === action.payload.id));
-      if (foundUserIndex !== -1) {
-        newIndication.splice(foundUserIndex, 1);
-      }
       return {
         ...state,
-        cro: {
-          details: newIndication,
-          fetching: false,
-          error: action.payload,
-        },
         addIndicationProcess: {
           saving: false,
           deleting: false,
@@ -193,7 +179,33 @@ function dashboardIndicationPageReducer(state = initialState, action) {
         },
       };
     case DELETE_INDICATION_ERROR:
-      console.log('&&&&&&&&&&&&&$########', action.payload);
+      return {
+        ...state,
+        addIndicationProcess: {
+          saving: false,
+          deleting: false,
+          error: action.payload,
+        },
+      };
+    case EDIT_INDICATION:
+      return {
+        ...state,
+        addIndicationProcess: {
+          saving: true,
+          deleting: false,
+          error: null,
+        },
+      };
+    case EDIT_INDICATION_SUCCESS:
+      return {
+        ...state,
+        addIndicationProcess: {
+          saving: false,
+          deleting: false,
+          error: null,
+        },
+      };
+    case EDIT_INDICATION_ERROR:
       return {
         ...state,
         addIndicationProcess: {

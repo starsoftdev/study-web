@@ -14,6 +14,7 @@ class FilterBar extends Component {
     sites: PropTypes.array.isRequired,
     indications: PropTypes.array.isRequired,
     schedules: PropTypes.array.isRequired,
+    protocols: PropTypes.array.isRequired,
     fetchingSites: PropTypes.bool,
     filter: PropTypes.object.isRequired,
     updateFilter: PropTypes.func.isRequired,
@@ -69,7 +70,7 @@ class FilterBar extends Component {
 
   handleSiteLocationChoose(siteLocationOption) {
     if (siteLocationOption) {
-      const { sites, indications } = this.props;
+      const { sites, indications, protocols } = this.props;
       let indicationOptions;
 
       if (siteLocationOption.value === 'All') {
@@ -83,10 +84,13 @@ class FilterBar extends Component {
           const i = _.find(indications, { id });
           let protocolOptions = _.flatten(sites.map(site => site.studies))
             .filter(s => s.indication_id === id)
-            .map(s => ({
-              label: s.protocolNumber,
-              value: s.protocolNumber,
-            }));
+            .map(s => {
+              const protocolNumber = _.find(protocols, { id: s.protocol_id }).number;
+              return {
+                label: protocolNumber,
+                value: protocolNumber,
+              };
+            });
           protocolOptions = addAllOption(protocolOptions);
           return {
             label: i.name,
@@ -97,10 +101,13 @@ class FilterBar extends Component {
         indicationOptions = addAllOption(indicationOptions, {
           label: 'All',
           value: 'All',
-          protocolOptions: addAllOption(_.flatten(sites.map(site => site.studies)).map(s => ({
-            label: s.protocolNumber,
-            value: s.protocolNumber,
-          }))),
+          protocolOptions: addAllOption(_.flatten(sites.map(site => site.studies)).map(s => {
+            const protocolNumber = _.find(protocols, { id: s.protocol_id }).number;
+            return {
+              label: protocolNumber,
+              value: protocolNumber,
+            };
+          })),
         });
       } else {
         const selectedSite = sites.filter(s => s.id === siteLocationOption.siteId)[0];
@@ -111,10 +118,13 @@ class FilterBar extends Component {
         indicationOptions = indicationIds.map(id => {
           const i = _.find(indications, { id });
           let protocolOptions = selectedSite.studies.filter(s => s.indication_id === id)
-            .map(s => ({
-              label: s.protocolNumber,
-              value: s.protocolNumber,
-            }));
+            .map(s => {
+              const protocolNumber = _.find(protocols, { id: s.protocol_id }).number;
+              return {
+                label: protocolNumber,
+                value: protocolNumber,
+              };
+            });
           protocolOptions = addAllOption(protocolOptions);
           return {
             label: i.name,
@@ -125,10 +135,13 @@ class FilterBar extends Component {
         indicationOptions = addAllOption(indicationOptions, {
           label: 'All',
           value: 'All',
-          protocolOptions: addAllOption(selectedSite.studies.map(s => ({
-            label: s.protocolNumber,
-            value: s.protocolNumber,
-          }))),
+          protocolOptions: addAllOption(selectedSite.studies.map(s => {
+            const protocolNumber = _.find(protocols, { id: s.protocol_id }).number;
+            return {
+              label: protocolNumber,
+              value: protocolNumber,
+            };
+          })),
         });
       }
 
