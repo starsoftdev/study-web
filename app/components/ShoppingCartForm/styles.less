@@ -3,14 +3,13 @@
   height: 100%;
 
   &.no-border {
-    padding-top: 12px;
+    padding-top: 0px;
   }
 
   .order-summery {
     height: 100%;
 
     .head {
-      padding: 0;
       margin-bottom: 20px;
     }
 
@@ -27,18 +26,22 @@
   &.no-border {
     .shopping-cart {
       border: 0 !important;
-
+      
       .head {
         background: none;
         color: inherit;
         border: 0 !important;
-        padding-bottom: 0;
+        padding: 12px 14px 0 25px;
       }
     }
   }
   
   table th{
     cursor: default;
+
+    &:nth-child(3) {
+      padding-right: 0px;
+    }
   }
 }
 .table-summary{
