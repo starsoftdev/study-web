@@ -387,6 +387,9 @@ function* fetchPatientDetails() {
         },
         {
           relation: 'studySource',
+          scope: {
+            include: 'source',
+          },
         },
         {
           relation: 'textMessages',
@@ -485,11 +488,15 @@ function* submitAddPatientIndication() {
     }
 
     try {
-      const requestURL = `${API_URL}/patients/${patientId}/indications/rel/${indication.id}`;
-      yield call(request, requestURL, {
-        method: 'PUT',
+      const requestURL = `${API_URL}/patientIndications/add`;
+      const payload = yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          patientId,
+          indicationId: indication.id,
+        }),
       });
-      yield put(addPatientIndicationSuccess(patientId, indication));
+      yield put(addPatientIndicationSuccess(patientId, indication, payload.isOriginal));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -537,9 +544,13 @@ function* submitRemovePatientIndication() {
     }
 
     try {
-      const requestURL = `${API_URL}/patients/${patientId}/indications/rel/${indicationId}`;
+      const requestURL = `${API_URL}/patientIndications/delete`;
       yield call(request, requestURL, {
         method: 'DELETE',
+        body: JSON.stringify({
+          patientId,
+          indicationId,
+        }),
       });
       yield put(removePatientIndicationSuccess(patientId, indicationId));
     } catch (e) {
@@ -561,7 +572,7 @@ function* submitPatientUpdate() {
     try {
       const requestURL = `${API_URL}/patients/${patientId}`;
       const response = yield call(request, requestURL, {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify(fields),
       });
       yield put(updatePatientSuccess(response));

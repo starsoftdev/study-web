@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
-import { Field, reduxForm, reset } from 'redux-form';
+import { Field, reduxForm, reset, change } from 'redux-form';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import { StickyContainer } from 'react-sticky';
@@ -13,7 +13,7 @@ import FiltersForm from './FiltersForm';
 import StudyList from './StudyList';
 import Filter from '../../../components/Filter';
 // import { selectFilterFormValues } from './FiltersForm/selectors';
-import { selectFilterFormValues, selectLevels, selectSiteNames, selectSiteLocations, selectIndications, selectSponsors, selectProtocols, selectCro, selectUsersByRoles } from './selectors';
+import { selectFilterFormValues, selectLevels, selectSiteNames, selectSiteLocations, selectIndications, selectSponsors, selectProtocols, selectCro, selectUsersByRoles, selectStudiesTotals } from './selectors';
 import rd3 from 'react-d3';
 import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
@@ -26,6 +26,7 @@ const LineChart = rd3.LineChart;
 @reduxForm({ form: 'filterPanel', destroyOnUnmount: false })
 export class AdminDashboard extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    dispatch: PropTypes.func,
     filtersFormValues: PropTypes.object,
     paginationOptions: PropTypes.object,
     studies: PropTypes.array,
@@ -47,6 +48,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     cro: PropTypes.array,
     fetchUsersByRole: PropTypes.func,
     usersByRoles: PropTypes.object,
+    totals: PropTypes.object,
   };
 
   constructor(props) {
@@ -76,6 +78,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.fetchStudiesAccordingToFilters = this.fetchStudiesAccordingToFilters.bind(this);
+    this.percentageFilterChange = this.percentageFilterChange.bind(this);
+    this.percentageFilterSubmit = this.percentageFilterSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -187,32 +191,56 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   mapFilterValues(filters) {
     const newFilters = [];
     mapKeys(filters, (filterValues, key) => {
-      _.forEach(filterValues, (v) => {
-        if (v.label !== 'All') {
-          newFilters.push({
-            name: key,
-            type: key === 'percentage' ? 'compare' : 'value',
-            value: v.label,
-          });
-        }
-      });
+      if (key === 'percentage') {
+        newFilters.push({
+          name: key,
+          type: key === 'percentage' ? 'compare' : 'value',
+          value: filterValues.value,
+          onChange: this.percentageFilterChange,
+          onSubmit: this.percentageFilterSubmit,
+        });
+      } else {
+        _.forEach(filterValues, (v) => {
+          if (v.label !== 'All') {
+            newFilters.push({
+              name: key,
+              type: key === 'percentage' ? 'compare' : 'value',
+              value: v.label,
+            });
+          }
+        });
+      }
     });
     return newFilters;
   }
 
   fetchStudiesAccordingToFilters(value, key) {
-    const newFilterValues = _.cloneDeep(value);
     let filters = _.cloneDeep(this.props.filtersFormValues);
+    console.log(filters);
+    const newFilterValues = _.cloneDeep(value);
     filters = { ...filters, [key]:newFilterValues };
 
+    console.log(filters);
+
     _.forEach(filters, (filter, key) => {
-      const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
-      filters[key] = withoutAll;
+      if (key !== 'percentage') {
+        const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
+        filters[key] = withoutAll;
+      }
     });
 
     console.log('fetchStudiesAccordingToFilters', filters);
 
     this.props.fetchStudiesDashboard(filters);
+  }
+
+  percentageFilterChange(e) {
+    this.props.dispatch(change('dashboardFilters', 'percentage', e));
+  }
+
+  percentageFilterSubmit(e) {
+    this.props.dispatch(change('dashboardFilters', 'percentage', { ...this.props.filtersFormValues.percentage, arg: e }));
+    this.fetchStudiesAccordingToFilters({ ...this.props.filtersFormValues.percentage, arg: e }, 'percentage');
   }
 
   renderDateFooter() {
@@ -237,21 +265,48 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
   render() {
     const { customFilters, modalFilters } = this.state;
+    console.log('render modalFilters', modalFilters);
+    console.log('render customFilters', customFilters);
     const filters = concat(this.mapFilterValues(modalFilters), customFilters);
 
-    console.log(123, this.props);
+    console.log('render', filters);
+
+    const redCount = parseInt(this.props.totals.details.total_red) || 0;
+    const yellowCount = parseInt(this.props.totals.details.total_yellow) || 0;
+    const greenCount = parseInt(this.props.totals.details.total_green) || 0;
+    const purpleCount = parseInt(this.props.totals.details.total_purple) || 0;
+
+    const colorsTotal = redCount + yellowCount + greenCount + purpleCount;
+
+    const redPercent = redCount ? (redCount / colorsTotal) * 100 : 0;
+    const yellowPercent = yellowCount ? (yellowCount / colorsTotal) * 100 : 0;
+    const greenPercent = greenCount ? (greenCount / colorsTotal) * 100 : 0;
+    const purplePercent = purpleCount ? (purpleCount / colorsTotal) * 100 : 0;
+
+    const tier1Count = parseInt(this.props.totals.details.total_tier_one) || 0;
+    const tier2Count = parseInt(this.props.totals.details.total_tier_two) || 0;
+    const tier3Count = parseInt(this.props.totals.details.total_tier_three) || 0;
+    const tier4Count = parseInt(this.props.totals.details.total_tier_four) || 0;
+
+    const tiersTotal = tier1Count + tier2Count + tier3Count + tier4Count;
+
+    const tier1Percent = tier1Count ? (tier1Count / tiersTotal) * 100 : 0;
+    const tier2Percent = tier2Count ? (tier2Count / tiersTotal) * 100 : 0;
+    const tier3Percent = tier3Count ? (tier3Count / tiersTotal) * 100 : 0;
+    const tier4Percent = tier4Count ? (tier4Count / tiersTotal) * 100 : 0;
+
     const pieData1 = [
-      { label: 'RED', value: 179, percent: 37.61, color: '#dd0000' },
-      { label: 'YELLOW', value: 107, percent: 22.48, color: '#f9ce15' },
-      { label: 'GREEN', value: 165, percent: 34.66, color: '#7dbc00' },
-      { label: 'PURPLE', value: 25, percent: 5.25, color: '#873fbd' },
+      { label: 'RED', value: redCount, percent: redPercent, color: '#dd0000' },
+      { label: 'YELLOW', value: yellowCount, percent: yellowPercent, color: '#f9ce15' },
+      { label: 'GREEN', value: greenCount, percent: greenPercent, color: '#7dbc00' },
+      { label: 'PURPLE', value: purpleCount, percent: purplePercent, color: '#873fbd' },
     ];
 
     const pieData2 = [
-      { label: 'TIER 1', value: 261, percent: 54.52, color: '#00afef' },
-      { label: 'TIER 2', value: 78, percent: 17.49, color: '#f78e1e' },
-      { label: 'TIER 3', value: 65, percent: 14.57, color: '#a0cf67' },
-      { label: 'TIER 4', value: 42, percent: 9.42, color: '#949ca1' },
+      { label: 'TIER 1', value: tier1Count, percent: tier1Percent, color: '#00afef' },
+      { label: 'TIER 2', value: tier2Count, percent: tier2Percent, color: '#f78e1e' },
+      { label: 'TIER 3', value: tier3Count, percent: tier3Percent, color: '#a0cf67' },
+      { label: 'TIER 4', value: tier4Count, percent: tier4Percent, color: '#949ca1' },
     ];
 
     const lineData = [
@@ -329,7 +384,18 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
                       options={filter}
                       component={Filter}
                       onClose={() => this.removeFilter(filter)}
-                      onChange={(e) => { console.log('onChange-filter', e); }}
+                      onChange={(e) => {
+                        if (filter.onChange) {
+                          filter.onChange(e);
+                        }
+                      }}
+                      onSubmit={(e) => {
+                        if (filter.onSubmit) {
+                          filter.onSubmit(e);
+                        }
+                      }
+
+                      }
                     />
                   )}
                   <Button
@@ -350,19 +416,19 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             <ul className="list-unstyled info-list  pull-left">
               <li>
                 <strong className="heading">TODAY: </strong>
-                <span className="number">308</span>
+                <span className="number">{this.props.totals.details.total_today || 0}</span>
               </li>
               <li>
                 <strong className="heading">YESTERDAY: </strong>
-                <span className="number">749</span>
+                <span className="number">{this.props.totals.details.total_yesterday || 0}</span>
               </li>
               <li>
                 <strong className="heading">CAMPAIGN TOTAL: </strong>
-                <span className="number">275390</span>
+                <span className="number">{this.props.totals.details.total_campaign || 0}</span>
               </li>
               <li>
                 <strong className="heading">GRAND TOTAL: </strong>
-                <span className="number">476</span>
+                <span className="number">{this.props.totals.details.total_grand || 0}</span>
               </li>
             </ul>
             <ul className="list-unstyled info-list pull-left">
@@ -372,7 +438,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
                   return (
                     <li key={index}>
                       <strong className={`heading color ${colorClass}`}>{data.label}: </strong>
-                      <span className="number">{data.value} <span>({data.percent})</span></span>
+                      <span className="number">{data.value} <span>({`${data.percent}%`})</span></span>
                     </li>
                   );
                 })
@@ -399,7 +465,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
                   return (
                     <li key={index}>
                       <strong className={`heading color ${colorClass}`}>{data.label}: </strong>
-                      <span className="number">{data.value} <span>({data.percent})</span></span>
+                      <span className="number">{data.value} <span>({`${data.percent}%`})</span></span>
                     </li>
                   );
                 })
@@ -502,6 +568,7 @@ const mapStateToProps = createStructuredSelector({
   protocols: selectProtocols(),
   cro: selectCro(),
   usersByRoles: selectUsersByRoles(),
+  totals: selectStudiesTotals(),
 });
 
 function mapDispatchToProps(dispatch) {
