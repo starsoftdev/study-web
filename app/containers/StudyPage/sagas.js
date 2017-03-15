@@ -548,7 +548,7 @@ function* submitPatientUpdate() {
     try {
       const requestURL = `${API_URL}/patients/${patientId}`;
       const response = yield call(request, requestURL, {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify(fields),
       });
       yield put(updatePatientSuccess(response));
