@@ -247,7 +247,7 @@ export function* savePatientWatcher() {
       } else {
         requestURL = `${API_URL}/patients/${id}`;
         options = {
-          method: 'PUT',
+          method: 'PATCH',
           body: JSON.stringify(data),
         };
       }
