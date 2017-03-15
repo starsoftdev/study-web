@@ -13,6 +13,7 @@ export default selectStudyPageDomain;
 /**
  * Other selectors
  */
+export const selectFormDomain = () => state => state.form;
 
 export const selectCampaigns = () => createSelector(
   selectStudyPageDomain(),
@@ -130,7 +131,22 @@ export const selectAddPatientStatus = () => createSelector(
   (subState) => subState.addPatientStatus
 );
 
+export const selectIndicationId = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.study.indication_id
+);
+
 export const selectSelectedDate = () => createSelector(
   selectStudyPageDomain(),
-  (subState) => subState.ScheduledModal ? subState.ScheduledModal.selectedDate : null
+  (subState) => (subState.ScheduledModal ? subState.ScheduledModal.selectedDate : null)
 )
+
+export const selectSchedulePatientFormValues = () => createSelector(
+  selectFormDomain(),
+  (subState) => (subState.ScheduledPatientModal ? subState.ScheduledPatientModal.values : null)
+);
+
+export const selectSchedulePatientFormErrors = () => createSelector(
+  selectFormDomain(),
+  (subState) => (subState.ScheduledPatientModal ? subState.ScheduledPatientModal.syncErrors : null)
+);
