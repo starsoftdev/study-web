@@ -25,6 +25,11 @@ const initialState = {
     fetching: false,
     error: null,
   },
+  totals: {
+    details: {},
+    fetching: false,
+    error: null,
+  },
   levels: [],
   siteLocations: [],
   siteNames: [],
@@ -321,7 +326,12 @@ export default function dashboardPageReducer(state = initialState, action) {
       return {
         ...state,
         studies: {
-          details: action.payload,
+          details: action.payload.studies,
+          fetching: false,
+          error: null,
+        },
+        totals: {
+          details: action.payload.totals,
           fetching: false,
           error: null,
         },
