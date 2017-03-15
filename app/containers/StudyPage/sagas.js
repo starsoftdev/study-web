@@ -374,6 +374,9 @@ function* fetchPatientDetails() {
         },
         {
           relation: 'studySource',
+          scope: {
+            include: 'source',
+          },
         },
         {
           relation: 'textMessages',
