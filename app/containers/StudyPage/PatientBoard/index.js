@@ -11,6 +11,8 @@ import { createStructuredSelector } from 'reselect';
 import * as Selector from '../selectors';
 import { push } from 'react-router-redux';
 import moment from 'moment';
+import _ from 'lodash';
+import { touch, change } from 'redux-form';
 
 import PatientCategory from './PatientCategory';
 import PatientDetailModal from '../PatientDetail/PatientDetailModal';
@@ -25,9 +27,11 @@ import {
   switchToTextSectionDetail,
   readStudyPatientMessages,
   changeScheduledDate,
+  submitSchedule,
 } from '../actions';
+import { selectCurrentUser, selectIndications } from '../../App/selectors';
 import { markAsReadPatientMessages } from '../../App/actions';
-import { change } from 'redux-form';
+import { fields } from '../ScheduledPatientModal/validator';
 
 import Scroll from 'react-scroll';
 const scroll = Scroll.animateScroll;
@@ -41,6 +45,7 @@ class PatientBoard extends React.Component {
     fetchPatientDetails: React.PropTypes.func.isRequired,
     openPatientModal: React.PropTypes.bool.isRequired,
     openScheduledModal: React.PropTypes.bool.isRequired,
+    schedulePatientFormValues: React.PropTypes.object,
     patientCategories: React.PropTypes.array.isRequired,
     setCurrentPatientId: React.PropTypes.func.isRequired,
     setCurrentPatientCategoryId: React.PropTypes.func.isRequired,
@@ -51,6 +56,13 @@ class PatientBoard extends React.Component {
     switchToTextSection: React.PropTypes.func.isRequired,
     push: React.PropTypes.func.isRequired,
     readStudyPatientMessages: React.PropTypes.func.isRequired,
+    currentUser: React.PropTypes.object.isRequired,
+    site: React.PropTypes.object.isRequired,
+    protocol: React.PropTypes.object.isRequired,
+    indications: React.PropTypes.array.isRequired,
+    indicationId: React.PropTypes.number.isRequired,
+    schedulePatientFormErrors: React.PropTypes.object.isRequired,
+    touchSchedulePatientModal: React.PropTypes.func.isRequired,
     selectedDate: React.PropTypes.object,
     markAsReadPatientMessages: React.PropTypes.func,
     studyId: React.PropTypes.number,
@@ -71,6 +83,7 @@ class PatientBoard extends React.Component {
     this.showModal = this.showModal.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.resetFormsValues = this.resetFormsValues.bind(this);
+    this.onPatientScheduleSubmit = this.onPatientScheduleSubmit.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
   }
 
@@ -135,6 +148,39 @@ class PatientBoard extends React.Component {
     }
     // set up the redux state for opening the modal
     setOpenPatientModal(show);
+  }
+
+  onPatientScheduleSubmit(e) {
+    e.preventDefault();
+    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, site, protocol, currentUser, indicationId, selectedDate, touchSchedulePatientModal } = this.props;
+
+    if (schedulePatientFormErrors) {
+      touchSchedulePatientModal();
+      return;
+    }
+
+    const defaultDate = moment().startOf('day');
+    console.log('selectedDate', selectedDate);
+    const scheduledDate = selectedDate || defaultDate;
+    const formValues = schedulePatientFormValues;
+
+    const submitData = {
+      siteLocation: site.name,
+      indication: _.find(this.props.indications, { id: indicationId }).name,
+      protocolNumber: protocol.number,
+      patientId: currentPatient.id,
+      patientName: `${currentPatient.firstName} ${currentPatient.lastName}`,
+      userId: currentUser.id,
+      time: moment(scheduledDate).add(formValues.amPm === 'AM' ?
+      formValues.hours % 12 :
+      (formValues.hours % 12) + 12, 'hours').add(formValues.minutes, 'minutes'),
+      textReminder: formValues.textReminder || false,
+      timezone: currentUser.timezone,
+    };
+
+    console.log(submitData);
+
+    // this.props.submitSchedule(submitData);
   }
 
   handleDateChange(date) {
@@ -214,8 +260,15 @@ const mapStateToProps = createStructuredSelector({
   carousel: Selector.selectCarousel(),
   openPatientModal: Selector.selectOpenPatientModal(),
   openScheduledModal: Selector.selectOpenScheduledModal(),
+  schedulePatientFormValues: Selector.selectSchedulePatientFormValues(),
+  schedulePatientFormErrors: Selector.selectSchedulePatientFormErrors(),
   studyId: Selector.selectStudyId(),
+  indicationId: Selector.selectIndicationId(),
+  site: Selector.selectSite(),
+  protocol: Selector.selectProtocol(),
   selectedDate: Selector.selectSelectedDate(),
+  currentUser: selectCurrentUser(),
+  indications: selectIndications(),
 });
 
 const mapDispatchToProps = (dispatch) => (
@@ -232,6 +285,7 @@ const mapDispatchToProps = (dispatch) => (
     readStudyPatientMessages: (patientId, studyId) => dispatch(readStudyPatientMessages(patientId, studyId)),
     markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
     setFormValueByName: (name, attrName, value) => dispatch(change(name, attrName, value)),
+    touchSchedulePatientModal: () => dispatch(touch('ScheduledPatientModal', ...fields)),
   }
 );
 
