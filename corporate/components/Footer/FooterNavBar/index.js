@@ -14,7 +14,7 @@ function FooterNavBar() {
       {
         menuItems.map((item, index) =>
           <li key={index}>
-            <Link to={item.link} title={item.text}>{item.text}</Link>
+            <Link to={item.link}>{item.text}</Link>
           </li>
         )
       }
