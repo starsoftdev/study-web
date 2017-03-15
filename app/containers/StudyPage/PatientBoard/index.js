@@ -10,6 +10,7 @@ import { DragDropContext } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
 import * as Selector from '../selectors';
 import { push } from 'react-router-redux';
+import moment from 'moment';
 
 import PatientCategory from './PatientCategory';
 import PatientDetailModal from '../PatientDetail/PatientDetailModal';
@@ -23,6 +24,7 @@ import {
   switchToNoteSectionDetail,
   switchToTextSectionDetail,
   readStudyPatientMessages,
+  changeScheduledDate,
 } from '../actions';
 import { markAsReadPatientMessages } from '../../App/actions';
 import { change } from 'redux-form';
@@ -44,10 +46,12 @@ class PatientBoard extends React.Component {
     setCurrentPatientCategoryId: React.PropTypes.func.isRequired,
     setOpenPatientModal: React.PropTypes.func.isRequired,
     showScheduledModal: React.PropTypes.func.isRequired,
+    changeScheduledDate: React.PropTypes.func.isRequired,
     switchToNoteSection: React.PropTypes.func.isRequired,
     switchToTextSection: React.PropTypes.func.isRequired,
     push: React.PropTypes.func.isRequired,
     readStudyPatientMessages: React.PropTypes.func.isRequired,
+    selectedDate: React.PropTypes.object,
     markAsReadPatientMessages: React.PropTypes.func,
     studyId: React.PropTypes.number,
     setFormValueByName: React.PropTypes.func,
@@ -67,6 +71,7 @@ class PatientBoard extends React.Component {
     this.showModal = this.showModal.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.resetFormsValues = this.resetFormsValues.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
   }
 
   componentDidMount() {
@@ -132,6 +137,12 @@ class PatientBoard extends React.Component {
     setOpenPatientModal(show);
   }
 
+  handleDateChange(date) {
+    const { changeScheduledDate } = this.props;
+    console.log(date);
+    changeScheduledDate(date);
+  }
+
   closePatientModal() {
     const { setCurrentPatientId, setCurrentPatientCategoryId, setOpenPatientModal } = this.props;
     setCurrentPatientId(-1);
@@ -188,7 +199,7 @@ class PatientBoard extends React.Component {
             onClose={this.closePatientModal}
             ePMS={ePMS}
           />
-          <ScheduledPatientModal show={openScheduledModal && currentPatient != null} onHide={showScheduledModal} />
+          <ScheduledPatientModal show={openScheduledModal && currentPatient != null} onHide={showScheduledModal} handleSubmit={this.onPatientScheduleSubmit} handleDateChange={this.handleDateChange} />
         </div>
         <div className="patients-form-closer" onClick={this.closePatientModal} />
       </div>
@@ -204,6 +215,7 @@ const mapStateToProps = createStructuredSelector({
   openPatientModal: Selector.selectOpenPatientModal(),
   openScheduledModal: Selector.selectOpenScheduledModal(),
   studyId: Selector.selectStudyId(),
+  selectedDate: Selector.selectSelectedDate(),
 });
 
 const mapDispatchToProps = (dispatch) => (
@@ -215,6 +227,7 @@ const mapDispatchToProps = (dispatch) => (
     showScheduledModal: () => dispatch(showScheduledModal()),
     switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
     switchToTextSection: () => dispatch(switchToTextSectionDetail()),
+    changeScheduledDate: (date) => dispatch(changeScheduledDate(date)),
     push: (url) => dispatch(push(url)),
     readStudyPatientMessages: (patientId, studyId) => dispatch(readStudyPatientMessages(patientId, studyId)),
     markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),

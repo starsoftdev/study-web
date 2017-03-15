@@ -23,6 +23,7 @@ class ScheduledPatientModal extends React.Component {
     onHide: React.PropTypes.func,
     show: React.PropTypes.bool.isRequired,
     currentPatient: React.PropTypes.object,
+    handleDateChange: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -36,6 +37,7 @@ class ScheduledPatientModal extends React.Component {
 
   render() {
     const { onHide, currentPatient, show, ...props } = this.props;
+    const { onHide, currentPatient, show, handleSubmit, handleDateChange } = this.props;
     if (currentPatient) {
       return (
         <Modal className="datepicker-modal scheduled-patient-modal" show={show} onHide={onHide} dialogComponentClass={CenteredModal}>
@@ -48,6 +50,7 @@ class ScheduledPatientModal extends React.Component {
           <Modal.Body className="lightbox-card">
             <Calendar
               className="calendar custom-calendar"
+              onChange={handleDateChange}
             />
             <div className="current-date">
               Today: {moment().format('dddd, MMMM DD, YYYY')}

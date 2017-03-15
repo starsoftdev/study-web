@@ -66,6 +66,8 @@ import {
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
   FETCH_STUDY_NEW_TEXTS,
+  CHANGE_SCHEDULED_DATE,
+  SUBMIT_SCHEDULE,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -520,5 +522,19 @@ export function switchToEmailSectionDetail() {
 export function switchToOtherSectionDetail() {
   return {
     type: SWITCH_TO_OTHER_SECTION_DETAIL,
+  };
+}
+
+export function changeScheduledDate(date) {
+  return {
+    type: CHANGE_SCHEDULED_DATE,
+    date,
+  };
+}
+
+export function submitSchedule(data) {
+  return {
+    type: SUBMIT_SCHEDULE,
+    data,
   };
 }
