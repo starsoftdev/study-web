@@ -64,6 +64,11 @@ const selectUsersByRoles = () => createSelector(
   substate => substate.usersByRoles
 );
 
+const selectStudiesTotals = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.totals
+);
+
 const selectPaginationOptions = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.paginationOptions
@@ -83,4 +88,5 @@ export {
   selectProtocols,
   selectCro,
   selectUsersByRoles,
+  selectStudiesTotals,
 };

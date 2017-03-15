@@ -54,14 +54,14 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
         <td className="list">
           <ul className="list-unstyled">
             <li><span>{item.study_id}</span></li>
-            <li><span>{'33%'}</span></li>
+            <li><span>{`${item.percent ? `${item.percent}%` : ''}`}</span></li>
 
             <li><span>{item.sm_user_first_name ? `SM: ${item.sm_user_first_name} ${item.sm_user_last_name}` : ''}</span></li>
             <li><span>{item.bd_user_first_name ? `BD: ${item.bd_user_first_name} ${item.bd_user_last_name}` : ''}</span></li>
             <li><span>{item.ae_user_first_name ? `AE: ${item.ae_user_first_name} ${item.ae_user_last_name}` : ''}</span></li>
 
             {/* <li><span className={`color ${studyInfo.color.toLowerCase()}`}>{studyInfo.color}</span></li>*/}
-            <li><span className={'color red'}>{'red'}</span></li>
+            <li><span className={`color ${item.color || ''}`}>{`${item.color ? item.color.toUpperCase() : ''}`}</span></li>
           </ul>
         </td>
         <td>

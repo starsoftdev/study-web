@@ -100,7 +100,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     let selectedAllStudies = true;
     let selectedStudyCount = 0;
     const studies = map(this.state.studies, (study) => {
-      const c = study.studyInfo.id === studyId ? checked : study.selected;
+      const c = study.study_id === studyId ? checked : study.selected;
       selectedAllStudies = selectedAllStudies && c;
       if (c === true) selectedStudyCount++;
       return {
