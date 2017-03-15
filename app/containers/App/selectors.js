@@ -138,6 +138,11 @@ const selectCoupon = () => createSelector(
   (substate) => get(substate, 'baseData.coupon', {})
 );
 
+const selectProtocols = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.protocols', {})
+);
+
 const selectRewards = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.rewards', [])
@@ -352,6 +357,7 @@ export {
   selectLevels,
   selectStudyLevels,
   selectCoupon,
+  selectProtocols,
   selectRewards,
   selectRewardsBalance,
   selectCards,

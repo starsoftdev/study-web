@@ -27,6 +27,10 @@ import {
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
 
+  FETCH_PROTOCOLS,
+  FETCH_PROTOCOLS_SUCCESS,
+  FETCH_PROTOCOLS_ERROR,
+
   SAVE_CARD,
   SAVE_CARD_SUCCESS,
   SAVE_CARD_ERROR,
@@ -213,6 +217,11 @@ const initialState = {
     },
     rewards: [],
     rewardsBalance: {},
+    protocols: {
+      details: [],
+      fetching: false,
+      error: null,
+    },
     clientRoles: {
       details: [],
       fetching: false,
@@ -529,6 +538,33 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     }
+    case FETCH_PROTOCOLS:
+      baseDataInnerState = {
+        protocols: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_PROTOCOLS_SUCCESS:
+      baseDataInnerState = {
+        protocols: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_PROTOCOLS_ERROR:
+      baseDataInnerState = {
+        protocols: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
+      };
+      break;
     case FETCH_CARDS:
       baseDataInnerState = {
         cards: {

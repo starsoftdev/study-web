@@ -21,51 +21,54 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
     super(props);
 
     this.state = {
-      vSelected: false,
+      vSelected: null,
     };
 
     this.messagingNumberChange = this.messagingNumberChange.bind(this);
   }
 
-  messagingNumberChange(e) {
+  componentWillMount() {
+    if (this.props.clientSites) {
+      const selectedSites = this.props.clientSites.map((item) => (
+        item.phone_id
+      ));
+      this.setState({
+        vSelected: selectedSites,
+      });
+    }
+  }
+
+  messagingNumberChange(e, index) {
     if (e === -1) {
       this.props.addMessagingNumberClick();
+    } else {
+      const selectedSites = this.state.vSelected;
+      selectedSites[index] = e;
+      this.setState({
+        vSelected: selectedSites,
+      });
     }
   }
 
   render() {
     // const messagingNumberOptions = [{ label: '(524) 999-1234', value: 1 }, { label: '(524) 999-1234', value: 2 }, { label: '(524) 999-1234', value: 3 }];
 
-    const filteredSites = this.props.clientSites.map((item) => (
-      !this.state.vSelected
-        ? <div key={item.id} className="field-row">
-          <strong className="label">
-            <label className="add-exposure-level">{item.name}</label>
-          </strong>
-          <div className="field">
-            <Field
-              name={`site-${item.id}`}
-              component={ReactSelect}
-              placeholder="Select Messaging Number"
-              options={this.props.messagingNumberOptions}
-              onChange={this.messagingNumberChange}
-            />
-          </div>
+    const filteredSites = this.props.clientSites.map((item, index) => (
+      <div key={item.id} className="field-row">
+        <strong className="label">
+          <label className="add-exposure-level">{item.name}</label>
+        </strong>
+        <div className="field">
+          <Field
+            name={`site-${item.id}`}
+            component={ReactSelect}
+            placeholder="Select Messaging Number"
+            options={this.props.messagingNumberOptions}
+            onChange={(e) => this.messagingNumberChange(e, index)}
+            selectedValue={this.state.vSelected[index] || undefined}
+          />
         </div>
-        : <div key={item.id} className="field-row">
-          <strong className="label">
-            <label className="add-exposure-level">{item.name}</label>
-          </strong>
-          <div className="field">
-            <Field
-              name={`site-${item.id}`}
-              component={ReactSelect}
-              placeholder="Select Messaging Number"
-              options={this.props.messagingNumberOptions}
-              onChange={this.messagingNumberChange}
-            />
-          </div>
-        </div>
+      </div>
     ));
 
     return (

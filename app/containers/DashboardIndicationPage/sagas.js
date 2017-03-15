@@ -15,6 +15,7 @@ import {
 } from './constants';
 
 import {
+  fetchIndications,
   fetchIndicationsSuccess,
   fetchIndicationsError,
   fetchLevelsSuccess,
@@ -60,8 +61,14 @@ export function* fetchIndicationsWorker() {
       include: [{
         relation: 'patientIndicationGoals',
       }],
+      where: {
+        and: [],
+      },
     };
 
+    filterObj.where.and.push({
+      isArchived: false,
+    });
 
     const queryParams = {
       filter: JSON.stringify(filterObj),
@@ -131,7 +138,7 @@ export function* addIndicationWorker(action) {
       body: JSON.stringify(action.payload),
     };
     const response = yield call(request, requestURL, params);
-
+    yield put(fetchIndications());
     yield put(addIndicationSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving indication');
@@ -150,9 +157,9 @@ export function* deleteIndicationWorker(action) {
     const params = {
       method: 'DELETE',
     };
-    yield call(request, requestURL, params);
-
-    yield put(deleteIndicationSuccess({ id: action.payload }));
+    const response = yield call(request, requestURL, params);
+    yield put(fetchIndications());
+    yield put(deleteIndicationSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while deleting indication');
     yield put(toastrActions.error('', errorMessage));
@@ -169,10 +176,10 @@ export function* editIndicationWorker(action) {
     const requestURL = `${API_URL}/indications/${action.payload.id}`;
     const params = {
       method: 'PUT',
-      body: JSON.stringify(action.payload),
+      body: JSON.stringify({ param: action.payload }),
     };
     const response = yield call(request, requestURL, params);
-
+    yield put(fetchIndications());
     yield put(editIndicationSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving cro');
