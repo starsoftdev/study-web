@@ -11,7 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import { DashboardIndicationSearch } from './DashboardIndicationSearch/index';
 import { DashboardIndicationTable } from './DashboardIndicationTable';
 import { fetchIndications, fetchLevels, addLevel, addIndication, deleteIndication, editIndication } from './actions';
-import { selectIndications, selectLevels, selectDashboardAddLevelProcess, selectDashboardAddIndicationProcess } from './selectors';
+import { selectDashboardIndicationSearchFormValues, selectIndications, selectLevels, selectDashboardAddLevelProcess, selectDashboardAddIndicationProcess } from './selectors';
 
 export class DashboardIndicationPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -25,6 +25,7 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
     addIndicationProcess: PropTypes.object,
     editIndication: PropTypes.func,
     deleteIndication: PropTypes.func,
+    indicationSearchFormValues: PropTypes.object,
   };
 
   componentWillMount() {
@@ -33,7 +34,7 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
   }
 
   render() {
-    const { indications, levels, addLevel, addIndication, addLevelProcess, addIndicationProcess } = this.props;
+    const { indicationSearchFormValues, indications, levels, addLevel, addIndication, addLevelProcess, addIndicationProcess } = this.props;
     return (
       <div className="container-fluid dashboard-indication">
         <h2 className="main-heading">Indication</h2>
@@ -52,6 +53,7 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
           editIndication={this.props.editIndication}
           deleteIndication={this.props.deleteIndication}
           addIndicationProcess={addIndicationProcess}
+          indicationSearchFormValues={indicationSearchFormValues}
         />
       </div>
     );
@@ -63,6 +65,7 @@ const mapStateToProps = createStructuredSelector({
   levels: selectLevels(),
   addLevelProcess: selectDashboardAddLevelProcess(),
   addIndicationProcess: selectDashboardAddIndicationProcess(),
+  indicationSearchFormValues: selectDashboardIndicationSearchFormValues(),
 });
 
 function mapDispatchToProps(dispatch) {

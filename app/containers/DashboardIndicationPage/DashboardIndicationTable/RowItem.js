@@ -127,6 +127,8 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
                 isEdit
                 onDelete={this.deleteIndication}
                 onSubmit={this.editIndication}
+                saving={this.props.addIndicationProcess.saving}
+                deleting={this.props.addIndicationProcess.deleting}
               />
             </div>
           </Modal.Body>
