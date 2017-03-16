@@ -33,6 +33,8 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
   }
 
   componentDidMount() {
+    const defaultSort = 'protocolId';
+    this.props.setActiveSort(defaultSort, null);
   }
 
   componentWillReceiveProps() {
@@ -48,7 +50,7 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
     ev.preventDefault();
     let sort = ev.currentTarget.dataset.sort;
     let direction = 'up';
-    const defaultSort = 'orderNumber';
+    const defaultSort = 'protocolNumber';
 
     if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
       direction = 'down';
@@ -85,7 +87,7 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
           <table className="table table-messaging-suite">
             <thead>
               <tr>
-                <th>#<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="protocolId" className={(this.props.paginationOptions.activeSort === 'protocolId') ? this.props.paginationOptions.activeDirection : ''}>#<i className="caret-arrow" /></th>
                 <th onClick={this.sortBy} data-sort="protocolNumber" className={(this.props.paginationOptions.activeSort === 'protocolNumber') ? this.props.paginationOptions.activeDirection : ''}>PROTOCOL<i className="caret-arrow" /></th>
                 <th onClick={this.sortBy} data-sort="indication" className={(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}>INDICATION<i className="caret-arrow" /></th>
                 <th onClick={this.sortBy} data-sort="croName" className={(this.props.paginationOptions.activeSort === 'croName') ? this.props.paginationOptions.activeDirection : ''}>CRO<i className="caret-arrow" /></th>

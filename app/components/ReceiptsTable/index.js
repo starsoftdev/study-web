@@ -80,6 +80,11 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
   componentDidUpdate() {}
 
+  componentWillUnmount() {
+    const defaultSort = 'orderNumber';
+    this.props.setActiveSort(defaultSort, null);
+  }
+
   onClickCurrent(ev) {
     ev.preventDefault();
     const scope = this;
@@ -253,15 +258,17 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
           </colgroup>
           <thead>
             <tr>
-              <th className={this.props.paginationOptions.activeSort === 'orderNumber' ? this.props.paginationOptions.activeDirection : ''}>
+              <th
+                className={this.props.paginationOptions.activeSort === 'orderNumber' ? this.props.paginationOptions.activeDirection : ''}
+                onClick={this.sortBy}
+                data-sort="orderNumber"
+              >
                 <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
                   <span className="input-style" onClick={this.onClickAll}>
                     <input name="all" type="checkbox" />
                   </span>
                 </span>
                 <span
-                  data-sort="orderNumber"
-                  onClick={this.sortBy}
                   className={`${(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}`}
                 >#</span>
                 <i className="caret-arrow" />
