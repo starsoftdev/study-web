@@ -7,7 +7,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
+import Helmet from 'react-helmet';
 import { DashboardIndicationSearch } from './DashboardIndicationSearch/index';
 import { DashboardIndicationTable } from './DashboardIndicationTable';
 import { fetchIndications, fetchLevels, addLevel, addIndication, deleteIndication, editIndication } from './actions';
@@ -37,6 +37,7 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
     const { indicationSearchFormValues, indications, levels, addLevel, addIndication, addLevelProcess, addIndicationProcess } = this.props;
     return (
       <div className="container-fluid dashboard-indication">
+        <Helmet title="Indication - StudyKIK" />
         <h2 className="main-heading">Indication</h2>
 
         <DashboardIndicationSearch

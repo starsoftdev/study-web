@@ -6,6 +6,7 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 import { selectDashboardPortalsClients, selectDashboardPortalsFormValues, selectDashboardPortalsSponsors } from './selectors';
 import { DashboardPortalsForm } from '../DashboardPortalsPage/DashboardPortalsForm';
 import { fetchClients, fetchSponsors } from './actions';
@@ -29,6 +30,7 @@ export class DashboardPortalsPage extends React.Component { // eslint-disable-li
   render() {
     return (
       <div className="container-fluid dashboard-portals">
+        <Helmet title="Portals - StudyKIK" />
         <h2 className="main-heading">PORTALS</h2>
 
         <DashboardPortalsForm

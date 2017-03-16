@@ -6,7 +6,7 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-
+import Helmet from 'react-helmet';
 import { DashboardClientAdminsSearch } from './DashboardClientAdminsSearch';
 import { DashboardClientAdminsTable } from './DashboardClientAdminsTable';
 import { addMessagingNumber, editMessagingNumber, getAvailPhoneNumbers, fetchSites, fetchClientAdmin, addClientAdmin, editClientAdmin, deleteClientAdmin, fetchUsersByRoles, setActiveSort } from './actions';
@@ -47,6 +47,7 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
     const { addMessagingProcess, addMessagingNumber, editMessagingProcess, availPhoneNumbers, editMessagingNumber, clientSites, usersByRoles, clientAdmins, editUserProcess, addClientAdmin, editClientAdmin, deleteClientAdmin, paginationOptions, setActiveSort, clientAdminSearchFormValues } = this.props;
     return (
       <div className="container-fluid dashboard-clients-admins">
+        <Helmet title="Client Admins - StudyKIK" />
         <h2 className="main-heading">CLIENT ADMINS</h2>
 
         <DashboardClientAdminsSearch
