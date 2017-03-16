@@ -61,7 +61,6 @@ class Filter extends React.Component {
       { id: 2, label: '>', value: 'gt' },
       { id: 3, label: '=', value: 'eq' },
     ];
-    console.log(999, options);
     return (
       <div
         style={style}
@@ -75,19 +74,10 @@ class Filter extends React.Component {
           className="form-control"
           simpleValue
           onChange={(event) => {
-            console.log(333, event);
             const fullOption = _.find(comparisonOptions, (item) => (item.value === event));
             this.props.onChange(fullOption);
           }}
         />
-        {/* <ReactSelect
-          className="select"
-          input={Input}
-          name={name}
-          placeholder=""
-          options={comparisonOptions}
-          meta={{ active: true }}
-        />*/}
         <input
           type="text" name={name} className="form-control" placeholder="Search" ref={(searchVal) => (
           this.searchVal = searchVal
