@@ -742,9 +742,9 @@ export function* submitSchedule() {
   while (true) {
     const action = yield take(SUBMIT_SCHEDULE);
     try {
-      const requestURL = `${API_URL}/callReminders`;
+      const requestURL = `${API_URL}/callReminders/upsertSchedule`;
       const params = {
-        method: 'PUT',
+        method: 'POST',
         body: JSON.stringify(action.data),
       };
       const response = yield call(request, requestURL, params);
