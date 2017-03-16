@@ -262,6 +262,23 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/app/list-new-protocol',
+      name: 'listNewProtocolPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/ListNewProtocolPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([component]) => {
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/app/rewards',
       name: 'rewardsPage',
       getComponent(nextState, cb) {
@@ -445,7 +462,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/app/protocol-users',
+      path: '/app/manage-users',
       name: 'sponsorManageUsersPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -485,7 +502,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/app/project-agreements',
+      path: '/app/receipts-project-agreements',
       name: 'projectAgreementsPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -603,6 +620,28 @@ export default function createRoutes(store) {
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('dashboardCROPage', reducer.default);
           injectReducer('dashboardCROPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/app/dashboard-exposure-level',
+      name: 'dashboardExposureLevelPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardExposureLevelPage/reducer'),
+          System.import('./containers/DashboardExposureLevelPage/sagas'),
+          System.import('./containers/DashboardExposureLevelPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardExposureLevelPage', reducer.default);
+          injectReducer('dashboardExposureLevelPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });

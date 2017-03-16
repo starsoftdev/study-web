@@ -27,6 +27,10 @@ import {
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
 
+  FETCH_PROTOCOLS,
+  FETCH_PROTOCOLS_SUCCESS,
+  FETCH_PROTOCOLS_ERROR,
+
   SAVE_CARD,
   SAVE_CARD_SUCCESS,
   SAVE_CARD_ERROR,
@@ -116,6 +120,8 @@ import {
   CLEAR_CLINICAL_TRIALS_SEARCH,
   LIST_SITE_NOW_SUCCESS,
   RESET_LIST_SITE_NOW_SUCCESS,
+  GET_PROPOSAL_SUCCESS,
+  RESET_GET_PROPOSAL_SUCCESS,
   LEARN_ABOUT_FUTURE_TRIALS_SUCCESS,
   RESET_LEARN_ABOUT_FUTURE_TRIALS,
   NEW_CONTACT_SUCCESS,
@@ -152,6 +158,7 @@ const initialState = {
     subscribedFromLanding: null,
     findOutPosted: null,
     listSiteNowSuccess: null,
+    getProposalSuccess: null,
     learnAboutFutureTrialsSuccess: null,
     newContactsSuccess: null,
     sources: [],
@@ -213,6 +220,11 @@ const initialState = {
     },
     rewards: [],
     rewardsBalance: {},
+    protocols: {
+      details: [],
+      fetching: false,
+      error: null,
+    },
     clientRoles: {
       details: [],
       fetching: false,
@@ -422,6 +434,16 @@ export default function appReducer(state = initialState, action) {
         listSiteNowSuccess: null,
       };
       break;
+    case GET_PROPOSAL_SUCCESS:
+      baseDataInnerState = {
+        getProposalSuccess: true,
+      };
+      break;
+    case RESET_GET_PROPOSAL_SUCCESS:
+      baseDataInnerState = {
+        getProposalSuccess: null,
+      };
+      break;
     case LEARN_ABOUT_FUTURE_TRIALS_SUCCESS:
       baseDataInnerState = {
         learnAboutFutureTrialsSuccess: true,
@@ -529,6 +551,33 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     }
+    case FETCH_PROTOCOLS:
+      baseDataInnerState = {
+        protocols: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_PROTOCOLS_SUCCESS:
+      baseDataInnerState = {
+        protocols: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_PROTOCOLS_ERROR:
+      baseDataInnerState = {
+        protocols: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
+      };
+      break;
     case FETCH_CARDS:
       baseDataInnerState = {
         cards: {

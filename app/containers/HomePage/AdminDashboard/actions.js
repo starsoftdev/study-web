@@ -14,6 +14,10 @@ import {
   FETCH_SITE_NAMES,
   FETCH_SITE_NAMES_SUCCESS,
   FETCH_SITE_NAMES_ERROR,
+  UPDATE_DASHBOARD_STUDY,
+  UPDATE_DASHBOARD_STUDY_SUCCESS,
+  UPDATE_DASHBOARD_STUDY_ERROR,
+  CLEAR_FILTERS,
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -81,5 +85,32 @@ export function fetchSiteNamesError(payload) {
   return {
     type: FETCH_SITE_NAMES_ERROR,
     payload,
+  };
+}
+
+export function updateDashboardStudy(params) {
+  return {
+    type: UPDATE_DASHBOARD_STUDY,
+    params,
+  };
+}
+
+export function updateDashboardStudySuccess(payload) {
+  return {
+    type: UPDATE_DASHBOARD_STUDY_SUCCESS,
+    payload,
+  };
+}
+
+export function updateDashboardStudyError(payload) {
+  return {
+    type: UPDATE_DASHBOARD_STUDY_ERROR,
+    payload,
+  };
+}
+
+export function clearFilters() {
+  return {
+    type: CLEAR_FILTERS,
   };
 }

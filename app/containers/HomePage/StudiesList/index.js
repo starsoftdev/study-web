@@ -145,6 +145,11 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     }
   }
 
+  componentWillUnmount() {
+    const defaultSort = 'orderNumber';
+    this.props.setActiveSort(defaultSort, null);
+  }
+
   onSaveCard(params) {
     this.props.saveCard(this.props.currentUserStripeCustomerId, params);
   }

@@ -67,7 +67,6 @@ export class NavBar extends React.Component { // eslint-disable-line react/prefe
                 >
                   <Link
                     to={item.link}
-                    title={item.text}
                     onClick={this.handleClick}
                   >
                     <div>{item.text.toUpperCase()}</div>

@@ -35,8 +35,8 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     const daysRan = moment.utc().diff(campaignDateFrom, 'days');
     const daysLeft = campaignDateTo.diff(moment.utc(), 'days');
 
-    const startDate = campaignDateFrom.format('MM/DD/YY');
-    const endDate = campaignDateTo.format('MM/DD/YY');
+    const startDate = item.campaign_datefrom ? campaignDateFrom.format('MM/DD/YY') : '';
+    const endDate = item.campaign_dateto ? campaignDateTo.format('MM/DD/YY') : '';
 
     return (
       <tr>
@@ -47,15 +47,15 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <ul className="list-unstyled">
             <li>Today: <span>{item.today_count || 0}</span></li>
             <li>Yesterday: <span>{item.yesterday_count || 0}</span></li>
-            <li>Campaign: <span>{'TODO'}</span></li>
+            <li>Campaign: <span>{item.campaign_count || 0}</span></li>
             <li>Grand Total: <span>{item.count_total || 0}</span></li>
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
             <li>Total Days: <span>{totalDays || 0}</span></li>
-            <li>Days Ran: <span>{daysRan}</span></li>
-            <li>Days Left: <span>{daysLeft}</span></li>
+            <li>Days Ran: <span>{daysRan || 0}</span></li>
+            <li>Days Left: <span>{daysLeft || 0}</span></li>
           </ul>
         </td>
         <td>
@@ -66,7 +66,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
             <li>End Date: <span>{endDate}</span></li>
           </ul>
         </td>
-        <td>{0}</td>
+        <td>{item.views_count || 0}</td>
         <td>{0}</td>
         <td><a href="#popup-rewards-list" className="lightbox-opener">{item.reward_balance || 0}</a></td>
         <td><a href="#popup-credits-list" className="lightbox-opener">{item.customer_credits || 0}</a></td>

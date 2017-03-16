@@ -17,12 +17,14 @@ import AllEventsModal from './components/AllEventsModal';
 import {
   fetchSites,
   fetchIndications,
+  fetchProtocols,
 } from '../../containers/App/actions';
 import {
   selectCurrentUser,
   selectSites,
   selectIndications,
   selectUserRoleType,
+  selectProtocols,
 } from '../../containers/App/selectors';
 
 import {
@@ -73,9 +75,11 @@ export class CalendarPage extends React.Component {
     indications: PropTypes.array.isRequired,
     patientsByStudy: PropTypes.object.isRequired,
     schedules: PropTypes.object.isRequired,
+    protocols: PropTypes.object.isRequired,
     fetchSites: PropTypes.func.isRequired,
     fetchIndications: PropTypes.func.isRequired,
     fetchPatientsByStudy: PropTypes.func.isRequired,
+    fetchProtocols: PropTypes.func.isRequired,
     fetchSchedules: PropTypes.func.isRequired,
     submitSchedule: PropTypes.func.isRequired,
     deleteSchedule: PropTypes.func.isRequired,
@@ -117,6 +121,7 @@ export class CalendarPage extends React.Component {
     this.props.fetchSites();
     this.props.fetchIndications();
     this.props.fetchSchedules({ userId: currentUser.id });
+    this.props.fetchProtocols();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -259,7 +264,7 @@ export class CalendarPage extends React.Component {
   }
 
   render() {
-    const { currentUser, sites, indications, patientsByStudy, userRoleType } = this.props;
+    const { currentUser, sites, indications, patientsByStudy, userRoleType, protocols } = this.props;
     const { showAll, localSchedules } = this.state;
     const fetchingSites = sites.isFetching;
     const fetchingPatientsByStudy = patientsByStudy.isFetching;
@@ -297,6 +302,7 @@ export class CalendarPage extends React.Component {
                 isAdmin={isAdmin}
                 sites={sites}
                 indications={indications}
+                protocols={protocols.details}
                 schedules={localSchedules}
                 fetchingSites={fetchingSites}
                 filter={this.state.filter}
@@ -315,6 +321,7 @@ export class CalendarPage extends React.Component {
                 isAdmin={isAdmin}
                 sites={sites}
                 indications={indications}
+                protocols={protocols.details}
                 onSubmit={this.handleSubmit}
                 handleCloseModal={this.handleCloseModal}
                 submitting={false}
@@ -357,7 +364,10 @@ export class CalendarPage extends React.Component {
         }
         {
           userRoleType === 'sponsor' &&
-            <ComingSoon />
+            <div>
+              <Helmet title="Calendar - StudyKIK" />
+              <ComingSoon />
+            </div>
         }
       </div>
     );
@@ -369,6 +379,7 @@ const mapStateToProps = createStructuredSelector({
   sites: selectSites(),
   indications: selectIndications(),
   schedules: selectSchedules,
+  protocols: selectProtocols(),
   patientsByStudy: selectPatientsByStudy,
   paginationOptions: selectPaginationOptions,
   userRoleType: selectUserRoleType(),
@@ -378,6 +389,7 @@ const mapDispatchToProps = {
   fetchSites,
   fetchIndications,
   fetchPatientsByStudy,
+  fetchProtocols,
   fetchSchedules,
   submitSchedule,
   deleteSchedule,
