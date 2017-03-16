@@ -152,7 +152,7 @@ function* fetchPatientReferralStat(action) {
     if (campaignId) {
       requestURL += `?campaignId=${campaignId}`;
     }
-    console.log('fetchPatientReferralStat', studyId, campaignId);
+    // console.log('fetchPatientReferralStat', studyId, campaignId);
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -177,7 +177,7 @@ function* fetchStudyCallStats(action) {
     if (campaignId) {
       requestURL += `?campaignId=${campaignId}`;
     }
-    console.log('fetchStudyCallStats', studyId, campaignId);
+    // console.log('fetchStudyCallStats', studyId, campaignId);
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -202,7 +202,7 @@ function* fetchStudyTextStats(action) {
     if (campaignId) {
       requestURL += `?campaignId=${campaignId}`;
     }
-    console.log('fetchStudyTextStats', studyId, campaignId);
+    // console.log('fetchStudyTextStats', studyId, campaignId);
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
