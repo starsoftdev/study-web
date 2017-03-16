@@ -46,16 +46,16 @@ class AvatarMenu extends React.Component {
         <div className={`logged-user-drop avatar-menu ${avatarMenuClassName}`}>
           <div className="well">
             <ul className="list-unstyled">
-              <li><Link to="/me/profile" onClick={() => this.handleClickOutside()}>PROFILE</Link></li>
+              <li><Link to="/me/profile" onClick={() => this.handleClickOutside()}>Profile - StudyKIK</Link></li>
               <li><Link to="/app/dashboard-exposure-level" onClick={() => this.handleClickOutside()}>EXPOSURE LEVEL</Link></li>
-              <li><Link to="/app/dashboard-indication" onClick={() => this.handleClickOutside()}>INDICATION</Link></li>
-              <li><Link to="/app/dashboard-protocol" onClick={() => this.handleClickOutside()}>Protocol</Link></li>
-              <li><Link to="/app/dashboard-cro" onClick={() => this.handleClickOutside()}>CRO</Link></li>
-              <li><Link to="/app/dashboard-sponsor" onClick={() => this.handleClickOutside()}>Sponsor</Link></li>
-              <li><Link to="/app/dashboard-sponsor-admins" onClick={() => this.handleClickOutside()}>Sponsor Admins</Link></li>
-              <li><Link to="/app/dashboard-client-admins" onClick={() => this.handleClickOutside()}>Client Admins</Link></li>
-              <li><Link to="/app/dashboard-manage-users" onClick={() => this.handleClickOutside()}>Manage Users</Link></li>
-              <li><Link to="/app/dashboard-portals" onClick={() => this.handleClickOutside()}>Portals</Link></li>
+              <li><Link to="/app/dashboard-indication" onClick={() => this.handleClickOutside()}>Indication - StudyKIK</Link></li>
+              <li><Link to="/app/dashboard-protocol" onClick={() => this.handleClickOutside()}>Protocol - StudyKIK</Link></li>
+              <li><Link to="/app/dashboard-cro" onClick={() => this.handleClickOutside()}>CRO - StudyKIK</Link></li>
+              <li><Link to="/app/dashboard-sponsor" onClick={() => this.handleClickOutside()}>Sponsor - StudyKIK</Link></li>
+              <li><Link to="/app/dashboard-sponsor-admins" onClick={() => this.handleClickOutside()}>Sponsor Admins - StudyKIK</Link></li>
+              <li><Link to="/app/dashboard-client-admins" onClick={() => this.handleClickOutside()}>Client Admins - StudyKIK</Link></li>
+              <li><Link to="/app/dashboard-manage-users" onClick={() => this.handleClickOutside()}>Manage Users - StudyKIK</Link></li>
+              <li><Link to="/app/dashboard-portals" onClick={() => this.handleClickOutside()}>Portals - StudyKIK</Link></li>
               <a
                 onClick={() => {
                   this.props.handleLogoutClick();
