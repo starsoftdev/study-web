@@ -7,7 +7,6 @@ import Collapse from 'react-bootstrap/lib/Collapse';
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import classNames from 'classnames';
-import moment from 'moment-timezone';
 
 class StudyStats extends React.Component {
   static propTypes = {
