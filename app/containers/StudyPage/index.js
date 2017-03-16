@@ -102,7 +102,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { fetchingPatientCategories, fetchingStudy, campaigns, patientCategories, protocol, site, sources, study, stats } = this.props;
+    const { fetchingPatientCategories, fetchStudy, fetchingStudy, campaigns, patientCategories, protocol, site, sources, study, stats } = this.props;
     const ePMS = (study && (study.patientMessagingSuite || study.patientQualificationSuite));
     if (fetchingStudy || fetchingPatientCategories) {
       return (
@@ -148,6 +148,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           <FilterStudyPatients
             campaignOptions={campaignOptions}
             sourceOptions={sourceOptions}
+            fetchStudy={fetchStudy}
             handleSubmit={this.handleSubmit}
             ePMS={ePMS}
           />
@@ -182,7 +183,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchPatients: (studyId, text, campaignId, sourceId) => dispatch(fetchPatients(studyId, text, campaignId, sourceId)),
     fetchPatientCategories: (studyId) => dispatch(fetchPatientCategories(studyId)),
-    fetchStudy: (studyId) => dispatch(fetchStudy(studyId)),
+    fetchStudy: (studyId, campaignId) => dispatch(fetchStudy(studyId, campaignId)),
     setStudyId: (id) => dispatch(setStudyId(id)),
     updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
     fetchSources: () => dispatch(fetchSources()),
