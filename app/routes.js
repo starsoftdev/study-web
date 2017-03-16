@@ -628,6 +628,28 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/app/dashboard-exposure-level',
+      name: 'dashboardExposureLevelPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardExposureLevelPage/reducer'),
+          System.import('./containers/DashboardExposureLevelPage/sagas'),
+          System.import('./containers/DashboardExposureLevelPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardExposureLevelPage', reducer.default);
+          injectReducer('dashboardExposureLevelPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/app/dashboard-indication',
       name: 'dashboardIndicationPage',
       getComponent(nextState, cb) {
