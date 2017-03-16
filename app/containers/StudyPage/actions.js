@@ -68,6 +68,8 @@ import {
   FETCH_STUDY_NEW_TEXTS,
   CHANGE_SCHEDULED_DATE,
   SUBMIT_SCHEDULE,
+  SUBMIT_SCHEDULE_SUCCEEDED,
+  SUBMIT_SCHEDULE_FAILED,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -536,5 +538,17 @@ export function submitSchedule(data) {
   return {
     type: SUBMIT_SCHEDULE,
     data,
+  };
+}
+
+export function submitScheduleSucceeded() {
+  return {
+    type: SUBMIT_SCHEDULE_SUCCEEDED,
+  };
+}
+
+export function submitScheduleFailed() {
+  return {
+    type: SUBMIT_SCHEDULE_FAILED,
   };
 }

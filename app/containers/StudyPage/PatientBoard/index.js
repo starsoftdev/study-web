@@ -61,8 +61,9 @@ class PatientBoard extends React.Component {
     protocol: React.PropTypes.object.isRequired,
     indications: React.PropTypes.array.isRequired,
     indicationId: React.PropTypes.number.isRequired,
-    schedulePatientFormErrors: React.PropTypes.object.isRequired,
     touchSchedulePatientModal: React.PropTypes.func.isRequired,
+    submitSchedule: React.PropTypes.func.isRequired,
+    schedulePatientFormErrors: React.PropTypes.object,
     selectedDate: React.PropTypes.object,
     markAsReadPatientMessages: React.PropTypes.func,
     studyId: React.PropTypes.number,
@@ -96,8 +97,8 @@ class PatientBoard extends React.Component {
   }
 
   onPatientClick(category, patient) {
-    const { currentPatientId, fetchPatientDetails, setCurrentPatientId, setCurrentPatientCategoryId, setOpenPatientModal, switchToNoteSection } = this.props;
-    const show = (patient && currentPatientId !== patient.id) || false;
+    const { currentPatientId, fetchPatientDetails, setCurrentPatientId, setCurrentPatientCategoryId, setOpenPatientModal, switchToNoteSection, openPatientModal } = this.props;
+    const show = (!openPatientModal || (patient && currentPatientId !== patient.id)) || false;
     if (show) {
       setCurrentPatientId(patient.id);
       setCurrentPatientCategoryId(category.id);
@@ -160,7 +161,6 @@ class PatientBoard extends React.Component {
     }
 
     const defaultDate = moment().startOf('day');
-    console.log('selectedDate', selectedDate);
     const scheduledDate = selectedDate || defaultDate;
     const formValues = schedulePatientFormValues;
 
@@ -173,14 +173,14 @@ class PatientBoard extends React.Component {
       userId: currentUser.id,
       time: moment(scheduledDate).add(formValues.amPm === 'AM' ?
       formValues.hours % 12 :
-      (formValues.hours % 12) + 12, 'hours').add(formValues.minutes, 'minutes'),
+      (formValues.hours % 12) + 12, 'hours').add(formValues.minutes, 'minutes').toISOString(),
       textReminder: formValues.textReminder || false,
       timezone: currentUser.timezone,
     };
 
-    console.log(submitData);
+    // console.log(submitData);
 
-    // this.props.submitSchedule(submitData);
+    this.props.submitSchedule(submitData);
   }
 
   handleDateChange(date) {
@@ -286,6 +286,7 @@ const mapDispatchToProps = (dispatch) => (
     markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
     setFormValueByName: (name, attrName, value) => dispatch(change(name, attrName, value)),
     touchSchedulePatientModal: () => dispatch(touch('ScheduledPatientModal', ...fields)),
+    submitSchedule: (data) => dispatch(submitSchedule(data)),
   }
 );
 
