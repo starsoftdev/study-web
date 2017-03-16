@@ -11,12 +11,8 @@ import CenteredModal from '../../../app/components/CenteredModal/index';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
 import { normalizePhone } from '../../../app/common/helper/functions';
 import formValidator, { fields } from './validator';
-import { fetchIndications, fetchLevels } from '../../../app/containers/App/actions';
+import { fetchIndications, fetchLevels, listSiteNow } from '../../../app/containers/App/actions';
 import { selectIndications, selectStudyLevels } from '../../../app/containers/App/selectors';
-
-import {
-  listSiteNow,
-} from '../../../app/containers/App/actions';
 
 const formName = 'listNowForm';
 
