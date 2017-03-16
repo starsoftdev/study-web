@@ -7,6 +7,7 @@ import Collapse from 'react-bootstrap/lib/Collapse';
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import classNames from 'classnames';
+import moment from 'moment-timezone';
 
 class StudyStats extends React.Component {
   static propTypes = {
@@ -30,6 +31,12 @@ class StudyStats extends React.Component {
 
   render() {
     const { stats } = this.props;
+    const date = new Date(null);
+    let callsDuration = '00:00:00'
+    if (stats.callsDuration) {
+      date.setSeconds(stats.callsDuration);
+      callsDuration = date.toISOString().substr(11, 8);
+    }
     return (
       <div className={classNames('stats', { active: this.state.open })}>
         <div className="head">
@@ -58,7 +65,7 @@ class StudyStats extends React.Component {
               </div>
               <div className="box">
                 <i className="icomoon-icon_clock_alt" />
-                <strong className="number">{stats.callsDuration ? stats.callsDuration : 0}</strong>
+                <strong className="number">{callsDuration}</strong>
                 <h3>CALLS DURATION</h3>
               </div>
             </Col>
