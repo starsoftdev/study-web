@@ -32,7 +32,7 @@ class StudyStats extends React.Component {
   render() {
     const { stats } = this.props;
     const date = new Date(null);
-    let callsDuration = '00:00:00'
+    let callsDuration = '00:00:00';
     if (stats.callsDuration) {
       date.setSeconds(stats.callsDuration);
       callsDuration = date.toISOString().substr(11, 8);
