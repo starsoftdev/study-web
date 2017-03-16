@@ -70,7 +70,9 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       const date = moment().year(formValues.dobYear).month(formValues.dobMonth - 1).date(formValues.dobDay).startOf('day');
       formattedData.dob = date.toISOString();
     }
-    onSubmit(formattedData);
+    if (!this.props.hasError) {
+      onSubmit(formattedData);
+    }
   }
 
   deleteIndication(indication) {
@@ -323,7 +325,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
           </div>
         </div>
         <div className="btn-block text-right">
-          <Button type="submit" className="btn-add-row" disabled={hasError || savedPatient.saving}>
+          <Button type="submit" className="btn-add-row" disabled={savedPatient.saving}>
             {savedPatient.saving
               ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
               : <span>Submit</span>
