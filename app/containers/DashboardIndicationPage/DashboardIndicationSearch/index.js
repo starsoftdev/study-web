@@ -109,13 +109,6 @@ export class DashboardIndicationSearch extends React.Component {
               Add Indication
             </a>
           </div>
-
-          <div className="col pull-left">
-            <a className="btn btn-primary lightbox-opener" onClick={this.openAddExposureLevelModal}>
-              Add Exposure Level
-            </a>
-          </div>
-
         </div>
         <div className="fields-holder">
           <div className="pull-left col custom-select">

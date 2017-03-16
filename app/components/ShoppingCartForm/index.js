@@ -217,10 +217,10 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     return (
       <form className={formClassName}>
         <div className="shopping-cart order-summary order-summery scroll jcf--scrollabel">
+          <div className="head">
+            <h3>{title}</h3>
+          </div>
           <div className="scroll-holder">
-            <div className="head">
-              <h3>{title}</h3>
-            </div>
             <div className="table-holder">
               <table className="table-summary">
                 <colgroup>

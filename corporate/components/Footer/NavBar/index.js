@@ -16,7 +16,7 @@ function NavBar() {
         {
           menuItems.map((item, index) =>
             <li key={index}>
-              <Link to={item.link} title={item.text}>
+              <Link to={item.link}>
                 <div>{item.text.toUpperCase()}</div>
               </Link>
             </li>

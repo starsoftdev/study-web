@@ -101,7 +101,6 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
           <Link
             to="/reset-password"
             className="link pull-right"
-            title="Forgot Password?"
           >
             Forgot Password?
           </Link>

@@ -1015,7 +1015,6 @@ function* sendThankYouEmail(action) {
     };
 
     yield call(request, requestURL, options);
-    yield put(toastrActions.success('', 'Thank you for subscribe.'));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong.');
     yield put(toastrActions.error('', errorMessage));
