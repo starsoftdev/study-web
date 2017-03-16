@@ -5,12 +5,14 @@
  */
 
 import {
+  CLEAR_FORM_UPLOAD,
   FIND_PATIENTS_TEXT_BLAST,
   FIND_PATIENTS_TEXT_BLAST_SUCCESS,
   FILTER_PATIENTS_TEXT_BLAST,
   ADD_PATIENTS_TO_TEXT_BLAST,
   REMOVE_PATIENT_FROM_TEXT_BLAST,
   REMOVE_PATIENTS_FROM_TEXT_BLAST,
+  FETCHING_STUDY,
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
@@ -19,11 +21,12 @@ import {
   FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_STUDY,
+  FETCH_PROTOCOL_SUCCESS,
+  FETCH_SITE_SUCCESS,
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
   FETCH_STUDY_TEXTS_SUCCESS,
-  FETCH_SITE_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
   EXPORT_PATIENTS,
@@ -32,7 +35,6 @@ import {
   READ_STUDY_PATIENT_MESSAGES_SUCCESS,
   READ_STUDY_PATIENT_MESSAGES_ERROR,
   SET_STUDY_ID,
-  SET_SITE_ID,
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
   SET_OPEN_PATIENT_MODAL,
@@ -45,6 +47,7 @@ import {
   SUBMIT_PATIENT_IMPORT,
   SUBMIT_ADD_PATIENT,
   SUBMIT_ADD_PATIENT_INDICATION,
+  SUBMIT_ADD_PATIENT_FAILURE,
   SUBMIT_REMOVE_PATIENT_INDICATION,
   SUBMIT_PATIENT_UPDATE,
   SUBMIT_PATIENT_NOTE,
@@ -60,12 +63,25 @@ import {
   SWITCH_TO_TEXT_SECTION_DETAIL,
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
+  FETCH_STUDY_NEW_TEXTS,
 } from './constants';
 
 export function campaignsFetched(payload) {
   return {
     type: FETCH_CAMPAIGNS_SUCCESS,
     payload,
+  };
+}
+
+export function clearForm() {
+  return {
+    type: CLEAR_FORM_UPLOAD,
+  };
+}
+
+export function fetchingStudy() {
+  return {
+    type: FETCHING_STUDY,
   };
 }
 
@@ -113,11 +129,10 @@ export function removePatientsFromTextBlast() {
   };
 }
 
-export function fetchPatients(studyId, siteId, text, campaignId, sourceId) {
+export function fetchPatients(studyId, text, campaignId, sourceId) {
   return {
     type: FETCH_PATIENTS,
     studyId,
-    siteId,
     text,
     campaignId,
     sourceId,
@@ -125,11 +140,10 @@ export function fetchPatients(studyId, siteId, text, campaignId, sourceId) {
 }
 
 
-export function exportPatients(studyId, siteId, text, campaignId, sourceId) {
+export function exportPatients(studyId, text, campaignId, sourceId) {
   return {
     type: EXPORT_PATIENTS,
     studyId,
-    siteId,
     text,
     campaignId,
     sourceId,
@@ -145,13 +159,6 @@ export function patientsExported() {
 export function setStudyId(id) {
   return {
     type: SET_STUDY_ID,
-    id,
-  };
-}
-
-export function setSiteId(id) {
-  return {
-    type: SET_SITE_ID,
     id,
   };
 }
@@ -177,11 +184,10 @@ export function patientDetailsFetched(payload) {
   };
 }
 
-export function fetchPatientCategories(studyId, siteId) {
+export function fetchPatientCategories(studyId) {
   return {
     type: FETCH_PATIENT_CATEGORIES,
     studyId,
-    siteId,
   };
 }
 
@@ -192,11 +198,18 @@ export function patientCategoriesFetched(payload) {
   };
 }
 
-export function fetchStudy(studyId, siteId) {
+export function fetchStudy(studyId, campaignId) {
   return {
     type: FETCH_STUDY,
     studyId,
-    siteId,
+    campaignId,
+  };
+}
+
+export function protocolFetched(payload) {
+  return {
+    type: FETCH_PROTOCOL_SUCCESS,
+    payload,
   };
 }
 
@@ -316,11 +329,12 @@ export function submitPatientUpdate(patientId, fields) {
   };
 }
 
-export function addPatientIndicationSuccess(patientId, indication) {
+export function addPatientIndicationSuccess(patientId, indication, isOriginal) {
   return {
     type: ADD_PATIENT_INDICATION_SUCCESS,
     patientId,
     indication,
+    isOriginal,
   };
 }
 
@@ -385,12 +399,20 @@ export function movePatientBetweenCategoriesFailed() {
   };
 }
 
-export function submitTextBlast(patients, message, onClose) {
+export function submitTextBlast(patients, message, currentUserId, onClose) {
   return {
     type: SUBMIT_TEXT_BLAST,
     patients,
     message,
+    currentUserId,
     onClose,
+  };
+}
+
+export function fetchStudyTextNewStats(studyId) {
+  return {
+    type: FETCH_STUDY_NEW_TEXTS,
+    studyId,
   };
 }
 
@@ -445,12 +467,21 @@ export function submitAddPatient(studyId, patient, onClose) {
     onClose,
   };
 }
-export function submitAddPatientSuccess(patients) {
+
+export function submitAddPatientSuccess(patients, fileName) {
   return {
     type: SUBMIT_ADD_PATIENT_SUCCESS,
     patients,
+    fileName,
   };
 }
+
+export function submitAddPatientFailure() {
+  return {
+    type: SUBMIT_ADD_PATIENT_FAILURE,
+  };
+}
+
 export function switchToNoteSectionDetail() {
   return {
     type: SWITCH_TO_NOTE_SECTION_DETAIL,

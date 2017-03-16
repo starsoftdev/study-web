@@ -45,6 +45,7 @@
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  cursor: pointer;
 }
 .r-ss-wrap.r-ss-expanded {
   z-index: 11;
@@ -63,6 +64,7 @@
 }
 .r-ss-trigger:hover {
   border-color: #00afef;
+  cursor: pointer;
 }
 .r-ss-trigger {
   background-color: #ffffff;
@@ -100,11 +102,6 @@
   border-color: rgba(51, 51, 51, 0.45);
 }
 .r-ss-trigger.r-ss-open {
-  -webkit-border-radius: 0.25rem 0.25rem 0 0;
-  -moz-border-radius: 0.25rem 0.25rem 0 0;
-  border-radius: 0.25rem 0.25rem 0 0;
-  -moz-background-clip: padding-box;
-  -webkit-background-clip: padding-box;
   background-clip: padding-box;
 }
 .r-ss-trigger.r-ss-open:focus {
@@ -112,6 +109,7 @@
 }
 .r-ss-trigger.r-ss-placeholder {
   color: #101010;
+  cursor: pointer;
 }
 .r-ss-trigger:focus {
   border-color: black;
@@ -244,7 +242,6 @@
 }
 .r-ss-dropdown {
   position: absolute;
-  top: 99%;
   -webkit-border-radius: 0 0 0.25rem 0.25rem;
   -moz-border-radius: 0 0 0.25rem 0.25rem;
   border-radius: 0 0 0.25rem 0.25rem;
@@ -447,12 +444,13 @@
   .icomoon-icon_search2{
     position: absolute;
     top: 4px;
-    right: 9px;
+    right: 11px;
     overflow: hidden;
-    width: 16px;
+    width: 21px;
     font-size: 15px;
     line-height: 36px;
     cursor: pointer;
+    padding-left: 5px;
     &:before {
       margin-right: 20px;
     }

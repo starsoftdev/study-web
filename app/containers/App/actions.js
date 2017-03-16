@@ -29,6 +29,14 @@ import {
   FETCH_REWARDS_SUCCESS,
   FETCH_REWARDS_ERROR,
 
+  FETCH_REWARDS_BALANCE,
+  FETCH_REWARDS_BALANCE_SUCCESS,
+  FETCH_REWARDS_BALANCE_ERROR,
+
+  REDEEM,
+  REDEEM_SUCCESS,
+  REDEEM_ERROR,
+
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
@@ -54,6 +62,13 @@ import {
   FETCH_SITE_PATIENTS_SUCCESS,
   FETCH_SITE_PATIENTS_ERROR,
   UPDATE_SITE_PATIENTS,
+
+  FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
+  FETCH_PATIENT_MESSAGE_UNREAD_COUNT_SUCCESS,
+
+  FETCH_CLIENT_CREDITS,
+  FETCH_CLIENT_CREDITS_SUCCESS,
+  FETCH_CLIENT_CREDITS_ERROR,
 
   SEARCH_SITE_PATIENTS,
   SEARCH_SITE_PATIENTS_SUCCESS,
@@ -104,6 +119,69 @@ import {
   GET_CREDITS_PRICE,
   GET_CREDITS_PRICE_SUCCESS,
   GET_CREDITS_PRICE_ERROR,
+
+  FETCH_INDICATION_LEVEL_PRICE,
+  FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+  FETCH_INDICATION_LEVEL_PRICE_ERROR,
+
+  CHANGE_USERS_TIMEZONE,
+  CHANGE_USERS_TIMEZONE_SUCCESS,
+  CHANGE_USERS_TIMEZONE_ERROR,
+
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
+  SUBSCRIBE_FROM_LANDING,
+  PATIENT_SUBSCRIBED,
+  PATIENT_SUBSCRIPTION_ERROR,
+  CLEAR_LANDING,
+
+  FIND_OUT_PATIENTS,
+  FIND_OUT_PATIENTS_POSTED,
+  FIND_OUT_PATIENTS_ERROR,
+
+  CLINICAL_TRIALS_SEARCH,
+  CLINICAL_TRIALS_SEARCH_SUCCESS,
+  CLINICAL_TRIALS_SEARCH_ERROR,
+  CLEAR_CLINICAL_TRIALS_SEARCH,
+
+  ADD_EMAIL_NOTIFICATION_USER,
+  ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+  ADD_EMAIL_NOTIFICATION_USER_ERROR,
+
+  LIST_SITE_NOW,
+  LIST_SITE_NOW_SUCCESS,
+  RESET_LIST_SITE_NOW_SUCCESS,
+
+  LEARN_ABOUT_FUTURE_TRIALS,
+  LEARN_ABOUT_FUTURE_TRIALS_SUCCESS,
+  RESET_LEARN_ABOUT_FUTURE_TRIALS,
+
+  NEW_CONTACT,
+  NEW_CONTACT_SUCCESS,
+  RESET_NEW_CONTACT_SUCCESS,
+
+  FETCH_CLIENT_ADMINS,
+  FETCH_CLIENT_ADMINS_SUCCESS,
+  FETCH_CLIENT_ADMINS_ERROR,
+
+  SEND_THANK_YOU_EMAIL,
+
+  FETCH_SPONSORS,
+  FETCH_SPONSORS_SUCCESS,
+  FETCH_SPONSORS_ERROR,
+
+  FETCH_PROTOCOLS,
+  FETCH_PROTOCOLS_SUCCESS,
+  FETCH_PROTOCOLS_ERROR,
+
+  FETCH_CRO,
+  FETCH_CRO_SUCCESS,
+  FETCH_CRO_ERROR,
+
+  FETCH_USERS_BY_ROLE,
+  FETCH_USERS_BY_ROLE_SUCCESS,
+  FETCH_USERS_BY_ROLE_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -262,10 +340,11 @@ export function clearCoupon() {
 // ///////////////////////////////////////////
 // fetch rewards
 // ///////////////////////////////////////////
-export function fetchRewards(customerId) {
+export function fetchRewards(clientId, siteId) {
   return {
     type: FETCH_REWARDS,
-    customerId,
+    siteId,
+    clientId,
   };
 }
 
@@ -283,6 +362,52 @@ export function rewardsFetchingError(payload) {
   };
 }
 
+// ///////////////////////////////////////////
+// fetch rewards balance
+// ///////////////////////////////////////////
+export function fetchRewardsBalance(clientId, siteId) {
+  return {
+    type: FETCH_REWARDS_BALANCE,
+    siteId,
+    clientId,
+  };
+}
+
+export function rewardsBalanceFetched(siteId, payload) {
+  return {
+    type: FETCH_REWARDS_BALANCE_SUCCESS,
+    siteId,
+    payload,
+  };
+}
+
+export function rewardsBalanceFetchingError(payload) {
+  return {
+    type: FETCH_REWARDS_BALANCE_ERROR,
+    payload,
+  };
+}
+
+export function redeem(payload) {
+  return {
+    type: REDEEM,
+    payload,
+  };
+}
+
+export function redeemSuccess(payload) {
+  return {
+    type: REDEEM_SUCCESS,
+    payload,
+  };
+}
+
+export function redeemError(payload) {
+  return {
+    type: REDEEM_ERROR,
+    payload,
+  };
+}
 // ///////////////////////////////////////////
 // fetch cards
 // ///////////////////////////////////////////
@@ -335,9 +460,10 @@ export function cardSavingError(payload) {
 // ///////////////////////////////////////////
 // delete card
 // ///////////////////////////////////////////
-export function deleteCard(customerId, cardId) {
+export function deleteCard(clientId, customerId, cardId) {
   return {
     type: DELETE_CARD,
+    clientId,
     customerId,
     cardId,
   };
@@ -414,6 +540,27 @@ export function clientSitesFetchingError(payload) {
   };
 }
 
+export function fetchClientCredits(userId) {
+  return {
+    type: FETCH_CLIENT_CREDITS,
+    userId,
+  };
+}
+
+export function clientCreditsFetched(payload) {
+  return {
+    type: FETCH_CLIENT_CREDITS_SUCCESS,
+    payload,
+  };
+}
+
+export function clientCreditsFetchingError(payload) {
+  return {
+    type: FETCH_CLIENT_CREDITS_ERROR,
+    payload,
+  };
+}
+
 export function fetchSitePatients(userId) {
   return {
     type: FETCH_SITE_PATIENTS,
@@ -431,6 +578,20 @@ export function sitePatientsFetched(payload) {
 export function sitePatientsFetchingError(payload) {
   return {
     type: FETCH_SITE_PATIENTS_ERROR,
+    payload,
+  };
+}
+
+export function fetchPatientMessageUnreadCount(currentUser) {
+  return {
+    type: FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
+    currentUser,
+  };
+}
+
+export function patientMessageUnreadCountFetched(payload) {
+  return {
+    type: FETCH_PATIENT_MESSAGE_UNREAD_COUNT_SUCCESS,
     payload,
   };
 }
@@ -656,12 +817,13 @@ export function saveUser(clientId, id, data) {
   };
 }
 
-export function userSaved(siteId, payload) {
+export function userSaved(siteId, payload, messageHeader) {
   const userType = (siteId === 0) ? 'admin' : 'nonAdmin';
   const userResultData = {
     siteId,
     ...payload.clientRole,
     user: payload.user,
+    header: messageHeader,
   };
   const result = {
     userType,
@@ -717,6 +879,338 @@ export function getCreditsPriceSuccess(payload) {
 export function getCreditsPriceError(payload) {
   return {
     type: GET_CREDITS_PRICE_ERROR,
+    payload,
+  };
+}
+
+export function fetchIndicationLevelPrice(indicationId, levelId) {
+  return {
+    type: FETCH_INDICATION_LEVEL_PRICE,
+    indicationId,
+    levelId,
+  };
+}
+
+export function fetchIndicationLevelPriceSuccess(payload) {
+  return {
+    type: FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchIndicationLevelPriceError(payload) {
+  return {
+    type: FETCH_INDICATION_LEVEL_PRICE_ERROR,
+    payload,
+  };
+}
+
+export function changeUsersTimezone(userId, payload) {
+  return {
+    type: CHANGE_USERS_TIMEZONE,
+    userId,
+    payload,
+  };
+}
+
+export function changeUsersTimezoneSuccess(payload) {
+  return {
+    type: CHANGE_USERS_TIMEZONE_SUCCESS,
+    payload,
+  };
+}
+
+export function changeUsersTimezoneError(payload) {
+  return {
+    type: CHANGE_USERS_TIMEZONE_ERROR,
+    payload,
+  };
+}
+
+export function fetchLanding(studyId) {
+  return {
+    type: FETCH_LANDING,
+    studyId,
+  };
+}
+
+export function landingFetched(payload) {
+  return {
+    type: FETCH_LANDING_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchLandingError(payload) {
+  return {
+    type: FETCH_LANDING_ERROR,
+    payload,
+  };
+}
+
+export function subscribeFromLanding(params) {
+  return {
+    type: SUBSCRIBE_FROM_LANDING,
+    params,
+  };
+}
+
+export function patientSubscribed(payload) {
+  return {
+    type: PATIENT_SUBSCRIBED,
+    payload,
+  };
+}
+
+export function patientSubscriptionError(payload) {
+  return {
+    type: PATIENT_SUBSCRIPTION_ERROR,
+    payload,
+  };
+}
+
+export function clearLanding() {
+  return {
+    type: CLEAR_LANDING,
+  };
+}
+
+export function addEmailNotificationUser(payload) {
+  return {
+    type: ADD_EMAIL_NOTIFICATION_USER,
+    payload,
+  };
+}
+
+export function addEmailNotificationUserSuccess(payload) {
+  return {
+    type: ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+    payload,
+  };
+}
+
+export function addEmailNotificationUserError(payload) {
+  return {
+    type: ADD_EMAIL_NOTIFICATION_USER_ERROR,
+    payload,
+  };
+}
+
+export function findOutPatients(params) {
+  return {
+    type: FIND_OUT_PATIENTS,
+    params,
+  };
+}
+
+export function findOutPatientsPosted(params) {
+  return {
+    type: FIND_OUT_PATIENTS_POSTED,
+    params,
+  };
+}
+
+export function findOutPatientsError(params) {
+  return {
+    type: FIND_OUT_PATIENTS_ERROR,
+    params,
+  };
+}
+
+export function clinicalTrialsSearch(params) {
+  return {
+    type: CLINICAL_TRIALS_SEARCH,
+    params,
+  };
+}
+
+export function clinicalTrialsSearchSuccess(payload) {
+  return {
+    type: CLINICAL_TRIALS_SEARCH_SUCCESS,
+    payload,
+  };
+}
+
+export function clinicalTrialsSearchError(payload) {
+  return {
+    type: CLINICAL_TRIALS_SEARCH_ERROR,
+    payload,
+  };
+}
+
+export function clearClinicalTrialsSearch() {
+  return {
+    type: CLEAR_CLINICAL_TRIALS_SEARCH,
+  };
+}
+
+export function listSiteNow(params) {
+  return {
+    type: LIST_SITE_NOW,
+    params,
+  };
+}
+
+export function listSiteNowSuccess(payload) {
+  return {
+    type: LIST_SITE_NOW_SUCCESS,
+    payload,
+  };
+}
+
+export function resetListSiteNowSuccess(payload) {
+  return {
+    type: RESET_LIST_SITE_NOW_SUCCESS,
+    payload,
+  };
+}
+
+export function learnAboutFutureTrials(params) {
+  return {
+    type: LEARN_ABOUT_FUTURE_TRIALS,
+    params,
+  };
+}
+
+export function learnAboutFutureTrialsSuccess(payload) {
+  return {
+    type: LEARN_ABOUT_FUTURE_TRIALS_SUCCESS,
+    payload,
+  };
+}
+
+export function resetLearnAboutFutureTrialsSuccess(payload) {
+  return {
+    type: RESET_LEARN_ABOUT_FUTURE_TRIALS,
+    payload,
+  };
+}
+
+export function newContact(params) {
+  return {
+    type: NEW_CONTACT,
+    params,
+  };
+}
+
+export function newContactSuccess(payload) {
+  return {
+    type: NEW_CONTACT_SUCCESS,
+    payload,
+  };
+}
+
+export function resetNewContactSuccess(payload) {
+  return {
+    type: RESET_NEW_CONTACT_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchClientAdmins(payload) {
+  return {
+    type: FETCH_CLIENT_ADMINS,
+    payload,
+  };
+}
+
+export function fetchClientAdminsSuccess(payload) {
+  return {
+    type: FETCH_CLIENT_ADMINS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchClientAdminsError(payload) {
+  return {
+    type: FETCH_CLIENT_ADMINS_ERROR,
+    payload,
+  };
+}
+
+export function sendThankYouEmail(payload) {
+  return {
+    type: SEND_THANK_YOU_EMAIL,
+    payload,
+  };
+}
+
+export function fetchSponsors() {
+  return {
+    type: FETCH_SPONSORS,
+  };
+}
+
+export function fetchSponsorsSuccess(payload) {
+  return {
+    type: FETCH_SPONSORS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchSponsorsError(payload) {
+  return {
+    type: FETCH_SPONSORS_ERROR,
+    payload,
+  };
+}
+
+export function fetchProtocols() {
+  return {
+    type: FETCH_PROTOCOLS,
+  };
+}
+
+export function fetchProtocolsSuccess(payload) {
+  return {
+    type: FETCH_PROTOCOLS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchProtocolsError(payload) {
+  return {
+    type: FETCH_PROTOCOLS_ERROR,
+    payload,
+  };
+}
+
+export function fetchCro() {
+  return {
+    type: FETCH_CRO,
+  };
+}
+
+export function fetchCroSuccess(payload) {
+  return {
+    type: FETCH_CRO_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchCroError(payload) {
+  return {
+    type: FETCH_CRO_ERROR,
+    payload,
+  };
+}
+
+export function fetchUsersByRole() {
+  return {
+    type: FETCH_USERS_BY_ROLE,
+  };
+}
+
+export function fetchUsersByRoleSuccess(payload) {
+  return {
+    type: FETCH_USERS_BY_ROLE_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchUsersByRoleError(payload) {
+  return {
+    type: FETCH_USERS_BY_ROLE_ERROR,
     payload,
   };
 }

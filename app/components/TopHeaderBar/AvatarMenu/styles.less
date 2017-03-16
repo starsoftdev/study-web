@@ -6,6 +6,17 @@
     &.active {
       background-color: #76daff;
     }
+
+    span {
+      width: 120px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .caret {
+      margin: 4px 0 0 16px;
+    }
   }
   .avatar-menu {
     overflow: hidden;
@@ -20,5 +31,11 @@
       -webkit-transition: height 0.5s;
       transition: height 0.5s;
     }
+  }
+}
+
+@media screen and (max-width: 1010px) {
+  #header .logged-user-area {
+    float: left !important;
   }
 }

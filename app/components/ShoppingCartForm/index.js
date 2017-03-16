@@ -12,16 +12,16 @@ import { Field, reduxForm, change } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
-import AddNewCardForm from 'components/AddNewCardForm';
-import { selectCouponId, selectTotal, selectShoppingCartFormError } from './selectors';
-import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSavedCard } from 'containers/App/selectors';
+import CenteredModal from '../../components/CenteredModal/index';
+import Input from '../../components/Input';
+import ReactSelect from '../../components/Input/ReactSelect';
+import AddNewCardForm from '../../components/AddNewCardForm';
+import { selectCouponId, selectTotal } from './selectors';
+import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSavedCard } from '../../containers/App/selectors';
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
-import Money from 'components/Money';
-import { fetchCoupon, clearCoupon, fetchCards, saveCard } from 'containers/App/actions';
-import './styles.less';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import Money from '../../components/Money';
+import { fetchCoupon, clearCoupon, fetchCards, saveCard } from '../../containers/App/actions';
 
 const mapStateToProps = createStructuredSelector({
   couponId: selectCouponId(),
@@ -30,7 +30,6 @@ const mapStateToProps = createStructuredSelector({
   cards: selectCards(),
   currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
   savedCard: selectSavedCard(),
-  hasError: selectShoppingCartFormError(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -58,14 +57,14 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     showCards: PropTypes.bool,
     cards: PropTypes.object,
     savedCard: PropTypes.object,
-    hasError: PropTypes.bool,
     submitting: PropTypes.bool,
     fetchCoupon: PropTypes.func,
     clearCoupon: PropTypes.func,
     fetchCards: PropTypes.func,
     saveCard: PropTypes.func,
-    handleSubmit: PropTypes.func,
-    disableSubmit: PropTypes.bool,
+    validateAndSubmit: PropTypes.func,
+    manualDisableSubmit: PropTypes.bool,
+    showAddNewCard: PropTypes.func,
   };
 
   constructor(props) {
@@ -114,6 +113,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
   onSelectCard(value) {
     if (value === -1) {
       this.openAddNewCardModal();
+      this.props.showAddNewCard();
     }
   }
 
@@ -149,17 +149,18 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
   render() {
     const title = this.props.title || 'Order Summary';
     const noBorderClassName = (this.props.noBorder) ? 'no-border' : '';
-    const formClassName = `form-study form-shopping-cart ${noBorderClassName}`;
-    const { addOns, coupon, showCards, cards, hasError, submitting, handleSubmit, disableSubmit } = this.props;
+    const formClassName = `form-shopping-cart ${noBorderClassName}`;
+    const { addOns, coupon, showCards, cards, submitting, validateAndSubmit, manualDisableSubmit } = this.props;
     const { subTotal, discount, total } = this.calculateTotal();
     let addOnsContent = null;
+
     if (addOns) {
       addOnsContent = addOns.map((product, index) => (
         <tr className="add-on" key={index}>
           <td>{product.title}</td>
-          <td><Money value={product.price / 100} /></td>
-          <td>{product.quantity}</td>
-          <td><Money value={product.total / 100} className="price" /></td>
+          <td className="right"><Money value={product.price / 100} /></td>
+          <td className="right">{product.quantity}</td>
+          <td className="right"><Money value={product.total / 100} className="price" /></td>
         </tr>
       ));
     }
@@ -170,10 +171,10 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
         value: cardIterator.id,
       }));
     }
-    creditCardOptions = creditCardOptions.concat({
+    creditCardOptions = [{
       label: 'Add New Card',
       value: -1,
-    });
+    }].concat(creditCardOptions);
 
     let cardsPanelContent = null;
     if (showCards) {
@@ -189,9 +190,19 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                 disabled={cards.fetching || submitting}
                 onChange={this.onSelectCard}
               />
-              <Modal className="modal-add-new-card" show={this.state.addNewCardModalOpen} onHide={this.closeAddNewCardModal}>
-                <Modal.Header closeButton>
+              <Modal
+                className="modal-add-new-card"
+                show={this.state.addNewCardModalOpen}
+                onHide={this.closeAddNewCardModal}
+                dialogComponentClass={CenteredModal}
+                backdrop
+                keyboard
+              >
+                <Modal.Header>
                   <Modal.Title>Add New Card</Modal.Title>
+                  <a className="lightbox-close close" onClick={this.closeAddNewCardModal}>
+                    <i className="icomoon-icon_close" />
+                  </a>
                 </Modal.Header>
                 <Modal.Body>
                   <AddNewCardForm onSubmit={this.onSaveCard} />
@@ -204,89 +215,86 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     }
 
     return (
-      <form className={formClassName} onSubmit={handleSubmit}>
-        <div className="shopping-cart order-summary order-summery">
+      <form className={formClassName}>
+        <div className="shopping-cart order-summary order-summery scroll jcf--scrollabel">
           <div className="head">
             <h3>{title}</h3>
           </div>
+          <div className="scroll-holder">
+            <div className="table-holder">
+              <table className="table-summary">
+                <colgroup>
+                  <col style={{ width: '44.2%' }} />
+                  <col style={{ width: '22.6%' }} />
+                  <col style={{ width: '13.6%' }} />
+                  <col style={{ width: 'auto' }} />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>PRODUCT <i className="caret-arrow" /></th>
+                    <th className="right">PRICE <i className="caret-arrow" /></th>
+                    <th className="right">QTY <i className="caret-arrow" /></th>
+                    <th className="right">TOTAL <i className="caret-arrow" /></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {addOnsContent}
+                </tbody>
+              </table>
+            </div>
 
-          <div className="scroll jcf--scrollabel">
-            <div className="scroll-holder">
-              <div className="table-holder">
-                <table className="table-summary">
-                  <colgroup>
-                    <col style={{ width: '44.2%' }} />
-                    <col style={{ width: '22.6%' }} />
-                    <col style={{ width: '13.6%' }} />
-                    <col style={{ width: 'auto' }} />
-                  </colgroup>
-                  <thead>
-                    <tr>
-                      <th>PRODUCT <i className="caret-arrow" /></th>
-                      <th>PRICE <i className="caret-arrow" /></th>
-                      <th>QTY <i className="caret-arrow" /></th>
-                      <th>TOTAL <i className="caret-arrow" /></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {addOnsContent}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="coupon-area">
-                <Field
-                  name="couponId"
-                  component={Input}
-                  type="text"
-                  placeholder="Coupon"
-                  disabled={coupon.fetching || submitting}
-                />
-                <Button
-                  bsStyle="primary"
-                  className="coupon-btn"
-                  onClick={this.onFetchCoupon}
-                  disabled={coupon.fetching || submitting}
-                >
-                  <span>Apply</span>
-                </Button>
-              </div>
-
-              <div className="total clearfix">
-                <span className="heading">Subtotal</span>
-                <Money value={subTotal / 100} className="price subtotal-price" />
-              </div>
-
-              <div className="total discount clearfix">
-                <span className="heading">discount</span>
-                {coupon.fetching
-                  ? <span className="price">
-                    <LoadingSpinner showOnlyIcon size={20} className="price" />
-                  </span>
-                  : <Money value={discount / 100} className="price discount-amount" />
-                }
-              </div>
-
-              <div className="total grand-total clearfix">
-                <strong className="heading">Total</strong>
-                <Money value={total / 100} className="price total-price" />
-              </div>
-
-              <div className="total hidden-value">
-                <Field
-                  name="total"
-                  component={Input}
-                  type="hidden"
-                />
-              </div>
-              {cardsPanelContent}
-              <Button type="submit" disabled={hasError || coupon.fetching || cards.fetching || submitting || disableSubmit}>
-                {submitting
-                  ? <span><LoadingSpinner showOnlyIcon size={20} className="submitting-shopping-cart" /></span>
-                  : <span>Submit</span>
-                }
+            <div className="coupon-area">
+              <Field
+                name="couponId"
+                component={Input}
+                type="text"
+                placeholder="Coupon"
+                disabled={coupon.fetching || submitting}
+              />
+              <Button
+                bsStyle="primary"
+                className="coupon-btn"
+                onClick={this.onFetchCoupon}
+                disabled={coupon.fetching || submitting}
+              >
+                <span>Apply</span>
               </Button>
             </div>
+
+            <div className="total clearfix">
+              <span className="heading">Subtotal</span>
+              <Money value={subTotal / 100} className="price subtotal-price" />
+            </div>
+
+            <div className="total discount clearfix">
+              <span className="heading">discount</span>
+              {coupon.fetching
+                ? <span className="price">
+                  <LoadingSpinner showOnlyIcon size={20} className="price" />
+                </span>
+                : <Money value={discount / 100} className="price discount-amount" />
+              }
+            </div>
+
+            <div className="total grand-total clearfix">
+              <strong className="heading">Total</strong>
+              <Money value={total / 100} className="price total-price" />
+            </div>
+
+            <div className="total hidden-value">
+              <Field
+                name="total"
+                component={Input}
+                type="hidden"
+              />
+            </div>
+            {cardsPanelContent}
+            <Button disabled={coupon.fetching || cards.fetching || submitting || manualDisableSubmit} onClick={validateAndSubmit}>
+              {submitting
+                ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
+                : <span>Submit</span>
+              }
+            </Button>
           </div>
         </div>
       </form>

@@ -1,4 +1,4 @@
-import { StudyPage } from 'containers/StudyPage';
+import StudyPage from '../index';
 import React from 'react';
 import { shallow } from 'enzyme';
 import chaiEnzyme from 'chai-enzyme';
@@ -52,10 +52,9 @@ describe('<StudyPage />', () => {
           { id: 6, name: 'Consented' },
           { id: 7, name: 'Randomized' },
         ],
-        params: { id: '1', siteId: '1' },
+        params: { id: '1' },
         patients: [],
         setStudyId: expect.createSpy(),
-        setSiteId: expect.createSpy(),
         sources: [],
         site: {
           address: null,

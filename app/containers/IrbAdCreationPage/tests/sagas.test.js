@@ -14,11 +14,11 @@ import {
 import {
   formSubmitted,
   formSubmissionError,
-} from 'containers/IrbAdCreationPage/actions';
+} from '../actions';
 
 import {
   SUBMIT_FORM,
-} from 'containers/IrbAdCreationPage/constants';
+} from '../constants';
 
 describe('IrbAdCreationPage Saga', () => {
   describe('submitFormWatcher Saga', () => {

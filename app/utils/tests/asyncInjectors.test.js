@@ -3,7 +3,7 @@
  */
 
 import expect from 'expect';
-import configureStore from 'store.js';
+import configureStore from '../../store';
 import { memoryHistory } from 'react-router';
 import { put } from 'redux-saga/effects';
 
@@ -11,7 +11,7 @@ import {
   injectAsyncReducer,
   injectAsyncSagas,
   getAsyncInjectors,
-} from 'utils/asyncInjectors';
+} from '../asyncInjectors';
 
 // Fixtures
 
@@ -34,7 +34,7 @@ const sagas = [
   testSaga,
 ];
 
-describe('utils/asyncInjectors', () => {
+describe('../../utils/asyncInjectors', () => {
   let store;
 
   describe('getAsyncInjectors', () => {

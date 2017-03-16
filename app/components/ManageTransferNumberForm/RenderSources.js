@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 import { Field } from 'redux-form';
 
-import Input from 'components/Input';
+import Input from '../../components/Input';
 
 const RenderSources = ({ fields, formValues }) => (
   <tbody>

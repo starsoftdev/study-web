@@ -82,8 +82,8 @@ class OtherSection extends React.Component {
         data.bmi = parseFloat(formValues.bmi);
       }
       if (formValues.dobDay && formValues.dobMonth && formValues.dobYear) {
-        const date = moment().year(formValues.dobYear).month(formValues.dobMonth).day(formValues.dobDay);
-        data.dob = date;
+        const date = moment().year(formValues.dobYear).month(formValues.dobMonth - 1).date(formValues.dobDay).startOf('day');
+        data.dob = date.toISOString();
       }
       submitPatientUpdate(initialValues.id, data);
       reset(formName);
@@ -133,19 +133,21 @@ class OtherSection extends React.Component {
 
   renderIndications() {
     const { initialValues } = this.props;
-    if (initialValues.indications) {
+    if (initialValues.patientIndications) {
       return (
         <div className="category-list">
-          {initialValues.indications.map(indication => (
-            <div key={indication.id} className="category">
+          {initialValues.patientIndications.map(pi => (
+            <div key={pi.indication.id} className="category">
               <span className="link">
-                <span className="text">{indication.name}</span>
-                <span
-                  className="icomoon-icon_trash"
-                  onClick={() => {
-                    this.deleteIndication(indication);
-                  }}
-                />
+                <span className="text">{pi.indication.name}</span>
+                { !pi.isOriginal &&
+                  <span
+                    className="icomoon-icon_trash"
+                    onClick={() => {
+                      this.deleteIndication(pi.indication);
+                    }}
+                  />
+                }
               </span>
             </div>
           ))}
@@ -170,7 +172,14 @@ class OtherSection extends React.Component {
 
   render() {
     const { active, currentUser, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, loading, submitting, submitAddPatientIndication } = this.props;
+
     if (initialValues) {
+      const overlayValues = { ...initialValues };
+
+      if (initialValues.patientIndications) {
+        overlayValues.indications = initialValues.patientIndications.map(pi => pi.indication.id);
+      }
+
       return (
         <div className={classNames('item others', { active })}>
           <div className="item-holder">
@@ -211,8 +220,10 @@ class OtherSection extends React.Component {
                     placement="bottom"
                     container={this.parent}
                     target={() => this.target}
+                    rootClose
+                    onHide={() => { this.toggleIndicationPopover(); }}
                   >
-                    <IndicationOverlay indications={indications} submitAddIndication={submitAddPatientIndication} patient={initialValues} onClose={this.toggleIndicationPopover} />
+                    <IndicationOverlay indications={indications} submitAddIndication={submitAddPatientIndication} patient={overlayValues} onClose={this.toggleIndicationPopover} />
                   </Overlay>
                 </div>
               </div>

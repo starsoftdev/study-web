@@ -6,22 +6,30 @@
 
 import React from 'react';
 import Sound from 'react-sound';
+import Form from 'react-bootstrap/lib/Form';
+import Button from 'react-bootstrap/lib/Button';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { Link } from 'react-router';
 
+import Input from '../../components/Input';
+import formValidator from './validator';
+import { selectGlobalPMSFormValues, selectGlobalPMSFormError } from './selectors';
 import CenteredModal from '../../components/CenteredModal/index';
 import Modal from 'react-bootstrap/lib/Modal';
 import {
   selectCurrentUser,
   selectSitePatients,
   selectPatientMessages,
-} from 'containers/App/selectors';
+  selectClientCredits,
+} from '../../containers/App/selectors';
 
 import MessageItem from './MessageItem';
 import CallItem from './CallItem';
 import PatientItem from './PatientItem';
 
 import ChatForm from './ChatForm';
+import { change, Field, reduxForm } from 'redux-form';
 
 import {
   fetchSitePatients,
@@ -29,19 +37,20 @@ import {
   fetchPatientMessages,
   markAsReadPatientMessages,
   updateSitePatients,
-} from 'containers/App/actions';
+  fetchClientCredits,
+} from '../../containers/App/actions';
 import {
   selectSocket,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../containers/GlobalNotifications/selectors';
 
 import {
   sendStudyPatientMessages,
-} from 'containers/GlobalNotifications/actions';
-
-import _ from 'lodash';
-import './styles.less';
+} from '../../containers/GlobalNotifications/actions';
 
 import alertSound from './sounds/message_received.wav';
+
+@reduxForm({ form: 'globalPMS', validate: formValidator })
+@connect(mapStateToProps, null)
 
 class GlobalPMSModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -58,6 +67,13 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     fetchPatientMessages: React.PropTypes.func,
     sendStudyPatientMessages: React.PropTypes.func,
     markAsReadPatientMessages: React.PropTypes.func,
+    setChatTextValue: React.PropTypes.func,
+    clientCredits: React.PropTypes.object,
+    fetchClientCredits: React.PropTypes.func,
+    handleSubmit: React.PropTypes.func,
+    hasError: React.PropTypes.bool,
+    formValues: React.PropTypes.object,
+    change: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -67,39 +83,37 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     this.startSound = this.startSound.bind(this);
     this.selectPatient = this.selectPatient.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleClose = this.handleClose.bind(this);
     this.state = {
       selectedPatient: { id: 0 },
-      patientLoaded: true,
       socketBinded: false,
       playSound: Sound.status.STOPPED,
+      searchBy: null,
     };
   }
 
   componentWillReceiveProps(newProps) {
+    const { currentUser } = newProps;
     if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
-        this.startSound();
+        this.props.fetchClientCredits(currentUser.id);
         if (newMessage.twilioTextMessage.direction === 'inbound') {
-          this.props.updateSitePatients(newMessage);
+          this.startSound();
         }
-        if (this.state.selectedPatient && this.state.selectedPatient.study_id) {
+        this.props.updateSitePatients(newMessage);
+        if (this.props.showModal === true && this.state.selectedPatient && this.state.selectedPatient.study_id && this.state.selectedPatient.id === newMessage.patient_id) {
           this.props.fetchPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
           this.props.markAsReadPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
         }
       });
       this.setState({ socketBinded: true });
     }
-    if (newProps.showModal === true && newProps.sitePatients.details.length > 0 && this.state.patientLoaded === true) {
-      let selectedPatient = { id: 0 };
-      _.forEach(newProps.sitePatients.details, (item) => {
-        if (item.show === undefined || (item.show && item.show === true)) {
-          selectedPatient = item;
-          return false;
-        }
-        return true;
-      });
-      this.selectPatient(selectedPatient);
-      this.setState({ patientLoaded: false });
+    if (!this.props.showModal && newProps.showModal) {
+      if (this.state.selectedPatient && this.state.selectedPatient.study_id) {
+        this.props.fetchPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
+        this.props.markAsReadPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
+      }
+      this.props.fetchSitePatients(currentUser.id);
     }
   }
 
@@ -120,38 +134,66 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     this.setState({ playSound: Sound.status.PLAYING });
   }
 
-  selectPatient(item) {
+  selectPatient(item, initialSelect = false) {
     if (item.id !== this.state.selectedPatient.id) {
       this.setState({ selectedPatient: item });
+      // TODO remove this later
       this.props.fetchPatientMessages(item.id, item.study_id);
       this.props.markAsReadPatientMessages(item.id, item.study_id);
+
+      if (!initialSelect) {
+        this.props.setChatTextValue('');
+      }
+      this.props.change('name', '');
+      this.handleKeyPress('');
     }
   }
 
   handleKeyPress(e) {
-    const searchKey = this.searchKey;
-    if (e.key === 'Enter') {
-      this.props.searchSitePatients(searchKey.value);
-      this.setState({ patientLoaded: true });
+    let value;
+    if (e && e.target) {
+      value = e.target.value;
+    } else {
+      value = e;
     }
+    this.setState({
+      searchBy: value,
+    });
+    // if (this.state.searchTimer) {
+    //   clearTimeout(this.state.searchTimer);
+    //   this.setState({ searchTimer: null });
+    // }
+    this.props.searchSitePatients(value);
+    // const timerH = setTimeout(() => { this.setState({ patientLoaded: true }); }, 500);
+    // this.setState({ searchTimer: timerH });
+  }
+
+  handleClose() {
+    this.props.closeModal();
   }
 
   render() {
     const { sitePatients, patientMessages, sendStudyPatientMessages } = this.props;
+    const clientCredits = this.props.clientCredits;
     const sitePatientArray = [];
     sitePatients.details.forEach((item) => {
       if (item.show === undefined || (item.show && item.show === true)) {
         sitePatientArray.push(item);
       }
     });
-    const sitePatientsListContents = sitePatientArray.map((item, index) => (
-      <PatientItem
-        patientData={item}
-        key={index}
-        onSelectPatient={this.selectPatient}
-        patientSelected={this.state.selectedPatient.id === item.id}
-      />
-    ));
+    const sitePatientsListContents = sitePatients.details.map((item, index) => {
+      const firstname = item.first_name.toUpperCase();
+      const lastname = item.last_name.toUpperCase();
+      if (!this.state.searchBy || firstname.includes(this.state.searchBy.toUpperCase()) || lastname.includes(this.state.searchBy.toUpperCase())) {
+        return (<PatientItem
+          patientData={item}
+          key={index}
+          onSelectPatient={this.selectPatient}
+          patientSelected={this.state.selectedPatient.id === item.id}
+        />);
+      }
+      return '';
+    });
     const patientMessageListContents = patientMessages.details.map((item, index) => {
       if (item.text_message_id) {
         return (<MessageItem
@@ -169,70 +211,90 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     if (this.state.selectedPatient.protocol_number) {
       protocolNumber = 'Protocol: '.concat(this.state.selectedPatient.protocol_number);
     }
+    const ePMS = this.state.selectedPatient && (this.state.selectedPatient.patientMessagingSuite || this.state.selectedPatient.patientQualificationSuite);
     return (
-      <div>
-        <Sound
-          url={alertSound}
-          playStatus={this.state.playSound}
-          onFinishedPlaying={this.onSoundFinished}
-        />
-        <Modal className="custom-modal global-pms" dialogComponentClass={CenteredModal} id="chart-popup" show={this.props.showModal} onHide={this.props.closeModal}>
-          <Modal.Header>
-            <Modal.Title>PATIENT MESSAGING SUITE</Modal.Title>
-            <a className="lightbox-close close" onClick={this.props.closeModal}>
-              <i className="icomoon-icon_close" />
-            </a>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="holder clearfix">
-              <aside className="aside-chat">
-                <div className="scroll-holder">
-                  <div className="custom-select-drop">
-                    <div className="search-holder">
-                      <input
-                        className="form-control keyword-search"
-                        type="search"
-                        placeholder="Search"
-                        onKeyPress={this.handleKeyPress}
-                        ref={(searchKey) => {
-                          this.searchKey = searchKey;
-                        }}
-                      />
-                      <i className="icomoon-icon_search2"></i>
+      <Form className="form-search form-search-studies pull-left" onSubmit={this.props.handleSubmit}>
+        <div>
+          <Sound
+            url={alertSound}
+            playStatus={this.state.playSound}
+            onFinishedPlaying={this.onSoundFinished}
+          />
+          <Modal
+            className="global-pms-modal"
+            id="chart-popup"
+            dialogComponentClass={CenteredModal}
+            show={this.props.showModal}
+            onHide={this.handleClose}
+            backdrop
+            keyboard
+          >
+            <Modal.Header>
+              <Modal.Title>PATIENT MESSAGING SUITE</Modal.Title>
+              <a className="lightbox-close close" onClick={this.handleClose}>
+                <i className="icomoon-icon_close" />
+              </a>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="holder clearfix">
+                <aside className="aside-chat">
+                  <div className="scroll-holder">
+                    <div className="custom-select-drop">
+                      <div className="field">
+                        <Button className="btn-enter" type="submit">
+                          <i className="icomoon-icon_search2" />
+                        </Button>
+                        <Field
+                          name="name"
+                          component={Input}
+                          onChange={(e) => this.handleKeyPress(e)}
+                          type="text"
+                          className="keyword-search"
+                          placeholder="Search"
+                          ref={(searchKey) => {
+                            this.searchKey = searchKey;
+                          }}
+                        />
+                      </div>
                     </div>
+                    <ul className="tabset list-unstyled">
+                      {sitePatientsListContents}
+                    </ul>
                   </div>
-                  <ul className="tabset list-unstyled">
-                    {sitePatientsListContents}
-                  </ul>
+                </aside>
+                <div className="chatroom">
+                  <section className="chat-area" id="chat-room1">
+                    <header>
+                      <strong className="name">{this.state.selectedPatient.first_name} {this.state.selectedPatient.last_name}</strong>
+                      <Link to={`/app/studies/${this.state.selectedPatient.study_id}/sites/${this.state.selectedPatient.site_id}`} onClick={this.handleClose}>
+                        <span className="protocol">{protocolNumber}</span>
+                      </Link>
+                    </header>
+                    <div
+                      className="scroll-holder"
+                      ref={(scrollable) => {
+                        this.scrollable = scrollable;
+                      }}
+                    >
+                      <article className="post-msg">
+                        {patientMessageListContents}
+                      </article>
+                    </div>
+                    <footer>
+                      <ChatForm
+                        clientCredits={clientCredits}
+                        selectedPatient={this.state.selectedPatient}
+                        sendStudyPatientMessages={sendStudyPatientMessages}
+                        ePMS={ePMS}
+                      />
+                    </footer>
+                  </section>
                 </div>
-              </aside>
-              <div className="chatroom">
-                <section className="chat-area" id="chat-room1">
-                  <header>
-                    <strong className="name">{this.state.selectedPatient.first_name} {this.state.selectedPatient.last_name}</strong>
-                    <a href="#">
-                      <span className="protocol">{protocolNumber}</span>
-                    </a>
-                  </header>
-                  <div
-                    className="scroll-holder"
-                    ref={(scrollable) => {
-                      this.scrollable = scrollable;
-                    }}
-                  >
-                    <article className="post-msg">
-                      {patientMessageListContents}
-                    </article>
-                  </div>
-                  <footer>
-                    <ChatForm selectedPatient={this.state.selectedPatient} sendStudyPatientMessages={sendStudyPatientMessages} />
-                  </footer>
-                </section>
               </div>
-            </div>
-          </Modal.Body>
-        </Modal>
-      </div>
+            </Modal.Body>
+          </Modal>
+        </div>
+      </Form>
     );
   }
 }
@@ -241,7 +303,10 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   sitePatients: selectSitePatients(),
   patientMessages: selectPatientMessages(),
+  clientCredits: selectClientCredits(),
   socket: selectSocket(),
+  hasError: selectGlobalPMSFormError(),
+  formValues: selectGlobalPMSFormValues(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -252,6 +317,9 @@ function mapDispatchToProps(dispatch) {
     fetchPatientMessages: (patientId, studyId) => dispatch(fetchPatientMessages(patientId, studyId)),
     markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
     sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
+    setChatTextValue: (value) => dispatch(change('chatPatient', 'body', value)),
+    fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
+    change: (field, value) => dispatch(change('globalPMS', field, value)),
   };
 }
 

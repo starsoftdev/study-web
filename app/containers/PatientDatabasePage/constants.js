@@ -35,10 +35,13 @@ export const SUBMIT_TEXT_BLAST    = 'PatientDatabasePage/SUBMIT_TEXT_BLAST';
 export const SET_ACTIVE_SORT    = 'PatientDatabasePage/SET_ACTIVE_SORT';
 
 export const SORT_PATIENTS_SUCCESS    = 'PatientDatabasePage/SORT_PATIENTS_SUCCESS';
-export const EXPORT_PATIENTS    = 'PatientDatabasePage/EXPORT_PATIENTS';
 export const IMPORT_PATIENTS    = 'PatientDatabasePage/IMPORT_PATIENTS';
+export const SUBMIT_ADD_PATIENT    = 'PatientDatabasePage/SUBMIT_ADD_PATIENT';
+export const SUBMIT_ADD_PATIENT_SUCCESS    = 'PatientDatabasePage/SUBMIT_ADD_PATIENT_SUCCESS';
+export const SUBMIT_ADD_PATIENT_FAILURE    = 'PatientDatabasePage/SUBMIT_ADD_PATIENT_FAILURE';
+export const EXPORT_PATIENTS    = 'PatientDatabasePage/EXPORT_PATIENTS';
 export const DOWNLOAD_COMPLETE    = 'PatientDatabasePage/DOWNLOAD_COMPLETE';
 
 export const CLEAR_PATIENTS_LIST = 'PatientDatabasePage/CLEAR_PATIENTS_LIST';
 export const EDIT_PATIENT_SITE = 'PatientDatabasePage/EDIT_PATIENT_SITE';
-
+export const CLEAR_IMPORT_FORM = 'PatientDatabasePage/CLEAR_IMPORT_FORM';

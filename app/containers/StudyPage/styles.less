@@ -128,6 +128,7 @@
     }
     &:hover {
       outline: none;
+      cursor: pointer;
       background: #fff;
       border-color: #76daff;
       box-shadow: none;
@@ -256,8 +257,40 @@
   margin: 0;
 }
 
+.field-row{
+  .field {
+    .pull-left{
+
+      &.none-event{
+        cursor: not-allowed;
+
+        span{
+          pointer-events: none;
+        }
+      }
+    }
+  }
+}
+
 #import-info .upload-patient-info label {
   cursor: pointer;
+}
+#import-info .clear-import-button {
+  background-color: transparent;
+  border-color: gray;
+  color: gray;
+  top: 6px;
+  right: 6px;
+  font-size: 18px;
+  line-height: 18px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  position: absolute;
+}
+#import-info .upload-patient-info .jcf-extension-csv {
+  border: 2px solid #1db0ec;
+  padding: 2px;
 }
 #import-info [type="reset"] {
   top: 6px;
@@ -282,26 +315,36 @@
 #import-info .parent-active .table-cell {
   padding: 3px 10px 20px;
 }
-#import-info .parent-active .icomoon-arrow_up_alt {
+
+#import-info .icomoon-arrow_up_alt {
   width: 40px;
   height: 40px;
+  text-indent: -4px;
+  font-size: 40px;
+  line-height: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 100%;
+}
+
+#import-info .icomoon-icon_check {
   color: #fff;
+  background: #00afef;
+  width: 40px;
+  height: 40px;
   text-indent: -4px;
   font-size: 28px;
   line-height: 40px;
   margin-left: auto;
   margin-right: auto;
   border-radius: 100%;
-  background: #00afef;
 }
-#import-info .parent-active .icomoon-arrow_up_alt:before {
-  content: '\e916';
-  display: inline;
-}
-#import-info .parent-active:hover .icomoon-arrow_up_alt {
+
+#import-info .upload-patient-info:hover .icomoon-icon_check {
   color: #00afef;
   background: #fff;
 }
+
 #import-info .jcf-file {
   height: auto;
   display: none;
@@ -320,15 +363,19 @@
   display: inline-block;
 }
 
-#text-blast {
+.study-text-blast {
   .modal-dialog {
     min-width: 728px;
   }
   .modal-content {
     max-width: 1024px;
   }
-  .text-email-blast-form .form-holder .sub-holder {
-    padding-top: 0;
+  .sub-holder {
+    padding: 25px;
+    min-height: 150px;
+    .emails-counter a{
+      cursor: pointer;
+    }
   }
   .sidebar {
     width: 300px;
@@ -340,6 +387,12 @@
       right: auto;
       left: 0;
     }
+    .selected-patients-list a{
+      cursor: pointer;
+    }
+  }
+  .message {
+    height: 100%;
   }
 }
 
@@ -374,6 +427,7 @@
 }
 
 .patients-list-form {
+  top: 2px;
   right: 0;
   width: 0;
   margin: 0 0 0 -100%;
@@ -404,6 +458,7 @@
     &:hover {
       color: #76daff;
       border-color: #76daff;
+      cursor: pointer;
     }
   }
   .form-head {
@@ -512,7 +567,7 @@
       border-width: 0;
       border-radius: 0;
       box-shadow: none;
-      padding: 8px 125px 15px 25px;
+      padding: 8px 179px 15px 25px
     }
     .btn-default {
       top: 50%;
@@ -520,6 +575,15 @@
       position: absolute;
       .transform(translate(0, -50%));
     }
+  }
+  .characters-counter{
+    color: #a0cf67;
+    font-size: 18px;
+    font-weight: 600;
+    position: absolute;
+    top: auto;
+    right: 124px;
+    bottom: 26px;
   }
   .postarea {
     overflow: auto;
@@ -760,6 +824,13 @@
       border-width: 8px 8px 8px 0;
       border-right-color: #a0cf67;
     }
+    .stop-list-notification,
+    .blast-message-notification{
+      display: inline-block;
+      margin: 10px 0 0;
+      font-size: 15px;
+      width: 100%;
+    }
   }
   p {
     margin: 0 0 10px;
@@ -875,4 +946,8 @@
   left: -9999px;
   top: -9999px;
   display: block;
+}
+
+.sidebar .scroll-holder .sub-holder .custom-select-drop .search-holder .field button i {
+  position: static;
 }

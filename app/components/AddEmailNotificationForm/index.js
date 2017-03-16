@@ -7,7 +7,7 @@
 import React from 'react';
 import formValidator from './validator';
 import { Field, reduxForm } from 'redux-form';
-import Input from 'components/Input';
+import Input from '../../components/Input';
 
 @reduxForm({ form: 'addEmailNotificationForm', validate: formValidator })
 class AddEmailNotificationForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -34,6 +34,7 @@ class AddEmailNotificationForm extends React.Component { // eslint-disable-line 
                 <Field
                   name="firstName"
                   component={Input}
+                  placeholder="First Name"
                   type="text"
                 />
               </div>
@@ -41,6 +42,7 @@ class AddEmailNotificationForm extends React.Component { // eslint-disable-line 
                 <Field
                   name="lastName"
                   component={Input}
+                  placeholder="Last Name"
                   type="text"
                 />
               </div>

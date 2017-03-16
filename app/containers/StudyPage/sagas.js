@@ -2,29 +2,33 @@
  * Created by mike on 9/23/16.
  */
 
-import { call, fork, put, take } from 'redux-saga/effects';
-import request from '../../utils/request';
-import { getItem, removeItem } from 'utils/localStorage';
-import { FIND_PATIENTS_TEXT_BLAST,
-  FETCH_PATIENTS,
-  EXPORT_PATIENTS,
-  FETCH_PATIENT_DETAILS,
-  FETCH_PATIENT_CATEGORIES,
-  FETCH_STUDY,
-  READ_STUDY_PATIENT_MESSAGES,
-  SUBMIT_ADD_PATIENT_INDICATION,
-  SUBMIT_REMOVE_PATIENT_INDICATION,
-  SUBMIT_PATIENT_UPDATE,
-  SUBMIT_TEXT_BLAST,
-  SUBMIT_PATIENT_IMPORT,
-  SUBMIT_ADD_PATIENT,
-  SUBMIT_PATIENT_NOTE,
-  SUBMIT_DELETE_NOTE,
-  SUBMIT_PATIENT_TEXT,
-  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
-} from './constants';
+import { call, fork, put, take, cancel } from 'redux-saga/effects';
+import { LOCATION_CHANGE } from 'react-router-redux';
+import { takeLatest } from 'redux-saga';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
+import request from '../../utils/request';
+import composeQueryString from '../../utils/composeQueryString';
+import { getItem, removeItem } from '../../utils/localStorage';
+import { FIND_PATIENTS_TEXT_BLAST,
+FETCH_PATIENTS,
+EXPORT_PATIENTS,
+FETCH_PATIENT_DETAILS,
+FETCH_PATIENT_CATEGORIES,
+FETCH_STUDY,
+READ_STUDY_PATIENT_MESSAGES,
+SUBMIT_ADD_PATIENT_INDICATION,
+SUBMIT_REMOVE_PATIENT_INDICATION,
+SUBMIT_PATIENT_UPDATE,
+SUBMIT_TEXT_BLAST,
+SUBMIT_PATIENT_IMPORT,
+SUBMIT_ADD_PATIENT,
+SUBMIT_PATIENT_NOTE,
+SUBMIT_DELETE_NOTE,
+SUBMIT_PATIENT_TEXT,
+FETCH_STUDY_NEW_TEXTS,
+SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
+} from './constants';
 
 import {
   addPatientsToTextBlast,
@@ -34,12 +38,14 @@ import {
   patientCategoriesFetched,
   patientsFetched,
   patientDetailsFetched,
-  siteFetched,
   patientsExported,
+  protocolFetched,
+  siteFetched,
   sourcesFetched,
   studyFetched,
   studyViewsStatFetched,
   submitAddPatientSuccess,
+  submitAddPatientFailure,
   patientReferralStatFetched,
   callStatsFetched,
   textStatsFetched,
@@ -62,40 +68,47 @@ export default [
 
 function* fetchStudyDetails() {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
   // listen for the FETCH_STUDY action
-  const { studyId, siteId } = yield take(FETCH_STUDY);
+  const { studyId } = yield take(FETCH_STUDY);
 
+  // put the fetching study action in case of a navigation action
   const filter = JSON.stringify({
     include: [
       {
         relation: 'campaigns',
       },
       {
+        relation: 'protocol',
+      },
+      {
+        relation: 'site',
+      },
+      {
         relation: 'sources',
       },
       {
-        relation: 'sites',
-        scope: {
-          where: {
-            id: siteId,
-          },
-        },
+        relation: 'sponsor',
       },
     ],
   });
   try {
-    const requestURL = `${API_URL}/studies/${studyId}?access_token=${authToken}&filter=${filter}`;
+    const requestURL = `${API_URL}/studies/${studyId}?filter=${filter}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
     // populate the campaigns and sources from the study
     yield put(campaignsFetched(response.campaigns));
+    yield put(protocolFetched(response.protocol));
+    yield put(siteFetched(response.site));
     yield put(sourcesFetched(response.sources));
-    yield put(siteFetched(response.sites[0]));
     delete response.campaigns;
+    delete response.protocol;
+    delete response.site;
     delete response.sources;
-    delete response.sites;
     // put in the study in the state
     yield put(studyFetched(response));
   } catch (e) {
@@ -106,12 +119,15 @@ function* fetchStudyDetails() {
 
 function* fetchStudyViewsStat() {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
   // listen for the FETCH_STUDY action
   const { studyId } = yield take(FETCH_STUDY);
 
   try {
-    const requestURL = `${API_URL}/studies/${studyId}/landingPageViews?access_token=${authToken}`;
+    const requestURL = `${API_URL}/studies/${studyId}/landingPageViews`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -122,14 +138,21 @@ function* fetchStudyViewsStat() {
   }
 }
 
-function* fetchPatientReferralStat() {
+function* fetchPatientReferralStat(action) {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
-  // listen for the FETCH_STUDY action
-  const { studyId } = yield take(FETCH_STUDY);
+  // listen for the latest FETCH_STUDY action
+  const { studyId, campaignId } = action;
 
   try {
-    const requestURL = `${API_URL}/studies/${studyId}/patients/count?access_token=${authToken}`;
+    let requestURL = `${API_URL}/studies/getPatientReferrals/${studyId}`;
+    if (campaignId) {
+      requestURL += `?campaignId=${campaignId}`;
+    }
+    console.log('fetchPatientReferralStat', studyId, campaignId);
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -140,14 +163,21 @@ function* fetchPatientReferralStat() {
   }
 }
 
-function* fetchStudyCallStats() {
+function* fetchStudyCallStats(action) {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
-  // listen for the FETCH_STUDY action
-  const { studyId } = yield take(FETCH_STUDY);
+  // listen for the latest FETCH_STUDY action
+  const { studyId, campaignId } = action;
 
   try {
-    const requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}?access_token=${authToken}`;
+    let requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}`;
+    if (campaignId) {
+      requestURL += `?campaignId=${campaignId}`;
+    }
+    console.log('fetchStudyCallStats', studyId, campaignId);
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -158,18 +188,24 @@ function* fetchStudyCallStats() {
   }
 }
 
-function* fetchStudyTextStats() {
+function* fetchStudyTextStats(action) {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
-  // listen for the FETCH_STUDY action
-  const { studyId } = yield take(FETCH_STUDY);
+  // listen for the latest FETCH_STUDY action
+  const { studyId, campaignId } = action;
 
   try {
-    const requestURL = `${API_URL}/textMessages/countStudyMessages/${studyId}?access_token=${authToken}`;
+    let requestURL = `${API_URL}/textMessages/countStudyMessages/${studyId}`;
+    if (campaignId) {
+      requestURL += `?campaignId=${campaignId}`;
+    }
+    console.log('fetchStudyTextStats', studyId, campaignId);
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
-    console.log('response', response);
     yield put(textStatsFetched(response));
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
@@ -177,23 +213,47 @@ function* fetchStudyTextStats() {
   }
 }
 
+function* fetchStudyTextNewStats() {
+  while (true) {
+    // listen for the FETCH_STUDY action
+    const { studyId } = yield take(FETCH_STUDY_NEW_TEXTS);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+    try {
+      const requestURL = `${API_URL}/textMessages/countStudyMessages/${studyId}`;
+      const response = yield call(request, requestURL, {
+        method: 'GET',
+      });
+      yield put(textStatsFetched(response));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+    }
+  }
+}
+
 function* fetchPatientCategories() {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
   // listen for the FETCH_PATIENT_CATEGORIES action
-  const { studyId, siteId } = yield take(FETCH_PATIENT_CATEGORIES);
+  const { studyId } = yield take(FETCH_PATIENT_CATEGORIES);
 
   const filter = JSON.stringify({
     fields: ['name', 'id'],
   });
   try {
-    const requestURL = `${API_URL}/patientCategories?access_token=${authToken}&filter=${filter}`;
+    const requestURL = `${API_URL}/patientCategories?filter=${filter}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
     // populate the patient categories
     yield put(patientCategoriesFetched(response));
-    yield call(fetchPatients, studyId, siteId);
+    yield call(fetchPatients, studyId);
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching patient categories. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
@@ -221,11 +281,14 @@ function* readStudyPatientMessages() {
 export function* exportPatients() {
   while (true) {
     // listen for the FETCH_PATIENTS action
-    const { studyId, siteId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
+    const { studyId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
     const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
 
     try {
-      let requestURL = `${API_URL}/studies/${studyId}/getPatientsForDB?access_token=${authToken}&siteId=${siteId}`;
+      let requestURL = `${API_URL}/studies/${studyId}/getPatientsForDB`;
       if (campaignId) {
         requestURL += `&campaignId=${campaignId}`;
       }
@@ -252,25 +315,30 @@ export function* exportPatients() {
 export function* fetchPatientsSaga() {
   while (true) {
     // listen for the FETCH_PATIENTS action
-    const { studyId, siteId, text, campaignId, sourceId } = yield take(FETCH_PATIENTS);
-    yield call(fetchPatients, studyId, siteId, text, campaignId, sourceId);
+    const { studyId, text, campaignId, sourceId } = yield take(FETCH_PATIENTS);
+    yield call(fetchPatients, studyId, text, campaignId, sourceId);
   }
 }
 
-function* fetchPatients(studyId, siteId, text, campaignId, sourceId) {
+function* fetchPatients(studyId, text, campaignId, sourceId) {
   const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
   try {
-    let requestURL = `${API_URL}/studies/${studyId}/patients?access_token=${authToken}&siteId=${siteId}`;
+    const queryParams = {};
     if (campaignId) {
-      requestURL += `&campaignId=${campaignId}`;
+      queryParams.campaignId = campaignId;
     }
     if (sourceId) {
-      requestURL += `&sourceId=${sourceId}`;
+      queryParams.sourceId = sourceId;
     }
     if (text) {
-      requestURL += `&text=${encodeURIComponent(text)}`;
+      queryParams.text = text;
     }
+    const queryString = composeQueryString(queryParams);
+    const requestURL = `${API_URL}/studies/${studyId}/patients?${queryString}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -294,10 +362,14 @@ function* fetchPatientDetails() {
     if (!authToken) {
       return;
     }
+
     const filter = JSON.stringify({
       include: [
         {
-          relation: 'indications',
+          relation: 'patientIndications',
+          scope: {
+            include: 'indication',
+          },
         },
         {
           relation: 'notes',
@@ -314,7 +386,10 @@ function* fetchPatientDetails() {
           },
         },
         {
-          relation: 'source',
+          relation: 'studySource',
+          scope: {
+            include: 'source',
+          },
         },
         {
           relation: 'textMessages',
@@ -347,7 +422,7 @@ function* fetchPatientDetails() {
       ],
     });
     try {
-      const requestURL = `${API_URL}/patients/${patientId}?access_token=${authToken}&filter=${filter}`;
+      const requestURL = `${API_URL}/patients/${patientId}?filter=${filter}`;
       const response = yield call(request, requestURL, {
         method: 'GET',
       });
@@ -372,6 +447,9 @@ function* fetchPatientDetails() {
 function* findPatientsSaga() {
   while (true) {
     const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
 
     // listen for the FIND_PATIENTS_TEXT_BLAST action
     const { studyId, text, categoryIds, sourceIds } = yield take(FIND_PATIENTS_TEXT_BLAST);
@@ -387,7 +465,7 @@ function* findPatientsSaga() {
     }
     filter = JSON.stringify(filter);
     try {
-      const requestURL = `${API_URL}/studies/${studyId}/findPatients?filter=${filter}&access_token=${authToken}`;
+      const requestURL = `${API_URL}/studies/${studyId}/findPatients?filter=${filter}`;
       const response = yield call(request, requestURL, {
         method: 'GET',
       });
@@ -408,12 +486,17 @@ function* submitAddPatientIndication() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/patients/${patientId}/indications/rel/${indication.id}?access_token=${authToken}`;
-      yield call(request, requestURL, {
-        method: 'PUT',
+      const requestURL = `${API_URL}/patientIndications/add`;
+      const payload = yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          patientId,
+          indicationId: indication.id,
+        }),
       });
-      yield put(addPatientIndicationSuccess(patientId, indication));
+      yield put(addPatientIndicationSuccess(patientId, indication, payload.isOriginal));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -429,9 +512,10 @@ function* submitMovePatientBetweenCategories() {
     if (!authToken) {
       return;
     }
+
     try {
       yield put(movePatientBetweenCategoriesLoading());
-      const requestURL = `${API_URL}/patients/update_category?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patients/update_category`;
       yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
@@ -458,10 +542,15 @@ function* submitRemovePatientIndication() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/patients/${patientId}/indications/rel/${indicationId}?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patientIndications/delete`;
       yield call(request, requestURL, {
         method: 'DELETE',
+        body: JSON.stringify({
+          patientId,
+          indicationId,
+        }),
       });
       yield put(removePatientIndicationSuccess(patientId, indicationId));
     } catch (e) {
@@ -479,10 +568,11 @@ function* submitPatientUpdate() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/patients/${patientId}?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patients/${patientId}`;
       const response = yield call(request, requestURL, {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify(fields),
       });
       yield put(updatePatientSuccess(response));
@@ -501,8 +591,9 @@ function* submitPatientNote() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/patients/${patientId}/notes?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patients/${patientId}/notes`;
       const response = yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
@@ -526,8 +617,9 @@ function* submitDeleteNote() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/patients/${patientId}/notes/${noteId}?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patients/${patientId}/notes/${noteId}`;
       yield call(request, requestURL, {
         method: 'DELETE',
       });
@@ -547,8 +639,9 @@ function* submitPatientText() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/patients/${id}/textMessages?access_token=${authToken}`;
+      const requestURL = `${API_URL}/patients/${id}/textMessages`;
       const response = yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
@@ -567,19 +660,21 @@ function* submitPatientText() {
 function* submitTextBlast() {
   while (true) {
     // listen for the SUBMIT_TEXT_BLAST action
-    const { patients, message, onClose } = yield take(SUBMIT_TEXT_BLAST);
+    const { patients, message, currentUserId, onClose } = yield take(SUBMIT_TEXT_BLAST);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/twilioTextMessages/textBlast?access_token=${authToken}`;
+      const requestURL = `${API_URL}/twilioTextMessages/textBlast`;
       yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
           patientsIDs: patients.map(patient => (
             patient.id
           )),
+          currentUserId,
           message,
         }),
       });
@@ -602,8 +697,9 @@ function* submitPatientImport() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/studies/${studyId}/importPatients?access_token=${authToken}`;
+      const requestURL = `${API_URL}/studies/${studyId}/importPatients`;
       const response = yield call(request, requestURL, {
         useDefaultContentType: 'multipart/form-data',
         method: 'POST',
@@ -611,9 +707,10 @@ function* submitPatientImport() {
       });
       onClose();
       yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
-      yield put(submitAddPatientSuccess(response));
+      yield put(submitAddPatientSuccess(response, file.name));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while importing the patient list. Please try again later or revise your patient list format.');
+      yield put(submitAddPatientFailure());
       yield put(toastrActions.error('', errorMessage));
     }
   }
@@ -627,8 +724,9 @@ function* submitAddPatient() {
     if (!authToken) {
       return;
     }
+
     try {
-      const requestURL = `${API_URL}/studies/${studyId}/addPatient?access_token=${authToken}`;
+      const requestURL = `${API_URL}/studies/${studyId}/addPatient`;
       const response = yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify(patient),
@@ -637,40 +735,75 @@ function* submitAddPatient() {
       yield put(toastrActions.success('Add Patient', 'Patient added successfully!'));
       yield put(submitAddPatientSuccess(response));
     } catch (e) {
-      const errorMessage = get(e, 'message', 'Something went wrong while adding a patient. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      let errorMessages;
+      if (e.details.messages) {
+        if (e.details.messages.email) {
+          errorMessages = e.details.messages.email[0];
+        } else if (e.details.messages.phone) {
+          errorMessages = e.details.messages.phone[0];
+        } else {
+          errorMessages = e.details.messages[0];
+        }
+      } else {
+        errorMessages = 'Something went wrong while adding a patient. Please try again later.';
+      }
+      yield put(toastrActions.error('', errorMessages));
+      yield put(submitAddPatientFailure());
     }
   }
 }
 
 export function* fetchStudySaga() {
-  const authToken = getItem('auth_token');
-  if (!authToken) {
-    return;
-  }
-
   try {
-    yield fork(fetchStudyDetails);
-    yield fork(fetchStudyViewsStat);
-    yield fork(fetchPatientReferralStat);
-    yield fork(fetchStudyCallStats);
-    yield fork(fetchStudyTextStats);
-    yield fork(fetchPatientCategories);
-    yield fork(fetchPatientsSaga);
-    yield fork(exportPatients);
-    yield fork(fetchPatientDetails);
-    yield fork(findPatientsSaga);
-    yield fork(readStudyPatientMessages);
-    yield fork(submitAddPatientIndication);
-    yield fork(submitMovePatientBetweenCategories);
-    yield fork(submitRemovePatientIndication);
-    yield fork(submitPatientUpdate);
-    yield fork(submitTextBlast);
-    yield fork(submitPatientImport);
-    yield fork(submitAddPatient);
-    yield fork(submitPatientNote);
-    yield fork(submitDeleteNote);
-    yield fork(submitPatientText);
+    const watcherA = yield fork(fetchStudyDetails);
+    const watcherB = yield fork(fetchStudyViewsStat);
+    // const watcherC = yield fork(fetchPatientReferralStat);
+    const watcherC = yield fork(takeLatest, FETCH_STUDY, fetchPatientReferralStat);
+    // const watcherD = yield fork(fetchStudyCallStats);
+    const watcherD = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
+    // const watcherE = yield fork(fetchStudyTextStats);
+    const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
+    const watcherF = yield fork(fetchPatientCategories);
+    const watcherG = yield fork(fetchPatientsSaga);
+    const watcherH = yield fork(exportPatients);
+    const watcherI = yield fork(fetchPatientDetails);
+    const watcherJ = yield fork(findPatientsSaga);
+    const watcherK = yield fork(readStudyPatientMessages);
+    const watcherL = yield fork(submitAddPatientIndication);
+    const watcherM = yield fork(submitMovePatientBetweenCategories);
+    const watcherN = yield fork(submitRemovePatientIndication);
+    const watcherO = yield fork(submitPatientUpdate);
+    const watcherP = yield fork(submitTextBlast);
+    const watcherQ = yield fork(submitPatientImport);
+    const watcherR = yield fork(submitAddPatient);
+    const watcherS = yield fork(submitPatientNote);
+    const watcherT = yield fork(submitDeleteNote);
+    const watcherU = yield fork(submitPatientText);
+    const watcherZ = yield fork(fetchStudyTextNewStats);
+
+    yield take(LOCATION_CHANGE);
+    yield cancel(watcherA);
+    yield cancel(watcherB);
+    yield cancel(watcherC);
+    yield cancel(watcherD);
+    yield cancel(watcherE);
+    yield cancel(watcherF);
+    yield cancel(watcherG);
+    yield cancel(watcherH);
+    yield cancel(watcherI);
+    yield cancel(watcherJ);
+    yield cancel(watcherK);
+    yield cancel(watcherL);
+    yield cancel(watcherM);
+    yield cancel(watcherN);
+    yield cancel(watcherO);
+    yield cancel(watcherP);
+    yield cancel(watcherQ);
+    yield cancel(watcherR);
+    yield cancel(watcherS);
+    yield cancel(watcherT);
+    yield cancel(watcherU);
+    yield cancel(watcherZ);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

@@ -8,8 +8,8 @@ import React from 'react';
 
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
+import Input from '../../components/Input';
+import ReactSelect from '../../components/Input/ReactSelect';
 import referFormValidator from './validator';
 
 @reduxForm({ form: 'refer', validate: referFormValidator })
@@ -17,19 +17,30 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
   static propTypes = {
     error: React.PropTypes.object,
     handleSubmit: React.PropTypes.func.isRequired,
+    siteLocations: React.PropTypes.array,
     reset: React.PropTypes.func.isRequired,
-    pristine: React.PropTypes.bool.isRequired,
     submitting: React.PropTypes.bool.isRequired,
     companyTypes: React.PropTypes.array,
   };
 
   render() {
-    const { error, handleSubmit, pristine, reset, submitting } = this.props; // eslint-disable-line
-    const { companyTypes } = this.props;
+    const { error, handleSubmit, reset, submitting } = this.props; // eslint-disable-line
+    const { siteLocations, companyTypes } = this.props;
+
     return (
       <form onSubmit={handleSubmit}>
         <div className="form-fields">
-
+          <div className="field-row">
+            <strong className="label required"><label htmlFor="site-location">SITE LOCATION</label></strong>
+            <div className="field">
+              <Field
+                name="siteLocation"
+                component={ReactSelect}
+                placeholder="Select Site Location"
+                options={siteLocations}
+              />
+            </div>
+          </div>
           <div className="field-row">
             <strong className="label required"><label>CONTACT NAME</label></strong>
             <div className="field">
@@ -98,7 +109,7 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
               type="submit"
               value="SUBMIT"
               className="btn btn-default"
-              disabled={pristine || submitting}
+              disabled={submitting}
             />
           </div>
         </div>

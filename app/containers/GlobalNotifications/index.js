@@ -8,8 +8,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import _ from 'lodash';
-import { selectCurrentUser } from 'containers/App/selectors';
-import { selectSocket } from 'containers/GlobalNotifications/selectors';
+import { selectCurrentUser } from '../../containers/App/selectors';
+import { selectSocket } from '../../containers/GlobalNotifications/selectors';
 import {
   setSocketConnection,
   subscribeToPageEvent,
@@ -17,7 +17,7 @@ import {
   unsubscribeFromAll,
   subscribeToChatEvent,
   receiveNotification,
-} from 'containers/GlobalNotifications/actions';
+} from '../../containers/GlobalNotifications/actions';
 
 export class GlobalNotifications extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -49,7 +49,6 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
         cb: (err, socket) => {
           if (!err) {
             socket.on('notification', (notification) => {
-              console.log(notification);
               this.props.receiveNotification(notification);
             });
             socket.on('connect', () => {
@@ -92,7 +91,19 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
       },
       {
         events: [
+          'twilio-call',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
           'create-patient',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
+          'add-patient',
         ],
         raw: { pathname: this.props.location.pathname },
       },
@@ -147,6 +158,72 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
       {
         events: [
           'import-patient-to-patientdb',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
+          'earn-rewards',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
+          'redeem-rewards',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
+          'renew-study',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
+          'upgrade-study',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
+          'create-referral',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
+          'create-call_reminder',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
+          'change-patient-info',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
+          'change-permissions',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
+          'change-site-info',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
+          'new-patient',
+        ],
+        raw: { pathname: this.props.location.pathname },
+      },
+      {
+        events: [
+          'purchase-credits',
         ],
         raw: { pathname: this.props.location.pathname },
       },

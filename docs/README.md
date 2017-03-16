@@ -113,7 +113,7 @@ For a thorough explanation of the testing procedure, see the
 
 #### Performance testing
 
-With the production server running (i.e. while `npm run start:production` is running in
+With the production server running (i.e. while `npm run start:prod` is running in
 another tab), enter `npm run pagespeed` to run Google PageSpeed Insights and
 get a performance check right in your terminal!
 

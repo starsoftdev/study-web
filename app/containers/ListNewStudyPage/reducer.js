@@ -13,10 +13,19 @@ import {
   SUBMIT_FORM_SUCCESS,
   SUBMIT_FORM_ERROR,
   HIDE_SUBMIT_FORM_MODAL,
-  FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
-  FETCH_INDICATION_LEVEL_PRICE,
   CLEAR_FORM_SUBMISSION_DATA,
 } from './constants';
+
+import {
+  FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
+  FETCH_INDICATION_LEVEL_PRICE,
+  ADD_EMAIL_NOTIFICATION_USER,
+  ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+  ADD_EMAIL_NOTIFICATION_USER_ERROR,
+  FETCH_CLIENT_ADMINS,
+  FETCH_CLIENT_ADMINS_SUCCESS,
+  FETCH_CLIENT_ADMINS_ERROR,
+} from '../../containers/App/constants';
 
 const initialState = {
   showAddSiteLocationModal: false,
@@ -27,6 +36,16 @@ const initialState = {
     submitting: false,
     error: null,
     response: null,
+  },
+  addNotificationProcess: {
+    saving: false,
+    error: null,
+    savedUser: null,
+  },
+  clientAdmins: {
+    details: [],
+    fetching: false,
+    error: null,
   },
 };
 
@@ -55,7 +74,6 @@ function listNewStudyPageReducer(state = initialState, action) {
     case SUBMIT_FORM:
       return {
         ...state,
-        showSubmitFormModal: true,
         formSubmissionStatus: {
           submitting: true,
           error: null,
@@ -102,6 +120,60 @@ function listNewStudyPageReducer(state = initialState, action) {
           submitting: false,
           error: null,
           response: null,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: true,
+          error: null,
+          savedUser: null,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER_SUCCESS:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: false,
+          error: null,
+          savedUser: action.payload,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER_ERROR:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: false,
+          error: action.payload,
+          savedUser: null,
+        },
+      };
+    case FETCH_CLIENT_ADMINS:
+      return {
+        ...state,
+        clientAdmins: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_CLIENT_ADMINS_SUCCESS:
+      return {
+        ...state,
+        clientAdmins: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_CLIENT_ADMINS_ERROR:
+      return {
+        ...state,
+        clientAdmins: {
+          details: [],
+          fetching: false,
+          error: action.payload,
         },
       };
     default:

@@ -6,9 +6,8 @@
 
 import React from 'react';
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
-import Input from 'components/Input';
+import Input from '../../components/Input';
 import changePasswordFormValidator from './validator';
-import './styles.less';
 
 @reduxForm(
   {

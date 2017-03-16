@@ -1,0 +1,267 @@
+@import "../../assets/less/variables.less";
+
+html {
+  -webkit-text-size-adjust: none !important;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+#footer{
+  .holder{
+
+    input{
+      font-size: 16px;
+    }
+  }
+}
+
+@import "~react-select/less/select.less";
+@import "../../assets/less/_custom.less";
+
+.visible-overflow{
+  overflow: visible !important;
+}
+
+/* react-select styles */
+.Select.form-control {
+  padding: 0 !important;
+  height: 60px;
+
+  &:hover{
+    color: #c0e890 !important;
+    border-color: #c0e890 !important;
+  }
+
+  @media screen and (max-width: @sm) {
+    height: 50px;
+  }
+
+  @media screen and (max-width: @xs) {
+    height: 40px;
+  }
+}
+
+.Select-control {
+  border: none !important;
+  height: 100%;
+  cursor: pointer;
+
+  &:hover{
+    box-shadow: none !important;
+  }
+}
+
+.Select.is-disabled > .Select-control {
+  background-color: #eee;
+  cursor: not-allowed;
+}
+
+.Select-placeholder {
+  color: #99cc66 !important;
+  padding-left: 15px !important;
+}
+
+.Select-value {
+  color: #99cc66 !important;
+  padding-left: 15px !important;
+
+  span{
+    color: #c0e890 !important;
+  }
+}
+
+.Select-placeholder, .Select-value {
+  top: 10px !important;
+
+  @media screen and (max-width: @sm) {
+    top: 5px !important;
+  }
+
+  @media screen and (max-width: @xs) {
+    top: 0px !important;
+  }
+}
+
+.Select-menu-outer {
+  margin: 2px 0 0 -2px;
+  box-sizing: initial !important;
+  border: 2px solid #CCC;
+  max-height: 300px;
+  div {
+    margin: 1px;
+  }
+}
+
+.Select-option:last-child {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.top-positioned .Select-menu-outer {
+  top: auto;
+  bottom: 100%;
+}
+
+.is-open {
+
+  & > .Select-control {
+
+    .Select-arrow-zone {
+      padding-right: 15px;
+
+      &:hover {
+
+        .Select-arrow {
+          border-color: transparent transparent #c0e890 !important;
+        }
+      }
+
+      .Select-arrow {
+        border-color: transparent transparent #99cc66 !important;
+        border-width: 0 14px 14px;
+
+        @media screen and (max-width: @desktop) {
+          margin: -5px 0 0;
+          border-width: 0 10px 10px;
+        }
+
+        @media screen and (max-width: @xs) {
+          margin: -3px 0 0;
+          border-width: 0 6px 6px;
+        }
+      }
+    }
+  }
+}
+
+.Select-arrow-zone {
+  padding-right: 15px;
+
+  &:hover{
+
+    .Select-arrow {
+      border-top-color: #c0e890;
+    }
+  }
+
+  .Select-arrow {
+    margin: -7px 0 0;
+    border-top-color: #99cc66;
+    border-width: 14px 14px 0;
+
+    @media screen and (max-width: @desktop) {
+      margin: -5px 0 0;
+      border-width: 10px 10px 0;
+    }
+
+    @media screen and (max-width: @xs) {
+      margin: -3px 0 0;
+      border-width: 6px 6px 0;
+    }
+  }
+}
+
+.Select-input{
+  padding-left: 15px;
+
+  input {
+    color: #99cc66;
+
+    @media screen and (min-width: @xs) {
+      padding: 12px 0 12px;
+    }
+
+    @media screen and (min-width: @desktop) {
+      padding: 14px 0 14px;
+    }
+  }
+}
+
+.Select-option.is-focused {
+  background-color: #00AFEF;
+  color: #FFF;
+}
+
+/* react-toggle-button styles */
+
+div.toggle > div:first-child {
+  width: 160px !important;
+
+  > div {
+    color: red;
+  }
+}
+div.toggle.has-error > div:first-child {
+  border: solid 1px red;
+}
+.toggleDisabled:after {
+  content: '';
+  position: absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width: 160px;
+  background-color: grey;
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.chat-text {
+  width: 100%;
+  position: relative;
+}
+
+.remaining-counter {
+  font-size: 18px;
+  font-weight: 600;
+  color: #a0cf67;
+  position: absolute;
+  top: 30px;
+  right: 123px;
+}
+
+.has-error .geosuggest__input {
+  border: solid 2px red !important;
+}
+
+.articles-holder {
+
+  &.relative {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.form-find-studies{
+  position: relative;
+  z-index: 2;
+}
+
+.post {
+
+  a:hover{
+
+    img.placeholder {
+      transform: none !important;
+    }
+  }
+
+  .img-holder {
+    height: 160px;
+
+    @media screen and (max-width: @sm) {
+      height: 240px;
+    }
+
+    @media screen and (max-width: @phone) {
+      height: 320px;
+    }
+
+    .placeholder{
+      height: 100%;
+    }
+  }
+}

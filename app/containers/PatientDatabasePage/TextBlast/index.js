@@ -6,6 +6,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
+import classNames from 'classnames';
+import { actions as toastrActions } from 'react-redux-toastr';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
@@ -15,10 +17,9 @@ import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input/index';
 import { removePatientsFromTextBlast, submitTextBlast } from '../actions';
 import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { selectClientCredits } from '../../App/selectors';
 
 const formName = 'PatientDatabase.TextBlastModal';
-
 
 @reduxForm({
   form: formName,
@@ -30,6 +31,7 @@ class TextBlastModal extends React.Component {
     className: React.PropTypes.any,
     dialogClassName: React.PropTypes.string,
     displayToastrError: React.PropTypes.func.isRequired,
+    clientCredits: React.PropTypes.object,
     formValues: React.PropTypes.object,
     formSyncErrors: React.PropTypes.object,
     onClose: React.PropTypes.func.isRequired,
@@ -45,6 +47,10 @@ class TextBlastModal extends React.Component {
     super(props);
     this.submitTextBlast = this.submitTextBlast.bind(this);
     this.renderPatientCount = this.renderPatientCount.bind(this);
+    this.textAreaChange = this.textAreaChange.bind(this);
+    this.state = {
+      enteredCharactersLength: 0,
+    };
   }
 
   submitTextBlast(event) {
@@ -57,6 +63,15 @@ class TextBlastModal extends React.Component {
     } else if (formSyncErrors.patients) {
       displayToastrError(formSyncErrors.patients);
     }
+  }
+
+  textAreaChange() {
+    setTimeout(() => {
+      const textarea = this.textarea;
+      const value = textarea.value;
+      this.setState({ enteredCharactersLength: value ? value.length : 0 }, () => {
+      });
+    }, 0);
   }
 
   renderPatientCount() {
@@ -74,12 +89,16 @@ class TextBlastModal extends React.Component {
 
   render() {
     const { show, className, onHide } = this.props;
+    const { enteredCharactersLength } = this.state;
+    const clientCredits = this.props.clientCredits.details.customerCredits;
+    const disabled = (clientCredits === 0 || clientCredits === null);
     return (
       <Modal
         show={show}
-        className={className}
+        className={classNames('patient-database-text-blast', className)}
         id="text-blast-popup"
         dialogComponentClass={CenteredModal}
+        onHide={onHide}
         backdrop
         keyboard
       >
@@ -100,9 +119,31 @@ class TextBlastModal extends React.Component {
                     <FormControl type="text" className="recievers" placeholder="To" disabled />
                     {this.renderPatientCount()}
                   </div>
-                  <Field name="message" component={Input} componentClass="textarea" placeholder="Type a message..." required />
+                  <Field
+                    name="message"
+                    component={Input}
+                    componentClass="textarea"
+                    className="message"
+                    placeholder="Type a message..."
+                    maxLength="160"
+                    required
+                    onChange={this.textAreaChange}
+                    ref={(textarea) => {
+                      this.textarea = textarea;
+                    }}
+                  />
                   <div className="footer">
-                    <Button type="submit" className="pull-right" onClick={this.submitTextBlast}>Submit</Button>
+                    <span className="characters-counter">
+                      {`${160 - enteredCharactersLength}`}
+                    </span>
+                    <Button
+                      type="submit"
+                      className="pull-right"
+                      onClick={this.submitTextBlast}
+                      disabled={disabled}
+                    >
+                      Send
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -117,6 +158,7 @@ class TextBlastModal extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   formValues: selectValues(formName),
+  clientCredits: selectClientCredits(),
   formSyncErrors: selectSyncErrors(formName),
 });
 

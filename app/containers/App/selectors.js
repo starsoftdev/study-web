@@ -16,6 +16,16 @@ const selectCurrentUser = () => createSelector(
   (substate) => substate.userData
 );
 
+const selectLoginError = () => createSelector(
+  selectGlobal(),
+  (substate) => substate.loginError
+);
+
+const selectUserRoleType = () => createSelector(
+  selectGlobal(),
+  (substate) => substate.userRoleType
+);
+
 const selectEvents = () => createSelector(
   selectGlobal(),
   (substate) => substate.pageEvents
@@ -44,7 +54,7 @@ const selectUserSites = () => createSelector(
   selectGlobal(),
   (substate) => {
     const currentUser = get(substate, 'userData');
-    const siteId = currentUser.site_id;
+    const siteId = currentUser.roleForClient.site_id;
     let sites = get(substate, 'baseData.sites', []);
     if (siteId) {
       sites = filter(sites, e => e.id === siteId);
@@ -63,8 +73,9 @@ const selectUserSiteLocations = () => createSelector(
   selectGlobal(),
   (substate) => {
     const currentUser = get(substate, 'userData');
-    const siteId = currentUser.site_id;
+    const siteId = currentUser.roleForClient.site_id;
     const sites = get(substate, 'baseData.sites', []);
+
     let userSites = [];
     if (siteId) {
       userSites = filter(sites, e => e.id === siteId);
@@ -72,9 +83,12 @@ const selectUserSiteLocations = () => createSelector(
       const clientId = get(substate, 'userData.roleForClient.client.id', null);
       if (clientId) {
         userSites = get(substate, 'baseData.clientSites.details', {});
+        userSites = [{ id: 0, name: 'All' }, ...userSites];
       }
     }
-    return map(userSites, e => pick(e, ['id', 'name']));
+    const returnArray = map(userSites, e => pick(e, ['id', 'name']));
+
+    return returnArray;
   }
 );
 
@@ -145,6 +159,7 @@ const selectStudyLevels = () => createSelector(
         label: `${e.name}`,
         type: e.name,
         stripeProductId: e.stripe_product_id,
+        isTop: e.isTop,
       }
     ));
   }
@@ -155,9 +170,19 @@ const selectCoupon = () => createSelector(
   (substate) => get(substate, 'baseData.coupon', {})
 );
 
+const selectProtocols = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.protocols', {})
+);
+
 const selectRewards = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.rewards', [])
+);
+
+const selectRewardsBalance = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.rewardsBalance', [])
 );
 
 const selectCards = () => createSelector(
@@ -191,9 +216,19 @@ const selectSitePatients = () => createSelector(
   (substate) => get(substate, 'baseData.sitePatients', {})
 );
 
+const selectClientCredits = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.clientCredits', {})
+);
+
 const selectPatientMessages = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.patientMessages', {})
+);
+
+const selectPatientMessageUnreadCount = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.patientMessages.stats.unreadTexts', 0)
 );
 
 const selectClientRoles = () => createSelector(
@@ -228,7 +263,7 @@ const selectSelectedUserDetailsForForm = () => createSelector(
       selectedUserInput.lastName = selectedUserDetails.lastName;
       selectedUserInput.email = selectedUserDetails.email;
 
-      if (!selectedUserDetails.roleForClient) {
+      if (!selectedUserDetails.roleForClient.site) {
         const foundSiteIndex = findIndex(clientSitesDetails, (siteIterator) => (findIndex(siteIterator.users, { id: selectedUserDetails.id }) > -1));
         if (foundSiteIndex > -1) {
           selectedUserInput.site = clientSitesDetails[foundSiteIndex].id.toString();
@@ -236,9 +271,9 @@ const selectSelectedUserDetailsForForm = () => createSelector(
           selectedUserInput.site = null;
         }
       } else {
-        selectedUserInput.site = '0';
-        selectedUserInput.purchase = selectedUserDetails.roleForClient.purchase;
-        selectedUserInput.reward = selectedUserDetails.roleForClient.reward;
+        selectedUserInput.isAdmin = selectedUserDetails.roleForClient.isAdmin;
+        selectedUserInput.canPurchase = selectedUserDetails.roleForClient.canPurchase;
+        selectedUserInput.canRedeemRewards = selectedUserDetails.roleForClient.canRedeemRewards;
       }
     }
 
@@ -275,6 +310,62 @@ const selectCreditsPrice = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.creditsPrice', {})
 );
+
+const selectChangeTimezoneState = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.changeUsersTimezoneState', {})
+);
+
+// TODO: debug this to select study instead landing
+const selectLanding = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.landing.details', {})
+);
+
+const selectLandingIsFetching = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.landing.fetching', {})
+);
+
+const selectLandingError = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.landing.error', {})
+);
+
+const selectSubscribedFromLanding = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.subscribedFromLanding', {})
+);
+
+const selectSubscriptionError = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.subscriptionError', {})
+);
+
+const selectFindOutPosted = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.findOutPosted', {})
+);
+
+const selectListSiteNowSuccess = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.listSiteNowSuccess', {})
+);
+
+const selectLearnAboutFutureTrialsSuccess = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.learnAboutFutureTrialsSuccess', {})
+);
+
+const selectNewContactSuccess = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.newContactsSuccess', {})
+);
+
+const selectTrials = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.trials.details', {})
+);
 // end
 
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
@@ -284,6 +375,8 @@ export {
   selectAuthState,
   selectEvents,
   selectCurrentUser,
+  selectLoginError,
+  selectUserRoleType,
   selectCurrentUserClientId,
   selectCurrentUserStripeCustomerId,
 
@@ -297,7 +390,9 @@ export {
   selectLevels,
   selectStudyLevels,
   selectCoupon,
+  selectProtocols,
   selectRewards,
+  selectRewardsBalance,
   selectCards,
   selectSavedCard,
   selectDeletedCard,
@@ -305,7 +400,9 @@ export {
 
   selectClientSites,
   selectSitePatients,
+  selectClientCredits,
   selectPatientMessages,
+  selectPatientMessageUnreadCount,
   selectClientRoles,
   selectSelectedSite,
   selectSelectedSiteDetailsForForm,
@@ -319,4 +416,18 @@ export {
 
   selectLocationState,
   selectCreditsPrice,
+
+  selectChangeTimezoneState,
+
+  selectLanding,
+  selectLandingIsFetching,
+  selectLandingError,
+  selectSubscribedFromLanding,
+  selectSubscriptionError,
+  selectFindOutPosted,
+  selectListSiteNowSuccess,
+  selectLearnAboutFutureTrialsSuccess,
+  selectNewContactSuccess,
+
+  selectTrials,
 };

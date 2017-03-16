@@ -6,7 +6,8 @@
 
 import React from 'react';
 import { Modal } from 'react-bootstrap';
-import AddNewCardForm from 'components/AddNewCardForm';
+import AddNewCardForm from '../../components/AddNewCardForm';
+import CenteredModal from '../../components/CenteredModal/index';
 
 class AddCreditCardModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -19,11 +20,11 @@ class AddCreditCardModal extends React.Component { // eslint-disable-line react/
   render() {
     return (
       <div>
-        <Modal className="custom-modal" show={this.props.showModal} onHide={this.props.closeModal}>
+        <Modal dialogComponentClass={CenteredModal} show={this.props.showModal} onHide={this.props.closeModal}>
           <Modal.Header>
             <Modal.Title>ADD NEW CARD</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closeModal}>
-              <i className="icomoon-icon_close"></i>
+              <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>

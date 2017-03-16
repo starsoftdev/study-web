@@ -7,12 +7,15 @@
 import {
   ADD_PATIENT_INDICATION_SUCCESS,
   ADD_PATIENT_NOTE_SUCCESS,
+  CLEAR_FORM_UPLOAD,
+  EXPORT_PATIENTS_SUCCESS,
+  FETCHING_STUDY,
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENT_DETAILS_SUCCESS,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
+  FETCH_PROTOCOL_SUCCESS,
   FETCH_SITE_SUCCESS,
-  EXPORT_PATIENTS_SUCCESS,
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
@@ -21,12 +24,13 @@ import {
   FETCH_STUDY_SUCCESS,
   REMOVE_PATIENT_INDICATION_SUCCESS,
   SET_STUDY_ID,
-  SET_SITE_ID,
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
   SET_OPEN_PATIENT_MODAL,
   SUBMIT_DELETE_NOTE_SUCCESS,
   SUBMIT_ADD_PATIENT_SUCCESS,
+  SUBMIT_ADD_PATIENT_FAILURE,
+  SUBMIT_PATIENT_IMPORT,
   MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
   MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
@@ -35,6 +39,7 @@ import {
   SWITCH_TO_TEXT_SECTION_DETAIL,
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
+  SUBMIT_ADD_PATIENT,
 } from './constants';
 import _ from 'lodash';
 
@@ -47,6 +52,9 @@ const initialState = {
     other: false,
   },
   openPatientModal: false,
+  addPatientStatus:{
+    adding: false,
+  },
 };
 
 function studyPageReducer(state = initialState, action) {
@@ -59,6 +67,11 @@ function studyPageReducer(state = initialState, action) {
     case EXPORT_PATIENTS_SUCCESS:
       return {
         ...state,
+      };
+    case FETCHING_STUDY:
+      return {
+        ...state,
+        fetchingStudy: true,
       };
     case FETCH_PATIENTS_SUCCESS:
       return {
@@ -88,12 +101,51 @@ function studyPageReducer(state = initialState, action) {
     case FETCH_PATIENT_DETAILS_SUCCESS:
     case REMOVE_PATIENT_INDICATION_SUCCESS:
     case SUBMIT_DELETE_NOTE_SUCCESS:
+    case UPDATE_PATIENT_SUCCESS:
+      if (action.payload && action.payload.lastTextMessage) {
+        return {
+          ...state,
+          patientCategories: patientCategories(state.patientCategories, action.payload.patientCategoryId, action.payload.patientId, action),
+        };
+      }
+      return {
+        ...state,
+        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),
+      };
+    case CLEAR_FORM_UPLOAD:
+      return {
+        ...state,
+        fileUploaded:null,
+      };
+    case SUBMIT_PATIENT_IMPORT:
+      return {
+        ...state,
+        fileUploaded: null,
+        uploadStarted: true,
+      };
+    case SUBMIT_ADD_PATIENT:
+      return {
+        ...state,
+        addPatientStatus: {
+          adding: true,
+        },
+      };
     case SUBMIT_ADD_PATIENT_SUCCESS:
       return {
         ...state,
+        uploadStarted: null,
+        fileUploaded: action.fileName,
+        addPatientStatus: {
+          adding: false,
+        },
         patientCategories: state.patientCategories.map(category => {
           if (category.name === 'New Patient') {
-            if (Array.isArray(action.patients)) {
+            if (!category.patients) {
+              return {
+                ...category,
+                patients: [...action.patients],
+              };
+            } else if (Array.isArray(action.patients)) {
               return {
                 ...category,
                 patients: [
@@ -113,11 +165,13 @@ function studyPageReducer(state = initialState, action) {
           return category;
         }),
       };
-
-    case UPDATE_PATIENT_SUCCESS:
+    case SUBMIT_ADD_PATIENT_FAILURE:
       return {
         ...state,
-        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),
+        uploadStarted: null,
+        addPatientStatus: {
+          adding: false,
+        },
       };
     case MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS:
       return {
@@ -134,6 +188,11 @@ function studyPageReducer(state = initialState, action) {
           return patientCategoryTemp;
         }),
         fetchingPatientCategories: false,
+      };
+    case FETCH_PROTOCOL_SUCCESS:
+      return {
+        ...state,
+        protocol: action.payload,
       };
     case FETCH_SITE_SUCCESS:
       return {
@@ -190,11 +249,6 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         studyId: action.id,
-      };
-    case SET_SITE_ID:
-      return {
-        ...state,
-        siteId: action.id,
       };
     case SET_CURRENT_PATIENT_ID:
       return {
@@ -341,9 +395,15 @@ function patients(state, currentPatientId, action) {
         if (patient.id === currentPatientId) {
           return {
             ...patient,
-            indications: [
-              ...patient.indications,
-              action.indication,
+            patientIndications: [
+              ...patient.patientIndications,
+              {
+                // isOriginal: false,      // always false on manual addition of indication
+                isOriginal: action.isOriginal,
+                indication: action.indication,
+                indication_id: action.indication.id,
+                patient_id: action.patientId,
+              },
             ],
           };
         }
@@ -370,8 +430,8 @@ function patients(state, currentPatientId, action) {
         if (patient.id === currentPatientId) {
           return {
             ...patient,
-            indications: patient.indications.filter(indication => (
-              indication.id !== action.indicationId
+            patientIndications: patient.patientIndications.filter(pi => (
+              pi.indication.id !== action.indicationId
             )),
           };
         }

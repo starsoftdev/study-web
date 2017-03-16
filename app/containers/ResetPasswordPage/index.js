@@ -6,46 +6,54 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import Helmet from 'react-helmet';
-import { resetPasswordRequest } from './actions';
-import ResetPasswordForm from 'components/ResetPasswordForm';
-import 'containers/LoginPage/styles.less';
+import { reset } from 'redux-form';
+import { createStructuredSelector } from 'reselect';
+import ResetPasswordForm from '../../components/ResetPasswordForm';
+
+import './styles.less';
+
+import {
+  clearResetPasswordSuccess,
+  resetPasswordRequest,
+} from './actions';
+
+import {
+  selectResetPasswordSuccess,
+} from './selectors';
 
 export class ResetPasswordPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     onSubmitForm: React.PropTypes.func,
+    clearResetPasswordSuccess: React.PropTypes.func,
+    resetForm: React.PropTypes.func,
+    resetPasswordSuccess: React.PropTypes.bool,
   };
 
   constructor(props) {
     super(props);
     this.onSubmitForm = this.props.onSubmitForm.bind(this);
   }
+
   render() {
     return (
-      <div className="login-page-wrapper">
-        <Helmet title="Reset Password" />
-        <div className="row">
-          <div className="col-md-4 col-md-push-4">
-            <div className="login-block">
-              <div className="text-center">
-                <h3>Reset Password</h3>
-              </div>
-              <br />
-
-              <ResetPasswordForm onSubmit={this.onSubmitForm} />
-            </div>
-          </div>
-        </div>
+      <div className="container">
+        <ResetPasswordForm onSubmit={this.onSubmitForm} {...this.props} />
       </div>
     );
   }
 }
 
+const mapStateToProps = createStructuredSelector({
+  resetPasswordSuccess: selectResetPasswordSuccess(),
+});
+
 function mapDispatchToProps(dispatch) {
   return {
     onSubmitForm: (values) => dispatch(resetPasswordRequest(values)),
+    resetForm: () => dispatch(reset('resetPassword')),
+    clearResetPasswordSuccess: () => dispatch(clearResetPasswordSuccess()),
   };
 }
 
-export default connect(null, mapDispatchToProps)(ResetPasswordPage);
+export default connect(mapStateToProps, mapDispatchToProps)(ResetPasswordPage);

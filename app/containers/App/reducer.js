@@ -1,5 +1,5 @@
-import { getItem } from 'utils/localStorage';
-import { forEach, map, remove, cloneDeep, findIndex, concat } from 'lodash';
+import { getItem } from '../../utils/localStorage';
+import _, { forEach, map, remove, cloneDeep, findIndex, concat, sortBy, reverse } from 'lodash';
 
 import {
   SET_AUTH_STATE,
@@ -20,9 +20,16 @@ import {
   FETCH_REWARDS_SUCCESS,
   FETCH_REWARDS_ERROR,
 
+  FETCH_REWARDS_BALANCE_SUCCESS,
+  REDEEM_SUCCESS,
+
   FETCH_CARDS,
   FETCH_CARDS_SUCCESS,
   FETCH_CARDS_ERROR,
+
+  FETCH_PROTOCOLS,
+  FETCH_PROTOCOLS_SUCCESS,
+  FETCH_PROTOCOLS_ERROR,
 
   SAVE_CARD,
   SAVE_CARD_SUCCESS,
@@ -46,12 +53,17 @@ import {
   FETCH_SITE_PATIENTS_ERROR,
   UPDATE_SITE_PATIENTS,
 
+  FETCH_CLIENT_CREDITS,
+  FETCH_CLIENT_CREDITS_SUCCESS,
+  FETCH_CLIENT_CREDITS_ERROR,
+
   FETCH_PATIENT_MESSAGES,
   FETCH_PATIENT_MESSAGES_SUCCESS,
   FETCH_PATIENT_MESSAGES_ERROR,
   UPDATE_PATIENT_MESSAGES,
 
-  SEARCH_SITE_PATIENTS,
+  FETCH_PATIENT_MESSAGE_UNREAD_COUNT_SUCCESS,
+
   SEARCH_SITE_PATIENTS_SUCCESS,
   SEARCH_SITE_PATIENTS_ERROR,
 
@@ -91,27 +103,79 @@ import {
   GET_AVAIL_PHONE_NUMBERS_SUCCESS,
 
   GET_CREDITS_PRICE_SUCCESS,
+
+  CHANGE_USERS_TIMEZONE,
+  CHANGE_USERS_TIMEZONE_SUCCESS,
+  CHANGE_USERS_TIMEZONE_ERROR,
+
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
+  CLEAR_LANDING,
+  PATIENT_SUBSCRIBED,
+  PATIENT_SUBSCRIPTION_ERROR,
+  FIND_OUT_PATIENTS_POSTED,
+
+  CLINICAL_TRIALS_SEARCH_SUCCESS,
+  CLEAR_CLINICAL_TRIALS_SEARCH,
+  LIST_SITE_NOW_SUCCESS,
+  RESET_LIST_SITE_NOW_SUCCESS,
+  LEARN_ABOUT_FUTURE_TRIALS_SUCCESS,
+  RESET_LEARN_ABOUT_FUTURE_TRIALS,
+  NEW_CONTACT_SUCCESS,
+  RESET_NEW_CONTACT_SUCCESS,
 } from './constants';
 
 import {
+  LOGIN_ERROR,
+} from '../../containers/LoginPage/constants';
+
+import {
   CHANGE_IMAGE_SUCCESS,
-} from 'containers/ProfilePage/constants';
+} from '../../containers/ProfilePage/constants';
+
+import {
+  UPGRADE_STUDY_SUCCESS,
+  SORT_SUCCESS,
+} from '../../containers/HomePage/constants';
 
 const initialState = {
   loggedIn: !!getItem('auth_token'),
+  loginError: null,
   userData: null,
   pageEvents: null,
   baseData: {
+    studies: {
+      details: [],
+      fetching: false,
+      error: null,
+    },
     sites: [],
     indications: [],
+    subscriptionError: null,
+    subscribedFromLanding: null,
+    findOutPosted: null,
+    listSiteNowSuccess: null,
+    learnAboutFutureTrialsSuccess: null,
+    newContactsSuccess: null,
     sources: [],
     levels: [],
+    landing: {
+      details: null,
+      fetching: false,
+      error: null,
+    },
     coupon: {
       details: null,
       fetching: false,
       error: null,
     },
     cards: {
+      details: null,
+      fetching: false,
+      error: null,
+    },
+    trials: {
       details: null,
       fetching: false,
       error: null,
@@ -141,12 +205,23 @@ const initialState = {
       fetching: false,
       error: null,
     },
+    clientCredits: {
+      details: {},
+      fetching: false,
+      error: null,
+    },
     patientMessages: {
       details: [],
       fetching: false,
       error: null,
     },
     rewards: [],
+    rewardsBalance: {},
+    protocols: {
+      details: [],
+      fetching: false,
+      error: null,
+    },
     clientRoles: {
       details: [],
       fetching: false,
@@ -184,6 +259,9 @@ const initialState = {
     },
     availPhoneNumbers: [],
     creditsPrice: {},
+    changeUsersTimezoneState: {
+      saving: false,
+    },
   },
 };
 
@@ -194,9 +272,12 @@ export default function appReducer(state = initialState, action) {
   const clientSitesCollection = map(state.baseData.clientSites.details, cloneDeep);
   const clientRolesCollection = map(state.baseData.clientRoles.details, cloneDeep);
   let sitePatientsCollection = [];
+  let unreadCount = 0;
   let patientMessagesCollection = [];
   let baseDataInnerState = null;
   let resultState = null;
+  let userRoleType = '';
+  let temRoleID = null;
 
   switch (action.type) {
     case SET_AUTH_STATE:
@@ -205,10 +286,28 @@ export default function appReducer(state = initialState, action) {
         loggedIn: payload.newAuthState,
       };
       break;
+    case LOGIN_ERROR:
+      resultState = {
+        ...state,
+        loginError: payload,
+      };
+      break;
     case SET_USER_DATA:
+      if (payload.userData) {
+        if (payload.userData.roleForSponsor) {
+          userRoleType = 'sponsor';
+        } else if (payload.userData.roleForClient) {
+          userRoleType = 'client';
+        } else if (payload.userData.roles && payload.userData.roles.length > 0) {
+          userRoleType = 'dashboard';
+        } else {
+          userRoleType = '';
+        }
+      }
       resultState = {
         ...state,
         userData: payload.userData,
+        userRoleType,
       };
       break;
     case CHANGE_IMAGE_SUCCESS:
@@ -231,6 +330,130 @@ export default function appReducer(state = initialState, action) {
     case FETCH_INDICATIONS_SUCCESS:
       baseDataInnerState = {
         indications: payload,
+      };
+      break;
+    case UPGRADE_STUDY_SUCCESS: {
+      const studies = _.cloneDeep(state.baseData.studies.details);
+      const study = _.find(studies, (o) => (o.studyId === payload.studyId));
+      study.campaign.level_id = payload.newLevelId;
+      baseDataInnerState = {
+        studies: {
+          details: studies,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    }
+    case SORT_SUCCESS:
+      baseDataInnerState = {
+        studies: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_LANDING:
+      baseDataInnerState = {
+        subscriptionError: null,
+        landing: {
+          details: null,
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_LANDING_SUCCESS:
+      baseDataInnerState = {
+        landing: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_LANDING_ERROR:
+      baseDataInnerState = {
+        landing: {
+          details: null,
+          fetching: false,
+          error: payload,
+        },
+      };
+      break;
+    case CLEAR_LANDING:
+      baseDataInnerState = {
+        subscriptionError: null,
+        subscribedFromLanding: null,
+        landing: {
+          details: null,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case CLINICAL_TRIALS_SEARCH_SUCCESS:
+      baseDataInnerState = {
+        trials: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case CLEAR_CLINICAL_TRIALS_SEARCH:
+      baseDataInnerState = {
+        trials: {
+          details: null,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case PATIENT_SUBSCRIBED:
+      baseDataInnerState = {
+        subscribedFromLanding: payload,
+      };
+      break;
+    case FIND_OUT_PATIENTS_POSTED:
+      baseDataInnerState = {
+        findOutPosted: payload,
+      };
+      break;
+    case LIST_SITE_NOW_SUCCESS:
+      baseDataInnerState = {
+        listSiteNowSuccess: true,
+      };
+      break;
+    case RESET_LIST_SITE_NOW_SUCCESS:
+      baseDataInnerState = {
+        listSiteNowSuccess: null,
+      };
+      break;
+    case LEARN_ABOUT_FUTURE_TRIALS_SUCCESS:
+      baseDataInnerState = {
+        learnAboutFutureTrialsSuccess: true,
+      };
+      break;
+    case RESET_LEARN_ABOUT_FUTURE_TRIALS:
+      baseDataInnerState = {
+        learnAboutFutureTrialsSuccess: null,
+      };
+      break;
+    case NEW_CONTACT_SUCCESS:
+      baseDataInnerState = {
+        newContactsSuccess: true,
+      };
+      break;
+    case RESET_NEW_CONTACT_SUCCESS:
+      baseDataInnerState = {
+        newContactsSuccess: null,
+      };
+      break;
+    case PATIENT_SUBSCRIPTION_ERROR:
+      baseDataInnerState = {
+        subscriptionError: payload,
       };
       break;
     case FETCH_SOURCES_SUCCESS:
@@ -292,6 +515,54 @@ export default function appReducer(state = initialState, action) {
     case FETCH_REWARDS_ERROR:
       baseDataInnerState = {
         rewards: [],
+      };
+      break;
+    case FETCH_REWARDS_BALANCE_SUCCESS: {
+      const { siteId } = action;
+      baseDataInnerState = {
+        rewardsBalance: {
+          ...state.baseData.rewardsBalance,
+          [siteId || 0]: payload,
+        },
+      };
+      break;
+    }
+    case REDEEM_SUCCESS: {
+      const { siteId, balance, points } = payload;
+      baseDataInnerState = {
+        rewardsBalance: {
+          ...state.baseData.rewardsBalance,
+          [siteId]: balance,
+          0: parseInt(state.baseData.rewardsBalance[0]) + parseInt(points),
+        },
+      };
+      break;
+    }
+    case FETCH_PROTOCOLS:
+      baseDataInnerState = {
+        protocols: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_PROTOCOLS_SUCCESS:
+      baseDataInnerState = {
+        protocols: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_PROTOCOLS_ERROR:
+      baseDataInnerState = {
+        protocols: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
       };
       break;
     case FETCH_CARDS:
@@ -452,9 +723,10 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case FETCH_SITE_PATIENTS_SUCCESS:
+      sitePatientsCollection = reverse(sortBy(payload, item => item.twtm_max_date_created));
       baseDataInnerState = {
         sitePatients: {
-          details: payload,
+          details: sitePatientsCollection,
           fetching: false,
           error: null,
         },
@@ -470,34 +742,54 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case UPDATE_SITE_PATIENTS:
+      unreadCount = 0;
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
         let patientData = null;
         patientData = item;
         if (patientData.id === action.newMessage.patient_id && patientData.study_id === action.newMessage.study_id) {
           const countUnread = patientData.count_unread;
           if (countUnread) {
-            patientData.count_unread = parseInt(countUnread) + 1;
+            if (action.newMessage.twilioTextMessage.direction === 'outbound-api') {
+              patientData.count_unread = parseInt(countUnread);
+            } else {
+              patientData.count_unread = parseInt(countUnread) + 1;
+              unreadCount = 1;
+            }
+          } else if (action.newMessage.twilioTextMessage.direction === 'outbound-api') {
+            patientData.count_unread = 0;
           } else {
             patientData.count_unread = 1;
+            unreadCount = 1;
           }
-          patientData.twtm_max_date_created = action.newMessage.twilioTextMessage.created_datetime;
+          patientData.twtm_max_date_created = action.newMessage.twilioTextMessage.dateCreated;
           patientData.last_message_body = action.newMessage.twilioTextMessage.body;
         }
         return patientData;
       });
+      sitePatientsCollection = reverse(sortBy(sitePatientsCollection, item => item.twtm_max_date_created));
       baseDataInnerState = {
         sitePatients: {
           details: sitePatientsCollection,
           fetching: false,
           error: null,
         },
+        patientMessages: {
+          details: state.baseData.patientMessages.details,
+          fetching: false,
+          error: null,
+          stats: {
+            total: state.baseData.patientMessages.stats.total,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails,
+            unreadTexts: state.baseData.patientMessages.stats.unreadTexts + unreadCount,
+          },
+        },
       };
       break;
     case MARK_AS_READ_PATIENT_MESSAGES:
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
-        let patientData = null;
-        patientData = item;
+        const patientData = Object.assign({}, item);
         if (patientData.id === action.patientId && patientData.study_id === action.studyId) {
+          unreadCount = patientData.count_unread;
           patientData.count_unread = 0;
         }
         return patientData;
@@ -508,11 +800,49 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
         },
+        patientMessages: {
+          details: state.baseData.patientMessages.details,
+          fetching: false,
+          error: null,
+          stats: {
+            total: state.baseData.patientMessages.stats.total,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails,
+            unreadTexts: state.baseData.patientMessages.stats.unreadTexts - unreadCount,
+          },
+        },
+      };
+      break;
+    case FETCH_CLIENT_CREDITS:
+      baseDataInnerState = {
+        clientCredits: {
+          details: {},
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_CLIENT_CREDITS_SUCCESS:
+      baseDataInnerState = {
+        clientCredits: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_CLIENT_CREDITS_ERROR:
+      baseDataInnerState = {
+        clientCredits: {
+          details: {},
+          fetching: false,
+          error: payload,
+        },
       };
       break;
     case FETCH_PATIENT_MESSAGES:
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: [],
           fetching: true,
           error: null,
@@ -522,6 +852,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_PATIENT_MESSAGES_SUCCESS:
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: payload,
           fetching: false,
           error: null,
@@ -533,6 +864,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_PATIENT_MESSAGES_ERROR:
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: [],
           fetching: false,
           error: payload,
@@ -543,6 +875,7 @@ export default function appReducer(state = initialState, action) {
       patientMessagesCollection = concat(state.baseData.patientMessages.details, action.newMessage);
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: patientMessagesCollection,
           fetching: false,
           error: null,
@@ -550,14 +883,21 @@ export default function appReducer(state = initialState, action) {
       };
       baseDataInnerState = {
         patientMessages: {
+          ...state.baseData.patientMessages,
           details: patientMessagesCollection,
           fetching: false,
           error: null,
         },
       };
       break;
-    case SEARCH_SITE_PATIENTS:
-      return state;
+    case FETCH_PATIENT_MESSAGE_UNREAD_COUNT_SUCCESS:
+      baseDataInnerState = {
+        patientMessages: {
+          ...state.baseData.patientMessages,
+          stats: action.payload,
+        },
+      };
+      break;
     case SEARCH_SITE_PATIENTS_SUCCESS:
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
         let patientData = null;
@@ -693,11 +1033,30 @@ export default function appReducer(state = initialState, action) {
       break;
     case DELETE_USER_SUCCESS:
       forEach(clientSitesCollection, item => {
-        if (remove(item.users, { id: payload.id }).length > 0) {
+        forEach(item.roles, role => {
+          if (role.user.id === payload.id) {
+            temRoleID = role.id;
+            return false;
+          }
+          return true;
+        });
+      });
+      forEach(clientSitesCollection, item => {
+        if (remove(item.roles, { id: temRoleID }).length > 0) {
           return false;
         }
         return true;
       });
+
+      forEach(clientRolesCollection, item => {
+        if (item.user.id === payload.id) {
+          temRoleID = item.id;
+          return false;
+        }
+        return true;
+      });
+      remove(clientRolesCollection, { id: temRoleID });
+
       baseDataInnerState = {
         deletedUser: {
           details: payload,
@@ -706,6 +1065,11 @@ export default function appReducer(state = initialState, action) {
         },
         clientSites: {
           details: clientSitesCollection,
+          fetching: false,
+          error: null,
+        },
+        clientRoles: {
+          details: clientRolesCollection,
           fetching: false,
           error: null,
         },
@@ -784,12 +1148,13 @@ export default function appReducer(state = initialState, action) {
       break;
     case SAVE_SITE_SUCCESS:
       foundIndex = findIndex(clientSitesCollection, { id: payload.id });
-      if (!payload.users) {
-        payload.users = [];
+      if (!payload.roles) {
+        payload.roles = [];
       }
       if (foundIndex < 0) {
         clientSitesCollection.push(payload);
       } else {
+        payload.roles = clientSitesCollection[foundIndex].roles;
         clientSitesCollection[foundIndex] = payload;
       }
       baseDataInnerState = {
@@ -834,21 +1199,25 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SAVE_USER_SUCCESS:
+      console.log('payload', payload);
       if (payload.userType === 'admin') {
         forEach(clientSitesCollection, item => {
-          if (remove(item.users, { id: payload.userResultData.user.id }).length > 0) {
+          foundIndex = findIndex(item.roles, { id: payload.userResultData.user.id });
+          if (foundIndex > -1) {
+            item.roles.splice(foundIndex, 1);
+            foundIndex = -1;
             return false;
           }
           return true;
         });
       } else if (payload.userType === 'nonAdmin') {
         forEach(clientSitesCollection, item => {
-          foundIndex = findIndex(item.users, { id: payload.userResultData.user.id });
+          foundIndex = findIndex(item.roles, { id: payload.userResultData.user.id });
           if (foundIndex > -1) {
             if (item.id === payload.userResultData.siteId) {
-              item.users[foundIndex] = payload.userResultData.user; // eslint-disable-line
+              item.roles[foundIndex].user = payload.userResultData.user; // eslint-disable-line
             } else {
-              item.users.splice(foundIndex, 1);
+              item.roles.splice(foundIndex, 1);
               foundIndex = -1;
             }
             return false;
@@ -858,11 +1227,10 @@ export default function appReducer(state = initialState, action) {
         if (foundIndex < 0) {
           foundIndex = findIndex(clientSitesCollection, { id: payload.userResultData.siteId });
           if (foundIndex > -1) {
-            clientSitesCollection[foundIndex].users.push(payload.userResultData.user);
+            clientSitesCollection[foundIndex].roles.push(payload.userResultData);
           }
         }
       }
-
       foundIndex = findIndex(clientRolesCollection, (item) => (item.user.id === payload.userResultData.user.id));
       if (payload.userType === 'admin') {
         if (foundIndex < 0) {
@@ -872,9 +1240,18 @@ export default function appReducer(state = initialState, action) {
         }
       } else if (payload.userType === 'nonAdmin') {
         if (foundIndex > -1) {
-          clientRolesCollection.splice(foundIndex, 1);
+          clientRolesCollection[foundIndex] = payload.userResultData;
         }
       }
+      // if (payload.userResultData.header === 'Add User') {
+      //   // console.log('New', payload.userResultData);
+      //   // if (payload.userResultData.siteId && payload.userResultData.siteId !== '0') {
+      //   //   foundIndex = findIndex(clientSitesCollection, { id: payload.userResultData.siteId });
+      //   //   clientSitesCollection[foundIndex].roles.push(payload.userResultData.user);
+      //   // } else {
+      //   clientRolesCollection.push(payload.userResultData);
+      //   // }
+      // }
 
       baseDataInnerState = {
         savedUser: {
@@ -921,6 +1298,36 @@ export default function appReducer(state = initialState, action) {
     case GET_CREDITS_PRICE_SUCCESS:
       baseDataInnerState = {
         creditsPrice: payload,
+      };
+      break;
+    case CHANGE_USERS_TIMEZONE:
+      baseDataInnerState = {
+        changeUsersTimezoneState: {
+          saving: true,
+        },
+      };
+      break;
+    case CHANGE_USERS_TIMEZONE_SUCCESS:
+      baseDataInnerState = {
+        changeUsersTimezoneState: {
+          saving: false,
+        },
+      };
+
+      resultState = {
+        ...state,
+        userData: { ...state.userData, timezone: payload },
+        baseData: {
+          ...state.baseData,
+          ...baseDataInnerState,
+        },
+      };
+      break;
+    case CHANGE_USERS_TIMEZONE_ERROR:
+      baseDataInnerState = {
+        changeUsersTimezoneState: {
+          saving: false,
+        },
       };
       break;
     default:

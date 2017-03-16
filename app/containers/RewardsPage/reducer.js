@@ -4,23 +4,28 @@
  *
  */
 
-import { map } from 'lodash';
-
 import {
   DEFAULT_SITES,
-  FETCH_SITES_SUCCESS,
-} from 'containers/RewardsPage/constants';
+  SET_ACTIVE_SORT,
+} from '../../containers/RewardsPage/constants';
 
 const initialState = {
   sites: DEFAULT_SITES,
+  paginationOptions: {
+    activeSort: null,
+    activeDirection: null,
+  },
 };
 
 function RewardsPageReducer(state = initialState, action) {
   switch (action.type) {
-    case FETCH_SITES_SUCCESS:
+    case SET_ACTIVE_SORT:
       return {
         ...state,
-        sites: map(action.payload, 'type'),
+        paginationOptions: {
+          activeSort: action.sort,
+          activeDirection: action.direction,
+        },
       };
     default:
       return state;

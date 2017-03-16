@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { get } from 'lodash';
 
 const selectHomePageDomain = () => state => state.homePage;
 
@@ -17,14 +18,29 @@ const selectPatientMessages = () => createSelector(
   substate => substate.patientMessages
 );
 
-const selectRewardsPoint = () => createSelector(
+const selectPrincipalInvestigatorTotals = () => createSelector(
   selectHomePageDomain(),
-  substate => substate.rewardsPoint
+  substate => substate.principalInvestigatorTotals
 );
 
 const selectStudies = () => createSelector(
   selectHomePageDomain(),
   substate => substate.studies
+);
+
+const selectProtocols = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.protocols
+);
+
+const selectProtocolNumbers = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.protocolNumbers
+);
+
+const selectIndications = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.indications
 );
 
 const selectSelectedIndicationLevelPrice = () => createSelector(
@@ -47,15 +63,45 @@ const selectEditedStudy = () => createSelector(
   substate => substate.editedStudy
 );
 
+const selectPaginationOptions = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.paginationOptions
+);
+
+const selectAddNotificationProcess = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.addNotificationProcess
+);
+
+const selectHomePageClientAdmins = () => createSelector(
+  selectHomePageDomain(),
+  substate => substate.clientAdmins
+);
+
+const selectFormDomain = () => state => state.form;
+
+const selectSearchProtocolsFormValues = () => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, 'searchProtocols.values', {})
+);
+
+
 export default selectHomePage;
 export {
   selectHomePageDomain,
   selectPatientSignUps,
   selectPatientMessages,
-  selectRewardsPoint,
+  selectPrincipalInvestigatorTotals,
   selectStudies,
+  selectProtocols,
+  selectProtocolNumbers,
+  selectIndications,
   selectSelectedIndicationLevelPrice,
   selectRenewedStudy,
   selectUpgradedStudy,
   selectEditedStudy,
+  selectPaginationOptions,
+  selectSearchProtocolsFormValues,
+  selectAddNotificationProcess,
+  selectHomePageClientAdmins,
 };

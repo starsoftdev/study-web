@@ -5,12 +5,8 @@ import { shallow, mount } from 'enzyme';
 
 import { Provider } from 'react-redux';
 import React from 'react';
-import configureStore from 'store';
-// import { ReduxForm } from 'redux-form';
-import { IrbAdCreationPage } from 'containers/IrbAdCreationPage';
-// import IrbAdCreationForm from 'components/IrbAdCreationForm';
-// import { shallow } from 'enzyme';
-// import React from 'react';
+import configureStore from '../../../store';
+import IrbAdCreationPage from '../index';
 
 describe('<IrbAdCreationPage />', () => {
   let setup;

@@ -1,9 +1,9 @@
-import { ManageTransferNumberPage } from 'containers/ManageTransferNumberPage';
+import ManageTransferNumberPage from '../index';
 import expect from 'expect';
 import { shallow, mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import React from 'react';
-import configureStore from 'store';
+import configureStore from '../../../store';
 import { ReduxForm } from 'redux-form';
 
 describe('<ManageTransferNumberPage />', () => {
