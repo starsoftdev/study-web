@@ -82,7 +82,7 @@ class GetProposalModal extends React.Component {
       >
         <Modal.Header>
           <Modal.Title>
-            <strong>list now</strong>
+            <strong>get proposal</strong>
           </Modal.Title>
           <a className="close" onClick={this.onHide}>
             <i className="icomoon-icon_close" />
