@@ -4,6 +4,7 @@
 
 import { call, fork, put, take, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
+import { takeLatest } from 'redux-saga';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import request from '../../utils/request';
@@ -119,17 +120,20 @@ function* fetchStudyDetails() {
   }
 }
 
-function* fetchStudyViewsStat() {
+function* fetchStudyViewsStat(action) {
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
   }
 
-  // listen for the FETCH_STUDY action
-  const { studyId } = yield take(FETCH_STUDY);
+  // listen for the latest FETCH_STUDY action
+  const { studyId, campaignId } = action;
 
   try {
-    const requestURL = `${API_URL}/studies/${studyId}/landingPageViews`;
+    let requestURL = `${API_URL}/studies/${studyId}/landingPageViews`;
+    if (campaignId) {
+      requestURL += `?campaignId=${campaignId}`;
+    }
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -140,17 +144,20 @@ function* fetchStudyViewsStat() {
   }
 }
 
-function* fetchPatientReferralStat() {
+function* fetchPatientReferralStat(action) {
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
   }
 
-  // listen for the FETCH_STUDY action
-  const { studyId } = yield take(FETCH_STUDY);
+  // listen for the latest FETCH_STUDY action
+  const { studyId, campaignId } = action;
 
   try {
-    const requestURL = `${API_URL}/studies/${studyId}/patients/count`;
+    let requestURL = `${API_URL}/studies/getPatientReferrals/${studyId}`;
+    if (campaignId) {
+      requestURL += `?campaignId=${campaignId}`;
+    }
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -161,17 +168,20 @@ function* fetchPatientReferralStat() {
   }
 }
 
-function* fetchStudyCallStats() {
+function* fetchStudyCallStats(action) {
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
   }
 
-  // listen for the FETCH_STUDY action
-  const { studyId } = yield take(FETCH_STUDY);
+  // listen for the latest FETCH_STUDY action
+  const { studyId, campaignId } = action;
 
   try {
-    const requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}`;
+    let requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}`;
+    if (campaignId) {
+      requestURL += `?campaignId=${campaignId}`;
+    }
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -182,17 +192,20 @@ function* fetchStudyCallStats() {
   }
 }
 
-function* fetchStudyTextStats() {
+function* fetchStudyTextStats(action) {
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
   }
 
-  // listen for the FETCH_STUDY action
-  const { studyId } = yield take(FETCH_STUDY);
+  // listen for the latest FETCH_STUDY action
+  const { studyId, campaignId } = action;
 
   try {
-    const requestURL = `${API_URL}/textMessages/countStudyMessages/${studyId}`;
+    let requestURL = `${API_URL}/textMessages/countStudyMessages/${studyId}`;
+    if (campaignId) {
+      requestURL += `?campaignId=${campaignId}`;
+    }
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -377,6 +390,9 @@ function* fetchPatientDetails() {
         },
         {
           relation: 'studySource',
+          scope: {
+            include: 'source',
+          },
         },
         {
           relation: 'textMessages',
@@ -481,11 +497,15 @@ function* submitAddPatientIndication() {
     }
 
     try {
-      const requestURL = `${API_URL}/patients/${patientId}/indications/rel/${indication.id}`;
-      yield call(request, requestURL, {
-        method: 'PUT',
+      const requestURL = `${API_URL}/patientIndications/add`;
+      const payload = yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          patientId,
+          indicationId: indication.id,
+        }),
       });
-      yield put(addPatientIndicationSuccess(patientId, indication));
+      yield put(addPatientIndicationSuccess(patientId, indication, payload.isOriginal));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -533,9 +553,13 @@ function* submitRemovePatientIndication() {
     }
 
     try {
-      const requestURL = `${API_URL}/patients/${patientId}/indications/rel/${indicationId}`;
+      const requestURL = `${API_URL}/patientIndications/delete`;
       yield call(request, requestURL, {
         method: 'DELETE',
+        body: JSON.stringify({
+          patientId,
+          indicationId,
+        }),
       });
       yield put(removePatientIndicationSuccess(patientId, indicationId));
     } catch (e) {
@@ -557,7 +581,7 @@ function* submitPatientUpdate() {
     try {
       const requestURL = `${API_URL}/patients/${patientId}`;
       const response = yield call(request, requestURL, {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify(fields),
       });
       yield put(updatePatientSuccess(response));
@@ -760,10 +784,10 @@ export function* submitSchedule() {
 export function* fetchStudySaga() {
   try {
     const watcherA = yield fork(fetchStudyDetails);
-    const watcherB = yield fork(fetchStudyViewsStat);
-    const watcherC = yield fork(fetchPatientReferralStat);
-    const watcherD = yield fork(fetchStudyCallStats);
-    const watcherE = yield fork(fetchStudyTextStats);
+    const watcherB = yield fork(takeLatest, FETCH_STUDY, fetchStudyViewsStat);
+    const watcherC = yield fork(takeLatest, FETCH_STUDY, fetchPatientReferralStat);
+    const watcherD = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
+    const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);
     const watcherH = yield fork(exportPatients);

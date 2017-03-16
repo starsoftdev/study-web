@@ -138,6 +138,11 @@ const selectCoupon = () => createSelector(
   (substate) => get(substate, 'baseData.coupon', {})
 );
 
+const selectProtocols = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.protocols', {})
+);
+
 const selectRewards = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.rewards', [])
@@ -315,6 +320,11 @@ const selectListSiteNowSuccess = () => createSelector(
   (substate) => get(substate, 'baseData.listSiteNowSuccess', {})
 );
 
+const selectGetProposalSuccess = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.getProposalSuccess', {})
+);
+
 const selectLearnAboutFutureTrialsSuccess = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.learnAboutFutureTrialsSuccess', {})
@@ -352,6 +362,7 @@ export {
   selectLevels,
   selectStudyLevels,
   selectCoupon,
+  selectProtocols,
   selectRewards,
   selectRewardsBalance,
   selectCards,
@@ -387,6 +398,7 @@ export {
   selectSubscriptionError,
   selectFindOutPosted,
   selectListSiteNowSuccess,
+  selectGetProposalSuccess,
   selectLearnAboutFutureTrialsSuccess,
   selectNewContactSuccess,
 

@@ -28,6 +28,7 @@ import {
   FETCH_STUDIES_DASHBOARD,
   FETCH_SITE_LOCATIONS,
   FETCH_SITE_NAMES,
+  UPDATE_DASHBOARD_STUDY,
 } from './AdminDashboard/constants';
 
 import {
@@ -37,6 +38,8 @@ import {
   fetchSiteLocationsError,
   fetchSiteNamesSuccess,
   fetchSiteNamesError,
+  updateDashboardStudySuccess,
+  updateDashboardStudyError,
 } from './AdminDashboard/actions';
 
 import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
@@ -447,6 +450,28 @@ export function* fetchSiteNamesWorker() {
   }
 }
 
+export function* updateDashboardStudyWatcher() {
+  yield* takeLatest(UPDATE_DASHBOARD_STUDY, updateDashboardStudyWorker);
+}
+
+export function* updateDashboardStudyWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/studies/updateDashboardStudy`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(updateDashboardStudySuccess(response));
+  } catch (err) {
+    yield put(updateDashboardStudyError(err));
+  }
+}
+
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   const watcherB = yield fork(fetchPatientMessagesWatcher);
@@ -464,6 +489,7 @@ export function* homePageSaga() {
   const fetchStudiesDashboardWatcher1 = yield fork(fetchStudiesDashboardWatcher);
   const fetchSiteLocationsWatcher1 = yield fork(fetchSiteLocationsWatcher);
   const fetchSiteNamesWatcher1 = yield fork(fetchSiteNamesWatcher);
+  const updateDashboardStudyWatcher1 = yield fork(updateDashboardStudyWatcher);
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
@@ -484,5 +510,6 @@ export function* homePageSaga() {
     yield cancel(fetchStudiesDashboardWatcher1);
     yield cancel(fetchSiteLocationsWatcher1);
     yield cancel(fetchSiteNamesWatcher1);
+    yield cancel(updateDashboardStudyWatcher1);
   }
 }

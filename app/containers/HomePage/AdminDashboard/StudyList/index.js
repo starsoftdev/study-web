@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field } from 'redux-form';
+import { Field, change, destroy } from 'redux-form';
 import { map, indexOf } from 'lodash';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
@@ -22,10 +22,15 @@ import LoadingSpinner from '../../../../components/LoadingSpinner';
 
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    dispatch: PropTypes.func,
     studies: PropTypes.object,
     paginationOptions: PropTypes.object,
     change: PropTypes.func,
     fetchStudiesDashboard: PropTypes.func,
+    totals: PropTypes.object,
+    fetchStudiesAccordingToFilters: PropTypes.func,
+    usersByRoles: PropTypes.object,
+    updateDashboardStudy: PropTypes.func,
   };
 
   constructor(props) {
@@ -49,6 +54,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.onTableScroll = this.onTableScroll.bind(this);
+    this.campaignChanged = this.campaignChanged.bind(this);
+    this.updateStudy = this.updateStudy.bind(this);
 
     this.state = {
       showDateRangeModal: false,
@@ -66,11 +73,11 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       studies: bindSelection(props.studies),
       selectedAllStudies: false,
       selectedStudyCount: 0,
+      editStudyInitValues: {},
     };
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('componentWillReceiveProps', newProps);
     if (this.props.studies.details !== newProps.studies.details) {
       this.setState({
         studies: bindSelection(newProps.studies),
@@ -97,17 +104,34 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
   toggleStudy(studyId, checked) {
     console.log('studyid', studyId, checked);
+
+    this.showEditInformationModal(false);
+    this.props.dispatch(destroy('dashboardEditStudyForm'));
+
     let selectedAllStudies = true;
     let selectedStudyCount = 0;
+    let selectedStudy = null;
     const studies = map(this.state.studies, (study) => {
-      const c = study.studyInfo.id === studyId ? checked : study.selected;
+      const c = study.study_id === studyId ? checked : study.selected;
       selectedAllStudies = selectedAllStudies && c;
-      if (c === true) selectedStudyCount++;
+      if (c === true) {
+        selectedStudyCount++;
+        selectedStudy = study;
+      }
       return {
         ...study,
         selected: c,
       };
     });
+
+    if (selectedStudyCount === 1) {
+      this.setState({ editStudyInitValues: {
+        initialValues: {
+          ...selectedStudy,
+        },
+      } });
+    }
+
     this.setState({
       selectedAllStudies,
       studies,
@@ -245,6 +269,16 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     });
   }
 
+  campaignChanged(e) {
+    this.props.dispatch(change('dashboardFilters', 'campaign', e));
+    this.props.fetchStudiesAccordingToFilters(e, 'campaign');
+  }
+
+  updateStudy(params) {
+    console.log('updateStudy', params);
+    this.props.updateDashboardStudy(params);
+  }
+
   renderDateFooter() {
     const { dateRange } = this.state;
     if (dateRange.startDate) {
@@ -266,7 +300,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   render() {
-    console.log('state 322', this.state);
     const { studies, selectedStudyCount, selectedAllStudies } = this.state;
 
     const studyListLeftContents = studies.map((item, index) =>
@@ -282,18 +315,20 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     );
 
 
-    const campaignOptions = [{ label: 'Newest', id: 0 },
-                           { label: '10', value: 10, id: 1 },
-                           { label: '9', value: 9, id: 2 },
-                           { label: '8', value: 8, id: 3 },
-                           { label: '7', value: 7, id: 4 },
-                           { label: '6', value: 6, id: 5 },
-                           { label: '5', value: 5, id: 6 },
-                           { label: '4', value: 4, id: 7 },
-                           { label: '3', value: 3, id: 8 },
-                           { label: '2', value: 2, id: 9 },
-                           { label: 'Oldest', value: -1, id: 10 },
-    ];
+    const maxCampaignCount = this.props.totals.details.max_campaign_count ? parseInt(this.props.totals.details.max_campaign_count) : 0;
+
+    let campaignOptions = [];
+    for (let i = 1; i <= maxCampaignCount; i++) {
+      if (i === 1) {
+        campaignOptions.push({ label: 'Oldest', value: 'oldest' });
+      } else if (i === maxCampaignCount) {
+        campaignOptions.push({ label: 'Newest', value: 'newest' });
+      } else {
+        campaignOptions.push({ label: i, value: i });
+      }
+    }
+
+    campaignOptions = campaignOptions.reverse();
 
     return (
       <div>
@@ -306,7 +341,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
             return (
               <div className={classNames({ 'btns-active' : selectedStudyCount > 0 })}>
                 { selectedStudyCount > 0 &&
-                <Sticky topOffset={-364} className={classNames('clearfix', 'top-head', 'top-head-fixed', 'active')}>
+                <div className={classNames('clearfix', 'top-head', 'top-head-fixed', 'active')}>
                   <strong className="title"><span className="studies-counter"> { selectedStudyCount }</span> <span className="text" data-one="STUDY" data-two="STUDIES"> SELECTED</span></strong>
                   <div className="btns-area">
                     <Button
@@ -380,7 +415,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                       > History </Button>
                     }
                   </div>
-                </Sticky>
+                </div>
                 }
                 <div className="study-tables fixed-top">
                   <div className="head">
@@ -396,6 +431,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                           searchable
                           options={campaignOptions}
                           customSearchIconClass="icomoon-icon_search2"
+                          onChange={this.campaignChanged}
                         />
                       </div>
                       <Button
@@ -576,8 +612,11 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   </StickyContainer>
                 </div>
                 <EditInformationModal
+                  {...this.state.editStudyInitValues}
+                  onSubmit={this.updateStudy}
                   openModal={this.state.showEditInformationModal}
                   onClose={() => { this.showEditInformationModal(false); }}
+                  usersByRoles={this.props.usersByRoles}
                 />
                 <LandingPageModal
                   openModal={this.state.showLandingPageModal}

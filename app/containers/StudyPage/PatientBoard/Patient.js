@@ -60,6 +60,7 @@ class Patient extends React.Component {
 
   renderPatientTextMessageSummary(patient) {
     const { category, currentUser, onPatientTextClick, unreadMessageCount } = this.props;
+
     if (patient.lastTextMessage) {
       return (
         <a

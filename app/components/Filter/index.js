@@ -4,8 +4,8 @@
 
 import React from 'react';
 import classNames from 'classnames';
-import ReactSelect from '../Input/ReactSelect';
-import Input from '../../components/Input';
+import Select from 'react-select';
+import _ from 'lodash';
 
 class Filter extends React.Component {
   static propTypes = {
@@ -13,6 +13,8 @@ class Filter extends React.Component {
     className: React.PropTypes.string,
     style: React.PropTypes.object,
     onClose: React.PropTypes.func,
+    onChange: React.PropTypes.func,
+    onSubmit: React.PropTypes.func,
   };
 
   componentDidMount() {
@@ -55,9 +57,9 @@ class Filter extends React.Component {
   createComparisonBox(options) {
     const { name, style } = options;
     const comparisonOptions = [
-      { id: 0, label: '<', value: 'lt' },
-      { id: 1, label: '>', value: 'gt' },
-      { id: 2, label: '=', value: 'eq' },
+      { id: 1, label: '<', value: 'lt' },
+      { id: 2, label: '>', value: 'gt' },
+      { id: 3, label: '=', value: 'eq' },
     ];
     return (
       <div
@@ -66,17 +68,22 @@ class Filter extends React.Component {
         className={classNames('filter-box')}
       >
         <strong className="title">{name}:</strong>
-        <ReactSelect
-          className="select"
-          input={Input}
-          name={name}
-          placeholder=""
+        <Select
+          value={options.value}
           options={comparisonOptions}
-          meta={{ active: true }}
-          onChange={() => {}}
+          className="form-control"
+          simpleValue
+          onChange={(event) => {
+            const fullOption = _.find(comparisonOptions, (item) => (item.value === event));
+            this.props.onChange(fullOption);
+          }}
         />
-        <input type="text" name={name} className="form-control" placeholder="Search" />
-        <button className="btn btn-default">Apply</button>
+        <input
+          type="text" name={name} className="form-control" placeholder="Search" ref={(searchVal) => (
+          this.searchVal = searchVal
+        )}
+        />
+        <button className="btn btn-default" onClick={() => { this.props.onSubmit(this.searchVal.value); }}>Apply</button>
         <a href="#" className="btn-close" data-remove=".filter-search-area" onClick={() => this.props.onClose()}>
           <i className="icomoon-icon_close"></i>
         </a>

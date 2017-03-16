@@ -204,10 +204,11 @@ export function patientCategoriesFetched(payload) {
   };
 }
 
-export function fetchStudy(studyId) {
+export function fetchStudy(studyId, campaignId) {
   return {
     type: FETCH_STUDY,
     studyId,
+    campaignId,
   };
 }
 
@@ -334,11 +335,12 @@ export function submitPatientUpdate(patientId, fields) {
   };
 }
 
-export function addPatientIndicationSuccess(patientId, indication) {
+export function addPatientIndicationSuccess(patientId, indication, isOriginal) {
   return {
     type: ADD_PATIENT_INDICATION_SUCCESS,
     patientId,
     indication,
+    isOriginal,
   };
 }
 

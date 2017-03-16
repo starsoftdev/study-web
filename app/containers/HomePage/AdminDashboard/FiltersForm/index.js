@@ -28,19 +28,19 @@ const filterOptions = {
     {
       id: 1,
       label: 'Red',
-      value: 'Red',
+      value: 'red',
     }, {
       id: 2,
       label: 'Yellow',
-      value: 'Yellow',
+      value: 'yellow',
     }, {
       id: 3,
       label: 'Green',
-      value: 'Green',
+      value: 'green',
     }, {
       id: 4,
       label: 'Purple',
-      value: 'Purple',
+      value: 'purple',
     },
   ],
 
@@ -84,66 +84,17 @@ const filterOptions = {
     {
       id: 1,
       label: '<',
-      value: '<',
+      value: 'lt',
     }, {
       id: 2,
       label: '>',
-      value: '>',
+      value: 'gt',
     }, {
       id: 3,
       label: '=',
-      value: '=',
+      value: 'eq',
     },
   ],
-
-  smOptions : [
-    {
-      id: 1,
-      label: 'Will Graham',
-      value: 'Will Graham',
-    }, {
-      id: 2,
-      label: 'Alan Walker',
-      value: 'Alan Walker',
-    }, {
-      id: 3,
-      label: 'Penny Worth',
-      value: 'Penny Worth',
-    },
-  ],
-
-  bdOptions : [
-    {
-      id: 1,
-      label: 'Bruce Wayne',
-      value: 'Bruce Wayne',
-    }, {
-      id: 2,
-      label: 'Ray Palmer',
-      value: 'Ray Palmer',
-    }, {
-      id: 3,
-      label: 'Oliver Queen',
-      value: 'Oliver Queen',
-    },
-  ],
-
-  aeOptions : [
-    {
-      id: 1,
-      label: 'Richard Hendriks',
-      value: 'Richard Hendriks',
-    }, {
-      id: 2,
-      label: 'Mary Stuart',
-      value: 'Mary Stuart',
-    }, {
-      id: 3,
-      label: 'Austin Baron',
-      value: 'Austin Baron',
-    },
-  ],
-
 };
 
 @reduxForm({ form: formName, validate: formValidator, destroyOnUnmount: false })
@@ -461,8 +412,6 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               component={ReactMultiCheckBox}
               placeholder="PERCENTAGE"
               optionLabelKey="label"
-              multiple
-              onChange={(e) => this.initSearch(e, 'percentage')}
               dataSource={filterOptions.percentageOptions}
               initialValue={this.props.initialValues.percentage}
               customSearchIconClass="icomoon-icon_search2"
