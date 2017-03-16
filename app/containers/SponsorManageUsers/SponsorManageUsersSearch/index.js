@@ -10,7 +10,7 @@ import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import EditSponsorUserForm from '../EditSponsorUserForm';
-import { selectEditUserProcess, selectProtocolsList, selectDeleteUserProcess, selectEditProtocolProcess } from '../selectors';
+import { selectEditUserProcess, selectDeleteUserProcess, selectEditProtocolProcess } from '../selectors';
 
 @reduxForm({ form: 'searchSponsorManageUsers' })
 
@@ -61,10 +61,11 @@ export class SponsorManageUsersSearch extends React.Component {
 
   render() {
     const options = [];
+
     _.forEach(this.props.protocols, (protocol) => {
       options.push({
         id: protocol.id,
-        name: protocol.name,
+        name: protocol.number,
         value: false,
       });
     });
@@ -127,7 +128,6 @@ export class SponsorManageUsersSearch extends React.Component {
 const mapStateToProps = createStructuredSelector({
   editUserProcess: selectEditUserProcess(),
   deleteUserProcess: selectDeleteUserProcess(),
-  protocols: selectProtocolsList(),
   editProtocolProcess: selectEditProtocolProcess(),
 });
 const mapDispatchToProps = {};
