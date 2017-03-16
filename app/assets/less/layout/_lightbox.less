@@ -972,26 +972,20 @@ input:focus {
     &:hover {
       font-weight: 600;
     }
-    a {
-      top: 0;
-      right: 0;
-      .size(32px);
-      padding: 5px;
+    .btn-close {
+      top: 50%;
+      right: 15px;
+      .size(20px);
       color: #636363;
+      margin: -10px 0 0;
+      .font(11px, 16px);
       position: absolute;
-      background-clip: border-box;
+      text-align: center;
+      border: none;
+      background: none;
+
       &:hover {
-        i {
-          margin: -8px 0 0 -8px;
-          .transform( rotate(-180deg));
-        }
-      }
-      i {
-        top: 50%;
-        left: 50%;
-        position: absolute;
-        margin: -9px 0 0 -9px;
-        transition: all 0.25s ease;
+        color: #76daff;
       }
     }
     .counter {

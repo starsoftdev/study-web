@@ -6,14 +6,13 @@ import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import Input from '../../../app/components/Input/index';
+import ReactSelect from '../../../app/components/Input/ReactSelect';
 import CenteredModal from '../../../app/components/CenteredModal/index';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
 import { normalizePhone } from '../../../app/common/helper/functions';
 import formValidator, { fields } from './validator';
-
-import {
-  listSiteNow,
-} from '../../../app/containers/App/actions';
+import { fetchIndications, fetchLevels, listSiteNow } from '../../../app/containers/App/actions';
+import { selectIndications, selectStudyLevels } from '../../../app/containers/App/selectors';
 
 const formName = 'listNowForm';
 
@@ -25,11 +24,15 @@ const formName = 'listNowForm';
 class ListNowModal extends React.Component {
   static propTypes = {
     submitForm: React.PropTypes.func.isRequired,
+    indications: React.PropTypes.array,
+    studyLevels: React.PropTypes.array,
     resetForm: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
     show: React.PropTypes.bool.isRequired,
     formError: React.PropTypes.bool.isRequired,
     newList: React.PropTypes.any,
+    fetchIndications: React.PropTypes.func,
+    fetchLevels: React.PropTypes.func,
     touchFields: React.PropTypes.func.isRequired,
   };
 
@@ -37,6 +40,11 @@ class ListNowModal extends React.Component {
     super(props);
     this.onHide = this.onHide.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.fetchIndications();
+    this.props.fetchLevels();
   }
 
   onHide() {
@@ -61,6 +69,8 @@ class ListNowModal extends React.Component {
   }
 
   render() {
+    const { indications, studyLevels } = this.props;
+
     return (
       <Modal
         show={this.props.show}
@@ -80,7 +90,7 @@ class ListNowModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <div className="scroll-holder jcf--scrollable">
-            <span>
+            <span className="text">
               Please provide your information below and a StudyKIK Project Manager will contact you shortly to get your study listed!
             </span>
             <Form
@@ -90,7 +100,7 @@ class ListNowModal extends React.Component {
             >
               <div className="field-row">
                 <strong className="label required">
-                  <label htmlFor="import-patient-email"> full name </label>
+                  <label> full name </label>
                 </strong>
                 <Field
                   name="name"
@@ -103,7 +113,7 @@ class ListNowModal extends React.Component {
               </div>
               <div className="field-row">
                 <strong className="label required">
-                  <label htmlFor="import-patient-phone"> company </label>
+                  <label> company </label>
                 </strong>
                 <Field
                   name="company"
@@ -116,7 +126,7 @@ class ListNowModal extends React.Component {
               </div>
               <div className="field-row">
                 <strong className="label required">
-                  <label htmlFor="import-patient-phone"> email </label>
+                  <label> email </label>
                 </strong>
                 <Field
                   name="email"
@@ -129,7 +139,7 @@ class ListNowModal extends React.Component {
               </div>
               <div className="field-row">
                 <strong className="label required">
-                  <label htmlFor="import-patient-phone"> phone </label>
+                  <label> phone </label>
                 </strong>
                 <Field
                   name="phone"
@@ -138,6 +148,30 @@ class ListNowModal extends React.Component {
                   className="field"
                   id=""
                   required
+                />
+              </div>
+              <div className="field-row">
+                <strong className="label required">
+                  <label>Indication</label>
+                </strong>
+                <Field
+                  name="indicationId"
+                  component={ReactSelect}
+                  placeholder="Select Indication"
+                  options={indications}
+                  className="field"
+                />
+              </div>
+              <div className="field-row">
+                <strong className="label required">
+                  <label>Exposure Level</label>
+                </strong>
+                <Field
+                  name="exposureLevel"
+                  component={ReactSelect}
+                  placeholder="Select Exposure Level"
+                  options={studyLevels}
+                  className="field"
                 />
               </div>
               <div className="text-right">
@@ -153,12 +187,16 @@ class ListNowModal extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   formError: selectSyncErrorBool(formName),
+  indications : selectIndications(),
+  studyLevels   : selectStudyLevels(),
   newList: selectValues(formName),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     submitForm: (values) => dispatch(listSiteNow(values)),
+    fetchIndications: () => dispatch(fetchIndications()),
+    fetchLevels: () => dispatch(fetchLevels()),
     resetForm: () => dispatch(reset(formName)),
     touchFields: () => dispatch(touch(formName, ...fields)),
   };

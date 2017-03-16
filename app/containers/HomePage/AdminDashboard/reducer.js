@@ -5,6 +5,7 @@ import {
   FETCH_STUDIES_DASHBOARD_ERROR,
   FETCH_SITE_NAMES_SUCCESS,
   FETCH_SITE_LOCATIONS_SUCCESS,
+  CLEAR_FILTERS,
 } from './constants';
 
 import {
@@ -384,6 +385,20 @@ export default function dashboardPageReducer(state = initialState, action) {
       return {
         ...state,
         usersByRoles: action.payload,
+      };
+    case CLEAR_FILTERS:
+      return {
+        ...state,
+        studies: {
+          details: [],
+          fetching: false,
+          error: null,
+        },
+        totals: {
+          details: {},
+          fetching: false,
+          error: null,
+        },
       };
     default:
       return state;

@@ -117,17 +117,20 @@ function* fetchStudyDetails() {
   }
 }
 
-function* fetchStudyViewsStat() {
+function* fetchStudyViewsStat(action) {
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
   }
 
-  // listen for the FETCH_STUDY action
-  const { studyId } = yield take(FETCH_STUDY);
+  // listen for the latest FETCH_STUDY action
+  const { studyId, campaignId } = action;
 
   try {
-    const requestURL = `${API_URL}/studies/${studyId}/landingPageViews`;
+    let requestURL = `${API_URL}/studies/${studyId}/landingPageViews`;
+    if (campaignId) {
+      requestURL += `?campaignId=${campaignId}`;
+    }
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -152,7 +155,6 @@ function* fetchPatientReferralStat(action) {
     if (campaignId) {
       requestURL += `?campaignId=${campaignId}`;
     }
-    console.log('fetchPatientReferralStat', studyId, campaignId);
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -177,7 +179,6 @@ function* fetchStudyCallStats(action) {
     if (campaignId) {
       requestURL += `?campaignId=${campaignId}`;
     }
-    console.log('fetchStudyCallStats', studyId, campaignId);
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -202,7 +203,6 @@ function* fetchStudyTextStats(action) {
     if (campaignId) {
       requestURL += `?campaignId=${campaignId}`;
     }
-    console.log('fetchStudyTextStats', studyId, campaignId);
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -756,12 +756,9 @@ function* submitAddPatient() {
 export function* fetchStudySaga() {
   try {
     const watcherA = yield fork(fetchStudyDetails);
-    const watcherB = yield fork(fetchStudyViewsStat);
-    // const watcherC = yield fork(fetchPatientReferralStat);
+    const watcherB = yield fork(takeLatest, FETCH_STUDY, fetchStudyViewsStat);
     const watcherC = yield fork(takeLatest, FETCH_STUDY, fetchPatientReferralStat);
-    // const watcherD = yield fork(fetchStudyCallStats);
     const watcherD = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
-    // const watcherE = yield fork(fetchStudyTextStats);
     const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);

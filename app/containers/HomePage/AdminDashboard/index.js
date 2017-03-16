@@ -17,7 +17,7 @@ import { selectFilterFormValues, selectLevels, selectSiteNames, selectSiteLocati
 import rd3 from 'react-d3';
 import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
-import { fetchStudiesDashboard, fetchSiteNames, fetchSiteLocations } from './actions';
+import { fetchStudiesDashboard, fetchSiteNames, fetchSiteLocations, updateDashboardStudy, clearFilters } from './actions';
 import { fetchLevels, fetchIndications, fetchSponsors, fetchProtocols, fetchCro, fetchUsersByRole } from '../../App/actions';
 
 const PieChart = rd3.PieChart;
@@ -49,6 +49,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     fetchUsersByRole: PropTypes.func,
     usersByRoles: PropTypes.object,
     totals: PropTypes.object,
+    updateDashboardStudy: PropTypes.func,
+    clearFilters: PropTypes.func,
   };
 
   constructor(props) {
@@ -105,7 +107,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
       ...options,
       name: options.name + customFilters.length,
     };
-    console.log('add filter', newOptions);
     customFilters.push(newOptions);
     this.setState({ customFilters });
   }
@@ -131,6 +132,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   }
 
   clearFilters() {
+    console.log('clearFilters');
+    this.props.clearFilters();
     this.setState({ customFilters: [],
       modalFilters: [] });
     this.props.resetForm();
@@ -191,24 +194,26 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   mapFilterValues(filters) {
     const newFilters = [];
     mapKeys(filters, (filterValues, key) => {
-      if (key === 'percentage') {
-        newFilters.push({
-          name: key,
-          type: key === 'percentage' ? 'compare' : 'value',
-          value: filterValues.value,
-          onChange: this.percentageFilterChange,
-          onSubmit: this.percentageFilterSubmit,
-        });
-      } else {
-        _.forEach(filterValues, (v) => {
-          if (v.label !== 'All') {
-            newFilters.push({
-              name: key,
-              type: key === 'percentage' ? 'compare' : 'value',
-              value: v.label,
-            });
-          }
-        });
+      if (key !== 'campaign') {
+        if (key === 'percentage') {
+          newFilters.push({
+            name: key,
+            type: key === 'percentage' ? 'compare' : 'value',
+            value: filterValues.value,
+            onChange: this.percentageFilterChange,
+            onSubmit: this.percentageFilterSubmit,
+          });
+        } else {
+          _.forEach(filterValues, (v) => {
+            if (v.label !== 'All') {
+              newFilters.push({
+                name: key,
+                type: key === 'percentage' ? 'compare' : 'value',
+                value: v.label,
+              });
+            }
+          });
+        }
       }
     });
     return newFilters;
@@ -216,20 +221,15 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
   fetchStudiesAccordingToFilters(value, key) {
     let filters = _.cloneDeep(this.props.filtersFormValues);
-    console.log(filters);
     const newFilterValues = _.cloneDeep(value);
     filters = { ...filters, [key]:newFilterValues };
 
-    console.log(filters);
-
     _.forEach(filters, (filter, key) => {
-      if (key !== 'percentage') {
+      if (key !== 'percentage' && key !== 'campaign') {
         const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
         filters[key] = withoutAll;
       }
     });
-
-    console.log('fetchStudiesAccordingToFilters', filters);
 
     this.props.fetchStudiesDashboard(filters);
   }
@@ -265,11 +265,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
   render() {
     const { customFilters, modalFilters } = this.state;
-    console.log('render modalFilters', modalFilters);
-    console.log('render customFilters', customFilters);
-    const filters = concat(this.mapFilterValues(modalFilters), customFilters);
 
-    console.log('render', filters);
+    const filters = concat(this.mapFilterValues(modalFilters), customFilters);
 
     const redCount = parseInt(this.props.totals.details.total_red) || 0;
     const yellowCount = parseInt(this.props.totals.details.total_yellow) || 0;
@@ -551,7 +548,12 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
               </Modal.Body>
             </Modal>
           </div>
-          <StudyList />
+          <StudyList
+            totals={this.props.totals}
+            fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
+            usersByRoles={this.props.usersByRoles}
+            updateDashboardStudy={this.props.updateDashboardStudy}
+          />
         </StickyContainer>
       </div>
     );
@@ -583,6 +585,8 @@ function mapDispatchToProps(dispatch) {
     fetchProtocols: () => dispatch(fetchProtocols()),
     fetchCro: () => dispatch(fetchCro()),
     fetchUsersByRole: () => dispatch(fetchUsersByRole()),
+    updateDashboardStudy: (params) => dispatch(updateDashboardStudy(params)),
+    clearFilters: () => dispatch(clearFilters()),
   };
 }
 
