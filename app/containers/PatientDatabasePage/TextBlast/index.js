@@ -17,7 +17,7 @@ import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input/index';
 import { removePatientsFromTextBlast, submitTextBlast } from '../actions';
 import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
-import { selectClientCredits } from '../../App/selectors';
+import { selectCurrentUser, selectClientCredits } from '../../App/selectors';
 
 const formName = 'PatientDatabase.TextBlastModal';
 
@@ -29,6 +29,7 @@ class TextBlastModal extends React.Component {
   static propTypes = {
     bsClass: React.PropTypes.string,
     className: React.PropTypes.any,
+    currentUser: React.PropTypes.object,
     dialogClassName: React.PropTypes.string,
     displayToastrError: React.PropTypes.func.isRequired,
     clientCredits: React.PropTypes.object,
@@ -55,9 +56,9 @@ class TextBlastModal extends React.Component {
 
   submitTextBlast(event) {
     event.preventDefault();
-    const { displayToastrError, formSyncErrors, formValues, submitTextBlast, onClose } = this.props;
+    const { displayToastrError, formSyncErrors, formValues, submitTextBlast, onClose, currentUser } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
-      submitTextBlast(formValues.patients, formValues.message, onClose);
+      submitTextBlast(formValues.patients, formValues.message, currentUser.id, onClose);
     } else if (formSyncErrors.message) {
       displayToastrError(formSyncErrors.message);
     } else if (formSyncErrors.patients) {
@@ -160,13 +161,14 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectValues(formName),
   clientCredits: selectClientCredits(),
   formSyncErrors: selectSyncErrors(formName),
+  currentUser: selectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     displayToastrError: (error) => dispatch(toastrActions.error(error)),
     removePatients: () => dispatch(removePatientsFromTextBlast()),
-    submitTextBlast: (patients, message, onClose) => dispatch(submitTextBlast(patients, message, onClose)),
+    submitTextBlast: (patients, message, currentUserId, onClose) => dispatch(submitTextBlast(patients, message, currentUserId, onClose)),
   };
 }
 

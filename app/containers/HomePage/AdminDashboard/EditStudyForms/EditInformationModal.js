@@ -12,9 +12,17 @@ import DatePicker from '../../../../components/Input/DatePicker';
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, FieldArray } from 'redux-form';
+import { Field, FieldArray, reduxForm } from 'redux-form';
 import Form from 'react-bootstrap/lib/Form';
 import RenderEmailsList from './RenderEmailsList';
+import _ from 'lodash';
+
+const mapStateToProps = createStructuredSelector({
+
+});
+
+@reduxForm({ form: 'dashboardEditStudyForm' })
+@connect(mapStateToProps)
 
 export class EditInformationModal extends React.Component {
   static propTypes = {
@@ -24,6 +32,8 @@ export class EditInformationModal extends React.Component {
     formValues: PropTypes.object,
     onShow: PropTypes.func,
     onHide: PropTypes.func,
+    handleSubmit: PropTypes.func,
+    usersByRoles: PropTypes.object,
   };
 
   addEmailNotificationClick() {
@@ -37,22 +47,33 @@ export class EditInformationModal extends React.Component {
   }
 
   render() {
+    console.log(322, 'render');
     const { openModal, onClose } = this.props;
-    const smUsers = [
-      { label: 'Will Graham', value: 'Will Graham', id: 15 },
-      { label: 'Alan Walker', value: 'Alan Walker', id: 16 },
-      { label: 'Penny Worth', value: 'Penny Worth', id: 17 },
-    ];
-    const bdUsers = [
-      { label: 'Bruce Wayne', value: 'Bruce Wayne', id: 15 },
-      { label: 'Ray Palmer', value: 'Ray Palmer', id: 16 },
-      { label: 'Oliver Queen', value: 'Oliver Queen', id: 17 },
-    ];
-    const aeUsers = [
-      { label: 'Richard Hendriks', value: 'Richard Hendriks', id: 15 },
-      { label: 'Mary Stuart', value: 'Mary Stuart', id: 16 },
-      { label: 'Austin Baron', value: 'Austin Baron', id: 17 },
-    ];
+    const smOptions = [];
+
+    _.forEach(this.props.usersByRoles.sm, (item) => {
+      smOptions.push({
+        value: item.id,
+        label: `${item.first_name} ${item.last_name}`,
+      });
+    });
+
+    const bdOptions = [];
+    _.forEach(this.props.usersByRoles.bd, (item) => {
+      bdOptions.push({
+        value: item.id,
+        label: `${item.first_name} ${item.last_name}`,
+      });
+    });
+
+    const aeOptions = [];
+    _.forEach(this.props.usersByRoles.ae, (item) => {
+      aeOptions.push({
+        value: item.id,
+        label: `${item.first_name} ${item.last_name}`,
+      });
+    });
+
     const siteLocations = [
       { label: 'Catalina Research Institute', value: 'Catalina Research Institute', id: 15 },
       { label: 'Ace Chemicals', value: 'Ace Chemicals', id: 16 },
@@ -116,7 +137,7 @@ export class EditInformationModal extends React.Component {
                 <a href="#" className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right"></i></a>
               </div>
             </div>
-            <Form className="form-holder" onSubmit={this.onSubmit}>
+            <Form className="form-holder" onSubmit={this.props.handleSubmit}>
               <div className="frame">
                 <div className="field-row">
                   <strong className="label">
@@ -138,9 +159,9 @@ export class EditInformationModal extends React.Component {
                     <Field
                       type="text"
                       id="edit-information-page-name"
-                      name="studyNumber"
+                      name="study_id"
                       component={Input}
-                      required
+                      isDisabled
                     />
                   </div>
                 </div>
@@ -150,12 +171,12 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="sm"
+                      name="sm_user_id"
                       component={ReactSelect}
                       placeholder="Select SM"
                       searchPlaceholder="Search"
                       searchable
-                      options={smUsers}
+                      options={smOptions}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -166,12 +187,12 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="bd"
+                      name="bd_user_id"
                       component={ReactSelect}
                       placeholder="Select BD"
                       searchPlaceholder="Search"
                       searchable
-                      options={bdUsers}
+                      options={bdOptions}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -182,12 +203,12 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="ae"
+                      name="ae_user_id"
                       component={ReactSelect}
                       placeholder="Select AE"
                       searchPlaceholder="Search"
                       searchable
-                      options={aeUsers}
+                      options={aeOptions}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -217,7 +238,6 @@ export class EditInformationModal extends React.Component {
                       type="text"
                       name="siteNumber"
                       component={Input}
-                      required
                     />
                   </div>
                 </div>
@@ -230,7 +250,6 @@ export class EditInformationModal extends React.Component {
                       type="text"
                       name="siteAddress"
                       component={Input}
-                      required
                     />
                   </div>
                 </div>
@@ -243,7 +262,6 @@ export class EditInformationModal extends React.Component {
                       type="text"
                       name="city"
                       component={Input}
-                      required
                     />
                   </div>
                 </div>
@@ -256,7 +274,6 @@ export class EditInformationModal extends React.Component {
                       type="text"
                       name="state"
                       component={Input}
-                      required
                     />
                   </div>
                 </div>
@@ -483,7 +500,7 @@ export class EditInformationModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row text-right">
-                  <Button bsStyle="primary"> Submit </Button>
+                  <Button type="submit" bsStyle="primary"> Submit </Button>
                 </div>
               </div>
             </Form>
@@ -494,8 +511,5 @@ export class EditInformationModal extends React.Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
+export default EditInformationModal;
 
-});
-
-export default connect(mapStateToProps)(EditInformationModal);
