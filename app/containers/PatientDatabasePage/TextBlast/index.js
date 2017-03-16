@@ -168,7 +168,7 @@ function mapDispatchToProps(dispatch) {
   return {
     displayToastrError: (error) => dispatch(toastrActions.error(error)),
     removePatients: () => dispatch(removePatientsFromTextBlast()),
-    submitTextBlast: (patients, message, onClose) => dispatch(submitTextBlast(patients, message, onClose)),
+    submitTextBlast: (patients, message, currentUserId, onClose) => dispatch(submitTextBlast(patients, message, currentUserId, onClose)),
   };
 }
 
