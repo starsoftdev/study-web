@@ -27,6 +27,7 @@ class ScheduledPatientModal extends React.Component {
     currentPatient: React.PropTypes.object,
     handleSubmit: React.PropTypes.func.isRequired,
     handleDateChange: React.PropTypes.func.isRequired,
+    submittingSchedule: React.PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -39,13 +40,13 @@ class ScheduledPatientModal extends React.Component {
   }
 
   render() {
-    const { onHide, currentPatient, show, handleSubmit, handleDateChange } = this.props;
+    const { onHide, currentPatient, show, handleSubmit, handleDateChange, submittingSchedule } = this.props;
     if (currentPatient) {
       return (
         <Modal className="datepicker-modal scheduled-patient-modal" show={show} onHide={onHide} dialogComponentClass={CenteredModal}>
           <Modal.Header>
             <Modal.Title>SCHEDULE PATIENT</Modal.Title>
-            <a className="lightbox-close close" onClick={onHide}>
+            <a className="lightbox-close close" onClick={onHide} disabled={submittingSchedule}>
               <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
@@ -130,7 +131,7 @@ class ScheduledPatientModal extends React.Component {
                     <label className="reminder-label"> Text Reminder</label>
                   </div>
                 </div>
-                <input type="submit" className="btn btn-default pull-right" value="Submit" />
+                <input type="submit" className="btn btn-default pull-right" value="Submit" disabled={submittingSchedule} />
               </div>
             </form>
           </Modal.Body>
@@ -142,6 +143,7 @@ class ScheduledPatientModal extends React.Component {
 }
 const mapStateToProps = createStructuredSelector({
   currentPatient: Selector.selectCurrentPatient(),
+  submittingSchedule: Selector.selectSubmittingSchedule(),
 });
 // const mapDispatchToProps = dispatch => ({
 //

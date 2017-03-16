@@ -141,6 +141,11 @@ export const selectSelectedDate = () => createSelector(
   (subState) => (subState.ScheduledModal ? subState.ScheduledModal.selectedDate : null)
 )
 
+export const selectSubmittingSchedule = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.submittingSchedule
+)
+
 export const selectSchedulePatientFormValues = () => createSelector(
   selectFormDomain(),
   (subState) => (subState.ScheduledPatientModal ? subState.ScheduledPatientModal.values : null)
