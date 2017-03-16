@@ -17,6 +17,11 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
     this.sortBy = this.sortBy.bind(this);
   }
 
+  componentWillUnmount() {
+    const defaultSort = 'userName';
+    this.props.setActiveSort(defaultSort, null);
+  }
+
   sortBy(ev) {
     ev.preventDefault();
     let sort = ev.currentTarget.dataset.sort;
