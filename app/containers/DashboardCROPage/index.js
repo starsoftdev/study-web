@@ -7,7 +7,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
+import Helmet from 'react-helmet';
 import { DashboardCROSearch } from './DashboardCROSearch/index';
 import { DashboardCROTable } from './DashboardCROTable';
 
@@ -35,6 +35,7 @@ export class DashboardCROPage extends React.Component { // eslint-disable-line r
   render() {
     return (
       <div className="container-fluid dashboard-cro">
+        <Helmet title="CRO - StudyKIK" />
         <h2 className="main-heading">CRO</h2>
 
         <DashboardCROSearch
