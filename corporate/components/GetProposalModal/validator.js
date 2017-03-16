@@ -19,6 +19,16 @@ const schema = {
       message: '^Email not valid',
     },
   },
+  indicationId: {
+    presence: {
+      message: '^Indication cannot be blank',
+    },
+  },
+  exposureLevel: {
+    presence: {
+      message: '^Exposure Level cannot be blank',
+    },
+  },
   phone: {
     presence: {
       message: '^Phone number cannot be blank',

@@ -153,6 +153,10 @@ import {
   LIST_SITE_NOW_SUCCESS,
   RESET_LIST_SITE_NOW_SUCCESS,
 
+  GET_PROPOSAL,
+  GET_PROPOSAL_SUCCESS,
+  RESET_GET_PROPOSAL_SUCCESS,
+
   LEARN_ABOUT_FUTURE_TRIALS,
   LEARN_ABOUT_FUTURE_TRIALS_SUCCESS,
   RESET_LEARN_ABOUT_FUTURE_TRIALS,
@@ -1061,6 +1065,27 @@ export function listSiteNowSuccess(payload) {
 export function resetListSiteNowSuccess(payload) {
   return {
     type: RESET_LIST_SITE_NOW_SUCCESS,
+    payload,
+  };
+}
+
+export function getProposal(params) {
+  return {
+    type: GET_PROPOSAL,
+    params,
+  };
+}
+
+export function getProposalSuccess(payload) {
+  return {
+    type: GET_PROPOSAL_SUCCESS,
+    payload,
+  };
+}
+
+export function resetGetProposalSuccess(payload) {
+  return {
+    type: RESET_GET_PROPOSAL_SUCCESS,
     payload,
   };
 }

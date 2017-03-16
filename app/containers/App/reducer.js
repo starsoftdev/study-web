@@ -120,6 +120,8 @@ import {
   CLEAR_CLINICAL_TRIALS_SEARCH,
   LIST_SITE_NOW_SUCCESS,
   RESET_LIST_SITE_NOW_SUCCESS,
+  GET_PROPOSAL_SUCCESS,
+  RESET_GET_PROPOSAL_SUCCESS,
   LEARN_ABOUT_FUTURE_TRIALS_SUCCESS,
   RESET_LEARN_ABOUT_FUTURE_TRIALS,
   NEW_CONTACT_SUCCESS,
@@ -156,6 +158,7 @@ const initialState = {
     subscribedFromLanding: null,
     findOutPosted: null,
     listSiteNowSuccess: null,
+    getProposalSuccess: null,
     learnAboutFutureTrialsSuccess: null,
     newContactsSuccess: null,
     sources: [],
@@ -429,6 +432,16 @@ export default function appReducer(state = initialState, action) {
     case RESET_LIST_SITE_NOW_SUCCESS:
       baseDataInnerState = {
         listSiteNowSuccess: null,
+      };
+      break;
+    case GET_PROPOSAL_SUCCESS:
+      baseDataInnerState = {
+        getProposalSuccess: true,
+      };
+      break;
+    case RESET_GET_PROPOSAL_SUCCESS:
+      baseDataInnerState = {
+        getProposalSuccess: null,
       };
       break;
     case LEARN_ABOUT_FUTURE_TRIALS_SUCCESS:

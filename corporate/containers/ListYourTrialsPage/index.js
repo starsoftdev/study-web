@@ -33,15 +33,18 @@ import computerImg from '../../assets/images/computer-img.png';
 
 import FindOutPatientsForm from '../../components/FindOutPatientsForm';
 import ListNowModal from '../../components/ListNowModal';
+import GetProposalModal from '../../components/GetProposalModal';
 
 import {
   findOutPatients,
   resetListSiteNowSuccess,
+  resetGetProposalSuccess,
 } from '../../../app/containers/App/actions';
 
 import {
   selectFindOutPosted,
   selectListSiteNowSuccess,
+  selectGetProposalSuccess,
 } from '../../../app/containers/App/selectors';
 
 import './styles.less';
@@ -51,10 +54,13 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
   static propTypes = {
     onSubmitForm: React.PropTypes.func,
     resetListSiteNowSuccess: React.PropTypes.func,
+    resetGetProposalSuccess: React.PropTypes.func,
     clearForm: React.PropTypes.func,
     clearListNowForm: React.PropTypes.func,
+    clearGetProposalForm: React.PropTypes.func,
     findOutPosted: React.PropTypes.any,
     listSiteNowSuccess: React.PropTypes.any,
+    getProposalSuccess: React.PropTypes.any,
   };
 
   constructor(props) {
@@ -62,11 +68,13 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
 
     this.handleClick = this.handleClick.bind(this);
     this.toggleListNow = this.toggleListNow.bind(this);
+    this.toggleGetProposal = this.toggleGetProposal.bind(this);
     this.onSubmitForm = this.props.onSubmitForm.bind(this);
 
     this.state = {
       open: false,
       listNowOpen: false,
+      getProposalOpen: false,
     };
   }
 
@@ -74,6 +82,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
   }
 
   componentWillReceiveProps(newProps) {
+    console.log('componentWillReceiveProps', newProps);
     if (newProps.findOutPosted) {
       this.props.clearForm();
     }
@@ -81,6 +90,12 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
       this.setState({ listNowOpen: false }, () => {
         this.props.clearListNowForm();
         this.props.resetListSiteNowSuccess();
+      });
+    }
+    if (newProps.getProposalSuccess) {
+      this.setState({ getProposalOpen: false }, () => {
+        this.props.clearGetProposalForm();
+        this.props.resetGetProposalSuccess();
       });
     }
   }
@@ -101,6 +116,13 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
     this.setState({ listNowOpen: !this.state.listNowOpen });
   }
 
+  toggleGetProposal(ev) {
+    if (ev) {
+      ev.preventDefault();
+    }
+    this.setState({ getProposalOpen: !this.state.getProposalOpen });
+  }
+
   render() {
     return (
       <div id="main" className="clinical-trils-page">
@@ -116,7 +138,13 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 >
                   LIST NOW!
                 </a>
-                <a href="#" className="btn btn-deep btn-block small">GET PROPOSAL</a>
+                <a
+                  href="#"
+                  className="btn btn-deep btn-block small"
+                  onClick={this.toggleGetProposal}
+                >
+                  GET PROPOSAL
+                </a>
                 <div className="img-holder">
                   <img src={img1} alt="img1" width="200" height="284" className="img-responsive svg" />
                 </div>
@@ -606,6 +634,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
         </section>
 
         <ListNowModal show={this.state.listNowOpen} onHide={this.toggleListNow} />
+        <GetProposalModal show={this.state.getProposalOpen} onHide={this.toggleGetProposal} />
       </div>
     );
   }
@@ -614,14 +643,17 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
 const mapStateToProps = createStructuredSelector({
   findOutPosted: selectFindOutPosted(),
   listSiteNowSuccess: selectListSiteNowSuccess(),
+  getProposalSuccess: selectGetProposalSuccess(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     onSubmitForm: (values) => dispatch(findOutPatients(values)),
     clearForm: () => dispatch(reset('find-location')),
-    clearListNowForm: () => dispatch(reset('listNow')),
+    clearListNowForm: () => dispatch(reset('listNowForm')),
+    clearGetProposalForm: () => dispatch(reset('getProposalForm')),
     resetListSiteNowSuccess: () => dispatch(resetListSiteNowSuccess()),
+    resetGetProposalSuccess: () => dispatch(resetGetProposalSuccess()),
   };
 }
 
