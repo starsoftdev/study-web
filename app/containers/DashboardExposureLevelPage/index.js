@@ -7,7 +7,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
+import Helmet from 'react-helmet';
 import { DashboardExposureLevelSearch } from './DashboardExposureLevelSearch/index';
 import { DashboardExposureLevelTable } from './DashboardExposureLevelTable';
 
@@ -35,6 +35,7 @@ export class DashboardExposureLevelPage extends React.Component { // eslint-disa
   render() {
     return (
       <div className="container-fluid dashboard-cro">
+        <Helmet title="Exposure Level - StudyKIK" />
         <h2 className="main-heading">Exposure Level</h2>
 
         <DashboardExposureLevelSearch
