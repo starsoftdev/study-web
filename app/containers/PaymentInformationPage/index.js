@@ -43,7 +43,9 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
   }
 
   componentDidMount() {
-    this.props.fetchCards(this.props.currentUser.roleForClient.client.stripeCustomerId);
+    if (this.props.currentUser && this.props.currentUser.roleForClient) {
+      this.props.fetchCards(this.props.currentUser.roleForClient.client.stripeCustomerId);
+    }
   }
 
   componentWillReceiveProps(newProps) {
