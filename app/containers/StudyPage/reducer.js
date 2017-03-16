@@ -340,6 +340,11 @@ function studyPageReducer(state = initialState, action) {
         submittingSchedule: true,
       };
     case SUBMIT_SCHEDULE_SUCCEEDED:
+      return {
+        ...state,
+        submittingSchedule: false,
+        openScheduledModal: false,
+      }
     case SUBMIT_SCHEDULE_FAILED:
       return {
         ...state,
