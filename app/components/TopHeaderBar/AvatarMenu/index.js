@@ -3,14 +3,14 @@ import classNames from 'classnames';
 import { Link } from 'react-router';
 import enhanceWithClickOutside from 'react-click-outside';
 
-import './styles.less';
 
-import defaultImage from 'assets/images/Default-User-Img-Dr.png';
+import defaultImage from '../../../assets/images/Default-User-Img-Dr.png';
 
 class AvatarMenu extends React.Component {
   static propTypes = {
     handleLogoutClick: PropTypes.func.isRequired,
     currentUser: PropTypes.any,
+    userRoleType: PropTypes.string,
   };
 
   constructor(props) {
@@ -34,6 +34,9 @@ class AvatarMenu extends React.Component {
 
   render() {
     const avatarMenuClassName = this.state.avatarMenuOpen ? 'avatar-menu-open' : 'avatar-menu-close';
+    const { currentUser, userRoleType } = this.props;
+    const { firstName, lastName } = currentUser;
+    const userName = `${firstName} ${lastName}`;
 
     return (
       <div className="logged-user-area open-close pull-right">
@@ -41,16 +44,23 @@ class AvatarMenu extends React.Component {
           <div className="img-circle">
             <img src={this.props.currentUser.profileImageURL || defaultImage} width="43" height="43" alt="Bruce Wayne" />
           </div>
-          <span className="text margin-left-5px margin-right-5px">Bruce Wayne</span>
+          <span className="text margin-left-5px margin-right-5px">{userName}</span>
           <i className="caret" />
         </a>
         <div className={`logged-user-drop avatar-menu ${avatarMenuClassName}`}>
           <div className="well">
             <ul className="list-unstyled">
-              <li><Link to="/me/profile" onClick={() => this.handleClickOutside()}>PROFILE</Link></li>
-              <li><Link to="/payment-information" onClick={() => this.handleClickOutside()}>PAYMENT INFORMATION</Link></li>
-              <li><Link to="/receipts" onClick={() => this.handleClickOutside()}>RECEIPTS</Link></li>
-              <li><Link to="/proposals" onClick={() => this.handleClickOutside()}>PROPOSALS</Link></li>
+              <li><Link to="/app/me/profile" onClick={() => this.handleClickOutside()}>PROFILE</Link></li>
+              <li><Link to="/app/payment-information" onClick={() => this.handleClickOutside()}>PAYMENT INFORMATION</Link></li>
+              { userRoleType === 'client' &&
+                <li><Link to="/app/receipts" onClick={() => this.handleClickOutside()}>RECEIPTS</Link></li>
+              }
+              { userRoleType === 'client' &&
+                <li><Link to="/app/proposals" onClick={() => this.handleClickOutside()}>PROPOSALS</Link></li>
+              }
+              { userRoleType !== 'client' &&
+                <li><Link to="/app/receipts-project-agreements" onClick={() => this.handleClickOutside()}>RECEIPTS & PROJECT AGREEMENTS</Link></li>
+              }
               <a
                 onClick={() => {
                   this.props.handleLogoutClick();

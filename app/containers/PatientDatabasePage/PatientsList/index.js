@@ -24,13 +24,13 @@ import { clearSelectedPatient,
   disableChat,
   addPatientsToTextBlast,
   removePatientsFromTextBlast,
+  removePatientFromTextBlast,
   setActiveSort,
   sortPatientsSuccess } from '../actions';
 import PatientItem from './PatientItem';
-import { normalizePhone, normalizePhoneDisplay } from '../../StudyPage/helper/functions';
+import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
-import './styles.less';
 
 const formName = 'PatientDatabase.TextBlastModal';
 
@@ -40,6 +40,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     addPatientsToTextBlast: PropTypes.func,
     change: PropTypes.func,
     removePatientsFromTextBlast: PropTypes.func,
+    removePatientFromTextBlast: PropTypes.func,
     patients: PropTypes.object,
     selectedPatient: PropTypes.object,
     selectedPatientDetailsForForm: PropTypes.object,
@@ -88,7 +89,8 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   updatePatient(patientData) {
     const { selectedPatient } = this.props;
     const payload = omit(patientData, ['indications', 'status', 'source']);
-    payload.indications = map(patientData.indications, indicationIterator => indicationIterator.id);
+
+    payload.indications = map(patientData.indications, indicationIterator => ({ id: indicationIterator.id, isOriginal: indicationIterator.isOriginal }));
     payload.source_id = patientData.source;
     payload.patient_category_id = patientData.status;
     payload.phone = normalizePhone(patientData.phone);
@@ -109,14 +111,20 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   }
 
   toggleAllPatientSelection(checked) {
-    const { addPatientsToTextBlast, change, patients, removePatientsFromTextBlast } = this.props;
+    const { addPatientsToTextBlast, change, patients, removePatientsFromTextBlast, removePatientFromTextBlast } = this.props;
     if (checked) {
       addPatientsToTextBlast(patients.details);
     } else {
       removePatientsFromTextBlast(patients.details);
     }
     for (const patient of patients.details) {
-      change(`patient-${patient.id}`, checked);
+      if (patient.unsubscribed && checked) {
+        const { id } = patient;
+        change('all-patients', false);
+        removePatientFromTextBlast([{ id }]);
+      } else {
+        change(`patient-${patient.id}`, checked);
+      }
     }
   }
 
@@ -165,8 +173,8 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
       selectedPatientDetailsForForm.phone = normalizePhoneDisplay(selectedPatientDetailsForForm.phone);
       if (selectedPatientDetailsForForm.dob) {
         const dob = moment(selectedPatientDetailsForForm.dob);
-        selectedPatientDetailsForForm.dobMonth = dob.month();
-        selectedPatientDetailsForForm.dobDay = dob.day();
+        selectedPatientDetailsForForm.dobMonth = dob.month() + 1;
+        selectedPatientDetailsForForm.dobDay = dob.date();
         selectedPatientDetailsForForm.dobYear = dob.year();
       }
     }
@@ -229,7 +237,14 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
         </StickyContainer>
 
         <div className="patients">
-          <Modal className="edit-patient" dialogComponentClass={CenteredModal} show={editPatientModalShown} onHide={this.closeEditPatientModal}>
+          <Modal
+            className="edit-patient"
+            dialogComponentClass={CenteredModal}
+            show={editPatientModalShown}
+            onHide={this.closeEditPatientModal}
+            backdrop
+            keyboard
+          >
             <Modal.Header>
               <Modal.Title>
                 <strong>Information</strong>
@@ -247,25 +262,22 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
           </Modal>
           {(chat)
             ?
-            <Modal className="chat-patient" dialogComponentClass={CenteredModal} show={chatModalShown} onHide={this.closeChat}>
-              <Modal.Header closeButton>
-                <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <ChatForm chat={chat} sendStudyPatientMessages={sendStudyPatientMessages} />
-              </Modal.Body>
-            </Modal>
+              <Modal className="chat-patient" dialogComponentClass={CenteredModal} show={chatModalShown} onHide={this.closeChat}>
+                <Modal.Header>
+                  <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
+                  <a className="lightbox-close close" onClick={this.closeRenewModal}>
+                    <i className="icomoon-icon_close" />
+                  </a>
+                </Modal.Header>
+                <Modal.Body>
+                  <ChatForm chat={chat} sendStudyPatientMessages={sendStudyPatientMessages} />
+                </Modal.Body>
+              </Modal>
             : ''
           }
         </div>
       </div>
     );
-
-    /* return (
-      <div>
-        <h3>No matching patients found!</h3>
-      </div>
-    );*/
   }
 }
 
@@ -282,6 +294,7 @@ function mapDispatchToProps(dispatch) {
     addPatientsToTextBlast: (patients) => dispatch(addPatientsToTextBlast(patients)),
     change: (field, value) => dispatch(change(formName, field, value)),
     removePatientsFromTextBlast: (patients) => dispatch(removePatientsFromTextBlast(patients)),
+    removePatientFromTextBlast: (patient) => dispatch(removePatientFromTextBlast(patient)),
     clearSelectedPatient: () => dispatch(clearSelectedPatient()),
     savePatient: (id, data) => dispatch(savePatient(id, data)),
     initChat: (payload) => dispatch(initChat(payload)),

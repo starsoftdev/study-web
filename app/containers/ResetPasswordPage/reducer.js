@@ -5,15 +5,26 @@
  */
 
 import {
-  DEFAULT_ACTION,
+  RESET_PASSWORD_SUCCESS,
+  CLEAR_RESET_PASSWORD_SUCCESS,
 } from './constants';
 
-const initialState = {};
+const initialState = {
+  resetPasswordSuccess: null,
+};
 
 function resetPasswordPageReducer(state = initialState, action) {
   switch (action.type) {
-    case DEFAULT_ACTION:
-      return state;
+    case RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        resetPasswordSuccess: true,
+      };
+    case CLEAR_RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        resetPasswordSuccess: null,
+      };
     default:
       return state;
   }

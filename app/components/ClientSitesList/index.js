@@ -4,19 +4,20 @@ import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
 import { map, cloneDeep } from 'lodash';
 
-import EditSiteForm from 'components/EditSiteForm';
-import EditUserForm from 'components/EditUserForm';
+import CenteredModal from '../../components/CenteredModal/index';
+import EditSiteForm from '../../components/EditSiteForm';
+import EditUserForm from '../../components/EditUserForm';
 import { selectCurrentUserClientId, selectClientSites, selectSelectedSite,
   selectSelectedSiteDetailsForForm, selectSelectedUser, selectSelectedUserDetailsForForm,
-  selectDeletedUser, selectSavedSite, selectSavedUser } from 'containers/App/selectors';
+  selectDeletedUser, selectSavedSite, selectSavedUser } from '../../containers/App/selectors';
 import { clearSelectedSite, clearSelectedUser,
-  deleteUser, saveSite, saveUser } from 'containers/App/actions';
+  deleteUser, saveSite, saveUser } from '../../containers/App/actions';
 import ClientSiteItem from './ClientSiteItem';
-import './styles.less';
 
 class ClientSitesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUserClientId: PropTypes.number,
+    currentUser: PropTypes.object,
     clientSites: PropTypes.object,
     selectedSite: PropTypes.object,
     selectedSiteDetailsForForm: PropTypes.object,
@@ -30,6 +31,8 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
     deleteUser: PropTypes.func,
     saveSite: PropTypes.func,
     saveUser: PropTypes.func,
+    filterMethod: PropTypes.func,
+    userFilterQuery: PropTypes.string,
   };
 
   constructor(props) {
@@ -64,9 +67,19 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
     if (sortBy === 'name') {
       return item.name;
     } else if (sortBy === 'principalInvestigator') {
-      return item.piFirstName;
-    } else if (sortBy === 'phone') {
-      return item.phone;
+      if (item.piFirstName) {
+        return item.piFirstName;
+      }
+      if (item.principalInvestigators) {
+        for (const pi of item.principalInvestigators) {
+          if (pi.active) {
+            return pi.firstName;
+          }
+        }
+      }
+      return null;
+    } else if (sortBy === 'redirectPhone') {
+      return item.redirectPhone;
     } else if (sortBy === 'address') {
       return item.address;
     }
@@ -148,12 +161,17 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
-      siteId: parseInt(userData.site, 10),
     };
-    if (userData.site === '0') {
+
+    if (userData.isAdmin) {
       userInput.clientRole = {
-        purchase: userData.purchase || false,
-        reward: userData.reward || false,
+        siteId: parseInt(userData.site, 10),
+        canPurchase: userData.canPurchase || false,
+        canRedeemRewards: userData.canRedeemRewards || false,
+      };
+    } else {
+      userInput.clientRole = {
+        siteId: parseInt(userData.site, 10),
       };
     }
 
@@ -167,93 +185,107 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { selectedSiteDetailsForForm, selectedUserDetailsForForm, deletedUser } = this.props;
-    const sortedClientSites = this.getSortedClientSites();
+    const { selectedSiteDetailsForForm, selectedUserDetailsForForm, deletedUser, filterMethod, userFilterQuery, selectedUser, currentUser } = this.props;
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = ((currentUser.roleForClient.canPurchase && currentUser.roleForClient.canRedeemRewards) || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+    }
+    const sortedClientSites = this.getSortedClientSites().filter(filterMethod);
     const clientSitesListContents = sortedClientSites.map((item, index) => (
-      <ClientSiteItem {...item} key={index} />
+      <ClientSiteItem {...item} key={index} userFilter={userFilterQuery} bDisabled={bDisabled} />
     ));
     const siteOptions = map(sortedClientSites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
 
     const editSiteModalShown = this.editSiteModalShouldBeShown();
     const editUserModalShown = this.editUserModalShouldBeShown();
+    const siteLocation = (selectedUser && selectedUser.details && selectedUser.details.roleForClient) ? selectedUser.details.roleForClient.site_id : null;
 
-    if (sortedClientSites.length > 0) {
-      return (
-        <div className="client-sites">
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="table-responsive">
-                <table className="table">
-                  <caption>SITE LOCATIONS</caption>
-                  <thead>
-                    <tr>
-                      <th className={this.getColumnSortClassName('name')} onClick={() => { this.clickSortHandler('name'); }}>
-                        <span>SITE NAME</span>
-                        <i className="caret-arrow"></i>
-                      </th>
-                      <th className={this.getColumnSortClassName('principalInvestigator')} onClick={() => { this.clickSortHandler('principalInvestigator'); }}>
-                        <span>PRINCIPAL INVESTIGATOR</span>
-                        <i className="caret-arrow"></i>
-                      </th>
-                      <th className={this.getColumnSortClassName('phone')} onClick={() => { this.clickSortHandler('phone'); }}>
-                        <span>SITE PHONE</span>
-                        <i className="caret-arrow"></i>
-                      </th>
-                      <th className={this.getColumnSortClassName('address')} onClick={() => { this.clickSortHandler('address'); }}>
-                        <span>SITE ADDRESS</span>
-                        <i className="caret-arrow"></i>
-                      </th>
-                      <th></th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {clientSitesListContents}
-                  </tbody>
-                </table>
-              </div>
-              <Modal className="edit-site" id="edit-site" show={editSiteModalShown} onHide={this.closeEditSiteModal}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Edit Site</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <div className="holder clearfix">
-                    <div className="form-lightbox">
-                      <EditSiteForm
-                        initialValues={selectedSiteDetailsForForm}
-                        onSubmit={this.updateSite}
-                      />
-                    </div>
-                  </div>
-                </Modal.Body>
-              </Modal>
-              <Modal className="edit-user" id="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Edit User</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <div className="holder clearfix">
-                    <div className="form-lightbox">
-                      <EditUserForm
-                        initialValues={selectedUserDetailsForForm}
-                        siteOptions={siteOptions}
-                        deleting={deletedUser.deleting}
-                        onDelete={this.deleteUser}
-                        onSubmit={this.updateUser}
-                      />
-                    </div>
-                  </div>
-                </Modal.Body>
-              </Modal>
+    if (selectedSiteDetailsForForm) {
+      for (const pi of selectedSiteDetailsForForm.principalInvestigators) {
+        if (pi.active) {
+          selectedSiteDetailsForForm.piFirstName = pi.firstName;
+          selectedSiteDetailsForForm.piLastName = pi.lastName;
+        }
+      }
+    }
+
+    return (
+      <div className="client-sites">
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="table-responsive">
+              <table className="table">
+                <caption>SITE LOCATIONS</caption>
+                <thead>
+                  <tr>
+                    <th className={this.getColumnSortClassName('name')} onClick={() => { this.clickSortHandler('name'); }}>
+                      <span>SITE NAME</span>
+                      <i className="caret-arrow" />
+                    </th>
+                    <th className={this.getColumnSortClassName('principalInvestigator')} onClick={() => { this.clickSortHandler('principalInvestigator'); }}>
+                      <span>PRINCIPAL INVESTIGATOR</span>
+                      <i className="caret-arrow" />
+                    </th>
+                    <th className={this.getColumnSortClassName('redirectPhone')} onClick={() => { this.clickSortHandler('redirectPhone'); }}>
+                      <span>SITE PHONE</span>
+                      <i className="caret-arrow" />
+                    </th>
+                    <th className={this.getColumnSortClassName('address')} onClick={() => { this.clickSortHandler('address'); }}>
+                      <span>SITE ADDRESS</span>
+                      <i className="caret-arrow" />
+                    </th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedClientSites.length > 0 && clientSitesListContents}
+                </tbody>
+              </table>
             </div>
+            <Modal dialogComponentClass={CenteredModal} className="edit-site" id="edit-site" show={editSiteModalShown} onHide={this.closeEditSiteModal}>
+              <Modal.Header>
+                <Modal.Title>Edit Site Location</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeEditSiteModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="holder clearfix">
+                  <EditSiteForm
+                    initialValues={selectedSiteDetailsForForm}
+                    onSubmit={this.updateSite}
+                    isEdit
+                  />
+                </div>
+              </Modal.Body>
+            </Modal>
+            <Modal dialogComponentClass={CenteredModal} className="edit-user" id="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
+              <Modal.Header>
+                <Modal.Title>Edit User</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeEditUserModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="holder clearfix">
+                  <div className="form-lightbox">
+                    <EditUserForm
+                      initialValues={selectedUserDetailsForForm}
+                      siteOptions={siteOptions}
+                      deleting={deletedUser.deleting}
+                      onDelete={this.deleteUser}
+                      onSubmit={this.updateUser}
+                      newSiteLocation={siteLocation}
+                      isEdit
+                    />
+                  </div>
+                </div>
+              </Modal.Body>
+            </Modal>
           </div>
         </div>
-      );
-    }
-    return (
-      <div>
-        <h3>No matching sites found!</h3>
       </div>
     );
   }

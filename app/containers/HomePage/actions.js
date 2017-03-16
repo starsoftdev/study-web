@@ -3,11 +3,20 @@ import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
   FETCH_PATIENT_MESSAGES,
   FETCH_PATIENT_MESSAGES_SUCCEESS,
-  FETCH_REWARDS_POINT,
-  FETCH_REWARDS_POINT_SUCCEESS,
+  FETCH_PRINCIPAL_INVESTIGATOR_TOTALS,
+  FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS,
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
+  FETCH_PROTOCOLS,
+  FETCH_PROTOCOLS_SUCCESS,
+  FETCH_PROTOCOLS_ERROR,
+  FETCH_PROTOCOL_NUMBERS,
+  FETCH_PROTOCOL_NUMBERS_SUCCESS,
+  FETCH_PROTOCOL_NUMBERS_ERROR,
+  FETCH_INDICATIONS,
+  FETCH_INDICATIONS_SUCCESS,
+  FETCH_INDICATIONS_ERROR,
   FETCH_INDICATION_LEVEL_PRICE,
   FETCH_INDICATION_LEVEL_PRICE_SUCCESS,
   FETCH_INDICATION_LEVEL_PRICE_ERROR,
@@ -21,6 +30,10 @@ import {
   EDIT_STUDY,
   EDIT_STUDY_SUCCESS,
   EDIT_STUDY_ERROR,
+  SET_ACTIVE_SORT,
+  SORT_SUCCESS,
+  FETCH_UPGRADE_STUDY_PRICE,
+  NEW_MESSAGE_FOR_PROTOCOL,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser) {
@@ -51,23 +64,24 @@ export function fetchPatientMessagesSucceeded(payload) {
   };
 }
 
-export function fetchRewardsPoint(currentUser) {
+export function fetchPrincipalInvestigatorTotals(currentUser) {
   return {
-    type: FETCH_REWARDS_POINT,
+    type: FETCH_PRINCIPAL_INVESTIGATOR_TOTALS,
     currentUser,
   };
 }
 
-export function fetchRewardsPointSucceeded(payload) {
+export function fetchPrincipalInvestigatorTotalsSucceeded(payload) {
   return {
-    type: FETCH_REWARDS_POINT_SUCCEESS,
+    type: FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS,
     payload,
   };
 }
 
-export function fetchStudies(searchParams = null) {
+export function fetchStudies(currentUser, searchParams) {
   return {
     type: FETCH_STUDIES,
+    currentUser,
     searchParams,
   };
 }
@@ -82,6 +96,69 @@ export function studiesFetched(payload) {
 export function studiesFetchingError(payload) {
   return {
     type: FETCH_STUDIES_ERROR,
+    payload,
+  };
+}
+
+export function fetchProtocols(searchParams) {
+  return {
+    type: FETCH_PROTOCOLS,
+    searchParams,
+  };
+}
+
+export function protocolsFetched(payload) {
+  return {
+    type: FETCH_PROTOCOLS_SUCCESS,
+    payload,
+  };
+}
+
+export function protocolsFetchingError(payload) {
+  return {
+    type: FETCH_PROTOCOLS_ERROR,
+    payload,
+  };
+}
+
+export function fetchProtocolNumbers(currentUser) {
+  return {
+    type: FETCH_PROTOCOL_NUMBERS,
+    currentUser,
+  };
+}
+
+export function protocolNumbersFetched(payload) {
+  return {
+    type: FETCH_PROTOCOL_NUMBERS_SUCCESS,
+    payload,
+  };
+}
+
+export function protocolNumbersFetchingError(payload) {
+  return {
+    type: FETCH_PROTOCOL_NUMBERS_ERROR,
+    payload,
+  };
+}
+
+export function fetchIndications(currentUser) {
+  return {
+    type: FETCH_INDICATIONS,
+    currentUser,
+  };
+}
+
+export function indicationsFetched(payload) {
+  return {
+    type: FETCH_INDICATIONS_SUCCESS,
+    payload,
+  };
+}
+
+export function indicationsFetchingError(payload) {
+  return {
+    type: FETCH_INDICATIONS_ERROR,
     payload,
   };
 }
@@ -179,5 +256,35 @@ export function studyEditingError(payload) {
   return {
     type: EDIT_STUDY_ERROR,
     payload,
+  };
+}
+
+export function setActiveSort(sort, direction) {
+  return {
+    type: SET_ACTIVE_SORT,
+    sort,
+    direction,
+  };
+}
+
+export function sortSuccess(payload) {
+  return {
+    type: SORT_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchUpgradeStudyPrice(fromLevel, toLevel) {
+  return {
+    type: FETCH_UPGRADE_STUDY_PRICE,
+    fromLevel,
+    toLevel,
+  };
+}
+
+export function addNewMessageForProtocol(protocolNumber) {
+  return {
+    type: NEW_MESSAGE_FOR_PROTOCOL,
+    protocolNumber,
   };
 }

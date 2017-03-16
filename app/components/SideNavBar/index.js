@@ -1,32 +1,89 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router';
 
-import sideNavLogo from 'assets/images/logo2.png';
+import {
+  selectCurrentUserClientId,
+  selectUserRoleType,
+  selectCurrentUser,
+} from '../../containers/App/selectors';
 
-const menuItemsGroupA = [
-  { upperText: 'Home', link: '/', icon: 'icomoon-icon_house_alt' },
-  { upperText: 'List New Study', link: '/list-new-study', icon: 'icomoon-screen' },
-  { upperText: 'Order IRB Ad Creation', link: '/order-irb-ad-creation', icon: 'icomoon-irb' },
-  { upperText: 'Request Proposal', link: '/request-proposal', icon: 'icomoon-doller' },
-  { upperText: 'Refer', link: '/refer', icon: 'icomoon-signout' },
-];
-const menuItemsGroupB = [
-  { upperText: 'Calendar', link: '/calendar', icon: 'icomoon-icon_calendar' },
-  { upperText: 'Manage', lowerText: 'Sites / Users', link: '/sites-users', icon: 'icomoon-icon_group' },
-  { upperText: 'Patient Database', link: '/patient-database', icon: 'icomoon-icon_contacts' },
-  { upperText: 'Rewards', link: '/rewards', icon: 'icomoon-gift' },
-  { upperText: 'Badges', link: '/badges', icon: 'icomoon-star' },
-];
+import sideNavLogo from '../../assets/images/logo2.png';
 
-function SideNavBar() {
-  return (
-    <aside id="sidebar">
-      <div className="sidebar-holder">
+class SideNavBar extends React.Component {
+  static propTypes = {
+    currentUserClientId: React.PropTypes.number,
+    userRoleType: React.PropTypes.string,
+    currentUser: React.PropTypes.any,
+    location: React.PropTypes.object,
+  };
 
-        <nav className="sidenav">
-          <ul className="list-unstyled">
-            {
-              menuItemsGroupA.map((item, index) =>
+  componentDidMount() {
+  }
+
+  render() {
+    const { userRoleType, currentUser } = this.props;
+    let purchasable = true;
+    if (userRoleType === 'client') {
+      purchasable = currentUser.roleForClient.canPurchase;
+    }
+    let menuItemsGroupA;
+    let menuItemsGroupB;
+    if (userRoleType === 'client') {
+      menuItemsGroupA = [
+        { upperText: 'Home', link: '/app', icon: 'icomoon-icon_house_alt' },
+        { upperText: 'List New Study', link: '/app/list-new-study', icon: 'icomoon-screen' },
+        { upperText: 'Order IRB Ad Creation', link: '/app/order-irb-ad-creation', icon: 'icomoon-irb' },
+        { upperText: 'Request Proposal', link: '/app/request-proposal', icon: 'icomoon-doller' },
+        { upperText: 'Refer', link: '/app/refer', icon: 'icomoon-signout' },
+      ];
+      menuItemsGroupB = [
+        { upperText: 'Calendar', link: '/app/calendar', icon: 'icomoon-icon_calendar' },
+        { upperText: 'Manage', lowerText: 'Sites / Users', link: '/app/sites-users', icon: 'icomoon-icon_group' },
+        { upperText: 'Patient Database', link: '/app/patient-database', icon: 'icomoon-icon_contacts' },
+        { upperText: 'Rewards', link: '/app/rewards', icon: 'icomoon-gift' },
+        { upperText: 'Badges', link: '/app/badges', icon: 'icomoon-star' },
+      ];
+    } else {
+      menuItemsGroupA = [
+        { upperText: 'Home', link: '/app', icon: 'icomoon-icon_house_alt' },
+        { upperText: 'List New Protocol', link: '/app/list-new-protocol', icon: 'icomoon-screen' },
+        { upperText: 'Order IRB Ad Creation', link: '/app/order-irb-ad-creation', icon: 'icomoon-irb' },
+        { upperText: 'Request Proposal', link: '/app/request-proposal', icon: 'icomoon-doller' },
+        { upperText: 'Find Out How Many Sites Are Listing Your Protocol', link: '/app/find-out-how-many-sites-are-listing-your-protocol', icon: 'icomoon-help-with-circle' },
+      ];
+      menuItemsGroupB = [
+        { upperText: 'Calendar', link: '/app/calendar', icon: 'icomoon-icon_calendar' },
+        { upperText: 'Manage Users', lowerText: '', link: '/app/manage-users', icon: 'icomoon-icon_group' },
+      ];
+    }
+    return (
+      <aside id="sidebar">
+        <div className="sidebar-holder">
+          <nav className="sidenav">
+            <ul className="list-unstyled">
+              {menuItemsGroupA.map((item, index) => (
+                ((index === 1 || index === 2) && !purchasable) ?
+                  <li key={index} className="disabled-li">
+                    <Link to={item.link} activeClassName="active">
+                      <i className={item.icon} />
+                      <div>{item.upperText}</div>
+                      <div>{item.lowerText}</div>
+                    </Link>
+                  </li>
+                :
+                  <li key={index}>
+                    <Link to={item.link} activeClassName="active">
+                      <i className={item.icon} />
+                      <div>{item.upperText}</div>
+                      <div>{item.lowerText}</div>
+                    </Link>
+                  </li>
+              ))}
+            </ul>
+            <ul className="list-unstyled">
+              {menuItemsGroupB.map((item, index) =>
                 <li key={index}>
                   <Link to={item.link} activeClassName="active">
                     <i className={item.icon} />
@@ -34,39 +91,34 @@ function SideNavBar() {
                     <div>{item.lowerText}</div>
                   </Link>
                 </li>
-              )
-            }
-          </ul>
-          <ul className="list-unstyled">
-            {
-              menuItemsGroupB.map((item, index) =>
-                <li key={index}>
-                  <Link to={item.link} activeClassName="active">
-                    <i className={item.icon} />
-                    <div>{item.upperText}</div>
-                    <div>{item.lowerText}</div>
-                  </Link>
-                </li>
-              )
-            }
-          </ul>
-        </nav>
-
-        <div className="helpline">
-          <h2>StudyKIK Project Manager</h2>
-          <div className="area">
-            <img src={sideNavLogo} width="60" height="60" alt="logo" className="sub-logo" />
-            <p>Motang <br /> <a href="tel:5626114752">562.611.4752</a> <br /> <a href="mailto:motang@studykik.com">motang@studykik.com</a></p>
+              )}
+            </ul>
+          </nav>
+          <div className="helpline">
+            <h2>StudyKIK Project Manager</h2>
+            <div className="area">
+              <img src={sideNavLogo} width="60" height="60" alt="logo" className="sub-logo" />
+              <p>Motang <br /> <a href="tel:5626114752">562.611.4752</a> <br /> <a href="mailto:motang@studykik.com">motang@studykik.com</a></p>
+            </div>
+            <a href="" className="bgn-chat">
+              <span className="text">CHAT NOW!</span>
+              <i className="icomoon-bg" />
+            </a>
           </div>
-          <a href="" className="bgn-chat">
-            <span className="text">CHAT NOW!</span>
-            <i className="icomoon-bg" />
-          </a>
-        </div>
 
-      </div>
-    </aside>
-  );
+        </div>
+      </aside>
+    );
+  }
 }
 
-export default SideNavBar;
+const mapStateToProps = createStructuredSelector({
+  currentUserClientId: selectCurrentUserClientId(),
+  userRoleType: selectUserRoleType(),
+  currentUser: selectCurrentUser(),
+});
+
+const mapDispatchToProps = () => ({
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SideNavBar);

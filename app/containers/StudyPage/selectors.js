@@ -8,6 +8,7 @@ import { createSelector } from 'reselect';
  * Direct selector to the studyPage state domain
  */
 const selectStudyPageDomain = () => state => state.studyPage;
+export default selectStudyPageDomain;
 
 /**
  * Other selectors
@@ -68,9 +69,9 @@ export const selectStudyId = () => createSelector(
   (subState) => subState.studyId
 );
 
-export const selectSiteId = () => createSelector(
+export const selectProtocol = () => createSelector(
   selectStudyPageDomain(),
-  (subState) => subState.siteId
+  (subState) => subState.protocol
 );
 
 export const selectSite = () => createSelector(
@@ -118,3 +119,7 @@ export const selectOpenPatientModal = () => createSelector(
   (subState) => subState.openPatientModal
 );
 
+export const selectAddPatientStatus = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.addPatientStatus
+);

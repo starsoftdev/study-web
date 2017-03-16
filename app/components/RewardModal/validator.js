@@ -1,8 +1,8 @@
-import { validatorFactory } from 'utils/reduxForm';
+import { validatorFactory } from '../../utils/reduxForm';
 
 const schema = {
-  site: { presence: true },
-  rewardType: { presence: { message: '^You need to select reward type' } },
+  siteId: { presence: { message: '^You need to select site location' } },
+  redemptionType: { presence: { message: '^You need to select redemption type' } },
 };
 
 export default validatorFactory(schema);

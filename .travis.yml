@@ -1,16 +1,17 @@
 language: node_js
+cache:
+  bundler: true
+  directories:
+  - node_modules # NPM packages
 sudo: true
 dist: trusty
 node_js:
-  - "6.2"
+  - "7"
 # safelist for specific branches for travis to test
 branches:
   only:
   - master
   - develop
-script:
-  - npm run build
-  - npm test
 before_install:
   - export CHROME_BIN=/usr/bin/google-chrome
   - export DISPLAY=:99.0
@@ -19,15 +20,14 @@ before_install:
   - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   - sudo dpkg -i google-chrome*.deb
   - sh -e /etc/init.d/xvfb start
+before_script:
+    - npm install --only=dev
+script:
+  - npm run build
+  - npm test
 notifications:
   email:
     on_failure: change
-  webhooks:
-    urls:
-      - http://web-staging.studykik.com:9001/notifications
-    on_success: always
-    on_failure: never
-    on_start: never
   slack: 'studykik:nxDZXJcNFYdWoXibXQ9T0013'
 
 after_success: 'npm run coveralls'

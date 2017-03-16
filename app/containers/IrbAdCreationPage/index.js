@@ -9,21 +9,27 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { createStructuredSelector } from 'reselect';
-import IrbAdCreationForm from 'components/IrbAdCreationForm';
-import ShoppingCartForm from 'components/ShoppingCartForm';
-import { selectIrbAdCreationFormValues, selectIrbAdCreationFormError } from 'components/IrbAdCreationForm/selectors';
-import { selectIrbProductList, selectIrbAdCreationDetail } from 'containers/IrbAdCreationPage/selectors';
-import { submitForm, fetchIrbProductList, fetchIrbAdCreation } from 'containers/IrbAdCreationPage/actions';
+import { touch } from 'redux-form';
+import IrbAdCreationForm from '../../components/IrbAdCreationForm';
+import ShoppingCartForm from '../../components/ShoppingCartForm';
+import { selectIrbAdCreationFormValues, selectIrbAdCreationFormError } from '../../components/IrbAdCreationForm/selectors';
+import { fields as irbAdCreationFields } from '../../components/IrbAdCreationForm/validator';
+import { selectIrbProductList, selectIrbAdCreationDetail } from '../../containers/IrbAdCreationPage/selectors';
+import { submitForm, fetchIrbProductList, fetchIrbAdCreation } from '../../containers/IrbAdCreationPage/actions';
+import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
+import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
+import { ComingSoon } from '../../components/ComingSoon';
 
 import {
   fetchSites,
   fetchIndications,
-} from 'containers/App/actions';
+} from '../../containers/App/actions';
 import {
   selectSiteLocations,
   selectIndications,
   selectCurrentUser,
-} from 'containers/App/selectors';
+  selectUserRoleType,
+} from '../../containers/App/selectors';
 
 import _ from 'lodash';
 
@@ -41,8 +47,13 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     productList: PropTypes.array,
     irbAdCreationDetail: PropTypes.object,
     params: PropTypes.object,
+    shoppingCartFormValues: PropTypes.object,
+    shoppingCartFormError: PropTypes.object,
     fetchProductList: PropTypes.func,
     fetchIrbAdCreation: PropTypes.func,
+    touchIrbAdCreation: PropTypes.func,
+    touchShoppingCart: PropTypes.func,
+    userRoleType: PropTypes.string,
   };
 
   constructor(props) {
@@ -53,6 +64,10 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     if (!isNaN(props.params.id)) {
       this.props.fetchIrbAdCreation(props.params.id);
     }
+
+    this.state = {
+      uniqueId: '1',
+    };
   }
 
   componentDidMount() {
@@ -61,55 +76,88 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     this.props.fetchProductList();
   }
 
-  onSubmitForm(params) {
+  onSubmitForm() {
+    const { hasError, shoppingCartFormValues, shoppingCartFormError, touchIrbAdCreation, touchShoppingCart } = this.props;
+    if (hasError || shoppingCartFormError) {
+      touchIrbAdCreation();
+      touchShoppingCart();
+      return;
+    }
+
     const siteLocation = _.find(this.props.siteLocations, { id: this.props.formValues.siteLocation });
-    this.submitForm(params, {
+    const indication = _.find(this.props.indications, { id: this.props.formValues.indication_id });
+
+    this.submitForm(shoppingCartFormValues, {
       ...this.props.formValues,
       siteLocationName: siteLocation.name,
+      indicationName: indication.name,
       user_id: this.props.currentUser.id,
       stripeProductId: this.props.productList[0].stripeProductId,
       stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
     });
+
+    if (this.state.uniqueId.length > 1) {
+      this.setState({
+        uniqueId: '1',
+      });
+    } else {
+      this.setState({
+        uniqueId: '11',
+      });
+    }
   }
 
   render() {
-    const { siteLocations, indications, hasError, productList, irbAdCreationDetail } = this.props;
+    const { siteLocations, indications, productList, irbAdCreationDetail, userRoleType } = this.props;
+    const { uniqueId } = this.state;
 
     if (productList[0]) {
       const addOns = [{
         title: productList[0].name,
-        price: productList[0].price,
+        price: productList[0].price * 100,
         quantity: 1,
-        total: productList[0].price,
+        total: productList[0].price * 100,
       }];
 
       return (
-        <StickyContainer className="container-fluid">
-          <Helmet title="Order IRB Ad Creation - StudyKIK" />
-          <section className="study-portal">
-            <h2 className="main-heading">ORDER IRB AD CREATION</h2>
-            <div className="form-study row">
-              <div className="col-xs-6 form-holder">
-                <IrbAdCreationForm
-                  siteLocations={siteLocations}
-                  indications={indications}
-                  initialValues={irbAdCreationDetail}
-                />
-              </div>
-
-              <div className="fixed-block">
-                <div className="fixed-block-holder">
-                  <div className="order-summery-container">
-                    <Sticky className="sticky-shopping-cart">
-                      <ShoppingCartForm showCards addOns={addOns} onSubmit={this.onSubmitForm} disableSubmit={hasError} />
-                    </Sticky>
+        <div>
+          { userRoleType === 'client' &&
+            <StickyContainer className="container-fluid">
+              <Helmet title="Order IRB Ad Creation - StudyKIK" />
+              <section className="study-portal">
+                <h2 className="main-heading">ORDER IRB AD CREATION</h2>
+                <div className="form-study row">
+                  <div className="col-xs-6 form-holder">
+                    <IrbAdCreationForm
+                      key={uniqueId}
+                      siteLocations={siteLocations}
+                      indications={indications}
+                      initialValues={irbAdCreationDetail}
+                    />
                   </div>
-                </div>
-              </div>
 
-            </div>
-          </section>
-        </StickyContainer>
+                  <div className="fixed-block">
+                    <div className="fixed-block-holder">
+                      <div className="order-summery-container">
+                        <Sticky className="sticky-shopping-cart">
+                          <ShoppingCartForm showCards addOns={addOns} validateAndSubmit={this.onSubmitForm} />
+                        </Sticky>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </section>
+            </StickyContainer>
+          }
+          {
+            userRoleType === 'sponsor' &&
+              <div>
+                <Helmet title="Order IRB Ad Creation - StudyKIK" />
+                <ComingSoon />
+              </div>
+          }
+        </div>
       );
     }
     return <div></div>;
@@ -124,6 +172,9 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   productList: selectIrbProductList(),
   irbAdCreationDetail: selectIrbAdCreationDetail(),
+  shoppingCartFormValues: selectShoppingCartFormValues(),
+  shoppingCartFormError: selectShoppingCartFormError(),
+  userRoleType: selectUserRoleType(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -133,6 +184,8 @@ function mapDispatchToProps(dispatch) {
     fetchProductList: () => dispatch(fetchIrbProductList()),
     fetchIrbAdCreation: (id) => dispatch(fetchIrbAdCreation(id)),
     submitForm:     (cartValues, formValues) => dispatch(submitForm(cartValues, formValues)),
+    touchIrbAdCreation: () => dispatch(touch('irbAdCreation', ...irbAdCreationFields)),
+    touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
   };
 }
 

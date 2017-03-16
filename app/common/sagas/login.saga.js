@@ -7,35 +7,36 @@
 import {
   take, call, put, cancel, cancelled, fork, select,
 } from 'redux-saga/effects';
-import { replace, push } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
-import { selectLocationState } from 'containers/App/selectors';
+import { selectLocationState } from '../../containers/App/selectors';
 
-import request from 'utils/request';
-import { getItem, setItem, removeItem } from 'utils/localStorage';
+import request from '../../utils/request';
+import { setItem, removeItem } from '../../utils/localStorage';
 import {
   LOGIN_REQUEST,
   LOGIN_ERROR,
   LOGOUT_REQUEST,
-} from 'containers/LoginPage/constants';
+} from '../../containers/LoginPage/constants';
 
 import {
   RESET_PASSWORD_REQUEST,
-} from 'containers/ResetPasswordPage/constants';
+} from '../../containers/ResetPasswordPage/constants';
+
+import {
+  resetPasswordSuccess,
+} from '../../containers/ResetPasswordPage/actions';
 
 import {
   SET_NEW_PASSWORD_REQUEST,
-} from 'containers/SetNewPasswordPage/constants';
+} from '../../containers/SetNewPasswordPage/constants';
 
 import {
   CONFIRM_CHANGE_PASSWORD_REQUEST,
-} from 'containers/ProfilePage/constants';
+} from '../../containers/ProfilePage/constants';
 
-import { loginError, logout as logoutAction } from 'containers/LoginPage/actions';
-import { fetchMeFromToken, setAuthState, setUserData } from 'containers/App/actions';
-import { selectNextPathname } from 'common/selectors/router.selector';
-
+import { loginError, logout as logoutAction } from '../../containers/LoginPage/actions';
+import { fetchMeFromToken, setAuthState, setUserData } from '../../containers/App/actions';
 
 export default function* loginSaga() {
   while (true) {
@@ -69,9 +70,6 @@ export function* authorize(data) {
       body: JSON.stringify(data),
     });
 
-    // TODO: do i need this? I will navigate away anyways
-    // resolve(response);
-
     // store auth token to localstorage
     yield call(setItem, 'auth_token', response.id);
     yield call(setItem, 'user_id', response.userId);
@@ -83,14 +81,6 @@ export function* authorize(data) {
 
     // fetch details of authenticated user
     yield put(fetchMeFromToken());
-
-    // redirect to nextPathName or to the dashboard page
-    const nextPathName = yield select(selectNextPathname);
-    if (nextPathName) {
-      yield put(push(nextPathName));
-    } else {
-      yield put(push('/'));
-    }
 
     // return the response from the generator task
     return response;
@@ -115,18 +105,21 @@ export function* logoutSaga() {
   while (true) {
     yield take(LOGOUT_REQUEST);
 
+    // Redirect to login page before setting auth state.
+    // This way no components will attempt to re-render using
+    // absent user data.
+    // manually push the location state to the login URL, since replace will try to update redux state, which we do not want
     yield call(logout);
+    yield call(() => { location.href = '/login'; });
+
     yield put(setAuthState(false));
     yield put(setUserData(null));
-    // redirect to login page
-    yield put(replace('/login'));
   }
 }
 
 export function* logout() {
   try {
-    const authToken = getItem('auth_token');
-    const requestURL = `${API_URL}/users/logout?access_token=${authToken}`;
+    const requestURL = `${API_URL}/users/logout`;
     const params = {
       method: 'POST',
     };
@@ -149,7 +142,7 @@ export function* resetPassword() {
       };
       const requestURL = `${API_URL}/users/reset`;
       yield call(request, requestURL, params);
-      yield put(toastrActions.success('Reset password', 'The request has been submitted successfully'));
+      yield put(resetPasswordSuccess());
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
@@ -171,14 +164,16 @@ export function* setNewPassword() {
         };
         const requestURL = `${API_URL}/users/reset-password`;
         yield call(request, requestURL, params);
-        yield put(toastrActions.success('Set new password', 'The request has been submitted successfully'));
-        yield put(push('/login'));
+        yield put(toastrActions.success('', 'Success! Your password has been reset, check your inbox.'));
       } else {
         const errorMessage = get(null, 'message', 'Can not find auth token!');
         yield put(toastrActions.error('', errorMessage));
       }
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
+      let errorMessage = get(err, 'message', 'Something went wrong!');
+      if (err.status === 401) {
+        errorMessage = 'Error! The link is no longer valid, you have to repeat the forgot password process.';
+      }
       yield put(toastrActions.error('', errorMessage));
     }
   }

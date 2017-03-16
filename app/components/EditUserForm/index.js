@@ -1,21 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 
-import Input from 'components/Input';
-import Toggle from 'components/Input/Toggle';
-import ReactSelect from 'components/Input/ReactSelect';
-import { selectEditUserFormError, selectEditUserFormSiteValue } from './selectors';
-import { selectSavedUser } from 'containers/App/selectors';
+import Input from '../../components/Input';
+import Toggle from '../../components/Input/Toggle';
+import ReactSelect from '../../components/Input/ReactSelect';
+import { selectEditUserFormSiteValue } from './selectors';
+import { selectSavedUser } from '../../containers/App/selectors';
 import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
-import './styles.less';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const mapStateToProps = createStructuredSelector({
   savedUser: selectSavedUser(),
   site: selectEditUserFormSiteValue(),
-  hasError: selectEditUserFormError(),
 });
 
 @reduxForm({ form: 'editUser', validate: formValidator })
@@ -27,17 +25,47 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
     savedUser: PropTypes.object,
     siteOptions: PropTypes.array,
     site: PropTypes.string,
-    hasError: PropTypes.bool,
     handleSubmit: PropTypes.func,
     onDelete: PropTypes.func,
     deleting: PropTypes.bool,
+    isEdit: PropTypes.bool,
+    newSiteLocation: PropTypes.number,
+    Purchase: PropTypes.bool,
+    Redeem: PropTypes.bool,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.handleSelect = this.handleSelect.bind(this);
+    this.state = {
+      fFlag: true,
+    };
+  }
+
+  componentDidMount() {
+    this.props.dispatch(change('editUser', 'purchase', this.props.Purchase));
+    this.props.dispatch(change('editUser', 'reward', this.props.Redeem));
+    const nSite = (this.props.newSiteLocation || this.props.newSiteLocation === 0) ? this.props.newSiteLocation.toString() : null;
+    this.props.dispatch(change('editUser', 'site', nSite));
+    // if (!this.props.site) {
+    //   this.props.dispatch(change('editUser', 'site', '0'));
+    // }
+  }
+
+  handleSelect() {
+    if (this.state) {
+      this.setState({
+        fFlag: false,
+      });
+    }
+  }
+
   render() {
-    const { savedUser, siteOptions, site, hasError, handleSubmit, onDelete, deleting } = this.props;
+    const { savedUser, siteOptions, site, handleSubmit, onDelete, deleting, isEdit, newSiteLocation } = this.props;
     let clientRolePanelContent = null;
 
-    if (site === '0') {
+    if (!site || site === '0' || (newSiteLocation && newSiteLocation === 0)) {
       clientRolePanelContent = (
         <div className="client-role">
           <div className="field-row">
@@ -54,7 +82,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
           </div>
           <div className="field-row">
             <strong className="label">
-              <label>REWARD</label>
+              <label>REWARDS</label>
             </strong>
             <div className="field">
               <Field
@@ -122,6 +150,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
                 placeholder="Select Site Location"
                 options={siteOptions}
                 disabled={savedUser.saving || deleting}
+                onChange={this.handleSelect}
               />
             </div>
           </div>
@@ -130,15 +159,15 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
             {onDelete &&
               <button type="button" className="btn btn-gray-outline" disabled={savedUser.saving || deleting} onClick={onDelete}>
                 {deleting
-                  ? <span><LoadingSpinner showOnlyIcon size={20} className="deleting-user" /></span>
+                  ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                   : <span>Delete</span>
                 }
               </button>
             }
-            <button type="submit" className="btn btn-default" disabled={hasError || savedUser.saving || deleting}>
+            <button type="submit" className="btn btn-default" disabled={savedUser.saving || deleting}>
               {savedUser.saving
                 ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
-                : <span>Submit</span>
+                : <span>{isEdit ? 'Update' : 'Submit'}</span>
               }
             </button>
           </div>

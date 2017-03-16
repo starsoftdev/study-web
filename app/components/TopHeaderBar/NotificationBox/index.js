@@ -2,31 +2,31 @@
 
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
+import moment from 'moment-timezone';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import enhanceWithClickOutside from 'react-click-outside';
 
-import moment from 'moment';
 import _ from 'lodash';
 
 import {
   fetchNotifications,
   fetchUnreadNotificationsCount,
-} from 'containers/GlobalNotifications/actions';
+  markNotificationsRead,
+} from '../../../containers/GlobalNotifications/actions';
 
 import {
   selectNotifications,
   selectUnreadNotificationsCount,
-} from 'containers/GlobalNotifications/selectors';
+} from '../../../containers/GlobalNotifications/selectors';
 
-import { getRedirectionUrl } from 'containers/NotificationsPage';
+import {
+  getRedirectionUrl,
+  getAvatarUrl,
+  eventMessage,
+} from '../../../containers/NotificationsPage';
 
-import avatar1 from 'assets/images/img2.png';
-import avatar2 from 'assets/images/img3.png';
-import avatar3 from 'assets/images/img4.png';
-
-import './styles.less';
 
 class NotificationBox extends React.Component {
   static propTypes = {
@@ -35,6 +35,7 @@ class NotificationBox extends React.Component {
     unreadNotificationsCount: PropTypes.number,
     fetchNotifications: PropTypes.func.isRequired,
     fetchUnreadNotificationsCount: PropTypes.func.isRequired,
+    markNotificationsRead: PropTypes.func.isRequired,
   }
 
   state = {
@@ -48,30 +49,36 @@ class NotificationBox extends React.Component {
     this.props.fetchNotifications(currentUser.id);
   }
 
-  getLocalTime(utc) {
-    return moment.utc(utc).local();
-  }
-
   handleBadgeNumberClick = () => {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen,
     });
+    this.props.markNotificationsRead(this.props.currentUser.id);
   }
 
   handleClickOutside = () => {
     this.setState({ dropdownOpen: false });
   }
 
+  seeAllClick = () => {
+    this.setState({ dropdownOpen: false });
+  }
+
+  parseNotificationTime(time, timezone) {
+    return moment(time).tz(timezone).format('MM/DD/YY [at] h:mm A');
+  }
+
   render() {
+    const { currentUser } = this.props;
+
     return (
       <div className="notifications pull-left open-close">
         <a
-          href="#"
           className={classNames('opener', { active: this.state.dropdownOpen })}
           onClick={() => this.handleBadgeNumberClick()}
         >
           <i className="icomoon-bell" />
-          <span className="counter">{this.props.unreadNotificationsCount}</span>
+          { this.props.unreadNotificationsCount > 0 && <span className="counter">{this.props.unreadNotificationsCount}</span> }
         </a>
 
         {this.state.dropdownOpen &&
@@ -80,22 +87,13 @@ class NotificationBox extends React.Component {
               <strong className="title">NOTIFICATIONS</strong>
               <div className="jcf-scrollable">
                 <ul className="list-unstyled">
-                  {/*
-                  <li>
-                    <a href="#">
-                      <div className="img-circle"><img src={avatar1} width="43" height="43" alt="Alan walker" /></div>
-                      <p><strong>alan walker</strong> moved Thomas Morgan from New Patient to Consented.</p>
-                      <time dateTime="2016-05-16">05/16/16 at 11:31 PM</time>
-                    </a>
-                  </li>
-                  */}
                   {
                     _.take(this.props.notifications, 3).map(n => (
                       <li key={n.id}>
                         <a href={getRedirectionUrl(n)}>
-                          <div className="img-circle"><img src={avatar1} width="43" height="43" alt="Alan walker" /></div>
-                          <p dangerouslySetInnerHTML={{ __html: n.event_log.eventMessage }} />
-                          <time>{`${this.getLocalTime(n.event_log.created).format('MM/DD/YY')} at ${this.getLocalTime(n.event_log.created).format('h:mm A')}`}</time>
+                          <div className="img-circle bg-gray"><img src={getAvatarUrl(n)} width="43" height="43" alt="Avatar" /></div>
+                          <p dangerouslySetInnerHTML={{ __html: eventMessage(n.event_log) }} />
+                          <time>{this.parseNotificationTime(n.event_log.created, currentUser.timezone)}</time>
                         </a>
                       </li>
                     ))
@@ -103,7 +101,7 @@ class NotificationBox extends React.Component {
                 </ul>
               </div>
               <div className="btn-block text-center">
-                <Link className="hover-underline" to="/notifications">
+                <Link onClick={this.seeAllClick} className="hover-underline" to="/app/notifications">
                   See All
                 </Link>
               </div>
@@ -124,6 +122,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   fetchNotifications,
   fetchUnreadNotificationsCount,
+  markNotificationsRead,
 };
 
 export default connect(

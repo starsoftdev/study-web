@@ -7,10 +7,13 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser, selectCards, selectSavedCard } from 'containers/App/selectors';
-import PaymentMethodsForm from 'components/PaymentMethodsForm';
-import AddCreditCardModal from 'components/AddCreditCardModal';
-import { fetchCards, deleteCard, saveCard } from 'containers/App/actions';
+import { selectCurrentUser, selectCards, selectSavedCard } from '../../containers/App/selectors';
+import PaymentMethodsForm from '../../components/PaymentMethodsForm';
+import AddCreditCardModal from '../../components/AddCreditCardModal';
+import { fetchCards, deleteCard, saveCard } from '../../containers/App/actions';
+import { selectPaginationOptions } from '../../containers/PaymentInformationPage/selectors';
+import { setActiveSort } from '../../containers/PaymentInformationPage/actions';
+import Helmet from 'react-helmet';
 
 export class PaymentInformationPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -21,6 +24,8 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
     saveCard: PropTypes.func,
     fetchCards: PropTypes.func,
     savedCard: PropTypes.object,
+    paginationOptions: PropTypes.object,
+    setActiveSort: PropTypes.func,
   }
 
   constructor(props) {
@@ -61,8 +66,10 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
 
   render() {
     let customerId = false;
+    let clientId = false;
     if (this.props.currentUser && this.props.currentUser.roleForClient) {
-      customerId = parseInt(this.props.currentUser.roleForClient.client.stripeCustomerId, 10);
+      customerId = this.props.currentUser.roleForClient.client.stripeCustomerId;
+      clientId = this.props.currentUser.roleForClient.client.id;
     }
     let creditCards = [];
     if (this.props.creditCards.details && this.props.creditCards.details.data) {
@@ -70,12 +77,13 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
     }
     return (
       <div className="container-fluid">
+        <Helmet title="Payment Information - StudyKIK" />
         <section className="payment-information">
           <h2 className="main-heading">PAYMENT INFORMATION</h2>
 
           <div>
             <div className="btn-block text-right">
-              <a className="btn btn-primary lightbox-opener" onClick={this.showCreditCardModal}>+   ADD  NEW CARD</a>
+              <a className="btn btn-primary lightbox-opener" onClick={this.showCreditCardModal}>+ ADD NEW CARD</a>
             </div>
             <AddCreditCardModal addCreditCard={this.onSaveCard} showModal={this.state.showAddCreditCardModal} closeModal={this.closeAddCredtCardModal} />
           </div>
@@ -83,7 +91,10 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
           <PaymentMethodsForm
             creditCards={creditCards}
             deleteCreditCard={this.deleteCard}
+            clientId={clientId}
             customerId={customerId}
+            paginationOptions={this.props.paginationOptions}
+            setActiveSort={this.props.setActiveSort}
           />
         </section>
       </div>
@@ -95,13 +106,15 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   creditCards: selectCards(),
   savedCard: selectSavedCard(),
+  paginationOptions: selectPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchCards: (customerId) => dispatch(fetchCards(customerId)),
-    deleteCard: (customerId, cardId) => dispatch(deleteCard(customerId, cardId)),
+    deleteCard: (clientId, customerId, cardId) => dispatch(deleteCard(clientId, customerId, cardId)),
     saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+    setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
   };
 }
 

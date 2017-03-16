@@ -26,7 +26,7 @@ import {
   FETCH_SCHEDULES,
 } from '../constants';
 
-import request from 'utils/request';
+import request from '../../../utils/request';
 
 describe('CalendarPage/sagas', () => {
   describe('fetchPatientsByStudyWatcher Saga', () => {

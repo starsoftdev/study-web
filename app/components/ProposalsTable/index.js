@@ -6,8 +6,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
-import moment from 'moment';
-import classNames from 'classnames';
+import moment from 'moment-timezone';
 
 const headers = [
   {
@@ -34,11 +33,14 @@ const headers = [
 
 class ProposalsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    currentUser: PropTypes.object,
     selectCurrent: PropTypes.func,
     selectAll: PropTypes.func,
     range: PropTypes.any,
     searchBy: PropTypes.any,
+    site: PropTypes.any,
     proposals: PropTypes.any,
+    showProposalPdf: PropTypes.func,
   };
 
   constructor(props) {
@@ -147,26 +149,20 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     const proposalsArr = this.props.proposals;
 
     if (site !== null && searchBy !== null) {
-      const number = parseInt(searchBy, 10);
       for (const proposal of proposalsArr) {
         if (proposal.site === site.name) {
-          if (!_.isNaN(number)) {
-            if (number === proposal.id) {
-              proposalsMatch.push(proposal);
-            }
-          } else if (number === proposal.proposalNumber || number === proposal.protocol) {
+          const proposalNumber = String(proposal.proposalNumber);
+          const protocalNumber = String(proposal.protocol);
+          if (proposalNumber.includes(searchBy) || protocalNumber.includes(searchBy)) {
             proposalsMatch.push(proposal);
           }
         }
       }
     } else if (searchBy !== null) {
       for (const proposal of proposalsArr) {
-        const number = parseInt(searchBy, 10);
-        if (!_.isNaN(number)) {
-          if (number === proposal.id) {
-            proposalsMatch.push(proposal);
-          }
-        } else if (number === proposal.proposalNumber || number === proposal.protocol) {
+        const proposalNumber = String(proposal.proposalNumber);
+        const protocalNumber = String(proposal.protocol);
+        if (proposalNumber.includes(searchBy) || protocalNumber.includes(searchBy)) {
           proposalsMatch.push(proposal);
         }
       }
@@ -191,14 +187,18 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
   sortBy(ev) {
     ev.preventDefault();
-    const sort = ev.currentTarget.dataset.sort;
-    let direction = 'down';
+    let sort = ev.currentTarget.dataset.sort;
+    let direction = 'up';
 
-    if (ev.currentTarget.className && ev.currentTarget.className === 'down') {
-      direction = 'up';
+    if (ev.currentTarget.className && ev.currentTarget.className === 'up') {
+      direction = 'down';
+    } else if (ev.currentTarget.className && ev.currentTarget.className === 'down') {
+      direction = null;
+      sort = null;
     }
 
     const proposalsArr = this.state.filteredProposals || this.props.proposals;
+
     const directionUnits = (direction === 'up') ? {
       more: 1,
       less: -1,
@@ -223,10 +223,10 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         break;
       case 'site':
         proposalsArr.sort((a, b) => {
-          if (a.site > b.site) {
+          if (a.site.toLowerCase() > b.site.toLowerCase()) {
             return directionUnits.more;
           }
-          if (a.site < b.site) {
+          if (a.site.toLowerCase() < b.site.toLowerCase()) {
             return directionUnits.less;
           }
           return 0;
@@ -265,7 +265,27 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           return 0;
         });
         break;
+      case 'order_number':
+        proposalsArr.sort((a, b) => {
+          if (a.order_number > b.order_number) {
+            return directionUnits.more;
+          }
+          if (a.order_number < b.order_number) {
+            return directionUnits.less;
+          }
+          return 0;
+        });
+        break;
       default:
+        proposalsArr.sort((a, b) => {
+          if (a.order_number > b.order_number) {
+            return 1;
+          }
+          if (a.order_number < b.order_number) {
+            return -1;
+          }
+          return 0;
+        });
         break;
     }
 
@@ -295,7 +315,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           key={key}
           data-sort={header.sort}
           onClick={this.sortBy}
-          className={(state.activeSort === header.sort) ? state.activeDirection : ''}
+          className={state.activeSort === header.sort ? state.activeDirection : ''}
         >
           {header.text} <i className="caret-arrow" />
         </th>
@@ -304,29 +324,45 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   }
 
   mapProposals(raw, result) {
+    if (this.state.activeSort === null) {
+      const directionUnits = {
+        more: 1,
+        less: -1,
+      };
+      raw.sort((a, b) => {
+        const aDate = new Date(a.created).getTime();
+        const bDate = new Date(b.created).getTime();
+        if (aDate > bDate) {
+          return directionUnits.more;
+        }
+        if (aDate < bDate) {
+          return directionUnits.less;
+        }
+        return 0;
+      });
+    }
     _.map(raw, (source, key) => {
-      const date = new Date(source.created);
-      const dateWrapper = moment(date).format('MM/DD/YY');
+      const dateWrapper = moment(source.created).tz(this.props.currentUser.timezone).format('MM/DD/YY');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
+
+      let proposalLink = source.proposalNumber;
+      if (source.proposalPdfId) {
+        proposalLink = <a className="show-pdf-link" onClick={() => this.props.showProposalPdf(source.id)}>{source.proposalNumber}</a>;
+      }
+
       result.push(
         <tr key={key}>
           <td>
-            <span className={classNames('jcf-checkbox', { 'jcf-checked': source.selected, 'jcf-unchecked': !source.selected })}>
-              <span
-                className="input-style"
-                onClick={this.onClickCurrent}
-              >
-                <input
-                  type="checkbox"
-                  name={key}
-                />
+            <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
+              <span className="input-style" onClick={this.onClickCurrent}>
+                <input type="checkbox" name={key} />
               </span>
             </span>
+            <span>{source.order_number}</span>
           </td>
-          <td><span>{(key + 1)}</span></td>
           <td>{dateWrapper}</td>
           <td>{source.site}</td>
-          <td>{source.proposalNumber}</td>
+          <td>{proposalLink}</td>
           <td>{source.protocol}</td>
           <td>${(sub) ? `${(source.total / 100)}${sub}` : `${(source.total / 100).toFixed(2)}` }</td>
         </tr>
@@ -340,15 +376,19 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     const proposals = [];
     const heads = [];
 
-    this.mapHeaders(headers, state, heads);
-    this.mapProposals(proposalsArr, proposals);
+    if (headers) {
+      this.mapHeaders(headers, state, heads);
+    }
+    if (proposalsArr) {
+      this.mapProposals(proposalsArr, proposals);
+    }
 
     return (
       <div className="table-holder">
         <table className="table">
+          <caption />
           <colgroup>
-            <col style={{ width: '2.5%' }} />
-            <col style={{ width: '4%' }} />
+            <col style={{ width: '6.5%' }} />
             <col style={{ width: '11%' }} />
             <col style={{ width: '24%' }} />
             <col style={{ width: '25%' }} />
@@ -357,15 +397,19 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           </colgroup>
           <thead>
             <tr>
-              <th>
-                <span className={(this.state.checkAll) ? 'jcf-checkbox jcf-checked' : 'jcf-checkbox jcf-unchecked'}>
+              <th className={state.activeSort === 'orderNumber' ? state.activeDirection : ''}>
+                <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
                   <span className="input-style" onClick={this.onClickAll}>
                     <input name="all" type="checkbox" />
                   </span>
                 </span>
-              </th>
-              <th>
-                #
+                <span
+                  data-sort="order_number"
+                  onClick={this.sortBy}
+                  className={(state.activeSort === 'order_number') ? state.activeDirection : ''}
+                >
+                  #<i className="caret-arrow" />
+                </span>
               </th>
               {heads}
             </tr>

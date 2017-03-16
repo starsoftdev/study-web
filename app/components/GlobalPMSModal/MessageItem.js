@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import moment from 'moment-timezone';
 
 import { selectSelectedUser, selectCurrentUser } from '../../containers/App/selectors';
 
-import defaultUserImage from 'assets/images/Default-User-Img.png';
-import defaultUserImageGirl from 'assets/images/Default-User-Img-Girl.png';
-import defaultUserImageDoctor from 'assets/images/Default-User-Img-Dr.png';
+import defaultUserImage from '../../assets/images/Default-User-Img.png';
+import defaultUserImageGirl from '../../assets/images/Default-User-Img-Girl.png';
+import defaultUserImageDoctor from '../../assets/images/Default-User-Img-Dr.png';
 
 class MessageItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -17,8 +18,8 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
   render() {
     const { messageData, currentUser } = this.props;
     const cts = messageData.twilioTextMessage.dateCreated;
-    const cdate = (new Date(cts)).toLocaleString();
 
+    let addon = '';
     let containerClassName = 'post-holder';
     let senderImage = defaultUserImageGirl;
     // todo remove and put back Anonymous behavior
@@ -43,14 +44,23 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
       }
     }
 
+    if (messageData.twilioTextMessage.isStopMessage) {
+      addon = <span className="stop-list-notification">This patient no longer wants to receive text messages. The ability to text him/her through your portal has been removed. You may still call or email to see if he/she qualifies for the study.</span>;
+    } else if (messageData.twilioTextMessage.isStartMessage) {
+      addon = <span className="stop-list-notification">This patient is able to receive text messages.</span>;
+    }
+
     return (
       <div className={containerClassName} data-post="1">
         <div className="img-holder"><img alt="" src={senderImage} /></div>
         <div className="post-content">
-          <p>{messageData.twilioTextMessage.body}</p>
+          <p>
+            {messageData.twilioTextMessage.body}
+            {addon}
+          </p>
         </div>
         <strong className="email">{senderName}</strong>
-        <time >{cdate}</time>
+        <time>{moment(cts).tz(currentUser.timezone).format('M/DD/YYYY [at] H:mm:ss A')}</time>
       </div>
     );
   }

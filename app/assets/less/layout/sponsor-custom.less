@@ -1,0 +1,202 @@
+.sponsor-portal {
+
+	.search-studies-panel {
+		.btn-list-new-study {
+			margin-left: 10px;
+		}
+
+		.form-search-protocols {
+	  	width: 100%;
+      z-index: 81;
+      .fields-holder{
+        width: calc(~'100% - 600px');
+      }
+
+      @media screen and (max-width: @psd) {
+        .fields-holder{
+          width: 100%;
+        }
+      }
+
+      @media screen and (max-width: @psd) {
+        .btns-popups{
+          margin-bottom: 30px;
+        }
+      }
+		}
+	}
+
+  .search-controls{
+    .fields-holder{
+      width: calc(~'100% - 670px');
+    }
+  }
+
+  .fixed-table-head-relative{
+    position: relative !important;
+  }
+
+  .report-view-fixed-header{
+    top: 71px!important;
+    z-index: 5;
+  }
+
+  .report-view-fixed-header[style*=" fixed;"] {
+    border-bottom: 2px solid #ccc;
+  }
+
+  .report-view-header-container{
+    position: relative;
+
+    .table-left{
+      width: 844px;
+      background: #fff;
+      .table {
+        margin-bottom: 15px;
+        > thead > tr > th {
+          vertical-align: top;
+        }
+      }
+    }
+
+    .table-right{
+      width: calc(~'100% - 844px');
+      left: 844px;
+      overflow: hidden;
+      background: #fff;
+      .table-right-inner{
+        overflow-x: scroll;
+        overflow-y: hidden;
+        margin-bottom: -17px;
+      }
+      .table {
+        width: 2239px;
+        max-width: none;
+        margin-bottom: 15px;
+        > thead > tr > th {
+          vertical-align: top;
+        }
+      }
+    }
+
+
+
+    @media screen and (max-width: @psd) {
+
+      .table-left { width: 644px; }
+
+      .table-right .table {
+        width: 1666px;
+      }
+
+      .table-right{
+        width: calc(~'100% - 644px');
+        left: 644px;
+      }
+    }
+
+  }
+
+
+  .table-area{
+    .active-table-row{
+      background: #f1f1f1 !important;
+      font-weight: 600;
+      &:hover {
+        > td{
+          background: #f1f1f1 !important;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .disabled-toggle-container{
+    margin-left: 13px;
+    opacity: 0.85;
+    margin-right: 15px;
+
+    .disabled-toggle{
+      div{
+        cursor: not-allowed !important;
+        &:hover {
+          cursor: not-allowed !important;
+        }
+      }
+    }
+  }
+
+  .patient-messaging-suite{
+    .patient-messaging-suite-status{
+      margin-right: 5px;
+    }
+    &.off{
+      color: #f78e1e;
+    }
+    color: #a0cf67;
+  }
+
+  .disabled-buttons-container{
+    button{
+      opacity: 0.65;
+    }
+  }
+
+  .table-manage-user{
+    tr{
+      &:hover {
+        > td{
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .table-manage-user.alt {
+    tr{
+      td{
+        vertical-align: top;
+      }
+      .col6{
+        a{
+          margin-left: 8px;
+        }
+      }
+    }
+    .assigned-users-list{
+      margin-top: 5px;
+      .assigned-user{
+        padding: 5px 0;
+        a{
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+}
+
+.tooltop-inner{
+  padding: 7px 5px;
+  min-width: 132px;
+  font-size: 18px;
+  line-height: 23px;
+  text-align: center;
+  border-radius: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.protocol-study-img{
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.manage-sponsor-user .table-holder+.table-holder {
+  margin: 30px 0 0;
+}
+
+
+
+	
+
+	

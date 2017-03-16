@@ -8,13 +8,15 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, FieldArray, reduxForm, change } from 'redux-form';
+import moment from 'moment-timezone';
+import DatePicker from '../../components/Input/DatePicker';
 
-import Input from 'components/Input';
-import Toggle from 'components/Input/Toggle';
-import ReactSelect from 'components/Input/ReactSelect';
-import RenderLeads from 'components/RenderLeads';
+import Input from '../../components/Input';
+import Toggle from '../../components/Input/Toggle';
+import ReactSelect from '../../components/Input/ReactSelect';
+import RenderLeads from '../../components/RenderLeads';
 
-import { CAMPAIGN_LENGTH_LIST } from 'common/constants';
+import { CAMPAIGN_LENGTH_LIST } from '../../common/constants';
 import {
   selectCallTracking,
   selectLeadsCount,
@@ -36,12 +38,41 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
     studyLevels: PropTypes.array,
     callTracking: PropTypes.bool,
     leadsCount: PropTypes.number,
+    formValues: PropTypes.object,
   };
+
+  constructor(props) {
+    super(props);
+    this.campaignLengthChaged = this.campaignLengthChaged.bind(this);
+  }
 
   componentWillReceiveProps(newProps) {
     // If leads are all removed, set `callTracking` value to false
     if (newProps.leadsCount === 0 && this.props.leadsCount === 1) {
       this.props.dispatch(change('requestProposal', 'callTracking', false));
+    }
+
+    let messagingSuiteToggled = false;
+    let qualificationSuiteToggled = false;
+
+    if (newProps.formValues.patientQualificationSuite === true &&
+      typeof this.props.formValues.patientQualificationSuite === 'undefined') {
+      qualificationSuiteToggled = true;
+    } else if (newProps.formValues.patientMessagingSuite === true &&
+      typeof this.props.formValues.patientMessagingSuite === 'undefined') {
+      messagingSuiteToggled = true;
+    }
+
+    if (qualificationSuiteToggled && newProps.formValues.patientMessagingSuite === true) {
+      this.props.dispatch(change('requestProposal', 'patientMessagingSuite', false));
+    } else if (messagingSuiteToggled && newProps.formValues.patientQualificationSuite === true) {
+      this.props.dispatch(change('requestProposal', 'patientQualificationSuite', false));
+    }
+  }
+
+  campaignLengthChaged(campaignLength) {
+    if (campaignLength !== 1) {
+      this.props.dispatch(change('requestProposal', 'condenseTwoWeeks', false));
     }
   }
 
@@ -162,15 +193,44 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
               component={ReactSelect}
               placeholder="Select Campaign Length"
               options={CAMPAIGN_LENGTH_LIST}
-              className="field top-positioned"
+              className="field"
+              onChange={this.campaignLengthChaged}
             />
           </div>
+
+          {(() => {
+            if (this.props.formValues.campaignLength === 1) {
+              return (
+                <div className="field-row">
+                  <strong className="label"><label>CONDENSE TO 2 WEEKS</label></strong>
+                  <Field
+                    name="condenseTwoWeeks"
+                    component={Toggle}
+                    className="field"
+                  />
+                </div>
+              );
+            }
+            return false;
+          })()}
 
           <div className="field-row">
             <strong className="label"><label>Patient messaging <br />
             Suite: $247</label></strong>
             <Field
-              name="addPatientMessagingSuite"
+              name="patientMessagingSuite"
+              component={Toggle}
+              className="field"
+            />
+          </div>
+
+          <div className="field-row">
+            <strong className="label"><label>Patient qualification <br />
+              Suite: $894 <br />
+              <span className="label-blue">(Includes patient <br />
+              messaging suite)</span></label></strong>
+            <Field
+              name="patientQualificationSuite"
               component={Toggle}
               className="field"
             />
@@ -196,10 +256,11 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           <div className="field-row">
             <strong className="label required"><label>Start Date</label></strong>
             <Field
+              id="start-date"
               name="startDate"
-              component={Input}
-              type="date"
-              className="field"
+              component={DatePicker}
+              className="form-control field datepicker-input"
+              initialDate={moment()}
             />
           </div>
 

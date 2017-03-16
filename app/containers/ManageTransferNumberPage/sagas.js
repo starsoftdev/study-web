@@ -3,26 +3,26 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import _, { get } from 'lodash';
 
-import request from 'utils/request';
+import request from '../../utils/request';
 
 import {
   fetchSourcesSuccess,
   fetchSourcesError,
   sourceFormSubmitted,
   sourceFormSubmissionError,
-} from 'containers/ManageTransferNumberPage/actions';
+} from '../../containers/ManageTransferNumberPage/actions';
 
 import {
   FETCH_SOURCES,
   SUBMIT_SOURCES_FORM,
-} from 'containers/ManageTransferNumberPage/constants';
+} from '../../containers/ManageTransferNumberPage/constants';
 
 export function* fetchSourcesWatcher() {
   while (true) {
     yield take(FETCH_SOURCES);
 
     try {
-      const requestURL = `${API_URL}/sources/getDetailedSources`;
+      const requestURL = `${API_URL}/studySources/getDetailedSources`;
       const response = yield call(request, requestURL);
 
       yield put(fetchSourcesSuccess(response));
@@ -48,7 +48,7 @@ export function* submitSourcesWatcher() {
     });
 
     try {
-      const requestURL = `${API_URL}/sources/updateRedirectNumbers`;
+      const requestURL = `${API_URL}/studySources/updateRedirectNumbers`;
       const params = {
         method: 'POST',
         body: JSON.stringify(sourcesToUpdate),

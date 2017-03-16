@@ -6,22 +6,21 @@ import _, { map } from 'lodash';
 import moment from 'moment-timezone';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
-
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
-import { selectEditPatientFormError } from './selectors';
-import { selectPatientCategories, selectSavedPatient } from 'containers/PatientDatabasePage/selectors';
-import { selectIndications, selectSources, selectValidSiteLocations } from 'containers/App/selectors';
-import formValidator from './validator';
-import LoadingSpinner from 'components/LoadingSpinner';
-import Checkbox from '../../../components/Input/Checkbox';
-import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
-import { selectValues } from '../../../common/selectors/form.selector';
 import Overlay from 'react-bootstrap/lib/Overlay';
-import IndicationOverlay from 'containers/StudyPage/PatientDetail/IndicationOverlay';
-import { editPatientSite } from '../actions';
 
-const formName = 'editPatient';
+import { selectValues, selectSyncErrorBool } from '../../../common/selectors/form.selector';
+import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
+import Input from '../../../components/Input/index';
+import ReactSelect from '../../../components/Input/ReactSelect';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import Checkbox from '../../../components/Input/Checkbox';
+import { selectIndications, selectSources, selectValidSiteLocations } from '../../App/selectors';
+import IndicationOverlay from '../../StudyPage/PatientDetail/IndicationOverlay';
+import { editPatientSite } from '../actions';
+import { selectPatientCategories, selectSavedPatient } from '../selectors';
+import formValidator from './validator';
+
+const formName = 'PatientDatabase.EditPatientModal';
 
 const mapStateToProps = createStructuredSelector({
   formValues: selectValues(formName),
@@ -29,10 +28,12 @@ const mapStateToProps = createStructuredSelector({
   sources: selectSources(),
   patientCategories: selectPatientCategories(),
   savedPatient: selectSavedPatient(),
-  hasError: selectEditPatientFormError(),
+  hasError: selectSyncErrorBool(formName),
   sites: selectValidSiteLocations(),
 });
+
 const mapDispatchToProps = dispatch => ({
+  change: (name, value) => dispatch(change(formName, name, value)),
   editPatientSite: (site) => dispatch(editPatientSite(site)),
 });
 
@@ -40,8 +41,8 @@ const mapDispatchToProps = dispatch => ({
 @connect(mapStateToProps, mapDispatchToProps)
 class EditPatientForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    editPatientSite: PropTypes.func,
+    change: PropTypes.func.isRequired,
+    editPatientSite: PropTypes.func.isRequired,
     indications: PropTypes.array,
     initialValues: PropTypes.object,
     loading: React.PropTypes.bool,
@@ -73,8 +74,8 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     const { onSubmit, formValues } = this.props;
     const formattedData = formValues;
     if (formValues.dobDay && formValues.dobMonth && formValues.dobYear) {
-      const date = moment().year(formValues.dobYear).month(formValues.dobMonth).day(formValues.dobDay);
-      formattedData.dob = date;
+      const date = moment().year(formValues.dobYear).month(formValues.dobMonth - 1).date(formValues.dobDay).startOf('day');
+      formattedData.dob = date.toISOString();
     }
     onSubmit(formattedData);
   }
@@ -90,9 +91,11 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     }
     editPatientSite(newEvent);
   }
+
   deleteIndication(indication) {
-    const newArr = _.remove(this.props.formValues.indications, (n) => (n.id !== indication.id));
-    this.props.dispatch(change('editPatient', 'indications', newArr));
+    const { change, formValues: { indications } } = this.props;
+    const newArr = _.remove(indications, (n) => (n.id !== indication.id));
+    change('indications', newArr);
   }
 
   toggleIndicationPopover() {
@@ -102,7 +105,8 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   selectIndication(indication) {
-    this.props.dispatch(change('editPatient', 'indications', this.props.formValues.indications.concat([indication])));
+    const { change } = this.props;
+    change('indications', this.props.formValues.indications.concat([indication]));
   }
 
   submitAddIndication() {
@@ -118,12 +122,14 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             <div key={indication.id} className="category">
               <span className="link">
                 <span className="text">{indication.name}</span>
-                <span
-                  className="icomoon-icon_trash"
-                  onClick={() => {
-                    this.deleteIndication(indication);
-                  }}
-                />
+                { !indication.isOriginal &&
+                  <span
+                    className="icomoon-icon_trash"
+                    onClick={() => {
+                      this.deleteIndication(indication);
+                    }}
+                  />
+                }
               </span>
             </div>
           ))}
@@ -273,6 +279,8 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
               placement="bottom"
               container={this.parent}
               target={() => this.target}
+              rootClose
+              onHide={() => { this.toggleIndicationPopover(); }}
             >
               <IndicationOverlay indications={indications} submitAddIndication={this.submitAddIndication} selectIndication={this.selectIndication} patient={patientValues} onClose={this.toggleIndicationPopover} />
             </Overlay>
@@ -317,31 +325,23 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             disabled={savedPatient.saving}
           />
         </div>
-        {(() => {
-          if (this.props.formValues.status) {
-            return (
-              <div className="field-row form-group">
-                <strong className="label">
-                  <label>STATUS</label>
-                </strong>
-                <div className="field">
-                  <Field
-                    name="status"
-                    component={ReactSelect}
-                    placeholder="Select Status"
-                    options={statusOptions}
-                    disabled
-                  />
-                </div>
-              </div>
-            );
-          }
-
-          return false;
-        })()}
         <div className="field-row form-group">
           <strong className="label">
-            <label>SOURCE</label>
+            <label>STATUS</label>
+          </strong>
+          <div className="field">
+            <Field
+              name="status"
+              component={ReactSelect}
+              placeholder="Select Status"
+              options={statusOptions}
+              disabled
+            />
+          </div>
+        </div>
+        <div className="field-row form-group">
+          <strong className="label">
+            <label>Source</label>
           </strong>
           <Field
             name="source"
@@ -349,7 +349,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="field"
             placeholder="Select Source"
             options={sourceOptions}
-            disabled={savedPatient.saving}
+            disabled
           />
         </div>
         {this.renderSite()}
@@ -368,7 +368,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         <div className="btn-block text-right">
           <Button type="submit" className="btn-add-row" disabled={hasError || savedPatient.saving}>
             {savedPatient.saving
-              ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-patient" /></span>
+              ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
               : <span>Submit</span>
             }
           </Button>

@@ -1,13 +1,11 @@
 .drag-drop-uploader {
-	width: 400px;
+	width: 100%;
 	margin: 0 auto;
 
 	.avatar-photo {
-		width: 400px;
-		height: 400px;
 		position: relative;
 		border: dashed 2px #ccc;
-		margin-bottom: 15px;
+		margin-bottom: 25px;
 
 		input[type=file] {
 			position: absolute;
@@ -40,7 +38,7 @@
 
 	.field-row {
 		.link {
-			margin-left: 40%;
+			margin-left: 35%;
 		}
 	}
 
@@ -61,24 +59,19 @@
 
 	.icomoon-arrow_up_alt {
 	  	display: block;
-	}
-	.icomoon-arrow_up_alt {
 	  	font-size: 40px;
 	  	margin: 0 0 5px;
 	  	transform: rotate(180deg);
-	  z-indexms-transform: rotate(180deg);
+	    -ms-transform: rotate(180deg);
 	}
 
 	a {
 		color: #00afef;
 		text-decoration: none;
+    cursor: pointer;
 		&:hover {
 			color: #76daff;
 			text-decoration: underline;
 		}
 	}
-}
-
-.icomoon-arrow_up_alt:before {
-  content: "\e925";
 }

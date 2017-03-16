@@ -7,10 +7,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import ProfileForm from 'components/ProfileForm';
-import { selectChangePasswordResult, selectOtherUser } from 'containers/ProfilePage/selectors';
-import { selectCurrentUser } from 'containers/App/selectors';
-import { changePassword, changeImage, fetchOtherUser } from 'containers/ProfilePage/actions';
+import ProfileForm from '../../components/ProfileForm';
+import { selectChangePasswordResult, selectOtherUser, selectProfileFormValues } from '../../containers/ProfilePage/selectors';
+import { selectCurrentUser, selectChangeTimezoneState } from '../../containers/App/selectors';
+import { changePassword, changeImage, fetchOtherUser } from '../../containers/ProfilePage/actions';
+import { changeUsersTimezone } from '../../containers/App/actions';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 
@@ -23,6 +24,9 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
     currentUser: PropTypes.any,
     otherUser: PropTypes.any,
     params: PropTypes.object,
+    formValues: PropTypes.object,
+    changeUsersTimezone: React.PropTypes.func,
+    changeTimezoneState: PropTypes.object,
   }
 
   constructor(props) {
@@ -45,16 +49,26 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
     return (
       <div className="container-fluid">
         <Helmet title="Profile - StudyKIK" />
-        <section className="study-portal">
-
+        <section>
           <h2 className="main-heading">PROFILE</h2>
-
-          <div className="row form-study">
+          <div className="row profile form-study">
 
             <div className="col-xs-6 form-holder">
               {(() => {
+                const userObjToUse = (me ? this.props.currentUser : this.props.otherUser);
+                let selectedRegion = userObjToUse.timezone.substr(0, userObjToUse.timezone.indexOf('/'));
+                const selectedTimezone = userObjToUse.timezone.substr(userObjToUse.timezone.indexOf('/') + 1);
+
+                if (!selectedRegion) {
+                  selectedRegion = selectedTimezone;
+                }
+
                 const initialValues = {
-                  initialValues: me ? this.props.currentUser : this.props.otherUser.info,
+                  initialValues: {
+                    ...(me ? this.props.currentUser : this.props.otherUser.info),
+                    selectedRegion,
+                    selectedTimezone,
+                  },
                 };
 
                 return (me || this.props.otherUser.info) && <ProfileForm
@@ -64,6 +78,9 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
                   changeImage={this.changeImage}
                   currentUser={me ? this.props.currentUser : this.props.otherUser.info}
                   me={me}
+                  formValues={this.props.formValues}
+                  changeUsersTimezone={this.props.changeUsersTimezone}
+                  changeTimezoneState={this.props.changeTimezoneState}
                 />;
               })()}
             </div>
@@ -78,6 +95,8 @@ const mapStateToProps = createStructuredSelector({
   changePasswordResult: selectChangePasswordResult(),
   currentUser: selectCurrentUser(),
   otherUser: selectOtherUser(),
+  formValues: selectProfileFormValues(),
+  changeTimezoneState: selectChangeTimezoneState(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -85,6 +104,7 @@ function mapDispatchToProps(dispatch) {
     changePassword: (values) => dispatch(changePassword(values)),
     changeImage: (values) => dispatch(changeImage(values)),
     fetchOtherUser: (userId) => dispatch(fetchOtherUser(userId)),
+    changeUsersTimezone: (userId, timezone) => dispatch(changeUsersTimezone(userId, timezone)),
   };
 }
 

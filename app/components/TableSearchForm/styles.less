@@ -1,18 +1,10 @@
 .receipts {
-  .holder {
-    width: 100%;
-
-    .rdr-DateRange, .rdr-Calendar {
-      min-height: 395px;
-    }
-  }
-
   .form-search {
     .btns-area {
-      position: absolute;
-      width: 39%;
-      right: 0;
-      bottom: 30px;
+      margin: 0 0 0 50px;
+      width: auto;
+      bottom: auto;
+      position: static;
 
       .col {
 
@@ -21,8 +13,15 @@
         }
       }
     }
+
     .fields-holder {
-      width: 60%;
+      width: calc(~'100% - 390px');
+      .search-area {
+        width: 40%;
+      }
+      .custom-select {
+        width: 40%;
+      }
     }
   }
 }

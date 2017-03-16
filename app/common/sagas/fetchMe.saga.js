@@ -3,13 +3,13 @@
  */
 import { take, call, put, select } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
+import moment from 'moment-timezone';
 
-import request from 'utils/request';
-import { getItem, removeItem } from 'utils/localStorage';
-import { FETCH_ME_FROM_TOKEN } from 'containers/App/constants';
-import { setAuthState, setUserData } from 'containers/App/actions';
-import { selectCurrentPath } from 'common/selectors/router.selector';
-
+import request from '../../utils/request';
+import { getItem, removeItem } from '../../utils/localStorage';
+import { FETCH_ME_FROM_TOKEN } from '../../containers/App/constants';
+import { setAuthState, setUserData } from '../../containers/App/actions';
+import { selectCurrentPath } from '../../common/selectors/router.selector';
 
 export default function* fetchMeSaga() {
   while (true) {
@@ -28,16 +28,17 @@ export function* fetchMeFromToken() {
   }
 
   try {
-    const requestURL = `${API_URL}/users/${userId}/get-full-user-info?access_token=${authToken}`;
+    const requestURL = `${API_URL}/users/${userId}/get-full-user-info`;
     const response = yield call(request, requestURL);
+    moment.tz.setDefault(response.timezone);
 
     yield put(setUserData(response));
 
     // If the user landed on `/login` as the first route, redirect him
     const currentPath = yield select(selectCurrentPath);
-    const pathsToRedirect = ['/', '/login'];
+    const pathsToRedirect = ['/login'];
     if (pathsToRedirect.indexOf(currentPath) > -1) {
-      yield put(push('/'));
+      yield put(push('/app'));
     }
   } catch (e) {
     yield put(setAuthState(false));

@@ -6,7 +6,7 @@ import React from 'react';
 import classNames from 'classnames';
 import moment from 'moment-timezone';
 import { DragSource } from 'react-dnd';
-import { formatPhone } from '../helper/functions';
+import { formatPhone } from '../../../common/helper/functions';
 import DragTypes from './dragSourceTypes';
 
 /**
@@ -60,6 +60,7 @@ class Patient extends React.Component {
 
   renderPatientTextMessageSummary(patient) {
     const { category, currentUser, onPatientTextClick, unreadMessageCount } = this.props;
+
     if (patient.lastTextMessage) {
       return (
         <a

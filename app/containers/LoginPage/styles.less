@@ -1,27 +1,41 @@
-@import '~assets/less/_custom.less';
+@sm: 991px;
+@xs: 767px;
 
-.login-page-wrapper {
-  margin-top: 100px;
-  .login-block {
-    background-color: @white;
-    padding: 1em;
-    border-radius: 4px;
-    box-shadow: 1px 1px 5px gray;
+#remember{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  margin: 0px;
+  opacity: 0;
+}
+
+label[for="remember"]{
+  margin: 0 0 0 4px;
+  line-height: 23px;
+
+  @media screen and (max-width: @sm) {
+    line-height: 25px;
   }
 
-  .login-logo {
-    max-width: 100%;
+  @media screen and (max-width: @xs) {
+    line-height: 23px;
+  }
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+
+  &.alert-danger {
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    color: #a94442;
   }
 
-  .forgot-password-link {
-    margin: 5px 0;
-    color:#FFF;
-    text-decoration: underline;
-  }
-
-  @media only screen and (min-width: 768px) {
-    .forgot-password-link {
-      margin: 5px 0 0;
-    }
+  &>p, .alert>ul {
+    margin-bottom: 0;
   }
 }

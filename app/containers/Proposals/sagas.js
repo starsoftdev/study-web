@@ -1,20 +1,21 @@
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
-import request from 'utils/request';
+import request from '../../utils/request';
 import { get } from 'lodash';
-import composeQueryString from 'utils/composeQueryString';
+import composeQueryString from '../../utils/composeQueryString';
 
 import {
   proposalsReceived,
   pdfCreated,
-} from 'containers/Proposals/actions';
+} from '../../containers/Proposals/actions';
 import {
   GET_PROPOSALS,
   CREATE_PDF,
   GET_PDF,
-} from 'containers/Proposals/constants';
-import { getItem } from 'utils/localStorage';
+  SHOW_PROPOSAL_PDF,
+} from '../../containers/Proposals/constants';
+import { getItem } from '../../utils/localStorage';
 
 const serializeParams = (obj) => {
   const str = [];
@@ -31,12 +32,14 @@ export function* proposalSaga() {
   const watcherA = yield fork(getProposals);
   const watcherB = yield fork(createPdf);
   const watcherC = yield fork(getPdf);
+  const watcherD = yield fork(showPdf);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
   yield cancel(watcherA);
   yield cancel(watcherB);
   yield cancel(watcherC);
+  yield cancel(watcherD);
 }
 
 export function* getProposals() {
@@ -49,9 +52,8 @@ export function* getProposals() {
       const response = yield call(request, requestURL);
 
       yield put(proposalsReceived(response));
-      yield put(toastrActions.success('', 'Proposals received.'));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
+      const errorMessage = get(err, 'message', 'We encountered an error loading proposals. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
       payload.cb(err, null);
     }
@@ -102,6 +104,27 @@ export function* getPdf() {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
       payload.cb(err, null);
+    }
+  }
+}
+
+export function* showPdf() {
+  while (true) {
+    const { proposalId } = yield take(SHOW_PROPOSAL_PDF);
+    //
+    try {
+      const requestURL = `${API_URL}/proposals/getPreSignedUrl`;
+      const params = {
+        query: {
+          proposalId,
+        },
+      };
+
+      const response = yield call(request, requestURL, params);
+      window.open(response.url, '_blank');
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      yield put(toastrActions.error('', errorMessage));
     }
   }
 }

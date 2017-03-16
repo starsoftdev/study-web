@@ -8,14 +8,13 @@ import React, { PropTypes } from 'react';
 
 import { Field } from 'redux-form';
 
-import Input from 'components/Input';
-import ReactSelect from 'components/Input/ReactSelect';
+import Input from '../../components/Input';
+import ReactSelect from '../../components/Input/ReactSelect';
 
 import {
   LEAD_SOURCE_LIST,
-} from 'common/constants';
+} from '../../common/constants';
 
-import './styles.less';
 
 const RenderLeads = ({ fields, availPhoneNumbers }) => (
   <div className="leads-list">
@@ -71,7 +70,7 @@ const RenderLeads = ({ fields, availPhoneNumbers }) => (
           className="add-new-source"
           onClick={() => fields.push({})}
         >
-          <i className="icomoon-icon_close"></i> Add Lead Source
+          <i className="icomoon-icon_close" /> Add Lead Source
         </button>
       </div>
     </div>

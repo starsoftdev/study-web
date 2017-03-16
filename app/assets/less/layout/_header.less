@@ -31,6 +31,44 @@
 	}
 }
 
+#d-header {
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 1000;
+	position: fixed;
+	min-width: 970px;
+	padding: 0;
+	background: #fff;
+	border-bottom: solid 2px #ccc;
+
+		
+	//box-shadow: 0 -1px 2px -1px rgba(0,0,0, 0.3);
+	
+	.logo {
+    width: 234px;
+    margin: 20px 20px 25px 10px;
+
+		a {
+			display: block;
+		}
+
+		img {
+			.img;
+		}
+	}
+
+  .opener{
+    padding-top: 20px;
+  }
+
+  .logged-user-area{
+    margin-right: -10px;
+    .avatar-menu{
+      height: 410px;
+    }
+  }
+}
 .emails,
 .notifications {
 	margin: 0;
@@ -48,6 +86,7 @@
     &.active {
 			outline: none;
       background: #76daff;
+      cursor: pointer;
 		}
 	}
 
@@ -158,11 +197,11 @@
 		}
 
 		li {
-			&:first-child {
-				a {
-					padding: 3px 10px 5px 69px;
-				}
-			}
+			//&:first-child {
+			//	a {
+			//		padding: 3px 10px 5px 69px;
+			//	}
+			//}
 
 			&:nth-child(3) {
 				a {
@@ -196,7 +235,7 @@
 	}
 
 	p {
-		margin: 0;
+		margin: 3px 0 0 0;
 		transition: all 0.25s;
 
 		strong {
@@ -238,6 +277,7 @@
 	&:hover {
 		color: #fff;
 		background: #76daff;
+    cursor: pointer;
 	}
 }
 
@@ -264,7 +304,7 @@
 /* get-credit */
 .get-credits {
   color: #101010;
-  padding: 17px 0 0;
+  padding-top: 17px;
   line-height: 30px;
   > * {
     .align(@align: middle);
@@ -281,7 +321,7 @@
     font-weight: 600;
     line-height: 26px;
     border-radius: 2px;
-    margin: 2px 0 -2px 12px;
+    margin-left: 12px;
     border: solid 2px #fff;
     &:focus, &:active:focus, &:hover {
       border-color: #fff;
@@ -318,6 +358,7 @@
 .btn-chat-popup:hover {
   color: #fff;
   background: #76daff;
+  cursor: pointer;
 }
 
 /* logged-user-area */
@@ -339,6 +380,10 @@
 			border-width: 7px 5px 0;
 			border-style: solid dashed;
 			border-color: #fff transparent transparent;
+			
+			#d-header &{
+				border-color: #000 transparent transparent;
+			}
 		}
 
 		&:focus { outline: none; }
@@ -408,6 +453,18 @@
     padding: 0 0 0 220px;
     .logo {
       width: 192px;
+			margin: 25px 20px 25px 10px;
+    }
+  }
+
+	#d-header {
+    padding: 0;
+    .logo {
+      width: 192px;
+			margin: 25px 20px 25px 10px;
+    }
+    .opener{
+      padding-top: 16px;
     }
   }
   .notifications-drop {
@@ -440,8 +497,16 @@
     }
     .well {
       ul {
-        max-height: 184px;
+        /*max-height: 184px;*/
       }
     }
   }
+}
+
+@media screen and (max-width: 1010px) {
+	.get-credits {
+		padding-top: 0px;
+		padding-bottom: 6px;
+		line-height: 66px;
+	}
 }
