@@ -7,7 +7,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
+import Helmet from 'react-helmet';
 import { DashboardSponsorAdminSearch } from './DashboardSponsorAdminSearch/index';
 import { DashboardSponsorAdminTable } from './DashboardSponsorAdminTable';
 import { fetchSponsors, fetchSponsorsWithoutAdmin, fetchUsersByRoles, addSponsorAdmin, editSponsorAdmin, deleteSponsorAdmin, setActiveSort } from './actions';
@@ -47,6 +47,7 @@ export class DashboardSponsorAdminPage extends React.Component { // eslint-disab
   render() {
     return (
       <div className="container-fluid dashboard-sponsor-admin">
+        <Helmet title="Sponsor Admins - StudyKIK" />
         <h2 className="main-heading">Sponsor Admins</h2>
 
         <DashboardSponsorAdminSearch

@@ -47,6 +47,7 @@ import {
   FIND_OUT_PATIENTS,
   CLINICAL_TRIALS_SEARCH,
   LIST_SITE_NOW,
+  GET_PROPOSAL,
   LEARN_ABOUT_FUTURE_TRIALS,
   NEW_CONTACT,
   FETCH_CLIENT_ADMINS,
@@ -125,6 +126,7 @@ import {
   clinicalTrialsSearchSuccess,
   clinicalTrialsSearchError,
   listSiteNowSuccess,
+  getProposalSuccess,
   learnAboutFutureTrialsSuccess,
   newContactSuccess,
   fetchClientAdminsSuccess,
@@ -176,6 +178,7 @@ export default function* baseDataSaga() {
   yield fork(takeLatest, FIND_OUT_PATIENTS, postFindOutPatients);
   yield fork(takeLatest, CLINICAL_TRIALS_SEARCH, searchClinicalTrials);
   yield fork(takeLatest, LIST_SITE_NOW, listNowSite);
+  yield fork(takeLatest, GET_PROPOSAL, getProposal);
   yield fork(takeLatest, LEARN_ABOUT_FUTURE_TRIALS, learnAboutFutureTrials);
   yield fork(takeLatest, NEW_CONTACT, newContact);
   yield fork(takeLatest, SEND_THANK_YOU_EMAIL, sendThankYouEmail);
@@ -960,6 +963,31 @@ function* listNowSite(action) {
       const response = yield call(request, requestURL, options);
       yield put(toastrActions.success('', 'Thank you for submitting your information.'));
       yield put(listSiteNowSuccess(response));
+    } else {
+      yield put(toastrActions.error('', 'All fields required.'));
+    }
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+function* getProposal(action) {
+  try {
+    const params = action.params;
+    const size = Object.keys(params).length;
+    const requestURL = `${API_URL}/sites/getProposalFormRequest`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    console.log('getProposal', params);
+
+    if (size === 6) {
+      const response = yield call(request, requestURL, options);
+      yield put(toastrActions.success('', 'Thank you for submitting your information.'));
+      yield put(getProposalSuccess(response));
     } else {
       yield put(toastrActions.error('', 'All fields required.'));
     }

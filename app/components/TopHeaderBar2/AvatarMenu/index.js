@@ -47,6 +47,7 @@ class AvatarMenu extends React.Component {
           <div className="well">
             <ul className="list-unstyled">
               <li><Link to="/me/profile" onClick={() => this.handleClickOutside()}>PROFILE</Link></li>
+              <li><Link to="/app/dashboard-exposure-level" onClick={() => this.handleClickOutside()}>EXPOSURE LEVEL</Link></li>
               <li><Link to="/app/dashboard-indication" onClick={() => this.handleClickOutside()}>INDICATION</Link></li>
               <li><Link to="/app/dashboard-protocol" onClick={() => this.handleClickOutside()}>Protocol</Link></li>
               <li><Link to="/app/dashboard-cro" onClick={() => this.handleClickOutside()}>CRO</Link></li>
@@ -55,6 +56,7 @@ class AvatarMenu extends React.Component {
               <li><Link to="/app/dashboard-client-admins" onClick={() => this.handleClickOutside()}>Client Admins</Link></li>
               <li><Link to="/app/dashboard-manage-users" onClick={() => this.handleClickOutside()}>Manage Users</Link></li>
               <li><Link to="/app/dashboard-portals" onClick={() => this.handleClickOutside()}>Portals</Link></li>
+
               <a
                 onClick={() => {
                   this.props.handleLogoutClick();

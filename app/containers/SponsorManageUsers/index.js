@@ -11,8 +11,8 @@ import Helmet from 'react-helmet';
 import SponsorManageUsersSearch from '../../containers/SponsorManageUsers/SponsorManageUsersSearch';
 import SponsorManageUsersAdminsTable from '../../containers/SponsorManageUsers/AdminsTable';
 import SponsorManageUsersProtocolsTable from '../../containers/SponsorManageUsers/ProtocolsTable';
-
-import { selectCurrentUser } from '../../containers/App/selectors';
+import { fetchProtocols } from '../../containers/App/actions';
+import { selectCurrentUser, selectProtocols } from '../../containers/App/selectors';
 import { fetchManageSponsorUsersData, editSponsorUser, deleteSponsorUser, editProtocol } from '../../containers/SponsorManageUsers/actions';
 import { selectManageSponsorUsersData, selectEditSponsorUserFormValues, selectEditProtocolFormValues } from '../../containers/SponsorManageUsers/selectors';
 
@@ -23,10 +23,12 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
     fetchManageSponsorUsersData: React.PropTypes.func,
     manageSponsorUsersData: React.PropTypes.object,
     formValues: React.PropTypes.object,
+    protocols: React.PropTypes.array,
     editSponsorUser: React.PropTypes.func,
     deleteSponsorUser: React.PropTypes.func,
     editProtocolFormValues: React.PropTypes.object,
     editProtocol: React.PropTypes.func,
+    fetchProtocols: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -39,6 +41,7 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
   }
 
   componentWillMount() {
+    this.props.fetchProtocols();
     this.updateData();
   }
 
@@ -88,6 +91,8 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
   }
 
   render() {
+    const protocols = this.props.protocols.details;
+
     return (
       <div className="container-fluid sponsor-portal">
         <Helmet title="Manage Users - StudyKIK" />
@@ -97,17 +102,20 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
             editUser={this.editUser}
             formValues={this.props.formValues}
             updateData={this.updateData}
+            protocols={protocols}
           />
           <SponsorManageUsersAdminsTable
             manageSponsorUsersData={this.props.manageSponsorUsersData}
             editUser={this.editUser}
             deleteUser={this.deleteUser}
+            protocols={protocols}
           />
           <SponsorManageUsersProtocolsTable
             manageSponsorUsersData={this.props.manageSponsorUsersData}
             editUser={this.editUser}
             deleteUser={this.deleteUser}
             editProtocol={this.editSponsorProtocol}
+            protocols={protocols}
           />
         </section>
       </div>
@@ -120,6 +128,7 @@ const mapStateToProps = createStructuredSelector({
   manageSponsorUsersData: selectManageSponsorUsersData(),
   formValues: selectEditSponsorUserFormValues(),
   editProtocolFormValues: selectEditProtocolFormValues(),
+  protocols: selectProtocols(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -128,6 +137,7 @@ function mapDispatchToProps(dispatch) {
     editSponsorUser: params => dispatch(editSponsorUser(params)),
     deleteSponsorUser: params => dispatch(deleteSponsorUser(params)),
     editProtocol: params => dispatch(editProtocol(params)),
+    fetchProtocols: () => dispatch(fetchProtocols()),
   };
 }
 

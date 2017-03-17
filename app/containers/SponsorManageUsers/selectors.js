@@ -42,11 +42,6 @@ const selectEditProtocolFormValues = () => createSelector(
   (substate) => get(substate, 'editProtocolForm.values', {})
 );
 
-const selectProtocolsList = () => createSelector(
-  selectSponsorManageUsersDomain(),
-  substate => substate.protocols
-);
-
 const selectEditUserProcess = () => createSelector(
   selectSponsorManageUsersDomain(),
   substate => substate.editUserProcess
@@ -77,7 +72,6 @@ export {
   selectSponsorManageUsersDomain,
   selectManageSponsorUsersData,
   selectEditSponsorUserFormValues,
-  selectProtocolsList,
   selectEditUserProcess,
   selectDeleteUserProcess,
   selectPaginationOptionsAdmin,

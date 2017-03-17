@@ -7,7 +7,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
+import Helmet from 'react-helmet';
 import { DashboardProtocolSearch } from './DashboardProtocolSearch/index';
 import { DashboardProtocolTable } from './DashboardProtocolTable';
 
@@ -35,6 +35,7 @@ export class DashboardProtocolPage extends React.Component { // eslint-disable-l
   render() {
     return (
       <div className="container-fluid dashboard-protocol">
+        <Helmet title="Protocol - StudyKIK" />
         <h2 className="main-heading">Protocol</h2>
 
         <DashboardProtocolSearch

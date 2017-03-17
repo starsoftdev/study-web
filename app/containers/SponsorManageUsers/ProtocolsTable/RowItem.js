@@ -6,7 +6,6 @@ import Modal from 'react-bootstrap/lib/Modal';
 
 import CenteredModal from '../../../components/CenteredModal/index';
 import EditProtocolForm from '../EditProtocolForm';
-import { selectProtocolsList } from '../selectors';
 import ExpandedItem from './ExpandedItem';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -144,7 +143,6 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 }
 
 const mapStateToProps = createStructuredSelector({
-  protocols: selectProtocolsList(),
 });
 
 function mapDispatchToProps(dispatch) {
