@@ -536,10 +536,12 @@ export function changeScheduledDate(date) {
   };
 }
 
-export function submitSchedule(data) {
+export function submitSchedule(data, fromCategoryId, scheduledCategoryId) {
   return {
     type: SUBMIT_SCHEDULE,
     data,
+    fromCategoryId,
+    scheduledCategoryId,
   };
 }
 

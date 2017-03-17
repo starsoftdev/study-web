@@ -153,7 +153,7 @@ class PatientBoard extends React.Component {
 
   onPatientScheduleSubmit(e) {
     e.preventDefault();
-    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, site, protocol, currentUser, indicationId, selectedDate, touchSchedulePatientModal } = this.props;
+    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, site, protocol, currentUser, indicationId, selectedDate, patientCategories, currentPatientCategoryId, touchSchedulePatientModal } = this.props;
 
     if (schedulePatientFormErrors) {
       touchSchedulePatientModal();
@@ -178,14 +178,15 @@ class PatientBoard extends React.Component {
       timezone: currentUser.timezone,
     };
 
-    // console.log(submitData);
+    // Get category info, so that upon successful schedule submission, the patient will be moved into the
+    // scheduled category.
+    const scheduledCategoryId = _.find(patientCategories, { name: 'Scheduled' }).id;
 
-    this.props.submitSchedule(submitData);
+    this.props.submitSchedule(submitData, currentPatientCategoryId, scheduledCategoryId);
   }
 
   handleDateChange(date) {
     const { changeScheduledDate } = this.props;
-    console.log(date);
     changeScheduledDate(date);
   }
 
@@ -286,7 +287,7 @@ const mapDispatchToProps = (dispatch) => (
     markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
     setFormValueByName: (name, attrName, value) => dispatch(change(name, attrName, value)),
     touchSchedulePatientModal: () => dispatch(touch('ScheduledPatientModal', ...fields)),
-    submitSchedule: (data) => dispatch(submitSchedule(data)),
+    submitSchedule: (data, fromCategoryId, scheduleCategoryId) => dispatch(submitSchedule(data, fromCategoryId, scheduleCategoryId)),
   }
 );
 

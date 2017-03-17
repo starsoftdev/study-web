@@ -764,14 +764,15 @@ function* submitAddPatient() {
 
 export function* submitSchedule() {
   while (true) {
-    const action = yield take(SUBMIT_SCHEDULE);
+    const { data, fromCategoryId, scheduledCategoryId } = yield take(SUBMIT_SCHEDULE);
     try {
       const requestURL = `${API_URL}/callReminders/upsertSchedule`;
       const params = {
         method: 'POST',
-        body: JSON.stringify(action.data),
+        body: JSON.stringify(data),
       };
       const response = yield call(request, requestURL, params);
+      yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, scheduledCategoryId, data.patientId));
       yield put(submitScheduleSucceeded(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting a schedule');
