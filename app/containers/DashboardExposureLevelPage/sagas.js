@@ -42,7 +42,7 @@ export function* fetchLevelWatcher() {
 
 export function* fetchLevelWorker() {
   try {
-    const requestURL = `${API_URL}/cros`;
+    const requestURL = `${API_URL}/levels/fetchLevelsWithPrice`;
 
     const params = {
       method: 'GET',
@@ -63,8 +63,7 @@ export function* addLevelWatcher() {
 
 export function* addLevelWorker(action) {
   try {
-    const requestURL = `${API_URL}/cros`;
-
+    const requestURL = `${API_URL}/levels`;
     const params = {
       method: 'POST',
       body: JSON.stringify(action.payload),
@@ -85,7 +84,7 @@ export function* editLevelWatcher() {
 
 export function* editLevelWorker(action) {
   try {
-    const requestURL = `${API_URL}/cros/${action.payload.id}`;
+    const requestURL = `${API_URL}/levels/${action.payload.id}`;
 
     const params = {
       method: 'PUT',
@@ -107,7 +106,7 @@ export function* deleteLevelWatcher() {
 
 export function* deleteLevelWorker(action) {
   try {
-    const requestURL = `${API_URL}/cros/${action.payload}`;
+    const requestURL = `${API_URL}/levels/${action.payload}`;
 
     const params = {
       method: 'DELETE',

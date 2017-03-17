@@ -55,6 +55,8 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
       initialValues: {
         name: this.props.item.name,
         id: this.props.item.id,
+        price: this.props.item.price,
+        position: this.props.item.position,
       },
     };
 
@@ -62,6 +64,15 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
       <tr>
         <td>
           {this.props.item.name}
+        </td>
+        <td>
+          {this.props.item.price}
+        </td>
+        <td>
+          {this.props.item.position}
+        </td>
+        <td>
+          {this.props.item.is_active}
         </td>
         <td>
           <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openAddLevelModal}>
