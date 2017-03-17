@@ -121,7 +121,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { formValues, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, sources, patientCategories, hasError, loading, submitting, savedPatient } = this.props;
+    const { formValues, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, sources, patientCategories, loading, submitting, savedPatient } = this.props;
     const indicationOptions = map(indications, indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
