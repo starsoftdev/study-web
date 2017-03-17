@@ -4,6 +4,8 @@ import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddExposureLevelForm } from '../DashboardExposureLevelSearch/AddExposureLevelForm';
+import Checkbox from '../../../components/Input/Checkbox';
+import { Field, change } from 'redux-form';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -11,6 +13,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     editLevel: PropTypes.func,
     deleteLevel: PropTypes.func,
     editLevelProcess: PropTypes.object,
+    change: PropTypes.func,
   };
 
   constructor(props) {
@@ -24,6 +27,13 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     this.openAddLevelModal = this.openAddLevelModal.bind(this);
     this.editLevel = this.editLevel.bind(this);
     this.deleteLevel = this.deleteLevel.bind(this);
+    this.updateActive = this.updateActive.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.props.item.is_active) {
+      this.props.change(`isActive-${this.props.item.id}`, true);
+    }
   }
 
   componentWillReceiveProps(newProps) {
@@ -44,6 +54,10 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
   editLevel(params) {
     this.props.editLevel(params);
+  }
+
+  updateActive() {
+
   }
 
   deleteLevel(params) {
@@ -72,7 +86,11 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           {this.props.item.position}
         </td>
         <td>
-          {this.props.item.is_active}
+          <Field
+            name={`isActive-${this.props.item.id}`}
+            type="checkbox"
+            component={Checkbox}
+          />
         </td>
         <td>
           <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openAddLevelModal}>
@@ -110,7 +128,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    change: (field, value) => dispatch(change('DashboardExposureLevel.LevelList', field, value)),
   };
 }
 
