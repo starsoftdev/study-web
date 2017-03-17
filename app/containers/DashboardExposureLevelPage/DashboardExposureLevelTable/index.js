@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import RowItem from './RowItem';
 import _ from 'lodash';
+import { reduxForm } from 'redux-form';
 
+@reduxForm({ form: 'DashboardExposureLevel.LevelList' })
 export class DashboardExposureLevelTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     level: PropTypes.object,
