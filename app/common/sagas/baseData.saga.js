@@ -269,7 +269,16 @@ export function* fetchLevelsWatcher() {
     yield take(FETCH_LEVELS);
 
     try {
-      const queryParams = { filter: '{"order":"id DESC"}' };
+      const filterObj = {
+        where: {
+          isArchived: false,
+        },
+        order: 'position DESC',
+      };
+
+      const queryParams = {
+        filter: JSON.stringify(filterObj),
+      };
       const queryString = composeQueryString(queryParams);
       const requestURL = `${API_URL}/levels?${queryString}`;
       const response = yield call(request, requestURL);
