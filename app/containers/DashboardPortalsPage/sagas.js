@@ -5,6 +5,7 @@ import { LOCATION_CHANGE, push } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import request from '../../utils/request';
+import { setItem } from '../../utils/localStorage';
 import {
   FETCH_CLIENTS,
   SUBMIT_TO_CLIENT_PORTAL,
@@ -43,6 +44,7 @@ export function* submitToSponsorPortalWorker(action) {
     const requestURL = `${API_URL}/users/${action.userId}/get-full-user-info`;
     const response = yield call(request, requestURL);
 
+    yield call(setItem, 'user_id', response.id);
     yield put(setUserData(response));
     yield put(push('/app'));
   } catch (err) {
@@ -60,6 +62,7 @@ export function* submitToClientPortalWorker(action) {
     const requestURL = `${API_URL}/users/${action.userId}/get-full-user-info`;
     const response = yield call(request, requestURL);
 
+    yield call(setItem, 'user_id', response.id);
     yield put(setUserData(response));
     yield put(push('/app'));
   } catch (err) {
