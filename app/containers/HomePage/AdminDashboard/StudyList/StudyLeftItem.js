@@ -68,9 +68,9 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
           </ul>
         </td>
         <td>
-          <span className="site-location">{ item.site_name }</span>
+          <span className="site-location">{ item.site_location }</span>
           <ul className="list-unstyled">
-            <li className="site-number">Site Number: <span>{item.site_location}</span></li>
+            <li className="site-number">Site Number: <span>{item.site_id}</span></li>
             <li className="protocol">Protocol: <span>{item.protocol_number || 'N/A'}</span></li>
             <li className="sponsor">Sponsor: <span>{item.sponsor_name || 'N/A'}</span></li>
             <li className="cro">CRO: <span>{item.cro_name || 'N/A'}</span></li>

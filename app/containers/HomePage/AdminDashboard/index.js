@@ -13,7 +13,19 @@ import FiltersForm from './FiltersForm';
 import StudyList from './StudyList';
 import Filter from '../../../components/Filter';
 // import { selectFilterFormValues } from './FiltersForm/selectors';
-import { selectFilterFormValues, selectLevels, selectSiteNames, selectSiteLocations, selectIndications, selectSponsors, selectProtocols, selectCro, selectUsersByRoles, selectStudiesTotals } from './selectors';
+import {
+  selectFilterFormValues,
+  selectLevels,
+  selectSiteNames,
+  selectSiteLocations,
+  selectIndications,
+  selectSponsors,
+  selectProtocols,
+  selectCro,
+  selectUsersByRoles,
+  selectStudiesTotals,
+  selectStudyUpdateProcess,
+} from './selectors';
 import rd3 from 'react-d3';
 import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
@@ -51,6 +63,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     totals: PropTypes.object,
     updateDashboardStudy: PropTypes.func,
     clearFilters: PropTypes.func,
+    studyUpdateProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -132,7 +145,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   }
 
   clearFilters() {
-    console.log('clearFilters');
     this.props.clearFilters();
     this.setState({ customFilters: [],
       modalFilters: [] });
@@ -224,14 +236,24 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     const newFilterValues = _.cloneDeep(value);
     filters = { ...filters, [key]:newFilterValues };
 
+    let isEmpty = true;
+
     _.forEach(filters, (filter, key) => {
       if (key !== 'percentage' && key !== 'campaign') {
         const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
         filters[key] = withoutAll;
       }
+
+      if (!_.isEmpty(filter)) {
+        isEmpty = false;
+      }
     });
 
-    this.props.fetchStudiesDashboard(filters);
+    if (isEmpty) {
+      this.props.clearFilters();
+    } else {
+      this.props.fetchStudiesDashboard(filters);
+    }
   }
 
   percentageFilterChange(e) {
@@ -553,6 +575,13 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
             usersByRoles={this.props.usersByRoles}
             updateDashboardStudy={this.props.updateDashboardStudy}
+            siteLocations={this.props.siteLocations}
+            sponsors={this.props.sponsors}
+            protocols={this.props.protocols}
+            cro={this.props.cro}
+            levels={this.props.levels}
+            indications={this.props.indications}
+            studyUpdateProcess={this.props.studyUpdateProcess}
           />
         </StickyContainer>
       </div>
@@ -571,6 +600,7 @@ const mapStateToProps = createStructuredSelector({
   cro: selectCro(),
   usersByRoles: selectUsersByRoles(),
   totals: selectStudiesTotals(),
+  studyUpdateProcess: selectStudyUpdateProcess(),
 });
 
 function mapDispatchToProps(dispatch) {

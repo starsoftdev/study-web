@@ -31,6 +31,13 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     fetchStudiesAccordingToFilters: PropTypes.func,
     usersByRoles: PropTypes.object,
     updateDashboardStudy: PropTypes.func,
+    siteLocations: PropTypes.array,
+    sponsors: PropTypes.array,
+    protocols: PropTypes.array,
+    cro: PropTypes.array,
+    levels: PropTypes.array,
+    indications: PropTypes.array,
+    studyUpdateProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -83,6 +90,9 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         studies: bindSelection(newProps.studies),
       });
     }
+    if (this.props.studyUpdateProcess.saving && !newProps.studyUpdateProcess.saving) {
+      this.showEditInformationModal(false);
+    }
   }
 
   onTableScroll(e, v) {
@@ -128,6 +138,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       this.setState({ editStudyInitValues: {
         initialValues: {
           ...selectedStudy,
+          site_location_form: selectedStudy.site_id,
         },
       } });
     }
@@ -617,6 +628,12 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   openModal={this.state.showEditInformationModal}
                   onClose={() => { this.showEditInformationModal(false); }}
                   usersByRoles={this.props.usersByRoles}
+                  siteLocations={this.props.siteLocations}
+                  sponsors={this.props.sponsors}
+                  protocols={this.props.protocols}
+                  cro={this.props.cro}
+                  levels={this.props.levels}
+                  indications={this.props.indications}
                 />
                 <LandingPageModal
                   openModal={this.state.showLandingPageModal}
@@ -643,7 +660,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 const bindSelection = (studies) =>
   map(studies.details, (study) => ({
     ...study,
-    selected: false,
+    selected: study.selected || false,
   }));
 
 const mapStateToProps = createStructuredSelector({

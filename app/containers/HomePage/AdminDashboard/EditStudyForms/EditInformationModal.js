@@ -12,7 +12,7 @@ import DatePicker from '../../../../components/Input/DatePicker';
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, FieldArray, reduxForm } from 'redux-form';
+import { Field, FieldArray, reduxForm, change } from 'redux-form';
 import Form from 'react-bootstrap/lib/Form';
 import RenderEmailsList from './RenderEmailsList';
 import _ from 'lodash';
@@ -34,7 +34,19 @@ export class EditInformationModal extends React.Component {
     onHide: PropTypes.func,
     handleSubmit: PropTypes.func,
     usersByRoles: PropTypes.object,
+    siteLocations: PropTypes.array,
+    sponsors: PropTypes.array,
+    protocols: PropTypes.array,
+    cro: PropTypes.array,
+    levels: PropTypes.array,
+    indications: PropTypes.array,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.siteLocationChanged = this.siteLocationChanged.bind(this);
+  }
 
   addEmailNotificationClick() {
     this.setState({ addEmailModalShow: true });
@@ -44,6 +56,20 @@ export class EditInformationModal extends React.Component {
   closeAddEmailModal() {
     this.setState({ addEmailModalShow: false });
     this.props.onShow();
+  }
+
+  siteLocationChanged(e) {
+    console.log(e);
+    const foundSiteLocation = _.find(this.props.siteLocations, (item) => (item.id === e));
+    if (foundSiteLocation) {
+      console.log(322, foundSiteLocation);
+      this.props.dispatch(change('dashboardEditStudyForm', 'site_id', foundSiteLocation.id));
+      this.props.dispatch(change('dashboardEditStudyForm', 'site_address', foundSiteLocation.address));
+      this.props.dispatch(change('dashboardEditStudyForm', 'site_city', foundSiteLocation.city));
+      this.props.dispatch(change('dashboardEditStudyForm', 'site_state', foundSiteLocation.state));
+      this.props.dispatch(change('dashboardEditStudyForm', 'site_zip', foundSiteLocation.zip));
+      this.props.dispatch(change('dashboardEditStudyForm', 'redirect_phone', foundSiteLocation.redirect_phone));
+    }
   }
 
   render() {
@@ -74,44 +100,61 @@ export class EditInformationModal extends React.Component {
       });
     });
 
-    const siteLocations = [
-      { label: 'Catalina Research Institute', value: 'Catalina Research Institute', id: 15 },
-      { label: 'Ace Chemicals', value: 'Ace Chemicals', id: 16 },
-      { label: 'Acme Corporation', value: 'Acme Corporation', id: 17 },
-    ];
+    const siteLocationsOptions = [];
+    _.forEach(this.props.siteLocations, (item) => {
+      siteLocationsOptions.push({
+        value: item.id,
+        label: item.location,
+      });
+    });
+
+    const sponsorsOptions = [];
+    _.forEach(this.props.sponsors, (item) => {
+      sponsorsOptions.push({
+        value: item.id,
+        label: item.name,
+      });
+    });
+
+    const protocolsOptions = [];
+    _.forEach(this.props.protocols, (item) => {
+      protocolsOptions.push({
+        value: item.id,
+        label: item.number,
+      });
+    });
+
+    const croOptions = [];
+    _.forEach(this.props.cro, (item) => {
+      croOptions.push({
+        value: item.id,
+        label: item.name,
+      });
+    });
+
+    const indicationsOptions = [];
+    _.forEach(this.props.indications, (item) => {
+      indicationsOptions.push({
+        value: item.id,
+        label: item.name,
+      });
+    });
+
+    const exposureLevelOptions = [];
+    _.forEach(this.props.levels, (level) => {
+      exposureLevelOptions.push({
+        value: level.id,
+        label: level.name,
+      });
+    });
+
+
     const messagingNumbers = [
       { label: '(524) 999-1234', value: '5249991234', id: 1 },
       { label: '(524) 666-2345', value: '524666-2345', id: 2 },
       { label: '(524) 111-1234', value: '524111-1234', id: 3 },
       { label: '(524) 440-9874', value: '524440-9874', id: 4 },
       { label: '(524) 599-3214', value: '524599-3214', id: 5 },
-    ];
-    const protocols = [
-      { label: 'A4071059', value: 'A4071059', id: 15 },
-      { label: 'ALK-502', value: 'ALK-502', id: 16 },
-      { label: 'COL MID-302', value: 'COL MID-302', id: 17 },
-    ];
-    const sponsors = [
-      { label: 'Pfizer', value: 'Pfizer', id: 15 },
-      { label: 'Jacob Smith', value: 'Jacob Smith', id: 16 },
-      { label: 'William Martin', value: 'William Martin', id: 17 },
-    ];
-    const cros = [
-      { label: 'inVentiv Health', value: 'inVentiv Health', id: 15 },
-      { label: 'INC_Research', value: 'INC_Research', id: 16 },
-      { label: 'Quintiles', value: 'Quintiles', id: 17 },
-    ];
-    const indications = [
-      { label: 'Acne', value: 'Acne', id: 15 },
-      { label: 'INC_Research', value: 'INC_Research', id: 16 },
-      { label: 'Quintiles', value: 'Quintiles', id: 17 },
-    ];
-    const exposureLevels = [
-      { label: 'Platinum', value: 'Platinum', id: 15 },
-      { label: 'Diamond', value: 'Diamond', id: 16 },
-      { label: 'Gold', value: 'Gold', id: 17 },
-      { label: 'Silver', value: 'Silver', id: 17 },
-      { label: 'Bronze', value: 'Bronze', id: 17 },
     ];
     const campaigns = [
       { label: 'Newest', value: '0', id: 1 },
@@ -219,12 +262,13 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="siteLocation"
+                      name="site_location_form"
                       component={ReactSelect}
                       placeholder="Select Location"
                       searchPlaceholder="Search"
                       searchable
-                      options={siteLocations}
+                      options={siteLocationsOptions}
+                      onChange={(e) => { this.siteLocationChanged(e); }}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -236,8 +280,9 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       type="text"
-                      name="siteNumber"
+                      name="site_id"
                       component={Input}
+                      isDisabled
                     />
                   </div>
                 </div>
@@ -248,7 +293,7 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       type="text"
-                      name="siteAddress"
+                      name="site_address"
                       component={Input}
                     />
                   </div>
@@ -260,7 +305,7 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       type="text"
-                      name="city"
+                      name="site_city"
                       component={Input}
                     />
                   </div>
@@ -272,7 +317,7 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       type="text"
-                      name="state"
+                      name="site_state"
                       component={Input}
                     />
                   </div>
@@ -285,7 +330,7 @@ export class EditInformationModal extends React.Component {
                     <Field
                       type="text"
                       id="editInfo-postalCode"
-                      name="postalCode"
+                      name="site_zip"
                       component={Input}
                     />
                   </div>
@@ -297,7 +342,7 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       type="text"
-                      name="recuritmentPhone"
+                      name="recruitment_phone"
                       component={Input}
                     />
                   </div>
@@ -346,7 +391,7 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       type="text"
-                      name="redirectNumber"
+                      name="redirect_phone"
                       component={Input}
                     />
                   </div>
@@ -357,12 +402,12 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="protocol"
+                      name="protocol_id"
                       component={ReactSelect}
                       placeholder="Select Protocol"
                       searchPlaceholder="Search"
                       searchable
-                      options={protocols}
+                      options={protocolsOptions}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -373,12 +418,12 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="protocol"
+                      name="sponsor_id"
                       component={ReactSelect}
                       placeholder="Select Sponsor"
                       searchPlaceholder="Search"
                       searchable
-                      options={sponsors}
+                      options={sponsorsOptions}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -401,12 +446,12 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="cro"
+                      name="cro_id"
                       component={ReactSelect}
                       placeholder="Select Cro"
                       searchPlaceholder="Search"
                       searchable
-                      options={cros}
+                      options={croOptions}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -417,12 +462,12 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="indication"
+                      name="indication_id"
                       component={ReactSelect}
                       placeholder="Select Indication"
                       searchPlaceholder="Search"
                       searchable
-                      options={indications}
+                      options={indicationsOptions}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -433,12 +478,12 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="exposureLevel"
+                      name="level_id"
                       component={ReactSelect}
                       placeholder="Select Exposure Level"
                       searchPlaceholder="Search"
                       searchable
-                      options={exposureLevels}
+                      options={exposureLevelOptions}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>

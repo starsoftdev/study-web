@@ -69,6 +69,11 @@ const selectStudiesTotals = () => createSelector(
   substate => substate.totals
 );
 
+const selectStudyUpdateProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.updateStudyProcess
+);
+
 const selectPaginationOptions = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.paginationOptions
@@ -89,4 +94,5 @@ export {
   selectCro,
   selectUsersByRoles,
   selectStudiesTotals,
+  selectStudyUpdateProcess,
 };
