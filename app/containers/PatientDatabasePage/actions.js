@@ -206,11 +206,12 @@ export function removePatientsFromTextBlast(patients) {
   };
 }
 
-export function submitTextBlast(patients, message, onClose) {
+export function submitTextBlast(patients, message, currentUserId, onClose) {
   return {
     type: SUBMIT_TEXT_BLAST,
     patients,
     message,
+    currentUserId,
     onClose,
   };
 }

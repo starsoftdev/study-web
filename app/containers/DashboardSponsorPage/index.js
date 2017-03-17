@@ -6,6 +6,7 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { fetchSponsors, addSponsor, editSponsor, deleteSponsor, setActiveSort } from './actions';
 import { selectDashboardSponsors, selectDashboardEditSponsorProcess, selectDashboardSponsorSearchFormValues, selectPaginationOptions } from './selectors';
@@ -34,6 +35,7 @@ export class DashboardSponsorPage extends React.Component { // eslint-disable-li
   render() {
     return (
       <div className="container-fluid dashboard-sponsor">
+        <Helmet title="Sponsor - StudyKIK" />
         <h2 className="main-heading">Sponsor</h2>
 
         <DashboardSponsorSearch

@@ -26,10 +26,79 @@
 .modal-body {
   padding: 0 !important;
 
+  @media screen and (min-width: @phone) {
+    overflow: visible !important;
+  }
+
   span {
-    padding: 20px 25px 0px;
-    width: 100%;
-    display: inline-block;
+    &.text{
+      padding: 20px 25px 0px;
+      width: 100%;
+      display: inline-block;
+    }
+  }
+
+  .Select {
+    &.form-control {
+      height: inherit;
+
+      .Select-arrow-zone {
+        padding-right: 15px;
+
+        &:hover{
+
+          .Select-arrow {
+            border-top-color: #c0e890;
+          }
+        }
+
+        .Select-arrow {
+          margin: -7px 0 0;
+          border-top-color: #99cc66;
+          border-width: 10px 10px 0;
+
+          @media screen and (max-width: @xs) {
+            margin: -3px 0 0;
+            border-width: 6px 6px 0;
+          }
+        }
+      }
+
+      .Select-multi-value-wrapper {
+        padding: 0;
+
+        .Select-placeholder, .Select-value {
+          top: 0 !important;
+        }
+      }
+    }
+
+    &.is-open {
+
+      & > .Select-control {
+
+        .Select-arrow-zone {
+          padding-right: 15px;
+
+          &:hover {
+
+            .Select-arrow {
+              border-color: transparent transparent #c0e890 !important;
+            }
+          }
+
+          .Select-arrow {
+            border-color: transparent transparent #99cc66 !important;
+            border-width: 0 10px 10px;
+
+            @media screen and (max-width: @xs) {
+              margin: -3px 0 0;
+              border-width: 0 6px 6px;
+            }
+          }
+        }
+      }
+    }
   }
 
   input.form-control {
