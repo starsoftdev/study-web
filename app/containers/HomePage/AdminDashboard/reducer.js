@@ -6,6 +6,9 @@ import {
   FETCH_SITE_NAMES_SUCCESS,
   FETCH_SITE_LOCATIONS_SUCCESS,
   CLEAR_FILTERS,
+  UPDATE_DASHBOARD_STUDY,
+  UPDATE_DASHBOARD_STUDY_SUCCESS,
+  UPDATE_DASHBOARD_STUDY_ERROR,
 } from './constants';
 
 import {
@@ -16,6 +19,7 @@ import {
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_USERS_BY_ROLE_SUCCESS,
 } from '../../App/constants';
+import _ from 'lodash';
 
 const initialState = {
   values: {
@@ -29,6 +33,10 @@ const initialState = {
   totals: {
     details: {},
     fetching: false,
+    error: null,
+  },
+  updateStudyProcess: {
+    saving: false,
     error: null,
   },
   levels: [],
@@ -313,6 +321,9 @@ const initialState = {
 };
 
 export default function dashboardPageReducer(state = initialState, action) {
+  const studiesCopy = _.cloneDeep(state.studies.details);
+  let savedStudy = null;
+  let foundKey = null;
   switch (action.type) {
     case FETCH_STUDIES_DASHBOARD:
       return {
@@ -397,6 +408,41 @@ export default function dashboardPageReducer(state = initialState, action) {
         totals: {
           details: {},
           fetching: false,
+          error: null,
+        },
+      };
+    case UPDATE_DASHBOARD_STUDY:
+      return {
+        ...state,
+        updateStudyProcess: {
+          saving: true,
+          error: null,
+        },
+      };
+    case UPDATE_DASHBOARD_STUDY_SUCCESS:
+      savedStudy = action.payload.studies[0];
+      foundKey = _.findKey(studiesCopy, (item) => (item.study_id === savedStudy.study_id));
+      if (foundKey) {
+        savedStudy.selected = true;
+        studiesCopy[foundKey] = savedStudy;
+      }
+      return {
+        ...state,
+        studies: {
+          details: studiesCopy,
+          fetching: false,
+          error: null,
+        },
+        updateStudyProcess: {
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_DASHBOARD_STUDY_ERROR:
+      return {
+        ...state,
+        updateStudyProcess: {
+          saving: false,
           error: null,
         },
       };

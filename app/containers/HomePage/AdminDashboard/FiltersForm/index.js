@@ -146,7 +146,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
     _.forEach(this.props.siteLocations, (item, key) => {
       siteLocationsOptions.push({
         id: (key + 1),
-        value: item.location,
+        value: item.id,
         label: item.location,
       });
     });

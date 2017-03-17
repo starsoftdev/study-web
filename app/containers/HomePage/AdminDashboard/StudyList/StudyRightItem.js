@@ -42,7 +42,12 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
       <tr>
         <td><span className="location">{`${item.site_address ? item.site_address : ''} ${item.site_city ? item.site_city : ''} ${item.site_state ? item.site_state : ''} ${item.site_zip ? item.site_zip : ''}`}</span></td>
         <td><span className="exposure-level">{item.level_name}</span></td>
-        <td><span className="goal">{item.goal}</span></td>
+        <td>
+          <ul className="list-unstyled">
+            <li>Goal: <span>{item.goal || 'N/A'}</span></li>
+            <li>Custom: <span>{item.custom_patient_goal || 'N/A'}</span></li>
+          </ul>
+        </td>
         <td>
           <ul className="list-unstyled">
             <li>Today: <span>{item.today_count || 0}</span></li>
