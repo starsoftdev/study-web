@@ -34,7 +34,7 @@ export class DashboardExposureLevelPage extends React.Component { // eslint-disa
 
   render() {
     return (
-      <div className="container-fluid dashboard-cro">
+      <div className="container-fluid dashboard-exposure-level">
         <Helmet title="Exposure Level - StudyKIK" />
         <h2 className="main-heading">Exposure Level</h2>
 
