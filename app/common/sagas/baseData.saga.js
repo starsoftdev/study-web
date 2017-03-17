@@ -809,14 +809,13 @@ export function* fetchCreditsPrice() {
 
 export function* fetchIndicationLevelPriceWatcher() {
   while (true) {
-    const { indicationId, levelId } = yield take(FETCH_INDICATION_LEVEL_PRICE);
+    const { levelId } = yield take(FETCH_INDICATION_LEVEL_PRICE);
 
     try {
       const requestURL = `${API_URL}/indicationLevelSkus/getPrice`;
       const params = {
         query: {
           levelId,
-          indicationId,
         },
       };
       const response = yield call(request, requestURL, params);

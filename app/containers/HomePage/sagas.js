@@ -224,12 +224,11 @@ export function* fetchIndicationLevelPriceWatcher() {
 
 export function* fetchIndicationLevelPriceWorker(action) {
   try {
-    const { levelId, indicationId } = action;
+    const { levelId } = action;
     const requestURL = `${API_URL}/indicationLevelSkus/getPrice`;
     const params = {
       query: {
         levelId,
-        indicationId,
       },
     };
     const response = yield call(request, requestURL, params);
