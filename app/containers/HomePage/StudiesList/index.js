@@ -28,7 +28,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     clientSites: PropTypes.object,
     clearIndicaoionLevelPrice: PropTypes.func,
     currentUserStripeCustomerId: PropTypes.string,
-    currentUser: PropTypes.object,
+    currentUser: PropTypes.object.isRequired,
     fetchLevels: PropTypes.func,
     fetchIndicationLevelPrice: PropTypes.func,
     fetchUpgradeStudyPrice: PropTypes.func,

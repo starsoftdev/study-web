@@ -13,6 +13,7 @@ export default selectStudyPageDomain;
 /**
  * Other selectors
  */
+export const selectFormDomain = () => state => state.form;
 
 export const selectCampaigns = () => createSelector(
   selectStudyPageDomain(),
@@ -119,7 +120,38 @@ export const selectOpenPatientModal = () => createSelector(
   (subState) => subState.openPatientModal
 );
 
+
+export const selectOpenScheduledModal = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.openScheduledModal
+);
+
 export const selectAddPatientStatus = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.addPatientStatus
+);
+
+export const selectIndicationId = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.study.indication_id
+);
+
+export const selectSelectedDate = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => (subState.ScheduledModal ? subState.ScheduledModal.selectedDate : null)
+);
+
+export const selectSubmittingSchedule = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.submittingSchedule
+);
+
+export const selectSchedulePatientFormValues = () => createSelector(
+  selectFormDomain(),
+  (subState) => (subState.ScheduledPatientModal ? subState.ScheduledPatientModal.values : null)
+);
+
+export const selectSchedulePatientFormErrors = () => createSelector(
+  selectFormDomain(),
+  (subState) => (subState.ScheduledPatientModal ? subState.ScheduledPatientModal.syncErrors : null)
 );

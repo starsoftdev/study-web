@@ -4,7 +4,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import ImportPatientsModal from './ImportPatients/ImportPatientsModal';
+import ImportPatientsModal from './ImportPatients/index';
 import TextEmailBlastModal from './TextEmailBlastModal';
 import TextBlastModal from './TextBlast/index';
 import AddPatientModal from './ImportPatients/AddPatientModal';

@@ -8,7 +8,6 @@ import classNames from 'classnames';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
 import { selectCurrentUser } from '../../App/selectors';
 import * as Selector from '../selectors';
 import PatientDetailSection from './PatientDetailSection';
@@ -18,6 +17,7 @@ import EmailSection from './EmailSection';
 import OtherSection from './OtherSection';
 import { normalizePhoneDisplay } from '../../../common/helper/functions';
 import {
+  showScheduledModal,
   fetchPatientDetails,
   switchToNoteSectionDetail,
   switchToTextSectionDetail,
@@ -38,8 +38,10 @@ export class PatientDetailModal extends React.Component {
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     openPatientModal: React.PropTypes.bool.isRequired,
+    openScheduledModal: React.PropTypes.bool.isRequired,
     fetchPatientDetails: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
+    showScheduledModal: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number.isRequired,
     socket: React.PropTypes.any,
     switchToNoteSection: React.PropTypes.func.isRequired,
@@ -53,8 +55,13 @@ export class PatientDetailModal extends React.Component {
 
   constructor(props) {
     super(props);
+    this.onSelectText = this.onSelectText.bind(this);
     this.renderOtherSection = this.renderOtherSection.bind(this);
     this.renderPatientDetail = this.renderPatientDetail.bind(this);
+    this.renderScheduledTime = this.renderScheduledTime.bind(this);
+    this.state = {
+      showScheduledPatientModal: false,
+    };
     this.onSelectText = this.onSelectText.bind(this);
 
     this.state = {
@@ -133,18 +140,30 @@ export class PatientDetailModal extends React.Component {
     }
     return null;
   }
+  renderScheduledTime() {
+    const { currentPatientCategory, currentPatient, showScheduledModal } = this.props;
+    if (currentPatientCategory && currentPatientCategory.name === 'Scheduled') {
+      if (currentPatient && currentPatient.callReminders) {
+        return (
+          <a className="modal-opener" onClick={() => showScheduledModal()}>
+            <span className="date">{moment(currentPatient.callReminders[0].time).format('MM/DD/YY')}</span>
+            <span> at </span>
+            <span className="time">{moment(currentPatient.callReminders[0].time).format('hh:mm A')} </span>
+          </a>
+        );
+      }
+    }
+    return null;
+  }
 
   render() {
-    const { ePMS, carousel, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
+    const { ePMS, carousel, openScheduledModal, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
     return (
-      <Collapse dimension="width" in={openPatientModal} timeout={250} className="patients-list-form">
+      <Collapse dimension="width" in={openPatientModal} timeout={250} className={openScheduledModal ? 'patients-list-form-OnSchedule' : 'patients-list-form'}>
         <div className="form-area">
           <div className="form-head">
             <strong className="title">{currentPatientCategory ? currentPatientCategory.name : null}</strong>
-            <a className="lightbox-opener">
-              <span className="date" />
-              <span className="time" />
-            </a>
+            {this.renderScheduledTime()}
             <a className="btn-close" onClick={onClose}>
               <i className="glyphicon glyphicon-menu-right" />
             </a>
@@ -178,11 +197,13 @@ const mapStateToProps = createStructuredSelector({
   currentPatient: Selector.selectCurrentPatient(),
   currentPatientCategory: Selector.selectCurrentPatientCategory(),
   openPatientModal: Selector.selectOpenPatientModal(),
+  openScheduledModal: Selector.selectOpenScheduledModal(),
   socket: selectSocket(),
   studyId: Selector.selectStudyId(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  showScheduledModal: () => dispatch(showScheduledModal()),
   fetchPatientDetails: (patientId) => dispatch(fetchPatientDetails(patientId)),
   switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
   switchToTextSection: () => dispatch(switchToTextSectionDetail()),
