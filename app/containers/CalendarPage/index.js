@@ -7,6 +7,8 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+import { SchedulePatientModalType } from '../../common/constants';
+
 import ComingSoon from '../../components/ComingSoon/index';
 import CalendarWidget from './components/CalendarWidget';
 import SchedulePatientModal from './components/SchedulePatientModal';
@@ -36,7 +38,6 @@ import {
 } from './actions';
 import { selectSchedules, selectPatientsByStudy, selectPaginationOptions } from './selectors';
 
-import { SchedulePatientModalType } from '../../common/constants';
 
 const getFilteredSchedules = (schedules, filter) =>
   schedules.filter(s =>
@@ -68,7 +69,31 @@ const periodOptions = [
   { label: 'PM', value: 'PM' },
 ];
 
-export class CalendarPage extends React.Component {
+
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
+  sites: selectSites(),
+  indications: selectIndications(),
+  schedules: selectSchedules(),
+  protocols: selectProtocols(),
+  patientsByStudy: selectPatientsByStudy(),
+  paginationOptions: selectPaginationOptions(),
+  userRoleType: selectUserRoleType(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchSites: () => dispatch(fetchSites()),
+  fetchIndications: () => dispatch(fetchIndications()),
+  fetchPatientsByStudy: (studyId, siteId) => dispatch(fetchPatientsByStudy(studyId, siteId)),
+  fetchProtocols: () => dispatch(fetchProtocols()),
+  fetchSchedules: (data) => dispatch(fetchSchedules(data)),
+  submitSchedule: (data) => dispatch(submitSchedule(data)),
+  deleteSchedule: (scheduleId, userId) => dispatch(deleteSchedule(scheduleId, userId)),
+  setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class CalendarPage extends React.Component {
   static propTypes = {
     currentUser: PropTypes.any,
     sites: PropTypes.array.isRequired,
@@ -373,30 +398,3 @@ export class CalendarPage extends React.Component {
     );
   }
 }
-
-const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser(),
-  sites: selectSites(),
-  indications: selectIndications(),
-  schedules: selectSchedules,
-  protocols: selectProtocols(),
-  patientsByStudy: selectPatientsByStudy,
-  paginationOptions: selectPaginationOptions,
-  userRoleType: selectUserRoleType(),
-});
-
-const mapDispatchToProps = {
-  fetchSites,
-  fetchIndications,
-  fetchPatientsByStudy,
-  fetchProtocols,
-  fetchSchedules,
-  submitSchedule,
-  deleteSchedule,
-  setActiveSort,
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CalendarPage);
