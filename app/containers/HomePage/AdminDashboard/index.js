@@ -25,12 +25,14 @@ import {
   selectUsersByRoles,
   selectStudiesTotals,
   selectStudyUpdateProcess,
+  selectAllClientUsers,
+  selectEditStudyValues,
 } from './selectors';
 import rd3 from 'react-d3';
 import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
-import { fetchStudiesDashboard, fetchSiteNames, fetchSiteLocations, updateDashboardStudy, clearFilters } from './actions';
-import { fetchLevels, fetchIndications, fetchSponsors, fetchProtocols, fetchCro, fetchUsersByRole } from '../../App/actions';
+import { fetchStudiesDashboard, fetchSiteNames, fetchSiteLocations, updateDashboardStudy, clearFilters, fetchAllClientUsersDashboard, fetchStudyCampaignsDashboard, changeStudyStatusDashboard, toggleStudy } from './actions';
+import { fetchLevels, fetchIndications, fetchSponsors, fetchProtocols, fetchCro, fetchUsersByRole, addEmailNotificationUser } from '../../App/actions';
 
 const PieChart = rd3.PieChart;
 const LineChart = rd3.LineChart;
@@ -64,6 +66,13 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     updateDashboardStudy: PropTypes.func,
     clearFilters: PropTypes.func,
     studyUpdateProcess: PropTypes.object,
+    fetchAllClientUsersDashboard: PropTypes.func,
+    allClientUsers: PropTypes.object,
+    editStudyValues: PropTypes.object,
+    addEmailNotificationUser: PropTypes.func,
+    fetchStudyCampaignsDashboard: PropTypes.func,
+    changeStudyStatusDashboard: PropTypes.func,
+    toggleStudy: PropTypes.func,
   };
 
   constructor(props) {
@@ -239,12 +248,13 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     let isEmpty = true;
 
     _.forEach(filters, (filter, key) => {
+      const initFilter = _.cloneDeep(filter);
       if (key !== 'percentage' && key !== 'campaign') {
         const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
         filters[key] = withoutAll;
       }
 
-      if (!_.isEmpty(filter)) {
+      if (!_.isEmpty(initFilter)) {
         isEmpty = false;
       }
     });
@@ -582,6 +592,13 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             levels={this.props.levels}
             indications={this.props.indications}
             studyUpdateProcess={this.props.studyUpdateProcess}
+            fetchAllClientUsersDashboard={this.props.fetchAllClientUsersDashboard}
+            allClientUsers={this.props.allClientUsers}
+            editStudyValues={this.props.editStudyValues}
+            addEmailNotificationUser={this.props.addEmailNotificationUser}
+            fetchStudyCampaignsDashboard={this.props.fetchStudyCampaignsDashboard}
+            changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
+            toggleStudy={this.props.toggleStudy}
           />
         </StickyContainer>
       </div>
@@ -601,6 +618,8 @@ const mapStateToProps = createStructuredSelector({
   usersByRoles: selectUsersByRoles(),
   totals: selectStudiesTotals(),
   studyUpdateProcess: selectStudyUpdateProcess(),
+  allClientUsers: selectAllClientUsers(),
+  editStudyValues: selectEditStudyValues(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -617,6 +636,11 @@ function mapDispatchToProps(dispatch) {
     fetchUsersByRole: () => dispatch(fetchUsersByRole()),
     updateDashboardStudy: (params) => dispatch(updateDashboardStudy(params)),
     clearFilters: () => dispatch(clearFilters()),
+    fetchAllClientUsersDashboard: (params) => dispatch(fetchAllClientUsersDashboard(params)),
+    addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
+    fetchStudyCampaignsDashboard: (params) => dispatch(fetchStudyCampaignsDashboard(params)),
+    changeStudyStatusDashboard: (params, status, isChecked) => dispatch(changeStudyStatusDashboard(params, status, isChecked)),
+    toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
   };
 }
 

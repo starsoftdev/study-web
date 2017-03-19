@@ -44,6 +44,14 @@ export default class DatePicker extends Component {
     this.handleInit(this.props.initialDate);
   }
 
+  componentWillReceiveProps(newProps) {
+    if (newProps.input.value !== this.props.input.value) {
+      this.setState({
+        date: moment(newProps.input.value),
+      });
+    }
+  }
+
   setToBeDetermined = () => {
     this.setState({
       date: null,

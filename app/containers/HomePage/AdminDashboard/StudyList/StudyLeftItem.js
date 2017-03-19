@@ -11,6 +11,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     item: PropTypes.object,
     onSelectStudy: PropTypes.func,
     onStatusChange: PropTypes.func,
+    changeStudyStatusDashboard: PropTypes.func,
   };
 
   constructor(props) {
@@ -31,7 +32,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    const { item, onSelectStudy, onStatusChange } = this.props;
+    const { item, onSelectStudy } = this.props;
 
     const lastLoginTime = item.last_login_time ? moment(item.last_login_time).format('MM/DD/YY [at] h:mm A') : 'N/A';
 
@@ -49,8 +50,8 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
             name={`status-${item.study_id}`}
             component={Toggle}
             className="field"
-            onChange={(value) => { console.log(123); onStatusChange([item.study_id], value); }}
-            initValue={status === 'active'}
+            onChange={(value) => { this.props.changeStudyStatusDashboard([item.study_id], value ? 'active' : 'inactive', false); }}
+            initValue={item.is_active}
           />
         </td>
         <td></td>
