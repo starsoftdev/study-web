@@ -330,7 +330,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     }
 
     const selectedStudy = _.find(this.props.studies.details, (o) => (o.studyId === this.state.selectedStudyId));
-
     if (!upgradeStudyFormValues.level) {
       upgradeStudyFormValues.level = selectedStudy.campaign.level_id;
     }
@@ -342,6 +341,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       stripeCustomerId: currentUserStripeCustomerId,
       selectedIndicationId: this.state.selectedIndicationId,
       selectedCampaignId: selectedStudy.campaignId,
+      prevLevelId: selectedStudy.level_id,
       selectedSiteId: this.state.selectedSiteId,
       user_id: this.props.currentUser.id,
       indicationName: this.state.indicationName,
