@@ -9,6 +9,14 @@ import {
   UPDATE_DASHBOARD_STUDY,
   UPDATE_DASHBOARD_STUDY_SUCCESS,
   UPDATE_DASHBOARD_STUDY_ERROR,
+  FETCH_ALL_CLIENT_USERS,
+  FETCH_ALL_CLIENT_USERS_SUCCESS,
+  FETCH_ALL_CLIENT_USERS_ERROR,
+  FETCH_STUDY_CAMPAIGNS,
+  FETCH_STUDY_CAMPAIGNS_ERROR,
+  FETCH_STUDY_CAMPAIGNS_SUCCESS,
+  CHANGE_STUDY_STATUS_SUCCESS,
+  TOGGLE_STUDY,
 } from './constants';
 
 import {
@@ -18,6 +26,9 @@ import {
   FETCH_SPONSORS_SUCCESS,
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_USERS_BY_ROLE_SUCCESS,
+  ADD_EMAIL_NOTIFICATION_USER,
+  ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+  ADD_EMAIL_NOTIFICATION_USER_ERROR,
 } from '../../App/constants';
 import _ from 'lodash';
 
@@ -37,6 +48,21 @@ const initialState = {
   },
   updateStudyProcess: {
     saving: false,
+    error: null,
+  },
+  allClientUsers: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  addNotificationProcess: {
+    saving: false,
+    error: null,
+    savedUser: null,
+  },
+  studyCampaigns: {
+    details: [],
+    fetching: false,
     error: null,
   },
   levels: [],
@@ -443,6 +469,120 @@ export default function dashboardPageReducer(state = initialState, action) {
         ...state,
         updateStudyProcess: {
           saving: false,
+          error: null,
+        },
+      };
+    case FETCH_ALL_CLIENT_USERS:
+      return {
+        ...state,
+        allClientUsers: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_ALL_CLIENT_USERS_SUCCESS:
+      return {
+        ...state,
+        allClientUsers: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_ALL_CLIENT_USERS_ERROR:
+      return {
+        ...state,
+        allClientUsers: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: true,
+          error: null,
+          savedUser: null,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER_SUCCESS:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: false,
+          error: null,
+          savedUser: action.payload,
+        },
+      };
+    case ADD_EMAIL_NOTIFICATION_USER_ERROR:
+      return {
+        ...state,
+        addNotificationProcess: {
+          saving: false,
+          error: action.payload,
+          savedUser: null,
+        },
+      };
+    case FETCH_STUDY_CAMPAIGNS:
+      return {
+        ...state,
+        studyCampaigns: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_STUDY_CAMPAIGNS_SUCCESS:
+      return {
+        ...state,
+        studyCampaigns: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_STUDY_CAMPAIGNS_ERROR:
+      return {
+        ...state,
+        studyCampaigns: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case CHANGE_STUDY_STATUS_SUCCESS:
+
+      _.forEach(studiesCopy, (study, key) => {
+        foundKey = _.findKey(action.payload.studies, (item) => (item === study.study_id));
+        if (foundKey) {
+          studiesCopy[key].is_active = action.payload.status === 'active';
+        }
+      });
+
+      return {
+        ...state,
+        studies: {
+          details: studiesCopy,
+          fetching: false,
+          error: null,
+        },
+      };
+
+    case TOGGLE_STUDY:
+      console.log(action);
+      foundKey = _.findKey(studiesCopy, (item) => (action.id === item.study_id));
+      if (foundKey) {
+        studiesCopy[foundKey].selected = action.status;
+      }
+
+      return {
+        ...state,
+        studies: {
+          details: studiesCopy,
+          fetching: false,
           error: null,
         },
       };

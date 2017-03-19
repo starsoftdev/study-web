@@ -25,3 +25,17 @@ export const UPDATE_DASHBOARD_STUDY_SUCCESS              = 'DashboardPage/UPDATE
 export const UPDATE_DASHBOARD_STUDY_ERROR                = 'DashboardPage/UPDATE_DASHBOARD_STUDY_ERROR';
 
 export const CLEAR_FILTERS                               = 'DashboardPage/CLEAR_FILTERS';
+
+export const FETCH_ALL_CLIENT_USERS                      = 'DashboardPage/FETCH_ALL_CLIENT_USERS';
+export const FETCH_ALL_CLIENT_USERS_SUCCESS              = 'DashboardPage/FETCH_ALL_CLIENT_USERS_SUCCESS';
+export const FETCH_ALL_CLIENT_USERS_ERROR                = 'DashboardPage/FETCH_ALL_CLIENT_USERS_ERROR';
+
+export const FETCH_STUDY_CAMPAIGNS                       = 'DashboardPage/FETCH_STUDY_CAMPAIGNS';
+export const FETCH_STUDY_CAMPAIGNS_SUCCESS               = 'DashboardPage/FETCH_STUDY_CAMPAIGNS_SUCCESS';
+export const FETCH_STUDY_CAMPAIGNS_ERROR                 = 'DashboardPage/FETCH_STUDY_CAMPAIGNS_ERROR';
+
+export const CHANGE_STUDY_STATUS                         = 'DashboardPage/CHANGE_STUDY_STATUS';
+export const CHANGE_STUDY_STATUS_SUCCESS                 = 'DashboardPage/CHANGE_STUDY_STATUS_SUCCESS';
+export const CHANGE_STUDY_STATUS_ERROR                   = 'DashboardPage/CHANGE_STUDY_STATUS_ERROR';
+
+export const TOGGLE_STUDY                                = 'DashboardPage/TOGGLE_STUDY';
