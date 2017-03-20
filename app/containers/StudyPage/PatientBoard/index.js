@@ -163,8 +163,14 @@ class PatientBoard extends React.Component {
     const defaultDate = moment().startOf('day');
     const scheduledDate = selectedDate || defaultDate;
     const formValues = schedulePatientFormValues;
+    let currentCallReminderId;
+
+    if (currentPatient.callReminders && currentPatient.callReminders[0]) {
+      currentCallReminderId = currentPatient.callReminders[0].id;
+    }
 
     const submitData = {
+      id: currentCallReminderId,
       siteLocation: site.name,
       indication: _.find(this.props.indications, { id: indicationId }).name,
       protocolNumber: protocol.number,
