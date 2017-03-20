@@ -27,8 +27,8 @@ const logView = (req) => {
         },
       };
 
-      request(options, (error, response) => {
-        if (error && response.statusCode !== 200) {
+      request(options, (error) => {
+        if (error) {
           console.trace(error);
         }
       });

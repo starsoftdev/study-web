@@ -6,6 +6,7 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 import { selectDashboardAdmins, selectDashboardRoles } from './selectors';
 import { createStructuredSelector } from 'reselect';
 import { DashboardManageUsersSearch } from './DashboardManageUsersSearch';
@@ -29,6 +30,7 @@ export class DashboardManageUsers extends React.Component { // eslint-disable-li
   render() {
     return (
       <div className="container-fluid dashboard-manage-users">
+        <Helmet title="Manage Users - StudyKIK" />
         <h2 className="main-heading">MANAGE USERS</h2>
 
         <DashboardManageUsersSearch

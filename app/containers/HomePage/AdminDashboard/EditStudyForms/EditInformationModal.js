@@ -12,13 +12,14 @@ import DatePicker from '../../../../components/Input/DatePicker';
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, FieldArray, reduxForm } from 'redux-form';
+import { Field, FieldArray, reduxForm, change, arrayRemoveAll, arrayPush } from 'redux-form';
 import Form from 'react-bootstrap/lib/Form';
 import RenderEmailsList from './RenderEmailsList';
 import _ from 'lodash';
+import { selectStudyCampaigns } from '../selectors';
 
 const mapStateToProps = createStructuredSelector({
-
+  studyCampaigns: selectStudyCampaigns(),
 });
 
 @reduxForm({ form: 'dashboardEditStudyForm' })
@@ -34,20 +35,88 @@ export class EditInformationModal extends React.Component {
     onHide: PropTypes.func,
     handleSubmit: PropTypes.func,
     usersByRoles: PropTypes.object,
+    siteLocations: PropTypes.array,
+    sponsors: PropTypes.array,
+    protocols: PropTypes.array,
+    cro: PropTypes.array,
+    levels: PropTypes.array,
+    indications: PropTypes.array,
+    fetchAllClientUsersDashboard: PropTypes.func,
+    allClientUsers: PropTypes.object,
+    addEmailNotificationClick: PropTypes.func,
+    studyCampaigns: PropTypes.object,
   };
 
-  addEmailNotificationClick() {
-    this.setState({ addEmailModalShow: true });
-    this.props.onHide(true);
+  constructor(props) {
+    super(props);
+
+    this.siteLocationChanged = this.siteLocationChanged.bind(this);
+    this.campaignChanged = this.campaignChanged.bind(this);
   }
 
-  closeAddEmailModal() {
-    this.setState({ addEmailModalShow: false });
-    this.props.onShow();
+  componentWillReceiveProps(newProps) {
+    if (this.props.studyCampaigns.fetching && !newProps.studyCampaigns.fetching) {
+      // newProps.allClientUsers.details
+    }
+
+    if (this.props.allClientUsers.fetching && !newProps.allClientUsers.fetching) {
+      const fields = [];
+      let isAllChecked = true;
+
+      let studyEmailUsers = this.props.formValues.study_notification_users;
+
+      if (studyEmailUsers) {
+        studyEmailUsers = studyEmailUsers.substr(studyEmailUsers.indexOf('{') + 1);
+        studyEmailUsers = studyEmailUsers.substr(0, studyEmailUsers.indexOf('}'));
+        studyEmailUsers = studyEmailUsers.split(',');
+
+        _.forEach(newProps.allClientUsers.details, (item) => {
+          const isChecked = _.find(studyEmailUsers, (o) => (parseInt(o) === item.user_id));
+          if (!isChecked) {
+            isAllChecked = false;
+          }
+          fields.push({
+            firstName: item.first_name,
+            lastName: item.last_name,
+            userId: item.user_id,
+            isChecked,
+          });
+        });
+
+        this.props.dispatch(arrayRemoveAll('dashboardEditStudyForm', 'emailNotifications'));
+        fields.map((newItem) => (this.props.dispatch(arrayPush('dashboardEditStudyForm', 'emailNotifications', newItem))));
+        this.props.dispatch(change('dashboardEditStudyForm', 'checkAllInput', isAllChecked));
+      }
+    }
   }
+
+  siteLocationChanged(e) {
+    const foundSiteLocation = _.find(this.props.siteLocations, (item) => (item.id === e));
+    if (foundSiteLocation) {
+      this.props.fetchAllClientUsersDashboard(foundSiteLocation.client_id);
+
+      this.props.dispatch(change('dashboardEditStudyForm', 'site_id', foundSiteLocation.id));
+      this.props.dispatch(change('dashboardEditStudyForm', 'site_address', foundSiteLocation.address));
+      this.props.dispatch(change('dashboardEditStudyForm', 'site_city', foundSiteLocation.city));
+      this.props.dispatch(change('dashboardEditStudyForm', 'site_state', foundSiteLocation.state));
+      this.props.dispatch(change('dashboardEditStudyForm', 'site_zip', foundSiteLocation.zip));
+      this.props.dispatch(change('dashboardEditStudyForm', 'redirect_phone', foundSiteLocation.redirect_phone));
+      this.props.dispatch(change('dashboardEditStudyForm', 'client_id', foundSiteLocation.client_id));
+    }
+  }
+
+  campaignChanged(e) {
+    const foundCampaign = _.find(this.props.studyCampaigns.details, (item) => (item.id === e));
+    if (foundCampaign) {
+      this.props.dispatch(change('dashboardEditStudyForm', 'campaign_datefrom', foundCampaign.datefrom));
+      this.props.dispatch(change('dashboardEditStudyForm', 'campaign_dateto', foundCampaign.dateto));
+      this.props.dispatch(change('dashboardEditStudyForm', 'custom_patient_goal', foundCampaign.custom_patient_goal));
+      this.props.dispatch(change('dashboardEditStudyForm', 'level_id', foundCampaign.level_id));
+    }
+  }
+
 
   render() {
-    console.log(322, 'render');
     const { openModal, onClose } = this.props;
     const smOptions = [];
 
@@ -74,11 +143,55 @@ export class EditInformationModal extends React.Component {
       });
     });
 
-    const siteLocations = [
-      { label: 'Catalina Research Institute', value: 'Catalina Research Institute', id: 15 },
-      { label: 'Ace Chemicals', value: 'Ace Chemicals', id: 16 },
-      { label: 'Acme Corporation', value: 'Acme Corporation', id: 17 },
-    ];
+    const siteLocationsOptions = [];
+    _.forEach(this.props.siteLocations, (item) => {
+      siteLocationsOptions.push({
+        value: item.id,
+        label: item.location,
+      });
+    });
+
+    const sponsorsOptions = [];
+    _.forEach(this.props.sponsors, (item) => {
+      sponsorsOptions.push({
+        value: item.id,
+        label: item.name,
+      });
+    });
+
+    const protocolsOptions = [];
+    _.forEach(this.props.protocols, (item) => {
+      protocolsOptions.push({
+        value: item.id,
+        label: item.number,
+      });
+    });
+
+    const croOptions = [];
+    _.forEach(this.props.cro, (item) => {
+      croOptions.push({
+        value: item.id,
+        label: item.name,
+      });
+    });
+
+    const indicationsOptions = [];
+    _.forEach(this.props.indications, (item) => {
+      indicationsOptions.push({
+        value: item.id,
+        label: item.name,
+      });
+    });
+
+    const exposureLevelOptions = [];
+    _.forEach(this.props.levels, (level) => {
+      exposureLevelOptions.push({
+        value: level.id,
+        label: level.name,
+      });
+    });
+
+
     const messagingNumbers = [
       { label: '(524) 999-1234', value: '5249991234', id: 1 },
       { label: '(524) 666-2345', value: '524666-2345', id: 2 },
@@ -86,47 +199,23 @@ export class EditInformationModal extends React.Component {
       { label: '(524) 440-9874', value: '524440-9874', id: 4 },
       { label: '(524) 599-3214', value: '524599-3214', id: 5 },
     ];
-    const protocols = [
-      { label: 'A4071059', value: 'A4071059', id: 15 },
-      { label: 'ALK-502', value: 'ALK-502', id: 16 },
-      { label: 'COL MID-302', value: 'COL MID-302', id: 17 },
-    ];
-    const sponsors = [
-      { label: 'Pfizer', value: 'Pfizer', id: 15 },
-      { label: 'Jacob Smith', value: 'Jacob Smith', id: 16 },
-      { label: 'William Martin', value: 'William Martin', id: 17 },
-    ];
-    const cros = [
-      { label: 'inVentiv Health', value: 'inVentiv Health', id: 15 },
-      { label: 'INC_Research', value: 'INC_Research', id: 16 },
-      { label: 'Quintiles', value: 'Quintiles', id: 17 },
-    ];
-    const indications = [
-      { label: 'Acne', value: 'Acne', id: 15 },
-      { label: 'INC_Research', value: 'INC_Research', id: 16 },
-      { label: 'Quintiles', value: 'Quintiles', id: 17 },
-    ];
-    const exposureLevels = [
-      { label: 'Platinum', value: 'Platinum', id: 15 },
-      { label: 'Diamond', value: 'Diamond', id: 16 },
-      { label: 'Gold', value: 'Gold', id: 17 },
-      { label: 'Silver', value: 'Silver', id: 17 },
-      { label: 'Bronze', value: 'Bronze', id: 17 },
-    ];
-    const campaigns = [
-      { label: 'Newest', value: '0', id: 1 },
-      { label: '10', value: '10', id: 2 },
-      { label: '9', value: '9', id: 3 },
-      { label: '8', value: '8', id: 4 },
-      { label: '7', value: '7', id: 5 },
-      { label: '6', value: '6', id: 6 },
-      { label: '5', value: '5', id: 7 },
-      { label: '4', value: '4', id: 8 },
-      { label: '3', value: '3', id: 9 },
-      { label: '2', value: '2', id: 10 },
-      { label: 'Oldest', value: '1', id: 11 },
-    ];
-    const formValues = {};
+
+    let campaignOptions = [];
+
+    for (let i = 0; i < this.props.studyCampaigns.details.length; i++) {
+      if (i === 0) {
+        campaignOptions.push({ label: 'Oldest', value: this.props.studyCampaigns.details[i].id });
+      } else if ((i + 1) === this.props.studyCampaigns.details.length) {
+        campaignOptions.push({ label: 'Newest', value: this.props.studyCampaigns.details[i].id });
+      } else {
+        campaignOptions.push({ label: i, value: this.props.studyCampaigns.details[i].id });
+      }
+    }
+
+    campaignOptions = campaignOptions.reverse();
+
+    const campaignDateFrom = moment(this.props.formValues.campaign_datefrom);
+
     return (
       <Collapse dimension="width" in={openModal} timeout={250} className="form-edit-information">
         <div>
@@ -145,9 +234,10 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="status"
+                      name="is_active"
                       component={Toggle}
                       className="field"
+                      onChange={(e) => { this.props.dispatch(change('dashboardEditStudyForm', 'is_public', e.toString())); }}
                     />
                   </div>
                 </div>
@@ -219,12 +309,13 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="siteLocation"
+                      name="site_location_form"
                       component={ReactSelect}
                       placeholder="Select Location"
                       searchPlaceholder="Search"
                       searchable
-                      options={siteLocations}
+                      options={siteLocationsOptions}
+                      onChange={(e) => { this.siteLocationChanged(e); }}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -236,8 +327,9 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       type="text"
-                      name="siteNumber"
+                      name="site_id"
                       component={Input}
+                      isDisabled
                     />
                   </div>
                 </div>
@@ -248,7 +340,7 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       type="text"
-                      name="siteAddress"
+                      name="site_address"
                       component={Input}
                     />
                   </div>
@@ -260,7 +352,7 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       type="text"
-                      name="city"
+                      name="site_city"
                       component={Input}
                     />
                   </div>
@@ -272,7 +364,7 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       type="text"
-                      name="state"
+                      name="site_state"
                       component={Input}
                     />
                   </div>
@@ -285,7 +377,7 @@ export class EditInformationModal extends React.Component {
                     <Field
                       type="text"
                       id="editInfo-postalCode"
-                      name="postalCode"
+                      name="site_zip"
                       component={Input}
                     />
                   </div>
@@ -297,7 +389,7 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       type="text"
-                      name="recuritmentPhone"
+                      name="recruitment_phone"
                       component={Input}
                     />
                   </div>
@@ -306,14 +398,13 @@ export class EditInformationModal extends React.Component {
                   <strong className="label"><label>EMAIL NOTIFICATIONS</label></strong>
                   <div className="field">
                     <div className="emails-list-holder">
-                      {false && <FieldArray
+                      {<FieldArray
                         name="emailNotifications"
                         component={RenderEmailsList}
-                        formValues={formValues}
+                        formValues={this.props.formValues}
                         dispatch={this.props.dispatch}
-                        addEmailNotification={this.addEmailNotificationClick}
+                        addEmailNotification={this.props.addEmailNotificationClick}
                         closeEmailNotification={this.closeAddEmailModal}
-                        emailFields={this.state.emailFields}
                       />}
                     </div>
 
@@ -346,7 +437,7 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       type="text"
-                      name="redirectNumber"
+                      name="redirect_phone"
                       component={Input}
                     />
                   </div>
@@ -357,12 +448,12 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="protocol"
+                      name="protocol_id"
                       component={ReactSelect}
                       placeholder="Select Protocol"
                       searchPlaceholder="Search"
                       searchable
-                      options={protocols}
+                      options={protocolsOptions}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -373,12 +464,12 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="protocol"
+                      name="sponsor_id"
                       component={ReactSelect}
                       placeholder="Select Sponsor"
                       searchPlaceholder="Search"
                       searchable
-                      options={sponsors}
+                      options={sponsorsOptions}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -389,7 +480,7 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="sponsorPortal"
+                      name="should_show_in_sponsor_portal"
                       component={Toggle}
                       className="field"
                     />
@@ -401,12 +492,12 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="cro"
+                      name="cro_id"
                       component={ReactSelect}
                       placeholder="Select Cro"
                       searchPlaceholder="Search"
                       searchable
-                      options={cros}
+                      options={croOptions}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -417,12 +508,12 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="indication"
+                      name="indication_id"
                       component={ReactSelect}
                       placeholder="Select Indication"
                       searchPlaceholder="Search"
                       searchable
-                      options={indications}
+                      options={indicationsOptions}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -433,12 +524,12 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="exposureLevel"
+                      name="level_id"
                       component={ReactSelect}
                       placeholder="Select Exposure Level"
                       searchPlaceholder="Search"
                       searchable
-                      options={exposureLevels}
+                      options={exposureLevelOptions}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -449,12 +540,13 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="campaign"
+                      name="campaign_id"
                       component={ReactSelect}
                       placeholder="Select Campaign"
                       searchPlaceholder="Search"
                       searchable
-                      options={campaigns}
+                      options={campaignOptions}
+                      onChange={(e) => { this.campaignChanged(e); }}
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
@@ -466,10 +558,10 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       id="start-date"
-                      name="startDate"
+                      name="campaign_datefrom"
                       component={DatePicker}
                       className="form-control datepicker-input"
-                      initialDate={moment()}
+                      initialDate={campaignDateFrom}
                     />
                   </div>
                 </div>
@@ -480,10 +572,10 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       id="end-date"
-                      name="endDate"
+                      name="campaign_dateto"
                       component={DatePicker}
                       className="form-control datepicker-input"
-                      initialDate={moment()}
+                      initialDate={moment(this.props.formValues.campaign_dateto)}
                     />
                   </div>
                 </div>
@@ -494,7 +586,7 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       type="text"
-                      name="customGoal"
+                      name="custom_patient_goal"
                       component={Input}
                     />
                   </div>

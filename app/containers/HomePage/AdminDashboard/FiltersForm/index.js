@@ -103,9 +103,9 @@ const filterOptions = {
 class FiltersForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func,
     fetchStudiesAccordingToFilters: PropTypes.func,
-    initialValues: PropTypes.object,
+    handleSubmit: PropTypes.func,
+    initialValues: PropTypes.object || PropTypes.arrayOf(PropTypes.object),
     levels: PropTypes.array,
     siteNames: PropTypes.array,
     siteLocations: PropTypes.array,
@@ -122,7 +122,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, initialValues } = this.props;
 
     const exposureLevelOptions = [];
     _.forEach(this.props.levels, (level, key) => {
@@ -146,7 +146,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
     _.forEach(this.props.siteLocations, (item, key) => {
       siteLocationsOptions.push({
         id: (key + 1),
-        value: item.location,
+        value: item.id,
         label: item.location,
       });
     });
@@ -214,7 +214,6 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
       });
     });
 
-
     return (
       <form className="form-filters" onSubmit={handleSubmit}>
         <div className="filters form-fields">
@@ -229,7 +228,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'status')}
               dataSource={filterOptions.statusOptions}
-              initialValue={this.props.initialValues.status}
+              initialValue={initialValues.status}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -245,7 +244,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'color')}
               dataSource={filterOptions.colorOptions}
-              initialValue={this.props.initialValues.color}
+              initialValue={initialValues.color}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -261,7 +260,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'tier')}
               dataSource={filterOptions.tierOptions}
-              initialValue={this.props.initialValues.tier}
+              initialValue={initialValues.tier}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -277,7 +276,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'exposureLevel')}
               dataSource={exposureLevelOptions}
-              initialValue={this.props.initialValues.exposureLevel}
+              initialValue={initialValues.exposureLevel}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -310,7 +309,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'siteLocation')}
               dataSource={siteLocationsOptions}
-              initialValue={this.props.initialValues.siteLocation}
+              initialValue={initialValues.siteLocation}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -328,7 +327,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'siteNumber')}
               dataSource={siteNamesOptions}
-              initialValue={this.props.initialValues.siteNumber}
+              initialValue={initialValues.siteNumber}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -346,7 +345,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'indication')}
               dataSource={indicationsOptions}
-              initialValue={this.props.initialValues.indication}
+              initialValue={initialValues.indication}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -364,7 +363,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'protocol')}
               dataSource={protocolsOptions}
-              initialValue={this.props.initialValues.protocol}
+              initialValue={initialValues.protocol}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -382,7 +381,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'sponsor')}
               dataSource={sponsorsOptions}
-              initialValue={this.props.initialValues.sponsor}
+              initialValue={initialValues.sponsor}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -400,7 +399,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'cro')}
               dataSource={croOptions}
-              initialValue={this.props.initialValues.cro}
+              initialValue={initialValues.cro}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -413,7 +412,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               placeholder="PERCENTAGE"
               optionLabelKey="label"
               dataSource={filterOptions.percentageOptions}
-              initialValue={this.props.initialValues.percentage}
+              initialValue={initialValues.percentage}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -431,7 +430,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'sm')}
               dataSource={smOptions}
-              initialValue={this.props.initialValues.sm}
+              initialValue={initialValues.sm}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -447,7 +446,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'bd')}
               dataSource={bdOptions}
-              initialValue={this.props.initialValues.bd}
+              initialValue={initialValues.bd}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -463,7 +462,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               includeAllOption
               onChange={(e) => this.initSearch(e, 'ae')}
               dataSource={aeOptions}
-              initialValue={this.props.initialValues.ae}
+              initialValue={initialValues.ae}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>

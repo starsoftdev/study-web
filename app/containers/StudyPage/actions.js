@@ -38,6 +38,8 @@ import {
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
   SET_OPEN_PATIENT_MODAL,
+  SCHEDULE_PATIENT,
+  SHOW_SCHEDULED_MODAL,
   SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
   MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
@@ -64,6 +66,10 @@ import {
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
   FETCH_STUDY_NEW_TEXTS,
+  CHANGE_SCHEDULED_DATE,
+  SUBMIT_SCHEDULE,
+  SUBMIT_SCHEDULE_SUCCEEDED,
+  SUBMIT_SCHEDULE_FAILED,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -368,6 +374,16 @@ export function addPatientTextSuccess(payload) {
   };
 }
 
+export function schedulePatient(studyId, fromCategoryId, toCategoryId, patientId) {
+  return {
+    type: SCHEDULE_PATIENT,
+    studyId,
+    fromCategoryId,
+    toCategoryId,
+    patientId,
+  };
+}
+
 export function submitMovePatientBetweenCategories(studyId, fromCategoryId, toCategoryId, patientId) {
   return {
     type: SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
@@ -396,6 +412,13 @@ export function movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId
 export function movePatientBetweenCategoriesFailed() {
   return {
     type: MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
+  };
+}
+
+
+export function showScheduledModal() {
+  return {
+    type: SHOW_SCHEDULED_MODAL,
   };
 }
 
@@ -503,5 +526,33 @@ export function switchToEmailSectionDetail() {
 export function switchToOtherSectionDetail() {
   return {
     type: SWITCH_TO_OTHER_SECTION_DETAIL,
+  };
+}
+
+export function changeScheduledDate(date) {
+  return {
+    type: CHANGE_SCHEDULED_DATE,
+    date,
+  };
+}
+
+export function submitSchedule(data, fromCategoryId, scheduledCategoryId) {
+  return {
+    type: SUBMIT_SCHEDULE,
+    data,
+    fromCategoryId,
+    scheduledCategoryId,
+  };
+}
+
+export function submitScheduleSucceeded() {
+  return {
+    type: SUBMIT_SCHEDULE_SUCCEEDED,
+  };
+}
+
+export function submitScheduleFailed() {
+  return {
+    type: SUBMIT_SCHEDULE_FAILED,
   };
 }

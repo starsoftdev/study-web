@@ -15,6 +15,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
 
   static propTypes = {
     study: PropTypes.object,
+    landing: PropTypes.object,
     subscriptionError: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
   };
@@ -40,13 +41,22 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
   }
 
   render() {
-    const { study, handleSubmit, subscriptionError } = this.props;
+    const { study, landing, handleSubmit, subscriptionError } = this.props;
 
     const name = (study) ? study.name : '';
     const city = (study && study.site.city) ? study.site.city : '';
     const state = (study && study.site.state) ? study.site.state : '';
 
     const cityAndState = (city && state) ? ` ${city}, ${state}` : '';
+
+    const fullNamePlaceholder = (landing.fullNamePlaceholder) ? landing.fullNamePlaceholder : '* Full Name';
+    const emailPlaceholder = (landing.emailPlaceholder) ? landing.emailPlaceholder : '* Email';
+    const phonePlaceholder = (landing.phonePlaceholder) ? landing.phonePlaceholder : '* Mobile phone';
+    const instructions = (landing.instructions) ? landing.instructions : 'Enter your information to join!';
+    const signupButtonText = (landing.signupButtonText) ? landing.signupButtonText : 'Sign up now!';
+    const clickToCallButtonText = (landing.clickToCallButtonText) ? landing.clickToCallButtonText : 'Click to Call!';
+    const clickToCallButtonNumber = (landing.clickToCallButtonNumber) ? landing.clickToCallButtonNumber : '360-718-5766';
+    const clickToCallNumber = (landing.clickToCallButtonNumber) ? `tel:${landing.clickToCallButtonNumber}` : 'tel:3607185766';
     return (
       <form
         action="#"
@@ -64,7 +74,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
           ref={(animatedFormContent) => { this.animatedFormContent = animatedFormContent; }}
           data-view="fadeInUp"
         >
-          <h3>Enter your information to join!</h3>
+          <h3>{instructions}</h3>
           {subscriptionError &&
             <Alert bsStyle="danger">
               <p>Phone or Email is not unique.</p>
@@ -74,7 +84,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             name="name"
             type="text"
             component={Input}
-            placeholder="* Full Name"
+            placeholder={fullNamePlaceholder}
             className="field-row"
             bsClass="form-control input-lg"
           />
@@ -82,7 +92,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             name="email"
             type="email"
             component={Input}
-            placeholder="* Email"
+            placeholder={emailPlaceholder}
             className="field-row"
             bsClass="form-control input-lg"
           />
@@ -90,20 +100,23 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             name="phone"
             type="phone"
             component={Input}
-            placeholder="* Mobile phone"
+            placeholder={phonePlaceholder}
             className="field-row"
             bsClass="form-control input-lg"
           />
           <div className="field-row">
             <input className="btn btn-default hidden input-lg" value="Reset" type="reset" />
-            <input className="btn btn-default btn-block input-lg" value="Sign up now!" type="submit" />
+            <input className="btn btn-default btn-block input-lg" value={signupButtonText} type="submit" />
           </div>
           <div className="field-row">
-            <a href="tel:3607185766" className="btn btn-deep btn-block small">
+            <a
+              href={clickToCallNumber}
+              className="btn btn-deep btn-block small"
+            >
               <i className="icomoon-phone-square"></i>
               <div className="inline">
-                <span>Click to Call!</span>
-                <span>360-718-5766</span>
+                <span>{clickToCallButtonText}</span>
+                <span>{clickToCallButtonNumber}</span>
               </div>
             </a>
           </div>

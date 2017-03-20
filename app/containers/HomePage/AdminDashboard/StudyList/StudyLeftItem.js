@@ -11,6 +11,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     item: PropTypes.object,
     onSelectStudy: PropTypes.func,
     onStatusChange: PropTypes.func,
+    changeStudyStatusDashboard: PropTypes.func,
   };
 
   constructor(props) {
@@ -31,7 +32,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    const { item, onSelectStudy, onStatusChange } = this.props;
+    const { item, onSelectStudy } = this.props;
 
     const lastLoginTime = item.last_login_time ? moment(item.last_login_time).format('MM/DD/YY [at] h:mm A') : 'N/A';
 
@@ -49,8 +50,8 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
             name={`status-${item.study_id}`}
             component={Toggle}
             className="field"
-            onChange={(value) => { console.log(123); onStatusChange([item.study_id], value); }}
-            initValue={status === 'active'}
+            onChange={(value) => { this.props.changeStudyStatusDashboard([item.study_id], value ? 'active' : 'inactive', false); }}
+            initValue={item.is_active}
           />
         </td>
         <td></td>
@@ -68,9 +69,9 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
           </ul>
         </td>
         <td>
-          <span className="site-location">{ item.site_name }</span>
+          <span className="site-location">{ item.site_location }</span>
           <ul className="list-unstyled">
-            <li className="site-number">Site Number: <span>{item.site_location}</span></li>
+            <li className="site-number">Site Number: <span>{item.site_id}</span></li>
             <li className="protocol">Protocol: <span>{item.protocol_number || 'N/A'}</span></li>
             <li className="sponsor">Sponsor: <span>{item.sponsor_name || 'N/A'}</span></li>
             <li className="cro">CRO: <span>{item.cro_name || 'N/A'}</span></li>

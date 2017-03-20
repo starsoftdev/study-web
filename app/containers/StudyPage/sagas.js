@@ -28,6 +28,7 @@ SUBMIT_DELETE_NOTE,
 SUBMIT_PATIENT_TEXT,
 FETCH_STUDY_NEW_TEXTS,
 SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
+SUBMIT_SCHEDULE,
 } from './constants';
 
 import {
@@ -59,6 +60,8 @@ import {
   movePatientBetweenCategoriesFailed,
   readStudyPatientMessagesSuccess,
   readStudyPatientMessagesError,
+  submitScheduleSucceeded,
+  submitScheduleFailed,
 } from './actions';
 
 // Bootstrap sagas
@@ -419,6 +422,12 @@ function* fetchPatientDetails() {
             ],
           },
         },
+        {
+          relation: 'callReminders',
+          scope: {
+            fields: ['time'],
+          },
+        },
       ],
     });
     try {
@@ -753,6 +762,26 @@ function* submitAddPatient() {
   }
 }
 
+export function* submitSchedule() {
+  while (true) {
+    const { data, fromCategoryId, scheduledCategoryId } = yield take(SUBMIT_SCHEDULE);
+    try {
+      const requestURL = `${API_URL}/callReminders/upsertSchedule`;
+      const params = {
+        method: 'POST',
+        body: JSON.stringify(data),
+      };
+      const response = yield call(request, requestURL, params);
+      yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, scheduledCategoryId, data.patientId));
+      yield put(submitScheduleSucceeded(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while submitting a schedule');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(submitScheduleFailed(err));
+    }
+  }
+}
+
 export function* fetchStudySaga() {
   try {
     const watcherA = yield fork(fetchStudyDetails);
@@ -776,6 +805,7 @@ export function* fetchStudySaga() {
     const watcherS = yield fork(submitPatientNote);
     const watcherT = yield fork(submitDeleteNote);
     const watcherU = yield fork(submitPatientText);
+    const watcherV = yield fork(submitSchedule);
     const watcherZ = yield fork(fetchStudyTextNewStats);
 
     yield take(LOCATION_CHANGE);
@@ -800,6 +830,7 @@ export function* fetchStudySaga() {
     yield cancel(watcherS);
     yield cancel(watcherT);
     yield cancel(watcherU);
+    yield cancel(watcherV);
     yield cancel(watcherZ);
   } catch (e) {
     // if returns forbidden we remove the token from local storage

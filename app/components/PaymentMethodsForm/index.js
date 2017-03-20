@@ -24,6 +24,11 @@ class PaymentMethodsForm extends React.Component { // eslint-disable-line react/
     this.sortBy = this.sortBy.bind(this);
   }
 
+  componentWillUnmount() {
+    const defaultSort = 'brand';
+    this.props.setActiveSort(defaultSort, null);
+  }
+
   sortBy(ev) {
     ev.preventDefault();
     let sort = ev.currentTarget.dataset.sort;

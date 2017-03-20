@@ -1,24 +1,25 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, change, destroy } from 'redux-form';
-import { map, indexOf } from 'lodash';
+import { Field, change } from 'redux-form';
+import _, { map, indexOf } from 'lodash';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import { StickyContainer, Sticky } from 'react-sticky';
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import EditInformationModal from '../EditStudyForms/EditInformationModal';
-import LandingPageModal from '../EditStudyForms/LandingPageModal';
-import ThankyouPageModal from '../EditStudyForms/ThankyouPageModal';
-import PatientThankyouPageModal from '../EditStudyForms/PatientThankyouPageModal';
+import LandingPageModal from '../../../../components/LandingPageModal';
+import ThankyouPageModal from '../../../../components/ThankyouPageModal';
+import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { Modal } from 'react-bootstrap';
 import CenteredModal from '../../../../components/CenteredModal';
 import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
-import { selectStudies, selectPaginationOptions } from '../selectors';
+import { selectStudies, selectPaginationOptions, selectAddNotificationProcess } from '../selectors';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
+import AddEmailNotificationForm from '../../../../components/AddEmailNotificationForm';
 
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -31,6 +32,21 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     fetchStudiesAccordingToFilters: PropTypes.func,
     usersByRoles: PropTypes.object,
     updateDashboardStudy: PropTypes.func,
+    siteLocations: PropTypes.array,
+    sponsors: PropTypes.array,
+    protocols: PropTypes.array,
+    cro: PropTypes.array,
+    levels: PropTypes.array,
+    indications: PropTypes.array,
+    studyUpdateProcess: PropTypes.object,
+    fetchAllClientUsersDashboard: PropTypes.func,
+    allClientUsers: PropTypes.object,
+    editStudyValues: PropTypes.object,
+    addNotificationProcess: PropTypes.object,
+    addEmailNotificationUser: PropTypes.func,
+    fetchStudyCampaignsDashboard: PropTypes.func,
+    changeStudyStatusDashboard: PropTypes.func,
+    toggleStudy: PropTypes.func,
   };
 
   constructor(props) {
@@ -57,6 +73,11 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.campaignChanged = this.campaignChanged.bind(this);
     this.updateStudy = this.updateStudy.bind(this);
 
+    this.addEmailNotificationClick = this.addEmailNotificationClick.bind(this);
+    this.closeAddEmailModal = this.closeAddEmailModal.bind(this);
+    this.addEmailNotificationSubmit = this.addEmailNotificationSubmit.bind(this);
+    this.setEditStudyFormValues = this.setEditStudyFormValues.bind(this);
+
     this.state = {
       showDateRangeModal: false,
       rangePicker : {},
@@ -74,6 +95,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       selectedAllStudies: false,
       selectedStudyCount: 0,
       editStudyInitValues: {},
+      addEmailModalShow: false,
     };
   }
 
@@ -83,10 +105,37 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         studies: bindSelection(newProps.studies),
       });
     }
+    if (this.props.studyUpdateProcess.saving && !newProps.studyUpdateProcess.saving) {
+      this.showEditInformationModal(false);
+    }
+    if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
+      let addFields = this.props.editStudyValues.emailNotifications;
+      const values = {
+        firstName: newProps.addNotificationProcess.savedUser.firstName,
+        lastName: newProps.addNotificationProcess.savedUser.lastName,
+        userId: newProps.addNotificationProcess.savedUser.id,
+        isChecked: true,
+      };
+      if (!addFields) {
+        addFields = [values];
+      } else {
+        addFields.push(values);
+      }
+      this.props.dispatch(change('dashboardEditStudyForm', 'emailNotifications', addFields));
+    }
   }
 
   onTableScroll(e, v) {
     console.log('scroll', e, v);
+  }
+
+  setEditStudyFormValues(study) {
+    _.forEach(study, (item, key) => {
+      this.props.dispatch(change('dashboardEditStudyForm', key, item));
+    });
+    this.props.dispatch(change('dashboardEditStudyForm', 'site_location_form', study.site_id));
+    this.props.fetchAllClientUsersDashboard(study.client_id);
+    this.props.fetchStudyCampaignsDashboard(study.study_id);
   }
 
   toggleAllstudies(checked) {
@@ -103,10 +152,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   toggleStudy(studyId, checked) {
-    console.log('studyid', studyId, checked);
-
+    this.props.toggleStudy(studyId, checked);
     this.showEditInformationModal(false);
-    this.props.dispatch(destroy('dashboardEditStudyForm'));
 
     let selectedAllStudies = true;
     let selectedStudyCount = 0;
@@ -125,11 +172,13 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     });
 
     if (selectedStudyCount === 1) {
-      this.setState({ editStudyInitValues: {
+      this.setEditStudyFormValues(selectedStudy);
+      /* this.setState({ editStudyInitValues: {
         initialValues: {
           ...selectedStudy,
+          site_location_form: selectedStudy.site_id,
         },
-      } });
+      } });*/
     }
 
     this.setState({
@@ -159,35 +208,25 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   activateStudies() {
-    const studies = map(this.state.studies, (study) => {
+    const selectedStudies = [];
+    _.forEach(this.state.studies, (study) => {
       if (study.selected) {
-        return {
-          ...study,
-          status: 'active',
-        };
+        selectedStudies.push(study.study_id);
       }
-      return study;
     });
 
-    this.setState({
-      studies,
-    });
+    this.props.changeStudyStatusDashboard(selectedStudies, 'active', true);
   }
 
   deactivateStudies() {
-    const studies = map(this.state.studies, (study) => {
+    const selectedStudies = [];
+    _.forEach(this.state.studies, (study) => {
       if (study.selected) {
-        return {
-          ...study,
-          status: 'deactive',
-        };
+        selectedStudies.push(study.study_id);
       }
-      return study;
     });
 
-    this.setState({
-      studies,
-    });
+    this.props.changeStudyStatusDashboard(selectedStudies, 'inactive', true);
   }
 
   adSetStudies() {
@@ -275,8 +314,31 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   updateStudy(params) {
-    console.log('updateStudy', params);
     this.props.updateDashboardStudy(params);
+  }
+
+  addEmailNotificationClick() {
+    this.setState({ addEmailModalShow: true });
+    // this.props.onHide(true);
+  }
+
+  closeAddEmailModal() {
+    this.setState({ addEmailModalShow: false });
+    // this.props.onShow();
+  }
+
+  addEmailNotificationSubmit(values) {
+    this.props.addEmailNotificationUser({
+      ...values,
+      clientId: this.props.editStudyValues.client_id,
+      addForNotification: true,
+      studyId: this.props.editStudyValues.study_id,
+      clientRole:{
+        siteId: this.props.editStudyValues.site_id,
+      },
+    });
+
+    this.closeAddEmailModal();
   }
 
   renderDateFooter() {
@@ -308,6 +370,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         key={index}
         onSelectStudy={this.toggleStudy}
         onStatusChange={this.changeStudyStatus}
+        changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
       />
     );
     const studyListRightContents = studies.map((item, index) =>
@@ -385,7 +448,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         className="pull-left"
                         data-class="btn-deactivate"
                         onClick={() => this.showPatientThankyouPageModal(true)}
-                      > Patient Thank You Page </Button>
+                      > Patient Thank You Email </Button>
                     }
                     {
                       selectedStudyCount === 1 &&
@@ -617,19 +680,49 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   openModal={this.state.showEditInformationModal}
                   onClose={() => { this.showEditInformationModal(false); }}
                   usersByRoles={this.props.usersByRoles}
+                  siteLocations={this.props.siteLocations}
+                  sponsors={this.props.sponsors}
+                  protocols={this.props.protocols}
+                  cro={this.props.cro}
+                  levels={this.props.levels}
+                  indications={this.props.indications}
+                  fetchAllClientUsersDashboard={this.props.fetchAllClientUsersDashboard}
+                  allClientUsers={this.props.allClientUsers}
+                  formValues={this.props.editStudyValues}
+                  addEmailNotificationClick={this.addEmailNotificationClick}
                 />
                 <LandingPageModal
                   openModal={this.state.showLandingPageModal}
+                  studies={this.state.studies}
                   onClose={() => { this.showLandingPageModal(false); }}
                 />
                 <ThankyouPageModal
                   openModal={this.state.showThankyouPageModal}
+                  studies={this.state.studies}
                   onClose={() => { this.showThankyouPageModal(false); }}
                 />
-                <PatientThankyouPageModal
+                <PatientThankYouEmailModal
                   openModal={this.state.showPatientThankyouPageModal}
+                  studies={this.state.studies}
                   onClose={() => { this.showPatientThankyouPageModal(false); }}
                 />
+                <Modal
+                  dialogComponentClass={CenteredModal}
+                  show={this.state.addEmailModalShow}
+                  onHide={this.closeAddEmailModal}
+                  backdrop
+                  keyboard
+                >
+                  <Modal.Header>
+                    <Modal.Title>ADD EMAIL NOTIFICATION</Modal.Title>
+                    <a className="lightbox-close close" onClick={this.closeAddEmailModal}>
+                      <i className="icomoon-icon_close" />
+                    </a>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <AddEmailNotificationForm onSubmit={this.addEmailNotificationSubmit} />
+                  </Modal.Body>
+                </Modal>
               </div>
             );
           }
@@ -643,12 +736,13 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 const bindSelection = (studies) =>
   map(studies.details, (study) => ({
     ...study,
-    selected: false,
+    selected: study.selected || false,
   }));
 
 const mapStateToProps = createStructuredSelector({
   studies: selectStudies(),
   paginationOptions: selectPaginationOptions(),
+  addNotificationProcess: selectAddNotificationProcess(),
 });
 
 export default connect(mapStateToProps)(StudyList);

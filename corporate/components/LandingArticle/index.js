@@ -72,6 +72,11 @@ export class LandingArticle extends React.Component {
 
     const markdown = md.render(landingDescription);
 
+    const bySignUpText = (landing.bySignUpText) ? landing.bySignUpText :
+      'By signing up you agree to receive text messages and emails about this and similar studies near you. You can unsubscribe at any time. Text messages and data rates may apply.';
+    const ifInterestedInstructions = (landing.ifInterestedInstructions) ? landing.ifInterestedInstructions :
+      'If interested, enter information above to sign up!';
+
     return (
       <article className="landing post">
         <div className="row">
@@ -89,11 +94,10 @@ export class LandingArticle extends React.Component {
             <strong className="title text-uppercase">{siteName}</strong>
             <address>{address}</address>
             <p className="text-underline">
-              If interested, enter information above to sign up!
+              {ifInterestedInstructions}
             </p>
             <p className="note">
-              By signing up you agree to receive text messages and emails about this and similar studies near you.
-              You can unsubscribe at any time. Text messages and data rates may apply.
+              {bySignUpText}
             </p>
             {!imgSrc &&
               <SocialArea alignCenter {...this.props} imgSrc={imgSrc} />

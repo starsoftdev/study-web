@@ -29,6 +29,13 @@ import {
   FETCH_SITE_LOCATIONS,
   FETCH_SITE_NAMES,
   UPDATE_DASHBOARD_STUDY,
+  FETCH_ALL_CLIENT_USERS,
+  FETCH_STUDY_CAMPAIGNS,
+  CHANGE_STUDY_STATUS,
+  UPDATE_LANDING_PAGE,
+  CHANGE_STUDY_ADD,
+  UPDATE_THANK_YOU_PAGE,
+  UPDATE_PATIENT_THANK_YOU_EMAIL,
 } from './AdminDashboard/constants';
 
 import {
@@ -40,6 +47,18 @@ import {
   fetchSiteNamesError,
   updateDashboardStudySuccess,
   updateDashboardStudyError,
+  fetchAllClientUsersDashboardSuccess,
+  fetchAllClientUsersDashboardError,
+  fetchStudyCampaignsDashboardSuccess,
+  fetchStudyCampaignsDashboardError,
+  changeStudyStatusDashboardSuccess,
+  changeStudyStatusDashboardError,
+  updateLandingPageSuccess,
+  updateLandingPageError,
+  updateThankYouPageSuccess,
+  updateThankYouPageError,
+  updatePatientThankYouEmailSuccess,
+  updatePatientThankYouEmailError,
 } from './AdminDashboard/actions';
 
 import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
@@ -224,12 +243,11 @@ export function* fetchIndicationLevelPriceWatcher() {
 
 export function* fetchIndicationLevelPriceWorker(action) {
   try {
-    const { levelId, indicationId } = action;
+    const { levelId } = action;
     const requestURL = `${API_URL}/indicationLevelSkus/getPrice`;
     const params = {
       query: {
         levelId,
-        indicationId,
       },
     };
     const response = yield call(request, requestURL, params);
@@ -472,6 +490,166 @@ export function* updateDashboardStudyWorker(action) {
   }
 }
 
+export function* fetchAllClientUsersWatcher() {
+  yield* takeLatest(FETCH_ALL_CLIENT_USERS, fetchAllClientUsersWorker);
+}
+
+export function* fetchAllClientUsersWorker(action) {
+  try {
+    const requestURL = `${API_URL}/sites/getSiteUsersAndAdmins`;
+
+    const params = {
+      method: 'GET',
+      query: {
+        id: action.params,
+      },
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchAllClientUsersDashboardSuccess(response));
+  } catch (err) {
+    yield put(fetchAllClientUsersDashboardError(err));
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+export function* fetchStudyCampaignsWatcher() {
+  yield* takeLatest(FETCH_STUDY_CAMPAIGNS, fetchStudyCampaignsWorker);
+}
+
+export function* fetchStudyCampaignsWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/getStudyCampaigns`;
+
+    const params = {
+      method: 'GET',
+      query: {
+        id: action.params,
+      },
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchStudyCampaignsDashboardSuccess(response));
+  } catch (err) {
+    yield put(fetchStudyCampaignsDashboardError(err));
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching campaigns for selected study');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+export function* changeStudyStatusWatcher() {
+  yield* takeLatest(CHANGE_STUDY_STATUS, changeStudyStatusWorker);
+}
+
+export function* changeStudyStatusWorker(action) {
+  const { params, status, isChecked } = action;
+
+  try {
+    const requestURL = `${API_URL}/studies/changeStudyStatus`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({ studies: params, status }),
+    };
+
+    yield call(request, requestURL, options);
+
+    yield put(changeStudyStatusDashboardSuccess({ studies: params, status, isChecked }));
+  } catch (err) {
+    yield put(changeStudyStatusDashboardError(err));
+  }
+}
+
+
+export function* updateLandingPageWatcher() {
+  yield* takeLatest(UPDATE_LANDING_PAGE, updateLandingPageWorker);
+}
+
+export function* updateLandingPageWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/landingPages/updateLandingPage`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(updateLandingPageSuccess(response));
+  } catch (err) {
+    yield put(updateLandingPageError(err));
+  }
+}
+
+export function* changeStudyAddWatcher() {
+  yield* takeLatest(CHANGE_STUDY_ADD, changeStudyAddWorker);
+}
+
+export function* changeStudyAddWorker(action) {
+  const { payload } = action;
+
+  try {
+    const requestURL = `${API_URL}/landingPages/change-study-add`;
+    const data = new FormData();
+    data.append('file', payload.file);
+
+    const options = {
+      method: 'POST',
+      body: data,
+      useDefaultContentType: true,
+    };
+
+    const response = yield call(request, requestURL, options);
+    console.log(response);
+    yield put(toastrActions.success('', 'You have successfully updated study add!'));
+  } catch (err) {
+    yield put(toastrActions.error('Error!'));
+  }
+}
+
+export function* updateThankYouPageWatcher() {
+  yield* takeLatest(UPDATE_THANK_YOU_PAGE, updateThankYouPageWorker);
+}
+
+export function* updateThankYouPageWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/thankYouPages/updateThankYouPage`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(updateThankYouPageSuccess(response));
+  } catch (err) {
+    yield put(updateThankYouPageError(err));
+  }
+}
+
+export function* updatePatientThankYouEmailWatcher() {
+  yield* takeLatest(UPDATE_PATIENT_THANK_YOU_EMAIL, updatePatientThankYouEmailWorker);
+}
+
+export function* updatePatientThankYouEmailWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/thankYouPages/updatePatientThankYouEmail`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(updatePatientThankYouEmailSuccess(response));
+  } catch (err) {
+    yield put(updatePatientThankYouEmailError(err));
+  }
+}
+
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   const watcherB = yield fork(fetchPatientMessagesWatcher);
@@ -490,6 +668,13 @@ export function* homePageSaga() {
   const fetchSiteLocationsWatcher1 = yield fork(fetchSiteLocationsWatcher);
   const fetchSiteNamesWatcher1 = yield fork(fetchSiteNamesWatcher);
   const updateDashboardStudyWatcher1 = yield fork(updateDashboardStudyWatcher);
+  const fetchAllClientUsersWatcher1 = yield fork(fetchAllClientUsersWatcher);
+  const fetchStudyCampaignsWatcher1 = yield fork(fetchStudyCampaignsWatcher);
+  const changeStudyStatusWatcher1 = yield fork(changeStudyStatusWatcher);
+  const updateLandingPageWatcher1 = yield fork(updateLandingPageWatcher);
+  const updateThankYouPageWatcher1 = yield fork(updateThankYouPageWatcher);
+  const updatePatientThankYouEmailWatcher1 = yield fork(updatePatientThankYouEmailWatcher);
+  const changeStudyAddWatcher1 = yield fork(changeStudyAddWatcher);
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
@@ -511,5 +696,12 @@ export function* homePageSaga() {
     yield cancel(fetchSiteLocationsWatcher1);
     yield cancel(fetchSiteNamesWatcher1);
     yield cancel(updateDashboardStudyWatcher1);
+    yield cancel(fetchAllClientUsersWatcher1);
+    yield cancel(fetchStudyCampaignsWatcher1);
+    yield cancel(changeStudyStatusWatcher1);
+    yield cancel(updateLandingPageWatcher1);
+    yield cancel(updateThankYouPageWatcher1);
+    yield cancel(updatePatientThankYouEmailWatcher1);
+    yield cancel(changeStudyAddWatcher1);
   }
 }

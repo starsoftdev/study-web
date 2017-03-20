@@ -150,6 +150,11 @@ export const LIST_SITE_NOW_SUCCESS                 = 'App/LIST_SITE_NOW_SUCCESS'
 export const RESET_LIST_SITE_NOW_SUCCESS           = 'App/RESET_LIST_SITE_NOW_SUCCESS';
 export const LIST_SITE_NOW_ERROR                   = 'App/LIST_SITE_NOW_ERROR';
 
+export const GET_PROPOSAL                          = 'App/GET_PROPOSAL';
+export const GET_PROPOSAL_SUCCESS                  = 'App/GET_PROPOSAL_SUCCESS';
+export const RESET_GET_PROPOSAL_SUCCESS            = 'App/RESET_GET_PROPOSAL_SUCCESS';
+export const GET_PROPOSAL_ERROR                    = 'App/GET_PROPOSAL_ERROR';
+
 export const LEARN_ABOUT_FUTURE_TRIALS             = 'App/LEARN_ABOUT_FUTURE_TRIALS';
 export const LEARN_ABOUT_FUTURE_TRIALS_SUCCESS     = 'App/LEARN_ABOUT_FUTURE_TRIALS_SUCCESS';
 export const RESET_LEARN_ABOUT_FUTURE_TRIALS       = 'App/RESET_LEARN_ABOUT_FUTURE_TRIALS';
