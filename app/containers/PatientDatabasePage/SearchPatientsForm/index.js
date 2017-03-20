@@ -10,6 +10,7 @@ import ReactSelect from '../../../components/Input/ReactSelect';
 import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import PatientActionButtons from '../PatientActionButtons';
+
 import { selectSearchPatientsFormError } from './selectors';
 import { selectPatientCategories, selectPatients, selectPatientDatabaseFormValues } from '../../../containers/PatientDatabasePage/selectors';
 import { selectIndications, selectSources, selectSiteLocations, selectCurrentUser } from '../../../containers/App/selectors';
@@ -92,7 +93,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     }
   }
 
-  renderSearchOrSite() {
+  renderSite() {
     const { user, patients, sites } = this.props;
     const siteOptions = map(sites, siteIterator => ({
       label: siteIterator.name,
@@ -118,26 +119,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
         </div>
       );
     }
-    return (
-      <div className="search-area pull-left">
-        <span className="title">
-        </span>
-        <div className="field">
-          <Field
-            name="name"
-            component={Input}
-            type="text"
-            placeholder="Search"
-            className="keyword-search"
-            disabled={patients.fetching}
-            onChange={(e) => this.initSearch(e, 'name')}
-          />
-          <label htmlFor="search">
-            <i className="icomoon-icon_search2" />
-          </label>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   render() {
@@ -216,6 +198,10 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     );
     return (
       <form className="form-search" onSubmit={handleSubmit}>
+        <div className="btns-popups">
+          {this.renderSite()}
+          <PatientActionButtons searchPatients={this.searchPatients} paginationOptions={this.props.paginationOptions} />
+        </div>
         <div className="fields-holder clearfix">
 
           <div className="search-area pull-left">
@@ -298,87 +284,8 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
               />
             </div>
           </div>
-
-          <div className="select-holder pull-left clear-left">
-            <span className="title">
-              <label>Status</label>
-            </span>
-            <div className="field">
-              <Field
-                name="status"
-                component={ReactSelect}
-                placeholder="Select Status"
-                options={statusOptions}
-                disabled={patients.fetching}
-                onChange={(e) => this.initSearch(e, 'status')}
-              />
-            </div>
-          </div>
         </div>
-        <PatientActionButtons searchPatients={this.props.searchPatients} paginationOptions={this.props.paginationOptions} />
-
         <div className="fields-holder clearfix">
-          {this.renderSearchOrSite()}
-          <div className="select-holder indication pull-left">
-            <span className="title">
-              <label>Include Indication</label>
-            </span>
-            <div className="field">
-              <Field
-                name="includeIndication"
-                component={ReactMultiSelect}
-                placeholder="Select Indication"
-                searchPlaceholder="Search Indication"
-                searchable
-                optionLabelKey="label"
-                multiple
-                onChange={(e) => this.initSearch(e, 'includeIndication')}
-                customOptionTemplateFunction={itemTemplate}
-                customSelectedValueTemplateFunction={selectedItemsTemplate}
-                dataSource={finalIncludeIndication}
-                customSearchIconClass="icomoon-icon_search2"
-              />
-            </div>
-          </div>
-
-          <div className="select-holder indication pull-left">
-            <span className="title">
-              <label>Exclude Indication</label>
-            </span>
-            <div className="field">
-              <Field
-                name="excludeIndication"
-                component={ReactMultiSelect}
-                placeholder="Select Indication"
-                searchPlaceholder="Search Indication"
-                searchable
-                optionLabelKey="label"
-                multiple
-                onChange={(e) => this.initSearch(e, 'excludeIndication')}
-                customOptionTemplateFunction={itemTemplate}
-                customSelectedValueTemplateFunction={selectedItemsTemplate}
-                dataSource={finalExcludeIndication}
-                customSearchIconClass="icomoon-icon_search2"
-              />
-            </div>
-          </div>
-
-          <div className="gender gender pull-left">
-            <span className="title">
-              <label>Gender</label>
-            </span>
-            <div className="field">
-              <Field
-                name="gender"
-                component={ReactSelect}
-                placeholder="Select Gender"
-                options={genderOptions}
-                disabled={patients.fetching}
-                onChange={(e) => this.initSearch(e, 'gender')}
-              />
-            </div>
-          </div>
-
           <div className="select-holder pull-left clear-left">
             <span className="title">
               <label>Status</label>

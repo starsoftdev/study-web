@@ -33,7 +33,6 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     this.props.fetchSources();
     this.props.fetchPatientCategories();
     this.props.fetchSites();
-    // this.props.fetchPatients({ limit:15, skip:0 });
   }
 
   searchPatients(searchFilter, isSearch, isExport = false) {
@@ -76,7 +75,6 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
         <section className="patient-database">
           <Helmet title="Patient Database - StudyKIK" />
           <h2 className="main-heading">Patient Database</h2>
-
           <SearchPatientsForm onSubmit={this.searchPatients} searchPatients={this.searchPatients} paginationOptions={this.props.paginationOptions} />
 
           <PatientsList

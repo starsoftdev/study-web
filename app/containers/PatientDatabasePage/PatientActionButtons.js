@@ -195,7 +195,7 @@ class PatientActionButtons extends React.Component {
 
   render() {
     return (
-      <div className="btns-popups">
+      <div className="btns-container">
         <div className="col pull-right">
           <a onClick={this.download} className="btn btn-primary download"><i className="icomoon-icon_download" /> Download</a>
         </div>
