@@ -77,9 +77,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
 
   editPatientModalShouldBeShown() {
     const { selectedPatient } = this.props;
-    const displayed = (selectedPatient.details) ? true: false; // eslint-disable-line
-
-    return displayed;
+    return selectedPatient.details !== null;
   }
 
   closeEditPatientModal() {

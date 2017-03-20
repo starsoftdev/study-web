@@ -902,7 +902,7 @@ function* fetchLandingStudy(action) {
 function* subscribeFromLanding(action) {
   try {
     const params = action.params;
-    const requestURL = `${API_URL}/patients/newPatient`;
+    const requestURL = `${API_URL}/patients`;
     const options = {
       method: 'POST',
       body: JSON.stringify(params),

@@ -14,7 +14,7 @@ import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Checkbox from '../../../components/Input/Checkbox';
-import { selectIndications, selectSources, selectValidSiteLocations } from '../../App/selectors';
+import { selectIndications, selectSources, selectSiteLocations } from '../../App/selectors';
 import IndicationOverlay from '../../StudyPage/PatientDetail/IndicationOverlay';
 import { editPatientSite } from '../actions';
 import { selectPatientCategories, selectSavedPatient } from '../selectors';
@@ -29,7 +29,7 @@ const mapStateToProps = createStructuredSelector({
   patientCategories: selectPatientCategories(),
   savedPatient: selectSavedPatient(),
   hasError: selectSyncErrorBool(formName),
-  sites: selectValidSiteLocations(),
+  sites: selectSiteLocations(),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -81,6 +81,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       onSubmit(formattedData);
     }
   }
+
   changeSite(event, siteOptions) {
     const { editPatientSite } = this.props;
     let newEvent = [];
@@ -140,9 +141,13 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     }
     return null;
   }
+
   renderSite() {
-    const { sites, savedPatient, initialValues } = this.props;
-    const siteOptions = sites.length > 0 ? [...initialValues.site, ...sites.map(site => site.site)] : initialValues.site;
+    const { sites, savedPatient } = this.props;
+    const siteOptions = sites.map(site => ({
+      name: site.name,
+      value: site.id,
+    }));
     return (
       <div className="field-row site-select">
         <strong className="label">
@@ -155,12 +160,12 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
           placeholder="Select Site"
           options={siteOptions}
           onChange={(event) => this.changeSite(event, siteOptions)}
-          multi
           disabled={savedPatient.saving}
         />
       </div>
     );
   }
+
   render() {
     const { formValues, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, sources, patientCategories, loading, submitting, savedPatient } = this.props;
     const indicationOptions = map(indications, indicationIterator => ({
@@ -351,7 +356,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="field"
             placeholder="Select Source"
             options={sourceOptions}
-            disabled
+            disabled={initialValues.source && initialValues.source.label === 'StudyKIK'}
           />
         </div>
         {this.renderSite()}
