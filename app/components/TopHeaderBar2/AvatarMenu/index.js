@@ -40,7 +40,7 @@ class AvatarMenu extends React.Component {
           <div className="img-circle">
             <img src={this.props.currentUser.profileImageURL || defaultImage} width="43" height="43" alt="Bruce Wayne" />
           </div>
-          <span className="text margin-left-5px margin-right-5px">Bruce Wayne</span>
+          <span className="text margin-left-5px margin-right-5px">{`${this.props.currentUser.firstName} ${this.props.currentUser.lastName}`}</span>
           <i className="caret" />
         </a>
         <div className={`logged-user-drop avatar-menu ${avatarMenuClassName}`}>
