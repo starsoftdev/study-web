@@ -225,6 +225,7 @@ export default function homePageReducer(state = initialState, action) {
         startDate: studyObject.campaigns[0].dateFrom,
         endDate: studyObject.campaigns[0].dateTo,
         level_id: studyObject.campaigns[0].level_id,
+        campaginId: studyObject.campaigns[0].campaignId,
         orderNumber: (index + 1),
         siteId: studyObject.site.id,
         campaignLastDate: studyObject.campaignLastDate,

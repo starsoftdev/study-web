@@ -18,6 +18,16 @@ import {
   UPDATE_DASHBOARD_STUDY_SUCCESS,
   UPDATE_DASHBOARD_STUDY_ERROR,
   CLEAR_FILTERS,
+  FETCH_ALL_CLIENT_USERS,
+  FETCH_ALL_CLIENT_USERS_SUCCESS,
+  FETCH_ALL_CLIENT_USERS_ERROR,
+  FETCH_STUDY_CAMPAIGNS,
+  FETCH_STUDY_CAMPAIGNS_SUCCESS,
+  FETCH_STUDY_CAMPAIGNS_ERROR,
+  CHANGE_STUDY_STATUS,
+  CHANGE_STUDY_STATUS_SUCCESS,
+  CHANGE_STUDY_STATUS_ERROR,
+  TOGGLE_STUDY,
   UPDATE_THANK_YOU_PAGE,
   UPDATE_THANK_YOU_PAGE_SUCCESS,
   UPDATE_THANK_YOU_PAGE_ERROR,
@@ -213,5 +223,78 @@ export function resetPatientThankYouEmailState() {
 export function clearFilters() {
   return {
     type: CLEAR_FILTERS,
+  };
+}
+
+export function fetchAllClientUsersDashboard(params) {
+  return {
+    type: FETCH_ALL_CLIENT_USERS,
+    params,
+  };
+}
+
+export function fetchAllClientUsersDashboardSuccess(payload) {
+  return {
+    type: FETCH_ALL_CLIENT_USERS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchAllClientUsersDashboardError(payload) {
+  return {
+    type: FETCH_ALL_CLIENT_USERS_ERROR,
+    payload,
+  };
+}
+
+export function fetchStudyCampaignsDashboard(params) {
+  return {
+    type: FETCH_STUDY_CAMPAIGNS,
+    params,
+  };
+}
+
+export function fetchStudyCampaignsDashboardSuccess(payload) {
+  return {
+    type: FETCH_STUDY_CAMPAIGNS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchStudyCampaignsDashboardError(payload) {
+  return {
+    type: FETCH_STUDY_CAMPAIGNS_ERROR,
+    payload,
+  };
+}
+
+export function changeStudyStatusDashboard(params, status, isChecked) {
+  return {
+    type: CHANGE_STUDY_STATUS,
+    params,
+    status,
+    isChecked,
+  };
+}
+
+export function changeStudyStatusDashboardSuccess(payload) {
+  return {
+    type: CHANGE_STUDY_STATUS_SUCCESS,
+    payload,
+  };
+}
+
+export function changeStudyStatusDashboardError(payload) {
+  return {
+    type: CHANGE_STUDY_STATUS_ERROR,
+    payload,
+  };
+}
+
+export function toggleStudy(id, status) {
+  return {
+    type: TOGGLE_STUDY,
+    id,
+    status,
   };
 }
