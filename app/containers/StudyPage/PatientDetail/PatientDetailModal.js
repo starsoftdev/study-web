@@ -159,7 +159,12 @@ export class PatientDetailModal extends React.Component {
   render() {
     const { ePMS, carousel, openScheduledModal, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
     return (
-      <Collapse dimension="width" in={openPatientModal} timeout={250} className={openScheduledModal ? 'patients-list-form-OnSchedule' : 'patients-list-form'}>
+      <Collapse
+        dimension="width"
+        in={openPatientModal}
+        timeout={250}
+        className={classNames({ 'patients-list-form-schedule': openScheduledModal, 'patients-list-form': openScheduledModal !== true })}
+      >
         <div className="form-area">
           <div className="form-head">
             <strong className="title">{currentPatientCategory ? currentPatientCategory.name : null}</strong>
