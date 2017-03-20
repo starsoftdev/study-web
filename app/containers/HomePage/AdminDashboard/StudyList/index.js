@@ -8,9 +8,9 @@ import Button from 'react-bootstrap/lib/Button';
 import { StickyContainer, Sticky } from 'react-sticky';
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import EditInformationModal from '../EditStudyForms/EditInformationModal';
-import LandingPageModal from '../EditStudyForms/LandingPageModal';
-import ThankyouPageModal from '../EditStudyForms/ThankyouPageModal';
-import PatientThankyouPageModal from '../EditStudyForms/PatientThankyouPageModal';
+import LandingPageModal from '../../../../components/LandingPageModal';
+import ThankyouPageModal from '../../../../components/ThankyouPageModal';
+import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { Modal } from 'react-bootstrap';
@@ -396,7 +396,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         className="pull-left"
                         data-class="btn-deactivate"
                         onClick={() => this.showPatientThankyouPageModal(true)}
-                      > Patient Thank You Page </Button>
+                      > Patient Thank You Email </Button>
                     }
                     {
                       selectedStudyCount === 1 &&
@@ -637,14 +637,17 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                 />
                 <LandingPageModal
                   openModal={this.state.showLandingPageModal}
+                  studies={this.state.studies}
                   onClose={() => { this.showLandingPageModal(false); }}
                 />
                 <ThankyouPageModal
                   openModal={this.state.showThankyouPageModal}
+                  studies={this.state.studies}
                   onClose={() => { this.showThankyouPageModal(false); }}
                 />
-                <PatientThankyouPageModal
+                <PatientThankYouEmailModal
                   openModal={this.state.showPatientThankyouPageModal}
+                  studies={this.state.studies}
                   onClose={() => { this.showPatientThankyouPageModal(false); }}
                 />
               </div>

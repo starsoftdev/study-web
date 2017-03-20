@@ -9,6 +9,21 @@ import {
   UPDATE_DASHBOARD_STUDY,
   UPDATE_DASHBOARD_STUDY_SUCCESS,
   UPDATE_DASHBOARD_STUDY_ERROR,
+
+  UPDATE_THANK_YOU_PAGE,
+  UPDATE_THANK_YOU_PAGE_SUCCESS,
+  UPDATE_THANK_YOU_PAGE_ERROR,
+  RESET_THANK_YOU_PAGE_STATE,
+
+  UPDATE_PATIENT_THANK_YOU_EMAIL,
+  UPDATE_PATIENT_THANK_YOU_EMAIL_SUCCESS,
+  UPDATE_PATIENT_THANK_YOU_EMAIL_ERROR,
+  RESET_PATIENT_THANK_YOU_EMAIL_STATE,
+
+  UPDATE_LANDING_PAGE,
+  UPDATE_LANDING_PAGE_SUCCESS,
+  UPDATE_LANDING_PAGE_ERROR,
+  RESET_LANDING_PAGE_STATE,
 } from './constants';
 
 import {
@@ -36,6 +51,21 @@ const initialState = {
     error: null,
   },
   updateStudyProcess: {
+    saving: false,
+    error: null,
+  },
+  updateLandingPageProcess: {
+    success: false,
+    saving: false,
+    error: null,
+  },
+  updateThankYouPageProcess: {
+    success: false,
+    saving: false,
+    error: null,
+  },
+  updatePatientThankYouEmailProcess: {
+    success: false,
     saving: false,
     error: null,
   },
@@ -442,6 +472,114 @@ export default function dashboardPageReducer(state = initialState, action) {
       return {
         ...state,
         updateStudyProcess: {
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_LANDING_PAGE:
+      return {
+        ...state,
+        updateLandingPageProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case UPDATE_LANDING_PAGE_SUCCESS:
+      return {
+        ...state,
+        updateLandingPageProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_LANDING_PAGE_ERROR:
+      return {
+        ...state,
+        updateLandingPageProcess: {
+          success: false,
+          saving: false,
+          error: true,
+        },
+      };
+    case RESET_LANDING_PAGE_STATE:
+      return {
+        ...state,
+        updateLandingPageProcess: {
+          success: false,
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_THANK_YOU_PAGE:
+      return {
+        ...state,
+        updateThankYouPageProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case UPDATE_THANK_YOU_PAGE_SUCCESS:
+      return {
+        ...state,
+        updateThankYouPageProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_THANK_YOU_PAGE_ERROR:
+      return {
+        ...state,
+        updateThankYouPageProcess: {
+          success: false,
+          saving: false,
+          error: true,
+        },
+      };
+    case RESET_THANK_YOU_PAGE_STATE:
+      return {
+        ...state,
+        updateThankYouPageProcess: {
+          success: false,
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_PATIENT_THANK_YOU_EMAIL:
+      return {
+        ...state,
+        updatePatientThankYouEmailProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case UPDATE_PATIENT_THANK_YOU_EMAIL_SUCCESS:
+      return {
+        ...state,
+        updatePatientThankYouEmailProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_PATIENT_THANK_YOU_EMAIL_ERROR:
+      return {
+        ...state,
+        updatePatientThankYouEmailProcess: {
+          success: false,
+          saving: false,
+          error: true,
+        },
+      };
+    case RESET_PATIENT_THANK_YOU_EMAIL_STATE:
+      return {
+        ...state,
+        updatePatientThankYouEmailProcess: {
+          success: false,
           saving: false,
           error: null,
         },
