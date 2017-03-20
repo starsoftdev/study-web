@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import Input from '../../../components/Input';
 import formValidator from './validator';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import Checkbox from '../../../components/Input/Checkbox';
 
 @reduxForm({ form: 'dashboardAddExposureLevelForm', validate: formValidator })
 
@@ -16,6 +17,13 @@ export class AddExposureLevelForm extends React.Component { // eslint-disable-li
     saving: PropTypes.bool,
     deleting: PropTypes.bool,
     onDelete: PropTypes.func,
+    change: PropTypes.func,
+  }
+
+  componentDidMount() {
+    if (this.props.initialValues.active) {
+      this.props.change('active', true);
+    }
   }
 
   render() {
@@ -61,6 +69,19 @@ export class AddExposureLevelForm extends React.Component { // eslint-disable-li
           </div>
         </div>
 
+        <div className="field-row">
+          <strong className="label">
+            <label className="add-exposure-level">Active</label>
+          </strong>
+          <div className="field">
+            <Field
+              name="active"
+              type="checkbox"
+              component={Checkbox}
+            />
+          </div>
+        </div>
+
         <div className="field-row text-right no-margins">
           {this.props.isEdit &&
             <a className="btn btn-gray-outline" onClick={() => { this.props.onDelete(this.props.initialValues.id); }}>
@@ -85,7 +106,11 @@ export class AddExposureLevelForm extends React.Component { // eslint-disable-li
 
 const mapStateToProps = createStructuredSelector({
 });
-const mapDispatchToProps = {};
+function mapDispatchToProps(dispatch) {
+  return {
+    change: (field, value) => dispatch(change('dashboardAddExposureLevelForm', field, value)),
+  };
+}
 
 export default connect(
   mapStateToProps,
