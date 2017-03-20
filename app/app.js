@@ -19,6 +19,7 @@ import configureStore from './store';
 // Import the CSS reset, which HtmlWebpackPlugin transfers to the build folder
 import 'sanitize.css/sanitize.css';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
+import 'codemirror/lib/codemirror.css';
 
 import './assets/less/main.less';
 

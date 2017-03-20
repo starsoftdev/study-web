@@ -74,6 +74,21 @@ const selectStudyUpdateProcess = () => createSelector(
   substate => substate.updateStudyProcess
 );
 
+const selectLandingPageUpdateProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.updateLandingPageProcess
+);
+
+const selectThankYouPageUpdateProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.updateThankYouPageProcess
+);
+
+const selectUpdatePatientThankYouEmailProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.updatePatientThankYouEmailProcess
+);
+
 const selectPaginationOptions = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.paginationOptions
@@ -95,4 +110,7 @@ export {
   selectUsersByRoles,
   selectStudiesTotals,
   selectStudyUpdateProcess,
+  selectThankYouPageUpdateProcess,
+  selectUpdatePatientThankYouEmailProcess,
+  selectLandingPageUpdateProcess,
 };

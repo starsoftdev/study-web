@@ -37,6 +37,7 @@ export class ThankYouPage extends React.Component {
   }
 
   componentWillMount() {
+    console.log('componentWillReceiveProps', this.props);
     if (!this.props.subscribedFromLanding && !this.state.subscribedFromLanding) {
       browserHistory.push('/');
     }
@@ -64,6 +65,25 @@ export class ThankYouPage extends React.Component {
     const state = site.state;
     const zip = site.zip;
 
+    let thankYouData;
+
+    for (const data of landing.studySources) {
+      if (data.landing_page_id) {
+        console.log('data', data.landingPage.thankYouPage);
+        thankYouData = data.landingPage.thankYouPage;
+      }
+    }
+    console.log('render', thankYouData);
+
+    const thankyouForText =
+      (thankYouData.thankyouFor && thankYouData.thankyouFor !== '') ? thankYouData.thankyouFor : 'Thank you for signing up for our research study!';
+    const youWillBeText =
+      (thankYouData.youWillBe && thankYouData.youWillBe !== '') ? thankYouData.youWillBe : 'You will be receiving a phone call or text message from the research site soon. If you\'d like to call and schedule an appointment, you can do so at.';
+    const lookingForwardText =
+      (thankYouData.lookingForwardText && thankYouData.lookingForwardText !== '') ? thankYouData.lookingForwardText : 'Looking forward to having you join.';
+    const herIsTheText =
+      (thankYouData.herIsThe && thankYouData.herIsThe !== '') ? thankYouData.herIsThe : 'Here is the study location:';
+
     if (city) {
       address += city;
     }
@@ -81,23 +101,32 @@ export class ThankYouPage extends React.Component {
         <div className="container">
           <section className="thanks-section text-center">
             <h1 className="main-heading small-font">
-              Thank you for signing up for our research study!
+              {thankyouForText}
             </h1>
             <p>
-              You will be receiving a phone call or text message from the research site soon.
-              If you'd like to call and schedule an appointment, you can do so at.
+              {youWillBeText}
             </p>
-            <strong className="name txt-green">
-              {site.name}
-            </strong>
-            <span className="tel">
-              <a href={`tel:${site.phone.phoneNumber}`} className="txt-orange">{site.phone.phoneNumber}</a>
-            </span>
-            <p>Here is the study location:</p>
-            <address className="txt-green" dangerouslySetInnerHTML={{ __html: address }} />
-            <p>
-              Looking forward to having you join.
-            </p>
+            {thankYouData.isShareLocation &&
+              <strong className="name txt-green">
+                {site.name}
+              </strong>
+            }
+            {thankYouData.isSharePhone &&
+              <span className="tel">
+                <a href={`tel:${site.phone.phoneNumber}`} className="txt-orange">{site.phone.phoneNumber}</a>
+              </span>
+            }
+            {!thankYouData.isHideLocationData &&
+              <div>
+                <p>
+                  {herIsTheText}
+                </p>
+                <address className="txt-green" dangerouslySetInnerHTML={{ __html: address }} />
+                <p>
+                  {lookingForwardText}
+                </p>
+              </div>
+            }
             <div className="thanks-img">
               <img src={img19} alt="THANK YOU!" width="369" className="img-responsive center-block" />
               <h2 className="title-caption">THANK YOU!</h2>

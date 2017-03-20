@@ -884,7 +884,7 @@ export function* fetchClientAdminsWorker(action) {
 function* fetchLandingStudy(action) {
   const { studyId } = action;
   const filter = JSON.stringify({
-    include: [{ studySources: ['source', 'landingPage'] }, 'indication', { site: ['phone'] }],
+    include: [{ studySources: ['source', { landingPage: ['thankYouPage'] }] }, 'indication', { site: ['phone'] }],
   });
   // put the fetching study action in case of a navigation action
   try {

@@ -18,6 +18,19 @@ import {
   UPDATE_DASHBOARD_STUDY_SUCCESS,
   UPDATE_DASHBOARD_STUDY_ERROR,
   CLEAR_FILTERS,
+  UPDATE_THANK_YOU_PAGE,
+  UPDATE_THANK_YOU_PAGE_SUCCESS,
+  UPDATE_THANK_YOU_PAGE_ERROR,
+  RESET_THANK_YOU_PAGE_STATE,
+  UPDATE_PATIENT_THANK_YOU_EMAIL,
+  UPDATE_PATIENT_THANK_YOU_EMAIL_SUCCESS,
+  UPDATE_PATIENT_THANK_YOU_EMAIL_ERROR,
+  RESET_PATIENT_THANK_YOU_EMAIL_STATE,
+  UPDATE_LANDING_PAGE,
+  UPDATE_LANDING_PAGE_SUCCESS,
+  UPDATE_LANDING_PAGE_ERROR,
+  RESET_LANDING_PAGE_STATE,
+  CHANGE_STUDY_ADD,
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -106,6 +119,94 @@ export function updateDashboardStudyError(payload) {
   return {
     type: UPDATE_DASHBOARD_STUDY_ERROR,
     payload,
+  };
+}
+
+export function updateLandingPage(params) {
+  return {
+    type: UPDATE_LANDING_PAGE,
+    params,
+  };
+}
+
+export function updateLandingPageSuccess(payload) {
+  return {
+    type: UPDATE_LANDING_PAGE_SUCCESS,
+    payload,
+  };
+}
+
+export function updateLandingPageError(payload) {
+  return {
+    type: UPDATE_LANDING_PAGE_ERROR,
+    payload,
+  };
+}
+
+export function resetLandingPageState() {
+  return {
+    type: RESET_LANDING_PAGE_STATE,
+  };
+}
+
+export function changeStudyAdd(payload) {
+  return {
+    type: CHANGE_STUDY_ADD,
+    payload,
+  };
+}
+
+export function updateThankYouPage(params) {
+  return {
+    type: UPDATE_THANK_YOU_PAGE,
+    params,
+  };
+}
+
+export function updateThankYouPageSuccess(payload) {
+  return {
+    type: UPDATE_THANK_YOU_PAGE_SUCCESS,
+    payload,
+  };
+}
+
+export function updateThankYouPageError(payload) {
+  return {
+    type: UPDATE_THANK_YOU_PAGE_ERROR,
+    payload,
+  };
+}
+
+export function resetThankYouPageState() {
+  return {
+    type: RESET_THANK_YOU_PAGE_STATE,
+  };
+}
+
+export function updatePatientThankYouEmail(params) {
+  return {
+    type: UPDATE_PATIENT_THANK_YOU_EMAIL,
+    params,
+  };
+}
+
+export function updatePatientThankYouEmailSuccess(payload) {
+  return {
+    type: UPDATE_PATIENT_THANK_YOU_EMAIL_SUCCESS,
+    payload,
+  };
+}
+
+export function updatePatientThankYouEmailError(payload) {
+  return {
+    type: UPDATE_PATIENT_THANK_YOU_EMAIL_ERROR,
+    payload,
+  };
+}
+
+export function resetPatientThankYouEmailState() {
+  return {
+    type: RESET_PATIENT_THANK_YOU_EMAIL_STATE,
   };
 }
 

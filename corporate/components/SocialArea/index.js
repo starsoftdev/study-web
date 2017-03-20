@@ -6,6 +6,7 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
   static propTypes = {
     alignCenter: PropTypes.bool,
     study: PropTypes.object,
+    landing: PropTypes.object,
     location: PropTypes.any,
     imgSrc: PropTypes.any,
   };
@@ -30,42 +31,51 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
   }
 
   render() {
-    const { study, imgSrc } = this.props;
-    return (
-      <div className="social-area clearfix">
-        <h3 className="pull-left">Share this study:</h3>
-        <ul className="social-networks pull-left list-inline">
-          <li className="facebook">
-            <a
-              href="#"
-              onClick={this.shareFB}
-            >
-              <i className="icomoon-facebook-square"></i>
-            </a>
-          </li>
-          <li className="twitter">
-            <a
-              href="#"
-              onClick={this.shareTwitter}
-            >
-              <i className="icomoon-twitter-square"></i>
-            </a>
-          </li>
-          {imgSrc &&
+    const { study, landing, imgSrc } = this.props;
+
+    console.log('SocialArea', landing);
+    const shareThisStudyText = (landing.shareThisStudyText) ? landing.shareThisStudyText : 'Share this study:';
+
+    if (landing.showSocialMediaButtons) {
+      return (
+        <div className="social-area clearfix">
+          <h3 className="pull-left">
+            {shareThisStudyText}
+          </h3>
+          <ul className="social-networks pull-left list-inline">
+            <li className="facebook">
+              <a
+                href="#"
+                onClick={this.shareFB}
+              >
+                <i className="icomoon-facebook-square"></i>
+              </a>
+            </li>
+            <li className="twitter">
+              <a
+                href="#"
+                onClick={this.shareTwitter}
+              >
+                <i className="icomoon-twitter-square"></i>
+              </a>
+            </li>
+            {imgSrc &&
             <li className="pinterest">
               <PinterestButton element="a" media={imgSrc}>
                 <i className="icomoon-pinterest-square"></i>
               </PinterestButton>
             </li>
-          }
-          <li className="gmail">
-            <a href={`mailto:?subject=${study.name}&body=${location.href}`}>
-              <i className="icomoon-envelope-square"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-    );
+            }
+            <li className="gmail">
+              <a href={`mailto:?subject=${study.name}&body=${location.href}`}>
+                <i className="icomoon-envelope-square"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      );
+    }
+    return null;
   }
 }
 
