@@ -86,6 +86,8 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
       } else {
         params[name] = e;
       }
+
+      console.log('initSearch', params);
       this.props.onSubmit(params, true);
     }
   }

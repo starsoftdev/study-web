@@ -23,6 +23,7 @@ import {
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
   REMOVE_PATIENT_INDICATION_SUCCESS,
+  SHOW_SCHEDULED_MODAL,
   SET_STUDY_ID,
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
@@ -40,6 +41,10 @@ import {
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
   SUBMIT_ADD_PATIENT,
+  CHANGE_SCHEDULED_DATE,
+  SUBMIT_SCHEDULE,
+  SUBMIT_SCHEDULE_SUCCEEDED,
+  SUBMIT_SCHEDULE_FAILED,
 } from './constants';
 import _ from 'lodash';
 
@@ -51,10 +56,12 @@ const initialState = {
     email: false,
     other: false,
   },
+  openScheduledModal: false,
   openPatientModal: false,
   addPatientStatus:{
     adding: false,
   },
+  submittingSchedule:false,
 };
 
 function studyPageReducer(state = initialState, action) {
@@ -265,6 +272,11 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         openPatientModal: action.show,
       };
+    case SHOW_SCHEDULED_MODAL:
+      return {
+        ...state,
+        openScheduledModal: !state.openScheduledModal,
+      };
     case MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING:
       return {
         ...state,
@@ -314,6 +326,29 @@ function studyPageReducer(state = initialState, action) {
           email: false,
           other: true,
         },
+      };
+    case CHANGE_SCHEDULED_DATE:
+      return {
+        ...state,
+        ScheduledModal: {
+          selectedDate: action.date.startOf('day'),
+        },
+      };
+    case SUBMIT_SCHEDULE:
+      return {
+        ...state,
+        submittingSchedule: true,
+      };
+    case SUBMIT_SCHEDULE_SUCCEEDED:
+      return {
+        ...state,
+        submittingSchedule: false,
+        openScheduledModal: false,
+      };
+    case SUBMIT_SCHEDULE_FAILED:
+      return {
+        ...state,
+        submittingSchedule: false,
       };
     default:
       return state;

@@ -47,6 +47,7 @@ import {
   FIND_OUT_PATIENTS,
   CLINICAL_TRIALS_SEARCH,
   LIST_SITE_NOW,
+  GET_PROPOSAL,
   LEARN_ABOUT_FUTURE_TRIALS,
   NEW_CONTACT,
   FETCH_CLIENT_ADMINS,
@@ -125,6 +126,7 @@ import {
   clinicalTrialsSearchSuccess,
   clinicalTrialsSearchError,
   listSiteNowSuccess,
+  getProposalSuccess,
   learnAboutFutureTrialsSuccess,
   newContactSuccess,
   fetchClientAdminsSuccess,
@@ -176,6 +178,7 @@ export default function* baseDataSaga() {
   yield fork(takeLatest, FIND_OUT_PATIENTS, postFindOutPatients);
   yield fork(takeLatest, CLINICAL_TRIALS_SEARCH, searchClinicalTrials);
   yield fork(takeLatest, LIST_SITE_NOW, listNowSite);
+  yield fork(takeLatest, GET_PROPOSAL, getProposal);
   yield fork(takeLatest, LEARN_ABOUT_FUTURE_TRIALS, learnAboutFutureTrials);
   yield fork(takeLatest, NEW_CONTACT, newContact);
   yield fork(takeLatest, SEND_THANK_YOU_EMAIL, sendThankYouEmail);
@@ -270,7 +273,17 @@ export function* fetchLevelsWatcher() {
     yield take(FETCH_LEVELS);
 
     try {
-      const queryParams = { filter: '{"order":"id DESC"}' };
+      const filterObj = {
+        where: {
+          isArchived: false,
+          isActive: true,
+        },
+        order: 'position DESC',
+      };
+
+      const queryParams = {
+        filter: JSON.stringify(filterObj),
+      };
       const queryString = composeQueryString(queryParams);
       const requestURL = `${API_URL}/levels?${queryString}`;
       const response = yield call(request, requestURL);
@@ -810,14 +823,13 @@ export function* fetchCreditsPrice() {
 
 export function* fetchIndicationLevelPriceWatcher() {
   while (true) {
-    const { indicationId, levelId } = yield take(FETCH_INDICATION_LEVEL_PRICE);
+    const { levelId } = yield take(FETCH_INDICATION_LEVEL_PRICE);
 
     try {
       const requestURL = `${API_URL}/indicationLevelSkus/getPrice`;
       const params = {
         query: {
           levelId,
-          indicationId,
         },
       };
       const response = yield call(request, requestURL, params);
@@ -877,7 +889,7 @@ export function* fetchClientAdminsWorker(action) {
 function* fetchLandingStudy(action) {
   const { studyId } = action;
   const filter = JSON.stringify({
-    include: [{ studySources: ['source', 'landingPage'] }, 'indication', { site: ['phone'] }],
+    include: [{ studySources: ['source', { landingPage: ['thankYouPage'] }] }, 'indication', { site: ['phone'] }],
   });
   // put the fetching study action in case of a navigation action
   try {
@@ -960,10 +972,35 @@ function* listNowSite(action) {
       body: JSON.stringify(params),
     };
 
-    if (size === 6) {
+    if (size === 4) {
       const response = yield call(request, requestURL, options);
       yield put(toastrActions.success('', 'Thank you for submitting your information.'));
       yield put(listSiteNowSuccess(response));
+    } else {
+      yield put(toastrActions.error('', 'All fields required.'));
+    }
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+function* getProposal(action) {
+  try {
+    const params = action.params;
+    const size = Object.keys(params).length;
+    const requestURL = `${API_URL}/sites/getProposalFormRequest`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    console.log('getProposal', params);
+
+    if (size === 6) {
+      const response = yield call(request, requestURL, options);
+      yield put(toastrActions.success('', 'Thank you for submitting your information.'));
+      yield put(getProposalSuccess(response));
     } else {
       yield put(toastrActions.error('', 'All fields required.'));
     }

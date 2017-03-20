@@ -46,6 +46,7 @@ export class LoginPage extends Component {
 
   render() {
     const { loginError } = this.state;
+
     return (
       <div className="login-page-wrapper">
         <div className="container">

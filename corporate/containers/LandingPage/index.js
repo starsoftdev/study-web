@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import moment from 'moment-timezone';
 import Helmet from 'react-helmet';
+import { find } from 'lodash';
 
 import LandingForm from '../../components/LandingForm';
 import LandingArticle from '../../components/LandingArticle';
@@ -18,8 +19,9 @@ import {
   selectLandingError,
   selectSubscribedFromLanding,
   selectSubscriptionError,
+  selectProtocols,
 } from '../../../app/containers/App/selectors';
-import { fetchLanding, subscribeFromLanding, clearLanding } from '../../../app/containers/App/actions';
+import { fetchLanding, subscribeFromLanding, clearLanding, fetchProtocols } from '../../../app/containers/App/actions';
 
 import './styles.less';
 
@@ -30,6 +32,7 @@ export class LandingPage extends React.Component {
     param: PropTypes.any,
     siteLocation: PropTypes.any,
     fetchLanding:  PropTypes.func.isRequired,
+    fetchProtocols: PropTypes.func.isRequired,
     subscribeFromLanding:  PropTypes.func.isRequired,
     subscribedFromLanding:  PropTypes.object,
     subscriptionError:  PropTypes.object,
@@ -39,6 +42,7 @@ export class LandingPage extends React.Component {
     currentUser: PropTypes.any,
     location: PropTypes.any,
     landing: PropTypes.object,
+    protocols: PropTypes.object,
   };
 
   constructor(props) {
@@ -60,6 +64,7 @@ export class LandingPage extends React.Component {
       this.props.clearLanding();
       browserHistory.push('/');
     }
+    this.props.fetchProtocols();
   }
 
   componentWillReceiveProps(newProps) {
@@ -100,6 +105,9 @@ export class LandingPage extends React.Component {
         studySourceId = studySource.id;
       }
     }
+
+    const protocol = find(this.props.protocols.details, { id: landing.protocol_id }) || {};
+
     const data = {
       firstName: separateNames[0],
       lastName: separateNames[1] || null,
@@ -111,6 +119,7 @@ export class LandingPage extends React.Component {
       study_id: landing.id,
       study_source_id: studySourceId,
       indicationName: landing.indication.name,
+      protocolNumber: protocol.number,
     };
 
     this.props.subscribeFromLanding(data);
@@ -156,7 +165,7 @@ export class LandingPage extends React.Component {
           ]}
         />
         <div className="container">
-          <LandingForm study={study} onSubmit={this.onSubmitForm} subscriptionError={subscriptionError} />
+          <LandingForm study={study} landing={landing} onSubmit={this.onSubmitForm} subscriptionError={subscriptionError} />
           <LandingArticle study={study} landing={landing} location={location} />
         </div>
       </div>
@@ -171,6 +180,7 @@ const mapStateToProps = createStructuredSelector({
   landingError: selectLandingError(),
   subscriptionError: selectSubscriptionError(),
   landing: selectLanding(),
+  protocols: selectProtocols(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -178,6 +188,7 @@ function mapDispatchToProps(dispatch) {
     fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
     subscribeFromLanding: (params) => dispatch(subscribeFromLanding(params)),
     clearLanding: () => dispatch(clearLanding()),
+    fetchProtocols: () => dispatch(fetchProtocols()),
   };
 }
 

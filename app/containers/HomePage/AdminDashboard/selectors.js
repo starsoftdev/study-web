@@ -19,6 +19,11 @@ const selectFilterFormValues = () => createSelector(
   substate => get(substate, 'dashboardFilters.values', {})
 );
 
+const selectEditStudyValues = () => createSelector(
+  selectFormDomain(),
+  substate => get(substate, 'dashboardEditStudyForm.values', {})
+);
+
 const selectStudies = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.studies
@@ -69,6 +74,41 @@ const selectStudiesTotals = () => createSelector(
   substate => substate.totals
 );
 
+const selectStudyUpdateProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.updateStudyProcess
+);
+
+const selectAllClientUsers = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.allClientUsers
+);
+
+const selectAddNotificationProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.addNotificationProcess
+);
+
+const selectStudyCampaigns = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.studyCampaigns
+);
+
+const selectLandingPageUpdateProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.updateLandingPageProcess
+);
+
+const selectThankYouPageUpdateProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.updateThankYouPageProcess
+);
+
+const selectUpdatePatientThankYouEmailProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.updatePatientThankYouEmailProcess
+);
+
 const selectPaginationOptions = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.paginationOptions
@@ -89,4 +129,12 @@ export {
   selectCro,
   selectUsersByRoles,
   selectStudiesTotals,
+  selectStudyUpdateProcess,
+  selectAllClientUsers,
+  selectEditStudyValues,
+  selectAddNotificationProcess,
+  selectStudyCampaigns,
+  selectThankYouPageUpdateProcess,
+  selectUpdatePatientThankYouEmailProcess,
+  selectLandingPageUpdateProcess,
 };

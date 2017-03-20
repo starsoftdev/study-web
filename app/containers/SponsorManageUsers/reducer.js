@@ -24,7 +24,6 @@ import {
 import _ from 'lodash';
 
 const initialState = {
-  protocols: [],
   editUserProcess: {
     saving: false,
     error: null,

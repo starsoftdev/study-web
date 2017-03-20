@@ -474,26 +474,11 @@
     }
     .modal-opener {
       .align;
-      color: #fff;
-      display: none;
+      color: #101010;
       margin: 2px 0 0;
       &:hover {
-        opacity: 0.8;
-      }
-    }
-  }
-  &.scheduled-patient-active {
-    .form-head .modal-opener {
-      display: inline-block;
-      color: #101010;
-      &:hover {
-        color: #808080;
+        font-weight: bold;
         text-decoration: underline;
-      }
-      .time {
-        &:before {
-          content: ' at ';
-        }
       }
     }
   }
@@ -518,7 +503,9 @@
     margin: 0 0 0 12px;
   }
 }
-
+.patients-list-form-OnSchedule {
+  z-index:1;
+}
 .popup-slider {
   .carousel-indicators {
     margin: 0;
@@ -938,6 +925,38 @@
       padding: 0 0 20px;
       transition: all 0.25s ease;
     }
+  }
+}
+
+.scheduled-patient-modal {
+  .current-date {
+    margin: 0 0 15px;
+  }
+  .patient-name-field-row {
+    .label, .form-control {
+      font-size: 16px !important;
+      color: black;
+    }
+  }
+  .time-field-row {
+    .label, .Select-placeholder {
+      font-size: 16px !important;
+    }
+    .time-field {
+      text-align: left;
+      .col-holder {
+        padding: 0;
+      }
+    }
+  }
+  .reminder-field {
+    text-align: left;
+  }
+  .reminder-container {
+    display: inline-block;
+  }
+  .reminder-label {
+    vertical-align: middle;
   }
 }
 

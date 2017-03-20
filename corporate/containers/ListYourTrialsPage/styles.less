@@ -25,7 +25,10 @@
 
 .modal-body {
   padding: 0 !important;
-  overflow: visible !important;
+
+  @media screen and (min-width: @phone) {
+    overflow: visible !important;
+  }
 
   span {
     &.text{
