@@ -39,7 +39,7 @@ export const selectSelectedPatientDetailsForForm = () => createSelector(
       return null;
     }
 
-    let selectedPatientDetailsForForm = omit(selectedPatientDetails, ['created', 'patientIndications', 'source_id', 'source', 'lastAction', 'study_patient_category_id', 'studyPatientCategory']);
+    let selectedPatientDetailsForForm = omit(selectedPatientDetails, ['created', 'patientIndications', 'lastAction', 'study_patient_category_id', 'studyPatientCategory']);
     selectedPatientDetailsForForm = {
       ...selectedPatientDetailsForForm,
       indications: map(selectedPatientDetails.patientIndications, piIterator => ({
@@ -50,7 +50,6 @@ export const selectSelectedPatientDetailsForForm = () => createSelector(
         isOriginal: piIterator.isOriginal,
       })),
       status: selectedPatientDetails.studyPatientCategory ? parseInt(selectedPatientDetails.studyPatientCategory.patient_category_id, 10) : false,
-      source: selectedPatientDetails.source_id,
     };
     return selectedPatientDetailsForForm;
   }

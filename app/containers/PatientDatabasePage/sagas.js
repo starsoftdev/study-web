@@ -183,7 +183,6 @@ export function* fetchPatientsWatcher() {
       };
 
       const queryString = composeQueryString(queryParams);
-      // const requestURL = `${API_URL}/patients?${queryString}`;
       const requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
       if (isExport) {
         location.replace(`${requestURL}`);
@@ -222,7 +221,7 @@ export function* fetchPatientWatcher() {
 
     try {
       const queryParams = {
-        filter: {
+        filter: JSON.stringify({
           include: [
             {
               relation: 'patientIndications',
@@ -230,35 +229,32 @@ export function* fetchPatientWatcher() {
                 include: 'indication',
               },
             },
-            'studySource',
             {
-              campaigns: 'site',
+              studySource: 'source',
             },
             {
-              studyPatientCategory: 'patientCategory',
+              studyPatientCategory: [
+                'patientCategory',
+                {
+                  study: 'site',
+                },
+              ],
             },
           ],
-        },
+        }),
       };
       const queryString = composeQueryString(queryParams);
       const requestURL = `${API_URL}/patients/${id}?${queryString}`;
       const response = yield call(request, requestURL);
-        /* cleaning up return */
-      const newReturn = response;
-      let tempArray = [];
-      newReturn.site = response.campaigns.map(campaign => ({
-        value: campaign.site.id,
-        label: campaign.site.name,
-      })).filter(site => {
-        let duplicate = true;
-        if (!tempArray.includes(site.value)) {
-          duplicate = false;
-          tempArray = [...tempArray, site.value];
-        }
-        return !duplicate;
-      });
-      delete newReturn.campaigns;
-      yield put(patientFetched(newReturn));
+      response.site = {
+        value: response.site.id,
+        label: response.site.name,
+      };
+      response.source = {
+        value: response.source.id,
+        label: response.source.type,
+      };
+      yield put(patientFetched(response));
     } catch (err) {
       yield put(patientFetchingError(err));
     }
@@ -363,7 +359,7 @@ function* submitAddPatient() {
     }
 
     try {
-      const requestURL = `${API_URL}/patients/addPatient`;
+      const requestURL = `${API_URL}/patients`;
       const response = yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify(patient),

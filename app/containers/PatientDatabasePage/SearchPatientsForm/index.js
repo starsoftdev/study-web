@@ -93,7 +93,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     }
   }
 
-  renderSite() {
+  renderSites() {
     const { user, patients, sites } = this.props;
     const siteOptions = map(sites, siteIterator => ({
       label: siteIterator.name,
@@ -198,8 +198,8 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     );
     return (
       <form className="form-search" onSubmit={handleSubmit}>
-        <div className="btns-popups">
-          {this.renderSite()}
+        <div className="btns-popups clearfix">
+          {this.renderSites()}
           <PatientActionButtons searchPatients={this.searchPatients} paginationOptions={this.props.paginationOptions} />
         </div>
         <div className="fields-holder clearfix">
