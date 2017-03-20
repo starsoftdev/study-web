@@ -159,6 +159,7 @@ export function resetLandingPageState() {
   };
 }
 
+// TODO: add success and error actions
 export function changeStudyAdd(payload) {
   return {
     type: CHANGE_STUDY_ADD,

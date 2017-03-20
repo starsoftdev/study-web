@@ -14,9 +14,8 @@ import './styles.less';
 
 @reduxForm(
   {
-    form: 'change_password',
-    fields: ['old_password', 'new_password', 'new_password_confirm', 'user_id'],
-    // validate: changePasswordFormValidator,
+    form: 'studyAddForm',
+    validate: null,
   })
 class StudyAddForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -51,7 +50,6 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
   }
 
   componentDidMount() {
-    console.log('StudyAddForm', this.props);
     this.redraw();
   }
 

@@ -587,15 +587,12 @@ export function* changeStudyAddWatcher() {
 }
 
 export function* changeStudyAddWorker(action) {
-  const { params } = action;
+  const { payload } = action;
 
   try {
     const requestURL = `${API_URL}/landingPages/change-study-add`;
     const data = new FormData();
-
-    console.log('changeStudyAddWorker', data);
-    data.append('file', params.file);
-    data.append('user_id', params.user_id);
+    data.append('file', payload.file);
 
     const options = {
       method: 'POST',
@@ -604,8 +601,8 @@ export function* changeStudyAddWorker(action) {
     };
 
     const response = yield call(request, requestURL, options);
-    console.log('response', response);
-    yield put(toastrActions.success('', 'You have successfully updated your profile image!'));
+    console.log(response);
+    yield put(toastrActions.success('', 'You have successfully updated study add!'));
   } catch (err) {
     yield put(toastrActions.error('Error!'));
   }

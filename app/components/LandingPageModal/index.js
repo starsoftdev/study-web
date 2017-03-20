@@ -64,6 +64,7 @@ export class LandingPageModal extends React.Component {
 
     this.state = {
       code: null,
+      fileSrc: null,
       selected: null,
       landingFetched: false,
       studyAddModalOpen: false,
@@ -72,7 +73,6 @@ export class LandingPageModal extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    // console.log('componentWillReceiveProps', newProps, this.state);
     const { resetState, onClose, fetchLanding } = this.props;
 
     if (newProps.studies) {
@@ -120,6 +120,7 @@ export class LandingPageModal extends React.Component {
           this.setState({
             initialValuesEntered: true,
             code: landing.description || null,
+            fileSrc: landing.imgSrc || null,
           });
         }
       });
@@ -174,7 +175,7 @@ export class LandingPageModal extends React.Component {
 
   uploadStudyAdd(e) {
     e.toBlob((blob) => {
-      this.props.submitStudyAdd({ file: blob });
+      this.props.submitStudyAdd({ file: blob, study_id: this.state.selected.study_id });
       this.closeStudyAddModal();
     });
   }
@@ -330,7 +331,7 @@ export class LandingPageModal extends React.Component {
                     { false && this.state.fileSrc &&
                       <div className="img-preview">
                         <a href="#image-perview" className="lightbox-opener">
-                          <img src="images/img5.png" alt="description" onError="this.src='images/error.png';" id="img-preview" />
+                          <img src={this.state.fileSrc} alt="description" onError="this.src='images/error.png';" id="img-preview" />
                         </a>
                       </div>
                     }
@@ -435,7 +436,7 @@ export class LandingPageModal extends React.Component {
             <Modal.Body>
               <StudyAddForm handleSubmit={this.uploadStudyAdd} />
             </Modal.Body>
-          </Modal>s
+          </Modal>
         </div>
       </Collapse>
     );
