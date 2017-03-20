@@ -196,9 +196,6 @@ export function* fetchSitesWatcher() {
       const requestURL = `${API_URL}/sites`;
 
       const filterObj = {
-<<<<<<< HEAD
-        include: ['users', 'studies', 'campaigns'],
-=======
         include: [{
           relation: 'roles',
           scope: {
@@ -210,7 +207,6 @@ export function* fetchSitesWatcher() {
             include: ['studyNotificationEmails'],
           },
         }],
->>>>>>> develop
       };
 
       const searchParams = action.payload || {};
