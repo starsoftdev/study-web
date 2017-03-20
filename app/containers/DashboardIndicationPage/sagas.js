@@ -64,6 +64,7 @@ export function* fetchIndicationsWorker() {
       where: {
         and: [],
       },
+      order: 'name',
     };
 
     filterObj.where.and.push({
