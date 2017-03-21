@@ -104,6 +104,11 @@ const selectThankYouPageUpdateProcess = () => createSelector(
   substate => substate.updateThankYouPageProcess
 );
 
+const selectMessagingNumbers = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.messagingNumbers
+);
+
 const selectUpdatePatientThankYouEmailProcess = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.updatePatientThankYouEmailProcess
@@ -137,4 +142,5 @@ export {
   selectThankYouPageUpdateProcess,
   selectUpdatePatientThankYouEmailProcess,
   selectLandingPageUpdateProcess,
+  selectMessagingNumbers,
 };
