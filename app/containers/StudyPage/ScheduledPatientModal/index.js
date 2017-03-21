@@ -42,7 +42,14 @@ class ScheduledPatientModal extends React.Component {
     const { onHide, currentPatient, show, handleSubmit, handleDateChange, submittingSchedule } = this.props;
     if (currentPatient) {
       return (
-        <Modal className="datepicker-modal scheduled-patient-modal" show={show} onHide={onHide} dialogComponentClass={CenteredModal}>
+        <Modal
+          className="datepicker-modal scheduled-patient-modal"
+          show={show}
+          onHide={onHide}
+          dialogComponentClass={CenteredModal}
+          backdrop
+          keyboard
+        >
           <Modal.Header>
             <Modal.Title>SCHEDULE PATIENT</Modal.Title>
             <a className="lightbox-close close" onClick={onHide} disabled={submittingSchedule}>
