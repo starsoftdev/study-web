@@ -14,6 +14,21 @@ import Checkbox from '../../../components/Input/Checkbox';
 import validator from './validator';
 const fieldName = 'ScheduledPatientModal';
 
+function numberSequenceCreator(start, end) {
+  return _.range(start, end).map(n => {
+    if (n < 10) {
+      return {
+        label: `0${n}`,
+        value: n.toString(),
+      };
+    }
+    return {
+      label: n.toString(),
+      value: n.toString(),
+    };
+  });
+}
+
 @reduxForm({
   form: fieldName,
   validate: validator,
@@ -101,7 +116,7 @@ class ScheduledPatientModal extends React.Component {
                         <Field
                           name="hours"
                           placeholder="Hours"
-                          options={HOUR_OPTIONS}
+                          options={hourOptions}
                           component={ReactSelect}
                         />
                       </div>
@@ -109,7 +124,7 @@ class ScheduledPatientModal extends React.Component {
                         <Field
                           name="minutes"
                           placeholder="Minutes"
-                          options={MINUTES_OPTIONS}
+                          options={minuteOptions}
                           component={ReactSelect}
                         />
                       </div>
@@ -117,7 +132,7 @@ class ScheduledPatientModal extends React.Component {
                         <Field
                           name="amPm"
                           placeholder="AM/PM"
-                          options={AM_PM_OPTIONS}
+                          options={periodOptions}
                           component={ReactSelect}
                         />
                       </div>
@@ -147,6 +162,14 @@ class ScheduledPatientModal extends React.Component {
     return null;
   }
 }
+
+const hourOptions = numberSequenceCreator(1, 13);
+const minuteOptions = numberSequenceCreator(0, 60);
+const periodOptions = [
+  { label: 'AM', value: 'AM' },
+  { label: 'PM', value: 'PM' },
+];
+
 const mapStateToProps = createStructuredSelector({
   currentPatient: Selector.selectCurrentPatient(),
   submittingSchedule: Selector.selectSubmittingSchedule(),
