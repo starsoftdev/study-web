@@ -27,11 +27,23 @@ import {
   selectStudyUpdateProcess,
   selectAllClientUsers,
   selectEditStudyValues,
+  selectMessagingNumbers,
 } from './selectors';
 import rd3 from 'react-d3';
 import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
-import { fetchStudiesDashboard, fetchSiteNames, fetchSiteLocations, updateDashboardStudy, clearFilters, fetchAllClientUsersDashboard, fetchStudyCampaignsDashboard, changeStudyStatusDashboard, toggleStudy } from './actions';
+import {
+  fetchStudiesDashboard,
+  fetchSiteNames,
+  fetchSiteLocations,
+  updateDashboardStudy,
+  clearFilters,
+  fetchAllClientUsersDashboard,
+  fetchStudyCampaignsDashboard,
+  changeStudyStatusDashboard,
+  toggleStudy,
+  fetchMessagingNumbersDashboard,
+} from './actions';
 import { fetchLevels, fetchIndications, fetchSponsors, fetchProtocols, fetchCro, fetchUsersByRole, addEmailNotificationUser } from '../../App/actions';
 
 const PieChart = rd3.PieChart;
@@ -73,6 +85,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     fetchStudyCampaignsDashboard: PropTypes.func,
     changeStudyStatusDashboard: PropTypes.func,
     toggleStudy: PropTypes.func,
+    fetchMessagingNumbersDashboard: PropTypes.func,
+    messagingNumbers: PropTypes.object,
   };
 
   constructor(props) {
@@ -115,6 +129,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.props.fetchProtocols();
     this.props.fetchCro();
     this.props.fetchUsersByRole();
+    this.props.fetchMessagingNumbersDashboard();
   }
 
   componentWillReceiveProps(newProps) {
@@ -599,6 +614,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             fetchStudyCampaignsDashboard={this.props.fetchStudyCampaignsDashboard}
             changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
             toggleStudy={this.props.toggleStudy}
+            messagingNumbers={this.props.messagingNumbers}
           />
         </StickyContainer>
       </div>
@@ -620,6 +636,7 @@ const mapStateToProps = createStructuredSelector({
   studyUpdateProcess: selectStudyUpdateProcess(),
   allClientUsers: selectAllClientUsers(),
   editStudyValues: selectEditStudyValues(),
+  messagingNumbers: selectMessagingNumbers(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -641,6 +658,7 @@ function mapDispatchToProps(dispatch) {
     fetchStudyCampaignsDashboard: (params) => dispatch(fetchStudyCampaignsDashboard(params)),
     changeStudyStatusDashboard: (params, status, isChecked) => dispatch(changeStudyStatusDashboard(params, status, isChecked)),
     toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
+    fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
   };
 }
 

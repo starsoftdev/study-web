@@ -272,6 +272,7 @@ export function* fetchLevelsWatcher() {
       const filterObj = {
         where: {
           isArchived: false,
+          isActive: true,
         },
         order: 'position DESC',
       };

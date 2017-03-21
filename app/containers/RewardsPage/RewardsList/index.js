@@ -78,7 +78,7 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
               <th onClick={this.sortBy} data-sort="date" className={(this.props.paginationOptions.activeSort === 'date') ? this.props.paginationOptions.activeDirection : ''}>DATE <i className="caret-arrow" /></th>
               <th onClick={this.sortBy} data-sort="time" className={(this.props.paginationOptions.activeSort === 'time') ? this.props.paginationOptions.activeDirection : ''}>TIME <i className="caret-arrow" /></th>
               <th onClick={this.sortBy} data-sort="points" className={(this.props.paginationOptions.activeSort === 'points') ? this.props.paginationOptions.activeDirection : ''}>AMOUNT <i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="balance" className={(this.props.paginationOptions.activeSort === 'balance') ? this.props.paginationOptions.activeDirection : ''}>BALANCE <i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="balance" className={(this.props.paginationOptions.activeSort === 'balance') ? this.props.paginationOptions.activeDirection : ''}>BALANCE<i className="caret-arrow" /></th>
             </tr>
           </thead>
           <tbody>
