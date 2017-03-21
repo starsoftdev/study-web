@@ -439,6 +439,18 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
             };
           }
           if (patientCategory.id === toPatientCategory.id) {
+            if (fromPatientCategory.name === 'Scheduled') {
+              return {
+                ...patientCategory,
+                patients: [
+                  {
+                    ...patient,
+                    callReminders: [],
+                  },
+                  ...patientCategory.patients,
+                ],
+              };
+            }
             return {
               ...patientCategory,
               patients: [
