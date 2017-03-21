@@ -45,6 +45,7 @@ export class EditInformationModal extends React.Component {
     allClientUsers: PropTypes.object,
     addEmailNotificationClick: PropTypes.func,
     studyCampaigns: PropTypes.object,
+    messagingNumbers: PropTypes.object,
   };
 
   constructor(props) {
@@ -191,14 +192,20 @@ export class EditInformationModal extends React.Component {
       });
     });
 
+    const messagingNumbers = [];
+    if (this.props.formValues.text_number_id) {
+      messagingNumbers.push({
+        value: this.props.formValues.text_number_id,
+        label: this.props.formValues.phone_number,
+      });
+    }
+    _.forEach(this.props.messagingNumbers.details, (number) => {
+      messagingNumbers.push({
+        value: number.id,
+        label: number.phone_number,
+      });
+    });
 
-    const messagingNumbers = [
-      { label: '(524) 999-1234', value: '5249991234', id: 1 },
-      { label: '(524) 666-2345', value: '524666-2345', id: 2 },
-      { label: '(524) 111-1234', value: '524111-1234', id: 3 },
-      { label: '(524) 440-9874', value: '524440-9874', id: 4 },
-      { label: '(524) 599-3214', value: '524599-3214', id: 5 },
-    ];
 
     let campaignOptions = [];
 
@@ -412,6 +419,19 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
+                    <label htmlFor="new-patient-first-name">Messaging Suite</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      name="patient_messaging_suite"
+                      component={Toggle}
+                      className="field"
+                      onChange={(e) => { this.props.dispatch(change('dashboardEditStudyForm', 'patientMessagingSuite', e.toString())); }}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
                     <label htmlFor="new-patient-phone">Messaging Number</label>
                   </strong>
                   <div className="field">
@@ -423,13 +443,14 @@ export class EditInformationModal extends React.Component {
                       searchable
                       options={messagingNumbers}
                       customSearchIconClass="icomoon-icon_search2"
+                      onChange={(e) => { this.props.dispatch(change('dashboardEditStudyForm', 'messaging_number', e.toString())); }}
                     />
                   </div>
                 </div>
-                <div className="field-row add-messaging-number-row">
+                {/* <div className="field-row add-messaging-number-row">
                   <strong className="label"> </strong>
                   <a href="#popup-add-messaging-number" className="link-add-messaging-number lightbox-opener">+ Add Messaging Number</a>
-                </div>
+                </div>*/}
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-phone">Redirect Number</label>
@@ -483,6 +504,7 @@ export class EditInformationModal extends React.Component {
                       name="should_show_in_sponsor_portal"
                       component={Toggle}
                       className="field"
+                      onChange={(e) => { this.props.dispatch(change('dashboardEditStudyForm', 'shouldShowInSponsorPortal', e.toString())); }}
                     />
                   </div>
                 </div>
