@@ -24,6 +24,7 @@ import {
   FETCH_STUDY_SUCCESS,
   REMOVE_PATIENT_INDICATION_SUCCESS,
   SHOW_SCHEDULED_MODAL,
+  HIDE_SCHEDULED_MODAL,
   SET_STUDY_ID,
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
@@ -45,6 +46,7 @@ import {
   SUBMIT_SCHEDULE,
   SUBMIT_SCHEDULE_SUCCEEDED,
   SUBMIT_SCHEDULE_FAILED,
+  SET_SCHEDULED_FORM_INITIALIZED,
 } from './constants';
 import _ from 'lodash';
 
@@ -275,7 +277,13 @@ function studyPageReducer(state = initialState, action) {
     case SHOW_SCHEDULED_MODAL:
       return {
         ...state,
-        openScheduledModal: !state.openScheduledModal,
+        openScheduledModal: true,
+      };
+    case HIDE_SCHEDULED_MODAL:
+      return {
+        ...state,
+        openScheduledModal: false,
+        scheduledFormInitialized: false,
       };
     case MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING:
       return {
@@ -370,6 +378,11 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         submittingSchedule: false,
+      };
+    case SET_SCHEDULED_FORM_INITIALIZED:
+      return {
+        ...state,
+        scheduledFormInitialized: action.formInitialized,
       };
     default:
       return state;

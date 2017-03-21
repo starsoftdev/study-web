@@ -20,6 +20,7 @@ import ScheduledPatientModal from '../ScheduledPatientModal/index';
 import {
   fetchPatientDetails,
   showScheduledModal,
+  hideScheduledModal,
   setCurrentPatientCategoryId,
   setCurrentPatientId,
   setOpenPatientModal,
@@ -51,6 +52,7 @@ class PatientBoard extends React.Component {
     setCurrentPatientCategoryId: React.PropTypes.func.isRequired,
     setOpenPatientModal: React.PropTypes.func.isRequired,
     showScheduledModal: React.PropTypes.func.isRequired,
+    hideScheduledModal: React.PropTypes.func.isRequired,
     changeScheduledDate: React.PropTypes.func.isRequired,
     switchToNoteSection: React.PropTypes.func.isRequired,
     switchToTextSection: React.PropTypes.func.isRequired,
@@ -237,7 +239,7 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, showScheduledModal, ePMS, currentPatient } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, hideScheduledModal, ePMS, currentPatient } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
@@ -252,7 +254,7 @@ class PatientBoard extends React.Component {
             onClose={this.closePatientModal}
             ePMS={ePMS}
           />
-          <ScheduledPatientModal show={openScheduledModal && currentPatient != null} onHide={showScheduledModal} handleSubmit={this.onPatientScheduleSubmit} handleDateChange={this.handleDateChange} />
+          <ScheduledPatientModal show={openScheduledModal && currentPatient != null} onHide={hideScheduledModal} handleSubmit={this.onPatientScheduleSubmit} handleDateChange={this.handleDateChange} />
         </div>
         <div className="patients-form-closer" onClick={this.closePatientModal} />
       </div>
@@ -285,6 +287,7 @@ const mapDispatchToProps = (dispatch) => (
     setCurrentPatientCategoryId: (id) => dispatch(setCurrentPatientCategoryId(id)),
     setOpenPatientModal: (show) => dispatch(setOpenPatientModal(show)),
     showScheduledModal: () => dispatch(showScheduledModal()),
+    hideScheduledModal: () => dispatch(hideScheduledModal()),
     switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
     switchToTextSection: () => dispatch(switchToTextSectionDetail()),
     changeScheduledDate: (date) => dispatch(changeScheduledDate(date)),

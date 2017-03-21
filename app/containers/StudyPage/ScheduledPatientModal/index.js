@@ -7,12 +7,22 @@ import { Calendar } from 'react-date-range';
 import { createStructuredSelector } from 'reselect';
 import * as Selector from '../selectors';
 import ReactSelect from '../../../components/Input/ReactSelect';
-import { HOUR_OPTIONS, MINUTES_OPTIONS, AM_PM_OPTIONS } from '../../../common/constants/index';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input/index';
 import Checkbox from '../../../components/Input/Checkbox';
 import validator from './validator';
+import { setScheduledFormInitialized } from '../actions';
 const fieldName = 'ScheduledPatientModal';
+
+function getTimeComponents(strTime, timezone) {
+  const localTime = moment(strTime).tz(timezone);
+
+  return {
+    hours: (((localTime.hour() + 11) % 12) + 1).toString(),
+    minutes: localTime.minute().toString(),
+    amPm: localTime.hour() < 12 ? 'AM' : 'PM',
+  };
+}
 
 function numberSequenceCreator(start, end) {
   return _.range(start, end).map(n => {
@@ -33,7 +43,6 @@ function numberSequenceCreator(start, end) {
   form: fieldName,
   validate: validator,
 })
-
 class ScheduledPatientModal extends React.Component {
   static propTypes = {
     onHide: React.PropTypes.func,
@@ -42,6 +51,9 @@ class ScheduledPatientModal extends React.Component {
     handleSubmit: React.PropTypes.func.isRequired,
     handleDateChange: React.PropTypes.func.isRequired,
     submittingSchedule: React.PropTypes.bool.isRequired,
+    initialize: React.PropTypes.func.isRequired,
+    scheduledFormInitialized: React.PropTypes.bool,
+    setScheduledFormInitialized: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -51,6 +63,22 @@ class ScheduledPatientModal extends React.Component {
   }
 
   componentDidMount() {
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { currentPatient } = nextProps;
+    let initialValues = {};
+
+    if (!(nextProps.scheduledFormInitialized) && nextProps.show && currentPatient &&
+        currentPatient.callReminders && currentPatient.callReminders.length > 0) {
+      const { time, timezone, textReminder } = currentPatient.callReminders[0];
+      initialValues = {
+        ...getTimeComponents(time, timezone),
+        textReminder,
+      };
+      this.props.setScheduledFormInitialized(true);
+      nextProps.initialize(initialValues);
+    }
   }
 
   render() {
@@ -173,8 +201,9 @@ const periodOptions = [
 const mapStateToProps = createStructuredSelector({
   currentPatient: Selector.selectCurrentPatient(),
   submittingSchedule: Selector.selectSubmittingSchedule(),
+  scheduledFormInitialized: Selector.selectScheduledFormInitialized(),
 });
-// const mapDispatchToProps = dispatch => ({
-//
-// });
-export default connect(mapStateToProps)(ScheduledPatientModal);
+const mapDispatchToProps = dispatch => ({
+  setScheduledFormInitialized: (formInitialized) => dispatch(setScheduledFormInitialized(formInitialized)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(ScheduledPatientModal);
