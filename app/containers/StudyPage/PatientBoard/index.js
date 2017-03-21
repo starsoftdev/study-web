@@ -163,8 +163,14 @@ class PatientBoard extends React.Component {
     const defaultDate = moment().startOf('day');
     const scheduledDate = selectedDate || defaultDate;
     const formValues = schedulePatientFormValues;
+    let currentCallReminderId;
+
+    if (currentPatient.callReminders && currentPatient.callReminders[0]) {
+      currentCallReminderId = currentPatient.callReminders[0].id;
+    }
 
     const submitData = {
+      id: currentCallReminderId,
       siteLocation: site.name,
       indication: _.find(this.props.indications, { id: indicationId }).name,
       protocolNumber: protocol.number,
@@ -234,7 +240,7 @@ class PatientBoard extends React.Component {
     const { patientCategories, openPatientModal, openScheduledModal, showScheduledModal, ePMS, currentPatient } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
-        <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !showScheduledModal })}>
+        <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
           <nav className="nav-status">
             <ul className={classNames('list-inline', { stick: this.state.stick })}>
               {patientCategories.map(patientCategory => (
