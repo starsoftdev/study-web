@@ -372,6 +372,7 @@ function studyPageReducer(state = initialState, action) {
           return category;
         }),
         submittingSchedule: false,
+        scheduledFormInitialized: false,
         openScheduledModal: false,
       };
     case SUBMIT_SCHEDULE_FAILED:
