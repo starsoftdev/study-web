@@ -8,6 +8,7 @@ import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 import { default as textBlastModalReducer } from './containers/StudyPage/TextBlast/reducer';
+import { default as ScheduledPatientModal } from './containers/StudyPage/ScheduledPatientModal/reducer';
 import { default as patientsListReducer } from './containers/PatientDatabasePage/TextBlast/reducer';
 import { default as rewardForm } from './containers/RewardsPage/RewardModal/reducer';
 import { default as resetPasswordPageReducer } from './containers/ResetPasswordPage/reducer';
@@ -23,6 +24,7 @@ export default function createReducer(asyncReducers) {
     form: formReducer.plugin({
       'StudyPage.TextBlastModal': textBlastModalReducer,
       'PatientDatabase.TextBlastModal': patientsListReducer,
+      ScheduledPatientModal,
       rewardForm,
     }),
     toastr: toastrReducer,
