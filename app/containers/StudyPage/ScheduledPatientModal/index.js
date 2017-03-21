@@ -83,7 +83,11 @@ class ScheduledPatientModal extends React.Component {
 
   render() {
     const { onHide, currentPatient, show, handleSubmit, handleDateChange, submittingSchedule } = this.props;
+    let scheduledDate = moment().startOf('date');
     if (currentPatient) {
+      if (currentPatient.callReminders && currentPatient.callReminders.length > 0) {
+        scheduledDate = moment(currentPatient.callReminders[0].time).startOf('date');
+      }
       return (
         <Modal
           className="datepicker-modal scheduled-patient-modal"
@@ -103,6 +107,7 @@ class ScheduledPatientModal extends React.Component {
             <Calendar
               className="calendar custom-calendar"
               onChange={handleDateChange}
+              date={scheduledDate}
             />
             <div className="current-date">
               Today: {moment().format('dddd, MMMM DD, YYYY')}
