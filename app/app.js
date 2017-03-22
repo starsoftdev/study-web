@@ -14,12 +14,13 @@ import ReduxToastr from 'react-redux-toastr';
 import { applyRouterMiddleware, Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import useScroll from 'react-router-scroll';
-import configureStore from './store';
 
 // Import the CSS reset, which HtmlWebpackPlugin transfers to the build folder
 import 'sanitize.css/sanitize.css';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 import 'codemirror/lib/codemirror.css';
+
+import configureStore from './store';
 
 import './assets/less/main.less';
 

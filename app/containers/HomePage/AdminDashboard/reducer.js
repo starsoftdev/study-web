@@ -37,6 +37,9 @@ import {
   CHANGE_STUDY_ADD_SUCCESS,
   CHANGE_STUDY_ADD_ERROR,
   RESET_CHANGE_STUDY_ADD_STATE,
+  FETCH_MESSAGING_NUMBERS,
+  FETCH_MESSAGING_NUMBERS_SUCCESS,
+  FETCH_MESSAGING_NUMBERS_ERROR,
 } from './constants';
 
 import {
@@ -69,6 +72,7 @@ const initialState = {
   updateStudyProcess: {
     saving: false,
     error: null,
+    study: null,
   },
   updateLandingPageProcess: {
     success: false,
@@ -91,6 +95,11 @@ const initialState = {
     error: null,
   },
   allClientUsers: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  messagingNumbers: {
     details: [],
     fetching: false,
     error: null,
@@ -483,6 +492,7 @@ export default function dashboardPageReducer(state = initialState, action) {
         updateStudyProcess: {
           saving: true,
           error: null,
+          study: null,
         },
       };
     case UPDATE_DASHBOARD_STUDY_SUCCESS:
@@ -502,6 +512,7 @@ export default function dashboardPageReducer(state = initialState, action) {
         updateStudyProcess: {
           saving: false,
           error: null,
+          study: savedStudy,
         },
       };
     case UPDATE_DASHBOARD_STUDY_ERROR:
@@ -510,6 +521,7 @@ export default function dashboardPageReducer(state = initialState, action) {
         updateStudyProcess: {
           saving: false,
           error: null,
+          study: null,
         },
       };
     case FETCH_ALL_CLIENT_USERS:
@@ -770,6 +782,36 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
+    case FETCH_MESSAGING_NUMBERS:
+      return {
+        ...state,
+        messagingNumbers: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_MESSAGING_NUMBERS_SUCCESS:
+
+      return {
+        ...state,
+        messagingNumbers: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_MESSAGING_NUMBERS_ERROR:
+      return {
+        ...state,
+        messagingNumbers: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+
+
     default:
       return state;
   }

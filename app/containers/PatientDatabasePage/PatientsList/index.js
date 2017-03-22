@@ -75,6 +75,10 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     }
   }
 
+  componentWillUnmount() {
+    this.props.setActiveSort('orderNumber', null);
+  }
+
   editPatientModalShouldBeShown() {
     const { selectedPatient } = this.props;
     const displayed = (selectedPatient.details) ? true: false; // eslint-disable-line

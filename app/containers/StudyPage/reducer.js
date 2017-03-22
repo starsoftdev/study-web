@@ -342,6 +342,27 @@ function studyPageReducer(state = initialState, action) {
     case SUBMIT_SCHEDULE_SUCCEEDED:
       return {
         ...state,
+        patientCategories: state.patientCategories.map(category => {
+          if (category.name === 'Scheduled') {
+            return {
+              ...category,
+              patients: category.patients.map(patient => {
+                if (patient.id === action.patientId) {
+                  const updatedCallReminder = _.find(action.schedules, { patient_id: action.patientId });
+
+                  return {
+                    ...patient,
+                    callReminders: [updatedCallReminder],
+                  };
+                }
+
+                return patient;
+              }),
+            };
+          }
+
+          return category;
+        }),
         submittingSchedule: false,
         openScheduledModal: false,
       };
