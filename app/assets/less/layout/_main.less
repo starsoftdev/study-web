@@ -2281,7 +2281,15 @@ th, .th {
 
 .patient-database {
   .btns-popups {
-    margin: 0 6px 25px 0;
+    margin: 0 -6px 25px;
+    overflow: hidden;
+    .search-area {
+      width: 25%;
+      padding: 0 6px;
+      .field {
+        position: relative;
+      }
+    }
     .btns-container {
       padding-top: 25px;
     }
