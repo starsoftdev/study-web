@@ -17,6 +17,7 @@ import Form from 'react-bootstrap/lib/Form';
 import RenderEmailsList from './RenderEmailsList';
 import _ from 'lodash';
 import { selectStudyCampaigns } from '../selectors';
+import FormGeosuggest from '../../../../components/Input/Geosuggest';
 
 const mapStateToProps = createStructuredSelector({
   studyCampaigns: selectStudyCampaigns(),
@@ -45,6 +46,7 @@ export class EditInformationModal extends React.Component {
     allClientUsers: PropTypes.object,
     addEmailNotificationClick: PropTypes.func,
     studyCampaigns: PropTypes.object,
+    messagingNumbers: PropTypes.object,
   };
 
   constructor(props) {
@@ -52,6 +54,7 @@ export class EditInformationModal extends React.Component {
 
     this.siteLocationChanged = this.siteLocationChanged.bind(this);
     this.campaignChanged = this.campaignChanged.bind(this);
+    this.onSuggestSelect = this.onSuggestSelect.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -90,10 +93,64 @@ export class EditInformationModal extends React.Component {
     }
   }
 
+  onSuggestSelect(e) {
+    let city = '';
+    let state = '';
+    let postalCode = '';
+    let streetNmber = '';
+    let route = '';
+
+    if (e.gmaps && e.gmaps.address_components) {
+      const addressComponents = e.gmaps.address_components;
+
+      for (const val of addressComponents) {
+        if (!city) {
+          city = _.find(val.types, (o) => (o === 'locality'));
+          if (city) {
+            this.props.dispatch(change('dashboardEditStudyForm', 'site_city', val.long_name));
+          }
+        }
+        if (!state) {
+          state = _.find(val.types, (o) => (o === 'administrative_area_level_1'));
+          if (state) {
+            this.props.dispatch(change('dashboardEditStudyForm', 'site_state', val.short_name));
+          }
+        }
+        if (!postalCode) {
+          postalCode = _.find(val.types, (o) => (o === 'postal_code'));
+          if (postalCode) {
+            this.props.dispatch(change('dashboardEditStudyForm', 'site_zip', val.long_name));
+          }
+        }
+        if (!streetNmber && _.find(val.types, (o) => (o === 'street_number'))) {
+          streetNmber = val.short_name;
+        }
+        if (!route && _.find(val.types, (o) => (o === 'route'))) {
+          route = val.short_name;
+        }
+        if (streetNmber && route) {
+          this.geoSuggest.update(`${streetNmber} ${route}`);
+          this.props.dispatch(change('dashboardEditStudyForm', 'site_address', `${streetNmber} ${route}`));
+        }
+      }
+      this.props.dispatch(change('dashboardEditStudyForm', 'site_address', e.label));
+    } else {
+      const addressArr = e.label.split(',');
+      if (addressArr[1]) {
+        this.props.dispatch(change('dashboardEditStudyForm', 'site_city', addressArr[1]));
+      }
+      if (addressArr[2]) {
+        this.props.dispatch(change('dashboardEditStudyForm', 'site_state', addressArr[2]));
+      }
+      this.geoSuggest.update(`${addressArr[0]}`);
+      this.props.dispatch(change('dashboardEditStudyForm', 'site_address', `${addressArr[0]}`));
+    }
+  }
+
   siteLocationChanged(e) {
     const foundSiteLocation = _.find(this.props.siteLocations, (item) => (item.id === e));
     if (foundSiteLocation) {
-      this.props.fetchAllClientUsersDashboard(foundSiteLocation.client_id);
+      this.props.fetchAllClientUsersDashboard({ clientId: foundSiteLocation.client_id, siteId: foundSiteLocation.id });
 
       this.props.dispatch(change('dashboardEditStudyForm', 'site_id', foundSiteLocation.id));
       this.props.dispatch(change('dashboardEditStudyForm', 'site_address', foundSiteLocation.address));
@@ -191,14 +248,20 @@ export class EditInformationModal extends React.Component {
       });
     });
 
+    const messagingNumbers = [];
+    if (this.props.formValues.text_number_id) {
+      messagingNumbers.push({
+        value: this.props.formValues.text_number_id,
+        label: this.props.formValues.phone_number,
+      });
+    }
+    _.forEach(this.props.messagingNumbers.details, (number) => {
+      messagingNumbers.push({
+        value: number.id,
+        label: number.phone_number,
+      });
+    });
 
-    const messagingNumbers = [
-      { label: '(524) 999-1234', value: '5249991234', id: 1 },
-      { label: '(524) 666-2345', value: '524666-2345', id: 2 },
-      { label: '(524) 111-1234', value: '524111-1234', id: 3 },
-      { label: '(524) 440-9874', value: '524440-9874', id: 4 },
-      { label: '(524) 599-3214', value: '524599-3214', id: 5 },
-    ];
 
     let campaignOptions = [];
 
@@ -230,7 +293,7 @@ export class EditInformationModal extends React.Component {
               <div className="frame">
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-first-name">Status</label>
+                    <label htmlFor="new-patient-first-name">STATUS</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -243,7 +306,7 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-first-name">Study Number</label>
+                    <label htmlFor="new-patient-first-name">STUDY NUMBER</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -305,13 +368,13 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">Site Location</label>
+                    <label htmlFor="new-patient-phone">SITE LOCATION</label>
                   </strong>
                   <div className="field">
                     <Field
                       name="site_location_form"
                       component={ReactSelect}
-                      placeholder="Select Location"
+                      placeholder="Select Site Location"
                       searchPlaceholder="Search"
                       searchable
                       options={siteLocationsOptions}
@@ -322,7 +385,7 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-email">Site Number</label>
+                    <label htmlFor="new-patient-email">SITE NUMBER</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -334,20 +397,28 @@ export class EditInformationModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row">
-                  <strong className="label required">
-                    <label htmlFor="new-patient-phone">Site Address</label>
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">SITE ADDRESS</label>
                   </strong>
                   <div className="field">
                     <Field
+                      name="site_address"
+                      component={FormGeosuggest}
+                      refObj={(el) => { this.geoSuggest = el; }}
+                      onSuggestSelect={this.onSuggestSelect}
+                      initialValue={this.props.formValues.site_address}
+                      placeholder=""
+                    />
+                    {/* <Field
                       type="text"
                       name="site_address"
                       component={Input}
-                    />
+                    />*/}
                   </div>
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">City</label>
+                    <label htmlFor="new-patient-phone">CITY</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -359,7 +430,7 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">State / Province</label>
+                    <label htmlFor="new-patient-phone">STATE / PROVINCE</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -371,7 +442,7 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">Postal Code</label>
+                    <label htmlFor="new-patient-phone">POSTAL CODE</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -384,7 +455,7 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">Recruitment Phone</label>
+                    <label htmlFor="new-patient-phone">RECRUITMENT PHONE</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -412,7 +483,20 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">Messaging Number</label>
+                    <label htmlFor="new-patient-first-name">MESSAGING SUITE</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      name="patient_messaging_suite"
+                      component={Toggle}
+                      className="field"
+                      onChange={(e) => { this.props.dispatch(change('dashboardEditStudyForm', 'patientMessagingSuite', e.toString())); }}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">MESSAGING NUMBER</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -423,16 +507,17 @@ export class EditInformationModal extends React.Component {
                       searchable
                       options={messagingNumbers}
                       customSearchIconClass="icomoon-icon_search2"
+                      onChange={(e) => { this.props.dispatch(change('dashboardEditStudyForm', 'messaging_number', e.toString())); }}
                     />
                   </div>
                 </div>
-                <div className="field-row add-messaging-number-row">
+                {/* <div className="field-row add-messaging-number-row">
                   <strong className="label"> </strong>
                   <a href="#popup-add-messaging-number" className="link-add-messaging-number lightbox-opener">+ Add Messaging Number</a>
-                </div>
+                </div>*/}
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">Redirect Number</label>
+                    <label htmlFor="new-patient-phone">REDIRECT NUMBER</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -444,7 +529,7 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">Protocol</label>
+                    <label htmlFor="new-patient-phone">PROTOCOL</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -460,7 +545,7 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">Sponsor</label>
+                    <label htmlFor="new-patient-phone">SPONSOR</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -476,13 +561,14 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-first-name">Sponsor Portal</label>
+                    <label htmlFor="new-patient-first-name">SPONSOR PORTAL</label>
                   </strong>
                   <div className="field">
                     <Field
                       name="should_show_in_sponsor_portal"
                       component={Toggle}
                       className="field"
+                      onChange={(e) => { this.props.dispatch(change('dashboardEditStudyForm', 'shouldShowInSponsorPortal', e.toString())); }}
                     />
                   </div>
                 </div>
@@ -494,7 +580,7 @@ export class EditInformationModal extends React.Component {
                     <Field
                       name="cro_id"
                       component={ReactSelect}
-                      placeholder="Select Cro"
+                      placeholder="Select CRO"
                       searchPlaceholder="Search"
                       searchable
                       options={croOptions}
@@ -504,7 +590,7 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">Indication</label>
+                    <label htmlFor="new-patient-phone">INDICATION</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -520,7 +606,7 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">Exposure Level</label>
+                    <label htmlFor="new-patient-phone">EXPOSURE LEVEL</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -536,7 +622,7 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">Campaign</label>
+                    <label htmlFor="new-patient-phone">CAMPAIGN</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -553,7 +639,7 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">Start Date</label>
+                    <label htmlFor="new-patient-phone">START DATE</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -567,7 +653,7 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">End Date</label>
+                    <label htmlFor="new-patient-phone">END DATE</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -581,7 +667,7 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">Custom Goal</label>
+                    <label htmlFor="new-patient-phone">CUSTOM GOAL</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -592,7 +678,7 @@ export class EditInformationModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row text-right">
-                  <Button type="submit" bsStyle="primary"> Submit </Button>
+                  <Button type="submit" bsStyle="primary"> UPDATE </Button>
                 </div>
               </div>
             </Form>

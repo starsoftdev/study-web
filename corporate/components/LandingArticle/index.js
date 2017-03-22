@@ -85,14 +85,20 @@ export class LandingArticle extends React.Component {
             className={classNames({ 'col-xs-12 col-sm-6 pull-right': imgSrc, centered: !imgSrc })}
             data-view={dataView}
           >
-            <h2 className={classNames({ nodesc: !landingDescription })}>
-              {indication}
-            </h2>
-            {landingDescription &&
-              <div dangerouslySetInnerHTML={{ __html: markdown }} />
+            {!landingDescription &&
+              <h2 className={classNames({ nodesc: !landingDescription })}>
+                {indication}
+              </h2>
             }
-            <strong className="title text-uppercase">{siteName}</strong>
-            <address>{address}</address>
+            {landingDescription &&
+              <div className="custom-description" dangerouslySetInnerHTML={{ __html: markdown }} />
+            }
+            {!landingDescription &&
+              <div>
+                <strong className="title text-uppercase">{siteName}</strong>
+                <address>{address}</address>
+              </div>
+            }
             <p className="text-underline">
               {ifInterestedInstructions}
             </p>

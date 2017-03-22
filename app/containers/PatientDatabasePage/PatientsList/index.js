@@ -75,6 +75,10 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     }
   }
 
+  componentWillUnmount() {
+    this.props.setActiveSort('orderNumber', null);
+  }
+
   editPatientModalShouldBeShown() {
     const { selectedPatient } = this.props;
     return selectedPatient.details !== null;
@@ -192,10 +196,11 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
                         name="all-patients"
                         type="checkbox"
                         component={Checkbox}
+                        className="pull-left"
                         onChange={this.toggleAllPatientSelection}
                       />
+                      <span onClick={this.sortBy} data-sort="orderNumber" className={`${(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}`}>#<i className="caret-arrow" /></span>
                     </div>
-                    <div onClick={this.sortBy} data-sort="orderNumber" className={`th ${(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}`}>#<i className="caret-arrow" /></div>
                     <div onClick={this.sortBy} data-sort="firstName" className={`th ${(this.props.paginationOptions.activeSort === 'firstName') ? this.props.paginationOptions.activeDirection : ''}`}>NAME<i className="caret-arrow" /></div>
                     <div onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL<i className="caret-arrow" /></div>
                     <div onClick={this.sortBy} data-sort="phone" className={`th ${(this.props.paginationOptions.activeSort === 'phone') ? this.props.paginationOptions.activeDirection : ''}`}>PHONE<i className="caret-arrow" /></div>

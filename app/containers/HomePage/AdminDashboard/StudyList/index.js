@@ -47,6 +47,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     fetchStudyCampaignsDashboard: PropTypes.func,
     changeStudyStatusDashboard: PropTypes.func,
     toggleStudy: PropTypes.func,
+    messagingNumbers: PropTypes.object,
   };
 
   constructor(props) {
@@ -77,6 +78,9 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.closeAddEmailModal = this.closeAddEmailModal.bind(this);
     this.addEmailNotificationSubmit = this.addEmailNotificationSubmit.bind(this);
     this.setEditStudyFormValues = this.setEditStudyFormValues.bind(this);
+    this.mouseOverRow = this.mouseOverRow.bind(this);
+    this.mouseOutRow = this.mouseOutRow.bind(this);
+
 
     this.state = {
       showDateRangeModal: false,
@@ -96,6 +100,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       selectedStudyCount: 0,
       editStudyInitValues: {},
       addEmailModalShow: false,
+      hoveredRowIndex: null,
     };
   }
 
@@ -107,6 +112,9 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     }
     if (this.props.studyUpdateProcess.saving && !newProps.studyUpdateProcess.saving) {
       this.showEditInformationModal(false);
+      this.setEditStudyFormValues(newProps.studyUpdateProcess.study);
+      // console.log(322, newProps.studyUpdateProcess.study.text_number_id);
+      // this.props.dispatch(change('dashboardEditStudyForm', 'messagingNumber', newProps.studyUpdateProcess.study.text_number_id));
     }
     if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
       let addFields = this.props.editStudyValues.emailNotifications;
@@ -134,7 +142,9 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       this.props.dispatch(change('dashboardEditStudyForm', key, item));
     });
     this.props.dispatch(change('dashboardEditStudyForm', 'site_location_form', study.site_id));
-    this.props.fetchAllClientUsersDashboard(study.client_id);
+    this.props.dispatch(change('dashboardEditStudyForm', 'messagingNumber', study.text_number_id));
+
+    this.props.fetchAllClientUsersDashboard({ clientId: study.client_id, siteId: study.site_id });
     this.props.fetchStudyCampaignsDashboard(study.study_id);
   }
 
@@ -306,6 +316,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.setState({
       showEditInformationModal: visible,
     });
+    // this.props.dispatch(change('dashboardEditStudyForm', 'messagingNumber', this.props.editStudyValues.text_number_id));
   }
 
   campaignChanged(e) {
@@ -341,6 +352,14 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.closeAddEmailModal();
   }
 
+  mouseOverRow(e, index) {
+    this.setState({ hoveredRowIndex: index });
+  }
+
+  mouseOutRow() {
+    this.setState({ hoveredRowIndex: null });
+  }
+
   renderDateFooter() {
     const { dateRange } = this.state;
     if (dateRange.startDate) {
@@ -371,10 +390,19 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         onSelectStudy={this.toggleStudy}
         onStatusChange={this.changeStudyStatus}
         changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
+        mouseOverRow={this.mouseOverRow}
+        mouseOutRow={this.mouseOutRow}
+        hoveredRowIndex={this.state.hoveredRowIndex}
       />
     );
     const studyListRightContents = studies.map((item, index) =>
-      <StudyRightItem item={item} key={index} />
+      <StudyRightItem
+        item={item}
+        key={index}
+        mouseOverRow={this.mouseOverRow}
+        mouseOutRow={this.mouseOutRow}
+        hoveredRowIndex={this.state.hoveredRowIndex}
+      />
     );
 
 
@@ -690,6 +718,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   allClientUsers={this.props.allClientUsers}
                   formValues={this.props.editStudyValues}
                   addEmailNotificationClick={this.addEmailNotificationClick}
+                  messagingNumbers={this.props.messagingNumbers}
                 />
                 <LandingPageModal
                   openModal={this.state.showLandingPageModal}

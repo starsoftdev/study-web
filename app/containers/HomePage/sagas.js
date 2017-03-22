@@ -36,6 +36,7 @@ import {
   CHANGE_STUDY_ADD,
   UPDATE_THANK_YOU_PAGE,
   UPDATE_PATIENT_THANK_YOU_EMAIL,
+  FETCH_MESSAGING_NUMBERS,
 } from './AdminDashboard/constants';
 
 import {
@@ -59,6 +60,11 @@ import {
   updateThankYouPageError,
   updatePatientThankYouEmailSuccess,
   updatePatientThankYouEmailError,
+  fetchMessagingNumbersDashboardSuccess,
+  fetchMessagingNumbersDashboardError,
+  fetchMessagingNumbersDashboard,
+  changeStudyAddSuccess,
+  changeStudyAddError,
 } from './AdminDashboard/actions';
 
 import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
@@ -484,6 +490,7 @@ export function* updateDashboardStudyWorker(action) {
 
     const response = yield call(request, requestURL, options);
 
+    yield put(fetchMessagingNumbersDashboard());
     yield put(updateDashboardStudySuccess(response));
   } catch (err) {
     yield put(updateDashboardStudyError(err));
@@ -500,9 +507,7 @@ export function* fetchAllClientUsersWorker(action) {
 
     const params = {
       method: 'GET',
-      query: {
-        id: action.params,
-      },
+      query: action.params,
     };
     const response = yield call(request, requestURL, params);
 
@@ -601,10 +606,11 @@ export function* changeStudyAddWorker(action) {
     };
 
     const response = yield call(request, requestURL, options);
-    console.log(response);
     yield put(toastrActions.success('', 'You have successfully updated study add!'));
+    yield put(changeStudyAddSuccess(response));
   } catch (err) {
     yield put(toastrActions.error('Error!'));
+    yield put(changeStudyAddError(err));
   }
 }
 
@@ -650,6 +656,29 @@ export function* updatePatientThankYouEmailWorker(action) {
   }
 }
 
+
+export function* fetchMessagingNumbersWatcher() {
+  yield* takeLatest(FETCH_MESSAGING_NUMBERS, fetchMessagingNumbersWorker);
+}
+
+export function* fetchMessagingNumbersWorker() {
+  try {
+    const requestURL = `${API_URL}/studies/getNotAssignedPhoneNumbers`;
+
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchMessagingNumbersDashboardSuccess(response));
+  } catch (err) {
+    yield put(fetchMessagingNumbersDashboardError(err));
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching messaging numbers for selected study');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   const watcherB = yield fork(fetchPatientMessagesWatcher);
@@ -675,6 +704,7 @@ export function* homePageSaga() {
   const updateThankYouPageWatcher1 = yield fork(updateThankYouPageWatcher);
   const updatePatientThankYouEmailWatcher1 = yield fork(updatePatientThankYouEmailWatcher);
   const changeStudyAddWatcher1 = yield fork(changeStudyAddWatcher);
+  const fetchMessagingNumbersWatcher1 = yield fork(fetchMessagingNumbersWatcher);
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
@@ -703,5 +733,6 @@ export function* homePageSaga() {
     yield cancel(updateThankYouPageWatcher1);
     yield cancel(updatePatientThankYouEmailWatcher1);
     yield cancel(changeStudyAddWatcher1);
+    yield cancel(fetchMessagingNumbersWatcher1);
   }
 }
