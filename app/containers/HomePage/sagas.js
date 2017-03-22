@@ -59,6 +59,8 @@ import {
   updateThankYouPageError,
   updatePatientThankYouEmailSuccess,
   updatePatientThankYouEmailError,
+  changeStudyAddSuccess,
+  changeStudyAddError,
 } from './AdminDashboard/actions';
 
 import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
@@ -601,10 +603,11 @@ export function* changeStudyAddWorker(action) {
     };
 
     const response = yield call(request, requestURL, options);
-    console.log(response);
     yield put(toastrActions.success('', 'You have successfully updated study add!'));
+    yield put(changeStudyAddSuccess(response));
   } catch (err) {
     yield put(toastrActions.error('Error!'));
+    yield put(changeStudyAddError(err));
   }
 }
 

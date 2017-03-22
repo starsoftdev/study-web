@@ -164,7 +164,7 @@ export class PatientThankYouEmailModal extends React.Component {
                   bsClass="form-control thx-msg"
                 />
                 <div className="field-row text-right">
-                  <Button bsStyle="primary" type="submit" disabled={false}>Submit</Button>
+                  <Button bsStyle="primary" type="submit" disabled={false}>Update</Button>
                 </div>
               </div>
             </Form>

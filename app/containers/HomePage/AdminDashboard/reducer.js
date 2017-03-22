@@ -32,6 +32,11 @@ import {
   UPDATE_LANDING_PAGE_SUCCESS,
   UPDATE_LANDING_PAGE_ERROR,
   RESET_LANDING_PAGE_STATE,
+
+  CHANGE_STUDY_ADD,
+  CHANGE_STUDY_ADD_SUCCESS,
+  CHANGE_STUDY_ADD_ERROR,
+  RESET_CHANGE_STUDY_ADD_STATE,
 } from './constants';
 
 import {
@@ -76,6 +81,11 @@ const initialState = {
     error: null,
   },
   updatePatientThankYouEmailProcess: {
+    success: false,
+    saving: false,
+    error: null,
+  },
+  changeStudyAddProcess: {
     success: false,
     saving: false,
     error: null,
@@ -647,6 +657,42 @@ export default function dashboardPageReducer(state = initialState, action) {
       return {
         ...state,
         updateLandingPageProcess: {
+          success: false,
+          saving: false,
+          error: null,
+        },
+      };
+    case CHANGE_STUDY_ADD:
+      return {
+        ...state,
+        changeStudyAddProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case CHANGE_STUDY_ADD_SUCCESS:
+      return {
+        ...state,
+        changeStudyAddProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case CHANGE_STUDY_ADD_ERROR:
+      return {
+        ...state,
+        changeStudyAddProcess: {
+          success: false,
+          saving: false,
+          error: true,
+        },
+      };
+    case RESET_CHANGE_STUDY_ADD_STATE:
+      return {
+        ...state,
+        changeStudyAddProcess: {
           success: false,
           saving: false,
           error: null,
