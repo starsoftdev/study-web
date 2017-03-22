@@ -57,9 +57,9 @@ class Filter extends React.Component {
   createComparisonBox(options) {
     const { name, style } = options;
     const comparisonOptions = [
-      { id: 1, label: '<', value: 'lt' },
-      { id: 2, label: '>', value: 'gt' },
-      { id: 3, label: '=', value: 'eq' },
+      { id: 1, label: '<', value: 'lt', clearableValue: false },
+      { id: 2, label: '>', value: 'gt', clearableValue: false },
+      { id: 3, label: '=', value: 'eq', clearableValue: false },
     ];
     return (
       <div
@@ -73,8 +73,11 @@ class Filter extends React.Component {
           options={comparisonOptions}
           className="form-control"
           simpleValue
+          clearable={false}
           onChange={(event) => {
+            console.log(123);
             const fullOption = _.find(comparisonOptions, (item) => (item.value === event));
+            console.log(fullOption);
             this.props.onChange(fullOption);
           }}
         />

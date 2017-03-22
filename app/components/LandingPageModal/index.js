@@ -22,8 +22,12 @@ import {
   updateLandingPage,
   resetLandingPageState,
   changeStudyAdd,
+  resetChangeStudyAddState,
 } from '../../containers/HomePage/AdminDashboard/actions';
-import { selectLandingPageUpdateProcess } from '../../containers/HomePage/AdminDashboard/selectors';
+import {
+  selectLandingPageUpdateProcess,
+  selectChangeStudyAddProcess,
+} from '../../containers/HomePage/AdminDashboard/selectors';
 import formValidator, { fields } from './validator';
 
 import './styles.less';
@@ -43,11 +47,13 @@ export class LandingPageModal extends React.Component {
     dispatch: React.PropTypes.func.isRequired,
     resetForm: React.PropTypes.func.isRequired,
     resetState: React.PropTypes.func.isRequired,
+    resetChangeAddState: React.PropTypes.func.isRequired,
     formError: React.PropTypes.bool.isRequired,
     studies: React.PropTypes.any,
     newList: React.PropTypes.any,
     landing: React.PropTypes.object,
     updateLandingPageProcess: React.PropTypes.any,
+    changeStudyAddProcess: React.PropTypes.any,
     submitStudyAdd: React.PropTypes.func.isRequired,
     touchFields: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
@@ -60,20 +66,22 @@ export class LandingPageModal extends React.Component {
     this.updateCode = this.updateCode.bind(this);
     this.openStudyAddModal = this.openStudyAddModal.bind(this);
     this.closeStudyAddModal = this.closeStudyAddModal.bind(this);
+    this.openStudyPreviewModal = this.openStudyPreviewModal.bind(this);
+    this.closeStudyPreviewModal = this.closeStudyPreviewModal.bind(this);
     this.uploadStudyAdd = this.uploadStudyAdd.bind(this);
 
     this.state = {
       code: null,
-      fileSrc: null,
       selected: null,
       landingFetched: false,
       studyAddModalOpen: false,
+      studyPreviewModalOpen: false,
       initialValuesEntered: false,
     };
   }
 
   componentWillReceiveProps(newProps) {
-    const { resetState, onClose, fetchLanding } = this.props;
+    const { resetState, resetChangeAddState, onClose, fetchLanding } = this.props;
 
     if (newProps.studies) {
       for (const study of newProps.studies) {
@@ -102,8 +110,6 @@ export class LandingPageModal extends React.Component {
           }
         }
 
-        // console.log('landing', landing);
-
         if (!this.state.initialValuesEntered) {
           this.props.dispatch(change(formName, 'instructions', landing.instructions));
           this.props.dispatch(change(formName, 'fullNamePlaceholder', landing.fullNamePlaceholder));
@@ -116,11 +122,11 @@ export class LandingPageModal extends React.Component {
           this.props.dispatch(change(formName, 'bySignUpText', landing.bySignUpText));
           this.props.dispatch(change(formName, 'shareThisStudyText', landing.shareThisStudyText));
           this.props.dispatch(change(formName, 'showSocialMediaButtons', landing.showSocialMediaButtons));
+          this.props.dispatch(change(formName, 'hideClickToCall', landing.hideClickToCall));
 
           this.setState({
             initialValuesEntered: true,
             code: landing.description || null,
-            fileSrc: landing.imgSrc || null,
           });
         }
       });
@@ -134,6 +140,16 @@ export class LandingPageModal extends React.Component {
       fetchLanding(this.state.selected.study_id);
       resetState();
       onClose();
+    }
+
+    if (!newProps.changeStudyAddProcess.saving && newProps.changeStudyAddProcess.success) {
+      this.setState({
+        landingFetched: false,
+        initialValuesEntered: false,
+      }, () => {
+        fetchLanding(this.state.selected.study_id);
+        resetChangeAddState();
+      });
     }
   }
 
@@ -173,6 +189,14 @@ export class LandingPageModal extends React.Component {
     this.setState({ studyAddModalOpen: true });
   }
 
+  closeStudyPreviewModal() {
+    this.setState({ studyPreviewModalOpen: false });
+  }
+
+  openStudyPreviewModal() {
+    this.setState({ studyPreviewModalOpen: true });
+  }
+
   uploadStudyAdd(e) {
     e.toBlob((blob) => {
       this.props.submitStudyAdd({ file: blob, study_id: this.state.selected.study_id });
@@ -182,6 +206,19 @@ export class LandingPageModal extends React.Component {
 
   render() {
     const { openModal, onClose } = this.props;
+    let fileSrc = null;
+
+    if (this.props.landing) {
+      const study = this.props.landing;
+      let landing;
+
+      for (const studySource of study.studySources) {
+        if (studySource.landingPage) {
+          landing = studySource.landingPage;
+          fileSrc = landing.imgSrc;
+        }
+      }
+    }
     /* const country = [{ label: 'USA', value: 'USA', id: 0 },
                     { label: 'Canada', value: 'Canada', id: 1 },
                     { label: 'UK', value: 'UK', id: 2 },
@@ -213,7 +250,7 @@ export class LandingPageModal extends React.Component {
               </div>
             </div>
             <Form
-              className="holder"
+              className="holder landing-holder"
               onSubmit={this.handleSubmit}
               noValidate="novalidate"
             >
@@ -232,7 +269,7 @@ export class LandingPageModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row">
-                  <strong className="label required">
+                  <strong className="label">
                     <label htmlFor="new-patient-first-name">Full Name</label>
                   </strong>
                   <div className="field">
@@ -246,7 +283,7 @@ export class LandingPageModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row">
-                  <strong className="label required">
+                  <strong className="label">
                     <label htmlFor="new-patient-email">Email</label>
                   </strong>
                   <div className="field">
@@ -259,7 +296,7 @@ export class LandingPageModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row">
-                  <strong className="label required">
+                  <strong className="label">
                     <label htmlFor="new-patient-phone">Mobile Phone</label>
                   </strong>
                   <div className="field">
@@ -313,6 +350,18 @@ export class LandingPageModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
+                    <label htmlFor="new-patient-phone">Hide click to call button</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="checkbox"
+                      name="hideClickToCall"
+                      component={Checkbox}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
                     <label htmlFor="new-patient-phone">Click To Call number</label>
                   </strong>
                   <div className="field">
@@ -328,10 +377,13 @@ export class LandingPageModal extends React.Component {
                     <label htmlFor="new-patient-phone">Study Ad</label>
                   </strong>
                   <div className="field">
-                    { false && this.state.fileSrc &&
+                    { fileSrc &&
                       <div className="img-preview">
-                        <a href="#image-perview" className="lightbox-opener">
-                          <img src={this.state.fileSrc} alt="description" onError="this.src='images/error.png';" id="img-preview" />
+                        <a
+                          className="lightbox-opener"
+                          onClick={this.openStudyPreviewModal}
+                        >
+                          <img src={fileSrc} id="img-preview" alt="preview" />
                         </a>
                       </div>
                     }
@@ -340,7 +392,7 @@ export class LandingPageModal extends React.Component {
                       className="btn btn-gray upload-btn"
                       onClick={this.openStudyAddModal}
                     >
-                      Browse
+                      update study ad
                     </a>
                     {/* <Field
                       id="study-ad"
@@ -414,7 +466,7 @@ export class LandingPageModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row text-right">
-                  <Button bsStyle="primary" type="submit" disabled={false}>Submit</Button>
+                  <Button bsStyle="primary" type="submit" disabled={false}>Update</Button>
                 </div>
               </div>
             </Form>
@@ -428,13 +480,33 @@ export class LandingPageModal extends React.Component {
             keyboard
           >
             <Modal.Header>
-              <Modal.Title>UPDATE STUDY ADD</Modal.Title>
+              <Modal.Title>UPDATE STUDY AD</Modal.Title>
               <a className="lightbox-close close" onClick={this.closeStudyAddModal}>
                 <i className="icomoon-icon_close" />
               </a>
             </Modal.Header>
             <Modal.Body>
               <StudyAddForm handleSubmit={this.uploadStudyAdd} />
+            </Modal.Body>
+          </Modal>
+          <Modal
+            className="study-preview-modal preview-modal"
+            dialogComponentClass={CenteredModal}
+            show={this.state.studyPreviewModalOpen}
+            onHide={this.closeStudyPreviewModal}
+            backdrop
+            keyboard
+          >
+            <Modal.Header>
+              <Modal.Title>Image Preview</Modal.Title>
+              <a className="lightbox-close close" onClick={this.closeStudyPreviewModal}>
+                <i className="icomoon-icon_close" />
+              </a>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="img-holder">
+                <img src={fileSrc} alt="modal-preview" />
+              </div>
             </Modal.Body>
           </Modal>
         </div>
@@ -448,12 +520,14 @@ const mapStateToProps = createStructuredSelector({
   newList: selectValues(formName),
   landing: selectLanding(),
   updateLandingPageProcess: selectLandingPageUpdateProcess(),
+  changeStudyAddProcess: selectChangeStudyAddProcess(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     submitForm: (values) => dispatch(updateLandingPage(values)),
     resetState: () => dispatch(resetLandingPageState()),
+    resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
     submitStudyAdd: (values) => dispatch(changeStudyAdd(values)),
     fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
     resetForm: () => dispatch(reset(formName)),

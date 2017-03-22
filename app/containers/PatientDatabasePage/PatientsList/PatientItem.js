@@ -132,9 +132,9 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
             component={Checkbox}
             onChange={this.togglePatientForTextBlast}
           />
-        </div>
-        <div className="td index">
-          {index + 1}
+          <span>
+            {index + 1}
+          </span>
         </div>
         <div className="td name">
           <span>{firstName} {lastName}</span>

@@ -27,11 +27,23 @@ import {
   selectStudyUpdateProcess,
   selectAllClientUsers,
   selectEditStudyValues,
+  selectMessagingNumbers,
 } from './selectors';
 import rd3 from 'react-d3';
 import moment from 'moment-timezone';
 import { defaultRanges, DateRange } from 'react-date-range';
-import { fetchStudiesDashboard, fetchSiteNames, fetchSiteLocations, updateDashboardStudy, clearFilters, fetchAllClientUsersDashboard, fetchStudyCampaignsDashboard, changeStudyStatusDashboard, toggleStudy } from './actions';
+import {
+  fetchStudiesDashboard,
+  fetchSiteNames,
+  fetchSiteLocations,
+  updateDashboardStudy,
+  clearFilters,
+  fetchAllClientUsersDashboard,
+  fetchStudyCampaignsDashboard,
+  changeStudyStatusDashboard,
+  toggleStudy,
+  fetchMessagingNumbersDashboard,
+} from './actions';
 import { fetchLevels, fetchIndications, fetchSponsors, fetchProtocols, fetchCro, fetchUsersByRole, addEmailNotificationUser } from '../../App/actions';
 
 const PieChart = rd3.PieChart;
@@ -73,6 +85,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     fetchStudyCampaignsDashboard: PropTypes.func,
     changeStudyStatusDashboard: PropTypes.func,
     toggleStudy: PropTypes.func,
+    fetchMessagingNumbersDashboard: PropTypes.func,
+    messagingNumbers: PropTypes.object,
   };
 
   constructor(props) {
@@ -115,6 +129,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.props.fetchProtocols();
     this.props.fetchCro();
     this.props.fetchUsersByRole();
+    this.props.fetchMessagingNumbersDashboard();
   }
 
   componentWillReceiveProps(newProps) {
@@ -134,12 +149,17 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   }
 
   removeFilter(filter) {
+    console.log('remove filter', filter);
     const { customFilters, modalFilters } = this.state;
 
     if (filter.type === 'search') {
       pullAt(customFilters, findIndex(customFilters, filter));
       this.setState({ customFilters });
-      return;
+    }
+
+    if (filter.name === 'percentage') {
+      pullAt(modalFilters, 'percentage');
+      this.setState({ modalFilters });
     }
 
     if (modalFilters[filter.name]) {
@@ -147,6 +167,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
       pullAt(modalFilters[filter.name], findIndex(modalFilters[filter.name], ['label', 'All']));
       this.setState({ modalFilters });
     }
+
+    this.fetchStudiesAccordingToFilters();
   }
 
   saveFilters() {
@@ -242,8 +264,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
   fetchStudiesAccordingToFilters(value, key) {
     let filters = _.cloneDeep(this.props.filtersFormValues);
-    const newFilterValues = _.cloneDeep(value);
-    filters = { ...filters, [key]:newFilterValues };
+    if (value && key) {
+      const newFilterValues = _.cloneDeep(value);
+      filters = { ...filters, [key]:newFilterValues };
+    }
 
     let isEmpty = true;
 
@@ -599,6 +623,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             fetchStudyCampaignsDashboard={this.props.fetchStudyCampaignsDashboard}
             changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
             toggleStudy={this.props.toggleStudy}
+            messagingNumbers={this.props.messagingNumbers}
           />
         </StickyContainer>
       </div>
@@ -620,6 +645,7 @@ const mapStateToProps = createStructuredSelector({
   studyUpdateProcess: selectStudyUpdateProcess(),
   allClientUsers: selectAllClientUsers(),
   editStudyValues: selectEditStudyValues(),
+  messagingNumbers: selectMessagingNumbers(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -641,6 +667,7 @@ function mapDispatchToProps(dispatch) {
     fetchStudyCampaignsDashboard: (params) => dispatch(fetchStudyCampaignsDashboard(params)),
     changeStudyStatusDashboard: (params, status, isChecked) => dispatch(changeStudyStatusDashboard(params, status, isChecked)),
     toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
+    fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
   };
 }
 

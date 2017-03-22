@@ -41,6 +41,12 @@ import {
   UPDATE_LANDING_PAGE_ERROR,
   RESET_LANDING_PAGE_STATE,
   CHANGE_STUDY_ADD,
+  CHANGE_STUDY_ADD_SUCCESS,
+  CHANGE_STUDY_ADD_ERROR,
+  RESET_CHANGE_STUDY_ADD_STATE,
+  FETCH_MESSAGING_NUMBERS,
+  FETCH_MESSAGING_NUMBERS_SUCCESS,
+  FETCH_MESSAGING_NUMBERS_ERROR,
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -159,11 +165,30 @@ export function resetLandingPageState() {
   };
 }
 
-// TODO: add success and error actions
 export function changeStudyAdd(payload) {
   return {
     type: CHANGE_STUDY_ADD,
     payload,
+  };
+}
+
+export function changeStudyAddSuccess(payload) {
+  return {
+    type: CHANGE_STUDY_ADD_SUCCESS,
+    payload,
+  };
+}
+
+export function changeStudyAddError(payload) {
+  return {
+    type: CHANGE_STUDY_ADD_ERROR,
+    payload,
+  };
+}
+
+export function resetChangeStudyAddState() {
+  return {
+    type: RESET_CHANGE_STUDY_ADD_STATE,
   };
 }
 
@@ -297,5 +322,25 @@ export function toggleStudy(id, status) {
     type: TOGGLE_STUDY,
     id,
     status,
+  };
+}
+
+export function fetchMessagingNumbersDashboard() {
+  return {
+    type: FETCH_MESSAGING_NUMBERS,
+  };
+}
+
+export function fetchMessagingNumbersDashboardSuccess(payload) {
+  return {
+    type: FETCH_MESSAGING_NUMBERS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchMessagingNumbersDashboardError(payload) {
+  return {
+    type: FETCH_MESSAGING_NUMBERS_ERROR,
+    payload,
   };
 }

@@ -8,18 +8,21 @@ const schema = {
     presence: false,
   },
   fullNamePlaceholder: {
-    presence: true,
+    presence: false,
   },
   emailPlaceholder: {
-    presence: true,
+    presence: false,
   },
   phonePlaceholder: {
-    presence: true,
+    presence: false,
   },
   signupButtonText: {
     presence: false,
   },
   clickToCallButtonText: {
+    presence: false,
+  },
+  hideClickToCall: {
     presence: false,
   },
   clickToCallButtonNumber: {

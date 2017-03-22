@@ -545,9 +545,11 @@ export function submitSchedule(data, fromCategoryId, scheduledCategoryId) {
   };
 }
 
-export function submitScheduleSucceeded() {
+export function submitScheduleSucceeded(schedules, patientId) {
   return {
     type: SUBMIT_SCHEDULE_SUCCEEDED,
+    schedules,
+    patientId,
   };
 }
 

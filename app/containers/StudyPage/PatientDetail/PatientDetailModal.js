@@ -143,7 +143,7 @@ export class PatientDetailModal extends React.Component {
   renderScheduledTime() {
     const { currentPatientCategory, currentPatient, showScheduledModal } = this.props;
     if (currentPatientCategory && currentPatientCategory.name === 'Scheduled') {
-      if (currentPatient && currentPatient.callReminders) {
+      if (currentPatient && currentPatient.callReminders && currentPatient.callReminders.length > 0) {
         return (
           <a className="modal-opener" onClick={() => showScheduledModal()}>
             <span className="date">{moment(currentPatient.callReminders[0].time).format('MM/DD/YY')}</span>
@@ -152,6 +152,12 @@ export class PatientDetailModal extends React.Component {
           </a>
         );
       }
+
+      return (
+        <a className="modal-opener" onClick={() => showScheduledModal()}>
+          No Scheduled Appointment
+        </a>
+      );
     }
     return null;
   }
@@ -159,7 +165,12 @@ export class PatientDetailModal extends React.Component {
   render() {
     const { ePMS, carousel, openScheduledModal, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
     return (
-      <Collapse dimension="width" in={openPatientModal} timeout={250} className={openScheduledModal ? 'patients-list-form-OnSchedule' : 'patients-list-form'}>
+      <Collapse
+        dimension="width"
+        in={openPatientModal}
+        timeout={250}
+        className={classNames({ 'patients-list-form-schedule': openScheduledModal, 'patients-list-form': openScheduledModal !== true })}
+      >
         <div className="form-area">
           <div className="form-head">
             <strong className="title">{currentPatientCategory ? currentPatientCategory.name : null}</strong>

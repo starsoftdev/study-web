@@ -42,6 +42,7 @@ export const RESET_LANDING_PAGE_STATE                    = 'DashboardPage/RESET_
 export const CHANGE_STUDY_ADD                            = 'DashboardPage/CHANGE_STUDY_ADD';
 export const CHANGE_STUDY_ADD_SUCCESS                    = 'DashboardPage/CHANGE_STUDY_ADD_SUCCESS';
 export const CHANGE_STUDY_ADD_ERROR                      = 'DashboardPage/CHANGE_STUDY_ADD_ERROR';
+export const RESET_CHANGE_STUDY_ADD_STATE                = 'DashboardPage/RESET_CHANGE_STUDY_ADD_STATE';
 
 export const CLEAR_FILTERS                               = 'DashboardPage/CLEAR_FILTERS';
 
@@ -58,3 +59,7 @@ export const CHANGE_STUDY_STATUS_SUCCESS                 = 'DashboardPage/CHANGE
 export const CHANGE_STUDY_STATUS_ERROR                   = 'DashboardPage/CHANGE_STUDY_STATUS_ERROR';
 
 export const TOGGLE_STUDY                                = 'DashboardPage/TOGGLE_STUDY';
+
+export const FETCH_MESSAGING_NUMBERS                     = 'DashboardPage/FETCH_MESSAGING_NUMBERS';
+export const FETCH_MESSAGING_NUMBERS_SUCCESS             = 'DashboardPage/FETCH_MESSAGING_NUMBERS_SUCCESS';
+export const FETCH_MESSAGING_NUMBERS_ERROR               = 'DashboardPage/FETCH_MESSAGING_NUMBERS_ERROR';

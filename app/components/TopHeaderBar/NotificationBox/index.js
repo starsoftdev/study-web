@@ -82,31 +82,31 @@ class NotificationBox extends React.Component {
         </a>
 
         {this.state.dropdownOpen &&
-          <div className="notifications-drop slide">
-            <div className="well">
-              <strong className="title">NOTIFICATIONS</strong>
-              <div className="jcf-scrollable">
-                <ul className="list-unstyled">
-                  {
-                    _.take(this.props.notifications, 3).map(n => (
-                      <li key={n.id}>
-                        <a href={getRedirectionUrl(n)}>
-                          <div className="img-circle bg-gray"><img src={getAvatarUrl(n)} width="43" height="43" alt="Avatar" /></div>
-                          <p dangerouslySetInnerHTML={{ __html: eventMessage(n.event_log) }} />
-                          <time>{this.parseNotificationTime(n.event_log.created, currentUser.timezone)}</time>
-                        </a>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </div>
-              <div className="btn-block text-center">
-                <Link onClick={this.seeAllClick} className="hover-underline" to="/app/notifications">
-                  See All
-                </Link>
-              </div>
+        <div className="notifications-drop slide">
+          <div className="well">
+            <strong className="title">NOTIFICATIONS</strong>
+            <div className="jcf-scrollable">
+              <ul className="list-unstyled">
+                {
+                  _.take(this.props.notifications, 3).map(n => (
+                    <li key={n.id}>
+                      <a>
+                        <div className="img-circle bg-gray"><img src={getAvatarUrl(n)} width="43" height="43" alt="Avatar" /></div>
+                        <p dangerouslySetInnerHTML={{ __html: eventMessage(n.event_log) }} />
+                        <time>{this.parseNotificationTime(n.event_log.created, currentUser.timezone)}</time>
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+            <div className="btn-block text-center">
+              <Link onClick={this.seeAllClick} className="hover-underline" to="/app/notifications">
+                See All
+              </Link>
             </div>
           </div>
+        </div>
         }
       </div>
     );
