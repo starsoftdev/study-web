@@ -12,6 +12,9 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     onSelectStudy: PropTypes.func,
     onStatusChange: PropTypes.func,
     changeStudyStatusDashboard: PropTypes.func,
+    mouseOverRow: PropTypes.func,
+    mouseOutRow: PropTypes.func,
+    hoveredRowIndex: PropTypes.any,
   };
 
   constructor(props) {
@@ -36,8 +39,17 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
 
     const lastLoginTime = item.last_login_time ? moment(item.last_login_time).format('MM/DD/YY [at] h:mm A') : 'N/A';
 
+    const landingHref = item.site_location ? `/${item.study_id}-${item.site_location.toLowerCase().replace(/ /ig, '-')}` : '';
+
     return (
-      <tr>
+      <tr
+        onMouseOver={(e) => this.props.mouseOverRow(e, item.study_id)}
+        onMouseOut={this.props.mouseOutRow}
+        onFocus={(e) => this.props.mouseOverRow(e, item.study_id)}
+        onBlur={this.props.mouseOutRow}
+
+        className={(this.props.hoveredRowIndex === item.study_id) ? 'active-table-row' : ''}
+      >
         <td>
           <span className={(item.selected) ? 'sm-container checked' : 'sm-container'}>
             <span className="input-style" onClick={() => { onSelectStudy(item.study_id, !item.selected); }}>
@@ -57,7 +69,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
         <td></td>
         <td className="list">
           <ul className="list-unstyled">
-            <li><span>{item.study_id}</span></li>
+            <li><span><a href={landingHref} className="landig-link" target="_blank">{item.study_id}</a></span></li>
             <li><span>{`${item.percent ? `${item.percent}%` : ''}`}</span></li>
 
             <li><span>{item.sm_user_first_name ? `SM: ${item.sm_user_first_name} ${item.sm_user_last_name}` : 'SM: N/A'}</span></li>

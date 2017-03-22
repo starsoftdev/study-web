@@ -78,6 +78,9 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.closeAddEmailModal = this.closeAddEmailModal.bind(this);
     this.addEmailNotificationSubmit = this.addEmailNotificationSubmit.bind(this);
     this.setEditStudyFormValues = this.setEditStudyFormValues.bind(this);
+    this.mouseOverRow = this.mouseOverRow.bind(this);
+    this.mouseOutRow = this.mouseOutRow.bind(this);
+
 
     this.state = {
       showDateRangeModal: false,
@@ -97,6 +100,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       selectedStudyCount: 0,
       editStudyInitValues: {},
       addEmailModalShow: false,
+      hoveredRowIndex: null,
     };
   }
 
@@ -348,6 +352,14 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.closeAddEmailModal();
   }
 
+  mouseOverRow(e, index) {
+    this.setState({ hoveredRowIndex: index });
+  }
+
+  mouseOutRow() {
+    this.setState({ hoveredRowIndex: null });
+  }
+
   renderDateFooter() {
     const { dateRange } = this.state;
     if (dateRange.startDate) {
@@ -378,10 +390,19 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         onSelectStudy={this.toggleStudy}
         onStatusChange={this.changeStudyStatus}
         changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
+        mouseOverRow={this.mouseOverRow}
+        mouseOutRow={this.mouseOutRow}
+        hoveredRowIndex={this.state.hoveredRowIndex}
       />
     );
     const studyListRightContents = studies.map((item, index) =>
-      <StudyRightItem item={item} key={index} />
+      <StudyRightItem
+        item={item}
+        key={index}
+        mouseOverRow={this.mouseOverRow}
+        mouseOutRow={this.mouseOutRow}
+        hoveredRowIndex={this.state.hoveredRowIndex}
+      />
     );
 
 
