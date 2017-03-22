@@ -88,42 +88,12 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
         params[name] = e;
       }
 
-      console.log('initSearch', params);
       this.props.onSubmit(params, true);
     }
   }
 
-  renderSites() {
-    const { user, patients, sites } = this.props;
-    const siteOptions = map(sites, siteIterator => ({
-      label: siteIterator.name,
-      value: siteIterator.id,
-    }));
-    siteOptions.push({ label: 'All', value: 'All' });
-    if (user.roleForClient.name === ('Super Admin' || 'Admin')) {
-      return (
-        <div className="select-holder pull-left">
-          <span className="title">
-            <label>SITE LOCATION</label>
-          </span>
-          <div className="field">
-            <Field
-              name="site"
-              component={ReactSelect}
-              placeholder="Select Site Location"
-              options={siteOptions}
-              disabled={patients.fetching}
-              onChange={(e) => this.initSearch(e, 'site')}
-            />
-          </div>
-        </div>
-      );
-    }
-    return null;
-  }
-
   render() {
-    const { formValues, indications, sources, patientCategories, patients, hasError, handleSubmit } = this.props;
+    const { formValues, indications, sources, patientCategories, patients, hasError, handleSubmit, sites, user } = this.props;
     const includeIndicationArr = [];
     let finalIncludeIndication = [];
     const excludeIndicationArr = [];
@@ -162,7 +132,11 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     finalIncludeIndication = _.concat(finalIncludeIndication, includeIndicationArr);
     finalExcludeIndication = _.concat(finalExcludeIndication, excludeIndicationArr);
 
-
+    const siteOptions = map(sites, siteIterator => ({
+      label: siteIterator.name,
+      value: siteIterator.id,
+    }));
+    siteOptions.push({ label: 'All', value: 'All' });
     const sourceOptions = [{ label: 'All', value: '0' }].concat(map(sources, sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
@@ -183,6 +157,14 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
         value: 'Female',
       },
     ];
+
+    const userIsAdmin = user.roleForClient.name === 'Super Admin' || user.roleForClient.name === 'Admin';
+    const sitesDropdownDisabled = !userIsAdmin || patients.fetching;
+    let defaultSiteLocation;
+
+    if (sites.length > 0 && !userIsAdmin) {
+      defaultSiteLocation = _.find(sites, { id: user.roleForClient.site_id }).id;
+    }
 
     const itemTemplate = (controlSelectedValue) => (
       <div key={controlSelectedValue.value}>
@@ -221,7 +203,22 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
         </div>
         <form className="form-search" onSubmit={handleSubmit}>
           <div className="fields-holder clearfix form-search">
-            {this.renderSites()}
+            <div className="select-holder pull-left">
+              <span className="title">
+                <label>SITE LOCATION</label>
+              </span>
+              <div className="field">
+                <Field
+                  name="site"
+                  component={ReactSelect}
+                  placeholder="Select Site Location"
+                  options={siteOptions}
+                  selectedValue={defaultSiteLocation}
+                  disabled={sitesDropdownDisabled}
+                  onChange={(e) => this.initSearch(e, 'site')}
+                />
+              </div>
+            </div>
             <div className="select-holder indication pull-left">
               <span className="title">
                 <label>Include Indication</label>
