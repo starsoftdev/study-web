@@ -773,7 +773,7 @@ export function* submitSchedule() {
       };
       const response = yield call(request, requestURL, params);
       yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, scheduledCategoryId, data.patientId));
-      yield put(submitScheduleSucceeded(response));
+      yield put(submitScheduleSucceeded(response, data.patientId));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting a schedule');
       yield put(toastrActions.error('', errorMessage));

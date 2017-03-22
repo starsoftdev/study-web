@@ -95,15 +95,15 @@ class ReactMultiCheckBox extends React.Component {
 }
 
 ReactMultiCheckBox.propTypes = {
-  input: React.PropTypes.object.isRequired,
-  name: React.PropTypes.string.isRequired,
-  placeholder: React.PropTypes.string,
-  onChange: React.PropTypes.func,
-  includeAllOption: React.PropTypes.bool,
-  dataSource: React.PropTypes.array,
-  meta: React.PropTypes.object.isRequired,
   className: React.PropTypes.string,
-  initialValue: React.PropTypes.object,
+  dataSource: React.PropTypes.array,
+  includeAllOption: React.PropTypes.bool,
+  initialValue: React.PropTypes.object || React.PropTypes.arrayOf(React.PropTypes.object),
+  input: React.PropTypes.object.isRequired,
+  meta: React.PropTypes.object.isRequired,
+  name: React.PropTypes.string.isRequired,
+  onChange: React.PropTypes.func,
+  placeholder: React.PropTypes.string,
 };
 
 export default ReactMultiCheckBox;

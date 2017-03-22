@@ -42,6 +42,7 @@ const initialState = {
 function dashboardExposureLevelPageReducer(state = initialState, action) {
   const newLevel = _.cloneDeep(state.level.details);
   let foundUserIndex = null;
+  let tempLevel = null;
 
   switch (action.type) {
     case FETCH_LEVEL:
@@ -115,6 +116,8 @@ function dashboardExposureLevelPageReducer(state = initialState, action) {
       };
     case EDIT_LEVEL_SUCCESS:
       foundUserIndex = _.findIndex(newLevel, item => (item.id === action.payload.id));
+      tempLevel = action.payload;
+      tempLevel.is_active = action.payload.isActive;
       if (foundUserIndex !== -1) {
         newLevel.splice(foundUserIndex, 1, action.payload);
       }

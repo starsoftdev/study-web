@@ -42,6 +42,11 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     ) {
       this.closeAddLevelModal();
     }
+    if (newProps.item.is_active) {
+      this.props.change(`isActive-${this.props.item.id}`, true);
+    } else {
+      this.props.change(`isActive-${this.props.item.id}`, false);
+    }
   }
 
   closeAddLevelModal() {
@@ -71,6 +76,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         id: this.props.item.id,
         price: this.props.item.price,
         position: this.props.item.position,
+        active: this.props.item.is_active,
       },
     };
 

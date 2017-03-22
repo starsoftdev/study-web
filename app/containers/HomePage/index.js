@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import { selectUserRoleType, selectCurrentUserClientId, selectCurrentUser } from '../../containers/App/selectors';
-import { fetchClientSites, fetchLevels, getAvailPhoneNumbers, fetchClientAdmins } from '../../containers/App/actions';
+import { fetchClientSites, fetchLevels, fetchClientAdmins } from '../../containers/App/actions';
 import { fetchStudies, fetchProtocols, fetchProtocolNumbers, fetchIndications } from './actions';
 import { selectSearchProtocolsFormValues, selectHomePageClientAdmins } from '../../containers/HomePage/selectors';
 
@@ -38,7 +38,6 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     fetchProtocols: PropTypes.func,
     fetchProtocolNumbers: PropTypes.func,
     fetchIndications: PropTypes.func,
-    getAvailPhoneNumbers: PropTypes.func,
     location: PropTypes.any,
     userRoleType: PropTypes.string,
     searchProtocolsFormValues: PropTypes.object,
@@ -58,7 +57,6 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     if (currentUserClientId && userRoleType === 'client') {
       this.props.fetchClientSites(currentUserClientId, {});
       this.props.fetchLevels();
-      this.props.getAvailPhoneNumbers();
       this.props.fetchStudies(currentUser);
       this.props.fetchClientAdmins(currentUserClientId);
     } else if (currentUser && userRoleType === 'sponsor') {
@@ -152,7 +150,6 @@ function mapDispatchToProps(dispatch) {
     fetchProtocols: (searchParams) => dispatch(fetchProtocols(searchParams)),
     fetchProtocolNumbers: (currentUser) => dispatch(fetchProtocolNumbers(currentUser)),
     fetchIndications: (currentUser) => dispatch(fetchIndications(currentUser)),
-    getAvailPhoneNumbers: () => dispatch(getAvailPhoneNumbers()),
     fetchClientAdmins: (payload) => dispatch(fetchClientAdmins(payload)),
   };
 }
