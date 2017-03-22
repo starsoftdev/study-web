@@ -122,7 +122,7 @@ export class LandingPageModal extends React.Component {
           this.props.dispatch(change(formName, 'bySignUpText', landing.bySignUpText));
           this.props.dispatch(change(formName, 'shareThisStudyText', landing.shareThisStudyText));
           this.props.dispatch(change(formName, 'showSocialMediaButtons', landing.showSocialMediaButtons));
-          this.props.dispatch(change(formName, 'isHideClickToCallButton', landing.isHideClickToCallButton));
+          this.props.dispatch(change(formName, 'hideClickToCall', landing.hideClickToCall));
 
           this.setState({
             initialValuesEntered: true,
@@ -355,7 +355,7 @@ export class LandingPageModal extends React.Component {
                   <div className="field">
                     <Field
                       type="checkbox"
-                      name="isHideClickToCallButton"
+                      name="hideClickToCall"
                       component={Checkbox}
                     />
                   </div>
