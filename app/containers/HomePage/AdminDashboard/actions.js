@@ -41,6 +41,9 @@ import {
   UPDATE_LANDING_PAGE_ERROR,
   RESET_LANDING_PAGE_STATE,
   CHANGE_STUDY_ADD,
+  CHANGE_STUDY_ADD_SUCCESS,
+  CHANGE_STUDY_ADD_ERROR,
+  RESET_CHANGE_STUDY_ADD_STATE,
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -159,11 +162,30 @@ export function resetLandingPageState() {
   };
 }
 
-// TODO: add success and error actions
 export function changeStudyAdd(payload) {
   return {
     type: CHANGE_STUDY_ADD,
     payload,
+  };
+}
+
+export function changeStudyAddSuccess(payload) {
+  return {
+    type: CHANGE_STUDY_ADD_SUCCESS,
+    payload,
+  };
+}
+
+export function changeStudyAddError(payload) {
+  return {
+    type: CHANGE_STUDY_ADD_ERROR,
+    payload,
+  };
+}
+
+export function resetChangeStudyAddState() {
+  return {
+    type: RESET_CHANGE_STUDY_ADD_STATE,
   };
 }
 
