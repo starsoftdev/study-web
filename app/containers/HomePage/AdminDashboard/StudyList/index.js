@@ -140,7 +140,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.props.dispatch(change('dashboardEditStudyForm', 'site_location_form', study.site_id));
     this.props.dispatch(change('dashboardEditStudyForm', 'messagingNumber', study.text_number_id));
 
-    this.props.fetchAllClientUsersDashboard(study.client_id);
+    this.props.fetchAllClientUsersDashboard({ clientId: study.client_id, siteId: study.site_id });
     this.props.fetchStudyCampaignsDashboard(study.study_id);
   }
 

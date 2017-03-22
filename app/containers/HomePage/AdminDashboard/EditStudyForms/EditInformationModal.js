@@ -94,7 +94,7 @@ export class EditInformationModal extends React.Component {
   siteLocationChanged(e) {
     const foundSiteLocation = _.find(this.props.siteLocations, (item) => (item.id === e));
     if (foundSiteLocation) {
-      this.props.fetchAllClientUsersDashboard(foundSiteLocation.client_id);
+      this.props.fetchAllClientUsersDashboard({ clientId: foundSiteLocation.client_id, siteId: foundSiteLocation.id });
 
       this.props.dispatch(change('dashboardEditStudyForm', 'site_id', foundSiteLocation.id));
       this.props.dispatch(change('dashboardEditStudyForm', 'site_address', foundSiteLocation.address));
