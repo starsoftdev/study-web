@@ -149,12 +149,17 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   }
 
   removeFilter(filter) {
+    console.log('remove filter', filter);
     const { customFilters, modalFilters } = this.state;
 
     if (filter.type === 'search') {
       pullAt(customFilters, findIndex(customFilters, filter));
       this.setState({ customFilters });
-      return;
+    }
+
+    if (filter.name === 'percentage') {
+      pullAt(modalFilters, 'percentage');
+      this.setState({ modalFilters });
     }
 
     if (modalFilters[filter.name]) {
@@ -162,6 +167,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
       pullAt(modalFilters[filter.name], findIndex(modalFilters[filter.name], ['label', 'All']));
       this.setState({ modalFilters });
     }
+
+    this.fetchStudiesAccordingToFilters();
   }
 
   saveFilters() {
@@ -257,8 +264,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
   fetchStudiesAccordingToFilters(value, key) {
     let filters = _.cloneDeep(this.props.filtersFormValues);
-    const newFilterValues = _.cloneDeep(value);
-    filters = { ...filters, [key]:newFilterValues };
+    if (value && key) {
+      const newFilterValues = _.cloneDeep(value);
+      filters = { ...filters, [key]:newFilterValues };
+    }
 
     let isEmpty = true;
 

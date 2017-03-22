@@ -6,6 +6,9 @@ import moment from 'moment';
 class StudyItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     item: PropTypes.object,
+    mouseOverRow: PropTypes.func,
+    mouseOutRow: PropTypes.func,
+    hoveredRowIndex: PropTypes.any,
   };
 
   constructor(props) {
@@ -39,7 +42,14 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     const endDate = item.campaign_dateto ? campaignDateTo.format('MM/DD/YY') : '';
 
     return (
-      <tr>
+      <tr
+        onMouseOver={(e) => this.props.mouseOverRow(e, item.study_id)}
+        onMouseOut={this.props.mouseOutRow}
+        onFocus={(e) => this.props.mouseOverRow(e, item.study_id)}
+        onBlur={this.props.mouseOutRow}
+
+        className={(this.props.hoveredRowIndex === item.study_id) ? 'active-table-row' : ''}
+      >
         <td><span className="location">{`${item.site_address ? item.site_address : ''} ${item.site_city ? item.site_city : ''} ${item.site_state ? item.site_state : ''} ${item.site_zip ? item.site_zip : ''}`}</span></td>
         <td><span className="exposure-level">{item.level_name}</span></td>
         <td>
@@ -82,13 +92,48 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
             <li className="unread">Unread Texts: <a href="#popup-text-unread-list" className="lightbox-opener">{item.unread_text}</a></li>
           </ul>
         </td>
-        <td><a href="#popup-new-patient-list" className="lightbox-opener">{item.count_not_contacted}</a></td>
-        <td><a href="#popup-call-attempted-list" className="lightbox-opener">{item.call_attempted}</a></td>
-        <td><a href="#popup-not-qualitied-list" className="lightbox-opener">{item.dnq}</a></td>
-        <td><a href="#popup-action-needed-list" className="lightbox-opener">{item.action_needed}</a></td>
-        <td><a href="#popup-scheduled-list" className="lightbox-opener">{item.scheduled}</a></td>
-        <td><a href="#popup-consected-list" className="lightbox-opener">{item.consented}</a></td>
-        <td><a href="#popup-randomized-list" className="lightbox-opener">{item.randomized}</a></td>
+        <td>
+          <ul className="list-unstyled">
+            <li>{item.count_not_contacted_campaign}</li>
+            <li>{item.count_not_contacted}</li>
+          </ul>
+        </td>
+        <td>
+          <ul className="list-unstyled">
+            <li>{item.call_attempted_campaign}</li>
+            <li>{item.call_attempted}</li>
+          </ul>
+        </td>
+        <td>
+          <ul className="list-unstyled">
+            <li>{item.dnq_campaign}</li>
+            <li>{item.dnq}</li>
+          </ul>
+        </td>
+        <td>
+          <ul className="list-unstyled">
+            <li>{item.action_needed_campaign}</li>
+            <li>{item.action_needed}</li>
+          </ul>
+        </td>
+        <td>
+          <ul className="list-unstyled">
+            <li>{item.scheduled_campaign}</li>
+            <li>{item.scheduled}</li>
+          </ul>
+        </td>
+        <td>
+          <ul className="list-unstyled">
+            <li>{item.consented_campaign}</li>
+            <li>{item.consented}</li>
+          </ul>
+        </td>
+        <td>
+          <ul className="list-unstyled">
+            <li>{item.randomized_campaign}</li>
+            <li>{item.randomized}</li>
+          </ul>
+        </td>
       </tr>
     );
   }
