@@ -505,9 +505,7 @@ export function* fetchAllClientUsersWorker(action) {
 
     const params = {
       method: 'GET',
-      query: {
-        id: action.params,
-      },
+      query: action.params,
     };
     const response = yield call(request, requestURL, params);
 
