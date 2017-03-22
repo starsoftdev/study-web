@@ -22,7 +22,7 @@ const schema = {
   clickToCallButtonText: {
     presence: false,
   },
-  isHideClickToCallButton: {
+  hideClickToCall: {
     presence: false,
   },
   clickToCallButtonNumber: {
