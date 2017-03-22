@@ -19,6 +19,8 @@ import { fetchLanding } from '../../containers/App/actions';
 import { selectLanding } from '../../containers/App/selectors';
 import formValidator, { fields } from './validator';
 
+import './styles.less';
+
 const formName = 'thankYouPageForm';
 
 @reduxForm({
@@ -153,7 +155,7 @@ export class ThankyouPageModal extends React.Component {
               </div>
             </div>
             <Form
-              className="holder"
+              className="holder thank-you-holder"
               onSubmit={this.handleSubmit}
               noValidate="novalidate"
             >
@@ -248,7 +250,7 @@ export class ThankyouPageModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row text-right">
-                  <Button bsStyle="primary" type="submit" disabled={false}>Submit</Button>
+                  <Button bsStyle="primary" type="submit" disabled={false}>Update</Button>
                 </div>
               </div>
             </Form>

@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import inViewport from 'in-viewport';
 import { Field, reduxForm } from 'redux-form';
 import landingFormValidator from './validator';
+import classNames from 'classnames';
 import Alert from 'react-bootstrap/lib/Alert';
 
 import Input from '../../../app/components/Input';
@@ -55,12 +56,12 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     const instructions = (landing.instructions) ? landing.instructions : 'Enter your information to join!';
     const signupButtonText = (landing.signupButtonText) ? landing.signupButtonText : 'Sign up now!';
     const clickToCallButtonText = (landing.clickToCallButtonText) ? landing.clickToCallButtonText : 'Click to Call!';
-    const clickToCallButtonNumber = (landing.clickToCallButtonNumber) ? landing.clickToCallButtonNumber : '360-718-5766';
-    const clickToCallNumber = (landing.clickToCallButtonNumber) ? `tel:${landing.clickToCallButtonNumber}` : 'tel:3607185766';
+    const clickToCallNumber = (landing.clickToCallButtonNumber) ? `tel:${landing.clickToCallButtonNumber}` : false;
+
     return (
       <form
         action="#"
-        className="form-study text-center"
+        className="form-study text-center landing-form"
         onSubmit={handleSubmit}
       >
         <h1 className="main-heading">{name}</h1>
@@ -69,7 +70,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             <i className="icomoon-map-marker"></i>
             {cityAndState}
           </h2>
-          }
+        }
         <div
           ref={(animatedFormContent) => { this.animatedFormContent = animatedFormContent; }}
           data-view="fadeInUp"
@@ -109,16 +110,20 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             <input className="btn btn-default btn-block input-lg" value={signupButtonText} type="submit" />
           </div>
           <div className="field-row">
-            <a
-              href={clickToCallNumber}
-              className="btn btn-deep btn-block small"
-            >
-              <i className="icomoon-phone-square"></i>
-              <div className="inline">
-                <span>{clickToCallButtonText}</span>
-                <span>{clickToCallButtonNumber}</span>
-              </div>
-            </a>
+            {!landing.isHideClickToCallButton &&
+              <a
+                href={clickToCallNumber}
+                className={classNames({ 'btn btn-deep btn-block small': true, disabled: !clickToCallNumber })}
+              >
+                <i className="icomoon-phone-square"></i>
+                <div className="inline">
+                  <span>{clickToCallButtonText}</span>
+                  {clickToCallNumber &&
+                    <span>{landing.clickToCallButtonNumber}</span>
+                  }
+                </div>
+              </a>
+            }
           </div>
         </div>
       </form>

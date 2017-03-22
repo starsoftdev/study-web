@@ -10,7 +10,7 @@ import ReactAvatarEditor from 'react-avatar-editor';
 import classNames from 'classnames';
 import FileUpload from './FileUpload';
 
-import './styles.less';
+// import './styles.less';
 
 @reduxForm(
   {
