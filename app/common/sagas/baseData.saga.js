@@ -897,8 +897,7 @@ export function* changeTemporaryPassword() {
         method: 'POST',
         body: JSON.stringify(payload),
       };
-      const response = yield call(request, requestURL, params);
-
+      yield call(request, requestURL, params);
       yield put(toastrActions.success('', 'You have successfully changed your password.'));
       yield put(logout());
     } catch (err) {

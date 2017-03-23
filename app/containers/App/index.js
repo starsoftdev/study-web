@@ -76,12 +76,12 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     }
   }
 
-  handleChangePassword(ev) {
-    ev.user_id = this.props.userData.id;
-    ev.user_id = this.props.userData.id;
-    ev.changeTempPassword = true;
+  handleChangePassword(ev) { // eslint-disable-line react/prefer-stateless-function
+    const params = ev;
+    params.user_id = this.props.userData.id;
+    params.changeTempPassword = true;
 
-    this.props.changePassword(ev)
+    this.props.changePassword(params);
   }
 
   render() {
