@@ -1,12 +1,13 @@
 import React, { PropTypes, Component } from 'react';
-import { Field, change } from 'redux-form';
-import Checkbox from '../../../components/Input/Checkbox';
 import { forEach, filter } from 'lodash';
+import { Field } from 'redux-form';
+
+import Checkbox from '../../../components/Input/Checkbox';
 
 class RenderEmailsList extends Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
     formValues: PropTypes.object.isRequired,
     fields: PropTypes.object,
     addEmailNotification: PropTypes.func,
@@ -37,13 +38,15 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
     forEach(values, (Object) => {
       this.props.fields.push(Object);
     });
-    this.props.dispatch(change('editStudy', 'checkAllInput', false));
+    const { change } = this.props;
+    change('checkAllInput', false);
   }
 
   addEmailNotificationFields(values) {
     this.props.fields.push(values);
     this.closeAddEmailModal();
-    this.props.dispatch(change('editStudy', 'checkAllInput', false));
+    const { change } = this.props;
+    change('checkAllInput', false);
   }
 
   addEmailNotificationClick() {
@@ -56,19 +59,21 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
 
   selectAll(e) {
     if (this.props.formValues.emailNotifications) {
+      const { change } = this.props;
       forEach(this.props.formValues.emailNotifications, (value, index) => {
-        this.props.dispatch(change('editStudy', `emailNotifications[${index}].isChecked`, e));
+        change(`emailNotifications[${index}].isChecked`, e);
       });
     }
   }
 
   selectEmail(e) {
+    const { change } = this.props;
     if (this.props.formValues.checkAllInput && !e) {
-      this.props.dispatch(change('editStudy', 'checkAllInput', false));
+      change('checkAllInput', false);
     } else if (!this.props.formValues.checkAllInput && e) {
       const checkedArr = filter(this.props.formValues.emailNotifications, (o) => o.isChecked);
       if ((checkedArr.length + 1) === this.props.formValues.emailNotifications.length) {
-        this.props.dispatch(change('editStudy', 'checkAllInput', true));
+        change('checkAllInput', true);
       }
     }
   }

@@ -77,7 +77,7 @@ export function* fetchClientsWatcher() {
 
 export function* fetchClientsWorker() {
   try {
-    const requestURL = `${API_URL}/clients/fetchAllClientAdmins`;
+    const requestURL = `${API_URL}/clients/superAdmins`;
 
     const params = {
       method: 'GET',

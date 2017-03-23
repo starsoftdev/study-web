@@ -222,11 +222,14 @@ export function* fetchSitesWatcher() {
         };
       }
 
-      const queryParams = {
-        filter: JSON.stringify(filterObj),
+      const params = {
+        method: 'GET',
+        query: {
+          filter: JSON.stringify(filterObj),
+        },
       };
 
-      const response = yield call(request, requestURL, { query: queryParams });
+      const response = yield call(request, requestURL, params);
 
       yield put(sitesFetched(response));
     } catch (e) {
@@ -494,12 +497,14 @@ export function* fetchClientSitesWatcher() {
         };
       }
 
-      const queryParams = {
-        filter: JSON.stringify(filterObj),
+      const params = {
+        method: 'GET',
+        query: {
+          filter: JSON.stringify(filterObj),
+        },
       };
-      const queryString = composeQueryString(queryParams);
-      const requestURL = `${API_URL}/clients/${clientId}/sites?${queryString}`;
-      const response = yield call(request, requestURL);
+      const requestURL = `${API_URL}/clients/${clientId}/sites`;
+      const response = yield call(request, requestURL, params);
 
       yield put(clientSitesFetched(response));
     } catch (err) {
@@ -867,13 +872,10 @@ export function* fetchClientAdminsWatcher() {
 
 export function* fetchClientAdminsWorker(action) {
   try {
-    const requestURL = `${API_URL}/clients/fetchAllClientAdminsById`;
+    const requestURL = `${API_URL}/clients/${action.id}/admins`;
 
     const params = {
       method: 'GET',
-      query: {
-        id: action.payload,
-      },
     };
     const response = yield call(request, requestURL, params);
 

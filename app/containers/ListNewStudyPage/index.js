@@ -35,7 +35,6 @@ import {
   getAvailPhoneNumbers,
   fetchIndicationLevelPrice,
   fetchClientSites,
-  fetchClientAdmins,
 } from '../../containers/App/actions';
 import {
   selectSiteLocations,
@@ -80,7 +79,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     fetchClientSites: PropTypes.func,
     currentUserClientId: PropTypes.number,
     userRoleType: PropTypes.string,
-    fetchClientAdmins: PropTypes.func,
     clientAdmins: PropTypes.object,
   }
 
@@ -103,7 +101,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     this.props.getAvailPhoneNumbers();
     if (this.props.userRoleType === 'client') {
       this.props.fetchClientSites(this.props.currentUserClientId, {});
-      this.props.fetchClientAdmins(this.props.currentUserClientId);
     }
   }
 
@@ -348,7 +345,6 @@ function mapDispatchToProps(dispatch) {
     hideSubmitFormModal:  () => dispatch(hideSubmitFormModal()),
     fetchIndicationLevelPrice: (indicationId, levelId) => dispatch(fetchIndicationLevelPrice(indicationId, levelId)),
     clearFormSubmissionData: () => (dispatch(clearFormSubmissionData())),
-    fetchClientAdmins: (payload) => dispatch(fetchClientAdmins(payload)),
     touchNewStudy: () => (dispatch(touch('listNewStudy', ...newStudyFields))),
     touchShoppingCart: () => (dispatch(touch('shoppingCart', ...shoppingCartFields))),
   };

@@ -1134,10 +1134,10 @@ export function resetNewContactSuccess(payload) {
   };
 }
 
-export function fetchClientAdmins(payload) {
+export function fetchClientAdmins(id) {
   return {
     type: FETCH_CLIENT_ADMINS,
-    payload,
+    id,
   };
 }
 
