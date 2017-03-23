@@ -44,63 +44,6 @@ const selectCurrentUserStripeCustomerId = () => createSelector(
 // ///////////////////////////////////////////
 // base data used across pages
 // ///////////////////////////////////////////
-const selectSites = () => createSelector(
-  selectGlobal(),
-  (substate) => get(substate, 'baseData.sites', [])
-);
-
-// get user's sites based on siteId and ClientId
-const selectUserSites = () => createSelector(
-  selectGlobal(),
-  (substate) => {
-    const currentUser = get(substate, 'userData');
-    const siteId = currentUser.roleForClient.site_id;
-    let sites = get(substate, 'baseData.sites', []);
-    if (siteId) {
-      sites = filter(sites, e => e.id === siteId);
-    } else {
-      const clientId = get(substate, 'userData.roleForClient.client.id', null);
-      if (clientId) {
-        sites = get(substate, 'baseData.clientSites', {});
-      }
-    }
-    return sites;
-  }
-);
-
-// get user's site locations based on siteId and ClientId
-const selectUserSiteLocations = () => createSelector(
-  selectGlobal(),
-  (substate) => {
-    const currentUser = get(substate, 'userData');
-    const siteId = currentUser.roleForClient.site_id;
-    const sites = get(substate, 'baseData.sites', []);
-
-    let userSites = [];
-    if (siteId) {
-      userSites = filter(sites, e => e.id === siteId);
-    } else {
-      const clientId = get(substate, 'userData.roleForClient.client.id', null);
-      if (clientId) {
-        userSites = get(substate, 'baseData.clientSites.details', {});
-        userSites = [{ id: 0, name: 'All' }, ...userSites];
-      }
-    }
-    const returnArray = map(userSites, e => pick(e, ['id', 'name']));
-
-    return returnArray;
-  }
-);
-
-// Deccorated site locations
-const selectSiteLocations = () => createSelector(
-  selectGlobal(),
-  (substate) => {
-    const sites = get(substate, 'baseData.sites', []);
-    return map(sites, e => pick(e, ['id', 'name']));
-  }
-);
-
 const selectIndications = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.indications', [])
@@ -174,9 +117,66 @@ const selectAddCredits = () => createSelector(
 );
 
 // sites and users
+const selectSites = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.sites.details', [])
+);
+
+// get user's sites based on siteId and ClientId
+const selectUserSites = () => createSelector(
+  selectGlobal(),
+  (substate) => {
+    const currentUser = get(substate, 'userData');
+    const siteId = currentUser.roleForClient.site_id;
+    let sites = get(substate, 'baseData.sites', []);
+    if (siteId) {
+      sites = filter(sites, e => e.id === siteId);
+    } else {
+      const clientId = get(substate, 'userData.roleForClient.client.id', null);
+      if (clientId) {
+        sites = get(substate, 'baseData.sites', {});
+      }
+    }
+    return sites;
+  }
+);
+
+// get user's site locations based on siteId and ClientId
+const selectUserSiteLocations = () => createSelector(
+  selectGlobal(),
+  (substate) => {
+    const currentUser = get(substate, 'userData');
+    const siteId = currentUser.roleForClient.site_id;
+    const sites = get(substate, 'baseData.sites', []);
+
+    let userSites = [];
+    if (siteId) {
+      userSites = filter(sites, e => e.id === siteId);
+    } else {
+      const clientId = get(substate, 'userData.roleForClient.client.id', null);
+      if (clientId) {
+        userSites = get(substate, 'baseData.sites.details', {});
+        userSites = [{ id: 0, name: 'All' }, ...userSites];
+      }
+    }
+    const returnArray = map(userSites, e => pick(e, ['id', 'name']));
+
+    return returnArray;
+  }
+);
+
+// Deccorated site locations
+const selectSiteLocations = () => createSelector(
+  selectGlobal(),
+  (substate) => {
+    const sites = get(substate, 'baseData.sites.details', []);
+    return map(sites, e => pick(e, ['id', 'name']));
+  }
+);
+
 const selectClientSites = () => createSelector(
   selectGlobal(),
-  (substate) => get(substate, 'baseData.clientSites', {})
+  (substate) => get(substate, 'baseData.sites', {})
 );
 
 const selectSitePatients = () => createSelector(
@@ -224,7 +224,7 @@ const selectSelectedUserDetailsForForm = () => createSelector(
   (substate) => {
     const selectedUserInput = {};
     const selectedUserDetails = get(substate, 'baseData.selectedUser.details', {});
-    const clientSitesDetails = get(substate, 'baseData.clientSites.details', []);
+    const clientSitesDetails = get(substate, 'baseData.sites.details', []);
 
     if (selectedUserDetails) {
       selectedUserInput.firstName = selectedUserDetails.firstName;

@@ -1,11 +1,11 @@
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
+import _, { get } from 'lodash';
+import { actions as toastrActions } from 'react-redux-toastr';
 
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
-import _, { get } from 'lodash';
-import { actions as toastrActions } from 'react-redux-toastr';
 
 import {
   FETCH_MANAGE_SPONSOR_USERS_DATA,

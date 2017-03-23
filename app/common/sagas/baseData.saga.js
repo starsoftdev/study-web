@@ -11,7 +11,6 @@ import composeQueryString from '../../utils/composeQueryString';
 import { logout } from '../../containers/LoginPage/actions';
 
 import {
-  FETCH_SITES,
   FETCH_INDICATIONS,
   FETCH_SOURCES,
   FETCH_LEVELS,
@@ -61,8 +60,6 @@ import {
 } from '../../containers/App/constants';
 
 import {
-  sitesFetched,
-  sitesFetchingError,
   indicationsFetched,
   indicationsFetchingError,
   sourcesFetched,
@@ -144,7 +141,6 @@ import {
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
-  yield fork(fetchSitesWatcher);
   yield fork(fetchIndicationsWatcher);
   yield fork(fetchSourcesWatcher);
   yield fork(fetchLevelsWatcher);
@@ -189,53 +185,6 @@ export default function* baseDataSaga() {
   yield fork(fetchProtocolsWatcher);
   yield fork(fetchCroWatcher);
   yield fork(fetchUsersByRoleWatcher);
-}
-
-export function* fetchSitesWatcher() {
-  while (true) {
-    const action = yield take(FETCH_SITES);
-
-    try {
-      const requestURL = `${API_URL}/sites`;
-
-      const filterObj = {
-        include: [{
-          relation: 'roles',
-          scope: {
-            include: ['user'],
-          },
-        }, {
-          relation: 'studies',
-          scope: {
-            include: ['studyNotificationEmails'],
-          },
-        }],
-      };
-
-      const searchParams = action.payload || {};
-
-      if (searchParams.name) {
-        filterObj.where = {
-          name: {
-            like: `%${searchParams.name}%`,
-          },
-        };
-      }
-
-      const params = {
-        method: 'GET',
-        query: {
-          filter: JSON.stringify(filterObj),
-        },
-      };
-
-      const response = yield call(request, requestURL, params);
-
-      yield put(sitesFetched(response));
-    } catch (e) {
-      yield put(sitesFetchingError(e));
-    }
-  }
 }
 
 export function* fetchIndicationsWatcher() {
@@ -485,7 +434,6 @@ export function* fetchClientSitesWatcher() {
         }, {
           relation: 'principalInvestigators',
         }],
-        where: {},
       };
 
       if (searchParams && searchParams.name) {
@@ -584,7 +532,7 @@ export function* fetchPatientMessageUnreadCountWatcher() {
       const response = yield call(request, requestURL);
       yield put(patientMessageUnreadCountFetched(response));
     } catch (err) {
-      console.log(err);
+      console.trace(err);
     }
   }
 }
@@ -1015,8 +963,6 @@ function* getProposal(action) {
       method: 'POST',
       body: JSON.stringify(params),
     };
-
-    console.log('getProposal', params);
 
     if (size === 6) {
       const response = yield call(request, requestURL, options);

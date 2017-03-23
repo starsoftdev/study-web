@@ -8,21 +8,20 @@ import React, { PropTypes, Component } from 'react';
 import { Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { Field, reduxForm, touch, reset, change } from 'redux-form';
+import _ from 'lodash';
 
 import ReactSelect from '../../components/Input/ReactSelect';
-import { Field, reduxForm, touch, reset, change } from 'redux-form';
-
 import CenteredModal from '../../components/CenteredModal/index';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
 import AddNewCardForm from '../../components/AddNewCardForm';
-import { addCredits, fetchSites, getCreditsPrice, saveCard } from '../../containers/App/actions';
+import { addCredits, fetchClientSites, getCreditsPrice, saveCard } from '../../containers/App/actions';
 import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice, selectCurrentUserStripeCustomerId } from '../../containers/App/selectors';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
 import { selectAddCreditsFormValues, selectAddCreditsFormError } from './selectors';
 import validator, { addCreditsFields } from './validator';
 
-import _ from 'lodash';
 
 @reduxForm({
   form: 'addCredits',
@@ -34,13 +33,13 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
   static propTypes = {
     showModal: PropTypes.bool,
     siteLocations: PropTypes.array,
-    fetchSites: PropTypes.func,
+    fetchClientSites: PropTypes.func,
     closeModal: PropTypes.func,
     openModal: PropTypes.func,
     addCredits: PropTypes.func,
     currentUser: PropTypes.object,
     addCreditsOperation: PropTypes.object,
-    getCreditsPrice: PropTypes.func,
+    getCreditsPrice: PropTypes.func.isRequired,
     creditsPrice: PropTypes.object,
     shoppingCartFormError: PropTypes.bool,
     shoppingCartFormValues: PropTypes.object,
@@ -75,8 +74,11 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
   }
 
   componentDidMount() {
-    this.props.fetchSites();
-    this.props.getCreditsPrice();
+    const { currentUser, fetchClientSites, getCreditsPrice } = this.props;
+    if (currentUser && currentUser.roleForClient.isAdmin) {
+      fetchClientSites(currentUser.roleForClient.client_id);
+    }
+    getCreditsPrice();
   }
 
   componentWillReceiveProps(newProps) {
@@ -340,7 +342,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     addCredits: (customerId, data) => dispatch(addCredits(customerId, data)),
-    fetchSites:       () => dispatch(fetchSites()),
+    fetchClientSites: (id) => dispatch(fetchClientSites(id)),
     getCreditsPrice: () => dispatch(getCreditsPrice()),
     touchAddCredits: () => dispatch(touch('addCredits', ...addCreditsFields)),
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),

@@ -17,7 +17,7 @@ import FilterBar from './components/FilterBar';
 import AllEventsModal from './components/AllEventsModal';
 
 import {
-  fetchSites,
+  fetchClientSites,
   fetchIndications,
   fetchProtocols,
 } from '../../containers/App/actions';
@@ -82,7 +82,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchSites: () => dispatch(fetchSites()),
+  fetchClientSites: (id) => dispatch(fetchClientSites(id)),
   fetchIndications: () => dispatch(fetchIndications()),
   fetchPatientsByStudy: (studyId, siteId) => dispatch(fetchPatientsByStudy(studyId, siteId)),
   fetchProtocols: () => dispatch(fetchProtocols()),
@@ -101,7 +101,7 @@ export default class CalendarPage extends React.Component {
     patientsByStudy: PropTypes.object.isRequired,
     schedules: PropTypes.object.isRequired,
     protocols: PropTypes.object.isRequired,
-    fetchSites: PropTypes.func.isRequired,
+    fetchClientSites: PropTypes.func.isRequired,
     fetchIndications: PropTypes.func.isRequired,
     fetchPatientsByStudy: PropTypes.func.isRequired,
     fetchProtocols: PropTypes.func.isRequired,
@@ -143,7 +143,7 @@ export default class CalendarPage extends React.Component {
   componentDidMount() {
     const { currentUser } = this.props;
 
-    this.props.fetchSites();
+    this.props.fetchClientSites(currentUser.roleForClient.client_id);
     this.props.fetchIndications();
     this.props.fetchSchedules({ clientId: currentUser.roleForClient.client_id });
     this.props.fetchProtocols();
