@@ -28,7 +28,7 @@ export default function request(url, options = {}) {
     headers.authorization = options.authToken;
   }
 
-  if (!options.method || options.method === 'GET') {
+  if (!options.method) {
     if (options.query) {
       const queryString = serializeParams(options.query);
       newUrl = `${url}?${queryString}`;

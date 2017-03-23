@@ -8,18 +8,20 @@ import { connect } from 'react-redux';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
-import * as Selector from '../selectors';
 import { push } from 'react-router-redux';
 import moment from 'moment';
 import _ from 'lodash';
 import { touch, change } from 'redux-form';
+import Scroll from 'react-scroll';
 
+import * as Selector from '../selectors';
 import PatientCategory from './PatientCategory';
 import PatientDetailModal from '../PatientDetail/PatientDetailModal';
 import ScheduledPatientModal from '../ScheduledPatientModal/index';
 import {
   fetchPatientDetails,
   showScheduledModal,
+  hideScheduledModal,
   setCurrentPatientCategoryId,
   setCurrentPatientId,
   setOpenPatientModal,
@@ -29,11 +31,10 @@ import {
   changeScheduledDate,
   submitSchedule,
 } from '../actions';
-import { selectCurrentUser, selectIndications } from '../../App/selectors';
+import { selectCurrentUser } from '../../App/selectors';
 import { markAsReadPatientMessages } from '../../App/actions';
 import { fields } from '../ScheduledPatientModal/validator';
 
-import Scroll from 'react-scroll';
 const scroll = Scroll.animateScroll;
 
 @DragDropContext(HTML5Backend)
@@ -51,16 +52,13 @@ class PatientBoard extends React.Component {
     setCurrentPatientCategoryId: React.PropTypes.func.isRequired,
     setOpenPatientModal: React.PropTypes.func.isRequired,
     showScheduledModal: React.PropTypes.func.isRequired,
+    hideScheduledModal: React.PropTypes.func.isRequired,
     changeScheduledDate: React.PropTypes.func.isRequired,
     switchToNoteSection: React.PropTypes.func.isRequired,
     switchToTextSection: React.PropTypes.func.isRequired,
     push: React.PropTypes.func.isRequired,
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object.isRequired,
-    site: React.PropTypes.object.isRequired,
-    protocol: React.PropTypes.object.isRequired,
-    indications: React.PropTypes.array.isRequired,
-    indicationId: React.PropTypes.number.isRequired,
     touchSchedulePatientModal: React.PropTypes.func.isRequired,
     submitSchedule: React.PropTypes.func.isRequired,
     schedulePatientFormErrors: React.PropTypes.object,
@@ -153,7 +151,7 @@ class PatientBoard extends React.Component {
 
   onPatientScheduleSubmit(e) {
     e.preventDefault();
-    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, site, protocol, currentUser, indicationId, selectedDate, patientCategories, currentPatientCategoryId, touchSchedulePatientModal } = this.props;
+    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, currentUser, selectedDate, patientCategories, currentPatientCategoryId, touchSchedulePatientModal } = this.props;
 
     if (schedulePatientFormErrors) {
       touchSchedulePatientModal();
@@ -171,17 +169,12 @@ class PatientBoard extends React.Component {
 
     const submitData = {
       id: currentCallReminderId,
-      siteLocation: site.name,
-      indication: _.find(this.props.indications, { id: indicationId }).name,
-      protocolNumber: protocol.number,
       patientId: currentPatient.id,
-      patientName: `${currentPatient.firstName} ${currentPatient.lastName}`,
-      userId: currentUser.id,
+      clientId: currentUser.roleForClient.client_id,
       time: moment(scheduledDate).add(formValues.amPm === 'AM' ?
       formValues.hours % 12 :
       (formValues.hours % 12) + 12, 'hours').add(formValues.minutes, 'minutes').toISOString(),
       textReminder: formValues.textReminder || false,
-      timezone: currentUser.timezone,
     };
 
     // Get category info, so that upon successful schedule submission, the patient will be moved into the
@@ -237,7 +230,7 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, showScheduledModal, ePMS, currentPatient } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, hideScheduledModal, ePMS, currentPatient } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
@@ -252,7 +245,7 @@ class PatientBoard extends React.Component {
             onClose={this.closePatientModal}
             ePMS={ePMS}
           />
-          <ScheduledPatientModal show={openScheduledModal && currentPatient != null} onHide={showScheduledModal} handleSubmit={this.onPatientScheduleSubmit} handleDateChange={this.handleDateChange} />
+          <ScheduledPatientModal show={openScheduledModal && currentPatient != null} onHide={hideScheduledModal} handleSubmit={this.onPatientScheduleSubmit} handleDateChange={this.handleDateChange} />
         </div>
         <div className="patients-form-closer" onClick={this.closePatientModal} />
       </div>
@@ -270,12 +263,8 @@ const mapStateToProps = createStructuredSelector({
   schedulePatientFormValues: Selector.selectSchedulePatientFormValues(),
   schedulePatientFormErrors: Selector.selectSchedulePatientFormErrors(),
   studyId: Selector.selectStudyId(),
-  indicationId: Selector.selectIndicationId(),
-  site: Selector.selectSite(),
-  protocol: Selector.selectProtocol(),
   selectedDate: Selector.selectSelectedDate(),
   currentUser: selectCurrentUser(),
-  indications: selectIndications(),
 });
 
 const mapDispatchToProps = (dispatch) => (
@@ -285,6 +274,7 @@ const mapDispatchToProps = (dispatch) => (
     setCurrentPatientCategoryId: (id) => dispatch(setCurrentPatientCategoryId(id)),
     setOpenPatientModal: (show) => dispatch(setOpenPatientModal(show)),
     showScheduledModal: () => dispatch(showScheduledModal()),
+    hideScheduledModal: () => dispatch(hideScheduledModal()),
     switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
     switchToTextSection: () => dispatch(switchToTextSectionDetail()),
     changeScheduledDate: (date) => dispatch(changeScheduledDate(date)),
