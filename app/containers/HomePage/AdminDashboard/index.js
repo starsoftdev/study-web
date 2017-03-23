@@ -385,7 +385,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             <Button bsStyle="primary" onClick={this.openFiltersModal}>
               Filters
             </Button>
-            <Modal dialogComponentclassName={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.addUserModalOpen} onHide={this.closeFiltersModal}>
+            <Modal dialogComponentClassName={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.addUserModalOpen} onHide={this.closeFiltersModal}>
               <Modal.Header>
                 <Modal.Title>Filters</Modal.Title>
                 <a className="lightbox-close close" onClick={this.closeFiltersModal}>

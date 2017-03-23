@@ -98,7 +98,7 @@ ReactMultiCheckBox.propTypes = {
   className: React.PropTypes.string,
   dataSource: React.PropTypes.array,
   includeAllOption: React.PropTypes.bool,
-  initialValue: React.PropTypes.object || React.PropTypes.arrayOf(React.PropTypes.object),
+  initialValue: React.PropTypes.any,
   input: React.PropTypes.object.isRequired,
   meta: React.PropTypes.object.isRequired,
   name: React.PropTypes.string.isRequired,
