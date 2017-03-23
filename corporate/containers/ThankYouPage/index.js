@@ -74,8 +74,6 @@ export class ThankYouPage extends React.Component {
       }
     }
 
-    console.log('render', landing);
-
     const thankyouForText =
       (thankYouData.thankyouFor && thankYouData.thankyouFor !== '') ? thankYouData.thankyouFor : 'Thank you for signing up for our research study!';
     const youWillBeText =
