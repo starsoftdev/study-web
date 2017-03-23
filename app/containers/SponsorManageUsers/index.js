@@ -23,7 +23,7 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
     fetchManageSponsorUsersData: React.PropTypes.func,
     manageSponsorUsersData: React.PropTypes.object,
     formValues: React.PropTypes.object,
-    protocols: React.PropTypes.array,
+    protocols: React.PropTypes.object,
     editSponsorUser: React.PropTypes.func,
     deleteSponsorUser: React.PropTypes.func,
     editProtocolFormValues: React.PropTypes.object,
@@ -115,7 +115,6 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
             editUser={this.editUser}
             deleteUser={this.deleteUser}
             editProtocol={this.editSponsorProtocol}
-            protocols={protocols}
           />
         </section>
       </div>
