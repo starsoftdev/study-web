@@ -58,7 +58,7 @@ describe('CalendarPage/actions', () => {
 
   describe('fetchSchedules action', () => {
     it('should dispatch action with correct type and payload', () => {
-      const data = { userId: 1 };
+      const data = { clientId: 1 };
       const expected = {
         type: FETCH_SCHEDULES,
         data,
@@ -70,9 +70,8 @@ describe('CalendarPage/actions', () => {
   describe('submitSchedule action', () => {
     it('should dispatch action with correct type and payload', () => {
       const data = {
-        userId: 1,
+        clientId: 1,
         patientId: 2,
-        siteLocation: 'Wayne Enterprises',
         indication: 'Acne',
         protocolNumber: 'AC-1',
         time: new Date(),
@@ -88,13 +87,13 @@ describe('CalendarPage/actions', () => {
   describe('deleteSchedule action', () => {
     it('should dispatch action with correct type and payload', () => {
       const scheduleId = 1;
-      const userId = 2;
+      const clientId = 1;
       const expected = {
         type: DELETE_SCHEDULE,
         scheduleId,
-        userId,
+        clientId,
       };
-      expect(deleteSchedule(scheduleId, userId)).toEqual(expected);
+      expect(deleteSchedule(scheduleId, clientId)).toEqual(expected);
     });
   });
 });

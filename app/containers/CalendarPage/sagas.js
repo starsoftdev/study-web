@@ -64,7 +64,7 @@ export function* fetchSchedulesWatcher() {
 
 export function* fetchSchedulesWorker(action) {
   try {
-    const requestURL = `${API_URL}/callReminders/getSchedules`;
+    const requestURL = `${API_URL}/callReminders/schedules`;
     const params = {
       query: action.data,
     };
@@ -108,7 +108,9 @@ export function* deleteSchedulesWorker(action) {
     const requestURL = `${API_URL}/callReminders/${action.scheduleId}/deleteSchedule`;
     const params = {
       method: 'DELETE',
-      body: JSON.stringify({ userId: action.userId }),
+      query: {
+        clientId: action.clientId,
+      },
     };
     const response = yield call(request, requestURL, params);
 

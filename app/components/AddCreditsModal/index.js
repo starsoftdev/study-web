@@ -59,7 +59,6 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     this.incQuantity = this.incQuantity.bind(this);
     this.decQuantity = this.decQuantity.bind(this);
     this.addCreditsSubmit = this.addCreditsSubmit.bind(this);
-    this.handleSiteLocationChoose = this.handleSiteLocationChoose.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.handleNewModalOpen = this.handleNewModalOpen.bind(this);
     this.openAddCardModal = this.openAddCardModal.bind(this);
@@ -137,8 +136,6 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
       this.resetState();
     }
   }
-
-  handleSiteLocationChoose() {}
 
   incQuantity() {
     if (this.state.quantity < 999) {
