@@ -71,7 +71,7 @@ class Filter extends React.Component {
         <Select
           value={options.value}
           options={comparisonOptions}
-          className="form-control"
+          className="form-control percent-select"
           simpleValue
           clearable={false}
           onChange={(event) => {
