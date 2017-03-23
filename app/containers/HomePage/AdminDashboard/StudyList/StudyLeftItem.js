@@ -70,7 +70,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
         <td className="list">
           <ul className="list-unstyled">
             <li><span><a href={landingHref} className="landig-link" target="_blank">{item.study_id}</a></span></li>
-            <li><span>{`${item.percent ? `${item.percent}%` : ''}`}</span></li>
+            <li><span>{`${(item.percent || item.percent === 0) ? `${item.percent}%` : ''}`}</span></li>
 
             <li><span>{item.sm_user_first_name ? `SM: ${item.sm_user_first_name} ${item.sm_user_last_name}` : 'SM: N/A'}</span></li>
             <li><span>{item.bd_user_first_name ? `BD: ${item.bd_user_first_name} ${item.bd_user_last_name}` : 'BD: N/A'}</span></li>
