@@ -190,3 +190,5 @@ export const FETCH_CRO_ERROR                       = 'App/FETCH_CRO_ERROR';
 export const FETCH_USERS_BY_ROLE                   = 'App/FETCH_USERS_BY_ROLE';
 export const FETCH_USERS_BY_ROLE_SUCCESS           = 'App/FETCH_USERS_BY_ROLE_SUCCESS';
 export const FETCH_USERS_BY_ROLE_ERROR             = 'App/FETCH_USERS_BY_ROLE_ERROR';
+
+export const CHANGE_TEMPORARY_PASSWORD             = 'App/CHANGE_TEMPORARY_PASSWORD';

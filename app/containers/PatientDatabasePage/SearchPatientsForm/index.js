@@ -49,6 +49,26 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     this.initSearch = this.initSearch.bind(this);
   }
 
+  componentWillReceiveProps(newProps) {
+    if (newProps.formValues) {
+      const params = newProps.formValues;
+      const paramKeys = Object.keys(params);
+
+      paramKeys.forEach(key => {
+        if (key === 'status' || key === 'source') {
+          if (params[key] === '0') {
+            params[key] = 0;
+          }
+        }
+      });
+
+      if (Object.keys(params).length) {
+        // console.log('params', params);
+        // this.props.onSubmit(params, true);
+      }
+    }
+  }
+
   initSearch(e, name) {
     const params = this.props.formValues;
     const paramKeys = Object.keys(params);

@@ -8,6 +8,7 @@ import { reset } from 'redux-form';
 
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
+import { logout } from '../../containers/LoginPage/actions';
 
 import {
   FETCH_SITES,
@@ -56,6 +57,7 @@ import {
   FETCH_PROTOCOLS,
   FETCH_CRO,
   FETCH_USERS_BY_ROLE,
+  CHANGE_TEMPORARY_PASSWORD,
 } from '../../containers/App/constants';
 
 import {
@@ -173,6 +175,7 @@ export default function* baseDataSaga() {
   yield fork(fetchIndicationLevelPriceWatcher);
   yield fork(changeUsersTimezoneWatcher);
   yield fork(fetchClientAdminsWatcher);
+  yield fork(changeTemporaryPassword);
   yield fork(takeLatest, FETCH_LANDING, fetchLandingStudy);
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
   yield fork(takeLatest, FIND_OUT_PATIENTS, postFindOutPatients);
@@ -879,6 +882,27 @@ export function* fetchClientAdminsWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching clients admins');
     yield put(toastrActions.error('', errorMessage));
     yield put(fetchClientAdminsError(err));
+  }
+}
+
+export function* changeTemporaryPassword() {
+  while (true) {
+    const { payload } = yield take(CHANGE_TEMPORARY_PASSWORD);
+
+    try {
+      const requestURL = `${API_URL}/userPasswordChange/change-password`;
+      const params = {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      };
+      const response = yield call(request, requestURL, params);
+
+      yield put(toastrActions.success('', 'You have successfully changed your password.'));
+      yield put(logout());
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      yield put(toastrActions.error('', errorMessage));
+    }
   }
 }
 

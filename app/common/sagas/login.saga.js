@@ -110,6 +110,7 @@ export function* logoutSaga() {
     // absent user data.
     // manually push the location state to the login URL, since replace will try to update redux state, which we do not want
     yield call(logout);
+    yield call(removeItem, 'temp_password');
     yield call(() => { location.href = '/login'; });
 
     yield put(setAuthState(false));

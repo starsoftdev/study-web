@@ -186,6 +186,8 @@ import {
   FETCH_USERS_BY_ROLE,
   FETCH_USERS_BY_ROLE_SUCCESS,
   FETCH_USERS_BY_ROLE_ERROR,
+
+  CHANGE_TEMPORARY_PASSWORD,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -1236,6 +1238,13 @@ export function fetchUsersByRoleSuccess(payload) {
 export function fetchUsersByRoleError(payload) {
   return {
     type: FETCH_USERS_BY_ROLE_ERROR,
+    payload,
+  };
+}
+
+export function changeTemporaryPassword(payload) {
+  return {
+    type: CHANGE_TEMPORARY_PASSWORD,
     payload,
   };
 }
