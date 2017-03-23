@@ -142,30 +142,6 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     return null;
   }
 
-  renderSite() {
-    const { sites, savedPatient } = this.props;
-    const siteOptions = sites.map(site => ({
-      name: site.name,
-      value: site.id,
-    }));
-    return (
-      <div className="field-row site-select">
-        <strong className="label">
-          <label>SITE</label>
-        </strong>
-        <Field
-          name="site"
-          component={ReactSelect}
-          className="field"
-          placeholder="Select Site"
-          options={siteOptions}
-          onChange={(event) => this.changeSite(event, siteOptions)}
-          disabled={savedPatient.saving}
-        />
-      </div>
-    );
-  }
-
   render() {
     const { formValues, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, sources, patientCategories, loading, submitting, savedPatient } = this.props;
     const indicationOptions = map(indications, indicationIterator => ({
@@ -359,7 +335,6 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             disabled={initialValues.source && initialValues.source.label === 'StudyKIK'}
           />
         </div>
-        {this.renderSite()}
         <div className="field-row">
           <strong className="label" />
           <div className="field">
