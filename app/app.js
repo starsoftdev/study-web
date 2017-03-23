@@ -14,6 +14,8 @@ import ReduxToastr from 'react-redux-toastr';
 import { applyRouterMiddleware, Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import useScroll from 'react-router-scroll';
+// import ServiceWorker and AppCache
+import { install } from 'offline-plugin/runtime';
 
 // Import the CSS reset, which HtmlWebpackPlugin transfers to the build folder
 import 'sanitize.css/sanitize.css';
@@ -23,6 +25,10 @@ import 'codemirror/lib/codemirror.css';
 import configureStore from './store';
 
 import './assets/less/main.less';
+
+// Set up the router, wrapping all Routes in the App component
+import App from './containers/App';
+import createRoutes from './routes';
 
 // Create redux store with history
 // this uses the singleton browserHistory provided by react-router
@@ -34,9 +40,6 @@ const store = configureStore(initialState, browserHistory);
 // Sync history and store
 const history = syncHistoryWithStore(browserHistory, store);
 
-// Set up the router, wrapping all Routes in the App component
-import App from './containers/App';
-import createRoutes from './routes';
 const rootRoute = {
   component: App,
   childRoutes: createRoutes(store),
@@ -71,5 +74,4 @@ render();
 // Install ServiceWorker and AppCache in the end since
 // it's not most important operation and if main code fails,
 // we do not want it installed
-import { install } from 'offline-plugin/runtime';
 install();

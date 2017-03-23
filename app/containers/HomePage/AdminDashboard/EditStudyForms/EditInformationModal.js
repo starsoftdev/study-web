@@ -3,19 +3,20 @@
  */
 
 import React, { PropTypes } from 'react';
-import Collapse from 'react-bootstrap/lib/Collapse';
-import Button from 'react-bootstrap/lib/Button';
+import _ from 'lodash';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { Field, FieldArray, reduxForm, change, arrayRemoveAll, arrayPush } from 'redux-form';
+import Button from 'react-bootstrap/lib/Button';
+import Collapse from 'react-bootstrap/lib/Collapse';
+import Form from 'react-bootstrap/lib/Form';
+
 import Toggle from '../../../../components/Input/Toggle';
 import Input from '../../../../components/Input/index';
 import DatePicker from '../../../../components/Input/DatePicker';
 import ReactSelect from '../../../../components/Input/ReactSelect';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { Field, FieldArray, reduxForm, change, arrayRemoveAll, arrayPush } from 'redux-form';
-import Form from 'react-bootstrap/lib/Form';
 import RenderEmailsList from './RenderEmailsList';
-import _ from 'lodash';
 import { selectStudyCampaigns } from '../selectors';
 import FormGeosuggest from '../../../../components/Input/Geosuggest';
 
@@ -25,7 +26,6 @@ const mapStateToProps = createStructuredSelector({
 
 @reduxForm({ form: 'dashboardEditStudyForm' })
 @connect(mapStateToProps)
-
 export class EditInformationModal extends React.Component {
   static propTypes = {
     openModal: PropTypes.bool.isRequired,

@@ -9,9 +9,9 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { find, reject } from 'lodash';
 import classNames from 'classnames';
+import Helmet from 'react-helmet';
 
 import {
-  fetchSites,
   fetchClientSites,
   fetchRewards,
   fetchRewardsBalance,
@@ -20,7 +20,6 @@ import {
 
 import {
   selectCurrentUser,
-  selectCurrentUserClientId,
   selectUserSiteLocations,
   selectRewards,
   selectRewardsBalance,
@@ -41,25 +40,22 @@ import diamond from '../../assets/images/diamond.svg';
 import platinum from '../../assets/images/platinum.svg';
 import gold from '../../assets/images/gold.svg';
 import ruby from '../../assets/images/ruby.png';
-import Helmet from 'react-helmet';
 
 export class RewardsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
     currentUser: PropTypes.object,
-    currentUserClientId: PropTypes.number,
     rewards: PropTypes.array,
     rewardsBalance: PropTypes.object,
     sites: PropTypes.array,
-    fetchSites: PropTypes.func,
-    fetchClientSites: PropTypes.func,
+    fetchClientSites: PropTypes.func.isRequired,
     fetchRewards: PropTypes.func,
-    fetchRewardsBalance: PropTypes.func,
-    onSubmitForm: PropTypes.func,
-    pickReward: PropTypes.func,
+    fetchRewardsBalance: PropTypes.func.isRequired,
+    onSubmitForm: PropTypes.func.isRequired,
+    pickReward: PropTypes.func.isRequired,
     selectedSite: PropTypes.number,
     paginationOptions: PropTypes.object,
-    setActiveSort: PropTypes.func,
+    setActiveSort: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -75,10 +71,9 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
   }
 
   componentWillMount() {
-    this.props.fetchSites();
-    const { currentUserClientId } = this.props;
-    if (currentUserClientId) {
-      this.props.fetchClientSites(currentUserClientId, {});
+    const { currentUser } = this.props;
+    if (currentUser) {
+      this.props.fetchClientSites(currentUser.roleForClient.client_id);
     }
   }
 
@@ -328,7 +323,6 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
-  currentUserClientId: selectCurrentUserClientId(),
   siteLocations: selectUserSiteLocations(),
   rewards: selectRewards(),
   rewardsBalance: selectRewardsBalance(),
@@ -339,7 +333,6 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSites: () => dispatch(fetchSites()),
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchRewards: (clientId, siteId) => dispatch(fetchRewards(clientId, siteId)),
     fetchRewardsBalance: (clientId, siteId) => dispatch(fetchRewardsBalance(clientId, siteId)),

@@ -6,14 +6,14 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import Helmet from 'react-helmet';
 
 import ProfileForm from '../../components/ProfileForm';
 import { selectChangePasswordResult, selectOtherUser, selectProfileFormValues } from '../../containers/ProfilePage/selectors';
 import { selectCurrentUser, selectChangeTimezoneState } from '../../containers/App/selectors';
 import { changePassword, changeImage, fetchOtherUser } from '../../containers/ProfilePage/actions';
 import { changeUsersTimezone } from '../../containers/App/actions';
-import { createStructuredSelector } from 'reselect';
-import Helmet from 'react-helmet';
 
 export class ProfilePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

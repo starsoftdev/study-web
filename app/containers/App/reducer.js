@@ -5,7 +5,6 @@ import {
   SET_AUTH_STATE,
   SET_USER_DATA,
 
-  FETCH_SITES_SUCCESS,
   FETCH_INDICATIONS_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_LEVELS_SUCCESS,
@@ -68,7 +67,6 @@ import {
   SEARCH_SITE_PATIENTS_ERROR,
 
   MARK_AS_READ_PATIENT_MESSAGES,
-
 
   FETCH_CLIENT_ROLES,
   FETCH_CLIENT_ROLES_SUCCESS,
@@ -322,11 +320,6 @@ export default function appReducer(state = initialState, action) {
       resultState = {
         ...state,
         pageEvents: payload,
-      };
-      break;
-    case FETCH_SITES_SUCCESS:
-      baseDataInnerState = {
-        sites: payload,
       };
       break;
     case FETCH_INDICATIONS_SUCCESS:
@@ -687,7 +680,7 @@ export default function appReducer(state = initialState, action) {
       break;
     case FETCH_CLIENT_SITES:
       baseDataInnerState = {
-        clientSites: {
+        sites: {
           details: [],
           fetching: true,
           error: null,
@@ -696,7 +689,7 @@ export default function appReducer(state = initialState, action) {
       break;
     case FETCH_CLIENT_SITES_SUCCESS:
       baseDataInnerState = {
-        clientSites: {
+        sites: {
           details: payload,
           fetching: false,
           error: null,
@@ -705,7 +698,7 @@ export default function appReducer(state = initialState, action) {
       break;
     case FETCH_CLIENT_SITES_ERROR:
       baseDataInnerState = {
-        clientSites: {
+        sites: {
           details: [],
           fetching: false,
           error: payload,

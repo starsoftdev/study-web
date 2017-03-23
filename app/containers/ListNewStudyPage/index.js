@@ -28,7 +28,6 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 
 import Helmet from 'react-helmet';
 import {
-  fetchSites,
   fetchIndications,
   fetchLevels,
   saveSite,
@@ -54,7 +53,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     fullSiteLocations: PropTypes.object,
     indications: PropTypes.array,
     studyLevels: PropTypes.array,
-    fetchSites: PropTypes.func,
     fetchIndications: PropTypes.func,
     fetchLevels: PropTypes.func,
     listNewStudyState: PropTypes.object,
@@ -94,8 +92,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
   }
 
   componentDidMount() {
-    this.props.fetchSites();
-
     this.props.fetchIndications();
     this.props.fetchLevels();
     this.props.getAvailPhoneNumbers();
@@ -335,7 +331,6 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSites:       () => dispatch(fetchSites()),
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchIndications: () => dispatch(fetchIndications()),
     fetchLevels:      () => dispatch(fetchLevels()),

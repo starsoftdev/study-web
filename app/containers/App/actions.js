@@ -3,10 +3,6 @@ import {
   SET_AUTH_STATE,
   SET_USER_DATA,
 
-  FETCH_SITES,
-  FETCH_SITES_SUCCESS,
-  FETCH_SITES_ERROR,
-
   FETCH_INDICATIONS,
   FETCH_INDICATIONS_SUCCESS,
   FETCH_INDICATIONS_ERROR,
@@ -214,30 +210,6 @@ export function setUserData(userData) {
     payload: {
       userData,
     },
-  };
-}
-
-// ///////////////////////////////////////////
-// site locations
-// ///////////////////////////////////////////
-export function fetchSites(payload) {
-  return {
-    type: FETCH_SITES,
-    payload,
-  };
-}
-
-export function sitesFetched(payload) {
-  return {
-    type: FETCH_SITES_SUCCESS,
-    payload,
-  };
-}
-
-export function sitesFetchingError(payload) {
-  return {
-    type: FETCH_SITES_ERROR,
-    payload,
   };
 }
 

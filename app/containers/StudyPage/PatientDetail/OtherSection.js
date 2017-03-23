@@ -3,7 +3,6 @@
  */
 
 import React from 'react';
-import ReactSelect from '../../../components/Input/ReactSelect';
 import { connect } from 'react-redux';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
@@ -12,10 +11,12 @@ import Overlay from 'react-bootstrap/lib/Overlay';
 import { reset, Field, reduxForm } from 'redux-form';
 import classNames from 'classnames';
 import moment from 'moment-timezone';
+import { createStructuredSelector } from 'reselect';
+
+import ReactSelect from '../../../components/Input/ReactSelect';
 import Input from '../../../components/Input/index';
 import { fetchIndications } from '../../App/actions';
 import { selectIndications } from '../../App/selectors';
-import { createStructuredSelector } from 'reselect';
 import { selectValues, selectSyncErrors, selectFormDidChange } from '../../../common/selectors/form.selector';
 import { submitAddPatientIndication, submitRemovePatientIndication, submitPatientUpdate } from '../actions';
 import IndicationOverlay from './IndicationOverlay';
