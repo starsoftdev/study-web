@@ -73,7 +73,8 @@ export class ThankYouPage extends React.Component {
         thankYouData = data.landingPage.thankYouPage;
       }
     }
-    console.log('render', thankYouData);
+
+    console.log('render', landing);
 
     const thankyouForText =
       (thankYouData.thankyouFor && thankYouData.thankyouFor !== '') ? thankYouData.thankyouFor : 'Thank you for signing up for our research study!';
@@ -113,7 +114,7 @@ export class ThankYouPage extends React.Component {
             }
             {thankYouData.isSharePhone &&
               <span className="tel">
-                <a href={`tel:${site.phone.phoneNumber}`} className="txt-orange">{site.phone.phoneNumber}</a>
+                <a href={`tel:${landing.recruitmentPhone}`} className="txt-orange">{landing.recruitmentPhone}</a>
               </span>
             }
             {!thankYouData.isHideLocationData &&
