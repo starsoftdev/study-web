@@ -6,14 +6,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { DropTarget } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
+import { find } from 'lodash';
+import classNames from 'classnames';
 
 import { selectCurrentUser, selectSitePatients } from '../../App/selectors';
 import * as Selector from '../selectors';
 import DragTypes from './dragSourceTypes';
 import Patient from './Patient';
 import { schedulePatient, submitMovePatientBetweenCategories, showScheduledModal } from '../actions';
-import { find } from 'lodash';
-import classNames from 'classnames';
 
 /**
  * Specifies the drop target contract.

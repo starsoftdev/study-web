@@ -21,7 +21,9 @@ import TopHeaderBar from '../../components/TopHeaderBar';
 import TopHeaderBar2 from '../../components/TopHeaderBar2';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import GlobalNotifications from '../../containers/GlobalNotifications';
-import { fetchMeFromToken } from './actions';
+import { fetchMeFromToken, changeTemporaryPassword } from './actions';
+import { getItem } from '../../utils/localStorage';
+import ChangeTemporaryPasswordModal from '../../components/ChangeTemporaryPasswordModal';
 import { selectAuthState, selectCurrentUser, selectEvents, selectUserRoleType } from './selectors';
 
 import './styles.less';
@@ -30,6 +32,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
   static propTypes = {
     children: React.PropTypes.node,
+    changePassword: React.PropTypes.func,
     currentUserRoleType: React.PropTypes.string,
     fetchMeFromToken: React.PropTypes.func.isRequired,
     isLoggedIn: React.PropTypes.bool.isRequired,
@@ -38,12 +41,28 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     userData: React.PropTypes.object,
   };
 
+  constructor(props) {
+    super(props);
+    this.handleChangePassword = this.handleChangePassword.bind(this);
+    this.changePassword = this.props.changePassword.bind(this);
+
+    this.state = {
+      showChangePwdModal: false,
+    };
+  }
+
   componentWillMount() {
     // Always load user details from the localStorage Token
     this.props.fetchMeFromToken();
   }
 
   componentWillReceiveProps(nextProps) {
+    const tempPassword = getItem('temp_password');
+
+    if (tempPassword) {
+      this.setState({ showChangePwdModal: true });
+    }
+
     if (process.env.NODE_ENV !== 'development') {
       if (!this.props.userData && nextProps.userData) {
         ReactGA.initialize('UA-91568063-1', {
@@ -55,6 +74,14 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         ReactGA.pageview(nextProps.location.pathname);
       }
     }
+  }
+
+  handleChangePassword(ev) { // eslint-disable-line react/prefer-stateless-function
+    const params = ev;
+    params.user_id = this.props.userData.id;
+    params.changeTempPassword = true;
+
+    this.props.changePassword(params);
   }
 
   render() {
@@ -91,6 +118,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
             {React.Children.toArray(this.props.children)}
           </main>
           <GlobalNotifications {...this.props} events={pageEvents} />
+          <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
         </div>
       );
     }
@@ -101,6 +129,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         <main id="main">
           {React.Children.toArray(this.props.children)}
         </main>
+        <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
       </div>
     );
   }
@@ -115,6 +144,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    changePassword: (values) => dispatch(changeTemporaryPassword(values)),
     fetchMeFromToken: () => dispatch(fetchMeFromToken()),
   };
 }

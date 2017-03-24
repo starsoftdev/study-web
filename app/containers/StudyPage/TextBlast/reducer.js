@@ -78,7 +78,6 @@ export default function TextBlastModal(state, action) {
       return {
         ...state,
         values: {
-          ...state.values,
           patients: [],
         },
       };

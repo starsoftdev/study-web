@@ -28,14 +28,12 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 
 import Helmet from 'react-helmet';
 import {
-  fetchSites,
   fetchIndications,
   fetchLevels,
   saveSite,
   getAvailPhoneNumbers,
   fetchIndicationLevelPrice,
   fetchClientSites,
-  fetchClientAdmins,
 } from '../../containers/App/actions';
 import {
   selectSiteLocations,
@@ -55,7 +53,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     fullSiteLocations: PropTypes.object,
     indications: PropTypes.array,
     studyLevels: PropTypes.array,
-    fetchSites: PropTypes.func,
     fetchIndications: PropTypes.func,
     fetchLevels: PropTypes.func,
     listNewStudyState: PropTypes.object,
@@ -80,7 +77,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     fetchClientSites: PropTypes.func,
     currentUserClientId: PropTypes.number,
     userRoleType: PropTypes.string,
-    fetchClientAdmins: PropTypes.func,
     clientAdmins: PropTypes.object,
   }
 
@@ -96,14 +92,11 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
   }
 
   componentDidMount() {
-    this.props.fetchSites();
-
     this.props.fetchIndications();
     this.props.fetchLevels();
     this.props.getAvailPhoneNumbers();
     if (this.props.userRoleType === 'client') {
       this.props.fetchClientSites(this.props.currentUserClientId, {});
-      this.props.fetchClientAdmins(this.props.currentUserClientId);
     }
   }
 
@@ -338,7 +331,6 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSites:       () => dispatch(fetchSites()),
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchIndications: () => dispatch(fetchIndications()),
     fetchLevels:      () => dispatch(fetchLevels()),
@@ -348,7 +340,6 @@ function mapDispatchToProps(dispatch) {
     hideSubmitFormModal:  () => dispatch(hideSubmitFormModal()),
     fetchIndicationLevelPrice: (indicationId, levelId) => dispatch(fetchIndicationLevelPrice(indicationId, levelId)),
     clearFormSubmissionData: () => (dispatch(clearFormSubmissionData())),
-    fetchClientAdmins: (payload) => dispatch(fetchClientAdmins(payload)),
     touchNewStudy: () => (dispatch(touch('listNewStudy', ...newStudyFields))),
     touchShoppingCart: () => (dispatch(touch('shoppingCart', ...shoppingCartFields))),
   };

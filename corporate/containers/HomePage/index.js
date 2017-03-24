@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { reset } from 'redux-form';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
-import TrialsArticle from './components/TrialsArticle';
+import TrialsArticle from '../../components/TrialsArticle';
 import ClinicalTrialsSearchForm from '../../components/ClinicalTrialsSearchForm';
 import { fetchIndications, clinicalTrialsSearch, clearClinicalTrialsSearch } from '../../../app/containers/App/actions';
 import { selectIndications, selectTrials } from '../../../app/containers/App/selectors';

@@ -3,12 +3,14 @@
  */
 
 import {
-  SHOW_SCHEDULED_MODAL,
+  HIDE_SCHEDULED_MODAL,
+  SUBMIT_SCHEDULE_SUCCEEDED,
 } from '../constants';
 
 export default function ScheduledPatientModal(state, action) {
   switch (action.type) {
-    case SHOW_SCHEDULED_MODAL:
+    case HIDE_SCHEDULED_MODAL:
+    case SUBMIT_SCHEDULE_SUCCEEDED:
       return undefined;
     default:
       return state;

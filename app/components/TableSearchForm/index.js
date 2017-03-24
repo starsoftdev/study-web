@@ -4,23 +4,20 @@
 *
 */
 
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm } from 'redux-form';
-import Button from 'react-bootstrap/lib/Button';
 import moment from 'moment-timezone';
+import React, { Component, PropTypes } from 'react';
+import { Field, reduxForm } from 'redux-form';
 import { defaultRanges, DateRange } from 'react-date-range';
+import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
+
 import CenteredModal from '../CenteredModal/index';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 
-const mapStateToProps = createStructuredSelector({});
-
-@reduxForm({ form: 'ProposalForm' })
-@connect(mapStateToProps)
-class TableSearchForm extends Component { // eslint-disable-line react/prefer-stateless-function
+const formName = 'ProposalForm';
+@reduxForm({ form: formName })
+export default class TableSearchForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
     createPdf: PropTypes.func,
@@ -200,5 +197,3 @@ class TableSearchForm extends Component { // eslint-disable-line react/prefer-st
     );
   }
 }
-
-export default TableSearchForm;

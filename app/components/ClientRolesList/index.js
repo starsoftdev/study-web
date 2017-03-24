@@ -6,7 +6,7 @@ import { map, cloneDeep } from 'lodash';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import EditUserForm from '../../components/EditUserForm';
-import { selectCurrentUserClientId, selectClientSites, selectClientRoles, selectSelectedUser,
+import { selectCurrentUserClientId, selectSites, selectClientRoles, selectSelectedUser,
   selectDeletedClientRole, selectSavedUser, selectSelectedUserDetailsForForm } from '../../containers/App/selectors';
 import { clearSelectedUser, deleteClientRole, saveUser, deleteUser } from '../../containers/App/actions';
 import ClientRoleItem from './ClientRoleItem';
@@ -14,7 +14,7 @@ import ClientRoleItem from './ClientRoleItem';
 class ClientRolesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUserClientId: PropTypes.number,
-    clientSites: PropTypes.object,
+    sites: PropTypes.arrayOf(PropTypes.object),
     clientRoles: PropTypes.object,
     filterMethod: PropTypes.func,
     selectedUser: PropTypes.object,
@@ -172,7 +172,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { clientSites, selectedUserDetailsForForm, deletedClientRole, filterMethod, selectedUser, currentUser } = this.props;
+    const { sites, selectedUserDetailsForForm, deletedClientRole, filterMethod, selectedUser, currentUser } = this.props;
     let bDisabled = true;
     if (currentUser && currentUser.roleForClient) {
       bDisabled = ((currentUser.roleForClient.canPurchase && currentUser.roleForClient.canRedeemRewards) || currentUser.roleForClient.name === 'Super Admin') ? null : true;
@@ -182,7 +182,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
       ((item.canPurchase || item.canRedeemRewards || item.name === 'Super Admin' || !item.site_id || item.site_id === 0 || item.isAdmin) && !item.user.isArchived) ? <ClientRoleItem {...item} key={index} bDisabled={bDisabled} /> : null
     )
     );
-    const siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
+    const siteOptions = map(sites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
     let siteLocation = (selectedUser && selectedUser.details && selectedUser.details.roleForClient) ? selectedUser.details.roleForClient.site_id : null;
     let cPurchasable = false;
@@ -267,7 +267,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
 
 const mapStateToProps = createStructuredSelector({
   currentUserClientId: selectCurrentUserClientId(),
-  clientSites: selectClientSites(),
+  sites: selectSites(),
   clientRoles: selectClientRoles(),
   selectedUser: selectSelectedUser(),
   selectedUserDetailsForForm: selectSelectedUserDetailsForForm(),

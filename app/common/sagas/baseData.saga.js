@@ -8,9 +8,9 @@ import { reset } from 'redux-form';
 
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
+import { logout } from '../../containers/LoginPage/actions';
 
 import {
-  FETCH_SITES,
   FETCH_INDICATIONS,
   FETCH_SOURCES,
   FETCH_LEVELS,
@@ -56,11 +56,10 @@ import {
   FETCH_PROTOCOLS,
   FETCH_CRO,
   FETCH_USERS_BY_ROLE,
+  CHANGE_TEMPORARY_PASSWORD,
 } from '../../containers/App/constants';
 
 import {
-  sitesFetched,
-  sitesFetchingError,
   indicationsFetched,
   indicationsFetchingError,
   sourcesFetched,
@@ -142,7 +141,6 @@ import {
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
-  yield fork(fetchSitesWatcher);
   yield fork(fetchIndicationsWatcher);
   yield fork(fetchSourcesWatcher);
   yield fork(fetchLevelsWatcher);
@@ -173,6 +171,7 @@ export default function* baseDataSaga() {
   yield fork(fetchIndicationLevelPriceWatcher);
   yield fork(changeUsersTimezoneWatcher);
   yield fork(fetchClientAdminsWatcher);
+  yield fork(changeTemporaryPassword);
   yield fork(takeLatest, FETCH_LANDING, fetchLandingStudy);
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
   yield fork(takeLatest, FIND_OUT_PATIENTS, postFindOutPatients);
@@ -186,50 +185,6 @@ export default function* baseDataSaga() {
   yield fork(fetchProtocolsWatcher);
   yield fork(fetchCroWatcher);
   yield fork(fetchUsersByRoleWatcher);
-}
-
-export function* fetchSitesWatcher() {
-  while (true) {
-    const action = yield take(FETCH_SITES);
-
-    try {
-      const requestURL = `${API_URL}/sites`;
-
-      const filterObj = {
-        include: [{
-          relation: 'roles',
-          scope: {
-            include: ['user'],
-          },
-        }, {
-          relation: 'studies',
-          scope: {
-            include: ['studyNotificationEmails'],
-          },
-        }],
-      };
-
-      const searchParams = action.payload || {};
-
-      if (searchParams.name) {
-        filterObj.where = {
-          name: {
-            like: `%${searchParams.name}%`,
-          },
-        };
-      }
-
-      const queryParams = {
-        filter: JSON.stringify(filterObj),
-      };
-
-      const response = yield call(request, requestURL, { query: queryParams });
-
-      yield put(sitesFetched(response));
-    } catch (e) {
-      yield put(sitesFetchingError(e));
-    }
-  }
 }
 
 export function* fetchIndicationsWatcher() {
@@ -479,7 +434,6 @@ export function* fetchClientSitesWatcher() {
         }, {
           relation: 'principalInvestigators',
         }],
-        where: {},
       };
 
       if (searchParams && searchParams.name) {
@@ -491,12 +445,14 @@ export function* fetchClientSitesWatcher() {
         };
       }
 
-      const queryParams = {
-        filter: JSON.stringify(filterObj),
+      const params = {
+        method: 'GET',
+        query: {
+          filter: JSON.stringify(filterObj),
+        },
       };
-      const queryString = composeQueryString(queryParams);
-      const requestURL = `${API_URL}/clients/${clientId}/sites?${queryString}`;
-      const response = yield call(request, requestURL);
+      const requestURL = `${API_URL}/clients/${clientId}/sites`;
+      const response = yield call(request, requestURL, params);
 
       yield put(clientSitesFetched(response));
     } catch (err) {
@@ -576,7 +532,7 @@ export function* fetchPatientMessageUnreadCountWatcher() {
       const response = yield call(request, requestURL);
       yield put(patientMessageUnreadCountFetched(response));
     } catch (err) {
-      console.log(err);
+      console.trace(err);
     }
   }
 }
@@ -864,13 +820,10 @@ export function* fetchClientAdminsWatcher() {
 
 export function* fetchClientAdminsWorker(action) {
   try {
-    const requestURL = `${API_URL}/clients/fetchAllClientAdminsById`;
+    const requestURL = `${API_URL}/clients/${action.id}/admins`;
 
     const params = {
       method: 'GET',
-      query: {
-        id: action.payload,
-      },
     };
     const response = yield call(request, requestURL, params);
 
@@ -879,6 +832,26 @@ export function* fetchClientAdminsWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching clients admins');
     yield put(toastrActions.error('', errorMessage));
     yield put(fetchClientAdminsError(err));
+  }
+}
+
+export function* changeTemporaryPassword() {
+  while (true) {
+    const { payload } = yield take(CHANGE_TEMPORARY_PASSWORD);
+
+    try {
+      const requestURL = `${API_URL}/userPasswordChange/change-password`;
+      const params = {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      };
+      yield call(request, requestURL, params);
+      yield put(toastrActions.success('', 'You have successfully changed your password.'));
+      yield put(logout());
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      yield put(toastrActions.error('', errorMessage));
+    }
   }
 }
 
@@ -990,8 +963,6 @@ function* getProposal(action) {
       method: 'POST',
       body: JSON.stringify(params),
     };
-
-    console.log('getProposal', params);
 
     if (size === 6) {
       const response = yield call(request, requestURL, options);

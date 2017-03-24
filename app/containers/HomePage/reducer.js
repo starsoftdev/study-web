@@ -440,7 +440,7 @@ export default function homePageReducer(state = initialState, action) {
     case UPGRADE_STUDY_SUCCESS:
       const studies = _.cloneDeep(state.studies.details);
       const study = _.find(studies, (o) => (o.studyId === payload.studyId));
-      study.campaign.level_id = payload.newLevelId;
+      study.level_id = payload.newLevelId;
       return {
         ...state,
         studies: {

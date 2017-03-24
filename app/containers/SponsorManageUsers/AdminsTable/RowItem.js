@@ -57,7 +57,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     _.forEach(this.props.protocols, (protocol) => {
       options.push({
         id: protocol.id,
-        name: protocol.name,
+        name: protocol.number,
         value: true,
       });
     });

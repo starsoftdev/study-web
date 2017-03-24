@@ -10,6 +10,8 @@ import { connect } from 'react-redux';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { createStructuredSelector } from 'reselect';
 import { touch } from 'redux-form';
+import _ from 'lodash';
+
 import IrbAdCreationForm from '../../components/IrbAdCreationForm';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
 import { selectIrbAdCreationFormValues, selectIrbAdCreationFormError } from '../../components/IrbAdCreationForm/selectors';
@@ -21,7 +23,7 @@ import { shoppingCartFields } from '../../components/ShoppingCartForm/validator'
 import { ComingSoon } from '../../components/ComingSoon';
 
 import {
-  fetchSites,
+  fetchClientSites,
   fetchIndications,
 } from '../../containers/App/actions';
 import {
@@ -31,19 +33,17 @@ import {
   selectUserRoleType,
 } from '../../containers/App/selectors';
 
-import _ from 'lodash';
-
 export class IrbAdCreationPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
+    currentUser: PropTypes.object,
     siteLocations: PropTypes.array,
     indications: PropTypes.array,
     submitForm: PropTypes.func.isRequired,
-    fetchSites: PropTypes.func,
+    fetchClientSites: PropTypes.func,
     fetchIndications: PropTypes.func,
     formValues: PropTypes.object,
     hasError: PropTypes.bool,
-    currentUser: PropTypes.object,
     productList: PropTypes.array,
     irbAdCreationDetail: PropTypes.object,
     params: PropTypes.object,
@@ -71,9 +71,10 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
   }
 
   componentDidMount() {
-    this.props.fetchSites();
-    this.props.fetchIndications();
-    this.props.fetchProductList();
+    const { currentUser, fetchClientSites, fetchIndications, fetchProductList } = this.props;
+    fetchClientSites(currentUser.roleForClient.client_id);
+    fetchIndications();
+    fetchProductList();
   }
 
   onSubmitForm() {
@@ -165,11 +166,11 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
 }
 
 const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
   siteLocations : selectSiteLocations(),
   indications   : selectIndications(),
   formValues: selectIrbAdCreationFormValues(),
   hasError: selectIrbAdCreationFormError(),
-  currentUser: selectCurrentUser(),
   productList: selectIrbProductList(),
   irbAdCreationDetail: selectIrbAdCreationDetail(),
   shoppingCartFormValues: selectShoppingCartFormValues(),
@@ -179,7 +180,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSites:       () => dispatch(fetchSites()),
+    fetchClientSites: (id) => dispatch(fetchClientSites(id)),
     fetchIndications: () => dispatch(fetchIndications()),
     fetchProductList: () => dispatch(fetchIrbProductList()),
     fetchIrbAdCreation: (id) => dispatch(fetchIrbAdCreation(id)),

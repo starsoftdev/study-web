@@ -12,7 +12,7 @@ import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId
 import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../constants';
 import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice } from '../actions';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions } from '../selectors';
-import { selectEditStudyFormValues, selectEditStudyFormError } from '../EditStudyForm/selectors';
+import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { selectRenewStudyFormValues, selectRenewStudyFormError } from '../RenewStudyForm/selectors';
 import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError } from '../UpgradeStudyForm/selectors';
 import RenewStudyForm from '../RenewStudyForm/index';
@@ -60,7 +60,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     saveCard: PropTypes.func,
     clearIndicationLevelPrice: PropTypes.func,
     currentUserClientId: PropTypes.number,
-    clientAdmins: PropTypes.object,
   };
 
   constructor(props) {
@@ -583,7 +582,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               show={this.state.editModalOpen}
               onHide={this.closeEditModal}
               onShow={this.showEditModal}
-              clientAdmins={this.props.clientAdmins}
             />
           </div>
         </div>
@@ -596,8 +594,8 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
   editedStudy: selectEditedStudy(),
-  editStudyFormValues: selectEditStudyFormValues(),
-  editStudyFormError: selectEditStudyFormError(),
+  editStudyFormValues: selectValues('editStudy'),
+  editStudyFormError: selectSyncErrorBool('editStudy'),
   paginationOptions: selectPaginationOptions(),
   renewedStudy: selectRenewedStudy(),
   renewStudyFormValues: selectRenewStudyFormValues(),

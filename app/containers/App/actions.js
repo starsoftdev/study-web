@@ -3,10 +3,6 @@ import {
   SET_AUTH_STATE,
   SET_USER_DATA,
 
-  FETCH_SITES,
-  FETCH_SITES_SUCCESS,
-  FETCH_SITES_ERROR,
-
   FETCH_INDICATIONS,
   FETCH_INDICATIONS_SUCCESS,
   FETCH_INDICATIONS_ERROR,
@@ -186,6 +182,8 @@ import {
   FETCH_USERS_BY_ROLE,
   FETCH_USERS_BY_ROLE_SUCCESS,
   FETCH_USERS_BY_ROLE_ERROR,
+
+  CHANGE_TEMPORARY_PASSWORD,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -212,30 +210,6 @@ export function setUserData(userData) {
     payload: {
       userData,
     },
-  };
-}
-
-// ///////////////////////////////////////////
-// site locations
-// ///////////////////////////////////////////
-export function fetchSites(payload) {
-  return {
-    type: FETCH_SITES,
-    payload,
-  };
-}
-
-export function sitesFetched(payload) {
-  return {
-    type: FETCH_SITES_SUCCESS,
-    payload,
-  };
-}
-
-export function sitesFetchingError(payload) {
-  return {
-    type: FETCH_SITES_ERROR,
-    payload,
   };
 }
 
@@ -1132,10 +1106,10 @@ export function resetNewContactSuccess(payload) {
   };
 }
 
-export function fetchClientAdmins(payload) {
+export function fetchClientAdmins(id) {
   return {
     type: FETCH_CLIENT_ADMINS,
-    payload,
+    id,
   };
 }
 
@@ -1236,6 +1210,13 @@ export function fetchUsersByRoleSuccess(payload) {
 export function fetchUsersByRoleError(payload) {
   return {
     type: FETCH_USERS_BY_ROLE_ERROR,
+    payload,
+  };
+}
+
+export function changeTemporaryPassword(payload) {
+  return {
+    type: CHANGE_TEMPORARY_PASSWORD,
     payload,
   };
 }
