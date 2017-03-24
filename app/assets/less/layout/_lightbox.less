@@ -978,18 +978,22 @@ input:focus {
     }
     .btn-close {
       top: 50%;
-      right: 15px;
+      right: 10px;
       .size(20px);
       color: #636363;
       margin: -10px 0 0;
-      .font(11px, 16px);
+      .font(18px, 16px);
       position: absolute;
       text-align: center;
       border: none;
       background: none;
 
       &:hover {
-        color: #76daff;
+        margin: -11px -2px 0 0;
+        -webkit-transform: rotate(-180deg);
+        -moz-transform: rotate(-180deg);
+        -ms-transform: rotate(-180deg);
+        transform: rotate(-180deg);
       }
     }
     .counter {
