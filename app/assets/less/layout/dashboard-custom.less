@@ -186,3 +186,34 @@
     }
   }
 }
+
+.dashboard-scroll-wrap{
+  overflow-x: scroll;
+  .dashboard-scroll-container{
+    width: 2891px;
+    height: 0.1px;
+  }
+}
+
+.dashboard-scroll-wrap-fixed{
+  position: fixed;
+  bottom: 0px;
+  z-index: 1;
+  width: 300px;
+}
+
+
+.dashboard{
+  .table-left {
+    overflow-x: hidden;
+  }
+  .table-right {
+    .scroll-holder {
+      overflow: hidden;
+      .table-inner {
+        margin-bottom: -13px;
+      }
+    }
+  }
+}
+
