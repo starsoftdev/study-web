@@ -6,14 +6,14 @@ import { createStructuredSelector } from 'reselect';
 
 import SearchPatientsForm from '../../containers/PatientDatabasePage/SearchPatientsForm/index';
 import PatientsList from '../../containers/PatientDatabasePage/PatientsList/index';
-import { fetchIndications, fetchSources, fetchSites } from '../../containers/App/actions';
+import { fetchIndications, fetchSources, fetchClientSites } from '../../containers/App/actions';
 import { fetchPatientCategories, fetchPatients, clearPatientsList } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
 
 export class PatientDatabasePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     fetchIndications: PropTypes.func,
-    fetchSites: PropTypes.func,
+    fetchClientSites: PropTypes.func,
     fetchSources: PropTypes.func,
     fetchPatientCategories: PropTypes.func,
     fetchPatients: PropTypes.func,
@@ -32,7 +32,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     this.props.fetchIndications();
     this.props.fetchSources();
     this.props.fetchPatientCategories();
-    this.props.fetchSites();
+    this.props.fetchClientSites();
   }
 
   searchPatients(searchFilter, isSearch, isExport = false) {
@@ -95,7 +95,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchIndications: () => dispatch(fetchIndications()),
-    fetchSites: () => dispatch(fetchSites()),
+    fetchClientSites: () => dispatch(fetchClientSites()),
     fetchSources: () => dispatch(fetchSources()),
     fetchPatientCategories: searchParams => dispatch(fetchPatientCategories(searchParams)),
     fetchPatients: (searchParams, patients, searchFilter, isExport) => dispatch(fetchPatients(searchParams, patients, searchFilter, isExport)),
