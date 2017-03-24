@@ -399,6 +399,9 @@ export default function dashboardPageReducer(state = initialState, action) {
   const studiesCopy = _.cloneDeep(state.studies.details);
   let savedStudy = null;
   let foundKey = null;
+  let totalActive = 0;
+  let totalInactive = 0;
+
   switch (action.type) {
     case FETCH_STUDIES_DASHBOARD:
       return {
@@ -502,8 +505,24 @@ export default function dashboardPageReducer(state = initialState, action) {
         savedStudy.selected = true;
         studiesCopy[foundKey] = savedStudy;
       }
+      _.forEach(studiesCopy, (study, key) => {
+        if (studiesCopy[key].is_active) {
+          totalActive++;
+        } else {
+          totalInactive++;
+        }
+      });
       return {
         ...state,
+        totals: {
+          details: {
+            ...state.totals.details,
+            total_active: totalActive,
+            total_inactive: totalInactive,
+          },
+          fetching: false,
+          error: null,
+        },
         studies: {
           details: studiesCopy,
           fetching: false,
@@ -612,10 +631,24 @@ export default function dashboardPageReducer(state = initialState, action) {
         if (foundKey) {
           studiesCopy[key].is_active = action.payload.status === 'active';
         }
+        if (studiesCopy[key].is_active) {
+          totalActive++;
+        } else {
+          totalInactive++;
+        }
       });
 
       return {
         ...state,
+        totals: {
+          details: {
+            ...state.totals.details,
+            total_active: totalActive,
+            total_inactive: totalInactive,
+          },
+          fetching: false,
+          error: null,
+        },
         studies: {
           details: studiesCopy,
           fetching: false,
