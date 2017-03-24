@@ -145,7 +145,7 @@ export class ThankyouPageModal extends React.Component {
     const { openModal } = this.props;
 
     return (
-      <Collapse dimension="width" in={openModal} timeout={250} className="thankyou-slider">
+      <Collapse dimension="width" in={openModal} timeout={0} className="thankyou-slider">
         <div>
           <div className="slider-area">
             <div className="head">
@@ -164,90 +164,83 @@ export class ThankyouPageModal extends React.Component {
                   <strong className="label">
                     <label htmlFor="new-patient-first-name">Thank You For...</label>
                   </strong>
-                  <div className="field">
-                    <Field
-                      type="text"
-                      name="thankyouFor"
-                      id="thankyou-for"
-                      component={Input}
-                    />
-                  </div>
+                  <Field
+                    type="text"
+                    name="thankyouFor"
+                    className="field"
+                    id="thankyou-for"
+                    component={Input}
+                  />
                 </div>
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-first-name">You Will be...</label>
                   </strong>
-                  <div className="field">
-                    <Field
-                      type="text"
-                      id="you-will-be"
-                      name="youWillBe"
-                      component={Input}
-                      required
-                    />
-                  </div>
+                  <Field
+                    type="text"
+                    id="you-will-be"
+                    className="field"
+                    name="youWillBe"
+                    component={Input}
+                    required
+                  />
                 </div>
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-email">Site Location</label>
                   </strong>
-                  <div className="field">
-                    <Field
-                      type="checkbox"
-                      name="isShareLocation"
-                      component={Checkbox}
-                    />
-                  </div>
+                  <Field
+                    type="checkbox"
+                    name="isShareLocation"
+                    className="field"
+                    component={Checkbox}
+                  />
                 </div>
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-phone">Phone</label>
                   </strong>
-                  <div className="field">
-                    <Field
-                      type="checkbox"
-                      name="isSharePhone"
-                      component={Checkbox}
-                    />
-                  </div>
+                  <Field
+                    type="checkbox"
+                    name="isSharePhone"
+                    className="field"
+                    component={Checkbox}
+                  />
                 </div>
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-phone">Here is the...</label>
                   </strong>
-                  <div className="field">
-                    <Field
-                      type="text"
-                      id="here-is-the"
-                      name="herIsThe"
-                      component={Input}
-                    />
-                  </div>
+                  <Field
+                    type="text"
+                    id="here-is-the"
+                    className="field"
+                    name="herIsThe"
+                    component={Input}
+                  />
                 </div>
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-phone">Looking Forward to...</label>
                   </strong>
-                  <div className="field">
-                    <Field
-                      type="text"
-                      name="lookingForwardText"
-                      component={Input}
-                    />
-                  </div>
+                  <Field
+                    type="text"
+                    name="lookingForwardText"
+                    className="field"
+                    component={Input}
+                  />
                 </div>
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-phone">Hide</label>
                   </strong>
-                  <div className="field">
-                    <Field
-                      type="checkbox"
-                      name="isHideLocationData"
-                      component={Checkbox}
-                      checked
-                    />
-                  </div>
+                  <Field
+                    type="checkbox"
+                    name="isHideLocationData"
+                    className="field"
+                    component={Checkbox}
+                    checked
+                  />
                 </div>
                 <div className="field-row text-right">
                   <Button bsStyle="primary" type="submit" disabled={false}>Update</Button>
