@@ -93,7 +93,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
         <td>
           <ul className="list-unstyled">
             <li><span>{item.indication_name}</span></li>
-            <li><span>{item.tier_number}</span></li>
+            <li><span>{item.tier_number ? `Tier ${item.tier_number}` : ''}</span></li>
           </ul>
         </td>
       </tr>
