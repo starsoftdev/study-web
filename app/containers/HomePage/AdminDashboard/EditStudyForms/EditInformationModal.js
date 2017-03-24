@@ -99,7 +99,7 @@ export class EditInformationModal extends React.Component {
     let postalCode = '';
     let streetNmber = '';
     let route = '';
-
+    console.log(e);
     if (e.gmaps && e.gmaps.address_components) {
       const addressComponents = e.gmaps.address_components;
 
@@ -131,9 +131,12 @@ export class EditInformationModal extends React.Component {
         if (streetNmber && route) {
           this.geoSuggest.update(`${streetNmber} ${route}`);
           this.props.dispatch(change('dashboardEditStudyForm', 'site_address', `${streetNmber} ${route}`));
+        } else {
+          const addressArr = e.label.split(',');
+          this.geoSuggest.update(`${addressArr[0]}`);
+          this.props.dispatch(change('dashboardEditStudyForm', 'site_address', `${addressArr[0]}`));
         }
       }
-      this.props.dispatch(change('dashboardEditStudyForm', 'site_address', e.label));
     } else {
       const addressArr = e.label.split(',');
       if (addressArr[1]) {

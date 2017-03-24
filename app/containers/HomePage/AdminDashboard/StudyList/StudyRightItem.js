@@ -35,8 +35,20 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     const campaignDateTo = moment(item.campaign_dateto);
 
     const totalDays = campaignDateTo.diff(campaignDateFrom, 'days');
-    const daysRan = moment.utc().diff(campaignDateFrom, 'days');
-    const daysLeft = campaignDateTo.diff(moment.utc(), 'days');
+    let daysRan = moment.utc().diff(campaignDateFrom, 'days');
+    let daysLeft = campaignDateTo.diff(moment.utc(), 'days');
+
+    if (daysLeft < 0) {
+      daysLeft = 0;
+    }
+
+    if (daysRan < 0) {
+      daysRan = 0;
+    }
+
+    if (daysRan > totalDays) {
+      daysRan = totalDays;
+    }
 
     const startDate = item.campaign_datefrom ? campaignDateFrom.format('MM/DD/YY') : '';
     const endDate = item.campaign_dateto ? campaignDateTo.format('MM/DD/YY') : '';
@@ -50,7 +62,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 
         className={(this.props.hoveredRowIndex === item.study_id) ? 'active-table-row' : ''}
       >
-        <td><span className="location">{`${item.site_address ? item.site_address : ''} ${item.site_city ? item.site_city : ''} ${item.site_state ? item.site_state : ''} ${item.site_zip ? item.site_zip : ''}`}</span></td>
+        <td><span className="location">{`${item.site_address ? item.site_address : ''} ${item.site_city ? item.site_city : ''}, ${item.site_state ? item.site_state : ''} ${item.site_zip ? item.site_zip : ''}`}</span></td>
         <td><span className="exposure-level">{item.level_name}</span></td>
         <td>
           <ul className="list-unstyled">
