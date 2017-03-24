@@ -2,20 +2,21 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
-import { Modal } from 'react-bootstrap';
-import Button from 'react-bootstrap/lib/Button';
-import ReactSelect from '../../components/Input/ReactSelect';
 import { map } from 'lodash';
 import { Field, reduxForm, change } from 'redux-form';
+import Button from 'react-bootstrap/lib/Button';
+import Modal from 'react-bootstrap/lib/Modal';
+
+import ReactSelect from '../../components/Input/ReactSelect';
 import CenteredModal from '../../components/CenteredModal/index';
 import EditSiteForm from '../../components/EditSiteForm';
 import EditUserForm from '../../components/EditUserForm';
 import ClientSitesList from '../../components/ClientSitesList';
 import ClientRolesList from '../../components/ClientRolesList';
+
 import {
   selectCurrentUserClientId,
-  selectClientSites,
-  selectClientRoles,
+  selectSites,
   selectSavedSite,
   selectSavedUser,
   selectCurrentUser,
@@ -27,8 +28,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     currentUserClientId: PropTypes.number,
-    clientSites: PropTypes.object,
-    clientRoles: PropTypes.object,
+    sites: PropTypes.arrayOf(PropTypes.object),
     savedSite: PropTypes.object,
     savedUser: PropTypes.object,
     fetchClientSites: PropTypes.func,
@@ -150,7 +150,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
       }, () => { this.filterClientSites(this.state.siteName); });
     } else {
       this.setState({
-        siteName: this.props.clientSites.details[sel - 1].name,
+        siteName: this.props.sites[sel - 1].name,
       }, () => { this.filterClientSites(this.state.siteName); });
     }
   }
@@ -184,7 +184,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
   }
 
   render() {
-    const { currentUserClientId, clientSites, currentUser } = this.props;
+    const { currentUserClientId, sites, currentUser } = this.props;
     if (!currentUserClientId) {
       return (
         <div className="sites-users-page">
@@ -201,7 +201,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     if (currentUser && currentUser.roleForClient) {
       bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
     }
-    const siteOptions = map(clientSites.details, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
+    const siteOptions = map(sites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
 
     return (
@@ -290,8 +290,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
 
 const mapStateToProps = createStructuredSelector({
   currentUserClientId: selectCurrentUserClientId(),
-  clientSites: selectClientSites(),
-  clientRoles: selectClientRoles(),
+  sites: selectSites(),
   savedSite: selectSavedSite(),
   savedUser: selectSavedUser(),
   currentUser: selectCurrentUser(),

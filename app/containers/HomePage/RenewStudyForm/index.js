@@ -6,6 +6,7 @@ import { Modal } from 'react-bootstrap';
 import { Calendar } from 'react-date-range';
 import classnames from 'classnames';
 import moment from 'moment-timezone';
+import _, { find } from 'lodash';
 
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_UPGRADE_PRICE } from '../../../common/constants';
 import CenteredModal from '../../../components/CenteredModal/index';
@@ -23,13 +24,13 @@ import { selectStudyLevels } from '../../App/selectors';
 import { saveCard } from '../../App/actions';
 import { selectSelectedIndicationLevelPrice } from '../selectors';
 import formValidator from './validator';
-import _, { find } from 'lodash';
 
 
-@reduxForm({ form: 'renewStudy', validate: formValidator })
+const formName = 'renewStudy';
+@reduxForm({ form: formName, validate: formValidator })
 class RenewStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
     studyLevels: PropTypes.array,
     selectedIndicationLevelPrice: PropTypes.object,
     campaignLength: PropTypes.number,
@@ -82,20 +83,21 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   componentWillReceiveProps(newProps) {
     if (newProps.campaignLength !== this.props.campaignLength) {
       if (newProps.campaignLength !== 1) {
-        this.props.dispatch(change('renewStudy', 'condenseTwoWeeks', false));
+        const { change } = this.props;
+        change('condenseTwoWeeks', false);
       }
     }
 
     if (newProps.selectedStudy) {
       const { patientMessagingSuite, patientQualificationSuite } = newProps.selectedStudy;
-
+      const { change } = this.props;
       if (patientMessagingSuite === 'On' && patientQualificationSuite === 'Off') {
-        this.props.dispatch(change('renewStudy', 'addPatientMessagingSuite', true));
+        change('addPatientMessagingSuite', true);
       }
 
       if (patientQualificationSuite === 'On') {
-        this.props.dispatch(change('renewStudy', 'addPatientQualificationSuite', true));
-        this.props.dispatch(change('renewStudy', 'addPatientMessagingSuite', false));
+        change('addPatientQualificationSuite', true);
+        change('addPatientMessagingSuite', false);
       }
     }
 
@@ -121,14 +123,16 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     this.setState({
       initDate: null,
     });
-    this.props.dispatch(change('renewStudy', 'startDate', null));
+    const { change } = this.props;
+    change('startDate', null);
   }
 
   handleDateSelect(date) {
     this.setState({
       initDate: date,
     });
-    this.props.dispatch(change('renewStudy', 'startDate', date));
+    const { change } = this.props;
+    change('startDate', date);
     this.handleDatePickerClose(false);
   }
 
@@ -201,7 +205,8 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     let { patientQualificationSuite } = this.state;
     if (e && this.state.patientQualificationSuite) {
       patientQualificationSuite = false;
-      this.props.dispatch(change('renewStudy', 'addPatientQualificationSuite', false));
+      const { change } = this.props;
+      change('addPatientQualificationSuite', false);
     }
     this.setState({
       patientMessagingSuite: e,
@@ -213,7 +218,8 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     let { patientMessagingSuite } = this.state;
     if (e && this.state.patientMessagingSuite) {
       patientMessagingSuite = false;
-      this.props.dispatch(change('renewStudy', 'addPatientMessagingSuite', false));
+      const { change } = this.props;
+      change('addPatientMessagingSuite', false);
     }
     this.setState({
       patientQualificationSuite: e,
@@ -540,8 +546,9 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  change: (name, value) => dispatch(change(formName, name, value)),
   saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
-  resetForm: () => dispatch(reset('renewStudy')),
+  resetForm: () => dispatch(reset(formName)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RenewStudyForm);

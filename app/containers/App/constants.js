@@ -34,10 +34,6 @@ export const FETCH_SOURCES                         = 'App/FETCH_SOURCES';
 export const FETCH_SOURCES_SUCCESS                 = 'App/FETCH_SOURCES_SUCCESS';
 export const FETCH_SOURCES_ERROR                   = 'App/FETCH_SOURCES_ERROR';
 
-export const FETCH_SITES                           = 'App/FETCH_SITES';
-export const FETCH_SITES_SUCCESS                   = 'App/FETCH_SITES_SUCCESS';
-export const FETCH_SITES_ERROR                     = 'App/FETCH_SITES_ERROR';
-
 export const FETCH_SITE                            = 'App/FETCH_SITE';
 export const FETCH_SITE_SUCCESS                    = 'App/FETCH_SITE_SUCCESS';
 export const FETCH_SITE_ERROR                      = 'App/FETCH_SITE_ERROR';
@@ -190,3 +186,5 @@ export const FETCH_CRO_ERROR                       = 'App/FETCH_CRO_ERROR';
 export const FETCH_USERS_BY_ROLE                   = 'App/FETCH_USERS_BY_ROLE';
 export const FETCH_USERS_BY_ROLE_SUCCESS           = 'App/FETCH_USERS_BY_ROLE_SUCCESS';
 export const FETCH_USERS_BY_ROLE_ERROR             = 'App/FETCH_USERS_BY_ROLE_ERROR';
+
+export const CHANGE_TEMPORARY_PASSWORD             = 'App/CHANGE_TEMPORARY_PASSWORD';

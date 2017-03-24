@@ -40,6 +40,7 @@ import {
   SET_OPEN_PATIENT_MODAL,
   SCHEDULE_PATIENT,
   SHOW_SCHEDULED_MODAL,
+  HIDE_SCHEDULED_MODAL,
   SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
   MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
@@ -70,6 +71,7 @@ import {
   SUBMIT_SCHEDULE,
   SUBMIT_SCHEDULE_SUCCEEDED,
   SUBMIT_SCHEDULE_FAILED,
+  SET_SCHEDULED_FORM_INITIALIZED,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -422,6 +424,12 @@ export function showScheduledModal() {
   };
 }
 
+export function hideScheduledModal() {
+  return {
+    type: HIDE_SCHEDULED_MODAL,
+  };
+}
+
 export function submitTextBlast(patients, message, currentUserId, onClose) {
   return {
     type: SUBMIT_TEXT_BLAST,
@@ -556,5 +564,12 @@ export function submitScheduleSucceeded(schedules, patientId) {
 export function submitScheduleFailed() {
   return {
     type: SUBMIT_SCHEDULE_FAILED,
+  };
+}
+
+export function setScheduledFormInitialized(formInitialized) {
+  return {
+    type: SET_SCHEDULED_FORM_INITIALIZED,
+    formInitialized,
   };
 }

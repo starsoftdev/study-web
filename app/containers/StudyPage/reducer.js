@@ -4,6 +4,7 @@
  *
  */
 
+import _ from 'lodash';
 import {
   ADD_PATIENT_INDICATION_SUCCESS,
   ADD_PATIENT_NOTE_SUCCESS,
@@ -24,6 +25,7 @@ import {
   FETCH_STUDY_SUCCESS,
   REMOVE_PATIENT_INDICATION_SUCCESS,
   SHOW_SCHEDULED_MODAL,
+  HIDE_SCHEDULED_MODAL,
   SET_STUDY_ID,
   SET_CURRENT_PATIENT_ID,
   SET_CURRENT_PATIENT_CATEGORY_ID,
@@ -45,8 +47,8 @@ import {
   SUBMIT_SCHEDULE,
   SUBMIT_SCHEDULE_SUCCEEDED,
   SUBMIT_SCHEDULE_FAILED,
+  SET_SCHEDULED_FORM_INITIALIZED,
 } from './constants';
-import _ from 'lodash';
 
 const initialState = {
   stats: {},
@@ -275,7 +277,13 @@ function studyPageReducer(state = initialState, action) {
     case SHOW_SCHEDULED_MODAL:
       return {
         ...state,
-        openScheduledModal: !state.openScheduledModal,
+        openScheduledModal: true,
+      };
+    case HIDE_SCHEDULED_MODAL:
+      return {
+        ...state,
+        openScheduledModal: false,
+        scheduledFormInitialized: false,
       };
     case MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING:
       return {
@@ -364,12 +372,18 @@ function studyPageReducer(state = initialState, action) {
           return category;
         }),
         submittingSchedule: false,
+        scheduledFormInitialized: false,
         openScheduledModal: false,
       };
     case SUBMIT_SCHEDULE_FAILED:
       return {
         ...state,
         submittingSchedule: false,
+      };
+    case SET_SCHEDULED_FORM_INITIALIZED:
+      return {
+        ...state,
+        scheduledFormInitialized: action.formInitialized,
       };
     default:
       return state;
@@ -426,6 +440,18 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
             };
           }
           if (patientCategory.id === toPatientCategory.id) {
+            if (fromPatientCategory.name === 'Scheduled') {
+              return {
+                ...patientCategory,
+                patients: [
+                  {
+                    ...patient,
+                    callReminders: [],
+                  },
+                  ...patientCategory.patients,
+                ],
+              };
+            }
             return {
               ...patientCategory,
               patients: [

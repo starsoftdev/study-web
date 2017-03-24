@@ -17,7 +17,7 @@ import {
   showProposalPdf,
 } from '../../containers/Proposals/actions';
 import {
-  fetchSites,
+  fetchClientSites,
   fetchEvents,
 } from '../../containers/App/actions';
 import {
@@ -40,7 +40,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     siteLocations: PropTypes.array,
     unsubscribeFromAll: PropTypes.func,
     unsubscribeFromPageEvent: PropTypes.func,
-    fetchSites: PropTypes.func,
+    fetchClientSites: PropTypes.func,
     fetchEvents: PropTypes.func,
     getProposals: PropTypes.func,
     createPDF: PropTypes.func,
@@ -92,9 +92,10 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
       },
     ];
 
-    this.props.fetchSites();
-    this.props.getProposals();
-    this.props.fetchEvents(events);
+    const { currentUser, fetchClientSites, fetchEvents, getProposals } = this.props;
+    fetchClientSites(currentUser.roleForClient.client_id);
+    getProposals();
+    fetchEvents(events);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -231,7 +232,7 @@ function mapDispatchToProps(dispatch) {
     unsubscribeFromAll: (values) => dispatch(unsubscribeFromAll(values)),
     unsubscribeFromPageEvent: (values) => dispatch(unsubscribeFromPageEvent(values)),
     fetchEvents: (values) => dispatch(fetchEvents(values)),
-    fetchSites: () => dispatch(fetchSites()),
+    fetchClientSites: (id) => dispatch(fetchClientSites(id)),
     getProposals: (values) => dispatch(getProposals(values)),
     createPDF: (values) => dispatch(createPDF(values)),
     showProposalPdf: (values) => dispatch(showProposalPdf(values)),

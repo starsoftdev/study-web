@@ -311,9 +311,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
         );
       }
       return (
-        <span className="time">
-          {moment(dateRange.startDate).format(format)} - {moment(dateRange.endDate).format(format)}
-        </span>
+        <span className="time">{moment(dateRange.startDate).format(format)} - {moment(dateRange.endDate).format(format)}</span>
       );
     }
     return null;
@@ -387,7 +385,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             <Button bsStyle="primary" onClick={this.openFiltersModal}>
               Filters
             </Button>
-            <Modal dialogComponentclassName={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.addUserModalOpen} onHide={this.closeFiltersModal}>
+            <Modal dialogComponentClassName={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.addUserModalOpen} onHide={this.closeFiltersModal}>
               <Modal.Header>
                 <Modal.Title>Filters</Modal.Title>
                 <a className="lightbox-close close" onClick={this.closeFiltersModal}>
@@ -418,51 +416,51 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
         </div>
         <StickyContainer className={classNames('filters-section', { 'bar-active': (filters.length > 0) }, { 'filters-added': (filters.length > 0) })}>
           {(filters.length > 0) && (
-            <div className="filters-bar">
-              <div className="filters-holder search-filters">
-                <strong className="title">FILTERS</strong>
-                <div className="btns pull-right">
-                  <Button bsStyle="primary" onClick={() => this.saveFilters()}>
-                    Save Filters
-                  </Button>
-                  <Button bsStyle="primary" onClick={() => this.clearFilters()}>
-                    Clear
-                  </Button>
-                </div>
-                <div className="holder">
-                  {filters.map((filter, index) =>
-                    <Field
-                      name={filter.name}
-                      key={index}
-                      options={filter}
-                      component={Filter}
-                      onClose={() => this.removeFilter(filter)}
-                      onChange={(e) => {
-                        if (filter.onChange) {
-                          filter.onChange(e);
-                        }
-                      }}
-                      onSubmit={(e) => {
-                        if (filter.onSubmit) {
-                          filter.onSubmit(e);
-                        }
+          <div className="filters-bar">
+            <div className="filters-holder search-filters">
+              <strong className="title">FILTERS</strong>
+              <div className="btns pull-right">
+                <Button bsStyle="primary" onClick={() => this.saveFilters()}>
+                  Save Filters
+                </Button>
+                <Button bsStyle="gray-outline" onClick={() => this.clearFilters()}>
+                  Clear
+                </Button>
+              </div>
+              <div className="holder">
+                {filters.map((filter, index) =>
+                  <Field
+                    name={filter.name}
+                    key={index}
+                    options={filter}
+                    component={Filter}
+                    onClose={() => this.removeFilter(filter)}
+                    onChange={(e) => {
+                      if (filter.onChange) {
+                        filter.onChange(e);
                       }
+                    }}
+                    onSubmit={(e) => {
+                      if (filter.onSubmit) {
+                        filter.onSubmit(e);
+                      }
+                    }
 
-                      }
-                    />
-                  )}
-                  <Button
-                    bsStyle="primary"
-                    className="add-new-filters btn btn-primary"
-                    onClick={() => this.addFilter({
-                      name: 'search',
-                      type: 'search',
-                      value: '',
-                    })}
-                  ><i className="glyphicon glyphicon-plus"></i></Button>
-                </div>
+                    }
+                  />
+                )}
+                <Button
+                  bsStyle="primary"
+                  className="add-new-filters btn btn-primary"
+                  onClick={() => this.addFilter({
+                    name: 'search',
+                    type: 'search',
+                    value: '',
+                  })}
+                ><i className="glyphicon glyphicon-plus"></i></Button>
               </div>
             </div>
+          </div>
           )}
 
           <div className="d-stats clearfix">

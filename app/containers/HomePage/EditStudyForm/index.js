@@ -9,18 +9,19 @@ import Input from '../../../components/Input';
 import AddEmailNotificationForm from '../../../components/AddEmailNotificationForm';
 import CenteredModal from '../../../components/CenteredModal/index';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import { addEmailNotificationUser } from '../../App/actions';
-import { selectCurrentUserClientId, selectClientSites } from '../../App/selectors';
-import { selectEditStudyFormValues, selectEditStudyFormError, selectEditStudyFormErrors } from './selectors';
+import { addEmailNotificationUser, fetchClientAdmins } from '../../App/actions';
+import { selectCurrentUser, selectClientSites } from '../../App/selectors';
+import { selectSyncErrorBool, selectSyncErrors, selectValues } from '../../../common/selectors/form.selector';
 import { selectEditedStudy, selectAddNotificationProcess } from '../../../containers/HomePage/selectors';
 import RenderEmailsList from './RenderEmailsList';
 import formValidator from './validator';
 
-@reduxForm({ form: 'editStudy', validate: formValidator })
+const formName = 'editStudy';
+@reduxForm({ form: formName, validate: formValidator })
 class EditStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    currentUserClientId: PropTypes.number,
+    change: PropTypes.func.isRequired,
+    currentUser: PropTypes.object,
     formError: PropTypes.bool,
     formErrors: PropTypes.object,
     formValues: PropTypes.object,
@@ -39,6 +40,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     addEmailNotificationUser: PropTypes.func,
     addNotificationProcess: PropTypes.object,
     clientAdmins: PropTypes.object,
+    fetchClientAdmins: PropTypes.func.isRequired,
   };
   constructor(props) {
     super(props);
@@ -61,10 +63,16 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   componentWillMount() {
-    this.props.dispatch(change('editStudy', 'emailNotifications', this.props.siteUsers));
+    const { change, currentUser, fetchClientAdmins, siteUsers } = this.props;
+    console.log(currentUser);
+    if (currentUser && currentUser.roleForClient.isAdmin) {
+      fetchClientAdmins(currentUser.roleForClient.client_id);
+    }
+    change('emailNotifications', siteUsers);
   }
 
   componentWillReceiveProps(newProps) {
+    const { clientAdmins, change } = this.props;
     if (newProps.selectedStudyId && newProps.selectedStudyId !== this.props.selectedStudyId) {
       const fields = [];
       let currentStudy = null;
@@ -77,19 +85,21 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
               this.setState({ currentStudy });
             }
           });
-          // add admin users to the list
-          _.forEach(this.props.clientAdmins.details, (role) => {
-            const isChecked = _.find(currentStudy.studyNotificationEmails, (item) => (item.user_id === role.user_id));
-            if (!isChecked) {
-              isAllChecked = false;
-            }
-            fields.push({
-              firstName: role.first_name,
-              lastName: role.last_name,
-              userId: role.user_id,
-              isChecked,
+          if (clientAdmins) {
+            // add admin users to the list
+            _.forEach(clientAdmins.details, (role) => {
+              const isChecked = _.find(currentStudy.studyNotificationEmails, (item) => (item.user_id === role.user_id));
+              if (!isChecked) {
+                isAllChecked = false;
+              }
+              fields.push({
+                firstName: role.first_name,
+                lastName: role.last_name,
+                userId: role.user_id,
+                isChecked,
+              });
             });
-          });
+          }
           // add site users to the list
           _.forEach(site.roles, (role) => {
             const isChecked = _.find(currentStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
@@ -105,9 +115,9 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
           });
         }
       });
-      this.props.dispatch(change('editStudy', 'recruitmentPhone', currentStudy.recruitmentPhone));
-      this.props.dispatch(change('editStudy', 'emailNotifications', fields));
-      this.props.dispatch(change('editStudy', 'checkAllInput', isAllChecked));
+      change('recruitmentPhone', currentStudy.recruitmentPhone);
+      change('emailNotifications', fields);
+      change('checkAllInput', isAllChecked);
 
       this.setState({ fileSrc: currentStudy.image || null });
     }
@@ -125,7 +135,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
       } else {
         addFields.push(values);
       }
-      this.props.dispatch(change('editStudy', 'emailNotifications', addFields));
+      change('emailNotifications', addFields);
     }
   }
 
@@ -174,13 +184,14 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   addEmailNotificationSubmit(values) {
+    const { currentUser, selectedStudyId, selectedSiteId } = this.props;
     this.props.addEmailNotificationUser({
       ...values,
-      clientId: this.props.currentUserClientId,
+      clientId: currentUser.roleForClient.client_id,
       addForNotification: true,
-      studyId: this.props.selectedStudyId,
+      studyId: selectedStudyId,
       clientRole:{
-        siteId: this.props.selectedSiteId,
+        siteId: selectedSiteId,
       },
     });
 
@@ -189,33 +200,35 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
 
   selectAll(e) {
     if (this.props.formValues.emailNotifications) {
+      const { change } = this.props;
       forEach(this.props.formValues.emailNotifications, (value, index) => {
-        this.props.dispatch(change('editStudy', `emailNotifications[${index}].isChecked`, e));
+        change(`emailNotifications[${index}].isChecked`, e);
       });
     }
   }
 
   selectEmail(e) {
+    const { change } = this.props;
     if (this.props.formValues.checkAllInput && !e) {
-      this.props.dispatch(change('editStudy', 'checkAllInput', false));
+      change('checkAllInput', false);
     } else if (!this.props.formValues.checkAllInput && e) {
       const checkedArr = filter(this.props.formValues.emailNotifications, (o) => o.isChecked);
       if ((checkedArr.length + 1) === this.props.formValues.emailNotifications.length) {
-        this.props.dispatch(change('editStudy', 'checkAllInput', true));
+        change('checkAllInput', true);
       }
     }
   }
 
   renderEmailList() {
-    const { formValues } = this.props;
+    const { change, formValues } = this.props;
 
     return (
       <div className="emails-list-holder">
         <FieldArray
           name="emailNotifications"
           component={RenderEmailsList}
+          change={change}
           formValues={formValues}
-          dispatch={this.props.dispatch}
           addEmailNotification={this.addEmailNotificationClick}
           closeEmailNotification={this.closeAddEmailModal}
           emailFields={this.state.emailFields}
@@ -330,18 +343,20 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUserClientId: selectCurrentUserClientId(),
-  formError: selectEditStudyFormError(),
-  formErrors: selectEditStudyFormErrors(),
-  formValues: selectEditStudyFormValues(),
+  addNotificationProcess: selectAddNotificationProcess(),
+  currentUser: selectCurrentUser(),
+  formError: selectSyncErrorBool(formName),
+  formErrors: selectSyncErrors(formName),
+  formValues: selectValues(formName),
   editedStudy: selectEditedStudy(),
   clientSites: selectClientSites(),
-  addNotificationProcess: selectAddNotificationProcess(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  resetForm: () => dispatch(reset('editStudy')),
   addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
+  fetchClientAdmins: (id) => dispatch(fetchClientAdmins(id)),
+  change: (name, value) => dispatch(change(formName, name, value)),
+  resetForm: () => dispatch(reset(formName)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditStudyForm);

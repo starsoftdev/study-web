@@ -8,13 +8,11 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, reset } from 'redux-form';
-import Input from '../../components/Input';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
 
-import formValidator from './validator';
+import Input from '../../components/Input';
 import LoadingSpinner from '../../components/LoadingSpinner';
-
 import {
   selectChat,
 } from '../../containers/PatientDatabasePage/selectors';
@@ -26,12 +24,11 @@ import {
   fetchStudyPatientMessages,
   setProcessingStatus,
 } from '../../containers/GlobalNotifications/actions';
-
+import formValidator from './validator';
 
 const formName = 'chatPatient';
 
 @reduxForm({ form: formName, validate: formValidator })
-
 class ChatForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     isSaving: PropTypes.any,

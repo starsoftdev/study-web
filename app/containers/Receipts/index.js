@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer } from 'react-sticky';
-const _ = require('lodash');
+import _ from 'lodash';
 
 import {
   getReceipts,
@@ -20,7 +20,7 @@ import {
   sortProposalsSuccess,
 } from '../../containers/Receipts/actions';
 import {
-  fetchSites,
+  fetchClientSites,
   fetchEvents,
 } from '../../containers/App/actions';
 import {
@@ -37,19 +37,19 @@ import AlertModal from '../../components/AlertModal';
 export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
-    unsubscribeFromAll: PropTypes.func,
-    unsubscribeFromPageEvent: PropTypes.func,
-    fetchSites: PropTypes.func,
+    unsubscribeFromAll: PropTypes.func.isRequired,
+    unsubscribeFromPageEvent: PropTypes.func.isRequired,
+    fetchClientSites: PropTypes.func.isRequired,
     getReceipts: PropTypes.func,
     getPDF: PropTypes.func,
     receipts: PropTypes.array,
     currentUser: PropTypes.any,
     paginationOptions: PropTypes.object,
     searchOptions: PropTypes.array,
-    setSearchOptions: PropTypes.func,
-    setActiveSort: PropTypes.func,
-    showInvoicePdf: PropTypes.func,
-    sortProposalsSuccess: PropTypes.func,
+    setSearchOptions: PropTypes.func.isRequired,
+    setActiveSort: PropTypes.func.isRequired,
+    showInvoicePdf: PropTypes.func.isRequired,
+    sortProposalsSuccess: PropTypes.func.isRequired,
   };
 
   constructor(props, context) {
@@ -72,8 +72,9 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
   }
 
   componentDidMount() {
-    this.props.fetchSites();
-    this.props.getReceipts(15, 0, this.props.receipts);
+    const { currentUser, fetchClientSites, getReceipts } = this.props;
+    fetchClientSites(currentUser.roleForClient.client_id);
+    getReceipts(15, 0, this.props.receipts);
   }
 
   getPDF() {
@@ -198,7 +199,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchEvents: (values) => dispatch(fetchEvents(values)),
-    fetchSites: () => dispatch(fetchSites()),
+    fetchClientSites: (id) => dispatch(fetchClientSites(id)),
     getReceipts: (limit, offset, receipts, orderBy, orderDir, values) => dispatch(getReceipts(limit, offset, receipts, orderBy, orderDir, values)),
     getPDF: (values) => dispatch(getPDF(values)),
     setSearchOptions: (payload) => dispatch(setSearchOptions(payload)),

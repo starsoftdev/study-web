@@ -17,7 +17,7 @@ import FilterBar from './components/FilterBar';
 import AllEventsModal from './components/AllEventsModal';
 
 import {
-  fetchSites,
+  fetchClientSites,
   fetchIndications,
   fetchProtocols,
 } from '../../containers/App/actions';
@@ -82,7 +82,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchSites: () => dispatch(fetchSites()),
+  fetchClientSites: (id) => dispatch(fetchClientSites(id)),
   fetchIndications: () => dispatch(fetchIndications()),
   fetchPatientsByStudy: (studyId, siteId) => dispatch(fetchPatientsByStudy(studyId, siteId)),
   fetchProtocols: () => dispatch(fetchProtocols()),
@@ -101,7 +101,7 @@ export default class CalendarPage extends React.Component {
     patientsByStudy: PropTypes.object.isRequired,
     schedules: PropTypes.object.isRequired,
     protocols: PropTypes.object.isRequired,
-    fetchSites: PropTypes.func.isRequired,
+    fetchClientSites: PropTypes.func.isRequired,
     fetchIndications: PropTypes.func.isRequired,
     fetchPatientsByStudy: PropTypes.func.isRequired,
     fetchProtocols: PropTypes.func.isRequired,
@@ -143,9 +143,9 @@ export default class CalendarPage extends React.Component {
   componentDidMount() {
     const { currentUser } = this.props;
 
-    this.props.fetchSites();
+    this.props.fetchClientSites(currentUser.roleForClient.client_id);
     this.props.fetchIndications();
-    this.props.fetchSchedules({ userId: currentUser.id });
+    this.props.fetchSchedules({ clientId: currentUser.roleForClient.client_id });
     this.props.fetchProtocols();
   }
 
@@ -206,17 +206,12 @@ export default class CalendarPage extends React.Component {
 
     if (data.siteLocation && data.protocol) { // CREATE
       submitData = {
-        siteLocation: data.siteLocation.label,
-        indication: data.protocol.indication,
-        protocolNumber: data.protocol.label,
         patientId: data.patient.value,
-        patientName: data.patient.label,
-        userId: currentUser.id,
+        clientId: currentUser.roleForClient.client_id,
         time: moment(this.selectedCellInfo.selectedDate).add(data.period === 'AM' ?
           data.hour % 12 :
           (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes'),
         textReminder: data.textReminder,
-        timezone: currentUser.timezone,
       };
     } else { // UPDATE
       let updatedDate;
@@ -233,9 +228,9 @@ export default class CalendarPage extends React.Component {
         time: updatedDate.clone().add(data.period === 'AM' ?
           data.hour % 12 :
           (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes'),
-        userId: currentUser.id,
+        clientId: currentUser.roleForClient.client_id,
+        patientId: data.patient.value,
         textReminder: data.textReminder,
-        timezone: currentUser.timezone,
       };
     }
 
@@ -252,7 +247,7 @@ export default class CalendarPage extends React.Component {
       allModalDeferred: false,
     });
 
-    this.props.deleteSchedule(scheduleId, this.props.currentUser.id);
+    this.props.deleteSchedule(scheduleId, this.props.currentUser.roleForClient.client_id);
   }
 
   navigateToToday = () => {

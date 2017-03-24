@@ -13,13 +13,13 @@ import { ComingSoon } from '../../components/ComingSoon';
 import RequestProposalForm from '../../components/RequestProposalForm';
 import RequestProposalCart from '../../components/RequestProposalCart';
 
-
 import {
-  fetchSites,
+  fetchClientSites,
   fetchIndications,
   fetchLevels,
 } from '../../containers/App/actions';
 import {
+  selectCurrentUser,
   selectSiteLocations,
   selectIndications,
   selectStudyLevels,
@@ -31,13 +31,14 @@ import { selectProposalDetail, selectProposalsFormError, selectProposalsFormValu
 
 export class RequestProposalPage extends Component {
   static propTypes = {
+    currentUser: PropTypes.object,
     siteLocations: PropTypes.array,
     indications: PropTypes.array,
     studyLevels: PropTypes.array,
     proposalDetail: PropTypes.object,
     params: PropTypes.object,
-    fetchSites: PropTypes.func,
-    fetchIndications: PropTypes.func,
+    fetchClientSites: PropTypes.func.isRequired,
+    fetchIndications: PropTypes.func.isRequired,
     fetchLevels: PropTypes.func,
     fetchProposal: PropTypes.func,
     onSubmitForm: PropTypes.func.isRequired,
@@ -57,7 +58,10 @@ export class RequestProposalPage extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchSites();
+    const { currentUser, fetchClientSites } = this.props;
+    if (currentUser && currentUser.roleForClient.isAdmin) {
+      fetchClientSites(currentUser.roleForClient.client_id);
+    }
     this.props.fetchIndications();
     this.props.fetchLevels();
   }
@@ -118,6 +122,7 @@ export class RequestProposalPage extends Component {
 }
 
 const mapStateToProps = createStructuredSelector({
+  currentUser : selectCurrentUser(),
   siteLocations : selectSiteLocations(),
   indications   : selectIndications(),
   studyLevels   : selectStudyLevels(),
@@ -129,7 +134,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSites:       () => dispatch(fetchSites()),
+    fetchClientSites: (id) => dispatch(fetchClientSites(id)),
     fetchIndications: () => dispatch(fetchIndications()),
     fetchLevels:      () => dispatch(fetchLevels()),
     fetchProposal:    (id) => dispatch(fetchProposal(id)),

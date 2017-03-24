@@ -70,7 +70,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.showPatientThankyouPageModal = this.showPatientThankyouPageModal.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.onTableScroll = this.onTableScroll.bind(this);
     this.campaignChanged = this.campaignChanged.bind(this);
     this.updateStudy = this.updateStudy.bind(this);
 
@@ -80,6 +79,9 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.setEditStudyFormValues = this.setEditStudyFormValues.bind(this);
     this.mouseOverRow = this.mouseOverRow.bind(this);
     this.mouseOutRow = this.mouseOutRow.bind(this);
+
+    this.handleScroll = this.handleScroll.bind(this);
+    this.handleBodyScroll = this.handleBodyScroll.bind(this);
 
 
     this.state = {
@@ -101,7 +103,13 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       editStudyInitValues: {},
       addEmailModalShow: false,
       hoveredRowIndex: null,
+      isFixedBottomScroll: false,
+      fixedScrollWidth: false,
     };
+  }
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleBodyScroll);
   }
 
   componentWillReceiveProps(newProps) {
@@ -113,8 +121,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     if (this.props.studyUpdateProcess.saving && !newProps.studyUpdateProcess.saving) {
       this.showEditInformationModal(false);
       this.setEditStudyFormValues(newProps.studyUpdateProcess.study);
-      // console.log(322, newProps.studyUpdateProcess.study.text_number_id);
-      // this.props.dispatch(change('dashboardEditStudyForm', 'messagingNumber', newProps.studyUpdateProcess.study.text_number_id));
     }
     if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
       let addFields = this.props.editStudyValues.emailNotifications;
@@ -133,8 +139,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     }
   }
 
-  onTableScroll(e, v) {
-    console.log('scroll', e, v);
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleBodyScroll);
   }
 
   setEditStudyFormValues(study) {
@@ -146,6 +152,23 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
     this.props.fetchAllClientUsersDashboard({ clientId: study.client_id, siteId: study.site_id });
     this.props.fetchStudyCampaignsDashboard(study.study_id);
+  }
+
+  handleScroll(event) {
+    const scrollLeft = event.target.scrollLeft;
+
+    this.rightDivHeader.scrollLeft = scrollLeft;
+  }
+
+  handleBodyScroll(event) {
+    const scrollTop = event.target.scrollingElement.scrollTop;
+    const scrollHeight = event.target.scrollingElement.scrollHeight;
+
+    if ((window.innerHeight + scrollTop < 1130) || (scrollHeight - window.innerHeight - scrollTop < 80)) {
+      this.setState({ isFixedBottomScroll: false });
+    } else {
+      this.setState({ isFixedBottomScroll: true, fixedScrollWidth: this.tableRight.clientWidth });
+    }
   }
 
   toggleAllstudies(checked) {
@@ -601,8 +624,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                               <th>
                                 <div>
                                   <span className="text-uppercase">Status <i className="caret-arrow"></i></span>
-                                  <span className="counter">Active: 4</span>
-                                  <span className="counter">Inactive: 1</span>
+                                  <span className="counter">Active: {this.props.totals.details.total_active || 0}</span>
+                                  <span className="counter">Inactive: {this.props.totals.details.total_inactive || 0}</span>
                                 </div>
                               </th>
                               <th>
@@ -627,9 +650,20 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         </tbody>
                       </table>
                     </div>
-                    <div className="table-right" data-table="">
+                    <div
+                      className="table-right"
+                      data-table=""
+                      ref={(tableRight) => {
+                        this.tableRight = tableRight;
+                      }}
+                    >
                       <div className="scroll-holder jcf-scrollable">
-                        <div className="table-inner" onScroll={this.onTableScroll}>
+                        <div
+                          className="table-inner"
+                          ref={(rightDivHeader) => {
+                            this.rightDivHeader = rightDivHeader;
+                          }}
+                        >
                           <Sticky topOffset={-200} className="table-top">
                             <table className="table table-study">
                               <thead>
@@ -698,6 +732,16 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                             </tbody>
                           </table>
                         </div>
+                      </div>
+                      <div
+                        onScroll={this.handleScroll}
+                        ref={(rightDiv) => {
+                          this.rightDiv = rightDiv;
+                        }}
+                        style={{ width: (this.state.fixedScrollWidth || 'auto') }}
+                        className={classNames('dashboard-scroll-wrap', (this.state.isFixedBottomScroll ? 'dashboard-scroll-wrap-fixed' : ''))}
+                      >
+                        <div className="dashboard-scroll-container"></div>
                       </div>
                     </div>
                   </StickyContainer>

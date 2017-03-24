@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 import { touch } from 'redux-form';
+import _ from 'lodash';
 
 import ReferForm from '../../components/ReferForm';
 import { selectReferFormError } from '../../components/ReferForm/selectors';
@@ -17,7 +18,7 @@ import { fields } from '../../components/ReferForm/validator';
 import { selectCompanyTypes } from '../../containers/ReferPage/selectors';
 import { submitForm, fetchCompanyTypes } from '../../containers/ReferPage/actions';
 import {
-  fetchSites,
+  fetchClientSites,
 } from '../../containers/App/actions';
 import {
   selectSiteLocations,
@@ -27,23 +28,22 @@ import {
 import manImage from '../../assets/images/man.svg';
 import shadowImage from '../../assets/images/shadow.png';
 
-import _ from 'lodash';
-
 export class ReferPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
-    fetchSites: PropTypes.func,
+    fetchClientSites: PropTypes.func.isRequired,
     companyTypes: PropTypes.array,
     currentUser: PropTypes.object,
     hasErrors: PropTypes.bool,
-    fetchCompanyTypes: PropTypes.func,
-    submitForm: PropTypes.func,
-    touchRefer: PropTypes.func,
+    fetchCompanyTypes: PropTypes.func.isRequired,
+    submitForm: PropTypes.func.isRequired,
+    touchRefer: PropTypes.func.isRequired,
   }
 
   componentDidMount() {
-    this.props.fetchSites();
-    this.props.fetchCompanyTypes();
+    const { currentUser, fetchClientSites, fetchCompanyTypes } = this.props;
+    fetchClientSites(currentUser.roleForClient.client_id);
+    fetchCompanyTypes();
   }
 
   onSubmitForm = (values) => {
@@ -122,7 +122,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSites:       () => dispatch(fetchSites()),
+    fetchClientSites: (id) => dispatch(fetchClientSites(id)),
     fetchCompanyTypes: () => dispatch(fetchCompanyTypes()),
     submitForm: (values) => dispatch(submitForm(values)),
     touchRefer: () => dispatch(touch('refer', ...fields)),

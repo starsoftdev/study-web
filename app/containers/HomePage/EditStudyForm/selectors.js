@@ -6,30 +6,6 @@ import { get } from 'lodash';
  */
 const selectFormDomain = () => state => state.form;
 
-/**
- * EditStudyForm -> all values
- */
-const selectEditStudyFormValues = () => createSelector(
-  selectFormDomain(),
-  substate => get(substate, 'editStudy.values', {})
-);
-
-/**
- * EditStudyForm -> checking validation error
- */
-const selectEditStudyFormError = () => createSelector(
-  selectFormDomain(),
-  (substate) => {
-    const errors = get(substate, 'editStudy.syncErrors', {});
-    return Object.keys(errors).length > 0;
-  }
-);
-
-const selectEditStudyFormErrors = () => createSelector(
-  selectFormDomain(),
-  (substate) => get(substate, 'editStudy.syncErrors', null)
-);
-
 const selectEditStudyFormRecruitmentPhoneValue = () => createSelector(
   selectFormDomain(),
   substate => get(substate, 'editStudy.values.recruitmentPhone', null)
@@ -42,9 +18,6 @@ const selectEditStudyFormStudyAdValue = () => createSelector(
 
 export default selectFormDomain;
 export {
-  selectEditStudyFormValues,
-  selectEditStudyFormError,
-  selectEditStudyFormErrors,
   selectEditStudyFormRecruitmentPhoneValue,
   selectEditStudyFormStudyAdValue,
 };

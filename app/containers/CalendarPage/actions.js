@@ -72,11 +72,11 @@ export function submitScheduleFailed(payload) {
   };
 }
 
-export function deleteSchedule(scheduleId, userId) {
+export function deleteSchedule(scheduleId, clientId) {
   return {
     type: DELETE_SCHEDULE,
     scheduleId,
-    userId,
+    clientId,
   };
 }
 export function deleteScheduleSucceeded(payload) {

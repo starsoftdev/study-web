@@ -225,7 +225,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
       });
     }
     if (patientQualificationSuite) {
-      if (selectedStudy.patientMessagingSuite && selectedStudy.patientMessagingSuite === 'On') {
+      if (selectedStudy && selectedStudy.patientMessagingSuite && selectedStudy.patientMessagingSuite === 'On') {
         addOns.push({
           title: 'Upgrade to Patient Qualification Suite',
           price: QUALIFICATION_SUITE_UPGRADE_PRICE,
