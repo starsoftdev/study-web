@@ -6,8 +6,9 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import inViewport from 'in-viewport';
+import Remarkable from 'remarkable';
 
-import studyKikLogo from '../../../assets/images/logo.svg';
+import studyKikLogo from '../../assets/images/logo.svg';
 
 export class TrialsArticle extends Component {
   static propTypes = {
@@ -39,6 +40,16 @@ export class TrialsArticle extends Component {
   render() {
     const { index, addr, trial } = this.props;
     const landingHref = `/${trial.study_id}-${trial.location.toLowerCase().replace(/ /ig, '-')}`;
+    const md = new Remarkable();
+
+    const landingDescription = (trial && trial.landingdescription && trial.landingdescription !== 'seed') ? trial.landingdescription : null;
+
+    md.set({
+      html: true,
+      breaks: true,
+    });
+
+    const markdown = md.render(landingDescription);
 
     return (
       <article
@@ -70,9 +81,14 @@ export class TrialsArticle extends Component {
             </span>
           </div>
           <div className="desc">
-            <p>
-              {trial.description}
-            </p>
+            {landingDescription ? (
+                <div className="custom-description" dangerouslySetInnerHTML={{ __html: markdown }} />
+              ) : (
+                <p>
+                  {trial.name}
+                </p>
+              )
+            }
           </div>
           <div className="btn-holder">
             <span className="btn btn-default">Learn More</span>
