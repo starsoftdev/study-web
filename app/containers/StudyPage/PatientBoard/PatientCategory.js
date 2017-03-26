@@ -6,8 +6,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { DropTarget } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
-import { find } from 'lodash';
+import { find, orderBy } from 'lodash';
 import classNames from 'classnames';
+import moment from 'moment';
 
 import { selectCurrentUser, selectSitePatients } from '../../App/selectors';
 import * as Selector from '../selectors';
@@ -100,12 +101,27 @@ class PatientCategory extends React.Component {
 
   renderPatients() {
     const { category, currentPatientId, currentUser, onPatientClick, onPatientTextClick, studyId, sitePatients } = this.props;
+
     if (category.patients.length > 0) {
+      const getLastUpdate = (patient) => {
+        const tempMax = moment.max(moment(patient.createdAt), moment(patient.updatedAt));
+        if (patient.lastTextMessage) {
+          return moment.max(tempMax, moment(patient.lastTextMessage.dateUpdated));
+        }
+
+        return tempMax;
+      };
+
+      const sortPatients = (patients) =>
+        orderBy(patients, (patient) => getLastUpdate(patient), 'desc');
+
+      const sorted = sortPatients(category.patients);
+
       return (
         <div className="slide">
           <div className="slide-holder">
             <ul className="list-unstyled">
-              {category.patients.map(patient => {
+              {sorted.map(patient => {
                 const patientData = find(sitePatients.details, { study_id: studyId, id: patient.id });
                 let unreadMessageCount = 0;
                 if (patientData !== undefined) {
