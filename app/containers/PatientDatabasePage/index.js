@@ -9,6 +9,7 @@ import PatientsList from '../../containers/PatientDatabasePage/PatientsList/inde
 import { fetchIndications, fetchSources, fetchClientSites } from '../../containers/App/actions';
 import { fetchPatientCategories, fetchPatients, clearPatientsList } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
+import { selectCurrentUser } from '../App/selectors';
 
 export class PatientDatabasePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -20,6 +21,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     paginationOptions: PropTypes.object,
     patients: PropTypes.object,
     clearPatientsList: PropTypes.func,
+    currentUser: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -32,7 +34,9 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     this.props.fetchIndications();
     this.props.fetchSources();
     this.props.fetchPatientCategories();
-    this.props.fetchClientSites();
+
+    const clientId = this.props.currentUser.roleForClient.client_id;
+    this.props.fetchClientSites(clientId);
   }
 
   searchPatients(searchFilter, isSearch, isExport = false) {
@@ -90,12 +94,13 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
 const mapStateToProps = createStructuredSelector({
   paginationOptions: selectPaginationOptions(),
   patients: selectPatients(),
+  currentUser: selectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchIndications: () => dispatch(fetchIndications()),
-    fetchClientSites: () => dispatch(fetchClientSites()),
+    fetchClientSites: (clientId) => dispatch(fetchClientSites(clientId)),
     fetchSources: () => dispatch(fetchSources()),
     fetchPatientCategories: searchParams => dispatch(fetchPatientCategories(searchParams)),
     fetchPatients: (searchParams, patients, searchFilter, isExport) => dispatch(fetchPatients(searchParams, patients, searchFilter, isExport)),
