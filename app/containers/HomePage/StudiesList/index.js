@@ -17,10 +17,10 @@ import { selectRenewStudyFormValues, selectRenewStudyFormError } from '../RenewS
 import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError } from '../UpgradeStudyForm/selectors';
 import RenewStudyForm from '../RenewStudyForm/index';
 import UpgradeStudyForm from '../UpgradeStudyForm/index';
-import EditStudyForm from '../EditStudyForm/index';
+import EditStudyForm from '../../../components/EditStudyForm';
 import { upgradeStudyFields } from '../UpgradeStudyForm/validator';
 import { renewStudyFields } from '../RenewStudyForm/validator';
-import { editStudyFields } from '../EditStudyForm/validator';
+import { editStudyFields } from '../../../components/EditStudyForm/validator';
 import StudyItem from './StudyItem';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
