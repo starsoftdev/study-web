@@ -240,24 +240,6 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     }
   }
 
-  renderEmailList() {
-    const { change, formValues } = this.props;
-
-    return (
-      <div className="emails-list-holder">
-        <FieldArray
-          name="emailNotifications"
-          component={RenderEmailsList}
-          change={change}
-          formValues={formValues}
-          addEmailNotification={this.addEmailNotificationClick}
-          closeEmailNotification={this.closeAddEmailModal}
-          emailFields={this.state.emailFields}
-        />
-      </div>
-    );
-  }
-
   closeStudyAddModal() {
     this.setState({ studyAddModalOpen: false });
   }
@@ -279,6 +261,24 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
       this.props.submitStudyAdd({ file: blob, study_id: this.state.currentStudy.id });
       this.closeStudyAddModal();
     });
+  }
+
+  renderEmailList() {
+    const { change, formValues } = this.props;
+
+    return (
+      <div className="emails-list-holder">
+        <FieldArray
+          name="emailNotifications"
+          component={RenderEmailsList}
+          change={change}
+          formValues={formValues}
+          addEmailNotification={this.addEmailNotificationClick}
+          closeEmailNotification={this.closeAddEmailModal}
+          emailFields={this.state.emailFields}
+        />
+      </div>
+    );
   }
 
   render() {
