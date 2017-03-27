@@ -471,7 +471,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
                     type: 'search',
                     value: '',
                   })}
-                ><i className="glyphicon glyphicon-plus"></i></Button>
+                ><i className="glyphicon glyphicon-plus" /></Button>
               </div>
             </div>
           </div>
@@ -556,7 +556,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
               <h2 className="pull-left">PATIENTS PER DAY</h2>
               <span className="counter pull-left">0% OF GOAL 0.49%</span>
               <Button bsStyle="primary" className="lightbox-opener pull-right" onClick={() => { this.showDateRangeModal(); }}>
-                <i className="icomoon-icon_calendar"></i>
+                <i className="icomoon-icon_calendar" />
                 {this.parseDateRange()}
               </Button>
             </div>

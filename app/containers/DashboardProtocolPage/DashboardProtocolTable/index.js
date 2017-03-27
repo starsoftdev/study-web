@@ -56,7 +56,7 @@ export class DashboardProtocolTable extends React.Component { // eslint-disable-
 
           <thead>
             <tr>
-              <th onClick={this.sortBy} data-sort="number" className={`th ${(this.props.paginationOptions.activeSort === 'number') ? this.props.paginationOptions.activeDirection : ''}`}>Protocol<i className="caret-arrow"></i></th>
+              <th onClick={this.sortBy} data-sort="number" className={`th ${(this.props.paginationOptions.activeSort === 'number') ? this.props.paginationOptions.activeDirection : ''}`}>Protocol<i className="caret-arrow" /></th>
               <th></th>
             </tr>
           </thead>

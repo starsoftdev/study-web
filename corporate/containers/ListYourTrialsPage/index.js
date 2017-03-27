@@ -82,7 +82,6 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('componentWillReceiveProps', newProps);
     if (newProps.findOutPosted) {
       this.props.clearForm();
     }
@@ -132,14 +131,14 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
               <h2 className="main-heading text-center"><span className="text">LIST YOUR CLINICAL TRIALS</span></h2>
               <div className="info">
                 <a
-                  href="#"
+
                   className="btn btn-deep btn-block"
                   onClick={this.toggleListNow}
                 >
                   LIST NOW!
                 </a>
                 <a
-                  href="#"
+
                   className="btn btn-deep btn-block small"
                   onClick={this.toggleGetProposal}
                 >
@@ -479,7 +478,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
               <div className="row">
                 <div className="col-xs-6 col-sm-4 col-lg-2">
                   <a
-                    href="#"
+
                     className="package"
                     onClick={this.toggleListNow}
                   >
@@ -508,7 +507,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 diamond">
                   <a
-                    href="#"
+
                     className="package"
                     onClick={this.toggleListNow}
                   >
@@ -532,7 +531,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 platinum">
                   <a
-                    href="#"
+
                     className="package"
                     onClick={this.toggleListNow}
                   >
@@ -554,7 +553,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 gold">
                   <a
-                    href="#"
+
                     className="package"
                     onClick={this.toggleListNow}
                   >
@@ -576,7 +575,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 silver">
                   <a
-                    href="#"
+
                     className="package"
                     onClick={this.toggleListNow}
                   >
@@ -598,7 +597,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 </div>
                 <div className="col-xs-6 col-sm-4 col-lg-2 bronze">
                   <a
-                    href="#"
+
                     className="package"
                     onClick={this.toggleListNow}
                   >
@@ -620,7 +619,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 </div>
               </div>
               <a
-                href="#"
+
                 className="btn btn-deep"
                 onClick={this.toggleListNow}
               >

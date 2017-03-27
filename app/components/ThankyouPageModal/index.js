@@ -90,8 +90,6 @@ export class ThankyouPageModal extends React.Component {
           }
         }
 
-        // console.log('thankYouPage', thankYouPage);
-
         if (!this.state.initialValuesEntered) {
           this.props.dispatch(change(formName, 'thankyouFor', thankYouPage.thankyouFor));
           this.props.dispatch(change(formName, 'youWillBe', thankYouPage.youWillBe));
@@ -151,7 +149,7 @@ export class ThankyouPageModal extends React.Component {
             <div className="head">
               <div className="inner-head">
                 <strong className="title">Thank You Page</strong>
-                <a href="#" className="btn-right-arrow" onClick={this.onHide}><i className="glyphicon glyphicon-menu-right"></i></a>
+                <a className="btn-right-arrow" onClick={this.onHide}><i className="glyphicon glyphicon-menu-right" /></a>
               </div>
             </div>
             <Form
