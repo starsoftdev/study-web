@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { get, map, pick, filter, findIndex } from 'lodash';
+import { get, map, pick, filter } from 'lodash';
 
 /**
  * Direct selector to the app state domain
@@ -224,27 +224,21 @@ const selectSelectedUserDetailsForForm = () => createSelector(
   (substate) => {
     const selectedUserInput = {};
     const selectedUserDetails = get(substate, 'baseData.selectedUser.details', {});
-    const clientSitesDetails = get(substate, 'baseData.sites.details', []);
 
     if (selectedUserDetails) {
       selectedUserInput.firstName = selectedUserDetails.firstName;
       selectedUserInput.lastName = selectedUserDetails.lastName;
       selectedUserInput.email = selectedUserDetails.email;
 
-      if (!selectedUserDetails.roleForClient.site) {
-        const foundSiteIndex = findIndex(clientSitesDetails, (siteIterator) => (findIndex(siteIterator.users, { id: selectedUserDetails.id }) > -1));
-        if (foundSiteIndex > -1) {
-          selectedUserInput.site = clientSitesDetails[foundSiteIndex].id.toString();
-        } else {
-          selectedUserInput.site = null;
-        }
+      if (selectedUserDetails.roleForClient.site_id) {
+        selectedUserInput.site = selectedUserDetails.roleForClient.site_id.toString();
       } else {
         selectedUserInput.isAdmin = selectedUserDetails.roleForClient.isAdmin;
         selectedUserInput.canPurchase = selectedUserDetails.roleForClient.canPurchase;
         selectedUserInput.canRedeemRewards = selectedUserDetails.roleForClient.canRedeemRewards;
+        selectedUserInput.site = '0';
       }
     }
-
     return selectedUserInput;
   }
 );
