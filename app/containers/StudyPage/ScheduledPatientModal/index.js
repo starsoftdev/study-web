@@ -180,8 +180,7 @@ class ScheduledPatientModal extends React.Component {
                       name="textReminder"
                       type="checkbox"
                       component={Checkbox}
-                      title="test"
-                      className={'reminder-container'}
+                      className="reminder-container"
                     />
                     <label className="reminder-label"> Text Reminder</label>
                   </div>
