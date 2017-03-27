@@ -2,6 +2,9 @@ import React from 'react';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { Field, reduxForm, reset, touch } from 'redux-form';
+import inViewport from 'in-viewport';
+import { Link } from 'react-router';
+
 import { normalizePhone } from '../../../app/common/helper/functions';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
 
@@ -16,17 +19,15 @@ import {
   resetNewContactSuccess,
 } from '../../../app/containers/App/actions';
 
-import inViewport from 'in-viewport';
-import { Link } from 'react-router';
 
 import img17 from '../../assets/images/img17.svg';
 import img18 from '../../assets/images/img18.svg';
 import imgWifi from '../../assets/images/wifi.svg';
+import formValidator, { fields } from './validator';
 
 import './styles.less';
 
 const formName = 'contactForm';
-import formValidator, { fields } from './validator';
 @reduxForm({
   form: formName,
   validate: formValidator,
@@ -110,16 +111,16 @@ export class ContactPage extends React.Component { // eslint-disable-line react/
               <p className="text-center txt-green">To speak with one of our friendly staff members, please contact us.</p>
               <div className="row contact-info">
                 <div className="col-xs-4">
-                  <h3 className="txt-orange"><i className="icomoon-phone txt-orange"></i> PHONE</h3>
+                  <h3 className="txt-orange"><i className="icomoon-phone txt-orange" /> PHONE</h3>
                   <a href="tel:8776272509">877.627.2509</a>
                 </div>
                 <div className="col-xs-4">
-                  <h3 className="txt-orange"><i className="icomoon-map-marker txt-orange"></i> LOCATION</h3>
+                  <h3 className="txt-orange"><i className="icomoon-map-marker txt-orange" /> LOCATION</h3>
                   <address>1675 Scenic Ave <br /> Suite 150 <br /> Costa Mesa, Ca 92626</address>
                 </div>
                 <div className="col-xs-4 pull-right col">
 
-                  <h3 className="txt-orange"><i className="icomoon-envelope txt-orange"></i> EMAIL</h3>
+                  <h3 className="txt-orange"><i className="icomoon-envelope txt-orange" /> EMAIL</h3>
                   <a href="mailto:info@studykik.com" className="email">info@studykik.com</a>
                 </div>
               </div>

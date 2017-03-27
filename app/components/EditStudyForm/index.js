@@ -5,14 +5,22 @@ import { Field, FieldArray, change, reduxForm, reset } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import _, { forEach, filter } from 'lodash';
 
-import Input from '../../../components/Input';
-import AddEmailNotificationForm from '../../../components/AddEmailNotificationForm';
-import CenteredModal from '../../../components/CenteredModal/index';
-import LoadingSpinner from '../../../components/LoadingSpinner';
-import { addEmailNotificationUser, fetchClientAdmins } from '../../App/actions';
-import { selectCurrentUser, selectClientSites } from '../../App/selectors';
-import { selectSyncErrorBool, selectSyncErrors, selectValues } from '../../../common/selectors/form.selector';
-import { selectEditedStudy, selectAddNotificationProcess } from '../../../containers/HomePage/selectors';
+import Input from '../../components/Input';
+import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
+import CenteredModal from '../../components/CenteredModal/index';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import { addEmailNotificationUser, fetchClientAdmins } from '../../containers/App/actions';
+import { selectCurrentUser, selectClientSites } from '../../containers/App/selectors';
+import { selectSyncErrorBool, selectSyncErrors, selectValues } from '../../common/selectors/form.selector';
+import { selectEditedStudy, selectAddNotificationProcess } from '../../containers/HomePage/selectors';
+import StudyAddForm from '../../components/StudyAddForm';
+import {
+  changeStudyAdd,
+  resetChangeStudyAddState,
+} from '../../containers/HomePage/AdminDashboard/actions';
+import {
+  selectChangeStudyAddProcess,
+} from '../../containers/HomePage/AdminDashboard/selectors';
 import RenderEmailsList from './RenderEmailsList';
 import formValidator from './validator';
 
@@ -41,6 +49,9 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     addNotificationProcess: PropTypes.object,
     clientAdmins: PropTypes.object,
     fetchClientAdmins: PropTypes.func.isRequired,
+    submitStudyAdd: PropTypes.func.isRequired,
+    changeStudyAddProcess: PropTypes.any,
+    resetChangeAddState: PropTypes.func.isRequired,
   };
   constructor(props) {
     super(props);
@@ -54,17 +65,23 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     this.addEmailNotificationSubmit = this.addEmailNotificationSubmit.bind(this);
     this.selectAll = this.selectAll.bind(this);
     this.selectEmail = this.selectEmail.bind(this);
+    this.openStudyAddModal = this.openStudyAddModal.bind(this);
+    this.closeStudyAddModal = this.closeStudyAddModal.bind(this);
+    this.openStudyPreviewModal = this.openStudyPreviewModal.bind(this);
+    this.closeStudyPreviewModal = this.closeStudyPreviewModal.bind(this);
+    this.uploadStudyAdd = this.uploadStudyAdd.bind(this);
 
     this.handleFileChange = this.handleFileChange.bind(this);
 
     this.state = {
       addEmailModalShow: false,
+      studyAddModalOpen: false,
+      studyPreviewModalOpen: false,
     };
   }
 
   componentWillMount() {
     const { change, currentUser, fetchClientAdmins, siteUsers } = this.props;
-    console.log(currentUser);
     if (currentUser && currentUser.roleForClient.isAdmin) {
       fetchClientAdmins(currentUser.roleForClient.client_id);
     }
@@ -72,7 +89,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   componentWillReceiveProps(newProps) {
-    const { clientAdmins, change } = this.props;
+    const { clientAdmins, change, resetChangeAddState } = this.props;
     if (newProps.selectedStudyId && newProps.selectedStudyId !== this.props.selectedStudyId) {
       const fields = [];
       let currentStudy = null;
@@ -136,6 +153,10 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
         addFields.push(values);
       }
       change('emailNotifications', addFields);
+    }
+
+    if (!newProps.changeStudyAddProcess.saving && newProps.changeStudyAddProcess.success) {
+      resetChangeAddState();
     }
   }
 
@@ -219,6 +240,29 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     }
   }
 
+  closeStudyAddModal() {
+    this.setState({ studyAddModalOpen: false });
+  }
+
+  openStudyAddModal() {
+    this.setState({ studyAddModalOpen: true });
+  }
+
+  closeStudyPreviewModal() {
+    this.setState({ studyPreviewModalOpen: false });
+  }
+
+  openStudyPreviewModal() {
+    this.setState({ studyPreviewModalOpen: true });
+  }
+
+  uploadStudyAdd(e) {
+    e.toBlob((blob) => {
+      this.props.submitStudyAdd({ file: blob, study_id: this.state.currentStudy.id });
+      this.closeStudyAddModal();
+    });
+  }
+
   renderEmailList() {
     const { change, formValues } = this.props;
 
@@ -239,6 +283,13 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
 
   render() {
     const { editedStudy } = this.props;
+    let fileSrc = null;
+
+    console.log('render', this.state.currentStudy);
+
+    if (this.state.currentStudy) {
+      fileSrc = this.state.currentStudy.image;
+    }
 
     return (
       <div>
@@ -288,16 +339,22 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
                           <label>STUDY AD</label>
                         </strong>
                         <div className="field">
-                          { this.state.fileSrc && <img alt="" className="protocol-study-img" src={this.state.fileSrc} /> }
-                          <label htmlFor="study-ad" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn"></label>
-                          <Field
-                            id="study-ad"
-                            name="studyAd"
-                            component={Input}
-                            type="file"
-                            className="hidden"
-                            onChange={this.handleFileChange}
-                          />
+                          { fileSrc &&
+                          <div className="img-preview">
+                            <a
+                              className="lightbox-opener"
+                              onClick={this.openStudyPreviewModal}
+                            >
+                              <img src={fileSrc} id="img-preview" alt="preview" />
+                            </a>
+                          </div>
+                          }
+                          <a
+                            className="btn btn-gray upload-btn"
+                            onClick={this.openStudyAddModal}
+                          >
+                            update study ad
+                          </a>
                           {/* TODO need to put an error message up so that people know to upload a file. */}
                           {/* formError
                           ? <div className="has-error">{formErrors.studyAd}</div>
@@ -306,7 +363,11 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
                         </div>
                       </div>
                       <div className="clearfix">
-                        <button type="submit" className="btn btn-default btn-submit pull-right" disabled={editedStudy.submitting}>
+                        <button
+                          type="submit"
+                          className="btn btn-default btn-submit pull-right"
+                          disabled={editedStudy.submitting}
+                        >
                           {editedStudy.submitting
                             ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                             : <span>Update</span>
@@ -337,6 +398,44 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
             <AddEmailNotificationForm onSubmit={this.addEmailNotificationSubmit} />
           </Modal.Body>
         </Modal>
+        <Modal
+          className="study-add-modal avatar-modal"
+          dialogComponentClass={CenteredModal}
+          show={this.state.studyAddModalOpen}
+          onHide={this.closeStudyAddModal}
+          backdrop
+          keyboard
+        >
+          <Modal.Header>
+            <Modal.Title>UPDATE STUDY AD</Modal.Title>
+            <a className="lightbox-close close" onClick={this.closeStudyAddModal}>
+              <i className="icomoon-icon_close" />
+            </a>
+          </Modal.Header>
+          <Modal.Body>
+            <StudyAddForm handleSubmit={this.uploadStudyAdd} />
+          </Modal.Body>
+        </Modal>
+        <Modal
+          className="study-preview-modal preview-modal"
+          dialogComponentClass={CenteredModal}
+          show={this.state.studyPreviewModalOpen}
+          onHide={this.closeStudyPreviewModal}
+          backdrop
+          keyboard
+        >
+          <Modal.Header>
+            <Modal.Title>Image Preview</Modal.Title>
+            <a className="lightbox-close close" onClick={this.closeStudyPreviewModal}>
+              <i className="icomoon-icon_close" />
+            </a>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="img-holder">
+              <img src={fileSrc} alt="modal-preview" />
+            </div>
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }
@@ -350,12 +449,15 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectValues(formName),
   editedStudy: selectEditedStudy(),
   clientSites: selectClientSites(),
+  changeStudyAddProcess: selectChangeStudyAddProcess(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
   fetchClientAdmins: (id) => dispatch(fetchClientAdmins(id)),
   change: (name, value) => dispatch(change(formName, name, value)),
+  submitStudyAdd: (values) => dispatch(changeStudyAdd(values)),
+  resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
   resetForm: () => dispatch(reset(formName)),
 });
 

@@ -141,16 +141,16 @@ export class ReportViewSearch extends React.Component {
         <div className="btns-area pull-right full-width">
           {/* TODO: remove tmp styles */}
           <div className="col pull-right">
-            <a disabled className="btn btn-primary lightbox-opener"><i className="icon-icon_download"></i> download</a>
+            <a disabled className="btn btn-primary lightbox-opener"><i className="icon-icon_download" /> download</a>
           </div>
           <div className="col pull-right">
-            <a disabled className="btn btn-primary lightbox-opener"><i className="icon-icon_creditcard"></i> add credits</a>
+            <a disabled className="btn btn-primary lightbox-opener"><i className="icon-icon_creditcard" /> add credits</a>
           </div>
           <div className="col pull-right">
             <a disabled className="btn btn-primary lightbox-opener">+ add site</a>
           </div>
           <div className="col pull-right">
-            <a className="btn btn-primary lightbox-opener" onClick={this.showPopup}><i className="icomoon-icon_calendar"></i> Date Range</a>
+            <a className="btn btn-primary lightbox-opener" onClick={this.showPopup}><i className="icomoon-icon_calendar" /> Date Range</a>
           </div>
         </div>
         <div className="fields-holder full-width">

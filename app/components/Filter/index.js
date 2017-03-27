@@ -29,8 +29,8 @@ class Filter extends React.Component {
         className={classNames('filter-box')}
       >
         <strong className="text-uppercase">{name}:</strong> {value}
-        <a href="#" className="btn-close" onClick={() => this.props.onClose()}>
-          <i className="icomoon-icon_close"></i>
+        <a className="btn-close" onClick={() => this.props.onClose()}>
+          <i className="icomoon-icon_close" />
         </a>
       </div>
     );
@@ -51,7 +51,7 @@ class Filter extends React.Component {
         )}
         />
         <button className="btn btn-default" onClick={() => { this.props.onSubmit(this.searchVal.value); }}>Apply</button>
-        <a href="#" className="btn-close" onClick={() => this.props.onClose()}>
+        <a className="btn-close" onClick={() => this.props.onClose()}>
           <i className="icomoon-icon_close"></i>
         </a>
       </div>
@@ -79,9 +79,7 @@ class Filter extends React.Component {
           simpleValue
           clearable={false}
           onChange={(event) => {
-            console.log(123);
             const fullOption = _.find(comparisonOptions, (item) => (item.value === event));
-            console.log(fullOption);
             this.props.onChange(fullOption);
           }}
         />
@@ -91,8 +89,8 @@ class Filter extends React.Component {
         )}
         />
         <button className="btn btn-default" onClick={() => { this.props.onSubmit(this.searchVal.value); }}>Apply</button>
-        <a href="#" className="btn-close" data-remove=".filter-search-area" onClick={() => this.props.onClose()}>
-          <i className="icomoon-icon_close"></i>
+        <a className="btn-close" data-remove=".filter-search-area" onClick={() => this.props.onClose()}>
+          <i className="icomoon-icon_close" />
         </a>
       </div>
     );

@@ -50,10 +50,6 @@ export class BillingPage extends Component {
     window.addEventListener('scroll', this.handleScroll);
   }
 
-  componentWillReceiveProps(newProps) {
-    console.log('componentWillReceiveProps', newProps);
-  }
-
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
   }
@@ -186,7 +182,7 @@ export class BillingPage extends Component {
                             className="btn-reset"
                             onClick={this.resetQuantity.bind(this, 'ruby')}
                           >
-                            <i className="icomoon-icon_trash"></i>
+                            <i className="icomoon-icon_trash" />
                           </a>
                         </div></td>
                       </tr>
@@ -226,7 +222,7 @@ export class BillingPage extends Component {
                             className="btn-reset"
                             onClick={this.resetQuantity.bind(this, 'diamond')}
                           >
-                            <i className="icomoon-icon_trash"></i>
+                            <i className="icomoon-icon_trash" />
                           </a>
                         </div></td>
                       </tr>
@@ -267,7 +263,7 @@ export class BillingPage extends Component {
                               className="btn-reset"
                               onClick={this.resetQuantity.bind(this, 'platinum')}
                             >
-                              <i className="icomoon-icon_trash"></i>
+                              <i className="icomoon-icon_trash" />
                             </a>
                           </div>
                         </td>
@@ -309,7 +305,7 @@ export class BillingPage extends Component {
                               className="btn-reset"
                               onClick={this.resetQuantity.bind(this, 'gold')}
                             >
-                              <i className="icomoon-icon_trash"></i>
+                              <i className="icomoon-icon_trash" />
                             </a>
                           </div>
                         </td>
@@ -351,7 +347,7 @@ export class BillingPage extends Component {
                               className="btn-reset"
                               onClick={this.resetQuantity.bind(this, 'silver')}
                             >
-                              <i className="icomoon-icon_trash"></i>
+                              <i className="icomoon-icon_trash" />
                             </a>
                           </div>
                         </td>
@@ -393,7 +389,7 @@ export class BillingPage extends Component {
                               className="btn-reset"
                               onClick={this.resetQuantity.bind(this, 'bronze')}
                             >
-                              <i className="icomoon-icon_trash"></i>
+                              <i className="icomoon-icon_trash" />
                             </a>
                           </div>
                         </td>
@@ -434,7 +430,7 @@ export class BillingPage extends Component {
                               className="btn-reset"
                               onClick={this.resetQuantity.bind(this, 'irb')}
                             >
-                              <i className="icomoon-icon_trash"></i>
+                              <i className="icomoon-icon_trash" />
                             </a>
                           </div>
                         </td>
@@ -470,7 +466,7 @@ export class BillingPage extends Component {
                     <dd>$354.00</dd>
                     <div className="coupon-area">
                       <input placeholder="Coupon" className="form-control" type="text" />
-                      <a href="#" className="btn btn-primary coupon-btn"></a>
+                      <a className="btn btn-primary coupon-btn"></a>
                     </div>
                     <dt>Subtotal</dt>
                     <dd>$7,031.00</dd>
@@ -490,7 +486,7 @@ export class BillingPage extends Component {
           <div className="row">
             <div className="col-xs-12 col-sm-6 blue dropdown">
               <a
-                href="#"
+
                 id="dLabel"
                 type="button"
                 data-toggle="dropdown"
@@ -498,7 +494,7 @@ export class BillingPage extends Component {
                 aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icomoon-search"></i>
+                <i className="icomoon-search" />
                 <h3>
                   <span>Exposure to StudyKIK Patient<br /> Enrollment Search</span>
                 </h3>
@@ -517,7 +513,7 @@ export class BillingPage extends Component {
             </div>
             <div className="col-xs-12 col-sm-6 light-blue dropdown">
               <a
-                href="#"
+
                 id="dLabel"
                 type="button"
                 data-toggle="dropdown"
@@ -525,7 +521,7 @@ export class BillingPage extends Component {
                 aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icomoon-sign"></i>
+                <i className="icomoon-sign" />
                 <h3>
                   <span>
                     Instant SIGN-UP Notifications<br /> to Your Site
@@ -548,7 +544,7 @@ export class BillingPage extends Component {
             </div>
             <div className="col-xs-12 col-sm-6 light-orange dropdown">
               <a
-                href="#"
+
                 id="dLabel"
                 type="button"
                 data-toggle="dropdown"
@@ -556,7 +552,7 @@ export class BillingPage extends Component {
                 aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icomoon-right"></i>
+                <i className="icomoon-right" />
                 <h3>
                   <span>Instant Patient Email and <br /> Text Message w/Site Phone</span>
                 </h3>
@@ -577,7 +573,7 @@ export class BillingPage extends Component {
             </div>
             <div className="col-xs-12 col-sm-6 orange dropdown">
               <a
-                href="#"
+
                 id="dLabel"
                 type="button"
                 data-toggle="dropdown"
@@ -585,7 +581,7 @@ export class BillingPage extends Component {
                 aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icomoon-mobile"></i>
+                <i className="icomoon-mobile" />
                 <h3>
                   <span>Mobile Friendly Study Page</span>
                 </h3>
@@ -607,7 +603,7 @@ export class BillingPage extends Component {
             </div>
             <div className="col-xs-12 col-sm-6 green dropdown drop-bottom">
               <a
-                href="#"
+
                 id="dLabel"
                 type="button"
                 data-toggle="dropdown"
@@ -615,7 +611,7 @@ export class BillingPage extends Component {
                 aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icomoon-lock2"></i>
+                <i className="icomoon-lock2" />
                 <h3>
                   <span>
                     Proprietary Filtering System <br /> for Quality Patient Reach
@@ -639,7 +635,7 @@ export class BillingPage extends Component {
             </div>
             <div className="col-xs-12 col-sm-6 light-green dropdown drop-bottom">
               <a
-                href="#"
+
                 id="dLabel"
                 type="button"
                 data-toggle="dropdown"
@@ -647,7 +643,7 @@ export class BillingPage extends Component {
                 aria-expanded="false"
                 onClick={this.handleClick}
               >
-                <i className="icomoon-time"></i>
+                <i className="icomoon-time" />
                 <h3><span>Patient Call Tracking</span></h3>
               </a>
               <div className="dropdown-menu" aria-labelledby="dLabel">

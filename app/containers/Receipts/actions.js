@@ -72,7 +72,6 @@ export function showInvoicePdf(invoiceId) {
 }
 
 export function sortProposalsSuccess(payload) {
-  console.log('action');
   return {
     type: SORT_PROPOSALS_SUCCESS,
     payload,

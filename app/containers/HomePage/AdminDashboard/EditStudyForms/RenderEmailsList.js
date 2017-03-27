@@ -1,12 +1,13 @@
 import React, { PropTypes, Component } from 'react';
-import { Field, change } from 'redux-form';
-import Checkbox from '../../../../components/Input/Checkbox';
+import { Field } from 'redux-form';
 import { forEach, filter } from 'lodash';
+
+import Checkbox from '../../../../components/Input/Checkbox';
 
 class RenderEmailsList extends Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
     formValues: PropTypes.object.isRequired,
     fields: PropTypes.object,
     addEmailNotification: PropTypes.func,
@@ -22,7 +23,7 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
     this.selectAll = this.selectAll.bind(this);
     this.selectEmail = this.selectEmail.bind(this);
     this.addEmailNotificationFields = this.addEmailNotificationFields.bind(this);
-    this.addNewFileds = this.addNewFileds.bind(this);
+    this.addNewFields = this.addNewFields.bind(this);
 
     this.state = {
       addEmailModalShow: false,
@@ -30,45 +31,50 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
   }
 
   componentDidMount() {
-    // this.addNewFileds(this.props.emailFields);
   }
 
-  addNewFileds(values) {
+  addNewFields(values) {
+    const { change, fields } = this.props;
     forEach(values, (Object) => {
-      this.props.fields.push(Object);
+      fields.push(Object);
     });
-    this.props.dispatch(change('dashboardEditStudyForm', 'checkAllInput', false));
+    change('checkAllInput', false);
   }
 
   addEmailNotificationFields(values) {
-    this.props.fields.push(values);
+    const { change, fields } = this.props;
+    fields.push(values);
     this.closeAddEmailModal();
-    this.props.dispatch(change('dashboardEditStudyForm', 'checkAllInput', false));
+    change('checkAllInput', false);
   }
 
   addEmailNotificationClick() {
-    this.props.addEmailNotification();
+    const { addEmailNotification } = this.props;
+    addEmailNotification();
   }
 
   closeAddEmailModal() {
-    this.props.closeEmailNotification();
+    const { closeEmailNotification } = this.props;
+    closeEmailNotification();
   }
 
   selectAll(e) {
-    if (this.props.formValues.emailNotifications) {
-      forEach(this.props.formValues.emailNotifications, (value, index) => {
-        this.props.dispatch(change('dashboardEditStudyForm', `emailNotifications[${index}].isChecked`, e));
+    const { change, formValues } = this.props;
+    if (formValues.emailNotifications) {
+      forEach(formValues.emailNotifications, (value, index) => {
+        change(`emailNotifications[${index}].isChecked`, e);
       });
     }
   }
 
   selectEmail(e) {
-    if (this.props.formValues.checkAllInput && !e) {
-      this.props.dispatch(change('dashboardEditStudyForm', 'checkAllInput', false));
-    } else if (!this.props.formValues.checkAllInput && e) {
-      const checkedArr = filter(this.props.formValues.emailNotifications, (o) => o.isChecked);
-      if ((checkedArr.length + 1) === this.props.formValues.emailNotifications.length) {
-        this.props.dispatch(change('dashboardEditStudyForm', 'checkAllInput', true));
+    const { change, formValues } = this.props;
+    if (formValues.checkAllInput && !e) {
+      change('checkAllInput', false);
+    } else if (!formValues.checkAllInput && e) {
+      const checkedArr = filter(formValues.emailNotifications, (o) => o.isChecked);
+      if ((checkedArr.length + 1) === formValues.emailNotifications.length) {
+        change('checkAllInput', true);
       }
     }
   }

@@ -71,13 +71,13 @@ export class TrialsArticle extends Component {
           <div className="info">
             <h4>{trial.name}</h4>
             <address>
-              <i className="icomoon-map-marker"></i> {(addr !== null) ? addr : 'N/A'}
+              <i className="icomoon-map-marker" /> {(addr !== null) ? addr : 'N/A'}
             </address>
             <p className="distance">
-              <i className="icomoon-car"></i> {(trial.distance !== null) ? `${trial.distance} Miles` : 'N/A'}
+              <i className="icomoon-car" /> {(trial.distance !== null) ? `${trial.distance} Miles` : 'N/A'}
             </p>
             <span className="tel">
-              <i className="icomoon-phone"></i> {trial.phone_number}
+              <i className="icomoon-phone" /> {trial.phone_number}
             </span>
           </div>
           <div className="desc">
