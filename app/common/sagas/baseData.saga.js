@@ -196,7 +196,8 @@ export function* fetchIndicationsWatcher() {
       const filterObj = {
         order: 'name',
       };
-
+      filterObj.where = {};
+      filterObj.where.and = [];
       filterObj.where.and.push({
         isArchived: false,
       });

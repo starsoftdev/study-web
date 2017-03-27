@@ -55,7 +55,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
       const value = (this.props.item.id === protocol.id);
       options.push({
         id: protocol.id,
-        name: protocol.name,
+        name: protocol.number,
         value,
       });
     });
@@ -79,9 +79,9 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
     const initialValues = {
       initialValues: {
-        protocolNumber: this.props.item.protocolNumber,
+        protocolNumber: this.props.item.protocol.number,
         indication: this.props.item.indication.name,
-        cro: this.props.item.cros[0] ? this.props.item.cros[0].name : '',
+        cro: this.props.item.cro.name,
         irb: this.props.item.irbName,
         iwrs: this.props.item.iwrs,
         id: this.props.item.id,
@@ -91,13 +91,13 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     return (
       <tr>
         <td className="col1">
-          {this.props.item.protocolNumber}
+          {this.props.item.protocol.number}
         </td>
         <td className="col2">
           {this.props.item.indication.name}
         </td>
         <td className="col3">
-          {this.props.item.cros[0] ? this.props.item.cros[0].name : ''}
+          {this.props.item.cro.name}
         </td>
         <td className="col4">
           {this.props.item.irbName}
