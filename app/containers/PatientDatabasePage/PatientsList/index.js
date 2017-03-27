@@ -228,7 +228,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
                     loadMore={this.loadItems}
                     initialLoad={false}
                     hasMore={this.props.paginationOptions.hasMoreItems}
-                    loader={<div>Loading...</div>}
+                    loader={<tr><td>Loading...</td></tr>}
                   >
                     {patientsListContents}
                   </InfiniteScroll>

@@ -56,7 +56,7 @@ export class DashboardCROTable extends React.Component { // eslint-disable-line 
 
           <thead>
             <tr>
-              <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>CRO<i className="caret-arrow"></i></th>
+              <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>CRO<i className="caret-arrow" /></th>
               <th></th>
             </tr>
           </thead>

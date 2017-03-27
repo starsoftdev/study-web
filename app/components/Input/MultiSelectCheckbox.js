@@ -203,7 +203,7 @@ export default class MultiSelectCheckbox extends Component {
                   selectedArr.map((item, index) => (
                     <div className="multi-select-checkbox-selected-item-wrap" key={index} >
                       {item.name}
-                      <a onClick={() => { this.setItemState(item, false); }} className="btn-remove"><i className="icomoon-icon_trash"></i></a>
+                      <a onClick={() => { this.setItemState(item, false); }} className="btn-remove"><i className="icomoon-icon_trash" /></a>
                     </div>
                   ))
                 }

@@ -56,7 +56,7 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
 
         <div className="btns-popups pull-right disabled-buttons-container">
           <div className="col pull-right">
-            <button disabled className="btn btn-primary download"><i className="icomoon-icon_creditcard"></i> ADD CREDITS</button>
+            <button disabled className="btn btn-primary download"><i className="icomoon-icon_creditcard" /> ADD CREDITS</button>
           </div>
           <div className="col pull-right">
             <button disabled className="btn btn-primary download">+ List New Protocol</button>
