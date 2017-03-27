@@ -13,17 +13,8 @@ import Input from '../../../components/Input/index';
 import Checkbox from '../../../components/Input/Checkbox';
 import validator from './validator';
 import { setScheduledFormInitialized } from '../actions';
+
 const fieldName = 'ScheduledPatientModal';
-
-function getTimeComponents(strTime, timezone) {
-  const localTime = moment(strTime).tz(timezone);
-
-  return {
-    hours: (((localTime.hour() + 11) % 12) + 1).toString(),
-    minutes: localTime.minute().toString(),
-    amPm: localTime.hour() < 12 ? 'AM' : 'PM',
-  };
-}
 
 function numberSequenceCreator(start, end) {
   return _.range(start, end).map(n => {
@@ -59,8 +50,7 @@ class ScheduledPatientModal extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-    };
+    this.getTimeComponents = this.getTimeComponents.bind(this);
   }
 
   componentDidMount() {
@@ -72,14 +62,24 @@ class ScheduledPatientModal extends React.Component {
 
     if (!(nextProps.scheduledFormInitialized) && nextProps.show && currentPatient &&
         currentPatient.callReminders && currentPatient.callReminders.length > 0) {
-      const { time, timezone, textReminder } = currentPatient.callReminders[0];
+      const { time, textReminder } = currentPatient.callReminders[0];
       initialValues = {
-        ...getTimeComponents(time, timezone),
+        ...this.getTimeComponents(time),
         textReminder,
       };
       this.props.setScheduledFormInitialized(true);
       nextProps.initialize(initialValues);
     }
+  }
+
+  getTimeComponents(strTime) {
+    const localTime = moment(strTime);
+
+    return {
+      hours: (((localTime.hour() + 11) % 12) + 1).toString(),
+      minutes: localTime.minute().toString(),
+      amPm: localTime.hour() < 12 ? 'AM' : 'PM',
+    };
   }
 
   render() {
