@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import inViewport from 'in-viewport';
 import { Field, reduxForm } from 'redux-form';
-import landingFormValidator from './validator';
 import classNames from 'classnames';
 import Alert from 'react-bootstrap/lib/Alert';
 
 import Input from '../../../app/components/Input';
+import landingFormValidator from './validator';
 
 @reduxForm({
   form: 'landing',
