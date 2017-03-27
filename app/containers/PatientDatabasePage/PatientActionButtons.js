@@ -10,7 +10,7 @@ import Form from 'react-bootstrap/lib/Form';
 import Modal from 'react-bootstrap/lib/Modal';
 
 import { selectValues } from '../../common/selectors/form.selector';
-import CenteredModal from '../CenteredModal/index';
+import CenteredModal from '../../components/CenteredModal/index';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { selectImportPatientsStatus } from '../../containers/PatientDatabasePage/selectors';
 import AlertModal from '../../components/AlertModal';
