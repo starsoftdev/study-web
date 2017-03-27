@@ -17,6 +17,7 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
     setActiveProtocolsSort: PropTypes.func,
     searchFormValues: React.PropTypes.object,
     editProtocol: PropTypes.func,
+    protocols: PropTypes.array,
   }
 
   constructor(props) {
@@ -53,9 +54,11 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
 
       studiesList = _.orderBy(studiesList, [(o) => {
         if (this.props.paginationOptionsProtocols.activeSort === 'indication') {
+          return o.protocol.number;
+        } else if (this.props.paginationOptionsProtocols.activeSort === 'indication') {
           return o.indication.name;
         } else if (this.props.paginationOptionsProtocols.activeSort === 'cros') {
-          return o.cros[0] ? o.cros[0].name : null;
+          return o.cro.name;
         }
         return o[this.props.paginationOptionsProtocols.activeSort];
       }], [dir]);
@@ -85,7 +88,7 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
               <tbody>
                 {
             studiesList.map((item, index) => (
-              <RowItem key={index} item={item} editProtocol={this.props.editProtocol} editUser={this.props.editUser} deleteUser={this.props.deleteUser} searchFormValues={this.props.searchFormValues} />
+              <RowItem key={index} item={item} editProtocol={this.props.editProtocol} editUser={this.props.editUser} deleteUser={this.props.deleteUser} searchFormValues={this.props.searchFormValues} protocols={this.props.protocols} />
             ))
           }
               </tbody>
