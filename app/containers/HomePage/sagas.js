@@ -598,6 +598,7 @@ export function* changeStudyAddWorker(action) {
     const requestURL = `${API_URL}/landingPages/change-study-add`;
     const data = new FormData();
     data.append('file', payload.file);
+    data.append('study_id', payload.study_id);
 
     const options = {
       method: 'POST',
