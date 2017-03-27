@@ -88,7 +88,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchProtocols: () => dispatch(fetchProtocols()),
   fetchSchedules: (data) => dispatch(fetchSchedules(data)),
   submitSchedule: (data) => dispatch(submitSchedule(data)),
-  deleteSchedule: (scheduleId, userId) => dispatch(deleteSchedule(scheduleId, userId)),
+  deleteSchedule: (scheduleId, clientId) => dispatch(deleteSchedule(scheduleId, clientId)),
   setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
 });
 
@@ -119,6 +119,8 @@ export default class CalendarPage extends React.Component {
     this.selectedCellInfo = {};
     this.updateFilter = ::this.updateFilter;
     this.handleCloseModal = this.handleModalVisibility.bind(this, SchedulePatientModalType.HIDDEN);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.sortBy = this.sortBy.bind(this);
   }
 
@@ -200,7 +202,7 @@ export default class CalendarPage extends React.Component {
     });
   }
 
-  handleSubmit = (data) => {
+  handleSubmit(data) {
     let submitData;
     const { currentUser } = this.props;
 
@@ -241,13 +243,14 @@ export default class CalendarPage extends React.Component {
     this.props.submitSchedule(submitData);
   }
 
-  handleDelete = (scheduleId) => {
+  handleDelete(scheduleId) {
+    const { currentUser, deleteSchedule } = this.props;
     this.setState({
       modalType: SchedulePatientModalType.HIDDEN,
       allModalDeferred: false,
     });
 
-    this.props.deleteSchedule(scheduleId, this.props.currentUser.roleForClient.client_id);
+    deleteSchedule(scheduleId, currentUser.roleForClient.client_id);
   }
 
   navigateToToday = () => {

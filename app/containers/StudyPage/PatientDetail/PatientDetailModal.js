@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { SchedulePatientModalType } from '../../../common/constants/index';
 import { selectCurrentUser } from '../../App/selectors';
 import * as Selector from '../selectors';
 import PatientDetailSection from './PatientDetailSection';
@@ -144,7 +145,7 @@ export class PatientDetailModal extends React.Component {
     if (currentPatientCategory && currentPatientCategory.name === 'Scheduled') {
       if (currentPatient && currentPatient.callReminders && currentPatient.callReminders.length > 0) {
         return (
-          <a className="modal-opener" onClick={() => showScheduledModal()}>
+          <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.UPDATED)}>
             <span className="date">{moment(currentPatient.callReminders[0].time).format('MM/DD/YY')}</span>
             <span> at </span>
             <span className="time">{moment(currentPatient.callReminders[0].time).format('hh:mm A')} </span>
@@ -153,7 +154,7 @@ export class PatientDetailModal extends React.Component {
       }
 
       return (
-        <a className="modal-opener" onClick={() => showScheduledModal()}>
+        <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.CREATE)}>
           No Scheduled Appointment
         </a>
       );
@@ -212,7 +213,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  showScheduledModal: () => dispatch(showScheduledModal()),
+  showScheduledModal: (type) => dispatch(showScheduledModal(type)),
   fetchPatientDetails: (patientId) => dispatch(fetchPatientDetails(patientId)),
   switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
   switchToTextSection: () => dispatch(switchToTextSectionDetail()),
