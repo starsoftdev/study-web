@@ -285,8 +285,6 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     const { editedStudy } = this.props;
     let fileSrc = null;
 
-    console.log('render', this.state.currentStudy);
-
     if (this.state.currentStudy) {
       fileSrc = this.state.currentStudy.image;
     }
