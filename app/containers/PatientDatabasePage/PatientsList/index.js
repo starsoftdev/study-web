@@ -27,6 +27,7 @@ import { clearSelectedPatient,
   removePatientFromTextBlast,
   setActiveSort,
   sortPatientsSuccess } from '../actions';
+import { selectProtocols } from '../../App/selectors';
 import PatientItem from './PatientItem';
 import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { StickyContainer, Sticky } from 'react-sticky';
@@ -55,6 +56,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     searchPatients: PropTypes.func,
     setActiveSort: PropTypes.func,
     sortPatientsSuccess: PropTypes.func,
+    protocols: PropTypes.object,
   };
 
   constructor(props) {
@@ -290,6 +292,7 @@ const mapStateToProps = createStructuredSelector({
   selectedPatientDetailsForForm: selectSelectedPatientDetailsForForm(),
   savedPatient: selectSavedPatient(),
   chat: selectChat(),
+  protocols: selectProtocols(),
 });
 
 function mapDispatchToProps(dispatch) {
