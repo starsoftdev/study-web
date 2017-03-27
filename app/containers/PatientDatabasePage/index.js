@@ -6,7 +6,7 @@ import { createStructuredSelector } from 'reselect';
 
 import SearchPatientsForm from '../../containers/PatientDatabasePage/SearchPatientsForm/index';
 import PatientsList from '../../containers/PatientDatabasePage/PatientsList/index';
-import { fetchIndications, fetchSources, fetchClientSites } from '../../containers/App/actions';
+import { fetchIndications, fetchSources, fetchClientSites, fetchProtocols } from '../../containers/App/actions';
 import { fetchPatientCategories, fetchPatients, clearPatientsList } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
 import { selectCurrentUser } from '../App/selectors';
@@ -18,6 +18,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     fetchSources: PropTypes.func,
     fetchPatientCategories: PropTypes.func,
     fetchPatients: PropTypes.func,
+    fetchProtocols: PropTypes.func,
     paginationOptions: PropTypes.object,
     patients: PropTypes.object,
     clearPatientsList: PropTypes.func,
@@ -31,12 +32,12 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
   }
 
   componentWillMount() {
-    this.props.fetchIndications();
-    this.props.fetchSources();
-    this.props.fetchPatientCategories();
-
-    const clientId = this.props.currentUser.roleForClient.client_id;
-    this.props.fetchClientSites(clientId);
+    const { fetchIndications, fetchSources, fetchPatientCategories, fetchClientSites, fetchProtocols, currentUser } = this.props;
+    fetchIndications();
+    fetchSources();
+    fetchPatientCategories();
+    fetchProtocols();
+    fetchClientSites(currentUser.roleForClient.client_id);
   }
 
   searchPatients(searchFilter, isSearch, isExport = false) {
@@ -104,6 +105,7 @@ function mapDispatchToProps(dispatch) {
     fetchSources: () => dispatch(fetchSources()),
     fetchPatientCategories: searchParams => dispatch(fetchPatientCategories(searchParams)),
     fetchPatients: (searchParams, patients, searchFilter, isExport) => dispatch(fetchPatients(searchParams, patients, searchFilter, isExport)),
+    fetchProtocols: () => dispatch(fetchProtocols()),
     clearPatientsList: () => dispatch(clearPatientsList()),
   };
 }
