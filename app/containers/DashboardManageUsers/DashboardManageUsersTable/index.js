@@ -125,10 +125,10 @@ export class DashboardManageUsersTable extends React.Component { // eslint-disab
 
           <thead>
             <tr>
-              <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptions.activeSort === 'first_name') ? this.props.paginationOptions.activeDirection : ''}`}>Name<i className="caret-arrow"></i></th>
-              <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>Email<i className="caret-arrow"></i></th>
-              <th onClick={this.sortBy} data-sort="phone" className={`th ${(this.props.paginationOptions.activeSort === 'phone') ? this.props.paginationOptions.activeDirection : ''}`}>Phone<i className="caret-arrow"></i></th>
-              <th onClick={this.sortBy} data-sort="role_name" className={`th ${(this.props.paginationOptions.activeSort === 'role_name') ? this.props.paginationOptions.activeDirection : ''}`}>Role<i className="caret-arrow"></i></th>
+              <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptions.activeSort === 'first_name') ? this.props.paginationOptions.activeDirection : ''}`}>Name<i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>Email<i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="phone" className={`th ${(this.props.paginationOptions.activeSort === 'phone') ? this.props.paginationOptions.activeDirection : ''}`}>Phone<i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="role_name" className={`th ${(this.props.paginationOptions.activeSort === 'role_name') ? this.props.paginationOptions.activeDirection : ''}`}>Role<i className="caret-arrow" /></th>
               <th>&nbsp;</th>
             </tr>
           </thead>

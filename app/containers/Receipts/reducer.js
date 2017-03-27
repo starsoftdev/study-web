@@ -65,7 +65,6 @@ function receiptsReducer(state = initialState, action) {
         },
       };
     case SORT_PROPOSALS_SUCCESS:
-      console.log('reducer');
       return {
         ...state,
         receiptsList: action.payload,
