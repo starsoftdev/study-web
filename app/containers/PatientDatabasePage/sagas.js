@@ -246,14 +246,18 @@ export function* fetchPatientWatcher() {
       const queryString = composeQueryString(queryParams);
       const requestURL = `${API_URL}/patients/${id}?${queryString}`;
       const response = yield call(request, requestURL);
-      response.site = {
-        value: response.site.id,
-        label: response.site.name,
-      };
-      response.source = {
-        value: response.source.id,
-        label: response.source.type,
-      };
+      if (response.site) {
+        response.site = {
+          value: response.site.id,
+          label: response.site.name,
+        };
+      }
+      if (response.source) {
+        response.source = {
+          value: response.source.id,
+          label: response.source.type,
+        };
+      }
       yield put(patientFetched(response));
     } catch (err) {
       yield put(patientFetchingError(err));
