@@ -45,10 +45,14 @@ class Filter extends React.Component {
         className={classNames('filter-search-area')}
       >
         <strong className="title">Search</strong>
-        <input type="text" name={name} className="form-control" placeholder="Search" />
-        <button className="btn btn-default">Apply</button>
+        <input
+          type="text" name={name} className="form-control" placeholder="Search" ref={(searchVal) => (
+          this.searchVal = searchVal
+        )}
+        />
+        <button className="btn btn-default" onClick={() => { this.props.onSubmit(this.searchVal.value); }}>Apply</button>
         <a className="btn-close" onClick={() => this.props.onClose()}>
-          <i className="icomoon-icon_close" />
+          <i className="icomoon-icon_close"></i>
         </a>
       </div>
     );

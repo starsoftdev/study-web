@@ -115,6 +115,7 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
             editUser={this.editUser}
             deleteUser={this.deleteUser}
             editProtocol={this.editSponsorProtocol}
+            protocols={protocols}
           />
         </section>
       </div>

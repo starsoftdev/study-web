@@ -118,6 +118,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.fetchStudiesAccordingToFilters = this.fetchStudiesAccordingToFilters.bind(this);
     this.percentageFilterChange = this.percentageFilterChange.bind(this);
     this.percentageFilterSubmit = this.percentageFilterSubmit.bind(this);
+    this.searchFilterSubmit = this.searchFilterSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -140,21 +141,27 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
   addFilter(options) {
     const { customFilters } = this.state;
-    const newOptions = {
-      ...options,
-      name: options.name + customFilters.length,
-    };
-    customFilters.push(newOptions);
-    this.setState({ customFilters });
+    if (customFilters.length === 0) {
+      const newOptions = {
+        ...options,
+        name: options.name + customFilters.length,
+        onClose: () => this.removeFilter({ name: 'search' }),
+        onSubmit: this.searchFilterSubmit,
+      };
+      customFilters.push(newOptions);
+      this.setState({ customFilters });
+    }
   }
 
   removeFilter(filter) {
-    console.log('remove filter', filter);
     const { customFilters, modalFilters } = this.state;
 
     if (filter.type === 'search') {
       pullAt(customFilters, findIndex(customFilters, filter));
       this.setState({ customFilters });
+
+      pullAt(modalFilters, 'search');
+      this.setState({ modalFilters });
     }
 
     if (filter.name === 'percentage') {
@@ -237,7 +244,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   mapFilterValues(filters) {
     const newFilters = [];
     mapKeys(filters, (filterValues, key) => {
-      if (key !== 'campaign') {
+      if (key !== 'campaign' && key !== 'search') {
         if (key === 'percentage') {
           newFilters.push({
             name: key,
@@ -264,6 +271,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
   fetchStudiesAccordingToFilters(value, key) {
     let filters = _.cloneDeep(this.props.filtersFormValues);
+
     if (value && key) {
       const newFilterValues = _.cloneDeep(value);
       filters = { ...filters, [key]:newFilterValues };
@@ -273,7 +281,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     _.forEach(filters, (filter, key) => {
       const initFilter = _.cloneDeep(filter);
-      if (key !== 'percentage' && key !== 'campaign') {
+      if (key !== 'search' && key !== 'percentage' && key !== 'campaign') {
         const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
         filters[key] = withoutAll;
       }
@@ -298,6 +306,12 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.props.dispatch(change('dashboardFilters', 'percentage', { ...this.props.filtersFormValues.percentage, arg: e }));
     this.fetchStudiesAccordingToFilters({ ...this.props.filtersFormValues.percentage, arg: e }, 'percentage');
   }
+
+  searchFilterSubmit(e) {
+    this.props.dispatch(change('dashboardFilters', 'search', { value: e }));
+    this.fetchStudiesAccordingToFilters({ value: e }, 'search');
+  }
+
 
   renderDateFooter() {
     const { dateRange } = this.state;
