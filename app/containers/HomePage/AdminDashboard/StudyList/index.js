@@ -222,7 +222,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   changeStudyStatus(studyIds, status) {
-    console.log('studyid', studyIds, status);
     const studies = map(this.state.studies, (study) => {
       const studyId = study.studyInfo.id;
       const hasStudy = indexOf(studyIds, studyId) > -1;
@@ -553,7 +552,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         className="pull-left"
                         onClick={() => { this.showDateRangeModal(); }}
                       >
-                        <i className="icomoon-icon_calendar"></i>
+                        <i className="icomoon-icon_calendar" />
                         &nbsp;Date Range
                       </Button>
                       <Button
@@ -561,7 +560,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         className="pull-left"
                         onClick={() => {}}
                       >
-                        <i className="icomoon-icon_download"></i>
+                        <i className="icomoon-icon_download" />
                         &nbsp;Download
                       </Button>
                     </div>
@@ -623,7 +622,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                               </th>
                               <th>
                                 <div>
-                                  <span className="text-uppercase">Status <i className="caret-arrow"></i></span>
+                                  <span className="text-uppercase">Status <i className="caret-arrow" /></span>
                                   <span className="counter">Active: {this.props.totals.details.total_active || 0}</span>
                                   <span className="counter">Inactive: {this.props.totals.details.total_inactive || 0}</span>
                                 </div>

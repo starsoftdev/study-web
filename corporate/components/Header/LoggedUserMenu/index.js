@@ -58,20 +58,20 @@ export class loggedUserMenu extends React.Component { // eslint-disable-line rea
       >
         <a
           className="opener"
-          href="#"
+
           onClick={this.switchUserDrop}
         >
           <div className="img-circle">
             <img src={profileImageURL} alt={fullName} width="43" height="43" />
           </div>
           <span className="text">{fullName}</span>
-          <i className="caret"></i>
+          <i className="caret" />
         </a>
         <Collapse className="slide logged-user-drop" in={!loggedDropCollapsed}>
           <Well>
             <ul className="list-unstyled jcf-scrollable text-left">
               <li><a href="/app">Portal</a></li>
-              <li><a href="#" onClick={this.handleLogoutClick}>Log out</a></li>
+              <li><a onClick={this.handleLogoutClick}>Log out</a></li>
             </ul>
           </Well>
         </Collapse>

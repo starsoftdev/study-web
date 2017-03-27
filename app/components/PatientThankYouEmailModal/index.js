@@ -56,7 +56,6 @@ export class PatientThankYouEmailModal extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    // console.log('componentWillReceiveProps', newProps, this.state);
     const { resetState, onClose, fetchLanding } = this.props;
 
     if (newProps.studies) {
@@ -146,7 +145,7 @@ export class PatientThankYouEmailModal extends React.Component {
             <div className="head">
               <div className="inner-head">
                 <strong className="title">Patient Thank You Email</strong>
-                <a href="#" className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right"></i></a>
+                <a className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right" /></a>
               </div>
             </div>
             <Form

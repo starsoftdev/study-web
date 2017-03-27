@@ -66,11 +66,11 @@ export class DashboardSponsorAdminTable extends React.Component { // eslint-disa
 
           <thead>
             <tr>
-              <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>Sponsor <i className="caret-arrow"></i></th>
-              <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptions.activeSort === 'first_name') ? this.props.paginationOptions.activeDirection : ''}`}>Name <i className="caret-arrow"></i></th>
-              <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL <i className="caret-arrow"></i></th>
-              <th onClick={this.sortBy} data-sort="bd_user_first_name" className={`th ${(this.props.paginationOptions.activeSort === 'bd_user_first_name') ? this.props.paginationOptions.activeDirection : ''}`}>BD <i className="caret-arrow"></i></th>
-              <th onClick={this.sortBy} data-sort="ae_user_first_name" className={`th ${(this.props.paginationOptions.activeSort === 'ae_user_first_name') ? this.props.paginationOptions.activeDirection : ''}`}>AE <i className="caret-arrow"></i></th>
+              <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>Sponsor <i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptions.activeSort === 'first_name') ? this.props.paginationOptions.activeDirection : ''}`}>Name <i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL <i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="bd_user_first_name" className={`th ${(this.props.paginationOptions.activeSort === 'bd_user_first_name') ? this.props.paginationOptions.activeDirection : ''}`}>BD <i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="ae_user_first_name" className={`th ${(this.props.paginationOptions.activeSort === 'ae_user_first_name') ? this.props.paginationOptions.activeDirection : ''}`}>AE <i className="caret-arrow" /></th>
               <th> </th>
             </tr>
           </thead>

@@ -11,7 +11,7 @@ class CardItem extends React.Component { // eslint-disable-line react/prefer-sta
 
   static propTypes = {
     clientId: PropTypes.number,
-    customerId: PropTypes.number,
+    customerId: PropTypes.string,
     deleteCreditCard: PropTypes.func,
     id: PropTypes.string,
     brand: PropTypes.string,

@@ -63,7 +63,6 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
       });
 
       if (Object.keys(params).length) {
-        // console.log('params', params);
         // this.props.onSubmit(params, true);
       }
     }
@@ -100,7 +99,6 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
         params[name] = e;
       }
 
-      console.log('initSearch', params);
       this.props.onSubmit(params, true);
     }
   }
