@@ -156,7 +156,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   updateUser(userData) {
-    const { currentUserClientId, selectedUser } = this.props;
+    const { currentUserClientId, selectedUser, saveUser } = this.props;
     const userInput = {
       firstName: userData.firstName,
       lastName: userData.lastName,
@@ -175,7 +175,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
       };
     }
 
-    this.props.saveUser(currentUserClientId, selectedUser.details.id, userInput);
+    saveUser(currentUserClientId, selectedUser.details.id, userInput);
   }
 
   deleteUser() {
@@ -185,7 +185,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { selectedSiteDetailsForForm, selectedUserDetailsForForm, deletedUser, filterMethod, userFilterQuery, selectedUser, currentUser } = this.props;
+    const { selectedSiteDetailsForForm, selectedUserDetailsForForm, deletedUser, filterMethod, userFilterQuery, currentUser } = this.props;
     let bDisabled = true;
     if (currentUser && currentUser.roleForClient) {
       bDisabled = ((currentUser.roleForClient.canPurchase && currentUser.roleForClient.canRedeemRewards) || currentUser.roleForClient.name === 'Super Admin') ? null : true;
@@ -199,7 +199,6 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
 
     const editSiteModalShown = this.editSiteModalShouldBeShown();
     const editUserModalShown = this.editUserModalShouldBeShown();
-    const siteLocation = (selectedUser && selectedUser.details && selectedUser.details.roleForClient) ? selectedUser.details.roleForClient.site_id : null;
 
     if (selectedSiteDetailsForForm) {
       for (const pi of selectedSiteDetailsForForm.principalInvestigators) {
@@ -277,7 +276,6 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                       deleting={deletedUser.deleting}
                       onDelete={this.deleteUser}
                       onSubmit={this.updateUser}
-                      newSiteLocation={siteLocation}
                       isEdit
                     />
                   </div>
