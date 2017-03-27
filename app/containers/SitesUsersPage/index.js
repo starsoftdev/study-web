@@ -168,7 +168,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
   }
 
   addUser(userData) {
-    const { currentUserClientId } = this.props;
+    const { currentUserClientId, saveUser } = this.props;
     const userInput = {
       firstName: userData.firstName,
       lastName: userData.lastName,
@@ -180,7 +180,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
       canRedeemRewards: userData.reward || false,
     };
 
-    this.props.saveUser(currentUserClientId, null, userInput);
+    saveUser(currentUserClientId, null, userInput);
   }
 
   render() {

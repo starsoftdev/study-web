@@ -48,6 +48,7 @@ export class Corporate extends React.Component { // eslint-disable-line react/pr
         <Footer {...this.props} />
         <ReduxToastr
           timeOut={6000}
+          preventDuplicates
           newestOnTop={false}
           position="top-right"
         />
