@@ -30,8 +30,8 @@ export class DashboardIndicationTable extends React.Component { // eslint-disabl
 
           <thead>
             <tr>
-              <th>Indication<i className="caret-arrow"></i></th>
-              <th>TIER <i className="caret-arrow"></i></th>
+              <th>Indication<i className="caret-arrow" /></th>
+              <th>TIER <i className="caret-arrow" /></th>
               <th></th>
             </tr>
           </thead>

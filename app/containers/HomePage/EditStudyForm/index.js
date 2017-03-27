@@ -64,7 +64,6 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
 
   componentWillMount() {
     const { change, currentUser, fetchClientAdmins, siteUsers } = this.props;
-    console.log(currentUser);
     if (currentUser && currentUser.roleForClient.isAdmin) {
       fetchClientAdmins(currentUser.roleForClient.client_id);
     }

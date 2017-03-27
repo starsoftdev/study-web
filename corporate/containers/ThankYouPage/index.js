@@ -37,7 +37,6 @@ export class ThankYouPage extends React.Component {
   }
 
   componentWillMount() {
-    console.log('componentWillReceiveProps', this.props);
     if (!this.props.subscribedFromLanding && !this.state.subscribedFromLanding) {
       browserHistory.push('/');
     }
@@ -69,7 +68,6 @@ export class ThankYouPage extends React.Component {
 
     for (const data of landing.studySources) {
       if (data.landing_page_id) {
-        console.log('data', data.landingPage.thankYouPage);
         thankYouData = data.landingPage.thankYouPage;
       }
     }

@@ -112,7 +112,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
   }
 
   logCallback(e) {
-    console.log('callback', e);
+    console.trace('callback', e);
   }
 
   render() {

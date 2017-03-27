@@ -246,7 +246,7 @@ export class LandingPageModal extends React.Component {
             <div className="head">
               <div className="inner-head">
                 <strong className="title">Landing Page</strong>
-                <a href="#" className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right"></i></a>
+                <a className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right" /></a>
               </div>
             </div>
             <Form

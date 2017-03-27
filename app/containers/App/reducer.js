@@ -1191,7 +1191,6 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SAVE_USER_SUCCESS:
-      console.log('payload', payload);
       if (payload.userType === 'admin') {
         forEach(clientSitesCollection, item => {
           foundIndex = findIndex(item.roles, { id: payload.userResultData.user.id });
@@ -1236,7 +1235,6 @@ export default function appReducer(state = initialState, action) {
         }
       }
       // if (payload.userResultData.header === 'Add User') {
-      //   // console.log('New', payload.userResultData);
       //   // if (payload.userResultData.siteId && payload.userResultData.siteId !== '0') {
       //   //   foundIndex = findIndex(clientSitesCollection, { id: payload.userResultData.siteId });
       //   //   clientSitesCollection[foundIndex].roles.push(payload.userResultData.user);

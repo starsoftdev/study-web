@@ -7,7 +7,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, FieldArray, reduxForm, change, arrayRemoveAll, arrayPush } from 'redux-form';
+import { arrayRemoveAll, arrayPush, change, Field, FieldArray, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Form from 'react-bootstrap/lib/Form';
@@ -24,13 +24,23 @@ const mapStateToProps = createStructuredSelector({
   studyCampaigns: selectStudyCampaigns(),
 });
 
-@reduxForm({ form: 'dashboardEditStudyForm' })
-@connect(mapStateToProps)
+const formName = 'dashboardEditStudyForm';
+
+const mapDispatchToProps = (dispatch) => ({
+  arrayRemoveAll: (field) => dispatch(arrayRemoveAll(formName, field)),
+  arrayPush: (field, value) => dispatch(arrayPush(formName, field, value)),
+  change: (field, value) => dispatch(change(formName, field, value)),
+});
+
+@reduxForm({ form: formName })
+@connect(mapStateToProps, mapDispatchToProps)
 export class EditInformationModal extends React.Component {
   static propTypes = {
+    arrayRemoveAll: PropTypes.func.isRequired,
+    arrayPush: PropTypes.func.isRequired,
     openModal: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    dispatch: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
     formValues: PropTypes.object,
     onShow: PropTypes.func,
     onHide: PropTypes.func,
@@ -58,15 +68,12 @@ export class EditInformationModal extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.studyCampaigns.fetching && !newProps.studyCampaigns.fetching) {
-      // newProps.allClientUsers.details
-    }
-
-    if (this.props.allClientUsers.fetching && !newProps.allClientUsers.fetching) {
+    const { arrayRemoveAll, arrayPush, allClientUsers, change, formValues } = this.props;
+    if (allClientUsers.fetching && !newProps.allClientUsers.fetching) {
       const fields = [];
       let isAllChecked = true;
 
-      let studyEmailUsers = this.props.formValues.study_notification_users;
+      let studyEmailUsers = formValues.study_notification_users;
 
       if (studyEmailUsers) {
         studyEmailUsers = studyEmailUsers.substr(studyEmailUsers.indexOf('{') + 1);
@@ -86,9 +93,9 @@ export class EditInformationModal extends React.Component {
           });
         });
 
-        this.props.dispatch(arrayRemoveAll('dashboardEditStudyForm', 'emailNotifications'));
-        fields.map((newItem) => (this.props.dispatch(arrayPush('dashboardEditStudyForm', 'emailNotifications', newItem))));
-        this.props.dispatch(change('dashboardEditStudyForm', 'checkAllInput', isAllChecked));
+        arrayRemoveAll('emailNotifications');
+        fields.map((newItem) => (arrayPush('emailNotifications', newItem)));
+        change('checkAllInput', isAllChecked);
       }
     }
   }
@@ -99,7 +106,7 @@ export class EditInformationModal extends React.Component {
     let postalCode = '';
     let streetNmber = '';
     let route = '';
-    console.log(e);
+    const { change } = this.props;
     if (e.gmaps && e.gmaps.address_components) {
       const addressComponents = e.gmaps.address_components;
 
@@ -107,19 +114,19 @@ export class EditInformationModal extends React.Component {
         if (!city) {
           city = _.find(val.types, (o) => (o === 'locality'));
           if (city) {
-            this.props.dispatch(change('dashboardEditStudyForm', 'site_city', val.long_name));
+            change('site_city', val.long_name);
           }
         }
         if (!state) {
           state = _.find(val.types, (o) => (o === 'administrative_area_level_1'));
           if (state) {
-            this.props.dispatch(change('dashboardEditStudyForm', 'site_state', val.short_name));
+            change('site_state', val.short_name);
           }
         }
         if (!postalCode) {
           postalCode = _.find(val.types, (o) => (o === 'postal_code'));
           if (postalCode) {
-            this.props.dispatch(change('dashboardEditStudyForm', 'site_zip', val.long_name));
+            change('site_zip', val.long_name);
           }
         }
         if (!streetNmber && _.find(val.types, (o) => (o === 'street_number'))) {
@@ -130,54 +137,56 @@ export class EditInformationModal extends React.Component {
         }
         if (streetNmber && route) {
           this.geoSuggest.update(`${streetNmber} ${route}`);
-          this.props.dispatch(change('dashboardEditStudyForm', 'site_address', `${streetNmber} ${route}`));
+          change('site_address', `${streetNmber} ${route}`);
         } else {
           const addressArr = e.label.split(',');
           this.geoSuggest.update(`${addressArr[0]}`);
-          this.props.dispatch(change('dashboardEditStudyForm', 'site_address', `${addressArr[0]}`));
+          change('site_address', `${addressArr[0]}`);
         }
       }
     } else {
       const addressArr = e.label.split(',');
       if (addressArr[1]) {
-        this.props.dispatch(change('dashboardEditStudyForm', 'site_city', addressArr[1]));
+        change('site_city', addressArr[1]);
       }
       if (addressArr[2]) {
-        this.props.dispatch(change('dashboardEditStudyForm', 'site_state', addressArr[2]));
+        change('site_state', addressArr[2]);
       }
       this.geoSuggest.update(`${addressArr[0]}`);
-      this.props.dispatch(change('dashboardEditStudyForm', 'site_address', `${addressArr[0]}`));
+      change('site_address', `${addressArr[0]}`);
     }
   }
 
   siteLocationChanged(e) {
     const foundSiteLocation = _.find(this.props.siteLocations, (item) => (item.id === e));
     if (foundSiteLocation) {
-      this.props.fetchAllClientUsersDashboard({ clientId: foundSiteLocation.client_id, siteId: foundSiteLocation.id });
+      const { change, fetchAllClientUsersDashboard } = this.props;
+      fetchAllClientUsersDashboard({ clientId: foundSiteLocation.client_id, siteId: foundSiteLocation.id });
 
-      this.props.dispatch(change('dashboardEditStudyForm', 'site_id', foundSiteLocation.id));
-      this.props.dispatch(change('dashboardEditStudyForm', 'site_address', foundSiteLocation.address));
-      this.props.dispatch(change('dashboardEditStudyForm', 'site_city', foundSiteLocation.city));
-      this.props.dispatch(change('dashboardEditStudyForm', 'site_state', foundSiteLocation.state));
-      this.props.dispatch(change('dashboardEditStudyForm', 'site_zip', foundSiteLocation.zip));
-      this.props.dispatch(change('dashboardEditStudyForm', 'redirect_phone', foundSiteLocation.redirect_phone));
-      this.props.dispatch(change('dashboardEditStudyForm', 'client_id', foundSiteLocation.client_id));
+      change('site_id', foundSiteLocation.id);
+      change('site_address', foundSiteLocation.address);
+      change('site_city', foundSiteLocation.city);
+      change('site_state', foundSiteLocation.state);
+      change('site_zip', foundSiteLocation.zip);
+      change('redirect_phone', foundSiteLocation.redirect_phone);
+      change('client_id', foundSiteLocation.client_id);
     }
   }
 
   campaignChanged(e) {
     const foundCampaign = _.find(this.props.studyCampaigns.details, (item) => (item.id === e));
     if (foundCampaign) {
-      this.props.dispatch(change('dashboardEditStudyForm', 'campaign_datefrom', foundCampaign.datefrom));
-      this.props.dispatch(change('dashboardEditStudyForm', 'campaign_dateto', foundCampaign.dateto));
-      this.props.dispatch(change('dashboardEditStudyForm', 'custom_patient_goal', foundCampaign.custom_patient_goal));
-      this.props.dispatch(change('dashboardEditStudyForm', 'level_id', foundCampaign.level_id));
+      const { change } = this.props;
+      change('campaign_datefrom', foundCampaign.datefrom);
+      change('campaign_dateto', foundCampaign.dateto);
+      change('custom_patient_goal', foundCampaign.custom_patient_goal);
+      change('level_id', foundCampaign.level_id);
     }
   }
 
 
   render() {
-    const { openModal, onClose } = this.props;
+    const { change, openModal, onClose } = this.props;
     const smOptions = [];
 
     _.forEach(this.props.usersByRoles.sm, (item) => {
@@ -289,7 +298,7 @@ export class EditInformationModal extends React.Component {
             <div className="head">
               <div className="inner-head">
                 <strong className="title">EDIT INFORMATION</strong>
-                <a href="#" className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right"></i></a>
+                <a className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right" /></a>
               </div>
             </div>
             <Form className="form-holder" onSubmit={this.props.handleSubmit}>
@@ -303,7 +312,7 @@ export class EditInformationModal extends React.Component {
                       name="is_active"
                       component={Toggle}
                       className="field"
-                      onChange={(e) => { this.props.dispatch(change('dashboardEditStudyForm', 'is_public', e.toString())); }}
+                      onChange={(e) => { change('is_public', e.toString()); }}
                     />
                   </div>
                 </div>
@@ -476,7 +485,7 @@ export class EditInformationModal extends React.Component {
                         name="emailNotifications"
                         component={RenderEmailsList}
                         formValues={this.props.formValues}
-                        dispatch={this.props.dispatch}
+                        change={change}
                         addEmailNotification={this.props.addEmailNotificationClick}
                         closeEmailNotification={this.closeAddEmailModal}
                       />}
@@ -493,7 +502,7 @@ export class EditInformationModal extends React.Component {
                       name="patient_messaging_suite"
                       component={Toggle}
                       className="field"
-                      onChange={(e) => { this.props.dispatch(change('dashboardEditStudyForm', 'patientMessagingSuite', e.toString())); }}
+                      onChange={(e) => { change('patientMessagingSuite', e.toString()); }}
                     />
                   </div>
                 </div>
@@ -510,7 +519,7 @@ export class EditInformationModal extends React.Component {
                       searchable
                       options={messagingNumbers}
                       customSearchIconClass="icomoon-icon_search2"
-                      onChange={(e) => { this.props.dispatch(change('dashboardEditStudyForm', 'messaging_number', e.toString())); }}
+                      onChange={(e) => { change('messaging_number', e.toString()); }}
                     />
                   </div>
                 </div>
@@ -571,7 +580,7 @@ export class EditInformationModal extends React.Component {
                       name="should_show_in_sponsor_portal"
                       component={Toggle}
                       className="field"
-                      onChange={(e) => { this.props.dispatch(change('dashboardEditStudyForm', 'shouldShowInSponsorPortal', e.toString())); }}
+                      onChange={(e) => { change('shouldShowInSponsorPortal', e.toString()); }}
                     />
                   </div>
                 </div>
