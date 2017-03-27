@@ -47,7 +47,10 @@ export default class EditScheduleModal extends Component {
     if (this.props.modalType === SchedulePatientModalType.HIDDEN && nextProps.modalType === SchedulePatientModalType.UPDATE) {
       const initialValues = {
         ...getTimeComponents(nextProps.selectedCellInfo.data.time, nextProps.currentUser.timezone),
-        textReminder: nextProps.selectedCellInfo.data.textReminder,
+        textReminder: nextProps.selectedCellInfo.data.text_reminder,
+        patient: {
+          value: nextProps.selectedCellInfo.data.patient_id,
+        },
       };
 
       nextProps.initialize(initialValues);

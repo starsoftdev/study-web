@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { forEach, filter } from 'lodash';
 import { Field } from 'redux-form';
 
-import Checkbox from '../../../components/Input/Checkbox';
+import Checkbox from '../../components/Input/Checkbox';
 
 class RenderEmailsList extends Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -23,7 +23,7 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
     this.selectAll = this.selectAll.bind(this);
     this.selectEmail = this.selectEmail.bind(this);
     this.addEmailNotificationFields = this.addEmailNotificationFields.bind(this);
-    this.addNewFileds = this.addNewFileds.bind(this);
+    this.addNewFields = this.addNewFields.bind(this);
 
     this.state = {
       addEmailModalShow: false,
@@ -31,10 +31,9 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
   }
 
   componentDidMount() {
-    // this.addNewFileds(this.props.emailFields);
   }
 
-  addNewFileds(values) {
+  addNewFields(values) {
     forEach(values, (Object) => {
       this.props.fields.push(Object);
     });

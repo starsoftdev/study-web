@@ -51,28 +51,24 @@
     margin: 0 0 4px 0;
     vertical-align: middle;
   }
+  
+  span.sm-container {
+      .sm-mixin;
 
-  span.jcf-checkbox {
-        margin: 0 0 4px 0;
-    }
+      &.checked {
+      span.input-style {
+          background: #a0cf67;
+          border-color: #a0cf67;
 
-    span.sm-container {
-        .sm-mixin;
+          &:before {
+          opacity: 1;
+          }
+      }
+      }
 
-        &.checked {
-        span.input-style {
-            background: #a0cf67;
-            border-color: #a0cf67;
-
-            &:before {
-            opacity: 1;
-            }
-        }
-        }
-
-        span.input-style {
-        .input-mixin;
-        }
-    }
+      span.input-style {
+      .input-mixin;
+      }
+  }
 
 }

@@ -16,12 +16,16 @@ const mapStateToProps = createStructuredSelector({
   site: selectEditUserFormSiteValue(),
 });
 
-@reduxForm({ form: 'editUser', validate: formValidator })
-@connect(mapStateToProps, null)
+const formName = 'editUser';
+const mapDispatchToProps = (dispatch) => ({
+  change: (field, value) => dispatch(change(formName, field, value)),
+});
 
+@reduxForm({ form: formName, validate: formValidator })
+@connect(mapStateToProps, mapDispatchToProps)
 class EditUserForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
     savedUser: PropTypes.object,
     siteOptions: PropTypes.array,
     site: PropTypes.string,
@@ -29,9 +33,6 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
     onDelete: PropTypes.func,
     deleting: PropTypes.bool,
     isEdit: PropTypes.bool,
-    newSiteLocation: PropTypes.number,
-    Purchase: PropTypes.bool,
-    Redeem: PropTypes.bool,
   };
 
   constructor(props) {
@@ -44,13 +45,6 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
   }
 
   componentDidMount() {
-    this.props.dispatch(change('editUser', 'purchase', this.props.Purchase));
-    this.props.dispatch(change('editUser', 'reward', this.props.Redeem));
-    const nSite = (this.props.newSiteLocation || this.props.newSiteLocation === 0) ? this.props.newSiteLocation.toString() : null;
-    this.props.dispatch(change('editUser', 'site', nSite));
-    // if (!this.props.site) {
-    //   this.props.dispatch(change('editUser', 'site', '0'));
-    // }
   }
 
   handleSelect() {
@@ -62,10 +56,10 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
   }
 
   render() {
-    const { savedUser, siteOptions, site, handleSubmit, onDelete, deleting, isEdit, newSiteLocation } = this.props;
+    const { savedUser, siteOptions, site, handleSubmit, onDelete, deleting, isEdit } = this.props;
     let clientRolePanelContent = null;
 
-    if (!site || site === '0' || (newSiteLocation && newSiteLocation === 0)) {
+    if (!site || site === '0') {
       clientRolePanelContent = (
         <div className="client-role">
           <div className="field-row">

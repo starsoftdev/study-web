@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import { map, omit, omitBy, isUndefined } from 'lodash';
 import { createStructuredSelector } from 'reselect';
 
-import SearchPatientsForm from '../../containers/PatientDatabasePage/SearchPatientsForm/index';
+import SearchPatientsForm from '../../components/SearchPatientsForm/index';
 import PatientsList from '../../containers/PatientDatabasePage/PatientsList/index';
 import { fetchIndications, fetchSources, fetchClientSites, fetchProtocols } from '../../containers/App/actions';
 import { fetchPatientCategories, fetchPatients, clearPatientsList } from './actions';

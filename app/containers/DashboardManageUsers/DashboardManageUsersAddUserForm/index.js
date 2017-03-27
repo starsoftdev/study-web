@@ -74,20 +74,18 @@ export class AddUserForm extends React.Component { // eslint-disable-line react/
           </div>
         </div>
 
-        {!this.props.isEdit &&
-          <div className="field-row">
-            <strong className="label">
-              <label className="add-exposure-level">Phone</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="phone"
-                component={Input}
-                type="text"
-              />
-            </div>
+        <div className="field-row">
+          <strong className="label">
+            <label className="add-exposure-level">Phone</label>
+          </strong>
+          <div className="field">
+            <Field
+              name="phone"
+              component={Input}
+              type="text"
+            />
           </div>
-        }
+        </div>
 
         <div className="field-row">
           <strong className="label required">

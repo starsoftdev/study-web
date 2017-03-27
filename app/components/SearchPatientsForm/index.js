@@ -4,18 +4,16 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
-
-import Input from '../../../components/Input';
-import ReactSelect from '../../../components/Input/ReactSelect';
-import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
-import LoadingSpinner from '../../../components/LoadingSpinner';
-import PatientActionButtons from '../PatientActionButtons';
-
+import Input from '../../components/Input';
+import ReactSelect from '../../components/Input/ReactSelect';
 import { selectSearchPatientsFormError } from './selectors';
-import { selectPatientCategories, selectPatients, selectPatientDatabaseFormValues } from '../../../containers/PatientDatabasePage/selectors';
-import { selectIndications, selectSources, selectSiteLocations, selectCurrentUser } from '../../../containers/App/selectors';
+import { selectPatientCategories, selectPatients, selectPatientDatabaseFormValues } from '../../containers/PatientDatabasePage/selectors';
+import { selectIndications, selectSources, selectSiteLocations, selectCurrentUser } from '../../containers/App/selectors';
 import formValidator from './validator';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import PatientActionButtons from '../../containers/PatientDatabasePage/PatientActionButtons';
 
+import ReactMultiSelect from '../../components/Input/ReactMultiSelect';
 
 const mapStateToProps = createStructuredSelector({
   formValues: selectPatientDatabaseFormValues(),
@@ -57,32 +55,13 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     this.initSearch = this.initSearch.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.formValues) {
-      const params = newProps.formValues;
-      const paramKeys = Object.keys(params);
-
-      paramKeys.forEach(key => {
-        if (key === 'status' || key === 'source') {
-          if (params[key] === '0') {
-            params[key] = 0;
-          }
-        }
-      });
-
-      if (Object.keys(params).length) {
-        // console.log('params', params);
-        // this.props.onSubmit(params, true);
-      }
-    }
-  }
-
   initSearch(e, name) {
     const params = this.props.formValues;
     const paramKeys = Object.keys(params);
 
     // Make sure no zeroes are stored as strings
     // Note: Zeroes represent the 'All' option for a drop down selection.
+    // Note: represent of 'All' option for status and source changed
     paramKeys.forEach(key => {
       if (params[key] === '0') {
         params[key] = 0;
@@ -103,6 +82,8 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
       this.setState({ searchTimer: timerH });
     } else {
       if (e === '0') {
+        params[name] = 0;
+      } else if (_.isUndefined(e)) {
         params[name] = 0;
       } else {
         params[name] = e;
@@ -157,11 +138,11 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
       value: siteIterator.id,
     }));
     siteOptions.push({ label: 'All', value: 'All' });
-    const sourceOptions = [{ label: 'All', value: '0' }].concat(map(sources, sourceIterator => ({
+    const sourceOptions = [{ label: 'All', value: 'All' }].concat(map(sources, sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
     })));
-    const statusOptions = [{ label: 'All', value: '0' }].concat(map(patientCategories.details, patientCategoryIterator => ({
+    const statusOptions = [{ label: 'All', value: 'All' }].concat(map(patientCategories.details, patientCategoryIterator => ({
       label: patientCategoryIterator.name,
       value: patientCategoryIterator.id,
     })));

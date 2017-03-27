@@ -37,8 +37,6 @@ import AlertModal from '../../components/AlertModal';
 export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
-    unsubscribeFromAll: PropTypes.func.isRequired,
-    unsubscribeFromPageEvent: PropTypes.func.isRequired,
     fetchClientSites: PropTypes.func.isRequired,
     getReceipts: PropTypes.func,
     getPDF: PropTypes.func,
