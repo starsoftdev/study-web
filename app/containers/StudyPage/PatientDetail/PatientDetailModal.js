@@ -38,7 +38,6 @@ export class PatientDetailModal extends React.Component {
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     openPatientModal: React.PropTypes.bool.isRequired,
-    openScheduledModal: React.PropTypes.bool.isRequired,
     fetchPatientDetails: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
     showScheduledModal: React.PropTypes.func.isRequired,
@@ -163,13 +162,13 @@ export class PatientDetailModal extends React.Component {
   }
 
   render() {
-    const { ePMS, carousel, openScheduledModal, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
+    const { ePMS, carousel, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
     return (
       <Collapse
         dimension="width"
         in={openPatientModal}
         timeout={250}
-        className={classNames({ 'patients-list-form-schedule': openScheduledModal, 'patients-list-form': openScheduledModal !== true })}
+        className="patients-list-form"
       >
         <div className="form-area">
           <div className="form-head">
@@ -208,7 +207,6 @@ const mapStateToProps = createStructuredSelector({
   currentPatient: Selector.selectCurrentPatient(),
   currentPatientCategory: Selector.selectCurrentPatientCategory(),
   openPatientModal: Selector.selectOpenPatientModal(),
-  openScheduledModal: Selector.selectOpenScheduledModal(),
   socket: selectSocket(),
   studyId: Selector.selectStudyId(),
 });

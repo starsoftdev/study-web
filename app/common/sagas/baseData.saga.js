@@ -193,7 +193,19 @@ export function* fetchIndicationsWatcher() {
 
     try {
       const requestURL = `${API_URL}/indications`;
-      const response = yield call(request, requestURL);
+      const filterObj = {
+        order: 'name',
+      };
+      filterObj.where = {};
+      filterObj.where.and = [];
+      filterObj.where.and.push({
+        isArchived: false,
+      });
+
+      const queryParams = {
+        filter: JSON.stringify(filterObj),
+      };
+      const response = yield call(request, requestURL, { query: queryParams });
 
       yield put(indicationsFetched(response));
     } catch (e) {

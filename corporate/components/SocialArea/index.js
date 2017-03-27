@@ -33,7 +33,6 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
   render() {
     const { study, landing, imgSrc } = this.props;
 
-    console.log('SocialArea', landing);
     const shareThisStudyText = (landing.shareThisStudyText) ? landing.shareThisStudyText : 'Share this study:';
 
     if (landing.showSocialMediaButtons) {
@@ -45,30 +44,30 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
           <ul className="social-networks pull-left list-inline">
             <li className="facebook">
               <a
-                href="#"
+
                 onClick={this.shareFB}
               >
-                <i className="icomoon-facebook-square"></i>
+                <i className="icomoon-facebook-square" />
               </a>
             </li>
             <li className="twitter">
               <a
-                href="#"
+
                 onClick={this.shareTwitter}
               >
-                <i className="icomoon-twitter-square"></i>
+                <i className="icomoon-twitter-square" />
               </a>
             </li>
             {imgSrc &&
             <li className="pinterest">
               <PinterestButton element="a" media={imgSrc}>
-                <i className="icomoon-pinterest-square"></i>
+                <i className="icomoon-pinterest-square" />
               </PinterestButton>
             </li>
             }
             <li className="gmail">
               <a href={`mailto:?subject=${study.name}&body=${location.href}`}>
-                <i className="icomoon-envelope-square"></i>
+                <i className="icomoon-envelope-square" />
               </a>
             </li>
           </ul>

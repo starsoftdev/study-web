@@ -67,7 +67,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
         <h1 className="main-heading">{name}</h1>
         {city &&
           <h2 className="txt-orange">
-            <i className="icomoon-map-marker"></i>
+            <i className="icomoon-map-marker" />
             {cityAndState}
           </h2>
         }
@@ -115,7 +115,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
                 href={clickToCallNumber}
                 className={classNames({ 'btn btn-deep btn-block small': true, disabled: !clickToCallNumber })}
               >
-                <i className="icomoon-phone-square"></i>
+                <i className="icomoon-phone-square" />
                 <div className="inline">
                   <span>{clickToCallButtonText}</span>
                   {clickToCallNumber &&

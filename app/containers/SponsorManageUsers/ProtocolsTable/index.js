@@ -17,6 +17,7 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
     setActiveProtocolsSort: PropTypes.func,
     searchFormValues: React.PropTypes.object,
     editProtocol: PropTypes.func,
+    protocols: PropTypes.array,
   }
 
   constructor(props) {
@@ -53,9 +54,11 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
 
       studiesList = _.orderBy(studiesList, [(o) => {
         if (this.props.paginationOptionsProtocols.activeSort === 'indication') {
+          return o.protocol.number;
+        } else if (this.props.paginationOptionsProtocols.activeSort === 'indication') {
           return o.indication.name;
         } else if (this.props.paginationOptionsProtocols.activeSort === 'cros') {
-          return o.cros[0] ? o.cros[0].name : null;
+          return o.cro.name;
         }
         return o[this.props.paginationOptionsProtocols.activeSort];
       }], [dir]);
@@ -73,11 +76,11 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
               <caption>PROTOCOLS</caption>
               <thead>
                 <tr>
-                  <th onClick={this.sortBy} data-sort="protocolNumber" className={`col1 ${(this.props.paginationOptionsProtocols.activeSort === 'protocolNumber') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>PROTOCOL NUMBER<i className="caret-arrow"></i></th>
-                  <th onClick={this.sortBy} data-sort="indication" className={`col2 ${(this.props.paginationOptionsProtocols.activeSort === 'indication') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>INDICATION<i className="caret-arrow"></i></th>
-                  <th onClick={this.sortBy} data-sort="cros" className={`col3 ${(this.props.paginationOptionsProtocols.activeSort === 'cros') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>CRO<i className="caret-arrow"></i></th>
-                  <th onClick={this.sortBy} data-sort="irbName" className={`col4 ${(this.props.paginationOptionsProtocols.activeSort === 'irbName') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>IRB<i className="caret-arrow"></i></th>
-                  <th onClick={this.sortBy} data-sort="iwrs" className={`col5 ${(this.props.paginationOptionsProtocols.activeSort === 'iwrs') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>IWRS<i className="caret-arrow"></i></th>
+                  <th onClick={this.sortBy} data-sort="protocolNumber" className={`col1 ${(this.props.paginationOptionsProtocols.activeSort === 'protocolNumber') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>PROTOCOL NUMBER<i className="caret-arrow" /></th>
+                  <th onClick={this.sortBy} data-sort="indication" className={`col2 ${(this.props.paginationOptionsProtocols.activeSort === 'indication') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>INDICATION<i className="caret-arrow" /></th>
+                  <th onClick={this.sortBy} data-sort="cros" className={`col3 ${(this.props.paginationOptionsProtocols.activeSort === 'cros') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>CRO<i className="caret-arrow" /></th>
+                  <th onClick={this.sortBy} data-sort="irbName" className={`col4 ${(this.props.paginationOptionsProtocols.activeSort === 'irbName') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>IRB<i className="caret-arrow" /></th>
+                  <th onClick={this.sortBy} data-sort="iwrs" className={`col5 ${(this.props.paginationOptionsProtocols.activeSort === 'iwrs') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>IWRS<i className="caret-arrow" /></th>
                   <th className="col6"></th>
                   <th className="col7"></th>
                 </tr>
@@ -85,7 +88,7 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
               <tbody>
                 {
             studiesList.map((item, index) => (
-              <RowItem key={index} item={item} editProtocol={this.props.editProtocol} editUser={this.props.editUser} deleteUser={this.props.deleteUser} searchFormValues={this.props.searchFormValues} />
+              <RowItem key={index} item={item} editProtocol={this.props.editProtocol} editUser={this.props.editUser} deleteUser={this.props.deleteUser} searchFormValues={this.props.searchFormValues} protocols={this.props.protocols} />
             ))
           }
               </tbody>
