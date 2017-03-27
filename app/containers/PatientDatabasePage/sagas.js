@@ -84,7 +84,7 @@ export function* fetchPatientsWatcher() {
 
       if (searchParams.status) {
         filterObj.where.and.push({
-          status: searchParams.status,
+          status:  (searchParams.status === 'All') ? 0 : searchParams.status,
         });
       }
 
@@ -164,7 +164,7 @@ export function* fetchPatientsWatcher() {
         }
         if (searchParams.source) {
           filterObj.where.and.push({
-            source_id: searchParams.source,
+            source_id: (searchParams.source === 'All') ? 0 : searchParams.source,
           });
         }
         if (searchParams.gender && searchParams.gender !== 'All') {
