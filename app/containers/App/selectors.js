@@ -234,8 +234,8 @@ const selectSelectedUserDetailsForForm = () => createSelector(
         selectedUserInput.site = selectedUserDetails.roleForClient.site_id.toString();
       } else {
         selectedUserInput.isAdmin = selectedUserDetails.roleForClient.isAdmin;
-        selectedUserInput.canPurchase = selectedUserDetails.roleForClient.canPurchase;
-        selectedUserInput.canRedeemRewards = selectedUserDetails.roleForClient.canRedeemRewards;
+        selectedUserInput.purchase = selectedUserDetails.roleForClient.canPurchase;
+        selectedUserInput.reward = selectedUserDetails.roleForClient.canRedeemRewards;
         selectedUserInput.site = '0';
       }
     }

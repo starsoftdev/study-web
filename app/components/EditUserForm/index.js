@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm, change } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 
 import Input from '../../components/Input';
 import Toggle from '../../components/Input/Toggle';
@@ -17,15 +17,11 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const formName = 'editUser';
-const mapDispatchToProps = (dispatch) => ({
-  change: (field, value) => dispatch(change(formName, field, value)),
-});
 
 @reduxForm({ form: formName, validate: formValidator })
-@connect(mapStateToProps, mapDispatchToProps)
+@connect(mapStateToProps, null)
 class EditUserForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    change: PropTypes.func.isRequired,
     savedUser: PropTypes.object,
     siteOptions: PropTypes.array,
     site: PropTypes.string,
