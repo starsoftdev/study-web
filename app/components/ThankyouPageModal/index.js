@@ -58,7 +58,6 @@ export class ThankyouPageModal extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    // console.log('componentWillReceiveProps', newProps, this.state);
     const { resetState, onClose, fetchLanding } = this.props;
 
     if (newProps.studies) {

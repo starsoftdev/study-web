@@ -23,10 +23,12 @@ import {
 } from '../../containers/App/selectors';
 import { fetchClientSites, fetchClientRoles, saveSite, saveUser } from '../../containers/App/actions';
 
-@reduxForm({ form: 'manageSiteUser' })
+const formName = 'manageSiteUser';
+
+@reduxForm({ form: formName })
 export class SitesUsersPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
     currentUserClientId: PropTypes.number,
     sites: PropTypes.arrayOf(PropTypes.object),
     savedSite: PropTypes.object,
@@ -72,13 +74,13 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
   }
 
   componentDidMount() {
-    const { currentUser } = this.props;
+    const { change, currentUser } = this.props;
     let bDisabled = true;
     if (currentUser && currentUser.roleForClient) {
       bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
       if (bDisabled) {
         const nLocation = currentUser.roleForClient.site_id ? currentUser.roleForClient.site_id.toString() : null;
-        this.props.dispatch(change('manageSiteUser', 'siteLocation', nLocation));
+        change('siteLocation', nLocation);
         this.handleSiteQueryChange(currentUser.roleForClient.site_id);
       }
     }
@@ -298,6 +300,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    change: (name, value) => dispatch(change(formName, name, value)),
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchClientRoles: (clientId, searchParams) => dispatch(fetchClientRoles(clientId, searchParams)),
     saveSite: (clientId, id, data) => dispatch(saveSite(clientId, id, data)),
