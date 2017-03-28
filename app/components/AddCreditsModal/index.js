@@ -298,7 +298,14 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
                 </div>
 
                 <div className="pull-left col">
-                  <ShoppingCartForm showCards noBorder validateAndSubmit={this.addCreditsSubmit} addOns={products} showAddNewCard={this.handleNewModalOpen} />
+                  <ShoppingCartForm
+                    showCards
+                    noBorder
+                    validateAndSubmit={this.addCreditsSubmit}
+                    addOns={products}
+                    showAddNewCard={this.handleNewModalOpen}
+                    submitting={this.addCreditsOperation.adding}
+                  />
                 </div>
               </div>
 
