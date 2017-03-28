@@ -44,7 +44,7 @@ npm start
 ### Running tests:
 ```
 # unit tests
-npm run unit
+npm test
 
 # integration tests
 npm run browsers
@@ -52,6 +52,12 @@ npm run browsers
 # all tests
 npm run test
 ```
+
+# Cucumber
+https://cucumber.io/
+
+Documentation about how to use the command line tools:
+https://github.com/cucumber/cucumber-js/blob/master/docs/cli.md
 
 ### Folder Structure
 Inspired by
@@ -103,6 +109,7 @@ If there are more than 5 import statements, feel free to add a line break betwee
 
 ## Tech Used
 
+- [Cucumber](https://cucumber.io/) for BDD testing
 - [ESLint](http://eslint.org/) for linting
 - [Express](http://expressjs.com/) for web server
 - [React](https://github.com/facebook/react) for all the goodness.
