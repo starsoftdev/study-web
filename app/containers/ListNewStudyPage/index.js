@@ -11,6 +11,7 @@ import { StickyContainer, Sticky } from 'react-sticky';
 import { touch } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
 import _, { find } from 'lodash';
+import Helmet from 'react-helmet';
 
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
 import CenteredModal from '../../components/CenteredModal/index';
@@ -26,13 +27,13 @@ import { selectListNewStudyPageDomain, selectFormSubmissionStatus, selectShowSub
 
 import LoadingSpinner from '../../components/LoadingSpinner';
 
-import Helmet from 'react-helmet';
 import {
   fetchIndications,
   fetchLevels,
   saveSite,
   getAvailPhoneNumbers,
   fetchIndicationLevelPrice,
+  fetchClientAdmins,
   fetchClientSites,
 } from '../../containers/App/actions';
 import {
@@ -74,6 +75,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     shoppingCartFormError: PropTypes.bool,
     touchNewStudy: PropTypes.func,
     touchShoppingCart: PropTypes.func,
+    fetchClientAdmins: PropTypes.func,
     fetchClientSites: PropTypes.func,
     currentUserClientId: PropTypes.number,
     userRoleType: PropTypes.string,
@@ -96,6 +98,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     this.props.fetchLevels();
     this.props.getAvailPhoneNumbers();
     if (this.props.userRoleType === 'client') {
+      this.props.fetchClientAdmins(this.props.currentUserClientId);
       this.props.fetchClientSites(this.props.currentUserClientId, {});
     }
   }
@@ -331,6 +334,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchClientAdmins: (clientId) => dispatch(fetchClientAdmins(clientId)),
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchIndications: () => dispatch(fetchIndications()),
     fetchLevels:      () => dispatch(fetchLevels()),
