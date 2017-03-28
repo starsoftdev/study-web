@@ -47,8 +47,16 @@ function Toggle({ input, name, initValue, className, onChange, disabled, meta: {
     </Tooltip>
   );
 
+  let initialVal = false;
+  if (initValue === true || initValue === false) {
+    initialVal = initValue;
+  } else if (input.value === true || input.value === false) {
+    initialVal = input.value;
+  }
+
+
   let inputComponent = (<ToggleButton
-    value={initValue || input.value || false}
+    value={initialVal}
     name={name}
     colors={backgroundColors}
     thumbAnimateRange={[0, 80]}
