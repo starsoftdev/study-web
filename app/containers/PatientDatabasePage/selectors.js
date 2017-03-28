@@ -49,8 +49,6 @@ export const selectSelectedPatientDetailsForForm = () => createSelector(
       protocolId = find(protocols, { id: study.protocol_id }).id;
     }
 
-    console.log('protocolId', protocolId);
-
     let selectedPatientDetailsForForm = omit(selectedPatientDetails, ['created', 'patientIndications', 'lastAction', 'study_patient_category_id', 'studyPatientCategory']);
     selectedPatientDetailsForForm = {
       ...selectedPatientDetailsForForm,
