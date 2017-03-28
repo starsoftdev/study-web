@@ -300,7 +300,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
               }}
             >
               <span>Submit</span>
-              {showLoading &&
+              {(showLoading || submitting || manualDisableSubmit) &&
                 <span className="pull-right"><LoadingSpinner showOnlyIcon size={20} /></span>
               }
             </Button>
