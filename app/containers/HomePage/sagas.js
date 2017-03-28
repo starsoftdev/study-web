@@ -394,7 +394,6 @@ export function* addEmailNotificationUserWatcher() {
 
 export function* addEmailNotificationUserWorker(action) {
   const { payload } = action;
-  console.log('saga', payload);
   try {
     const clientId = payload.clientId;
     delete payload.clientId;
