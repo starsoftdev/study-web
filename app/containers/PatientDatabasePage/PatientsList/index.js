@@ -102,8 +102,6 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     payload.protocol_id = patientData.protocol;
     payload.client_id = currentUser.roleForClient.client_id;
 
-    console.log('selectedPatient', selectedPatient);
-
     this.props.savePatient(selectedPatient.details.id, payload);
   }
 
