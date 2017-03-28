@@ -1,5 +1,6 @@
-import { omit, map, get } from 'lodash';
+import { omit, map, get, find } from 'lodash';
 import { createSelector } from 'reselect';
+import { selectStudiesFromSites } from '../App/selectors';
 
 /**
  * Direct selector to the patientDatabasePage state domain
@@ -33,11 +34,22 @@ export const selectSelectedPatient = () => createSelector(
 
 export const selectSelectedPatientDetailsForForm = () => createSelector(
   selectPatientDatabasePageDomain(),
-  (substate) => {
+  selectStudiesFromSites(),
+  (substate, studies) => {
     const selectedPatientDetails = substate.selectedPatient.details;
+    const protocols = substate.protocols.details;
     if (!selectedPatientDetails) {
       return null;
     }
+
+    let protocolId;
+
+    if (selectedPatientDetails.studyPatientCategory && selectedPatientDetails.studyPatientCategory.study_id) {
+      const study = find(studies, { id: selectedPatientDetails.studyPatientCategory.study_id });
+      protocolId = find(protocols, { id: study.protocol_id }).id;
+    }
+
+    console.log('protocolId', protocolId);
 
     let selectedPatientDetailsForForm = omit(selectedPatientDetails, ['created', 'patientIndications', 'lastAction', 'study_patient_category_id', 'studyPatientCategory']);
     selectedPatientDetailsForForm = {
@@ -50,6 +62,8 @@ export const selectSelectedPatientDetailsForForm = () => createSelector(
         isOriginal: piIterator.isOriginal,
       })),
       status: selectedPatientDetails.studyPatientCategory ? parseInt(selectedPatientDetails.studyPatientCategory.patient_category_id, 10) : false,
+      protocol: protocolId,
+      source: selectedPatientDetails.source ? selectedPatientDetails.source.value : null,
     };
     return selectedPatientDetailsForForm;
   }
@@ -79,6 +93,11 @@ export const selectAddPatientStatus = () => createSelector(
   selectPatientDatabasePageDomain(),
   (subState) => subState.addPatientStatus
 );
+
+export const selectProtocols = () => createSelector(
+  selectPatientDatabasePageDomain(),
+  (substate) => substate.protocols
+)
 
 const selectFormDomain = () => state => state.form;
 

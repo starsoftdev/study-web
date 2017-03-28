@@ -16,6 +16,7 @@ import {
   SUBMIT_TEXT_BLAST,
   IMPORT_PATIENTS,
   SUBMIT_ADD_PATIENT,
+  FETCH_PROTOCOLS,
 } from './constants';
 
 import {
@@ -31,6 +32,8 @@ import {
   submitAddPatientSuccess,
   submitAddPatientFailure,
   clearPatientsList,
+  fetchProtocolsSuccess,
+  fetchProtocolsError,
 } from './actions';
 
 export function* patientDatabasePageSaga() {
@@ -41,6 +44,7 @@ export function* patientDatabasePageSaga() {
   const watcherE = yield fork(submitTextBlast);
   const watcherF = yield fork(importPatients);
   const watcherG = yield fork(submitAddPatient);
+  const watcherH = yield fork(fetchProtocolsWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -53,6 +57,7 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherE);
   yield cancel(watcherF);
   yield cancel(watcherG);
+  yield cancel(watcherH);
 }
 
 // Bootstrap sagas
@@ -69,7 +74,7 @@ export function* fetchPatientsWatcher() {
           'indications',
           'source',
           { campaigns: 'site' },
-          { studyPatientCategory: 'patientCategory' },
+          { studyPatientCategory: ['patientCategory'] },
         ],
         where: {
           and: [],
@@ -261,6 +266,7 @@ export function* fetchPatientWatcher() {
       yield put(patientFetched(response));
     } catch (err) {
       yield put(patientFetchingError(err));
+      console.error(err);
     }
   }
 }
@@ -386,6 +392,27 @@ function* submitAddPatient() {
       }
       yield put(toastrActions.error('', errorMessages));
       yield put(submitAddPatientFailure());
+    }
+  }
+}
+
+export function* fetchProtocolsWatcher() {
+  while (true) {
+    yield take(FETCH_PROTOCOLS);
+
+    try {
+      const requestURL = `${API_URL}/protocols`;
+
+      const params = {
+        method: 'GET',
+      };
+      const response = yield call(request, requestURL, params);
+
+      yield put(fetchProtocolsSuccess(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while fetching protocols');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(fetchProtocolsError(err));
     }
   }
 }
