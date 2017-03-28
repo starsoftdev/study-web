@@ -314,6 +314,22 @@ const selectChangeTimezoneState = () => createSelector(
   (substate) => get(substate, 'baseData.changeUsersTimezoneState', {})
 );
 
+const selectStudiesFromSites = () => createSelector(
+  selectGlobal(),
+  (substate) => {
+    const sites = get(substate, 'baseData.sites', {});
+    const studies = [];
+    if (sites && sites.details) {
+      sites.details.forEach(site => {
+        site.studies.forEach(study => {
+          studies.push(study);
+        });
+      });
+    }
+    return studies;
+  }
+);
+
 // TODO: debug this to select study instead landing
 const selectLanding = () => createSelector(
   selectGlobal(),
@@ -416,6 +432,7 @@ export {
   selectSavedSite,
   selectSavedUser,
   selectAvailPhoneNumbers,
+  selectStudiesFromSites,
 
   selectLocationState,
   selectCreditsPrice,

@@ -27,7 +27,7 @@ import { clearSelectedPatient,
   removePatientFromTextBlast,
   setActiveSort,
   sortPatientsSuccess } from '../actions';
-import { selectProtocols } from '../../App/selectors';
+import { selectProtocols, selectCurrentUser } from '../../App/selectors';
 import PatientItem from './PatientItem';
 import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { StickyContainer, Sticky } from 'react-sticky';
@@ -57,6 +57,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     setActiveSort: PropTypes.func,
     sortPatientsSuccess: PropTypes.func,
     protocols: PropTypes.object,
+    currentUser: PropTypes.object,
   };
 
   constructor(props) {
@@ -91,13 +92,17 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   }
 
   updatePatient(patientData) {
-    const { selectedPatient } = this.props;
-    const payload = omit(patientData, ['indications', 'status', 'source']);
+    const { selectedPatient, currentUser } = this.props;
+    const payload = omit(patientData, ['indications', 'status', 'source', 'protocol']);
 
     payload.indications = map(patientData.indications, indicationIterator => ({ id: indicationIterator.id, isOriginal: indicationIterator.isOriginal }));
     payload.source_id = patientData.source;
     payload.patient_category_id = patientData.status;
     payload.phone = normalizePhone(patientData.phone);
+    payload.protocol_id = patientData.protocol;
+    payload.client_id = currentUser.roleForClient.client_id;
+
+    console.log('selectedPatient', selectedPatient);
 
     this.props.savePatient(selectedPatient.details.id, payload);
   }
@@ -293,6 +298,7 @@ const mapStateToProps = createStructuredSelector({
   savedPatient: selectSavedPatient(),
   chat: selectChat(),
   protocols: selectProtocols(),
+  currentUser: selectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {

@@ -18,6 +18,10 @@ export const FETCH_PATIENT                      = 'PatientDatabasePage/FETCH_PAT
 export const FETCH_PATIENT_SUCCESS              = 'PatientDatabasePage/FETCH_PATIENT_SUCCESS';
 export const FETCH_PATIENT_ERROR                = 'PatientDatabasePage/FETCH_PATIENT_ERROR';
 
+export const FETCH_PROTOCOLS                    = 'PatientDatabasePage/FETCH_PROTOCOLS';
+export const FETCH_PROTOCOLS_SUCCESS            = 'PatientDatabasePage/FETCH_PROTOCOLS_SUCCESS';
+export const FETCH_PROTOCOLS_ERROR              = 'PatientDatabasePage/FETCH_PROTOCOLS_ERROR';
+
 export const CLEAR_SELECTED_PATIENT             = 'PatientDatabasePage/CLEAR_SELECTED_PATIENT';
 
 export const SAVE_PATIENT                       = 'PatientDatabasePage/SAVE_PATIENT';
