@@ -50,6 +50,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   }
 
   render() {
+    console.log(this.props.item);
     const options = [];
     _.forEach(this.props.protocols, (protocol) => {
       const value = (this.props.item.id === protocol.id);
@@ -81,7 +82,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
       initialValues: {
         protocolNumber: this.props.item.protocol.number,
         indication: this.props.item.indication.name,
-        cro: this.props.item.cro.name,
+        cro: this.props.item.cro ? this.props.item.cro.name : '',
         irb: this.props.item.irbName,
         iwrs: this.props.item.iwrs,
         id: this.props.item.id,
@@ -97,7 +98,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           {this.props.item.indication.name}
         </td>
         <td className="col3">
-          {this.props.item.cro.name}
+          {this.props.item.cro ? this.props.item.cro.name : ''}
         </td>
         <td className="col4">
           {this.props.item.irbName}
