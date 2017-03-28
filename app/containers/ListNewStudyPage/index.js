@@ -240,7 +240,12 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
                   <div className="fixed-block-holder">
                     <div className="order-summery-container">
                       <Sticky className="sticky-shopping-cart">
-                        {<ShoppingCartForm showCards addOns={addOns} validateAndSubmit={this.onSubmitForm} />}
+                        {<ShoppingCartForm
+                          showCards
+                          addOns={addOns}
+                          validateAndSubmit={this.onSubmitForm}
+                          submitting={this.props.formSubmissionStatus.submitting}
+                        />}
                       </Sticky>
                     </div>
                   </div>
