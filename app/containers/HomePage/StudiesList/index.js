@@ -562,7 +562,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               onHide={this.closeRenewModal}
               onShow={this.showRenewModal}
               manualDisableSubmit={this.props.renewedStudy.submitting}
-              submitting={this.props.renewedStudy.submitting}
               validateAndSubmit={this.handleRenewStudyFormSubmit}
               currentUserStripeCustomerId={this.props.currentUserStripeCustomerId}
             />
@@ -572,7 +571,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               onHide={this.closeUpgradeModal}
               onShow={this.showUpgradeModal}
               manualDisableSubmit={this.props.upgradedStudy.submitting}
-              submitting={this.props.upgradedStudy.submitting}
               validateAndSubmit={this.handleUpgradeStudyFormSubmit}
               currentUserStripeCustomerId={this.props.currentUserStripeCustomerId}
             />

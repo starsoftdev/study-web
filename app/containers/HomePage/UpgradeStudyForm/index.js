@@ -407,6 +407,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                   noBorder
                   addOns={addOns}
                   manualDisableSubmit={this.props.manualDisableSubmit}
+                  submitting={this.props.manualDisableSubmit}
                   validateAndSubmit={this.handleSubmit}
                   showAddNewCard={this.handleNewModalOpen}
                 />
