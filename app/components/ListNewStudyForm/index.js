@@ -157,9 +157,9 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
         // add admin users
         _.forEach(clientAdmins.details, (role) => {
           fields.push({
-            firstName: role.first_name,
-            lastName: role.last_name,
-            userId: role.user_id,
+            firstName: role.firstName,
+            lastName: role.lastName,
+            userId: role.userId,
             isChecked: true,
           });
         });

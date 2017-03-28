@@ -12,7 +12,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import { addEmailNotificationUser, fetchClientAdmins } from '../../containers/App/actions';
 import { selectCurrentUser, selectClientSites } from '../../containers/App/selectors';
 import { selectSyncErrorBool, selectSyncErrors, selectValues } from '../../common/selectors/form.selector';
-import { selectEditedStudy, selectAddNotificationProcess } from '../../containers/HomePage/selectors';
+import { selectEditedStudy, selectAddNotificationProcess, selectHomePageClientAdmins } from '../../containers/HomePage/selectors';
 import StudyAddForm from '../../components/StudyAddForm';
 import {
   changeStudyAdd,
@@ -105,14 +105,14 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
           if (clientAdmins) {
             // add admin users to the list
             _.forEach(clientAdmins.details, (role) => {
-              const isChecked = _.find(currentStudy.studyNotificationEmails, (item) => (item.user_id === role.user_id));
+              const isChecked = _.find(currentStudy.studyNotificationEmails, (item) => (item.user_id === role.userId));
               if (!isChecked) {
                 isAllChecked = false;
               }
               fields.push({
-                firstName: role.first_name,
-                lastName: role.last_name,
-                userId: role.user_id,
+                firstName: role.firstName,
+                lastName: role.lastName,
+                userId: role.userId,
                 isChecked,
               });
             });
@@ -443,6 +443,7 @@ const mapStateToProps = createStructuredSelector({
   addNotificationProcess: selectAddNotificationProcess(),
   currentUser: selectCurrentUser(),
   formError: selectSyncErrorBool(formName),
+  clientAdmins: selectHomePageClientAdmins(),
   formErrors: selectSyncErrors(formName),
   formValues: selectValues(formName),
   editedStudy: selectEditedStudy(),
