@@ -154,7 +154,6 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     const formClassName = `form-shopping-cart ${noBorderClassName}`;
     const { addOns, coupon, showCards, cards, submitting, validateAndSubmit, manualDisableSubmit } = this.props;
     const { subTotal, discount, total } = this.calculateTotal();
-    const { showLoading } = this.state;
     let addOnsContent = null;
 
     if (addOns) {
