@@ -684,7 +684,7 @@ export function* saveSiteWatcher() {
       let messageHeader = 'Edit Site Location';
       let message = 'The site location has been updated successfully!';
       if (id) {
-        requestURL = `${API_URL}/sites/${id}`;
+        requestURL = `${API_URL}/sites/${id}/updateSite`;
         options = {
           method: 'PUT',
           body: JSON.stringify(data),
@@ -812,7 +812,7 @@ export function* changeUsersTimezoneWatcher() {
     try {
       const requestURL = `${API_URL}/users/${userId}`;
       const params = {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify({ timezone: payload }),
       };
       const response = yield call(request, requestURL, params);

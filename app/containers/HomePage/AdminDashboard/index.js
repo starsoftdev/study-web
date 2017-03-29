@@ -343,10 +343,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     const colorsTotal = redCount + yellowCount + greenCount + purpleCount;
 
-    const redPercent = redCount ? (redCount / colorsTotal) * 100 : 0;
-    const yellowPercent = yellowCount ? (yellowCount / colorsTotal) * 100 : 0;
-    const greenPercent = greenCount ? (greenCount / colorsTotal) * 100 : 0;
-    const purplePercent = purpleCount ? (purpleCount / colorsTotal) * 100 : 0;
+    const redPercent = redCount ? ((redCount / colorsTotal) * 100).toFixed(2) : 0;
+    const yellowPercent = yellowCount ? ((yellowCount / colorsTotal) * 100).toFixed(2) : 0;
+    const greenPercent = greenCount ? ((greenCount / colorsTotal) * 100).toFixed(2) : 0;
+    const purplePercent = purpleCount ? ((purpleCount / colorsTotal) * 100).toFixed(2) : 0;
 
     const tier1Count = parseInt(this.props.totals.details.total_tier_one) || 0;
     const tier2Count = parseInt(this.props.totals.details.total_tier_two) || 0;
@@ -355,10 +355,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     const tiersTotal = tier1Count + tier2Count + tier3Count + tier4Count;
 
-    const tier1Percent = tier1Count ? (tier1Count / tiersTotal) * 100 : 0;
-    const tier2Percent = tier2Count ? (tier2Count / tiersTotal) * 100 : 0;
-    const tier3Percent = tier3Count ? (tier3Count / tiersTotal) * 100 : 0;
-    const tier4Percent = tier4Count ? (tier4Count / tiersTotal) * 100 : 0;
+    const tier1Percent = tier1Count ? ((tier1Count / tiersTotal) * 100).toFixed(2) : 0;
+    const tier2Percent = tier2Count ? ((tier2Count / tiersTotal) * 100).toFixed(2) : 0;
+    const tier3Percent = tier3Count ? ((tier3Count / tiersTotal) * 100).toFixed(2) : 0;
+    const tier4Percent = tier4Count ? ((tier4Count / tiersTotal) * 100).toFixed(2) : 0;
 
     const pieData1 = [
       { label: 'RED', value: redCount, percent: redPercent, color: '#dd0000' },

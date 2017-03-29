@@ -149,7 +149,11 @@ const initialState = {
       fetching: false,
       error: null,
     },
-    sites: [],
+    sites: {
+      details: [],
+      fetching: false,
+      error: null,
+    },
     indications: [],
     subscriptionError: null,
     subscribedFromLanding: null,

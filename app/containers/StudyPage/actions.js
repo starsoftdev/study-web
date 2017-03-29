@@ -418,9 +418,10 @@ export function movePatientBetweenCategoriesFailed() {
 }
 
 
-export function showScheduledModal() {
+export function showScheduledModal(modalType) {
   return {
     type: SHOW_SCHEDULED_MODAL,
+    modalType,
   };
 }
 

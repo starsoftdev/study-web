@@ -1,12 +1,13 @@
-import PatientDetailModal from '../PatientDetail/PatientDetailModal';
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { Provider } from 'react-redux';
-import configureStore from '../../../store';
-
 import chaiEnzyme from 'chai-enzyme';
 import expect from 'expect';
 import chai from 'chai';
+
+import configureStore from '../../../store';
+import PatientDetailModal from '../PatientDetail/PatientDetailModal';
+
 chai.use(chaiEnzyme());
 const chaiExpect = chai.expect;
 

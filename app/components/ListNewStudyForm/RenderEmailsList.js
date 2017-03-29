@@ -6,22 +6,19 @@
 
 import React, { PropTypes } from 'react';
 import _ from 'lodash';
-import { Field, change } from 'redux-form';
+import { Field } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
 import Checkbox from '../../components/Input/Checkbox';
 
-import {
-  showAddEmailModal,
-  hideAddEmailModal,
-} from '../../containers/ListNewStudyPage/actions';
-
 class RenderEmailsList extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
+    hideAddEmailModal: PropTypes.func.isRequired,
+    showAddEmailModal: PropTypes.func.isRequired,
     formValues: PropTypes.object.isRequired,
     listNewStudyState: PropTypes.object.isRequired,
     fields: PropTypes.object,
@@ -39,7 +36,8 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
   }
 
   addEmailNotificationClick() {
-    this.props.dispatch(showAddEmailModal());
+    const { showAddEmailModal } = this.props;
+    showAddEmailModal();
   }
 
   addEmailNotificationSubmit(values) {
@@ -52,32 +50,36 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
     });
 
     // this.props.fields.push(values);
-    // this.props.dispatch(change('listNewStudy', 'checkAllInput', false));
+    // const { change } = this.props;
+    // change('checkAllInput', false);
 
     // this.props.dispatch(hideAddEmailModal());
   }
 
   closeAddEmailModal() {
-    this.props.dispatch(hideAddEmailModal());
+    const { hideAddEmailModal } = this.props;
+    hideAddEmailModal();
   }
 
   selectAll(e) {
+    const { change, formValues } = this.props;
     const checked = e;
-    if (this.props.formValues.emailNotifications) {
-      _.forEach(this.props.formValues.emailNotifications, (value, index) => {
-        this.props.dispatch(change('listNewStudy', `emailNotifications[${index}].isChecked`, checked));
+    if (formValues.emailNotifications) {
+      _.forEach(formValues.emailNotifications, (value, index) => {
+        change(`emailNotifications[${index}].isChecked`, checked);
       });
     }
   }
 
   selectEmail(e) {
+    const { change, formValues } = this.props;
     const checked = e;
-    if (this.props.formValues.checkAllInput && !checked) {
-      this.props.dispatch(change('listNewStudy', 'checkAllInput', false));
-    } else if (!this.props.formValues.checkAllInput && checked) {
-      const checkedArr = _.filter(this.props.formValues.emailNotifications, (o) => o.isChecked);
-      if ((checkedArr.length + 1) === this.props.formValues.emailNotifications.length) {
-        this.props.dispatch(change('listNewStudy', 'checkAllInput', true));
+    if (formValues.checkAllInput && !checked) {
+      change('checkAllInput', false);
+    } else if (!formValues.checkAllInput && checked) {
+      const checkedArr = _.filter(formValues.emailNotifications, (o) => o.isChecked);
+      if ((checkedArr.length + 1) === formValues.emailNotifications.length) {
+        change('checkAllInput', true);
       }
     }
   }
