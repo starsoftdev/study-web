@@ -70,33 +70,21 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
     this.deleteIndication = this.deleteIndication.bind(this);
     this.selectIndication = this.selectIndication.bind(this);
-    this.submitAddIndication = this.submitAddIndication.bind(this);
   }
 
   onSubmit(event) {
     event.preventDefault();
     const { onSubmit, formValues } = this.props;
-    const formattedData = formValues;
+    const formattedData = Object.assign({}, formValues);
     if (formValues.dobDay && formValues.dobMonth && formValues.dobYear) {
       const date = moment().year(formValues.dobYear).month(formValues.dobMonth - 1).date(formValues.dobDay).startOf('day');
       formattedData.dob = date.toISOString();
     }
+    formattedData.site = formattedData.site.value;
+    formattedData.source = formattedData.source.value;
     if (!this.props.hasError) {
       onSubmit(formattedData);
     }
-  }
-
-  changeSite(event, siteOptions) {
-    const { editPatientSite } = this.props;
-    let newEvent = [];
-    if (event.split(',')[1]) {
-      for (const id of event.split(',')) {
-        newEvent = [...newEvent, siteOptions.filter(site => parseInt(site.value) === parseInt(id))[0]];
-      }
-    } else {
-      newEvent = [siteOptions.filter(site => parseInt(site.value) === parseInt(event))[0]];
-    }
-    editPatientSite(newEvent);
   }
 
   deleteIndication(indication) {
@@ -111,13 +99,9 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     });
   }
 
-  selectIndication(indication) {
-    const { change } = this.props;
-    change('indications', this.props.formValues.indications.concat([indication]));
-  }
-
-  submitAddIndication() {
-
+  selectIndication(patientId, indication) {
+    const { change, formValues } = this.props;
+    change('indications', formValues.indications.concat([indication]));
   }
 
   renderIndications() {
@@ -276,7 +260,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
               rootClose
               onHide={() => { this.toggleIndicationPopover(); }}
             >
-              <IndicationOverlay indications={indications} submitAddIndication={this.submitAddIndication} selectIndication={this.selectIndication} patient={patientValues} onClose={this.toggleIndicationPopover} />
+              <IndicationOverlay indications={indications} selectIndication={this.selectIndication} patient={patientValues} onClose={this.toggleIndicationPopover} />
             </Overlay>
           </div>
         </div>
