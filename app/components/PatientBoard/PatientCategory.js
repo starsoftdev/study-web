@@ -31,6 +31,7 @@ const patientTarget = {
     // access the coordinates
     const clientOffset = monitor.getClientOffset();
     const el = document.elementFromPoint(clientOffset.x, clientOffset.y);
+    const item = monitor.getItem();
     let patientId = null;
     let ancestor = null;
 
@@ -46,7 +47,18 @@ const patientTarget = {
       patientId = parseInt(ancestor.dataset.patientId);
       if (!ancestor.previousSibling) {
         patientId = null;
+      } else {
+        patientId = parseInt(ancestor.previousSibling.dataset.patientId);
+
+        if (!ancestor.nextSibling) {
+          patientId = parseInt(ancestor.dataset.patientId);
+        }
+
+        if (item.id === patientId) {
+          patientId = parseInt(ancestor.dataset.patientId);
+        }
       }
+
       props.setPatientUnder(patientId);
     }
   },
@@ -56,6 +68,7 @@ const patientTarget = {
     }
     // Obtain the dragged item
     const item = monitor.getItem();
+    console.log('drop', props.patientUnder);
     if (props.category.name === 'Scheduled') {
       // store the scheduled patient information temporarily since the user could cancel out of their category movement
       // props.schedulePatient(props.studyId, item.patientCategoryId, props.category.id, item.id);
