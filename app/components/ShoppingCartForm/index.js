@@ -18,7 +18,6 @@ import ReactSelect from '../../components/Input/ReactSelect';
 import AddNewCardForm from '../../components/AddNewCardForm';
 import { selectCouponId, selectTotal } from './selectors';
 import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSavedCard } from '../../containers/App/selectors';
-import { selectFormSubmissionStatus } from '../../containers/ListNewStudyPage/selectors';
 import formValidator from './validator';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Money from '../../components/Money';
@@ -31,7 +30,6 @@ const mapStateToProps = createStructuredSelector({
   cards: selectCards(),
   currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
   savedCard: selectSavedCard(),
-  formSubmissionStatus: selectFormSubmissionStatus(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -67,7 +65,6 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     validateAndSubmit: PropTypes.func,
     manualDisableSubmit: PropTypes.bool,
     showAddNewCard: PropTypes.func,
-    formSubmissionStatus: PropTypes.object,
   };
 
   constructor(props) {
@@ -80,7 +77,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     this.onSelectCard = this.onSelectCard.bind(this);
     this.state = {
       addNewCardModalOpen: false,
-      showLoading: props.formSubmissionStatus.submitting,
+      showLoading: props.submitting,
     };
   }
 
@@ -100,8 +97,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     if (!newProps.savedCard.saving && this.props.savedCard.saving) {
       this.closeAddNewCardModal();
     }
-
-    this.setState({ showLoading: newProps.formSubmissionStatus.submitting });
+    this.setState({ showLoading : newProps.submitting });
   }
 
   componentWillUnmount() {
@@ -158,7 +154,6 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     const formClassName = `form-shopping-cart ${noBorderClassName}`;
     const { addOns, coupon, showCards, cards, submitting, validateAndSubmit, manualDisableSubmit } = this.props;
     const { subTotal, discount, total } = this.calculateTotal();
-    const { showLoading } = this.state;
     let addOnsContent = null;
 
     if (addOns) {
@@ -296,9 +291,15 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
               />
             </div>
             {cardsPanelContent}
-            <Button disabled={coupon.fetching || cards.fetching || submitting || manualDisableSubmit} onClick={validateAndSubmit}>
+            <Button
+              disabled={coupon.fetching || cards.fetching || submitting || manualDisableSubmit}
+              onClick={(ev) => {
+                this.setState({ showLoading: true });
+                validateAndSubmit(ev);
+              }}
+            >
               <span>Submit</span>
-              {showLoading &&
+              {(manualDisableSubmit) &&
                 <span className="pull-right"><LoadingSpinner showOnlyIcon size={20} /></span>
               }
             </Button>

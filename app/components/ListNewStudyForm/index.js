@@ -31,8 +31,10 @@ import { addEmailNotificationUser } from '../../containers/App/actions';
 import { CAMPAIGN_LENGTH_LIST } from '../../common/constants';
 
 import {
-  showSiteLocationModal,
+  hideAddEmailModal,
+  showAddEmailModal,
   hideSiteLocationModal,
+  showSiteLocationModal,
 } from '../../containers/ListNewStudyPage/actions';
 
 const mapStateToProps = createStructuredSelector({
@@ -48,6 +50,8 @@ const formName = 'listNewStudy';
 const mapDispatchToProps = (dispatch) => ({
   addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
   change: (field, value) => dispatch(change(formName, field, value)),
+  hideAddEmailModal: () => dispatch(hideAddEmailModal()),
+  showAddEmailModal: () => dispatch(showAddEmailModal()),
   hideSiteLocationModal: () => dispatch(hideSiteLocationModal()),
   showSiteLocationModal: () => dispatch(showSiteLocationModal()),
 });
@@ -59,8 +63,11 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
   static propTypes = {
     addEmailNotificationUser: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired,
+    clientAdmins: PropTypes.object,
     hideSiteLocationModal: PropTypes.func.isRequired,
     showSiteLocationModal: PropTypes.func.isRequired,
+    hideAddEmailModal: PropTypes.func.isRequired,
+    showAddEmailModal: PropTypes.func.isRequired,
     indications: PropTypes.array,
     studyLevels: PropTypes.array,
     listNewStudyState: PropTypes.object,
@@ -73,7 +80,6 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     availPhoneNumbers: PropTypes.array,
     addNotificationProcess: PropTypes.object,
     savedSite: PropTypes.object,
-    clientAdmins: PropTypes.object,
   };
 
   constructor(props) {
@@ -157,9 +163,9 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
         // add admin users
         _.forEach(clientAdmins.details, (role) => {
           fields.push({
-            firstName: role.first_name,
-            lastName: role.last_name,
-            userId: role.user_id,
+            firstName: role.firstName,
+            lastName: role.lastName,
+            userId: role.userId,
             isChecked: true,
           });
         });
@@ -188,7 +194,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { indications, studyLevels, callTracking, formValues } = this.props;
+    const { addEmailNotificationUser, callTracking, change, currentUserClientId, formValues, hideAddEmailModal, listNewStudyState, indications, showAddEmailModal, studyLevels } = this.props;
     const { fileName } = this.state;
 
     const siteLocations = _.map(this.props.fullSiteLocations.details, row => ({
@@ -223,10 +229,12 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
                         name="emailNotifications"
                         component={RenderEmailsList}
                         formValues={formValues}
-                        listNewStudyState={this.props.listNewStudyState}
-                        change={this.props.change}
-                        addEmailNotificationUser={this.props.addEmailNotificationUser}
-                        currentUserClientId={this.props.currentUserClientId}
+                        listNewStudyState={listNewStudyState}
+                        change={change}
+                        showAddEmailModal={showAddEmailModal}
+                        hideAddEmailModal={hideAddEmailModal}
+                        addEmailNotificationUser={addEmailNotificationUser}
+                        currentUserClientId={currentUserClientId}
                       />
                     </div>
 

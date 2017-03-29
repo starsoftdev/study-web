@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
+import _ from 'lodash';
 
 import Input from '../../components/Input';
 import { selectSavedSite } from '../../containers/App/selectors';
@@ -9,18 +10,23 @@ import formValidator from './validator';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FormGeosuggest from '../../components/Input/Geosuggest';
 import './styles.less';
-import _ from 'lodash';
+
+const formName = 'editSite';
 
 const mapStateToProps = createStructuredSelector({
   savedSite: selectSavedSite(),
 });
 
-@reduxForm({ form: 'editSite', validate: formValidator })
-@connect(mapStateToProps, null)
+const mapDispatchToProps = (dispatch) => ({
+  change: (field, value) => dispatch(change(formName, field, value)),
+});
+
+@reduxForm({ form: formName, validate: formValidator })
+@connect(mapStateToProps, mapDispatchToProps)
 
 class EditSiteForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
     savedSite: PropTypes.object,
     handleSubmit: PropTypes.func,
     isEdit: PropTypes.bool,
@@ -34,6 +40,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   }
 
   onSuggestSelect(e) {
+    const { change } = this.props;
     let city = '';
     let state = '';
     let postalCode = '';
@@ -47,19 +54,19 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
         if (!city) {
           city = _.find(val.types, (o) => (o === 'locality'));
           if (city) {
-            this.props.dispatch(change('editSite', 'city', val.long_name));
+            change('city', val.long_name);
           }
         }
         if (!state) {
           state = _.find(val.types, (o) => (o === 'administrative_area_level_1'));
           if (state) {
-            this.props.dispatch(change('editSite', 'state', val.short_name));
+            change('state', val.short_name);
           }
         }
         if (!postalCode) {
           postalCode = _.find(val.types, (o) => (o === 'postal_code'));
           if (postalCode) {
-            this.props.dispatch(change('editSite', 'zip', val.long_name));
+            change('zip', val.long_name);
           }
         }
         if (!streetNmber && _.find(val.types, (o) => (o === 'street_number'))) {
@@ -70,20 +77,20 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
         }
         if (streetNmber && route) {
           this.geoSuggest.update(`${streetNmber} ${route}`);
-          this.props.dispatch(change('editSite', 'address', `${streetNmber} ${route}`));
+          change('address', `${streetNmber} ${route}`);
         }
       }
-      this.props.dispatch(change('editSite', 'address', e.label));
+      change('address', e.label);
     } else {
       const addressArr = e.label.split(',');
       if (addressArr[1]) {
-        this.props.dispatch(change('editSite', 'city', addressArr[1]));
+        change('city', addressArr[1]);
       }
       if (addressArr[2]) {
-        this.props.dispatch(change('editSite', 'state', addressArr[2]));
+        change('state', addressArr[2]);
       }
       this.geoSuggest.update(`${addressArr[0]}`);
-      this.props.dispatch(change('editSite', 'address', `${addressArr[0]}`));
+      change('address', `${addressArr[0]}`);
     }
   }
 

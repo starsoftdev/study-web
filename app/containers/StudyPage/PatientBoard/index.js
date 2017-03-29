@@ -14,8 +14,7 @@ import _ from 'lodash';
 import { touch, change } from 'redux-form';
 import Scroll from 'react-scroll';
 
-import * as Selector from '../selectors';
-import PatientCategory from './PatientCategory';
+import { SchedulePatientModalType } from '../../../common/constants/index';
 import PatientDetailModal from '../PatientDetail/PatientDetailModal';
 import ScheduledPatientModal from '../ScheduledPatientModal/index';
 import {
@@ -34,6 +33,8 @@ import {
 import { selectCurrentUser } from '../../App/selectors';
 import { markAsReadPatientMessages } from '../../App/actions';
 import { fields } from '../ScheduledPatientModal/validator';
+import * as Selector from '../selectors';
+import PatientCategory from './PatientCategory';
 
 const scroll = Scroll.animateScroll;
 
@@ -79,6 +80,7 @@ class PatientBoard extends React.Component {
     this.onPatientTextClick = this.onPatientTextClick.bind(this);
     this.onPatientDraggedToScheduled = this.onPatientDraggedToScheduled.bind(this);
     this.closePatientModal = this.closePatientModal.bind(this);
+    this.closePatientScheduleModal = this.closePatientScheduleModal.bind(this);
     this.showModal = this.showModal.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.resetFormsValues = this.resetFormsValues.bind(this);
@@ -111,11 +113,13 @@ class PatientBoard extends React.Component {
     setOpenPatientModal(show);
   }
 
-  onPatientDraggedToScheduled(patientId, patientCategoryId) {
+  onPatientDraggedToScheduled(patientId, patientCategoryId, scheduledCategoryId) {
     const { setCurrentPatientId, setCurrentPatientCategoryId, showScheduledModal } = this.props;
     setCurrentPatientId(patientId);
     setCurrentPatientCategoryId(patientCategoryId);
-    showScheduledModal();
+    if (patientCategoryId !== scheduledCategoryId) {
+      showScheduledModal(SchedulePatientModalType.CREATE);
+    }
   }
 
   onPatientTextClick(category, patient) {
@@ -199,6 +203,19 @@ class PatientBoard extends React.Component {
     setOpenPatientModal(false);
   }
 
+  closePatientScheduleModal() {
+    const { setCurrentPatientId, setCurrentPatientCategoryId, hideScheduledModal, openPatientModal } = this.props;
+    // do not reset selection if patient detail modal is open
+    if (!openPatientModal) {
+      setCurrentPatientId(-1);
+      setCurrentPatientCategoryId(-1);
+      this.resetFormsValues();
+    }
+
+    // set up the redux state for opening the modal
+    hideScheduledModal();
+  }
+
   resetFormsValues() {
     this.props.setFormValueByName('PatientDetailModal.Notes', 'note', '');
     this.props.setFormValueByName('PatientDetailSection.Text', 'body', '');
@@ -230,7 +247,7 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, hideScheduledModal, ePMS, currentPatient } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
@@ -245,7 +262,7 @@ class PatientBoard extends React.Component {
             onClose={this.closePatientModal}
             ePMS={ePMS}
           />
-          <ScheduledPatientModal show={openScheduledModal && currentPatient != null} onHide={hideScheduledModal} handleSubmit={this.onPatientScheduleSubmit} handleDateChange={this.handleDateChange} />
+          <ScheduledPatientModal show={openScheduledModal && currentPatient !== null} onHide={this.closePatientScheduleModal} handleSubmit={this.onPatientScheduleSubmit} handleDateChange={this.handleDateChange} />
         </div>
         <div className="patients-form-closer" onClick={this.closePatientModal} />
       </div>
@@ -273,7 +290,7 @@ const mapDispatchToProps = (dispatch) => (
     setCurrentPatientId: (id) => dispatch(setCurrentPatientId(id)),
     setCurrentPatientCategoryId: (id) => dispatch(setCurrentPatientCategoryId(id)),
     setOpenPatientModal: (show) => dispatch(setOpenPatientModal(show)),
-    showScheduledModal: () => dispatch(showScheduledModal()),
+    showScheduledModal: (type) => dispatch(showScheduledModal(type)),
     hideScheduledModal: () => dispatch(hideScheduledModal()),
     switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
     switchToTextSection: () => dispatch(switchToTextSectionDetail()),
