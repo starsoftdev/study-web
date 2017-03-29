@@ -31,7 +31,6 @@ const patientTarget = {
     // access the coordinates
     const clientOffset = monitor.getClientOffset();
     const el = document.elementFromPoint(clientOffset.x, clientOffset.y);
-    const item = monitor.getItem();
     let patientId = null;
     let ancestor = null;
 
@@ -44,23 +43,11 @@ const patientTarget = {
     ancestor = findAncestor(el, 'patient-li');
 
     if (ancestor) {
-      if (ancestor.previousSibling) {
-        patientId = parseInt(ancestor.previousSibling.dataset.patientId);
-
-        if (!ancestor.nextSibling) {
-          patientId = parseInt(ancestor.dataset.patientId);
-        }
-
-        if (item.id === patientId) {
-          patientId = parseInt(ancestor.dataset.patientId);
-        }
-      } else {
-        patientId = parseInt(ancestor.dataset.patientId);
+      patientId = parseInt(ancestor.dataset.patientId);
+      if (!ancestor.previousSibling) {
+        patientId = null;
       }
-
-      if (patientId && patientId !== props.patientUnder) {
-        props.setPatientUnder(patientId);
-      }
+      props.setPatientUnder(patientId);
     }
   },
   drop(props, monitor) {
@@ -73,7 +60,7 @@ const patientTarget = {
       // store the scheduled patient information temporarily since the user could cancel out of their category movement
       // props.schedulePatient(props.studyId, item.patientCategoryId, props.category.id, item.id);
       props.onPatientDraggedToScheduled(item.id, item.patientCategoryId, props.category.id);
-    } else if (props.patientUnder) {
+    } else {
       props.submitMovePatientBetweenCategories(props.studyId, item.patientCategoryId, props.category.id, item.id, props.patientUnder);
     }
   },
