@@ -224,7 +224,7 @@ class OtherSection extends React.Component {
                     rootClose
                     onHide={() => { this.toggleIndicationPopover(); }}
                   >
-                    <IndicationOverlay indications={indications} submitAddIndication={submitAddPatientIndication} patient={overlayValues} onClose={this.toggleIndicationPopover} />
+                    <IndicationOverlay indications={indications} selectIndication={submitAddPatientIndication} patient={overlayValues} onClose={this.toggleIndicationPopover} />
                   </Overlay>
                 </div>
               </div>

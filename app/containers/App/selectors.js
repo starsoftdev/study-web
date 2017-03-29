@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { get, map, pick, filter } from 'lodash';
+import moment from 'moment';
 
 /**
  * Direct selector to the app state domain
@@ -44,6 +45,41 @@ const selectCurrentUserStripeCustomerId = () => createSelector(
 // ///////////////////////////////////////////
 // base data used across pages
 // ///////////////////////////////////////////
+
+const selectValidSiteLocations = () => createSelector(
+  selectGlobal(),
+  (substate) => {
+    const sites = get(substate, 'baseData.sites', []);
+    return sites.filter(site =>
+      (
+        site.campaigns.filter(campaign =>
+          (
+            moment(campaign.dateFrom) < moment() && moment() < moment(campaign.dateTo)
+          )).length > 0
+      )).map(site => {
+        const recentCampaign = site.campaigns.filter(campaign =>
+          (
+            moment(campaign.dateFrom) < moment() && moment() < moment(campaign.dateTo)
+          )).sort((a, b) => {
+            if (moment(a.dateFrom) > moment(b.dateFrom)) {
+              return 1;
+            } else if (moment(a.dateFrom) === moment(b.dateFrom)) {
+              return 0;
+            }
+            return -1;
+          })[0];
+        return {
+          site: {
+            value: site.id,
+            label: site.name,
+          },
+          study_id: recentCampaign.study_id,
+          campaign_id: recentCampaign.id,
+        };
+      });
+  }
+);
+
 const selectIndications = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.indications', [])
@@ -278,6 +314,22 @@ const selectChangeTimezoneState = () => createSelector(
   (substate) => get(substate, 'baseData.changeUsersTimezoneState', {})
 );
 
+const selectStudiesFromSites = () => createSelector(
+  selectGlobal(),
+  (substate) => {
+    const sites = get(substate, 'baseData.sites', {});
+    const studies = [];
+    if (sites && sites.details) {
+      sites.details.forEach(site => {
+        site.studies.forEach(study => {
+          studies.push(study);
+        });
+      });
+    }
+    return studies;
+  }
+);
+
 // TODO: debug this to select study instead landing
 const selectLanding = () => createSelector(
   selectGlobal(),
@@ -351,6 +403,7 @@ export {
   selectSiteLocations,
   selectUserSites,
   selectUserSiteLocations,
+  selectValidSiteLocations,
   selectIndications,
   selectSources,
   selectLevels,
@@ -379,6 +432,7 @@ export {
   selectSavedSite,
   selectSavedUser,
   selectAvailPhoneNumbers,
+  selectStudiesFromSites,
 
   selectLocationState,
   selectCreditsPrice,

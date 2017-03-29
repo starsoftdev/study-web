@@ -27,6 +27,7 @@ import { clearSelectedPatient,
   removePatientFromTextBlast,
   setActiveSort,
   sortPatientsSuccess } from '../actions';
+import { selectProtocols, selectCurrentUser } from '../../App/selectors';
 import PatientItem from './PatientItem';
 import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { StickyContainer, Sticky } from 'react-sticky';
@@ -55,6 +56,8 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     searchPatients: PropTypes.func,
     setActiveSort: PropTypes.func,
     sortPatientsSuccess: PropTypes.func,
+    protocols: PropTypes.object,
+    currentUser: PropTypes.object,
   };
 
   constructor(props) {
@@ -81,9 +84,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
 
   editPatientModalShouldBeShown() {
     const { selectedPatient } = this.props;
-    const displayed = (selectedPatient.details) ? true: false; // eslint-disable-line
-
-    return displayed;
+    return selectedPatient.details !== null;
   }
 
   closeEditPatientModal() {
@@ -91,13 +92,15 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   }
 
   updatePatient(patientData) {
-    const { selectedPatient } = this.props;
-    const payload = omit(patientData, ['indications', 'status', 'source']);
+    const { selectedPatient, currentUser } = this.props;
+    const payload = omit(patientData, ['indications', 'status', 'source', 'protocol']);
 
     payload.indications = map(patientData.indications, indicationIterator => ({ id: indicationIterator.id, isOriginal: indicationIterator.isOriginal }));
     payload.source_id = patientData.source;
     payload.patient_category_id = patientData.status;
     payload.phone = normalizePhone(patientData.phone);
+    payload.protocol_id = patientData.protocol;
+    payload.client_id = currentUser.roleForClient.client_id;
 
     this.props.savePatient(selectedPatient.details.id, payload);
   }
@@ -292,6 +295,8 @@ const mapStateToProps = createStructuredSelector({
   selectedPatientDetailsForForm: selectSelectedPatientDetailsForForm(),
   savedPatient: selectSavedPatient(),
   chat: selectChat(),
+  protocols: selectProtocols(),
+  currentUser: selectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {

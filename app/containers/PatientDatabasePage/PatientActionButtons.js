@@ -12,12 +12,12 @@ import Modal from 'react-bootstrap/lib/Modal';
 import { selectValues } from '../../common/selectors/form.selector';
 import CenteredModal from '../../components/CenteredModal/index';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { selectImportPatientsStatus } from './selectors';
+import { selectImportPatientsStatus } from '../../containers/PatientDatabasePage/selectors';
 import AlertModal from '../../components/AlertModal';
-import AddPatientModal from './ImportPatients/AddPatientModal';
-import TextEmailBlastModal from './TextEmailBlastModal';
-import TextBlastModal from './TextBlast/index';
-import { clearForm, importPatients } from './actions';
+import AddPatientModal from '../../containers/PatientDatabasePage/ImportPatients/AddPatientModal';
+import TextEmailBlastModal from '../../containers/PatientDatabasePage/TextEmailBlastModal';
+import TextBlastModal from '../../containers/PatientDatabasePage/TextBlast/index';
+import { clearForm, importPatients } from '../../containers/PatientDatabasePage/actions';
 
 class PatientActionButtons extends React.Component {
   static propTypes = {
@@ -195,7 +195,7 @@ class PatientActionButtons extends React.Component {
 
   render() {
     return (
-      <div className="btns-popups">
+      <div>
         <div className="col pull-right">
           <a onClick={this.download} className="btn btn-primary download"><i className="icomoon-icon_download" /> Download</a>
         </div>

@@ -3,29 +3,24 @@
  * Patient Database page actions
  *
  */
-
+import _ from 'lodash';
 import {
+  EDIT_PATIENT_SITE,
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENTS_ERROR,
-
   FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_PATIENT_CATEGORIES_ERROR,
-
   FETCH_PATIENT,
   FETCH_PATIENT_SUCCESS,
   FETCH_PATIENT_ERROR,
-
   CLEAR_SELECTED_PATIENT,
-
   SAVE_PATIENT,
   SAVE_PATIENT_SUCCESS,
   SAVE_PATIENT_ERROR,
-
   INIT_CHAT,
   DISABLE_CHAT,
-
   ADD_PATIENTS_TO_TEXT_BLAST,
   REMOVE_PATIENT_FROM_TEXT_BLAST,
   REMOVE_PATIENTS_FROM_TEXT_BLAST,
@@ -39,8 +34,10 @@ import {
   SUBMIT_ADD_PATIENT_FAILURE,
   CLEAR_PATIENTS_LIST,
   CLEAR_IMPORT_FORM,
+  FETCH_PROTOCOLS,
+  FETCH_PROTOCOLS_SUCCESS,
+  FETCH_PROTOCOLS_ERROR,
 } from './constants';
-import _ from 'lodash';
 
 export function fetchPatients(searchParams = {}, patients = {}, searchFilter = {}, isExport = false) {
   return {
@@ -273,8 +270,35 @@ export function clearPatientsList() {
   };
 }
 
+export function editPatientSite(site) {
+  return {
+    type: EDIT_PATIENT_SITE,
+    site,
+  };
+}
+
 export function clearForm() {
   return {
     type: CLEAR_IMPORT_FORM,
+  };
+}
+
+export function fetchProtocols() {
+  return {
+    type: FETCH_PROTOCOLS,
+  };
+}
+
+export function fetchProtocolsSuccess(payload) {
+  return {
+    type: FETCH_PROTOCOLS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchProtocolsError(payload) {
+  return {
+    type: FETCH_PROTOCOLS_ERROR,
+    payload,
   };
 }

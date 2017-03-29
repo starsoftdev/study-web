@@ -18,6 +18,10 @@ export const FETCH_PATIENT                      = 'PatientDatabasePage/FETCH_PAT
 export const FETCH_PATIENT_SUCCESS              = 'PatientDatabasePage/FETCH_PATIENT_SUCCESS';
 export const FETCH_PATIENT_ERROR                = 'PatientDatabasePage/FETCH_PATIENT_ERROR';
 
+export const FETCH_PROTOCOLS                    = 'PatientDatabasePage/FETCH_PROTOCOLS';
+export const FETCH_PROTOCOLS_SUCCESS            = 'PatientDatabasePage/FETCH_PROTOCOLS_SUCCESS';
+export const FETCH_PROTOCOLS_ERROR              = 'PatientDatabasePage/FETCH_PROTOCOLS_ERROR';
+
 export const CLEAR_SELECTED_PATIENT             = 'PatientDatabasePage/CLEAR_SELECTED_PATIENT';
 
 export const SAVE_PATIENT                       = 'PatientDatabasePage/SAVE_PATIENT';
@@ -43,5 +47,5 @@ export const EXPORT_PATIENTS    = 'PatientDatabasePage/EXPORT_PATIENTS';
 export const DOWNLOAD_COMPLETE    = 'PatientDatabasePage/DOWNLOAD_COMPLETE';
 
 export const CLEAR_PATIENTS_LIST = 'PatientDatabasePage/CLEAR_PATIENTS_LIST';
+export const EDIT_PATIENT_SITE = 'PatientDatabasePage/EDIT_PATIENT_SITE';
 export const CLEAR_IMPORT_FORM = 'PatientDatabasePage/CLEAR_IMPORT_FORM';
-

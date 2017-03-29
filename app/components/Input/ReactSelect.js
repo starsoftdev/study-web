@@ -18,6 +18,7 @@ function ReactSelect({
   selectedValue,
   objectValue,
   onChange,
+  multi,
   meta: { touched, error, active },
   ...rest
 }) {
@@ -48,6 +49,7 @@ function ReactSelect({
       options={optionsToRender}
       placeholder={placeholder}
       className="form-control"
+      multi={multi}
       simpleValue={!objectValue}
       autosize={false}
       {...rest}
@@ -79,6 +81,7 @@ ReactSelect.propTypes = {
   onChange: PropTypes.func,
   options: PropTypes.array,
   meta: PropTypes.object.isRequired,
+  multi: PropTypes.bool,
   className: PropTypes.string,
   selectedValue: PropTypes.any,
   objectValue: PropTypes.bool,

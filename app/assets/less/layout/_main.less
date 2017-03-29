@@ -2255,18 +2255,51 @@ th, .th {
     }
   }
 }
-
+.site-select {
+  .Select {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 6px 12px;
+    font-size: 18px;
+    line-height: 1.42857143;
+    color: #101010;
+    background-color: #fff;
+    background-image: none;
+    border: 2px solid #636363;
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  }
+}
 .patient-database-indication-hidden{
   display: none;
 }
 
 .patient-database {
   .btns-popups {
-    overflow: hidden;
     margin: 0 -6px 25px;
+    overflow: hidden;
+    .search-area {
+      width: 25%;
+      padding: 0 6px;
+      .field {
+        position: relative;
+      }
+    }
+    .btns-container {
+      padding-top: 25px;
+    }
     .col {
+      width: auto;
       padding: 0 6px;
     }
+  }
+  .col {
+    width: 45%;
   }
   .table > thead > tr > th:first-child .jcf-checkbox {
     margin-top: 3px;
@@ -2299,9 +2332,6 @@ th, .th {
     .search-area {
       margin: 0;
       width: 25%;
-    }
-    .col {
-      width: 45%;
     }
     .sign {
       display: block;
