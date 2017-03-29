@@ -92,6 +92,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     this.goToStudyPage = this.goToStudyPage.bind(this);
     this.state = {
       uniqueId: '1',
+      shoppingcartLoading: props.formSubmissionStatus.submitting,
     };
   }
 
@@ -116,6 +117,10 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       newProps.formValues.indication_id !== undefined && newProps.formValues.exposureLevel !== undefined
     ) {
       this.props.fetchIndicationLevelPrice(newProps.formValues.indication_id, newProps.formValues.exposureLevel);
+    }
+
+    if (this.props.formSubmissionStatus.submitting !== newProps.formSubmissionStatus.submitting) {
+      this.setState({ shoppingcartLoading: newProps.formSubmissionStatus.submitting });
     }
   }
 
@@ -248,7 +253,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
                           showCards
                           addOns={addOns}
                           validateAndSubmit={this.onSubmitForm}
-                          submitting={this.props.formSubmissionStatus.submitting}
+                          manualDisableSubmit={this.state.shoppingcartLoading}
                         />}
                       </Sticky>
                     </div>

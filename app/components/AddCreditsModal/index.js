@@ -304,7 +304,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
                     validateAndSubmit={this.addCreditsSubmit}
                     addOns={products}
                     showAddNewCard={this.handleNewModalOpen}
-                    submitting={this.props.addCreditsOperation.adding}
+                    manualDisableSubmit={this.props.addCreditsOperation.adding}
                   />
                 </div>
               </div>
