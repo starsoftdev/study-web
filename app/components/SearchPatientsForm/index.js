@@ -1,27 +1,29 @@
 import React, { Component, PropTypes } from 'react';
+import _, { map } from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
-import _, { map } from 'lodash';
-
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { selectSearchPatientsFormError } from './selectors';
 import { selectPatientCategories, selectPatients, selectPatientDatabaseFormValues } from '../../containers/PatientDatabasePage/selectors';
-import { selectIndications, selectSources } from '../../containers/App/selectors';
+import { selectIndications, selectSources, selectSiteLocations, selectCurrentUser } from '../../containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import PatientActionButtons from '../../containers/PatientDatabasePage/PatientActionButtons';
 
 import ReactMultiSelect from '../../components/Input/ReactMultiSelect';
 
 const mapStateToProps = createStructuredSelector({
+  formValues: selectPatientDatabaseFormValues(),
+  hasError: selectSearchPatientsFormError(),
   indications: selectIndications(),
-  sources: selectSources(),
   patientCategories: selectPatientCategories(),
   patients: selectPatients(),
-  hasError: selectSearchPatientsFormError(),
-  formValues: selectPatientDatabaseFormValues(),
+  sources: selectSources(),
+  sites: selectSiteLocations(),
+  user: selectCurrentUser(),
 });
 
 @reduxForm({ form: 'searchPatients', validate: formValidator })
@@ -29,14 +31,18 @@ const mapStateToProps = createStructuredSelector({
 
 class SearchPatientsForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    formValues: PropTypes.object,
+    handleSubmit: PropTypes.func,
+    hasError: PropTypes.bool,
     indications: PropTypes.array,
-    sources: PropTypes.array,
+    onSubmit: PropTypes.func,
+    paginationOptions: PropTypes.object,
     patientCategories: PropTypes.object,
     patients: PropTypes.object,
-    hasError: PropTypes.bool,
-    handleSubmit: PropTypes.func,
-    formValues: PropTypes.object,
-    onSubmit: PropTypes.func,
+    searchPatients: PropTypes.func,
+    sites: PropTypes.array,
+    sources: PropTypes.array,
+    user: PropTypes.object,
   };
 
   constructor(props) {
@@ -88,8 +94,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
   }
 
   render() {
-    const { formValues, indications, sources, patientCategories, patients, hasError, handleSubmit } = this.props;
-
+    const { formValues, indications, sources, patientCategories, patients, hasError, handleSubmit, sites, user } = this.props;
     const includeIndicationArr = [];
     let finalIncludeIndication = [];
     const excludeIndicationArr = [];
@@ -128,7 +133,11 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     finalIncludeIndication = _.concat(finalIncludeIndication, includeIndicationArr);
     finalExcludeIndication = _.concat(finalExcludeIndication, excludeIndicationArr);
 
-
+    const siteOptions = map(sites, siteIterator => ({
+      label: siteIterator.name,
+      value: siteIterator.id,
+    }));
+    siteOptions.push({ label: 'All', value: 'All' });
     const sourceOptions = [{ label: 'All', value: 'All' }].concat(map(sources, sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
@@ -150,6 +159,14 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
       },
     ];
 
+    const userIsAdmin = user.roleForClient.name === 'Super Admin' || user.roleForClient.name === 'Admin';
+    const sitesDropdownDisabled = !userIsAdmin || patients.fetching;
+    let defaultSiteLocation;
+
+    if (sites.length > 0 && !userIsAdmin) {
+      defaultSiteLocation = _.find(sites, { id: user.roleForClient.site_id }).id;
+    }
+
     const itemTemplate = (controlSelectedValue) => (
       <div key={controlSelectedValue.value}>
         {controlSelectedValue.label}
@@ -162,11 +179,9 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
         {controlSelectedValue.length} item(s) selected
       </div>
     );
-
     return (
-      <form className="form-search" onSubmit={handleSubmit}>
-        <div className="fields-holder clearfix">
-
+      <div>
+        <div className="btns-popups">
           <div className="search-area pull-left">
             <span className="title">
             </span>
@@ -185,160 +200,189 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
               />
             </div>
           </div>
-
-          <div className="select-holder indication pull-left">
-            <span className="title">
-              <label>Include Indication</label>
-            </span>
-            <div className="field">
-              <Field
-                name="includeIndication"
-                component={ReactMultiSelect}
-                placeholder="Select Indication"
-                searchPlaceholder="Search"
-                searchable
-                optionLabelKey="label"
-                multiple
-                includeAllOption
-                onChange={(e) => this.initSearch(e, 'includeIndication')}
-                customOptionTemplateFunction={itemTemplate}
-                customSelectedValueTemplateFunction={selectedItemsTemplate}
-                dataSource={finalIncludeIndication}
-                customSearchIconClass="icomoon-icon_search2"
-              />
-            </div>
-          </div>
-
-          <div className="select-holder indication pull-left">
-            <span className="title">
-              <label>Exclude Indication</label>
-            </span>
-            <div className="field">
-              <Field
-                name="excludeIndication"
-                component={ReactMultiSelect}
-                placeholder="Select Indication"
-                searchPlaceholder="Search"
-                searchable
-                optionLabelKey="label"
-                multiple
-                includeAllOption
-                onChange={(e) => this.initSearch(e, 'excludeIndication')}
-                customOptionTemplateFunction={itemTemplate}
-                customSelectedValueTemplateFunction={selectedItemsTemplate}
-                dataSource={finalExcludeIndication}
-                customSearchIconClass="icomoon-icon_search2"
-              />
-            </div>
-          </div>
-
-          <div className="gender gender pull-left">
-            <span className="title">
-              <label>Gender</label>
-            </span>
-            <div className="field">
-              <Field
-                name="gender"
-                component={ReactSelect}
-                placeholder="Select Gender"
-                options={genderOptions}
-                disabled={patients.fetching}
-                onChange={(e) => this.initSearch(e, 'gender')}
-              />
-            </div>
-          </div>
-
-          <div className="select-holder pull-left clear-left">
-            <span className="title">
-              <label>Status</label>
-            </span>
-            <div className="field">
-              <Field
-                name="status"
-                component={ReactSelect}
-                placeholder="Select Status"
-                options={statusOptions}
-                disabled={patients.fetching}
-                onChange={(e) => this.initSearch(e, 'status')}
-              />
-            </div>
-          </div>
-
-          <div className="select-holder pull-left">
-            <span className="title">
-              <label>Source</label>
-            </span>
-            <div className="field">
-              <Field
-                name="source"
-                component={ReactSelect}
-                placeholder="Select Source"
-                options={sourceOptions}
-                disabled={patients.fetching}
-                onChange={(e) => this.initSearch(e, 'source')}
-              />
-            </div>
-          </div>
-
-          <div className="age-range pull-left">
-            <span className="title">
-              <label>Age Range</label>
-            </span>
-            <div className="col-holder clearfix">
-              <div className="col pull-left">
+          <PatientActionButtons searchPatients={this.searchPatients} paginationOptions={this.props.paginationOptions} />
+        </div>
+        <form className="form-search" onSubmit={handleSubmit}>
+          <div className="fields-holder clearfix form-search">
+            <div className="select-holder pull-left">
+              <span className="title">
+                <label>SITE LOCATION</label>
+              </span>
+              <div className="field">
                 <Field
-                  name="ageFrom"
-                  className="age-from"
-                  placeholder="From"
-                  component={Input}
-                  type="text"
-                  disabled={patients.fetching}
-                  onChange={(e) => this.initSearch(e, 'ageFrom')}
+                  name="site"
+                  component={ReactSelect}
+                  placeholder="Select Site Location"
+                  options={siteOptions}
+                  selectedValue={defaultSiteLocation}
+                  disabled={sitesDropdownDisabled}
+                  onChange={(e) => this.initSearch(e, 'site')}
                 />
               </div>
-              <div className="col pull-right">
+            </div>
+            <div className="select-holder indication pull-left">
+              <span className="title">
+                <label>Include Indication</label>
+              </span>
+              <div className="field">
                 <Field
-                  name="ageTo"
-                  className="age-to"
-                  placeholder="To"
-                  component={Input}
-                  type="text"
-                  disabled={patients.fetching}
-                  onChange={(e) => this.initSearch(e, 'ageTo')}
+                  name="includeIndication"
+                  component={ReactMultiSelect}
+                  placeholder="Select Indication"
+                  searchPlaceholder="Search"
+                  searchable
+                  optionLabelKey="label"
+                  multiple
+                  includeAllOption
+                  onChange={(e) => this.initSearch(e, 'includeIndication')}
+                  customOptionTemplateFunction={itemTemplate}
+                  customSelectedValueTemplateFunction={selectedItemsTemplate}
+                  dataSource={finalIncludeIndication}
+                  customSearchIconClass="icomoon-icon_search2"
                 />
               </div>
-              <span className="sign">-</span>
+            </div>
+
+            <div className="select-holder indication pull-left">
+              <span className="title">
+                <label>Exclude Indication</label>
+              </span>
+              <div className="field">
+                <Field
+                  name="excludeIndication"
+                  component={ReactMultiSelect}
+                  placeholder="Select Indication"
+                  searchPlaceholder="Search"
+                  searchable
+                  optionLabelKey="label"
+                  multiple
+                  includeAllOption
+                  onChange={(e) => this.initSearch(e, 'excludeIndication')}
+                  customOptionTemplateFunction={itemTemplate}
+                  customSelectedValueTemplateFunction={selectedItemsTemplate}
+                  dataSource={finalExcludeIndication}
+                  customSearchIconClass="icomoon-icon_search2"
+                />
+              </div>
+            </div>
+
+            <div className="gender gender pull-left">
+              <span className="title">
+                <label>Gender</label>
+              </span>
+              <div className="field">
+                <Field
+                  name="gender"
+                  component={ReactSelect}
+                  placeholder="Select Gender"
+                  options={genderOptions}
+                  disabled={patients.fetching}
+                  onChange={(e) => this.initSearch(e, 'gender')}
+                />
+              </div>
             </div>
           </div>
+          <div className="fields-holder clearfix">
+            <div className="select-holder pull-left clear-left">
+              <span className="title">
+                <label>Status</label>
+              </span>
+              <div className="field">
+                <Field
+                  name="status"
+                  component={ReactSelect}
+                  placeholder="Select Status"
+                  options={statusOptions}
+                  disabled={patients.fetching}
+                  onChange={(e) => this.initSearch(e, 'status')}
+                />
+              </div>
+            </div>
 
-          <div className="bmi pull-left">
-            <span className="title">
-              <label>BMI</label>
-            </span>
-            <div className="col-holder clearfix">
-              <div className="col pull-left">
+            <div className="select-holder pull-left">
+              <span className="title">
+                <label>Source</label>
+              </span>
+              <div className="field">
                 <Field
-                  name="bmiFrom"
-                  className="bmi-from"
-                  placeholder="From"
-                  component={Input}
-                  type="text"
+                  name="source"
+                  component={ReactSelect}
+                  placeholder="Select Source"
+                  options={sourceOptions}
                   disabled={patients.fetching}
-                  onChange={(e) => this.initSearch(e, 'bmiFrom')}
+                  onChange={(e) => this.initSearch(e, 'source')}
                 />
               </div>
-              <div className="col pull-right">
-                <Field
-                  name="bmiTo"
-                  className="bmi-to"
-                  placeholder="To"
-                  component={Input}
-                  type="text"
-                  disabled={patients.fetching}
-                  onChange={(e) => this.initSearch(e, 'bmiTo')}
-                />
+            </div>
+
+            <div className="age-range pull-left">
+              <span className="title">
+                <label>Age Range</label>
+              </span>
+              <div className="col-holder clearfix">
+                <div className="col pull-left">
+                  <Field
+                    name="ageFrom"
+                    className="age-from"
+                    placeholder="From"
+                    component={Input}
+                    type="text"
+                    disabled={patients.fetching}
+                    onChange={(e) => this.initSearch(e, 'ageFrom')}
+                  />
+                </div>
+                <div className="col pull-right">
+                  <Field
+                    name="ageTo"
+                    className="age-to"
+                    placeholder="To"
+                    component={Input}
+                    type="text"
+                    disabled={patients.fetching}
+                    onChange={(e) => this.initSearch(e, 'ageTo')}
+                  />
+                </div>
+                <span className="sign">-</span>
               </div>
-              <span className="sign">-</span>
+            </div>
+
+            <div className="bmi pull-left">
+              <span className="title">
+                <label>BMI</label>
+              </span>
+              <div className="col-holder clearfix">
+                <div className="col pull-left">
+                  <Field
+                    name="bmiFrom"
+                    className="bmi-from"
+                    placeholder="From"
+                    component={Input}
+                    type="text"
+                    disabled={patients.fetching}
+                    onChange={(e) => this.initSearch(e, 'bmiFrom')}
+                  />
+                </div>
+                <div className="col pull-right">
+                  <Field
+                    name="bmiTo"
+                    className="bmi-to"
+                    placeholder="To"
+                    component={Input}
+                    type="text"
+                    disabled={patients.fetching}
+                    onChange={(e) => this.initSearch(e, 'bmiTo')}
+                  />
+                </div>
+                <span className="sign">-</span>
+              </div>
+            </div>
+            <div className="hidden">
+              <Button type="submit" bsStyle="primary" className="btn-search" disabled={patients.fetching || hasError}>
+                {(patients.fetching)
+                  ? <LoadingSpinner showOnlyIcon size={20} className="fetching-patients" />
+                  : <span>Search</span>
+                }
+              </Button>
             </div>
           </div>
           <div className="hidden">
@@ -349,8 +393,8 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
               }
             </Button>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     );
   }
 }

@@ -6,20 +6,23 @@ import { createStructuredSelector } from 'reselect';
 
 import SearchPatientsForm from '../../components/SearchPatientsForm/index';
 import PatientsList from '../../containers/PatientDatabasePage/PatientsList/index';
-import PatientActionButtons from './PatientActionButtons';
-import { fetchIndications, fetchSources } from '../../containers/App/actions';
-import { fetchPatientCategories, fetchPatients, clearPatientsList } from './actions';
+import { fetchIndications, fetchSources, fetchClientSites } from '../../containers/App/actions';
+import { fetchPatientCategories, fetchPatients, clearPatientsList, fetchProtocols } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
+import { selectCurrentUser } from '../App/selectors';
 
 export class PatientDatabasePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     fetchIndications: PropTypes.func,
+    fetchClientSites: PropTypes.func,
     fetchSources: PropTypes.func,
     fetchPatientCategories: PropTypes.func,
     fetchPatients: PropTypes.func,
+    fetchProtocols: PropTypes.func,
     paginationOptions: PropTypes.object,
     patients: PropTypes.object,
     clearPatientsList: PropTypes.func,
+    currentUser: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -29,10 +32,12 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
   }
 
   componentWillMount() {
-    this.props.fetchIndications();
-    this.props.fetchSources();
-    this.props.fetchPatientCategories();
-    // this.props.fetchPatients({ limit:15, skip:0 });
+    const { fetchIndications, fetchSources, fetchPatientCategories, fetchClientSites, fetchProtocols, currentUser } = this.props;
+    fetchIndications();
+    fetchSources();
+    fetchPatientCategories();
+    fetchProtocols();
+    fetchClientSites(currentUser.roleForClient.client_id);
   }
 
   searchPatients(searchFilter, isSearch, isExport = false) {
@@ -60,8 +65,9 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
       queryParams.direction = this.props.paginationOptions.activeDirection;
     }
 
-    if (queryParams.status != null || queryParams.source != null || queryParams.includeIndication || queryParams.name ||
-      queryParams.excludeIndication || queryParams.gender || queryParams.ageFrom || queryParams.ageTo || queryParams.bmiFrom || queryParams.bmiTo) {
+    if (queryParams.status != null || queryParams.source != null || queryParams.includeIndication || queryParams.name
+      || queryParams.site || queryParams.excludeIndication || queryParams.gender || queryParams.ageFrom ||
+      queryParams.ageTo || queryParams.bmiFrom || queryParams.bmiTo) {
       this.props.fetchPatients(queryParams, this.props.patients.details, searchFilter, isExport);
     } else {
       this.props.clearPatientsList();
@@ -74,9 +80,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
         <section className="patient-database">
           <Helmet title="Patient Database - StudyKIK" />
           <h2 className="main-heading">Patient Database</h2>
-          <PatientActionButtons searchPatients={this.searchPatients} paginationOptions={this.props.paginationOptions} />
-
-          <SearchPatientsForm onSubmit={this.searchPatients} />
+          <SearchPatientsForm onSubmit={this.searchPatients} searchPatients={this.searchPatients} paginationOptions={this.props.paginationOptions} />
 
           <PatientsList
             searchPatients={this.searchPatients}
@@ -91,14 +95,17 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
 const mapStateToProps = createStructuredSelector({
   paginationOptions: selectPaginationOptions(),
   patients: selectPatients(),
+  currentUser: selectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchIndications: () => dispatch(fetchIndications()),
+    fetchClientSites: (clientId) => dispatch(fetchClientSites(clientId)),
     fetchSources: () => dispatch(fetchSources()),
     fetchPatientCategories: searchParams => dispatch(fetchPatientCategories(searchParams)),
     fetchPatients: (searchParams, patients, searchFilter, isExport) => dispatch(fetchPatients(searchParams, patients, searchFilter, isExport)),
+    fetchProtocols: () => dispatch(fetchProtocols()),
     clearPatientsList: () => dispatch(clearPatientsList()),
   };
 }

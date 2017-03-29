@@ -10,8 +10,7 @@ import Input from '../../../components/Input/index';
 class IndicationOverlay extends React.Component {
   static propTypes = {
     indications: React.PropTypes.array,
-    submitAddIndication: React.PropTypes.func.isRequired,
-    selectIndication: React.PropTypes.func,
+    selectIndication: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
     patient: React.PropTypes.object.isRequired,
   };
@@ -27,12 +26,8 @@ class IndicationOverlay extends React.Component {
   }
 
   onClick(indication) {
-    const { selectIndication, submitAddIndication, onClose, patient } = this.props;
-    if (selectIndication) {
-      selectIndication(indication);
-    } else {
-      submitAddIndication(patient.id, indication);
-    }
+    const { selectIndication, onClose, patient } = this.props;
+    selectIndication(patient.id, indication);
     onClose();
   }
 

@@ -16,6 +16,7 @@ import {
   SUBMIT_TEXT_BLAST,
   IMPORT_PATIENTS,
   SUBMIT_ADD_PATIENT,
+  FETCH_PROTOCOLS,
 } from './constants';
 
 import {
@@ -31,6 +32,8 @@ import {
   submitAddPatientSuccess,
   submitAddPatientFailure,
   clearPatientsList,
+  fetchProtocolsSuccess,
+  fetchProtocolsError,
 } from './actions';
 
 export function* patientDatabasePageSaga() {
@@ -41,6 +44,7 @@ export function* patientDatabasePageSaga() {
   const watcherE = yield fork(submitTextBlast);
   const watcherF = yield fork(importPatients);
   const watcherG = yield fork(submitAddPatient);
+  const watcherH = yield fork(fetchProtocolsWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -53,6 +57,7 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherE);
   yield cancel(watcherF);
   yield cancel(watcherG);
+  yield cancel(watcherH);
 }
 
 // Bootstrap sagas
@@ -68,7 +73,8 @@ export function* fetchPatientsWatcher() {
         include: [
           'indications',
           'source',
-          { studyPatientCategory: 'patientCategory' },
+          { campaigns: 'site' },
+          { studyPatientCategory: ['patientCategory'] },
         ],
         where: {
           and: [],
@@ -81,13 +87,16 @@ export function* fetchPatientsWatcher() {
       if (searchParams.sort && searchParams.direction && searchParams.sort !== 'orderNumber') {
         filterObj.order = `${searchParams.sort} ${((searchParams.direction === 'down') ? 'DESC' : 'ASC')}`;
       }
-
       if (searchParams.status) {
         filterObj.where.and.push({
           status:  (searchParams.status === 'All') ? 0 : searchParams.status,
         });
       }
-
+      if (searchParams.site && searchParams.site !== 'All') {
+        filterObj.where.and.push({
+          site: searchParams.site,
+        });
+      }
       if (searchParams.includeIndication) {
         filterObj.where.and.push({
           includeIndication: searchParams.includeIndication,
@@ -179,7 +188,6 @@ export function* fetchPatientsWatcher() {
       };
 
       const queryString = composeQueryString(queryParams);
-      // const requestURL = `${API_URL}/patients?${queryString}`;
       const requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
       if (isExport) {
         location.replace(`${requestURL}`);
@@ -217,13 +225,37 @@ export function* fetchPatientWatcher() {
     const { id } = yield take(FETCH_PATIENT);
 
     try {
-      const queryParams = { filter: '{"include": [{"relation": "patientIndications", "scope": {"include": "indication"}}, "studySource", {"studyPatientCategory": "patientCategory"}]}' };
+      const queryParams = {
+        filter: JSON.stringify({
+          include: [
+            {
+              relation: 'patientIndications',
+              scope: {
+                include: 'indication',
+              },
+            },
+            {
+              studySource: 'source',
+            },
+            {
+              studyPatientCategory: [
+                'patientCategory',
+                'study',
+              ],
+            },
+          ],
+        }),
+      };
       const queryString = composeQueryString(queryParams);
       const requestURL = `${API_URL}/patients/${id}?${queryString}`;
       const response = yield call(request, requestURL);
+      if (response.source) {
+        response.source = response.source.id;
+      }
       yield put(patientFetched(response));
     } catch (err) {
       yield put(patientFetchingError(err));
+      console.error(err);
     }
   }
 }
@@ -326,7 +358,7 @@ function* submitAddPatient() {
     }
 
     try {
-      const requestURL = `${API_URL}/patients/addPatient`;
+      const requestURL = `${API_URL}/patients`;
       const response = yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify(patient),
@@ -349,6 +381,27 @@ function* submitAddPatient() {
       }
       yield put(toastrActions.error('', errorMessages));
       yield put(submitAddPatientFailure());
+    }
+  }
+}
+
+export function* fetchProtocolsWatcher() {
+  while (true) {
+    yield take(FETCH_PROTOCOLS);
+
+    try {
+      const requestURL = `${API_URL}/protocols`;
+
+      const params = {
+        method: 'GET',
+      };
+      const response = yield call(request, requestURL, params);
+
+      yield put(fetchProtocolsSuccess(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while fetching protocols');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(fetchProtocolsError(err));
     }
   }
 }

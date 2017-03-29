@@ -8,19 +8,19 @@ import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import Overlay from 'react-bootstrap/lib/Overlay';
 
-import { selectValues } from '../../../common/selectors/form.selector';
-import Input from '../../../components/Input';
+import { selectValues, selectSyncErrorBool } from '../../../common/selectors/form.selector';
+import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
+import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Checkbox from '../../../components/Input/Checkbox';
-import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
-import { selectIndications, selectSources } from '../../App/selectors';
+import { selectIndications, selectSources, selectSiteLocations, selectStudiesFromSites } from '../../App/selectors';
 import IndicationOverlay from '../../StudyPage/PatientDetail/IndicationOverlay';
-import { selectPatientCategories, selectSavedPatient } from '../selectors';
-import { selectEditPatientFormError } from './selectors';
+import { editPatientSite } from '../actions';
+import { selectPatientCategories, selectSavedPatient, selectProtocols } from '../selectors';
 import formValidator from './validator';
 
-const formName = 'editPatient';
+const formName = 'PatientDatabase.EditPatientModal';
 
 const mapStateToProps = createStructuredSelector({
   formValues: selectValues(formName),
@@ -28,15 +28,23 @@ const mapStateToProps = createStructuredSelector({
   sources: selectSources(),
   patientCategories: selectPatientCategories(),
   savedPatient: selectSavedPatient(),
-  hasError: selectEditPatientFormError(),
+  hasError: selectSyncErrorBool(formName),
+  sites: selectSiteLocations(),
+  protocols: selectProtocols(),
+  studies: selectStudiesFromSites(),
+});
+
+const mapDispatchToProps = dispatch => ({
+  change: (name, value) => dispatch(change(formName, name, value)),
+  editPatientSite: (site) => dispatch(editPatientSite(site)),
 });
 
 @reduxForm({ form: formName, validate: formValidator })
-@connect(mapStateToProps, null)
-
+@connect(mapStateToProps, mapDispatchToProps)
 class EditPatientForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
+    editPatientSite: PropTypes.func.isRequired,
     indications: PropTypes.array,
     initialValues: PropTypes.object,
     loading: React.PropTypes.bool,
@@ -45,8 +53,11 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     sources: PropTypes.array,
     patientCategories: PropTypes.object,
     savedPatient: PropTypes.object,
+    sites: PropTypes.array,
     hasError: PropTypes.bool,
     onSubmit: PropTypes.func,
+    protocols: PropTypes.object,
+    studies: PropTypes.array,
   };
 
   constructor(props) {
@@ -59,13 +70,12 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
     this.deleteIndication = this.deleteIndication.bind(this);
     this.selectIndication = this.selectIndication.bind(this);
-    this.submitAddIndication = this.submitAddIndication.bind(this);
   }
 
   onSubmit(event) {
     event.preventDefault();
     const { onSubmit, formValues } = this.props;
-    const formattedData = formValues;
+    const formattedData = Object.assign({}, formValues);
     if (formValues.dobDay && formValues.dobMonth && formValues.dobYear) {
       const date = moment().year(formValues.dobYear).month(formValues.dobMonth - 1).date(formValues.dobDay).startOf('day');
       formattedData.dob = date.toISOString();
@@ -76,8 +86,9 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   deleteIndication(indication) {
-    const newArr = _.remove(this.props.formValues.indications, (n) => (n.id !== indication.id));
-    this.props.dispatch(change('editPatient', 'indications', newArr));
+    const { change, formValues: { indications } } = this.props;
+    const newArr = _.remove(indications, (n) => (n.id !== indication.id));
+    change('indications', newArr);
   }
 
   toggleIndicationPopover() {
@@ -86,12 +97,9 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     });
   }
 
-  selectIndication(indication) {
-    this.props.dispatch(change('editPatient', 'indications', this.props.formValues.indications.concat([indication])));
-  }
-
-  submitAddIndication() {
-
+  selectIndication(patientId, indication) {
+    const { change, formValues } = this.props;
+    change('indications', formValues.indications.concat([indication]));
   }
 
   renderIndications() {
@@ -121,11 +129,12 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { formValues, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, sources, patientCategories, loading, submitting, savedPatient } = this.props;
+    const { formValues, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, sources, patientCategories, loading, submitting, savedPatient, studies, protocols } = this.props;
     const indicationOptions = map(indications, indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
     }));
+
     const sourceOptions = map(sources, sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
@@ -144,9 +153,16 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       },
     ];
     const patientValues = {
-      id: initialValues.id,
+      id: initialValues ? initialValues.id : null,
       indications: formValues.indications,
     };
+    const protocolOptions = map(studies, studyIterator => {
+      const protocol = _.find(protocols.details, { id: studyIterator.protocol_id });
+      return {
+        label: protocol.number,
+        value: protocol.id,
+      };
+    });
     return (
       <Form className="form-lightbox form-edit-patient-information" onSubmit={this.onSubmit}>
         <div className="field-row form-group">
@@ -242,7 +258,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
               rootClose
               onHide={() => { this.toggleIndicationPopover(); }}
             >
-              <IndicationOverlay indications={indications} submitAddIndication={this.submitAddIndication} selectIndication={this.selectIndication} patient={patientValues} onClose={this.toggleIndicationPopover} />
+              <IndicationOverlay indications={indications} selectIndication={this.selectIndication} patient={patientValues} onClose={this.toggleIndicationPopover} />
             </Overlay>
           </div>
         </div>
@@ -301,6 +317,19 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
+            <label>Protocol</label>
+          </strong>
+          <Field
+            name="protocol"
+            component={ReactSelect}
+            className="field"
+            placeholder="Select Protocol"
+            options={protocolOptions}
+            disabled={initialValues && initialValues.source && initialValues.source.label === 'StudyKIK'}
+          />
+        </div>
+        <div className="field-row form-group">
+          <strong className="label">
             <label>Source</label>
           </strong>
           <Field
@@ -309,7 +338,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="field"
             placeholder="Select Source"
             options={sourceOptions}
-            disabled
+            disabled={(initialValues && initialValues.source && initialValues.source.label === 'StudyKIK') || !formValues.protocol || formValues.protocol === ''}
           />
         </div>
         <div className="field-row">

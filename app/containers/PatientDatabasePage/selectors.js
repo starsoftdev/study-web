@@ -1,5 +1,6 @@
 import { omit, map, get } from 'lodash';
 import { createSelector } from 'reselect';
+import { selectStudiesFromSites } from '../App/selectors';
 
 /**
  * Direct selector to the patientDatabasePage state domain
@@ -33,13 +34,20 @@ export const selectSelectedPatient = () => createSelector(
 
 export const selectSelectedPatientDetailsForForm = () => createSelector(
   selectPatientDatabasePageDomain(),
+  selectStudiesFromSites(),
   (substate) => {
     const selectedPatientDetails = substate.selectedPatient.details;
     if (!selectedPatientDetails) {
       return null;
     }
 
-    let selectedPatientDetailsForForm = omit(selectedPatientDetails, ['created', 'patientIndications', 'source_id', 'source', 'lastAction', 'study_patient_category_id', 'studyPatientCategory']);
+    let protocolId;
+
+    if (selectedPatientDetails.studyPatientCategory && selectedPatientDetails.studyPatientCategory.study) {
+      protocolId = selectedPatientDetails.studyPatientCategory.study.protocol_id;
+    }
+
+    let selectedPatientDetailsForForm = omit(selectedPatientDetails, ['created', 'patientIndications', 'lastAction', 'study_patient_category_id', 'studyPatientCategory']);
     selectedPatientDetailsForForm = {
       ...selectedPatientDetailsForForm,
       indications: map(selectedPatientDetails.patientIndications, piIterator => ({
@@ -50,7 +58,7 @@ export const selectSelectedPatientDetailsForForm = () => createSelector(
         isOriginal: piIterator.isOriginal,
       })),
       status: selectedPatientDetails.studyPatientCategory ? parseInt(selectedPatientDetails.studyPatientCategory.patient_category_id, 10) : false,
-      source: selectedPatientDetails.source_id,
+      protocol: protocolId,
     };
     return selectedPatientDetailsForForm;
   }
@@ -79,6 +87,11 @@ export const selectChat = () => createSelector(
 export const selectAddPatientStatus = () => createSelector(
   selectPatientDatabasePageDomain(),
   (subState) => subState.addPatientStatus
+);
+
+export const selectProtocols = () => createSelector(
+  selectPatientDatabasePageDomain(),
+  (substate) => substate.protocols
 );
 
 const selectFormDomain = () => state => state.form;
