@@ -80,7 +80,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
   render() {
     const protocolNumber = this.props.location.query.protocol || null;
     const indication = this.props.location.query.indication || null;
-    const cro = this.props.location.query.cro || null;
+    const cro = (this.props.location.query.cro && this.props.location.query.cro !== 'null') ? this.props.location.query.cro : 'N/A';
 
     return (
       <div className="container-fluid sponsor-portal report-view-page">
