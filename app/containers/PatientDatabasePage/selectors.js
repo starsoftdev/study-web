@@ -1,4 +1,4 @@
-import { omit, map, get, find } from 'lodash';
+import { omit, map, get } from 'lodash';
 import { createSelector } from 'reselect';
 import { selectStudiesFromSites } from '../App/selectors';
 
@@ -35,9 +35,8 @@ export const selectSelectedPatient = () => createSelector(
 export const selectSelectedPatientDetailsForForm = () => createSelector(
   selectPatientDatabasePageDomain(),
   selectStudiesFromSites(),
-  (substate, studies) => {
+  (substate) => {
     const selectedPatientDetails = substate.selectedPatient.details;
-    const protocols = substate.protocols.details;
     if (!selectedPatientDetails) {
       return null;
     }
@@ -93,7 +92,7 @@ export const selectAddPatientStatus = () => createSelector(
 export const selectProtocols = () => createSelector(
   selectPatientDatabasePageDomain(),
   (substate) => substate.protocols
-)
+);
 
 const selectFormDomain = () => state => state.form;
 
