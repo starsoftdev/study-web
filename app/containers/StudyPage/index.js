@@ -134,7 +134,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       sponsor = study.sponsor.name;
     }
     return (
-      <div className="container-fluid">
+      <div className="container-fluid no-padding">
         <Helmet title={pageTitle} />
         <section className="individual-study">
           <header className="main-head">
