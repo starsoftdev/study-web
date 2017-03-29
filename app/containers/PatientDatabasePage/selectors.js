@@ -61,7 +61,6 @@ export const selectSelectedPatientDetailsForForm = () => createSelector(
       })),
       status: selectedPatientDetails.studyPatientCategory ? parseInt(selectedPatientDetails.studyPatientCategory.patient_category_id, 10) : false,
       protocol: protocolId,
-      source: selectedPatientDetails.source ? selectedPatientDetails.source.value : null,
     };
     return selectedPatientDetailsForForm;
   }
