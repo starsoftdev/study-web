@@ -20,6 +20,11 @@ export const selectCampaigns = () => createSelector(
   (subState) => subState.campaigns
 );
 
+export const selectPatientUnder = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.patientUnder
+);
+
 export const selectPatientCategories = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.patientCategories
