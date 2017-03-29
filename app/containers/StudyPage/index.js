@@ -15,7 +15,7 @@ import { fetchSources } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import StudyStats from './StudyStats';
-import PatientBoard from './PatientBoard/index';
+import PatientBoard from '../../components/PatientBoard/index';
 import * as Selector from './selectors';
 import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats } from './actions';
 import {

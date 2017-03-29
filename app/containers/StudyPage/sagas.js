@@ -62,6 +62,7 @@ import {
   readStudyPatientMessagesError,
   submitScheduleSucceeded,
   submitScheduleFailed,
+  clearPatientUnder,
 } from './actions';
 
 // Bootstrap sagas
@@ -516,7 +517,7 @@ function* submitAddPatientIndication() {
 function* submitMovePatientBetweenCategories() {
   while (true) {
     // listen for the SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES action
-    const { studyId, fromCategoryId, toCategoryId, patientId } = yield take(SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES);
+    const { studyId, fromCategoryId, toCategoryId, patientId, afterPatientId } = yield take(SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -532,9 +533,12 @@ function* submitMovePatientBetweenCategories() {
           patient_id: patientId,
           patient_category_id: toCategoryId,
           scheduled_date: new Date(),
+          afterPatientId,
         }),
       });
       yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, patientId));
+      yield put(clearPatientUnder());
+      yield call(fetchPatients, studyId);
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
       yield put(toastrActions.error('', errorMessage));

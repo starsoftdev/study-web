@@ -14,9 +14,9 @@ import _ from 'lodash';
 import { touch, change } from 'redux-form';
 import Scroll from 'react-scroll';
 
-import { SchedulePatientModalType } from '../../../common/constants/index';
-import PatientDetailModal from '../PatientDetail/PatientDetailModal';
-import ScheduledPatientModal from '../ScheduledPatientModal/index';
+import { SchedulePatientModalType } from '../../common/constants/index';
+import PatientDetailModal from '../../containers/StudyPage/PatientDetail/PatientDetailModal';
+import ScheduledPatientModal from '../../containers/StudyPage/ScheduledPatientModal/index';
 import {
   fetchPatientDetails,
   showScheduledModal,
@@ -29,11 +29,11 @@ import {
   readStudyPatientMessages,
   changeScheduledDate,
   submitSchedule,
-} from '../actions';
-import { selectCurrentUser } from '../../App/selectors';
-import { markAsReadPatientMessages } from '../../App/actions';
-import { fields } from '../ScheduledPatientModal/validator';
-import * as Selector from '../selectors';
+} from '../../containers/StudyPage/actions';
+import { selectCurrentUser } from '../../containers/App/selectors';
+import { markAsReadPatientMessages } from '../../containers/App/actions';
+import { fields } from '../../containers/StudyPage/ScheduledPatientModal/validator';
+import * as Selector from '../../containers/StudyPage/selectors';
 import PatientCategory from './PatientCategory';
 
 const scroll = Scroll.animateScroll;

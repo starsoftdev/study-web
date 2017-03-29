@@ -6,7 +6,7 @@ import React from 'react';
 import classNames from 'classnames';
 import moment from 'moment-timezone';
 import { DragSource } from 'react-dnd';
-import { formatPhone } from '../../../common/helper/functions';
+import { formatPhone } from '../../common/helper/functions';
 import DragTypes from './dragSourceTypes';
 
 /**
@@ -95,7 +95,10 @@ class Patient extends React.Component {
     const { connectDragSource, category, currentPatientId, onPatientClick, patient } = this.props;
     const patientPhone = formatPhone(patient.phone);
     return connectDragSource(
-      <li className={classNames({ 'patient-selected': patient.id === currentPatientId })}>
+      <li
+        className={classNames({ 'patient-li': true, 'patient-selected': patient.id === currentPatientId })}
+        data-patient-id={patient.id}
+      >
         <a
           className="top"
           onClick={() => {
