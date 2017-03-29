@@ -80,8 +80,6 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       const date = moment().year(formValues.dobYear).month(formValues.dobMonth - 1).date(formValues.dobDay).startOf('day');
       formattedData.dob = date.toISOString();
     }
-    formattedData.site = formattedData.site.value;
-    formattedData.source = formattedData.source.value;
     if (!this.props.hasError) {
       onSubmit(formattedData);
     }

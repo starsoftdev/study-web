@@ -240,9 +240,7 @@ export function* fetchPatientWatcher() {
             {
               studyPatientCategory: [
                 'patientCategory',
-                {
-                  study: 'site',
-                },
+                'study',
               ],
             },
           ],
@@ -251,17 +249,8 @@ export function* fetchPatientWatcher() {
       const queryString = composeQueryString(queryParams);
       const requestURL = `${API_URL}/patients/${id}?${queryString}`;
       const response = yield call(request, requestURL);
-      if (response.site) {
-        response.site = {
-          value: response.site.id,
-          label: response.site.name,
-        };
-      }
       if (response.source) {
-        response.source = {
-          value: response.source.id,
-          label: response.source.type,
-        };
+        response.source = response.source.id;
       }
       yield put(patientFetched(response));
     } catch (err) {
