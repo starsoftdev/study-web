@@ -6,7 +6,7 @@ import { Parallax } from 'react-parallax';
 
 import bg1 from '../../assets/images/bg1.jpg';
 import img1 from '../../assets/images/img1.svg';
-import img4 from '../../assets/images/img4.svg';
+import img4 from '../../assets/images/img4.png';
 import img6 from '../../assets/images/img6.svg';
 import img7 from '../../assets/images/img7.svg';
 import img8 from '../../assets/images/img8.svg';
