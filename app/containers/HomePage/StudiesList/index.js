@@ -100,15 +100,15 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.showEditModal = this.showEditModal.bind(this);
   }
 
-  componentDidMount() {
-    this.props.fetchLevels();
-  }
-
   componentWillMount() {
     const { currentUser, fetchClientAdmins } = this.props;
     if (currentUser && currentUser.roleForClient.isAdmin) {
       fetchClientAdmins(currentUser.roleForClient.client_id);
     }
+  }
+
+  componentDidMount() {
+    this.props.fetchLevels();
   }
 
   componentWillReceiveProps(newProps) {
@@ -328,7 +328,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
           });
         }
       });
-    })
+    });
 
     if (this.props.clientAdmins) {
       // add admin users to the list
@@ -390,7 +390,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
           });
         }
       });
-    })
+    });
 
     if (this.props.clientAdmins) {
       // add admin users to the list
