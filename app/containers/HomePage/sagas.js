@@ -37,6 +37,7 @@ import {
   UPDATE_THANK_YOU_PAGE,
   UPDATE_PATIENT_THANK_YOU_EMAIL,
   FETCH_MESSAGING_NUMBERS,
+  UPDATE_TWILIO_NUMBERS,
 } from './AdminDashboard/constants';
 
 import {
@@ -65,6 +66,8 @@ import {
   fetchMessagingNumbersDashboard,
   changeStudyAddSuccess,
   changeStudyAddError,
+  updateTwilioNumbersSuccess,
+  updateTwilioNumbersError,
 } from './AdminDashboard/actions';
 
 import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
@@ -678,6 +681,28 @@ export function* fetchMessagingNumbersWorker() {
   }
 }
 
+export function* updateTwilioNumbersWatcher() {
+  yield* takeLatest(UPDATE_TWILIO_NUMBERS, updateTwilioNumbersWorker);
+}
+
+export function* updateTwilioNumbersWorker() {
+  try {
+    const requestURL = `${API_URL}/twilioNumbers/synchronizeTwilioNumbers`;
+
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(updateTwilioNumbersSuccess(response));
+    yield put(toastrActions.success('Twilio Numbers', `${response.length} numbers were added.`));
+  } catch (err) {
+    yield put(updateTwilioNumbersError(err));
+    const errorMessage = get(err, 'message', 'Something went wrong while updating twili numbers');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
 
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
@@ -705,6 +730,7 @@ export function* homePageSaga() {
   const updatePatientThankYouEmailWatcher1 = yield fork(updatePatientThankYouEmailWatcher);
   const changeStudyAddWatcher1 = yield fork(changeStudyAddWatcher);
   const fetchMessagingNumbersWatcher1 = yield fork(fetchMessagingNumbersWatcher);
+  const updateTwilioNumbersWatcher1 = yield fork(updateTwilioNumbersWatcher);
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
@@ -734,5 +760,6 @@ export function* homePageSaga() {
     yield cancel(updatePatientThankYouEmailWatcher1);
     yield cancel(changeStudyAddWatcher1);
     yield cancel(fetchMessagingNumbersWatcher1);
+    yield cancel(updateTwilioNumbersWatcher1);
   }
 }

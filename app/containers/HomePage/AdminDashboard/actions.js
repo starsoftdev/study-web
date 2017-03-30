@@ -47,6 +47,9 @@ import {
   FETCH_MESSAGING_NUMBERS,
   FETCH_MESSAGING_NUMBERS_SUCCESS,
   FETCH_MESSAGING_NUMBERS_ERROR,
+  UPDATE_TWILIO_NUMBERS,
+  UPDATE_TWILIO_NUMBERS_SUCCESS,
+  UPDATE_TWILIO_NUMBERS_ERROR,
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -341,6 +344,26 @@ export function fetchMessagingNumbersDashboardSuccess(payload) {
 export function fetchMessagingNumbersDashboardError(payload) {
   return {
     type: FETCH_MESSAGING_NUMBERS_ERROR,
+    payload,
+  };
+}
+
+export function updateTwilioNumbers() {
+  return {
+    type: UPDATE_TWILIO_NUMBERS,
+  };
+}
+
+export function updateTwilioNumbersSuccess(payload) {
+  return {
+    type: UPDATE_TWILIO_NUMBERS_SUCCESS,
+    payload,
+  };
+}
+
+export function updateTwilioNumbersError(payload) {
+  return {
+    type: UPDATE_TWILIO_NUMBERS_ERROR,
     payload,
   };
 }
