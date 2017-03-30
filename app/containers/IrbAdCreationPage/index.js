@@ -48,7 +48,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     irbAdCreationDetail: PropTypes.object,
     params: PropTypes.object,
     shoppingCartFormValues: PropTypes.object,
-    shoppingCartFormError: PropTypes.object,
+    shoppingCartFormError: PropTypes.bool,
     fetchProductList: PropTypes.func,
     fetchIrbAdCreation: PropTypes.func,
     touchIrbAdCreation: PropTypes.func,
@@ -73,10 +73,13 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
   }
 
   componentDidMount() {
-    const { currentUser, fetchClientSites, fetchIndications, fetchProductList } = this.props;
-    fetchClientSites(currentUser.roleForClient.client_id);
-    fetchIndications();
-    fetchProductList();
+    const { currentUser, fetchClientSites, fetchIndications, fetchProductList, userRoleType } = this.props;
+    // coming soon for sponsor
+    if (userRoleType === 'client') {
+      fetchClientSites(currentUser.roleForClient.client_id);
+      fetchIndications();
+      fetchProductList();
+    }
   }
 
   componentWillReceiveProps(newProps) {
@@ -116,65 +119,77 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     }
   }
 
-  render() {
+  renderClientIRBAdCreation() {
     const { siteLocations, indications, productList, irbAdCreationDetail, userRoleType } = this.props;
     const { uniqueId } = this.state;
 
-    if (productList[0]) {
+    if (userRoleType === 'client' && productList[0]) {
       const addOns = [{
         title: productList[0].name,
         price: productList[0].price * 100,
         quantity: 1,
         total: productList[0].price * 100,
       }];
-
       return (
         <div>
-          { userRoleType === 'client' &&
-            <StickyContainer className="container-fluid">
-              <Helmet title="Order IRB Ad Creation - StudyKIK" />
-              <section className="study-portal">
-                <h2 className="main-heading">ORDER IRB AD CREATION</h2>
-                <div className="form-study row">
-                  <div className="col-xs-6 form-holder">
-                    <IrbAdCreationForm
-                      key={uniqueId}
-                      siteLocations={siteLocations}
-                      indications={indications}
-                      initialValues={irbAdCreationDetail}
-                    />
-                  </div>
+          <StickyContainer className="container-fluid">
+            <Helmet title="Order IRB Ad Creation - StudyKIK" />
+            <section className="study-portal">
+              <h2 className="main-heading">ORDER IRB AD CREATION</h2>
+              <div className="form-study row">
+                <div className="col-xs-6 form-holder">
+                  <IrbAdCreationForm
+                    key={uniqueId}
+                    siteLocations={siteLocations}
+                    indications={indications}
+                    initialValues={irbAdCreationDetail}
+                  />
+                </div>
 
-                  <div className="fixed-block">
-                    <div className="fixed-block-holder">
-                      <div className="order-summery-container">
-                        <Sticky className="sticky-shopping-cart">
-                          <ShoppingCartForm
-                            showCards
-                            addOns={addOns}
-                            validateAndSubmit={this.onSubmitForm}
-                            manualDisableSubmit={this.state.shoppingcartLoading}
-                          />
-                        </Sticky>
-                      </div>
+                <div className="fixed-block">
+                  <div className="fixed-block-holder">
+                    <div className="order-summery-container">
+                      <Sticky className="sticky-shopping-cart">
+                        <ShoppingCartForm
+                          showCards
+                          addOns={addOns}
+                          validateAndSubmit={this.onSubmitForm}
+                          manualDisableSubmit={this.state.shoppingcartLoading}
+                        />
+                      </Sticky>
                     </div>
                   </div>
-
                 </div>
-              </section>
-            </StickyContainer>
-          }
-          {
-            userRoleType === 'sponsor' &&
-              <div>
-                <Helmet title="Order IRB Ad Creation - StudyKIK" />
-                <ComingSoon />
+
               </div>
-          }
+            </section>
+          </StickyContainer>
         </div>
       );
     }
     return <div></div>;
+  }
+
+  renderSponsorIRBAdCreation() {
+    const { userRoleType } = this.props;
+    if (userRoleType === 'sponsor') {
+      return (
+        <div>
+          <Helmet title="Order IRB Ad Creation - StudyKIK"/>
+          <ComingSoon />
+        </div>
+      );
+    }
+    return null;
+  }
+
+  render() {
+    return (
+      <div>
+        {this.renderClientIRBAdCreation()}
+        {this.renderSponsorIRBAdCreation()}
+      </div>
+    );
   }
 }
 
