@@ -150,11 +150,11 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
                       <div className="order-summery-container">
                         <Sticky className="sticky-shopping-cart">
                           <ShoppingCartForm
-                          showCards
-                          addOns={addOns}
-                          validateAndSubmit={this.onSubmitForm}
-                          manualDisableSubmit={this.state.shoppingcartLoading}
-                        />
+                            showCards
+                            addOns={addOns}
+                            validateAndSubmit={this.onSubmitForm}
+                            manualDisableSubmit={this.state.shoppingcartLoading}
+                          />
                         </Sticky>
                       </div>
                     </div>
