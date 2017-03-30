@@ -100,8 +100,7 @@ class SideNavBar extends React.Component {
               <img src={sideNavLogo} width="60" height="60" alt="logo" className="sub-logo" />
               <p>Motang <br /> <a href="tel:5626114752">562.611.4752</a> <br /> <a href="mailto:motang@studykik.com">motang@studykik.com</a></p>
             </div>
-            <a href="" className="bgn-chat">
-              <span className="text">CHAT NOW!</span>
+            <a href="" className="bgn-chat" data-text="CHAT NOW!" data-hovertext="COMMING SOON">
               <i className="icomoon-bg" />
             </a>
           </div>

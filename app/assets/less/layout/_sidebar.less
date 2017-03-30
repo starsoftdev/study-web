@@ -186,6 +186,19 @@
 		position: absolute;
 		background: #afda7d;
 	}
+
+	
+	&:before {
+		.font(18px, 26px);
+		content: attr(data-text);
+	}
+
+	&:hover {
+		&:before {
+			content: attr(data-hovertext);
+		}
+	}
+	
 }
 
 @media screen and (max-width: @psd) {
