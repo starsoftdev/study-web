@@ -95,13 +95,14 @@ export function fetchingStudy() {
   };
 }
 
-export function findPatientsForTextBlast(studyId, text, categoryIds, sourceIds) {
+export function findPatientsForTextBlast(studyId, text, categoryIds, sourceIds, campaignId) {
   return {
     type: FIND_PATIENTS_TEXT_BLAST,
     studyId,
     text,
     categoryIds,
     sourceIds,
+    campaignId,
   };
 }
 

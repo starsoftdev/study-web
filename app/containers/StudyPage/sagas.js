@@ -462,7 +462,7 @@ function* findPatientsSaga() {
     }
 
     // listen for the FIND_PATIENTS_TEXT_BLAST action
-    const { studyId, text, categoryIds, sourceIds } = yield take(FIND_PATIENTS_TEXT_BLAST);
+    const { studyId, text, categoryIds, sourceIds, campaignId } = yield take(FIND_PATIENTS_TEXT_BLAST);
     let filter = {};
     if (text) {
       filter.text = text;
@@ -473,6 +473,7 @@ function* findPatientsSaga() {
     if (sourceIds && sourceIds.length > 0) {
       filter.sourceIds = sourceIds;
     }
+    filter.campaignId = campaignId;
     filter = JSON.stringify(filter);
     try {
       const requestURL = `${API_URL}/studies/${studyId}/findPatients?filter=${filter}`;

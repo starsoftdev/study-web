@@ -127,6 +127,7 @@ class StudyActionButtons extends Component {
             <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} toggleTextBlast={this.toggleTextBlastModal} />
             <TextBlastModal
               show={this.state.showTextBlastModal}
+              campaign={this.props.campaign}
               onClose={this.closeTextBlastModal}
               onHide={this.toggleTextBlastModal}
               ePMS={this.props.ePMS}

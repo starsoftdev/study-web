@@ -57,6 +57,7 @@ class TextBlastModal extends React.Component {
     style: React.PropTypes.object,
     submitTextBlast: React.PropTypes.func.isRequired,
     ePMS: React.PropTypes.bool,
+    campaign: React.PropTypes.number,
   };
 
   constructor(props) {
@@ -93,8 +94,12 @@ class TextBlastModal extends React.Component {
   }
 
   selectCategory(checked, categoryId) {
-    const { change, findPatients, formValues, patientCategories, sources, studyId, removePatients } = this.props;
+    const { change, findPatients, formValues, patientCategories, sources, studyId, removePatients, campaign } = this.props;
     // find patients for text blast
+    let newCampaign = campaign;
+    if (campaign === -1 || !campaign) {
+      newCampaign = null;
+    }
     let sourceIds = null;
     if (!formValues.source) {
       sourceIds = [];
@@ -109,7 +114,7 @@ class TextBlastModal extends React.Component {
         change(`category-${category.id}`, checked);
       }
       if (checked || (sourceIds && sourceIds.length)) {
-        findPatients(studyId, null, null, sourceIds);
+        findPatients(studyId, null, null, sourceIds, newCampaign);
       } else {
         removePatients();
       }
@@ -127,7 +132,7 @@ class TextBlastModal extends React.Component {
       }
       if ((categoryIds && categoryIds.length) || (sourceIds && sourceIds.length)) {
         // if (sourceIds) {
-        findPatients(studyId, null, categoryIds, sourceIds);
+        findPatients(studyId, null, categoryIds, sourceIds, newCampaign);
         // } else {
         //   findPatients(studyId, null, categoryIds, []);
         // }
@@ -464,7 +469,7 @@ function mapDispatchToProps(dispatch) {
     addPatients: (patients) => dispatch(addPatientsToTextBlast(patients)),
     change: (field, value) => dispatch(change(formName, field, value)),
     displayToastrError: (error) => dispatch(toastrActions.error(error)),
-    findPatients: (studyId, text, categoryIds, sourceIds) => dispatch(findPatientsForTextBlast(studyId, text, categoryIds, sourceIds)),
+    findPatients: (studyId, text, categoryIds, sourceIds, campaignId) => dispatch(findPatientsForTextBlast(studyId, text, categoryIds, sourceIds, campaignId)),
     filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
     removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
     removePatients: () => dispatch(removePatientsFromTextBlast()),
