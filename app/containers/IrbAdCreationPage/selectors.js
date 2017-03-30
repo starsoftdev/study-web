@@ -29,9 +29,15 @@ const selectIrbAdCreationDetail = () => createSelector(
   (substate) => substate.irbAdCreation,
 );
 
+const selectFormSubmissionStatus = () => createSelector(
+  selectIrbAdCreationPageDomain(),
+  (substate) => substate.formSubmissionStatus
+);
+
 export default selectIrbAdCreationPage;
 export {
   selectIrbAdCreationPageDomain,
   selectIrbProductList,
   selectIrbAdCreationDetail,
+  selectFormSubmissionStatus,
 };
