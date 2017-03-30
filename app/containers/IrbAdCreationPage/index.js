@@ -16,7 +16,7 @@ import IrbAdCreationForm from '../../components/IrbAdCreationForm';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
 import { selectIrbAdCreationFormValues, selectIrbAdCreationFormError } from '../../components/IrbAdCreationForm/selectors';
 import { fields as irbAdCreationFields } from '../../components/IrbAdCreationForm/validator';
-import { selectIrbProductList, selectIrbAdCreationDetail } from '../../containers/IrbAdCreationPage/selectors';
+import { selectIrbProductList, selectIrbAdCreationDetail, selectFormSubmissionStatus } from '../../containers/IrbAdCreationPage/selectors';
 import { submitForm, fetchIrbProductList, fetchIrbAdCreation } from '../../containers/IrbAdCreationPage/actions';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
@@ -54,6 +54,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     touchIrbAdCreation: PropTypes.func,
     touchShoppingCart: PropTypes.func,
     userRoleType: PropTypes.string,
+    formSubmissionStatus: PropTypes.object,
   };
 
   constructor(props) {
@@ -67,6 +68,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
 
     this.state = {
       uniqueId: '1',
+      shoppingcartLoading: props.formSubmissionStatus.submitting,
     };
   }
 
@@ -75,6 +77,12 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     fetchClientSites(currentUser.roleForClient.client_id);
     fetchIndications();
     fetchProductList();
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (this.props.formSubmissionStatus.submitting !== newProps.formSubmissionStatus.submitting) {
+      this.setState({ shoppingcartLoading: newProps.formSubmissionStatus.submitting });
+    }
   }
 
   onSubmitForm() {
@@ -141,7 +149,12 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
                     <div className="fixed-block-holder">
                       <div className="order-summery-container">
                         <Sticky className="sticky-shopping-cart">
-                          <ShoppingCartForm showCards addOns={addOns} validateAndSubmit={this.onSubmitForm} />
+                          <ShoppingCartForm
+                          showCards
+                          addOns={addOns}
+                          validateAndSubmit={this.onSubmitForm}
+                          manualDisableSubmit={this.state.shoppingcartLoading}
+                        />
                         </Sticky>
                       </div>
                     </div>
@@ -176,6 +189,7 @@ const mapStateToProps = createStructuredSelector({
   shoppingCartFormValues: selectShoppingCartFormValues(),
   shoppingCartFormError: selectShoppingCartFormError(),
   userRoleType: selectUserRoleType(),
+  formSubmissionStatus: selectFormSubmissionStatus(),
 });
 
 function mapDispatchToProps(dispatch) {
