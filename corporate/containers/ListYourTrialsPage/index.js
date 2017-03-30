@@ -163,7 +163,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
             <div className="video" data-view-del="fadeInUp">
               <div>
                 <img src={videoPlaceholder} width="608" height="283" alt="video" className="video-placeholder" />
-                <iframe width="854" height="480" frameBorder="0" allowFullScreen="true" src="https://www.youtube.com/embed/bF2YU7zWmH4"></iframe>
+                <iframe width="854" height="480" frameBorder="0" allowFullScreen="true" src="https://www.youtube.com/embed/MGvFeYcVEqU"></iframe>
               </div>
             </div>
             <p>
