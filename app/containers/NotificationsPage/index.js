@@ -40,7 +40,7 @@ export const getAvatarUrl = (notification) => {
   const { event_log } = notification;
   const data = JSON.parse(event_log.eventData);
   let url = require('../../assets/images/Default-User-Img-Dr.png');
-  if (event_log.eventType === 'twilio-message' || event_log.eventType === 'new-patient') {
+  if (event_log.eventType === 'twilio-message' || event_log.eventType === 'new-patient' || event_log.eventType === 'create-patient' || event_log.eventType === 'add-patient') {
     if (data.patientGender === 'Female') {
       url = require('../../assets/images/Default-User-Img-Girl.png');
     } else {
