@@ -19,6 +19,19 @@ export class AddClientAdminsForm extends React.Component { // eslint-disable-lin
 
         <div className="field-row">
           <strong className="label required">
+            <label className="add-exposure-level">Client Name</label>
+          </strong>
+          <div className="field">
+            <Field
+              name="name"
+              component={Input}
+              type="text"
+            />
+          </div>
+        </div>
+
+        <div className="field-row">
+          <strong className="label required">
             <label className="add-exposure-level">Name</label>
           </strong>
           <div className="field">
