@@ -6,7 +6,7 @@ import { Parallax } from 'react-parallax';
 
 import bg1 from '../../assets/images/bg1.jpg';
 import img1 from '../../assets/images/img1.svg';
-import img4 from '../../assets/images/img4.svg';
+import img4 from '../../assets/images/img4.png';
 import img6 from '../../assets/images/img6.svg';
 import img7 from '../../assets/images/img7.svg';
 import img8 from '../../assets/images/img8.svg';
@@ -163,7 +163,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
             <div className="video" data-view-del="fadeInUp">
               <div>
                 <img src={videoPlaceholder} width="608" height="283" alt="video" className="video-placeholder" />
-                <iframe width="854" height="480" frameBorder="0" allowFullScreen="true" src="https://www.youtube.com/embed/bF2YU7zWmH4"></iframe>
+                <iframe width="854" height="480" frameBorder="0" allowFullScreen="true" src="https://www.youtube.com/embed/MGvFeYcVEqU"></iframe>
               </div>
             </div>
             <p>

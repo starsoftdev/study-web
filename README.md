@@ -85,12 +85,13 @@ For Jetbrains Webstorm, support is built-in, but you will need to enable it in s
 ```
 npm install
 ```
-to install the necessary dependencies. You will also need to enable it in the settings for Webstorm, as shown in the screenshot below.
-![Webstorm ESLint Settings](https://studykik.atlassian.net/wiki/download/attachments/5210114/eslint%20webstorm.png?version=1&modificationDate=1467068787645&api=v2)
+to install the necessary dependencies. You will also need to enable it in the **settings panel** in Webstorm for ESLint to be active. Jetbrains also has a good support document on using ESLint in Webstorm.
+[https://www.jetbrains.com/help/webstorm/2017.1/eslint.html](https://www.jetbrains.com/help/webstorm/2017.1/eslint.html)
 
-Jetbrains also has a good support document on using ESLint in Webstorm.
+For Visual Studio Code: 
+[https://code.visualstudio.com/docs/languages/javascript#_linters](https://code.visualstudio.com/docs/languages/javascript#_linters)
 
-[https://www.jetbrains.com/help/webstorm/11.0/using-javascript-code-quality-tools.html#ESLint](https://www.jetbrains.com/help/webstorm/11.0/using-javascript-code-quality-tools.html#ESLint)
+You will not need to create an .eslintrc.json file, as the ESLint configuration already exists in the repository.
 
 #### Imports
 Imports should be added in the following order:
@@ -107,13 +108,17 @@ Imports should be added in the following order:
 
 If there are more than 5 import statements, feel free to add a line break between at any of the break points above so that the imports are easier to digest.
 
+In addition, it is best practice if the absolute imports are before the relative imports.
+
 ## Tech Used
 
 - [Cucumber](https://cucumber.io/) for BDD testing
+- [dotenv](https://github.com/bkeepers/dotenv) for loading environment variables from a .env file
 - [ESLint](http://eslint.org/) for linting
 - [Express](http://expressjs.com/) for web server
 - [React](https://github.com/facebook/react) for all the goodness.
 - [Redux](https://github.com/gaearon/redux) for the _Atomic Flux_ architecture.
 - [React-Router](https://github.com/rackt/react-router) for routing goodness.
 - [React-Transform](https://github.com/gaearon/babel-plugin-react-transform) for development fun (and productivity).
+- [Socket.io](http://socket.io/) for real time communication features
 - [Webpack](https://github.com/webpack/webpack) for asset management and production builds.
