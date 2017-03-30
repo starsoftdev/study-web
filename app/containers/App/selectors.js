@@ -187,7 +187,7 @@ const selectUserSiteLocations = () => createSelector(
 
     let userSites = [];
     if (siteId) {
-      userSites = filter(sites, e => e.id === siteId);
+      userSites = sites.details.filter(e => e.id === siteId);
     } else {
       const clientId = get(substate, 'userData.roleForClient.client.id', null);
       if (clientId) {
