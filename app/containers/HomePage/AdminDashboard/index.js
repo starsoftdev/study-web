@@ -43,6 +43,7 @@ import {
   changeStudyStatusDashboard,
   toggleStudy,
   fetchMessagingNumbersDashboard,
+  updateTwilioNumbers,
 } from './actions';
 import { fetchLevels, fetchIndications, fetchSponsors, fetchProtocols, fetchCro, fetchUsersByRole, addEmailNotificationUser } from '../../App/actions';
 
@@ -87,6 +88,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     toggleStudy: PropTypes.func,
     fetchMessagingNumbersDashboard: PropTypes.func,
     messagingNumbers: PropTypes.object,
+    updateTwilioNumbers: PropTypes.func,
   };
 
   constructor(props) {
@@ -399,6 +401,9 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             <Button bsStyle="primary" onClick={this.openFiltersModal}>
               Filters
             </Button>
+            <Button bsStyle="primary" onClick={this.props.updateTwilioNumbers}>
+              #
+            </Button>
             <Modal dialogComponentClassName={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.addUserModalOpen} onHide={this.closeFiltersModal}>
               <Modal.Header>
                 <Modal.Title>Filters</Modal.Title>
@@ -680,6 +685,7 @@ function mapDispatchToProps(dispatch) {
     changeStudyStatusDashboard: (params, status, isChecked) => dispatch(changeStudyStatusDashboard(params, status, isChecked)),
     toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
     fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
+    updateTwilioNumbers: () => dispatch(updateTwilioNumbers()),
   };
 }
 
