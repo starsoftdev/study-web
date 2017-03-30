@@ -7,11 +7,11 @@ import { touch } from 'redux-form';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from '../../../common/constants';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../../components/ShoppingCartForm/validator';
-import { fetchLevels, saveCard } from '../../App/actions';
+import { fetchLevels, saveCard, fetchClientAdmins } from '../../App/actions';
 import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients, selectCurrentUserClientId, selectClientSites } from '../../App/selectors';
 import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../constants';
 import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice } from '../actions';
-import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions } from '../selectors';
+import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions, selectHomePageClientAdmins } from '../selectors';
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { selectRenewStudyFormValues, selectRenewStudyFormError } from '../RenewStudyForm/selectors';
 import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError } from '../UpgradeStudyForm/selectors';
@@ -48,6 +48,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     sitePatients: React.PropTypes.object,
     sortSuccess: PropTypes.func,
     studies: PropTypes.object,
+    clientAdmins: PropTypes.object,
     studyLevels: PropTypes.array,
     touchEditStudy: PropTypes.func,
     touchRenewStudy: PropTypes.func,
@@ -60,6 +61,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     saveCard: PropTypes.func,
     clearIndicationLevelPrice: PropTypes.func,
     currentUserClientId: PropTypes.number,
+    fetchClientAdmins: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -100,6 +102,13 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
   componentDidMount() {
     this.props.fetchLevels();
+  }
+
+  componentWillMount() {
+    const { currentUser, fetchClientAdmins } = this.props;
+    if (currentUser && currentUser.roleForClient.isAdmin) {
+      fetchClientAdmins(currentUser.roleForClient.client_id);
+    }
   }
 
   componentWillReceiveProps(newProps) {
@@ -304,6 +313,37 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const studyLevel = _.find(this.props.studyLevels, { id: renewStudyFormValues.exposureLevel });
     const selectedStudy = _.find(this.props.studies.details, (o) => (o.studyId === this.state.selectedStudyId));
 
+    const eSelectedSite = _.find(this.props.clientSites.details, (o) => (o.id === this.state.selectedSiteId));
+    const eSelectedStudy = _.find(eSelectedSite.studies, (o) => (o.id === this.state.selectedStudyId));
+
+    const emailNotificationArray = [];
+    _.forEach(this.props.clientSites.details, (site) => {
+      _.forEach(site.roles, (role) => {
+        const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
+        if (isChecked) {
+          emailNotificationArray.push({
+            firstName: role.user.firstName,
+            lastName: role.user.lastName,
+            userId: role.user.email,
+          });
+        }
+      });
+    })
+
+    if (this.props.clientAdmins) {
+      // add admin users to the list
+      _.forEach(this.props.clientAdmins.details, (role) => {
+        const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.userId));
+        if (isChecked) {
+          emailNotificationArray.push({
+            firstName: role.firstName,
+            lastName: role.lastName,
+            userId: role.email,
+          });
+        }
+      });
+    }
+
     renewStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...selectedStudy,
       ...renewStudyFormValues,
@@ -315,6 +355,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       locationName: this.state.locationName,
       exposureLevelName: studyLevel.label,
       client_id: this.props.currentUser.roleForClient.client_id,
+      studyNotificationEmails: emailNotificationArray,
     });
   }
 
@@ -334,6 +375,37 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     }
     const studyLevel = _.find(this.props.studyLevels, { id: upgradeStudyFormValues.level });
 
+    const eSelectedSite = _.find(this.props.clientSites.details, (o) => (o.id === this.state.selectedSiteId));
+    const eSelectedStudy = _.find(eSelectedSite.studies, (o) => (o.id === this.state.selectedStudyId));
+
+    const emailNotificationArray = [];
+    _.forEach(this.props.clientSites.details, (site) => {
+      _.forEach(site.roles, (role) => {
+        const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
+        if (isChecked) {
+          emailNotificationArray.push({
+            firstName: role.user.firstName,
+            lastName: role.user.lastName,
+            userId: role.user.email,
+          });
+        }
+      });
+    })
+
+    if (this.props.clientAdmins) {
+      // add admin users to the list
+      _.forEach(this.props.clientAdmins.details, (role) => {
+        const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.userId));
+        if (isChecked) {
+          emailNotificationArray.push({
+            firstName: role.firstName,
+            lastName: role.lastName,
+            userId: role.email,
+          });
+        }
+      });
+    }
+
     upgradeStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...selectedStudy,
       ...upgradeStudyFormValues,
@@ -348,6 +420,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       exposureLevelName: studyLevel.label,
       campaignlength: selectedStudy.campaignlength,
       name: '',
+      studyNotificationEmails: emailNotificationArray,
     });
   }
 
@@ -611,6 +684,7 @@ const mapStateToProps = createStructuredSelector({
   upgradedStudy: selectUpgradedStudy(),
   currentUserClientId: selectCurrentUserClientId(),
   clientSites: selectClientSites(),
+  clientAdmins: selectHomePageClientAdmins(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -629,6 +703,7 @@ function mapDispatchToProps(dispatch) {
     touchUpgradeStudy: () => dispatch(touch('upgradeStudy', ...upgradeStudyFields)),
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
     upgradeStudy: (studyId, cartValues, formValues) => dispatch(upgradeStudy(studyId, cartValues, formValues)),
+    fetchClientAdmins: (id) => dispatch(fetchClientAdmins(id)),
   };
 }
 
