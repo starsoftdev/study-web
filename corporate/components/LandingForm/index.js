@@ -44,7 +44,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
   render() {
     const { study, landing, handleSubmit, subscriptionError } = this.props;
 
-    const name = (study) ? study.name : '';
+    const indication = (study && study.indication) ? study.indication.name : '';
     const city = (study && study.site.city) ? study.site.city : '';
     const state = (study && study.site.state) ? study.site.state : '';
 
@@ -64,7 +64,9 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
         className="form-study text-center landing-form"
         onSubmit={handleSubmit}
       >
-        <h1 className="main-heading">{name}</h1>
+        <h1 className="main-heading">
+          {indication}
+        </h1>
         {city &&
           <h2 className="txt-orange">
             <i className="icomoon-map-marker" />
