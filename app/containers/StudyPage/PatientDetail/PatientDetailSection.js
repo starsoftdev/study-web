@@ -13,7 +13,7 @@ import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/index';
 import { submitPatientUpdate } from '../actions';
 import formValidator from './detailValidator';
-import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
+import { normalizePhone, normalizePhoneDisplay, formatPhone } from '../../../common/helper/functions';
 import { selectSyncErrors, selectValues, selectFormDidChange } from '../../../common/selectors/form.selector';
 
 const formName = 'PatientDetailModal.Detail';
@@ -50,9 +50,11 @@ class PatientDetailSection extends React.Component {
     event.preventDefault();
     const { blur, formSyncErrors, formValues, initialValues, reset, submitPatientUpdate } = this.props;
     if (!formSyncErrors.firstName && !formSyncErrors.lastName && !formSyncErrors.email && !formSyncErrors.phone) {
-      const formattedPhoneNumber = normalizePhoneDisplay(formValues.phone);
+      let formattedPhoneNumber = formatPhone(formValues.phone);
+      formattedPhoneNumber = normalizePhoneDisplay(formattedPhoneNumber);
       blur('phone', formattedPhoneNumber);
-      const phoneNumber = normalizePhone(formValues.phone);
+      let phoneNumber = formatPhone(formValues.phone);
+      phoneNumber = normalizePhone(phoneNumber);
       submitPatientUpdate(initialValues.id, {
         firstName: formValues.firstName,
         lastName: formValues.lastName,
