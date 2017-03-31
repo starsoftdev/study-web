@@ -387,6 +387,7 @@ function studyPageReducer(state = initialState, action) {
         submittingSchedule: false,
         scheduledFormInitialized: false,
         openScheduledModal: false,
+        currentPatientId: -1,
       };
     case SUBMIT_SCHEDULE_FAILED:
       return {
