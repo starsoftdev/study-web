@@ -216,7 +216,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
         });
       }
     }
-    if (patientMessagingSuite) {
+    if (patientMessagingSuite && !(selectedStudy && selectedStudy.patientMessagingSuite && selectedStudy.patientMessagingSuite === 'On')) {
       addOns.push({
         title: 'Patient Messaging Suite',
         price: MESSAGING_SUITE_PRICE,
@@ -232,7 +232,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
           quantity: 1,
           total: QUALIFICATION_SUITE_UPGRADE_PRICE,
         });
-      } else {
+      } else if (!(selectedStudy && selectedStudy.patientQualificationSuite && selectedStudy.patientQualificationSuite === 'On')) {
         addOns.push({
           title: 'Patient Qualification Suite',
           price: QUALIFICATION_SUITE_PRICE,
