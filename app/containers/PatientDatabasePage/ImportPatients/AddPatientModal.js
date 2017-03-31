@@ -106,7 +106,7 @@ class AddPatient extends React.Component {
       >
         <Modal.Header>
           <Modal.Title>
-            <strong>Import</strong>
+            <strong>Add Patient</strong>
           </Modal.Title>
           <a className="close" onClick={this.onHide}>
             <i className="icomoon-icon_close" />
