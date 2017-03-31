@@ -262,12 +262,14 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             </Overlay>
           </div>
         </div>
-        <div className="field-row remove-indication">
+        {this.props.formValues.indications && this.props.formValues.indications.length > 0 &&
+          <div className="field-row remove-indication">
           <span className="label" />
           <div className="field">
             {this.renderIndications()}
           </div>
         </div>
+        }
         <DateOfBirthPicker
           loading={loading}
           submitting={submitting}
