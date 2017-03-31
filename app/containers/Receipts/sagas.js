@@ -44,21 +44,20 @@ export function* getReceipts() {
   while (true) {
     const { limit, offset, receipts, orderBy, orderDir, payload } = yield take(GET_RECEIPT);
     try {
-      let requestURL;
-      let sortParams = '';
+      const params = {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        query: {
+          limit,
+          skip: offset,
+        },
+      };
       if (orderBy && orderDir && orderBy !== 'orderNumber') {
-        sortParams = `&orderBy=${orderBy}&orderDir=${((orderDir === 'down') ? 'DESC' : 'ASC')}`;
+        params.query.orderBy = orderBy;
+        params.query.orderDir = orderDir === 'down' ? 'DESC' : 'ASC';
       }
-      if (!payload) {
-        requestURL = `${API_URL}/invoices/getReceipts?limit=${limit}&skip=${offset}&${sortParams}`;
-      } else {
-        payload.limit = limit;
-        payload.skip = offset;
-        const options = JSON.stringify(payload);
-        requestURL = `${API_URL}/invoices/getReceipts?options=${options}&limit=${limit}&skip=${offset}&${sortParams}`;
-      }
-
-      const response = yield call(request, requestURL);
+      const requestURL = `${API_URL}/invoices/receipts`;
+      const response = yield call(request, requestURL, params);
 
       let resultArr = [];
       if (payload && offset === 0) {
@@ -92,7 +91,6 @@ export function* getReceipts() {
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
-      payload.cb(err, null);
     }
   }
 }
