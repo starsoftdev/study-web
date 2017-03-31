@@ -243,7 +243,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                   </button>
                   <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
                     <Modal.Header>
-                      <Modal.Title>New User</Modal.Title>
+                      <Modal.Title>Add User</Modal.Title>
                       <a className="lightbox-close close" onClick={this.closeAddUserModal}>
                         <i className="icomoon-icon_close" />
                       </a>
@@ -263,7 +263,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                   </button>
                   <Modal dialogComponentClass={CenteredModal} className="new-site" id="new-site" show={this.state.addSiteModalOpen} onHide={this.closeAddSiteModal}>
                     <Modal.Header>
-                      <Modal.Title>New Site</Modal.Title>
+                      <Modal.Title>Add Site Location</Modal.Title>
                       <a className="lightbox-close close" onClick={this.closeAddSiteModal}>
                         <i className="icomoon-icon_close" />
                       </a>

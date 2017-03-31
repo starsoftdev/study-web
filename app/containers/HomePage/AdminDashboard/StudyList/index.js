@@ -581,11 +581,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                       </Modal.Header>
                       <Modal.Body>
                         <DateRange
-                          theme={{
-                            DateRange: {
-                              display: 'inline-grid',
-                            },
-                          }}
                           linkedCalendars
                           ranges={defaultRanges}
                           startDate={this.state.dateRange.startDate ? this.state.dateRange.startDate : moment()}
