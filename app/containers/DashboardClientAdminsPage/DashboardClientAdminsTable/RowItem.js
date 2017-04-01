@@ -13,6 +13,9 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     return (
       <tr>
         <td>
+          {this.props.item.client_name}
+        </td>
+        <td>
           {`${this.props.item.first_name} ${this.props.item.last_name}`}
         </td>
         <td>

@@ -25,6 +25,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     city: PropTypes.string,
     state: PropTypes.string,
     zip: PropTypes.string,
+    timezone: PropTypes.string,
   };
 
   constructor(props) {
@@ -116,7 +117,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { name, piFirstName, piLastName, redirectPhone, address, city, zip, state, principalInvestigators } = this.props;
+    const { name, piFirstName, piLastName, redirectPhone, address, city, zip, state, principalInvestigators, timezone } = this.props;
     let piNode = '';
     if (principalInvestigators) {
       for (const pi of principalInvestigators) {
@@ -145,6 +146,9 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
         </td>
         <td className="address">
           <span>{addressArr[0]}<br />{city}, {state} {zip}</span>
+        </td>
+        <td className="timezone">
+          <span>{timezone}</span>
         </td>
         {this.renderSiteUsers()}
         <td className="action">
