@@ -11,9 +11,9 @@
 
 	.form-search {
 		clear: both;
-		margin: 0 -6px 30px;
+		margin: 0 0 30px;
 		position: relative;
-    z-index: 10;
+    	z-index: 10;
 		
 		.btns-area {
 			margin: 0 0 0 50px;
@@ -44,6 +44,10 @@
 		
 		.col {
 			padding: 0 6px;
+
+			&:first-child {
+				padding-right: 0;
+			}
 		}
 		
 		.search-area {
@@ -71,6 +75,9 @@
 		.custom-select {
 			width: 33.333%;
 			padding: 0 6px;
+			&:first-child {
+				padding-left: 0;
+			}
 		}
 		
 		&.alt {
@@ -111,7 +118,13 @@
 				.search-area,
 				.custom-select {
 					width: 33.3333%;
+
+					&:nth-child(3) {
+						padding-right: 0;
+					}
+					
 				}
+				
 			}
 		}
 		
@@ -123,6 +136,8 @@
 				margin: 0;
 				width: 33.333%;
 				padding: 0 6px 30px;
+
+				
 			}
 			
 		}
