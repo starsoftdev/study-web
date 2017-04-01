@@ -202,7 +202,7 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
           </div>
           <PatientActionButtons searchPatients={this.searchPatients} paginationOptions={this.props.paginationOptions} />
         </div>
-        <form className="form-search" onSubmit={handleSubmit}>
+        <form className="form-search patient-db-search" onSubmit={handleSubmit}>
           <div className="fields-holder clearfix form-search">
             <div className="select-holder pull-left">
               <span className="title">
