@@ -151,8 +151,10 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
 
   updateSite(siteData) {
     const { currentUserClientId, selectedSite } = this.props;
+    const params = siteData;
+    params.timezone = (siteData.selectedRegion === siteData.selectedTimezone) ? siteData.selectedRegion : `${siteData.selectedRegion}/${siteData.selectedTimezone}`;
 
-    this.props.saveSite(currentUserClientId, selectedSite.details.id, siteData);
+    this.props.saveSite(currentUserClientId, selectedSite.details.id, params);
   }
 
   updateUser(userData) {
@@ -207,6 +209,14 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
           selectedSiteDetailsForForm.piLastName = pi.lastName;
         }
       }
+      let selectedRegion = selectedSiteDetailsForForm.timezone.substr(0, selectedSiteDetailsForForm.timezone.indexOf('/'));
+      const selectedTimezone = selectedSiteDetailsForForm.timezone.substr(selectedSiteDetailsForForm.timezone.indexOf('/') + 1);
+
+      if (!selectedRegion) {
+        selectedRegion = selectedTimezone;
+      }
+      selectedSiteDetailsForForm.selectedRegion = selectedRegion;
+      selectedSiteDetailsForForm.selectedTimezone = selectedTimezone;
     }
 
     return (
@@ -232,6 +242,10 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                     </th>
                     <th className={this.getColumnSortClassName('address')} onClick={() => { this.clickSortHandler('address'); }}>
                       <span>SITE ADDRESS</span>
+                      <i className="caret-arrow" />
+                    </th>
+                    <th className={this.getColumnSortClassName('timezone')} onClick={() => { this.clickSortHandler('timezone'); }}>
+                      <span>TIMEZONE</span>
                       <i className="caret-arrow" />
                     </th>
                     <th></th>
