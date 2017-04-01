@@ -165,8 +165,10 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
 
   addSite(siteData) {
     const { currentUserClientId } = this.props;
+    const params = siteData;
+    params.timezone = (siteData.selectedRegion === siteData.selectedTimezone) ? siteData.selectedRegion : `${siteData.selectedRegion}/${siteData.selectedTimezone}`;
 
-    this.props.saveSite(currentUserClientId, null, siteData);
+    this.props.saveSite(currentUserClientId, null, params);
   }
 
   addUser(userData) {

@@ -9,6 +9,8 @@ const schema = {
   city: { presence: true },
   state: { presence: true },
   zip: { presence: true },
+  selectedRegion: { presence: true },
+  selectedTimezone: { presence: true },
 };
 
 export default validatorFactory(schema);

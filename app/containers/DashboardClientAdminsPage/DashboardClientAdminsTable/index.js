@@ -163,6 +163,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
 
           <thead>
             <tr>
+              <th>Company<i className="caret-arrow" /></th>
               <th>Name<i className="caret-arrow" /></th>
               <th>Email<i className="caret-arrow" /></th>
               <th>Phone<i className="caret-arrow" /></th>
