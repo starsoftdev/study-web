@@ -151,10 +151,10 @@ class PatientCategory extends React.Component {
         if (patient.lastTextMessage) {
           return moment.max(tempMax, moment(patient.lastTextMessage.dateCreated));
         }
-      
+
         return tempMax;
       };
-      
+
       const sorted = _.orderBy(category.patients, (patient) => getLastUpdate(patient), 'desc');
 
       // const sorted = _.orderBy(category.patients, ['orderNumber'], ['asc']);
