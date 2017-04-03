@@ -32,7 +32,7 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
       <tr>
         <td>
           <div className="info clearfix">
-            <div className="img-holder">
+            <div className="img-holder bg-gray">
               <img src={defaultImage} alt="" />
             </div>
             { points > 0 ?
