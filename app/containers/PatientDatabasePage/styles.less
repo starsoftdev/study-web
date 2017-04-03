@@ -19,6 +19,15 @@
     position: absolute;
     //.transform(translate(0,-50%));
   }
+  .patient-container {
+    .name {
+      word-wrap: break-word;
+    }
+    .email, .phone {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
 }
 
 #patient-database-alert {
