@@ -101,14 +101,16 @@ export function* getPdf() {
     try {
       const requestURL = `${API_URL}/invoices/getInvoicePDF`;
       const authToken = getItem('auth_token');
-      const params = {
-        access_token: authToken,
-      };
       const invoices = [];
       for (const value of payload) {
         invoices.push(value.invoice_pdf_id);
       }
-      params.invoices = invoices;
+      const params = {
+        access_token: authToken,
+      };
+      if (invoices.length > 0) {
+        params.invoices = JSON.stringify(invoices);
+      }
       location.replace(`${requestURL}?${serializeParams(params)}`);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');

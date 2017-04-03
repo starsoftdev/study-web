@@ -203,33 +203,33 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
   mapReceipts(raw, result) {
     let invoiceId = null;
-    _.map(raw, (source, key) => {
-      const dateWrapper = moment(source.created).tz(this.props.currentUser.timezone).format('MM/DD/YY');
-      const siteName = source.site_name || '-';
+    _.map(raw, (receipt, key) => {
+      const dateWrapper = moment(receipt.created).tz(this.props.currentUser.timezone).format('MM/DD/YY');
+      const siteName = receipt.site_name || '-';
 
-      let invoiceIdLink = source.invoice_id;
-      if (source.invoice_pdf_id) {
-        invoiceIdLink = <a className="show-pdf-link" onClick={() => this.props.showInvoicePdf(source.invoice_id)}>{source.invoice_id}</a>;
+      let invoiceIdLink = receipt.invoice_id;
+      if (receipt.invoice_pdf_id) {
+        invoiceIdLink = <a className="show-pdf-link" onClick={() => this.props.showInvoicePdf(receipt.invoice_id)}>{receipt.invoice_id}</a>;
       }
 
-      if (key === 0 || invoiceId !== source.invoice_id) {
-        invoiceId = source.invoice_id;
+      if (key === 0 || invoiceId !== receipt.invoice_id) {
+        invoiceId = receipt.invoice_id;
         result.push(
           <tr key={key}>
             <td>
-              <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
+              <span className={(receipt.selected) ? 'sm-container checked' : 'sm-container'}>
                 <span className="input-style" onClick={this.onClickCurrent}>
                   <input type="checkbox" name={key} />
                 </span>
               </span>
-              <span>{source.orderNumber}</span>
+              <span>{receipt.orderNumber}</span>
             </td>
             <td>{dateWrapper}</td>
             <td>{siteName}</td>
             <td>{invoiceIdLink}</td>
-            <td>{source.protocol_number || '-'}</td>
-            <td>{source.payment_type}</td>
-            <td><Money value={source.total / 100} className="price" /></td>
+            <td>{receipt.protocol_number || '-'}</td>
+            <td>{receipt.payment_type}</td>
+            <td><Money value={receipt.total / 100} className="price" /></td>
           </tr>
         );
       }
