@@ -5,7 +5,6 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
-import { find } from 'lodash';
 
 import LandingForm from '../../components/LandingForm';
 import LandingArticle from '../../components/LandingArticle';
@@ -18,9 +17,8 @@ import {
   selectLandingError,
   selectSubscribedFromLanding,
   selectSubscriptionError,
-  selectProtocols,
 } from '../../../app/containers/App/selectors';
-import { fetchLanding, subscribeFromLanding, clearLanding, fetchProtocols } from '../../../app/containers/App/actions';
+import { fetchLanding, subscribeFromLanding, clearLanding } from '../../../app/containers/App/actions';
 
 import './styles.less';
 
@@ -31,7 +29,6 @@ export class LandingPage extends React.Component {
     param: PropTypes.any,
     siteLocation: PropTypes.any,
     fetchLanding:  PropTypes.func.isRequired,
-    fetchProtocols: PropTypes.func.isRequired,
     subscribeFromLanding:  PropTypes.func.isRequired,
     subscribedFromLanding:  PropTypes.object,
     subscriptionError:  PropTypes.object,
@@ -41,7 +38,6 @@ export class LandingPage extends React.Component {
     currentUser: PropTypes.any,
     location: PropTypes.any,
     landing: PropTypes.object,
-    protocols: PropTypes.object,
   };
 
   constructor(props) {
@@ -63,7 +59,6 @@ export class LandingPage extends React.Component {
       this.props.clearLanding();
       browserHistory.push('/');
     }
-    this.props.fetchProtocols();
   }
 
   componentWillReceiveProps(newProps) {
@@ -96,16 +91,13 @@ export class LandingPage extends React.Component {
   onSubmitForm(params) {
     const landing = this.props.landing;
     const separateNames = params.name.split(' ');
-    const protocol = find(this.props.protocols.details, { id: landing.protocol_id }) || {};
 
     const data = {
       firstName: separateNames[0],
       lastName: separateNames[1] || null,
       email: params.email,
       phone: normalizePhone(params.phone),
-      study_id: landing.id,
-      indicationName: landing.indication.name,
-      protocolNumber: protocol.number,
+      landing_page_id: landing.id,
     };
 
     this.props.subscribeFromLanding(data);
@@ -166,7 +158,6 @@ const mapStateToProps = createStructuredSelector({
   landingError: selectLandingError(),
   subscriptionError: selectSubscriptionError(),
   landing: selectLanding(),
-  protocols: selectProtocols(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -174,7 +165,6 @@ function mapDispatchToProps(dispatch) {
     fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
     subscribeFromLanding: (params) => dispatch(subscribeFromLanding(params)),
     clearLanding: () => dispatch(clearLanding()),
-    fetchProtocols: () => dispatch(fetchProtocols()),
   };
 }
 
