@@ -75,8 +75,7 @@ class AddPatientModal extends React.Component {
 
     const patient = Object.assign({}, newPatient);
     /* normalizing the phone number */
-    patient.phone = formatPhone(newPatient.phone);
-    patient.phone = normalizePhone(patient.phone);
+    patient.phone = normalizePhone(newPatient.phone);
     patient.source_id = newPatient.source;
     delete patient.source;
     submitAddPatient(studyId, patient, this.onClose);
