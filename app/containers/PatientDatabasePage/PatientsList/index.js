@@ -164,9 +164,8 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     }
   }
 
-  render() {
-    const { patients, selectedPatientDetailsForForm } = this.props;
-    const chat = this.props.chat.active ? this.props.chat.details : null;
+  renderPatientsTable() {
+    const { patients } = this.props;
     const patientsListContents = patients.details.map((item, index) => {
       const patient = item;
       patient.phone = normalizePhoneDisplay(patient.phone);
@@ -174,6 +173,28 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
         <PatientItem {...patient} key={index} index={index} openChat={this.openChat} />
       );
     });
+    if (patients.details.length > 0) {
+      return (
+        <div className="table">
+          <InfiniteScroll
+            className="tbody"
+            pageStart={0}
+            loadMore={this.loadItems}
+            initialLoad={false}
+            hasMore={this.props.paginationOptions.hasMoreItems}
+            loader={<span>Loading...</span>}
+          >
+            {patientsListContents}
+          </InfiniteScroll>
+        </div>
+      );
+    }
+    return null;
+  }
+
+  render() {
+    const { patients, selectedPatientDetailsForForm } = this.props;
+    const chat = this.props.chat.active ? this.props.chat.details : null;
     const editPatientModalShown = this.editPatientModalShouldBeShown();
     const chatModalShown = this.chatModalShouldBeShown();
     if (selectedPatientDetailsForForm) {
@@ -220,28 +241,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
               </div>
             </div>
           </Sticky>
-
-          {(() => {
-            if (patients.details.length > 0) {
-              return (
-                <div className="table">
-                  <InfiniteScroll
-                    className="tbody"
-                    pageStart={0}
-                    loadMore={this.loadItems}
-                    initialLoad={false}
-                    hasMore={this.props.paginationOptions.hasMoreItems}
-                    loader={<tr><td>Loading...</td></tr>}
-                  >
-                    {patientsListContents}
-                  </InfiniteScroll>
-                </div>
-              );
-            }
-            return false;
-          })()}
-
-
+          {this.renderPatientsTable()}
         </StickyContainer>
 
         <div className="patients">
@@ -281,7 +281,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
                   <ChatForm chat={chat} sendStudyPatientMessages={sendStudyPatientMessages} />
                 </Modal.Body>
               </Modal>
-            : ''
+            : null
           }
         </div>
       </div>

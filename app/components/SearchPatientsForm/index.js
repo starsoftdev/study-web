@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import _, { map } from 'lodash';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
@@ -133,16 +133,15 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     finalIncludeIndication = _.concat(finalIncludeIndication, includeIndicationArr);
     finalExcludeIndication = _.concat(finalExcludeIndication, excludeIndicationArr);
 
-    const siteOptions = map(sites, siteIterator => ({
+    const siteOptions = [{ label: 'All', value: 'All' }].concat(sites.map(siteIterator => ({
       label: siteIterator.name,
       value: siteIterator.id,
-    }));
-    siteOptions.push({ label: 'All', value: 'All' });
-    const sourceOptions = [{ label: 'All', value: 'All' }].concat(map(sources, sourceIterator => ({
+    })));
+    const sourceOptions = [{ label: 'All', value: 'All' }].concat(sources.map(sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
     })));
-    const statusOptions = [{ label: 'All', value: 'All' }].concat(map(patientCategories.details, patientCategoryIterator => ({
+    const statusOptions = [{ label: 'All', value: 'All' }].concat(patientCategories.details.map(patientCategoryIterator => ({
       label: patientCategoryIterator.name,
       value: patientCategoryIterator.id,
     })));
