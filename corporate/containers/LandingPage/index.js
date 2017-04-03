@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import moment from 'moment-timezone';
 import Helmet from 'react-helmet';
 import { find } from 'lodash';
 
@@ -95,17 +94,8 @@ export class LandingPage extends React.Component {
   }
 
   onSubmitForm(params) {
-    const now = moment();
     const landing = this.props.landing;
     const separateNames = params.name.split(' ');
-    let studySourceId;
-
-    for (const studySource of landing.studySources) {
-      if (studySource.landingPage) {
-        studySourceId = studySource.id;
-      }
-    }
-
     const protocol = find(this.props.protocols.details, { id: landing.protocol_id }) || {};
 
     const data = {
@@ -113,11 +103,7 @@ export class LandingPage extends React.Component {
       lastName: separateNames[1] || null,
       email: params.email,
       phone: normalizePhone(params.phone),
-      createdAt: now,
-      updatedAt: now,
-      unsubscribed: false,
       study_id: landing.id,
-      study_source_id: studySourceId,
       indicationName: landing.indication.name,
       protocolNumber: protocol.number,
     };
