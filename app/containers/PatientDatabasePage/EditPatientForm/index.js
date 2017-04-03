@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
-import _, { map } from 'lodash';
+import _ from 'lodash';
 import moment from 'moment-timezone';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
@@ -130,16 +130,16 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
 
   render() {
     const { formValues, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, sources, patientCategories, loading, submitting, savedPatient, studies, protocols } = this.props;
-    const indicationOptions = map(indications, indicationIterator => ({
+    const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
     }));
 
-    const sourceOptions = map(sources, sourceIterator => ({
+    const sourceOptions = sources.map(sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
     }));
-    const statusOptions = map(patientCategories.details, patientCategoryIterator => ({
+    const statusOptions = patientCategories.details.map(patientCategoryIterator => ({
       label: patientCategoryIterator.name,
       value: patientCategoryIterator.id,
     }));
@@ -156,7 +156,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       id: initialValues ? initialValues.id : null,
       indications: formValues.indications,
     };
-    const protocolOptions = map(studies, studyIterator => {
+    const protocolOptions = studies.map(studyIterator => {
       const protocol = _.find(protocols.details, { id: studyIterator.protocol_id });
       return {
         label: protocol.number,
@@ -328,7 +328,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="field"
             placeholder="Select Protocol"
             options={protocolOptions}
-            disabled={initialValues && initialValues.source && initialValues.source.label === 'StudyKIK'}
+            disabled={initialValues && initialValues.source && initialValues.source === 1}
           />
         </div>
         <div className="field-row form-group">
@@ -341,7 +341,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="field"
             placeholder="Select Source"
             options={sourceOptions}
-            disabled={(initialValues && initialValues.source && initialValues.source.label === 'StudyKIK') || !formValues.protocol || formValues.protocol === ''}
+            disabled={(initialValues && initialValues.source && initialValues.source === 1) || !formValues.protocol || formValues.protocol === ''}
           />
         </div>
         <div className="field-row">

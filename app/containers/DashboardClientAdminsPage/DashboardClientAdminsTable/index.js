@@ -71,9 +71,13 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
 
 
   editAdminClick(item) {
+    const filteredClientSites = this.props.clientSites.details.filter((element) => (
+      element.client_id === item.client_id
+    ));
     this.setState({ editClientAdminInitValues: {
       initialValues: {
         ...item,
+        clientSites: filteredClientSites,
       },
     } });
     this.openAddSponsorModal();
