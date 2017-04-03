@@ -4,17 +4,17 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, formValueSelector, reduxForm, reset } from 'redux-form';
+import { Field, formValueSelector, reduxForm, reset, touch } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import classNames from 'classnames';
-
+import { selectSyncErrorBool } from '../../../common/selectors/form.selector';
 import { submitPatientNote, submitDeleteNote } from '../actions';
 import Input from '../../../components/Input/index';
 import PatientNote from './PatientNote';
 
 const formName = 'PatientDetailModal.Notes';
-
-@reduxForm({ form: formName })
+import formValidator, { fields } from './validator';
+@reduxForm({ form: formName, validator:formValidator })
 class NotesSection extends React.Component {
   static propTypes = {
     active: React.PropTypes.bool.isRequired,
@@ -35,8 +35,11 @@ class NotesSection extends React.Component {
 
   onClick() {
     const { currentPatient, currentUser, note, resetForm, studyId, submitPatientNote } = this.props;
-    submitPatientNote(studyId, currentPatient.id, currentUser, note);
-    resetForm();
+
+    if (note) {
+      submitPatientNote(studyId, currentPatient.id, currentUser, note);
+      resetForm();
+    }
   }
 
   renderNotes() {
@@ -70,6 +73,7 @@ const selector = formValueSelector(formName);
 const mapStateToProps = state => (
   {
     note: selector(state, 'note'),
+    formError: selectSyncErrorBool(formName),
   }
 );
 
@@ -78,6 +82,7 @@ function mapDispatchToProps(dispatch) {
     submitPatientNote: (studyId, patientId, currentUser, note) => dispatch(submitPatientNote(studyId, patientId, currentUser, note)),
     submitDeleteNote: (patientId, noteId) => dispatch(submitDeleteNote(patientId, noteId)),
     resetForm: () => dispatch(reset(formName)),
+    touchFields: () => dispatch(touch(formName, ...fields)),
   };
 }
 
