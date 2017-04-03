@@ -10,7 +10,7 @@ import { DropTarget } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
 import _ from 'lodash';
 import classNames from 'classnames';
-// import moment from 'moment';
+import moment from 'moment';
 
 import { selectCurrentUser, selectSitePatients } from '../../containers/App/selectors';
 import * as Selector from '../../containers/StudyPage/selectors';
@@ -146,19 +146,18 @@ class PatientCategory extends React.Component {
     const { category, currentPatientId, currentUser, onPatientClick, onPatientTextClick, studyId, sitePatients } = this.props;
 
     if (category.patients.length > 0) {
-      // const getLastUpdate = (patient) => {
-      //   const tempMax = moment.max(moment(patient.createdAt), moment(patient.updatedAt));
-      //   if (patient.lastTextMessage) {
-      //     return moment.max(tempMax, moment(patient.lastTextMessage.dateUpdated));
-      //   }
-      //
-      //   return tempMax;
-      // };
-      //
-      // const sortPatients = (patients) =>
-      //   _.orderBy(patients, (patient) => getLastUpdate(patient), 'desc');
+      const getLastUpdate = (patient) => {
+        const tempMax = moment.max(moment(patient.createdAt), moment(patient.updatedAt));
+        if (patient.lastTextMessage) {
+          return moment.max(tempMax, moment(patient.lastTextMessage.dateCreated));
+        }
+      
+        return tempMax;
+      };
+      
+      const sorted = _.orderBy(category.patients, (patient) => getLastUpdate(patient), 'desc');
 
-      const sorted = _.orderBy(category.patients, ['orderNumber'], ['asc']);
+      // const sorted = _.orderBy(category.patients, ['orderNumber'], ['asc']);
 
       return (
         <div className="slide">
