@@ -139,6 +139,10 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
       this.closeAddSiteModal();
       change('siteLocation', null);
     }
+
+    if (typeof newProps.formValues.startDate === 'undefined') {
+      change('startDate', moment());
+    }
   }
 
   closeAddSiteModal() {
