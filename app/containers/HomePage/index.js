@@ -90,6 +90,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     if (userRoleType === 'client') {
       purchasable = currentUser.roleForClient.canPurchase;
     }
+    const listButtonClass = purchasable ? null : 'disabled-div';
     return (
       <div className="home-page">
         <Helmet title="Home - StudyKIK" />
@@ -101,7 +102,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
             </div>
             <div className="search-studies-panel clearfix form-group">
               <SearchStudiesForm onSubmit={this.searchStudies} currentUser={currentUser} />
-              <div className="disabled-div">
+              <div className={listButtonClass}>
                 <Link to="/app/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Study</Link>
               </div>
             </div>
