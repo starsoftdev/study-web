@@ -1,4 +1,4 @@
-import { omit, map, get } from 'lodash';
+import { omit, get } from 'lodash';
 import { createSelector } from 'reselect';
 import { selectStudiesFromSites } from '../App/selectors';
 
@@ -50,13 +50,13 @@ export const selectSelectedPatientDetailsForForm = () => createSelector(
     let selectedPatientDetailsForForm = omit(selectedPatientDetails, ['created', 'patientIndications', 'lastAction', 'study_patient_category_id', 'studyPatientCategory']);
     selectedPatientDetailsForForm = {
       ...selectedPatientDetailsForForm,
-      indications: map(selectedPatientDetails.patientIndications, piIterator => ({
+      indications: selectedPatientDetails.patientIndications ? selectedPatientDetails.patientIndications.map(piIterator => ({
         label: piIterator.indication.name,
         value: piIterator.indication.id,
         id: piIterator.indication.id,
         name: piIterator.indication.name,
         isOriginal: piIterator.isOriginal,
-      })),
+      })) : [],
       status: selectedPatientDetails.studyPatientCategory ? parseInt(selectedPatientDetails.studyPatientCategory.patient_category_id, 10) : false,
       protocol: protocolId,
     };
