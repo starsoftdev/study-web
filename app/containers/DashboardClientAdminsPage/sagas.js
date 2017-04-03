@@ -150,6 +150,8 @@ export function* fetchSitesWorker(action) {
         },
       }, {
         relation: 'phone',
+      }, {
+        relation: 'rewards',
       }],
     };
 
