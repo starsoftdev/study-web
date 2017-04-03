@@ -138,7 +138,7 @@ class TextSection extends React.Component {
     this.props.sendStudyPatientMessages(options, (err, data) => {
       if (!err) {
         this.props.updatePatientSuccess({
-          lastTextMessage: { body: data.body, dateSent: data.dateUpdated, dateUpdated: data.dateUpdated },
+          lastTextMessage: { body: data.body, dateCreated: data.dateCreated },
         });
         this.setState({ enteredCharactersLength: 0 }, () => {
           textarea.value = '';
