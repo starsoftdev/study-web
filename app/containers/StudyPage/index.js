@@ -89,7 +89,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         this.props.updatePatientSuccess({
           patientId: message.patient_id,
           patientCategoryId: curCategoryId,
-          lastTextMessage: { body: message.twilioTextMessage.body, dateSent: message.twilioTextMessage.dateUpdated, dateUpdated: message.twilioTextMessage.dateUpdated },
+          lastTextMessage: { body: message.twilioTextMessage.body, dateCreated: message.twilioTextMessage.dateCreated },
         });
       });
       this.setState({ socketBinded: true });
