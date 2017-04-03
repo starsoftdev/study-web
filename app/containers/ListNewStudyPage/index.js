@@ -149,7 +149,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
       exposureLevelName: studyLevel.label,
     });
-
+    
     if (this.state.uniqueId.length > 1) {
       this.setState({
         uniqueId: '1',
