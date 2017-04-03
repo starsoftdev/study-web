@@ -82,7 +82,7 @@ class Patient extends React.Component {
                 }
                 return false;
               })()}
-              <time dateTime={patient.lastTextMessage.dateUpdated}>{moment.tz(patient.lastTextMessage.dateUpdated, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+              <time dateTime={patient.lastTextMessage.dateCreated}>{moment.tz(patient.lastTextMessage.dateCreated, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
             </div>
           </div>
         </a>
