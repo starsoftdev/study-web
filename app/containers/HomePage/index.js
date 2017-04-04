@@ -88,7 +88,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     const { userRoleType, currentUser } = this.props;
     let purchasable = true;
     if (userRoleType === 'client') {
-      purchasable = currentUser.roleForClient.canPurchase;
+      purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
     }
     const listButtonClass = purchasable ? null : 'disabled-div';
     return (
