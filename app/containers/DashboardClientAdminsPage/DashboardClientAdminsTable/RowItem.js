@@ -22,9 +22,6 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           {this.props.item.email}
         </td>
         <td>
-          {this.props.item.phone}
-        </td>
-        <td>
           {this.props.item.bd_user_first_name} {this.props.item.bd_user_last_name}
         </td>
         <td>
