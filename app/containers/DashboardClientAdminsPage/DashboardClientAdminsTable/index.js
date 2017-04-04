@@ -149,7 +149,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     const nParams = {
       ...params,
       rewardValues: nValues,
-    }
+    };
     this.props.editClientAdmin(nParams);
   }
 
