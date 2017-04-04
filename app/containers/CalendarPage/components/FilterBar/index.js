@@ -215,7 +215,6 @@ class FilterBar extends Component {
           <div className="pull-left custom-select">
             <Select
               className="form-control data-search"
-              value={filter.siteLocation}
               disabled={fetchingSites || !isAdmin || bDisabled}
               options={siteLocationOptions}
               placeholder="Select Site Location"

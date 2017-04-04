@@ -301,11 +301,11 @@ export default class CalendarPage extends React.Component {
         siteId: s.id,
       }));
     } else {
-      let site_id = currentUser.site_id;
+      let siteId = currentUser.site_id;
       if (currentUser && currentUser.roleForClient) {
-        site_id = currentUser.roleForClient.site_id;
+        siteId = currentUser.roleForClient.site_id;
       }
-      const site = _.find(sites, { id: site_id });
+      const site = _.find(sites, { id: siteId });
       if (site) {     // if site is fetched
         siteLocationOptions = [{
           label: site.name,
