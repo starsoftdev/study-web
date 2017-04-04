@@ -40,6 +40,9 @@ const schema = {
   showSocialMediaButtons: {
     presence: false,
   },
+  initialMessageText: {
+    presence: false,
+  },
 };
 
 const fields = Object.keys(schema);

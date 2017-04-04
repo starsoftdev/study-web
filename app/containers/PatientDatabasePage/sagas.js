@@ -267,7 +267,8 @@ export function* savePatientWatcher() {
     try {
       let requestURL = null;
       let options = null;
-      if (data.patient_category_id) {
+      // check if we need to update the patient with study info
+      if (data.patient_category_id && data.protocol_id && data.source_id) {
         requestURL = `${API_URL}/patients/update_with_relations`;
         options = {
           method: 'POST',

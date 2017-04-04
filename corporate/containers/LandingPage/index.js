@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import moment from 'moment-timezone';
 import Helmet from 'react-helmet';
 import _, { find } from 'lodash';
 
@@ -19,9 +18,8 @@ import {
   selectLandingError,
   selectSubscribedFromLanding,
   selectSubscriptionError,
-  selectProtocols,
 } from '../../../app/containers/App/selectors';
-import { fetchLanding, subscribeFromLanding, clearLanding, fetchProtocols } from '../../../app/containers/App/actions';
+import { fetchLanding, subscribeFromLanding, clearLanding } from '../../../app/containers/App/actions';
 
 import './styles.less';
 
@@ -32,7 +30,6 @@ export class LandingPage extends React.Component {
     param: PropTypes.any,
     siteLocation: PropTypes.any,
     fetchLanding:  PropTypes.func.isRequired,
-    fetchProtocols: PropTypes.func.isRequired,
     subscribeFromLanding:  PropTypes.func.isRequired,
     subscribedFromLanding:  PropTypes.object,
     subscriptionError:  PropTypes.object,
@@ -42,7 +39,6 @@ export class LandingPage extends React.Component {
     currentUser: PropTypes.any,
     location: PropTypes.any,
     landing: PropTypes.object,
-    protocols: PropTypes.object,
   };
 
   constructor(props) {
@@ -64,7 +60,6 @@ export class LandingPage extends React.Component {
       this.props.clearLanding();
       browserHistory.push('/');
     }
-    this.props.fetchProtocols();
   }
 
   componentWillReceiveProps(newProps) {
@@ -102,31 +97,15 @@ export class LandingPage extends React.Component {
   }
 
   onSubmitForm(params) {
-    const now = moment();
     const landing = this.props.landing;
     const separateNames = params.name.split(' ');
-    let studySourceId;
-
-    for (const studySource of landing.studySources) {
-      if (studySource.landingPage) {
-        studySourceId = studySource.id;
-      }
-    }
-
-    const protocol = find(this.props.protocols.details, { id: landing.protocol_id }) || {};
 
     const data = {
       firstName: separateNames[0],
       lastName: separateNames[1] || null,
       email: params.email,
       phone: normalizePhone(params.phone),
-      createdAt: now,
-      updatedAt: now,
-      unsubscribed: false,
-      study_id: landing.id,
-      study_source_id: studySourceId,
-      indicationName: landing.indication.name,
-      protocolNumber: protocol.number,
+      landing_page_id: landing.id,
     };
 
     this.props.subscribeFromLanding(data);
@@ -195,7 +174,6 @@ function mapDispatchToProps(dispatch) {
     fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
     subscribeFromLanding: (params) => dispatch(subscribeFromLanding(params)),
     clearLanding: () => dispatch(clearLanding()),
-    fetchProtocols: () => dispatch(fetchProtocols()),
   };
 }
 

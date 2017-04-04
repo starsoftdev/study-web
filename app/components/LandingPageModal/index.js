@@ -124,6 +124,7 @@ export class LandingPageModal extends React.Component {
           this.props.dispatch(change(formName, 'shareThisStudyText', landing.shareThisStudyText));
           this.props.dispatch(change(formName, 'showSocialMediaButtons', landing.showSocialMediaButtons));
           this.props.dispatch(change(formName, 'hideClickToCall', landing.hideClickToCall));
+          this.props.dispatch(change(formName, 'initialMessageText', landing.initialMessageText));
 
           this.setState({
             initialValuesEntered: true,
@@ -463,6 +464,18 @@ export class LandingPageModal extends React.Component {
                       type="checkbox"
                       name="showSocialMediaButtons"
                       component={Checkbox}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">Initial text message</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      name="initialMessageText"
+                      component={Input}
+                      componentClass="textarea"
                     />
                   </div>
                 </div>
