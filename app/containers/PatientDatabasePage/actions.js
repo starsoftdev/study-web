@@ -39,9 +39,10 @@ import {
   FETCH_PROTOCOLS_ERROR,
 } from './constants';
 
-export function fetchPatients(searchParams = {}, patients = {}, searchFilter = {}, isExport = false) {
+export function fetchPatients(clientId, searchParams = {}, patients = {}, searchFilter = {}, isExport = false) {
   return {
     type: FETCH_PATIENTS,
+    clientId,
     searchParams,
     patients,
     searchFilter,
@@ -228,9 +229,10 @@ export function sortPatientsSuccess(patients) {
   };
 }
 
-export function importPatients(payload, onClose) {
+export function importPatients(clientId, payload, onClose) {
   return {
     type: IMPORT_PATIENTS,
+    clientId,
     payload,
     onClose,
   };
