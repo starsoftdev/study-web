@@ -185,7 +185,7 @@ export function* fetchPatientsWatcher() {
 
       const queryParams = {
         filter: JSON.stringify(filterObj),
-        clientId: clientId,
+        clientId,
       };
 
       const queryString = composeQueryString(queryParams);
