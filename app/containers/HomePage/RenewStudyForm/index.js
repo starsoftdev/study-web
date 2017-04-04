@@ -20,7 +20,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import {
   selectRenewStudyFormCampaignLengthValue,
 } from './selectors';
-import { selectStudyLevels } from '../../App/selectors';
+import { selectStudyLevels, selectCurrentUserClientId } from '../../App/selectors';
 import { saveCard } from '../../App/actions';
 import { selectSelectedIndicationLevelPrice } from '../selectors';
 import formValidator from './validator';
@@ -30,6 +30,7 @@ const formName = 'renewStudy';
 @reduxForm({ form: formName, validate: formValidator })
 class RenewStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    clientId: PropTypes.number,
     change: PropTypes.func.isRequired,
     studyLevels: PropTypes.array,
     selectedIndicationLevelPrice: PropTypes.object,
@@ -116,7 +117,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   }
 
   onSaveCard(params) {
-    this.props.saveCard(this.props.currentUserStripeCustomerId, params);
+    this.props.saveCard(this.props.clientId, this.props.currentUserStripeCustomerId, params);
   }
 
   setToBeDetermined = () => {
@@ -541,6 +542,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
 }
 
 const mapStateToProps = createStructuredSelector({
+  clientId: selectCurrentUserClientId(),
   studyLevels: selectStudyLevels(),
   selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
   campaignLength: selectRenewStudyFormCampaignLengthValue(),
@@ -548,7 +550,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   change: (name, value) => dispatch(change(formName, name, value)),
-  saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+  saveCard: (clientId, customerId, cardData) => dispatch(saveCard(clientId, customerId, cardData)),
   resetForm: () => dispatch(reset(formName)),
 });
 

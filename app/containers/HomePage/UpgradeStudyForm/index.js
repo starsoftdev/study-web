@@ -14,7 +14,7 @@ import ShoppingCartForm from '../../../components/ShoppingCartForm';
 import AddNewCardForm from '../../../components/AddNewCardForm';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { saveCard } from '../../App/actions';
-import { selectStudyLevels, selectAvailPhoneNumbers } from '../../App/selectors';
+import { selectStudyLevels, selectAvailPhoneNumbers, selectCurrentUserClientId } from '../../App/selectors';
 import { selectSelectedIndicationLevelPrice } from '../selectors';
 import { selectUpgradeStudyFormCallTrackingValue, selectUpgradeStudyFormLeadsCount } from './selectors';
 import RenderLeads from './renderLeads';
@@ -23,6 +23,7 @@ import formValidator from './validator';
 @reduxForm({ form: 'upgradeStudy', validate: formValidator })
 class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    clientId: PropTypes.number,
     dispatch: PropTypes.func.isRequired,
     studyLevels: PropTypes.array,
     selectedIndicationLevelPrice: PropTypes.object,
@@ -89,7 +90,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   onSaveCard(params) {
-    this.props.saveCard(this.props.currentUserStripeCustomerId, params);
+    this.props.saveCard(this.props.clientId, this.props.currentUserStripeCustomerId, params);
   }
 
   closeAddCardModal() {
@@ -439,6 +440,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
 }
 
 const mapStateToProps = createStructuredSelector({
+  clientId: selectCurrentUserClientId(),
   studyLevels: selectStudyLevels(),
   selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
   callTracking: selectUpgradeStudyFormCallTrackingValue(),
@@ -447,7 +449,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+  saveCard: (clientId, customerId, cardData) => dispatch(saveCard(clientId, customerId, cardData)),
   resetForm: () => dispatch(reset('upgradeStudy')),
   ValidationChange: () => dispatch(change('upgradeStudy', 'addPatientMessagingSuite', true)),
 });

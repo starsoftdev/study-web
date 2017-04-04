@@ -18,6 +18,7 @@ import Helmet from 'react-helmet';
 export class PaymentInformationPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
+    clientId: PropTypes.number,
     creditCards: PropTypes.object,
     deleteCard: PropTypes.func,
     currentUser: PropTypes.any,
@@ -44,7 +45,7 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
 
   componentDidMount() {
     if (this.props.currentUser && this.props.currentUser.roleForClient) {
-      this.props.fetchCards(this.props.currentUser.roleForClient.client.stripeCustomerId);
+      this.props.fetchCards(this.props.currentUser.roleForClient.client_id, this.props.currentUser.roleForClient.client.stripeCustomerId);
     }
   }
 
@@ -55,7 +56,7 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
   }
 
   onSaveCard(params) {
-    this.props.saveCard(this.props.currentUser.roleForClient.client.stripeCustomerId, params);
+    this.props.saveCard(this.props.currentUser.roleForClient.client_id, this.props.currentUser.roleForClient.client.stripeCustomerId, params);
   }
 
   closeAddCredtCardModal() {
@@ -113,9 +114,9 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchCards: (customerId) => dispatch(fetchCards(customerId)),
+    fetchCards: (clientId, customerId) => dispatch(fetchCards(clientId, customerId)),
     deleteCard: (clientId, customerId, cardId) => dispatch(deleteCard(clientId, customerId, cardId)),
-    saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+    saveCard: (clientId, customerId, cardData) => dispatch(saveCard(clientId, customerId, cardData)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
   };
 }
