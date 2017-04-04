@@ -18,6 +18,7 @@ class FilterBar extends Component {
     fetchingSites: PropTypes.bool,
     filter: PropTypes.object.isRequired,
     updateFilter: PropTypes.func.isRequired,
+    currentUser: PropTypes.object,
   }
 
   state = {
@@ -183,6 +184,20 @@ class FilterBar extends Component {
       filter,
     } = this.props;
     const { siteLocationOptions } = this.state;
+    const { currentUser, sites } = this.props;
+    let bDisabled = true;
+    let defaultValue = null;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
+      if (bDisabled) {
+        if (sites) {
+          const site = _.find(sites, { id: currentUser.roleForClient.site_id });
+          if (site) {
+            defaultValue = site.name;
+          }
+        }
+      }
+    }
 
     return (
       <form action="#" className="form-search clearfix alt">
@@ -201,9 +216,10 @@ class FilterBar extends Component {
             <Select
               className="form-control data-search"
               value={filter.siteLocation}
-              disabled={fetchingSites || !isAdmin}
+              disabled={fetchingSites || !isAdmin || bDisabled}
               options={siteLocationOptions}
               placeholder="Select Site Location"
+              value={defaultValue}
               onChange={(option) => this.handleFilterChange('siteLocation', option)}
             />
           </div>
