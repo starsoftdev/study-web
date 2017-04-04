@@ -10,7 +10,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
-import { selectSources } from '../../App/selectors';
+import { selectSources, selectCurrentUserClientId } from '../../App/selectors';
 import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
@@ -24,6 +24,7 @@ const formName = 'addPatient';
 @reduxForm({ form: formName, validate: formValidator })
 class AddPatientModal extends React.Component {
   static propTypes = {
+    clientId: React.PropTypes.number,
     addPatientStatus: React.PropTypes.object,
     blur: React.PropTypes.func.isRequired,
     formError: React.PropTypes.bool.isRequired,
@@ -66,7 +67,7 @@ class AddPatientModal extends React.Component {
 
   addPatient(event) {
     event.preventDefault();
-    const { formError, newPatient, studyId, submitAddPatient, touchFields } = this.props;
+    const { clientId, formError, newPatient, studyId, submitAddPatient, touchFields } = this.props;
 
     if (formError) {
       touchFields();
@@ -74,6 +75,7 @@ class AddPatientModal extends React.Component {
     }
 
     const patient = Object.assign({}, newPatient);
+    patient.client_id = clientId;
     /* normalizing the phone number */
     patient.phone = normalizePhone(newPatient.phone);
     patient.source_id = newPatient.source;
@@ -193,6 +195,7 @@ class AddPatientModal extends React.Component {
 
 
 const mapStateToProps = createStructuredSelector({
+  clientId: selectCurrentUserClientId(),
   addPatientStatus: selectAddPatientStatus(),
   formError: selectSyncErrorBool(formName),
   newPatient: selectValues(formName),

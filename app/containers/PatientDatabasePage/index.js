@@ -50,41 +50,43 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
       queryParams.excludeIndication = map(searchFilter.excludeIndication, i => i.value).join(',');
     }
 
+    const { currentUser, paginationOptions } = this.props;
     queryParams.limit = 15;
     if (isSearch) {
       queryParams.skip = 0;
     } else {
-      queryParams.skip = (this.props.paginationOptions.page) * 15;
+      queryParams.skip = (paginationOptions.page) * 15;
     }
 
     if (searchFilter.sort !== undefined && searchFilter.direction !== undefined) {
       queryParams.sort = searchFilter.sort;
       queryParams.direction = searchFilter.direction;
-    } else if (this.props.paginationOptions.activeSort && this.props.paginationOptions.activeDirection) {
-      queryParams.sort = this.props.paginationOptions.activeSort;
-      queryParams.direction = this.props.paginationOptions.activeDirection;
+    } else if (paginationOptions.activeSort && paginationOptions.activeDirection) {
+      queryParams.sort = paginationOptions.activeSort;
+      queryParams.direction = paginationOptions.activeDirection;
     }
 
-    if (queryParams.status != null || queryParams.source != null || queryParams.includeIndication || queryParams.name
+    if (queryParams.status !== null || queryParams.source !== null || queryParams.includeIndication || queryParams.name
       || queryParams.site || queryParams.excludeIndication || queryParams.gender || queryParams.ageFrom ||
       queryParams.ageTo || queryParams.bmiFrom || queryParams.bmiTo) {
-      this.props.fetchPatients(queryParams, this.props.patients.details, searchFilter, isExport);
+      this.props.fetchPatients(currentUser.roleForClient.client_id, queryParams, this.props.patients.details, searchFilter, isExport);
     } else {
       this.props.clearPatientsList();
     }
   }
 
   render() {
+    const { paginationOptions } = this.props;
     return (
       <div className="container-fluid">
         <section className="patient-database">
           <Helmet title="Patient Database - StudyKIK" />
           <h2 className="main-heading">Patient Database</h2>
-          <SearchPatientsForm onSubmit={this.searchPatients} searchPatients={this.searchPatients} paginationOptions={this.props.paginationOptions} />
+          <SearchPatientsForm onSubmit={this.searchPatients} searchPatients={this.searchPatients} paginationOptions={paginationOptions} />
 
           <PatientsList
             searchPatients={this.searchPatients}
-            paginationOptions={this.props.paginationOptions}
+            paginationOptions={paginationOptions}
           />
         </section>
       </div>
@@ -104,7 +106,7 @@ function mapDispatchToProps(dispatch) {
     fetchClientSites: (clientId) => dispatch(fetchClientSites(clientId)),
     fetchSources: () => dispatch(fetchSources()),
     fetchPatientCategories: searchParams => dispatch(fetchPatientCategories(searchParams)),
-    fetchPatients: (searchParams, patients, searchFilter, isExport) => dispatch(fetchPatients(searchParams, patients, searchFilter, isExport)),
+    fetchPatients: (clientId, searchParams, patients, searchFilter, isExport) => dispatch(fetchPatients(clientId, searchParams, patients, searchFilter, isExport)),
     fetchProtocols: () => dispatch(fetchProtocols()),
     clearPatientsList: () => dispatch(clearPatientsList()),
   };
