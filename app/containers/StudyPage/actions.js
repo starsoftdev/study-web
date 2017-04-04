@@ -486,9 +486,10 @@ export function submitPatientText(studyId, patientId, text) {
   };
 }
 
-export function submitPatientImport(studyId, file, onClose) {
+export function submitPatientImport(clientId, studyId, file, onClose) {
   return {
     type: SUBMIT_PATIENT_IMPORT,
+    clientId,
     studyId,
     file,
     onClose,
