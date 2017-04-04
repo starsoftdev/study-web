@@ -74,8 +74,8 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     const filteredClientSites = this.props.clientSites.details.filter((element) => (
       element.client_id === item.client_id
     ));
-    let initRewards = {};
-    const rewards = map(filteredClientSites, (site, index) => {
+    const initRewards = {};
+    map(filteredClientSites, (site) => {
       initRewards[`site-${site.id}`] = sumBy(site.rewards, 'points');
     });
     this.setState({ editClientAdminInitValues: {
@@ -142,12 +142,15 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
             points: parseInt(params[`site-${site.id}`]) - initRewardPoints,
             balance: parseInt(params[`site-${site.id}`]),
             user_id: params.user_id,
-          })
+          });
         }
       }
-    })
-    params.rewardValues = nValues;
-    this.props.editClientAdmin(params);
+    });
+    const nParams = {
+      ...params,
+      rewardValues: nValues,
+    }
+    this.props.editClientAdmin(nParams);
   }
 
   deleteClientAdmin(params) {
