@@ -345,10 +345,10 @@ export function* redeemWatcher() {
 
 export function* fetchCardsWatcher() {
   while (true) {
-    const { customerId } = yield take(FETCH_CARDS);
+    const { clientId, customerId } = yield take(FETCH_CARDS);
 
     try {
-      const requestURL = `${API_URL}/clients/stripeCustomers/${customerId}/retrieve_cardsList`;
+      const requestURL = `${API_URL}/clients/${clientId}/stripeCustomers/${customerId}/retrieve_cardsList`;
       const response = yield call(request, requestURL);
 
       yield put(cardsFetched(response));
@@ -360,14 +360,15 @@ export function* fetchCardsWatcher() {
 
 export function* saveCardWatcher() {
   while (true) {
-    const { customerId, cardData } = yield take(SAVE_CARD);
+    const { clientId, customerId, cardData } = yield take(SAVE_CARD);
 
     try {
-      const requestURL = `${API_URL}/clients/stripeCustomers/${customerId}/saveCard`;
+      const requestURL = `${API_URL}/clients/${clientId}/stripeCustomers/${customerId}/saveCard`;
       const options = {
         method: 'POST',
         body: JSON.stringify(cardData),
       };
+
       const response = yield call(request, requestURL, options);
 
       yield put(toastrActions.success('Add New Card', 'Card saved successfully!'));

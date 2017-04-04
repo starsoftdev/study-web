@@ -17,13 +17,14 @@ import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import AddNewCardForm from '../../components/AddNewCardForm';
 import { selectCouponId, selectTotal } from './selectors';
-import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSavedCard } from '../../containers/App/selectors';
+import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSavedCard, selectCurrentUserClientId } from '../../containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Money from '../../components/Money';
 import { fetchCoupon, clearCoupon, fetchCards, saveCard } from '../../containers/App/actions';
 
 const mapStateToProps = createStructuredSelector({
+  clientId: selectCurrentUserClientId(),
   couponId: selectCouponId(),
   total: selectTotal(),
   coupon: selectCoupon(),
@@ -36,8 +37,8 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchCoupon: (id) => dispatch(fetchCoupon(id)),
     clearCoupon: () => dispatch(clearCoupon()),
-    fetchCards: (customerId) => dispatch(fetchCards(customerId)),
-    saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+    fetchCards: (clientId, customerId) => dispatch(fetchCards(clientId, customerId)),
+    saveCard: (clientId, customerId, cardData) => dispatch(saveCard(clientId, customerId, cardData)),
   };
 }
 
@@ -46,6 +47,7 @@ function mapDispatchToProps(dispatch) {
 
 class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    clientId: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
     currentUserStripeCustomerId: PropTypes.string,
     title: PropTypes.string,
@@ -83,7 +85,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
 
   componentWillMount() {
     if (this.props.showCards) {
-      this.props.fetchCards(this.props.currentUserStripeCustomerId);
+      this.props.fetchCards(this.props.clientId, this.props.currentUserStripeCustomerId);
     }
   }
 
@@ -105,7 +107,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   onSaveCard(params) {
-    this.props.saveCard(this.props.currentUserStripeCustomerId, params);
+    this.props.saveCard(this.props.clientId, this.props.currentUserStripeCustomerId, params);
   }
 
   onFetchCoupon() {
