@@ -67,7 +67,7 @@ export default [
 
 export function* fetchPatientsWatcher() {
   while (true) {
-    const { searchParams, patients, searchFilter, isExport } = yield take(FETCH_PATIENTS);
+    const { clientId, searchParams, patients, searchFilter, isExport } = yield take(FETCH_PATIENTS);
     try {
       const filterObj = {
         include: [
@@ -185,6 +185,7 @@ export function* fetchPatientsWatcher() {
 
       const queryParams = {
         filter: JSON.stringify(filterObj),
+        clientId: clientId,
       };
 
       const queryString = composeQueryString(queryParams);
@@ -328,9 +329,10 @@ function* submitTextBlast() {
 
 function* importPatients() {
   while (true) {
-    const { payload, onClose } = yield take(IMPORT_PATIENTS);
+    const { clientId, payload, onClose } = yield take(IMPORT_PATIENTS);
     const formData = new FormData();
     formData.append('file', payload);
+    formData.append('clientId', clientId);
     try {
       const requestURL = `${API_URL}/patients/importPatients`;
       const response = yield call(request, requestURL, {
