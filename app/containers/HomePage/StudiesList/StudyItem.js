@@ -86,7 +86,10 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     const { currentUser, indication, location, sponsor, protocol, patientMessagingSuite, patientQualificationSuite, status,
       startDate, endDate, unreadMessageCount, orderNumber, studyId, url } = this.props;
     const buttonsShown = this.state.buttonsShown;
-    const purchasable = (currentUser.roleForClient && currentUser.roleForClient.canPurchase);
+    let purchasable = true;
+    if (currentUser.roleForClient) {
+      purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
+    }
     const landingHref = url ? `/${studyId}-${url.toLowerCase().replace(/ /ig, '-')}` : '';
     let messageCountContent = null;
     if (unreadMessageCount > 0) {
