@@ -18,6 +18,7 @@ import { submitPatientImport, clearForm } from '../actions';
 @reduxForm({ form: 'importPatients' })
 class ImportPatientsModal extends React.Component {
   static propTypes = {
+    clientId: React.PropTypes.number,
     clearForm: React.PropTypes.func,
     fileUploaded: React.PropTypes.string,
     show: React.PropTypes.bool.isRequired,
@@ -39,11 +40,11 @@ class ImportPatientsModal extends React.Component {
   }
 
   uploadFile(event) {
-    const { onHide, submitPatientImport, studyId, toastrActions } = this.props;
+    const { clientId, onHide, submitPatientImport, studyId, toastrActions } = this.props;
     // if the file is a csv
     if (event.target.files[0].type === 'text/csv' || event.target.files[0].type === '' || event.target.files[0].type === 'application/vnd.ms-excel' || event.target.files[0].type === 'application/excel' || event.target.files[0].type === 'text/anytext' || event.target.files[0].type === 'application/vnd.msexcel' || event.target.files[0].type === 'text/comma-separated-values') {
       const file = event.target.files[0];
-      submitPatientImport(studyId, file, onHide);
+      submitPatientImport(clientId, studyId, file, onHide);
     } else {
       // display error
       toastrActions.error('Wrong file type');
@@ -141,6 +142,7 @@ class ImportPatientsModal extends React.Component {
 }
 const mapStateToProps = (state) => (
   {
+    clientId: state.global.userData.roleForClient.client.id,
     studyId: state.studyPage.studyId,
     uploadStart: state.studyPage.uploadStarted,
     fileUploaded: state.studyPage.fileUploaded,
@@ -149,7 +151,7 @@ const mapStateToProps = (state) => (
 
 function mapDispatchToProps(dispatch) {
   return {
-    submitPatientImport: (studyId, file, onClose) => dispatch(submitPatientImport(studyId, file, onClose)),
+    submitPatientImport: (clientId, studyId, file, onClose) => dispatch(submitPatientImport(clientId, studyId, file, onClose)),
     toastrActions: bindActionCreators(toastrActions, dispatch),
     clearForm: () => dispatch(clearForm()),
   };

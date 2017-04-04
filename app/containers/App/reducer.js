@@ -275,6 +275,7 @@ export default function appReducer(state = initialState, action) {
   const cardsCollection = cloneDeep(state.baseData.cards.details);
   const clientSitesCollection = map(state.baseData.clientSites.details, cloneDeep);
   const clientRolesCollection = map(state.baseData.clientRoles.details, cloneDeep);
+  const sitesCopy = map(state.baseData.sites.details, cloneDeep);
   let sitePatientsCollection = [];
   let unreadCount = 0;
   let patientMessagesCollection = [];
@@ -1143,15 +1144,15 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SAVE_SITE_SUCCESS:
-      foundIndex = findIndex(clientSitesCollection, { id: payload.id });
+      foundIndex = findIndex(sitesCopy, { id: payload.id });
       if (!payload.roles) {
         payload.roles = [];
       }
       if (foundIndex < 0) {
-        clientSitesCollection.push(payload);
+        sitesCopy.push(payload);
       } else {
-        payload.roles = clientSitesCollection[foundIndex].roles;
-        clientSitesCollection[foundIndex] = payload;
+        payload.roles = sitesCopy[foundIndex].roles;
+        sitesCopy[foundIndex] = payload;
       }
       baseDataInnerState = {
         savedSite: {
@@ -1159,8 +1160,8 @@ export default function appReducer(state = initialState, action) {
           saving: false,
           error: null,
         },
-        clientSites: {
-          details: clientSitesCollection,
+        sites: {
+          details: sitesCopy,
           fetching: false,
           error: null,
         },

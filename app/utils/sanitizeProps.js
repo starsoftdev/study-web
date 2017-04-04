@@ -39,5 +39,6 @@ export default function sanitizeProps(prop) {
   delete newSanitizedProp.pure;
   delete newSanitizedProp.validate;
   delete newSanitizedProp.error;
+  delete newSanitizedProp.clientId;
   return newSanitizedProp;
 }
