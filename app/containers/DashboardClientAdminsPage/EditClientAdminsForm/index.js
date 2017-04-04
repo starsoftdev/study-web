@@ -30,6 +30,21 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
       label: `${sponsor.first_name} ${sponsor.last_name}`,
       value: sponsor.id,
     }));
+    const rewards = map(this.props.initialValues.clientSites, (site) => (
+        <div className="field-row" key={site.id}>
+          <strong className="label">
+            <label className="add-exposure-level">{site.name} Rewards</label>
+          </strong>
+          <div className="field">
+            <Field
+              name={`site-${site.id}`}
+              component={Input}
+              type="text"
+              value="abc"
+            />
+          </div>
+        </div>
+    ));
 
     return (
       <form action="#" className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
@@ -128,18 +143,7 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
           </div>
         </div>
 
-        <div className="field-row">
-          <strong className="label">
-            <label className="add-exposure-level">Rewards</label>
-          </strong>
-          <div className="field">
-            <Field
-              name="rewards"
-              component={Input}
-              type="text"
-            />
-          </div>
-        </div>
+        {rewards}
 
         <div className="field-row text-right no-margins">
           <a className="btn btn-gray-outline" onClick={() => { this.props.onDelete(this.props.initialValues.user_id); }} >

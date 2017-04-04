@@ -7,7 +7,7 @@ import CenteredModal from '../../../components/CenteredModal/index';
 import EditClientAdminsForm from '../EditClientAdminsForm';
 import AddMessagingNumberForm from '../AddMessagingNumberForm';
 import EditMessagingNumberForm from './EditMessagingNumber';
-import { forEach, map } from 'lodash';
+import { forEach, map, sumBy } from 'lodash';
 
 export class DashboardClientAdminsTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -74,9 +74,14 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     const filteredClientSites = this.props.clientSites.details.filter((element) => (
       element.client_id === item.client_id
     ));
+    let initRewards = {};
+    const rewards = map(filteredClientSites, (site, index) => {
+      initRewards[`site-${site.id}`] = sumBy(site.rewards, 'points');
+    });
     this.setState({ editClientAdminInitValues: {
       initialValues: {
         ...item,
+        ...initRewards,
         clientSites: filteredClientSites,
       },
     } });
@@ -125,6 +130,21 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     this.setState({ addMessagingNumberModalOpen: true });
   }
   editClientAdmin(params) {
+    const nValues = [];
+    forEach(this.props.clientSites.details, (site) => {
+      if (params[`site-${site.id}`]) {
+        const initRewardPoints = sumBy(site.rewards, 'points');
+        if (initRewardPoints !== parseInt(params[`site-${site.id}`])) {
+          nValues.push({
+            site_id: site.id,
+            points: parseInt(params[`site-${site.id}`]) - initRewardPoints,
+            balance: parseInt(params[`site-${site.id}`]),
+            user_id: params.user_id,
+          })
+        }
+      }
+    })
+    params.rewardValues = nValues;
     this.props.editClientAdmin(params);
   }
 
