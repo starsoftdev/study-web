@@ -31,19 +31,19 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
       value: sponsor.id,
     }));
     const rewards = map(this.props.initialValues.clientSites, (site) => (
-        <div className="field-row" key={site.id}>
-          <strong className="label">
-            <label className="add-exposure-level">{site.name} Rewards</label>
-          </strong>
-          <div className="field">
-            <Field
-              name={`site-${site.id}`}
-              component={Input}
-              type="text"
-              value="abc"
-            />
-          </div>
+      <div className="field-row" key={site.id}>
+        <strong className="label">
+          <label className="add-exposure-level">{site.name} Rewards</label>
+        </strong>
+        <div className="field">
+          <Field
+            name={`site-${site.id}`}
+            component={Input}
+            type="text"
+            value="abc"
+          />
         </div>
+      </div>
     ));
 
     return (
