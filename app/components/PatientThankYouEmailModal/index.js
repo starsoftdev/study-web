@@ -15,7 +15,7 @@ import { updatePatientThankYouEmail, resetPatientThankYouEmailState } from '../.
 import { selectUpdatePatientThankYouEmailProcess } from '../../containers/HomePage/AdminDashboard/selectors';
 import { fetchLanding } from '../../containers/App/actions';
 import { selectLanding } from '../../containers/App/selectors';
-
+import classNames from 'classnames';
 import formValidator, { fields } from './validator';
 import './styles.less';
 
@@ -41,6 +41,7 @@ export class PatientThankYouEmailModal extends React.Component {
     updatePatientThankYouEmailProcess: React.PropTypes.any,
     touchFields: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
+    isOnTop: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -139,7 +140,7 @@ export class PatientThankYouEmailModal extends React.Component {
 
     const { openModal, onClose } = this.props;
     return (
-      <Collapse dimension="width" in={openModal} timeout={250} className="patient-thankyou-slider">
+      <Collapse dimension="width" in={openModal} timeout={250} className={classNames('patient-thankyou-slider', (this.props.isOnTop > 0 ? 'slider-on-top' : ''))}>
         <div>
           <div className="slider-area">
             <div className="head">
