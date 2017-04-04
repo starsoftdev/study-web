@@ -3265,7 +3265,7 @@ div[data-percentage],
 	}
 
 	.color {
-			font-weight: 700;
+			/*font-weight: 700;*/
 	}
 	.red {
 			color: #dd0000;
@@ -3450,9 +3450,15 @@ div[data-percentage],
 				border-width: 0;
 			}
 
-			&.sticky {
-				top: 269px !important;
-			}
+      &.sticky{
+        &.sticky-selected {
+          top: 343px !important;
+        }
+        &.sticky-unselected {
+          top: 269px !important;
+        }
+      }
+
 			
 			table { background: #fff; }
 		}
@@ -3469,10 +3475,15 @@ div[data-percentage],
 					top:0 !important;
 					.transform(translate(0));
 				}
-				
-				&.sticky {
-					top: 269px !important;
-				}
+
+        &.sticky{
+          &.sticky-selected {
+            top: 343px !important;
+          }
+          &.sticky-unselected {
+            top: 269px !important;
+          }
+        }
 				//table { background: #c00; }
 			}
 		}

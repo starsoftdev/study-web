@@ -70,19 +70,6 @@ export class AddClientAdminsForm extends React.Component { // eslint-disable-lin
           </div>
         </div>
 
-        <div className="field-row">
-          <strong className="label">
-            <label className="add-exposure-level">Phone</label>
-          </strong>
-          <div className="field">
-            <Field
-              name="phone"
-              component={Input}
-              type="text"
-            />
-          </div>
-        </div>
-
         <div className="field-row text-right no-margins">
           <button type="submit" className="btn btn-primary">
             {this.props.saving

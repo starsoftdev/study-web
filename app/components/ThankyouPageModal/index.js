@@ -18,7 +18,7 @@ import { selectThankYouPageUpdateProcess } from '../../containers/HomePage/Admin
 import { fetchLanding } from '../../containers/App/actions';
 import { selectLanding } from '../../containers/App/selectors';
 import formValidator, { fields } from './validator';
-
+import classNames from 'classnames';
 import './styles.less';
 
 const formName = 'thankYouPageForm';
@@ -43,6 +43,7 @@ export class ThankyouPageModal extends React.Component {
     thankYouPageUpdateProcess: React.PropTypes.any,
     touchFields: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
+    isOnTop: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -142,7 +143,7 @@ export class ThankyouPageModal extends React.Component {
     const { openModal } = this.props;
 
     return (
-      <Collapse dimension="width" in={openModal} timeout={0} className="thankyou-slider">
+      <Collapse dimension="width" in={openModal} timeout={0} className={classNames('thankyou-slider', (this.props.isOnTop > 0 ? 'slider-on-top' : ''))}>
         <div>
           <div className="slider-area">
             <div className="head">

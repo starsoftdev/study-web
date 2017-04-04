@@ -105,6 +105,12 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       hoveredRowIndex: null,
       isFixedBottomScroll: false,
       fixedScrollWidth: false,
+
+      openedPages: [],
+      landingPageOnTop: false,
+      thankYouPageOnTop: false,
+      patientThankYouEmailPageOnTop: false,
+      editStudyPageOnTop: false,
     };
   }
 
@@ -317,27 +323,103 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   showLandingPageModal(visible) {
-    this.setState({
-      showLandingPageModal: visible,
-    });
+    const pages = this.state.openedPages;
+    if (visible) {
+      pages.push('landingPageOnTop');
+      this.setState({
+        showLandingPageModal: visible,
+        landingPageOnTop: visible,
+        thankYouPageOnTop: false,
+        patientThankYouEmailPageOnTop: false,
+        editStudyPageOnTop: false,
+
+        openedPages: pages,
+      });
+    } else {
+      pages.pop();
+      this.setState({
+        showLandingPageModal: visible,
+        landingPageOnTop: visible,
+        [pages[(pages.length - 1)]]: true,
+
+        openedPages: pages,
+      });
+    }
   }
 
   showThankyouPageModal(visible) {
-    this.setState({
-      showThankyouPageModal: visible,
-    });
+    const pages = this.state.openedPages;
+    if (visible) {
+      pages.push('thankYouPageOnTop');
+      this.setState({
+        showThankyouPageModal: visible,
+        landingPageOnTop: false,
+        thankYouPageOnTop: visible,
+        patientThankYouEmailPageOnTop: false,
+        editStudyPageOnTop: false,
+
+        openedPages: pages,
+      });
+    } else {
+      pages.pop();
+      this.setState({
+        showThankyouPageModal: visible,
+        thankYouPageOnTop: visible,
+        [pages[(pages.length - 1)]]: true,
+
+        openedPages: pages,
+      });
+    }
   }
 
   showPatientThankyouPageModal(visible) {
-    this.setState({
-      showPatientThankyouPageModal: visible,
-    });
+    const pages = this.state.openedPages;
+    if (visible) {
+      pages.push('patientThankYouEmailPageOnTop');
+      this.setState({
+        showPatientThankyouPageModal: visible,
+        landingPageOnTop: false,
+        thankYouPageOnTop: false,
+        patientThankYouEmailPageOnTop: visible,
+        editStudyPageOnTop: false,
+
+        openedPages: pages,
+      });
+    } else {
+      pages.pop();
+      this.setState({
+        showPatientThankyouPageModal: visible,
+        patientThankYouEmailPageOnTop: visible,
+        [pages[(pages.length - 1)]]: true,
+
+        openedPages: pages,
+      });
+    }
   }
 
   showEditInformationModal(visible) {
-    this.setState({
-      showEditInformationModal: visible,
-    });
+    const pages = this.state.openedPages;
+    if (visible) {
+      pages.push('editStudyPageOnTop');
+      this.setState({
+        showEditInformationModal: visible,
+        landingPageOnTop: false,
+        thankYouPageOnTop: false,
+        patientThankYouEmailPageOnTop: false,
+        editStudyPageOnTop: visible,
+
+        openedPages: pages,
+      });
+    } else {
+      pages.pop();
+      this.setState({
+        showEditInformationModal: visible,
+        editStudyPageOnTop: visible,
+        [pages[(pages.length - 1)]]: true,
+
+        openedPages: pages,
+      });
+    }
     // this.props.dispatch(change('dashboardEditStudyForm', 'messagingNumber', this.props.editStudyValues.text_number_id));
   }
 
@@ -454,7 +536,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
             return (
               <div className={classNames({ 'btns-active' : selectedStudyCount > 0 })}>
                 { selectedStudyCount > 0 &&
-                <div className={classNames('clearfix', 'top-head', 'top-head-fixed', 'active')}>
+                <Sticky className={classNames('clearfix', 'top-head', 'top-head-fixed', 'active')}>
                   <strong className="title"><span className="studies-counter"> { selectedStudyCount }</span> <span className="text" data-one="STUDY" data-two="STUDIES"> SELECTED</span></strong>
                   <div className="btns-area">
                     <Button
@@ -528,7 +610,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                       > History </Button>
                     }
                   </div>
-                </div>
+                </Sticky>
                 }
                 <div className="study-tables fixed-top">
                   <div className="head">
@@ -604,7 +686,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   </div>
                   <StickyContainer className="table-area">
                     <div className="table-left" data-table="">
-                      <Sticky topOffset={-200} className="table-top">
+                      <Sticky className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))}>
                         <table className="table table-study">
                           <thead>
                             <tr>
@@ -658,7 +740,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                             this.rightDivHeader = rightDivHeader;
                           }}
                         >
-                          <Sticky topOffset={-200} className="table-top">
+                          <Sticky className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))}>
                             <table className="table table-study">
                               <thead>
                                 <tr>
@@ -757,21 +839,25 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   formValues={this.props.editStudyValues}
                   addEmailNotificationClick={this.addEmailNotificationClick}
                   messagingNumbers={this.props.messagingNumbers}
+                  isOnTop={this.state.editStudyPageOnTop}
                 />
                 <LandingPageModal
                   openModal={this.state.showLandingPageModal}
                   studies={this.state.studies}
                   onClose={() => { this.showLandingPageModal(false); }}
+                  isOnTop={this.state.landingPageOnTop}
                 />
                 <ThankyouPageModal
                   openModal={this.state.showThankyouPageModal}
                   studies={this.state.studies}
                   onClose={() => { this.showThankyouPageModal(false); }}
+                  isOnTop={this.state.thankYouPageOnTop}
                 />
                 <PatientThankYouEmailModal
                   openModal={this.state.showPatientThankyouPageModal}
                   studies={this.state.studies}
                   onClose={() => { this.showPatientThankyouPageModal(false); }}
+                  isOnTop={this.state.patientThankYouEmailPageOnTop}
                 />
                 <Modal
                   dialogComponentClass={CenteredModal}

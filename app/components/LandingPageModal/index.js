@@ -29,7 +29,7 @@ import {
   selectChangeStudyAddProcess,
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import formValidator, { fields } from './validator';
-
+import classNames from 'classnames';
 import './styles.less';
 
 const formName = 'landingPageForm';
@@ -57,6 +57,7 @@ export class LandingPageModal extends React.Component {
     submitStudyAdd: React.PropTypes.func.isRequired,
     touchFields: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
+    isOnTop: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -241,7 +242,7 @@ export class LandingPageModal extends React.Component {
                     { label: 'Malaysia', value: 'Malaysia', id: 18 },
     ];*/
     return (
-      <Collapse dimension="width" in={openModal} timeout={250} className="landing-slider">
+      <Collapse dimension="width" in={openModal} timeout={250} className={classNames('landing-slider', (this.props.isOnTop > 0 ? 'slider-on-top' : ''))}>
         <div>
           <div className="slider-area">
             <div className="head">

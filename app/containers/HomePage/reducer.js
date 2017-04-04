@@ -230,6 +230,7 @@ export default function homePageReducer(state = initialState, action) {
         orderNumber: (index + 1),
         siteId: studyObject.site.id,
         campaignLastDate: studyObject.campaignLastDate,
+        url: studyObject.url,
       }));
       const nEntities = [];
       _.forEach(entitiesCollection, (item) => {

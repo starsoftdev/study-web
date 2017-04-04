@@ -704,10 +704,11 @@ function* submitTextBlast() {
 function* submitPatientImport() {
   while (true) {
     // listen for the SUBMIT_PATIENT_IMPORT action
-    const { studyId, file, onClose } = yield take(SUBMIT_PATIENT_IMPORT);
+    const { clientId, studyId, file, onClose } = yield take(SUBMIT_PATIENT_IMPORT);
     const authToken = getItem('auth_token');
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('clientId', clientId);
     if (!authToken) {
       return;
     }

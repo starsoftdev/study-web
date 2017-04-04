@@ -83,6 +83,8 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
         ...item,
         ...initRewards,
         clientSites: filteredClientSites,
+        bd: item.bd_user_id,
+        ae: item.ae_user_id,
       },
     } });
     this.openAddSponsorModal();
@@ -190,7 +192,6 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
               <th>Company<i className="caret-arrow" /></th>
               <th>Name<i className="caret-arrow" /></th>
               <th>Email<i className="caret-arrow" /></th>
-              <th>Phone<i className="caret-arrow" /></th>
               <th>BD<i className="caret-arrow" /></th>
               <th>AE<i className="caret-arrow" /></th>
               <th>&nbsp;</th>

@@ -14,7 +14,7 @@ import Form from 'react-bootstrap/lib/Form';
 
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
-import { selectSources, selectStudiesFromSites } from '../../App/selectors';
+import { selectSources, selectStudiesFromSites, selectCurrentUserClientId } from '../../App/selectors';
 import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
@@ -26,6 +26,7 @@ import formValidator, { fields } from './validator';
 const formName = 'addPatient';
 
 const mapStateToProps = createStructuredSelector({
+  clientId: selectCurrentUserClientId(),
   addPatientStatus: selectAddPatientStatus(),
   formError: selectSyncErrorBool(formName),
   newPatient: selectValues(formName),
@@ -45,6 +46,7 @@ const mapDispatchToProps = (dispatch) => ({
 @connect(mapStateToProps, mapDispatchToProps)
 export default class AddPatient extends React.Component {
   static propTypes = {
+    clientId: React.PropTypes.number,
     addPatientStatus: React.PropTypes.object,
     blur: React.PropTypes.func.isRequired,
     formError: React.PropTypes.bool.isRequired,
@@ -87,7 +89,7 @@ export default class AddPatient extends React.Component {
 
   addPatient(event) {
     event.preventDefault();
-    const { formError, newPatient, studies, submitAddPatient, touchFields } = this.props;
+    const { clientId, formError, newPatient, studies, submitAddPatient, touchFields } = this.props;
 
     if (formError) {
       touchFields();
@@ -95,6 +97,7 @@ export default class AddPatient extends React.Component {
     }
 
     const patient = Object.assign({}, newPatient);
+    patient.client_id = clientId;
     /* normalizing the phone number */
     patient.phone = normalizePhone(newPatient.phone);
     if (newPatient.protocol) {

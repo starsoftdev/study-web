@@ -68,6 +68,7 @@ import {
   changeStudyAddError,
   updateTwilioNumbersSuccess,
   updateTwilioNumbersError,
+  clearFilters,
 } from './AdminDashboard/actions';
 
 import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
@@ -735,6 +736,7 @@ export function* homePageSaga() {
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
   if (options.payload.pathname !== '/') {
+    yield put(clearFilters());
     yield cancel(watcherA);
     yield cancel(watcherB);
     yield cancel(watcherD);

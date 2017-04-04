@@ -13,6 +13,7 @@ import { selectValues } from '../../common/selectors/form.selector';
 import CenteredModal from '../../components/CenteredModal/index';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { selectImportPatientsStatus } from '../../containers/PatientDatabasePage/selectors';
+import { selectCurrentUserClientId } from '../App/selectors';
 import AlertModal from '../../components/AlertModal';
 import AddPatientModal from '../../containers/PatientDatabasePage/ImportPatients/AddPatientModal';
 import TextEmailBlastModal from '../../containers/PatientDatabasePage/TextEmailBlastModal';
@@ -21,6 +22,7 @@ import { clearForm, importPatients } from '../../containers/PatientDatabasePage/
 
 class PatientActionButtons extends React.Component {
   static propTypes = {
+    clientId: React.PropTypes.number,
     clearTextBlastMessage: React.PropTypes.func,
     clearForm: React.PropTypes.func,
     formValues: React.PropTypes.object,
@@ -132,8 +134,9 @@ class PatientActionButtons extends React.Component {
   }
 
   uploadFile(e) {
+    const { clientId } = this.props;
     if (e.target.files[0]) {
-      this.props.importPatients(e.target.files[0], this.toggleImportPatientsModal);
+      this.props.importPatients(clientId, e.target.files[0], this.toggleImportPatientsModal);
       this.fileBttn.value = '';
     }
   }
@@ -240,6 +243,7 @@ class PatientActionButtons extends React.Component {
 
 const formName = 'PatientDatabase.TextBlastModal';
 const mapStateToProps = createStructuredSelector({
+  clientId: selectCurrentUserClientId(),
   formValues: selectValues(formName),
   importPatientsStatus: selectImportPatientsStatus(),
 });
@@ -248,7 +252,7 @@ function mapDispatchToProps(dispatch) {
   return {
     clearForm: () => (dispatch(clearForm())),
     clearTextBlastMessage: () => dispatch(change(formName, 'message', '')),
-    importPatients: (payload, onClose) => dispatch(importPatients(payload, onClose)),
+    importPatients: (clientId, payload, onClose) => dispatch(importPatients(clientId, payload, onClose)),
   };
 }
 
