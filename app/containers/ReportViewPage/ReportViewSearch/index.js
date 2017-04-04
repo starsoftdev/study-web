@@ -205,11 +205,6 @@ export class ReportViewSearch extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <DateRange
-              theme={{
-                DateRange: {
-                  display: 'inline-grid',
-                },
-              }}
               linkedCalendars
               ranges={defaultRanges}
               startDate={this.state.predefined.startDate ? this.state.predefined.startDate : moment()}

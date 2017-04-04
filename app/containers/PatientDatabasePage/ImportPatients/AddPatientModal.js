@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { blur, Field, reduxForm, reset, touch } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
@@ -13,19 +14,36 @@ import Form from 'react-bootstrap/lib/Form';
 
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
-import { selectSources } from '../../App/selectors';
+import { selectSources, selectStudiesFromSites } from '../../App/selectors';
 import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import sanitizeProps from '../../../utils/sanitizeProps';
 import { submitAddPatient } from '../actions';
-import { selectAddPatientStatus } from '../selectors';
+import { selectAddPatientStatus, selectProtocols } from '../selectors';
 import formValidator, { fields } from './validator';
 
 const formName = 'addPatient';
 
+const mapStateToProps = createStructuredSelector({
+  addPatientStatus: selectAddPatientStatus(),
+  formError: selectSyncErrorBool(formName),
+  newPatient: selectValues(formName),
+  protocols: selectProtocols(),
+  sources: selectSources(),
+  studies: selectStudiesFromSites(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  blur: (field, value) => dispatch(blur(formName, field, value)),
+  resetForm: () => dispatch(reset(formName)),
+  submitAddPatient: (patient, onClose) => dispatch(submitAddPatient(patient, onClose)),
+  touchFields: () => dispatch(touch(formName, ...fields)),
+});
+
 @reduxForm({ form: formName, validate: formValidator })
-class AddPatient extends React.Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class AddPatient extends React.Component {
   static propTypes = {
     addPatientStatus: React.PropTypes.object,
     blur: React.PropTypes.func.isRequired,
@@ -38,6 +56,8 @@ class AddPatient extends React.Component {
     submitAddPatient: React.PropTypes.func.isRequired,
     resetForm: React.PropTypes.func.isRequired,
     touchFields: React.PropTypes.func.isRequired,
+    protocols: React.PropTypes.object,
+    studies: React.PropTypes.array,
   };
   constructor(props) {
     super(props);
@@ -67,7 +87,7 @@ class AddPatient extends React.Component {
 
   addPatient(event) {
     event.preventDefault();
-    const { formError, newPatient, submitAddPatient, touchFields } = this.props;
+    const { formError, newPatient, studies, submitAddPatient, touchFields } = this.props;
 
     if (formError) {
       touchFields();
@@ -77,13 +97,20 @@ class AddPatient extends React.Component {
     const patient = Object.assign({}, newPatient);
     /* normalizing the phone number */
     patient.phone = normalizePhone(newPatient.phone);
-    patient.source_id = newPatient.source;
+    if (newPatient.protocol) {
+      const study = _.find(studies, { protocol_id: newPatient.protocol });
+      patient.study_id = study.id;
+    }
+    delete patient.protocol;
+    if (newPatient.source) {
+      patient.source_id = newPatient.source;
+    }
     delete patient.source;
     submitAddPatient(patient, this.onClose);
   }
 
   render() {
-    const { addPatientStatus, sources, ...props } = this.props;
+    const { addPatientStatus, protocols, sources, studies, ...props } = this.props;
     const sourceOptions = sources.map(source => ({
       label: source.type,
       value: source.id,
@@ -95,6 +122,14 @@ class AddPatient extends React.Component {
     delete sanitizedProps.resetForm;
     delete sanitizedProps.submitAddPatient;
     delete sanitizedProps.touchFields;
+
+    const protocolOptions = studies.map(studyIterator => {
+      const protocol = _.find(protocols.details, { id: studyIterator.protocol_id });
+      return {
+        label: protocol.number,
+        value: protocol.id,
+      };
+    });
     return (
       <Modal
         {...sanitizedProps}
@@ -106,7 +141,7 @@ class AddPatient extends React.Component {
       >
         <Modal.Header>
           <Modal.Title>
-            <strong>Import</strong>
+            <strong>Add Patient</strong>
           </Modal.Title>
           <a className="close" onClick={this.onHide}>
             <i className="icomoon-icon_close" />
@@ -168,14 +203,26 @@ class AddPatient extends React.Component {
                   onBlur={this.onPhoneBlur}
                 />
               </div>
+              <div className="field-row form-group">
+                <strong className="label">
+                  <label>Protocol</label>
+                </strong>
+                <Field
+                  name="protocol"
+                  component={ReactSelect}
+                  className="field"
+                  placeholder="Select Protocol"
+                  options={protocolOptions}
+                />
+              </div>
               <div className="field-row">
-                <strong className="label required">
+                <strong className="label">
                   <label>Source</label>
                 </strong>
                 <Field
                   name="source"
                   component={ReactSelect}
-                  className="field required"
+                  className="field"
                   placeholder="Select Source"
                   options={sourceOptions}
                 />
@@ -190,22 +237,3 @@ class AddPatient extends React.Component {
     );
   }
 }
-
-
-const mapStateToProps = createStructuredSelector({
-  addPatientStatus: selectAddPatientStatus(),
-  formError: selectSyncErrorBool(formName),
-  newPatient: selectValues(formName),
-  sources: selectSources(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    blur: (field, value) => dispatch(blur(formName, field, value)),
-    resetForm: () => dispatch(reset(formName)),
-    submitAddPatient: (patient, onClose) => dispatch(submitAddPatient(patient, onClose)),
-    touchFields: () => dispatch(touch(formName, ...fields)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddPatient);

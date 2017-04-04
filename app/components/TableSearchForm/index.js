@@ -168,11 +168,6 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
           </Modal.Header>
           <Modal.Body>
             <DateRange
-              theme={{
-                DateRange: {
-                  display: 'inline-grid',
-                },
-              }}
               linkedCalendars
               ranges={defaultRanges}
               startDate={this.state.predefined.startDate ? this.state.predefined.startDate : moment()}

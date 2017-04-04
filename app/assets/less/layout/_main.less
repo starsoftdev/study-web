@@ -12,8 +12,18 @@
 }
 
 .disabled-li {
-  pointer-events: none;
+	background-color: lightgray;
+	cursor: not-allowed;
 	a {
+		pointer-events: none;
+		cursor: not-allowed !important;
+	}
+}
+
+.disabled-div {
+	pointer-events: none;
+	a {
+		opacity: 0.65;
 		cursor: not-allowed !important;
 	}
 }
@@ -388,7 +398,7 @@ input[type=text]:-ms-input-placeholder {
 		}
 
 		.counter {
-			margin: 0 0 0 5px;
+			margin: 0;
 		}
 
 	}
@@ -3187,6 +3197,7 @@ div[data-percentage],
 		margin: 0;
 		left: auto;
 		right: auto;
+		cursor: pointer;
 		
 		.transform(none);
 		position: relative;
