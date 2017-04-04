@@ -95,7 +95,8 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
   }
 
   onSaveCard(params) {
-    this.props.saveCard(this.props.currentUserStripeCustomerId, params);
+    const { currentUser } = this.props;
+    this.props.saveCard(currentUser.roleForClient.client_id, this.props.currentUserStripeCustomerId, params);
   }
 
   openAddCardModal() {
@@ -354,7 +355,7 @@ function mapDispatchToProps(dispatch) {
     touchAddCredits: () => dispatch(touch('addCredits', ...addCreditsFields)),
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
     resetForm: () => dispatch(reset('addCredits')),
-    saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+    saveCard: (clientId, customerId, cardData) => dispatch(saveCard(clientId, customerId, cardData)),
     validateChange: () => dispatch(change('addCredits', 'siteLocation', '200')),
   };
 }

@@ -389,9 +389,10 @@ export function redeemError(payload) {
 // ///////////////////////////////////////////
 // fetch cards
 // ///////////////////////////////////////////
-export function fetchCards(customerId) {
+export function fetchCards(clientId, customerId) {
   return {
     type: FETCH_CARDS,
+    clientId,
     customerId,
   };
 }
@@ -413,9 +414,10 @@ export function cardsFetchingError(payload) {
 // ///////////////////////////////////////////
 // save card
 // ///////////////////////////////////////////
-export function saveCard(customerId, cardData) {
+export function saveCard(clientId, customerId, cardData) {
   return {
     type: SAVE_CARD,
+    clientId,
     customerId,
     cardData,
   };

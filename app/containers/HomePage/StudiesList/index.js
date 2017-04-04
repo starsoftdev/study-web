@@ -25,6 +25,7 @@ import StudyItem from './StudyItem';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    clientId: PropTypes.number,
     clientSites: PropTypes.object,
     clearIndicaoionLevelPrice: PropTypes.func,
     currentUserStripeCustomerId: PropTypes.string,
@@ -159,7 +160,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   onSaveCard(params) {
-    this.props.saveCard(this.props.currentUserStripeCustomerId, params);
+    this.props.saveCard(this.props.currentUserClientId, this.props.currentUserStripeCustomerId, params);
   }
 
   openRenewModal(studyId, indicationId, campaign, siteId, iName, lName) {
@@ -695,7 +696,7 @@ function mapDispatchToProps(dispatch) {
     fetchUpgradeStudyPrice: (fromLevel, toLevel) => dispatch(fetchUpgradeStudyPrice(fromLevel, toLevel)),
     editStudy: (studyId, formValues) => dispatch(editStudy(studyId, formValues)),
     renewStudy: (studyId, cartValues, formValues) => dispatch(renewStudy(studyId, cartValues, formValues)),
-    saveCard: (customerId, cardData) => dispatch(saveCard(customerId, cardData)),
+    saveCard: (clientId, customerId, cardData) => dispatch(saveCard(clientId, customerId, cardData)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
     sortSuccess: (payload) => dispatch(sortSuccess(payload)),
     touchEditStudy: () => dispatch(touch('editStudy', ...editStudyFields)),
