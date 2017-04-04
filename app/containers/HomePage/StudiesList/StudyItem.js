@@ -28,6 +28,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     push: PropTypes.func,
     orderNumber: PropTypes.number,
     siteId: PropTypes.number,
+    url: PropTypes.string,
   };
 
   constructor(props) {
@@ -83,10 +84,10 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 
   render() {
     const { currentUser, indication, location, sponsor, protocol, patientMessagingSuite, patientQualificationSuite, status,
-      startDate, endDate, unreadMessageCount, orderNumber, studyId } = this.props;
+      startDate, endDate, unreadMessageCount, orderNumber, studyId, url } = this.props;
     const buttonsShown = this.state.buttonsShown;
     const purchasable = (currentUser.roleForClient && currentUser.roleForClient.canPurchase);
-    const landingHref = location ? `/${studyId}-${location.toLowerCase().replace(/ /ig, '-')}` : '';
+    const landingHref = url ? `/${studyId}-${url.toLowerCase().replace(/ /ig, '-')}` : '';
     let messageCountContent = null;
     if (unreadMessageCount > 0) {
       messageCountContent = (

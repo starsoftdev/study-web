@@ -19,6 +19,7 @@ import ReactSelect from '../../../../components/Input/ReactSelect';
 import RenderEmailsList from './RenderEmailsList';
 import { selectStudyCampaigns } from '../selectors';
 import FormGeosuggest from '../../../../components/Input/Geosuggest';
+import classNames from 'classnames';
 
 const mapStateToProps = createStructuredSelector({
   studyCampaigns: selectStudyCampaigns(),
@@ -57,6 +58,7 @@ export class EditInformationModal extends React.Component {
     addEmailNotificationClick: PropTypes.func,
     studyCampaigns: PropTypes.object,
     messagingNumbers: PropTypes.object,
+    isOnTop: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -292,7 +294,7 @@ export class EditInformationModal extends React.Component {
     const campaignDateFrom = moment(this.props.formValues.campaign_datefrom);
 
     return (
-      <Collapse dimension="width" in={openModal} timeout={250} className="form-edit-information">
+      <Collapse dimension="width" in={openModal} timeout={250} className={classNames('form-edit-information', (this.props.isOnTop > 0 ? 'slider-on-top' : ''))}>
         <div>
           <div className="form-area">
             <div className="head">
@@ -313,6 +315,19 @@ export class EditInformationModal extends React.Component {
                       component={Toggle}
                       className="field"
                       onChange={(e) => { change('is_public', e.toString()); }}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-first-name">STUDY URL</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="text"
+                      id="edit-information-page-name"
+                      name="landing_page_url"
+                      component={Input}
                     />
                   </div>
                 </div>

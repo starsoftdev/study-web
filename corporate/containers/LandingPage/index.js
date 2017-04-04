@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import moment from 'moment-timezone';
 import Helmet from 'react-helmet';
-import { find } from 'lodash';
+import _, { find } from 'lodash';
 
 import LandingForm from '../../components/LandingForm';
 import LandingArticle from '../../components/LandingArticle';
@@ -79,7 +79,14 @@ export class LandingPage extends React.Component {
         browserHistory.push('/');
       }
 
-      if (landing.site.location.toLowerCase().replace(/ /ig, '-') !== siteLocation) {
+      let urlPart = null;
+      _.forEach(landing.studySources, (item) => {
+        if (item.landingPage) {
+          urlPart = item.landingPage.url;
+        }
+      });
+
+      if (urlPart.toLowerCase().replace(/ /ig, '-') !== siteLocation) {
         invalidSite = true;
       }
     }
