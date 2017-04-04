@@ -5,7 +5,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
-import _, { find } from 'lodash';
+import _ from 'lodash';
 
 import LandingForm from '../../components/LandingForm';
 import LandingArticle from '../../components/LandingArticle';
@@ -166,7 +166,6 @@ const mapStateToProps = createStructuredSelector({
   landingError: selectLandingError(),
   subscriptionError: selectSubscriptionError(),
   landing: selectLanding(),
-  protocols: selectProtocols(),
 });
 
 function mapDispatchToProps(dispatch) {
