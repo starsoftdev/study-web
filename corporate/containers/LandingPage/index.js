@@ -100,7 +100,7 @@ export class LandingPage extends React.Component {
     const { landing } = this.props;
     const separateNames = params.name.split(' ');
 
-    let landingPage
+    let landingPage;
     for (const studySource of landing.studySources) {
       if (studySource.landingPage) {
         landingPage = studySource.landingPage;
