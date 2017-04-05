@@ -47,7 +47,7 @@ function mapDispatchToProps(dispatch) {
 
 class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    clientId: PropTypes.string.isRequired,
+    clientId: PropTypes.number.isRequired,
     dispatch: PropTypes.func.isRequired,
     currentUserStripeCustomerId: PropTypes.string,
     title: PropTypes.string,
