@@ -78,8 +78,8 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
         }
       }
       return null;
-    } else if (sortBy === 'redirectPhone') {
-      return item.redirectPhone;
+    } else if (sortBy === 'phoneNumber') {
+      return item.phoneNumber;
     } else if (sortBy === 'address') {
       return item.address;
     }
@@ -236,7 +236,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                       <span>PRINCIPAL INVESTIGATOR</span>
                       <i className="caret-arrow" />
                     </th>
-                    <th className={this.getColumnSortClassName('redirectPhone')} onClick={() => { this.clickSortHandler('redirectPhone'); }}>
+                    <th className={this.getColumnSortClassName('phoneNumber')} onClick={() => { this.clickSortHandler('phoneNumber'); }}>
                       <span>SITE PHONE</span>
                       <i className="caret-arrow" />
                     </th>

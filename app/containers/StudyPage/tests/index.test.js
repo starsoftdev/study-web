@@ -69,7 +69,7 @@ describe('<StudyPage />', () => {
           phone_id: 3,
           piFirstName: null,
           piLastName: null,
-          redirectPhone: '+15108172118',
+          phoneNumber: '+15108172118',
           rewardPoints: null,
           state: null,
           zip: null,
