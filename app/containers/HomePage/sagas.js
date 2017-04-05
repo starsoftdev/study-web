@@ -563,8 +563,11 @@ export function* changeStudyStatusWorker(action) {
     yield call(request, requestURL, options);
 
     yield put(changeStudyStatusDashboardSuccess({ studies: params, status, isChecked }));
+    yield put(toastrActions.success('Success!', `The ${params.length > 1 ? 'studies are' : 'study is'} now ${status}.`));
   } catch (err) {
     yield put(changeStudyStatusDashboardError(err));
+    const errorMessage = get(err, 'message', 'Something went wrong while updating study status');
+    yield put(toastrActions.error('', errorMessage));
   }
 }
 
@@ -696,7 +699,7 @@ export function* updateTwilioNumbersWorker() {
     const response = yield call(request, requestURL, params);
 
     yield put(updateTwilioNumbersSuccess(response));
-    yield put(toastrActions.success('Twilio Numbers', `${response.length} numbers were added.`));
+    yield put(toastrActions.success('Success!', `${response.length} numbers has been added.`));
   } catch (err) {
     yield put(updateTwilioNumbersError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while updating twili numbers');
@@ -737,6 +740,7 @@ export function* homePageSaga() {
   const options = yield take(LOCATION_CHANGE);
   if (options.payload.pathname !== '/') {
     yield put(clearFilters());
+    yield put(reset('dashboardFilters'));
     yield cancel(watcherA);
     yield cancel(watcherB);
     yield cancel(watcherD);

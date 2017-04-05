@@ -102,15 +102,18 @@ class SideNavBar extends React.Component {
               )}
             </ul>
           </nav>
-          <div className="helpline">
-            <h2>StudyKIK Project Manager</h2>
-            <div className="area">
-              <p>{helpName} <br /> <a>{helpPhone}</a> <br /> <a>{helpEmail}</a></p>
+          {
+            helpName &&
+            <div className="helpline">
+              <h2>StudyKIK Project Manager</h2>
+              <div className="area">
+                <p>{helpName} <br /> <a>{helpPhone}</a> <br /> <a>{helpEmail}</a></p>
+              </div>
+              <a href="" className="bgn-chat" data-text="CHAT NOW!" data-hovertext="COMING SOON">
+                <i className="icomoon-bg" />
+              </a>
             </div>
-            <a href="" className="bgn-chat" data-text="CHAT NOW!" data-hovertext="COMING SOON">
-              <i className="icomoon-bg" />
-            </a>
-          </div>
+          }
 
         </div>
       </aside>
