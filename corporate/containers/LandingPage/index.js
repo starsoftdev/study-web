@@ -97,15 +97,22 @@ export class LandingPage extends React.Component {
   }
 
   onSubmitForm(params) {
-    const landing = this.props.landing;
+    const { landing } = this.props;
     const separateNames = params.name.split(' ');
 
+    let landingPage;
+    for (const studySource of landing.studySources) {
+      if (studySource.landingPage) {
+        landingPage = studySource.landingPage;
+        break;
+      }
+    }
     const data = {
       firstName: separateNames[0],
       lastName: separateNames[1] || null,
       email: params.email,
       phone: normalizePhone(params.phone),
-      landing_page_id: landing.id,
+      landing_page_id: landingPage.id,
     };
 
     this.props.subscribeFromLanding(data);
@@ -122,6 +129,7 @@ export class LandingPage extends React.Component {
       for (const studySource of study.studySources) {
         if (studySource.landingPage) {
           landing = studySource.landingPage;
+          break;
         }
       }
     }

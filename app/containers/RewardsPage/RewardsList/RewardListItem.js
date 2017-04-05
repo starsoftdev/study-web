@@ -37,12 +37,12 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
             </div>
             { points > 0 ?
               <div className="desc">
-                <p><strong>{rewardData.siteLocationName}</strong> Earned {points} KIKs</p>
-                <p>{rewardData.description}</p>
+                <p><strong>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null}</strong> Earned {points} KIKs</p>
+                <p>{(rewardData && rewardData.description) ? rewardData.description : null}</p>
               </div>
               :
               <div className="desc">
-                <p><strong>{rewardData.userName}</strong> {rewardData.description}</p>
+                <p><strong>{rewardData.userName}</strong> {(rewardData && rewardData.description) ? rewardData.description : null}</p>
               </div>
             }
           </div>
