@@ -39,7 +39,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
 
     const lastLoginTime = item.last_login_time ? moment(item.last_login_time).format('MM/DD/YY [at] h:mm A') : 'N/A';
 
-    const landingHref = item.site_location ? `/${item.study_id}-${item.landing_page_url.toLowerCase().replace(/ /ig, '-')}` : '';
+    const landingHref = item.landing_page_url ? `/${item.study_id}-${item.landing_page_url.toLowerCase().replace(/ /ig, '-')}` : '';
 
     return (
       <tr

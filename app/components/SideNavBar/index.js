@@ -9,8 +9,6 @@ import {
   selectCurrentUser,
 } from '../../containers/App/selectors';
 
-import sideNavLogo from '../../assets/images/logo2.png';
-
 class SideNavBar extends React.Component {
   static propTypes = {
     currentUserClientId: React.PropTypes.number,
@@ -25,8 +23,18 @@ class SideNavBar extends React.Component {
   render() {
     const { userRoleType, currentUser } = this.props;
     let purchasable = true;
+    let helpName = '';
+    let helpEmail = '';
+    let helpPhone = '';
     if (userRoleType === 'client') {
       purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
+      helpName = currentUser.roleForClient.bdUser ? `${currentUser.roleForClient.bdUser.firstName} ${currentUser.roleForClient.bdUser.lastName}` : '';
+      helpEmail = currentUser.roleForClient.bdUser ? currentUser.roleForClient.bdUser.email : '';
+      helpPhone = currentUser.roleForClient.bdUser ? currentUser.roleForClient.bdUser.phone : '';
+    } else {
+      helpName = currentUser.roleForSponsor.bdUser ? `${currentUser.roleForSponsor.bdUser.firstName} ${currentUser.roleForSponsor.bdUser.lastName}` : '';
+      helpEmail = currentUser.roleForSponsor.bdUser ? currentUser.roleForSponsor.bdUser.email : '';
+      helpPhone = currentUser.roleForSponsor.bdUser ? currentUser.roleForSponsor.bdUser.phone : '';
     }
     let menuItemsGroupA;
     let menuItemsGroupB;
@@ -97,8 +105,7 @@ class SideNavBar extends React.Component {
           <div className="helpline">
             <h2>StudyKIK Project Manager</h2>
             <div className="area">
-              <img src={sideNavLogo} width="60" height="60" alt="logo" className="sub-logo" />
-              <p>Motang <br /> <a href="tel:5626114752">562.611.4752</a> <br /> <a href="mailto:motang@studykik.com">motang@studykik.com</a></p>
+              <p>{helpName} <br /> <a>{helpPhone}</a> <br /> <a>{helpEmail}</a></p>
             </div>
             <a href="" className="bgn-chat" data-text="CHAT NOW!" data-hovertext="COMING SOON">
               <i className="icomoon-bg" />
