@@ -28,13 +28,13 @@ class SideNavBar extends React.Component {
     let helpPhone = '';
     if (userRoleType === 'client') {
       purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
-      helpName = currentUser.roleForClient.bdUser ? `${currentUser.roleForClient.bdUser.firstName} ${currentUser.roleForClient.bdUser.lastName}` : '';
-      helpEmail = currentUser.roleForClient.bdUser ? currentUser.roleForClient.bdUser.email : '';
-      helpPhone = currentUser.roleForClient.bdUser ? currentUser.roleForClient.bdUser.phone : '';
+      helpName = (currentUser.roleForClient.client && currentUser.roleForClient.client.bdUser) ? `${currentUser.roleForClient.client.bdUser.firstName} ${currentUser.roleForClient.client.bdUser.lastName}` : '';
+      helpEmail = (currentUser.roleForClient.client && currentUser.roleForClient.client.bdUser) ? currentUser.roleForClient.client.bdUser.email : '';
+      helpPhone = (currentUser.roleForClient.client && currentUser.roleForClient.client.bdUser) ? currentUser.roleForClient.client.bdUser.phone : '';
     } else {
-      helpName = currentUser.roleForSponsor.bdUser ? `${currentUser.roleForSponsor.bdUser.firstName} ${currentUser.roleForSponsor.bdUser.lastName}` : '';
-      helpEmail = currentUser.roleForSponsor.bdUser ? currentUser.roleForSponsor.bdUser.email : '';
-      helpPhone = currentUser.roleForSponsor.bdUser ? currentUser.roleForSponsor.bdUser.phone : '';
+      helpName = (currentUser.roleForSponsor.sponsor && currentUser.roleForSponsor.sponsor.bdUser) ? `${currentUser.roleForSponsor.sponsor.bdUser.firstName} ${currentUser.roleForSponsor.sponsor.bdUser.lastName}` : '';
+      helpEmail = (currentUser.roleForSponsor.sponsor && currentUser.roleForSponsor.sponsor.bdUser) ? currentUser.roleForSponsor.sponsor.bdUser.email : '';
+      helpPhone = (currentUser.roleForSponsor.sponsor && currentUser.roleForSponsor.sponsor.bdUser) ? currentUser.roleForSponsor.sponsor.bdUser.phone : '';
     }
     let menuItemsGroupA;
     let menuItemsGroupB;
