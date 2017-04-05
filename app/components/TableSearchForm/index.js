@@ -23,6 +23,7 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
     createPdf: PropTypes.func,
     changeRange: PropTypes.func,
     search: PropTypes.func,
+    currentUser: PropTypes.object,
   };
 
   constructor(props, context) {
@@ -100,7 +101,21 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
 
   render() {
     const siteLocations = [{ name: 'All', value: '0' }].concat(this.props.siteLocations);
+    const { currentUser } = this.props;
     const state = this.state;
+
+    const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
+    }
+    let defaultValue = null;
+    if (!isAdmin && bDisabled) {
+      defaultValue = currentUser.site_id;
+      if (currentUser && currentUser.roleForClient) {
+        defaultValue = currentUser.roleForClient.site_id;
+      }
+    }
     return (
       <form
         className="form-search clearfix"
@@ -146,7 +161,9 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
               component={ReactSelect}
               placeholder="Select Site Location"
               options={siteLocations}
+              selectedValue={defaultValue || undefined}
               className="field"
+              disabled={bDisabled}
               onChange={(event) => this.props.search(event, 'site')}
             />
           </div>
