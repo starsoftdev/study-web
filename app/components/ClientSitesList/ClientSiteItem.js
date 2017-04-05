@@ -12,7 +12,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     name: PropTypes.string,
     piFirstName: PropTypes.string,
     piLastName: PropTypes.string,
-    phone: PropTypes.string,
+    redirectPhone: PropTypes.string,
     address: PropTypes.string,
     roles: PropTypes.object,
     principalInvestigators: PropTypes.array,
@@ -117,7 +117,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { name, piFirstName, piLastName, phone, address, city, zip, state, principalInvestigators, timezone } = this.props;
+    const { name, piFirstName, piLastName, redirectPhone, address, city, zip, state, principalInvestigators, timezone } = this.props;
     let piNode = '';
     if (principalInvestigators) {
       for (const pi of principalInvestigators) {
@@ -141,8 +141,8 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
         <td className="principal-investigator">
           {piNode}
         </td>
-        <td className="phone">
-          <span>{phone}</span>
+        <td className="redirectPhone">
+          <span>{redirectPhone}</span>
         </td>
         <td className="address">
           <span>{addressArr[0]}<br />{city}, {state} {zip}</span>
