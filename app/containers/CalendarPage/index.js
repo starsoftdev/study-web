@@ -301,8 +301,11 @@ export default class CalendarPage extends React.Component {
         siteId: s.id,
       }));
     } else {
-      const site = _.find(sites, { id: currentUser.site_id });
-
+      let siteId = currentUser.site_id;
+      if (currentUser && currentUser.roleForClient) {
+        siteId = currentUser.roleForClient.site_id;
+      }
+      const site = _.find(sites, { id: siteId });
       if (site) {     // if site is fetched
         siteLocationOptions = [{
           label: site.name,
@@ -330,6 +333,7 @@ export default class CalendarPage extends React.Component {
                 fetchingSites={fetchingSites}
                 filter={this.state.filter}
                 updateFilter={this.updateFilter}
+                currentUser={currentUser}
               />
               <CalendarWidget
                 currentUser={currentUser}
