@@ -264,7 +264,7 @@ export function* fetchCouponWatcher() {
     const encodedCouponId = encodeURIComponent(couponId);
 
     try {
-      const requestURL = `${API_URL}/clients/stripeCustomers/retrieveCoupon/${encodedCouponId}`;
+      const requestURL = `${API_URL}/clients/payments/retrieveCoupon/${encodedCouponId}`;
       const response = yield call(request, requestURL);
 
       yield put(couponFetched(response));
@@ -348,7 +348,7 @@ export function* fetchCardsWatcher() {
     const { clientId, customerId } = yield take(FETCH_CARDS);
 
     try {
-      const requestURL = `${API_URL}/clients/${clientId}/stripeCustomers/${customerId}/retrieve_cardsList`;
+      const requestURL = `${API_URL}/clients/${clientId}/payments/${customerId}/retrieve_cardsList`;
       const response = yield call(request, requestURL);
 
       yield put(cardsFetched(response));
@@ -363,7 +363,7 @@ export function* saveCardWatcher() {
     const { clientId, customerId, cardData } = yield take(SAVE_CARD);
 
     try {
-      const requestURL = `${API_URL}/clients/${clientId}/stripeCustomers/${customerId}/saveCard`;
+      const requestURL = `${API_URL}/clients/${clientId}/payments/${customerId}/saveCard`;
       const options = {
         method: 'POST',
         body: JSON.stringify(cardData),
@@ -415,7 +415,7 @@ export function* addCreditsWatcher() {
     };
 
     try {
-      const requestURL = `${API_URL}/clients/stripeCustomers/${customerId}/checkout_credits`;
+      const requestURL = `${API_URL}/clients/payments/${customerId}/checkout_credits`;
       const response = yield call(request, requestURL, options);
 
       yield put(toastrActions.success('Add Credits', 'Credits added successfully!'));
