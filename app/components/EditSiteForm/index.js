@@ -202,7 +202,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </strong>
             <div className="field">
               <Field
-                name="redirectPhone"
+                name="phone"
                 component={Input}
                 type="text"
                 disabled={savedSite.saving}
