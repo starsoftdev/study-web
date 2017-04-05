@@ -258,6 +258,7 @@ export function* editClientAdminWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(fetchClientAdmin());
+    yield put(fetchSites());
 
     yield put(editClientAdminSuccess(response));
   } catch (err) {
