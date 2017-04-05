@@ -242,10 +242,12 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
 
   closeStudyAddModal() {
     this.setState({ studyAddModalOpen: false });
+    this.props.onShow();
   }
 
   openStudyAddModal() {
     this.setState({ studyAddModalOpen: true });
+    this.props.onHide(true);
   }
 
   closeStudyPreviewModal() {
