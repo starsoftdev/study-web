@@ -108,9 +108,9 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
       });
     }
 
-    const { currentUser, siteLocations, proposals } = nextProps;
+    const { currentUser, siteLocations } = nextProps;
 
-    if (siteLocations.length>0 && this.props.siteLocations.length<1) {
+    if (siteLocations.length > 0 && this.props.siteLocations.length < 1) {
       const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
       let bDisabled = true;
       if (currentUser && currentUser.roleForClient) {
