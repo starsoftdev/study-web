@@ -68,16 +68,25 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
     this.props.sortSuccess(sorted);
   }
 
-  render() {
+  renderProtocols() {
     const { protocols } = this.props;
-    const ProtocolsListContents = protocols.details.map((item, index) => ((
-      <ProtocolItem
-        {...item}
-        key={index}
-        index={index}
-      />
-    )));
+    if (protocols.details) {
+      return (
+        <tbody>
+          {protocols.details.map((item, index) => ((
+            <ProtocolItem
+              {...item}
+              key={index}
+              index={index}
+            />
+          )))}
+        </tbody>
+      );
+    }
+    return null;
+  }
 
+  render() {
     return (
       <section className="table-holder table-area fixed-table">
         <header className="fixed-table-head">
@@ -103,9 +112,7 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
           </table>
         </div>
         <table className="table table-messaging-suite">
-          <tbody>
-            {ProtocolsListContents}
-          </tbody>
+          {this.renderProtocols()}
         </table>
       </section>
     );

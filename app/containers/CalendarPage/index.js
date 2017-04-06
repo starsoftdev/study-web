@@ -85,7 +85,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchClientSites: (id) => dispatch(fetchClientSites(id)),
   fetchIndications: () => dispatch(fetchIndications()),
   fetchPatientsByStudy: (studyId, siteId) => dispatch(fetchPatientsByStudy(studyId, siteId)),
-  fetchProtocols: () => dispatch(fetchProtocols()),
+  fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
   fetchSchedules: (data) => dispatch(fetchSchedules(data)),
   submitSchedule: (data) => dispatch(submitSchedule(data)),
   deleteSchedule: (scheduleId, clientId) => dispatch(deleteSchedule(scheduleId, clientId)),
@@ -148,7 +148,7 @@ export default class CalendarPage extends React.Component {
     this.props.fetchClientSites(currentUser.roleForClient.client_id);
     this.props.fetchIndications();
     this.props.fetchSchedules({ clientId: currentUser.roleForClient.client_id });
-    this.props.fetchProtocols();
+    this.props.fetchProtocols(currentUser.roleForClient.id);
   }
 
   componentWillReceiveProps(nextProps) {

@@ -1065,13 +1065,17 @@ export function* fetchSponsorsWatcher() {
 
 export function* fetchProtocolsWatcher() {
   while (true) {
-    yield take(FETCH_PROTOCOLS);
+    const { clientRoleId, sponsorRoleId } = yield take(FETCH_PROTOCOLS);
 
     try {
       const requestURL = `${API_URL}/protocols`;
 
       const params = {
         method: 'GET',
+        query: {
+          clientRoleId,
+          sponsorRoleId,
+        },
       };
       const response = yield call(request, requestURL, params);
 

@@ -88,7 +88,7 @@ export function* editProtocolWorker(action) {
     const requestURL = `${API_URL}/protocols/${action.payload.id}`;
 
     const params = {
-      method: 'PUT',
+      method: 'PATCH',
       body: JSON.stringify(action.payload),
     };
     const response = yield call(request, requestURL, params);

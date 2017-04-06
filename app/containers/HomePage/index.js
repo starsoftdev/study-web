@@ -36,8 +36,8 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     fetchClientSites: PropTypes.func,
     fetchLevels: PropTypes.func,
     fetchStudies: PropTypes.func,
-    fetchProtocols: PropTypes.func,
-    fetchProtocolNumbers: PropTypes.func,
+    fetchProtocols: PropTypes.func.isRequired,
+    fetchProtocolNumbers: PropTypes.func.isRequired,
     fetchIndications: PropTypes.func,
     location: PropTypes.any,
     userRoleType: PropTypes.string,
@@ -58,8 +58,8 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
       this.props.fetchLevels();
       this.props.fetchStudies(currentUser);
     } else if (currentUser && userRoleType === 'sponsor') {
-      this.props.fetchProtocols({ sponsorRoleId: currentUser.roleForSponsor.id });
-      this.props.fetchProtocolNumbers(currentUser);
+      this.props.fetchProtocols(currentUser.roleForSponsor.id);
+      this.props.fetchProtocolNumbers(currentUser.roleForSponsor.id);
       this.props.fetchIndications(currentUser);
     }
   }
@@ -75,13 +75,10 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
   }
 
   searchProtocols(searchParams) {
-    const { currentUser } = this.props;
+    const { currentUser, fetchProtocols, searchProtocolsFormValues } = this.props;
 
-    let filters = { sponsorRoleId: currentUser.roleForSponsor.id };
-
-    filters = _.assign(filters, this.props.searchProtocolsFormValues, searchParams);
-
-    this.props.fetchProtocols(filters);
+    const filters = _.assign(searchProtocolsFormValues, searchParams);
+    fetchProtocols(currentUser.roleForSponsor.id, filters);
   }
 
   render() {
@@ -149,8 +146,8 @@ function mapDispatchToProps(dispatch) {
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchLevels: () => dispatch(fetchLevels()),
     fetchStudies: (currentUser, searchParams) => dispatch(fetchStudies(currentUser, searchParams)),
-    fetchProtocols: (searchParams) => dispatch(fetchProtocols(searchParams)),
-    fetchProtocolNumbers: (currentUser) => dispatch(fetchProtocolNumbers(currentUser)),
+    fetchProtocols: (sponsorRoleId, searchParams) => dispatch(fetchProtocols(sponsorRoleId, searchParams)),
+    fetchProtocolNumbers: (sponsorRoleId) => dispatch(fetchProtocolNumbers(sponsorRoleId)),
     fetchIndications: (currentUser) => dispatch(fetchIndications(currentUser)),
   };
 }

@@ -14,10 +14,10 @@ import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Checkbox from '../../../components/Input/Checkbox';
-import { selectIndications, selectSources, selectSiteLocations, selectStudiesFromSites } from '../../App/selectors';
+import { selectIndications, selectSources, selectSiteLocations, selectStudiesFromSites, selectProtocols } from '../../App/selectors';
 import IndicationOverlay from '../../StudyPage/PatientDetail/IndicationOverlay';
 import { editPatientSite } from '../actions';
-import { selectPatientCategories, selectSavedPatient, selectProtocols } from '../selectors';
+import { selectPatientCategories, selectSavedPatient } from '../selectors';
 import formValidator from './validator';
 
 const formName = 'PatientDatabase.EditPatientModal';
