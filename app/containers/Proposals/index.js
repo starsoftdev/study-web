@@ -107,6 +107,28 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
         proposals: nextProps.proposals,
       });
     }
+
+    const { currentUser, siteLocations, proposals } = nextProps;
+
+    if (siteLocations.length>0 && this.props.siteLocations.length<1) {
+      const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
+      let bDisabled = true;
+      if (currentUser && currentUser.roleForClient) {
+        bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
+      }
+      let defaultValue = null;
+      if (!isAdmin && bDisabled) {
+        defaultValue = currentUser.site_id;
+        if (currentUser && currentUser.roleForClient) {
+          defaultValue = currentUser.roleForClient.site_id;
+        }
+        const site = siteLocations[defaultValue - 1] || null;
+
+        this.setState({
+          site,
+        });
+      }
+    }
   }
 
   componentWillUnmount() {
