@@ -91,7 +91,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
         }
         this.search(defaultValue, 'site');
       } else {
-        this.props.getReceipts(15, 0, this.props.receipts);
+        this.props.getReceipts(currentUser.roleForClient.id, 15, 0, this.props.receipts);
       }
     }
   }
@@ -169,9 +169,10 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
       }
     }
 
-    this.props.setSearchOptions(this.searchOptions);
+    const { currentUser, getReceipts, paginationOptions, receipts, setSearchOptions } = this.props;
+    setSearchOptions(this.searchOptions);
 
-    this.props.getReceipts(15, 0, this.props.receipts, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection, this.searchOptions);
+    getReceipts(currentUser.roleForClient.id, 15, 0, receipts, paginationOptions.activeSort, paginationOptions.activeDirection, this.searchOptions);
   }
 
   render() {
@@ -219,7 +220,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchEvents: (values) => dispatch(fetchEvents(values)),
     fetchClientSites: (id) => dispatch(fetchClientSites(id)),
-    getReceipts: (limit, offset, receipts, orderBy, orderDir, values) => dispatch(getReceipts(limit, offset, receipts, orderBy, orderDir, values)),
+    getReceipts: (clientRoleId, limit, offset, receipts, orderBy, orderDir, values) => dispatch(getReceipts(clientRoleId, limit, offset, receipts, orderBy, orderDir, values)),
     getPDF: (values) => dispatch(getPDF(values)),
     setSearchOptions: (payload) => dispatch(setSearchOptions(payload)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),

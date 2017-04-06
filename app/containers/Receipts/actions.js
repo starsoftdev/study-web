@@ -30,9 +30,10 @@ export function receiptsReceived(payload, hasMore, page) {
   };
 }
 
-export function getReceipts(limit, offset, receipts, orderBy, orderDir, payload) {
+export function getReceipts(clientRoleId, limit, offset, receipts, orderBy, orderDir, payload) {
   return {
     type: GET_RECEIPT,
+    clientRoleId,
     limit,
     offset,
     receipts,
