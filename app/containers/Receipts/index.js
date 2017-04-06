@@ -69,10 +69,31 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     };
   }
 
+  componentWillReceiveProps(nProps) {
+    const { currentUser, siteLocations } = nProps;
+
+    if (siteLocations !== this.props.siteLocations) {
+      const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
+      let bDisabled = true;
+      if (currentUser && currentUser.roleForClient) {
+        bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
+      }
+      let defaultValue = null;
+      if (!isAdmin && bDisabled) {
+        defaultValue = currentUser.site_id;
+        if (currentUser && currentUser.roleForClient) {
+          defaultValue = currentUser.roleForClient.site_id;
+        }
+        this.search(defaultValue, 'site');
+      } else {
+        this.props.getReceipts(15, 0, this.props.receipts);
+      }
+    }
+  }
+
   componentDidMount() {
     const { currentUser, fetchClientSites, getReceipts } = this.props;
     fetchClientSites(currentUser.roleForClient.client_id);
-    getReceipts(15, 0, this.props.receipts);
   }
 
   getPDF() {
