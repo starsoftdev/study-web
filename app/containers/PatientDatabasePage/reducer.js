@@ -13,10 +13,6 @@ import {
   FETCH_PATIENT_SUCCESS,
   FETCH_PATIENT_ERROR,
 
-  FETCH_PROTOCOLS,
-  FETCH_PROTOCOLS_SUCCESS,
-  FETCH_PROTOCOLS_ERROR,
-
   CLEAR_SELECTED_PATIENT,
 
   SAVE_PATIENT,
@@ -342,33 +338,6 @@ export default function patientDatabasePageReducer(state = initialState, action)
           details: action.patients,
           fetching: false,
           error: null,
-        },
-      };
-    case FETCH_PROTOCOLS:
-      return {
-        ...state,
-        protocols: {
-          details: [],
-          fetching: true,
-          error: null,
-        },
-      };
-    case FETCH_PROTOCOLS_SUCCESS:
-      return {
-        ...state,
-        protocols: {
-          details: payload,
-          fetching: false,
-          error: null,
-        },
-      };
-    case FETCH_PROTOCOLS_ERROR:
-      return {
-        ...state,
-        protocols: {
-          details: [],
-          fetching: false,
-          error: payload,
         },
       };
     default:

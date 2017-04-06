@@ -89,11 +89,6 @@ export const selectAddPatientStatus = () => createSelector(
   (subState) => subState.addPatientStatus
 );
 
-export const selectProtocols = () => createSelector(
-  selectPatientDatabasePageDomain(),
-  (substate) => substate.protocols
-);
-
 const selectFormDomain = () => state => state.form;
 
 export const selectPatientDatabaseFormValues = () => createSelector(

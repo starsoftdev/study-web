@@ -1,3 +1,4 @@
+import _ from 'lodash';
 
 import {
   FETCH_STUDIES_DASHBOARD,
@@ -53,7 +54,6 @@ import {
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
   ADD_EMAIL_NOTIFICATION_USER_ERROR,
 } from '../../App/constants';
-import _ from 'lodash';
 
 const initialState = {
   values: {

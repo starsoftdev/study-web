@@ -6,8 +6,8 @@ import { createStructuredSelector } from 'reselect';
 
 import SearchPatientsForm from '../../components/SearchPatientsForm/index';
 import PatientsList from '../../containers/PatientDatabasePage/PatientsList/index';
-import { fetchIndications, fetchSources, fetchClientSites } from '../../containers/App/actions';
-import { fetchPatientCategories, fetchPatients, clearPatientsList, fetchProtocols } from './actions';
+import { fetchIndications, fetchSources, fetchClientSites, fetchProtocols } from '../../containers/App/actions';
+import { fetchPatientCategories, fetchPatients, clearPatientsList } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
 import { selectCurrentUser } from '../App/selectors';
 
@@ -36,7 +36,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     fetchIndications();
     fetchSources();
     fetchPatientCategories();
-    fetchProtocols();
+    fetchProtocols(currentUser.roleForClient.id);
     fetchClientSites(currentUser.roleForClient.client_id);
   }
 
@@ -107,7 +107,7 @@ function mapDispatchToProps(dispatch) {
     fetchSources: () => dispatch(fetchSources()),
     fetchPatientCategories: searchParams => dispatch(fetchPatientCategories(searchParams)),
     fetchPatients: (clientId, searchParams, patients, searchFilter, isExport) => dispatch(fetchPatients(clientId, searchParams, patients, searchFilter, isExport)),
-    fetchProtocols: () => dispatch(fetchProtocols()),
+    fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
     clearPatientsList: () => dispatch(clearPatientsList()),
   };
 }
