@@ -53,7 +53,6 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherE);
   yield cancel(watcherF);
   yield cancel(watcherG);
-  yield cancel(watcherH);
 }
 
 // Bootstrap sagas
