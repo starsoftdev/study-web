@@ -69,6 +69,11 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     };
   }
 
+  componentDidMount() {
+    const { currentUser, fetchClientSites } = this.props;
+    fetchClientSites(currentUser.roleForClient.client_id);
+  }
+
   componentWillReceiveProps(nProps) {
     const { currentUser, siteLocations } = nProps;
 
@@ -89,11 +94,6 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
         this.props.getReceipts(15, 0, this.props.receipts);
       }
     }
-  }
-
-  componentDidMount() {
-    const { currentUser, fetchClientSites, getReceipts } = this.props;
-    fetchClientSites(currentUser.roleForClient.client_id);
   }
 
   getPDF() {
