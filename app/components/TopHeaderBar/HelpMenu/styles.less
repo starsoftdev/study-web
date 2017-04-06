@@ -1,0 +1,53 @@
+.help-menu-box {
+  cursor: pointer;
+
+  .opener {
+    &.active {
+      background-color: #76daff;
+    }
+  }
+  .help-menu {
+    overflow: hidden;
+    position: absolute;
+    width: 250px;
+    height: auto;
+    top: 100%;
+    -webkit-transition: height 0.5s;
+    transition: height 0.5s;
+
+    &.help-menu-close {
+      height: 0 !important;
+      -webkit-transition: height 0.5s;
+      transition: height 0.5s;
+    }
+
+    .well {
+      padding: 3px;
+      margin: 0;
+      position: relative;
+      background: @white;
+      box-shadow: none;
+      border-radius: 0;
+      border: solid 2px #ccc;
+
+
+      ul {
+        margin: 0;
+
+        a {
+          color: #354052;
+          display: block;
+          padding: 9px 8px;
+          text-transform: uppercase;
+
+          &:hover {
+            color: @white;
+            background: #00afef;
+          }
+        }
+
+
+      }
+    }
+  }
+}
