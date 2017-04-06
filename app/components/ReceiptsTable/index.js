@@ -156,9 +156,10 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   }
 
   loadItems() {
+    const { currentUser, getReceipts, paginationOptions, receipts, searchOptions } = this.props;
     const limit = 15;
-    const offset = (this.props.paginationOptions.page) * 15;
-    this.props.getReceipts(limit, offset, this.props.receipts, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection, this.props.searchOptions);
+    const offset = (paginationOptions.page) * 15;
+    getReceipts(currentUser.roleForClient.id, limit, offset, receipts, paginationOptions.activeSort, paginationOptions.activeDirection, searchOptions);
   }
 
   sortBy(ev) {
@@ -173,16 +174,17 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
       sort = null;
     }
 
+    const { currentUser, getReceipts, receipts, setActiveSort, sortProposalsSuccess, searchOptions } = this.props;
     if (sort === 'orderNumber') {
       const dir = ((direction === 'down') ? 'desc' : 'asc');
-      const sortedProposals = _.orderBy(this.props.receipts, [function (o) {
+      const sortedProposals = _.orderBy(receipts, [function (o) {
         return o.orderNumber;
       }], [dir]);
-      this.props.setActiveSort(sort, direction);
-      this.props.sortProposalsSuccess(sortedProposals);
+      setActiveSort(sort, direction);
+      sortProposalsSuccess(sortedProposals);
     } else if (sort !== 'payment') {
-      this.props.setActiveSort(sort, direction);
-      this.props.getReceipts(15, 0, this.props.receipts, sort, direction, this.props.searchOptions);
+      setActiveSort(sort, direction);
+      getReceipts(currentUser.roleForClient.id, 15, 0, receipts, sort, direction, searchOptions);
     }
   }
 
