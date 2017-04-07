@@ -34,6 +34,8 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
       borderRadius: 0,
       preview: null,
       selectedImage: null,
+      selectedImageWidth: null,
+      selectedImageHeight: null,
       isDragOver: false,
       usingDefaultImage: false,
     };
@@ -107,8 +109,12 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
     this.setState({ borderRadius: borderRadiusValue });
   }
 
-  handleFileChange(img) {
-    this.setState({ selectedImage: img });
+  handleFileChange(img, width, height) {
+    this.setState({
+      selectedImage: img,
+      selectedImageWidth: width,
+      selectedImageHeight: height,
+    });
   }
 
   logCallback(e) {
@@ -117,6 +123,24 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
 
   render() {
     const { error, handleSubmit, pristine, reset, submitting } = this.props; // eslint-disable-line
+    let width;
+    let height;
+    if (this.state.selectedImageWidth) {
+      // calculate the ratio
+      // choose whichever is higher for the nominator so that the picture will fit
+      if (this.state.selectedImageHeight > this.state.selectedImageWidth) {
+        const ratio = this.state.selectedImageWidth / this.state.selectedImageHeight;
+        width = 350 * ratio;
+        height = 350;
+      } else {
+        const ratio = this.state.selectedImageHeight / this.state.selectedImageWidth;
+        width = 350;
+        height = 350 * ratio;
+      }
+    } else {
+      width = 350;
+      height = 350;
+    }
     return (
       <form className="form-lightbox">
         <div className="drag-drop-uploader">
@@ -125,8 +149,8 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
               ref={(avatar) => {
                 this.avatar = avatar;
               }}
-              width={350}
-              height={350}
+              width={width}
+              height={height}
               scale={parseFloat(this.state.scale)}
               borderRadius={this.state.borderRadius}
               onSave={this.handleSave}
@@ -166,8 +190,8 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
                 this.rootElement = rootElement;
               }}
               style={{ margin: '10px 24px 32px', padding: 5, border: '1px solid #CCC', display: 'none' }}
-              width={400}
-              height={400}
+              width={width}
+              height={height}
             />
             :
             null
