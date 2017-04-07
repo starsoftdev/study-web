@@ -15,7 +15,6 @@ import landingFormValidator from './validator';
 export class LandingForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    study: PropTypes.object,
     landing: PropTypes.object,
     subscriptionError: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
@@ -42,11 +41,11 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
   }
 
   render() {
-    const { study, landing, handleSubmit, subscriptionError } = this.props;
+    const { landing, handleSubmit, subscriptionError } = this.props;
 
-    const indication = (study && study.indication) ? study.indication.name : '';
-    const city = (study && study.site.city) ? study.site.city : '';
-    const state = (study && study.site.state) ? study.site.state : '';
+    const indication = (landing.indication) ? landing.indication : '';
+    const city = (landing.city) ? landing.city : '';
+    const state = (landing.state) ? landing.state : '';
 
     const cityAndState = (city && state) ? ` ${city}, ${state}` : '';
 

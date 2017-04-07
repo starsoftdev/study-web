@@ -870,12 +870,9 @@ export function* changeTemporaryPassword() {
 
 function* fetchLandingStudy(action) {
   const { studyId } = action;
-  const filter = JSON.stringify({
-    include: [{ studySources: ['source', { landingPage: ['thankYouPage'] }] }, 'indication', { site: ['phone'] }],
-  });
   // put the fetching study action in case of a navigation action
   try {
-    const requestURL = `${API_URL}/studies/${studyId}?filter=${filter}`;
+    const requestURL = `${API_URL}/landingPages/${studyId}/fetchLandingStudy`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -1029,7 +1026,7 @@ function* newContact(action) {
 function* sendThankYouEmail(action) {
   try {
     const params = action.payload;
-    const requestURL = `${API_URL}/landingPages/sendThankYouEmail`;
+    const requestURL = `${API_URL}/thankYouPages/sendThankYouEmail`;
     const options = {
       method: 'POST',
       body: JSON.stringify(params),
