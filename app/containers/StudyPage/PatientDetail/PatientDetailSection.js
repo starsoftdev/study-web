@@ -13,7 +13,7 @@ import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/index';
 import { submitPatientUpdate } from '../actions';
 import formValidator from './detailValidator';
-import { normalizePhone, normalizePhoneDisplay, formatPhone } from '../../../common/helper/functions';
+import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSyncErrors, selectValues, selectFormDidChange } from '../../../common/selectors/form.selector';
 
 const formName = 'PatientDetailModal.Detail';
@@ -38,6 +38,7 @@ class PatientDetailSection extends React.Component {
   constructor(props) {
     super(props);
     this.onReset = this.onReset.bind(this);
+    this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -46,15 +47,23 @@ class PatientDetailSection extends React.Component {
     reset();
   }
 
+  onPhoneBlur(event) {
+    event.preventDefault();
+    const { blur } = this.props;
+    // change the phone number to be formatted for display
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur('phone', formattedPhoneNumber);
+  }
+
   onSubmit(event) {
     event.preventDefault();
     const { blur, formSyncErrors, formValues, initialValues, reset, submitPatientUpdate } = this.props;
     if (!formSyncErrors.firstName && !formSyncErrors.lastName && !formSyncErrors.email && !formSyncErrors.phone) {
-      let formattedPhoneNumber = formatPhone(formValues.phone);
-      formattedPhoneNumber = normalizePhoneDisplay(formattedPhoneNumber);
+      // change the phone number to be formatted for display
+      const formattedPhoneNumber = normalizePhoneDisplay(formValues.phone);
       blur('phone', formattedPhoneNumber);
-      let phoneNumber = formatPhone(formValues.phone);
-      phoneNumber = normalizePhone(phoneNumber);
+      // normalize the number in international format for submission to the server
+      const phoneNumber = normalizePhone(formValues.phone);
       submitPatientUpdate(initialValues.id, {
         firstName: formValues.firstName,
         lastName: formValues.lastName,
@@ -140,6 +149,7 @@ class PatientDetailSection extends React.Component {
               type="tel"
               name="phone"
               component={Input}
+              onBlur={this.onPhoneBlur}
               required
               tooltipDisabled
             />
