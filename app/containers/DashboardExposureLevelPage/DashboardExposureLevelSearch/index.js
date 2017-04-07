@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -6,7 +7,6 @@ import Modal from 'react-bootstrap/lib/Modal';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddExposureLevelForm } from './AddExposureLevelForm';
-import _ from 'lodash';
 
 @reduxForm({ form: 'dashboardExposureLevelForm' })
 

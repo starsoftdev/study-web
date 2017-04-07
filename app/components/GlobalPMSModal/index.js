@@ -6,17 +6,18 @@
 
 import React from 'react';
 import Sound from 'react-sound';
-import Form from 'react-bootstrap/lib/Form';
-import Button from 'react-bootstrap/lib/Button';
 import { connect } from 'react-redux';
+import { change, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router';
+import Form from 'react-bootstrap/lib/Form';
+import Button from 'react-bootstrap/lib/Button';
+import Modal from 'react-bootstrap/lib/Modal';
 
 import Input from '../../components/Input';
 import formValidator from './validator';
 import { selectGlobalPMSFormValues, selectGlobalPMSFormError } from './selectors';
 import CenteredModal from '../../components/CenteredModal/index';
-import Modal from 'react-bootstrap/lib/Modal';
 import {
   selectCurrentUser,
   selectSitePatients,
@@ -29,7 +30,6 @@ import CallItem from './CallItem';
 import PatientItem from './PatientItem';
 
 import ChatForm from './ChatForm';
-import { change, Field, reduxForm } from 'redux-form';
 
 import {
   fetchSitePatients,

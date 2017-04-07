@@ -11,9 +11,9 @@ import { selectSyncErrorBool } from '../../../common/selectors/form.selector';
 import { submitPatientNote, submitDeleteNote } from '../actions';
 import Input from '../../../components/Input/index';
 import PatientNote from './PatientNote';
+import formValidator, { fields } from './validator';
 
 const formName = 'PatientDetailModal.Notes';
-import formValidator, { fields } from './validator';
 @reduxForm({ form: formName, validator:formValidator })
 class NotesSection extends React.Component {
   static propTypes = {

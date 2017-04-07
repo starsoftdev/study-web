@@ -4,8 +4,9 @@
 
 import React from 'react';
 import { Field } from 'redux-form';
-import ReactSelect from '../Input/ReactSelect';
 import moment from 'moment-timezone';
+
+import ReactSelect from '../Input/ReactSelect';
 
 class DateOfBirthPicker extends React.Component {
   static propTypes = {

@@ -4,13 +4,13 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { reset } from 'redux-form';
 import ImportPatientsModal from './ImportPatients/index';
 import TextEmailBlastModal from './TextEmailBlastModal';
 import TextBlastModal from './TextBlast/index';
 import AddPatientModal from './ImportPatients/AddPatientModal';
 
 import { exportPatients } from './actions';
-import { reset } from 'redux-form';
 
 class StudyActionButtons extends Component {
   static propTypes = {

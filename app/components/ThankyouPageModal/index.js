@@ -2,15 +2,17 @@
  * Created by mike on 10/11/16.
  */
 
+import classNames from 'classnames';
 import React from 'react';
-import { createStructuredSelector } from 'reselect';
-import Collapse from 'react-bootstrap/lib/Collapse';
 import Button from 'react-bootstrap/lib/Button';
-import Checkbox from '../Input/Checkbox';
-import Input from '../Input/index';
+import Collapse from 'react-bootstrap/lib/Collapse';
+import Form from 'react-bootstrap/lib/Form';
 import { connect } from 'react-redux';
 import { Field, reduxForm, reset, touch, change } from 'redux-form';
-import Form from 'react-bootstrap/lib/Form';
+import { createStructuredSelector } from 'reselect';
+
+import Checkbox from '../Input/Checkbox';
+import Input from '../Input/index';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
 import { updateThankYouPage, resetThankYouPageState } from '../../containers/HomePage/AdminDashboard/actions';
 import { selectThankYouPageUpdateProcess } from '../../containers/HomePage/AdminDashboard/selectors';
@@ -18,7 +20,7 @@ import { selectThankYouPageUpdateProcess } from '../../containers/HomePage/Admin
 import { fetchLanding } from '../../containers/App/actions';
 import { selectLanding } from '../../containers/App/selectors';
 import formValidator, { fields } from './validator';
-import classNames from 'classnames';
+
 import './styles.less';
 
 const formName = 'thankYouPageForm';

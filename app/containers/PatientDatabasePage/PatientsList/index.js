@@ -5,6 +5,8 @@ import { Field, reduxForm, change } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import _, { map, omit } from 'lodash';
 import moment from 'moment-timezone';
+import { StickyContainer, Sticky } from 'react-sticky';
+import InfiniteScroll from 'react-infinite-scroller';
 
 import Checkbox from '../../../components/Input/Checkbox';
 import CenteredModal from '../../../components/CenteredModal/index';
@@ -30,8 +32,6 @@ import { clearSelectedPatient,
 import { selectProtocols, selectCurrentUser } from '../../App/selectors';
 import PatientItem from './PatientItem';
 import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
-import { StickyContainer, Sticky } from 'react-sticky';
-import InfiniteScroll from 'react-infinite-scroller';
 
 const formName = 'PatientDatabase.TextBlastModal';
 

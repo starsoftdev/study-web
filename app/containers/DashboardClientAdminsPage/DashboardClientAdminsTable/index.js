@@ -1,13 +1,14 @@
+import { forEach, map, sumBy } from 'lodash';
 import React, { PropTypes } from 'react';
+import Modal from 'react-bootstrap/lib/Modal';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import RowItem from './RowItem';
-import Modal from 'react-bootstrap/lib/Modal';
+
 import CenteredModal from '../../../components/CenteredModal/index';
-import EditClientAdminsForm from '../EditClientAdminsForm';
 import AddMessagingNumberForm from '../AddMessagingNumberForm';
+import EditClientAdminsForm from '../EditClientAdminsForm';
 import EditMessagingNumberForm from './EditMessagingNumber';
-import { forEach, map, sumBy } from 'lodash';
+import RowItem from './RowItem';
 
 export class DashboardClientAdminsTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
