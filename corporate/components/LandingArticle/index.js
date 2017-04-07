@@ -11,7 +11,6 @@ import SocialArea from '../SocialArea';
 export class LandingArticle extends React.Component {
 
   static propTypes = {
-    study: PropTypes.object,
     landing: PropTypes.object,
   };
 
@@ -39,19 +38,19 @@ export class LandingArticle extends React.Component {
   }
 
   render() {
-    const { study, landing } = this.props;
+    const { landing } = this.props;
     const md = new Remarkable();
     const imgSrc = (landing && landing.imgSrc) ? landing.imgSrc : null;
     const dataView = (imgSrc) ? 'slideInRight' : 'fadeInUp';
-    const indication = study.indication.name;
-    const siteName = study.site.name;
+    const indication = landing.indication;
+    const siteName = landing.siteName;
 
     const landingDescription = (landing && landing.description && landing.description !== 'seed') ? landing.description : null;
 
-    let address = study.site.address;
-    const city = study.site.city;
-    const state = study.site.state;
-    const zip = study.site.zip;
+    let address = landing.address;
+    const city = landing.city;
+    const state = landing.state;
+    const zip = landing.zip;
 
     if (city) {
       address += ', ' + city;

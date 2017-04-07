@@ -5,7 +5,6 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
-import _ from 'lodash';
 
 import LandingForm from '../../components/LandingForm';
 import LandingArticle from '../../components/LandingArticle';
@@ -19,7 +18,12 @@ import {
   selectSubscribedFromLanding,
   selectSubscriptionError,
 } from '../../../app/containers/App/selectors';
-import { fetchLanding, subscribeFromLanding, clearLanding } from '../../../app/containers/App/actions';
+import {
+  fetchLanding,
+  subscribeFromLanding,
+  clearLanding,
+  sendThankYouEmail,
+} from '../../../app/containers/App/actions';
 
 import './styles.less';
 
@@ -32,6 +36,7 @@ export class LandingPage extends React.Component {
     fetchLanding:  PropTypes.func.isRequired,
     subscribeFromLanding:  PropTypes.func.isRequired,
     subscribedFromLanding:  PropTypes.object,
+    sendThankYouEmail:  PropTypes.func.isRequired,
     subscriptionError:  PropTypes.object,
     landingError:  PropTypes.object,
     landingIsFetching:  PropTypes.bool,
@@ -63,23 +68,12 @@ export class LandingPage extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { subscribedFromLanding } = newProps;
+    const { subscribedFromLanding, landing, sendThankYouEmail } = newProps;
     const { siteLocation } = newProps.params;
     let invalidSite = false;
 
-    if (newProps.landing) {
-      const { landing } = newProps;
-      if (!landing.studySources.length) {
-        this.props.clearLanding();
-        browserHistory.push('/');
-      }
-
-      let urlPart = null;
-      _.forEach(landing.studySources, (item) => {
-        if (item.landingPage) {
-          urlPart = item.landingPage.url;
-        }
-      });
+    if (landing) {
+      const urlPart = landing.url;
 
       if (urlPart.toLowerCase().replace(/ /ig, '-') !== siteLocation) {
         invalidSite = true;
@@ -92,6 +86,7 @@ export class LandingPage extends React.Component {
     }
 
     if (subscribedFromLanding) {
+      sendThankYouEmail(subscribedFromLanding);
       browserHistory.push('/thankyou-page');
     }
   }
@@ -99,41 +94,19 @@ export class LandingPage extends React.Component {
   onSubmitForm(params) {
     const { landing } = this.props;
     const separateNames = params.name.split(' ');
-
-    let landingPage;
-    for (const studySource of landing.studySources) {
-      if (studySource.landingPage) {
-        landingPage = studySource.landingPage;
-        break;
-      }
-    }
     const data = {
       firstName: separateNames[0],
       lastName: separateNames[1] || null,
       email: params.email,
       phone: normalizePhone(params.phone),
-      landing_page_id: landingPage.id,
+      landing_page_id: landing.id,
     };
 
     this.props.subscribeFromLanding(data);
   }
 
   render() {
-    const { subscriptionError, landingIsFetching, location } = this.props;
-
-    let landing = null;
-    let study = null;
-    if (this.props.landing) {
-      study = this.props.landing;
-
-      for (const studySource of study.studySources) {
-        if (studySource.landingPage) {
-          landing = studySource.landingPage;
-          break;
-        }
-      }
-    }
-
+    const { subscriptionError, landingIsFetching, location, landing } = this.props;
     if (landingIsFetching || landing === null) {
       return (
         <div id="main">
@@ -150,7 +123,7 @@ export class LandingPage extends React.Component {
           meta={[
             {
               name: 'og:description',
-              content: study.name,
+              content: landing.studyName,
             },
             {
               name: 'twitter:description',
@@ -159,8 +132,8 @@ export class LandingPage extends React.Component {
           ]}
         />
         <div className="container">
-          <LandingForm study={study} landing={landing} onSubmit={this.onSubmitForm} subscriptionError={subscriptionError} />
-          <LandingArticle study={study} landing={landing} location={location} />
+          <LandingForm landing={landing} onSubmit={this.onSubmitForm} subscriptionError={subscriptionError} />
+          <LandingArticle landing={landing} location={location} />
         </div>
       </div>
     );
@@ -180,6 +153,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
     subscribeFromLanding: (params) => dispatch(subscribeFromLanding(params)),
+    sendThankYouEmail: (params) => dispatch(sendThankYouEmail(params)),
     clearLanding: () => dispatch(clearLanding()),
   };
 }
