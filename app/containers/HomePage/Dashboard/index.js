@@ -1,7 +1,8 @@
+import classNames from 'classnames';
+import { reject } from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { reject } from 'lodash';
 
 import RewardModal from '../../../components/RewardModal';
 
@@ -13,7 +14,6 @@ import { fetchPatientSignUps, fetchPatientMessages } from '../actions';
 import { selectPatientSignUps, selectPatientMessages } from '../selectors';
 
 import graph from '../../../assets/images/graph.svg';
-import classNames from 'classnames';
 
 export class Dashboard extends React.Component {
   static propTypes = {

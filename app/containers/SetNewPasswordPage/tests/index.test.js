@@ -1,10 +1,10 @@
 // import SetNewPasswordPage from '../index';
 
 import expect from 'expect';
-import SetNewPasswordPage from '../index';
-import { ReduxForm } from 'redux-form';
 import { shallow } from 'enzyme';
 import React from 'react';
+import { ReduxForm } from 'redux-form';
+import SetNewPasswordPage from '../index';
 
 describe('<SetNewPasswordPage />', () => {
   let setup;

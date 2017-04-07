@@ -1,9 +1,8 @@
+import { get } from 'lodash';
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import request from '../../utils/request';
-import { get } from 'lodash';
-import composeQueryString from '../../utils/composeQueryString';
 
 import {
   proposalsReceived,
@@ -44,18 +43,22 @@ export function* proposalSaga() {
 
 export function* getProposals() {
   while (true) {
-    const { payload } = yield take(GET_PROPOSALS);
+    const { clientRoleId, searchParams } = yield take(GET_PROPOSALS);
     try {
-      const queryParams = { filter: '{"include": [ "level", "indication" ]}' };
-      const queryString = composeQueryString(queryParams);
-      const requestURL = `${API_URL}/proposals/?${queryString}`;
-      const response = yield call(request, requestURL);
+      const params = {
+        method: 'GET',
+        query: {
+          clientRoleId,
+          searchParams,
+        },
+      };
+      const requestURL = `${API_URL}/proposals`;
+      const response = yield call(request, requestURL, params);
 
       yield put(proposalsReceived(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'We encountered an error loading proposals. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
-      payload.cb(err, null);
     }
   }
 }

@@ -7,10 +7,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import { createStructuredSelector } from 'reselect';
+
 import { selectDashboardPortalsClients, selectDashboardPortalsFormValues, selectDashboardPortalsSponsors } from './selectors';
 import { DashboardPortalsForm } from '../DashboardPortalsPage/DashboardPortalsForm';
 import { fetchClients, fetchSponsors } from './actions';
-import { createStructuredSelector } from 'reselect';
 
 export class DashboardPortalsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 

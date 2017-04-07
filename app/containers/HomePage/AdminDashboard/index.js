@@ -1,18 +1,23 @@
-import React, { PropTypes, Component } from 'react';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { Modal } from 'react-bootstrap';
-import { Field, reduxForm, reset, change } from 'redux-form';
 import classNames from 'classnames';
-import Button from 'react-bootstrap/lib/Button';
-import { StickyContainer } from 'react-sticky';
 import _, { map, mapKeys, concat, findIndex, pullAt } from 'lodash';
-import './styles.less';
+import moment from 'moment-timezone';
+import React, { PropTypes, Component } from 'react';
+import Button from 'react-bootstrap/lib/Button';
+import Modal from 'react-bootstrap/lib/Modal';
+import rd3 from 'react-d3';
+import { defaultRanges, DateRange } from 'react-date-range';
+import { connect } from 'react-redux';
+import { StickyContainer } from 'react-sticky';
+import { Field, reduxForm, reset, change } from 'redux-form';
+import { createStructuredSelector } from 'reselect';
+
 import CenteredModal from '../../../components/CenteredModal';
 import FiltersForm from './FiltersForm';
 import StudyList from './StudyList';
 import Filter from '../../../components/Filter';
-// import { selectFilterFormValues } from './FiltersForm/selectors';
+
+import './styles.less';
+
 import {
   selectFilterFormValues,
   selectLevels,
@@ -29,9 +34,6 @@ import {
   selectEditStudyValues,
   selectMessagingNumbers,
 } from './selectors';
-import rd3 from 'react-d3';
-import moment from 'moment-timezone';
-import { defaultRanges, DateRange } from 'react-date-range';
 import {
   fetchStudiesDashboard,
   fetchSiteNames,

@@ -1,25 +1,26 @@
+import classNames from 'classnames';
+import _, { map, indexOf } from 'lodash';
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, change } from 'redux-form';
-import _, { map, indexOf } from 'lodash';
-import classNames from 'classnames';
+import moment from 'moment-timezone';
 import Button from 'react-bootstrap/lib/Button';
+import Modal from 'react-bootstrap/lib/Modal';
+import { defaultRanges, DateRange } from 'react-date-range';
+import { Field, change } from 'redux-form';
 import { StickyContainer, Sticky } from 'react-sticky';
+
 import ReactSelect from '../../../../components/Input/ReactSelect';
-import EditInformationModal from '../EditStudyForms/EditInformationModal';
 import LandingPageModal from '../../../../components/LandingPageModal';
 import ThankyouPageModal from '../../../../components/ThankyouPageModal';
 import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
-import StudyLeftItem from './StudyLeftItem';
-import StudyRightItem from './StudyRightItem';
-import { Modal } from 'react-bootstrap';
 import CenteredModal from '../../../../components/CenteredModal';
-import moment from 'moment-timezone';
-import { defaultRanges, DateRange } from 'react-date-range';
-import { selectStudies, selectPaginationOptions, selectAddNotificationProcess } from '../selectors';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
 import AddEmailNotificationForm from '../../../../components/AddEmailNotificationForm';
+import EditInformationModal from '../EditStudyForms/EditInformationModal';
+import { selectStudies, selectPaginationOptions, selectAddNotificationProcess } from '../selectors';
+import StudyLeftItem from './StudyLeftItem';
+import StudyRightItem from './StudyRightItem';
 
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

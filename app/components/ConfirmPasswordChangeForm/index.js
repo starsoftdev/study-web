@@ -5,9 +5,11 @@
 */
 
 import React from 'react';
-import { FormGroup, Col } from 'react-bootstrap';
-import { confirmChangePasswordRequest } from '../../containers/ProfilePage/actions';
 import { connect } from 'react-redux';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import Col from 'react-bootstrap/lib/Col';
+
+import { confirmChangePasswordRequest } from '../../containers/ProfilePage/actions';
 
 function mapDispatchToProps(dispatch) {
   return {
