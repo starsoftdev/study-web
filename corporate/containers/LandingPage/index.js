@@ -68,7 +68,7 @@ export class LandingPage extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { subscribedFromLanding, landing, sendThankYouEmail } = newProps;
+    const { subscribedFromLanding, landing, sendThankYouEmail, landingError } = newProps;
     const { siteLocation } = newProps.params;
     let invalidSite = false;
 
@@ -80,7 +80,7 @@ export class LandingPage extends React.Component {
       }
     }
 
-    if (invalidSite) {
+    if (invalidSite || landingError) {
       this.props.clearLanding();
       browserHistory.push('/');
     }
