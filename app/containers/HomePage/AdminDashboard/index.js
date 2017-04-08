@@ -33,6 +33,7 @@ import {
   selectAllClientUsers,
   selectEditStudyValues,
   selectMessagingNumbers,
+  selectPaginationOptions,
 } from './selectors';
 import {
   fetchStudiesDashboard,
@@ -57,7 +58,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   static propTypes = {
     dispatch: PropTypes.func,
     filtersFormValues: PropTypes.object,
-    paginationOptions: PropTypes.object,
     studies: PropTypes.array,
     resetForm: PropTypes.func,
     fetchStudiesDashboard: PropTypes.func,
@@ -91,6 +91,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     fetchMessagingNumbersDashboard: PropTypes.func,
     messagingNumbers: PropTypes.object,
     updateTwilioNumbers: PropTypes.func,
+    paginationOptions: PropTypes.object,
   };
 
   constructor(props) {
@@ -273,7 +274,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     return newFilters;
   }
 
-  fetchStudiesAccordingToFilters(value, key) {
+  fetchStudiesAccordingToFilters(value, key, fetchByScroll) {
     let filters = _.cloneDeep(this.props.filtersFormValues);
 
     if (value && key) {
@@ -295,10 +296,17 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
       }
     });
 
+    let offset = 0;
+    const limit = 10;
+
+    if (fetchByScroll) {
+      offset = this.props.paginationOptions.page * 10;
+    }
+
     if (isEmpty) {
       this.props.clearFilters();
     } else {
-      this.props.fetchStudiesDashboard(filters);
+      this.props.fetchStudiesDashboard(filters, limit, offset);
     }
   }
 
@@ -638,6 +646,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
             toggleStudy={this.props.toggleStudy}
             messagingNumbers={this.props.messagingNumbers}
+            paginationOptions={this.props.paginationOptions}
           />
         </StickyContainer>
       </div>
@@ -660,12 +669,13 @@ const mapStateToProps = createStructuredSelector({
   allClientUsers: selectAllClientUsers(),
   editStudyValues: selectEditStudyValues(),
   messagingNumbers: selectMessagingNumbers(),
+  paginationOptions: selectPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     resetForm: () => dispatch(reset('dashboardFilters')),
-    fetchStudiesDashboard: (params) => dispatch(fetchStudiesDashboard(params)),
+    fetchStudiesDashboard: (params, limit, offset) => dispatch(fetchStudiesDashboard(params, limit, offset)),
     fetchLevels: () => dispatch(fetchLevels()),
     fetchSiteNames: () => dispatch(fetchSiteNames()),
     fetchSiteLocations: () => dispatch(fetchSiteLocations()),
