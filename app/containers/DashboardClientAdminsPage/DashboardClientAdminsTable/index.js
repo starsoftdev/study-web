@@ -161,7 +161,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
   updateMessagingNumber(params) {
     const nValues = [];
     forEach(this.props.clientSites.details, (data) => {
-      if (params[`site-${data.id}`]) {
+      if (params[`site-${data.id}`] || params[`site-${data.id}`] === null) {
         nValues.push({
           site_id: data.id,
           phone_id: params[`site-${data.id}`],
