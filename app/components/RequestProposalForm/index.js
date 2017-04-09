@@ -39,6 +39,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
     callTracking: PropTypes.bool,
     leadsCount: PropTypes.number,
     formValues: PropTypes.object,
+    currentUser: PropTypes.object,
   };
 
   constructor(props) {
@@ -77,8 +78,21 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
   }
 
   render() {
-    const { siteLocations, indications, studyLevels } = this.props;
+    const { siteLocations, indications, studyLevels, currentUser } = this.props;
     const { callTracking } = this.props;
+
+    const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
+    }
+    let defaultValue = null;
+    if (!isAdmin && bDisabled) {
+      defaultValue = currentUser.site_id;
+      if (currentUser && currentUser.roleForClient) {
+        defaultValue = currentUser.roleForClient.site_id;
+      }
+    }
 
     return (
       <div className="form-study">
@@ -90,6 +104,8 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
               component={ReactSelect}
               placeholder="Select Site Location"
               options={siteLocations}
+              disabled={bDisabled}
+              selectedValue={defaultValue || undefined}
               className="field"
             />
           </div>
