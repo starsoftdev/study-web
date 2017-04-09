@@ -37,6 +37,11 @@ class AvatarMenu extends React.Component {
     const { currentUser, userRoleType } = this.props;
     const { firstName, lastName } = currentUser;
     const userName = `${firstName} ${lastName}`;
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.name === 'Super Admin');
+    }
+    const paymentClassName = bDisabled ? 'disabled-li' : null;
 
     return (
       <div className="logged-user-area open-close pull-right">
@@ -51,7 +56,7 @@ class AvatarMenu extends React.Component {
           <div className="well">
             <ul className="list-unstyled">
               <li><Link to="/app/me/profile" onClick={() => this.handleClickOutside()}>PROFILE</Link></li>
-              <li><Link to="/app/payment-information" onClick={() => this.handleClickOutside()}>PAYMENT INFORMATION</Link></li>
+              <li className={paymentClassName}><Link to="/app/payment-information" onClick={() => this.handleClickOutside()}>PAYMENT INFORMATION</Link></li>
               { userRoleType === 'client' &&
                 <li><Link to="/app/receipts" onClick={() => this.handleClickOutside()}>RECEIPTS</Link></li>
               }
