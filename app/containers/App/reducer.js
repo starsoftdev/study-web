@@ -1,5 +1,5 @@
-import { getItem } from '../../utils/localStorage';
 import { forEach, map, remove, cloneDeep, findIndex, concat, sortBy, reverse } from 'lodash';
+import { getItem } from '../../utils/localStorage';
 
 import {
   SET_AUTH_STATE,

@@ -67,7 +67,7 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { siteLocations, companyTypes } = this.props;
+    const { siteLocations, companyTypes, currentUser } = this.props;
 
     return (
       <div className="container-fluid">
@@ -103,7 +103,7 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
             </div>
 
             <div className="form-holder ovh">
-              <ReferForm siteLocations={siteLocations} companyTypes={companyTypes} onSubmit={this.onSubmitForm} />
+              <ReferForm siteLocations={siteLocations} companyTypes={companyTypes} onSubmit={this.onSubmitForm} currentUser={currentUser} />
             </div>
 
           </div>

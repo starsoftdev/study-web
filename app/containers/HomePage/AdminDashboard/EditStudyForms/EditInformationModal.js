@@ -2,8 +2,9 @@
  * Created by mike on 10/11/16.
  */
 
-import React, { PropTypes } from 'react';
+import classNames from 'classnames';
 import _ from 'lodash';
+import React, { PropTypes } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -19,7 +20,6 @@ import ReactSelect from '../../../../components/Input/ReactSelect';
 import RenderEmailsList from './RenderEmailsList';
 import { selectStudyCampaigns } from '../selectors';
 import FormGeosuggest from '../../../../components/Input/Geosuggest';
-import classNames from 'classnames';
 
 const mapStateToProps = createStructuredSelector({
   studyCampaigns: selectStudyCampaigns(),

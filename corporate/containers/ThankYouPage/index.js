@@ -14,7 +14,6 @@ import {
 } from '../../../app/containers/App/selectors';
 import {
   clearLanding,
-  sendThankYouEmail,
 } from '../../../app/containers/App/actions';
 
 export class ThankYouPage extends React.Component {
@@ -23,7 +22,6 @@ export class ThankYouPage extends React.Component {
     landing: PropTypes.object,
     currentUser: PropTypes.any,
     clearLanding:  PropTypes.func.isRequired,
-    sendThankYouEmail:  PropTypes.func.isRequired,
     subscribedFromLanding:  PropTypes.object,
   };
 
@@ -44,9 +42,7 @@ export class ThankYouPage extends React.Component {
     if (this.props.landing) {
       this.setState({
         landing: this.props.landing,
-        subscribedFromLanding: this.props.subscribedFromLanding,
       }, () => {
-        this.props.sendThankYouEmail(this.props.subscribedFromLanding);
         this.props.clearLanding();
       });
     }
@@ -57,20 +53,12 @@ export class ThankYouPage extends React.Component {
 
   render() {
     const landing = (this.state.landing) ? this.state.landing : this.props.landing;
-    const site = landing.site;
+    let address = `${landing.address}<br />`;
+    const city = landing.city;
+    const state = landing.state;
+    const zip = landing.zip;
 
-    let address = `${site.address}<br />`;
-    const city = site.city;
-    const state = site.state;
-    const zip = site.zip;
-
-    let thankYouData;
-
-    for (const data of landing.studySources) {
-      if (data.landing_page_id) {
-        thankYouData = data.landingPage.thankYouPage;
-      }
-    }
+    const thankYouData = landing.thankYouPage;
 
     const thankyouForText =
       (thankYouData.thankyouFor && thankYouData.thankyouFor !== '') ? thankYouData.thankyouFor : 'Thank you for signing up for our research study!';
@@ -105,7 +93,7 @@ export class ThankYouPage extends React.Component {
             </p>
             {thankYouData.isShareLocation &&
               <strong className="name txt-green">
-                {site.name}
+                {landing.siteName}
               </strong>
             }
             {thankYouData.isSharePhone &&
@@ -143,7 +131,6 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     clearLanding: () => dispatch(clearLanding()),
-    sendThankYouEmail: (params) => dispatch(sendThankYouEmail(params)),
   };
 }
 

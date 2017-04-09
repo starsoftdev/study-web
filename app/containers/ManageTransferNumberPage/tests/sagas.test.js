@@ -3,9 +3,9 @@
  */
 
 import expect from 'expect';
+import { LOCATION_CHANGE } from 'react-router-redux';
 import { take, put, fork, cancel } from 'redux-saga/effects';
 import { manageTransferNumberPageSaga, submitSourcesWatcher, fetchSourcesWatcher } from '../sagas';
-import { LOCATION_CHANGE } from 'react-router-redux';
 
 describe('MangeTransferNumberPageSaga Saga', () => {
   describe('mangeTransferNumberPageSaga', () => {

@@ -4,6 +4,8 @@
  *
  */
 
+import _ from 'lodash';
+
 import {
   FETCH_CRO,
   FETCH_CRO_SUCCESS,
@@ -19,8 +21,6 @@ import {
   DELETE_CRO_ERROR,
   SET_ACTIVE_SORT,
 } from './constants';
-
-import _ from 'lodash';
 
 const initialState = {
   cro: {

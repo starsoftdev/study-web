@@ -15,9 +15,18 @@ export default class NotFound extends React.Component { // eslint-disable-line r
 
   render() {
     return (
-      <h1>
-        This is NotFoundPage component !
-      </h1>
+      <div>
+        <h1>
+          The page you are looking for can't be found.
+        </h1>
+        <h3>Here are some helpful links instead:</h3>
+        <li>
+          <a href="/app">Home</a>
+        </li>
+        <li>
+          <a href="/logout">Log Out</a>
+        </li>
+      </div>
     );
   }
 }

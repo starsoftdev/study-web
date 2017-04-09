@@ -37,17 +37,17 @@ import AlertModal from '../../components/AlertModal';
 
 export class Proposals extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    siteLocations: PropTypes.array,
-    unsubscribeFromAll: PropTypes.func,
-    unsubscribeFromPageEvent: PropTypes.func,
+    currentUser: PropTypes.object,
+    createPDF: PropTypes.func,
     fetchClientSites: PropTypes.func,
     fetchEvents: PropTypes.func,
     getProposals: PropTypes.func,
-    createPDF: PropTypes.func,
-    location: PropTypes.any,
-    proposals: PropTypes.any,
-    currentUser: PropTypes.any,
+    location: PropTypes.object,
+    proposals: PropTypes.array,
     showProposalPdf: PropTypes.func,
+    siteLocations: PropTypes.array,
+    unsubscribeFromAll: PropTypes.func,
+    unsubscribeFromPageEvent: PropTypes.func,
   }
 
   constructor(props, context) {
@@ -94,7 +94,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
 
     const { currentUser, fetchClientSites, fetchEvents, getProposals } = this.props;
     fetchClientSites(currentUser.roleForClient.client_id);
-    getProposals();
+    getProposals(currentUser.roleForClient.client_id);
     fetchEvents(events);
   }
 
@@ -106,6 +106,28 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
       this.setState({
         proposals: nextProps.proposals,
       });
+    }
+
+    const { currentUser, siteLocations } = nextProps;
+
+    if (siteLocations.length > 0 && this.props.siteLocations.length < 1) {
+      const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
+      let bDisabled = true;
+      if (currentUser && currentUser.roleForClient) {
+        bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
+      }
+      let defaultValue = null;
+      if (!isAdmin && bDisabled) {
+        defaultValue = currentUser.site_id;
+        if (currentUser && currentUser.roleForClient) {
+          defaultValue = currentUser.roleForClient.site_id;
+        }
+        const site = siteLocations[defaultValue - 1] || null;
+
+        this.setState({
+          site,
+        });
+      }
     }
   }
 
@@ -233,7 +255,7 @@ function mapDispatchToProps(dispatch) {
     unsubscribeFromPageEvent: (values) => dispatch(unsubscribeFromPageEvent(values)),
     fetchEvents: (values) => dispatch(fetchEvents(values)),
     fetchClientSites: (id) => dispatch(fetchClientSites(id)),
-    getProposals: (values) => dispatch(getProposals(values)),
+    getProposals: (clientRoleId, searchParams) => dispatch(getProposals(clientRoleId, searchParams)),
     createPDF: (values) => dispatch(createPDF(values)),
     showProposalPdf: (values) => dispatch(showProposalPdf(values)),
   };

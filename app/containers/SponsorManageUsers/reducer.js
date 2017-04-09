@@ -4,6 +4,7 @@
  *
  */
 
+import _ from 'lodash';
 import {
   FETCH_MANAGE_SPONSOR_USERS_DATA,
   FETCH_MANAGE_SPONSOR_USERS_DATA_SUCCESS,
@@ -20,8 +21,6 @@ import {
   EDIT_PROTOCOL_SUCCESS,
   EDIT_PROTOCOL_ERROR,
 } from './constants';
-
-import _ from 'lodash';
 
 const initialState = {
   editUserProcess: {

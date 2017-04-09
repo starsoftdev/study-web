@@ -14,13 +14,13 @@ import Form from 'react-bootstrap/lib/Form';
 
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
-import { selectSources, selectStudiesFromSites, selectCurrentUserClientId } from '../../App/selectors';
+import { selectSources, selectStudiesFromSites, selectCurrentUserClientId, selectProtocols } from '../../App/selectors';
 import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import sanitizeProps from '../../../utils/sanitizeProps';
 import { submitAddPatient } from '../actions';
-import { selectAddPatientStatus, selectProtocols } from '../selectors';
+import { selectAddPatientStatus } from '../selectors';
 import formValidator, { fields } from './validator';
 
 const formName = 'addPatient';

@@ -1,9 +1,9 @@
-import StudyPage from '../index';
 import React from 'react';
 import { shallow } from 'enzyme';
 import chaiEnzyme from 'chai-enzyme';
 import expect from 'expect';
 import chai from 'chai';
+import StudyPage from '../index';
 chai.use(chaiEnzyme());
 const chaiExpect = chai.expect;
 

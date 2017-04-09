@@ -34,9 +34,6 @@ import {
   SUBMIT_ADD_PATIENT_FAILURE,
   CLEAR_PATIENTS_LIST,
   CLEAR_IMPORT_FORM,
-  FETCH_PROTOCOLS,
-  FETCH_PROTOCOLS_SUCCESS,
-  FETCH_PROTOCOLS_ERROR,
 } from './constants';
 
 export function fetchPatients(clientId, searchParams = {}, patients = {}, searchFilter = {}, isExport = false) {
@@ -282,25 +279,5 @@ export function editPatientSite(site) {
 export function clearForm() {
   return {
     type: CLEAR_IMPORT_FORM,
-  };
-}
-
-export function fetchProtocols() {
-  return {
-    type: FETCH_PROTOCOLS,
-  };
-}
-
-export function fetchProtocolsSuccess(payload) {
-  return {
-    type: FETCH_PROTOCOLS_SUCCESS,
-    payload,
-  };
-}
-
-export function fetchProtocolsError(payload) {
-  return {
-    type: FETCH_PROTOCOLS_ERROR,
-    payload,
   };
 }

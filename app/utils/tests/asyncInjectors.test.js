@@ -3,9 +3,9 @@
  */
 
 import expect from 'expect';
-import configureStore from '../../store';
 import { memoryHistory } from 'react-router';
 import { put } from 'redux-saga/effects';
+import configureStore from '../../store';
 
 import {
   injectAsyncReducer,

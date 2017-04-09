@@ -2,11 +2,13 @@
  * Created by mike on 10/6/16.
  */
 
+import _ from 'lodash';
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { Field, reduxForm, change } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
+import { actions as toastrActions } from 'react-redux-toastr';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
@@ -18,10 +20,8 @@ import Input from '../../../components/Input/index';
 import * as Selector from '../selectors';
 import { addPatientsToTextBlast, findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitTextBlast } from '../actions';
 import { selectActiveField, selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
-import { actions as toastrActions } from 'react-redux-toastr';
 import { fetchClientCredits } from '../../App/actions';
 import { selectCurrentUser, selectClientCredits, selectSources } from '../../App/selectors';
-import _ from 'lodash';
 
 const formName = 'StudyPage.TextBlastModal';
 

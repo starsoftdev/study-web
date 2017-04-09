@@ -1,7 +1,7 @@
+import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import moment from 'moment';
 import { reduxForm } from 'redux-form';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';

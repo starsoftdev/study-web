@@ -28,13 +28,13 @@ class SideNavBar extends React.Component {
     let helpPhone = '';
     if (userRoleType === 'client') {
       purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
-      helpName = (currentUser.roleForClient.client && currentUser.roleForClient.client.bdUser) ? `${currentUser.roleForClient.client.bdUser.firstName} ${currentUser.roleForClient.client.bdUser.lastName}` : '';
-      helpEmail = (currentUser.roleForClient.client && currentUser.roleForClient.client.bdUser) ? currentUser.roleForClient.client.bdUser.email : '';
-      helpPhone = (currentUser.roleForClient.client && currentUser.roleForClient.client.bdUser) ? currentUser.roleForClient.client.bdUser.phone : '';
+      helpName = (currentUser.roleForClient.client && currentUser.roleForClient.client.projectManager) ? `${currentUser.roleForClient.client.projectManager.firstName} ${currentUser.roleForClient.client.projectManager.lastName}` : '';
+      helpEmail = (currentUser.roleForClient.client && currentUser.roleForClient.client.projectManager) ? currentUser.roleForClient.client.projectManager.email : '';
+      helpPhone = (currentUser.roleForClient.client && currentUser.roleForClient.client.projectManager) ? currentUser.roleForClient.client.projectManager.phone : '';
     } else {
-      helpName = (currentUser.roleForSponsor.sponsor && currentUser.roleForSponsor.sponsor.bdUser) ? `${currentUser.roleForSponsor.sponsor.bdUser.firstName} ${currentUser.roleForSponsor.sponsor.bdUser.lastName}` : '';
-      helpEmail = (currentUser.roleForSponsor.sponsor && currentUser.roleForSponsor.sponsor.bdUser) ? currentUser.roleForSponsor.sponsor.bdUser.email : '';
-      helpPhone = (currentUser.roleForSponsor.sponsor && currentUser.roleForSponsor.sponsor.bdUser) ? currentUser.roleForSponsor.sponsor.bdUser.phone : '';
+      helpName = (currentUser.roleForSponsor.sponsor && currentUser.roleForSponsor.sponsor.projectManager) ? `${currentUser.roleForSponsor.sponsor.projectManager.firstName} ${currentUser.roleForSponsor.sponsor.projectManager.lastName}` : '';
+      helpEmail = (currentUser.roleForSponsor.sponsor && currentUser.roleForSponsor.sponsor.projectManager) ? currentUser.roleForSponsor.sponsor.projectManager.email : '';
+      helpPhone = (currentUser.roleForSponsor.sponsor && currentUser.roleForSponsor.sponsor.projectManager) ? currentUser.roleForSponsor.sponsor.projectManager.phone : '';
     }
     let menuItemsGroupA;
     let menuItemsGroupB;

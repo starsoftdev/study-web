@@ -13,6 +13,7 @@ import GlobalPMSModal from '../../components/GlobalPMSModal';
 
 import NotificationBox from './NotificationBox';
 import AvatarMenu from './AvatarMenu';
+import HelpMenu from './HelpMenu';
 
 import { fetchClientCredits, fetchPatientMessageUnreadCount, fetchSitePatients } from '../../containers/App/actions';
 import {
@@ -131,16 +132,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
               </a>
             </div>
 
-            <div className="open-close help-drop pull-left">
-              <a
-                className="link-help pull-left opener"
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="Coming Soon"
-              >
-                ?
-              </a>
-            </div>
+            <HelpMenu />
 
             <a
               className={classNames('opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}

@@ -298,7 +298,7 @@ export default function homePageReducer(state = initialState, action) {
       return {
         ...state,
         protocols: {
-          details: payload.protocols,
+          details: payload,
           fetching: false,
           error: null,
         },

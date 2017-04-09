@@ -4,6 +4,9 @@
  *
  */
 
+import _ from 'lodash';
+import moment from 'moment';
+
 import {
   GET_REPORTS_LIST,
   GET_REPORTS_LIST_SUCCESS,
@@ -14,9 +17,6 @@ import {
   CHANGE_PROTOCOL_STATUS_SUCCESS,
   CHANGE_PROTOCOL_STATUS_ERROR,
 } from './constants';
-
-import _ from 'lodash';
-import moment from 'moment';
 
 const initialState = {
   reportsList: {

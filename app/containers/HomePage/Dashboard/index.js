@@ -1,7 +1,8 @@
+import classNames from 'classnames';
+import { reject } from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { reject } from 'lodash';
 
 import RewardModal from '../../../components/RewardModal';
 
@@ -13,7 +14,6 @@ import { fetchPatientSignUps, fetchPatientMessages } from '../actions';
 import { selectPatientSignUps, selectPatientMessages } from '../selectors';
 
 import graph from '../../../assets/images/graph.svg';
-import classNames from 'classnames';
 
 export class Dashboard extends React.Component {
   static propTypes = {
@@ -61,9 +61,8 @@ export class Dashboard extends React.Component {
 
   render() {
     const { currentUser, patientSignUps, patientMessages, rewardsBalance, siteLocations, pickReward, patientMessageUnreadCount } = this.props;
-    const redeemable = (currentUser.roleForClient && currentUser.roleForClient.canRedeemRewards);
+    const redeemable = (currentUser.roleForClient && currentUser.roleForClient.canRedeemRewards) || currentUser.roleForClient.name === 'Super Admin';
     const redeemableSiteLocations = reject(siteLocations, { id: 0 });
-
     return (
       <section className="row infoarea text-uppercase">
         <h2 className="hidden">Statics</h2>

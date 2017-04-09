@@ -172,7 +172,7 @@ export default function* baseDataSaga() {
   yield fork(changeUsersTimezoneWatcher);
   yield fork(fetchClientAdminsWatcher);
   yield fork(changeTemporaryPassword);
-  yield fork(takeLatest, FETCH_LANDING, fetchLandingStudy);
+  yield fork(takeLatest, FETCH_LANDING, fetchLanding);
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
   yield fork(takeLatest, FIND_OUT_PATIENTS, postFindOutPatients);
   yield fork(takeLatest, CLINICAL_TRIALS_SEARCH, searchClinicalTrials);
@@ -868,14 +868,11 @@ export function* changeTemporaryPassword() {
   }
 }
 
-function* fetchLandingStudy(action) {
+function* fetchLanding(action) {
   const { studyId } = action;
-  const filter = JSON.stringify({
-    include: [{ studySources: ['source', { landingPage: ['thankYouPage'] }] }, 'indication', { site: ['phone'] }],
-  });
   // put the fetching study action in case of a navigation action
   try {
-    const requestURL = `${API_URL}/studies/${studyId}?filter=${filter}`;
+    const requestURL = `${API_URL}/landingPages/${studyId}/fetchLanding`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
@@ -1029,7 +1026,7 @@ function* newContact(action) {
 function* sendThankYouEmail(action) {
   try {
     const params = action.payload;
-    const requestURL = `${API_URL}/landingPages/sendThankYouEmail`;
+    const requestURL = `${API_URL}/thankYouPages/sendThankYouEmail`;
     const options = {
       method: 'POST',
       body: JSON.stringify(params),
@@ -1065,13 +1062,17 @@ export function* fetchSponsorsWatcher() {
 
 export function* fetchProtocolsWatcher() {
   while (true) {
-    yield take(FETCH_PROTOCOLS);
+    const { clientRoleId, sponsorRoleId } = yield take(FETCH_PROTOCOLS);
 
     try {
       const requestURL = `${API_URL}/protocols`;
 
       const params = {
         method: 'GET',
+        query: {
+          clientRoleId,
+          sponsorRoleId,
+        },
       };
       const response = yield call(request, requestURL, params);
 

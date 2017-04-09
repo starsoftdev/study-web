@@ -5,9 +5,10 @@
 */
 
 import React, { PropTypes } from 'react';
-import CardItem from '../../components/CardItem';
 import moment from 'moment-timezone';
 import _ from 'lodash';
+
+import CardItem from '../../components/CardItem';
 
 class PaymentMethodsForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

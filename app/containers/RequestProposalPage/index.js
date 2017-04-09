@@ -71,7 +71,7 @@ export class RequestProposalPage extends Component {
   }
 
   render() {
-    const { siteLocations, indications, studyLevels, proposalDetail, userRoleType } = this.props;
+    const { siteLocations, indications, studyLevels, proposalDetail, userRoleType, currentUser } = this.props;
 
     return (
       <div>
@@ -89,6 +89,7 @@ export class RequestProposalPage extends Component {
                     siteLocations={siteLocations}
                     indications={indications}
                     studyLevels={studyLevels}
+                    currentUser={currentUser}
                     initialValues={proposalDetail}
                     formValues={this.props.formValues}
                   />

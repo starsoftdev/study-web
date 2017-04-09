@@ -3,7 +3,8 @@ import Form from 'react-bootstrap/lib/Form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import _, { map } from 'lodash';
+import _ from 'lodash';
+
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { selectSearchProtocolsFormError } from './selectors';
@@ -11,7 +12,6 @@ import { selectProtocols, selectProtocolNumbers, selectIndications } from '../se
 import formValidator from './validator';
 
 const mapStateToProps = createStructuredSelector({
-  // clientSites: selectClientSites(),
   protocols: selectProtocols(),
   protocolNumbers: selectProtocolNumbers(),
   indications: selectIndications(),
@@ -23,7 +23,6 @@ const mapStateToProps = createStructuredSelector({
 
 class SearchProtocolsForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    // clientSites: PropTypes.object,
     protocols: PropTypes.object,
     protocolNumbers: PropTypes.object,
     indications: PropTypes.object,
@@ -34,16 +33,18 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
 
   render() {
     const { protocols, hasError, handleSubmit, protocolNumbers, indications } = this.props;
-    const protocolNumberOptions = [{ label: 'All', value: 'all' }].concat(map(protocolNumbers.details, row => ({
-      label: row.protocolNumber,
-      value: row.protocolNumber,
+    const protocolNumberOptions = [{ label: 'All', value: 'all' }].concat(protocolNumbers.details.map(row => ({
+      label: row.number,
+      value: row.number,
     })));
-    const indicationOptions = [{ label: 'All', value: 'all' }].concat(map(indications.details, row => ({
+    const indicationOptions = [{ label: 'All', value: 'all' }].concat(indications.details.map(row => ({
       label: row.name,
       value: row.id,
     })));
 
-    let croOptions = [{ label: 'All', value: 'all' }].concat(map(protocols.details, row => ({
+    let croOptions = [{ label: 'All', value: 'all' }].concat(protocols.details.filter(protocol => ((
+      protocol.croName
+    ))).map(row => ({
       label: row.croName,
       value: row.croName,
     })));

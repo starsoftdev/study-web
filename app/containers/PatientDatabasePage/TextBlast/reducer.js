@@ -2,18 +2,21 @@
  * Created by mike on 10/31/16.
  */
 
+import _ from 'lodash';
+
 import {
   ADD_PATIENTS_TO_TEXT_BLAST,
   REMOVE_PATIENT_FROM_TEXT_BLAST,
   REMOVE_PATIENTS_FROM_TEXT_BLAST,
   FETCH_PATIENTS_SUCCESS,
 } from '../constants';
-import _ from 'lodash';
+
 const initialState = {
   values: {
     uncheckedPatients: [],
   },
 };
+
 export default function TextBlastModal(state = initialState, action) {
   let patientsIdsToAdd = [];
   let patientsIdsToRemove = [];

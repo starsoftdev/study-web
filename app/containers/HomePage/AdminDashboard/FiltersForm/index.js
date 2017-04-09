@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -5,7 +6,6 @@ import { Field, reduxForm } from 'redux-form';
 
 import ReactMultiCheckBox from '../../../../components/Input/ReactMultiCheckbox';
 import formValidator from './validator';
-import _ from 'lodash';
 
 const formName = 'dashboardFilters';
 const mapStateToProps = createStructuredSelector({

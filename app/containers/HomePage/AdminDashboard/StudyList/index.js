@@ -1,31 +1,30 @@
+import classNames from 'classnames';
+import _, { map, indexOf } from 'lodash';
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, change } from 'redux-form';
-import _, { map, indexOf } from 'lodash';
-import classNames from 'classnames';
+import moment from 'moment-timezone';
 import Button from 'react-bootstrap/lib/Button';
+import Modal from 'react-bootstrap/lib/Modal';
+import { defaultRanges, DateRange } from 'react-date-range';
+import { Field, change } from 'redux-form';
 import { StickyContainer, Sticky } from 'react-sticky';
+import InfiniteScroll from 'react-infinite-scroller';
+
 import ReactSelect from '../../../../components/Input/ReactSelect';
-import EditInformationModal from '../EditStudyForms/EditInformationModal';
 import LandingPageModal from '../../../../components/LandingPageModal';
 import ThankyouPageModal from '../../../../components/ThankyouPageModal';
 import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
+import CenteredModal from '../../../../components/CenteredModal';
+import AddEmailNotificationForm from '../../../../components/AddEmailNotificationForm';
+import EditInformationModal from '../EditStudyForms/EditInformationModal';
+import { selectStudies, selectPaginationOptions, selectAddNotificationProcess } from '../selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
-import { Modal } from 'react-bootstrap';
-import CenteredModal from '../../../../components/CenteredModal';
-import moment from 'moment-timezone';
-import { defaultRanges, DateRange } from 'react-date-range';
-import { selectStudies, selectPaginationOptions, selectAddNotificationProcess } from '../selectors';
-import LoadingSpinner from '../../../../components/LoadingSpinner';
-import AddEmailNotificationForm from '../../../../components/AddEmailNotificationForm';
-
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func,
     studies: PropTypes.object,
-    paginationOptions: PropTypes.object,
     change: PropTypes.func,
     fetchStudiesDashboard: PropTypes.func,
     totals: PropTypes.object,
@@ -48,6 +47,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     changeStudyStatusDashboard: PropTypes.func,
     toggleStudy: PropTypes.func,
     messagingNumbers: PropTypes.object,
+    paginationOptions: PropTypes.object,
   };
 
   constructor(props) {
@@ -275,6 +275,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   loadItems() {
+    this.props.fetchStudiesAccordingToFilters(null, null, true);
     // this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, false);
   }
 
@@ -528,11 +529,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     return (
       <div>
         {(() => {
-          if (this.props.studies.fetching) {
-            return (
-              <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
-            );
-          } else if (this.props.studies.details.length > 0) {
+          if (this.props.studies.details.length > 0) {
             return (
               <div className={classNames({ 'btns-active' : selectedStudyCount > 0 })}>
                 { selectedStudyCount > 0 &&
@@ -614,7 +611,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                 }
                 <div className="study-tables fixed-top">
                   <div className="head">
-                    <h2 className="pull-left">{studies.length} STUDIES</h2>
+                    <h2 className="pull-left">{this.props.totals.details.total_studies || 0} STUDIES</h2>
                     <div className="btns pull-right">
                       <div className="select pull-left">
                         <Field
@@ -684,143 +681,152 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                       </Modal.Body>
                     </Modal>
                   </div>
-                  <StickyContainer className="table-area">
-                    <div className="table-left" data-table="">
-                      <Sticky className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))}>
-                        <table className="table table-study">
-                          <thead>
-                            <tr>
-                              <th>
-                                <span className={selectedAllStudies ? 'sm-container checked' : 'sm-container'}>
-                                  <span className="input-style" onClick={() => this.toggleAllstudies(!selectedAllStudies)}>
-                                    <input name="all" type="checkbox" />
-                                  </span>
-                                </span>
-                              </th>
-                              <th>
-                                <div>
-                                  <span className="text-uppercase">Status <i className="caret-arrow" /></span>
-                                  <span className="counter">Active: {this.props.totals.details.total_active || 0}</span>
-                                  <span className="counter">Inactive: {this.props.totals.details.total_inactive || 0}</span>
-                                </div>
-                              </th>
-                              <th>
-                                <div onClick={this.sortBy} data-sort="orderNumber" className={`${(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}`}>#<i className="caret-arrow" /></div>
-                              </th>
-                              <th>
-                                <div onClick={this.sortBy} data-sort="studyInfo" className={`${(this.props.paginationOptions.activeSort === 'studyInfo') ? this.props.paginationOptions.activeDirection : ''}`}>STUDY INFO<i className="caret-arrow" /></div>
-                              </th>
-                              <th>
-                                <div onClick={this.sortBy} data-sort="siteInfo" className={`${(this.props.paginationOptions.activeSort === 'siteInfo') ? this.props.paginationOptions.activeDirection : ''}`}>SITE INFO<i className="caret-arrow" /></div>
-                              </th>
-                              <th>
-                                <div onClick={this.sortBy} data-sort="indication" className={`${(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}`}>INDICATION<i className="caret-arrow" /></div>
-                              </th>
-                            </tr>
-                          </thead>
-                        </table>
-                      </Sticky>
-                      <table className="table table-study">
-                        <tbody>
-                          {studyListLeftContents}
-                        </tbody>
-                      </table>
-                    </div>
-                    <div
-                      className="table-right"
-                      data-table=""
-                      ref={(tableRight) => {
-                        this.tableRight = tableRight;
-                      }}
-                    >
-                      <div className="scroll-holder jcf-scrollable">
-                        <div
-                          className="table-inner"
-                          ref={(rightDivHeader) => {
-                            this.rightDivHeader = rightDivHeader;
-                          }}
-                        >
-                          <Sticky className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))}>
-                            <table className="table table-study">
-                              <thead>
-                                <tr>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="location" className={`${(this.props.paginationOptions.activeSort === 'location') ? this.props.paginationOptions.activeDirection : ''}`}>LOCATION<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="exposureLevel" className={`${(this.props.paginationOptions.activeSort === 'exposureLevel') ? this.props.paginationOptions.activeDirection : ''}`}>EXPOSURE LEVEL<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="goal" className={`${(this.props.paginationOptions.activeSort === 'goal') ? this.props.paginationOptions.activeDirection : ''}`}>GOAL<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="patients" className={`${(this.props.paginationOptions.activeSort === 'patients') ? this.props.paginationOptions.activeDirection : ''}`}>PATIENTS<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="days" className={`${(this.props.paginationOptions.activeSort === 'days') ? this.props.paginationOptions.activeDirection : ''}`}>DAYS<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="campaign" className={`${(this.props.paginationOptions.activeSort === 'campaign') ? this.props.paginationOptions.activeDirection : ''}`}>CAMPAIGN<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="pageViews" className={`${(this.props.paginationOptions.activeSort === 'pageViews') ? this.props.paginationOptions.activeDirection : ''}`}>PAGE VIEWS<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="facebook" className={`${(this.props.paginationOptions.activeSort === 'facebook') ? this.props.paginationOptions.activeDirection : ''}`}>FACEBOOK CLICKS<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="rewards" className={`${(this.props.paginationOptions.activeSort === 'rewards') ? this.props.paginationOptions.activeDirection : ''}`}>REWARDS<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="credits" className={`${(this.props.paginationOptions.activeSort === 'credits') ? this.props.paginationOptions.activeDirection : ''}`}>CREDITS<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="texts" className={`${(this.props.paginationOptions.activeSort === 'texts') ? this.props.paginationOptions.activeDirection : ''}`}>TEXTS<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="newPatients" className={`${(this.props.paginationOptions.activeSort === 'newPatients') ? this.props.paginationOptions.activeDirection : ''}`}>NEW PATIENT<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="callAttempted" className={`${(this.props.paginationOptions.activeSort === 'callAttempted') ? this.props.paginationOptions.activeDirection : ''}`}>CALL ATTEMPTED<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="notQualified" className={`${(this.props.paginationOptions.activeSort === 'notQualified') ? this.props.paginationOptions.activeDirection : ''}`}>NOT QUALIFIED<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="actionNeeded" className={`${(this.props.paginationOptions.activeSort === 'actionNeeded') ? this.props.paginationOptions.activeDirection : ''}`}>ACTION NEEDED<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="scheduled" className={`${(this.props.paginationOptions.activeSort === 'scheduled') ? this.props.paginationOptions.activeDirection : ''}`}>SCHEDULED<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="consented" className={`${(this.props.paginationOptions.activeSort === 'consented') ? this.props.paginationOptions.activeDirection : ''}`}>CONSENTED<i className="caret-arrow" /></div>
-                                  </th>
-                                  <th>
-                                    <div onClick={this.sortBy} data-sort="randomized" className={`${(this.props.paginationOptions.activeSort === 'randomized') ? this.props.paginationOptions.activeDirection : ''}`}>RANDOMIZED<i className="caret-arrow" /></div>
-                                  </th>
-                                </tr>
-                              </thead>
-                            </table>
-                          </Sticky>
+                  <InfiniteScroll
+                    className="test-test"
+                    pageStart={0}
+                    loadMore={this.loadItems}
+                    initialLoad={false}
+                    hasMore={this.props.paginationOptions.hasMoreItems}
+                    loader={<span>Loading...</span>}
+                  >
+                    <StickyContainer className="table-area">
+                      <div className="table-left" data-table="">
+                        <Sticky className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))}>
                           <table className="table table-study">
-                            <tbody>
-                              {studyListRightContents}
-                            </tbody>
+                            <thead>
+                              <tr>
+                                <th>
+                                  <span className={selectedAllStudies ? 'sm-container checked' : 'sm-container'}>
+                                    <span className="input-style" onClick={() => this.toggleAllstudies(!selectedAllStudies)}>
+                                      <input name="all" type="checkbox" />
+                                    </span>
+                                  </span>
+                                </th>
+                                <th>
+                                  <div>
+                                    <span className="text-uppercase">Status <i className="caret-arrow" /></span>
+                                    <span className="counter">Active: {this.props.totals.details.total_active || 0}</span>
+                                    <span className="counter">Inactive: {this.props.totals.details.total_inactive || 0}</span>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div onClick={this.sortBy} data-sort="orderNumber" className={`${(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}`}>#<i className="caret-arrow" /></div>
+                                </th>
+                                <th>
+                                  <div onClick={this.sortBy} data-sort="studyInfo" className={`${(this.props.paginationOptions.activeSort === 'studyInfo') ? this.props.paginationOptions.activeDirection : ''}`}>STUDY INFO<i className="caret-arrow" /></div>
+                                </th>
+                                <th>
+                                  <div onClick={this.sortBy} data-sort="siteInfo" className={`${(this.props.paginationOptions.activeSort === 'siteInfo') ? this.props.paginationOptions.activeDirection : ''}`}>SITE INFO<i className="caret-arrow" /></div>
+                                </th>
+                                <th>
+                                  <div onClick={this.sortBy} data-sort="indication" className={`${(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}`}>INDICATION<i className="caret-arrow" /></div>
+                                </th>
+                              </tr>
+                            </thead>
                           </table>
-                        </div>
+                        </Sticky>
+                        <table className="table table-study">
+                          <tbody>
+                            {studyListLeftContents}
+                          </tbody>
+                        </table>
                       </div>
                       <div
-                        onScroll={this.handleScroll}
-                        ref={(rightDiv) => {
-                          this.rightDiv = rightDiv;
+                        className="table-right"
+                        data-table=""
+                        ref={(tableRight) => {
+                          this.tableRight = tableRight;
                         }}
-                        style={{ width: (this.state.fixedScrollWidth || 'auto') }}
-                        className={classNames('dashboard-scroll-wrap', (this.state.isFixedBottomScroll ? 'dashboard-scroll-wrap-fixed' : ''))}
                       >
-                        <div className="dashboard-scroll-container"></div>
+                        <div className="scroll-holder jcf-scrollable">
+                          <div
+                            className="table-inner"
+                            ref={(rightDivHeader) => {
+                              this.rightDivHeader = rightDivHeader;
+                            }}
+                          >
+                            <Sticky className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))}>
+                              <table className="table table-study">
+                                <thead>
+                                  <tr>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="location" className={`${(this.props.paginationOptions.activeSort === 'location') ? this.props.paginationOptions.activeDirection : ''}`}>LOCATION<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="exposureLevel" className={`${(this.props.paginationOptions.activeSort === 'exposureLevel') ? this.props.paginationOptions.activeDirection : ''}`}>EXPOSURE LEVEL<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="goal" className={`${(this.props.paginationOptions.activeSort === 'goal') ? this.props.paginationOptions.activeDirection : ''}`}>GOAL<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="patients" className={`${(this.props.paginationOptions.activeSort === 'patients') ? this.props.paginationOptions.activeDirection : ''}`}>PATIENTS<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="days" className={`${(this.props.paginationOptions.activeSort === 'days') ? this.props.paginationOptions.activeDirection : ''}`}>DAYS<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="campaign" className={`${(this.props.paginationOptions.activeSort === 'campaign') ? this.props.paginationOptions.activeDirection : ''}`}>CAMPAIGN<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="pageViews" className={`${(this.props.paginationOptions.activeSort === 'pageViews') ? this.props.paginationOptions.activeDirection : ''}`}>PAGE VIEWS<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="facebook" className={`${(this.props.paginationOptions.activeSort === 'facebook') ? this.props.paginationOptions.activeDirection : ''}`}>FACEBOOK CLICKS<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="rewards" className={`${(this.props.paginationOptions.activeSort === 'rewards') ? this.props.paginationOptions.activeDirection : ''}`}>REWARDS<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="credits" className={`${(this.props.paginationOptions.activeSort === 'credits') ? this.props.paginationOptions.activeDirection : ''}`}>CREDITS<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="texts" className={`${(this.props.paginationOptions.activeSort === 'texts') ? this.props.paginationOptions.activeDirection : ''}`}>TEXTS<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="newPatients" className={`${(this.props.paginationOptions.activeSort === 'newPatients') ? this.props.paginationOptions.activeDirection : ''}`}>NEW PATIENT<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="callAttempted" className={`${(this.props.paginationOptions.activeSort === 'callAttempted') ? this.props.paginationOptions.activeDirection : ''}`}>CALL ATTEMPTED<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="notQualified" className={`${(this.props.paginationOptions.activeSort === 'notQualified') ? this.props.paginationOptions.activeDirection : ''}`}>NOT QUALIFIED<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="actionNeeded" className={`${(this.props.paginationOptions.activeSort === 'actionNeeded') ? this.props.paginationOptions.activeDirection : ''}`}>ACTION NEEDED<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="scheduled" className={`${(this.props.paginationOptions.activeSort === 'scheduled') ? this.props.paginationOptions.activeDirection : ''}`}>SCHEDULED<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="consented" className={`${(this.props.paginationOptions.activeSort === 'consented') ? this.props.paginationOptions.activeDirection : ''}`}>CONSENTED<i className="caret-arrow" /></div>
+                                    </th>
+                                    <th>
+                                      <div onClick={this.sortBy} data-sort="randomized" className={`${(this.props.paginationOptions.activeSort === 'randomized') ? this.props.paginationOptions.activeDirection : ''}`}>RANDOMIZED<i className="caret-arrow" /></div>
+                                    </th>
+                                  </tr>
+                                </thead>
+                              </table>
+                            </Sticky>
+                            <table className="table table-study">
+                              <tbody>
+                                {studyListRightContents}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          onScroll={this.handleScroll}
+                          ref={(rightDiv) => {
+                            this.rightDiv = rightDiv;
+                          }}
+                          style={{ width: (this.state.fixedScrollWidth || 'auto') }}
+                          className={classNames('dashboard-scroll-wrap', (this.state.isFixedBottomScroll ? 'dashboard-scroll-wrap-fixed' : ''))}
+                        >
+                          <div className="dashboard-scroll-container"></div>
+                        </div>
                       </div>
-                    </div>
-                  </StickyContainer>
+                    </StickyContainer>
+                  </InfiniteScroll>
                 </div>
                 <EditInformationModal
                   {...this.state.editStudyInitValues}
