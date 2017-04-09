@@ -1,12 +1,13 @@
+import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import RowItem from './RowItem';
+
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { selectPaginationOptionsAdmin, selectSearchSponsorsFormValues } from '../selectors';
 import { setActiveAdminSort } from '../actions';
+import RowItem from './RowItem';
 
-import _ from 'lodash';
 export class SponsorManageUsersAdminsTable extends React.Component {
   static propTypes = {
     manageSponsorUsersData: PropTypes.object,

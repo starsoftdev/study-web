@@ -4,18 +4,19 @@
 
 import React from 'react';
 import { createStructuredSelector } from 'reselect';
-import Collapse from 'react-bootstrap/lib/Collapse';
-import Input from '../Input/index';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { Field, reduxForm, reset, touch, change } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
+import Collapse from 'react-bootstrap/lib/Collapse';
 import Form from 'react-bootstrap/lib/Form';
+
+import Input from '../Input/index';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
 import { updatePatientThankYouEmail, resetPatientThankYouEmailState } from '../../containers/HomePage/AdminDashboard/actions';
 import { selectUpdatePatientThankYouEmailProcess } from '../../containers/HomePage/AdminDashboard/selectors';
 import { fetchLanding } from '../../containers/App/actions';
 import { selectLanding } from '../../containers/App/selectors';
-import classNames from 'classnames';
 import formValidator, { fields } from './validator';
 import './styles.less';
 

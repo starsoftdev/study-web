@@ -20,18 +20,18 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
 
   shareFB(ev) {
     ev.preventDefault();
-    const { study } = this.props;
-    window.open(`http://www.facebook.com/sharer.php?u=${location.href}`, study.name, 'width=600, height=530');
+    const { landing } = this.props;
+    window.open(`http://www.facebook.com/sharer.php?u=${location.href}`, landing.studyName, 'width=600, height=530');
   }
 
   shareTwitter(ev) {
     ev.preventDefault();
-    const { study } = this.props;
-    window.open(`https://twitter.com/intent/tweet?text=${study.name} ${location.href}`, study.name, 'width=600,height=530');
+    const { landing } = this.props;
+    window.open(`https://twitter.com/intent/tweet?text=${landing.studyName} ${location.href}`, landing.studyName, 'width=600,height=530');
   }
 
   render() {
-    const { study, landing, imgSrc } = this.props;
+    const { landing, imgSrc } = this.props;
 
     const shareThisStudyText = (landing.shareThisStudyText) ? landing.shareThisStudyText : 'Share this study:';
 
@@ -66,7 +66,7 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
             </li>
             }
             <li className="gmail">
-              <a href={`mailto:?subject=${study.name}&body=${location.href}`}>
+              <a href={`mailto:?subject=${landing.studyName}&body=${location.href}`}>
                 <i className="icomoon-envelope-square" />
               </a>
             </li>

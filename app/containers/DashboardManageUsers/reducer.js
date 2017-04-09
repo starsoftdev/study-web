@@ -4,6 +4,8 @@
  *
  */
 
+import _ from 'lodash';
+
 import {
   FETCH_ADMINS,
   FETCH_ADMINS_SUCCESS,
@@ -19,8 +21,6 @@ import {
   DELETE_DASHBOARD_USER_ERROR,
   SET_ACTIVE_SORT,
 } from './constants';
-
-import _ from 'lodash';
 
 const initialState = {
   admins: {

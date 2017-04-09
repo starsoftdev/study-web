@@ -4,6 +4,8 @@ import { createStructuredSelector } from 'reselect';
 import ReduxToastr from 'react-redux-toastr';
 import Helmet from 'react-helmet';
 
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
+
 import { default as Header } from '../../components/Header';
 import { default as Footer } from '../../components/Footer';
 
@@ -13,7 +15,6 @@ import { logout } from '../../../app/containers/LoginPage/actions';
 
 import './styles.less';
 
-import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
 export class Corporate extends React.Component { // eslint-disable-line react/prefer-stateless-function
 

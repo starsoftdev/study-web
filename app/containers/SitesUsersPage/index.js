@@ -112,7 +112,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
   }
 
   filterClientSites(searchQuery) {
-    if (searchQuery !== '') {
+    if (searchQuery !== '' && searchQuery) {
       this.setState({
         siteFilterMethod: (clientSite) => clientSite.name.toUpperCase().includes(searchQuery.toUpperCase()),
       });
@@ -146,14 +146,15 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
 
   handleSiteQueryChange(index) {
     const sel = parseInt(index !== null ? index : 0);
+    const sName = (this.props.sites[sel - 1] && this.props.sites[sel - 1].name) ? this.props.sites[sel - 1].name : null;
     if (sel === 0) {
       this.setState({
         siteName: '',
-      }, () => { this.filterClientSites(this.state.siteName); });
+      }, () => { this.filterClientSites(sName); });
     } else {
       this.setState({
-        siteName: this.props.sites[sel - 1].name,
-      }, () => { this.filterClientSites(this.state.siteName); });
+        siteName: (this.props.sites[sel - 1] && this.props.sites[sel - 1].name) ? this.props.sites[sel - 1].name : null,
+      }, () => { this.filterClientSites(sName); });
     }
   }
 

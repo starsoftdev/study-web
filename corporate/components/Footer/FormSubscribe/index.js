@@ -19,9 +19,9 @@ import {
   learnAboutFutureTrials,
   resetLearnAboutFutureTrialsSuccess,
 } from '../../../../app/containers/App/actions';
+import formValidator, { fields } from './validator';
 
 const formName = 'learnAboutFuture';
-import formValidator, { fields } from './validator';
 @reduxForm({
   form: formName,
   validate: formValidator,

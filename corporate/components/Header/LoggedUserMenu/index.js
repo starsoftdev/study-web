@@ -1,6 +1,6 @@
 import React from 'react';
 import { Well, Collapse } from 'react-bootstrap';
-const enhanceWithClickOutside = require('react-click-outside');
+import enhanceWithClickOutside from 'react-click-outside';
 
 import defaultImage from '../../../../app/assets/images/Default-User-Img-Dr.png';
 

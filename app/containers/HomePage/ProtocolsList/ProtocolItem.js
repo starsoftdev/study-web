@@ -1,10 +1,12 @@
-import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
+import React, { PropTypes, Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
+
 import Toggle from '../../../components/Input/Toggle';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 class ProtocolItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

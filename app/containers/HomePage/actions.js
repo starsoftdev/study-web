@@ -100,9 +100,10 @@ export function studiesFetchingError(payload) {
   };
 }
 
-export function fetchProtocols(searchParams) {
+export function fetchProtocols(sponsorRoleId, searchParams) {
   return {
     type: FETCH_PROTOCOLS,
+    sponsorRoleId,
     searchParams,
   };
 }
@@ -121,10 +122,10 @@ export function protocolsFetchingError(payload) {
   };
 }
 
-export function fetchProtocolNumbers(currentUser) {
+export function fetchProtocolNumbers(sponsorRoleId) {
   return {
     type: FETCH_PROTOCOL_NUMBERS,
-    currentUser,
+    sponsorRoleId,
   };
 }
 

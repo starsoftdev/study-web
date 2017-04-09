@@ -1156,9 +1156,11 @@ export function fetchSponsorsError(payload) {
   };
 }
 
-export function fetchProtocols() {
+export function fetchProtocols(clientRoleId, sponsorRoleId) {
   return {
     type: FETCH_PROTOCOLS,
+    clientRoleId,
+    sponsorRoleId,
   };
 }
 

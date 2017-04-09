@@ -41,7 +41,8 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
   }
 
   componentWillMount() {
-    this.props.fetchProtocols();
+    const { currentUser, fetchProtocols } = this.props;
+    fetchProtocols(currentUser.roleForSponsor.id);
     this.updateData();
   }
 
@@ -137,7 +138,7 @@ function mapDispatchToProps(dispatch) {
     editSponsorUser: params => dispatch(editSponsorUser(params)),
     deleteSponsorUser: params => dispatch(deleteSponsorUser(params)),
     editProtocol: params => dispatch(editProtocol(params)),
-    fetchProtocols: () => dispatch(fetchProtocols()),
+    fetchProtocols: (sponsorRoleId) => dispatch(fetchProtocols(null, sponsorRoleId)),
   };
 }
 

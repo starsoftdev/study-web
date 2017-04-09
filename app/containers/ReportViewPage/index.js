@@ -4,6 +4,7 @@
  *
  */
 
+import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -16,8 +17,6 @@ import ReportViewTable from '../../containers/ReportViewPage/ReportViewTable';
 import { selectCurrentUser } from '../../containers/App/selectors';
 import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus } from '../../containers/ReportViewPage/actions';
 import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues } from '../../containers/ReportViewPage/selectors';
-
-import _ from 'lodash';
 
 export class ReportViewPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 

@@ -4,6 +4,7 @@
  *
  */
 
+import _ from 'lodash';
 import {
   DEFAULT_ACTION,
   GET_PROPOSALS,
@@ -12,8 +13,6 @@ import {
   CREATE_PDF,
   SHOW_PROPOSAL_PDF,
 } from './constants';
-
-import _ from 'lodash';
 
 export function defaultAction() {
   return {
@@ -32,10 +31,11 @@ export function proposalsReceived(payload) {
   };
 }
 
-export function getProposals(payload) {
+export function getProposals(clientRoleId, searchParams) {
   return {
     type: GET_PROPOSALS,
-    payload,
+    clientRoleId,
+    searchParams,
   };
 }
 

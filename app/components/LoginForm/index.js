@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router';
 import inViewport from 'in-viewport';
 import { Field, reduxForm } from 'redux-form';
-import loginFormValidator from './validator';
-import { Alert } from 'react-bootstrap';
+import Alert from 'react-bootstrap/lib/Alert';
 
 import Input from '../../components/Input';
+import loginFormValidator from './validator';
 
 @reduxForm({
   form: 'login',

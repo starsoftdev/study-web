@@ -4,6 +4,10 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
+import Editor from 'react-md-editor';
+import Form from 'react-bootstrap/lib/Form';
+
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, reset, touch, change } from 'redux-form';
 import { Modal } from 'react-bootstrap';
@@ -11,8 +15,6 @@ import Collapse from 'react-bootstrap/lib/Collapse';
 import Button from 'react-bootstrap/lib/Button';
 import Checkbox from '../Input/Checkbox';
 import Input from '../Input/index';
-import Editor from 'react-md-editor';
-import Form from 'react-bootstrap/lib/Form';
 import CenteredModal from '../../components/CenteredModal/index';
 import StudyAddForm from '../../components/StudyAddForm';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
@@ -29,7 +31,6 @@ import {
   selectChangeStudyAddProcess,
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import formValidator, { fields } from './validator';
-import classNames from 'classnames';
 import './styles.less';
 
 const formName = 'landingPageForm';

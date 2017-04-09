@@ -1,9 +1,8 @@
 // import React from 'react';
+import _, { get } from 'lodash';
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
-import request from '../../utils/request';
-import _, { get } from 'lodash';
 
 import {
   receiptsReceived,
@@ -14,6 +13,7 @@ import {
   SHOW_INVOICE_PDF,
 } from '../../containers/Receipts/constants';
 import { getItem } from '../../utils/localStorage';
+import request from '../../utils/request';
 
 const serializeParams = (obj) => {
   const str = [];
@@ -42,20 +42,20 @@ export function* receiptSaga() {
 
 export function* getReceipts() {
   while (true) {
-    const { limit, offset, receipts, orderBy, orderDir, payload } = yield take(GET_RECEIPT);
+    const { clientRoleId, limit, offset, receipts, orderBy, orderDir, payload } = yield take(GET_RECEIPT);
     try {
+      const body = {
+        clientRoleId,
+        limit,
+        skip: offset,
+        orderBy,
+        orderDir: orderDir === 'down' ? 'DESC' : 'ASC',
+        searchOptions: payload,
+      };
       const params = {
         method: 'POST',
-        body: JSON.stringify(payload),
-        query: {
-          limit,
-          skip: offset,
-        },
+        body: JSON.stringify(body),
       };
-      if (orderBy && orderDir && orderBy !== 'orderNumber') {
-        params.query.orderBy = orderBy;
-        params.query.orderDir = orderDir === 'down' ? 'DESC' : 'ASC';
-      }
       const requestURL = `${API_URL}/invoices/receipts`;
       const response = yield call(request, requestURL, params);
 

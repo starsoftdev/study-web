@@ -65,7 +65,7 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
             placeholder="Select Messaging Number"
             options={this.props.messagingNumberOptions}
             onChange={(e) => this.messagingNumberChange(e, index)}
-            selectedValue={this.state.vSelected[index] || undefined}
+            selectedValue={this.state.vSelected[index]}
           />
         </div>
       </div>

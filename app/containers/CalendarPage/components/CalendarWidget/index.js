@@ -4,12 +4,13 @@ import React, { PropTypes } from 'react';
 import Calendar from 'react-big-calendar';
 import moment from 'moment-timezone';
 
+import 'react-big-calendar/lib/less/styles.less';
+
 import { SchedulePatientModalType } from '../../../../common/constants';
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
 Calendar.momentLocalizer(moment); // or globalizeLocalizer
-import 'react-big-calendar/lib/less/styles.less';
 
 class CalendarWidget extends React.Component {
   static propTypes = {

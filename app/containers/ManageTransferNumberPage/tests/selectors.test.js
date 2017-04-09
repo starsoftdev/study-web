@@ -1,5 +1,5 @@
-import { selectMangeTransferNumberPageDomain } from '../selectors';
 import expect from 'expect';
+import { selectMangeTransferNumberPageDomain } from '../selectors';
 
 // const selector = selectMangeTransferNumberPageDomain();
 

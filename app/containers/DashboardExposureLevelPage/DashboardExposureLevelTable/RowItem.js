@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react';
+import Modal from 'react-bootstrap/lib/Modal';
+import { Field, change } from 'redux-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import Modal from 'react-bootstrap/lib/Modal';
+
 import CenteredModal from '../../../components/CenteredModal/index';
-import { AddExposureLevelForm } from '../DashboardExposureLevelSearch/AddExposureLevelForm';
 import Checkbox from '../../../components/Input/Checkbox';
-import { Field, change } from 'redux-form';
+import { AddExposureLevelForm } from '../DashboardExposureLevelSearch/AddExposureLevelForm';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

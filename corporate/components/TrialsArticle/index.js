@@ -39,7 +39,7 @@ export class TrialsArticle extends Component {
 
   render() {
     const { index, addr, trial } = this.props;
-    const landingHref = `/${trial.study_id}-${trial.location.toLowerCase().replace(/ /ig, '-')}`;
+    const landingHref = `/${trial.study_id}-${trial.url_part.toLowerCase().replace(/ /ig, '-')}`;
     const md = new Remarkable();
 
     const landingDescription = (trial && trial.landingdescription && trial.landingdescription !== 'seed') ? trial.landingdescription : null;

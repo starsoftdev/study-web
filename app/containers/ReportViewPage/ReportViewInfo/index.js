@@ -1,9 +1,9 @@
+import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import graphImage from '../../../assets/images/graph.svg';
 
-import _ from 'lodash';
+import graphImage from '../../../assets/images/graph.svg';
 
 export class ReportViewInfo extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
