@@ -7,7 +7,7 @@
 import {
   DEFAULT_ACTION,
   RECEIPTS_RECEIVED,
-  GET_RECEIPT,
+  GET_RECEIPTS,
   SET_SEARCH_OPTIONS,
   SET_ACTIVE_SORT,
   SORT_PROPOSALS_SUCCESS,
@@ -28,7 +28,7 @@ function receiptsReducer(state = initialState, action) {
   switch (action.type) {
     case DEFAULT_ACTION:
       return state;
-    case GET_RECEIPT:
+    case GET_RECEIPTS:
       return {
         ...state,
         paginationOptions:{

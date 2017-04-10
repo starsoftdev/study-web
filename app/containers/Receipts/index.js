@@ -72,6 +72,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
   componentDidMount() {
     const { currentUser, fetchClientSites } = this.props;
     fetchClientSites(currentUser.roleForClient.client_id);
+    this.props.getReceipts(currentUser.roleForClient.id, 15, 0, this.props.receipts);
   }
 
   componentWillReceiveProps(nProps) {
@@ -90,8 +91,6 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
           defaultValue = currentUser.roleForClient.site_id;
         }
         this.search(defaultValue, 'site');
-      } else {
-        this.props.getReceipts(currentUser.roleForClient.id, 15, 0, this.props.receipts);
       }
     }
   }

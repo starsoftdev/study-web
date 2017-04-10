@@ -6,7 +6,7 @@
 
 import {
   DEFAULT_ACTION,
-  GET_RECEIPT,
+  GET_RECEIPTS,
   RECEIPTS_RECEIVED,
   GET_PDF,
   SET_SEARCH_OPTIONS,
@@ -32,7 +32,7 @@ export function receiptsReceived(payload, hasMore, page) {
 
 export function getReceipts(clientRoleId, limit, offset, receipts, orderBy, orderDir, payload) {
   return {
-    type: GET_RECEIPT,
+    type: GET_RECEIPTS,
     clientRoleId,
     limit,
     offset,

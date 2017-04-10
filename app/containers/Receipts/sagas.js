@@ -8,7 +8,7 @@ import {
   receiptsReceived,
 } from '../../containers/Receipts/actions';
 import {
-  GET_RECEIPT,
+  GET_RECEIPTS,
   GET_PDF,
   SHOW_INVOICE_PDF,
 } from '../../containers/Receipts/constants';
@@ -42,7 +42,7 @@ export function* receiptSaga() {
 
 export function* getReceipts() {
   while (true) {
-    const { clientRoleId, limit, offset, receipts, orderBy, orderDir, payload } = yield take(GET_RECEIPT);
+    const { clientRoleId, limit, offset, receipts, orderBy, orderDir, payload } = yield take(GET_RECEIPTS);
     try {
       const body = {
         clientRoleId,
