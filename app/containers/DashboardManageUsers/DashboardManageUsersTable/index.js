@@ -1,13 +1,14 @@
+import _ from 'lodash';
 import React, { PropTypes } from 'react';
+import Modal from 'react-bootstrap/lib/Modal';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+
 import RowItem from './RowItem';
-import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddUserForm } from '../../DashboardManageUsers/DashboardManageUsersAddUserForm';
-import { editDashboardUser, deleteDashboardUser, setActiveSort } from '../actions';
 import { selectDashboardEditUserProcess, selectDashboardManageUsersSearchFormValues, selectPaginationOptions } from '../selectors';
-import _ from 'lodash';
+import { editDashboardUser, deleteDashboardUser, setActiveSort } from '../actions';
 
 const mapStateToProps = createStructuredSelector({
   editUserProcess: selectDashboardEditUserProcess(),

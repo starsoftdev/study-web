@@ -1,8 +1,8 @@
+import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import RowItem from './RowItem';
-import _ from 'lodash';
 
 export class DashboardIndicationTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

@@ -26,8 +26,6 @@ import { getItem } from '../../utils/localStorage';
 import ChangeTemporaryPasswordModal from '../../components/ChangeTemporaryPasswordModal';
 import { selectAuthState, selectCurrentUser, selectEvents, selectUserRoleType } from './selectors';
 
-import './styles.less';
-
 class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {

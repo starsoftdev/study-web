@@ -428,10 +428,13 @@ export function* fetchStudiesDashboardWatcher() {
 }
 
 export function* fetchStudiesDashboardWorker(action) {
-  const { params } = action;
+  const { params, limit, offset } = action;
 
   try {
     const requestURL = `${API_URL}/studies/getStudiesForDashboard`;
+    params.limit = limit;
+    params.offset = offset;
+
     const options = {
       method: 'POST',
       body: JSON.stringify(params),
@@ -439,7 +442,13 @@ export function* fetchStudiesDashboardWorker(action) {
 
     const response = yield call(request, requestURL, options);
 
-    yield put(fetchStudiesDashboardSuccess(response));
+    let hasMore = true;
+    const page = (offset / 10) + 1;
+    if (response.studies.length < 10) {
+      hasMore = false;
+    }
+
+    yield put(fetchStudiesDashboardSuccess(response, hasMore, page));
   } catch (err) {
     yield put(fetchStudiesDashboardError(err));
   }

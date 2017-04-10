@@ -1,9 +1,9 @@
-import StudyPage from '../index';
 import React from 'react';
 import { shallow } from 'enzyme';
 import chaiEnzyme from 'chai-enzyme';
 import expect from 'expect';
 import chai from 'chai';
+import StudyPage from '../index';
 chai.use(chaiEnzyme());
 const chaiExpect = chai.expect;
 
@@ -69,7 +69,7 @@ describe('<StudyPage />', () => {
           phone_id: 3,
           piFirstName: null,
           piLastName: null,
-          redirectPhone: '+15108172118',
+          phoneNumber: '+15108172118',
           rewardPoints: null,
           state: null,
           zip: null,

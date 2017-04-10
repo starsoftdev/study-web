@@ -9,6 +9,7 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
     rewards: PropTypes.array,
     paginationOptions: PropTypes.object,
     setActiveSort: PropTypes.func,
+    siteLocations: PropTypes.array,
   };
 
   constructor(props) {
@@ -55,6 +56,7 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
           timezone={currentUser.timezone}
           key={index}
           index={index}
+          siteLocations={this.props.siteLocations}
         />
       ));
     }

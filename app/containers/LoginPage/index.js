@@ -11,8 +11,6 @@ import { loginRequest } from './actions';
 import { selectLoginError } from '../../containers/App/selectors';
 import { setNewPasswordRequest } from '../SetNewPasswordPage/actions';
 
-import './styles.less';
-
 export class LoginPage extends Component {
 
   static propTypes = {

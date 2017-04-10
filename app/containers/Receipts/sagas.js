@@ -1,9 +1,8 @@
 // import React from 'react';
+import _, { get } from 'lodash';
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
-import request from '../../utils/request';
-import _, { get } from 'lodash';
 
 import {
   receiptsReceived,
@@ -14,6 +13,7 @@ import {
   SHOW_INVOICE_PDF,
 } from '../../containers/Receipts/constants';
 import { getItem } from '../../utils/localStorage';
+import request from '../../utils/request';
 
 const serializeParams = (obj) => {
   const str = [];

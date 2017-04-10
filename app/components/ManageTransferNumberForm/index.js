@@ -5,12 +5,13 @@
 */
 
 import React, { PropTypes } from 'react';
-import formValidator from './validator';
 import { reduxForm, FieldArray, change } from 'redux-form';
-import RenderSources from './RenderSources';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
+
 import { selectMangeSourcesFormValues } from '../../components/ManageTransferNumberForm/selectors';
+import formValidator from './validator';
+import RenderSources from './RenderSources';
 
 const mapStateToProps = createStructuredSelector({
   formValues: selectMangeSourcesFormValues(),

@@ -2,8 +2,6 @@ import React from 'react';
 // import main from '../../assets/images/img19.svg';
 import main from '../../assets/images/comingSoon.png';
 
-import './styles.less';
-
 export default class ComingSoon extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {};
