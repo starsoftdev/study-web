@@ -140,6 +140,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
         if (initRewardPoints !== parseInt(params[`site-${site.id}`])) {
           nValues.push({
             site_id: site.id,
+            siteName: site.name,
             points: parseInt(params[`site-${site.id}`]) - initRewardPoints,
             balance: parseInt(params[`site-${site.id}`]),
             user_id: params.user_id,
