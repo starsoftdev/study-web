@@ -58,7 +58,7 @@ class TextBlastModal extends React.Component {
     event.preventDefault();
     const { displayToastrError, formSyncErrors, formValues, submitTextBlast, onClose, currentUser } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
-      submitTextBlast(formValues.patients, formValues.message, currentUser.id, onClose);
+      submitTextBlast(formValues.patients, formValues.message, currentUser.roleForClient.id, onClose);
     } else if (formSyncErrors.message) {
       displayToastrError(formSyncErrors.message);
     } else if (formSyncErrors.patients) {
@@ -168,7 +168,7 @@ function mapDispatchToProps(dispatch) {
   return {
     displayToastrError: (error) => dispatch(toastrActions.error(error)),
     removePatients: () => dispatch(removePatientsFromTextBlast()),
-    submitTextBlast: (patients, message, currentUserId, onClose) => dispatch(submitTextBlast(patients, message, currentUserId, onClose)),
+    submitTextBlast: (patients, message, clientRoleId, onClose) => dispatch(submitTextBlast(patients, message, clientRoleId, onClose)),
   };
 }
 
