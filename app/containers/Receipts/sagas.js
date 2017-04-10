@@ -49,7 +49,7 @@ export function* getReceipts() {
         limit,
         skip: offset,
         orderBy,
-        orderDir: orderDir === 'down' ? 'DESC' : 'ASC',
+        orderDir: orderDir === 'up' ? 'ASC' : 'DESC',
         searchOptions: payload,
       };
       const params = {
@@ -66,15 +66,15 @@ export function* getReceipts() {
         });
         resultArr = response;
       } else {
-        const proposalsCount = receipts.length;
+        const receiptsCount = receipts.length;
         _.forEach(response, (item, index) => {
-          response[index].orderNumber = proposalsCount + index + 1;
+          response[index].orderNumber = receiptsCount + index + 1;
         });
         resultArr = receipts.concat(response);
       }
 
       if (orderBy && orderBy === 'orderNumber') {
-        const dir = ((orderDir === 'down') ? 'desc' : 'asc');
+        const dir = ((orderDir === 'up') ? 'asc' : 'desc');
         resultArr = _.orderBy(resultArr, [function (o) {
           return o.orderNumber;
         }], [dir]);
