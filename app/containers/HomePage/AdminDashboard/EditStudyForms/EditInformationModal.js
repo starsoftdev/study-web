@@ -57,7 +57,7 @@ export class EditInformationModal extends React.Component {
     protocols: PropTypes.array,
     siteLocations: PropTypes.array,
     sponsors: PropTypes.array,
-    study: PropTypes.object.isRequired,
+    study: PropTypes.object,
     studyCampaigns: PropTypes.object,
     usersByRoles: PropTypes.object,
   };
