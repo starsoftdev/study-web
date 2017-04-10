@@ -37,28 +37,29 @@ const mapDispatchToProps = (dispatch) => ({
 @connect(mapStateToProps, mapDispatchToProps)
 export class EditInformationModal extends React.Component {
   static propTypes = {
+    addEmailNotificationClick: PropTypes.func.isRequired,
+    allClientUsers: PropTypes.object,
     arrayRemoveAll: PropTypes.func.isRequired,
     arrayPush: PropTypes.func.isRequired,
-    openModal: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired,
+    cro: PropTypes.array,
+    fetchAllClientUsersDashboard: PropTypes.func.isRequired,
     formValues: PropTypes.object,
-    onShow: PropTypes.func,
+    handleSubmit: PropTypes.func.isRequired,
+    indications: PropTypes.array,
+    isOnTop: React.PropTypes.bool,
+    onClose: PropTypes.func.isRequired,
     onHide: PropTypes.func,
-    handleSubmit: PropTypes.func,
-    usersByRoles: PropTypes.object,
+    openModal: PropTypes.bool.isRequired,
+    onShow: PropTypes.func,
+    levels: PropTypes.array,
+    messagingNumbers: PropTypes.object,
+    protocols: PropTypes.array,
     siteLocations: PropTypes.array,
     sponsors: PropTypes.array,
-    protocols: PropTypes.array,
-    cro: PropTypes.array,
-    levels: PropTypes.array,
-    indications: PropTypes.array,
-    fetchAllClientUsersDashboard: PropTypes.func,
-    allClientUsers: PropTypes.object,
-    addEmailNotificationClick: PropTypes.func,
+    study: PropTypes.object.isRequired,
     studyCampaigns: PropTypes.object,
-    messagingNumbers: PropTypes.object,
-    isOnTop: React.PropTypes.bool,
+    usersByRoles: PropTypes.object,
   };
 
   constructor(props) {
@@ -170,7 +171,6 @@ export class EditInformationModal extends React.Component {
       change('site_city', foundSiteLocation.city);
       change('site_state', foundSiteLocation.state);
       change('site_zip', foundSiteLocation.zip);
-      change('redirect_phone', foundSiteLocation.redirect_phone);
       change('client_id', foundSiteLocation.client_id);
     }
   }
@@ -549,7 +549,7 @@ export class EditInformationModal extends React.Component {
                   <div className="field">
                     <Field
                       type="text"
-                      name="redirect_phone"
+                      name="redirectPhone"
                       component={Input}
                     />
                   </div>

@@ -435,7 +435,6 @@ export function* fetchStudiesDashboardWorker(action) {
     params.limit = limit;
     params.offset = offset;
 
-    console.log(action);
     const options = {
       method: 'POST',
       body: JSON.stringify(params),

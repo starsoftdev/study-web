@@ -151,7 +151,6 @@ export default function dashboardPageReducer(state = initialState, action) {
         },
       };
     case FETCH_STUDIES_DASHBOARD_SUCCESS:
-      console.log('reducer', action);
       if (action.page === 1) {
         newStudiesList = action.payload.studies;
       } else {
@@ -405,7 +404,6 @@ export default function dashboardPageReducer(state = initialState, action) {
       };
 
     case TOGGLE_STUDY:
-      console.log(action);
       foundKey = _.findKey(studiesCopy, (item) => (action.id === item.study_id));
       if (foundKey) {
         studiesCopy[foundKey].selected = action.status;

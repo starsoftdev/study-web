@@ -13,9 +13,6 @@ import { fetchMeFromToken } from '../../../app/containers/App/actions';
 import { selectAuthState, selectCurrentUser } from '../../../app/containers/App/selectors';
 import { logout } from '../../../app/containers/LoginPage/actions';
 
-import './styles.less';
-
-
 export class Corporate extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {

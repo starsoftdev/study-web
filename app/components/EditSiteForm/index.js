@@ -13,7 +13,6 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import { selectEditSiteFormValues } from './selectors';
 import formValidator from './validator';
 
-import './styles.less';
 const formName = 'editSite';
 
 const mapStateToProps = createStructuredSelector({

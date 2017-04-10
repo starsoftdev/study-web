@@ -25,8 +25,6 @@ import {
   sendThankYouEmail,
 } from '../../../app/containers/App/actions';
 
-import './styles.less';
-
 export class LandingPage extends React.Component {
 
   static propTypes = {
