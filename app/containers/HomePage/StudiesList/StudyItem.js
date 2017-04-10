@@ -16,7 +16,6 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     sponsor: PropTypes.string,
     protocol: PropTypes.string,
     patientMessagingSuite: PropTypes.string,
-    patientQualificationSuite: PropTypes.string,
     unreadMessageCount: PropTypes.number,
     status: PropTypes.string,
     siteUsers: PropTypes.array,
@@ -83,7 +82,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   render() {
-    const { currentUser, indication, location, sponsor, protocol, patientMessagingSuite, patientQualificationSuite, status,
+    const { currentUser, indication, location, sponsor, protocol, patientMessagingSuite, status,
       startDate, endDate, unreadMessageCount, orderNumber, studyId, url } = this.props;
     const buttonsShown = this.state.buttonsShown;
     let purchasable = true;
@@ -118,8 +117,8 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
         <td className="protocol">
           <span>{protocol}</span>
         </td>
-        <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off' && patientQualificationSuite === 'Off') })}>
-          <span className="patient-messaging-suite-status">{(patientMessagingSuite === 'Off' && patientQualificationSuite === 'Off') ? 'Off' : 'On'}</span>
+        <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off') })}>
+          <span className="patient-messaging-suite-status">{(patientMessagingSuite === 'Off') ? 'Off' : 'On'}</span>
           <span>{messageCountContent}</span>
         </td>
         <td className={classNames('status', { inactive: (status === 'Inactive') })}>
