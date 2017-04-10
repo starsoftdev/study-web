@@ -16,6 +16,7 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
     userImageURL: PropTypes.string,
     created: PropTypes.string,
     timezone: PropTypes.string,
+    site_id: PropTypes.number,
     siteLocations: PropTypes.array,
   };
 
@@ -32,7 +33,7 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
       if (foundIndex !== -1) {
         rewardData = {
           siteLocationName: this.props.siteLocations[foundIndex].name,
-        }
+        };
       }
     }
 
