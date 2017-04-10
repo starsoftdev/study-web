@@ -9,7 +9,7 @@ import Input from '../../../app/components/Input/index';
 import ReactSelect from '../../../app/components/Input/ReactSelect';
 import CenteredModal from '../../../app/components/CenteredModal/index';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
-import { normalizePhone } from '../../../app/common/helper/functions';
+import { normalizePhoneForServer } from '../../../app/common/helper/functions';
 import formValidator, { fields } from './validator';
 import { fetchIndications, fetchLevels, getProposal } from '../../../app/containers/App/actions';
 import { selectIndications, selectStudyLevels } from '../../../app/containers/App/selectors';
@@ -63,7 +63,7 @@ class GetProposalModal extends React.Component {
 
     const list = Object.assign({}, newList);
     /* normalizing the phone number */
-    list.phone = normalizePhone(newList.phone);
+    list.phone = normalizePhoneForServer(newList.phone);
 
     submitForm(list);
   }

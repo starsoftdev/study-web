@@ -13,7 +13,7 @@ import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/index';
 import { submitPatientUpdate } from '../actions';
 import formValidator from './detailValidator';
-import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSyncErrors, selectValues, selectFormDidChange } from '../../../common/selectors/form.selector';
 
 const formName = 'PatientDetailModal.Detail';
@@ -63,7 +63,7 @@ class PatientDetailSection extends React.Component {
       const formattedPhoneNumber = normalizePhoneDisplay(formValues.phone);
       blur('phone', formattedPhoneNumber);
       // normalize the number in international format for submission to the server
-      const phoneNumber = normalizePhone(formValues.phone);
+      const phoneNumber = normalizePhoneForServer(formValues.phone);
       submitPatientUpdate(initialValues.id, {
         firstName: formValues.firstName,
         lastName: formValues.lastName,

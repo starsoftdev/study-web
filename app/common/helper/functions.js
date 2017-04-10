@@ -18,7 +18,7 @@ export function formatPhone(phone) {
   return patientPhone;
 }
 
-export function normalizePhone(value) {
+export function normalizePhoneForServer(value) {
   if (!value) {
     return value;
   }

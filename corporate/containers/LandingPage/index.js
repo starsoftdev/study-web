@@ -8,7 +8,7 @@ import Helmet from 'react-helmet';
 
 import LandingForm from '../../components/LandingForm';
 import LandingArticle from '../../components/LandingArticle';
-import { normalizePhone } from '../../../app/common/helper/functions';
+import { normalizePhoneForServer } from '../../../app/common/helper/functions';
 
 import {
   selectCurrentUser,
@@ -103,7 +103,7 @@ export class LandingPage extends React.Component {
       firstName: separateNames[0],
       lastName: separateNames[1] || null,
       email: params.email,
-      phone: normalizePhone(params.phone),
+      phone: normalizePhoneForServer(params.phone),
       landing_page_id: landing.id,
     };
 

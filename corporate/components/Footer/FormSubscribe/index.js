@@ -6,7 +6,7 @@ import { Well, Collapse } from 'react-bootstrap';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { Field, reduxForm, reset, touch } from 'redux-form';
-import { normalizePhone } from '../../../../app/common/helper/functions';
+import { normalizePhoneForServer } from '../../../../app/common/helper/functions';
 import { selectSyncErrorBool, selectValues } from '../../../../app/common/selectors/form.selector';
 
 import {
@@ -94,7 +94,7 @@ export class FormSubscribe extends React.Component {
 
     const subscriber = Object.assign({}, newSubscriber);
     /* normalizing the phone number */
-    subscriber.phone = normalizePhone(newSubscriber.phone);
+    subscriber.phone = normalizePhoneForServer(newSubscriber.phone);
 
     submitForm(subscriber);
   }
