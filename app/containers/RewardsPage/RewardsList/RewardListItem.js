@@ -13,6 +13,7 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
     balance: PropTypes.number,
     reward_data: PropTypes.string,
     rewardData: PropTypes.object,
+    reward_type_id: PropTypes.number,
     userImageURL: PropTypes.string,
     created: PropTypes.string,
     timezone: PropTypes.string,
@@ -28,14 +29,18 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
     const time = localTime.format('hh:mm A');
     if (reward_data) {
       rewardData = JSON.parse(reward_data);
-    } else {
-      const foundIndex = findIndex(this.props.siteLocations, { id: this.props.site_id });
-      if (foundIndex !== -1) {
+    }
+    const foundIndex = findIndex(this.props.siteLocations, { id: this.props.site_id });
+    if (foundIndex !== -1) {
+      if (rewardData) {
+        rewardData.siteLocationName = this.props.siteLocations[foundIndex].name;
+      } else {
         rewardData = {
           siteLocationName: this.props.siteLocations[foundIndex].name,
         };
       }
     }
+    const infoTag = (this.props.reward_type_id === 9 || this.props.reward_type_id === 10 || this.props.reward_type_id === 11) ? <p><strong>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null}</strong> now has {balance} KIKs</p> : null;
 
     let content = null;
     content = (
@@ -49,12 +54,12 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
               <div className="desc">
                 <p><strong>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null}</strong> earned {points} KIKs</p>
                 <p>{(rewardData && rewardData.description) ? rewardData.description : null}</p>
-                <p><strong>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null}</strong> now has {balance} KIKs</p>
+                {infoTag}
               </div>
               :
               <div className="desc">
                 <p><strong>{rewardData.userName}</strong> {(rewardData && rewardData.description) ? rewardData.description : null}</p>
-                <p><strong>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null}</strong> now has {balance} KIKs</p>
+                {infoTag}
               </div>
             }
           </div>
