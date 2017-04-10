@@ -79,6 +79,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
       <form
         action="#"
         className="form-study text-center landing-form"
+        noValidate="novalidate"
         onSubmit={handleSubmit}
       >
         <h1 className="main-heading">
