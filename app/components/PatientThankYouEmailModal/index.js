@@ -18,7 +18,6 @@ import { selectUpdatePatientThankYouEmailProcess } from '../../containers/HomePa
 import { fetchLanding } from '../../containers/App/actions';
 import { selectLanding } from '../../containers/App/selectors';
 import formValidator, { fields } from './validator';
-import './styles.less';
 
 const formName = 'patientEmailBlockForm';
 
@@ -32,7 +31,7 @@ export class PatientThankYouEmailModal extends React.Component {
     submitForm: React.PropTypes.func.isRequired,
     fetchLanding:  React.PropTypes.func.isRequired,
     openModal: React.PropTypes.bool.isRequired,
-    dispatch: React.PropTypes.func.isRequired,
+    change: React.PropTypes.func.isRequired,
     resetForm: React.PropTypes.func.isRequired,
     resetState: React.PropTypes.func.isRequired,
     formError: React.PropTypes.bool.isRequired,
@@ -90,7 +89,8 @@ export class PatientThankYouEmailModal extends React.Component {
         }
 
         if (!this.state.initialValuesEntered) {
-          this.props.dispatch(change(formName, 'thankYouEmailBlock', thankYouPage.thankYouEmailBlock));
+          const { change } = this.props;
+          change('thankYouEmailBlock', thankYouPage.thankYouEmailBlock);
           this.setState({
             initialValuesEntered: true,
           });
@@ -185,6 +185,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    change: (name, value) => dispatch(change(formName, name, value)),
     submitForm: (values) => dispatch(updatePatientThankYouEmail(values)),
     resetState: () => dispatch(resetPatientThankYouEmailState()),
     fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),

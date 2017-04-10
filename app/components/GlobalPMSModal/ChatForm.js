@@ -24,8 +24,6 @@ import {
   selectCurrentUser,
 } from '../../containers/App/selectors';
 
-import './styles.less';
-
 const formName = 'chatPatient';
 
 @reduxForm({ form: formName, validate: formValidator })

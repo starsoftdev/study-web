@@ -4,8 +4,6 @@ import { createStructuredSelector } from 'reselect';
 
 import BillingForm from '../../components/BillingForm';
 
-import './styles.less';
-
 export class BillingPage extends Component {
 
   static propTypes = {

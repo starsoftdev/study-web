@@ -31,7 +31,6 @@ import {
   selectChangeStudyAddProcess,
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import formValidator, { fields } from './validator';
-import './styles.less';
 
 const formName = 'landingPageForm';
 
@@ -45,7 +44,7 @@ export class LandingPageModal extends React.Component {
     submitForm: React.PropTypes.func.isRequired,
     fetchLanding:  React.PropTypes.func.isRequired,
     openModal: React.PropTypes.bool.isRequired,
-    dispatch: React.PropTypes.func.isRequired,
+    change: React.PropTypes.func.isRequired,
     resetForm: React.PropTypes.func.isRequired,
     resetState: React.PropTypes.func.isRequired,
     resetChangeAddState: React.PropTypes.func.isRequired,
@@ -113,19 +112,20 @@ export class LandingPageModal extends React.Component {
         }
 
         if (!this.state.initialValuesEntered) {
-          this.props.dispatch(change(formName, 'instructions', landing.instructions));
-          this.props.dispatch(change(formName, 'fullNamePlaceholder', landing.fullNamePlaceholder));
-          this.props.dispatch(change(formName, 'emailPlaceholder', landing.emailPlaceholder));
-          this.props.dispatch(change(formName, 'phonePlaceholder', landing.phonePlaceholder));
-          this.props.dispatch(change(formName, 'signupButtonText', landing.signupButtonText));
-          this.props.dispatch(change(formName, 'clickToCallButtonText', landing.clickToCallButtonText));
-          this.props.dispatch(change(formName, 'clickToCallButtonNumber', landing.clickToCallButtonNumber));
-          this.props.dispatch(change(formName, 'ifInterestedInstructions', landing.ifInterestedInstructions));
-          this.props.dispatch(change(formName, 'bySignUpText', landing.bySignUpText));
-          this.props.dispatch(change(formName, 'shareThisStudyText', landing.shareThisStudyText));
-          this.props.dispatch(change(formName, 'showSocialMediaButtons', landing.showSocialMediaButtons));
-          this.props.dispatch(change(formName, 'hideClickToCall', landing.hideClickToCall));
-          this.props.dispatch(change(formName, 'initialMessageText', landing.initialMessageText));
+          const { change } = this.props;
+          change('instructions', landing.instructions);
+          change('fullNamePlaceholder', landing.fullNamePlaceholder);
+          change('emailPlaceholder', landing.emailPlaceholder);
+          change('phonePlaceholder', landing.phonePlaceholder);
+          change('signupButtonText', landing.signupButtonText);
+          change('clickToCallButtonText', landing.clickToCallButtonText);
+          change('clickToCallButtonNumber', landing.clickToCallButtonNumber);
+          change('ifInterestedInstructions', landing.ifInterestedInstructions);
+          change('bySignUpText', landing.bySignUpText);
+          change('shareThisStudyText', landing.shareThisStudyText);
+          change('showSocialMediaButtons', landing.showSocialMediaButtons);
+          change('hideClickToCall', landing.hideClickToCall);
+          change('initialMessageText', landing.initialMessageText);
 
           this.setState({
             initialValuesEntered: true,
@@ -540,6 +540,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    change: (name, value) => dispatch(change(formName, name, value)),
     submitForm: (values) => dispatch(updateLandingPage(values)),
     resetState: () => dispatch(resetLandingPageState()),
     resetChangeAddState: () => dispatch(resetChangeStudyAddState()),

@@ -25,8 +25,6 @@ import img18 from '../../assets/images/img18.svg';
 import imgWifi from '../../assets/images/wifi.svg';
 import formValidator, { fields } from './validator';
 
-import './styles.less';
-
 const formName = 'contactForm';
 @reduxForm({
   form: formName,

@@ -16,8 +16,6 @@ import FiltersForm from './FiltersForm';
 import StudyList from './StudyList';
 import Filter from '../../../components/Filter';
 
-import './styles.less';
-
 import {
   selectFilterFormValues,
   selectLevels,
@@ -452,7 +450,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
                 <Button bsStyle="primary" onClick={() => this.saveFilters()}>
                   Save Filters
                 </Button>
-                <Button bsStyle="gray-outline" onClick={() => this.clearFilters()}>
+                <Button className="gray-outline" onClick={() => this.clearFilters()}>
                   Clear
                 </Button>
               </div>

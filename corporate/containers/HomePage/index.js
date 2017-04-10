@@ -8,7 +8,6 @@ import TrialsArticle from '../../components/TrialsArticle';
 import ClinicalTrialsSearchForm from '../../components/ClinicalTrialsSearchForm';
 import { fetchIndications, clinicalTrialsSearch, clearClinicalTrialsSearch } from '../../../app/containers/App/actions';
 import { selectIndications, selectTrials } from '../../../app/containers/App/selectors';
-import './styles.less';
 
 export class Home extends Component { // eslint-disable-line react/prefer-stateless-function
 

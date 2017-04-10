@@ -13,7 +13,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import LandingPageModal from '../../../../components/LandingPageModal';
-import ThankyouPageModal from '../../../../components/ThankyouPageModal';
+import ThankYouPageModal from '../../../../components/ThankYouPageModal';
 import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
 import CenteredModal from '../../../../components/CenteredModal';
 import AddEmailNotificationForm from '../../../../components/AddEmailNotificationForm';
@@ -23,31 +23,29 @@ import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    dispatch: PropTypes.func,
-    studies: PropTypes.object,
-    change: PropTypes.func,
-    fetchStudiesDashboard: PropTypes.func,
-    totals: PropTypes.object,
-    fetchStudiesAccordingToFilters: PropTypes.func,
-    usersByRoles: PropTypes.object,
-    updateDashboardStudy: PropTypes.func,
-    siteLocations: PropTypes.array,
-    sponsors: PropTypes.array,
-    protocols: PropTypes.array,
-    cro: PropTypes.array,
-    levels: PropTypes.array,
-    indications: PropTypes.array,
-    studyUpdateProcess: PropTypes.object,
-    fetchAllClientUsersDashboard: PropTypes.func,
     allClientUsers: PropTypes.object,
-    editStudyValues: PropTypes.object,
     addNotificationProcess: PropTypes.object,
-    addEmailNotificationUser: PropTypes.func,
-    fetchStudyCampaignsDashboard: PropTypes.func,
-    changeStudyStatusDashboard: PropTypes.func,
-    toggleStudy: PropTypes.func,
+    addEmailNotificationUser: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
+    changeStudyStatusDashboard: PropTypes.func.isRequired,
+    cro: PropTypes.array,
+    editStudyValues: PropTypes.object,
+    fetchAllClientUsersDashboard: PropTypes.func.isRequired,
+    fetchStudyCampaignsDashboard: PropTypes.func.isRequired,
+    fetchStudiesAccordingToFilters: PropTypes.func.isRequired,
+    indications: PropTypes.array,
+    levels: PropTypes.array,
     messagingNumbers: PropTypes.object,
     paginationOptions: PropTypes.object,
+    protocols: PropTypes.array,
+    sponsors: PropTypes.array,
+    siteLocations: PropTypes.array,
+    studies: PropTypes.object,
+    studyUpdateProcess: PropTypes.object,
+    toggleStudy: PropTypes.func,
+    totals: PropTypes.object,
+    updateDashboardStudy: PropTypes.func.isRequired,
+    usersByRoles: PropTypes.object,
   };
 
   constructor(props) {
@@ -66,8 +64,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.hideDateRangeModal = this.hideDateRangeModal.bind(this);
     this.showEditInformationModal = this.showEditInformationModal.bind(this);
     this.showLandingPageModal = this.showLandingPageModal.bind(this);
-    this.showThankyouPageModal = this.showThankyouPageModal.bind(this);
-    this.showPatientThankyouPageModal = this.showPatientThankyouPageModal.bind(this);
+    this.showThankYouPageModal = this.showThankYouPageModal.bind(this);
+    this.showPatientThankYouPageModal = this.showPatientThankYouPageModal.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.campaignChanged = this.campaignChanged.bind(this);
@@ -95,8 +93,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       },
       showEditInformationModal: false,
       showLandingPageModal: false,
-      showThankyouPageModal: false,
-      showPatientThankyouPageModal: false,
+      showThankYouPageModal: false,
+      showPatientThankYouPageModal: false,
       studies: bindSelection(props.studies),
       selectedAllStudies: false,
       selectedStudyCount: 0,
@@ -141,7 +139,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       } else {
         addFields.push(values);
       }
-      this.props.dispatch(change('dashboardEditStudyForm', 'emailNotifications', addFields));
+      const { change } = this.props;
+      change('dashboardEditStudyForm', 'emailNotifications', addFields);
     }
   }
 
@@ -150,11 +149,12 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   setEditStudyFormValues(study) {
+    const { change } = this.props;
     _.forEach(study, (item, key) => {
-      this.props.dispatch(change('dashboardEditStudyForm', key, item));
+      change('dashboardEditStudyForm', key, item);
     });
-    this.props.dispatch(change('dashboardEditStudyForm', 'site_location_form', study.site_id));
-    this.props.dispatch(change('dashboardEditStudyForm', 'messagingNumber', study.text_number_id));
+    change('dashboardEditStudyForm', 'site_location_form', study.site_id);
+    change('dashboardEditStudyForm', 'messagingNumber', study.text_number_id);
 
     this.props.fetchAllClientUsersDashboard({ clientId: study.client_id, siteId: study.site_id });
     this.props.fetchStudyCampaignsDashboard(study.study_id);
@@ -348,12 +348,12 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     }
   }
 
-  showThankyouPageModal(visible) {
+  showThankYouPageModal(visible) {
     const pages = this.state.openedPages;
     if (visible) {
       pages.push('thankYouPageOnTop');
       this.setState({
-        showThankyouPageModal: visible,
+        showThankYouPageModal: visible,
         landingPageOnTop: false,
         thankYouPageOnTop: visible,
         patientThankYouEmailPageOnTop: false,
@@ -364,7 +364,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     } else {
       pages.pop();
       this.setState({
-        showThankyouPageModal: visible,
+        showThankYouPageModal: visible,
         thankYouPageOnTop: visible,
         [pages[(pages.length - 1)]]: true,
 
@@ -373,12 +373,12 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     }
   }
 
-  showPatientThankyouPageModal(visible) {
+  showPatientThankYouPageModal(visible) {
     const pages = this.state.openedPages;
     if (visible) {
       pages.push('patientThankYouEmailPageOnTop');
       this.setState({
-        showPatientThankyouPageModal: visible,
+        showPatientThankYouPageModal: visible,
         landingPageOnTop: false,
         thankYouPageOnTop: false,
         patientThankYouEmailPageOnTop: visible,
@@ -389,7 +389,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     } else {
       pages.pop();
       this.setState({
-        showPatientThankyouPageModal: visible,
+        showPatientThankYouPageModal: visible,
         patientThankYouEmailPageOnTop: visible,
         [pages[(pages.length - 1)]]: true,
 
@@ -421,11 +421,12 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         openedPages: pages,
       });
     }
-    // this.props.dispatch(change('dashboardEditStudyForm', 'messagingNumber', this.props.editStudyValues.text_number_id));
+    // change('dashboardEditStudyForm', 'messagingNumber', this.props.editStudyValues.text_number_id);
   }
 
   campaignChanged(e) {
-    this.props.dispatch(change('dashboardFilters', 'campaign', e));
+    const { change } = this.props;
+    change('dashboardFilters', 'campaign', e);
     this.props.fetchStudiesAccordingToFilters(e, 'campaign');
   }
 
@@ -567,7 +568,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         bsStyle="primary"
                         className="pull-left"
                         data-class="btn-deactivate"
-                        onClick={() => this.showThankyouPageModal(true)}
+                        onClick={() => this.showThankYouPageModal(true)}
                       > Thank You Page </Button>
                     }
                     {
@@ -576,7 +577,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         bsStyle="primary"
                         className="pull-left"
                         data-class="btn-deactivate"
-                        onClick={() => this.showPatientThankyouPageModal(true)}
+                        onClick={() => this.showPatientThankYouPageModal(true)}
                       > Patient Thank You Email </Button>
                     }
                     {
@@ -822,7 +823,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                           style={{ width: (this.state.fixedScrollWidth || 'auto') }}
                           className={classNames('dashboard-scroll-wrap', (this.state.isFixedBottomScroll ? 'dashboard-scroll-wrap-fixed' : ''))}
                         >
-                          <div className="dashboard-scroll-container"></div>
+                          <div className="dashboard-scroll-container" />
                         </div>
                       </div>
                     </StickyContainer>
@@ -835,6 +836,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   onClose={() => { this.showEditInformationModal(false); }}
                   usersByRoles={this.props.usersByRoles}
                   siteLocations={this.props.siteLocations}
+                  study={this.state.studies[0]}
                   sponsors={this.props.sponsors}
                   protocols={this.props.protocols}
                   cro={this.props.cro}
@@ -853,16 +855,16 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   onClose={() => { this.showLandingPageModal(false); }}
                   isOnTop={this.state.landingPageOnTop}
                 />
-                <ThankyouPageModal
-                  openModal={this.state.showThankyouPageModal}
+                <ThankYouPageModal
+                  openModal={this.state.showThankYouPageModal}
                   studies={this.state.studies}
-                  onClose={() => { this.showThankyouPageModal(false); }}
+                  onClose={() => { this.showThankYouPageModal(false); }}
                   isOnTop={this.state.thankYouPageOnTop}
                 />
                 <PatientThankYouEmailModal
-                  openModal={this.state.showPatientThankyouPageModal}
+                  openModal={this.state.showPatientThankYouPageModal}
                   studies={this.state.studies}
-                  onClose={() => { this.showPatientThankyouPageModal(false); }}
+                  onClose={() => { this.showPatientThankYouPageModal(false); }}
                   isOnTop={this.state.patientThankYouEmailPageOnTop}
                 />
                 <Modal
@@ -904,4 +906,8 @@ const mapStateToProps = createStructuredSelector({
   addNotificationProcess: selectAddNotificationProcess(),
 });
 
-export default connect(mapStateToProps)(StudyList);
+const mapDispatchToProps = (dispatch) => ({
+  change: (formName, name, value) => dispatch(change(formName, name, value)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(StudyList);
