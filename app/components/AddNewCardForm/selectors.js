@@ -20,8 +20,8 @@ const selectAddNewCardFormValues = () => createSelector(
 const selectAddNewCardFormError = () => createSelector(
   selectFormDomain(),
   (substate) => {
-    const errors = get(substate, 'addNewCard.syncErrors', {});
-    return Object.keys(errors).length > 0;
+    const errors = get(substate, 'addNewCard.syncErrors');
+    return typeof errors === 'undefined' || Object.keys(errors).length > 0;
   }
 );
 
