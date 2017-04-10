@@ -28,7 +28,7 @@ export const Currencies = {
 };
 
 export const MESSAGING_SUITE_PRICE = 24700;
-export const QUALIFICATION_SUITE_PRICE = 84900;
+export const QUALIFICATION_SUITE_PRICE = 89400;
 export const CALL_TRACKING_PRICE = 24700;
 export const QUALIFICATION_SUITE_UPGRADE_PRICE = QUALIFICATION_SUITE_PRICE - MESSAGING_SUITE_PRICE;
 
@@ -52,6 +52,9 @@ export const YEAR_OPTIONS = [
   { label: thisYear.toString(), value: thisYear },
   { label: (thisYear + 1).toString(), value: thisYear + 1 },
   { label: (thisYear + 2).toString(), value: thisYear + 2 },
+  { label: (thisYear + 3).toString(), value: thisYear + 3 },
+  { label: (thisYear + 4).toString(), value: thisYear + 4 },
+  { label: (thisYear + 5).toString(), value: thisYear + 5 },
 ];
 
 export const SchedulePatientModalType = {

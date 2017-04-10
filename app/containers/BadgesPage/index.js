@@ -5,12 +5,11 @@
  */
 
 import React from 'react';
+import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 
 import varImage from '../../assets/images/img10.svg';
 import bubbleImage from '../../assets/images/foot.svg';
-import Helmet from 'react-helmet';
-
 
 export class BadgesPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 

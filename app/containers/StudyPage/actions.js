@@ -435,12 +435,12 @@ export function hideScheduledModal() {
   };
 }
 
-export function submitTextBlast(patients, message, currentUserId, onClose) {
+export function submitTextBlast(patients, message, clientRoleId, onClose) {
   return {
     type: SUBMIT_TEXT_BLAST,
     patients,
     message,
-    currentUserId,
+    clientRoleId,
     onClose,
   };
 }

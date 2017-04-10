@@ -1,18 +1,17 @@
+import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
-import _ from 'lodash';
+import moment from 'moment-timezone';
 
-import Input from '../../components/Input';
 import { selectSavedSite } from '../../containers/App/selectors';
+import Input from '../../components/Input/index';
+import FormGeosuggest from '../../components/Input/Geosuggest';
+import ReactSelect from '../../components/Input/ReactSelect';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import { selectEditSiteFormValues } from './selectors';
 import formValidator from './validator';
-import LoadingSpinner from '../../components/LoadingSpinner';
-import FormGeosuggest from '../../components/Input/Geosuggest';
-import './styles.less';
-import moment from 'moment-timezone';
-import ReactSelect from '../../components/Input/ReactSelect';
 
 const formName = 'editSite';
 
@@ -202,7 +201,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </strong>
             <div className="field">
               <Field
-                name="redirectPhone"
+                name="phoneNumber"
                 component={Input}
                 type="text"
                 disabled={savedSite.saving}

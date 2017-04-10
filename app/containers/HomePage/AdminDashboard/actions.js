@@ -59,17 +59,21 @@ export function updateFilters(filters = []) {
   };
 }
 
-export function fetchStudiesDashboard(params) {
+export function fetchStudiesDashboard(params, limit, offset) {
   return {
     type: FETCH_STUDIES_DASHBOARD,
     params,
+    limit,
+    offset,
   };
 }
 
-export function fetchStudiesDashboardSuccess(payload) {
+export function fetchStudiesDashboardSuccess(payload, hasMoreItems, page) {
   return {
     type: FETCH_STUDIES_DASHBOARD_SUCCESS,
     payload,
+    hasMoreItems,
+    page,
   };
 }
 

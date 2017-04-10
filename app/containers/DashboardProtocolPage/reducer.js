@@ -4,6 +4,7 @@
  *
  */
 
+import _ from 'lodash';
 import {
   FETCH_PROTOCOL,
   FETCH_PROTOCOL_SUCCESS,
@@ -19,8 +20,6 @@ import {
   DELETE_PROTOCOL_ERROR,
   SET_ACTIVE_SORT,
 } from './constants';
-
-import _ from 'lodash';
 
 const initialState = {
   protocol: {

@@ -3,13 +3,13 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
+import { defaultRanges, DateRange } from 'react-date-range';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 
-import Input from '../../../components/Input';
-import ReactSelect from '../../../components/Input/ReactSelect';
-import { defaultRanges, DateRange } from 'react-date-range';
 import CenteredModal from '../../../components/CenteredModal/index';
+import ReactSelect from '../../../components/Input/ReactSelect';
+import Input from '../../../components/Input/index';
 
 @reduxForm({ form: 'searchReports' })
 

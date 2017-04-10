@@ -2,6 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment-timezone';
+import { findIndex } from 'lodash';
 
 import defaultImage from '../../../assets/images/site_location.png';
 
@@ -15,6 +16,8 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
     userImageURL: PropTypes.string,
     created: PropTypes.string,
     timezone: PropTypes.string,
+    site_id: PropTypes.number,
+    siteLocations: PropTypes.array,
   };
 
   render() {
@@ -25,6 +28,13 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
     const time = localTime.format('hh:mm A');
     if (reward_data) {
       rewardData = JSON.parse(reward_data);
+    } else {
+      const foundIndex = findIndex(this.props.siteLocations, { id: this.props.site_id });
+      if (foundIndex !== -1) {
+        rewardData = {
+          siteLocationName: this.props.siteLocations[foundIndex].name,
+        };
+      }
     }
 
     let content = null;
@@ -37,12 +47,14 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
             </div>
             { points > 0 ?
               <div className="desc">
-                <p><strong>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null}</strong> Earned {points} KIKs</p>
+                <p><strong>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null}</strong> earned {points} KIKs</p>
                 <p>{(rewardData && rewardData.description) ? rewardData.description : null}</p>
+                <p><strong>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null}</strong> now has {balance} KIKs</p>
               </div>
               :
               <div className="desc">
                 <p><strong>{rewardData.userName}</strong> {(rewardData && rewardData.description) ? rewardData.description : null}</p>
+                <p><strong>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null}</strong> now has {balance} KIKs</p>
               </div>
             }
           </div>

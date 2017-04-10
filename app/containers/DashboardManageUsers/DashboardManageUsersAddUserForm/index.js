@@ -1,12 +1,13 @@
+import _ from 'lodash';
 import React, { PropTypes } from 'react';
+import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm } from 'redux-form';
+
 import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
-import formValidator from './validator';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import _ from 'lodash';
+import formValidator from './validator';
 
 @reduxForm({ form: 'dashboardAddClientAdminsForm', validate: formValidator })
 

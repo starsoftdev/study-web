@@ -4,7 +4,7 @@ const schema = {
   name: { presence: true },
   piFirstName: { presence: true },
   piLastName: { presence: true },
-  redirectPhone: { presence: true },
+  phoneNumber: { presence: true },
   address: { presence: true },
   city: { presence: true },
   state: { presence: true },

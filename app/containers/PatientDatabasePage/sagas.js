@@ -296,7 +296,7 @@ export function* savePatientWatcher() {
 function* submitTextBlast() {
   while (true) {
     // listen for the SUBMIT_TEXT_BLAST action
-    const { patients, message, currentUserId, onClose } = yield take(SUBMIT_TEXT_BLAST);
+    const { patients, message, clientRoleId, onClose } = yield take(SUBMIT_TEXT_BLAST);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -309,7 +309,7 @@ function* submitTextBlast() {
           patientsIDs: patients.map(patient => (
             patient.id
           )),
-          currentUserId,
+          clientRoleId,
           message,
         }),
       });

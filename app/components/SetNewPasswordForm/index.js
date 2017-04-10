@@ -5,10 +5,12 @@
 */
 
 import React from 'react';
-import setNewPasswordFormValidator from './validator';
+import Col from 'react-bootstrap/lib/Col';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
 import { Field, reduxForm } from 'redux-form';
+
+import setNewPasswordFormValidator from './validator';
 import Input from '../../components/Input';
-import { FormGroup, Col } from 'react-bootstrap';
 
 
 @reduxForm({

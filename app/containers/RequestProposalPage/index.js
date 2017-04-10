@@ -7,11 +7,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { StickyContainer, Sticky } from 'react-sticky';
 import Helmet from 'react-helmet';
 import { ComingSoon } from '../../components/ComingSoon';
-import RequestProposalForm from '../../components/RequestProposalForm';
-import RequestProposalCart from '../../components/RequestProposalCart';
 
 import {
   fetchClientSites,
@@ -71,43 +68,15 @@ export class RequestProposalPage extends Component {
   }
 
   render() {
-    const { siteLocations, indications, studyLevels, proposalDetail, userRoleType } = this.props;
+    const { userRoleType } = this.props;
 
     return (
       <div>
         { userRoleType === 'client' &&
-          <StickyContainer className="container-fluid">
+          <div>
             <Helmet title="Request Proposal - StudyKIK" />
-            <section className="study-portal">
-
-              <h2 className="main-heading">REQUEST PROPOSAL</h2>
-
-              <div className="row form-study">
-
-                <div className="col-xs-6 form-holder">
-                  <RequestProposalForm
-                    siteLocations={siteLocations}
-                    indications={indications}
-                    studyLevels={studyLevels}
-                    initialValues={proposalDetail}
-                    formValues={this.props.formValues}
-                  />
-                </div>
-
-                <div className="fixed-block">
-                  <div className="fixed-block-holder">
-                    <div className="order-summery-container">
-                      <Sticky className="sticky-shopping-cart">
-                        {/* this will be replaced with a new shopping cart component */}
-                        <RequestProposalCart onSubmit={this.onSubmitForm} />
-                      </Sticky>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </section>
-          </StickyContainer>
+            <ComingSoon />
+          </div>
         }
         {
           userRoleType === 'sponsor' &&

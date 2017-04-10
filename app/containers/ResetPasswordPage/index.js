@@ -10,8 +10,6 @@ import { reset } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import ResetPasswordForm from '../../components/ResetPasswordForm';
 
-import './styles.less';
-
 import {
   clearResetPasswordSuccess,
   resetPasswordRequest,

@@ -27,7 +27,13 @@ export default class FileUpload extends Component {
   onFileLoad(img) {
     const inFile = this.inFile;
     inFile.value = '';
-    this.props.handleFileChange(img.target.result);
+    // get file reader for the image
+    const image = new Image();
+    image.src = img.target.result;
+    image.onload = () => {
+      // access image src, width, and height
+      this.props.handleFileChange(image.src, image.width, image.height);
+    };
   }
 
   handleFile(e) {

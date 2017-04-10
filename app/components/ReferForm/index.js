@@ -21,11 +21,25 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
     reset: React.PropTypes.func.isRequired,
     submitting: React.PropTypes.bool.isRequired,
     companyTypes: React.PropTypes.array,
+    currentUser: React.PropTypes.object,
   };
 
   render() {
     const { error, handleSubmit, reset, submitting } = this.props; // eslint-disable-line
-    const { siteLocations, companyTypes } = this.props;
+    const { siteLocations, companyTypes, currentUser } = this.props;
+
+    const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
+    let bDisabled = true;
+    if (currentUser && currentUser.roleForClient) {
+      bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
+    }
+    let defaultValue = null;
+    if (!isAdmin && bDisabled) {
+      defaultValue = currentUser.site_id;
+      if (currentUser && currentUser.roleForClient) {
+        defaultValue = currentUser.roleForClient.site_id;
+      }
+    }
 
     return (
       <form onSubmit={handleSubmit}>
@@ -38,6 +52,8 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
                 component={ReactSelect}
                 placeholder="Select Site Location"
                 options={siteLocations}
+                disabled={bDisabled}
+                selectedValue={defaultValue || undefined}
               />
             </div>
           </div>

@@ -1,18 +1,21 @@
-import React, { PropTypes, Component } from 'react';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { Modal } from 'react-bootstrap';
-import { Field, reduxForm, reset, change } from 'redux-form';
 import classNames from 'classnames';
-import Button from 'react-bootstrap/lib/Button';
-import { StickyContainer } from 'react-sticky';
 import _, { map, mapKeys, concat, findIndex, pullAt } from 'lodash';
-import './styles.less';
+import moment from 'moment-timezone';
+import React, { PropTypes, Component } from 'react';
+import Button from 'react-bootstrap/lib/Button';
+import Modal from 'react-bootstrap/lib/Modal';
+import rd3 from 'react-d3';
+import { defaultRanges, DateRange } from 'react-date-range';
+import { connect } from 'react-redux';
+import { StickyContainer } from 'react-sticky';
+import { Field, reduxForm, reset, change } from 'redux-form';
+import { createStructuredSelector } from 'reselect';
+
 import CenteredModal from '../../../components/CenteredModal';
 import FiltersForm from './FiltersForm';
 import StudyList from './StudyList';
 import Filter from '../../../components/Filter';
-// import { selectFilterFormValues } from './FiltersForm/selectors';
+
 import {
   selectFilterFormValues,
   selectLevels,
@@ -28,10 +31,8 @@ import {
   selectAllClientUsers,
   selectEditStudyValues,
   selectMessagingNumbers,
+  selectPaginationOptions,
 } from './selectors';
-import rd3 from 'react-d3';
-import moment from 'moment-timezone';
-import { defaultRanges, DateRange } from 'react-date-range';
 import {
   fetchStudiesDashboard,
   fetchSiteNames,
@@ -55,7 +56,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   static propTypes = {
     dispatch: PropTypes.func,
     filtersFormValues: PropTypes.object,
-    paginationOptions: PropTypes.object,
     studies: PropTypes.array,
     resetForm: PropTypes.func,
     fetchStudiesDashboard: PropTypes.func,
@@ -89,6 +89,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     fetchMessagingNumbersDashboard: PropTypes.func,
     messagingNumbers: PropTypes.object,
     updateTwilioNumbers: PropTypes.func,
+    paginationOptions: PropTypes.object,
   };
 
   constructor(props) {
@@ -271,7 +272,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     return newFilters;
   }
 
-  fetchStudiesAccordingToFilters(value, key) {
+  fetchStudiesAccordingToFilters(value, key, fetchByScroll) {
     let filters = _.cloneDeep(this.props.filtersFormValues);
 
     if (value && key) {
@@ -293,10 +294,17 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
       }
     });
 
+    let offset = 0;
+    const limit = 10;
+
+    if (fetchByScroll) {
+      offset = this.props.paginationOptions.page * 10;
+    }
+
     if (isEmpty) {
       this.props.clearFilters();
     } else {
-      this.props.fetchStudiesDashboard(filters);
+      this.props.fetchStudiesDashboard(filters, limit, offset);
     }
   }
 
@@ -442,7 +450,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
                 <Button bsStyle="primary" onClick={() => this.saveFilters()}>
                   Save Filters
                 </Button>
-                <Button bsStyle="gray-outline" onClick={() => this.clearFilters()}>
+                <Button className="gray-outline" onClick={() => this.clearFilters()}>
                   Clear
                 </Button>
               </div>
@@ -636,6 +644,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
             toggleStudy={this.props.toggleStudy}
             messagingNumbers={this.props.messagingNumbers}
+            paginationOptions={this.props.paginationOptions}
           />
         </StickyContainer>
       </div>
@@ -658,12 +667,13 @@ const mapStateToProps = createStructuredSelector({
   allClientUsers: selectAllClientUsers(),
   editStudyValues: selectEditStudyValues(),
   messagingNumbers: selectMessagingNumbers(),
+  paginationOptions: selectPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     resetForm: () => dispatch(reset('dashboardFilters')),
-    fetchStudiesDashboard: (params) => dispatch(fetchStudiesDashboard(params)),
+    fetchStudiesDashboard: (params, limit, offset) => dispatch(fetchStudiesDashboard(params, limit, offset)),
     fetchLevels: () => dispatch(fetchLevels()),
     fetchSiteNames: () => dispatch(fetchSiteNames()),
     fetchSiteLocations: () => dispatch(fetchSiteLocations()),

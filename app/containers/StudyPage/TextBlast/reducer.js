@@ -2,6 +2,7 @@
  * Created by mike on 10/31/16.
  */
 
+import _ from 'lodash';
 import {
   FIND_PATIENTS_TEXT_BLAST_SUCCESS,
   FILTER_PATIENTS_TEXT_BLAST,
@@ -9,7 +10,6 @@ import {
   REMOVE_PATIENT_FROM_TEXT_BLAST,
   REMOVE_PATIENTS_FROM_TEXT_BLAST,
 } from '../constants';
-import _ from 'lodash';
 
 export default function TextBlastModal(state, action) {
   switch (action.type) {

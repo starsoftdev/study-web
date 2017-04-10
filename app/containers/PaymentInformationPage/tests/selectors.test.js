@@ -1,5 +1,5 @@
-import { selectPaymentInformationPageDomain } from '../selectors';
 import expect from 'expect';
+import { selectPaymentInformationPageDomain } from '../selectors';
 
 // const selector = selectPaymentInformationPageDomain();
 
