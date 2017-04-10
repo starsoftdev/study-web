@@ -5,7 +5,7 @@ import { Field, reduxForm, reset, touch } from 'redux-form';
 import inViewport from 'in-viewport';
 import { Link } from 'react-router';
 
-import { normalizePhone } from '../../../app/common/helper/functions';
+import { normalizePhoneForServer } from '../../../app/common/helper/functions';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
 
 import {
@@ -84,7 +84,7 @@ export class ContactPage extends React.Component { // eslint-disable-line react/
 
     const contact = Object.assign({}, newContact);
     /* normalizing the phone number */
-    contact.phone = normalizePhone(newContact.phone);
+    contact.phone = normalizePhoneForServer(newContact.phone);
 
     submitForm(contact);
   }

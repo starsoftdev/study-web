@@ -8,7 +8,7 @@ import Form from 'react-bootstrap/lib/Form';
 import Input from '../../../app/components/Input/index';
 import CenteredModal from '../../../app/components/CenteredModal/index';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
-import { normalizePhone } from '../../../app/common/helper/functions';
+import { normalizePhoneForServer } from '../../../app/common/helper/functions';
 import formValidator, { fields } from './validator';
 
 import {
@@ -55,7 +55,7 @@ class ListNowModal extends React.Component {
 
     const list = Object.assign({}, newList);
     /* normalizing the phone number */
-    list.phone = normalizePhone(newList.phone);
+    list.phone = normalizePhoneForServer(newList.phone);
 
     submitForm(list);
   }
