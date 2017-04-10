@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
-import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSources, selectCurrentUserClientId } from '../../App/selectors';
 import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
@@ -77,7 +77,7 @@ class AddPatientModal extends React.Component {
     const patient = Object.assign({}, newPatient);
     patient.client_id = clientId;
     /* normalizing the phone number */
-    patient.phone = normalizePhone(newPatient.phone);
+    patient.phone = normalizePhoneForServer(newPatient.phone);
     patient.source_id = newPatient.source;
     delete patient.source;
     submitAddPatient(studyId, patient, this.onClose);
