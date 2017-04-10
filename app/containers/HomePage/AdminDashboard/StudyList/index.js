@@ -534,7 +534,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
             return (
               <div className={classNames({ 'btns-active' : selectedStudyCount > 0 })}>
                 { selectedStudyCount > 0 &&
-                <Sticky className={classNames('clearfix', 'top-head', 'top-head-fixed', 'active')}>
+                <Sticky className={classNames('clearfix', 'top-head', 'top-head-fixed', 'active')} topOffset={-268}>
                   <strong className="title"><span className="studies-counter"> { selectedStudyCount }</span> <span className="text" data-one="STUDY" data-two="STUDIES"> SELECTED</span></strong>
                   <div className="btns-area">
                     <Button
@@ -692,7 +692,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   >
                     <StickyContainer className="table-area">
                       <div className="table-left" data-table="">
-                        <Sticky className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))}>
+                        <Sticky className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))} topOffset={-270}>
                           <table className="table table-study">
                             <thead>
                               <tr>
@@ -746,7 +746,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                               this.rightDivHeader = rightDivHeader;
                             }}
                           >
-                            <Sticky className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))}>
+                            <Sticky className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))} topOffset={-270}>
                               <table className="table table-study">
                                 <thead>
                                   <tr>
