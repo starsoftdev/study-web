@@ -21,6 +21,7 @@ import {
 import {
   fetchLanding,
   subscribeFromLanding,
+  patientSubscriptionError,
   clearLanding,
   sendThankYouEmail,
 } from '../../../app/containers/App/actions';
@@ -35,6 +36,7 @@ export class LandingPage extends React.Component {
     siteLocation: PropTypes.any,
     fetchLanding:  PropTypes.func.isRequired,
     subscribeFromLanding:  PropTypes.func.isRequired,
+    patientSubscriptionError:  PropTypes.func.isRequired,
     subscribedFromLanding:  PropTypes.object,
     sendThankYouEmail:  PropTypes.func.isRequired,
     subscriptionError:  PropTypes.object,
@@ -78,6 +80,11 @@ export class LandingPage extends React.Component {
       if (urlPart.toLowerCase().replace(/ /ig, '-') !== siteLocation) {
         invalidSite = true;
       }
+
+      if (!landing.isPublic) {
+        this.props.clearLanding();
+        browserHistory.push('/');
+      }
     }
 
     if (invalidSite || landingError) {
@@ -102,7 +109,22 @@ export class LandingPage extends React.Component {
       landing_page_id: landing.id,
     };
 
-    this.props.subscribeFromLanding(data);
+    if (separateNames[1]) {
+      this.props.subscribeFromLanding(data);
+    } else {
+      const err = {
+        message: 'Must provide a last name.',
+        status: 422,
+        details: {
+          codes: {
+            lastName: ['absent'],
+          },
+        },
+        statusText: 'Unprocessable Entity',
+      };
+
+      this.props.patientSubscriptionError(err);
+    }
   }
 
   render() {
@@ -153,6 +175,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
     subscribeFromLanding: (params) => dispatch(subscribeFromLanding(params)),
+    patientSubscriptionError: (params) => dispatch(patientSubscriptionError(params)),
     sendThankYouEmail: (params) => dispatch(sendThankYouEmail(params)),
     clearLanding: () => dispatch(clearLanding()),
   };
