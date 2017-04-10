@@ -1,22 +1,33 @@
 import React, { PropTypes } from 'react';
 import inViewport from 'in-viewport';
-import { Field, reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+import { blur, Field, reduxForm, touch } from 'redux-form';
 import classNames from 'classnames';
 import Alert from 'react-bootstrap/lib/Alert';
 
 import Input from '../../../app/components/Input';
-import landingFormValidator from './validator';
+import landingFormValidator, { fields } from './validator';
+import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
+
+const formName = 'landing';
+
+const mapDispatchToProps = (dispatch) => ({
+  blur: (field, value) => dispatch(blur(formName, field, value)),
+  touchFields: () => dispatch(touch(formName, ...fields)),
+});
 
 @reduxForm({
-  form: 'landing',
+  form: formName,
   validate: landingFormValidator,
 })
+@connect(null, mapDispatchToProps)
 
 export class LandingForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     landing: PropTypes.object,
     subscriptionError: PropTypes.object,
+    blur: React.PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
   };
 
@@ -25,6 +36,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     this.watcher = null;
 
     this.setVisible = this.setVisible.bind(this);
+    this.onPhoneBlur = this.onPhoneBlur.bind(this);
   }
 
   componentDidMount() {
@@ -33,6 +45,12 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
 
   componentWillUnmount() {
     this.watcher.dispose();
+  }
+
+  onPhoneBlur(event) {
+    const { blur } = this.props;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur('phone', formattedPhoneNumber);
   }
 
   setVisible(el) {
@@ -126,6 +144,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             placeholder={phonePlaceholder}
             className="field-row"
             bsClass="form-control input-lg"
+            onBlur={this.onPhoneBlur}
           />
           <div className="field-row">
             <input className="btn btn-default hidden input-lg" value="Reset" type="reset" />
