@@ -1,26 +1,35 @@
 import React, { PropTypes } from 'react';
 import inViewport from 'in-viewport';
 import { connect } from 'react-redux';
-import { blur, Field, reduxForm, touch } from 'redux-form';
+import { createStructuredSelector } from 'reselect';
+import { blur, Field, reduxForm } from 'redux-form';
 import classNames from 'classnames';
 import Alert from 'react-bootstrap/lib/Alert';
 
 import Input from '../../../app/components/Input';
-import landingFormValidator, { fields } from './validator';
+import landingFormValidator from './validator';
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
+import {
+  patientSubscriptionError,
+} from '../../../app/containers/App/actions';
 
 const formName = 'landing';
 
+const mapStateToProps = createStructuredSelector({});
+
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
-  touchFields: () => dispatch(touch(formName, ...fields)),
+  patientSubscriptionError: (params) => dispatch(patientSubscriptionError(params)),
 });
 
 @reduxForm({
   form: formName,
   validate: landingFormValidator,
+  onSubmitFail: (errors, dispatch) => {
+    dispatch(patientSubscriptionError(null));
+  },
 })
-@connect(null, mapDispatchToProps)
+@connect(mapStateToProps, mapDispatchToProps)
 
 export class LandingForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
