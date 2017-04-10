@@ -40,7 +40,7 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
         };
       }
     }
-    const infoTag = (this.props.reward_type_id === 9 || this.props.reward_type_id === 10 || this.props.reward_type_id === 11) ? <p><strong>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null}</strong> now has {balance} KIKs</p> : null;
+    const infoTag = (rewardData.gift) ? <p>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null} now has {balance} KIKs</p> : null;
 
     let content = null;
     content = (
