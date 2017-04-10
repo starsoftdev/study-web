@@ -31,7 +31,7 @@ import { clearSelectedPatient,
   sortPatientsSuccess } from '../actions';
 import { selectProtocols, selectCurrentUser } from '../../App/selectors';
 import PatientItem from './PatientItem';
-import { normalizePhone, normalizePhoneDisplay } from '../../../common/helper/functions';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
 
 const formName = 'PatientDatabase.TextBlastModal';
 
@@ -98,7 +98,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     payload.indications = map(patientData.indications, indicationIterator => ({ id: indicationIterator.id, isOriginal: indicationIterator.isOriginal }));
     payload.source_id = patientData.source;
     payload.patient_category_id = patientData.status;
-    payload.phone = normalizePhone(patientData.phone);
+    payload.phone = normalizePhoneForServer(patientData.phone);
     payload.protocol_id = patientData.protocol;
     payload.client_id = currentUser.roleForClient.client_id;
 
