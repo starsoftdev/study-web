@@ -51,11 +51,29 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
 
     const fullNamePlaceholder = (landing.fullNamePlaceholder) ? landing.fullNamePlaceholder : '* Full Name';
     const emailPlaceholder = (landing.emailPlaceholder) ? landing.emailPlaceholder : '* Email';
-    const phonePlaceholder = (landing.phonePlaceholder) ? landing.phonePlaceholder : '* Mobile phone';
+    const phonePlaceholder = (landing.phonePlaceholder) ? landing.phonePlaceholder : '* Mobile Phone';
     const instructions = (landing.instructions) ? landing.instructions : 'Enter your information to join!';
     const signupButtonText = (landing.signupButtonText) ? landing.signupButtonText : 'Sign up now!';
     const clickToCallButtonText = (landing.clickToCallButtonText) ? landing.clickToCallButtonText : 'Click to Call!';
     const clickToCallNumber = (landing.clickToCallButtonNumber) ? `tel:${landing.clickToCallButtonNumber}` : false;
+
+    let errorMessage = '';
+
+    if (subscriptionError) {
+      if (subscriptionError.status === 422) {
+        if (subscriptionError.details.codes.phone) {
+          errorMessage = 'Mobile Phone is not unique.';
+        }
+        if (subscriptionError.details.codes.email) {
+          errorMessage = 'Email is not unique.';
+        }
+        if (subscriptionError.details.codes.lastName) {
+          errorMessage = 'Last name is required.';
+        }
+      } else {
+        errorMessage = subscriptionError.message;
+      }
+    }
 
     return (
       <form
@@ -79,7 +97,9 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
           <h3>{instructions}</h3>
           {subscriptionError &&
             <Alert bsStyle="danger">
-              <p>Phone or Email is not unique.</p>
+              <p>
+                {errorMessage}
+              </p>
             </Alert>
           }
           <Field
