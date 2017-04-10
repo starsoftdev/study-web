@@ -9,5 +9,6 @@ const schema = {
   expirationYear: { presence: true },
   billingPostalCode: { presence: true },
 };
-
+const addCardFields = Object.keys(schema);
+export { addCardFields };
 export default validatorFactory(schema);
