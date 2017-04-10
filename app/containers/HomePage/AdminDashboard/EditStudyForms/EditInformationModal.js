@@ -8,7 +8,7 @@ import React, { PropTypes } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { arrayRemoveAll, arrayPush, change, Field, FieldArray, reduxForm } from 'redux-form';
+import { arrayRemoveAll, arrayPush, change, Field, FieldArray, reduxForm, blur } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Form from 'react-bootstrap/lib/Form';
@@ -20,7 +20,7 @@ import ReactSelect from '../../../../components/Input/ReactSelect';
 import RenderEmailsList from './RenderEmailsList';
 import { selectStudyCampaigns } from '../selectors';
 import FormGeosuggest from '../../../../components/Input/Geosuggest';
-
+import { normalizePhoneDisplay } from '../../../../common/helper/functions';
 const mapStateToProps = createStructuredSelector({
   studyCampaigns: selectStudyCampaigns(),
 });
@@ -28,6 +28,7 @@ const mapStateToProps = createStructuredSelector({
 const formName = 'dashboardEditStudyForm';
 
 const mapDispatchToProps = (dispatch) => ({
+  blur: (field, value) => dispatch(blur(formName, field, value)),
   arrayRemoveAll: (field) => dispatch(arrayRemoveAll(formName, field)),
   arrayPush: (field, value) => dispatch(arrayPush(formName, field, value)),
   change: (field, value) => dispatch(change(formName, field, value)),
@@ -38,6 +39,7 @@ const mapDispatchToProps = (dispatch) => ({
 export class EditInformationModal extends React.Component {
   static propTypes = {
     addEmailNotificationClick: PropTypes.func.isRequired,
+    blur: React.PropTypes.func.isRequired,
     allClientUsers: PropTypes.object,
     arrayRemoveAll: PropTypes.func.isRequired,
     arrayPush: PropTypes.func.isRequired,
@@ -68,6 +70,7 @@ export class EditInformationModal extends React.Component {
     this.siteLocationChanged = this.siteLocationChanged.bind(this);
     this.campaignChanged = this.campaignChanged.bind(this);
     this.onSuggestSelect = this.onSuggestSelect.bind(this);
+    this.onPhoneBlur = this.onPhoneBlur.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -160,6 +163,12 @@ export class EditInformationModal extends React.Component {
     }
   }
 
+  onPhoneBlur(event) {
+    const { blur } = this.props;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur(event.target.name, formattedPhoneNumber);
+  }
+
   siteLocationChanged(e) {
     const foundSiteLocation = _.find(this.props.siteLocations, (item) => (item.id === e));
     if (foundSiteLocation) {
@@ -185,7 +194,6 @@ export class EditInformationModal extends React.Component {
       change('level_id', foundCampaign.level_id);
     }
   }
-
 
   render() {
     const { change, openModal, onClose } = this.props;
@@ -489,6 +497,7 @@ export class EditInformationModal extends React.Component {
                       type="text"
                       name="recruitment_phone"
                       component={Input}
+                      onBlur={this.onPhoneBlur}
                     />
                   </div>
                 </div>
@@ -551,6 +560,7 @@ export class EditInformationModal extends React.Component {
                       type="text"
                       name="redirectPhone"
                       component={Input}
+                      onBlur={this.onPhoneBlur}
                     />
                   </div>
                 </div>
