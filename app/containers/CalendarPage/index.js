@@ -172,6 +172,7 @@ export default class CalendarPage extends React.Component {
   }
 
   filterSchedules(schedules, filter) {
+    console.log('+++++++', schedules);
     this.setState({
       filteredSchedules: getFilteredSchedules(schedules, filter),
     });
