@@ -75,20 +75,8 @@ export class ThankYouPageModal extends React.Component {
       this.setState({
         landingFetched: true,
       }, () => {
-        let landing = null;
-        let thankYouPage = null;
-        let study = null;
-
-        if (this.props.landing) {
-          study = this.props.landing;
-
-          for (const studySource of study.studySources) {
-            if (studySource.landingPage) {
-              landing = studySource.landingPage;
-              thankYouPage = landing.thankYouPage;
-            }
-          }
-        }
+        const landing = newProps.landing;
+        const thankYouPage = landing.thankYouPage;
 
         if (!this.state.initialValuesEntered) {
           const { change } = this.props;
