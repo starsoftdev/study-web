@@ -213,14 +213,25 @@ class FilterBar extends Component {
             </div>
           </div>
           <div className="pull-left custom-select">
-            <Select
-              className="form-control data-search"
-              disabled={fetchingSites || !isAdmin || bDisabled}
-              options={siteLocationOptions}
-              placeholder="Select Site Location"
-              value={defaultValue}
-              onChange={(option) => this.handleFilterChange('siteLocation', option)}
-            />
+            {(bDisabled)
+            ? <Select
+                className="form-control data-search"
+                disabled={fetchingSites || !isAdmin || bDisabled}
+                options={siteLocationOptions}
+                placeholder="Select Site Location"
+                value={defaultValue}
+                onChange={(option) => this.handleFilterChange('siteLocation', option)}
+              />
+            : <Select
+                className="form-control data-search"
+                disabled={fetchingSites || !isAdmin || bDisabled}
+                options={siteLocationOptions}
+                value={filter.siteLocation}
+                placeholder="Select Site Location"
+                onChange={(option) => this.handleFilterChange('siteLocation', option)}
+              />
+            }
+            
           </div>
           <div className="pull-left custom-select">
             <Select
