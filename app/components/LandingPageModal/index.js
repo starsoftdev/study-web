@@ -74,6 +74,7 @@ export class LandingPageModal extends React.Component {
     this.state = {
       code: null,
       selected: null,
+      landing: null,
       landingFetched: false,
       studyAddModalOpen: false,
       studyPreviewModalOpen: false,
@@ -97,19 +98,9 @@ export class LandingPageModal extends React.Component {
     if (newProps.landing) {
       this.setState({
         landingFetched: true,
+        landing: newProps.landing,
       }, () => {
-        let landing = null;
-        let study = null;
-
-        if (this.props.landing) {
-          study = this.props.landing;
-
-          for (const studySource of study.studySources) {
-            if (studySource.landingPage) {
-              landing = studySource.landingPage;
-            }
-          }
-        }
+        const landing = newProps.landing;
 
         if (!this.state.initialValuesEntered) {
           const { change } = this.props;
@@ -211,16 +202,9 @@ export class LandingPageModal extends React.Component {
     const { openModal, onClose } = this.props;
     let fileSrc = null;
 
-    if (this.props.landing) {
-      const study = this.props.landing;
-      let landing;
-
-      for (const studySource of study.studySources) {
-        if (studySource.landingPage) {
-          landing = studySource.landingPage;
-          fileSrc = landing.imgSrc;
-        }
-      }
+    if (this.state.landing) {
+      const landing = this.state.landing;
+      fileSrc = landing.imgSrc;
     }
     /* const country = [{ label: 'USA', value: 'USA', id: 0 },
                     { label: 'Canada', value: 'Canada', id: 1 },
