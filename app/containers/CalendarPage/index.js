@@ -42,7 +42,7 @@ import { selectSchedules, selectPatientsByStudy, selectPaginationOptions } from 
 const getFilteredSchedules = (schedules, filter) =>
   schedules.filter(s =>
     `${s.patient.firstName} ${s.patient.lastName}`.toLowerCase().indexOf(filter.patientName.toLowerCase()) > -1 &&
-      (!filter.siteLocation || filter.siteLocation === 'All' || s.siteLocation === filter.siteLocation) &&
+      (!filter.siteLocation || filter.siteLocation === 'All' || s.sitelocation === filter.siteLocation) &&
       (!filter.indication || filter.indication === 'All' || s.indication === filter.indication) &&
       (!filter.protocol || filter.protocol === 'All' || s.protocolNumber === filter.protocol)
   );
@@ -172,7 +172,6 @@ export default class CalendarPage extends React.Component {
   }
 
   filterSchedules(schedules, filter) {
-    console.log('+++++++', schedules);
     this.setState({
       filteredSchedules: getFilteredSchedules(schedules, filter),
     });
