@@ -231,7 +231,6 @@ class FilterBar extends Component {
               onChange={(option) => this.handleFilterChange('siteLocation', option)}
             />
             }
-            
           </div>
           <div className="pull-left custom-select">
             <Select
