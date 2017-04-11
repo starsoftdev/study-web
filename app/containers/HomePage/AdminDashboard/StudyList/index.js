@@ -21,6 +21,7 @@ import EditInformationModal from '../EditStudyForms/EditInformationModal';
 import { selectStudies, selectPaginationOptions, selectAddNotificationProcess } from '../selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
+import { normalizePhoneForServer } from '../../../../common/helper/functions';
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     allClientUsers: PropTypes.object,
@@ -431,7 +432,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   updateStudy(params) {
-    this.props.updateDashboardStudy(params);
+    const newParam = Object.assign({}, params);
+    newParam.redirectPhone = normalizePhoneForServer(params.redirectPhone);
+    newParam.recruitment_phone = normalizePhoneForServer(params.recruitment_phone);
+    this.props.updateDashboardStudy(newParam);
   }
 
   addEmailNotificationClick() {
