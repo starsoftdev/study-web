@@ -160,7 +160,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             <input className="btn btn-default btn-block input-lg" value={signupButtonText} type="submit" />
           </div>
           <div className="field-row">
-            {!landing.isHideClickToCallButton &&
+            {!landing.hideClickToCall &&
               <a
                 href={clickToCallNumber}
                 className={classNames({ 'btn btn-deep btn-block small': true, disabled: !clickToCallNumber })}
