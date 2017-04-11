@@ -68,9 +68,10 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
   }
 
   handleCropLoad(e) {
+    const { selectedImageWidth, selectedImageHeight } = this.state;
     const rootElement = this.rootElement;
     const ctx = rootElement.getContext('2d');
-    ctx.drawImage(e.target, 0, 0, 400, 400);
+    ctx.drawImage(e.target, 0, 0, selectedImageWidth, selectedImageHeight);
     this.props.handleSubmit(rootElement);
   }
 
@@ -118,11 +119,12 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
   }
 
   logCallback(e) {
-    console.trace('callback', e);
+    if (e) {
+      console.trace('callback', e);
+    }
   }
 
   render() {
-    const { error, handleSubmit, pristine, reset, submitting } = this.props; // eslint-disable-line
     let width;
     let height;
     if (this.state.selectedImageWidth) {
@@ -190,8 +192,8 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
                 this.rootElement = rootElement;
               }}
               style={{ margin: '10px 24px 32px', padding: 5, border: '1px solid #CCC', display: 'none' }}
-              width={width}
-              height={height}
+              width={this.state.selectedImageWidth}
+              height={this.state.selectedImageHeight}
             />
             :
             null
