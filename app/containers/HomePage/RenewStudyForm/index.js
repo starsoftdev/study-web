@@ -114,6 +114,10 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
         });
       }
     }
+
+    if (newProps.manualDisableSubmit === false && this.props.manualDisableSubmit === true) {
+      this.resetState();
+    }
   }
 
   onSaveCard(params) {
