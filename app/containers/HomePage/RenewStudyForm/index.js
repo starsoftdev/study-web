@@ -161,6 +161,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       campaignLength: null,
       condenseTwoWeeks: false,
       patientMessagingSuite: false,
+      patientQualificationSuite: false,
       callTracking: false,
       initDate: moment(),
       minDate: 'none',
