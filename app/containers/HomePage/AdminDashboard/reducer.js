@@ -41,6 +41,7 @@ import {
   FETCH_MESSAGING_NUMBERS,
   FETCH_MESSAGING_NUMBERS_SUCCESS,
   FETCH_MESSAGING_NUMBERS_ERROR,
+  SET_HOVER_ROW_INDEX,
 } from './constants';
 
 import {
@@ -126,6 +127,7 @@ const initialState = {
   protocols: [],
   cro: [],
   usersByRoles: {},
+  hoverRowIndex: null,
 };
 
 export default function dashboardPageReducer(state = initialState, action) {
@@ -589,7 +591,11 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: action.payload,
         },
       };
-
+    case SET_HOVER_ROW_INDEX:
+      return {
+        ...state,
+        hoverRowIndex: action.index,
+      };
 
     default:
       return state;
