@@ -319,6 +319,7 @@ export function* renewStudyWorker(action) {
     yield put(toastrActions.success('Renew Study', 'The request has been submitted successfully'));
     yield put(studyRenewed(response));
     yield put(reset('renewStudy'));
+    yield put(reset('shoppingCart'));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
     yield put(toastrActions.error('', errorMessage));
