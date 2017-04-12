@@ -21,7 +21,7 @@ export class AddExposureLevelForm extends React.Component { // eslint-disable-li
   }
 
   componentDidMount() {
-    if (this.props.initialValues.active) {
+    if (this.props.initialValues && this.props.initialValues.active) {
       this.props.change('active', true);
     }
   }

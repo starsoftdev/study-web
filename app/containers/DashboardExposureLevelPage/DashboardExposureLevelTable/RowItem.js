@@ -96,7 +96,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           <Field
             name={`isActive-${this.props.item.id}`}
             type="checkbox"
-            disabled="true"
+            disabled={true}
             component={Checkbox}
           />
         </td>
