@@ -134,11 +134,11 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
     });
 
     const siteNamesOptions = [];
-    _.forEach(this.props.siteNames, (item, key) => {
+    _.forEach(this.props.siteLocations, (item, key) => {
       siteNamesOptions.push({
         id: (key + 1),
-        value: item.name,
-        label: item.name,
+        value: item.id,
+        label: item.id.toString(),
       });
     });
 
