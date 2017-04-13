@@ -488,7 +488,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <h2>RUBY</h2>
                     <p>100 Posts</p>
                     <strong className="price">
-                      $5059 <span>/MONTH</span>
+                      $5297 <span>/MONTH</span>
                     </strong>
                     <div className="note">
                       <span>
@@ -517,7 +517,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <h2>DIAMOND</h2>
                     <p>60 Posts</p>
                     <strong className="price">
-                      $3059 <span>/MONTH</span>
+                      $3297 <span>/MONTH</span>
                     </strong>
                     <div className="btn-block text-center">
                       <span
@@ -540,7 +540,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     </div>
                     <h2>PLATINUM</h2>
                     <p>30 Posts</p>
-                    <strong className="price">$1559 <span>/MONTH</span></strong>
+                    <strong className="price">$1797 <span>/MONTH</span></strong>
                     <div className="btn-block text-center">
                       <span
                         className="btn-default btn"
@@ -562,7 +562,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     </div>
                     <h2>GOLD</h2>
                     <p>10 Posts</p>
-                    <strong className="price">$559 <span>/MONTH</span></strong>
+                    <strong className="price">$797 <span>/MONTH</span></strong>
                     <div className="btn-block text-center">
                       <span
                         className="btn-default btn"
@@ -584,7 +584,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     </div>
                     <h2>SILVER</h2>
                     <p>3 Posts</p>
-                    <strong className="price">$209 <span>/MONTH</span></strong>
+                    <strong className="price">$297 <span>/MONTH</span></strong>
                     <div className="btn-block text-center">
                       <span
                         className="btn-default btn"
@@ -606,7 +606,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     </div>
                     <h2>BRONZE</h2>
                     <p>1 Posts</p>
-                    <strong className="price">$59 <span>/MONTH</span></strong>
+                    <strong className="price">$97 <span>/MONTH</span></strong>
                     <div className="btn-block text-center">
                       <span
                         className="btn-default btn"
