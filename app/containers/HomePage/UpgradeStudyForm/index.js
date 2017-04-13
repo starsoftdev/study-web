@@ -335,30 +335,8 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                           </div>
                         </div>
                         <div className="field-row">
-                          <strong className="label">
-                            <label>PATIENT MESSAGING SUITE: $247</label>
-                          </strong>
-                          <div className="field">
-                            <Field
-                              name="addPatientMessagingSuite"
-                              disabled={patientMessagingSuite === 'On' || patientQualificationSuite === 'On'}
-                              component={Toggle}
-                              onChange={this.handleMessagingChoose}
-                            />
-                            <Field
-                              name="validateToggle"
-                              className="validate-toggle"
-                              component={Toggle}
-                              visible="false"
-                              onChange={this.handleMessagingChoose}
-                            />
-                          </div>
-                        </div>
-                        <div className="field-row">
                           <strong className="label"><label>Patient qualification <br />
-                            Suite: ${qualificationSuitePrice / 100} <br />
-                            <span className="label-blue">(Includes patient <br />
-                            messaging suite)</span></label></strong>
+                            Suite: ${qualificationSuitePrice / 100}</label></strong>
                           <div className="field">
                             <Field
                               name="addPatientQualificationSuite"
