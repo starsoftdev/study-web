@@ -119,23 +119,6 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
           <div className="btns-slide">
             <div className="btns">
               <div className="area">
-
-                <div className="pull-right">
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={tooltip}
-                  >
-                    <div className="disabled-toggle-container">
-                      <Toggle
-                        name="purchase"
-                        meta={{ touched:false, error:false, active:false }}
-                        input={{}}
-                        className="disabled-toggle"
-                      />
-                    </div>
-                  </OverlayTrigger>
-                </div>
-
                 <div className="pull-right">
                   <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Report</Button>
                   <Button disabled className="btn btn-primary lightbox-opener">Renew</Button>
