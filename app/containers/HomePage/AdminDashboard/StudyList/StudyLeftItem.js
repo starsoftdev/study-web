@@ -5,16 +5,15 @@ import { createStructuredSelector } from 'reselect';
 import moment from 'moment';
 
 import Toggle from '../../../../components/Input/Toggle';
-
+import { selectHoverRowIndex } from '../selectors';
 class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     item: PropTypes.object,
     onSelectStudy: PropTypes.func,
     onStatusChange: PropTypes.func,
     changeStudyStatusDashboard: PropTypes.func,
-    mouseOverRow: PropTypes.func,
-    mouseOutRow: PropTypes.func,
-    hoveredRowIndex: PropTypes.any,
+    hoverRowIndex: PropTypes.any,
+    setHoverRowIndex: PropTypes.func,
   };
 
   constructor(props) {
@@ -22,8 +21,18 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     this.state = {
       hover: false,
     };
+    this.mouseOverRow = this.mouseOverRow.bind(this);
+    this.mouseOutRow = this.mouseOutRow.bind(this);
     this.showHover = this.showHover.bind(this);
     this.hideHover = this.hideHover.bind(this);
+  }
+
+  mouseOverRow(e, index) {
+    this.props.setHoverRowIndex(index);
+  }
+
+  mouseOutRow() {
+    this.props.setHoverRowIndex(null);
   }
 
   showHover() {
@@ -43,12 +52,12 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
 
     return (
       <tr
-        onMouseOver={(e) => this.props.mouseOverRow(e, item.study_id)}
-        onMouseOut={this.props.mouseOutRow}
-        onFocus={(e) => this.props.mouseOverRow(e, item.study_id)}
-        onBlur={this.props.mouseOutRow}
+        onMouseEnter={(e) => this.mouseOverRow(e, item.study_id)}
+        onMouseLeave={this.mouseOutRow}
+        onFocus={(e) => this.mouseOverRow(e, item.study_id)}
+        onBlur={this.mouseOutRow}
 
-        className={(this.props.hoveredRowIndex === item.study_id) ? 'active-table-row' : ''}
+        className={(this.props.hoverRowIndex === item.study_id) ? 'active-table-row' : ''}
       >
         <td>
           <span className={(item.selected) ? 'sm-container checked' : 'sm-container'}>
@@ -102,6 +111,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
 }
 
 const mapStateToProps = createStructuredSelector({
+  hoverRowIndex: selectHoverRowIndex(),
 });
 
 export default connect(mapStateToProps)(StudyLeftItem);

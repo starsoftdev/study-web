@@ -50,6 +50,7 @@ import {
   UPDATE_TWILIO_NUMBERS,
   UPDATE_TWILIO_NUMBERS_SUCCESS,
   UPDATE_TWILIO_NUMBERS_ERROR,
+  SET_HOVER_ROW_INDEX,
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -369,5 +370,12 @@ export function updateTwilioNumbersError(payload) {
   return {
     type: UPDATE_TWILIO_NUMBERS_ERROR,
     payload,
+  };
+}
+
+export function setHoverRowIndex(index) {
+  return {
+    type: SET_HOVER_ROW_INDEX,
+    index,
   };
 }
