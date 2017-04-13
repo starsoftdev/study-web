@@ -1,4 +1,4 @@
-import { forEach, map, sumBy } from 'lodash';
+import _, { forEach, map, sumBy } from 'lodash';
 import React, { PropTypes } from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import { connect } from 'react-redux';
@@ -9,6 +9,7 @@ import AddMessagingNumberForm from '../AddMessagingNumberForm';
 import EditClientAdminsForm from '../EditClientAdminsForm';
 import EditMessagingNumberForm from './EditMessagingNumber';
 import RowItem from './RowItem';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
 
 export class DashboardClientAdminsTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -92,12 +93,18 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
   }
 
   editMessagingClick(item) {
+    const initialValues = {};
     const filteredClientSites = this.props.clientSites.details.filter((element) => (
       element.client_id === item.client_id
     ));
+    _.forEach((filteredClientSites), (item) => {
+      initialValues[`site-phoneNumber-${item.id}`] = item.phoneNumber ? normalizePhoneDisplay(item.phoneNumber) : null;
+      initialValues[`site-${item.id}`] = item.phone ? item.phone.id : null;
+    });
     this.setState({ editClientMessagingNumberValues: {
       clientSites: filteredClientSites,
       phoneNumber: this.props.availPhoneNumbers,
+      initialValues,
     } });
     this.openEditMessagingNumber();
   }
@@ -166,6 +173,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
         nValues.push({
           site_id: data.id,
           phone_id: params[`site-${data.id}`],
+          phoneNumber: normalizePhoneForServer(params[`site-phoneNumber-${data.id}`]),
         });
       }
     });
