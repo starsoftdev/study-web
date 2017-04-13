@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import React, { PropTypes, Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
-import Tooltip from 'react-bootstrap/lib/Tooltip';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 
