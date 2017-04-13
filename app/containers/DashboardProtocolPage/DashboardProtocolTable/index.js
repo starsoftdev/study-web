@@ -21,6 +21,10 @@ export class DashboardProtocolTable extends React.Component { // eslint-disable-
     this.sortBy = this.sortBy.bind(this);
   }
 
+  componentDidMount() {
+    this.props.setActiveSort('number', 'up');
+  }
+
   sortBy(ev) {
     ev.preventDefault();
     let sort = ev.currentTarget.dataset.sort;

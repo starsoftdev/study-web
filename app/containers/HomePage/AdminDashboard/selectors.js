@@ -124,6 +124,11 @@ const selectUpdatePatientThankYouEmailProcess = () => createSelector(
   substate => substate.updatePatientThankYouEmailProcess
 );
 
+const selectHoverRowIndex = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.hoverRowIndex
+);
+
 const selectPaginationOptions = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.paginationOptions
@@ -155,4 +160,5 @@ export {
   selectChangeStudyAddProcess,
   selectMessagingNumbers,
   selectUpdatedStudyAd,
+  selectHoverRowIndex,
 };

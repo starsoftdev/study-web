@@ -22,6 +22,7 @@ import { selectStudies, selectPaginationOptions, selectAddNotificationProcess } 
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { normalizePhoneForServer } from '../../../../common/helper/functions';
+import { setHoverRowIndex } from '../actions';
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     allClientUsers: PropTypes.object,
@@ -47,6 +48,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     totals: PropTypes.object,
     updateDashboardStudy: PropTypes.func.isRequired,
     usersByRoles: PropTypes.object,
+    setHoverRowIndex: PropTypes.func,
   };
 
   constructor(props) {
@@ -76,8 +78,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.closeAddEmailModal = this.closeAddEmailModal.bind(this);
     this.addEmailNotificationSubmit = this.addEmailNotificationSubmit.bind(this);
     this.setEditStudyFormValues = this.setEditStudyFormValues.bind(this);
-    this.mouseOverRow = this.mouseOverRow.bind(this);
-    this.mouseOutRow = this.mouseOutRow.bind(this);
 
     this.handleScroll = this.handleScroll.bind(this);
     this.handleBodyScroll = this.handleBodyScroll.bind(this);
@@ -101,7 +101,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       selectedStudyCount: 0,
       editStudyInitValues: {},
       addEmailModalShow: false,
-      hoveredRowIndex: null,
       isFixedBottomScroll: false,
       fixedScrollWidth: false,
 
@@ -172,8 +171,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     const scrollHeight = event.target.scrollingElement.scrollHeight;
 
     if ((window.innerHeight + scrollTop < 1130) || (scrollHeight - window.innerHeight - scrollTop < 80)) {
-      this.setState({ isFixedBottomScroll: false });
-    } else {
+      if (this.state.isFixedBottomScroll) {
+        this.setState({ isFixedBottomScroll: false });
+      }
+    } else if (!this.state.isFixedBottomScroll || this.state.fixedScrollWidth !== this.tableRight.clientWidth) {
       this.setState({ isFixedBottomScroll: true, fixedScrollWidth: this.tableRight.clientWidth });
     }
   }
@@ -462,14 +463,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.closeAddEmailModal();
   }
 
-  mouseOverRow(e, index) {
-    this.setState({ hoveredRowIndex: index });
-  }
-
-  mouseOutRow() {
-    this.setState({ hoveredRowIndex: null });
-  }
-
   renderDateFooter() {
     const { dateRange } = this.state;
     if (dateRange.startDate) {
@@ -500,18 +493,14 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         onSelectStudy={this.toggleStudy}
         onStatusChange={this.changeStudyStatus}
         changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
-        mouseOverRow={this.mouseOverRow}
-        mouseOutRow={this.mouseOutRow}
-        hoveredRowIndex={this.state.hoveredRowIndex}
+        setHoverRowIndex={this.props.setHoverRowIndex}
       />
     );
     const studyListRightContents = studies.map((item, index) =>
       <StudyRightItem
         item={item}
         key={index}
-        mouseOverRow={this.mouseOverRow}
-        mouseOutRow={this.mouseOutRow}
-        hoveredRowIndex={this.state.hoveredRowIndex}
+        setHoverRowIndex={this.props.setHoverRowIndex}
       />
     );
 
@@ -912,6 +901,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   change: (formName, name, value) => dispatch(change(formName, name, value)),
+  setHoverRowIndex: (index) => dispatch(setHoverRowIndex(index)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyList);

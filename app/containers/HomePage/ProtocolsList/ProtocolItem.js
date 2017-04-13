@@ -1,12 +1,8 @@
 import classNames from 'classnames';
 import React, { PropTypes, Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
-import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
-import Tooltip from 'react-bootstrap/lib/Tooltip';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
-
-import Toggle from '../../../components/Input/Toggle';
 
 class ProtocolItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -80,15 +76,6 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
       patientMessagingSuite = 'On';
     }
 
-    const tooltip = (
-      <Tooltip
-        id={'ms-tooltip'}
-        className="tooltop-inner"
-      >
-        {'MESSAGING SUITE'}
-      </Tooltip>
-    );
-
     return (
       <tr
         className={classNames('study-container', { 'tr-active': buttonsShown, 'tr-inactive': !buttonsShown })}
@@ -119,23 +106,6 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
           <div className="btns-slide">
             <div className="btns">
               <div className="area">
-
-                <div className="pull-right">
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={tooltip}
-                  >
-                    <div className="disabled-toggle-container">
-                      <Toggle
-                        name="purchase"
-                        meta={{ touched:false, error:false, active:false }}
-                        input={{}}
-                        className="disabled-toggle"
-                      />
-                    </div>
-                  </OverlayTrigger>
-                </div>
-
                 <div className="pull-right">
                   <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Report</Button>
                   <Button disabled className="btn btn-primary lightbox-opener">Renew</Button>

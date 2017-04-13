@@ -519,7 +519,7 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-first-name">MESSAGING SUITE</label>
+                    <label htmlFor="new-patient-first-name">PMS</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -527,6 +527,19 @@ export class EditInformationModal extends React.Component {
                       component={Toggle}
                       className="field"
                       onChange={(e) => { change('patientMessagingSuite', e.toString()); }}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-first-name">PQS</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      name="patient_qualification_suite"
+                      component={Toggle}
+                      className="field"
+                      onChange={(e) => { change('patientQualificationSuite', e.toString()); }}
                     />
                   </div>
                 </div>
@@ -551,19 +564,6 @@ export class EditInformationModal extends React.Component {
                   <strong className="label"> </strong>
                   <a href="#popup-add-messaging-number" className="link-add-messaging-number lightbox-opener">+ Add Messaging Number</a>
                 </div>*/}
-                <div className="field-row">
-                  <strong className="label">
-                    <label htmlFor="new-patient-phone">REDIRECT NUMBER</label>
-                  </strong>
-                  <div className="field">
-                    <Field
-                      type="text"
-                      name="redirectPhone"
-                      component={Input}
-                      onBlur={this.onPhoneBlur}
-                    />
-                  </div>
-                </div>
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-phone">PROTOCOL</label>
