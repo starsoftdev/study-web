@@ -1,4 +1,4 @@
-import _, { forEach, map, sumBy } from 'lodash';
+import { forEach, map, sumBy, orderBy } from 'lodash';
 import React, { PropTypes } from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import { connect } from 'react-redux';
@@ -56,6 +56,11 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     this.updateMessagingNumber = this.updateMessagingNumber.bind(this);
     this.addMessagingNumber = this.addMessagingNumber.bind(this);
   }
+
+  componentDidMount() {
+    this.props.setActiveSort('client_name', 'up');
+  }
+
   componentWillReceiveProps(newProps) {
     if ((!newProps.editUserProcess.saving && this.props.editUserProcess.saving) ||
       (!newProps.editUserProcess.deleting && this.props.editUserProcess.deleting)) {
@@ -185,7 +190,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
   }
 
   render() {
-    const { clientAdmins, clientSites } = this.props;
+    const { clientSites } = this.props;
 
     let messagingNumberOptions = [];
     if (this.props.availPhoneNumbers.details) {
@@ -194,6 +199,14 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
         value: cardIterator.id,
       }));
     }
+
+    let clientAdmins = this.props.clientAdmins.details;
+
+    if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
+      const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
+      clientAdmins = orderBy(clientAdmins, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
+    }
+
 
     return (
       <div className="table-holder">
@@ -212,7 +225,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
           </thead>
           <tbody>
             {
-              clientAdmins.details.map((item, index) => (
+              clientAdmins.map((item, index) => (
                 <RowItem key={index} item={item} editAdminClick={this.editAdminClick} editMessagingClick={this.editMessagingClick} clientSites={clientSites} />
             ))
           }
