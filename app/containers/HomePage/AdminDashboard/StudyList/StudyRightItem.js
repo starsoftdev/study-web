@@ -2,13 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import moment from 'moment';
+import { selectHoverRowIndex } from '../selectors';
 
 class StudyItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     item: PropTypes.object,
     mouseOverRow: PropTypes.func,
     mouseOutRow: PropTypes.func,
-    hoveredRowIndex: PropTypes.any,
+    hoverRowIndex: PropTypes.any,
+    setHoverRowIndex: PropTypes.func,
   };
 
   constructor(props) {
@@ -16,8 +18,18 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     this.state = {
       hover: false,
     };
+    this.mouseOverRow = this.mouseOverRow.bind(this);
+    this.mouseOutRow = this.mouseOutRow.bind(this);
     this.showHover = this.showHover.bind(this);
     this.hideHover = this.hideHover.bind(this);
+  }
+
+  mouseOverRow(e, index) {
+    this.props.setHoverRowIndex(index);
+  }
+
+  mouseOutRow() {
+    this.props.setHoverRowIndex(null);
   }
 
   showHover() {
@@ -55,12 +67,12 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 
     return (
       <tr
-        onMouseOver={(e) => this.props.mouseOverRow(e, item.study_id)}
-        onMouseOut={this.props.mouseOutRow}
-        onFocus={(e) => this.props.mouseOverRow(e, item.study_id)}
-        onBlur={this.props.mouseOutRow}
+        onMouseEnter={(e) => this.mouseOverRow(e, item.study_id)}
+        onMouseLeave={this.mouseOutRow}
+        onFocus={(e) => this.mouseOverRow(e, item.study_id)}
+        onBlur={this.mouseOutRow}
 
-        className={(this.props.hoveredRowIndex === item.study_id) ? 'active-table-row' : ''}
+        className={(this.props.hoverRowIndex === item.study_id) ? 'active-table-row' : ''}
       >
         <td><span className="location">{`${item.site_address ? item.site_address : ''} ${item.site_city ? item.site_city : ''}, ${item.site_state ? item.site_state : ''} ${item.site_zip ? item.site_zip : ''}`}</span></td>
         <td><span className="exposure-level">{item.level_name}</span></td>
@@ -152,6 +164,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 }
 
 const mapStateToProps = createStructuredSelector({
+  hoverRowIndex: selectHoverRowIndex(),
 });
 
 export default connect(mapStateToProps)(StudyItem);

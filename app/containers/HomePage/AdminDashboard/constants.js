@@ -67,3 +67,5 @@ export const FETCH_MESSAGING_NUMBERS_ERROR               = 'DashboardPage/FETCH_
 export const UPDATE_TWILIO_NUMBERS                       = 'DashboardPage/UPDATE_TWILIO_NUMBERS';
 export const UPDATE_TWILIO_NUMBERS_SUCCESS               = 'DashboardPage/UPDATE_TWILIO_NUMBERS_SUCCESS';
 export const UPDATE_TWILIO_NUMBERS_ERROR                 = 'DashboardPage/UPDATE_TWILIO_NUMBERS_ERROR';
+
+export const SET_HOVER_ROW_INDEX                         = 'DashboardPage/SET_HOVER_ROW_INDEX';
