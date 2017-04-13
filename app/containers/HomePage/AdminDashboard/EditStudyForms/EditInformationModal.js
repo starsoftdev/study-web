@@ -566,19 +566,6 @@ export class EditInformationModal extends React.Component {
                 </div>*/}
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">REDIRECT NUMBER</label>
-                  </strong>
-                  <div className="field">
-                    <Field
-                      type="text"
-                      name="redirectPhone"
-                      component={Input}
-                      onBlur={this.onPhoneBlur}
-                    />
-                  </div>
-                </div>
-                <div className="field-row">
-                  <strong className="label">
                     <label htmlFor="new-patient-phone">PROTOCOL</label>
                   </strong>
                   <div className="field">
