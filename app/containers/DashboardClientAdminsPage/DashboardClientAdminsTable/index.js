@@ -102,7 +102,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     const filteredClientSites = this.props.clientSites.details.filter((element) => (
       element.client_id === item.client_id
     ));
-    _.forEach((filteredClientSites), (item) => {
+    forEach((filteredClientSites), (item) => {
       initialValues[`site-phoneNumber-${item.id}`] = item.phoneNumber ? normalizePhoneDisplay(item.phoneNumber) : null;
       initialValues[`site-${item.id}`] = item.phone ? item.phone.id : null;
     });
