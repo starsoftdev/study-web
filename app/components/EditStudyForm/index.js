@@ -92,8 +92,6 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('componentWillReceiveProps', newProps);
-
     const { clientAdmins, change, resetChangeAddState } = this.props;
     if (newProps.selectedStudyId && newProps.selectedStudyId !== this.props.selectedStudyId) {
       const fields = [];
