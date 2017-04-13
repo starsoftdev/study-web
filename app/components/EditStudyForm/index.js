@@ -20,6 +20,7 @@ import {
 } from '../../containers/HomePage/AdminDashboard/actions';
 import {
   selectChangeStudyAddProcess,
+  selectUpdatedStudyAd,
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import RenderEmailsList from './RenderEmailsList';
 import formValidator from './validator';
@@ -51,6 +52,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     fetchClientAdmins: PropTypes.func.isRequired,
     submitStudyAdd: PropTypes.func.isRequired,
     changeStudyAddProcess: PropTypes.any,
+    updatedStudyAd: PropTypes.any,
     resetChangeAddState: PropTypes.func.isRequired,
   };
   constructor(props) {
@@ -74,6 +76,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     this.handleFileChange = this.handleFileChange.bind(this);
 
     this.state = {
+      updatedStudyAd: null,
       addEmailModalShow: false,
       studyAddModalOpen: false,
       studyPreviewModalOpen: false,
@@ -89,6 +92,8 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   componentWillReceiveProps(newProps) {
+    console.log('componentWillReceiveProps', newProps);
+
     const { clientAdmins, change, resetChangeAddState } = this.props;
     if (newProps.selectedStudyId && newProps.selectedStudyId !== this.props.selectedStudyId) {
       const fields = [];
@@ -157,6 +162,10 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
 
     if (!newProps.changeStudyAddProcess.saving && newProps.changeStudyAddProcess.success) {
       resetChangeAddState();
+    }
+
+    if (newProps.updatedStudyAd && this.state.updatedStudyAd !== newProps.updatedStudyAd) {
+      this.setState({ updatedStudyAd: newProps.updatedStudyAd });
     }
   }
 
@@ -288,7 +297,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     let fileSrc = null;
 
     if (this.state.currentStudy) {
-      fileSrc = this.state.currentStudy.image;
+      fileSrc = this.state.updatedStudyAd || this.state.currentStudy.image;
     }
 
     return (
@@ -450,6 +459,7 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectValues(formName),
   editedStudy: selectEditedStudy(),
   clientSites: selectClientSites(),
+  updatedStudyAd: selectUpdatedStudyAd(),
   changeStudyAddProcess: selectChangeStudyAddProcess(),
 });
 

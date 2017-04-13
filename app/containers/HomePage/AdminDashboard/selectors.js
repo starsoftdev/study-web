@@ -104,6 +104,11 @@ const selectChangeStudyAddProcess = () => createSelector(
   substate => substate.changeStudyAddProcess
 );
 
+const selectUpdatedStudyAd = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.updatedStudyAd
+);
+
 const selectThankYouPageUpdateProcess = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.updateThankYouPageProcess
@@ -149,4 +154,5 @@ export {
   selectLandingPageUpdateProcess,
   selectChangeStudyAddProcess,
   selectMessagingNumbers,
+  selectUpdatedStudyAd,
 };

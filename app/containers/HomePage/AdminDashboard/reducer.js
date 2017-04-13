@@ -118,6 +118,7 @@ const initialState = {
     hasMoreItems: true,
     page: 1,
   },
+  updatedStudyAd: null,
   levels: [],
   siteLocations: [],
   siteNames: [],
@@ -456,6 +457,7 @@ export default function dashboardPageReducer(state = initialState, action) {
     case CHANGE_STUDY_ADD:
       return {
         ...state,
+        updatedStudyAd: null,
         changeStudyAddProcess: {
           success: false,
           saving: true,
@@ -465,6 +467,7 @@ export default function dashboardPageReducer(state = initialState, action) {
     case CHANGE_STUDY_ADD_SUCCESS:
       return {
         ...state,
+        updatedStudyAd: action.payload.imgSrc,
         changeStudyAddProcess: {
           success: true,
           saving: false,
@@ -474,6 +477,7 @@ export default function dashboardPageReducer(state = initialState, action) {
     case CHANGE_STUDY_ADD_ERROR:
       return {
         ...state,
+        updatedStudyAd: null,
         changeStudyAddProcess: {
           success: false,
           saving: false,
@@ -483,6 +487,7 @@ export default function dashboardPageReducer(state = initialState, action) {
     case RESET_CHANGE_STUDY_ADD_STATE:
       return {
         ...state,
+        updatedStudyAd: null,
         changeStudyAddProcess: {
           success: false,
           saving: false,
