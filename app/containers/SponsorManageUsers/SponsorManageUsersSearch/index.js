@@ -23,7 +23,7 @@ export class SponsorManageUsersSearch extends React.Component {
     editProtocolProcess: PropTypes.object,
     updateData: PropTypes.func,
     protocols: PropTypes.array,
-  }
+  };
 
   constructor(props) {
     super(props);

@@ -21,8 +21,7 @@ class EditSponsorUserForm extends Component { // eslint-disable-line react/prefe
     dispatch: PropTypes.func.isRequired,
     isEdit: PropTypes.bool,
     item: PropTypes.object,
-    onEdit: PropTypes.func,
-    handleSubmit: PropTypes.func,
+    onSubmit: PropTypes.func,
     editUserProcess: PropTypes.object,
     deleteUserProcess: PropTypes.object,
     protocolOptions: PropTypes.array,
@@ -30,10 +29,10 @@ class EditSponsorUserForm extends Component { // eslint-disable-line react/prefe
   };
 
   render() {
-    const { isEdit } = this.props;
+    const { isEdit, onSubmit } = this.props;
 
     return (
-      <form className="form-study form-lightbox" onSubmit={this.props.handleSubmit}>
+      <form className="form-study form-lightbox" onSubmit={onSubmit}>
         <div className="field-row">
           <strong className="required label">
             <label>NAME</label>
