@@ -5,8 +5,8 @@ import React from 'react';
 import { Well, Collapse } from 'react-bootstrap';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { Field, reduxForm, reset, touch } from 'redux-form';
-import { normalizePhoneForServer } from '../../../../app/common/helper/functions';
+import { Field, reduxForm, reset, touch, blur } from 'redux-form';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../app/common/helper/functions';
 import { selectSyncErrorBool, selectValues } from '../../../../app/common/selectors/form.selector';
 
 import {
@@ -22,13 +22,26 @@ import {
 import formValidator, { fields } from './validator';
 
 const formName = 'learnAboutFuture';
+
+function mapDispatchToProps(dispatch) {
+  return {
+    blur: (field, value) => dispatch(blur(formName, field, value)),
+    submitForm: (values) => dispatch(learnAboutFutureTrials(values)),
+    resetForm: () => dispatch(reset(formName)),
+    touchFields: () => dispatch(touch(formName, ...fields)),
+    resetLearnAboutFutureTrialsSuccess: () => dispatch(resetLearnAboutFutureTrialsSuccess()),
+  };
+}
+
 @reduxForm({
   form: formName,
   validate: formValidator,
 })
+@connect(null, mapDispatchToProps)
 
 export class FormSubscribe extends React.Component {
   static propTypes = {
+    blur: React.PropTypes.func.isRequired,
     submitForm: React.PropTypes.func.isRequired,
     formError: React.PropTypes.bool.isRequired,
     resetForm: React.PropTypes.func.isRequired,
@@ -47,6 +60,7 @@ export class FormSubscribe extends React.Component {
     this.handleCollapseProcess = this.handleCollapseProcess.bind(this);
     this.handleCollapseEnd = this.handleCollapseEnd.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onPhoneBlur = this.onPhoneBlur.bind(this);
 
     this.state = {
       open: false,
@@ -58,6 +72,12 @@ export class FormSubscribe extends React.Component {
       this.props.resetForm();
       this.props.resetLearnAboutFutureTrialsSuccess();
     }
+  }
+
+  onPhoneBlur(event) {
+    const { blur } = this.props;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur('phone', formattedPhoneNumber);
   }
 
   // TODO: need to refactor DOM operations below
@@ -163,6 +183,7 @@ export class FormSubscribe extends React.Component {
                     className="field"
                     id=""
                     required
+                    onBlur={this.onPhoneBlur}
                   />
                 </div>
               </div>
@@ -179,14 +200,5 @@ const mapStateToProps = createStructuredSelector({
   newSubscriber: selectValues(formName),
   learnAboutFutureTrialsSuccess: selectLearnAboutFutureTrialsSuccess(),
 });
-
-function mapDispatchToProps(dispatch) {
-  return {
-    submitForm: (values) => dispatch(learnAboutFutureTrials(values)),
-    resetForm: () => dispatch(reset(formName)),
-    touchFields: () => dispatch(touch(formName, ...fields)),
-    resetLearnAboutFutureTrialsSuccess: () => dispatch(resetLearnAboutFutureTrialsSuccess()),
-  };
-}
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormSubscribe);

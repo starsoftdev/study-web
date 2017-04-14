@@ -1,11 +1,11 @@
 import React from 'react';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { Field, reduxForm, reset, touch } from 'redux-form';
+import { Field, reduxForm, reset, touch, blur } from 'redux-form';
 import inViewport from 'in-viewport';
 import { Link } from 'react-router';
 
-import { normalizePhoneForServer } from '../../../app/common/helper/functions';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
 
 import {
@@ -26,14 +26,27 @@ import imgWifi from '../../assets/images/wifi.svg';
 import formValidator, { fields } from './validator';
 
 const formName = 'contactForm';
+
+function mapDispatchToProps(dispatch) {
+  return {
+    blur: (field, value) => dispatch(blur(formName, field, value)),
+    submitForm: (values) => dispatch(newContact(values)),
+    resetForm: () => dispatch(reset(formName)),
+    touchFields: () => dispatch(touch(formName, ...fields)),
+    resetNewContactSuccess: () => dispatch(resetNewContactSuccess()),
+  };
+}
+
 @reduxForm({
   form: formName,
   validate: formValidator,
 })
+@connect(null, mapDispatchToProps)
 
 export class ContactPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
+    blur: React.PropTypes.func.isRequired,
     submitForm: React.PropTypes.func.isRequired,
     formError: React.PropTypes.bool.isRequired,
     resetForm: React.PropTypes.func.isRequired,
@@ -49,6 +62,7 @@ export class ContactPage extends React.Component { // eslint-disable-line react/
 
     this.setVisible = this.setVisible.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onPhoneBlur = this.onPhoneBlur.bind(this);
   }
 
   componentWillMount() {
@@ -67,6 +81,12 @@ export class ContactPage extends React.Component { // eslint-disable-line react/
 
   componentWillUnmount() {
     this.watcher.dispose();
+  }
+
+  onPhoneBlur(event) {
+    const { blur } = this.props;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur('phone', formattedPhoneNumber);
   }
 
   setVisible(el) {
@@ -151,6 +171,7 @@ export class ContactPage extends React.Component { // eslint-disable-line react/
                 bsClass="form-control input-lg"
                 id=""
                 required
+                onBlur={this.onPhoneBlur}
               />
               <Field
                 name="message"
@@ -183,14 +204,5 @@ const mapStateToProps = createStructuredSelector({
   newContact: selectValues(formName),
   newContactSuccess: selectNewContactSuccess(),
 });
-
-function mapDispatchToProps(dispatch) {
-  return {
-    submitForm: (values) => dispatch(newContact(values)),
-    resetForm: () => dispatch(reset(formName)),
-    touchFields: () => dispatch(touch(formName, ...fields)),
-    resetNewContactSuccess: () => dispatch(resetNewContactSuccess()),
-  };
-}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactPage);

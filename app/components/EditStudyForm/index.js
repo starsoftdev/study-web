@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, FieldArray, change, reduxForm, reset } from 'redux-form';
+import { Field, FieldArray, change, reduxForm, reset, blur } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import _, { forEach, filter } from 'lodash';
 
+import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import Input from '../../components/Input';
 import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
 import CenteredModal from '../../components/CenteredModal/index';
@@ -26,10 +27,22 @@ import RenderEmailsList from './RenderEmailsList';
 import formValidator from './validator';
 
 const formName = 'editStudy';
+
+const mapDispatchToProps = (dispatch) => ({
+  addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
+  fetchClientAdmins: (id) => dispatch(fetchClientAdmins(id)),
+  change: (name, value) => dispatch(change(formName, name, value)),
+  blur: (field, value) => dispatch(blur(formName, field, value)),
+  submitStudyAdd: (values) => dispatch(changeStudyAdd(values)),
+  resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
+  resetForm: () => dispatch(reset(formName)),
+});
 @reduxForm({ form: formName, validate: formValidator })
+@connect(null, mapDispatchToProps)
 class EditStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     change: PropTypes.func.isRequired,
+    blur: React.PropTypes.func.isRequired,
     currentUser: PropTypes.object,
     formError: PropTypes.bool,
     formErrors: PropTypes.object,
@@ -72,6 +85,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     this.openStudyPreviewModal = this.openStudyPreviewModal.bind(this);
     this.closeStudyPreviewModal = this.closeStudyPreviewModal.bind(this);
     this.uploadStudyAdd = this.uploadStudyAdd.bind(this);
+    this.onPhoneBlur = this.onPhoneBlur.bind(this);
 
     this.handleFileChange = this.handleFileChange.bind(this);
 
@@ -135,7 +149,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
           });
         }
       });
-      change('recruitmentPhone', currentStudy.recruitmentPhone);
+      change('recruitmentPhone', normalizePhoneDisplay(currentStudy.recruitmentPhone));
       change('emailNotifications', fields);
       change('checkAllInput', isAllChecked);
 
@@ -165,6 +179,12 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     if (newProps.updatedStudyAd && this.state.updatedStudyAd !== newProps.updatedStudyAd) {
       this.setState({ updatedStudyAd: newProps.updatedStudyAd });
     }
+  }
+
+  onPhoneBlur(event) {
+    const { blur } = this.props;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur('recruitmentPhone', formattedPhoneNumber);
   }
 
   handleFileChange(e) {
@@ -330,6 +350,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
                             name="recruitmentPhone"
                             component={Input}
                             type="text"
+                            onBlur={this.onPhoneBlur}
                           />
                         </div>
                       </div>
@@ -459,15 +480,6 @@ const mapStateToProps = createStructuredSelector({
   clientSites: selectClientSites(),
   updatedStudyAd: selectUpdatedStudyAd(),
   changeStudyAddProcess: selectChangeStudyAddProcess(),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
-  fetchClientAdmins: (id) => dispatch(fetchClientAdmins(id)),
-  change: (name, value) => dispatch(change(formName, name, value)),
-  submitStudyAdd: (values) => dispatch(changeStudyAdd(values)),
-  resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
-  resetForm: () => dispatch(reset(formName)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditStudyForm);

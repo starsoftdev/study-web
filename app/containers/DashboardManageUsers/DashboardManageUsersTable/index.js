@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../app/common/helper/functions';
 import RowItem from './RowItem';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddUserForm } from '../../DashboardManageUsers/DashboardManageUsersAddUserForm';
@@ -70,10 +70,11 @@ export class DashboardManageUsersTable extends React.Component { // eslint-disab
   editUserClick(item) {
     this.setState({ editUserInitValues: {
       initialValues: {
+        ...item,
         firstName: item.first_name,
         lastName: item.last_name,
         role: item.role_id,
-        ...item,
+        phone: normalizePhoneDisplay(item.phone),
       },
     } });
     this.openEditUserModal();
@@ -88,7 +89,9 @@ export class DashboardManageUsersTable extends React.Component { // eslint-disab
   }
 
   updateUser(params) {
-    this.props.editDashboardUser(params);
+    const normalizedParams = params;
+    normalizedParams.phone = normalizePhoneForServer(normalizedParams.phone);
+    this.props.editDashboardUser(normalizedParams);
   }
 
   deleteUser(params) {

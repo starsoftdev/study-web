@@ -13,6 +13,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import _, { find } from 'lodash';
 import Helmet from 'react-helmet';
 
+import { normalizePhoneForServer } from '../../../app/common/helper/functions';
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
 import CenteredModal from '../../components/CenteredModal/index';
 import ListNewStudyForm from '../../components/ListNewStudyForm';
@@ -138,7 +139,8 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     const siteLocation = _.find(this.props.siteLocations, { id: this.props.formValues.siteLocation });
     const indication = _.find(this.props.indications, { id: this.props.formValues.indication_id });
     const studyLevel = _.find(this.props.studyLevels, { id: this.props.formValues.exposureLevel });
-    this.submitForm(shoppingCartFormValues, {
+
+    const params = {
       ...this.props.formValues,
       siteLocationName: siteLocation.name,
       indicationName: indication.name,
@@ -148,7 +150,9 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       client_id: this.props.currentUser.roleForClient.client_id,
       stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
       exposureLevelName: studyLevel.label,
-    });
+    };
+    params.recruitmentPhone = normalizePhoneForServer(params.recruitmentPhone);
+    this.submitForm(shoppingCartFormValues, params);
 
     if (this.state.uniqueId.length > 1) {
       this.setState({

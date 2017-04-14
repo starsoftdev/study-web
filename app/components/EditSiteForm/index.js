@@ -2,9 +2,10 @@ import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm, change } from 'redux-form';
+import { Field, reduxForm, change, blur } from 'redux-form';
 import moment from 'moment-timezone';
 
+import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import { selectSavedSite } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
 import FormGeosuggest from '../../components/Input/Geosuggest';
@@ -22,6 +23,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   change: (field, value) => dispatch(change(formName, field, value)),
+  blur: (field, value) => dispatch(blur(formName, field, value)),
 });
 
 @reduxForm({ form: formName, validate: formValidator })
@@ -31,6 +33,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   static propTypes = {
     change: PropTypes.func.isRequired,
     savedSite: PropTypes.object,
+    blur: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func,
     isEdit: PropTypes.bool,
     initialValues: PropTypes.object,
@@ -41,6 +44,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     super(props);
 
     this.onSuggestSelect = this.onSuggestSelect.bind(this);
+    this.onPhoneBlur = this.onPhoneBlur.bind(this);
 
     const timezones = moment.tz.names();
     const regionOptions = [];
@@ -86,6 +90,12 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
       regionOptions,
       regionWithTimezones,
     };
+  }
+
+  onPhoneBlur(event) {
+    const { blur } = this.props;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur('phoneNumber', formattedPhoneNumber);
   }
 
   onSuggestSelect(e) {
@@ -205,6 +215,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                 component={Input}
                 type="text"
                 disabled={savedSite.saving}
+                onBlur={this.onPhoneBlur}
               />
             </div>
           </div>

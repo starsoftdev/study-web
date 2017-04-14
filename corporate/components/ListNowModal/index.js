@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm, reset, touch } from 'redux-form';
+import { Field, reduxForm, reset, touch, blur } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import Input from '../../../app/components/Input/index';
 import CenteredModal from '../../../app/components/CenteredModal/index';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
-import { normalizePhoneForServer } from '../../../app/common/helper/functions';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import formValidator, { fields } from './validator';
 
 import {
@@ -17,13 +17,24 @@ import {
 
 const formName = 'listNowForm';
 
+function mapDispatchToProps(dispatch) {
+  return {
+    blur: (field, value) => dispatch(blur(formName, field, value)),
+    submitForm: (values) => dispatch(listSiteNow(values)),
+    resetForm: () => dispatch(reset(formName)),
+    touchFields: () => dispatch(touch(formName, ...fields)),
+  };
+}
+
 @reduxForm({
   form: formName,
   validate: formValidator,
 })
+@connect(null, mapDispatchToProps)
 
 class ListNowModal extends React.Component {
   static propTypes = {
+    blur: React.PropTypes.func.isRequired,
     submitForm: React.PropTypes.func.isRequired,
     resetForm: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
@@ -37,6 +48,13 @@ class ListNowModal extends React.Component {
     super(props);
     this.onHide = this.onHide.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onPhoneBlur = this.onPhoneBlur.bind(this);
+  }
+
+  onPhoneBlur(event) {
+    const { blur } = this.props;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur('phone', formattedPhoneNumber);
   }
 
   onHide() {
@@ -138,6 +156,7 @@ class ListNowModal extends React.Component {
                   className="field"
                   id=""
                   required
+                  onBlur={this.onPhoneBlur}
                 />
               </div>
               <div className="text-right">
@@ -155,13 +174,5 @@ const mapStateToProps = createStructuredSelector({
   formError: selectSyncErrorBool(formName),
   newList: selectValues(formName),
 });
-
-function mapDispatchToProps(dispatch) {
-  return {
-    submitForm: (values) => dispatch(listSiteNow(values)),
-    resetForm: () => dispatch(reset(formName)),
-    touchFields: () => dispatch(touch(formName, ...fields)),
-  };
-}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListNowModal);
