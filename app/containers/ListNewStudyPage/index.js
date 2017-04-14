@@ -138,7 +138,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     const siteLocation = _.find(this.props.siteLocations, { id: this.props.formValues.siteLocation });
     const indication = _.find(this.props.indications, { id: this.props.formValues.indication_id });
     const studyLevel = _.find(this.props.studyLevels, { id: this.props.formValues.exposureLevel });
-
     this.submitForm(shoppingCartFormValues, {
       ...this.props.formValues,
       siteLocationName: siteLocation.name,
@@ -146,6 +145,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       user_id: this.props.currentUser.id,
       currentUser: this.props.currentUser,
       emailNotifications: filteredEmails,
+      client_id: this.props.currentUser.roleForClient.client_id,
       stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
       exposureLevelName: studyLevel.label,
     });
