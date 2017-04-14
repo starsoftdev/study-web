@@ -77,7 +77,8 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         id: this.props.item.id,
         price: this.props.item.price,
         credits: this.props.item.credits,
-        kiks: this.props.item.kiks,
+        points: this.props.item.points,
+        typeId: this.props.item.typeid,
         position: this.props.item.position,
         active: this.props.item.is_active,
       },
@@ -95,7 +96,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           {this.props.item.credits}
         </td>
         <td>
-          {this.props.item.kiks}
+          {this.props.item.points}
         </td>
         <td>
           {this.props.item.position}
