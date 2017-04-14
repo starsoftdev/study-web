@@ -133,7 +133,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
       });
     });
 
-    const siteNamesOptions = [];
+    let siteNamesOptions = [];
     _.forEach(this.props.siteLocations, (item, key) => {
       siteNamesOptions.push({
         id: (key + 1),
@@ -141,8 +141,9 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
         label: item.id.toString(),
       });
     });
+    siteNamesOptions = _.orderBy(siteNamesOptions, 'label');
 
-    const siteLocationsOptions = [];
+    let siteLocationsOptions = [];
     _.forEach(this.props.siteLocations, (item, key) => {
       siteLocationsOptions.push({
         id: (key + 1),
@@ -150,8 +151,9 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
         label: item.location,
       });
     });
+    siteLocationsOptions = _.orderBy(siteLocationsOptions, 'label');
 
-    const indicationsOptions = [];
+    let indicationsOptions = [];
     _.forEach(this.props.indications, (item, key) => {
       indicationsOptions.push({
         id: (key + 1),
@@ -159,8 +161,9 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
         label: item.name,
       });
     });
+    indicationsOptions = _.orderBy(indicationsOptions, 'label');
 
-    const sponsorsOptions = [];
+    let sponsorsOptions = [];
     _.forEach(this.props.sponsors, (item, key) => {
       sponsorsOptions.push({
         id: (key + 1),
@@ -168,8 +171,9 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
         label: item.name,
       });
     });
+    sponsorsOptions = _.orderBy(sponsorsOptions, 'label');
 
-    const protocolsOptions = [];
+    let protocolsOptions = [];
     _.forEach(this.props.protocols, (item, key) => {
       protocolsOptions.push({
         id: (key + 1),
@@ -177,8 +181,9 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
         label: item.number,
       });
     });
+    protocolsOptions = _.orderBy(protocolsOptions, 'label');
 
-    const croOptions = [];
+    let croOptions = [];
     _.forEach(this.props.cro, (item, key) => {
       croOptions.push({
         id: (key + 1),
@@ -186,8 +191,9 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
         label: item.name,
       });
     });
+    croOptions = _.orderBy(croOptions, 'label');
 
-    const smOptions = [];
+    let smOptions = [];
     _.forEach(this.props.usersByRoles.sm, (item, key) => {
       smOptions.push({
         id: (key + 1),
@@ -195,8 +201,9 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
         label: `${item.first_name} ${item.last_name}`,
       });
     });
+    smOptions = _.orderBy(smOptions, 'label');
 
-    const bdOptions = [];
+    let bdOptions = [];
     _.forEach(this.props.usersByRoles.bd, (item, key) => {
       bdOptions.push({
         id: (key + 1),
@@ -204,8 +211,9 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
         label: `${item.first_name} ${item.last_name}`,
       });
     });
+    bdOptions = _.orderBy(bdOptions, 'label');
 
-    const aeOptions = [];
+    let aeOptions = [];
     _.forEach(this.props.usersByRoles.ae, (item, key) => {
       aeOptions.push({
         id: (key + 1),
@@ -213,6 +221,9 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
         label: `${item.first_name} ${item.last_name}`,
       });
     });
+    aeOptions = _.orderBy(aeOptions, 'label');
+
+    const colorOptions = _.orderBy(filterOptions.colorOptions, 'label');
 
     return (
       <form className="form-filters" onSubmit={handleSubmit}>
@@ -243,7 +254,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'color')}
-              dataSource={filterOptions.colorOptions}
+              dataSource={colorOptions}
               initialValue={initialValues.color}
               customSearchIconClass="icomoon-icon_search2"
             />
