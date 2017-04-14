@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm, reset, touch } from 'redux-form';
+import { Field, reduxForm, reset, touch, blur } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
@@ -9,20 +9,33 @@ import Input from '../../../app/components/Input/index';
 import ReactSelect from '../../../app/components/Input/ReactSelect';
 import CenteredModal from '../../../app/components/CenteredModal/index';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
-import { normalizePhoneForServer } from '../../../app/common/helper/functions';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import formValidator, { fields } from './validator';
 import { fetchIndications, fetchLevels, getProposal } from '../../../app/containers/App/actions';
 import { selectIndications, selectStudyLevels } from '../../../app/containers/App/selectors';
 
 const formName = 'getProposalForm';
 
+function mapDispatchToProps(dispatch) {
+  return {
+    blur: (field, value) => dispatch(blur(formName, field, value)),
+    submitForm: (values) => dispatch(getProposal(values)),
+    fetchIndications: () => dispatch(fetchIndications()),
+    fetchLevels: () => dispatch(fetchLevels()),
+    resetForm: () => dispatch(reset(formName)),
+    touchFields: () => dispatch(touch(formName, ...fields)),
+  };
+}
+
 @reduxForm({
   form: formName,
   validate: formValidator,
 })
+@connect(null, mapDispatchToProps)
 
 class GetProposalModal extends React.Component {
   static propTypes = {
+    blur: React.PropTypes.func.isRequired,
     submitForm: React.PropTypes.func.isRequired,
     indications: React.PropTypes.array,
     studyLevels: React.PropTypes.array,
@@ -40,6 +53,7 @@ class GetProposalModal extends React.Component {
     super(props);
     this.onHide = this.onHide.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onPhoneBlur = this.onPhoneBlur.bind(this);
   }
 
   componentDidMount() {
@@ -51,6 +65,12 @@ class GetProposalModal extends React.Component {
     const { onHide, resetForm } = this.props;
     resetForm();
     onHide();
+  }
+
+  onPhoneBlur(event) {
+    const { blur } = this.props;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur('phone', formattedPhoneNumber);
   }
 
   handleSubmit(ev) {
@@ -148,6 +168,7 @@ class GetProposalModal extends React.Component {
                   className="field"
                   id=""
                   required
+                  onBlur={this.onPhoneBlur}
                 />
               </div>
               <div className="field-row">
@@ -191,15 +212,5 @@ const mapStateToProps = createStructuredSelector({
   studyLevels   : selectStudyLevels(),
   newList: selectValues(formName),
 });
-
-function mapDispatchToProps(dispatch) {
-  return {
-    submitForm: (values) => dispatch(getProposal(values)),
-    fetchIndications: () => dispatch(fetchIndications()),
-    fetchLevels: () => dispatch(fetchLevels()),
-    resetForm: () => dispatch(reset(formName)),
-    touchFields: () => dispatch(touch(formName, ...fields)),
-  };
-}
 
 export default connect(mapStateToProps, mapDispatchToProps)(GetProposalModal);

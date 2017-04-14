@@ -9,10 +9,11 @@ import Editor from 'react-md-editor';
 import Form from 'react-bootstrap/lib/Form';
 
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm, reset, touch, change } from 'redux-form';
+import { Field, reduxForm, reset, touch, change, blur } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Button from 'react-bootstrap/lib/Button';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import Checkbox from '../Input/Checkbox';
 import Input from '../Input/index';
 import CenteredModal from '../../components/CenteredModal/index';
@@ -34,10 +35,25 @@ import formValidator, { fields } from './validator';
 
 const formName = 'landingPageForm';
 
+function mapDispatchToProps(dispatch) {
+  return {
+    change: (name, value) => dispatch(change(formName, name, value)),
+    blur: (field, value) => dispatch(blur(formName, field, value)),
+    submitForm: (values) => dispatch(updateLandingPage(values)),
+    resetState: () => dispatch(resetLandingPageState()),
+    resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
+    submitStudyAdd: (values) => dispatch(changeStudyAdd(values)),
+    fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
+    resetForm: () => dispatch(reset(formName)),
+    touchFields: () => dispatch(touch(formName, ...fields)),
+  };
+}
+
 @reduxForm({
   form: formName,
   validate: formValidator,
 })
+@connect(null, mapDispatchToProps)
 
 export class LandingPageModal extends React.Component {
   static propTypes = {
@@ -45,6 +61,7 @@ export class LandingPageModal extends React.Component {
     fetchLanding:  React.PropTypes.func.isRequired,
     openModal: React.PropTypes.bool.isRequired,
     change: React.PropTypes.func.isRequired,
+    blur: React.PropTypes.func.isRequired,
     resetForm: React.PropTypes.func.isRequired,
     resetState: React.PropTypes.func.isRequired,
     resetChangeAddState: React.PropTypes.func.isRequired,
@@ -70,6 +87,7 @@ export class LandingPageModal extends React.Component {
     this.openStudyPreviewModal = this.openStudyPreviewModal.bind(this);
     this.closeStudyPreviewModal = this.closeStudyPreviewModal.bind(this);
     this.uploadStudyAdd = this.uploadStudyAdd.bind(this);
+    this.onPhoneBlur = this.onPhoneBlur.bind(this);
 
     this.state = {
       code: null,
@@ -110,7 +128,7 @@ export class LandingPageModal extends React.Component {
           change('phonePlaceholder', landing.phonePlaceholder);
           change('signupButtonText', landing.signupButtonText);
           change('clickToCallButtonText', landing.clickToCallButtonText);
-          change('clickToCallButtonNumber', landing.clickToCallButtonNumber);
+          change('clickToCallButtonNumber', normalizePhoneDisplay(landing.clickToCallButtonNumber));
           change('ifInterestedInstructions', landing.ifInterestedInstructions);
           change('bySignUpText', landing.bySignUpText);
           change('shareThisStudyText', landing.shareThisStudyText);
@@ -147,6 +165,12 @@ export class LandingPageModal extends React.Component {
     }
   }
 
+  onPhoneBlur(event) {
+    const { blur } = this.props;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur('clickToCallButtonNumber', formattedPhoneNumber);
+  }
+
   onHide() {
     const { onClose, resetForm } = this.props;
     this.setState({
@@ -167,7 +191,9 @@ export class LandingPageModal extends React.Component {
       return;
     }
 
-    const list = Object.assign({ studyId: this.state.selected.study_id, description: this.state.code }, newList);
+    const formValues = newList;
+    formValues.clickToCallButtonNumber = normalizePhoneForServer(formValues.clickToCallButtonNumber);
+    const list = Object.assign({ studyId: this.state.selected.study_id, description: this.state.code }, formValues);
     submitForm(list);
   }
 
@@ -356,6 +382,7 @@ export class LandingPageModal extends React.Component {
                       type="text"
                       name="clickToCallButtonNumber"
                       component={Input}
+                      onBlur={this.onPhoneBlur}
                     />
                   </div>
                 </div>
@@ -521,18 +548,5 @@ const mapStateToProps = createStructuredSelector({
   updateLandingPageProcess: selectLandingPageUpdateProcess(),
   changeStudyAddProcess: selectChangeStudyAddProcess(),
 });
-
-function mapDispatchToProps(dispatch) {
-  return {
-    change: (name, value) => dispatch(change(formName, name, value)),
-    submitForm: (values) => dispatch(updateLandingPage(values)),
-    resetState: () => dispatch(resetLandingPageState()),
-    resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
-    submitStudyAdd: (values) => dispatch(changeStudyAdd(values)),
-    fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
-    resetForm: () => dispatch(reset(formName)),
-    touchFields: () => dispatch(touch(formName, ...fields)),
-  };
-}
 
 export default connect(mapStateToProps, mapDispatchToProps)(LandingPageModal);

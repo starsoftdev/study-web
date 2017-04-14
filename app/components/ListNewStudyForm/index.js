@@ -5,13 +5,14 @@
 */
 
 import React, { PropTypes } from 'react';
-import { Field, FieldArray, reduxForm, change } from 'redux-form';
+import { Field, FieldArray, reduxForm, change, blur } from 'redux-form';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import moment from 'moment-timezone';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 
+import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import CenteredModal from '../../components/CenteredModal/index';
 import Input from '../../components/Input';
 import Toggle from '../../components/Input/Toggle';
@@ -50,6 +51,7 @@ const formName = 'listNewStudy';
 const mapDispatchToProps = (dispatch) => ({
   addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
   change: (field, value) => dispatch(change(formName, field, value)),
+  blur: (field, value) => dispatch(blur(formName, field, value)),
   hideAddEmailModal: () => dispatch(hideAddEmailModal()),
   showAddEmailModal: () => dispatch(showAddEmailModal()),
   hideSiteLocationModal: () => dispatch(hideSiteLocationModal()),
@@ -63,6 +65,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
   static propTypes = {
     addEmailNotificationUser: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired,
+    blur: React.PropTypes.func.isRequired,
     clientAdmins: PropTypes.object,
     hideSiteLocationModal: PropTypes.func.isRequired,
     showSiteLocationModal: PropTypes.func.isRequired,
@@ -89,6 +92,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     this.closeAddSiteModal = this.closeAddSiteModal.bind(this);
     this.addSite = this.addSite.bind(this);
     this.handleFileChange = this.handleFileChange.bind(this);
+    this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.state = {
       fileName: '',
     };
@@ -143,6 +147,12 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     if (typeof newProps.formValues.startDate === 'undefined') {
       change('startDate', moment());
     }
+  }
+
+  onPhoneBlur(event) {
+    const { blur } = this.props;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur('recruitmentPhone', formattedPhoneNumber);
   }
 
   closeAddSiteModal() {
@@ -256,6 +266,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
               component={Input}
               type="text"
               className="field"
+              onBlur={this.onPhoneBlur}
             />
           </div>
 

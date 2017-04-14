@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
 import Button from 'react-bootstrap/lib/Button';
+import { normalizePhoneForServer } from '../../../../app/common/helper/functions';
 import Input from '../../../components/Input';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddUserForm } from '../../DashboardManageUsers/DashboardManageUsersAddUserForm';
@@ -59,8 +60,9 @@ export class DashboardManageUsersSearch extends React.Component {
   }
 
   addUser(params) {
-    console.log('add user', params);
-    this.props.editDashboardUser(params);
+    const normalizedParams = params;
+    normalizedParams.phone = normalizePhoneForServer(normalizedParams.phone);
+    this.props.editDashboardUser(normalizedParams);
   }
 
   render() {

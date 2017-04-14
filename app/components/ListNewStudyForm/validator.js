@@ -6,7 +6,16 @@ const schema = {
   protocolNumber: { presence: true },
   sponsorName: { presence: true },
   sponsorEmail: { email: true },
-  recruitmentPhone: { presence: true },
+  recruitmentPhone: {
+    presence: {
+      message: '^Phone number cannot be blank',
+    },
+    format: {
+      // must be a phone in the format of (123) 456-7890 or E.164 format phone numbers
+      pattern: '^\\(\\d{3}\\)\\s?\\d{3}\\-\\d{4}|\\+?[1-9]\\d{1,14}$',
+      message: '^Invalid phone number',
+    },
+  },
   croContactEmail: { email: true },
   irbEmail: { email: true },
   exposureLevel: { presence: { message: '^You need to select exposure level' } },

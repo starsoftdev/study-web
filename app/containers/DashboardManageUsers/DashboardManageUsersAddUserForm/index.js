@@ -1,18 +1,29 @@
 import _ from 'lodash';
 import React, { PropTypes } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, blur } from 'redux-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+import { normalizePhoneDisplay } from '../../../../app/common/helper/functions';
 import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import formValidator from './validator';
 
-@reduxForm({ form: 'dashboardAddClientAdminsForm', validate: formValidator })
+const formName = 'dashboardAddClientAdminsForm';
+
+function mapDispatchToProps(dispatch) {
+  return {
+    blur: (field, value) => dispatch(blur(formName, field, value)),
+  };
+}
+
+@reduxForm({ form: formName, validate: formValidator })
+@connect(null, mapDispatchToProps)
 
 export class AddUserForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    blur: PropTypes.func.isRequired,
     isEdit: PropTypes.bool,
     handleSubmit: PropTypes.func,
     saving: PropTypes.bool,
@@ -20,6 +31,17 @@ export class AddUserForm extends React.Component { // eslint-disable-line react/
     roles: PropTypes.object,
     onDelete: PropTypes.func,
     initialValues: PropTypes.object,
+  }
+
+  constructor(props) {
+    super(props);
+    this.onPhoneBlur = this.onPhoneBlur.bind(this);
+  }
+
+  onPhoneBlur(event) {
+    const { blur } = this.props;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur('phone', formattedPhoneNumber);
   }
 
   render() {
@@ -33,8 +55,11 @@ export class AddUserForm extends React.Component { // eslint-disable-line react/
 
 
     return (
-      <form className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
-
+      <form
+        className="form-lightbox dashboard-lightbox"
+        onSubmit={this.props.handleSubmit}
+        noValidate="novalidate"
+      >
         <div className="field-row">
           <strong className="label required">
             <label className="add-exposure-level">Name</label>
@@ -76,7 +101,7 @@ export class AddUserForm extends React.Component { // eslint-disable-line react/
         </div>
 
         <div className="field-row">
-          <strong className="label">
+          <strong className="label required">
             <label className="add-exposure-level">Phone</label>
           </strong>
           <div className="field">
@@ -84,6 +109,7 @@ export class AddUserForm extends React.Component { // eslint-disable-line react/
               name="phone"
               component={Input}
               type="text"
+              onBlur={this.onPhoneBlur}
             />
           </div>
         </div>
@@ -127,7 +153,6 @@ export class AddUserForm extends React.Component { // eslint-disable-line react/
 
 const mapStateToProps = createStructuredSelector({
 });
-const mapDispatchToProps = {};
 
 export default connect(
   mapStateToProps,

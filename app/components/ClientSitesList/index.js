@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
 import { map, cloneDeep } from 'lodash';
 
+import { normalizePhoneDisplay, normalizePhoneForServer } from '../../../app/common/helper/functions';
 import CenteredModal from '../../components/CenteredModal/index';
 import EditSiteForm from '../../components/EditSiteForm';
 import EditUserForm from '../../components/EditUserForm';
@@ -153,6 +154,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
     const { currentUserClientId, selectedSite } = this.props;
     const params = siteData;
     params.timezone = (siteData.selectedRegion === siteData.selectedTimezone) ? siteData.selectedRegion : `${siteData.selectedRegion}/${siteData.selectedTimezone}`;
+    params.phoneNumber = normalizePhoneForServer(params.phoneNumber);
 
     this.props.saveSite(currentUserClientId, selectedSite.details.id, params);
   }
@@ -217,6 +219,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
       }
       selectedSiteDetailsForForm.selectedRegion = selectedRegion;
       selectedSiteDetailsForForm.selectedTimezone = selectedTimezone;
+      selectedSiteDetailsForForm.phoneNumber = normalizePhoneDisplay(selectedSiteDetailsForForm.phoneNumber);
     }
 
     return (

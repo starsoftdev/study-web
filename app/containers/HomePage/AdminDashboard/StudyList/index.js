@@ -21,7 +21,7 @@ import EditInformationModal from '../EditStudyForms/EditInformationModal';
 import { selectStudies, selectPaginationOptions, selectAddNotificationProcess } from '../selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
-import { normalizePhoneForServer } from '../../../../common/helper/functions';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
 import { setHoverRowIndex } from '../actions';
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -151,7 +151,11 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   setEditStudyFormValues(study) {
     const { change } = this.props;
     _.forEach(study, (item, key) => {
-      change('dashboardEditStudyForm', key, item);
+      if (key === 'recruitment_phone') {
+        change('dashboardEditStudyForm', key, normalizePhoneDisplay(item));
+      } else {
+        change('dashboardEditStudyForm', key, item);
+      }
     });
     change('dashboardEditStudyForm', 'site_location_form', study.site_id);
     change('dashboardEditStudyForm', 'messagingNumber', study.text_number_id);

@@ -5,6 +5,7 @@ import _, { countBy, find, filter, sumBy } from 'lodash';
 import { touch } from 'redux-form';
 
 import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from '../../../common/constants';
+import { normalizePhoneForServer } from '../../../../app/common/helper/functions';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../../components/ShoppingCartForm/validator';
 import { fetchLevels, saveCard, fetchClientAdmins } from '../../App/actions';
@@ -432,7 +433,11 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       return;
     }
 
-    this.props.editStudy(this.state.selectedStudyId, { ...editStudyFormValues, clientId: this.props.currentUserClientId });
+    this.props.editStudy(this.state.selectedStudyId, {
+      emailNotifications: editStudyFormValues.emailNotifications,
+      recruitmentPhone: normalizePhoneForServer(editStudyFormValues.recruitmentPhone),
+      clientId: this.props.currentUserClientId,
+    });
   }
 
   generateRenewStudyShoppingCartAddOns() {

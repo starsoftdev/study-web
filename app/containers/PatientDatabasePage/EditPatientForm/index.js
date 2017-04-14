@@ -1,13 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm, change } from 'redux-form';
+import { Field, reduxForm, change, blur } from 'redux-form';
 import _ from 'lodash';
 import moment from 'moment-timezone';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import Overlay from 'react-bootstrap/lib/Overlay';
 
+import { normalizePhoneDisplay } from '../../../../app/common/helper/functions';
 import { selectValues, selectSyncErrorBool } from '../../../common/selectors/form.selector';
 import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
 import Input from '../../../components/Input/index';
@@ -36,6 +37,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   change: (name, value) => dispatch(change(formName, name, value)),
+  blur: (field, value) => dispatch(blur(formName, field, value)),
   editPatientSite: (site) => dispatch(editPatientSite(site)),
 });
 
@@ -44,6 +46,7 @@ const mapDispatchToProps = dispatch => ({
 class EditPatientForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     change: PropTypes.func.isRequired,
+    blur: PropTypes.func.isRequired,
     editPatientSite: PropTypes.func.isRequired,
     indications: PropTypes.array,
     initialValues: PropTypes.object,
@@ -70,6 +73,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
     this.deleteIndication = this.deleteIndication.bind(this);
     this.selectIndication = this.selectIndication.bind(this);
+    this.onPhoneBlur = this.onPhoneBlur.bind(this);
   }
 
   onSubmit(event) {
@@ -83,6 +87,12 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     if (!this.props.hasError) {
       onSubmit(formattedData);
     }
+  }
+
+  onPhoneBlur(event) {
+    const { blur } = this.props;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    blur('phone', formattedPhoneNumber);
   }
 
   deleteIndication(indication) {
@@ -214,6 +224,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             type="text"
             className="field"
             disabled={savedPatient.saving}
+            onBlur={this.onPhoneBlur}
           />
         </div>
         <div className="field-row form-group patient-database-indication-hidden">
