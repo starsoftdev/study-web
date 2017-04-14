@@ -163,7 +163,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     //   clearTimeout(this.state.searchTimer);
     //   this.setState({ searchTimer: null });
     // }
-    this.props.searchSitePatients(value);
+    // this.props.searchSitePatients(value);
     // const timerH = setTimeout(() => { this.setState({ patientLoaded: true }); }, 500);
     // this.setState({ searchTimer: timerH });
   }
