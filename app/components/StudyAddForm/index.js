@@ -8,6 +8,9 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 import ReactAvatarEditor from 'react-avatar-editor';
 import classNames from 'classnames';
+import { actions as toastrActions } from 'react-redux-toastr';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import FileUpload from './FileUpload';
 
 // import './styles.less';
@@ -25,6 +28,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
     reset: React.PropTypes.func.isRequired,
     pristine: React.PropTypes.bool.isRequired,
     submitting: React.PropTypes.bool.isRequired,
+    displayToastrError: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -111,11 +115,16 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
   }
 
   handleFileChange(img, width, height) {
+    if (width > 2000 || height > 2000) {
+      this.props.displayToastrError('Image size is too large. Please try uploading a smaller resolution image at a maximum of 2000 x 2000 pixels.');
+    }
     this.setState({
       selectedImage: img,
       selectedImageWidth: width,
       selectedImageHeight: height,
+      manualDisable: width > 2000 || height > 2000,
     });
+    console.log('width', width, height);
   }
 
   logCallback(e) {
@@ -127,6 +136,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
   render() {
     let width;
     let height;
+    const { manualDisable } = this.state;
     if (this.state.selectedImageWidth) {
       // calculate the ratio
       // choose whichever is higher for the nominator so that the picture will fit
@@ -205,12 +215,19 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
             </div>
           </div>
           <div className="text-right">
-            <input type="button" className="btn btn-default" onClick={this.handleSave} value="update" />
+            <input type="button" className={manualDisable ? 'btn btn-gray' : 'btn btn-default'} onClick={this.handleSave} value="update" disabled={manualDisable} />
           </div>
         </div>
       </form>
     );
   }
 }
+const mapStateToProps = createStructuredSelector({
+});
 
-export default StudyAddForm;
+function mapDispatchToProps(dispatch) {
+  return {
+    displayToastrError: (error) => dispatch(toastrActions.error(error)),
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(StudyAddForm);
