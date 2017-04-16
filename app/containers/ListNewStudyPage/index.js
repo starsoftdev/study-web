@@ -14,7 +14,7 @@ import _, { find } from 'lodash';
 import Helmet from 'react-helmet';
 
 import { normalizePhoneForServer } from '../../../app/common/helper/functions';
-import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
+import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
 import CenteredModal from '../../components/CenteredModal/index';
 import ListNewStudyForm from '../../components/ListNewStudyForm';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
@@ -85,7 +85,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
   constructor(props) {
     super(props);
-    this.submitForm = this.props.submitForm.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
     this.closeSubmitFormModal = this.closeSubmitFormModal.bind(this);
     this.goToStudyPage = this.goToStudyPage.bind(this);
@@ -151,11 +150,8 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
       exposureLevelName: studyLevel.label,
     };
-    if (params.startDate) {
-      params.startDate = this.props.formValues.startDate.startOf('day');
-    }
     params.recruitmentPhone = normalizePhoneForServer(params.recruitmentPhone);
-    this.submitForm(shoppingCartFormValues, params);
+    this.props.submitForm(shoppingCartFormValues, params);
 
     if (this.state.uniqueId.length > 1) {
       this.setState({
@@ -194,15 +190,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
         price: indicationLevelPrice,
         quantity: months.value,
         total: indicationLevelPrice * months.value,
-      });
-    }
-
-    if (formValues.patientMessagingSuite) {
-      addOns.push({
-        title: 'Patient Messaging Suite',
-        price: MESSAGING_SUITE_PRICE,
-        quantity: 1,
-        total: MESSAGING_SUITE_PRICE,
       });
     }
 

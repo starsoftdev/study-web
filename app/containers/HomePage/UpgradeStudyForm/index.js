@@ -5,7 +5,7 @@ import { Field, FieldArray, reduxForm, change, reset } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import _, { find } from 'lodash';
 
-import { MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE, QUALIFICATION_SUITE_UPGRADE_PRICE } from '../../../common/constants';
+import { CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE, QUALIFICATION_SUITE_UPGRADE_PRICE } from '../../../common/constants';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
@@ -53,12 +53,10 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     this.resetState = this.resetState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleExposureChoose = this.handleExposureChoose.bind(this);
-    this.handleMessagingChoose = this.handleMessagingChoose.bind(this);
     this.handleQualificationChoose = this.handleQualificationChoose.bind(this);
     this.handleCallChoose = this.handleCallChoose.bind(this);
     this.state = {
       level: null,
-      patientMessagingSuite: false,
       patientQualificationSuite: false,
       callTracking: false,
       addCardModalOpen: false,
@@ -71,17 +69,9 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     }
 
     if (newProps.selectedStudy) {
-      const { patientMessagingSuite, patientQualificationSuite } = newProps.selectedStudy;
-      if (patientMessagingSuite === 'On' && patientQualificationSuite === 'Off') {
-        this.props.dispatch(change('upgradeStudy', 'addPatientMessagingSuite', true));
-        this.setState({
-          patientMessagingSuite: true,
-        });
-      }
-
+      const { patientQualificationSuite } = newProps.selectedStudy;
       if (patientQualificationSuite === 'On') {
         this.props.dispatch(change('upgradeStudy', 'addPatientQualificationSuite', true));
-        this.props.dispatch(change('upgradeStudy', 'addPatientMessagingSuite', false));
         this.setState({
           patientQualificationSuite: true,
         });
@@ -104,7 +94,6 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     this.props.ValidationChange();
     const resetState = {
       level: null,
-      patientMessagingSuite: false,
       patientQualificationSuite: false,
       callTracking: false,
     };
@@ -130,64 +119,12 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     this.setState({
       level: e,
     });
-    if (this.props.selectedStudy && !e) {
-      const { patientMessagingSuite, patientQualificationSuite } = this.props.selectedStudy;
-      const pMS = patientMessagingSuite === 'On';
-      const pQS = patientQualificationSuite === 'On';
-      if (pMS === this.state.patientMessagingSuite && pQS === this.state.patientQualificationSuite) {
-        this.props.dispatch(change('upgradeStudy', 'validateToggle', false));
-      } else {
-        this.props.dispatch(change('upgradeStudy', 'validateToggle', true));
-      }
-    } else {
-      this.props.dispatch(change('upgradeStudy', 'validateToggle', true));
-    }
-  }
-
-  handleMessagingChoose(e) {
-    let { patientQualificationSuite } = this.state;
-    if (e && this.state.patientQualificationSuite) {
-      patientQualificationSuite = false;
-      this.props.dispatch(change('upgradeStudy', 'addPatientQualificationSuite', false));
-    }
-    this.setState({
-      patientMessagingSuite: e,
-      patientQualificationSuite,
-    });
-    if (this.props.selectedStudy && !e) {
-      const { patientQualificationSuite } = this.props.selectedStudy;
-      const pQS = patientQualificationSuite === 'On';
-      if (pQS === this.state.patientQualificationSuite && !this.state.level) {
-        this.props.dispatch(change('upgradeStudy', 'validateToggle', false));
-      } else {
-        this.props.dispatch(change('upgradeStudy', 'validateToggle', true));
-      }
-    } else {
-      this.props.dispatch(change('upgradeStudy', 'validateToggle', true));
-    }
   }
 
   handleQualificationChoose(e) {
-    let { patientMessagingSuite } = this.state;
-    if (e && this.state.patientMessagingSuite) {
-      patientMessagingSuite = false;
-      this.props.dispatch(change('upgradeStudy', 'addPatientMessagingSuite', false));
-    }
     this.setState({
       patientQualificationSuite: e,
-      patientMessagingSuite,
     });
-    if (this.props.selectedStudy && !e) {
-      const { patientMessagingSuite } = this.props.selectedStudy;
-      const pMS = patientMessagingSuite === 'On';
-      if (pMS === this.state.patientMessagingSuite && !this.state.level) {
-        this.props.dispatch(change('upgradeStudy', 'validateToggle', false));
-      } else {
-        this.props.dispatch(change('upgradeStudy', 'validateToggle', true));
-      }
-    } else {
-      this.props.dispatch(change('upgradeStudy', 'validateToggle', true));
-    }
   }
 
   handleCallChoose(e) {
@@ -202,7 +139,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
 
   generateUpgradeStudyShoppingCartAddOns() {
     const { studyLevels, selectedIndicationLevelPrice, selectedStudy } = this.props;
-    const { level, patientMessagingSuite, callTracking, patientQualificationSuite } = this.state;
+    const { level, callTracking, patientQualificationSuite } = this.state;
     const addOns = [];
 
     if (level) {
@@ -217,23 +154,8 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
         });
       }
     }
-    if (patientMessagingSuite && !(selectedStudy && selectedStudy.patientMessagingSuite && selectedStudy.patientMessagingSuite === 'On')) {
-      addOns.push({
-        title: 'Patient Messaging Suite',
-        price: MESSAGING_SUITE_PRICE,
-        quantity: 1,
-        total: MESSAGING_SUITE_PRICE,
-      });
-    }
     if (patientQualificationSuite) {
-      if (selectedStudy && selectedStudy.patientMessagingSuite && selectedStudy.patientMessagingSuite === 'On') {
-        addOns.push({
-          title: 'Upgrade to Patient Qualification Suite',
-          price: QUALIFICATION_SUITE_UPGRADE_PRICE,
-          quantity: 1,
-          total: QUALIFICATION_SUITE_UPGRADE_PRICE,
-        });
-      } else if (!(selectedStudy && selectedStudy.patientQualificationSuite && selectedStudy.patientQualificationSuite === 'On')) {
+      if (selectedStudy && selectedStudy.patientQualificationSuite !== 'On') {
         addOns.push({
           title: 'Patient Qualification Suite',
           price: QUALIFICATION_SUITE_PRICE,
@@ -257,8 +179,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   render() {
     const { studyLevels, selectedIndicationLevelPrice, callTracking, availPhoneNumbers, selectedStudy } = this.props;
     let patientQualificationSuite = false;
-    let qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
-    let patientMessagingSuite = false;
+    const qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
 
     let filteredLevels = studyLevels;
     let isDisabled = false;
@@ -266,11 +187,6 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
 
     if (selectedStudy) {
       patientQualificationSuite = selectedStudy.patientQualificationSuite;
-      patientMessagingSuite = selectedStudy.patientMessagingSuite;
-
-      if (patientMessagingSuite === 'On' && patientQualificationSuite === 'Off') {
-        qualificationSuitePrice = QUALIFICATION_SUITE_UPGRADE_PRICE;
-      }
 
       if (selectedStudy.level_id) {
         filteredLevels = _.filter(studyLevels, (o) => (o.id > selectedStudy.level_id));
@@ -429,7 +345,6 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   saveCard: (clientId, customerId, cardData) => dispatch(saveCard(clientId, customerId, cardData)),
   resetForm: () => dispatch(reset('upgradeStudy')),
-  ValidationChange: () => dispatch(change('upgradeStudy', 'addPatientMessagingSuite', true)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpgradeStudyForm);

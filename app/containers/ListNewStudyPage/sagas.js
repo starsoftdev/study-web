@@ -36,7 +36,7 @@ export function* submitFormWatcher() {
           // start date may have a null value due to not determined start date status
           // we don't want to send that over as part of the request
           if (value) {
-            data.append(index, value.utc().startOf('day').toISOString());
+            data.append(index, value.format('YYYY-MM-DD'));
           }
         } else {
           data.append(index, value);

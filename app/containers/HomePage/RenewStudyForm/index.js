@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import moment from 'moment-timezone';
 import _, { find } from 'lodash';
 
-import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_UPGRADE_PRICE } from '../../../common/constants';
+import { CAMPAIGN_LENGTH_LIST, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_UPGRADE_PRICE } from '../../../common/constants';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
@@ -58,7 +58,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     this.handleExposureChoose = this.handleExposureChoose.bind(this);
     this.handleLengthChoose = this.handleLengthChoose.bind(this);
     this.handleCondenseChoose = this.handleCondenseChoose.bind(this);
-    this.handleMessagingChoose = this.handleMessagingChoose.bind(this);
     this.handleQualificationChoose = this.handleQualificationChoose.bind(this);
     this.handleCallChoose = this.handleCallChoose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -69,7 +68,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       exposureLevel: null,
       campaignLength: null,
       condenseTwoWeeks: false,
-      patientMessagingSuite: false,
       patientQualificationSuite: false,
       callTracking: false,
       addCardModalOpen: false,
@@ -90,15 +88,10 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     }
 
     if (newProps.selectedStudy) {
-      const { patientMessagingSuite, patientQualificationSuite } = newProps.selectedStudy;
+      const { patientQualificationSuite } = newProps.selectedStudy;
       const { change } = this.props;
-      if (patientMessagingSuite === 'On' && patientQualificationSuite === 'Off') {
-        change('addPatientMessagingSuite', true);
-      }
-
       if (patientQualificationSuite === 'On') {
         change('addPatientQualificationSuite', true);
-        change('addPatientMessagingSuite', false);
       }
     }
 
@@ -132,12 +125,12 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     change('startDate', null);
   }
 
-  handleDateSelect(date) {
+  handleDateSelect(momentDate) {
     this.setState({
-      initDate: date,
+      initDate: momentDate,
     });
     const { change } = this.props;
-    change('startDate', date);
+    change('startDate', momentDate);
     this.handleDatePickerClose(false);
   }
 
@@ -164,7 +157,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       exposureLevel: null,
       campaignLength: null,
       condenseTwoWeeks: false,
-      patientMessagingSuite: false,
       patientQualificationSuite: false,
       callTracking: false,
       initDate: moment(),
@@ -207,29 +199,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     });
   }
 
-  handleMessagingChoose(e) {
-    let { patientQualificationSuite } = this.state;
-    if (e && this.state.patientQualificationSuite) {
-      patientQualificationSuite = false;
-      const { change } = this.props;
-      change('addPatientQualificationSuite', false);
-    }
-    this.setState({
-      patientMessagingSuite: e,
-      patientQualificationSuite,
-    });
-  }
-
   handleQualificationChoose(e) {
-    let { patientMessagingSuite } = this.state;
-    if (e && this.state.patientMessagingSuite) {
-      patientMessagingSuite = false;
-      const { change } = this.props;
-      change('addPatientMessagingSuite', false);
-    }
     this.setState({
       patientQualificationSuite: e,
-      patientMessagingSuite,
     });
   }
 
@@ -257,8 +229,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
 
   generateRenewStudyShoppingCartAddOns() {
     const { studyLevels, selectedIndicationLevelPrice, selectedStudy } = this.props;
-    const { exposureLevel, campaignLength, condenseTwoWeeks,
-      patientMessagingSuite, patientQualificationSuite, callTracking } = this.state;
+    const { exposureLevel, campaignLength, condenseTwoWeeks, patientQualificationSuite, callTracking } = this.state;
     const addOns = [];
 
     if (exposureLevel && campaignLength) {
@@ -275,23 +246,8 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
         });
       }
     }
-    if (patientMessagingSuite) {
-      addOns.push({
-        title: 'Patient Messaging Suite',
-        price: MESSAGING_SUITE_PRICE,
-        quantity: 1,
-        total: MESSAGING_SUITE_PRICE,
-      });
-    }
     if (patientQualificationSuite) {
-      if (selectedStudy && selectedStudy.patientMessagingSuite === 'On') {
-        addOns.push({
-          title: 'Upgrade to Patient Qualification Suite',
-          price: QUALIFICATION_SUITE_UPGRADE_PRICE,
-          quantity: 1,
-          total: QUALIFICATION_SUITE_UPGRADE_PRICE,
-        });
-      } else {
+      if (selectedStudy && selectedStudy.patientQualificationSuite !== 'On') {
         addOns.push({
           title: 'Patient Qualification Suite',
           price: QUALIFICATION_SUITE_PRICE,
@@ -315,16 +271,10 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   render() {
     const { studyLevels, campaignLength, selectedIndicationLevelPrice, selectedStudy } = this.props;
     let patientQualificationSuite = false;
-    let qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
-    let patientMessagingSuite = false;
+    const qualificationSuitePrice = QUALIFICATION_SUITE_UPGRADE_PRICE;
 
     if (selectedStudy) {
       patientQualificationSuite = selectedStudy.patientQualificationSuite;
-      patientMessagingSuite = selectedStudy.patientMessagingSuite;
-
-      if (patientMessagingSuite === 'On' && patientQualificationSuite === 'Off') {
-        qualificationSuitePrice = QUALIFICATION_SUITE_UPGRADE_PRICE;
-      }
     }
 
     const currentDate = moment();
