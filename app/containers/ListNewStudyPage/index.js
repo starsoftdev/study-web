@@ -151,6 +151,9 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
       exposureLevelName: studyLevel.label,
     };
+    if (params.startDate) {
+      params.startDate = this.props.formValues.startDate.startOf('day');
+    }
     params.recruitmentPhone = normalizePhoneForServer(params.recruitmentPhone);
     this.submitForm(shoppingCartFormValues, params);
 

@@ -20,7 +20,6 @@ const schema = {
   irbEmail: { email: true },
   exposureLevel: { presence: { message: '^You need to select exposure level' } },
   campaignLength: { presence: { message: '^You need to select campaign length' } },
-  startDate: { presence: true },
 };
 const fields = Object.keys(schema);
 
