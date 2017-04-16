@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import _, { countBy, find, filter, sumBy } from 'lodash';
 import { touch } from 'redux-form';
 
-import { CAMPAIGN_LENGTH_LIST, MESSAGING_SUITE_PRICE, CALL_TRACKING_PRICE } from '../../../common/constants';
+import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE } from '../../../common/constants';
 import { normalizePhoneForServer } from '../../../../app/common/helper/functions';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../../components/ShoppingCartForm/validator';
@@ -345,7 +345,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         }
       });
     }
-
+    
     renewStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...selectedStudy,
       ...renewStudyFormValues,
@@ -442,8 +442,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
   generateRenewStudyShoppingCartAddOns() {
     const { studyLevels, selectedIndicationLevelPrice } = this.props;
-    const { exposureLevel, campaignLength, condenseTwoWeeks,
-      patientMessagingSuite, callTracking } = this.props.renewStudyFormValues;
+    const { exposureLevel, campaignLength, condenseTwoWeeks, callTracking } = this.props.renewStudyFormValues;
     const addOns = [];
 
     if (exposureLevel && campaignLength) {
@@ -460,14 +459,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         });
       }
     }
-    if (patientMessagingSuite) {
-      addOns.push({
-        title: 'Patient Messaging Suite',
-        price: MESSAGING_SUITE_PRICE,
-        quantity: 1,
-        total: MESSAGING_SUITE_PRICE,
-      });
-    }
     if (callTracking) {
       addOns.push({
         title: 'Call Tracking',
@@ -482,7 +473,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
   generateUpgradeStudyShoppingCartAddOns() {
     const { studyLevels, selectedIndicationLevelPrice } = this.props;
-    const { level, patientMessagingSuite, callTracking } = this.props.upgradeStudyFormValues;
+    const { level, callTracking } = this.props.upgradeStudyFormValues;
     const addOns = [];
 
     if (level) {
@@ -496,14 +487,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
           total: selectedIndicationLevelPrice.details,
         });
       }
-    }
-    if (patientMessagingSuite) {
-      addOns.push({
-        title: 'Patient Messaging Suite',
-        price: MESSAGING_SUITE_PRICE,
-        quantity: 1,
-        total: MESSAGING_SUITE_PRICE,
-      });
     }
     if (callTracking) {
       addOns.push({

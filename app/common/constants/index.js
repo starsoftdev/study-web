@@ -27,10 +27,9 @@ export const Currencies = {
   CAD: 'CAD',
 };
 
-export const MESSAGING_SUITE_PRICE = 24700;
 export const QUALIFICATION_SUITE_PRICE = 89700;
 export const CALL_TRACKING_PRICE = 24700;
-export const QUALIFICATION_SUITE_UPGRADE_PRICE = QUALIFICATION_SUITE_PRICE - MESSAGING_SUITE_PRICE;
+export const QUALIFICATION_SUITE_UPGRADE_PRICE = 89700;
 
 export const MONTH_OPTIONS = [
   { label: 'Jan', value: 1 },
