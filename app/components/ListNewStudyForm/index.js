@@ -105,18 +105,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
       change('callTracking', false);
     }
 
-    let messagingSuiteToggled = false;
-    let qualificationSuiteToggled = false;
-
-    if (newProps.formValues.patientQualificationSuite === true && typeof this.props.formValues.patientQualificationSuite === 'undefined') {
-      qualificationSuiteToggled = true;
-    } else if (newProps.formValues.patientMessagingSuite === true && typeof this.props.formValues.patientMessagingSuite === 'undefined') {
-      messagingSuiteToggled = true;
-    }
-
-    if (qualificationSuiteToggled && newProps.formValues.patientMessagingSuite === true) {
-      change('patientMessagingSuite', false);
-    } else if (messagingSuiteToggled && newProps.formValues.patientQualificationSuite === true) {
+    if (newProps.formValues.patientQualificationSuite === true) {
       change('patientQualificationSuite', false);
     }
 
@@ -440,6 +429,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
               component={DatePicker}
               className="form-control field datepicker-input"
               initialDate={moment()}
+              minDate={moment()}
             />
           </div>
 
