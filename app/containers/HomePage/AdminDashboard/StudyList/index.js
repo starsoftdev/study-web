@@ -438,7 +438,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
   updateStudy(params) {
     const newParam = Object.assign({}, params);
-    newParam.redirectPhone = normalizePhoneForServer(params.redirectPhone);
     newParam.recruitment_phone = normalizePhoneForServer(params.recruitment_phone);
     this.props.updateDashboardStudy(newParam);
   }
