@@ -23,7 +23,7 @@ import {
 } from '../../containers/App/actions';
 import {
   selectCurrentUser,
-  selectSites,
+  selectUserSites,
   selectIndications,
   selectUserRoleType,
   selectProtocols,
@@ -72,7 +72,7 @@ const periodOptions = [
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
-  sites: selectSites(),
+  sites: selectUserSites(),
   indications: selectIndications(),
   schedules: selectSchedules(),
   protocols: selectProtocols(),
