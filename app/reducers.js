@@ -13,6 +13,7 @@ import { default as patientsListReducer } from './containers/PatientDatabasePage
 import { default as editPatientReducer } from './containers/PatientDatabasePage/EditPatientForm/reducer';
 import { default as rewardForm } from './containers/RewardsPage/RewardModal/reducer';
 import { default as resetPasswordPageReducer } from './containers/ResetPasswordPage/reducer';
+import { default as editStudyReducer } from './containers/HomePage/AdminDashboard/EditStudyForms/reducer';
 import appReducer from './containers/App/reducer';
 import globalNotificationsReducer from './containers/GlobalNotifications/reducer';
 
@@ -26,6 +27,7 @@ export default function createReducer(asyncReducers) {
       'StudyPage.TextBlastModal': textBlastModalReducer,
       'PatientDatabase.TextBlastModal': patientsListReducer,
       'PatientDatabase.EditPatientModal': editPatientReducer,
+      dashboardEditStudyForm: editStudyReducer,
       ScheduledPatientModal,
       rewardForm,
     }),

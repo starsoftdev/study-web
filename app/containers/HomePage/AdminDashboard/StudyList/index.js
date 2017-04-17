@@ -22,7 +22,7 @@ import { selectStudies, selectPaginationOptions, selectAddNotificationProcess } 
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
-import { setHoverRowIndex } from '../actions';
+import { setHoverRowIndex, setEditStudyFormValues } from '../actions';
 
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -50,6 +50,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     updateDashboardStudy: PropTypes.func.isRequired,
     usersByRoles: PropTypes.object,
     setHoverRowIndex: PropTypes.func,
+    setEditStudyFormValues: PropTypes.func,
   };
 
   constructor(props) {
@@ -150,16 +151,12 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   setEditStudyFormValues(study) {
-    const { change } = this.props;
-    _.forEach(study, (item, key) => {
-      if (key === 'recruitment_phone') {
-        change('dashboardEditStudyForm', key, normalizePhoneDisplay(item));
-      } else {
-        change('dashboardEditStudyForm', key, item);
-      }
-    });
-    change('dashboardEditStudyForm', 'site_location_form', study.site_id);
-    change('dashboardEditStudyForm', 'messagingNumber', study.text_number_id);
+    const formValues = _.cloneDeep(study);
+    formValues.recruitment_phone = normalizePhoneDisplay(formValues.recruitment_phone);
+    formValues.site_location_form = study.site_id;
+    formValues.messagingNumber = study.text_number_id;
+
+    this.props.setEditStudyFormValues(formValues);
 
     this.props.fetchAllClientUsersDashboard({ clientId: study.client_id, siteId: study.site_id });
     this.props.fetchStudyCampaignsDashboard(study.study_id);
@@ -906,6 +903,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   change: (formName, name, value) => dispatch(change(formName, name, value)),
   setHoverRowIndex: (index) => dispatch(setHoverRowIndex(index)),
+  setEditStudyFormValues: (values) => dispatch(setEditStudyFormValues(values)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyList);
