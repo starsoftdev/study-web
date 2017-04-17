@@ -164,13 +164,13 @@ const selectUserSites = () => createSelector(
   (substate) => {
     const currentUser = get(substate, 'userData');
     const siteId = currentUser.roleForClient.site_id;
-    let sites = get(substate, 'baseData.sites', []);
+    let sites = get(substate, 'baseData.sites.details', []);
     if (siteId) {
       sites = filter(sites, e => e.id === siteId);
     } else {
       const clientId = get(substate, 'userData.roleForClient.client.id', null);
       if (clientId) {
-        sites = get(substate, 'baseData.sites', {});
+        sites = get(substate, 'baseData.sites.details', []);
       }
     }
     return sites;

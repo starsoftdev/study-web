@@ -40,12 +40,12 @@ class FilterBar extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { siteLocationOptions, isAdmin } = this.props;
+    const { siteLocationOptions, protocols, isAdmin } = this.props;
 
     if (!isAdmin) {
-      if (prevState.siteLocation === null || prevState.siteLocation.siteId !== this.state.siteLocation.siteId) {  // prevent recursive render
+      if (prevState.siteLocation === null || prevState.siteLocation.siteId !== this.state.siteLocation.siteId || prevProps.protocols !== protocols) {  // prevent recursive render
         const site = siteLocationOptions[0];
-        if (site) {
+        if (site && protocols && protocols.length > 0) {
           this.handleFilterChange('siteLocation', site);
         }
       }
