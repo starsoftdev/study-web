@@ -66,7 +66,7 @@ describe('<StudyPage />', () => {
           isDeleted: false,
           location: 'Palmer Tech',
           name: 'Palmer Tech',
-          phone_id: 3,
+          twilio_number_id: 3,
           piFirstName: null,
           piLastName: null,
           phoneNumber: '+15108172118',

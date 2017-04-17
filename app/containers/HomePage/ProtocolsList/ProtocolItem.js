@@ -12,8 +12,8 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
     croName: PropTypes.string,
     activeCount: PropTypes.string,
     inactiveCount: PropTypes.string,
-    patientMessagingSuiteCount: PropTypes.string,
-    unreadMessageCount: PropTypes.string,
+    patientMessagingSuite: PropTypes.number,
+    unreadMessageCount: PropTypes.number,
     push: PropTypes.func,
   };
 
@@ -62,18 +62,18 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
   }
 
   render() {
-    const { protocolNumber, indication, croName, activeCount, inactiveCount, patientMessagingSuiteCount, unreadMessageCount } = this.props;
+    const { protocolNumber, indication, croName, activeCount, inactiveCount, patientMessagingSuite, unreadMessageCount } = this.props;
     const buttonsShown = this.state.buttonsShown;
     let messageCountContent = null;
-    let patientMessagingSuite = 'Off';
+    let patientMessagingSuiteText = 'Off';
     if (unreadMessageCount && unreadMessageCount > 0) {
       messageCountContent = (
         <span className="counter-circle">{unreadMessageCount}</span>
       );
     }
 
-    if (patientMessagingSuiteCount && patientMessagingSuiteCount > 0) {
-      patientMessagingSuite = 'On';
+    if (patientMessagingSuite) {
+      patientMessagingSuiteText = 'On';
     }
 
     return (
@@ -92,8 +92,8 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
         <td>
           <span>{croName}</span>
         </td>
-        <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuite === 'Off') })}>
-          <span className="patient-messaging-suite-status">{patientMessagingSuite}</span>
+        <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuiteText === 'Off') })}>
+          <span className="patient-messaging-suite-status">{patientMessagingSuiteText}</span>
           <span>{messageCountContent}</span>
         </td>
         <td>

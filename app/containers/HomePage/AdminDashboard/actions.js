@@ -51,6 +51,7 @@ import {
   UPDATE_TWILIO_NUMBERS_SUCCESS,
   UPDATE_TWILIO_NUMBERS_ERROR,
   SET_HOVER_ROW_INDEX,
+  SET_EDIT_STUDY_FORM_VALUES,
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -379,3 +380,11 @@ export function setHoverRowIndex(index) {
     index,
   };
 }
+
+export function setEditStudyFormValues(values) {
+  return {
+    type: SET_EDIT_STUDY_FORM_VALUES,
+    values,
+  };
+}
+

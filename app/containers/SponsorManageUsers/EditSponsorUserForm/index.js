@@ -21,19 +21,28 @@ class EditSponsorUserForm extends Component { // eslint-disable-line react/prefe
     dispatch: PropTypes.func.isRequired,
     isEdit: PropTypes.bool,
     item: PropTypes.object,
-    onEdit: PropTypes.func,
-    handleSubmit: PropTypes.func,
+    onSubmit: PropTypes.func,
     editUserProcess: PropTypes.object,
     deleteUserProcess: PropTypes.object,
     protocolOptions: PropTypes.array,
     onDelete: PropTypes.func,
   };
 
+  componentDidMount() {
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(e) {
+    const { onSubmit } = this.props;
+    e.preventDefault();
+    onSubmit(e);
+  }
+
   render() {
     const { isEdit } = this.props;
 
     return (
-      <form className="form-study form-lightbox" onSubmit={this.props.handleSubmit}>
+      <form className="form-study form-lightbox" onSubmit={this.handleSubmit}>
         <div className="field-row">
           <strong className="required label">
             <label>NAME</label>
@@ -61,24 +70,19 @@ class EditSponsorUserForm extends Component { // eslint-disable-line react/prefe
             </div>
           </div>
         </div>
-
-        {
-          !isEdit &&
-            <div className="field-row">
-              <strong className="required label">
-                <label>EMAIL</label>
-              </strong>
-              <div className="field">
-                <Field
-                  name="email"
-                  component={Input}
-                  type="text"
-                  placeholder="Email"
-                />
-              </div>
-            </div>
-        }
-
+        <div className="field-row">
+          <strong className="required label">
+            <label>EMAIL</label>
+          </strong>
+          <div className="field">
+            <Field
+              name="email"
+              component={Input}
+              type="text"
+              placeholder="Email"
+            />
+          </div>
+        </div>
         <div className="field-row label-top">
           <strong className="required label">
             <label>PROTOCOL</label>

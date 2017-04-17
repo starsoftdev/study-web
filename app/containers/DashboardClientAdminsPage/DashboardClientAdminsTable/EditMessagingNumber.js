@@ -36,7 +36,7 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
   componentWillMount() {
     if (this.props.clientSites) {
       const selectedSites = this.props.clientSites.map((item) => (
-        item.phone_id
+        item.twilio_number_id
       ));
       this.setState({
         vSelected: selectedSites,
@@ -68,7 +68,7 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
       <div key={item.id}>
         <div className="field-row">
           <strong className="label">
-            <label className="add-exposure-level">{item.name}</label>
+            <label className="messaging-number">{item.name}</label>
           </strong>
           <div className="field">
             <Field
@@ -82,7 +82,7 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
         </div>
         <div className="field-row">
           <strong className="label">
-            <label className="add-exposure-level"></label>
+            <label className="site-phone" />
           </strong>
           <div className="field">
             <Field

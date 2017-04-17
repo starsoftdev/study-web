@@ -42,8 +42,10 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
 
   componentWillMount() {
     const { currentUser, fetchProtocols } = this.props;
-    fetchProtocols(currentUser.roleForSponsor.id);
-    this.updateData();
+    if (currentUser.roleForSponsor) {
+      fetchProtocols(currentUser.roleForSponsor.id);
+      this.updateData();
+    }
   }
 
   updateData() {
