@@ -345,7 +345,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         }
       });
     }
-    
+
     renewStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...selectedStudy,
       ...renewStudyFormValues,

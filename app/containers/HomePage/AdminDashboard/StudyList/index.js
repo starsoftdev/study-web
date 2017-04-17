@@ -13,7 +13,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import LandingPageModal from '../../../../components/LandingPageModal';
-import ThankYouPageModal from '../../../../components/ThankYouPageModal';
+import ThankYouPageModal from '../../../../components/ThankYouPageModal/index';
 import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
 import CenteredModal from '../../../../components/CenteredModal';
 import AddEmailNotificationForm from '../../../../components/AddEmailNotificationForm';
@@ -23,6 +23,7 @@ import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
 import { setHoverRowIndex } from '../actions';
+
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     allClientUsers: PropTypes.object,
