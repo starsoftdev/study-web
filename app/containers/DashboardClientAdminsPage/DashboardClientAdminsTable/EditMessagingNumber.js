@@ -97,7 +97,7 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
     ));
 
     return (
-      <form action="#" className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
+      <form className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
 
         {filteredSites}
 
