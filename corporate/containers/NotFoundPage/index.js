@@ -45,7 +45,6 @@ export default class NotFound extends React.Component { // eslint-disable-line r
             <img src={img2} alt="img4" className="img-responsive" />
           </div>
         </div>
-        
       </div>
     );
   }
