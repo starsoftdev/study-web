@@ -48,8 +48,6 @@ import {
   SUBMIT_SCHEDULE_SUCCEEDED,
   SUBMIT_SCHEDULE_FAILED,
   SET_SCHEDULED_FORM_INITIALIZED,
-  SET_PATIENT_UNDER,
-  CLEAR_PATIENT_UNDER,
 } from './constants';
 
 const initialState = {
@@ -61,7 +59,6 @@ const initialState = {
     other: false,
   },
   openScheduledModal: false,
-  patientUnder: null,
   openPatientModal: false,
   addPatientStatus:{
     adding: false,
@@ -75,16 +72,6 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         campaigns: action.payload,
-      };
-    case SET_PATIENT_UNDER:
-      return {
-        ...state,
-        patientUnder: action.id,
-      };
-    case CLEAR_PATIENT_UNDER:
-      return {
-        ...state,
-        patientUnder: null,
       };
     case EXPORT_PATIENTS_SUCCESS:
       return {
