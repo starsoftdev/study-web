@@ -62,7 +62,6 @@ import {
   readStudyPatientMessagesError,
   submitScheduleSucceeded,
   submitScheduleFailed,
-  clearPatientUnder,
 } from './actions';
 
 // Bootstrap sagas
@@ -538,7 +537,6 @@ function* submitMovePatientBetweenCategories() {
         }),
       });
       yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, patientId));
-      yield put(clearPatientUnder());
       yield call(fetchPatients, studyId);
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');

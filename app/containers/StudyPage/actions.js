@@ -72,8 +72,6 @@ import {
   SUBMIT_SCHEDULE_SUCCEEDED,
   SUBMIT_SCHEDULE_FAILED,
   SET_SCHEDULED_FORM_INITIALIZED,
-  SET_PATIENT_UNDER,
-  CLEAR_PATIENT_UNDER,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -577,18 +575,5 @@ export function setScheduledFormInitialized(formInitialized) {
   return {
     type: SET_SCHEDULED_FORM_INITIALIZED,
     formInitialized,
-  };
-}
-
-export function setPatientUnder(id) {
-  return {
-    type: SET_PATIENT_UNDER,
-    id,
-  };
-}
-
-export function clearPatientUnder() {
-  return {
-    type: CLEAR_PATIENT_UNDER,
   };
 }
