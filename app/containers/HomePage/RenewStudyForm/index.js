@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import moment from 'moment-timezone';
 import _, { find } from 'lodash';
 
-import { CAMPAIGN_LENGTH_LIST, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_UPGRADE_PRICE } from '../../../common/constants';
+import { CAMPAIGN_LENGTH_LIST, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE } from '../../../common/constants';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
@@ -271,7 +271,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   render() {
     const { studyLevels, campaignLength, selectedIndicationLevelPrice, selectedStudy } = this.props;
     let patientQualificationSuite = false;
-    const qualificationSuitePrice = QUALIFICATION_SUITE_UPGRADE_PRICE;
+    const qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
 
     if (selectedStudy) {
       patientQualificationSuite = selectedStudy.patientQualificationSuite;
