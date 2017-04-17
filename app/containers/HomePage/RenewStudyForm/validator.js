@@ -4,7 +4,6 @@ const schema = {
   exposureLevel: { presence: true },
   campaignLength: { presence: true },
   condenseTwoWeeks: { presence: false },
-  patientMessagingSuite: { presence: false },
   callTracking: { presence: false },
   startDate: { presence: true },
   notes: { presence: false },
