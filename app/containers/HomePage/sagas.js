@@ -310,8 +310,9 @@ export function* renewStudyWorker(action) {
     const params = {
       method: 'POST',
       body: JSON.stringify({
-        formValues,
-        cartValues,
+        ...formValues,
+        ...cartValues,
+        startDate: formValues.startDate ? formValues.startDate.format('YYYY-MM-DD') : null,
       }),
     };
     const response = yield call(request, requestURL, params);

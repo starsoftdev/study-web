@@ -104,7 +104,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     ));
     forEach((filteredClientSites), (item) => {
       initialValues[`site-phoneNumber-${item.id}`] = item.phoneNumber ? normalizePhoneDisplay(item.phoneNumber) : null;
-      initialValues[`site-${item.id}`] = item.phone ? item.phone.id : null;
+      initialValues[`site-${item.id}`] = item.twilioNumber ? item.twilioNumber.id : null;
     });
     this.setState({ editClientMessagingNumberValues: {
       clientSites: filteredClientSites,
@@ -177,7 +177,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
       if (params[`site-${data.id}`] || params[`site-${data.id}`] === null) {
         nValues.push({
           site_id: data.id,
-          phone_id: params[`site-${data.id}`],
+          twilio_number_id: params[`site-${data.id}`],
           phoneNumber: normalizePhoneForServer(params[`site-phoneNumber-${data.id}`]),
         });
       }

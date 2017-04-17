@@ -126,13 +126,20 @@ export default class AddPatient extends React.Component {
     delete sanitizedProps.submitAddPatient;
     delete sanitizedProps.touchFields;
 
-    const protocolOptions = studies.map(studyIterator => {
-      const protocol = _.find(protocols.details, { id: studyIterator.protocol_id });
-      return {
-        label: protocol.number,
-        value: protocol.id,
-      };
-    });
+    let protocolOptions = [];
+    if (studies.length > 0 && protocols.details.length > 0) {
+      protocolOptions = studies.map(studyIterator => {
+        const protocol = _.find(protocols.details, { id: studyIterator.protocol_id });
+        if (protocol) {
+          return {
+            label: protocol.number,
+            value: protocol.id,
+          };
+        }
+        return null;
+      }).filter(po => !!po);
+    }
+
     return (
       <Modal
         {...sanitizedProps}

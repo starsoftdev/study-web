@@ -149,7 +149,7 @@ export function* fetchSitesWorker(action) {
           include: ['user'],
         },
       }, {
-        relation: 'phone',
+        relation: 'twilioNumber',
       }, {
         relation: 'rewards',
       }],

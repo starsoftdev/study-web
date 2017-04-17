@@ -32,6 +32,12 @@ export function* submitFormWatcher() {
           data.append(index, value[0]);
         } else if (index === 'emailNotifications' || index === 'leadSource') {
           data.append(index, JSON.stringify(value));
+        } else if (index === 'startDate') {
+          // start date may have a null value due to not determined start date status
+          // we don't want to send that over as part of the request
+          if (value) {
+            data.append(index, value.format('YYYY-MM-DD'));
+          }
         } else {
           data.append(index, value);
         }

@@ -84,13 +84,19 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
       },
     };
 
+    const formattedNumber = new Intl.NumberFormat(undefined, {
+      style: 'currency',
+      currency: 'USD',
+      currencyDisplay: 'symbol',
+    }).format(this.props.item.price / 100).replace(/[A-Z]*/, '');
+
     return (
       <tr>
         <td>
           {this.props.item.name}
         </td>
         <td>
-          {this.props.item.price}
+          {formattedNumber}
         </td>
         <td>
           {this.props.item.credits}

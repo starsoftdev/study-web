@@ -69,3 +69,5 @@ export const UPDATE_TWILIO_NUMBERS_SUCCESS               = 'DashboardPage/UPDATE
 export const UPDATE_TWILIO_NUMBERS_ERROR                 = 'DashboardPage/UPDATE_TWILIO_NUMBERS_ERROR';
 
 export const SET_HOVER_ROW_INDEX                         = 'DashboardPage/SET_HOVER_ROW_INDEX';
+
+export const SET_EDIT_STUDY_FORM_VALUES                  = 'DashboardPage/SET_EDIT_STUDY_FORM_VALUES';
