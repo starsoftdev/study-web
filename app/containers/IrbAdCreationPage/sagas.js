@@ -54,6 +54,9 @@ export function* submitFormWatcher() {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));
       yield put(formSubmissionError(err));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }
@@ -71,6 +74,9 @@ export function* fetchIrbProductListWatcher() {
       const errorMessage = get(err, 'message', 'Can not fetch IrbAd Product List');
       yield put(toastrActions.error('', errorMessage));
       yield put(fetchIrbProductListError(err));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }
@@ -88,6 +94,9 @@ export function* fetchIrbAdCreationWatcher() {
       const errorMessage = get(err, 'message', 'Something went wrong while fetching the irb ad creation');
       yield put(toastrActions.error('', errorMessage));
       yield put(fetchIrbAdCreationError(err));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }
