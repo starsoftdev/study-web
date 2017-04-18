@@ -525,14 +525,13 @@ function* submitMovePatientBetweenCategories() {
 
     try {
       yield put(movePatientBetweenCategoriesLoading());
-      const requestURL = `${API_URL}/patients/update_category`;
+      const requestURL = `${API_URL}/patients/updateCategory`;
       yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
-          study_id: studyId,
-          patient_id: patientId,
-          patient_category_id: toCategoryId,
-          scheduled_date: new Date(),
+          studyId,
+          patientId,
+          patientCategoryId: toCategoryId,
           afterPatientId,
         }),
       });
