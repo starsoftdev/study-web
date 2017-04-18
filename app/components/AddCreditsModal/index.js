@@ -189,7 +189,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
       siteLocationName: siteLocationName.name,
     };
 
-    addCredits(currentUser.roleForClient.client.stripeCustomerId, data);
+    addCredits(currentUser.roleForClient.client_id, currentUser.roleForClient.client.stripeCustomerId, data);
   }
 
 
@@ -349,7 +349,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    addCredits: (customerId, data) => dispatch(addCredits(customerId, data)),
+    addCredits: (clientId, customerId, data) => dispatch(addCredits(clientId, customerId, data)),
     fetchClientSites: (id) => dispatch(fetchClientSites(id)),
     getCreditsPrice: () => dispatch(getCreditsPrice()),
     touchAddCredits: () => dispatch(touch('addCredits', ...addCreditsFields)),
