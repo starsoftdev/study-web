@@ -59,7 +59,9 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   }
 
   editLevel(params) {
-    this.props.editLevel(params);
+    const newParam = params;
+    newParam.price *= 100;
+    this.props.editLevel(newParam);
   }
 
   updateActive() {
@@ -75,7 +77,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
       initialValues: {
         name: this.props.item.name,
         id: this.props.item.id,
-        price: this.props.item.price,
+        price: parseFloat(Math.round(this.props.item.price) / 100).toFixed(2),
         credits: this.props.item.credits,
         points: this.props.item.points,
         typeId: this.props.item.typeid,

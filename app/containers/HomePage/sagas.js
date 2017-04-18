@@ -72,7 +72,7 @@ import {
 } from './AdminDashboard/actions';
 
 import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
-import { addEmailNotificationUserSuccess, addEmailNotificationUserError, fetchClientSites } from '../../containers/App/actions';
+import { addEmailNotificationUserSuccess, addEmailNotificationUserError, fetchClientSites, fetchClientCredits, fetchRewardsBalance } from '../../containers/App/actions';
 
 import {
   fetchPatientSignUpsSucceeded,
@@ -318,6 +318,8 @@ export function* renewStudyWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(toastrActions.success('Renew Study', 'The request has been submitted successfully'));
+    yield put(fetchRewardsBalance(formValues.currentUser.roleForClient.client_id, formValues.currentUser.roleForClient.site_id));
+    yield put(fetchClientCredits(formValues.user_id));
     yield put(studyRenewed(response));
     yield put(reset('renewStudy'));
     yield put(reset('shoppingCart'));
@@ -349,6 +351,8 @@ export function* upgradeStudyWorker(action) {
     yield put(toastrActions.success('Upgrade Study', 'The request has been submitted successfully'));
     response.newLevelId = formValues.level;
     response.studyId = studyId;
+    yield put(fetchRewardsBalance(formValues.currentUser.roleForClient.client_id, formValues.currentUser.roleForClient.site_id));
+    yield put(fetchClientCredits(formValues.user_id));
     yield put(studyUpgraded(response));
     yield put(reset('upgradeStudy'));
   } catch (err) {
