@@ -466,9 +466,10 @@ export function cardDeletingError(payload) {
 // ///////////////////////////////////////////
 // add credits
 // ///////////////////////////////////////////
-export function addCredits(customerId, data) {
+export function addCredits(clientId, customerId, data) {
   return {
     type: ADD_CREDITS,
+    clientId,
     customerId,
     data,
   };

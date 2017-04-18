@@ -408,14 +408,14 @@ export function* deleteCardWatcher() {
 
 export function* addCreditsWatcher() {
   while (true) {
-    const { customerId, data } = yield take(ADD_CREDITS);
+    const { clientId, customerId, data } = yield take(ADD_CREDITS);
     const options = {
       method: 'POST',
       body: JSON.stringify(data),
     };
 
     try {
-      const requestURL = `${API_URL}/clients/payments/${customerId}/checkout_credits`;
+      const requestURL = `${API_URL}/clients/${clientId}/payments/${customerId}/checkout_credits`;
       const response = yield call(request, requestURL, options);
 
       yield put(toastrActions.success('Add Credits', 'Credits added successfully!'));
