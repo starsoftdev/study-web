@@ -18,7 +18,7 @@ import {
 } from '../../containers/ListNewStudyPage/constants';
 
 import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
-import { addEmailNotificationUserSuccess, addEmailNotificationUserError, fetchClientSites } from '../../containers/App/actions';
+import { addEmailNotificationUserSuccess, addEmailNotificationUserError, fetchClientSites, fetchClientCredits } from '../../containers/App/actions';
 
 export function* submitFormWatcher() {
   while (true) {
@@ -52,6 +52,7 @@ export function* submitFormWatcher() {
       const response = yield call(request, requestURL, params);
 
       yield put(toastrActions.success('List New Study', 'The request has been submitted successfully'));
+      yield put(fetchClientCredits(formValues.user_id));
       yield put(formSubmitted(response));
 
       // Clear the form values

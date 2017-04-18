@@ -44,7 +44,9 @@ export class DashboardExposureLevelSearch extends React.Component {
   }
 
   addLevel(params) {
-    this.props.addLevel(params);
+    const newParam = params;
+    newParam.price *= 100;
+    this.props.addLevel(newParam);
   }
 
   render() {
