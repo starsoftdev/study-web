@@ -288,6 +288,9 @@ export function* savePatientWatcher() {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));
       yield put(patientSavingError(err));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }
@@ -318,6 +321,9 @@ function* submitTextBlast() {
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }
@@ -342,6 +348,9 @@ function* importPatients() {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
       yield put(submitAddPatientFailure());
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }
@@ -379,6 +388,9 @@ function* submitAddPatient() {
       }
       yield put(toastrActions.error('', errorMessages));
       yield put(submitAddPatientFailure());
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }

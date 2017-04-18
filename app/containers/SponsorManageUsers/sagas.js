@@ -79,6 +79,9 @@ export function* editSponsorUserWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while editing user. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
     yield put(editSponsorUserError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -134,6 +137,9 @@ export function* editProtocolWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while editing the protocol. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
     yield put(editProtocolError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 

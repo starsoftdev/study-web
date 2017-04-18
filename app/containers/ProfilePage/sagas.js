@@ -46,6 +46,9 @@ export function* changePassword() {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
       yield put(passwordChangingError(err));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }
@@ -71,6 +74,9 @@ export function* changeImage() {
     } catch (err) {
       yield put(imageChangingError(err));
       yield put(toastrActions.error('Error!'));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }
@@ -87,6 +93,9 @@ export function* fetchOtherUserWorker() {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
       yield put(fetchOtherUserError(err));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }

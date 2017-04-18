@@ -61,6 +61,10 @@ export function* submitFormWatcher() {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));
       yield put(formSubmissionError(err));
+      // if returns forbidden we remove the token from local storage
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }
