@@ -8,6 +8,7 @@ export default function editStudyReducer(state = {}, action) {
       return {
         ...state,
         values: {
+          ...state.values,
           ...action.values,
         },
       };

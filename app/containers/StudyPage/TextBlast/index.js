@@ -428,6 +428,7 @@ class TextBlastModal extends React.Component {
                     ref={(textarea) => {
                       this.textarea = textarea;
                     }}
+                    isDisabled={disabled}
                   />
                   <div className="footer">
                     <span className="characters-counter">

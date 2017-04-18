@@ -842,6 +842,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   addEmailNotificationClick={this.addEmailNotificationClick}
                   messagingNumbers={this.props.messagingNumbers}
                   isOnTop={this.state.editStudyPageOnTop}
+                  setEditStudyFormValues={this.props.setEditStudyFormValues}
                 />
                 <LandingPageModal
                   openModal={this.state.showLandingPageModal}

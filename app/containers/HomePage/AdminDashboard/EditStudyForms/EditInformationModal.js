@@ -62,6 +62,7 @@ export class EditInformationModal extends React.Component {
     study: PropTypes.object,
     studyCampaigns: PropTypes.object,
     usersByRoles: PropTypes.object,
+    setEditStudyFormValues: PropTypes.func,
   };
 
   constructor(props) {
@@ -74,7 +75,7 @@ export class EditInformationModal extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { arrayRemoveAll, arrayPush, allClientUsers, change, formValues } = this.props;
+    const { allClientUsers, formValues } = this.props;
     if (allClientUsers.fetching && !newProps.allClientUsers.fetching) {
       const fields = [];
       let isAllChecked = true;
@@ -99,9 +100,10 @@ export class EditInformationModal extends React.Component {
           });
         });
 
-        arrayRemoveAll('emailNotifications');
-        fields.map((newItem) => (arrayPush('emailNotifications', newItem)));
-        change('checkAllInput', isAllChecked);
+        const formValues = {};
+        formValues.emailNotifications = fields;
+        formValues.checkAllInput = isAllChecked;
+        this.props.setEditStudyFormValues(formValues);
       }
     }
   }
