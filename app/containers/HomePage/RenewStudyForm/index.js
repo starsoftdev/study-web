@@ -95,17 +95,15 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       }
     }
 
-    if (this.props.selectedStudy && newProps.selectedStudy && this.props.selectedStudy.id !== newProps.selectedStudy.id && newProps.selectedStudy.campaignLastDate) {
+    if (!this.props.selectedStudy && newProps.selectedStudy && newProps.selectedStudy.campaignLastDate) {
       const { selectedStudy } = newProps;
       const minDate = moment(selectedStudy.campaignLastDate).add(1, 'days');
       this.setState({
         minDate,
+        initDate: minDate,
       });
-      if (this.state.initDate.isSameOrBefore(minDate, 'day')) {
-        this.setState({
-          initDate: minDate.clone(),
-        });
-      }
+      const { change } = this.props;
+      change('startDate', minDate);
     }
 
     if (newProps.manualDisableSubmit === false && this.props.manualDisableSubmit === true) {
@@ -136,7 +134,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
 
     this.calendar.changeMonth(monthDiff, { preventDefault: _.noop });
 
-    if (moment(this.state.minDate).isSameOrAfter(today, 'day')) {
+    if (moment(this.state.minDate).isSameOrBefore(today, 'day')) {
       this.setState({
         initDate: today,
       });
@@ -160,8 +158,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       condenseTwoWeeks: false,
       patientQualificationSuite: false,
       callTracking: false,
-      initDate: moment(),
-      minDate: moment(),
       isReset: false,
     };
 
