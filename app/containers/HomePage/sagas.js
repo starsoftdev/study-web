@@ -126,6 +126,9 @@ export function* fetchPatientSignUpsWorker(action) {
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
     yield put(toastrActions.error('', errorMessage));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -147,6 +150,9 @@ export function* fetchPrincipalInvestigatorTotalsWorker(action) {
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching principal investigators');
     yield put(toastrActions.error('', errorMessage));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -163,6 +169,9 @@ export function* fetchPatientMessagesWorker(action) {
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patient messages');
     yield put(toastrActions.error('', errorMessage));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -272,6 +281,9 @@ export function* fetchIndicationLevelPriceWorker(action) {
     const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
     yield put(toastrActions.error('', errorMessage));
     yield put(indicationLevelPriceFetchingError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -295,6 +307,9 @@ export function* fetchUpgradeStudyPriceWorker(action) {
     const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
     yield put(toastrActions.error('', errorMessage));
     yield put(indicationLevelPriceFetchingError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -327,6 +342,9 @@ export function* renewStudyWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
     yield put(toastrActions.error('', errorMessage));
     yield put(studyRenewingError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -359,6 +377,9 @@ export function* upgradeStudyWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
     yield put(toastrActions.error('', errorMessage));
     yield put(studyUpgradingError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -401,6 +422,9 @@ export function* editStudyWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
     yield put(toastrActions.error('', errorMessage));
     yield put(studyEditingError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -540,6 +564,9 @@ export function* fetchAllClientUsersWorker(action) {
     yield put(fetchAllClientUsersDashboardError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
     yield put(toastrActions.error('', errorMessage));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -564,6 +591,9 @@ export function* fetchStudyCampaignsWorker(action) {
     yield put(fetchStudyCampaignsDashboardError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while fetching campaigns for selected study');
     yield put(toastrActions.error('', errorMessage));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -589,6 +619,9 @@ export function* changeStudyStatusWorker(action) {
     yield put(changeStudyStatusDashboardError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while updating study status');
     yield put(toastrActions.error('', errorMessage));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -639,6 +672,9 @@ export function* changeStudyAddWorker(action) {
   } catch (err) {
     yield put(toastrActions.error('Error!'));
     yield put(changeStudyAddError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -703,6 +739,9 @@ export function* fetchMessagingNumbersWorker() {
     yield put(fetchMessagingNumbersDashboardError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while fetching messaging numbers for selected study');
     yield put(toastrActions.error('', errorMessage));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -725,6 +764,9 @@ export function* updateTwilioNumbersWorker() {
     yield put(updateTwilioNumbersError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while updating twili numbers');
     yield put(toastrActions.error('', errorMessage));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 

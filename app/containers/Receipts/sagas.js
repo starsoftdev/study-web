@@ -91,6 +91,9 @@ export function* getReceipts() {
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }
@@ -115,6 +118,9 @@ export function* getPdf() {
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }
@@ -136,6 +142,9 @@ export function* showPdf() {
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }

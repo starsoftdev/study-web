@@ -48,13 +48,13 @@ export function* fetchPatientsByStudyWorker(action) {
 
     yield put(fetchPatientsByStudySucceeded(response));
   } catch (err) {
-    // if returns forbidden we remove the token from local storage
-    if (err.status === 401) {
-      removeItem('auth_token');
-    }
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
     yield put(fetchPatientsByStudyFailed(err));
     yield put(toastrActions.error('', errorMessage));
+    if (err.status === 401) {
+      removeItem('auth_token');
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -75,6 +75,10 @@ export function* fetchSchedulesWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching schedules');
     yield put(toastrActions.error('', errorMessage));
     yield put(fetchSchedulesFailed(err));
+    if (err.status === 401) {
+      removeItem('auth_token');
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -96,6 +100,10 @@ export function* submitSchedulesWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting a schedule');
     yield put(toastrActions.error('', errorMessage));
     yield put(submitScheduleFailed(err));
+    if (err.status === 401) {
+      removeItem('auth_token');
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -119,6 +127,10 @@ export function* deleteSchedulesWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while deleting a schedule');
     yield put(toastrActions.error('', errorMessage));
     yield put(deleteScheduleFailed(err));
+    if (err.status === 401) {
+      removeItem('auth_token');
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
