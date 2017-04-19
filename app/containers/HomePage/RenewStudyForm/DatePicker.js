@@ -24,7 +24,7 @@ export default class DatePicker extends Component {
 
     delete rest.meta;
     delete rest.initialDate;
-    const inputValue = (input.value === '') ? moment().format(dateStyle) : moment(input.value).format(dateStyle);
+    const inputValue = (input.value === '') ? 'To Be Determined' : moment(input.value).format(dateStyle);
     const inputComponent = (
       <input
         type="text"

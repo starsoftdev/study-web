@@ -5,7 +5,7 @@ const schema = {
   campaignLength: { presence: true },
   condenseTwoWeeks: { presence: false },
   callTracking: { presence: false },
-  startDate: { presence: true },
+  startDate: { presence: false },
   notes: { presence: false },
 };
 
