@@ -14,7 +14,7 @@ import _ from 'lodash';
 import ReactSelect from '../../components/Input/ReactSelect';
 import CenteredModal from '../../components/CenteredModal/index';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
-import AddNewCardForm from '../../components/AddNewCardForm';
+import AddCreditCardModal from '../../components/AddCreditCardModal';
 import { addCredits, fetchClientSites, getCreditsPrice, saveCard } from '../../containers/App/actions';
 import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice, selectCurrentUserStripeCustomerId } from '../../containers/App/selectors';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
@@ -312,24 +312,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
             </div>
           </Modal.Body>
         </Modal>
-        <Modal
-          className="modal-add-new-card"
-          show={this.state.addCardModalOpen}
-          onHide={this.closeAddCardModal}
-          dialogComponentClass={CenteredModal}
-          backdrop
-          keyboard
-        >
-          <Modal.Header>
-            <Modal.Title>Add New Card</Modal.Title>
-            <a className="lightbox-close close" onClick={this.closeAddCardModal}>
-              <i className="icomoon-icon_close" />
-            </a>
-          </Modal.Header>
-          <Modal.Body>
-            <AddNewCardForm onSubmit={this.onSaveCard} />
-          </Modal.Body>
-        </Modal>
+        <AddCreditCardModal addCreditCard={this.onSaveCard} showModal={this.state.addCardModalOpen} closeModal={this.closeAddCardModal} />
       </div>
     );
   }

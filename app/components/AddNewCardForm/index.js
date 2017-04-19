@@ -7,65 +7,37 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm, touch, change } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { selectSavedCard } from '../../containers/App/selectors';
-import formValidator, { addCardFields } from './validator';
+import formValidator from './validator';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { MONTH_OPTIONS as monthOptions, YEAR_OPTIONS as yearOptions } from '../../common/constants';
-import { selectAddNewCardFormError } from './selectors';
+
+const formName = 'addNewCard';
 
 const mapStateToProps = createStructuredSelector({
   savedCard: selectSavedCard(),
-  addCardFormError: selectAddNewCardFormError(),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    touchAddCard: () => dispatch(touch('addNewCard', ...addCardFields)),
-    validateChange: () => dispatch(change('addNewCard', 'company', 'abc')),
-  };
-}
-
-@reduxForm({ form: 'addNewCard', validate: formValidator })
+@reduxForm({ form: formName, validate: formValidator })
 @connect(mapStateToProps)
-
-class AddNewCardForm extends Component { // eslint-disable-line react/prefer-stateless-function
+export default class AddNewCardForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
     savedCard: PropTypes.object,
-    handleSubmit: PropTypes.func,
-    touchAddCard: PropTypes.func,
-    addCardFormError: PropTypes.bool,
-    validateChange: PropTypes.func,
+    handleSubmit: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    this.props.validateChange();
-  }
-
-  addNewCard = (ev) => {
-    ev.preventDefault();
-    const {
-      addCardFormError,
-      touchAddCard,
-      handleSubmit,
-    } = this.props;
-
-    if (addCardFormError) {
-      touchAddCard();
-      return;
-    }
-    handleSubmit(ev);
   }
 
   render() {
-    const { savedCard } = this.props;
+    const { savedCard, handleSubmit } = this.props;
 
     return (
-      <form className="form-add-new-card">
+      <form className="form-add-new-card" onSubmit={handleSubmit}>
         <div className="add-new-card scroll-holder jcf--scrollable">
           <div className="row form-group">
             <strong className="required col-sm-4">
@@ -178,7 +150,6 @@ class AddNewCardForm extends Component { // eslint-disable-line react/prefer-sta
               type="submit"
               className="btn btn-default btn-add-row"
               disabled={savedCard.saving}
-              onClick={this.addNewCard}
             >
               {savedCard.saving
                 ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
@@ -191,5 +162,3 @@ class AddNewCardForm extends Component { // eslint-disable-line react/prefer-sta
     );
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddNewCardForm);
