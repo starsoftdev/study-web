@@ -55,6 +55,8 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     this.onSaveCard = this.onSaveCard.bind(this);
     this.closeAddCardModal = this.closeAddCardModal.bind(this);
     this.resetState = this.resetState.bind(this);
+    this.setToBeDetermined = this.setToBeDetermined.bind(this);
+    this.handleDateSelect = this.handleDateSelect.bind(this);
     this.handleExposureChoose = this.handleExposureChoose.bind(this);
     this.handleLengthChoose = this.handleLengthChoose.bind(this);
     this.handleCondenseChoose = this.handleCondenseChoose.bind(this);
@@ -62,7 +64,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     this.handleCallChoose = this.handleCallChoose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDatePickerClose = this.handleDatePickerClose.bind(this);
-    this.handleDateSelect = this.handleDateSelect.bind(this);
     this.navigateToday = this.navigateToday.bind(this);
     this.state = {
       exposureLevel: null,
@@ -95,15 +96,23 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       }
     }
 
-    if (!this.props.selectedStudy && newProps.selectedStudy && newProps.selectedStudy.campaignLastDate) {
-      const { selectedStudy } = newProps;
-      const minDate = moment(selectedStudy.campaignLastDate).add(1, 'days');
-      this.setState({
-        minDate,
-        initDate: minDate,
-      });
-      const { change } = this.props;
-      change('startDate', minDate);
+    if (!this.props.selectedStudy && newProps.selectedStudy) {
+      if (newProps.selectedStudy.campaignLastDate && moment(newProps.selectedStudy.campaignLastDate).isAfter(moment())) {
+        const { selectedStudy } = newProps;
+        const minDate = moment(selectedStudy.campaignLastDate).add(1, 'days');
+        this.setState({
+          minDate,
+          initDate: minDate,
+        });
+        const { change } = this.props;
+        change('startDate', minDate);
+      } else {
+        this.setState({
+          initDate: moment(),
+        });
+        const { change } = this.props;
+        change('startDate', moment());
+      }
     }
 
     if (newProps.manualDisableSubmit === false && this.props.manualDisableSubmit === true) {
@@ -113,6 +122,15 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
 
   onSaveCard(params) {
     this.props.saveCard(this.props.clientId, this.props.currentUserStripeCustomerId, params);
+  }
+
+  setToBeDetermined() {
+    this.setState({
+      initDate: null,
+    });
+    const { change } = this.props;
+    change('startDate', null);
+    this.handleDatePickerClose(false);
   }
 
   handleDateSelect(momentDate) {
@@ -465,6 +483,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
             />
             <div className="current-date" onClick={this.navigateToday}>
               Today: {currentDate.format('dddd, MMMM Do, YYYY')}
+            </div>
+            <div className="link-holder text-center">
+              <a onClick={this.setToBeDetermined}>To Be Determined</a>
             </div>
           </Modal.Body>
         </Modal>
