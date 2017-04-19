@@ -841,7 +841,7 @@ export function* submitSchedule() {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting a schedule');
       yield put(toastrActions.error('', errorMessage));
       yield put(submitScheduleFailed(err));
-      if (e.status === 401) {
+      if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
     }
