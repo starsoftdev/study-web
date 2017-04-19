@@ -40,7 +40,6 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
             name={`site-${site.id}`}
             component={Input}
             type="text"
-            value="abc"
           />
         </div>
       </div>
