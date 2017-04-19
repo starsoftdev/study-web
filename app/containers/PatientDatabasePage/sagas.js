@@ -321,7 +321,7 @@ function* submitTextBlast() {
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
-      if (err.status === 401) {
+      if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
     }
@@ -348,7 +348,7 @@ function* importPatients() {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
       yield put(submitAddPatientFailure());
-      if (err.status === 401) {
+      if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
     }
@@ -388,7 +388,7 @@ function* submitAddPatient() {
       }
       yield put(toastrActions.error('', errorMessages));
       yield put(submitAddPatientFailure());
-      if (err.status === 401) {
+      if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
     }
