@@ -602,7 +602,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                 </caption>
                 <thead>
                   <tr>
-                    <th onClick={this.sortBy} data-sort="orderNumber" className={(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}>#<i className="caret-arrow" /></th>
+                    <th className="default-cursor">#<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="indication" className={(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}>INDICATION<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="location" className={(this.props.paginationOptions.activeSort === 'location') ? this.props.paginationOptions.activeDirection : ''}>LOCATION<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="sponsor" className={(this.props.paginationOptions.activeSort === 'sponsor') ? this.props.paginationOptions.activeDirection : ''}>SPONSOR<i className="caret-arrow" /></th>
