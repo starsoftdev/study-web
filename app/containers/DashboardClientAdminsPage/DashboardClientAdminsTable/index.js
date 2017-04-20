@@ -54,10 +54,8 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     this.editMessagingClick = this.editMessagingClick.bind(this);
     this.updateMessagingNumber = this.updateMessagingNumber.bind(this);
     this.addMessagingNumber = this.addMessagingNumber.bind(this);
-  }
 
-  componentDidMount() {
-    this.props.setActiveSort('client_name', 'up');
+    this.sortBy = this.sortBy.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -181,6 +179,22 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     this.props.addMessagingNumber(params);
   }
 
+  sortBy(ev) {
+    ev.preventDefault();
+    let sort = ev.currentTarget.dataset.sort;
+    let direction = 'up';
+
+
+    if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
+      direction = 'down';
+    } else if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1) {
+      direction = null;
+      sort = null;
+    }
+
+    this.props.setActiveSort(sort, direction);
+  }
+
   render() {
     const { clientSites } = this.props;
 
@@ -196,9 +210,18 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
 
     if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
       const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
-      clientAdmins = orderBy(clientAdmins, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
-    }
 
+      if (this.props.paginationOptions.activeSort === 'name') {
+        clientAdmins = orderBy(clientAdmins, [(o) => (`${o['first_name']} ${o['last_name']}` )], [dir]);
+      } else if (this.props.paginationOptions.activeSort === 'bd_name') {
+        clientAdmins = orderBy(clientAdmins, [(o) => (`${o['bd_user_first_name']} ${o['bd_user_last_name']}` )], [dir]);
+      } else if (this.props.paginationOptions.activeSort === 'ae_name') {
+        clientAdmins = orderBy(clientAdmins, [(o) => (`${o['ae_user_first_name']} ${o['ae_user_last_name']}` )], [dir]);
+      }
+      else {
+        clientAdmins = orderBy(clientAdmins, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
+      }
+    }
 
     return (
       <div className="table-holder">
@@ -207,11 +230,11 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
 
           <thead>
             <tr>
-              <th>Company<i className="caret-arrow" /></th>
-              <th>Name<i className="caret-arrow" /></th>
-              <th>Email<i className="caret-arrow" /></th>
-              <th>BD<i className="caret-arrow" /></th>
-              <th>AE<i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="client_name" className={`th ${(this.props.paginationOptions.activeSort === 'client_name') ? this.props.paginationOptions.activeDirection : ''}`}>Company<i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>Name<i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>Email<i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="bd_name" className={`th ${(this.props.paginationOptions.activeSort === 'bd_name') ? this.props.paginationOptions.activeDirection : ''}`}>BD<i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="ae_name" className={`th ${(this.props.paginationOptions.activeSort === 'ae_name') ? this.props.paginationOptions.activeDirection : ''}`}>AE<i className="caret-arrow" /></th>
               <th>&nbsp;</th>
             </tr>
           </thead>

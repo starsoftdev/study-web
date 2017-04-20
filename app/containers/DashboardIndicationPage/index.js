@@ -10,8 +10,8 @@ import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 import { DashboardIndicationSearch } from './DashboardIndicationSearch/index';
 import { DashboardIndicationTable } from './DashboardIndicationTable';
-import { fetchIndications, fetchLevels, addLevel, addIndication, deleteIndication, editIndication } from './actions';
-import { selectDashboardIndicationSearchFormValues, selectIndications, selectLevels, selectDashboardAddLevelProcess, selectDashboardAddIndicationProcess } from './selectors';
+import { fetchIndications, fetchLevels, addLevel, addIndication, deleteIndication, editIndication, setActiveSort } from './actions';
+import { selectDashboardIndicationSearchFormValues, selectIndications, selectLevels, selectDashboardAddLevelProcess, selectDashboardAddIndicationProcess, selectPaginationOptions } from './selectors';
 
 export class DashboardIndicationPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -26,6 +26,8 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
     editIndication: PropTypes.func,
     deleteIndication: PropTypes.func,
     indicationSearchFormValues: PropTypes.object,
+    setActiveSort: PropTypes.func,
+    paginationOptions: PropTypes.object,
   };
 
   componentWillMount() {
@@ -55,6 +57,8 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
           deleteIndication={this.props.deleteIndication}
           addIndicationProcess={addIndicationProcess}
           indicationSearchFormValues={indicationSearchFormValues}
+          setActiveSort={this.props.setActiveSort}
+          paginationOptions={this.props.paginationOptions}
         />
       </div>
     );
@@ -67,6 +71,7 @@ const mapStateToProps = createStructuredSelector({
   addLevelProcess: selectDashboardAddLevelProcess(),
   addIndicationProcess: selectDashboardAddIndicationProcess(),
   indicationSearchFormValues: selectDashboardIndicationSearchFormValues(),
+  paginationOptions: selectPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -77,6 +82,7 @@ function mapDispatchToProps(dispatch) {
     addIndication: (payload) => dispatch(addIndication(payload)),
     editIndication: (payload) => dispatch(editIndication(payload)),
     deleteIndication: (payload) => dispatch(deleteIndication(payload)),
+    setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
   };
 }
 
