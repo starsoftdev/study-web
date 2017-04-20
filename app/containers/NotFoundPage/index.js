@@ -11,21 +11,44 @@
 
 import React from 'react';
 
+import img1 from '../../assets/images/404.png';
+import img2 from '../../assets/images/img20.png';
+
 export default class NotFound extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   render() {
     return (
-      <div>
-        <h1>
-          The page you are looking for can't be found.
-        </h1>
-        <h3>Here are some helpful links instead:</h3>
-        <li>
-          <a href="/app">Home</a>
-        </li>
-        <li>
-          <a href="/logout">Log Out</a>
-        </li>
+      <div id="main" className="not-fouund-page">
+        <div className="container">
+          <div className="img-holder">
+            <img src={img1} alt="img4" className="img-responsive" />
+          </div>
+          <h3 className="text-center">The page you found does not Exist.</h3>
+          <h2 className="text-center">HELP DECIDE THE I.T. TEAMS FATE.</h2>
+        </div>
+        <div className="container">
+          <div className="buttons text-center">
+            <a href="/" >
+              <span
+                className="btn-default btn-fire btn"
+                onClick={this.toggleListNow}
+              >
+                FIRE THEM
+              </span>
+            </a>
+            <a href="/" >
+              <span
+                className="btn-default btn-live btn"
+                onClick={this.toggleListNow}
+              >
+                LET THEM LIVE
+              </span>
+            </a>
+          </div>
+          <div className="img-holder complaint_image">
+            <img src={img2} alt="img4" className="img-responsive" />
+          </div>
+        </div>
       </div>
     );
   }
