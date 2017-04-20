@@ -14,7 +14,7 @@ export default class NotFound extends React.Component { // eslint-disable-line r
 
   render() {
     return (
-      <div id="main" className="not-fouund-page">
+      <div id="main" className="not-found-page">
         <div className="container">
           <div className="img-holder">
             <img src={img1} alt="img4" className="img-responsive" />
