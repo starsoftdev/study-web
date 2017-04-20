@@ -225,6 +225,26 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/app/help-support',
+      name: 'helpSupportPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/HelpSupportPage/reducer'),
+          System.import('./containers/HelpSupportPage/sagas'),
+          System.import('./containers/HelpSupportPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('helpSupportPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '/app/badges',
       name: 'badgesPage',
       getComponent(nextState, cb) {
