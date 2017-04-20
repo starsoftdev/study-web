@@ -51,6 +51,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         firstName: this.props.item.first_name,
         lastName: this.props.item.last_name,
         id: this.props.item.id,
+        email: this.props.item.email,
       },
     };
 
