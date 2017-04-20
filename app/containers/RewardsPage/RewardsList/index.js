@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import moment from 'moment-timezone';
+
 import RewardListItem from './RewardListItem';
 
 class RewardsList extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -48,7 +50,14 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
       if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
         const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
 
-        sorted = _.orderBy(rewards, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
+        sorted = _.orderBy(rewards, [(o) => {
+          if (this.props.paginationOptions.activeSort === 'time') {
+            return moment(o.created).tz(currentUser.timezone).format('HH:mm');
+          } else if (this.props.paginationOptions.activeSort === 'date') {
+            return moment(o.created).tz(currentUser.timezone).format('MM/DD/YYYY');
+          }
+          return o[this.props.paginationOptions.activeSort];
+        }], [dir]);
       }
       rewardsListContents = sorted.map((item, index) => (
         <RewardListItem
@@ -76,7 +85,7 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
           </colgroup>
           <thead>
             <tr>
-              <th onClick={this.sortBy} data-sort="userName" className={(this.props.paginationOptions.activeSort === 'userName') ? this.props.paginationOptions.activeDirection : ''}>DESCRIPTION <i className="caret-arrow" /></th>
+              <th className="default-cursor">DESCRIPTION <i className="caret-arrow" /></th>
               <th onClick={this.sortBy} data-sort="date" className={(this.props.paginationOptions.activeSort === 'date') ? this.props.paginationOptions.activeDirection : ''}>DATE <i className="caret-arrow" /></th>
               <th onClick={this.sortBy} data-sort="time" className={(this.props.paginationOptions.activeSort === 'time') ? this.props.paginationOptions.activeDirection : ''}>TIME <i className="caret-arrow" /></th>
               <th onClick={this.sortBy} data-sort="points" className={(this.props.paginationOptions.activeSort === 'points') ? this.props.paginationOptions.activeDirection : ''}>AMOUNT <i className="caret-arrow" /></th>
