@@ -23,6 +23,7 @@ import {
   EDIT_INDICATION,
   EDIT_INDICATION_ERROR,
   EDIT_INDICATION_SUCCESS,
+  SET_ACTIVE_SORT,
 } from './constants';
 
 const initialState = {
@@ -44,6 +45,10 @@ const initialState = {
     details: [],
     fetching: false,
     error: null,
+  },
+  paginationOptions: {
+    activeSort: null,
+    activeDirection: null,
   },
 };
 
@@ -212,6 +217,14 @@ function dashboardIndicationPageReducer(state = initialState, action) {
           saving: false,
           deleting: false,
           error: action.payload,
+        },
+      };
+    case SET_ACTIVE_SORT:
+      return {
+        ...state,
+        paginationOptions: {
+          activeSort: action.sort,
+          activeDirection: action.direction,
         },
       };
     default:
