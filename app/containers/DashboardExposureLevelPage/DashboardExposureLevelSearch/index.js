@@ -61,7 +61,10 @@ export class DashboardExposureLevelSearch extends React.Component {
       <form action="#" className="form-search clearfix">
         <div className="btns-area row pull-right">
           <div className="col pull-left">
-            <a className="btn btn-primary lightbox-opener" onClick={this.openAddLevelModal}>
+            { /*<a className="btn btn-primary lightbox-opener" onClick={this.openAddLevelModal}>
+              Add Exposure Level
+            </a>*/ }
+            <a className="btn btn-primary lightbox-opener" disabled>
               Add Exposure Level
             </a>
           </div>
