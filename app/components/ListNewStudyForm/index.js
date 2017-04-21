@@ -105,10 +105,6 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
       change('callTracking', false);
     }
 
-    if (newProps.formValues.patientQualificationSuite === true) {
-      change('patientQualificationSuite', false);
-    }
-
     if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
       let addFields = this.props.formValues.emailNotifications;
       const values = {
@@ -205,7 +201,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
       name: row.name,
     }));
     siteLocations.push({ id: 'add-new-location', name: 'Add New Location' });
-
+    console.log('---', this.props);
     return (
       <div className="form-study">
         <div className="form-fields">
