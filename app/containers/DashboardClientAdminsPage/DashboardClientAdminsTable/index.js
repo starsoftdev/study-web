@@ -220,13 +220,12 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
       const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
 
       if (this.props.paginationOptions.activeSort === 'name') {
-        clientAdmins = orderBy(clientAdmins, [(o) => (`${o['first_name']} ${o['last_name']}` )], [dir]);
+        clientAdmins = orderBy(clientAdmins, [(o) => (`${o.first_name} ${o.last_name}`)], [dir]);
       } else if (this.props.paginationOptions.activeSort === 'bd_name') {
-        clientAdmins = orderBy(clientAdmins, [(o) => (`${o['bd_user_first_name']} ${o['bd_user_last_name']}` )], [dir]);
+        clientAdmins = orderBy(clientAdmins, [(o) => (`${o.bd_user_first_name} ${o.bd_user_last_name}`)], [dir]);
       } else if (this.props.paginationOptions.activeSort === 'ae_name') {
-        clientAdmins = orderBy(clientAdmins, [(o) => (`${o['ae_user_first_name']} ${o['ae_user_last_name']}` )], [dir]);
-      }
-      else {
+        clientAdmins = orderBy(clientAdmins, [(o) => (`${o.ae_user_first_name} ${o.ae_user_last_name}`)], [dir]);
+      } else {
         clientAdmins = orderBy(clientAdmins, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
       }
     }
