@@ -43,6 +43,11 @@ const selectDashboardIndicationSearchFormValues = () => createSelector(
   (substate) => get(substate, 'dashboardIndicationForm.values', {})
 );
 
+const selectPaginationOptions = () => createSelector(
+  selectDashboardIndicationPageDomain(),
+  substate => substate.paginationOptions
+);
+
 export default selectDashboardIndicationPage;
 export {
   selectDashboardIndicationPageDomain,
@@ -51,4 +56,5 @@ export {
   selectDashboardAddLevelProcess,
   selectDashboardAddIndicationProcess,
   selectDashboardIndicationSearchFormValues,
+  selectPaginationOptions,
 };

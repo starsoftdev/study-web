@@ -56,10 +56,6 @@ export class DashboardManageUsersTable extends React.Component { // eslint-disab
     this.sortBy = this.sortBy.bind(this);
   }
 
-  componentDidMount() {
-    this.props.setActiveSort('first_name', 'up');
-  }
-
   componentWillReceiveProps(newProps) {
     if ((!newProps.editUserProcess.saving && this.props.editUserProcess.saving) ||
      (!newProps.editUserProcess.deleting && this.props.editUserProcess.deleting)) {

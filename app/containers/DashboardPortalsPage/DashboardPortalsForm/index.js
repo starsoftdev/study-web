@@ -49,7 +49,7 @@ export class DashboardPortalsForm extends React.Component { // eslint-disable-li
   }
 
   render() {
-    const clientsOptions = [];
+    let clientsOptions = [];
     _.forEach(this.props.clients.details, (item) => {
       clientsOptions.push(
         {
@@ -58,7 +58,10 @@ export class DashboardPortalsForm extends React.Component { // eslint-disable-li
         }
       );
     });
-    const sponsorsOptions = [];
+
+    clientsOptions = _.orderBy(clientsOptions, 'label');
+
+    let sponsorsOptions = [];
     _.forEach(this.props.sponsors.details, (item) => {
       sponsorsOptions.push(
         {
@@ -67,6 +70,8 @@ export class DashboardPortalsForm extends React.Component { // eslint-disable-li
         }
       );
     });
+
+    sponsorsOptions = _.orderBy(sponsorsOptions, 'label');
 
     return (
       <form className="form-search selects-form clearfix">
