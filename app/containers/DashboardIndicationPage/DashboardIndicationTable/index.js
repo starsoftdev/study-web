@@ -12,9 +12,30 @@ export class DashboardIndicationTable extends React.Component { // eslint-disabl
     deleteIndication: PropTypes.func,
     addIndicationProcess: PropTypes.object,
     indicationSearchFormValues: PropTypes.object,
+    paginationOptions: PropTypes.object,
+    setActiveSort: PropTypes.func,
   }
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+
+    this.sortBy = this.sortBy.bind(this);
+  }
+
+  sortBy(ev) {
+    ev.preventDefault();
+    let sort = ev.currentTarget.dataset.sort;
+    let direction = 'up';
+
+
+    if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
+      direction = 'down';
+    } else if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1) {
+      direction = null;
+      sort = null;
+    }
+
+    this.props.setActiveSort(sort, direction);
   }
 
   render() {
@@ -23,6 +44,21 @@ export class DashboardIndicationTable extends React.Component { // eslint-disabl
     if (this.props.indicationSearchFormValues.indication) {
       indication = _.filter(indication, (item) => (item.id === this.props.indicationSearchFormValues.indication));
     }
+
+    if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
+      const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
+      if (this.props.paginationOptions.activeSort === 'tier') {
+        indication = _.orderBy(indication, [(o) => {
+          if (o['patientIndicationGoals'] && o['patientIndicationGoals'].length > 0) {
+            return o['patientIndicationGoals'][0]['tierNumber'];  
+          }
+          return null;
+        }], [dir]);
+      } else {
+        indication = _.orderBy(indication, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
+      }
+    }
+
     return (
       <div className="table-responsive table-holder table-indication alt">
         <table className="table-manage-user table">
@@ -30,8 +66,8 @@ export class DashboardIndicationTable extends React.Component { // eslint-disabl
 
           <thead>
             <tr>
-              <th>Indication<i className="caret-arrow" /></th>
-              <th>TIER <i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>Indication<i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="tier" className={`th ${(this.props.paginationOptions.activeSort === 'tier') ? this.props.paginationOptions.activeDirection : ''}`}>TIER <i className="caret-arrow" /></th>
               <th></th>
             </tr>
           </thead>
