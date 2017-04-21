@@ -143,12 +143,12 @@ export class PatientDetailModal extends React.Component {
   renderScheduledTime() {
     const { currentPatientCategory, currentPatient, showScheduledModal } = this.props;
     if (currentPatientCategory && currentPatientCategory.name === 'Scheduled') {
-      if (currentPatient && currentPatient.callReminders && currentPatient.callReminders.length > 0) {
+      if (currentPatient && currentPatient.appointments && currentPatient.appointments.length > 0) {
         return (
           <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.UPDATED)}>
-            <span className="date">{moment(currentPatient.callReminders[0].time).format('MM/DD/YY')}</span>
+            <span className="date">{moment(currentPatient.appointments[0].time).format('MM/DD/YY')}</span>
             <span> at </span>
-            <span className="time">{moment(currentPatient.callReminders[0].time).format('hh:mm A')} </span>
+            <span className="time">{moment(currentPatient.appointments[0].time).format('hh:mm A')} </span>
           </a>
         );
       }

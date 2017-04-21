@@ -64,7 +64,7 @@ export function* fetchSchedulesWatcher() {
 
 export function* fetchSchedulesWorker(action) {
   try {
-    const requestURL = `${API_URL}/callReminders/schedules`;
+    const requestURL = `${API_URL}/appointments/schedules`;
     const params = {
       query: action.data,
     };
@@ -88,7 +88,7 @@ export function* submitSchedulesWatcher() {
 
 export function* submitSchedulesWorker(action) {
   try {
-    const requestURL = `${API_URL}/callReminders/upsertSchedule`;
+    const requestURL = `${API_URL}/appointments/upsertSchedule`;
     const params = {
       method: 'POST',
       body: JSON.stringify(action.data),
@@ -113,7 +113,7 @@ export function* deleteSchedulesWatcher() {
 
 export function* deleteSchedulesWorker(action) {
   try {
-    const requestURL = `${API_URL}/callReminders/${action.scheduleId}/deleteSchedule`;
+    const requestURL = `${API_URL}/appointments/${action.scheduleId}/deleteSchedule`;
     const params = {
       method: 'DELETE',
       query: {

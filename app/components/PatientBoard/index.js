@@ -165,14 +165,14 @@ class PatientBoard extends React.Component {
     const defaultDate = moment().startOf('day');
     const scheduledDate = selectedDate || defaultDate;
     const formValues = schedulePatientFormValues;
-    let currentCallReminderId;
+    let currentAppointmentId;
 
-    if (currentPatient.callReminders && currentPatient.callReminders[0]) {
-      currentCallReminderId = currentPatient.callReminders[0].id;
+    if (currentPatient.appointments && currentPatient.appointments[0]) {
+      currentAppointmentId = currentPatient.appointments[0].id;
     }
 
     const submitData = {
-      id: currentCallReminderId,
+      id: currentAppointmentId,
       patientId: currentPatient.id,
       clientId: currentUser.roleForClient.client_id,
       time: moment(scheduledDate).add(formValues.amPm === 'AM' ?

@@ -61,8 +61,8 @@ class ScheduledPatientModal extends React.Component {
     let initialValues = {};
 
     if (!(nextProps.scheduledFormInitialized) && nextProps.show && currentPatient &&
-        currentPatient.callReminders && currentPatient.callReminders.length > 0) {
-      const { time, textReminder } = currentPatient.callReminders[0];
+        currentPatient.appointments && currentPatient.appointments.length > 0) {
+      const { time, textReminder } = currentPatient.appointments[0];
       initialValues = {
         ...this.getTimeComponents(time),
         textReminder,
@@ -86,8 +86,8 @@ class ScheduledPatientModal extends React.Component {
     const { onHide, currentPatient, show, handleSubmit, handleDateChange, submittingSchedule } = this.props;
     let scheduledDate = moment().startOf('date');
     if (currentPatient) {
-      if (currentPatient.callReminders && currentPatient.callReminders.length > 0) {
-        scheduledDate = moment(currentPatient.callReminders[0].time).startOf('date');
+      if (currentPatient.appointments && currentPatient.appointments.length > 0) {
+        scheduledDate = moment(currentPatient.appointments[0].time).startOf('date');
       }
       return (
         <Modal

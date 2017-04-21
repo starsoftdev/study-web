@@ -54,7 +54,7 @@ export const getAvatarUrl = (notification) => {
 };
 
 export const eventMessage = (eventLog) => {
-  if (eventLog.eventType === 'create-call_reminder') {
+  if (eventLog.eventType === 'create-appointment') {
     /*
     const data = JSON.parse(eventLog.eventData);
     const userTime = moment(data.time).tz(data.timezone);
