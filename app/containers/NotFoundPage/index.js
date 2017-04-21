@@ -18,7 +18,7 @@ export default class NotFound extends React.Component { // eslint-disable-line r
 
   render() {
     return (
-      <div id="main" className="not-fouund-page">
+      <div id="main" className="not-found-page">
         <div className="container">
           <div className="img-holder">
             <img src={img1} alt="img4" className="img-responsive" />
@@ -28,7 +28,7 @@ export default class NotFound extends React.Component { // eslint-disable-line r
         </div>
         <div className="container">
           <div className="buttons text-center">
-            <a href="/" >
+            <a href="/app" >
               <span
                 className="btn-default btn-fire btn"
                 onClick={this.toggleListNow}
@@ -36,7 +36,7 @@ export default class NotFound extends React.Component { // eslint-disable-line r
                 FIRE THEM
               </span>
             </a>
-            <a href="/" >
+            <a href="/app" >
               <span
                 className="btn-default btn-live btn"
                 onClick={this.toggleListNow}
