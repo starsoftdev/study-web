@@ -49,8 +49,8 @@ export class DashboardIndicationTable extends React.Component { // eslint-disabl
       const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
       if (this.props.paginationOptions.activeSort === 'tier') {
         indication = _.orderBy(indication, [(o) => {
-          if (o['patientIndicationGoals'] && o['patientIndicationGoals'].length > 0) {
-            return o['patientIndicationGoals'][0]['tierNumber'];  
+          if (o.patientIndicationGoals && o.patientIndicationGoals.length > 0) {
+            return o.patientIndicationGoals[0].tierNumber;
           }
           return null;
         }], [dir]);
