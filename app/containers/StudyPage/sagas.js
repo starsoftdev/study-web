@@ -450,7 +450,7 @@ function* fetchPatientDetails() {
           },
         },
         {
-          relation: 'callReminders',
+          relation: 'appointments',
           scope: {
             fields: ['time'],
           },
@@ -829,7 +829,7 @@ export function* submitSchedule() {
   while (true) {
     const { data, fromCategoryId, scheduledCategoryId } = yield take(SUBMIT_SCHEDULE);
     try {
-      const requestURL = `${API_URL}/callReminders/upsertSchedule`;
+      const requestURL = `${API_URL}/appointments/upsertSchedule`;
       const params = {
         method: 'POST',
         body: JSON.stringify(data),

@@ -356,11 +356,11 @@ function studyPageReducer(state = initialState, action) {
               ...category,
               patients: category.patients.map(patient => {
                 if (patient.id === action.patientId) {
-                  const updatedCallReminder = _.find(action.schedules, { patient_id: action.patientId });
+                  const updatedAppointment = _.find(action.schedules, { patient_id: action.patientId });
 
                   return {
                     ...patient,
-                    callReminders: [updatedCallReminder],
+                    appointments: [updatedAppointment],
                   };
                 }
 
@@ -447,7 +447,7 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
                 patients: [
                   {
                     ...patient,
-                    callReminders: [],
+                    appointments: [],
                   },
                   ...patientCategory.patients,
                 ],
