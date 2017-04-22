@@ -15,23 +15,18 @@ export default class MultiSelectCheckbox extends Component {
     className: PropTypes.string,
     options: PropTypes.array,
     meta: PropTypes.object,
+    isAdmin: PropTypes.bool,
   }
 
   constructor(props) {
     super(props);
-    let isAllSelected = true;
-    _.forEach(this.props.options, (item) => {
-      if (!item.value) {
-        isAllSelected = false;
-      }
-    });
 
     this.state = {
       showIndicationPopover: false,
-      options: this.props.options,
+      options: [{ isAdmin: this.props.isAdmin }].concat(this.props.options),
       nameFilter: null,
       searchTimer: null,
-      isAllSelected,
+      isAdmin: this.props.isAdmin,
     };
 
 
@@ -61,21 +56,17 @@ export default class MultiSelectCheckbox extends Component {
 
   setItemState(item, state) {
     const curStateOptions = _.clone(this.state.options);
-    const componentValues = [];
-    let isAllSelected = true;
+    const componentValues = [{ isAdmin: this.state.isAdmin }];
     _.forEach(curStateOptions, (o, index) => {
       if (o.id === item.id) {
         curStateOptions[index].value = state;
       }
-      if (!o.value) {
-        isAllSelected = false;
-      } else {
+      if (o.value) {
         componentValues.push(o);
       }
     });
     this.setState({
       options: curStateOptions,
-      isAllSelected,
     });
 
     this.props.input.onChange(componentValues);
@@ -100,18 +91,32 @@ export default class MultiSelectCheckbox extends Component {
   }
 
   selectAll() {
-    const state = !this.state.isAllSelected;
+    const state = !this.state.isAdmin;
     const curStateOptions = _.clone(this.state.options);
-    const componentValues = [];
-    _.forEach(curStateOptions, (o, index) => {
-      curStateOptions[index].value = state;
-      if (o.value) {
-        componentValues.push(o);
-      }
-    });
+    const componentValues = [{ isAdmin: state }];
+    if (state) {
+      _.forEach(curStateOptions, (o, index) => {
+        if (index !== 0) {
+          curStateOptions[index].value = state;
+        }
+
+        if (o.value) {
+          componentValues.push(o);
+        }
+      });
+    } else {
+      _.forEach(curStateOptions, (o) => {
+        if (o.value) {
+          componentValues.push(o);
+        }
+      });
+    }
+
+    componentValues[0].isAdmin = state;
+
     this.setState({
       options: curStateOptions,
-      isAllSelected: state,
+      isAdmin: state,
     });
 
     this.props.input.onChange(componentValues);
@@ -124,7 +129,9 @@ export default class MultiSelectCheckbox extends Component {
 
     let options = _.clone(this.state.options);
 
-    const selectedArr = _.filter(this.state.options, (o) => {
+    options.splice(0, 1);
+
+    const selectedArr = _.filter(options, (o) => {
       if (this.state.nameFilter) {
         return (o.value && this.state.nameFilter === o.name);
       }
@@ -168,14 +175,14 @@ export default class MultiSelectCheckbox extends Component {
               </div>
               <div className="category">
                 <div className="multi-select-checkbox-dropdown-list-row">
-                  <span className={`jcf-checkbox ${this.state.isAllSelected ? 'jcf-checked' : 'jcf-unchecked'}`}>
+                  <span className={`jcf-checkbox ${this.state.isAdmin ? 'jcf-checked' : 'jcf-unchecked'}`}>
                     <span
                       onClick={() => {
                         this.selectAll();
                       }}
                     ></span>
                   </span>
-                  All
+                  Admin
                 </div>
                 {
                   options.map((item, index) => (

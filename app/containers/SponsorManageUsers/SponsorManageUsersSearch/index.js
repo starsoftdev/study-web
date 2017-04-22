@@ -116,7 +116,7 @@ export class SponsorManageUsersSearch extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <EditSponsorUserForm isEdit={false} onSubmit={this.addNewUser} protocolOptions={options} />
+              <EditSponsorUserForm isEdit={false} onSubmit={this.addNewUser} protocolOptions={options} isAdmin={false} />
             </div>
           </Modal.Body>
         </Modal>

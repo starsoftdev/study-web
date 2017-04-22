@@ -27,6 +27,7 @@ class EditSponsorUserForm extends Component { // eslint-disable-line react/prefe
     protocolOptions: PropTypes.array,
     onDelete: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
+    isAdmin: PropTypes.bool,
   };
 
   componentDidMount() {
@@ -93,6 +94,7 @@ class EditSponsorUserForm extends Component { // eslint-disable-line react/prefe
               name="protocols"
               component={MultiSelectCheckbox}
               options={this.props.protocolOptions}
+              isAdmin={this.props.isAdmin}
             />
           </div>
         </div>

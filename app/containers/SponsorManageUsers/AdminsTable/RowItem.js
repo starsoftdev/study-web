@@ -89,7 +89,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <EditSponsorUserForm {...initialValues} isEdit item={this.props.item} onSubmit={this.editLocalUser} onDelete={this.deleteLocalUser} protocolOptions={options} />
+              <EditSponsorUserForm {...initialValues} isEdit item={this.props.item} onSubmit={this.editLocalUser} onDelete={this.deleteLocalUser} protocolOptions={options} isAdmin />
             </div>
           </Modal.Body>
         </Modal>
