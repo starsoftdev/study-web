@@ -46,6 +46,7 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
       initialValues: {
         firstName: this.props.item.user.firstName,
         lastName: this.props.item.user.lastName,
+        email: this.props.item.user.email,
         id: this.props.item.user.id,
       },
     };
@@ -66,7 +67,7 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <EditSponsorUserForm {...initialValues} isEdit item={this.props.item} onSubmit={this.editLocalUser} protocolOptions={this.props.protocolOptions} onDelete={this.deleteLocalUser} />
+              <EditSponsorUserForm {...initialValues} isEdit item={this.props.item} onSubmit={this.editLocalUser} protocolOptions={this.props.protocolOptions} onDelete={this.deleteLocalUser} isAdmin={false} />
             </div>
           </Modal.Body>
         </Modal>

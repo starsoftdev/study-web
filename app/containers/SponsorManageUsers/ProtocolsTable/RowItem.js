@@ -50,7 +50,6 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   }
 
   render() {
-    console.log(this.props.item);
     const options = [];
     _.forEach(this.props.protocols, (protocol) => {
       const value = (this.props.item.id === protocol.id);
@@ -67,6 +66,11 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
       if (this.props.searchFormValues.name && `${item.user.firstName} ${item.user.lastName}`.toLowerCase().indexOf(this.props.searchFormValues.name.toLowerCase()) !== -1) {
         shouldBeOpened = true;
       }
+
+      _.forEach(options, (option, index) => {
+        options[index].value = _.find(item.studies, (o) => (o.protocol_id === option.id));
+      });
+
       return (
         <ExpandedItem
           key={index}
