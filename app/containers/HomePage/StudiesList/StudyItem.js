@@ -13,6 +13,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     indication: PropTypes.object,
     campaign: PropTypes.object,
     location: PropTypes.string,
+    siteName: PropTypes.string,
     sponsor: PropTypes.string,
     protocol: PropTypes.string,
     patientMessagingSuite: PropTypes.string,
@@ -82,7 +83,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   render() {
-    const { currentUser, indication, location, sponsor, protocol, patientMessagingSuite, status,
+    const { currentUser, indication, location, siteName, sponsor, protocol, patientMessagingSuite, status,
       startDate, endDate, unreadMessageCount, orderNumber, studyId, url } = this.props;
     const buttonsShown = this.state.buttonsShown;
     let purchasable = true;
@@ -109,7 +110,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <a href={landingHref} className="landig-link" target="_blank">{indication.name}</a>
         </td>
         <td className="location">
-          <span>{location}</span>
+          <span>{location || siteName}</span>
         </td>
         <td className="sponsor">
           <span>{sponsor}</span>

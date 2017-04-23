@@ -11,6 +11,7 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
     editUser: PropTypes.func,
     protocolOptions: PropTypes.array,
     deleteUser: PropTypes.func,
+    currentUser: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -54,9 +55,11 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
     return (
       <div className="assigned-user">
         <span>{this.props.item.user.firstName} {this.props.item.user.lastName}</span>
-        <span className="edit-assigned-user">
-          <a className="btn btn-primary right edit lightbox-opener" onClick={this.openAddUserModal}><i className="icomoon-icon_pencil-edit" /></a>
-        </span>
+        { (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin') &&
+          <span className="edit-assigned-user">
+            <a className="btn btn-primary right edit lightbox-opener" onClick={this.openAddUserModal}><i className="icomoon-icon_pencil-edit" /></a>
+          </span>
+        }
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
           <Modal.Header>

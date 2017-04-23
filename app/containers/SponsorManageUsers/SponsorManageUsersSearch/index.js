@@ -23,6 +23,7 @@ export class SponsorManageUsersSearch extends React.Component {
     editProtocolProcess: PropTypes.object,
     updateData: PropTypes.func,
     protocols: PropTypes.array,
+    currentUser: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -72,13 +73,15 @@ export class SponsorManageUsersSearch extends React.Component {
 
     return (
       <form action="#" className="form-search clearfix">
-        <div className="btns-area pull-right">
-          <div className="col pull-right">
-            <a className="btn btn-primary" onClick={this.openAddUserModal}>
-              + Add User
-            </a>
+        { (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin') &&
+          <div className="btns-area pull-right">
+            <div className="col pull-right">
+              <a className="btn btn-primary" onClick={this.openAddUserModal}>
+                + Add User
+              </a>
+            </div>
           </div>
-        </div>
+        }
 
         <div className="fields-holder">
           <div className="search-area pull-left">

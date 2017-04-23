@@ -106,12 +106,14 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
             formValues={this.props.formValues}
             updateData={this.updateData}
             protocols={protocols}
+            currentUser={this.props.currentUser}
           />
           <SponsorManageUsersAdminsTable
             manageSponsorUsersData={this.props.manageSponsorUsersData}
             editUser={this.editUser}
             deleteUser={this.deleteUser}
             protocols={protocols}
+            currentUser={this.props.currentUser}
           />
           <SponsorManageUsersProtocolsTable
             manageSponsorUsersData={this.props.manageSponsorUsersData}
@@ -119,6 +121,7 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
             deleteUser={this.deleteUser}
             editProtocol={this.editSponsorProtocol}
             protocols={protocols}
+            currentUser={this.props.currentUser}
           />
         </section>
       </div>

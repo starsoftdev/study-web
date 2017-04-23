@@ -13,6 +13,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     editUser: PropTypes.func,
     protocols: PropTypes.array,
     deleteUser: PropTypes.func,
+    currentUser: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -73,7 +74,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           {this.props.item.email}
         </td>
         <td className="col7">
-          { (this.props.item.name !== 'Super Admin') &&
+          { (this.props.currentUser.roleForSponsor.name === 'Super Admin' || (this.props.currentUser.roleForSponsor.name === 'Admin' && this.props.item.name !== 'Super Admin')) &&
             <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openAddUserModal}>
               <span>Edit</span>
             </a>

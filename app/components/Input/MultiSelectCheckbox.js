@@ -38,7 +38,7 @@ export default class MultiSelectCheckbox extends Component {
   }
 
   componentWillMount() {
-    const componentValues = [];
+    const componentValues = [{ isAdmin: this.props.isAdmin }];
     _.forEach(this.props.options, (item) => {
       if (item.value) {
         componentValues.push(item);
