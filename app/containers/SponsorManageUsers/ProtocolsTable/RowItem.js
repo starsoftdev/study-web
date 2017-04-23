@@ -16,6 +16,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     deleteUser: PropTypes.func,
     searchFormValues: React.PropTypes.object,
     editProtocol: PropTypes.func,
+    currentUser: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -78,6 +79,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           protocolOptions={options}
           editUser={this.props.editUser}
           deleteUser={this.props.deleteUser}
+          currentUser={this.props.currentUser}
         />
       );
     });
@@ -123,9 +125,11 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
         </td>
         <td className="col7">
-          <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openEditProtocolModal}>
-            <span>Edit</span>
-          </a>
+          { (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin') &&
+            <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openEditProtocolModal}>
+              <span>Edit</span>
+            </a>
+          }
         </td>
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="edit-protocol" show={this.state.editProtocolModalOpen} onHide={this.closeEditProtocolModal}>

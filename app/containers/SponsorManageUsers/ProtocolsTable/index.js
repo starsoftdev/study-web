@@ -18,6 +18,7 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
     searchFormValues: React.PropTypes.object,
     editProtocol: PropTypes.func,
     protocols: PropTypes.array,
+    currentUser: React.PropTypes.object,
   }
 
   constructor(props) {
@@ -88,7 +89,7 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
               <tbody>
                 {
             studiesList.map((item, index) => (
-              <RowItem key={index} item={item} editProtocol={this.props.editProtocol} editUser={this.props.editUser} deleteUser={this.props.deleteUser} searchFormValues={this.props.searchFormValues} protocols={this.props.protocols} />
+              <RowItem key={index} item={item} editProtocol={this.props.editProtocol} editUser={this.props.editUser} deleteUser={this.props.deleteUser} searchFormValues={this.props.searchFormValues} protocols={this.props.protocols} currentUser={this.props.currentUser} />
             ))
           }
               </tbody>

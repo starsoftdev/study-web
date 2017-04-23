@@ -17,6 +17,7 @@ export class SponsorManageUsersAdminsTable extends React.Component {
     setActiveAdminSort: PropTypes.func,
     searchFormValues: React.PropTypes.object,
     protocols: PropTypes.array,
+    currentUser: React.PropTypes.object,
   }
 
   constructor(props) {
@@ -76,7 +77,7 @@ export class SponsorManageUsersAdminsTable extends React.Component {
               <tbody>
                 {
               adminsList.map((item, index) => (
-                <RowItem key={index} item={item} editUser={this.props.editUser} deleteUser={this.props.deleteUser} protocols={this.props.protocols} />
+                <RowItem key={index} item={item} editUser={this.props.editUser} deleteUser={this.props.deleteUser} protocols={this.props.protocols} currentUser={this.props.currentUser} />
               ))
               }
               </tbody>

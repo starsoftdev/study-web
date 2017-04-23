@@ -126,7 +126,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
   componentWillMount() {
     this.props.fetchLevels();
-    this.props.fetchSiteNames();
     this.props.fetchSiteLocations();
     this.props.fetchIndications();
     this.props.fetchSponsors();
