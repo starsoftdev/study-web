@@ -15,7 +15,7 @@ import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Checkbox from '../../../components/Input/Checkbox';
-import { selectIndications, selectSources, selectSiteLocations, selectStudiesFromSites, selectProtocols } from '../../App/selectors';
+import { selectIndications, selectSiteLocations, selectSources, selectProtocols } from '../../App/selectors';
 import IndicationOverlay from '../../StudyPage/PatientDetail/IndicationOverlay';
 import { editPatientSite } from '../actions';
 import { selectPatientCategories, selectSavedPatient } from '../selectors';
@@ -26,13 +26,12 @@ const formName = 'PatientDatabase.EditPatientModal';
 const mapStateToProps = createStructuredSelector({
   formValues: selectValues(formName),
   indications: selectIndications(),
-  sources: selectSources(),
   patientCategories: selectPatientCategories(),
   savedPatient: selectSavedPatient(),
   hasError: selectSyncErrorBool(formName),
   sites: selectSiteLocations(),
+  sources: selectSources(),
   protocols: selectProtocols(),
-  studies: selectStudiesFromSites(),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -53,14 +52,13 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     loading: React.PropTypes.bool,
     submitting: React.PropTypes.bool,
     formValues: React.PropTypes.object,
-    sources: PropTypes.array,
     patientCategories: PropTypes.object,
+    protocols: PropTypes.array,
     savedPatient: PropTypes.object,
     sites: PropTypes.array,
+    sources: PropTypes.array,
     hasError: PropTypes.bool,
     onSubmit: PropTypes.func,
-    protocols: PropTypes.object,
-    studies: PropTypes.array,
   };
 
   constructor(props) {
@@ -139,12 +137,16 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { formValues, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, sources, patientCategories, loading, submitting, savedPatient, studies, protocols } = this.props;
+    const { formValues, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, protocols, sites, sources, patientCategories, loading, submitting, savedPatient } = this.props;
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
     }));
 
+    const siteOptions = sites.map(siteIterator => ({
+      label: siteIterator.name,
+      value: siteIterator.id,
+    }));
     const sourceOptions = sources.map(sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
@@ -166,13 +168,10 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       id: initialValues ? initialValues.id : null,
       indications: formValues.indications,
     };
-    const protocolOptions = studies.map(studyIterator => {
-      const protocol = _.find(protocols.details, { id: studyIterator.protocol_id });
-      return {
-        label: protocol.number,
-        value: protocol.id,
-      };
-    });
+    const protocolOptions = protocols.map(protocolIterator => ({
+      label: protocolIterator.number,
+      value: protocolIterator.studyId,
+    }));
     return (
       <Form className="form-lightbox form-edit-patient-information" onSubmit={this.onSubmit}>
         <div className="field-row form-group">
@@ -331,6 +330,19 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
+            <label>* Site Location</label>
+          </strong>
+          <Field
+            name="site"
+            component={ReactSelect}
+            className="field"
+            placeholder="Select Site Location"
+            options={siteOptions}
+            disabled={initialValues && initialValues.source && initialValues.source === 1}
+          />
+        </div>
+        <div className="field-row form-group">
+          <strong className="label">
             <label>Protocol</label>
           </strong>
           <Field
@@ -344,7 +356,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <label>Source</label>
+            <label>* Source</label>
           </strong>
           <Field
             name="source"

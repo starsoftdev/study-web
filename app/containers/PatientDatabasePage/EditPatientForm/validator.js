@@ -33,8 +33,9 @@ const schema = {
   age: { presence: false },
   gender: { presence: false },
   bmi: { presence: false },
+  site: { presence: true },
   status: { presence: false },
-  source: { presence: false },
+  source: { presence: true },
 };
 
 export default validatorFactory(schema);
