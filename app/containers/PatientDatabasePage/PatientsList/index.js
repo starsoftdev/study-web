@@ -153,12 +153,22 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
 
     this.props.setActiveSort(sort, direction);
 
-    if (sort !== 'orderNumber') {
-      this.props.searchPatients({ ...this.props.paginationOptions.prevSearchFilter, sort, direction }, true);
+    if (sort === 'status') {
+      const dir = ((direction === 'down') ? 'desc' : 'asc');
+      const sortedPatients = _.orderBy(this.props.patients.details, [function (o) {
+        return o.studyPatientCategory.patientCategory.name;
+      }], [dir]);
+      this.props.sortPatientsSuccess(sortedPatients);
+    } else if (sort === 'indication') {
+      const dir = ((direction === 'down') ? 'desc' : 'asc');
+      const sortedPatients = _.orderBy(this.props.patients.details, [function (o) {
+        return _.map(o.indications, i => i.name).join(' ');
+      }], [dir]);
+      this.props.sortPatientsSuccess(sortedPatients);
     } else {
       const dir = ((direction === 'down') ? 'desc' : 'asc');
       const sortedPatients = _.orderBy(this.props.patients.details, [function (o) {
-        return o.orderNumber;
+        return o[sort];
       }], [dir]);
       this.props.sortPatientsSuccess(sortedPatients);
     }
@@ -217,7 +227,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
               <div className="table">
                 <div className="thead">
                   <div className="tr">
-                    <div className="th">
+                    <div className="th default-cursor">
                       <Field
                         name="all-patients"
                         type="checkbox"
@@ -225,7 +235,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
                         className="pull-left"
                         onChange={this.toggleAllPatientSelection}
                       />
-                      <span onClick={this.sortBy} data-sort="orderNumber" className={`${(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}`}>#<i className="caret-arrow" /></span>
+                      <span>#<i className="caret-arrow" /></span>
                     </div>
                     <div onClick={this.sortBy} data-sort="firstName" className={`th ${(this.props.paginationOptions.activeSort === 'firstName') ? this.props.paginationOptions.activeDirection : ''}`}>NAME<i className="caret-arrow" /></div>
                     <div onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL<i className="caret-arrow" /></div>

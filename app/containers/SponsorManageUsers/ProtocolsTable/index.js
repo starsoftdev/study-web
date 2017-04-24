@@ -54,12 +54,12 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
       const dir = ((this.props.paginationOptionsProtocols.activeDirection === 'down') ? 'desc' : 'asc');
 
       studiesList = _.orderBy(studiesList, [(o) => {
-        if (this.props.paginationOptionsProtocols.activeSort === 'indication') {
+        if (this.props.paginationOptionsProtocols.activeSort === 'protocolNumber') {
           return o.protocol.number;
         } else if (this.props.paginationOptionsProtocols.activeSort === 'indication') {
-          return o.indication.name;
+          return o.indication ? o.indication.name : null;
         } else if (this.props.paginationOptionsProtocols.activeSort === 'cros') {
-          return o.cro.name;
+          return o.cro ? o.cro.name : null;
         }
         return o[this.props.paginationOptionsProtocols.activeSort];
       }], [dir]);

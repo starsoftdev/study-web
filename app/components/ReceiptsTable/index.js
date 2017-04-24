@@ -261,9 +261,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
           <thead>
             <tr>
               <th
-                className={this.props.paginationOptions.activeSort === 'orderNumber' ? this.props.paginationOptions.activeDirection : ''}
-                onClick={this.sortBy}
-                data-sort="orderNumber"
+                className="default-cursor"
               >
                 <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
                   <span className="input-style" onClick={this.onClickAll}>
