@@ -116,8 +116,11 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
 
   onSelectCard(value) {
     if (value === -1) {
-      this.openAddNewCardModal();
-      this.props.showAddNewCard();
+      if (!this.props.showAddNewCard) {
+        this.openAddNewCardModal();
+      } else {
+        this.props.showAddNewCard();
+      }
     }
   }
 
