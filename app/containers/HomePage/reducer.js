@@ -215,7 +215,6 @@ export default function homePageReducer(state = initialState, action) {
       const entitiesCollection = payload.map((studyObject, index) => ({
         studyId: studyObject.id,
         indication: studyObject.indication,
-        location: studyObject.site.location,
         siteName: studyObject.site.siteName,
         sponsor: studyObject.sponsor.name,
         protocol: studyObject.protocolNumber,
