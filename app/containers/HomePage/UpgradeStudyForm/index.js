@@ -11,10 +11,10 @@ import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import Toggle from '../../../components/Input/Toggle';
 import ShoppingCartForm from '../../../components/ShoppingCartForm';
-import AddNewCardForm from '../../../components/AddNewCardForm';
+import AddCreditCardModal from '../../../components/AddCreditCardModal';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { saveCard } from '../../App/actions';
-import { selectStudyLevels, selectAvailPhoneNumbers, selectCurrentUserClientId } from '../../App/selectors';
+import { selectStudyLevels, selectAvailPhoneNumbers, selectCurrentUserClientId, selectSavedCard } from '../../App/selectors';
 import { selectSelectedIndicationLevelPrice } from '../selectors';
 import { selectUpgradeStudyFormCallTrackingValue, selectUpgradeStudyFormLeadsCount } from './selectors';
 import RenderLeads from './renderLeads';
@@ -31,6 +31,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     leadsCount: PropTypes.number,
     availPhoneNumbers: PropTypes.array,
     selectedStudy: PropTypes.object,
+    savedCard: PropTypes.object,
     show: PropTypes.bool,
     onShow: PropTypes.func,
     onHide: PropTypes.func,
@@ -58,7 +59,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
       level: null,
       patientQualificationSuite: false,
       callTracking: false,
-      addCardModalOpen: false,
+      addCardModalOpenU: false,
     };
   }
 
@@ -76,6 +77,10 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
         });
       }
     }
+
+    if (!newProps.savedCard.saving && this.props.savedCard.saving && this.state.addCardModalOpenU) {
+      this.closeAddCardModal();
+    }
   }
 
   onSaveCard(params) {
@@ -84,7 +89,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
 
   closeAddCardModal() {
     this.setState({
-      addCardModalOpen: false,
+      addCardModalOpenU: false,
     });
     this.props.onShow();
   }
@@ -108,7 +113,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
 
   handleNewModalOpen() {
     this.setState({
-      addCardModalOpen: true,
+      addCardModalOpenU: true,
     });
     this.props.onHide(true);
   }
@@ -308,24 +313,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
             </div>
           </Modal.Body>
         </Modal>
-        <Modal
-          className="modal-add-new-card"
-          show={this.state.addCardModalOpen}
-          onHide={this.closeAddCardModal}
-          dialogComponentClass={CenteredModal}
-          backdrop
-          keyboard
-        >
-          <Modal.Header>
-            <Modal.Title>Add New Card</Modal.Title>
-            <a className="lightbox-close close" onClick={this.closeAddCardModal}>
-              <i className="icomoon-icon_close" />
-            </a>
-          </Modal.Header>
-          <Modal.Body>
-            <AddNewCardForm onSubmit={this.onSaveCard} />
-          </Modal.Body>
-        </Modal>
+        <AddCreditCardModal addCreditCard={this.onSaveCard} showModal={this.state.addCardModalOpenU} closeModal={this.closeAddCardModal} />
       </div>
     );
   }
@@ -338,6 +326,7 @@ const mapStateToProps = createStructuredSelector({
   callTracking: selectUpgradeStudyFormCallTrackingValue(),
   leadsCount: selectUpgradeStudyFormLeadsCount(),
   availPhoneNumbers: selectAvailPhoneNumbers(),
+  savedCard: selectSavedCard(),
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -15,12 +15,12 @@ import ReactSelect from '../../../components/Input/ReactSelect';
 import DatePickerDisplay from '../../../components/Input/DatePickerDisplay';
 import Toggle from '../../../components/Input/Toggle';
 import ShoppingCartForm from '../../../components/ShoppingCartForm';
-import AddNewCardForm from '../../../components/AddNewCardForm';
+import AddCreditCardModal from '../../../components/AddCreditCardModal';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import {
   selectRenewStudyFormCampaignLengthValue,
 } from './selectors';
-import { selectStudyLevels, selectCurrentUserClientId } from '../../App/selectors';
+import { selectStudyLevels, selectCurrentUserClientId, selectSavedCard } from '../../App/selectors';
 import { saveCard } from '../../App/actions';
 import { selectSelectedIndicationLevelPrice } from '../selectors';
 import formValidator from './validator';
@@ -36,6 +36,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     selectedIndicationLevelPrice: PropTypes.object,
     campaignLength: PropTypes.number,
     selectedStudy: PropTypes.object,
+    savedCard: PropTypes.object,
     show: PropTypes.bool,
     onShow: PropTypes.func,
     onHide: PropTypes.func,
@@ -118,6 +119,10 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     if (newProps.manualDisableSubmit === false && this.props.manualDisableSubmit === true) {
       this.resetState();
     }
+
+    if (!newProps.savedCard.saving && this.props.savedCard.saving && this.state.addCardModalOpenR) {
+      this.closeAddCardModal();
+    }
   }
 
   onSaveCard(params) {
@@ -164,7 +169,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
 
   closeAddCardModal() {
     this.setState({
-      addCardModalOpen: false,
+      addCardModalOpenR: false,
     });
     this.props.onShow();
   }
@@ -191,7 +196,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
 
   handleNewModalOpen() {
     this.setState({
-      addCardModalOpen: true,
+      addCardModalOpenR: true,
     });
     this.props.onHide(true);
   }
@@ -439,24 +444,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
             </div>
           </Modal.Body>
         </Modal>
-        <Modal
-          className="modal-add-new-card"
-          show={this.state.addCardModalOpen}
-          onHide={this.closeAddCardModal}
-          dialogComponentClass={CenteredModal}
-          backdrop
-          keyboard
-        >
-          <Modal.Header>
-            <Modal.Title>Add New Card</Modal.Title>
-            <a className="lightbox-close close" onClick={this.closeAddCardModal}>
-              <i className="icomoon-icon_close" />
-            </a>
-          </Modal.Header>
-          <Modal.Body>
-            <AddNewCardForm onSubmit={this.onSaveCard} />
-          </Modal.Body>
-        </Modal>
+        <AddCreditCardModal addCreditCard={this.onSaveCard} showModal={this.state.addCardModalOpenR} closeModal={this.closeAddCardModal} />
         <Modal
           className="datepicker-modal"
           dialogComponentClass={CenteredModal}
@@ -499,6 +487,7 @@ const mapStateToProps = createStructuredSelector({
   studyLevels: selectStudyLevels(),
   selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
   campaignLength: selectRenewStudyFormCampaignLengthValue(),
+  savedCard: selectSavedCard(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
