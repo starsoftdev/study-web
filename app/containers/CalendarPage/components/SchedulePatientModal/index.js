@@ -185,7 +185,6 @@ export default class SchedulePatientModal extends Component {
                 <input type="text" className="form-control add-date scheduleTime" disabled value={selectedCellInfo.selectedDate && moment(selectedCellInfo.selectedDate).tz(currentUser.timezone).format('MM/DD/YY')} />
               </div>
             </div>
-
             <div className="field-row">
               <strong className="label required"><label htmlFor="patient-time">Time</label></strong>
               <div className="field">
@@ -269,7 +268,7 @@ export default class SchedulePatientModal extends Component {
                   id="patient"
                   name="patient"
                   component={ReactSelect}
-                  placeholder={this.state.protocol ? 'Select Patient' : 'N/A'}
+                  placeholder={this.state.patient ? 'Select Patient' : 'N/A'}
                   options={patientOptions}
                   className="data-search"
                   disabled={submitting || this.props.fetchingPatientsByStudy || !this.state.protocol}

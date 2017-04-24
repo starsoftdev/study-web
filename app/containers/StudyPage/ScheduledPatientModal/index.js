@@ -51,6 +51,10 @@ class ScheduledPatientModal extends React.Component {
   constructor(props) {
     super(props);
     this.getTimeComponents = this.getTimeComponents.bind(this);
+    this.navigateToday = this.navigateToday.bind(this);
+    this.state = {
+      date: moment(),
+    };
   }
 
   componentDidMount() {
@@ -68,6 +72,9 @@ class ScheduledPatientModal extends React.Component {
         textReminder,
       };
       this.props.setScheduledFormInitialized(true);
+      this.setState({
+        date: moment(currentPatient.appointments[0].time).startOf('date'),
+      });
       nextProps.initialize(initialValues);
     }
   }
@@ -82,13 +89,25 @@ class ScheduledPatientModal extends React.Component {
     };
   }
 
+  navigateToday() {
+    const today = moment();
+    const todayYear = today.year();
+    const todayMonth = today.month();
+    const calendarYear = this.calendar.getShownDate().year();
+    const calendarMonth = this.calendar.getShownDate().month();
+    const monthDiff = ((todayYear - calendarYear) * 12) + (todayMonth - calendarMonth);
+
+    this.calendar.changeMonth(monthDiff, { preventDefault: _.noop });
+    this.calendar.changeDay(today, { preventDefault: _.noop });
+    this.setState({
+      date: today,
+    });
+    this.props.handleDateChange(today);
+  }
+
   render() {
     const { onHide, currentPatient, show, handleSubmit, handleDateChange, submittingSchedule } = this.props;
-    let scheduledDate = moment().startOf('date');
     if (currentPatient) {
-      if (currentPatient.appointments && currentPatient.appointments.length > 0) {
-        scheduledDate = moment(currentPatient.appointments[0].time).startOf('date');
-      }
       return (
         <Modal
           className="datepicker-modal scheduled-patient-modal"
@@ -108,9 +127,10 @@ class ScheduledPatientModal extends React.Component {
             <Calendar
               className="calendar custom-calendar"
               onChange={handleDateChange}
-              date={scheduledDate}
+              date={this.state.date}
+              ref={(calendar) => { this.calendar = calendar; }}
             />
-            <div className="current-date">
+            <div className="current-date" onClick={this.navigateToday}>
               Today: {moment().format('dddd, MMMM DD, YYYY')}
             </div>
             <form onSubmit={handleSubmit}>

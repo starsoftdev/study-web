@@ -5,6 +5,7 @@ import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { takeLatest } from 'redux-saga';
 import { reset } from 'redux-form';
+import moment from 'moment-timezone';
 
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
@@ -819,6 +820,7 @@ export function* changeUsersTimezoneWatcher() {
       };
       const response = yield call(request, requestURL, params);
       yield put(toastrActions.success('Time Zone', 'Your time zone has been updated successfully!'));
+      moment.tz.setDefault(response.timezone);
       yield put(changeUsersTimezoneSuccess(response.timezone));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Can not update timezone');

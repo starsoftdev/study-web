@@ -7,7 +7,7 @@
 import moment from 'moment-timezone';
 import React, { Component, PropTypes } from 'react';
 
-export default class DatePicker extends Component {
+export default class DatePickerDisplay extends Component {
   static propTypes = {
     input: PropTypes.object.isRequired,
     name: PropTypes.string.isRequired,
