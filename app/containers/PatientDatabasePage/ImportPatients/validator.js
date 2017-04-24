@@ -19,6 +19,9 @@ const schema = {
       message: '^Email not valid',
     },
   },
+  indication: {
+    presence: true,
+  },
   phone: {
     presence: {
       message: '^Phone number cannot be blank',
@@ -28,6 +31,12 @@ const schema = {
       pattern: '^\\(\\d{3}\\)\\s?\\d{3}\\-\\d{4}|\\+?[1-9]\\d{1,14}$',
       message: 'Invalid phone number',
     },
+  },
+  site: {
+    presence: true,
+  },
+  source: {
+    presence: true,
   },
 };
 

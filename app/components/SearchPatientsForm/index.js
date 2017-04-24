@@ -7,7 +7,8 @@ import Button from 'react-bootstrap/lib/Button';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { selectSearchPatientsFormError } from './selectors';
-import { selectPatientCategories, selectPatients, selectPatientDatabaseFormValues } from '../../containers/PatientDatabasePage/selectors';
+import { selectPatientCategories, selectPatients } from '../../containers/PatientDatabasePage/selectors';
+import { selectValues } from '../../common/selectors/form.selector';
 import { selectIndications, selectSources, selectSiteLocations, selectCurrentUser } from '../../containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -15,8 +16,10 @@ import PatientActionButtons from '../../containers/PatientDatabasePage/PatientAc
 
 import ReactMultiSelect from '../../components/Input/ReactMultiSelect';
 
+const formName = 'searchPatients';
+
 const mapStateToProps = createStructuredSelector({
-  formValues: selectPatientDatabaseFormValues(),
+  formValues: selectValues(formName),
   hasError: selectSearchPatientsFormError(),
   indications: selectIndications(),
   patientCategories: selectPatientCategories(),
@@ -26,10 +29,9 @@ const mapStateToProps = createStructuredSelector({
   user: selectCurrentUser(),
 });
 
-@reduxForm({ form: 'searchPatients', validate: formValidator })
+@reduxForm({ form: formName, validate: formValidator })
 @connect(mapStateToProps, null)
-
-class SearchPatientsForm extends Component { // eslint-disable-line react/prefer-stateless-function
+export default class SearchPatientsForm extends Component {
   static propTypes = {
     formValues: PropTypes.object,
     handleSubmit: PropTypes.func,
@@ -397,5 +399,3 @@ class SearchPatientsForm extends Component { // eslint-disable-line react/prefer
     );
   }
 }
-
-export default SearchPatientsForm;
