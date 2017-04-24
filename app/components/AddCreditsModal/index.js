@@ -16,7 +16,7 @@ import CenteredModal from '../../components/CenteredModal/index';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
 import AddCreditCardModal from '../../components/AddCreditCardModal';
 import { addCredits, fetchClientSites, getCreditsPrice, saveCard } from '../../containers/App/actions';
-import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice, selectCurrentUserStripeCustomerId } from '../../containers/App/selectors';
+import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice, selectCurrentUserStripeCustomerId, selectSavedCard } from '../../containers/App/selectors';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
 import { selectAddCreditsFormValues, selectAddCreditsFormError } from './selectors';
@@ -37,6 +37,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     closeModal: PropTypes.func,
     openModal: PropTypes.func,
     addCredits: PropTypes.func,
+    savedCard: PropTypes.object,
     currentUser: PropTypes.object,
     addCreditsOperation: PropTypes.object,
     getCreditsPrice: PropTypes.func.isRequired,
@@ -60,7 +61,6 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     this.addCreditsSubmit = this.addCreditsSubmit.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.handleNewModalOpen = this.handleNewModalOpen.bind(this);
-    this.openAddCardModal = this.openAddCardModal.bind(this);
     this.closeAddCardModal = this.closeAddCardModal.bind(this);
     this.onSaveCard = this.onSaveCard.bind(this);
 
@@ -69,7 +69,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
       credits: 0,
       total: 0,
       price: 0,
-      addCardModalOpen: false,
+      addCardModalOpenC: false,
     };
   }
 
@@ -92,6 +92,10 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
         price: newProps.creditsPrice.price,
       });
     }
+
+    if (!newProps.savedCard.saving && this.props.savedCard.saving && this.state.addCardModalOpenC) {
+      this.closeAddCardModal();
+    }
   }
 
   onSaveCard(params) {
@@ -99,22 +103,16 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     this.props.saveCard(currentUser.roleForClient.client_id, this.props.currentUserStripeCustomerId, params);
   }
 
-  openAddCardModal() {
-    this.setState({
-      addCardModalOpen: true,
-    });
-  }
-
   closeAddCardModal() {
     this.setState({
-      addCardModalOpen: false,
+      addCardModalOpenC: false,
     });
     this.props.openModal();
   }
 
   handleNewModalOpen() {
     this.setState({
-      addCardModalOpen: true,
+      addCardModalOpenC: true,
     });
     this.props.closeModal();
   }
@@ -135,7 +133,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
 
   closeModal() {
     this.props.closeModal();
-    if (!this.state.addCardModalOpen) {
+    if (!this.state.addCardModalOpenC) {
       this.resetState();
     }
   }
@@ -312,7 +310,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
             </div>
           </Modal.Body>
         </Modal>
-        <AddCreditCardModal addCreditCard={this.onSaveCard} showModal={this.state.addCardModalOpen} closeModal={this.closeAddCardModal} />
+        <AddCreditCardModal addCreditCard={this.onSaveCard} showModal={this.state.addCardModalOpenC} closeModal={this.closeAddCardModal} />
       </div>
     );
   }
@@ -328,6 +326,7 @@ const mapStateToProps = createStructuredSelector({
   addCreditsOperation: selectAddCredits(),
   creditsPrice: selectCreditsPrice(),
   currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
+  savedCard: selectSavedCard(),
 });
 
 function mapDispatchToProps(dispatch) {
