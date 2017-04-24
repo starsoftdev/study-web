@@ -225,6 +225,24 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/app/help-support',
+      name: 'helpSupportPage',
+      getComponent(nextState, cb) {
+        System.import('./containers/HelpSupportPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/app/videos',
+      name: 'videoPage',
+      getComponent(nextState, cb) {
+        System.import('./containers/VideoPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/app/badges',
       name: 'badgesPage',
       getComponent(nextState, cb) {
