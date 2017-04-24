@@ -228,7 +228,7 @@ export class EditInformationModal extends React.Component {
     _.forEach(this.props.siteLocations, (item) => {
       siteLocationsOptions.push({
         value: item.id,
-        label: item.location,
+        label: item.name,
       });
     });
 

@@ -128,7 +128,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       }
     ));
     sourceOptions.unshift({ label: 'All', value: -1 });
-    const siteLocation = site.location;
+    const siteLocation = site.name;
     let sponsor = 'None';
     if (study.sponsor) {
       sponsor = study.sponsor.name;
