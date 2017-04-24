@@ -53,8 +53,8 @@ export class SponsorManageUsersAdminsTable extends React.Component {
       const dir = ((this.props.paginationOptionsAdmin.activeDirection === 'down') ? 'desc' : 'asc');
       adminsList = _.orderBy(adminsList, [(o) => {
         if (this.props.paginationOptionsAdmin.activeSort === 'first_name') {
-          const firstName = o['first_name'];
-          const lastName = o['last_name'];
+          const firstName = o.first_name;
+          const lastName = o.last_name;
           return `${firstName} ${lastName}`;
         }
         return o[this.props.paginationOptionsAdmin.activeSort];
