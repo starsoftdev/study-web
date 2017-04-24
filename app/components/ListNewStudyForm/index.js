@@ -150,7 +150,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
   }
 
   handleSiteLocationChoose(e) {
-    const { change, clientAdmins, fullSiteLocations } = this.props;
+    const { change, clientAdmins, fullSiteLocations, showSiteLocationModal } = this.props;
     if (e === 'add-new-location') {
       showSiteLocationModal();
     } else {
@@ -201,7 +201,6 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
       name: row.name,
     }));
     siteLocations.push({ id: 'add-new-location', name: 'Add New Location' });
-    console.log('---', this.props);
     return (
       <div className="form-study">
         <div className="form-fields">
