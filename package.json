@@ -148,7 +148,7 @@
     "react-bootstrap": "^0.30.3",
     "react-click-outside": "^2.2.0",
     "react-d3": "^0.4.0",
-    "react-date-range": "git+https://github.com/studykik/react-date-range.git#0b79ad4b4e96ddfd450f4e63d24aad1823398c2e",
+    "react-date-range": "git+https://github.com/studykik/react-date-range.git#6ef52fe7814160f322d52348cc21dd4eb373c49c",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "15.4.2",

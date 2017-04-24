@@ -365,13 +365,12 @@ export default class CalendarPage extends React.Component {
                 initialValues={{ hour: '0' }}
               />
               <EditScheduleModal
-                currentUser={currentUser}
                 onSubmit={this.handleSubmit}
-                handleCloseModal={this.handleCloseModal}
                 handleDelete={this.handleDelete}
                 submitting={false}
                 selectedCellInfo={this.selectedCellInfo}
                 modalType={this.state.modalType}
+                onClose={this.handleCloseModal}
                 hourOptions={hourOptions}
                 minuteOptions={minuteOptions}
                 periodOptions={periodOptions}

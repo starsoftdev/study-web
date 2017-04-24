@@ -12,7 +12,7 @@ import { CAMPAIGN_LENGTH_LIST, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE } 
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
-import DatePicker from './DatePicker';
+import DatePickerDisplay from '../../../components/Input/DatePickerDisplay';
 import Toggle from '../../../components/Input/Toggle';
 import ShoppingCartForm from '../../../components/ShoppingCartForm';
 import AddNewCardForm from '../../../components/AddNewCardForm';
@@ -403,7 +403,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                           <div className="field" onClick={() => { this.handleDatePickerClose(true); }}>
                             <Field
                               name="startDate"
-                              component={DatePicker}
+                              component={DatePickerDisplay}
                               className="form-control datepicker-input"
                             />
                           </div>
