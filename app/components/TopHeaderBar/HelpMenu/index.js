@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import enhanceWithClickOutside from 'react-click-outside';
-
+import { Link } from 'react-router';
 class HelpMenu extends React.Component {
 
   constructor(props) {
@@ -34,8 +34,8 @@ class HelpMenu extends React.Component {
         <div className={`help-menu ${HelpMenuClassName}`}>
           <div className="well">
             <ul className="list-unstyled">
-              <li><a onClick={() => this.handleClickOutside()}>Help and Support</a></li>
-              <li><a onClick={() => this.handleClickOutside()}>Videos</a></li>
+              <li><Link to="/app/help-support" onClick={() => this.handleClickOutside()}>Help and Support</Link></li>
+              <li><Link to="/app/videos" onClick={() => this.handleClickOutside()}>Videos</Link></li>
             </ul>
           </div>
         </div>
