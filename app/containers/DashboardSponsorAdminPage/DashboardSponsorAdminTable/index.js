@@ -56,7 +56,15 @@ export class DashboardSponsorAdminTable extends React.Component { // eslint-disa
 
     if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
       const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
-      sponsors = _.orderBy(sponsors, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
+      sponsors = _.orderBy(sponsors, [(o) => {
+        if (this.props.paginationOptions.activeSort === 'first_name') {
+          const firstName = _.get(o, 'first_name', '');
+          const lastName = _.get(o, 'last_name', '');
+          const name = `${firstName} ${lastName}`;
+          return name;
+        }
+        return o[this.props.paginationOptions.activeSort];
+      }], [dir]);
     }
 
     return (
