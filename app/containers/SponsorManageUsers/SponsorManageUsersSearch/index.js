@@ -71,17 +71,17 @@ export class SponsorManageUsersSearch extends React.Component {
       });
     });
 
+    const isAllowToEdit = (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin');
+
     return (
       <form action="#" className="form-search clearfix">
-        { (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin') &&
-          <div className="btns-area pull-right">
-            <div className="col pull-right">
-              <a className="btn btn-primary" onClick={this.openAddUserModal}>
-                + Add User
-              </a>
-            </div>
+        <div className="btns-area pull-right">
+          <div className="col pull-right">
+            <a disabled={!isAllowToEdit} className="btn btn-primary" onClick={() => (!isAllowToEdit ? null : this.openAddUserModal())}>
+              + Add User
+            </a>
           </div>
-        }
+        </div>
 
         <div className="fields-holder">
           <div className="search-area pull-left">

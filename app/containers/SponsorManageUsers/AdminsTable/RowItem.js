@@ -65,6 +65,8 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
       });
     });
 
+    const isAllowToEdit = (this.props.item.name !== 'Super Admin' && (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin'));
+
     return (
       <tr>
         <td>
@@ -75,7 +77,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         </td>
         <td className="col7">
           { (this.props.item.name !== 'Super Admin') &&
-            <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openAddUserModal}>
+            <a disabled={!isAllowToEdit} className="btn btn-primary btn-edit-site pull-right" onClick={() => (!isAllowToEdit ? null : this.openAddUserModal())}>
               <span>Edit</span>
             </a>
           }
