@@ -57,16 +57,21 @@ export default class MultiSelectCheckbox extends Component {
   setItemState(item, state) {
     const curStateOptions = _.clone(this.state.options);
     const componentValues = [{ isAdmin: this.state.isAdmin }];
+    let isAdmin = true;
     _.forEach(curStateOptions, (o, index) => {
       if (o.id === item.id) {
         curStateOptions[index].value = state;
       }
       if (o.value) {
         componentValues.push(o);
+      } else {
+        isAdmin = false;
       }
     });
+    componentValues[0].isAdmin = isAdmin;
     this.setState({
       options: curStateOptions,
+      isAdmin,
     });
 
     this.props.input.onChange(componentValues);

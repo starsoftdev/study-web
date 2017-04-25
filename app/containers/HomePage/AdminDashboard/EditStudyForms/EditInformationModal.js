@@ -295,7 +295,7 @@ export class EditInformationModal extends React.Component {
       } else if ((i + 1) === this.props.studyCampaigns.details.length) {
         campaignOptions.push({ label: 'Newest', value: this.props.studyCampaigns.details[i].id });
       } else {
-        campaignOptions.push({ label: i, value: this.props.studyCampaigns.details[i].id });
+        campaignOptions.push({ label: (i + 1), value: this.props.studyCampaigns.details[i].id });
       }
     }
 

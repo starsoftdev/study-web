@@ -150,7 +150,7 @@ export class ReportViewTable extends React.Component {
 
           className={(this.state.hoveredRowIndex === index) ? 'active-table-row' : ''}
         >
-          <td>{item.site_name}</td>
+          <td>{item.site_id}</td>
           <td>
             <span className="name" data-placement="top" data-toggle="tooltip" title="" data-original-title="Palmer Tech">{`${item.principalinvestigatorfirstname} ${item.principalinvestigatorlastname}`}</span>
           </td>

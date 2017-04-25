@@ -11,6 +11,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     mouseOutRow: PropTypes.func,
     hoverRowIndex: PropTypes.any,
     setHoverRowIndex: PropTypes.func,
+    filtersFormValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -65,6 +66,9 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     const startDate = item.campaign_datefrom ? campaignDateFrom.format('MM/DD/YY') : '';
     const endDate = item.campaign_dateto ? campaignDateTo.format('MM/DD/YY') : '';
 
+    let campaignName = this.props.filtersFormValues.campaign ? this.props.filtersFormValues.campaign.toString() : 'Newest';
+    campaignName = campaignName.charAt(0).toUpperCase() + campaignName.slice(1);
+
     return (
       <tr
         onMouseEnter={(e) => this.mouseOverRow(e, item.study_id)}
@@ -100,7 +104,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
         <td>
           <ul className="list-unstyled">
             {/* <li><span>{item.campaign_name}</span></li>*/}
-            <li><span>{'Newest'}</span></li>
+            <li><span>{campaignName}</span></li>
             <li>Start Date: <span>{startDate}</span></li>
             <li>End Date: <span>{endDate}</span></li>
           </ul>

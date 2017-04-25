@@ -274,7 +274,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   fetchStudiesAccordingToFilters(value, key, fetchByScroll) {
     let filters = _.cloneDeep(this.props.filtersFormValues);
 
-    if (value && key) {
+    if ((value && key) || (key === 'campaign')) {
       const newFilterValues = _.cloneDeep(value);
       filters = { ...filters, [key]:newFilterValues };
     }
@@ -644,6 +644,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             toggleStudy={this.props.toggleStudy}
             messagingNumbers={this.props.messagingNumbers}
             paginationOptions={this.props.paginationOptions}
+            filtersFormValues={this.props.filtersFormValues}
           />
         </StickyContainer>
       </div>

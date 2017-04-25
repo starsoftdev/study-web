@@ -51,6 +51,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     usersByRoles: PropTypes.object,
     setHoverRowIndex: PropTypes.func,
     setEditStudyFormValues: PropTypes.func,
+    filtersFormValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -83,6 +84,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
     this.handleScroll = this.handleScroll.bind(this);
     this.handleBodyScroll = this.handleBodyScroll.bind(this);
+    this.handleStickyStateChange = this.handleStickyStateChange.bind(this);
 
 
     this.state = {
@@ -105,12 +107,14 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       addEmailModalShow: false,
       isFixedBottomScroll: false,
       fixedScrollWidth: false,
+      fixedScrollContainerWidth: 2891,
 
       openedPages: [],
       landingPageOnTop: false,
       thankYouPageOnTop: false,
       patientThankYouEmailPageOnTop: false,
       editStudyPageOnTop: false,
+      stickyLeftOffset: false,
     };
   }
 
@@ -164,8 +168,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
   handleScroll(event) {
     const scrollLeft = event.target.scrollLeft;
-
-    this.rightDivHeader.scrollLeft = scrollLeft;
+    this.rightDivHeader.refs.children.scrollLeft = scrollLeft;
+    this.rightDivParentHeader.scrollLeft = scrollLeft;
   }
 
   handleBodyScroll(event) {
@@ -177,7 +181,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         this.setState({ isFixedBottomScroll: false });
       }
     } else if (!this.state.isFixedBottomScroll || this.state.fixedScrollWidth !== this.tableRight.clientWidth) {
-      this.setState({ isFixedBottomScroll: true, fixedScrollWidth: this.tableRight.clientWidth });
+      this.setState({ isFixedBottomScroll: true, fixedScrollWidth: this.tableRight.clientWidth, fixedScrollContainerWidth: (2891 + this.tableRight.clientWidth) });
     }
   }
 
@@ -464,6 +468,15 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.closeAddEmailModal();
   }
 
+  handleStickyStateChange(e) {
+    if (e && this.rightDivHeader) {
+      this.rightDivHeader.refs.children.scrollLeft = this.rightDivParentHeader.scrollLeft;
+      this.setState({ stickyLeftOffset: this.rightDivHeader.refs.children.offsetLeft });
+    } else {
+      this.setState({ stickyLeftOffset: false });
+    }
+  }
+
   renderDateFooter() {
     const { dateRange } = this.state;
     if (dateRange.startDate) {
@@ -502,6 +515,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         item={item}
         key={index}
         setHoverRowIndex={this.props.setHoverRowIndex}
+        filtersFormValues={this.props.filtersFormValues}
       />
     );
 
@@ -736,11 +750,18 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         <div className="scroll-holder jcf-scrollable">
                           <div
                             className="table-inner"
-                            ref={(rightDivHeader) => {
-                              this.rightDivHeader = rightDivHeader;
+                            ref={(rightDivParentHeader) => {
+                              this.rightDivParentHeader = rightDivParentHeader;
                             }}
                           >
-                            <Sticky className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))} topOffset={-270}>
+                            <Sticky
+                              className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))} topOffset={-270}
+                              ref={(rightDivHeader) => {
+                                this.rightDivHeader = rightDivHeader;
+                              }}
+                              onStickyStateChange={this.handleStickyStateChange}
+                              stickyStyle={{ left: this.state.stickyLeftOffset || 'auto' }}
+                            >
                               <table className="table table-study">
                                 <thead>
                                   <tr>
@@ -817,7 +838,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                           style={{ width: (this.state.fixedScrollWidth || 'auto') }}
                           className={classNames('dashboard-scroll-wrap', (this.state.isFixedBottomScroll ? 'dashboard-scroll-wrap-fixed' : ''))}
                         >
-                          <div className="dashboard-scroll-container" />
+                          <div className="dashboard-scroll-container" style={{ width: (this.state.fixedScrollContainerWidth || 802) }} />
                         </div>
                       </div>
                     </StickyContainer>
