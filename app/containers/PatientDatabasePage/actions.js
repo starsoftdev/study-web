@@ -5,7 +5,6 @@
  */
 import _ from 'lodash';
 import {
-  EDIT_PATIENT_SITE,
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENTS_ERROR,
@@ -15,6 +14,9 @@ import {
   FETCH_PATIENT,
   FETCH_PATIENT_SUCCESS,
   FETCH_PATIENT_ERROR,
+  FETCH_FILTERED_PROTOCOLS,
+  FETCH_FILTERED_PROTOCOLS_SUCCESS,
+  FETCH_FILTERED_PROTOCOLS_ERROR,
   CLEAR_SELECTED_PATIENT,
   SAVE_PATIENT,
   SAVE_PATIENT_SUCCESS,
@@ -94,6 +96,28 @@ export function patientsFetchingError(payload) {
   return {
     type: FETCH_PATIENTS_ERROR,
     payload,
+  };
+}
+
+export function fetchFilteredProtcols(clientId, siteId) {
+  return {
+    type: FETCH_FILTERED_PROTOCOLS,
+    clientId,
+    siteId,
+  };
+}
+
+export function filteredProtcolsFetched(payload) {
+  return {
+    type: FETCH_FILTERED_PROTOCOLS_SUCCESS,
+    payload
+  };
+}
+
+export function filteredProtcolsFetchingError(payload) {
+  return {
+    type: FETCH_FILTERED_PROTOCOLS,
+    payload
   };
 }
 

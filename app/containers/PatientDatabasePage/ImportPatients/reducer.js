@@ -11,7 +11,7 @@ const initialState = {
   },
 };
 
-export default function editPatientReducer(state = initialState, action) {
+export default function addPatientReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_FILTERED_PROTOCOLS:
       return {

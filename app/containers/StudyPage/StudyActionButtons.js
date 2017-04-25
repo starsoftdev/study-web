@@ -5,10 +5,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
+import Modal from 'react-bootstrap/lib/Modal';
+
+import CenteredModal from '../../components/CenteredModal/index';
 import ImportPatientsModal from './ImportPatients/index';
 import TextEmailBlastModal from './TextEmailBlastModal';
 import TextBlastModal from './TextBlast/index';
-import AddPatientModal from './ImportPatients/AddPatientModal';
+import AddPatientForm from './ImportPatients/AddPatientForm';
 
 import { exportPatients } from './actions';
 
@@ -118,7 +121,26 @@ class StudyActionButtons extends Component {
             &nbsp;Import
           </span>
           <ImportPatientsModal show={this.state.showImportPatientsModal} onHide={this.toggleImportPatientsModal} toggleAddPatient={this.toggleAddPatientModal} />
-          <AddPatientModal show={this.state.showAddPatientModal} onClose={this.closeAddPatientModal} onHide={this.toggleAddPatientModal} />
+          <Modal
+            id="add-patient-info-import"
+            dialogComponentClass={CenteredModal}
+            show={this.state.showAddPatientModal}
+            onHide={this.toggleAddPatientModal}
+            backdrop
+            keyboard
+          >
+            <Modal.Header>
+              <Modal.Title>
+                <strong>Add Patient</strong>
+              </Modal.Title>
+              <a className="close" onClick={this.toggleAddPatientModal}>
+                <i className="icomoon-icon_close" />
+              </a>
+            </Modal.Header>
+            <Modal.Body>
+              <AddPatientForm onClose={this.closeAddPatientModal} />
+            </Modal.Body>
+          </Modal>
         </div>
         <div className="col pull-right">
           <span className="btn btn-primary email" onClick={this.toggleTextEmailBlastModal}>

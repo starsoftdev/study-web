@@ -91,7 +91,12 @@ export const selectAddPatientStatus = () => createSelector(
 
 const selectFormDomain = () => state => state.form;
 
-export const selectPatientDatabaseFormValues = () => createSelector(
+export const selectProtocols = (formName) => createSelector(
   selectFormDomain(),
-  (substate) => get(substate, 'searchPatients.values', {})
+  (substate) => get(substate, `${formName}.protocols.details`, [])
+);
+
+export const selectIsFetchingProtocols = (formName) => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, `${formName}.protocols.fetching`, false)
 );
