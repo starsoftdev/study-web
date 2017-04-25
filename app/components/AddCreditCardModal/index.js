@@ -12,7 +12,7 @@ import CenteredModal from '../../components/CenteredModal/index';
 class AddCreditCardModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    showModal: React.PropTypes.bool.isRequired,
+    showModal: React.PropTypes.bool,
     closeModal: React.PropTypes.func.isRequired,
     addCreditCard: React.PropTypes.func.isRequired,
   };
