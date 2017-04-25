@@ -145,10 +145,12 @@ export default class CalendarPage extends React.Component {
   componentDidMount() {
     const { currentUser } = this.props;
 
-    this.props.fetchClientSites(currentUser.roleForClient.client_id);
-    this.props.fetchIndications();
-    this.props.fetchSchedules({ clientId: currentUser.roleForClient.client_id });
-    this.props.fetchProtocols(currentUser.roleForClient.id);
+    if (currentUser.roleForClient) {
+      this.props.fetchClientSites(currentUser.roleForClient.client_id);
+      this.props.fetchIndications();
+      this.props.fetchSchedules({ clientId: currentUser.roleForClient.client_id });
+      this.props.fetchProtocols(currentUser.roleForClient.id);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
