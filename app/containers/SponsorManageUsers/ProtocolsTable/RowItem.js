@@ -95,6 +95,8 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
       },
     };
 
+    const isAllowToEdit = (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin');
+
     return (
       <tr>
         <td className="col1">
@@ -125,11 +127,9 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
         </td>
         <td className="col7">
-          { (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin') &&
-            <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openEditProtocolModal}>
-              <span>Edit</span>
-            </a>
-          }
+          <a disabled={!isAllowToEdit} className="btn btn-primary btn-edit-site pull-right" onClick={() => (!isAllowToEdit ? null : this.openEditProtocolModal())}>
+            <span>Edit</span>
+          </a>
         </td>
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="edit-protocol" show={this.state.editProtocolModalOpen} onHide={this.closeEditProtocolModal}>
