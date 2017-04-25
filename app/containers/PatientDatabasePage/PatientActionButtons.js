@@ -15,7 +15,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import { selectImportPatientsStatus } from '../../containers/PatientDatabasePage/selectors';
 import { selectCurrentUserClientId } from '../App/selectors';
 import AlertModal from '../../components/AlertModal';
-import AddPatientModal from '../../containers/PatientDatabasePage/ImportPatients/AddPatientModal';
+import AddPatientForm from './ImportPatients/AddPatientForm';
 import TextEmailBlastModal from '../../containers/PatientDatabasePage/TextEmailBlastModal';
 import TextBlastModal from '../../containers/PatientDatabasePage/TextBlast/index';
 import { clearForm, importPatients } from '../../containers/PatientDatabasePage/actions';
@@ -163,6 +163,8 @@ class PatientActionButtons extends React.Component {
             <label className="table-cell" htmlFor="file">
               <i className={fileUploaded ? 'icomoon-icon_check' : 'icomoon-arrow_up_alt'} />
               <span className="text">Upload Patients</span>
+              <span>Coming Soon</span>
+              {/*
               {fileUploaded && <span className="jcf-file jcf-extension-csv parent-active">{fileUploaded}</span>}
               <span className="jcf-file">
                 <span className="jcf-fake-input">No file chosen</span>
@@ -178,6 +180,7 @@ class PatientActionButtons extends React.Component {
                   }}
                 />
               </span>
+              */}
             </label>
           </div>
         </Form>
@@ -235,7 +238,26 @@ class PatientActionButtons extends React.Component {
             {this.renderUpload()}
           </Modal.Body>
         </Modal>
-        <AddPatientModal show={this.state.showAddPatientModal} onClose={this.closeAddPatientModal} onHide={this.toggleAddPatientModal} />
+        <Modal
+          id="add-patient-info-import"
+          dialogComponentClass={CenteredModal}
+          show={this.state.showAddPatientModal}
+          onHide={this.toggleAddPatientModal}
+          backdrop
+          keyboard
+        >
+          <Modal.Header>
+            <Modal.Title>
+              <strong>Add Patient</strong>
+            </Modal.Title>
+            <a className="close" onClick={this.toggleAddPatientModal}>
+              <i className="icomoon-icon_close" />
+            </a>
+          </Modal.Header>
+          <Modal.Body>
+            <AddPatientForm onClose={this.closeAddPatientModal} />
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }

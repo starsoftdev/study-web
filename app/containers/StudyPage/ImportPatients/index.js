@@ -5,12 +5,11 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import { actions as toastrActions } from 'react-redux-toastr';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import CenteredModal from '../../../components/CenteredModal/index';
-import Input from '../../../components/Input/index';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import sanitizeProps from '../../../utils/sanitizeProps';
 import { submitPatientImport, clearForm } from '../actions';
@@ -72,6 +71,8 @@ class ImportPatientsModal extends React.Component {
             <label className="table-cell" htmlFor="upload-patient">
               <i className={fileUploaded ? 'icomoon-icon_check' : 'icomoon-arrow_up_alt'} />
               <span className="text">Upload Patients</span>
+              <span>Coming Soon</span>
+              {/*
               {fileUploaded && <span className="jcf-file jcf-extension-csv parent-active">{fileUploaded}</span>}
               <span className="jcf-file">
                 <span className="jcf-fake-input">No file chosen</span>
@@ -87,6 +88,7 @@ class ImportPatientsModal extends React.Component {
                   onChange={this.uploadFile}
                 />
               </span>
+              */}
             </label>
           </div>
         </Form>
