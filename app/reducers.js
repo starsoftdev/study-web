@@ -11,6 +11,7 @@ import { default as textBlastModalReducer } from './containers/StudyPage/TextBla
 import { default as ScheduledPatientModal } from './containers/StudyPage/ScheduledPatientModal/reducer';
 import { default as patientsListReducer } from './containers/PatientDatabasePage/TextBlast/reducer';
 import { default as editPatientReducer } from './containers/PatientDatabasePage/EditPatientForm/reducer';
+import { default as addPatientReducer } from './containers/PatientDatabasePage/ImportPatients/reducer';
 import { default as rewardForm } from './containers/RewardsPage/RewardModal/reducer';
 import { default as resetPasswordPageReducer } from './containers/ResetPasswordPage/reducer';
 import { default as editStudyReducer } from './containers/HomePage/AdminDashboard/EditStudyForms/reducer';
@@ -27,6 +28,7 @@ export default function createReducer(asyncReducers) {
       'StudyPage.TextBlastModal': textBlastModalReducer,
       'PatientDatabase.TextBlastModal': patientsListReducer,
       'PatientDatabase.EditPatientModal': editPatientReducer,
+      'PatientDatabase.AddPatientModal': addPatientReducer,
       dashboardEditStudyForm: editStudyReducer,
       ScheduledPatientModal,
       rewardForm,

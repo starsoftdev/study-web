@@ -12,6 +12,7 @@ import {
   FETCH_PATIENTS,
   FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT,
+  FETCH_FILTERED_PROTOCOLS,
   SAVE_PATIENT,
   SUBMIT_TEXT_BLAST,
   IMPORT_PATIENTS,
@@ -19,6 +20,8 @@ import {
 } from './constants';
 
 import {
+  filteredProtcolsFetched,
+  filteredProtcolsFetchingError,
   patientsFetched,
   patientsFetchingError,
   patientCategoriesFetched,
@@ -37,10 +40,11 @@ export function* patientDatabasePageSaga() {
   const watcherA = yield fork(fetchPatientsWatcher);
   const watcherB = yield fork(fetchPatientCategoriesWatcher);
   const watcherC = yield fork(fetchPatientWatcher);
-  const watcherD = yield fork(savePatientWatcher);
-  const watcherE = yield fork(submitTextBlast);
-  const watcherF = yield fork(importPatients);
-  const watcherG = yield fork(submitAddPatient);
+  const watcherD = yield fork(fetchFilteredProtocolsWatcher);
+  const watcherE = yield fork(savePatientWatcher);
+  const watcherF = yield fork(submitTextBlast);
+  const watcherG = yield fork(importPatients);
+  const watcherH = yield fork(submitAddPatient);
 
   yield take(LOCATION_CHANGE);
 
@@ -53,6 +57,7 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherE);
   yield cancel(watcherF);
   yield cancel(watcherG);
+  yield cancel(watcherH);
 }
 
 // Bootstrap sagas
@@ -251,6 +256,24 @@ export function* fetchPatientWatcher() {
       yield put(patientFetched(response));
     } catch (err) {
       yield put(patientFetchingError(err));
+      console.error(err);
+    }
+  }
+}
+
+export function* fetchFilteredProtocolsWatcher() {
+  while (true) {
+    const { clientRoleId, siteId } = yield take(FETCH_FILTERED_PROTOCOLS);
+
+    try {
+      const params = {
+        clientRoleId,
+      };
+      const requestURL = `${API_URL}/sites/${siteId}/protocols`;
+      const response = yield call(request, requestURL, params);
+      yield put(filteredProtcolsFetched(response));
+    } catch (err) {
+      yield put(filteredProtcolsFetchingError(err));
       console.error(err);
     }
   }

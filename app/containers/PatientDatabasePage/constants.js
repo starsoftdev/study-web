@@ -43,5 +43,7 @@ export const EXPORT_PATIENTS    = 'PatientDatabasePage/EXPORT_PATIENTS';
 export const DOWNLOAD_COMPLETE    = 'PatientDatabasePage/DOWNLOAD_COMPLETE';
 
 export const CLEAR_PATIENTS_LIST = 'PatientDatabasePage/CLEAR_PATIENTS_LIST';
-export const EDIT_PATIENT_SITE = 'PatientDatabasePage/EDIT_PATIENT_SITE';
+export const FETCH_FILTERED_PROTOCOLS = 'PatientDatabasePage/FETCH_FILTERED_PROTOCOLS';
+export const FETCH_FILTERED_PROTOCOLS_SUCCESS = 'PatientDatabasePage/FETCH_FILTERED_PROTOCOLS_SUCCESS';
+export const FETCH_FILTERED_PROTOCOLS_ERROR = 'PatientDatabasePage/FETCH_FILTERED_PROTOCOLS_ERROR';
 export const CLEAR_IMPORT_FORM = 'PatientDatabasePage/CLEAR_IMPORT_FORM';
