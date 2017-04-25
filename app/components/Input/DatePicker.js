@@ -83,6 +83,12 @@ export default class DatePicker extends Component {
     const monthDiff = ((todayYear - calendarYear) * 12) + (todayMonth - calendarMonth);
 
     this.calendar.changeMonth(monthDiff, { preventDefault: _.noop });
+
+    this.calendar.changeDay(today, { preventDefault: _.noop });
+    this.setState({
+      today,
+    });
+    this.props.input.onBlur(today);
   }
 
   toggleModal(visible) {
@@ -127,6 +133,7 @@ export default class DatePicker extends Component {
         <Modal.Body>
           <Calendar
             date={date}
+            shownDate={date}
             onChange={this.handleSelect}
             className="calendar custom-calendar"
             ref={(calendar) => { this.calendar = calendar; }}
