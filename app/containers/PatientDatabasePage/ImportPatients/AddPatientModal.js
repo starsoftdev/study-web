@@ -3,8 +3,9 @@
  */
 
 import React from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
-import { blur, Field, reduxForm, reset, touch } from 'redux-form';
+import { blur, change, Field, reduxForm, reset, touch } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -38,6 +39,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
+  change: (field, value) => dispatch(change(formName, field, value)),
   fetchFilteredProtcols: (clientId, siteId) => dispatch(fetchFilteredProtcols(clientId, siteId)),
   resetForm: () => dispatch(reset(formName)),
   submitAddPatient: (patient, onClose) => dispatch(submitAddPatient(patient, onClose)),
@@ -51,6 +53,7 @@ export default class AddPatient extends React.Component {
     addPatientStatus: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     blur: React.PropTypes.func.isRequired,
+    change: React.PropTypes.func.isRequired,
     fetchFilteredProtcols: React.PropTypes.func.isRequired,
     formError: React.PropTypes.bool.isRequired,
     indications: React.PropTypes.array.isRequired,
@@ -74,6 +77,8 @@ export default class AddPatient extends React.Component {
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
     this.addPatient = this.addPatient.bind(this);
+    this.selectIndication = this.selectIndication.bind(this);
+    this.selectProtocol = this.selectProtocol.bind(this);
   }
 
   onClose() {
@@ -112,17 +117,38 @@ export default class AddPatient extends React.Component {
     patient.client_id = currentUser.roleForClient.client_id;
     /* normalizing the phone number */
     patient.phone = normalizePhoneForServer(newPatient.phone);
+    patient.indication_id = newPatient.indication;
+    delete patient.indication;
+    patient.site_id = newPatient.site;
+    delete patient.site;
     // swap out the "protocol" for the study_id for adding the patient (in reality, we're storing studyId in the protocol field,
     // since it's easier to transform and display this way while still displaying studies by protocol
     if (newPatient.protocol) {
       patient.study_id = newPatient.protocol;
     }
     delete patient.protocol;
-    if (newPatient.source) {
-      patient.source_id = newPatient.source;
-    }
+    patient.source_id = newPatient.source;
     delete patient.source;
     submitAddPatient(patient, this.onClose);
+  }
+
+  selectIndication(indicationId) {
+    const { change, protocols } = this.props;
+    const protocol = _.find(protocols, { indicationId });
+    if (protocol) {
+      change('protocol', protocol.studyId);
+    } else {
+      // clear the protocol value if the indicationId doesn't match
+      change('protocol', null);
+    }
+  }
+
+  selectProtocol(studyId) {
+    if (studyId) {
+      const { change, protocols } = this.props;
+      const protocol = _.find(protocols, { studyId });
+      change('indication', protocol.indicationId);
+    }
   }
 
   render() {
@@ -233,6 +259,7 @@ export default class AddPatient extends React.Component {
                 placeholder="Select Indication"
                 options={indicationOptions}
                 clearable={false}
+                onChange={this.selectIndication}
               />
             </div>
             <div className="field-row form-group">
@@ -246,6 +273,7 @@ export default class AddPatient extends React.Component {
                 placeholder="Select Site Location"
                 options={siteOptions}
                 onChange={this.changeSiteLocation}
+                clearable={false}
               />
             </div>
             <div className="field-row form-group">
@@ -259,6 +287,7 @@ export default class AddPatient extends React.Component {
                 placeholder="Select Protocol"
                 options={protocolOptions}
                 disabled={isFetchingProtocols}
+                onChange={this.selectProtocol}
               />
             </div>
             <div className="field-row">
@@ -271,6 +300,7 @@ export default class AddPatient extends React.Component {
                 className="field"
                 placeholder="Select Source"
                 options={sourceOptions}
+                clearable={false}
               />
             </div>
             <div className="text-right">
