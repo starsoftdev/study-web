@@ -52,14 +52,14 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
       },
     };
 
+    const isAllowToEdit = (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin');
+
     return (
       <div className="assigned-user">
         <span>{this.props.item.user.firstName} {this.props.item.user.lastName}</span>
-        { (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin') &&
-          <span className="edit-assigned-user">
-            <a className="btn btn-primary right edit lightbox-opener" onClick={this.openAddUserModal}><i className="icomoon-icon_pencil-edit" /></a>
-          </span>
-        }
+        <span className="edit-assigned-user">
+          <a disabled={!isAllowToEdit} className="btn btn-primary right edit lightbox-opener" onClick={() => (!isAllowToEdit ? null : this.openAddUserModal())}><i className="icomoon-icon_pencil-edit" /></a>
+        </span>
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
           <Modal.Header>
