@@ -55,6 +55,12 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
             return moment(o.created).tz(currentUser.timezone).format('HH:mm');
           } else if (this.props.paginationOptions.activeSort === 'date') {
             return moment(o.created).tz(currentUser.timezone).format('MM/DD/YYYY');
+          } else if (this.props.paginationOptions.activeSort === 'description') {
+            let rewardData = _.get(o, 'reward_data', '');
+            if (rewardData) {
+              rewardData = JSON.parse(rewardData);
+            }
+            return _.get(rewardData, 'siteLocationName');
           }
           return o[this.props.paginationOptions.activeSort];
         }], [dir]);
@@ -85,7 +91,7 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
           </colgroup>
           <thead>
             <tr>
-              <th className="default-cursor">DESCRIPTION <i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="description" className={(this.props.paginationOptions.activeSort === 'description') ? this.props.paginationOptions.activeDirection : ''}>DESCRIPTION <i className="caret-arrow" /></th>
               <th onClick={this.sortBy} data-sort="date" className={(this.props.paginationOptions.activeSort === 'date') ? this.props.paginationOptions.activeDirection : ''}>DATE <i className="caret-arrow" /></th>
               <th onClick={this.sortBy} data-sort="time" className={(this.props.paginationOptions.activeSort === 'time') ? this.props.paginationOptions.activeDirection : ''}>TIME <i className="caret-arrow" /></th>
               <th onClick={this.sortBy} data-sort="points" className={(this.props.paginationOptions.activeSort === 'points') ? this.props.paginationOptions.activeDirection : ''}>AMOUNT <i className="caret-arrow" /></th>
