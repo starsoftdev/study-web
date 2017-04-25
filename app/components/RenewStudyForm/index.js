@@ -8,21 +8,21 @@ import classnames from 'classnames';
 import moment from 'moment-timezone';
 import _, { find } from 'lodash';
 
-import { CAMPAIGN_LENGTH_LIST, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE } from '../../../common/constants';
-import CenteredModal from '../../../components/CenteredModal/index';
-import Input from '../../../components/Input';
-import ReactSelect from '../../../components/Input/ReactSelect';
-import DatePickerDisplay from '../../../components/Input/DatePickerDisplay';
-import Toggle from '../../../components/Input/Toggle';
-import ShoppingCartForm from '../../../components/ShoppingCartForm';
-import AddCreditCardModal from '../../../components/AddCreditCardModal';
-import LoadingSpinner from '../../../components/LoadingSpinner';
+import { CAMPAIGN_LENGTH_LIST, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE } from '../../common/constants';
+import CenteredModal from '../../components/CenteredModal/index';
+import Input from '../../components/Input';
+import ReactSelect from '../../components/Input/ReactSelect';
+import DatePickerDisplay from '../../components/Input/DatePickerDisplay';
+import Toggle from '../../components/Input/Toggle';
+import ShoppingCartForm from '../../components/ShoppingCartForm';
+import AddCreditCardModal from '../../components/AddCreditCardModal';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import {
   selectRenewStudyFormCampaignLengthValue,
 } from './selectors';
-import { selectStudyLevels, selectCurrentUserClientId, selectSavedCard } from '../../App/selectors';
-import { saveCard } from '../../App/actions';
-import { selectSelectedIndicationLevelPrice } from '../selectors';
+import { selectStudyLevels, selectCurrentUserClientId, selectSavedCard } from '../../containers/App/selectors';
+import { saveCard } from '../../containers/App/actions';
+import { selectSelectedIndicationLevelPrice } from '../../containers/HomePage/selectors';
 import formValidator from './validator';
 
 
@@ -90,11 +90,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     }
 
     if (newProps.selectedStudy) {
-      const { patientQualificationSuite } = newProps.selectedStudy;
       const { change } = this.props;
-      if (patientQualificationSuite === 'On') {
-        change('addPatientQualificationSuite', true);
-      }
+      const { patientQualificationSuite } = this.state;
+      change('addPatientQualificationSuite', patientQualificationSuite);
     }
 
     if (!this.props.selectedStudy && newProps.selectedStudy) {
@@ -248,7 +246,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   }
 
   generateRenewStudyShoppingCartAddOns() {
-    const { studyLevels, selectedIndicationLevelPrice, selectedStudy } = this.props;
+    const { studyLevels, selectedIndicationLevelPrice } = this.props;
     const { exposureLevel, campaignLength, condenseTwoWeeks, patientQualificationSuite, callTracking } = this.state;
     const addOns = [];
 
@@ -267,14 +265,12 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       }
     }
     if (patientQualificationSuite) {
-      if (selectedStudy && selectedStudy.patientQualificationSuite !== 'On') {
-        addOns.push({
-          title: 'Patient Qualification Suite',
-          price: QUALIFICATION_SUITE_PRICE,
-          quantity: 1,
-          total: QUALIFICATION_SUITE_PRICE,
-        });
-      }
+      addOns.push({
+        title: 'Patient Qualification Suite',
+        price: QUALIFICATION_SUITE_PRICE,
+        quantity: 1,
+        total: QUALIFICATION_SUITE_PRICE,
+      });
     }
     if (callTracking) {
       addOns.push({
@@ -289,13 +285,8 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { studyLevels, campaignLength, selectedIndicationLevelPrice, selectedStudy } = this.props;
-    let patientQualificationSuite = false;
+    const { studyLevels, campaignLength, selectedIndicationLevelPrice } = this.props;
     const qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
-
-    if (selectedStudy) {
-      patientQualificationSuite = selectedStudy.patientQualificationSuite;
-    }
 
     const currentDate = moment();
 
@@ -381,7 +372,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                           <div className="field">
                             <Field
                               name="addPatientQualificationSuite"
-                              disabled={patientQualificationSuite === 'On'}
                               component={Toggle}
                               onChange={this.handleQualificationChoose}
                             />
