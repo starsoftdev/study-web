@@ -133,6 +133,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.props.fetchCro();
     this.props.fetchUsersByRole();
     this.props.fetchMessagingNumbersDashboard();
+
+    this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
   }
 
   componentWillReceiveProps(newProps) {
