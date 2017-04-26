@@ -110,14 +110,14 @@ export function fetchFilteredProtcols(clientId, siteId) {
 export function filteredProtcolsFetched(payload) {
   return {
     type: FETCH_FILTERED_PROTOCOLS_SUCCESS,
-    payload
+    payload,
   };
 }
 
 export function filteredProtcolsFetchingError(payload) {
   return {
-    type: FETCH_FILTERED_PROTOCOLS,
-    payload
+    type: FETCH_FILTERED_PROTOCOLS_ERROR,
+    payload,
   };
 }
 
@@ -290,13 +290,6 @@ export function downloadComplete() {
 export function clearPatientsList() {
   return {
     type: CLEAR_PATIENTS_LIST,
-  };
-}
-
-export function editPatientSite(site) {
-  return {
-    type: EDIT_PATIENT_SITE,
-    site,
   };
 }
 
