@@ -281,28 +281,20 @@ export function* fetchFilteredProtocolsWatcher() {
 
 export function* savePatientWatcher() {
   while (true) {
-    const { id, data } = yield take(SAVE_PATIENT);
+    const { clientRoleId, id, data } = yield take(SAVE_PATIENT);
 
     try {
-      let requestURL = null;
-      let options = null;
       // check if we need to update the patient with study info
-      if (data.patient_category_id && data.protocol_id && data.source_id) {
-        requestURL = `${API_URL}/patients/update_with_relations`;
-        options = {
-          method: 'POST',
-          body: JSON.stringify({
-            id,
-            ...data,
-          }),
-        };
-      } else {
-        requestURL = `${API_URL}/patients/${id}`;
-        options = {
-          method: 'PATCH',
-          body: JSON.stringify(data),
-        };
-      }
+      const requestURL = `${API_URL}/patients/${id}/updatePatientForDB`;
+      const options = {
+        method: 'POST',
+        query: {
+          clientRoleId,
+        },
+        body: JSON.stringify({
+          ...data,
+        }),
+      };
       const response = yield call(request, requestURL, options);
 
       yield put(toastrActions.success('Save Patient', 'Patient saved successfully!'));

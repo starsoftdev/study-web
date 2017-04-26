@@ -15,43 +15,47 @@ import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Checkbox from '../../../components/Input/Checkbox';
-import { selectIndications, selectSiteLocations, selectSources, selectProtocols } from '../../App/selectors';
+import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../App/selectors';
 import IndicationOverlay from '../../StudyPage/PatientDetail/IndicationOverlay';
-import { editPatientSite } from '../actions';
-import { selectPatientCategories, selectSavedPatient } from '../selectors';
+import { fetchFilteredProtcols } from '../actions';
+import { selectIsFetchingProtocols, selectPatientCategories, selectProtocols, selectSavedPatient } from '../selectors';
 import formValidator from './validator';
 
 const formName = 'PatientDatabase.EditPatientModal';
 
 const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
   formValues: selectValues(formName),
   indications: selectIndications(),
+  isFetchingProtocols: selectIsFetchingProtocols(formName),
   patientCategories: selectPatientCategories(),
   savedPatient: selectSavedPatient(),
   hasError: selectSyncErrorBool(formName),
   sites: selectSiteLocations(),
   sources: selectSources(),
-  protocols: selectProtocols(),
+  protocols: selectProtocols(formName),
 });
 
 const mapDispatchToProps = dispatch => ({
-  change: (name, value) => dispatch(change(formName, name, value)),
   blur: (field, value) => dispatch(blur(formName, field, value)),
-  editPatientSite: (site) => dispatch(editPatientSite(site)),
+  change: (name, value) => dispatch(change(formName, name, value)),
+  fetchFilteredProtcols: (clientId, siteId) => dispatch(fetchFilteredProtcols(clientId, siteId)),
 });
 
 @reduxForm({ form: formName, validate: formValidator })
 @connect(mapStateToProps, mapDispatchToProps)
 class EditPatientForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    change: PropTypes.func.isRequired,
     blur: PropTypes.func.isRequired,
-    editPatientSite: PropTypes.func.isRequired,
+    currentUser: React.PropTypes.object,
+    change: PropTypes.func.isRequired,
+    formValues: React.PropTypes.object,
+    fetchFilteredProtcols: React.PropTypes.func.isRequired,
     indications: PropTypes.array,
     initialValues: PropTypes.object,
+    isFetchingProtocols: React.PropTypes.bool.isRequired,
     loading: React.PropTypes.bool,
     submitting: React.PropTypes.bool,
-    formValues: React.PropTypes.object,
     patientCategories: PropTypes.object,
     protocols: PropTypes.array,
     savedPatient: PropTypes.object,
@@ -67,12 +71,22 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       showIndicationPopover: false,
     };
     this.onSubmit = this.onSubmit.bind(this);
-    this.renderIndications = this.renderIndications.bind(this);
-    this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
-    this.deleteIndication = this.deleteIndication.bind(this);
-    this.selectIndication = this.selectIndication.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
+    this.deleteIndication = this.deleteIndication.bind(this);
+    this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
+    this.selectIndication = this.selectIndication.bind(this);
+    this.changeSiteLocation = this.changeSiteLocation.bind(this);
+    this.selectProtocol = this.selectProtocol.bind(this);
+    this.renderIndications = this.renderIndications.bind(this);
   }
+
+  componentDidMount() {
+    const { initialValues, fetchFilteredProtcols, currentUser } = this.props;
+    if (initialValues.site) {
+      fetchFilteredProtcols(currentUser.roleForClient.id, initialValues.site);
+    }
+  }
+
 
   onSubmit(event) {
     event.preventDefault();
@@ -93,6 +107,18 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     blur('phone', formattedPhoneNumber);
   }
 
+  selectIndication(patientId, indication) {
+    const { change, formValues, protocols } = this.props;
+    change('indications', formValues.indications.concat([indication]));
+    // const protocol = _.find(protocols, { indicationId });
+    // if (protocol) {
+    //   change('protocol', protocol.studyId);
+    // } else {
+    //   // clear the protocol value if the indicationId doesn't match
+    //   change('protocol', null);
+    // }
+  }
+
   deleteIndication(indication) {
     const { change, formValues: { indications } } = this.props;
     const newArr = _.remove(indications, (n) => (n.id !== indication.id));
@@ -105,9 +131,27 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     });
   }
 
-  selectIndication(patientId, indication) {
-    const { change, formValues } = this.props;
-    change('indications', formValues.indications.concat([indication]));
+  changeSiteLocation(siteId) {
+    const { currentUser, fetchFilteredProtcols } = this.props;
+    fetchFilteredProtcols(currentUser.roleForClient.id, siteId);
+  }
+
+  selectProtocol(studyId) {
+    if (studyId) {
+      const { change, formValues, indications, protocols } = this.props;
+      const protocol = _.find(protocols, { studyId });
+      if (!_.includes(formValues.indications, protocol.indicationId)) {
+        const indication = _.find(indications, { id: protocol.indicationId });
+        const formattedIndication = {
+          id: indication.id,
+          isOriginal: formValues.indications.length === 0,
+          label: indication.name,
+          name: indication.name,
+          value: indication.id,
+        };
+        change('indications', formValues.indications.concat([formattedIndication]));
+      }
+    }
   }
 
   renderIndications() {
@@ -137,7 +181,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { formValues, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, protocols, sites, sources, patientCategories, loading, submitting, savedPatient } = this.props;
+    const { formValues, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, isFetchingProtocols, protocols, sites, sources, patientCategories, loading, submitting, savedPatient } = this.props;
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -147,9 +191,13 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       label: siteIterator.name,
       value: siteIterator.id,
     }));
-    const sourceOptions = sources.map(sourceIterator => ({
-      label: sourceIterator.type,
-      value: sourceIterator.id,
+    const protocolOptions = protocols.map(protocolIterator => ({
+      label: protocolIterator.number,
+      value: protocolIterator.studyId,
+    }));
+    const sourceOptions = sources.map(source => ({
+      label: source.type,
+      value: source.id,
     }));
     const statusOptions = patientCategories.details.map(patientCategoryIterator => ({
       label: patientCategoryIterator.name,
@@ -168,10 +216,6 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       id: initialValues ? initialValues.id : null,
       indications: formValues.indications,
     };
-    const protocolOptions = protocols.map(protocolIterator => ({
-      label: protocolIterator.number,
-      value: protocolIterator.studyId,
-    }));
     return (
       <Form className="form-lightbox form-edit-patient-information" onSubmit={this.onSubmit}>
         <div className="field-row form-group">
@@ -248,14 +292,14 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
           <div
             className="field add-indications"
             ref={(parent) => (
-                    this.parent = parent
-                  )}
+              this.parent = parent
+            )}
           >
             <Button
               bsStyle="primary"
               ref={(target) => (
-                      this.target = target
-                    )}
+                this.target = target
+              )}
               onClick={this.toggleIndicationPopover}
             >
               + Add Indication
@@ -338,6 +382,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="field"
             placeholder="Select Site Location"
             options={siteOptions}
+            onChange={this.changeSiteLocation}
             disabled={initialValues && initialValues.source && initialValues.source === 1}
           />
         </div>
@@ -351,7 +396,8 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="field"
             placeholder="Select Protocol"
             options={protocolOptions}
-            disabled={initialValues && initialValues.source && initialValues.source === 1}
+            onChange={this.selectProtocol}
+            disabled={isFetchingProtocols || (initialValues && initialValues.source && initialValues.source === 1)}
           />
         </div>
         <div className="field-row form-group">
@@ -364,7 +410,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="field"
             placeholder="Select Source"
             options={sourceOptions}
-            disabled={(initialValues && initialValues.source && initialValues.source === 1) || !formValues.protocol || formValues.protocol === ''}
+            disabled={initialValues && initialValues.source && initialValues.source === 1}
           />
         </div>
         <div className="field-row">

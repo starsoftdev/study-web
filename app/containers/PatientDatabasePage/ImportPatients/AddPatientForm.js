@@ -17,7 +17,7 @@ import { selectIndications, selectSiteLocations, selectSources, selectCurrentUse
 import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import { fetchFilteredProtcols, submitAddPatient } from '../actions';
-import { selectAddPatientStatus, selectProtocols, selectIsFetchingProtocols } from '../selectors';
+import { selectIsFetchingProtocols, selectAddPatientStatus, selectProtocols } from '../selectors';
 import formValidator, { fields } from './validator';
 
 const formName = 'PatientDatabase.AddPatientModal';

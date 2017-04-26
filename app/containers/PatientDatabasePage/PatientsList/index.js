@@ -99,10 +99,9 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     payload.source_id = patientData.source;
     payload.patient_category_id = patientData.status;
     payload.phone = normalizePhoneForServer(patientData.phone);
-    payload.protocol_id = patientData.protocol;
-    payload.client_id = currentUser.roleForClient.client_id;
+    payload.studyId = patientData.protocol;
 
-    this.props.savePatient(selectedPatient.details.id, payload);
+    this.props.savePatient(currentUser.roleForClient.id, selectedPatient.details.id, payload);
   }
 
   chatModalShouldBeShown() {
@@ -214,6 +213,11 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
         selectedPatientDetailsForForm.dobMonth = dob.month() + 1;
         selectedPatientDetailsForForm.dobDay = dob.date();
         selectedPatientDetailsForForm.dobYear = dob.year();
+        delete selectedPatientDetailsForForm.dob;
+      }
+      if (selectedPatientDetailsForForm.site_id) {
+        selectedPatientDetailsForForm.site = selectedPatientDetailsForForm.site_id;
+        delete selectedPatientDetailsForForm.site_id;
       }
     }
     return (
@@ -316,7 +320,7 @@ function mapDispatchToProps(dispatch) {
     removePatientsFromTextBlast: (patients) => dispatch(removePatientsFromTextBlast(patients)),
     removePatientFromTextBlast: (patient) => dispatch(removePatientFromTextBlast(patient)),
     clearSelectedPatient: () => dispatch(clearSelectedPatient()),
-    savePatient: (id, data) => dispatch(savePatient(id, data)),
+    savePatient: (clientRoleId, id, data) => dispatch(savePatient(clientRoleId, id, data)),
     initChat: (payload) => dispatch(initChat(payload)),
     disableChat: (payload) => dispatch(disableChat(payload)),
     sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
