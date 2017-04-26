@@ -169,9 +169,10 @@ export function clearSelectedPatient() {
   };
 }
 
-export function savePatient(id, data) {
+export function savePatient(clientRoleId, id, data) {
   return {
     type: SAVE_PATIENT,
+    clientRoleId,
     id,
     data,
   };
