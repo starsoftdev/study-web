@@ -194,6 +194,7 @@ export class EditInformationModal extends React.Component {
       change('campaign_dateto', foundCampaign.dateto);
       change('custom_patient_goal', foundCampaign.custom_patient_goal);
       change('level_id', foundCampaign.level_id);
+      change('patient_qualification_suite', foundCampaign.patient_qualification_suite);
     }
   }
 
