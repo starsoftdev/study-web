@@ -445,9 +445,8 @@ function* submitAddPatient() {
       yield put(toastrActions.success('Add Patient', 'Patient added successfully!'));
       yield put(submitAddPatientSuccess(response));
     } catch (e) {
-      console.log(e);
       let errorMessages;
-      if (e.details.messages) {
+      if (e.details && e.details.messages) {
         if (e.details.messages.email) {
           errorMessages = e.details.messages.email[0];
         } else if (e.details.messages.phone) {
