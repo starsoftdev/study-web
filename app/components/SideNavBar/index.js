@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router';
+import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
 
 import {
   selectCurrentUserClientId,
@@ -30,11 +31,11 @@ class SideNavBar extends React.Component {
       purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
       helpName = (currentUser.roleForClient.client && currentUser.roleForClient.client.projectManager) ? `${currentUser.roleForClient.client.projectManager.firstName} ${currentUser.roleForClient.client.projectManager.lastName}` : '';
       helpEmail = (currentUser.roleForClient.client && currentUser.roleForClient.client.projectManager) ? currentUser.roleForClient.client.projectManager.email : '';
-      helpPhone = (currentUser.roleForClient.client && currentUser.roleForClient.client.projectManager) ? currentUser.roleForClient.client.projectManager.phone : '';
+      helpPhone = (currentUser.roleForClient.client && currentUser.roleForClient.client.projectManager) ? normalizePhoneDisplay(currentUser.roleForClient.client.projectManager.phone) : '';
     } else {
       helpName = (currentUser.roleForSponsor.sponsor && currentUser.roleForSponsor.sponsor.projectManager) ? `${currentUser.roleForSponsor.sponsor.projectManager.firstName} ${currentUser.roleForSponsor.sponsor.projectManager.lastName}` : '';
       helpEmail = (currentUser.roleForSponsor.sponsor && currentUser.roleForSponsor.sponsor.projectManager) ? currentUser.roleForSponsor.sponsor.projectManager.email : '';
-      helpPhone = (currentUser.roleForSponsor.sponsor && currentUser.roleForSponsor.sponsor.projectManager) ? currentUser.roleForSponsor.sponsor.projectManager.phone : '';
+      helpPhone = (currentUser.roleForSponsor.sponsor && currentUser.roleForSponsor.sponsor.projectManager) ? normalizePhoneDisplay(currentUser.roleForSponsor.sponsor.projectManager.phone) : '';
     }
     let menuItemsGroupA;
     let menuItemsGroupB;
