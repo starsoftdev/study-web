@@ -387,7 +387,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/app/studies/:id',
+      path: '/app/study/:id',
       name: 'studyPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([

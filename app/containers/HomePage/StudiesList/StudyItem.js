@@ -48,7 +48,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 
   onViewClick() {
     const { push, studyId } = this.props;
-    push(`/app/studies/${studyId}`);
+    push(`/app/study/${studyId}`);
   }
 
   onRenewClick() {
