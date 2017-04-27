@@ -57,6 +57,7 @@ export class AddCouponForm extends React.Component { // eslint-disable-line reac
                   component={RadioButton}
                   className=""
                   value="fixed"
+                  checked={couponType}
                 />
                 <span className="text">Fixed</span>
               </div>
@@ -67,6 +68,7 @@ export class AddCouponForm extends React.Component { // eslint-disable-line reac
                   component={RadioButton}
                   className=""
                   value="percentage"
+                  checked={couponType}
                 />
                 <span className="text">Percentage</span>
               </div>
