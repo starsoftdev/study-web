@@ -559,7 +559,6 @@ export function* fetchClientRolesWatcher() {
     try {
       const filterObj = {
         include: 'user',
-        where: {},
       };
 
       if (searchParams && searchParams.name) {
@@ -571,12 +570,14 @@ export function* fetchClientRolesWatcher() {
         };
       }
 
-      const queryParams = {
-        filter: JSON.stringify(filterObj),
+      const params = {
+        method: 'GET',
+        query: {
+          filter: JSON.stringify(filterObj),
+        },
       };
-      const queryString = composeQueryString(queryParams);
-      const requestURL = `${API_URL}/clients/${clientId}/roles?${queryString}`;
-      const response = yield call(request, requestURL);
+      const requestURL = `${API_URL}/clients/${clientId}/roles`;
+      const response = yield call(request, requestURL, params);
 
       yield put(clientRolesFetched(response));
     } catch (err) {
