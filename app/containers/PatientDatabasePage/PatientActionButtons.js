@@ -162,8 +162,9 @@ class PatientActionButtons extends React.Component {
           <div className="table">
             <label className="table-cell" htmlFor="file">
               <i className={fileUploaded ? 'icomoon-icon_check' : 'icomoon-arrow_up_alt'} />
-              <span className="text">Upload Patients</span>
-              <span>Coming Soon</span>
+              <a className="bgn-patient text" data-text="Upload Patients" data-hovertext="Coming Soon">
+                <i className="icomoon-bg" />
+              </a>
               {/*
               {fileUploaded && <span className="jcf-file jcf-extension-csv parent-active">{fileUploaded}</span>}
               <span className="jcf-file">
