@@ -67,6 +67,14 @@ const addDevMiddlewares = (app, webpackConfig) => {
     });
   });
 
+  // TODO remove after loader.io is verified
+  app.get('/loaderio-9719d1a0d138bda492e5d8e90a243c6e', (req, res) => {
+    res.send('loaderio-9719d1a0d138bda492e5d8e90a243c6e');
+  });
+  app.get('/loaderio-446030d79af6fc10143acfa9b2f0613f', (req, res) => {
+    res.send('loaderio-446030d79af6fc10143acfa9b2f0613f');
+  });
+
   app.get('*', (req, res) => {
     logView(req);
     fs.readFile(path.join(compiler.outputPath, 'corporate.html'), (err, file) => {
@@ -91,6 +99,15 @@ const addProdMiddlewares = (app, options) => {
   app.use(publicPath, express.static(outputPath));
 
   app.get('/app*', (req, res) => res.sendFile(path.resolve(outputPath, 'app.html')));
+
+  // TODO remove after loader.io is verified
+  app.get('/loaderio-9719d1a0d138bda492e5d8e90a243c6e', (req, res) => {
+    res.send('loaderio-9719d1a0d138bda492e5d8e90a243c6e');
+  });
+  app.get('/loaderio-446030d79af6fc10143acfa9b2f0613f', (req, res) => {
+    res.send('loaderio-446030d79af6fc10143acfa9b2f0613f');
+  });
+
   app.get('*', (req, res) => {
     logView(req);
     res.sendFile(path.resolve(outputPath, 'corporate.html'));
