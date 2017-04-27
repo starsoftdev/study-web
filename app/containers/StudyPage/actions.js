@@ -49,9 +49,9 @@ import {
   SUBMIT_TEXT_BLAST,
   SUBMIT_PATIENT_IMPORT,
   SUBMIT_ADD_PATIENT,
-  SUBMIT_ADD_PATIENT_INDICATION,
+  ADD_PATIENT_INDICATION,
   SUBMIT_ADD_PATIENT_FAILURE,
-  SUBMIT_REMOVE_PATIENT_INDICATION,
+  REMOVE_PATIENT_INDICATION,
   SUBMIT_PATIENT_UPDATE,
   SUBMIT_PATIENT_NOTE,
   SUBMIT_DELETE_NOTE,
@@ -314,17 +314,17 @@ export function setOpenPatientModal(show) {
   };
 }
 
-export function submitAddPatientIndication(patientId, indication) {
+export function addPatientIndication(patientId, indication) {
   return {
-    type: SUBMIT_ADD_PATIENT_INDICATION,
+    type: ADD_PATIENT_INDICATION,
     patientId,
     indication,
   };
 }
 
-export function submitRemovePatientIndication(patientId, indicationId) {
+export function removePatientIndication(patientId, indicationId) {
   return {
-    type: SUBMIT_REMOVE_PATIENT_INDICATION,
+    type: REMOVE_PATIENT_INDICATION,
     patientId,
     indicationId,
   };
