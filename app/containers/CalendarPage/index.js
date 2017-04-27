@@ -260,10 +260,19 @@ export default class CalendarPage extends React.Component {
   }
 
   updateFilter(field, newValue) {
-    const newFilter = {
-      ...this.state.filter,
-      [field]: newValue,
-    };
+    const newFilter = this.state.filter;
+    newFilter[field] = newValue;
+
+    if (field === 'siteLocation' && !newValue) {
+      newFilter.siteLocation = null;
+      newFilter.indication = null;
+      newFilter.protocol = null;
+    }
+
+    if (field === 'indication' && !newValue) {
+      newFilter.indication = null;
+      newFilter.protocol = null;
+    }
 
     this.setState({
       filter: newFilter,
