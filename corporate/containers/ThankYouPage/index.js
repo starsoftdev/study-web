@@ -15,7 +15,7 @@ import {
 import {
   clearLanding,
 } from '../../../app/containers/App/actions';
-
+import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
 export class ThankYouPage extends React.Component {
 
   static propTypes = {
@@ -97,20 +97,20 @@ export class ThankYouPage extends React.Component {
               </strong>
             }
             {thankYouData.isSharePhone &&
-              <span className="tel">
-                <a href={`tel:${landing.recruitmentPhone}`} className="txt-orange">{landing.recruitmentPhone}</a>
-              </span>
+            <span className="tel">
+              <a href={`tel:${landing.recruitmentPhone}`} className="txt-orange">{normalizePhoneDisplay(landing.recruitmentPhone)}</a>
+            </span>
             }
             {!thankYouData.isHideLocationData &&
-              <div>
-                <p>
-                  {herIsTheText}
-                </p>
-                <address className="txt-green" dangerouslySetInnerHTML={{ __html: address }} />
-                <p>
-                  {lookingForwardText}
-                </p>
-              </div>
+            <div>
+              <p>
+                {herIsTheText}
+              </p>
+              <address className="txt-green" dangerouslySetInnerHTML={{ __html: address }} />
+              <p>
+                {lookingForwardText}
+              </p>
+            </div>
             }
             <div className="thanks-img">
               <img src={img19} alt="THANK YOU!" width="369" className="img-responsive center-block" />
