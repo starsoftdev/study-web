@@ -5,6 +5,8 @@
  */
 import _ from 'lodash';
 import {
+  ADD_PATIENT_INDICATION,
+  REMOVE_PATIENT_INDICATION,
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENTS_ERROR,
@@ -166,6 +168,23 @@ export function patientFetchingError(payload) {
 export function clearSelectedPatient() {
   return {
     type: CLEAR_SELECTED_PATIENT,
+  };
+}
+
+export function addPatientIndication(patientId, indicationId, studyId) {
+  return {
+    type: ADD_PATIENT_INDICATION,
+    patientId,
+    indicationId,
+    studyId,
+  };
+}
+
+export function removePatientIndication(patientId, indicationId) {
+  return {
+    type: REMOVE_PATIENT_INDICATION,
+    patientId,
+    indicationId,
   };
 }
 

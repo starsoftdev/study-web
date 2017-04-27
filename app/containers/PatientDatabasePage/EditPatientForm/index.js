@@ -17,7 +17,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import Checkbox from '../../../components/Input/Checkbox';
 import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../App/selectors';
 import IndicationOverlay from '../../StudyPage/PatientDetail/IndicationOverlay';
-import { fetchFilteredProtcols } from '../actions';
+import { fetchFilteredProtcols, addPatientIndication, removePatientIndication } from '../actions';
 import { selectIsFetchingProtocols, selectPatientCategories, selectProtocols, selectSavedPatient } from '../selectors';
 import formValidator from './validator';
 
@@ -37,8 +37,10 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
+  addPatientIndication: (patientId, indicationId, studyId) => dispatch(addPatientIndication(patientId, indicationId, studyId)),
   blur: (field, value) => dispatch(blur(formName, field, value)),
   change: (name, value) => dispatch(change(formName, name, value)),
+  removePatientIndication: (patientId, indicationId) => dispatch(removePatientIndication(patientId, indicationId)),
   fetchFilteredProtcols: (clientId, siteId) => dispatch(fetchFilteredProtcols(clientId, siteId)),
 });
 
@@ -46,6 +48,7 @@ const mapDispatchToProps = dispatch => ({
 @connect(mapStateToProps, mapDispatchToProps)
 class EditPatientForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    addPatientIndication: PropTypes.func.isRequired,
     blur: PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
     change: PropTypes.func.isRequired,
@@ -58,6 +61,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     submitting: React.PropTypes.bool,
     patientCategories: PropTypes.object,
     protocols: PropTypes.array,
+    removePatientIndication: PropTypes.func.isRequired,
     savedPatient: PropTypes.object,
     sites: PropTypes.array,
     sources: PropTypes.array,
@@ -108,21 +112,16 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   selectIndication(patientId, indication) {
-    const { change, formValues, protocols } = this.props;
+    const { change, formValues, addPatientIndication } = this.props;
     change('indications', formValues.indications.concat([indication]));
-    // const protocol = _.find(protocols, { indicationId });
-    // if (protocol) {
-    //   change('protocol', protocol.studyId);
-    // } else {
-    //   // clear the protocol value if the indicationId doesn't match
-    //   change('protocol', null);
-    // }
+    addPatientIndication(patientId, indication.id, formValues.protocol);
   }
 
-  deleteIndication(indication) {
-    const { change, formValues: { indications } } = this.props;
+  deleteIndication(patientId, indication) {
+    const { change, formValues: { indications }, removePatientIndication } = this.props;
     const newArr = _.remove(indications, (n) => (n.id !== indication.id));
     change('indications', newArr);
+    removePatientIndication(patientId, indication.id);
   }
 
   toggleIndicationPopover() {
@@ -138,24 +137,37 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
 
   selectProtocol(studyId) {
     if (studyId) {
-      const { change, formValues, indications, protocols } = this.props;
+      const { change, formValues, initialValues, indications, protocols, addPatientIndication } = this.props;
       const protocol = _.find(protocols, { studyId });
-      if (!_.includes(formValues.indications, protocol.indicationId)) {
+      const indicationInList = _.find(formValues.indications, { id: protocol.indicationId });
+      if (indicationInList) {
+        // if the indication exists, make sure we modify it as the original
+        const indicationArray = formValues.indications.map(indication => ({
+          ...indication,
+          isOriginal: indication.id === indicationInList.id,
+        }));
+        change('indications', indicationArray);
+      } else {
         const indication = _.find(indications, { id: protocol.indicationId });
         const formattedIndication = {
           id: indication.id,
-          isOriginal: formValues.indications.length === 0,
+          isOriginal: true,
           label: indication.name,
           name: indication.name,
           value: indication.id,
         };
-        change('indications', formValues.indications.concat([formattedIndication]));
+        const indicationArray = [formattedIndication].concat(formValues.indications.map(indication => ({
+          ...indication,
+          isOriginal: false,
+        })));
+        change('indications', indicationArray);
+        addPatientIndication(initialValues.id, indication.id, formValues.protocol);
       }
     }
   }
 
   renderIndications() {
-    const { formValues } = this.props;
+    const { formValues, initialValues } = this.props;
     if (formValues.indications) {
       return (
         <div className="category-list">
@@ -167,7 +179,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
                   <span
                     className="icomoon-icon_trash"
                     onClick={() => {
-                      this.deleteIndication(indication);
+                      this.deleteIndication(initialValues.id, indication);
                     }}
                   />
                 }
@@ -382,6 +394,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="field"
             placeholder="Select Site Location"
             options={siteOptions}
+            clearable={false}
             onChange={this.changeSiteLocation}
             disabled={initialValues && initialValues.source && initialValues.source === 1}
           />
@@ -410,6 +423,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="field"
             placeholder="Select Source"
             options={sourceOptions}
+            clearable={false}
             disabled={initialValues && initialValues.source && initialValues.source === 1}
           />
         </div>

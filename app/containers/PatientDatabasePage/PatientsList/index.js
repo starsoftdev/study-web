@@ -219,6 +219,10 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
         selectedPatientDetailsForForm.site = selectedPatientDetailsForForm.site_id;
         delete selectedPatientDetailsForForm.site_id;
       }
+      if (selectedPatientDetailsForForm.source_id) {
+        selectedPatientDetailsForForm.source = selectedPatientDetailsForForm.source_id;
+        delete selectedPatientDetailsForForm.source_id;
+      }
     }
     return (
       <div className="patient-database-fixed-table-wrapper">
