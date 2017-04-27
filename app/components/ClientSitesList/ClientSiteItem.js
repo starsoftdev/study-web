@@ -5,6 +5,7 @@ import { find } from 'lodash';
 import { selectClientRoles, selectSelectedSite, selectSelectedUser } from '../../containers/App/selectors';
 import { fetchSite, fetchUser } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
 
 class ClientSiteItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -142,7 +143,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           {piNode}
         </td>
         <td className="phoneNumber">
-          <span>{phoneNumber}</span>
+          <span>{normalizePhoneDisplay(phoneNumber)}</span>
         </td>
         <td className="address">
           <span>{addressArr[0]}<br />{city}, {state} {zip}</span>
