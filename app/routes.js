@@ -649,6 +649,28 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/app/coupon',
+      name: 'dashboardCouponPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardCouponPage/reducer'),
+          System.import('./containers/DashboardCouponPage/sagas'),
+          System.import('./containers/DashboardCouponPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardCouponPage', reducer.default);
+          injectReducer('dashboardCouponPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/app/dashboard-indication',
       name: 'dashboardIndicationPage',
       getComponent(nextState, cb) {
