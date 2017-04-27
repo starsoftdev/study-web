@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
+import { normalizePhoneDisplay } from '../../../../app/common/helper/functions';
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     item: PropTypes.object,
@@ -21,7 +21,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           {this.props.item.phone}
         </td>
         <td className="text-uppercase">
-          {this.props.item.role_name}
+          {normalizePhoneDisplay(this.props.item.role_name)}
         </td>
         <td>
           <a className="btn btn-primary btn-edit-site pull-right" onClick={() => { this.props.editUserClick(this.props.item); }}>
