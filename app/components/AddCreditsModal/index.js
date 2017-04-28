@@ -15,8 +15,24 @@ import ReactSelect from '../../components/Input/ReactSelect';
 import CenteredModal from '../../components/CenteredModal/index';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
 import AddCreditCardModal from '../../components/AddCreditCardModal';
-import { addCredits, fetchClientSites, getCreditsPrice, saveCard } from '../../containers/App/actions';
-import { selectSiteLocations, selectCurrentUser, selectAddCredits, selectCreditsPrice, selectCurrentUserStripeCustomerId, selectSavedCard } from '../../containers/App/selectors';
+import EditSiteForm from '../../components/EditSiteForm/index';
+import {
+  addCredits,
+  fetchClientSites,
+  getCreditsPrice,
+  saveCard,
+  saveSite,
+} from '../../containers/App/actions';
+import {
+  selectSiteLocations,
+  selectCurrentUser,
+  selectAddCredits,
+  selectCreditsPrice,
+  selectCurrentUserStripeCustomerId,
+  selectSavedCard,
+  selectCurrentUserClientId,
+  selectSavedSite,
+} from '../../containers/App/selectors';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
 import { selectAddCreditsFormValues, selectAddCreditsFormError } from './selectors';
@@ -32,6 +48,7 @@ import validator, { addCreditsFields } from './validator';
 class AddCreditsModal extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     showModal: PropTypes.bool,
+    change: PropTypes.func.isRequired,
     siteLocations: PropTypes.array,
     fetchClientSites: PropTypes.func,
     closeModal: PropTypes.func,
@@ -51,6 +68,9 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     touchAddCredits: PropTypes.func,
     saveCard: PropTypes.func,
     currentUserStripeCustomerId: PropTypes.string,
+    saveSite: PropTypes.func,
+    currentUserClientId: PropTypes.number,
+    savedSite: PropTypes.object,
     validateChange: PropTypes.func,
   };
 
@@ -63,6 +83,9 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     this.handleNewModalOpen = this.handleNewModalOpen.bind(this);
     this.closeAddCardModal = this.closeAddCardModal.bind(this);
     this.onSaveCard = this.onSaveCard.bind(this);
+    this.handleSiteLocationChoose = this.handleSiteLocationChoose.bind(this);
+    this.closeAddSiteModal = this.closeAddSiteModal.bind(this);
+    this.addSite = this.addSite.bind(this);
 
     this.state = {
       quantity: 1,
@@ -70,6 +93,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
       total: 0,
       price: 0,
       addCardModalOpenC: false,
+      showSiteLocationModal: false,
     };
   }
 
@@ -95,6 +119,11 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
 
     if (!newProps.savedCard.saving && this.props.savedCard.saving && this.state.addCardModalOpenC) {
       this.closeAddCardModal();
+    }
+
+    if (!newProps.savedSite.saving && this.props.savedSite.saving && this.state.showSiteLocationModal) {
+      this.closeAddSiteModal();
+      change('siteLocation', null);
     }
   }
 
@@ -158,6 +187,27 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     }
   }
 
+  handleSiteLocationChoose(e) {
+    const { change } = this.props;
+    if (e === 'add-new-location') {
+      this.setState({ showSiteLocationModal: true });
+      this.props.closeModal();
+    } else {
+      change('siteLocation', e);
+    }
+  }
+
+  closeAddSiteModal() {
+    this.setState({ showSiteLocationModal: false });
+    this.props.openModal();
+  }
+
+  addSite(siteData) {
+    const { currentUserClientId, saveSite } = this.props;
+
+    saveSite(currentUserClientId, null, siteData);
+  }
+
   addCreditsSubmit(ev) {
     ev.preventDefault();
     const {
@@ -193,6 +243,9 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
 
   render() {
     const { siteLocations } = this.props;
+    if (!_.find(siteLocations, (o) => o.id === 'add-new-location')) {
+      siteLocations.push({ id: 'add-new-location', name: 'Add Site Location' });
+    }
     const products = [
       {
         title: '100 Credits',
@@ -311,6 +364,18 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
           </Modal.Body>
         </Modal>
         <AddCreditCardModal addCreditCard={this.onSaveCard} showModal={this.state.addCardModalOpenC} closeModal={this.closeAddCardModal} />
+
+        <Modal dialogComponentClass={CenteredModal} show={this.state.showSiteLocationModal} onHide={this.closeAddSiteModal}>
+          <Modal.Header>
+            <Modal.Title>ADD SITE LOCATION</Modal.Title>
+            <a className="lightbox-close close" onClick={this.closeAddSiteModal}>
+              <i className="icomoon-icon_close" />
+            </a>
+          </Modal.Header>
+          <Modal.Body>
+            <EditSiteForm onSubmit={this.addSite} />
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }
@@ -326,6 +391,8 @@ const mapStateToProps = createStructuredSelector({
   addCreditsOperation: selectAddCredits(),
   creditsPrice: selectCreditsPrice(),
   currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
+  currentUserClientId: selectCurrentUserClientId(),
+  savedSite: selectSavedSite(),
   savedCard: selectSavedCard(),
 });
 
@@ -338,6 +405,7 @@ function mapDispatchToProps(dispatch) {
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
     resetForm: () => dispatch(reset('addCredits')),
     saveCard: (clientId, customerId, cardData) => dispatch(saveCard(clientId, customerId, cardData)),
+    saveSite: (clientId, id, data) => dispatch(saveSite(clientId, id, data)),
     validateChange: () => dispatch(change('addCredits', 'siteLocation', '200')),
   };
 }
