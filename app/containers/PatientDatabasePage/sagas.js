@@ -9,6 +9,8 @@ import { getItem } from '../../utils/localStorage';
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 import {
+  ADD_PATIENT_INDICATION,
+  REMOVE_PATIENT_INDICATION,
   FETCH_PATIENTS,
   FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT,
@@ -41,10 +43,12 @@ export function* patientDatabasePageSaga() {
   const watcherB = yield fork(fetchPatientCategoriesWatcher);
   const watcherC = yield fork(fetchPatientWatcher);
   const watcherD = yield fork(fetchFilteredProtocolsWatcher);
-  const watcherE = yield fork(savePatientWatcher);
-  const watcherF = yield fork(submitTextBlast);
-  const watcherG = yield fork(importPatients);
-  const watcherH = yield fork(submitAddPatient);
+  const watcherE = yield fork(addPatientIndicationWatcher);
+  const watcherF = yield fork(removePatientIndicationWatcher);
+  const watcherG = yield fork(savePatientWatcher);
+  const watcherH = yield fork(submitTextBlast);
+  const watcherI = yield fork(importPatients);
+  const watcherJ = yield fork(submitAddPatient);
 
   yield take(LOCATION_CHANGE);
 
@@ -58,6 +62,8 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherF);
   yield cancel(watcherG);
   yield cancel(watcherH);
+  yield cancel(watcherI);
+  yield cancel(watcherJ);
 }
 
 // Bootstrap sagas
@@ -279,30 +285,73 @@ export function* fetchFilteredProtocolsWatcher() {
   }
 }
 
-export function* savePatientWatcher() {
+export function* addPatientIndicationWatcher() {
   while (true) {
-    const { id, data } = yield take(SAVE_PATIENT);
+    const { patientId, indicationId, studyId } = yield take(ADD_PATIENT_INDICATION);
 
     try {
-      let requestURL = null;
-      let options = null;
       // check if we need to update the patient with study info
-      if (data.patient_category_id && data.protocol_id && data.source_id) {
-        requestURL = `${API_URL}/patients/update_with_relations`;
-        options = {
-          method: 'POST',
-          body: JSON.stringify({
-            id,
-            ...data,
-          }),
-        };
-      } else {
-        requestURL = `${API_URL}/patients/${id}`;
-        options = {
-          method: 'PATCH',
-          body: JSON.stringify(data),
-        };
+      const requestURL = `${API_URL}/patientIndications/add`;
+      const options = {
+        method: 'POST',
+        body: JSON.stringify({
+          patientId,
+          indicationId,
+          studyId,
+        }),
+      };
+      yield call(request, requestURL, options);
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while adding indications.');
+      yield put(toastrActions.error('', errorMessage));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
       }
+    }
+  }
+}
+
+export function* removePatientIndicationWatcher() {
+  while (true) {
+    const { patientId, indicationId } = yield take(REMOVE_PATIENT_INDICATION);
+
+    try {
+      // check if we need to update the patient with study info
+      const requestURL = `${API_URL}/patientIndications/delete`;
+      const options = {
+        method: 'DELETE',
+        body: JSON.stringify({
+          patientId,
+          indicationId,
+        }),
+      };
+      yield call(request, requestURL, options);
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while removing indications.');
+      yield put(toastrActions.error('', errorMessage));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
+export function* savePatientWatcher() {
+  while (true) {
+    const { clientRoleId, id, data } = yield take(SAVE_PATIENT);
+
+    try {
+      // check if we need to update the patient with study info
+      const requestURL = `${API_URL}/patients/${id}/updatePatientForDB`;
+      const options = {
+        method: 'POST',
+        query: {
+          clientRoleId,
+        },
+        body: JSON.stringify({
+          ...data,
+        }),
+      };
       const response = yield call(request, requestURL, options);
 
       yield put(toastrActions.success('Save Patient', 'Patient saved successfully!'));
@@ -317,7 +366,6 @@ export function* savePatientWatcher() {
     }
   }
 }
-
 
 function* submitTextBlast() {
   while (true) {
@@ -398,7 +446,7 @@ function* submitAddPatient() {
       yield put(submitAddPatientSuccess(response));
     } catch (e) {
       let errorMessages;
-      if (e.details.messages) {
+      if (e.details && e.details.messages) {
         if (e.details.messages.email) {
           errorMessages = e.details.messages.email[0];
         } else if (e.details.messages.phone) {

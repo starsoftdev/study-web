@@ -92,17 +92,17 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   }
 
   updatePatient(patientData) {
-    const { selectedPatient, currentUser } = this.props;
+    const { selectedPatient, currentUser, savePatient } = this.props;
     const payload = omit(patientData, ['indications', 'status', 'source', 'protocol']);
 
     payload.indications = map(patientData.indications, indicationIterator => ({ id: indicationIterator.id, isOriginal: indicationIterator.isOriginal }));
     payload.source_id = patientData.source;
     payload.patient_category_id = patientData.status;
     payload.phone = normalizePhoneForServer(patientData.phone);
-    payload.protocol_id = patientData.protocol;
-    payload.client_id = currentUser.roleForClient.client_id;
+    payload.site_id = patientData.site;
+    payload.studyId = patientData.protocol;
 
-    this.props.savePatient(selectedPatient.details.id, payload);
+    savePatient(currentUser.roleForClient.id, selectedPatient.details.id, payload);
   }
 
   chatModalShouldBeShown() {
@@ -207,13 +207,23 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     const chat = this.props.chat.active ? this.props.chat.details : null;
     const editPatientModalShown = this.editPatientModalShouldBeShown();
     const chatModalShown = this.chatModalShouldBeShown();
-    if (selectedPatientDetailsForForm) {
-      selectedPatientDetailsForForm.phone = normalizePhoneDisplay(selectedPatientDetailsForForm.phone);
-      if (selectedPatientDetailsForForm.dob) {
-        const dob = moment(selectedPatientDetailsForForm.dob);
-        selectedPatientDetailsForForm.dobMonth = dob.month() + 1;
-        selectedPatientDetailsForForm.dobDay = dob.date();
-        selectedPatientDetailsForForm.dobYear = dob.year();
+    const selectedPatient = Object.assign({}, selectedPatientDetailsForForm);
+    if (selectedPatient) {
+      selectedPatient.phone = normalizePhoneDisplay(selectedPatient.phone);
+      if (selectedPatient.dob) {
+        const dob = moment(selectedPatient.dob);
+        selectedPatient.dobMonth = dob.month() + 1;
+        selectedPatient.dobDay = dob.date();
+        selectedPatient.dobYear = dob.year();
+        delete selectedPatient.dob;
+      }
+      if (selectedPatient.site_id) {
+        selectedPatient.site = selectedPatient.site_id;
+        delete selectedPatient.site_id;
+      }
+      if (selectedPatient.source_id) {
+        selectedPatient.source = selectedPatient.source_id;
+        delete selectedPatient.source_id;
       }
     }
     return (
@@ -273,7 +283,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
             </Modal.Header>
             <Modal.Body>
               <EditPatientForm
-                initialValues={selectedPatientDetailsForForm}
+                initialValues={selectedPatient}
                 onSubmit={this.updatePatient}
               />
             </Modal.Body>
@@ -316,7 +326,7 @@ function mapDispatchToProps(dispatch) {
     removePatientsFromTextBlast: (patients) => dispatch(removePatientsFromTextBlast(patients)),
     removePatientFromTextBlast: (patient) => dispatch(removePatientFromTextBlast(patient)),
     clearSelectedPatient: () => dispatch(clearSelectedPatient()),
-    savePatient: (id, data) => dispatch(savePatient(id, data)),
+    savePatient: (clientRoleId, id, data) => dispatch(savePatient(clientRoleId, id, data)),
     initChat: (payload) => dispatch(initChat(payload)),
     disableChat: (payload) => dispatch(disableChat(payload)),
     sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),

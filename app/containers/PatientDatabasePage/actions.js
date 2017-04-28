@@ -5,6 +5,8 @@
  */
 import _ from 'lodash';
 import {
+  ADD_PATIENT_INDICATION,
+  REMOVE_PATIENT_INDICATION,
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENTS_ERROR,
@@ -169,9 +171,27 @@ export function clearSelectedPatient() {
   };
 }
 
-export function savePatient(id, data) {
+export function addPatientIndication(patientId, indicationId, studyId) {
+  return {
+    type: ADD_PATIENT_INDICATION,
+    patientId,
+    indicationId,
+    studyId,
+  };
+}
+
+export function removePatientIndication(patientId, indicationId) {
+  return {
+    type: REMOVE_PATIENT_INDICATION,
+    patientId,
+    indicationId,
+  };
+}
+
+export function savePatient(clientRoleId, id, data) {
   return {
     type: SAVE_PATIENT,
+    clientRoleId,
     id,
     data,
   };

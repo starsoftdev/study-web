@@ -18,7 +18,7 @@ import Input from '../../../components/Input/index';
 import { fetchIndications } from '../../App/actions';
 import { selectIndications } from '../../App/selectors';
 import { selectValues, selectSyncErrors, selectFormDidChange } from '../../../common/selectors/form.selector';
-import { submitAddPatientIndication, submitRemovePatientIndication, submitPatientUpdate } from '../actions';
+import { addPatientIndication, removePatientIndication, submitPatientUpdate } from '../actions';
 import IndicationOverlay from './IndicationOverlay';
 import formValidator from './otherValidator';
 import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
@@ -44,8 +44,8 @@ class OtherSection extends React.Component {
     loading: React.PropTypes.bool,
     submitting: React.PropTypes.bool,
     reset: React.PropTypes.func,
-    submitAddPatientIndication: React.PropTypes.func.isRequired,
-    submitRemovePatientIndication: React.PropTypes.func.isRequired,
+    addPatientIndication: React.PropTypes.func.isRequired,
+    removePatientIndication: React.PropTypes.func.isRequired,
     submitPatientUpdate: React.PropTypes.func.isRequired,
   };
 
@@ -92,8 +92,8 @@ class OtherSection extends React.Component {
   }
 
   deleteIndication(indication) {
-    const { initialValues, submitRemovePatientIndication } = this.props;
-    submitRemovePatientIndication(initialValues.id, indication.id);
+    const { initialValues, removePatientIndication } = this.props;
+    removePatientIndication(initialValues.id, indication.id);
   }
 
   toggleIndicationPopover() {
@@ -172,7 +172,7 @@ class OtherSection extends React.Component {
   }
 
   render() {
-    const { active, currentUser, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, loading, submitting, submitAddPatientIndication } = this.props;
+    const { active, currentUser, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, loading, submitting, addPatientIndication } = this.props;
 
     if (initialValues) {
       const overlayValues = { ...initialValues };
@@ -224,7 +224,7 @@ class OtherSection extends React.Component {
                     rootClose
                     onHide={() => { this.toggleIndicationPopover(); }}
                   >
-                    <IndicationOverlay indications={indications} selectIndication={submitAddPatientIndication} patient={overlayValues} onClose={this.toggleIndicationPopover} />
+                    <IndicationOverlay indications={indications} selectIndication={addPatientIndication} patient={overlayValues} onClose={this.toggleIndicationPopover} />
                   </Overlay>
                 </div>
               </div>
@@ -293,8 +293,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   fetchIndications: () => dispatch(fetchIndications()),
   reset: () => dispatch(reset(formName)),
-  submitAddPatientIndication: (patientId, indication) => dispatch(submitAddPatientIndication(patientId, indication)),
-  submitRemovePatientIndication: (patientId, indicationId) => dispatch(submitRemovePatientIndication(patientId, indicationId)),
+  addPatientIndication: (patientId, indication) => dispatch(addPatientIndication(patientId, indication)),
+  removePatientIndication: (patientId, indicationId) => dispatch(removePatientIndication(patientId, indicationId)),
   submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),
 });
 

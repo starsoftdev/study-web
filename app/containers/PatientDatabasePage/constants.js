@@ -20,6 +20,8 @@ export const FETCH_PATIENT_ERROR                = 'PatientDatabasePage/FETCH_PAT
 
 export const CLEAR_SELECTED_PATIENT             = 'PatientDatabasePage/CLEAR_SELECTED_PATIENT';
 
+export const ADD_PATIENT_INDICATION             = 'PatientDatabasePage/ADD_PATIENT_INDICATION';
+export const REMOVE_PATIENT_INDICATION          = 'PatientDatabasePage/REMOVE_PATIENT_INDICATION';
 export const SAVE_PATIENT                       = 'PatientDatabasePage/SAVE_PATIENT';
 export const SAVE_PATIENT_SUCCESS               = 'PatientDatabasePage/SAVE_PATIENT_SUCCESS';
 export const SAVE_PATIENT_ERROR                 = 'PatientDatabasePage/SAVE_PATIENT_ERROR';

@@ -17,7 +17,7 @@ import { selectIndications, selectSiteLocations, selectSources, selectCurrentUse
 import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import { fetchFilteredProtcols, submitAddPatient } from '../actions';
-import { selectAddPatientStatus, selectProtocols, selectIsFetchingProtocols } from '../selectors';
+import { selectIsFetchingProtocols, selectAddPatientStatus, selectProtocols } from '../selectors';
 import formValidator, { fields } from './validator';
 
 const formName = 'PatientDatabase.AddPatientModal';
@@ -58,6 +58,7 @@ export default class AddPatientForm extends React.Component {
     onClose: React.PropTypes.func.isRequired,
     sites: React.PropTypes.array.isRequired,
     sources: React.PropTypes.array.isRequired,
+    submitting: React.PropTypes.bool.isRequired,
     submitAddPatient: React.PropTypes.func.isRequired,
     touchFields: React.PropTypes.func.isRequired,
     protocols: React.PropTypes.array,
@@ -131,7 +132,7 @@ export default class AddPatientForm extends React.Component {
   }
 
   render() {
-    const { addPatientStatus, indications, isFetchingProtocols, protocols, sites, sources } = this.props;
+    const { submitting, indications, isFetchingProtocols, protocols, sites, sources } = this.props;
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -258,7 +259,7 @@ export default class AddPatientForm extends React.Component {
           />
         </div>
         <div className="text-right">
-          <Button type="submit" disabled={addPatientStatus.adding}>Submit</Button>
+          <Button type="submit" disabled={submitting}>Submit</Button>
         </div>
       </Form>
     );

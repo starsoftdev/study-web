@@ -17,8 +17,8 @@ FETCH_PATIENT_DETAILS,
 FETCH_PATIENT_CATEGORIES,
 FETCH_STUDY,
 READ_STUDY_PATIENT_MESSAGES,
-SUBMIT_ADD_PATIENT_INDICATION,
-SUBMIT_REMOVE_PATIENT_INDICATION,
+ADD_PATIENT_INDICATION,
+REMOVE_PATIENT_INDICATION,
 SUBMIT_PATIENT_UPDATE,
 SUBMIT_TEXT_BLAST,
 SUBMIT_PATIENT_IMPORT,
@@ -521,10 +521,10 @@ function* findPatientsSaga() {
   }
 }
 
-function* submitAddPatientIndication() {
+function* addPatientIndication() {
   while (true) {
     // listen for the SUBMIT_ADD_PATIENT_INDICATION action
-    const { patientId, indication } = yield take(SUBMIT_ADD_PATIENT_INDICATION);
+    const { patientId, indication } = yield take(ADD_PATIENT_INDICATION);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -584,10 +584,10 @@ function* submitMovePatientBetweenCategories() {
   }
 }
 
-function* submitRemovePatientIndication() {
+function* removePatientIndication() {
   while (true) {
     // listen for the SUBMIT_REMOVE_PATIENT_INDICATION action
-    const { patientId, indicationId } = yield take(SUBMIT_REMOVE_PATIENT_INDICATION);
+    const { patientId, indicationId } = yield take(REMOVE_PATIENT_INDICATION);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -861,9 +861,9 @@ export function* fetchStudySaga() {
     const watcherI = yield fork(fetchPatientDetails);
     const watcherJ = yield fork(findPatientsSaga);
     const watcherK = yield fork(readStudyPatientMessages);
-    const watcherL = yield fork(submitAddPatientIndication);
+    const watcherL = yield fork(addPatientIndication);
     const watcherM = yield fork(submitMovePatientBetweenCategories);
-    const watcherN = yield fork(submitRemovePatientIndication);
+    const watcherN = yield fork(removePatientIndication);
     const watcherO = yield fork(submitPatientUpdate);
     const watcherP = yield fork(submitTextBlast);
     const watcherQ = yield fork(submitPatientImport);
