@@ -6,6 +6,7 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { touch } from 'redux-form';
@@ -94,6 +95,14 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     };
   }
 
+  componentWillMount() {
+    const { currentUser } = this.props;
+    const purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
+    if (!purchasable) {
+      browserHistory.push('/app');
+    }
+  }
+
   componentDidMount() {
     this.props.fetchIndications();
     this.props.fetchLevels();
@@ -177,7 +186,8 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
   }
 
   render() {
-    const { indications, studyLevels, formValues, fullSiteLocations, indicationLevelPrice, userRoleType } = this.props;
+    const { indications, studyLevels, formValues, fullSiteLocations, indicationLevelPrice, userRoleType, currentUser } = this.props;
+    const purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
     const { uniqueId } = this.state;
 
     const addOns = [];
@@ -212,7 +222,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     }
     return (
       <div>
-        { userRoleType === 'client' &&
+        {(userRoleType === 'client' && purchasable) &&
           <StickyContainer className="container-fluid">
             <Helmet title="List New Study - StudyKIK" />
             <section className="study-portal">
