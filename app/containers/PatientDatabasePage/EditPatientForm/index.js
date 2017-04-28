@@ -17,7 +17,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import Checkbox from '../../../components/Input/Checkbox';
 import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../App/selectors';
 import IndicationOverlay from '../../StudyPage/PatientDetail/IndicationOverlay';
-import { fetchFilteredProtcols, addPatientIndication, removePatientIndication } from '../actions';
+import { fetchFilteredProtcols, addPatientIndication, removePatientIndication, updatePatientIndication } from '../actions';
 import { selectIsFetchingProtocols, selectPatientCategories, selectProtocols, selectSavedPatient } from '../selectors';
 import formValidator from './validator';
 
@@ -41,6 +41,7 @@ const mapDispatchToProps = dispatch => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
   change: (name, value) => dispatch(change(formName, name, value)),
   removePatientIndication: (patientId, indicationId) => dispatch(removePatientIndication(patientId, indicationId)),
+  updatePatientIndication: (patientId, indicationId, studyId) => dispatch(updatePatientIndication(patientId, indicationId, studyId)),
   fetchFilteredProtcols: (clientId, siteId) => dispatch(fetchFilteredProtcols(clientId, siteId)),
 });
 
@@ -62,6 +63,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     patientCategories: PropTypes.object,
     protocols: PropTypes.array,
     removePatientIndication: PropTypes.func.isRequired,
+    updatePatientIndication: PropTypes.func.isRequired,
     savedPatient: PropTypes.object,
     sites: PropTypes.array,
     sources: PropTypes.array,
@@ -91,6 +93,15 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     }
   }
 
+  componentWillUnmount() {
+    // cleanup indication relation to restore isOriginal back to protocol's indication
+    const { formValues, initialValues, protocols, submitting, updatePatientIndication } = this.props;
+    if (formValues.protocol && !submitting) {
+      const protocol = _.find(protocols, { studyId: formValues.protocol });
+      const indication = _.find(formValues.indications, { id: protocol.indicationId });
+      updatePatientIndication(initialValues.id, indication.id, protocol.studyId);
+    }
+  }
 
   onSubmit(event) {
     event.preventDefault();
@@ -137,7 +148,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
 
   selectProtocol(studyId) {
     if (studyId) {
-      const { change, formValues, initialValues, indications, protocols, addPatientIndication } = this.props;
+      const { change, formValues, initialValues, indications, protocols, addPatientIndication, updatePatientIndication } = this.props;
       const protocol = _.find(protocols, { studyId });
       const indicationInList = _.find(formValues.indications, { id: protocol.indicationId });
       if (indicationInList) {
@@ -147,6 +158,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
           isOriginal: indication.id === indicationInList.id,
         }));
         change('indications', indicationArray);
+        updatePatientIndication(initialValues.id, protocol.indicationId, studyId);
       } else {
         const indication = _.find(indications, { id: protocol.indicationId });
         const formattedIndication = {
@@ -156,12 +168,13 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
           name: indication.name,
           value: indication.id,
         };
-        const indicationArray = [formattedIndication].concat(formValues.indications.map(indication => ({
+        const indicationArray = formValues.indications.map(indication => ({
           ...indication,
           isOriginal: false,
-        })));
+        })).concat([formattedIndication]);
         change('indications', indicationArray);
-        addPatientIndication(initialValues.id, indication.id, formValues.protocol);
+        console.log(indicationArray);
+        addPatientIndication(initialValues.id, protocol.indicationId, studyId);
       }
     }
   }

@@ -7,6 +7,7 @@ import _ from 'lodash';
 import {
   ADD_PATIENT_INDICATION,
   REMOVE_PATIENT_INDICATION,
+  UPDATE_PATIENT_INDICATION,
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENTS_ERROR,
@@ -185,6 +186,15 @@ export function removePatientIndication(patientId, indicationId) {
     type: REMOVE_PATIENT_INDICATION,
     patientId,
     indicationId,
+  };
+}
+
+export function updatePatientIndication(patientId, indicationId, studyId) {
+  return {
+    type: UPDATE_PATIENT_INDICATION,
+    patientId,
+    indicationId,
+    studyId,
   };
 }
 

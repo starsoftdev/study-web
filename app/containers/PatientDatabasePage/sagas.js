@@ -11,6 +11,7 @@ import composeQueryString from '../../utils/composeQueryString';
 import {
   ADD_PATIENT_INDICATION,
   REMOVE_PATIENT_INDICATION,
+  UPDATE_PATIENT_INDICATION,
   FETCH_PATIENTS,
   FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT,
@@ -45,10 +46,11 @@ export function* patientDatabasePageSaga() {
   const watcherD = yield fork(fetchFilteredProtocolsWatcher);
   const watcherE = yield fork(addPatientIndicationWatcher);
   const watcherF = yield fork(removePatientIndicationWatcher);
-  const watcherG = yield fork(savePatientWatcher);
-  const watcherH = yield fork(submitTextBlast);
-  const watcherI = yield fork(importPatients);
-  const watcherJ = yield fork(submitAddPatient);
+  const watcherG = yield fork(updatePatientIndicationWatcher);
+  const watcherH = yield fork(savePatientWatcher);
+  const watcherI = yield fork(submitTextBlast);
+  const watcherJ = yield fork(importPatients);
+  const watcherK = yield fork(submitAddPatient);
 
   yield take(LOCATION_CHANGE);
 
@@ -64,6 +66,7 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherH);
   yield cancel(watcherI);
   yield cancel(watcherJ);
+  yield cancel(watcherK);
 }
 
 // Bootstrap sagas
@@ -291,7 +294,7 @@ export function* addPatientIndicationWatcher() {
 
     try {
       // check if we need to update the patient with study info
-      const requestURL = `${API_URL}/patientIndications/add`;
+      const requestURL = `${API_URL}/patientIndications`;
       const options = {
         method: 'POST',
         body: JSON.stringify({
@@ -317,7 +320,7 @@ export function* removePatientIndicationWatcher() {
 
     try {
       // check if we need to update the patient with study info
-      const requestURL = `${API_URL}/patientIndications/delete`;
+      const requestURL = `${API_URL}/patientIndications`;
       const options = {
         method: 'DELETE',
         body: JSON.stringify({
@@ -328,6 +331,32 @@ export function* removePatientIndicationWatcher() {
       yield call(request, requestURL, options);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while removing indications.');
+      yield put(toastrActions.error('', errorMessage));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
+export function* updatePatientIndicationWatcher() {
+  while (true) {
+    const { patientId, indicationId, studyId } = yield take(UPDATE_PATIENT_INDICATION);
+
+    try {
+      // check if we need to update the patient with study info
+      const requestURL = `${API_URL}/patientIndications`;
+      const options = {
+        method: 'PUT',
+        body: JSON.stringify({
+          patientId,
+          indicationId,
+          studyId,
+        }),
+      };
+      yield call(request, requestURL, options);
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while updating indications.');
       yield put(toastrActions.error('', errorMessage));
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
