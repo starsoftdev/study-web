@@ -18,10 +18,10 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           {this.props.item.email}
         </td>
         <td>
-          {this.props.item.phone}
+          {normalizePhoneDisplay(this.props.item.phone)}
         </td>
         <td className="text-uppercase">
-          {normalizePhoneDisplay(this.props.item.role_name)}
+          {this.props.item.role_name}
         </td>
         <td>
           <a className="btn btn-primary btn-edit-site pull-right" onClick={() => { this.props.editUserClick(this.props.item); }}>
