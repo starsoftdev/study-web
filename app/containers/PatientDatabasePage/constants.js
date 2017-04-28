@@ -22,6 +22,7 @@ export const CLEAR_SELECTED_PATIENT             = 'PatientDatabasePage/CLEAR_SEL
 
 export const ADD_PATIENT_INDICATION             = 'PatientDatabasePage/ADD_PATIENT_INDICATION';
 export const REMOVE_PATIENT_INDICATION          = 'PatientDatabasePage/REMOVE_PATIENT_INDICATION';
+export const UPDATE_PATIENT_INDICATION          = 'PatientDatabasePage/UPDATE_PATIENT_INDICATION';
 export const SAVE_PATIENT                       = 'PatientDatabasePage/SAVE_PATIENT';
 export const SAVE_PATIENT_SUCCESS               = 'PatientDatabasePage/SAVE_PATIENT_SUCCESS';
 export const SAVE_PATIENT_ERROR                 = 'PatientDatabasePage/SAVE_PATIENT_ERROR';

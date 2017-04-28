@@ -44,7 +44,7 @@ export const selectSelectedPatientDetailsForForm = () => createSelector(
     let protocolId;
 
     if (selectedPatientDetails.studyPatientCategory && selectedPatientDetails.studyPatientCategory.study) {
-      protocolId = selectedPatientDetails.studyPatientCategory.study.protocol_id;
+      protocolId = selectedPatientDetails.studyPatientCategory.study.id;
     }
 
     let selectedPatientDetailsForForm = omit(selectedPatientDetails, ['created', 'patientIndications', 'lastAction', 'study_patient_category_id', 'studyPatientCategory']);
