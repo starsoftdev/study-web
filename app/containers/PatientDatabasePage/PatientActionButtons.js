@@ -159,31 +159,15 @@ class PatientActionButtons extends React.Component {
     return (
       <div>
         <Form className="upload-patient-info">
-          <div className="table">
-            <label className="table-cell" htmlFor="file">
-              <i className={fileUploaded ? 'icomoon-icon_check' : 'icomoon-arrow_up_alt'} />
-              <a className="bgn-patient text" data-text="Upload Patients" data-hovertext="Coming Soon">
-                <i className="icomoon-bg" />
-              </a>
-              {/*
-              {fileUploaded && <span className="jcf-file jcf-extension-csv parent-active">{fileUploaded}</span>}
-              <span className="jcf-file">
-                <span className="jcf-fake-input">No file chosen</span>
-                <span className="jcf-upload-button">
-                  <span className="jcf-button-content">Choose file</span>
-                </span>
-                <input
-                  type="file"
-                  id="file"
-                  onChange={this.uploadFile}
-                  ref={(fileBttn) => {
-                    this.fileBttn = fileBttn;
-                  }}
-                />
-              </span>
-              */}
-            </label>
-          </div>
+          <span className="modal-opener coming-soon-wrapper">
+            <div className="table">
+              <div className="table-cell">
+                <i className={fileUploaded ? 'icomoon-icon_check' : 'icomoon-arrow_up_alt'} />
+                <span className="text coming-soon-old">Upload Patients</span>
+                <span className="text coming-soon-new" />
+              </div>
+            </div>
+          </span>
         </Form>
         <span className="or">
           <span>or</span>
