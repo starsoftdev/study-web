@@ -200,7 +200,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
       id: row.id,
       name: row.name,
     }));
-    siteLocations.push({ id: 'add-new-location', name: 'Add New Location' });
+    siteLocations.push({ id: 'add-new-location', name: 'Add Site Location' });
     return (
       <div className="form-study">
         <div className="form-fields">
