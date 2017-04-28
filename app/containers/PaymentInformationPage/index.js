@@ -6,6 +6,7 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 import { selectCurrentUser, selectCards, selectSavedCard } from '../../containers/App/selectors';
@@ -43,6 +44,14 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
     };
   }
 
+  componentWillMount() {
+    const { currentUser } = this.props;
+    const purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
+    if (!purchasable) {
+      browserHistory.push('/app');
+    }
+  }
+
   componentDidMount() {
     if (this.props.currentUser && this.props.currentUser.roleForClient) {
       this.props.fetchCards(this.props.currentUser.roleForClient.client_id, this.props.currentUser.roleForClient.client.stripeCustomerId);
@@ -68,40 +77,46 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
   }
 
   render() {
+    const { currentUser } = this.props;
     let customerId = false;
     let clientId = false;
-    if (this.props.currentUser && this.props.currentUser.roleForClient) {
-      customerId = this.props.currentUser.roleForClient.client.stripeCustomerId;
-      clientId = this.props.currentUser.roleForClient.client.id;
+    let purchasable = false;
+    if (currentUser && currentUser.roleForClient) {
+      purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
+      customerId = currentUser.roleForClient.client.stripeCustomerId;
+      clientId = currentUser.roleForClient.client.id;
     }
     let creditCards = [];
     if (this.props.creditCards.details && this.props.creditCards.details.data) {
       creditCards = this.props.creditCards.details.data;
     }
-    return (
-      <div className="container-fluid">
-        <Helmet title="Payment Information - StudyKIK" />
-        <section className="payment-information">
-          <h2 className="main-heading">PAYMENT INFORMATION</h2>
+    if (purchasable) {
+      return (
+        <div className="container-fluid">
+          <Helmet title="Payment Information - StudyKIK" />
+          <section className="payment-information">
+            <h2 className="main-heading">PAYMENT INFORMATION</h2>
 
-          <div>
-            <div className="btn-block text-right">
-              <a className="btn btn-primary lightbox-opener" onClick={this.showCreditCardModal}>+ ADD NEW CARD</a>
+            <div>
+              <div className="btn-block text-right">
+                <a className="btn btn-primary lightbox-opener" onClick={this.showCreditCardModal}>+ ADD NEW CARD</a>
+              </div>
+              <AddCreditCardModal addCreditCard={this.onSaveCard} showModal={this.state.showAddCreditCardModal} closeModal={this.closeAddCredtCardModal} />
             </div>
-            <AddCreditCardModal addCreditCard={this.onSaveCard} showModal={this.state.showAddCreditCardModal} closeModal={this.closeAddCredtCardModal} />
-          </div>
 
-          <PaymentMethodsForm
-            creditCards={creditCards}
-            deleteCreditCard={this.deleteCard}
-            clientId={clientId}
-            customerId={customerId}
-            paginationOptions={this.props.paginationOptions}
-            setActiveSort={this.props.setActiveSort}
-          />
-        </section>
-      </div>
-    );
+            <PaymentMethodsForm
+              creditCards={creditCards}
+              deleteCreditCard={this.deleteCard}
+              clientId={clientId}
+              customerId={customerId}
+              paginationOptions={this.props.paginationOptions}
+              setActiveSort={this.props.setActiveSort}
+            />
+          </section>
+        </div>
+      );
+    }
+    return <div></div>;
   }
 }
 

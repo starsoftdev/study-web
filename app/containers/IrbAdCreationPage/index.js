@@ -7,6 +7,7 @@
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { createStructuredSelector } from 'reselect';
 import { touch } from 'redux-form';
@@ -72,6 +73,14 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     };
   }
 
+  componentWillMount() {
+    const { currentUser } = this.props;
+    const purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
+    if (!purchasable) {
+      browserHistory.push('/app');
+    }
+  }
+
   componentDidMount() {
     const { currentUser, fetchClientSites, fetchIndications, fetchProductList, userRoleType } = this.props;
     // coming soon for sponsor
@@ -120,10 +129,11 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
   }
 
   renderClientIRBAdCreation() {
-    const { siteLocations, indications, productList, irbAdCreationDetail, userRoleType } = this.props;
+    const { siteLocations, indications, productList, irbAdCreationDetail, userRoleType, currentUser } = this.props;
+    const purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
     const { uniqueId } = this.state;
 
-    if (userRoleType === 'client' && productList[0]) {
+    if ((userRoleType === 'client' && purchasable) && productList[0]) {
       const addOns = [{
         title: productList[0].name,
         price: productList[0].price * 100,
