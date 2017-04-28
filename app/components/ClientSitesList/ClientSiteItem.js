@@ -85,7 +85,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     let assignedUsersContent;
     if (roles.details) {
       assignedUsersContent = roles.details.filter(item => (
-        !item.user.isArchived && !item.isAdmin && item.site_id === id
+        item.user && !item.user.isArchived && !item.isAdmin && item.site_id === id
       )).map(item => ((
         <div className="assigned-user" key={item.id}>
           <span>{item.user.firstName} {item.user.lastName}</span>
