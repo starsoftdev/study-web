@@ -191,6 +191,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.setState({ customFilters: [],
       modalFilters: [] });
     this.props.resetForm();
+    this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
   }
 
   openFiltersModal() {
