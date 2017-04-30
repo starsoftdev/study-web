@@ -58,20 +58,18 @@ class Filter extends React.Component {
     );
   }
 
-  createComparisonBox(options) {
+  createComparisonBox(options, comparisonOptions) {
     const { name, style } = options;
-    const comparisonOptions = [
-      { id: 1, label: '<', value: 'lt', clearableValue: false },
-      { id: 2, label: '>', value: 'gt', clearableValue: false },
-      { id: 3, label: '=', value: 'eq', clearableValue: false },
-    ];
+    
+    const label = name === 'nearbyStudies' ? 'nearby Studies' : name;
+    console.log('aaa', name, label);
     return (
       <div
         style={style}
         data-percentage="percentage-filter"
         className={classNames('filter-box')}
       >
-        <strong className="title">{name}:</strong>
+        <strong className="title">{label}:</strong>
         <Select
           value={options.value}
           options={comparisonOptions}
@@ -98,6 +96,17 @@ class Filter extends React.Component {
 
   render() {
     const { options } = this.props;
+    const percentageComparisonOptions = [
+      { id: 1, label: '<', value: 'lt', clearableValue: false },
+      { id: 2, label: '>', value: 'gt', clearableValue: false },
+      { id: 3, label: '=', value: 'eq', clearableValue: false },
+    ];
+
+    const nearbyComparisonOptions = [
+      { id: 1, label: '< 10 Miles', value: 10, clearableValue: false },
+      { id: 2, label: '< 25 Miles', value: 25, clearableValue: false },
+      { id: 3, label: '< 50 Miles', value: 50, clearableValue: false },
+    ];
 
     switch (options.type) {
       case 'search':
@@ -105,7 +114,9 @@ class Filter extends React.Component {
       case 'value':
         return this.createValueBox(options);
       case 'compare':
-        return this.createComparisonBox(options);
+        return this.createComparisonBox(options, percentageComparisonOptions);
+      case 'nearby':
+        return this.createComparisonBox(options, nearbyComparisonOptions);
       default:
         return this.createSearchBox(options);
     }

@@ -299,8 +299,6 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               component={ReactMultiCheckBox}
               placeholder="NEARBY STUDIES"
               optionLabelKey="label"
-              multiple
-              includeAllOption
               onChange={(e) => this.initSearch(e, 'nearbyStudies')}
               dataSource={filterOptions.nearbyStudiesOptions}
               customSearchIconClass="icomoon-icon_search2"
