@@ -62,6 +62,7 @@ export class DashboardCouponTable extends React.Component { // eslint-disable-li
               <th onClick={this.sortBy} data-sort="amount" className={`th ${(this.props.paginationOptions.activeSort === 'amount') ? this.props.paginationOptions.activeDirection : ''}`}>Amount<i className="caret-arrow" /></th>
               <th onClick={this.sortBy} data-sort="validFrom" className={`th ${(this.props.paginationOptions.activeSort === 'validFrom') ? this.props.paginationOptions.activeDirection : ''}`}>Valid From<i className="caret-arrow" /></th>
               <th onClick={this.sortBy} data-sort="validTo" className={`th ${(this.props.paginationOptions.activeSort === 'validTo') ? this.props.paginationOptions.activeDirection : ''}`}>Valid To<i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="neverExpires" className={`th ${(this.props.paginationOptions.activeSort === 'neverExpires') ? this.props.paginationOptions.activeDirection : ''}`}>Never Expires<i className="caret-arrow" /></th>
               <th></th>
             </tr>
           </thead>
