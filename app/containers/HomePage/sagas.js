@@ -269,7 +269,7 @@ export function* fetchIndicationLevelPriceWatcher() {
 export function* fetchIndicationLevelPriceWorker(action) {
   try {
     const { levelId } = action;
-    const requestURL = `${API_URL}/indicationLevelSkus/getPrice`;
+    const requestURL = `${API_URL}/levels/getPrice`;
     const params = {
       query: {
         levelId,
@@ -278,7 +278,7 @@ export function* fetchIndicationLevelPriceWorker(action) {
     const response = yield call(request, requestURL, params);
     yield put(indicationLevelPriceFetched(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
+    const errorMessage = get(err, 'message', 'Can not get price for Level');
     yield put(toastrActions.error('', errorMessage));
     yield put(indicationLevelPriceFetchingError(err));
     if (err.status === 401) {
