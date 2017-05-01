@@ -182,7 +182,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.fetchStudiesAccordingToFilters();
   }
 
-  removeFilters() {
+  saveFilters() {
 
   }
 
@@ -250,18 +250,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     const newFilters = [];
     mapKeys(filters, (filterValues, key) => {
       if (key !== 'campaign' && key !== 'search') {
-        let type;
-        if (key === 'percentage') {
-          type = 'compare';
-        } else if (key === 'nearbyStudies') {
-          type = 'nearby';
-        } else {
-          type = 'value';
-        }
         if (key === 'percentage') {
           newFilters.push({
             name: key,
-            type,
+            type: key === 'percentage' ? 'compare' : 'value',
             value: filterValues.value,
             onChange: this.percentageFilterChange,
             onSubmit: this.percentageFilterSubmit,
@@ -271,7 +263,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             if (v.label !== 'All') {
               newFilters.push({
                 name: key,
-                type,
+                type: key === 'percentage' ? 'compare' : 'value',
                 value: v.label,
               });
             }
@@ -457,8 +449,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             <div className="filters-holder search-filters">
               <strong className="title">FILTERS</strong>
               <div className="btns pull-right">
-                <Button bsStyle="primary" onClick={() => this.removeFilters()}>
-                  Remove
+                <Button bsStyle="primary" onClick={() => this.saveFilters()}>
+                  Save Filters
                 </Button>
                 <Button className="gray-outline" onClick={() => this.clearFilters()}>
                   Clear
