@@ -82,6 +82,9 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           {this.props.item.number}
         </td>
         <td>
+          {this.props.item.neverExpires}
+        </td>
+        <td>
           <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openAddCouponModal}>
             <span>Edit</span>
           </a>
