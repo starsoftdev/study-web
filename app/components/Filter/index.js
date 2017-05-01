@@ -58,6 +58,33 @@ class Filter extends React.Component {
     );
   }
 
+  createNearByBox(options) {
+    const { name, style } = options;
+
+    return (
+      <div
+        style={style}
+        className={classNames('filter-nearby-area')}
+      >
+        <strong className="title">Nearby Studies:</strong>
+        <input
+          type="text" name={`${name}-miles`} className="form-control" placeholder="Miles" ref={(searchVal) => (
+          this.searchVal = searchVal
+        )}
+        />
+        <input
+          type="text" name={`${name}-zipcode`} className="form-control" placeholder="Postal Code" ref={(searchVal) => (
+          this.searchVal = searchVal
+        )}
+        />
+        <button className="btn btn-default" onClick={() => { this.props.onSubmit(this.searchVal.value); }}>Apply</button>
+        <a className="btn-close" onClick={() => this.props.onClose()}>
+          <i className="icomoon-icon_close"></i>
+        </a>
+      </div>
+    );
+  }
+
   createComparisonBox(options) {
     const { name, style } = options;
     const comparisonOptions = [
@@ -84,7 +111,7 @@ class Filter extends React.Component {
           }}
         />
         <input
-          type="text" name={name} className="form-control" placeholder="Search" ref={(searchVal) => (
+          type="text" name={name} className="form-control" placeholder="%" ref={(searchVal) => (
           this.searchVal = searchVal
         )}
         />
@@ -106,6 +133,8 @@ class Filter extends React.Component {
         return this.createValueBox(options);
       case 'compare':
         return this.createComparisonBox(options);
+      case 'nearby':
+        return this.createNearByBox(options);
       default:
         return this.createSearchBox(options);
     }
