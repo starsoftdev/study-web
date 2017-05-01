@@ -63,6 +63,11 @@ export class DashboardManageUsersTable extends React.Component { // eslint-disab
     }
   }
 
+  componentWillUnmount() {
+    const defaultSort = 'first_name';
+    this.props.setActiveSort(defaultSort, null);
+  }
+
   editUserClick(item) {
     this.setState({ editUserInitValues: {
       initialValues: {

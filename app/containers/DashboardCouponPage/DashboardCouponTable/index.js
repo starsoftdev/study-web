@@ -21,6 +21,11 @@ export class DashboardCouponTable extends React.Component { // eslint-disable-li
     this.sortBy = this.sortBy.bind(this);
   }
 
+  componentWillUnmount() {
+    const defaultSort = 'number';
+    this.props.setActiveSort(defaultSort, null);
+  }
+
   sortBy(ev) {
     ev.preventDefault();
     let sort = ev.currentTarget.dataset.sort;
