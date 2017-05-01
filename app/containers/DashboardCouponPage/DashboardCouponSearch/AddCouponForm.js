@@ -5,6 +5,7 @@ import { Field, reduxForm, change } from 'redux-form';
 import moment from 'moment';
 import Modal from 'react-bootstrap/lib/Modal';
 import { Calendar } from 'react-date-range';
+import _ from 'lodash';
 
 import RadioButton from '../../../components/Input/RadioButton';
 import DatePickerDisplay from '../../../components/Input/DatePickerDisplay';
@@ -36,6 +37,7 @@ export class AddCouponForm extends React.Component { // eslint-disable-line reac
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleDatePickerClose = this.handleDatePickerClose.bind(this);
     this.handleDateSelect = this.handleDateSelect.bind(this);
+    this.navigateToday = this.navigateToday.bind(this);
     this.state = {
       showDatePicker: false,
       initDate: moment(),
@@ -72,6 +74,27 @@ export class AddCouponForm extends React.Component { // eslint-disable-line reac
     const { which } = this.state;
     change(which, momentDate);
     this.handleDatePickerClose(false);
+  }
+
+  navigateToday() {
+    const today = moment();
+    const todayYear = today.year();
+    const todayMonth = today.month();
+    const calendarYear = this.calendar.getShownDate().year();
+    const calendarMonth = this.calendar.getShownDate().month();
+    const monthDiff = ((todayYear - calendarYear) * 12) + (todayMonth - calendarMonth);
+    const { which } = this.state;
+
+    this.calendar.changeMonth(monthDiff, { preventDefault: _.noop });
+
+    if (moment(this.state.minDate).isSameOrBefore(today, 'day')) {
+      this.setState({
+        initDate: today,
+      });
+      const { change } = this.props;
+      change(which, today);
+      this.handleDatePickerClose(false);
+    }
   }
 
   render() {
@@ -152,7 +175,7 @@ export class AddCouponForm extends React.Component { // eslint-disable-line reac
 
                 <div className="field-row">
                   <strong className="label required">
-                    <label>Valid To</label>
+                    <label>Valid From</label>
                   </strong>
                   <div className="field" onClick={() => { this.handleDatePickerClose(true, 'validFrom'); }}>
                     <Field
@@ -220,7 +243,7 @@ export class AddCouponForm extends React.Component { // eslint-disable-line reac
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>Choose Start Date</Modal.Title>
+            <Modal.Title>{ this.state.which === 'validFrom' ? 'Valid From' : 'Valid To' }</Modal.Title>
             <a className="lightbox-close close" onClick={() => { this.handleDatePickerClose(false); }}>
               <i className="icomoon-icon_close" />
             </a>
