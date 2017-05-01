@@ -3,11 +3,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import { Calendar } from 'react-date-range';
-import moment from 'moment-timezone';
-import Modal from 'react-bootstrap/lib/Modal';
 import ReactSelect from '../../../components/Input/ReactSelect';
-import CenteredModal from '../../../components/CenteredModal/index';
 import { AddCouponForm } from './AddCouponForm';
 
 @reduxForm({ form: 'dashboardCouponForm' })
@@ -56,8 +52,6 @@ export class DashboardCouponSearch extends React.Component {
         label: item.number, value: item.id,
       });
     });
-
-    const currentDate = moment();
 
     return (
       <form action="#" className="form-search clearfix">
