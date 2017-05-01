@@ -67,16 +67,8 @@ const filterOptions = {
   nearbyStudiesOptions : [
     {
       id: 1,
-      label: '< 10 Miles',
-      value: 10,
-    }, {
-      id: 2,
-      label: '< 25 Miles',
-      value: 25,
-    }, {
-      id: 3,
-      label: '< 50 Miles',
-      value: 50,
+      label: 'Find',
+      value: 'find',
     },
   ],
 
@@ -299,8 +291,6 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               component={ReactMultiCheckBox}
               placeholder="NEARBY STUDIES"
               optionLabelKey="label"
-              multiple
-              includeAllOption
               onChange={(e) => this.initSearch(e, 'nearbyStudies')}
               dataSource={filterOptions.nearbyStudiesOptions}
               customSearchIconClass="icomoon-icon_search2"
