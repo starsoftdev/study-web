@@ -22,6 +22,11 @@ export class DashboardIndicationTable extends React.Component { // eslint-disabl
     this.sortBy = this.sortBy.bind(this);
   }
 
+  componentWillUnmount() {
+    const defaultSort = 'name';
+    this.props.setActiveSort(defaultSort, null);
+  }
+
   sortBy(ev) {
     ev.preventDefault();
     let sort = ev.currentTarget.dataset.sort;
