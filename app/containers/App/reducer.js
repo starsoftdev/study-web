@@ -763,7 +763,7 @@ export default function appReducer(state = initialState, action) {
         }
         return patientData;
       });
-      sitePatientsCollection = reverse(sortBy(sitePatientsCollection, item => item.twtm_max_date_created));
+      sitePatientsCollection = sortBy(sitePatientsCollection, item => item.twtm_max_date_created);
       baseDataInnerState = {
         sitePatients: {
           details: sitePatientsCollection,
