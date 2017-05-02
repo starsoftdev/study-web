@@ -785,7 +785,7 @@ export default function appReducer(state = initialState, action) {
     case MARK_AS_READ_PATIENT_MESSAGES:
       sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
         const patientData = Object.assign({}, item);
-        if (patientData.id === action.patientId && patientData.study_id === action.studyId) {
+        if (patientData.id === action.patientId) {
           unreadCount = patientData.count_unread;
           patientData.count_unread = 0;
         }
