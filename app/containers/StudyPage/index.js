@@ -120,7 +120,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       return {
         label: `${dateFrom} - ${dateTo}`,
         value: campaign.id,
-      }
+      };
     });
     campaignOptions.unshift({ label: 'All', value: -1 });
     const sourceOptions = sources.map(source => (
