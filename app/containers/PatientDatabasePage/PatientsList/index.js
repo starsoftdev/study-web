@@ -127,7 +127,6 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     for (const patient of patients.details) {
       if (patient.unsubscribed && checked) {
         const { id } = patient;
-        change('all-patients', false);
         removePatientFromTextBlast([{ id }]);
       } else {
         change(`patient-${patient.id}`, checked);

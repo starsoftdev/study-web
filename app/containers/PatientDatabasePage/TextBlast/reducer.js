@@ -50,7 +50,6 @@ export default function TextBlastModal(state = initialState, action) {
             patient.id !== action.patient[0].id
           )),
           uncheckedPatients: [...state.values.uncheckedPatients, action.patient[0].id],
-          'all-patients': false,
         },
       };
     case REMOVE_PATIENTS_FROM_TEXT_BLAST:

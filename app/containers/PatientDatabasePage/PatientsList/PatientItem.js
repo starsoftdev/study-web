@@ -99,25 +99,36 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
   }
 
   togglePatientForTextBlast(checked) {
-    const { addPatientsToTextBlast, change, id, removePatientFromTextBlast } = this.props;
+    const { addPatientsToTextBlast, change, id, removePatientFromTextBlast, patients, formValues } = this.props;
+    let totalCount = patients.details.length;
+    let newCount;
+    let allPatients = false;
     if (checked) {
       addPatientsToTextBlast([{ id }]);
-      const totalCount = this.props.patients.details.length;
-      const newCount = this.props.formValues.patients.length;
-      if ((newCount + 1) === totalCount) {
-        change('all-patients', true);
-      }
+      newCount = formValues.patients.length + 1;
     } else {
       removePatientFromTextBlast([{ id }]);
+      newCount = formValues.patients.length - 1;
     }
+
+    for (const detail of patients.details) {
+      if (detail.unsubscribed) {
+        totalCount--;
+      }
+    }
+
+    if (newCount === totalCount) {
+      allPatients = true;
+    }
+    change('all-patients', allPatients);
   }
 
   render() {
+    const { id, index, firstName, lastName, email, phone, age, gender, bmi, indications, source, studyPatientCategory, unsubscribed } = this.props;
     let checkClassName = 'pull-left';
     if (unsubscribed) {
       checkClassName += ' none-event';
     }
-    const { id, index, firstName, lastName, email, phone, age, gender, bmi, indications, source, studyPatientCategory, unsubscribed } = this.props;
     const indicationNames = indications.map(indicationIterator => indicationIterator.name).join(', ');
     return (
       <div className={classNames('tr', 'patient-container', { 'tr-active': this.state.hover })} onMouseEnter={this.showHover} onMouseLeave={this.hideHover}>
