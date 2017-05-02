@@ -302,7 +302,8 @@ export class EditInformationModal extends React.Component {
 
     campaignOptions = campaignOptions.reverse();
 
-    const campaignDateFrom = moment(this.props.formValues.campaign_datefrom);
+    const campaignDateFrom = this.props.formValues.campaign_datefrom ? moment(this.props.formValues.campaign_datefrom) : null;
+    const campaignDateTo = this.props.formValues.campaign_dateto ? moment(this.props.formValues.campaign_dateto) : null;
 
     return (
       <Collapse dimension="width" in={openModal} timeout={250} className={classNames('form-edit-information', (this.props.isOnTop > 0 ? 'slider-on-top' : ''))}>
@@ -701,7 +702,7 @@ export class EditInformationModal extends React.Component {
                       name="campaign_dateto"
                       component={DatePicker}
                       className="form-control datepicker-input"
-                      initialDate={moment(this.props.formValues.campaign_dateto)}
+                      initialDate={campaignDateTo}
                     />
                   </div>
                 </div>

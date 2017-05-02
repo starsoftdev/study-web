@@ -114,12 +114,14 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       );
     }
     const pageTitle = `${study.name} - StudyKIK`;
-    const campaignOptions = campaigns.map(campaign => (
-      {
-        label: `${moment(campaign.dateFrom).format('MM/DD/YYYY')} - ${moment(campaign.dateTo).format('MM/DD/YYYY')}`,
+    const campaignOptions = campaigns.map(campaign => {
+      const dateFrom = campaign.dateFrom ? moment(campaign.dateFrom).format('MM/DD/YYYY') : 'TBD';
+      const dateTo = campaign.dateTo ? moment(campaign.dateTo).format('MM/DD/YYYY') : 'TBD';
+      return {
+        label: `${dateFrom} - ${dateTo}`,
         value: campaign.id,
       }
-    ));
+    });
     campaignOptions.unshift({ label: 'All', value: -1 });
     const sourceOptions = sources.map(source => (
       {

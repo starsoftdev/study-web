@@ -16,7 +16,7 @@ export default class DatePicker extends Component {
     input: PropTypes.object.isRequired,
     name: PropTypes.string.isRequired,
     className: PropTypes.string,
-    initialDate: PropTypes.object.isRequired,
+    initialDate: PropTypes.object,
     dateStyle: PropTypes.string,
     minDate: PropTypes.any,
   }
@@ -45,10 +45,17 @@ export default class DatePicker extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.input.value && newProps.input.value !== this.props.input.value) {
-      this.setState({
-        date: moment(newProps.input.value),
-      });
+    if (this.props.input.value !== newProps.input.value) {
+      const date = moment(newProps.input.value);
+      if (date.isValid()) {
+        this.setState({
+          date,
+        });
+      } else {
+        this.setState({
+          date: null,
+        });
+      }
     }
   }
 
