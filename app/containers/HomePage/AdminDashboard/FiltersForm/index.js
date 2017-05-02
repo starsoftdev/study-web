@@ -444,6 +444,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               placeholder="BD"
               optionLabelKey="label"
               multiple
+              searchable
               includeAllOption
               onChange={(e) => this.initSearch(e, 'bd')}
               dataSource={bdOptions}
@@ -460,6 +461,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               placeholder="AE"
               optionLabelKey="label"
               multiple
+              searchable
               includeAllOption
               onChange={(e) => this.initSearch(e, 'ae')}
               dataSource={aeOptions}
