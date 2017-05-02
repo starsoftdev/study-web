@@ -75,9 +75,11 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
 
   componentWillMount() {
     const { currentUser } = this.props;
-    const purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
-    if (!purchasable) {
-      browserHistory.push('/app');
+    if (currentUser.roleForClient) {
+      const purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
+      if (!purchasable) {
+        browserHistory.push('/app');
+      }
     }
   }
 
@@ -130,7 +132,10 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
 
   renderClientIRBAdCreation() {
     const { siteLocations, indications, productList, irbAdCreationDetail, userRoleType, currentUser } = this.props;
-    const purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
+    let purchasable = false;
+    if (currentUser.roleForClient) {
+      purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
+    }
     const { uniqueId } = this.state;
 
     if ((userRoleType === 'client' && purchasable) && productList[0]) {

@@ -531,7 +531,7 @@ function* addPatientIndication() {
     }
 
     try {
-      const requestURL = `${API_URL}/patientIndications/add`;
+      const requestURL = `${API_URL}/patientIndications`;
       const payload = yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
@@ -594,7 +594,7 @@ function* removePatientIndication() {
     }
 
     try {
-      const requestURL = `${API_URL}/patientIndications/delete`;
+      const requestURL = `${API_URL}/patientIndications`;
       yield call(request, requestURL, {
         method: 'DELETE',
         body: JSON.stringify({

@@ -12,7 +12,7 @@
 import React, { PropTypes, Component } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { browserHistory } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import _ from 'lodash';
 
@@ -49,6 +49,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
 
     this.searchStudies = this.searchStudies.bind(this);
     this.searchProtocols = this.searchProtocols.bind(this);
+    this.gotoListNewStudy = this.gotoListNewStudy.bind(this);
   }
 
   componentWillMount() {
@@ -81,13 +82,17 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     fetchProtocols(currentUser.roleForSponsor.id, filters);
   }
 
+  gotoListNewStudy() {
+    browserHistory.push('/app/list-new-study');
+  }
+
   render() {
     const { userRoleType, currentUser } = this.props;
     let purchasable = true;
     if (userRoleType === 'client') {
       purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
     }
-    const listButtonClass = purchasable ? null : 'disabled-div';
+    const bDisabled = purchasable ? null : true;
     return (
       <div className="home-page">
         <Helmet title="Home - StudyKIK" />
@@ -99,9 +104,9 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
             </div>
             <div className="search-studies-panel clearfix form-group">
               <SearchStudiesForm onSubmit={this.searchStudies} currentUser={currentUser} />
-              <div className={listButtonClass}>
-                <Link to="/app/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Study</Link>
-              </div>
+              <button type="button" className="btn btn-primary btn-list-new-study pull-right" onClick={this.gotoListNewStudy} disabled={bDisabled}>
+                + List New Study
+              </button>
             </div>
             <div className="table-holder form-group">
               <StudiesList />

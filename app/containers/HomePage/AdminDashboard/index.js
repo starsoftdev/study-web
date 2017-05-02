@@ -305,6 +305,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     if (isEmpty) {
       this.props.clearFilters();
+      this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
     } else {
       this.props.fetchStudiesDashboard(filters, limit, offset);
     }
