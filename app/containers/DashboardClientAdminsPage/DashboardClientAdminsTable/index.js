@@ -74,6 +74,10 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     }
   }
 
+  componentWillUnmount() {
+    const defaultSort = 'name';
+    this.props.setActiveSort(defaultSort, null);
+  }
 
   editAdminClick(item) {
     const filteredClientSites = this.props.clientSites.details.filter((element) => (

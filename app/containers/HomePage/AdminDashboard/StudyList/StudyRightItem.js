@@ -63,8 +63,8 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
       daysRan = totalDays;
     }
 
-    const startDate = item.campaign_datefrom ? campaignDateFrom.format('MM/DD/YY') : '';
-    const endDate = item.campaign_dateto ? campaignDateTo.format('MM/DD/YY') : '';
+    const startDate = item.campaign_datefrom ? campaignDateFrom.format('MM/DD/YY') : 'TBD';
+    const endDate = item.campaign_dateto ? campaignDateTo.format('MM/DD/YY') : 'TBD';
 
     let campaignName = this.props.filtersFormValues.campaign ? this.props.filtersFormValues.campaign.toString() : 'Newest';
     campaignName = campaignName.charAt(0).toUpperCase() + campaignName.slice(1);

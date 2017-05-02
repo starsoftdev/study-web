@@ -23,6 +23,11 @@ export class DashboardSponsorAdminTable extends React.Component { // eslint-disa
     this.sortBy = this.sortBy.bind(this);
   }
 
+  componentWillUnmount() {
+    const defaultSort = 'first_name';
+    this.props.setActiveSort(defaultSort, null);
+  }
+
   sortBy(ev) {
     ev.preventDefault();
     let sort = ev.currentTarget.dataset.sort;

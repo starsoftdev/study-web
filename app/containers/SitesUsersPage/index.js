@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
-import { map } from 'lodash';
+import _, { map } from 'lodash';
 import { Field, reduxForm, change } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
@@ -146,7 +146,8 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
 
   handleSiteQueryChange(index) {
     const sel = parseInt(index !== null ? index : 0);
-    const sName = (this.props.sites[sel - 1] && this.props.sites[sel - 1].name) ? this.props.sites[sel - 1].name : null;
+    let sName = _.find(this.props.sites, { id: parseInt(index) });
+    sName = (sName && sName.name) ? sName.name : null;
     if (sel === 0) {
       this.setState({
         siteName: '',
