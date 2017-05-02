@@ -76,8 +76,8 @@ class TextSection extends React.Component {
       this.props.socket.on('notifyMessage', (newMessage) => {
         this.initStudyPatientMessagesFetch(newProps);
         if (this.props.active && newMessage) {
-          this.props.readStudyPatientMessages(this.props.currentPatient.id, this.props.studyId);
-          this.props.markAsReadPatientMessages(this.props.currentPatient.id, this.props.studyId);
+          this.props.readStudyPatientMessages(this.props.currentPatient.id);
+          this.props.markAsReadPatientMessages(this.props.currentPatient.id);
           this.props.fetchClientCredits(currentUser.id);
         }
       });
@@ -252,8 +252,8 @@ const mapDispatchToProps = (dispatch) => ({
   sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
   fetchStudyPatientMessages: (payload) => dispatch(fetchStudyPatientMessages(payload)),
   setProcessingStatus: (payload) => dispatch(setProcessingStatus(payload)),
-  readStudyPatientMessages: (patientId, studyId) => dispatch(readStudyPatientMessages(patientId, studyId)),
-  markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
+  readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
+  markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
   fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
   updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
 });

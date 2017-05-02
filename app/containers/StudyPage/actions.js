@@ -250,11 +250,10 @@ export function studyViewsStatFetched(payload) {
   };
 }
 
-export function readStudyPatientMessages(patientId, studyId) {
+export function readStudyPatientMessages(patientId) {
   return {
     type: READ_STUDY_PATIENT_MESSAGES,
     patientId,
-    studyId,
   };
 }
 

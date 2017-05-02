@@ -605,11 +605,10 @@ export function sitePatientsSearchingError(payload) {
   };
 }
 
-export function fetchPatientMessages(patientId, studyId) {
+export function fetchPatientMessages(patientId) {
   return {
     type: FETCH_PATIENT_MESSAGES,
     patientId,
-    studyId,
   };
 }
 
@@ -634,11 +633,10 @@ export function updatePatientMessages(newMessage) {
   };
 }
 
-export function markAsReadPatientMessages(patientId, studyId) {
+export function markAsReadPatientMessages(patientId) {
   return {
     type: MARK_AS_READ_PATIENT_MESSAGES,
     patientId,
-    studyId,
   };
 }
 
