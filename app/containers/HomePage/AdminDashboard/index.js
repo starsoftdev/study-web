@@ -121,6 +121,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.fetchStudiesAccordingToFilters = this.fetchStudiesAccordingToFilters.bind(this);
     this.percentageFilterChange = this.percentageFilterChange.bind(this);
     this.percentageFilterSubmit = this.percentageFilterSubmit.bind(this);
+    this.nearbyFilterChange = this.nearbyFilterChange.bind(this);
+    this.nearbyFilterSubmit = this.nearbyFilterSubmit.bind(this);
     this.searchFilterSubmit = this.searchFilterSubmit.bind(this);
   }
 
@@ -170,6 +172,11 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     if (filter.name === 'percentage') {
       pullAt(modalFilters, 'percentage');
+      this.setState({ modalFilters });
+    }
+
+    if (filter.name === 'nearbyStudies') {
+      pullAt(modalFilters, 'nearbyStudies');
       this.setState({ modalFilters });
     }
 
@@ -263,8 +270,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             name: key,
             type: 'nearby',
             value: filterValues.value,
-            onChange: this.percentageFilterChange,
-            onSubmit: this.percentageFilterSubmit,
+            onChange: this.nearbyFilterChange,
+            onSubmit: this.nearbyFilterSubmit,
           });
         } else {
           _.forEach(filterValues, (v) => {
@@ -325,6 +332,15 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   percentageFilterSubmit(e) {
     this.props.dispatch(change('dashboardFilters', 'percentage', { ...this.props.filtersFormValues.percentage, arg: e }));
     this.fetchStudiesAccordingToFilters({ ...this.props.filtersFormValues.percentage, arg: e }, 'percentage');
+  }
+
+  nearbyFilterChange(e) {
+    this.props.dispatch(change('dashboardFilters', 'nearbyStudies', e));
+  }
+
+  nearbyFilterSubmit(e) {
+    this.props.dispatch(change('dashboardFilters', 'nearbyStudies', { ...this.props.filtersFormValues.nearbyStudies, arg: e }));
+    this.fetchStudiesAccordingToFilters({ ...this.props.filtersFormValues.nearbyStudies, arg: e }, 'nearbyStudies');
   }
 
   searchFilterSubmit(e) {
