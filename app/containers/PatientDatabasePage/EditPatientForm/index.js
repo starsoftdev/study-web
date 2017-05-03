@@ -144,8 +144,14 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   changeSiteLocation(siteId) {
-    const { currentUser, fetchFilteredProtcols } = this.props;
-    fetchFilteredProtcols(currentUser.roleForClient.id, siteId);
+    if (siteId) {
+      const { currentUser, fetchFilteredProtcols } = this.props;
+      fetchFilteredProtcols(currentUser.roleForClient.id, siteId);
+    } else {
+      const { change } = this.props;
+      // clear the protocol value if there is no site id
+      change('protocol', null);
+    }
   }
 
   selectProtocol(studyId) {
@@ -409,7 +415,6 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="field"
             placeholder="Select Site Location"
             options={siteOptions}
-            clearable={false}
             onChange={this.changeSiteLocation}
             disabled={initialValues && initialValues.source && initialValues.source === 1}
           />
@@ -438,7 +443,6 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="field"
             placeholder="Select Source"
             options={sourceOptions}
-            clearable={false}
             disabled={initialValues && initialValues.source && initialValues.source === 1}
           />
         </div>

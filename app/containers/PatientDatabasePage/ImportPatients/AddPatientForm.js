@@ -80,8 +80,14 @@ export default class AddPatientForm extends React.Component {
   }
 
   changeSiteLocation(siteId) {
-    const { currentUser, fetchFilteredProtcols } = this.props;
-    fetchFilteredProtcols(currentUser.roleForClient.id, siteId);
+    if (siteId) {
+      const { currentUser, fetchFilteredProtcols } = this.props;
+      fetchFilteredProtcols(currentUser.roleForClient.id, siteId);
+    } else {
+      const { change } = this.props;
+      // clear the protocol value if there is no site id
+      change('protocol', null);
+    }
   }
 
   addPatient(event) {
@@ -113,13 +119,15 @@ export default class AddPatientForm extends React.Component {
   }
 
   selectIndication(indicationId) {
-    const { change, protocols } = this.props;
-    const protocol = _.find(protocols, { indicationId });
-    if (protocol) {
-      change('protocol', protocol.studyId);
-    } else {
-      // clear the protocol value if the indicationId doesn't match
-      change('protocol', null);
+    if (indicationId) {
+      const { change, protocols } = this.props;
+      const protocol = _.find(protocols, { indicationId });
+      if (protocol) {
+        change('protocol', protocol.studyId);
+      } else {
+        // clear the protocol value if the indicationId doesn't match
+        change('protocol', null);
+      }
     }
   }
 
@@ -213,7 +221,6 @@ export default class AddPatientForm extends React.Component {
             className="field"
             placeholder="Select Indication"
             options={indicationOptions}
-            clearable={false}
             onChange={this.selectIndication}
           />
         </div>
@@ -228,7 +235,6 @@ export default class AddPatientForm extends React.Component {
             placeholder="Select Site Location"
             options={siteOptions}
             onChange={this.changeSiteLocation}
-            clearable={false}
           />
         </div>
         <div className="field-row form-group">
@@ -255,7 +261,6 @@ export default class AddPatientForm extends React.Component {
             className="field"
             placeholder="Select Source"
             options={sourceOptions}
-            clearable={false}
           />
         </div>
         <div className="text-right">
