@@ -57,6 +57,7 @@ export default class SearchPatientsForm extends Component {
     this.initSearch = this.initSearch.bind(this);
   }
 
+  // TODO: refactor this method(value of labels no longer "0" it's "All" now)
   initSearch(e, name) {
     const params = this.props.formValues;
     const paramKeys = Object.keys(params);
