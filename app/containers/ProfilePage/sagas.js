@@ -58,10 +58,9 @@ export function* changeImage() {
     const { payload } = yield take(CHANGE_IMAGE);
 
     try {
-      const requestURL = `${API_URL}/users/change-profile-image`;
+      const requestURL = `${API_URL}/users/${payload.user_id}/change-profile-image`;
       const data = new FormData();
       data.append('file', payload.file);
-      data.append('user_id', payload.user_id);
 
       const params = {
         method: 'POST',
