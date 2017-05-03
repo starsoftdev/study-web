@@ -100,14 +100,13 @@ export class PatientDetailModal extends React.Component {
 
   onSelectText() {
     const {
-      studyId,
       switchToTextSection,
       readStudyPatientMessages,
       markAsReadPatientMessages,
       currentPatient,
     } = this.props;
-    readStudyPatientMessages(currentPatient.id, studyId);
-    markAsReadPatientMessages(currentPatient.id, studyId);
+    readStudyPatientMessages(currentPatient.id);
+    markAsReadPatientMessages(currentPatient.id);
     switchToTextSection();
   }
 
@@ -219,8 +218,8 @@ const mapDispatchToProps = (dispatch) => ({
   switchToTextSection: () => dispatch(switchToTextSectionDetail()),
   switchToEmailSection: () => dispatch(switchToEmailSectionDetail()),
   switchToOtherSection: () => dispatch(switchToOtherSectionDetail()),
-  readStudyPatientMessages: (patientId, studyId) => dispatch(readStudyPatientMessages(patientId, studyId)),
-  markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
+  readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
+  markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientDetailModal);

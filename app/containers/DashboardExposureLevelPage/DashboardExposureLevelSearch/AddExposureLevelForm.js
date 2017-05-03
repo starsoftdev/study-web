@@ -71,11 +71,24 @@ export class AddExposureLevelForm extends React.Component { // eslint-disable-li
 
         <div className="field-row">
           <strong className="label">
-            <label className="add-exposure-level">KIKs</label>
+            <label className="add-exposure-level">LISTING KIKs</label>
           </strong>
           <div className="field">
             <Field
               name="points"
+              component={Input}
+              type="text"
+            />
+          </div>
+        </div>
+
+        <div className="field-row">
+          <strong className="label">
+            <label className="add-exposure-level">ENROLLMENT KIKs</label>
+          </strong>
+          <div className="field">
+            <Field
+              name="enrollPoints"
               component={Input}
               type="text"
             />

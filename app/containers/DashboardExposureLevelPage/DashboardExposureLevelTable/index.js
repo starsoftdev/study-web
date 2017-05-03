@@ -67,7 +67,8 @@ export class DashboardExposureLevelTable extends React.Component { // eslint-dis
               <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>EXPOSURE LEVEL<i className="caret-arrow" /></th>
               <th onClick={this.sortBy} data-sort="price" className={`th ${(this.props.paginationOptions.activeSort === 'price') ? this.props.paginationOptions.activeDirection : ''}`}>PRICE<i className="caret-arrow" /></th>
               <th onClick={this.sortBy} data-sort="credits" className={`th ${(this.props.paginationOptions.activeSort === 'credits') ? this.props.paginationOptions.activeDirection : ''}`}>CREDITS<i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="points" className={`th ${(this.props.paginationOptions.activeSort === 'points') ? this.props.paginationOptions.activeDirection : ''}`}>KIKS<i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="points" className={`th ${(this.props.paginationOptions.activeSort === 'points') ? this.props.paginationOptions.activeDirection : ''}`}>LISTING KIKS<i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="enrollPoints" className={`th ${(this.props.paginationOptions.activeSort === 'enrollPoints') ? this.props.paginationOptions.activeDirection : ''}`}>ENROLLMENT KIKS<i className="caret-arrow" /></th>
               <th onClick={this.sortBy} data-sort="position" className={`th ${(this.props.paginationOptions.activeSort === 'position') ? this.props.paginationOptions.activeDirection : ''}`}>POSITION<i className="caret-arrow" /></th>
               <th onClick={this.sortBy} data-sort="is_active" className={`th ${(this.props.paginationOptions.activeSort === 'is_active') ? this.props.paginationOptions.activeDirection : ''}`}>Active<i className="caret-arrow" /></th>
               <th></th>

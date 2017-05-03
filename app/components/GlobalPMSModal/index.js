@@ -101,17 +101,17 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
           this.startSound();
         }
         this.props.updateSitePatients(newMessage);
-        if (this.props.showModal === true && this.state.selectedPatient && this.state.selectedPatient.study_id && this.state.selectedPatient.id === newMessage.patient_id) {
-          this.props.fetchPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
-          this.props.markAsReadPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
+        if (this.props.showModal === true && this.state.selectedPatient && this.state.selectedPatient.id === newMessage.patient_id) {
+          this.props.fetchPatientMessages(this.state.selectedPatient.id);
+          this.props.markAsReadPatientMessages(this.state.selectedPatient.id);
         }
       });
       this.setState({ socketBinded: true });
     }
     if (!this.props.showModal && newProps.showModal) {
-      if (this.state.selectedPatient && this.state.selectedPatient.study_id) {
-        this.props.fetchPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
-        this.props.markAsReadPatientMessages(this.state.selectedPatient.id, this.state.selectedPatient.study_id);
+      if (this.state.selectedPatient) {
+        this.props.fetchPatientMessages(this.state.selectedPatient.id);
+        this.props.markAsReadPatientMessages(this.state.selectedPatient.id);
       }
       this.props.fetchSitePatients(currentUser.id);
     }
@@ -138,8 +138,8 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     if (item.id !== this.state.selectedPatient.id) {
       this.setState({ selectedPatient: item });
       // TODO remove this later
-      this.props.fetchPatientMessages(item.id, item.study_id);
-      this.props.markAsReadPatientMessages(item.id, item.study_id);
+      this.props.fetchPatientMessages(item.id);
+      this.props.markAsReadPatientMessages(item.id);
 
       if (!initialSelect) {
         this.props.setChatTextValue('');
@@ -211,7 +211,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     if (this.state.selectedPatient.protocol_number) {
       protocolNumber = 'Protocol: '.concat(this.state.selectedPatient.protocol_number);
     }
-    const ePMS = this.state.selectedPatient && (this.state.selectedPatient.patientMessagingSuite || this.state.selectedPatient.patientQualificationSuite);
     return (
       <Form className="form-search form-search-studies pull-left" onSubmit={this.props.handleSubmit}>
         <div>
@@ -266,7 +265,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                   <section className="chat-area" id="chat-room1">
                     <header>
                       <strong className="name">{this.state.selectedPatient.first_name} {this.state.selectedPatient.last_name}</strong>
-                      <Link to={`/app/studies/${this.state.selectedPatient.study_id}/sites/${this.state.selectedPatient.site_id}`} onClick={this.handleClose}>
+                      <Link to={`/app/studies/${this.state.selectedPatient.study_id}`} onClick={this.handleClose}>
                         <span className="protocol">{protocolNumber}</span>
                       </Link>
                     </header>
@@ -285,7 +284,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                         clientCredits={clientCredits}
                         selectedPatient={this.state.selectedPatient}
                         sendStudyPatientMessages={sendStudyPatientMessages}
-                        ePMS={ePMS}
                       />
                     </footer>
                   </section>
@@ -314,8 +312,8 @@ function mapDispatchToProps(dispatch) {
     fetchSitePatients: (siteId) => dispatch(fetchSitePatients(siteId)),
     searchSitePatients: (keyword) => dispatch(searchSitePatients(keyword)),
     updateSitePatients: (newMessage) => dispatch(updateSitePatients(newMessage)),
-    fetchPatientMessages: (patientId, studyId) => dispatch(fetchPatientMessages(patientId, studyId)),
-    markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
+    fetchPatientMessages: (patientId) => dispatch(fetchPatientMessages(patientId)),
+    markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
     sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
     setChatTextValue: (value) => dispatch(change('chatPatient', 'body', value)),
     fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),

@@ -286,10 +286,10 @@ function* fetchPatientCategories() {
 
 function* readStudyPatientMessages() {
   while (true) {
-    const { patientId, studyId } = yield take(READ_STUDY_PATIENT_MESSAGES);
-    if (patientId && patientId > 0 && studyId && studyId > 0) {
+    const { patientId } = yield take(READ_STUDY_PATIENT_MESSAGES);
+    if (patientId && patientId > 0) {
       try {
-        const requestURL = `${API_URL}/patients/readMessagesByPatientAndStudy?patientId=${patientId}&studyId=${studyId}`;
+        const requestURL = `${API_URL}/patients/${patientId}/markMessagesAsRead`;
         const response = yield call(request, requestURL);
 
         yield put(readStudyPatientMessagesSuccess(response));
