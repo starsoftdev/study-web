@@ -99,7 +99,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     if (formValues.protocol && !submitting) {
       const protocol = _.find(protocols, { studyId: formValues.protocol });
       if (protocol) {
-        const indication = _.find(formValues.indications, {id: protocol.indicationId});
+        const indication = _.find(formValues.indications, { id: protocol.indicationId });
         if (indication) {
           updatePatientIndication(formValues.id, indication.id, protocol.studyId);
         }
