@@ -128,8 +128,8 @@ class PatientBoard extends React.Component {
       fetchPatientDetails,
       setCurrentPatientId,
       setCurrentPatientCategoryId,
-      setOpenPatientModal, switchToTextSection,
-      studyId,
+      setOpenPatientModal,
+      switchToTextSection,
       readStudyPatientMessages,
       markAsReadPatientMessages,
     } = this.props;
@@ -138,8 +138,8 @@ class PatientBoard extends React.Component {
       setCurrentPatientId(patient.id);
       setCurrentPatientCategoryId(category.id);
       fetchPatientDetails(patient.id);
-      readStudyPatientMessages(patient.id, studyId);
-      markAsReadPatientMessages(patient.id, studyId);
+      readStudyPatientMessages(patient.id);
+      markAsReadPatientMessages(patient.id);
       const options = {
         duration: 500,
       };
@@ -296,8 +296,8 @@ const mapDispatchToProps = (dispatch) => (
     switchToTextSection: () => dispatch(switchToTextSectionDetail()),
     changeScheduledDate: (date) => dispatch(changeScheduledDate(date)),
     push: (url) => dispatch(push(url)),
-    readStudyPatientMessages: (patientId, studyId) => dispatch(readStudyPatientMessages(patientId, studyId)),
-    markAsReadPatientMessages: (patientId, studyId) => dispatch(markAsReadPatientMessages(patientId, studyId)),
+    readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
+    markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
     setFormValueByName: (name, attrName, value) => dispatch(change(name, attrName, value)),
     touchSchedulePatientModal: () => dispatch(touch('ScheduledPatientModal', ...fields)),
     submitSchedule: (data, fromCategoryId, scheduleCategoryId) => dispatch(submitSchedule(data, fromCategoryId, scheduleCategoryId)),

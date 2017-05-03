@@ -522,12 +522,14 @@ export function* searchSitePatientsWatcher() {
 
 export function* fetchPatientMessagesWatcher() {
   while (true) {
-    const { patientId, studyId } = yield take(FETCH_PATIENT_MESSAGES);
+    const { patientId } = yield take(FETCH_PATIENT_MESSAGES);
     if (patientId && patientId > 0) {
-      const queryStr = `patientId=${patientId}${studyId ? `&studyId=${studyId}` : ''}`;
+      const params = {
+        method: 'GET',
+      };
       try {
-        const requestURL = `${API_URL}/patients/getMessagesByPatientAndStudy?${queryStr}`;
-        const response = yield call(request, requestURL);
+        const requestURL = `${API_URL}/patients/${patientId}/messages`;
+        const response = yield call(request, requestURL, params);
 
         yield put(patientMessagesFetched(response));
       } catch (err) {

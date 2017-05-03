@@ -38,7 +38,6 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
     selectedPatient: PropTypes.object,
     sendStudyPatientMessages: PropTypes.func,
     reset: PropTypes.func,
-    ePMS: PropTypes.bool,
   };
 
   constructor(props) {
@@ -65,7 +64,7 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
   }
 
   render() {
-    const { handleSubmit, clientCredits, selectedPatient, ePMS } = this.props;
+    const { handleSubmit, clientCredits, selectedPatient } = this.props;
     const disabled = (clientCredits.details.customerCredits === 0 || clientCredits.details.customerCredits === null);
     const unsubscribed = (selectedPatient) ? selectedPatient.unsubscribed : null;
     return (
@@ -77,9 +76,9 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
             className="form-control"
             placeholder="Type a message..."
             maxLength="160"
-            disabled={!ePMS || disabled || unsubscribed || this.props.selectedPatient.id <= 0}
+            disabled={disabled || unsubscribed || this.props.selectedPatient.id <= 0}
           />
-          <Button type="submit" disabled={!ePMS || disabled || unsubscribed || this.props.selectedPatient.id <= 0}>
+          <Button type="submit" disabled={disabled || unsubscribed || this.props.selectedPatient.id <= 0}>
             Send
           </Button>
         </fieldset>
