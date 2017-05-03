@@ -630,7 +630,12 @@ function* submitPatientUpdate() {
       });
       yield put(updatePatientSuccess(response));
     } catch (e) {
-      const errorMessage = get(e, 'message', 'Something went wrong while updating patient information. Please try again later.');
+      let errorMessage = get(e, 'message', 'Something went wrong while updating patient information. Please try again later.');
+      if (errorMessage.includes('email')) {
+        errorMessage = 'Error! This email is already on file.';
+      } else if (errorMessage.includes('phone')) {
+        errorMessage = 'Error! This phone number is already on file.';
+      }
       yield put(toastrActions.error('', errorMessage));
     }
   }
