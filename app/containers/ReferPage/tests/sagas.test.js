@@ -95,7 +95,7 @@ describe('ReferPage/sagas', () => {
       actualYield = iterator.next().value;
       expect(actualYield).toEqual(take(SUBMIT_FORM));
 
-      const requestURL = `${API_URL}/referral`;
+      const requestURL = `${API_URL}/referrals`;
       const params = {
         method: 'POST',
         body: JSON.stringify(values),
