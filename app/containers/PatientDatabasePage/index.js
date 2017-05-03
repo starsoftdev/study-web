@@ -7,7 +7,7 @@ import { createStructuredSelector } from 'reselect';
 import SearchPatientsForm from '../../components/SearchPatientsForm/index';
 import PatientsList from '../../containers/PatientDatabasePage/PatientsList/index';
 import { fetchIndications, fetchSources, fetchClientSites, fetchProtocols } from '../../containers/App/actions';
-import { fetchPatientCategories, fetchPatients, clearPatientsList } from './actions';
+import { fetchPatientCategories, fetchPatients, clearPatientsList, resetTextBlast } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
 import { selectCurrentUser } from '../App/selectors';
 
@@ -17,6 +17,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     fetchClientSites: PropTypes.func,
     fetchSources: PropTypes.func,
     fetchPatientCategories: PropTypes.func,
+    resetTextBlast: PropTypes.func,
     fetchPatients: PropTypes.func,
     fetchProtocols: PropTypes.func,
     paginationOptions: PropTypes.object,
@@ -66,12 +67,14 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
       queryParams.direction = paginationOptions.activeDirection;
     }
 
-    if (queryParams.status !== null || queryParams.source !== null || queryParams.includeIndication || queryParams.name
-      || queryParams.site || queryParams.excludeIndication || queryParams.gender || queryParams.ageFrom ||
-      queryParams.ageTo || queryParams.bmiFrom || queryParams.bmiTo) {
+    if ((queryParams.status !== null && !isUndefined(queryParams.status)) || (queryParams.source !== null && !isUndefined(queryParams.source))
+      || queryParams.includeIndication || queryParams.name || queryParams.site
+      || queryParams.excludeIndication || queryParams.gender || queryParams.ageFrom
+      || queryParams.ageTo || queryParams.bmiFrom || queryParams.bmiTo) {
       this.props.fetchPatients(currentUser.roleForClient.client_id, queryParams, this.props.patients.details, searchFilter, isExport);
     } else {
       this.props.clearPatientsList();
+      this.props.resetTextBlast();
     }
   }
 
@@ -107,6 +110,7 @@ function mapDispatchToProps(dispatch) {
     fetchSources: () => dispatch(fetchSources()),
     fetchPatientCategories: searchParams => dispatch(fetchPatientCategories(searchParams)),
     fetchPatients: (clientId, searchParams, patients, searchFilter, isExport) => dispatch(fetchPatients(clientId, searchParams, patients, searchFilter, isExport)),
+    resetTextBlast: () => dispatch(resetTextBlast()),
     fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
     clearPatientsList: () => dispatch(clearPatientsList()),
   };
