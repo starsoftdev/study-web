@@ -80,7 +80,9 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         price: parseFloat(Math.round(this.props.item.price) / 100).toFixed(2),
         credits: this.props.item.credits,
         points: this.props.item.points,
-        type: this.props.item.type,
+        enrollPoints: this.props.item.enrollPoints,
+        listingTypeId: this.props.item.listingTypeId,
+        enrollmentTypeId: this.props.item.enrollmentTypeId,
         position: this.props.item.position,
         active: this.props.item.is_active,
       },
@@ -105,6 +107,9 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         </td>
         <td>
           {this.props.item.points}
+        </td>
+        <td>
+          {this.props.item.enrollPoints}
         </td>
         <td>
           {this.props.item.position}
