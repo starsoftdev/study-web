@@ -21,7 +21,7 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
 
     let addon = '';
     let containerClassName = 'post-holder';
-    let senderImage = defaultUserImageGirl;
+    let senderImage = defaultUserImage;
     // todo remove and put back Anonymous behavior
     // let senderName = 'Anonymous';
     let senderName = `${currentUser.firstName} ${currentUser.lastName}`;
@@ -36,8 +36,8 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
         senderName = messageData.user.firstName.concat(' '.concat(messageData.user.lastName));
       }
     } else {
-      if (messageData.patient.gender === 'Male') {
-        senderImage = defaultUserImage;
+      if (messageData.patient.gender === 'Female') {
+        senderImage = defaultUserImageGirl;
       }
       if (messageData.patient) {
         senderName = messageData.patient.firstName.concat(' '.concat(messageData.patient.lastName));
