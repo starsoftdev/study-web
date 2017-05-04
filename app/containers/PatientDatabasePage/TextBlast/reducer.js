@@ -9,6 +9,7 @@ import {
   REMOVE_PATIENT_FROM_TEXT_BLAST,
   REMOVE_PATIENTS_FROM_TEXT_BLAST,
   FETCH_PATIENTS_SUCCESS,
+  RESET_TEXT_BLAST,
 } from '../constants';
 
 const initialState = {
@@ -63,15 +64,30 @@ export default function TextBlastModal(state = initialState, action) {
           'all-patients': false,
         },
       };
+    case RESET_TEXT_BLAST:
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          patients: [],
+          uncheckedPatients: [],
+          'all-patients': false,
+        },
+      };
     case FETCH_PATIENTS_SUCCESS:
       patients = _.filter(action.payload, (patients) => {
         if (_.indexOf(state.values.uncheckedPatients, patients.id) === -1) {
           return { id: patients.id };
         }
-        return false;
+        if (!patients.unsubscribed) {
+          return false;
+        }
+        return { id: patients.id, unsubscribed: true };
       });
       _.forEach(patients, (patient) => {
-        checkedPatinets[`patient-${patient.id}`] = true;
+        if (!patient.unsubscribed) {
+          checkedPatinets[`patient-${patient.id}`] = true;
+        }
       });
 
       if (patients.length === action.payload.length) {

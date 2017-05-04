@@ -134,7 +134,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
             <div className="btns">
               <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>
               <Button bsStyle="primary" className="btn-renew" disabled={!purchasable} onClick={this.onRenewClick}>Renew</Button>
-              <Button bsStyle="danger" className="btn-upgrade" disabled={!purchasable} onClick={this.onUpgradeClick}>Upgrade</Button>
+              <Button bsStyle="danger" className="btn-upgrade" disabled={!purchasable || status === 'Inactive'} onClick={this.onUpgradeClick}>Upgrade</Button>
               <Button bsStyle="info" className="btn-edit" onClick={this.onEditClick}>Edit</Button>
             </div>
           </div>

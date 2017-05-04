@@ -95,12 +95,14 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
 
   componentWillUnmount() {
     // cleanup indication relation to restore isOriginal back to protocol's indication
-    const { formValues, initialValues, protocols, submitting, updatePatientIndication } = this.props;
+    const { formValues, protocols, submitting, updatePatientIndication } = this.props;
     if (formValues.protocol && !submitting) {
       const protocol = _.find(protocols, { studyId: formValues.protocol });
-      const indication = _.find(formValues.indications, { id: protocol.indicationId });
-      if (indication) {
-        updatePatientIndication(initialValues.id, indication.id, protocol.studyId);
+      if (protocol) {
+        const indication = _.find(formValues.indications, { id: protocol.indicationId });
+        if (indication) {
+          updatePatientIndication(formValues.id, indication.id, protocol.studyId);
+        }
       }
     }
   }
@@ -144,13 +146,19 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   changeSiteLocation(siteId) {
-    const { currentUser, fetchFilteredProtcols } = this.props;
-    fetchFilteredProtcols(currentUser.roleForClient.id, siteId);
+    if (siteId) {
+      const { currentUser, fetchFilteredProtcols } = this.props;
+      fetchFilteredProtcols(currentUser.roleForClient.id, siteId);
+    } else {
+      const { change } = this.props;
+      // clear the protocol value if there is no site id
+      change('protocol', null);
+    }
   }
 
   selectProtocol(studyId) {
     if (studyId) {
-      const { change, formValues, initialValues, indications, protocols, addPatientIndication, updatePatientIndication } = this.props;
+      const { change, formValues, indications, protocols, addPatientIndication, updatePatientIndication } = this.props;
       const protocol = _.find(protocols, { studyId });
       const indicationInList = _.find(formValues.indications, { id: protocol.indicationId });
       if (indicationInList) {
@@ -160,7 +168,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
           isOriginal: indication.id === indicationInList.id,
         }));
         change('indications', indicationArray);
-        updatePatientIndication(initialValues.id, protocol.indicationId, studyId);
+        updatePatientIndication(formValues.id, protocol.indicationId, studyId);
       } else {
         const indication = _.find(indications, { id: protocol.indicationId });
         const formattedIndication = {
@@ -175,14 +183,13 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
           isOriginal: false,
         })).concat([formattedIndication]);
         change('indications', indicationArray);
-        console.log(indicationArray);
-        addPatientIndication(initialValues.id, protocol.indicationId, studyId);
+        addPatientIndication(formValues.id, protocol.indicationId, studyId);
       }
     }
   }
 
   renderIndications() {
-    const { formValues, initialValues } = this.props;
+    const { formValues } = this.props;
     if (formValues.indications) {
       return (
         <div className="category-list">
@@ -194,7 +201,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
                   <span
                     className="icomoon-icon_trash"
                     onClick={() => {
-                      this.deleteIndication(initialValues.id, indication);
+                      this.deleteIndication(formValues.id, indication);
                     }}
                   />
                 }
@@ -240,7 +247,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       },
     ];
     const patientValues = {
-      id: initialValues ? initialValues.id : null,
+      id: formValues ? formValues.id : null,
       indications: formValues.indications,
     };
     return (
@@ -409,7 +416,6 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="field"
             placeholder="Select Site Location"
             options={siteOptions}
-            clearable={false}
             onChange={this.changeSiteLocation}
             disabled={initialValues && initialValues.source && initialValues.source === 1}
           />
@@ -438,7 +444,6 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
             className="field"
             placeholder="Select Source"
             options={sourceOptions}
-            clearable={false}
             disabled={initialValues && initialValues.source && initialValues.source === 1}
           />
         </div>
