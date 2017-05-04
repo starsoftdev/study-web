@@ -106,12 +106,12 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   componentWillReceiveProps(newProps) {
-    const { clientAdmins, change, resetChangeAddState } = this.props;
+    const { clientAdmins, clientSites, change, resetChangeAddState } = this.props;
     if (newProps.selectedStudyId && newProps.selectedStudyId !== this.props.selectedStudyId) {
       const fields = [];
       let currentStudy = null;
       let isAllChecked = true;
-      _.forEach(this.props.clientSites.details, (site) => {
+      _.forEach(clientSites.details, (site) => {
         if (site.id === newProps.selectedSiteId) {
           _.forEach(site.studies, (study) => {
             if (study.id === newProps.selectedStudyId) {
@@ -140,12 +140,15 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
             if (!isChecked) {
               isAllChecked = false;
             }
-            fields.push({
-              firstName: role.user.firstName,
-              lastName: role.user.lastName,
-              userId: role.user.id,
-              isChecked,
-            });
+            // if user has been deleted, their role still exists, but they aren't fetched anymore
+            if (role.user) {
+              fields.push({
+                firstName: role.user.firstName,
+                lastName: role.user.lastName,
+                userId: role.user.id,
+                isChecked,
+              });
+            }
           });
         }
       });
