@@ -274,7 +274,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
           >
             <Modal.Header>
               <Modal.Title>
-                <strong>Information</strong>
+                <strong>Edit Patient Information</strong>
               </Modal.Title>
               <a className="close" onClick={this.closeEditPatientModal}>
                 <i className="icomoon-icon_close" />

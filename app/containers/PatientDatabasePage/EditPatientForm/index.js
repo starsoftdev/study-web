@@ -463,7 +463,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
           <Button type="submit" className="btn-add-row" disabled={savedPatient.saving}>
             {savedPatient.saving
               ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
-              : <span>Submit</span>
+              : <span>Update</span>
             }
           </Button>
         </div>
