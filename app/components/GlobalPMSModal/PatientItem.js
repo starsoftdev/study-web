@@ -35,7 +35,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
       <li className={patientSelected === true ? 'active' : ''} onClick={this.selectPatient}>
         <a className="tab-opener">
           <div className="user-img">
-            <img src={patientData.gender === 'Male' ? defaultUserImage : defaultUserImageGirl} alt="" />
+            <img src={patientData.gender === 'Female' ? defaultUserImageGirl : defaultUserImage} alt="" />
           </div>
           <strong className="name">{patientData.first_name} {patientData.last_name}</strong>
           <p>{patientData.last_message_body ? patientData.last_message_body : 'No message yet'}</p>
