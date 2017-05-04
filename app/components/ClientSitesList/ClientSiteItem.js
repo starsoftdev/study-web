@@ -44,15 +44,25 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   componentWillReceiveProps(newProps) {
     const { roles, userFilter } = newProps;
 
-    const filteredUser = find(roles, (item) => {
-      if (userFilter.trim() === '') {
-        return false;
-      }
-      const fullName = `${item.user.firstName} ${item.user.lastName}`;
-      return (fullName.toUpperCase().includes(userFilter.toUpperCase()));
-    });
+    if (newProps.userFilter !== this.props.userFilter) {
+      const filteredUser = find(roles.details, (item) => {
+        if (userFilter.trim() === '') {
+          return false;
+        }
 
-    this.setState({ assignedUsersCollapsed: !filteredUser });
+        const fullName = `${item.user.firstName} ${item.user.lastName}`;
+
+        if (fullName.toLowerCase().indexOf(userFilter.toLowerCase()) !== -1) {
+          return true;
+        }
+        return false;
+      });
+      if (filteredUser) {
+        this.setState({ assignedUsersCollapsed: false });
+      } else {
+        this.setState({ assignedUsersCollapsed: true });
+      }
+    }
   }
 
   toggleAssignedUsers() {
