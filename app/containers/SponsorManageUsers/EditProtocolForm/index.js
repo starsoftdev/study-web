@@ -81,7 +81,6 @@ class EditProtocolForm extends Component { // eslint-disable-line react/prefer-s
               name="cro"
               component={Input}
               type="text"
-              placeholder="CRO"
               isDisabled
             />
           </div>
@@ -113,7 +112,7 @@ class EditProtocolForm extends Component { // eslint-disable-line react/prefer-s
           </div>
         </div>
 
-        <div className="field-row label-top">
+        {/* <div className="field-row label-top">
           <strong className="label required"><label htmlFor="clinicaltrialGovLink">STUDY AD</label></strong>
           <div className="field">
             { this.state.fileSrc && <img alt="" className="protocol-study-img" src={this.state.fileSrc} /> }
@@ -127,7 +126,7 @@ class EditProtocolForm extends Component { // eslint-disable-line react/prefer-s
             />
             <strong className="label lfilename"><label className="filename" htmlFor="irb_filename">{this.state.fileName}</label></strong>
           </div>
-        </div>
+        </div>*/}
 
         <div className="btn-block btns text-right">
           <button type="submit" className="btn btn-default" disabled={this.props.editProtocolProcess.saving}>
