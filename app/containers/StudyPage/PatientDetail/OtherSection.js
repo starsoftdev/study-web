@@ -268,9 +268,10 @@ class OtherSection extends React.Component {
                   <strong className="label">
                     <label htmlFor="patient-source5">PATIENT REFERRAL</label>
                   </strong>
-                  <div className="field">
-                    <a className="btn btn-primary btn-default-padding"><i className="icomoon-icon_download" />&nbsp;&nbsp;Download</a>
-                  </div>
+                  <button type="button" className="btn btn-primary btn-default-padding" disabled>
+                    <i className="icomoon-icon_download" />
+                    &nbsp;Download
+                  </button>
                 </div>
               </div>
               {this.renderUpdateButtons()}
