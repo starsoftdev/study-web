@@ -57,7 +57,6 @@ class EditSponsorUserForm extends Component { // eslint-disable-line react/prefe
                   component={Input}
                   type="text"
                   placeholder="First Name"
-                  isDisabled={isEdit}
                 />
               </div>
               <div className="col pull-left">
@@ -66,7 +65,6 @@ class EditSponsorUserForm extends Component { // eslint-disable-line react/prefe
                   component={Input}
                   type="text"
                   placeholder="Last Name"
-                  isDisabled={isEdit}
                 />
               </div>
             </div>
