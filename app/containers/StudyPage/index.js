@@ -63,15 +63,15 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillMount() {
-    const { params, setStudyId, fetchStudy, fetchPatientCategories } = this.props;
+    const { params, setStudyId, fetchStudy, fetchPatientCategories, fetchSources } = this.props;
     setStudyId(parseInt(params.id));
     fetchStudy(params.id);
     fetchPatientCategories(params.id);
-    this.props.fetchSources();
+    fetchSources();
   }
 
-  componentWillReceiveProps() {
-    const { params, socket } = this.props;
+  componentWillReceiveProps(newProps) {
+    const { params, socket, setStudyId, fetchStudy, fetchPatientCategories, fetchSources } = this.props;
     if (socket && this.state.socketBinded === false) {
       socket.on('notifyMessage', (message) => {
         let curCategoryId = null;
@@ -93,6 +93,13 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         });
       });
       this.setState({ socketBinded: true });
+    }
+
+    if (params.id !== newProps.params.id) {
+      setStudyId(parseInt(newProps.params.id));
+      fetchStudy(newProps.params.id);
+      fetchPatientCategories(newProps.params.id);
+      fetchSources();
     }
   }
 

@@ -33,20 +33,21 @@ export const DISABLE_CHAT                       = 'PatientDatabasePage/DISABLE_C
 export const ADD_PATIENTS_TO_TEXT_BLAST         = 'PatientDatabasePage/ADD_PATIENTS_TO_TEXT_BLAST';
 export const REMOVE_PATIENT_FROM_TEXT_BLAST     = 'PatientDatabasePage/REMOVE_PATIENT_FROM_TEXT_BLAST';
 export const REMOVE_PATIENTS_FROM_TEXT_BLAST    = 'PatientDatabasePage/REMOVE_PATIENTS_FROM_TEXT_BLAST';
-export const SUBMIT_TEXT_BLAST    = 'PatientDatabasePage/SUBMIT_TEXT_BLAST';
+export const RESET_TEXT_BLAST                   = 'PatientDatabasePage/RESET_TEXT_BLAST';
+export const SUBMIT_TEXT_BLAST                  = 'PatientDatabasePage/SUBMIT_TEXT_BLAST';
 
-export const SET_ACTIVE_SORT    = 'PatientDatabasePage/SET_ACTIVE_SORT';
+export const SET_ACTIVE_SORT                    = 'PatientDatabasePage/SET_ACTIVE_SORT';
 
-export const SORT_PATIENTS_SUCCESS    = 'PatientDatabasePage/SORT_PATIENTS_SUCCESS';
-export const IMPORT_PATIENTS    = 'PatientDatabasePage/IMPORT_PATIENTS';
-export const SUBMIT_ADD_PATIENT    = 'PatientDatabasePage/SUBMIT_ADD_PATIENT';
-export const SUBMIT_ADD_PATIENT_SUCCESS    = 'PatientDatabasePage/SUBMIT_ADD_PATIENT_SUCCESS';
-export const SUBMIT_ADD_PATIENT_FAILURE    = 'PatientDatabasePage/SUBMIT_ADD_PATIENT_FAILURE';
-export const EXPORT_PATIENTS    = 'PatientDatabasePage/EXPORT_PATIENTS';
-export const DOWNLOAD_COMPLETE    = 'PatientDatabasePage/DOWNLOAD_COMPLETE';
+export const SORT_PATIENTS_SUCCESS              = 'PatientDatabasePage/SORT_PATIENTS_SUCCESS';
+export const IMPORT_PATIENTS                    = 'PatientDatabasePage/IMPORT_PATIENTS';
+export const SUBMIT_ADD_PATIENT                 = 'PatientDatabasePage/SUBMIT_ADD_PATIENT';
+export const SUBMIT_ADD_PATIENT_SUCCESS         = 'PatientDatabasePage/SUBMIT_ADD_PATIENT_SUCCESS';
+export const SUBMIT_ADD_PATIENT_FAILURE         = 'PatientDatabasePage/SUBMIT_ADD_PATIENT_FAILURE';
+export const EXPORT_PATIENTS                    = 'PatientDatabasePage/EXPORT_PATIENTS';
+export const DOWNLOAD_COMPLETE                  = 'PatientDatabasePage/DOWNLOAD_COMPLETE';
 
-export const CLEAR_PATIENTS_LIST = 'PatientDatabasePage/CLEAR_PATIENTS_LIST';
-export const FETCH_FILTERED_PROTOCOLS = 'PatientDatabasePage/FETCH_FILTERED_PROTOCOLS';
-export const FETCH_FILTERED_PROTOCOLS_SUCCESS = 'PatientDatabasePage/FETCH_FILTERED_PROTOCOLS_SUCCESS';
-export const FETCH_FILTERED_PROTOCOLS_ERROR = 'PatientDatabasePage/FETCH_FILTERED_PROTOCOLS_ERROR';
-export const CLEAR_IMPORT_FORM = 'PatientDatabasePage/CLEAR_IMPORT_FORM';
+export const CLEAR_PATIENTS_LIST                = 'PatientDatabasePage/CLEAR_PATIENTS_LIST';
+export const FETCH_FILTERED_PROTOCOLS           = 'PatientDatabasePage/FETCH_FILTERED_PROTOCOLS';
+export const FETCH_FILTERED_PROTOCOLS_SUCCESS   = 'PatientDatabasePage/FETCH_FILTERED_PROTOCOLS_SUCCESS';
+export const FETCH_FILTERED_PROTOCOLS_ERROR     = 'PatientDatabasePage/FETCH_FILTERED_PROTOCOLS_ERROR';
+export const CLEAR_IMPORT_FORM                  = 'PatientDatabasePage/CLEAR_IMPORT_FORM';

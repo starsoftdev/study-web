@@ -29,6 +29,7 @@ import {
   ADD_PATIENTS_TO_TEXT_BLAST,
   REMOVE_PATIENT_FROM_TEXT_BLAST,
   REMOVE_PATIENTS_FROM_TEXT_BLAST,
+  RESET_TEXT_BLAST,
   SUBMIT_TEXT_BLAST,
   SET_ACTIVE_SORT,
   SORT_PATIENTS_SUCCESS,
@@ -244,6 +245,13 @@ export function addPatientsToTextBlast(patients) {
 export function removePatientFromTextBlast(patient) {
   return {
     type: REMOVE_PATIENT_FROM_TEXT_BLAST,
+    patient,
+  };
+}
+
+export function resetTextBlast(patient) {
+  return {
+    type: RESET_TEXT_BLAST,
     patient,
   };
 }
