@@ -109,12 +109,10 @@ class StudyActionButtons extends Component {
   render() {
     return (
       <div className="btns-popups pull-right">
-        <div className="col pull-right">
-          <a className="btn btn-primary download" onClick={this.download}>
-            <i className="icomoon-icon_download" />
-            &nbsp;Download
-          </a>
-        </div>
+        <button type="button" className="btn btn-primary download pull-right" onClick={this.download} disabled>
+          <i className="icomoon-icon_download" />
+          &nbsp;Download
+        </button>
         <div className="col pull-right">
           <span className="btn btn-primary import" onClick={this.toggleImportPatientsModal}>
             <i className="icomoon-icon_upload" />
