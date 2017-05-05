@@ -110,6 +110,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           paginationOptions={this.props.paginationOptions}
           formTableValues={this.props.formTableValues}
           changeProtocolStatus={this.props.changeProtocolStatus}
+          currentUser={this.props.currentUser}
         />
       </div>
     );

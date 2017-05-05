@@ -626,7 +626,7 @@ export class EditInformationModal extends React.Component {
                       searchable
                       options={croOptions}
                       customSearchIconClass="icomoon-icon_search2"
-                      onChange={(e) => { change('cro_id', e.toString()); }}
+                      onChange={(e) => { change('croId', e ? e.toString() : null); }}
                     />
                   </div>
                 </div>
