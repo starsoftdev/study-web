@@ -301,7 +301,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     _.forEach(filters, (filter, key) => {
       const initFilter = _.cloneDeep(filter);
-      if (key !== 'search' && key !== 'percentage' && key !== 'campaign') {
+      if (key !== 'search' && key !== 'percentage' && key !== 'campaign' && key !== 'nearbyStudies') {
         const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
         filters[key] = withoutAll;
       }
