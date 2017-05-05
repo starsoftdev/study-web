@@ -2,11 +2,12 @@
 
 // Bootstrap sagas
 export default [
-    fetchRewardSaga,
+  fetchRewardSaga,
 ];
 
 export function* fetchRewardSaga() {
   try {
+
   } catch (e) {
     // if returns forbidden we remove the token from local storage
   }
