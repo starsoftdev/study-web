@@ -68,16 +68,16 @@ class Filter extends React.Component {
       >
         <strong className="title">Nearby Studies:</strong>
         <input
-          type="text" name={`${name}-miles`} className="form-control" placeholder="Miles" ref={(searchVal) => (
-          this.searchVal = searchVal
+          type="text" name={`${name}-miles`} className="form-control" placeholder="Miles" ref={(miles) => (
+          this.miles = miles
         )}
         />
         <input
-          type="text" name={`${name}-zipcode`} className="form-control" placeholder="Postal Code" ref={(searchVal) => (
-          this.searchVal = searchVal
+          type="text" name={`${name}-zipcode`} className="form-control" placeholder="Postal Code" ref={(zip) => (
+          this.zip = zip
         )}
         />
-        <button className="btn btn-default" onClick={() => { this.props.onSubmit(this.searchVal.value); }}>Apply</button>
+        <button className="btn btn-default" onClick={() => { this.props.onSubmit({ miles: this.miles.value, zip: this.zip.value }); }}>Apply</button>
         <a className="btn-close" onClick={() => this.props.onClose()}>
           <i className="icomoon-icon_close"></i>
         </a>

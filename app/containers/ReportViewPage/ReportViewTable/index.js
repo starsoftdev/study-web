@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { PropTypes } from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -187,7 +187,7 @@ export class ReportViewTable extends React.Component {
         >
           <td>{item.levelDateFrom}</td>
           <td>{item.levelDateTo}</td>
-          <td>{ (item.last_login_time ? moment.utc(item.last_login_time).tz('EST').format('MM/DD/YY [at] HH:mm A') : '')}</td>
+          <td>{ (item.last_login_time ? moment(item.last_login_time).tz(item.timezone).format('MM/DD/YY [at] HH:mm A') : '')}</td>
           <td>{item.count_total}</td>
           <td><span className="text">{item.count_contacted}<span className="small">{`(${percentage.count_contacted_p}%)`}</span></span></td>
           <td><span className="text">{item.count_not_contacted}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></td>
