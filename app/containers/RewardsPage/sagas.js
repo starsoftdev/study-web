@@ -7,7 +7,7 @@ export default [
 
 export function* fetchRewardSaga() {
   try {
-
+    // try statements
   } catch (e) {
     // if returns forbidden we remove the token from local storage
   }
