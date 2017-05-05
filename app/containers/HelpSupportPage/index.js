@@ -66,7 +66,7 @@ export class HelpSupportPage extends React.Component { // eslint-disable-line re
     const { siteLocations, currentUser } = this.props;
 
     return (
-      <div className="container-fluid">
+      <div className="container-fluid helpAndSupportPage">
         <Helmet title="Help and Support - StudyKIK" />
         <section className="study-portal">
 
@@ -76,11 +76,9 @@ export class HelpSupportPage extends React.Component { // eslint-disable-line re
             <div className="refer-info pull-right">
               <div className="refer-holder">
                 <div className="textbox text-center pull-left">
-                  <strong className="title">
+                  <strong className="title help-support-info">
                     To speak with one of our friendly staff members, please contact us.
                   </strong>
-                  <p>
-                  </p>
                 </div>
                 <div className="img-holder pull-left">
                   <img src={manImage} alt="" width="256" />
