@@ -77,7 +77,7 @@ class OtherSection extends React.Component {
     if (!formSyncErrors.gender && !formSyncErrors.bmi) {
       const data = {
         gender: null,
-        bmi: null
+        bmi: null,
       };
       if (formValues.gender) {
         data.gender = formValues.gender;
