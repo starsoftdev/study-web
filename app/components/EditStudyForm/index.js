@@ -136,12 +136,12 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
           }
           // add site users to the list
           _.forEach(site.roles, (role) => {
-            const isChecked = _.find(currentStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
-            if (!isChecked) {
-              isAllChecked = false;
-            }
-            // if user has been deleted, their role still exists, but they aren't fetched anymore
             if (role.user) {
+              const isChecked = _.find(currentStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
+              if (!isChecked) {
+                isAllChecked = false;
+              }
+              // if user has been deleted, their role still exists, but they aren't fetched anymore
               fields.push({
                 firstName: role.user.firstName,
                 lastName: role.user.lastName,
