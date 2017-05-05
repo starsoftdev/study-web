@@ -384,13 +384,15 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const emailNotificationArray = [];
     _.forEach(this.props.clientSites.details, (site) => {
       _.forEach(site.roles, (role) => {
-        const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
-        if (isChecked) {
-          emailNotificationArray.push({
-            firstName: role.user.firstName,
-            lastName: role.user.lastName,
-            userId: role.user.email,
-          });
+        if (role.user) {
+          const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
+          if (isChecked) {
+            emailNotificationArray.push({
+              firstName: role.user.firstName,
+              lastName: role.user.lastName,
+              userId: role.user.email,
+            });
+          }
         }
       });
     });
@@ -398,13 +400,15 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     if (this.props.clientAdmins) {
       // add admin users to the list
       _.forEach(this.props.clientAdmins.details, (role) => {
-        const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.userId));
-        if (isChecked) {
-          emailNotificationArray.push({
-            firstName: role.firstName,
-            lastName: role.lastName,
-            userId: role.email,
-          });
+        if (role.user) {
+          const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.userId));
+          if (isChecked) {
+            emailNotificationArray.push({
+              firstName: role.firstName,
+              lastName: role.lastName,
+              userId: role.email,
+            });
+          }
         }
       });
     }
