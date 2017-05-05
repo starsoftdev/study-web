@@ -216,6 +216,7 @@ export default function homePageReducer(state = initialState, action) {
         studyId: studyObject.id,
         indication: studyObject.indication,
         siteName: studyObject.site.siteName,
+        siteTimezone: studyObject.site.timezone,
         sponsor: studyObject.sponsor.name,
         protocol: studyObject.protocolNumber,
         patientMessagingSuite: studyObject.patientMessagingSuite ? 'On' : 'Off',

@@ -186,9 +186,9 @@ export class ReportViewTable extends React.Component {
 
           className={(this.state.hoveredRowIndex === index) ? 'active-table-row' : ''}
         >
-          <td>{moment(item.levelDateFrom).tz(this.props.currentUser.timezone).format('MM/DD/YY')}</td>
-          <td>{moment(item.levelDateTo).tz(this.props.currentUser.timezone).format('MM/DD/YY')}</td>
-          <td>{ (item.last_login_time ? moment(item.last_login_time).tz(this.props.currentUser.timezone).format('MM/DD/YY [at] HH:mm A') : '')}</td>
+          <td>{item.levelDateFrom}</td>
+          <td>{item.levelDateTo}</td>
+          <td>{ (item.last_login_time ? moment(item.last_login_time).tz(item.timezone).format('MM/DD/YY [at] HH:mm A') : '')}</td>
           <td>{item.count_total}</td>
           <td><span className="text">{item.count_contacted}<span className="small">{`(${percentage.count_contacted_p}%)`}</span></span></td>
           <td><span className="text">{item.count_not_contacted}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></td>
