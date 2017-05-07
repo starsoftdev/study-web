@@ -275,7 +275,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
           });
         } else {
           _.forEach(filterValues, (v) => {
-            if (v.label !== 'All') {
+            if ((v.label !== 'All') || (v.label === 'All' && filterValues.length === 1)) {
               newFilters.push({
                 name: key,
                 type: 'value',
