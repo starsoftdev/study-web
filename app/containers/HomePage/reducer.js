@@ -443,6 +443,7 @@ export default function homePageReducer(state = initialState, action) {
       const studies = _.cloneDeep(state.studies.details);
       const study = _.find(studies, (o) => (o.studyId === payload.studyId));
       study.level_id = payload.newLevelId;
+      studyl.patientQualificationSuite = payload.patientQualificationSuite;
       return {
         ...state,
         studies: {
