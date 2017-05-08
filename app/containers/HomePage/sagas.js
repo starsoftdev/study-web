@@ -407,7 +407,7 @@ export function* editStudyWorker(action) {
     }
 
     const params = {
-      method: 'POST',
+      method: 'PUT',
       body: data,
       useDefaultContentType: true,
     };
