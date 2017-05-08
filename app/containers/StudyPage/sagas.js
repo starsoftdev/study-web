@@ -160,7 +160,7 @@ function* fetchPatientReferralStat(action) {
   const { studyId, campaignId } = action;
 
   try {
-    let requestURL = `${API_URL}/studies/getPatientReferrals/${studyId}`;
+    let requestURL = `${API_URL}/studies/${studyId}/getPatientReferrals`;
     if (campaignId) {
       requestURL += `?campaignId=${campaignId}`;
     }
