@@ -156,7 +156,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           <span>{normalizePhoneDisplay(phoneNumber)}</span>
         </td>
         <td className="address">
-          <span>{addressArr[0]}<br />{city}, {state} {zip}</span>
+          <span>{`${addressArr[0] || ''}`}<br />{`${city || ''}`}{`${city && state ? ',' : ''}`} {`${state || ''}`} {`${zip || ''}`}</span>
         </td>
         <td className="timezone">
           <span>{timezone.replace(/_/g, ' ')}</span>
