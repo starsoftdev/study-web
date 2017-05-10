@@ -3,8 +3,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import ReactSelect from '../../../components/Input/ReactSelect';
-import { AddCouponForm } from './AddCouponForm';
+import ReactSelect from '../../components/Input/ReactSelect';
+import AddCouponForm from './AddCouponForm';
 
 @reduxForm({ form: 'dashboardCouponForm' })
 
@@ -41,15 +41,32 @@ export class DashboardCouponSearch extends React.Component {
     this.setState({ addCouponModalOpen: true });
   }
 
-  addCoupon(params) {
-    this.props.addCoupon(params);
+  addCoupon(props) {
+    const data = props;
+
+    if (data.type === 'amount') {
+      data.amountOff = data.amount;
+    } else {
+      data.percentOff = data.amount;
+    }
+    console.log(data);
+    delete data.id;
+    this.props.addCoupon(props);
   }
 
   render() {
+    const initialValues = {
+      code: null,
+      isArchived: false,
+      type: 'amount',
+      validFrom: null,
+      validTo: null,
+    };
     const options = [];
     _.forEach(this.props.coupon.details, (item) => {
       options.push({
-        label: item.number, value: item.id,
+        label: item.code,
+        value: item.id,
       });
     });
 
@@ -74,12 +91,12 @@ export class DashboardCouponSearch extends React.Component {
             </div>
           </div>
         </div>
-
         <AddCouponForm
           show={this.state.addCouponModalOpen}
+          initialValues={initialValues}
           onHide={this.closeAddCouponModal}
           onShow={this.showAddCouponModal}
-          onSubmit={this.addCoupon}
+          handleSubmit={this.addCoupon}
           saving={this.props.editCouponProcess.saving}
         />
       </form>

@@ -8,9 +8,10 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { sumBy, map } from 'lodash';
-import { Field, reduxForm, change } from 'redux-form';
+import { Field, reduxForm, change, reset } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
+import classNames from 'classnames';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import Input from '../../components/Input';
@@ -22,6 +23,7 @@ import formValidator from './validator';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Money from '../../components/Money';
 import { fetchCoupon, clearCoupon, fetchCards, saveCard } from '../../containers/App/actions';
+const formName = 'shoppingCart';
 
 const mapStateToProps = createStructuredSelector({
   clientId: selectCurrentUserClientId(),
@@ -39,10 +41,11 @@ function mapDispatchToProps(dispatch) {
     clearCoupon: () => dispatch(clearCoupon()),
     fetchCards: (clientId, customerId) => dispatch(fetchCards(clientId, customerId)),
     saveCard: (clientId, customerId, cardData) => dispatch(saveCard(clientId, customerId, cardData)),
+    resetForm: () => dispatch(reset(formName)),
   };
 }
 
-@reduxForm({ form: 'shoppingCart', validate: formValidator })
+@reduxForm({ form: formName, validate: formValidator })
 @connect(mapStateToProps, mapDispatchToProps)
 
 class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -65,6 +68,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     fetchCards: PropTypes.func,
     saveCard: PropTypes.func,
     validateAndSubmit: PropTypes.func,
+    resetForm: PropTypes.func.isRequired,
     manualDisableSubmit: PropTypes.bool,
     showAddNewCard: PropTypes.func,
   };
@@ -111,7 +115,15 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   onFetchCoupon() {
-    this.props.fetchCoupon(this.props.couponId);
+    const { fetchCoupon, clearCoupon, resetForm, coupon, couponId } = this.props;
+    if (!coupon.details) {
+      if (couponId) {
+        fetchCoupon(couponId);
+      }
+    } else {
+      clearCoupon();
+      resetForm();
+    }
   }
 
   onSelectCard(value) {
@@ -134,10 +146,10 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     const subTotal = sumBy(addOns, 'total');
     let discount = 0;
     if (coupon.details) {
-      if (coupon.details.amount_off) {
-        discount = coupon.details.amount_off;
-      } else if (coupon.details.percent_off) {
-        discount = subTotal * (coupon.details.percent_off / 100);
+      if (coupon.details.amountOff) {
+        discount = coupon.details.amountOff;
+      } else if (coupon.details.percentOff) {
+        discount = subTotal * (coupon.details.percentOff / 100);
       }
     }
     const total = parseFloat((subTotal - discount).toFixed(2));
@@ -157,9 +169,14 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     const title = this.props.title || 'Order Summary';
     const noBorderClassName = (this.props.noBorder) ? 'no-border' : '';
     const formClassName = `form-shopping-cart ${noBorderClassName}`;
-    const { addOns, coupon, showCards, cards, submitting, validateAndSubmit, manualDisableSubmit } = this.props;
+    const { addOns, coupon, couponId, showCards, cards, submitting, validateAndSubmit, manualDisableSubmit, resetForm, clearCoupon } = this.props;
     const { subTotal, discount, total } = this.calculateTotal();
     let addOnsContent = null;
+    let couponSelected = false;
+
+    if (coupon && coupon.details) {
+      couponSelected = true;
+    }
 
     if (addOns) {
       addOnsContent = addOns.map((product, index) => (
@@ -251,20 +268,34 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
             </div>
 
             <div className="coupon-area">
-              <Field
-                name="couponId"
-                component={Input}
-                type="text"
-                placeholder="Coupon"
-                disabled={coupon.fetching || submitting}
-              />
+              {couponSelected
+                ?
+                  <input
+                    className="form-control"
+                    value={couponId}
+                    type="text"
+                    name="couponId"
+                    disabled
+                  />
+                :
+                  <Field
+                    name="couponId"
+                    component={Input}
+                    type="text"
+                    placeholder="Coupon"
+                    className={classNames({ couponSelected })}
+                  />
+              }
               <Button
                 bsStyle="primary"
-                className="coupon-btn"
+                className={classNames('coupon-btn', { couponSelected })}
                 onClick={this.onFetchCoupon}
                 disabled={coupon.fetching || submitting}
               >
-                <span>Apply</span>
+                {couponSelected
+                  ? <span>Remove</span>
+                  : <span>Apply</span>
+                }
               </Button>
             </div>
 
@@ -300,6 +331,8 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
               disabled={coupon.fetching || cards.fetching || submitting || manualDisableSubmit}
               onClick={(ev) => {
                 this.setState({ showLoading: true });
+                clearCoupon();
+                resetForm();
                 validateAndSubmit(ev);
               }}
             >
