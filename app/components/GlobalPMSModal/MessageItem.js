@@ -60,7 +60,7 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
           </p>
         </div>
         <strong className="email">{senderName}</strong>
-        <time>{moment(cts).tz(currentUser.timezone).format('M/DD/YYYY [at] H:mm:ss A')}</time>
+        <time>{moment(cts).tz(currentUser.timezone).format('M/DD/YYYY [at] h:mm:ss A')}</time>
       </div>
     );
   }
