@@ -1,7 +1,8 @@
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-
+import { actions as toastrActions } from 'react-redux-toastr';
+import { get } from 'lodash';
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 
@@ -60,8 +61,11 @@ export function* changeProtocolStatusWorker(action) {
 
     const response = yield call(request, requestURL);
     yield put(changeProtocolStatusSuccess(response));
+    yield put(toastrActions.success('Success!', `The study is now ${action.payload.status ? 'active' : 'inactive'}.`));
   } catch (err) {
     yield put(changeProtocolStatusError(err));
+    const errorMessage = get(err, 'message', 'Something went wrong while updating study status');
+    yield put(toastrActions.error('', errorMessage));
   }
 }
 

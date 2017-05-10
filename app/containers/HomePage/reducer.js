@@ -216,6 +216,7 @@ export default function homePageReducer(state = initialState, action) {
         studyId: studyObject.id,
         indication: studyObject.indication,
         siteName: studyObject.site.siteName,
+        siteTimezone: studyObject.site.timezone,
         sponsor: studyObject.sponsor.name,
         protocol: studyObject.protocolNumber,
         patientMessagingSuite: studyObject.patientMessagingSuite ? 'On' : 'Off',
@@ -442,6 +443,7 @@ export default function homePageReducer(state = initialState, action) {
       const studies = _.cloneDeep(state.studies.details);
       const study = _.find(studies, (o) => (o.studyId === payload.studyId));
       study.level_id = payload.newLevelId;
+      study.patientQualificationSuite = payload.patientQualificationSuite;
       return {
         ...state,
         studies: {

@@ -407,7 +407,7 @@ export function* editStudyWorker(action) {
     }
 
     const params = {
-      method: 'POST',
+      method: 'PUT',
       body: data,
       useDefaultContentType: true,
     };
@@ -802,8 +802,6 @@ export function* homePageSaga() {
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
   if (options.payload.pathname !== '/') {
-    yield put(clearFilters());
-    yield put(reset('dashboardFilters'));
     yield cancel(watcherA);
     yield cancel(watcherB);
     yield cancel(watcherD);
@@ -830,5 +828,9 @@ export function* homePageSaga() {
     yield cancel(changeStudyAddWatcher1);
     yield cancel(fetchMessagingNumbersWatcher1);
     yield cancel(updateTwilioNumbersWatcher1);
+    if (options.payload.pathname !== '/app') {
+      yield put(clearFilters());
+      yield put(reset('dashboardFilters'));
+    }
   }
 }
