@@ -70,7 +70,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
 
     if (newProps.selectedStudy) {
       const { patientQualificationSuite } = newProps.selectedStudy;
-      if (patientQualificationSuite === 'On') {
+      if (patientQualificationSuite === 'On' || patientQualificationSuite === true) {
         this.props.dispatch(change('upgradeStudy', 'addPatientQualificationSuite', true));
         this.setState({
           patientQualificationSuite: true,
@@ -259,7 +259,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                           <div className="field">
                             <Field
                               name="addPatientQualificationSuite"
-                              disabled={patientQualificationSuite === 'On'}
+                              disabled={patientQualificationSuite === 'On' || patientQualificationSuite === true}
                               component={Toggle}
                               onChange={this.handleQualificationChoose}
                             />

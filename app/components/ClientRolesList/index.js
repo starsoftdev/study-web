@@ -173,7 +173,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     }
     const sortedClientRoles = this.getSortedClientRoles();
     const clientRolesListContents = sortedClientRoles.filter(filterMethod).map((item, index) => (
-      ((item.canPurchase || item.canRedeemRewards || item.name === 'Super Admin' || !item.site_id || item.site_id === 0 || item.isAdmin) && !item.user.isArchived) ? <ClientRoleItem {...item} key={index} bDisabled={bDisabled} /> : null
+      ((item.canPurchase || item.canRedeemRewards || item.name === 'Super Admin' || !item.site_id || item.site_id === 0 || item.isAdmin) && item.user && !item.user.isArchived) ? <ClientRoleItem {...item} key={index} bDisabled={bDisabled} /> : null
     )
     );
     const siteOptions = map(sites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));

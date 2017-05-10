@@ -69,7 +69,7 @@ export function* editSponsorUserWorker(action) {
   try {
     const requestURL = `${API_URL}/sponsorRoles/editSponsorUser`;
     const params = {
-      method: 'POST',
+      method: 'PUT',
       body: JSON.stringify(action.params),
     };
     const response = yield call(request, requestURL, params);
@@ -126,7 +126,7 @@ export function* editProtocolWorker(action) {
     }
 
     const params = {
-      method: 'POST',
+      method: 'PUT',
       body: data,
       useDefaultContentType: true,
     };

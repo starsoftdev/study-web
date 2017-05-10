@@ -149,7 +149,7 @@ export function* editSponsorAdminWorker(action) {
     const requestURL = `${API_URL}/sponsors/editSponsorAdmin`;
 
     const params = {
-      method: 'POST',
+      method: 'PUT',
       body: JSON.stringify(action.payload),
     };
     const response = yield call(request, requestURL, params);
@@ -174,7 +174,7 @@ export function* deleteSponsorAdminWorker(action) {
     const requestURL = `${API_URL}/sponsors/deleteSponsorAdmin`;
 
     const params = {
-      method: 'POST',
+      method: 'DELETE',
       body: JSON.stringify(action.payload),
     };
     const response = yield call(request, requestURL, params);

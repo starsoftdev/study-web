@@ -51,40 +51,28 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
           <strong className="number"><span>{totals.count_not_contacted}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></strong>
         </li>
         <li>
-          <a href="#popup-call-attempted" className="lightbox-opener">
-            <strong className="heading"><span>CALL<br /> ATTEMPTED</span></strong>
-            <strong className="number"><span>{totals.call_attempted}<span className="small">{`(${percentage.call_attempted_p}%)`}</span></span></strong>
-          </a>
+          <strong className="heading"><span>CALL<br /> ATTEMPTED</span></strong>
+          <strong className="number"><span>{totals.call_attempted}<span className="small">{`(${percentage.call_attempted_p}%)`}</span></span></strong>
         </li>
         <li>
-          <a href="#popup-dnq" className="lightbox-opener">
-            <strong className="heading"><span>DNQ</span></strong>
-            <strong className="number"><span>{totals.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></strong>
-          </a>
+          <strong className="heading"><span>DNQ</span></strong>
+          <strong className="number"><span>{totals.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></strong>
         </li>
         <li>
-          <a href="#popup-scheduled" className="lightbox-opener">
-            <strong className="heading"><span>SCHEDULED</span></strong>
-            <strong className="number"><span>{totals.scheduled}<span className="small">{`(${percentage.scheduled_p}%)`}</span></span></strong>
-          </a>
+          <strong className="heading"><span>SCHEDULED</span></strong>
+          <strong className="number"><span>{totals.scheduled}<span className="small">{`(${percentage.scheduled_p}%)`}</span></span></strong>
         </li>
         <li>
-          <a href="#popup-condrnted" className="lightbox-opener">
-            <strong className="heading"><span>CONSENTED</span></strong>
-            <strong className="number"><span>{totals.consented}<span className="small">{`(${percentage.consented_p}%)`}</span></span></strong>
-          </a>
+          <strong className="heading"><span>CONSENTED</span></strong>
+          <strong className="number"><span>{totals.consented}<span className="small">{`(${percentage.consented_p}%)`}</span></span></strong>
         </li>
         <li>
-          <a href="#popup-screen-failed" className="lightbox-opener">
-            <strong className="heading"><span>SCREEN<br /> FAILED</span></strong>
-            <strong className="number"><span>{totals.screen_failed}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span></strong>
-          </a>
+          <strong className="heading"><span>SCREEN<br /> FAILED</span></strong>
+          <strong className="number"><span>{totals.screen_failed}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span></strong>
         </li>
         <li>
-          <a href="#popup-randomized" className="lightbox-opener">
-            <strong className="heading"><span>RANDOMIZED</span></strong>
-            <strong className="number"><span>{totals.randomized}<span className="small">{`(${percentage.randomized_p}%)`}</span></span></strong>
-          </a>
+          <strong className="heading"><span>RANDOMIZED</span></strong>
+          <strong className="number"><span>{totals.randomized}<span className="small">{`(${percentage.randomized_p}%)`}</span></span></strong>
         </li>
       </ul>
     );
