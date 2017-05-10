@@ -75,7 +75,8 @@ class AddCouponForm extends React.Component { // eslint-disable-line react/prefe
         change('validFrom', newProps.initialValues.validFrom);
         change('validTo', newProps.initialValues.validTo);
         if (newProps.initialValues.type === 'amount') {
-          change('amount', newProps.initialValues.amountOff/100);
+          const amountOff = (newProps.initialValues.amountOff) ? newProps.initialValues.amountOff / 100 : null;
+          change('amount', amountOff);
         }
         if (newProps.initialValues.type === 'percent') {
           change('amount', newProps.initialValues.percentOff);
