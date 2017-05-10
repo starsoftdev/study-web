@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { createStructuredSelector } from 'reselect';
+import Money from '../../components/Money';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -42,7 +43,10 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           {item.type}
         </td>
         <td>
-          {item.amountOff || item.percentOff}
+          {item.amountOff
+            ? <Money value={item.amountOff / 100} />
+            : item.percentOff
+          }
         </td>
         <td>
           {validFrom}

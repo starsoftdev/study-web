@@ -45,7 +45,7 @@ export class DashboardCouponSearch extends React.Component {
     const data = props;
 
     if (data.type === 'amount') {
-      data.amountOff = data.amount;
+      data.amountOff = data.amount * 100;
     } else {
       data.percentOff = data.amount;
     }
