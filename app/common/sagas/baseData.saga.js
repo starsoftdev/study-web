@@ -259,7 +259,7 @@ export function* fetchLevelsWatcher() {
   }
 }
 
-export function* fetchCouponWatcher() {
+export function* fetchCouponWatcher() { // 1
   while (true) {
     const { couponId } = yield take(FETCH_COUPON);
     const encodedCouponId = encodeURIComponent(couponId);
@@ -271,6 +271,7 @@ export function* fetchCouponWatcher() {
       yield put(couponFetched(response));
     } catch (err) {
       yield put(couponFetchingError(err));
+      yield put(toastrActions.error('', err.message));
     }
   }
 }

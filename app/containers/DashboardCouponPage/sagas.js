@@ -20,6 +20,7 @@ import {
   editCouponError,
   deleteCouponSuccess,
   deleteCouponError,
+  fetchCoupon,
 } from './actions';
 
 export function* dashboardCouponSaga() {
@@ -44,10 +45,19 @@ export function* fetchCouponWorker() {
   try {
     const requestURL = `${API_URL}/coupons`;
 
-    const params = {
-      method: 'GET',
+    const filterObj = {
+      where: {
+        isArchived: {
+          neq: true,
+        },
+      },
     };
-    const response = yield call(request, requestURL, params);
+
+    const queryParams = {
+      filter: JSON.stringify(filterObj),
+    };
+
+    const response = yield call(request, requestURL, { query: queryParams });
 
     yield put(fetchCouponSuccess(response));
   } catch (err) {
@@ -72,6 +82,7 @@ export function* addCouponWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(addCouponSuccess(response));
+    yield put(fetchCoupon());
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving coupons');
     yield put(toastrActions.error('', errorMessage));
@@ -94,6 +105,7 @@ export function* editCouponWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(editCouponSuccess(response));
+    yield put(fetchCoupon());
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving coupons');
     yield put(toastrActions.error('', errorMessage));
