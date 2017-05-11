@@ -321,7 +321,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const emailNotificationArray = [];
     _.forEach(this.props.clientSites.details, (site) => {
       _.forEach(site.roles, (role) => {
-        const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
+        const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.user_id));
         if (isChecked) {
           emailNotificationArray.push({
             firstName: role.user.firstName,
