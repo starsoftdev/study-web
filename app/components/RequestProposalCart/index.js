@@ -14,7 +14,6 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import Money from '../../components/Money';
 import {
   CAMPAIGN_LENGTH_LIST,
-  MESSAGING_SUITE_PRICE,
   QUALIFICATION_SUITE_PRICE,
   CALL_TRACKING_PRICE,
 } from '../../common/constants';
@@ -108,14 +107,14 @@ export class RequestProposalCart extends Component {
       });
     }
 
-    if (formValues.patientMessagingSuite) {
-      products.push({
-        title: 'Patient Messaging Suite',
-        price: MESSAGING_SUITE_PRICE,
-        quantity: 1,
-        total: MESSAGING_SUITE_PRICE,
-      });
-    }
+    // if (formValues.patientMessagingSuite) {
+    //   products.push({
+    //     title: 'Patient Messaging Suite',
+    //     price: MESSAGING_SUITE_PRICE,
+    //     quantity: 1,
+    //     total: MESSAGING_SUITE_PRICE,
+    //   });
+    // }
 
     if (formValues.patientQualificationSuite) {
       products.push({
