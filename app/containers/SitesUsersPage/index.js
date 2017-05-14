@@ -127,8 +127,11 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     if (searchQuery !== '') {
       this.setState({
         roleFilterMethod: (clientRole) => {
-          const fullName = `${clientRole.user.firstName} ${clientRole.user.lastName}`;
-          return (fullName.toUpperCase().includes(searchQuery.toUpperCase()));
+          if (clientRole.user) {
+            const fullName = `${clientRole.user.firstName} ${clientRole.user.lastName}`;
+            return fullName.toUpperCase().includes(searchQuery.toUpperCase());
+          }
+          return false;
         },
       });
     } else {

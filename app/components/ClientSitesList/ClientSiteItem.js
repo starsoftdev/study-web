@@ -91,12 +91,12 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   renderSiteUsers() {
-    const { id, roles } = this.props;
+    const { id, roles, userFilter } = this.props;
     let assignedUsersContent;
+    const allAssignedUsers = roles.details.filter(item => (item.user && !item.user.isArchived && !item.isAdmin && item.site_id === id));
+    const filtredAssignedUsers = allAssignedUsers.filter(item => (!userFilter || `${item.user.firstName} ${item.user.lastName}`.toLowerCase().indexOf(userFilter.toLowerCase()) !== -1));
     if (roles.details) {
-      assignedUsersContent = roles.details.filter(item => (
-        item.user && !item.user.isArchived && !item.isAdmin && item.site_id === id
-      )).map(item => ((
+      assignedUsersContent = filtredAssignedUsers.map(item => ((
         <div className="assigned-user" key={item.id}>
           <span>{item.user.firstName} {item.user.lastName}</span>
           <span className="edit-assigned-user">
@@ -114,7 +114,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     return (
       <td className="assigned-users">
         <div className="toggle-assigned-users">
-          <span>ASSIGNED USERS ({assignedUsersContent.length ? assignedUsersContent.length : 0})</span>
+          <span>ASSIGNED USERS ({allAssignedUsers.length ? allAssignedUsers.length : 0})</span>
           {(this.state.assignedUsersCollapsed)
             ? <a className="btn toggle toggle-plus" onClick={this.toggleAssignedUsers} />
             : <a className="btn toggle toggle-minus" onClick={this.toggleAssignedUsers} />
