@@ -50,12 +50,9 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           return false;
         }
 
-        const fullName = `${item.user.firstName} ${item.user.lastName}`;
+        const fullName = item.user ? `${item.user.firstName} ${item.user.lastName}` : '';
 
-        if (fullName.toLowerCase().indexOf(userFilter.toLowerCase()) !== -1) {
-          return true;
-        }
-        return false;
+        return fullName.toLowerCase().indexOf(userFilter.toLowerCase()) !== -1;
       });
       if (filteredUser) {
         this.setState({ assignedUsersCollapsed: false });
