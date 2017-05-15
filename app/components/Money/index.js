@@ -4,6 +4,7 @@ import { Currencies } from '../../common/constants';
 export default class Money extends Component {
   static propTypes = {
     value: PropTypes.number,
+    discount: PropTypes.bool,
     currency: PropTypes.oneOf(Object.keys(Currencies)),
     className: PropTypes.string,
   };
@@ -14,6 +15,7 @@ export default class Money extends Component {
 
   render() {
     const value = this.props.value;
+    const discount = this.props.discount && value !== 0;
     const currency = this.props.currency || 'USD';
     const className = this.props.className;
 
@@ -24,6 +26,6 @@ export default class Money extends Component {
       currencyDisplay: 'symbol',
     }).format(absValue).replace(/[A-Z]*/, '');
 
-    return <span className={className}>{value < 0 ? '-' : ''}{formattedNumber}</span>;
+    return <span className={className}>{(value < 0 || discount) ? '-' : ''}{formattedNumber}</span>;
   }
 }
