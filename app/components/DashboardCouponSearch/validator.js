@@ -1,6 +1,7 @@
 import { validatorFactory } from '../../utils/reduxForm';
 
 const schema = {
+  coupon: { presence: true },
   code: { presence: true },
   neverExpires: { presence: false },
   type: { presence: true },

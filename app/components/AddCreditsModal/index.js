@@ -232,6 +232,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
       quantity: this.state.quantity,
       totalAmount: parseInt(shoppingCartFormValues.total),
       cardId: shoppingCartFormValues.creditCard,
+      couponId: shoppingCartFormValues.couponId,
       userId: this.props.currentUser.id,
       site: addCreditsFormValues.siteLocation,
       siteLocationName: siteLocationName.name,

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import ReactSelect from '../../components/Input/ReactSelect';
-import AddCouponForm from './AddCouponForm';
+import AddCouponModal from './AddCouponModal';
 
 @reduxForm({ form: 'dashboardCouponForm' })
 
@@ -91,7 +91,7 @@ export class DashboardCouponSearch extends React.Component {
             </div>
           </div>
         </div>
-        <AddCouponForm
+        <AddCouponModal
           show={this.state.addCouponModalOpen}
           initialValues={initialValues}
           onHide={this.closeAddCouponModal}
