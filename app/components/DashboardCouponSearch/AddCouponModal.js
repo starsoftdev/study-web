@@ -120,7 +120,6 @@ class AddCouponModal extends React.Component { // eslint-disable-line react/pref
   }
 
   handleDateSelect(momentDate) {
-    console.log('moment', momentDate);
     this.setState({
       initDate: momentDate,
     });

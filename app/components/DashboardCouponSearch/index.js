@@ -49,7 +49,6 @@ export class DashboardCouponSearch extends React.Component {
     } else {
       data.percentOff = data.amount;
     }
-    console.log(data);
     delete data.id;
     this.props.addCoupon(props);
   }
