@@ -3,7 +3,6 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import LoadingSpinner from '../../../components/LoadingSpinner';
 import { selectPaginationOptionsAdmin, selectSearchSponsorsFormValues } from '../selectors';
 import { setActiveAdminSort } from '../actions';
 import RowItem from './RowItem';
@@ -18,7 +17,7 @@ export class SponsorManageUsersAdminsTable extends React.Component {
     searchFormValues: React.PropTypes.object,
     protocols: PropTypes.array,
     currentUser: React.PropTypes.object,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -63,32 +62,24 @@ export class SponsorManageUsersAdminsTable extends React.Component {
 
     return (
       <div className="table-holder table-responsive">
-        {(this.props.manageSponsorUsersData.fetching)
-          ?
-            <div className="text-center">
-              <LoadingSpinner showOnlyIcon size={20} />
-            </div>
-          :
-            <table className="table-manage-user table">
-              <caption>
-              ADMINS
-            </caption>
-
-              <thead>
-                <tr>
-                  <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'first_name') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>NAME<i className="caret-arrow" /></th>
-                  <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'email') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>EMAIL<i className="caret-arrow" /></th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-              adminsList.map((item, index) => (
-                <RowItem key={index} item={item} editUser={this.props.editUser} deleteUser={this.props.deleteUser} protocols={this.props.protocols} currentUser={this.props.currentUser} />
-              ))
+        {
+          <table className="table-manage-user table">
+            <caption>ADMINS</caption>
+            <thead>
+              <tr>
+                <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'first_name') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>NAME<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'email') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>EMAIL<i className="caret-arrow" /></th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {
+                adminsList.map((item, index) => (
+                  <RowItem key={index} item={item} editUser={this.props.editUser} deleteUser={this.props.deleteUser} protocols={this.props.protocols} currentUser={this.props.currentUser} />
+                ))
               }
-              </tbody>
-            </table>
+            </tbody>
+          </table>
         }
       </div>
     );
