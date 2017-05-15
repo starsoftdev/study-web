@@ -105,7 +105,6 @@ export function* editCouponWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(editCouponSuccess(response));
-    yield put(fetchCoupon());
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving coupons');
     yield put(toastrActions.error('', errorMessage));
