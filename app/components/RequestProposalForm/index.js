@@ -231,20 +231,8 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           })()}
 
           <div className="field-row">
-            <strong className="label"><label>Patient messaging <br />
-            Suite: $247</label></strong>
-            <Field
-              name="patientMessagingSuite"
-              component={Toggle}
-              className="field"
-            />
-          </div>
-
-          <div className="field-row">
             <strong className="label"><label>Patient qualification <br />
-              Suite: $894 <br />
-              <span className="label-blue">(Includes patient <br />
-              messaging suite)</span></label></strong>
+              Suite: $897</label></strong>
             <Field
               name="patientQualificationSuite"
               component={Toggle}
