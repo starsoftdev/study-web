@@ -27,7 +27,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.item && newProps.item.neverExpires) {
+    if (newProps.item && newProps.item.validTo === null) {
       this.props.change(`isActive-${newProps.item.id}`, true);
     } else {
       this.props.change(`isActive-${newProps.item.id}`, false);
