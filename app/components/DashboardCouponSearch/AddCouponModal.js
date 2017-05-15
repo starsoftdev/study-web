@@ -71,7 +71,7 @@ class AddCouponModal extends React.Component { // eslint-disable-line react/pref
       this.setState({ initialValues: newProps.initialValues, initialValuesAplied: true }, () => {
         change('type', newProps.initialValues.type);
         change('code', newProps.initialValues.code);
-        change('coupon', newProps.initialValues.coupon);
+        change('description', newProps.initialValues.description);
         change('validFrom', newProps.initialValues.validFrom);
         change('validTo', newProps.initialValues.validTo);
         if (newProps.initialValues.validTo === null) {
@@ -200,7 +200,7 @@ class AddCouponModal extends React.Component { // eslint-disable-line react/pref
                 </strong>
                 <div className="field">
                   <Field
-                    name="coupon"
+                    name="description"
                     component={Input}
                     type="text"
                     placeholder=""

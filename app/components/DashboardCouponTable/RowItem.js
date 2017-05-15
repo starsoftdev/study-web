@@ -51,7 +51,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     return (
       <tr>
         <td>
-          {item.coupon}
+          {item.description}
         </td>
         <td>
           {item.code}
