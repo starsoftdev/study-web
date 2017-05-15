@@ -191,15 +191,15 @@ export default function createRoutes(store) {
           System.import('./containers/Proposals/sagas'),
           System.import('./containers/Proposals'),
         ]);
-    
+
         const renderRoute = loadModule(cb);
-    
+
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('proposals', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });
-    
+
         importModules.catch(errorLoading);
       },
     }, {
