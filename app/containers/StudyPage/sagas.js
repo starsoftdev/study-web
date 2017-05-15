@@ -214,13 +214,15 @@ function* fetchStudyTextStats(action) {
   const { studyId, campaignId } = action;
 
   try {
-    let requestURL = `${API_URL}/textMessages/countStudyMessages/${studyId}`;
-    if (campaignId) {
-      requestURL += `?campaignId=${campaignId}`;
-    }
-    const response = yield call(request, requestURL, {
+    const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
+    const options = {
       method: 'GET',
-    });
+      query: {},
+    };
+    if (campaignId) {
+      options.query.campaignId = campaignId;
+    }
+    const response = yield call(request, requestURL, options);
     yield put(textStatsFetched(response));
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
@@ -240,7 +242,7 @@ function* fetchStudyTextNewStats() {
       return;
     }
     try {
-      const requestURL = `${API_URL}/textMessages/countStudyMessages/${studyId}`;
+      const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
       const response = yield call(request, requestURL, {
         method: 'GET',
       });
