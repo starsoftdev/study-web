@@ -228,9 +228,21 @@ export default function createRoutes(store) {
       path: '/app/help-support',
       name: 'helpSupportPage',
       getComponent(nextState, cb) {
-        System.import('./containers/HelpSupportPage')
-          .then(loadModule(cb))
-          .catch(errorLoading);
+        const importModules = Promise.all([
+          System.import('./containers/HelpSupportPage/reducer'),
+          System.import('./containers/HelpSupportPage/sagas'),
+          System.import('./containers/HelpSupportPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('HelpSupportPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
       },
     }, {
       onEnter: redirectToLogin,

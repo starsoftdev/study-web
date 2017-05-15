@@ -28,7 +28,7 @@ export function* submitFormWatcher() {
     // listen for the SUBMIT_FORM action dispatched on form submit
     const { payload } = yield take(SUBMIT_FORM);
     try {
-      const requestURL = `${API_URL}/referrals`;
+      const requestURL = `${API_URL}/supports`;
       const params = {
         method: 'POST',
         body: JSON.stringify(payload),
