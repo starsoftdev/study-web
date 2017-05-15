@@ -193,7 +193,7 @@ export class BillingPage extends Component {
                           </div>
                           <div className="textbox">
                             <strong className="name">Diamond Listing</strong>
-                            <p>60 Posts</p>
+                            <p>63 Posts</p>
                           </div>
                         </div></td>
                         <td data-label="Price">

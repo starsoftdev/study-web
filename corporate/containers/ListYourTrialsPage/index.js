@@ -515,7 +515,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                       <img src={diamond2} width="91" alt="package description" className="img2" />
                     </div>
                     <h2>DIAMOND</h2>
-                    <p>60 Posts</p>
+                    <p>63 Posts</p>
                     <strong className="price">
                       $3297 <span>/MONTH</span>
                     </strong>
