@@ -99,7 +99,10 @@ export class RequestProposalPage extends Component {
                     <div className="order-summery-container">
                       <Sticky className="sticky-shopping-cart">
                         {/* this will be replaced with a new shopping cart component */}
-                        <RequestProposalCart onSubmit={this.onSubmitForm} />
+                        <RequestProposalCart
+                          onSubmit={this.onSubmitForm}
+                          currentUser={this.props.currentUser}
+                        />
                       </Sticky>
                     </div>
                   </div>

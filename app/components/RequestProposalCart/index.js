@@ -46,6 +46,7 @@ export class RequestProposalCart extends Component {
     fetchIndicationLevelPrice: PropTypes.func,
     indicationLevelPrice: PropTypes.number,
     touchRequestProposal: PropTypes.func,
+    currentUser: PropTypes.object,
   }
 
   constructor(props) {
@@ -84,8 +85,14 @@ export class RequestProposalCart extends Component {
       return;
     }
 
-    const { formValues } = this.props;
-    this.props.onSubmitForm(formValues);
+    const { formValues, currentUser } = this.props;
+    this.props.onSubmitForm({
+      ...formValues,
+      firstName: currentUser.firstName,
+      lastName: currentUser.lastName,
+      email: currentUser.email,
+      site_id: formValues.site,
+    });
   }
 
   onFetchCoupon() {
