@@ -16,19 +16,18 @@ import CenteredModal from '../../components/CenteredModal/index';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
 
 import formValidator, { fields } from './validator';
-const formName = 'dashboardAddCouponForm';
+const formName = 'dashboardAddCouponModal';
 
 const mapDispatchToProps = (dispatch) => ({
   change: (name, value) => dispatch(change(formName, name, value)),
-  resetForm: () => dispatch(reset(formName)),
+  clearForm: () => dispatch(reset(formName)),
   touchFields: () => dispatch(touch(formName, ...fields)),
 });
 
 @reduxForm({ form: formName, validate: formValidator })
 @connect(null, mapDispatchToProps)
 
-// TODO: rename to AddCouponModal
-class AddCouponForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class AddCouponModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     isEdit: PropTypes.bool,
     isAdd: PropTypes.bool,
@@ -38,7 +37,7 @@ class AddCouponForm extends React.Component { // eslint-disable-line react/prefe
     formError: PropTypes.bool.isRequired,
     newList: PropTypes.any,
     touchFields: PropTypes.func.isRequired,
-    resetForm: PropTypes.func.isRequired,
+    clearForm: PropTypes.func.isRequired,
     saving: PropTypes.bool,
     deleting: PropTypes.bool,
     onDelete: PropTypes.func,
@@ -67,13 +66,17 @@ class AddCouponForm extends React.Component { // eslint-disable-line react/prefe
   }
 
   componentWillReceiveProps(newProps) {
-    // console.log('initialValues', newProps.initialValues, this.state.initialValuesAplied);
     const { change } = this.props;
     if (newProps.show && !this.state.initialValuesAplied) {
       this.setState({ initialValues: newProps.initialValues, initialValuesAplied: true }, () => {
+        change('type', newProps.initialValues.type);
         change('code', newProps.initialValues.code);
+        change('description', newProps.initialValues.description);
         change('validFrom', newProps.initialValues.validFrom);
         change('validTo', newProps.initialValues.validTo);
+        if (newProps.initialValues.validTo === null) {
+          change('neverExpires', true);
+        }
         if (newProps.initialValues.type === 'amount') {
           const amountOff = (newProps.initialValues.amountOff) ? newProps.initialValues.amountOff / 100 : null;
           change('amount', amountOff);
@@ -92,10 +95,10 @@ class AddCouponForm extends React.Component { // eslint-disable-line react/prefe
   }
 
   handleCloseModal() {
-    const { onHide, resetForm } = this.props;
+    const { onHide, clearForm } = this.props;
     this.setState({ initialValues: null, initialValuesAplied: false }, () => {
       onHide();
-      resetForm();
+      clearForm();
     });
   }
 
@@ -117,7 +120,6 @@ class AddCouponForm extends React.Component { // eslint-disable-line react/prefe
   }
 
   handleDateSelect(momentDate) {
-    console.log('moment', momentDate);
     this.setState({
       initDate: momentDate,
     });
@@ -194,6 +196,20 @@ class AddCouponForm extends React.Component { // eslint-disable-line react/prefe
               <div className="field-row">
                 <strong className="label required">
                   <label>Coupon</label>
+                </strong>
+                <div className="field">
+                  <Field
+                    name="description"
+                    component={Input}
+                    type="text"
+                    placeholder=""
+                  />
+                </div>
+              </div>
+
+              <div className="field-row">
+                <strong className="label required">
+                  <label>Code</label>
                 </strong>
                 <div className="field">
                   <Field
@@ -348,4 +364,4 @@ const mapStateToProps = createStructuredSelector({
   newList: selectValues(formName),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddCouponForm);
+export default connect(mapStateToProps, mapDispatchToProps)(AddCouponModal);
