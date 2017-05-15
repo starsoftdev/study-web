@@ -32,6 +32,12 @@ export class DashboardCouponPage extends React.Component { // eslint-disable-lin
     this.props.fetchCoupon();
   }
 
+  componentWillReceiveProps(newProps) {
+    if (!newProps.editCouponProcess.saving && this.props.editCouponProcess.saving) {
+      this.props.fetchCoupon();
+    }
+  }
+
   render() {
     return (
       <div className="container-fluid dashboard-coupon">
