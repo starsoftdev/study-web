@@ -74,7 +74,9 @@ class AddCouponModal extends React.Component { // eslint-disable-line react/pref
         change('coupon', newProps.initialValues.coupon);
         change('validFrom', newProps.initialValues.validFrom);
         change('validTo', newProps.initialValues.validTo);
-        change('neverExpires', newProps.initialValues.neverExpires);
+        if (newProps.initialValues.validTo === null) {
+          change('neverExpires', true);
+        }
         if (newProps.initialValues.type === 'amount') {
           const amountOff = (newProps.initialValues.amountOff) ? newProps.initialValues.amountOff / 100 : null;
           change('amount', amountOff);
