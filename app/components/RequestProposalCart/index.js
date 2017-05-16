@@ -92,6 +92,7 @@ export class RequestProposalCart extends Component {
       lastName: currentUser.lastName,
       email: currentUser.email,
       site_id: formValues.site,
+      phone: '1111',
     });
   }
 
