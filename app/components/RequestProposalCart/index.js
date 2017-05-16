@@ -87,11 +87,22 @@ export class RequestProposalCart extends Component {
       return;
     }
 
-    const { formValues, currentUser } = this.props;
+    const { formValues, currentUser, levels, indicationLevelPrice } = this.props;
 
     const selectedSite = _.find(this.props.siteLocations, (o) => (o.id === formValues.site));
     const selectedIndication = _.find(this.props.indications, (o) => (o.id === formValues.indication_id));
     const selectedLevel = _.find(this.props.levels, (o) => (o.id === formValues.level_id));
+
+    const level = find(levels, { id: formValues.level_id });
+    let totalPrice = 0;
+    const months = find(CAMPAIGN_LENGTH_LIST, { value: formValues.campaignLength });
+    if (level && months && indicationLevelPrice) {
+      totalPrice = indicationLevelPrice * months.value;
+    }
+
+    if (formValues.patientQualificationSuite) {
+      totalPrice += QUALIFICATION_SUITE_PRICE;
+    }
 
     this.props.onSubmitForm({
       ...formValues,
@@ -104,7 +115,8 @@ export class RequestProposalCart extends Component {
       site_id: formValues.site,
       exposureLevelName: selectedLevel.name,
       phone: '1111',
-      organization: 'abc',
+      organization: selectedSite.name,
+      total: totalPrice,
     });
   }
 
