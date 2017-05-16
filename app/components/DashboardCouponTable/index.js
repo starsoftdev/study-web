@@ -1,10 +1,12 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import RowItem from './RowItem';
-import AddCouponForm from '../../components/DashboardCouponSearch/AddCouponForm';
+import AddCouponModal from '../../components/DashboardCouponSearch/AddCouponModal';
 
+@reduxForm({ form: 'DashboardCoupon.CouponList' })
 export class DashboardCouponTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     coupon: PropTypes.object,
@@ -89,7 +91,6 @@ export class DashboardCouponTable extends Component { // eslint-disable-line rea
       const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
       coupon = _.orderBy(coupon, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
     }
-    // console.log('initialValues', this.state.item);
 
     return (
       <div className="table-responsive table-holder table-indication alt">
@@ -130,7 +131,7 @@ export class DashboardCouponTable extends Component { // eslint-disable-line rea
             }
           </tbody>
         </table>
-        <AddCouponForm
+        <AddCouponModal
           isEdit
           show={this.state.editCouponModalOpen}
           initialValues={this.state.item}

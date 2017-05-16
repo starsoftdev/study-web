@@ -230,8 +230,9 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     const siteLocationName = _.find(this.props.siteLocations, { id: addCreditsFormValues.siteLocation });
     const data = {
       quantity: this.state.quantity,
-      totalAmount: this.state.quantity * this.props.creditsPrice.price,
+      totalAmount: parseInt(shoppingCartFormValues.total),
       cardId: shoppingCartFormValues.creditCard,
+      couponId: shoppingCartFormValues.couponId,
       userId: this.props.currentUser.id,
       site: addCreditsFormValues.siteLocation,
       siteLocationName: siteLocationName.name,

@@ -58,6 +58,9 @@ export class HelpSupportPage extends React.Component { // eslint-disable-line re
       email: values.email,
       siteLocation: values.siteLocation,
       message: values.message,
+      companyName: 'Help',
+      companyType: 'Support',
+      isHelp: true,
     };
     this.props.submitForm(newValues);
   }

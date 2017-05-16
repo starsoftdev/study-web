@@ -81,7 +81,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   componentDidUpdate() {}
 
   componentWillUnmount() {
-    const defaultSort = 'orderNumber';
+    const defaultSort = '';
     this.props.setActiveSort(defaultSort, null);
   }
 

@@ -288,7 +288,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
               }
               <Button
                 bsStyle="primary"
-                className={classNames('coupon-btn', { couponSelected })}
+                className={classNames('coupon-btn')}
                 onClick={this.onFetchCoupon}
                 disabled={coupon.fetching || submitting}
               >
@@ -310,7 +310,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                 ? <span className="price">
                   <LoadingSpinner showOnlyIcon size={20} className="price" />
                 </span>
-                : <Money value={discount / 100} className="price discount-amount" />
+                : <Money value={discount / 100} discount className="price discount-amount" />
               }
             </div>
 
