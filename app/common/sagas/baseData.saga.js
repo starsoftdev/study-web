@@ -295,8 +295,11 @@ export function* fetchRewardsWatcher() {
       }
       const response = yield call(request, requestURL, options);
 
+      console.warn('no error happened!!!!');
       yield put(rewardsFetched(response));
     } catch (err) {
+      console.warn('an error happened!!!!');
+      console.info(err);
       yield put(rewardsFetchingError(err));
     }
   }
