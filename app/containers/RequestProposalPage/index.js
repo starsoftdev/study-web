@@ -102,6 +102,8 @@ export class RequestProposalPage extends Component {
                         <RequestProposalCart
                           onSubmit={this.onSubmitForm}
                           currentUser={this.props.currentUser}
+                          indications={this.props.indications}
+                          siteLocations={this.props.siteLocations}
                         />
                       </Sticky>
                     </div>

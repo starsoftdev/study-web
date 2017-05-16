@@ -7,7 +7,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { find, sumBy } from 'lodash';
+import _, { find, sumBy } from 'lodash';
 import { touch } from 'redux-form';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -47,6 +47,8 @@ export class RequestProposalCart extends Component {
     indicationLevelPrice: PropTypes.number,
     touchRequestProposal: PropTypes.func,
     currentUser: PropTypes.object,
+    siteLocations: PropTypes.array,
+    indications: PropTypes.array,
   }
 
   constructor(props) {
@@ -86,13 +88,23 @@ export class RequestProposalCart extends Component {
     }
 
     const { formValues, currentUser } = this.props;
+
+    const selectedSite = _.find(this.props.siteLocations, (o) => (o.id === formValues.site));
+    const selectedIndication = _.find(this.props.indications, (o) => (o.id === formValues.indication_id));
+    const selectedLevel = _.find(this.props.levels, (o) => (o.id === formValues.level_id));
+
     this.props.onSubmitForm({
       ...formValues,
+      siteLocationName: selectedSite.name,
+      indicationName: selectedIndication.name,
+      protocolNumber: formValues.protocol,
       firstName: currentUser.firstName,
       lastName: currentUser.lastName,
       email: currentUser.email,
       site_id: formValues.site,
+      exposureLevelName: selectedLevel.name,
       phone: '1111',
+      organization: 'abc',
     });
   }
 
