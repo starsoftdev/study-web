@@ -345,9 +345,9 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       const dateWrapper = moment(source.created).tz(this.props.currentUser.timezone).format('MM/DD/YY');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
 
-      let proposalLink = source.proposalNumber;
-      if (source.proposalPdfId) {
-        proposalLink = <a className="show-pdf-link" onClick={() => this.props.showProposalPdf(source.id)}>{source.proposalNumber}</a>;
+      let proposalLink = source.proposalnumber;
+      if (source.proposalpdfid) {
+        proposalLink = <a className="show-pdf-link" onClick={() => this.props.showProposalPdf(source.id)}>{source.proposalnumber}</a>;
       }
 
       result.push(
@@ -361,7 +361,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
             <span>{source.order_number}</span>
           </td>
           <td>{dateWrapper}</td>
-          <td>{source.site}</td>
+          <td>{source.sitename}</td>
           <td>{proposalLink}</td>
           <td>{source.protocol}</td>
           <td>${(sub) ? `${(source.total / 100)}${sub}` : `${(source.total / 100).toFixed(2)}` }</td>
