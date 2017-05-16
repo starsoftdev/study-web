@@ -109,7 +109,7 @@ export class RequestProposalCart extends Component {
       siteLocationName: selectedSite.name,
       indicationName: selectedIndication.name,
       protocolNumber: formValues.protocol,
-      proposalNumber: '111',
+      proposalNumber: 11,
       firstName: currentUser.firstName,
       lastName: currentUser.lastName,
       email: currentUser.email,
