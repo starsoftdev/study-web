@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import LoadingSpinner from '../../../components/LoadingSpinner';
 import { setActiveProtocolsSort } from '../actions';
 import { selectPaginationOptionsProtocols, selectSearchSponsorsFormValues } from '../selectors';
 import RowItem from './RowItem';
@@ -19,7 +18,7 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
     editProtocol: PropTypes.func,
     protocols: PropTypes.array,
     currentUser: React.PropTypes.object,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -67,33 +66,28 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
 
     return (
       <div className="table-holder table-responsive">
-        {(this.props.manageSponsorUsersData.fetching)
-          ?
-            <div className="text-center">
-              <LoadingSpinner showOnlyIcon size={20} />
-            </div>
-          :
-            <table className="table-manage-user alt table">
-              <caption>PROTOCOLS</caption>
-              <thead>
-                <tr>
-                  <th onClick={this.sortBy} data-sort="protocolNumber" className={`col1 ${(this.props.paginationOptionsProtocols.activeSort === 'protocolNumber') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>PROTOCOL NUMBER<i className="caret-arrow" /></th>
-                  <th onClick={this.sortBy} data-sort="indication" className={`col2 ${(this.props.paginationOptionsProtocols.activeSort === 'indication') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>INDICATION<i className="caret-arrow" /></th>
-                  <th onClick={this.sortBy} data-sort="cros" className={`col3 ${(this.props.paginationOptionsProtocols.activeSort === 'cros') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>CRO<i className="caret-arrow" /></th>
-                  <th onClick={this.sortBy} data-sort="irbName" className={`col4 ${(this.props.paginationOptionsProtocols.activeSort === 'irbName') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>IRB<i className="caret-arrow" /></th>
-                  <th onClick={this.sortBy} data-sort="iwrs" className={`col5 ${(this.props.paginationOptionsProtocols.activeSort === 'iwrs') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>IWRS<i className="caret-arrow" /></th>
-                  <th className="col6"></th>
-                  <th className="col7"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-            studiesList.map((item, index) => (
-              <RowItem key={index} item={item} editProtocol={this.props.editProtocol} editUser={this.props.editUser} deleteUser={this.props.deleteUser} searchFormValues={this.props.searchFormValues} protocols={this.props.protocols} currentUser={this.props.currentUser} />
-            ))
-          }
-              </tbody>
-            </table>
+        {
+          <table className="table-manage-user alt table">
+            <caption>PROTOCOLS</caption>
+            <thead>
+              <tr>
+                <th onClick={this.sortBy} data-sort="protocolNumber" className={`col1 ${(this.props.paginationOptionsProtocols.activeSort === 'protocolNumber') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>PROTOCOL NUMBER<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="indication" className={`col2 ${(this.props.paginationOptionsProtocols.activeSort === 'indication') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>INDICATION<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="cros" className={`col3 ${(this.props.paginationOptionsProtocols.activeSort === 'cros') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>CRO<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="irbName" className={`col4 ${(this.props.paginationOptionsProtocols.activeSort === 'irbName') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>IRB<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="iwrs" className={`col5 ${(this.props.paginationOptionsProtocols.activeSort === 'iwrs') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>IWRS<i className="caret-arrow" /></th>
+                <th className="col6" />
+                <th className="col7" />
+              </tr>
+            </thead>
+            <tbody>
+              {
+                studiesList.map((item, index) => (
+                  <RowItem key={index} item={item} editProtocol={this.props.editProtocol} editUser={this.props.editUser} deleteUser={this.props.deleteUser} searchFormValues={this.props.searchFormValues} protocols={this.props.protocols} currentUser={this.props.currentUser} />
+                ))
+              }
+            </tbody>
+          </table>
         }
       </div>
     );

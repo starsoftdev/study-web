@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Field } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import Toggle from '../../../../components/Input/Toggle';
 import { selectHoverRowIndex } from '../selectors';
@@ -46,7 +46,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
   render() {
     const { item, onSelectStudy } = this.props;
 
-    const lastLoginTime = item.last_login_time ? moment(item.last_login_time).format('MM/DD/YY [at] h:mm A') : 'N/A';
+    const lastLoginTime = item.last_login_time ? moment(item.last_login_time).tz(item.timezone).format('MM/DD/YY [at] h:mm A') : 'N/A';
 
     const landingHref = item.landing_page_url ? `/${item.study_id}-${item.landing_page_url.toLowerCase().replace(/ /ig, '-')}` : '';
 

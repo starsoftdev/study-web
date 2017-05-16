@@ -65,7 +65,7 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
   render() {
     // const messagingNumberOptions = [{ label: '(524) 999-1234', value: 1 }, { label: '(524) 999-1234', value: 2 }, { label: '(524) 999-1234', value: 3 }];
     const filteredSites = this.props.clientSites.map((item, index) => (
-      <div key={item.id}>
+      <div className="messaging-number-row" key={item.id}>
         <div className="field-row">
           <strong className="label">
             <label className="messaging-number">{item.name}</label>
