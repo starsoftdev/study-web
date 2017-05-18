@@ -104,8 +104,19 @@ export class RequestProposalCart extends Component {
       totalPrice += QUALIFICATION_SUITE_PRICE;
     }
 
+    const newFormValues = formValues;
+    if (!newFormValues.sponsorEmail) {
+      newFormValues.sponsorEmail = null
+    }
+    if (!newFormValues.croEmail) {
+      newFormValues.croEmail = null
+    }
+    if (!newFormValues.irbEmail) {
+      newFormValues.irbEmail = null
+    }
+
     this.props.onSubmitForm({
-      ...formValues,
+      ...newFormValues,
       siteLocationName: selectedSite.name,
       indicationName: selectedIndication.name,
       protocolNumber: formValues.protocol,
