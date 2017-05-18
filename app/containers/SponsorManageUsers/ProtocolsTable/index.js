@@ -46,7 +46,7 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
     let studiesList = this.props.manageSponsorUsersData.studiesList;
 
     if (this.props.searchFormValues.protocol && this.props.searchFormValues.protocol !== 'all') {
-      studiesList = _.filter(studiesList, (item) => (item.id === this.props.searchFormValues.protocol));
+      studiesList = _.filter(studiesList, (item) => (item.protocolId === this.props.searchFormValues.protocol));
     }
 
     if (this.props.paginationOptionsProtocols.activeDirection && this.props.paginationOptionsProtocols.activeSort) {
@@ -54,11 +54,11 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
 
       studiesList = _.orderBy(studiesList, [(o) => {
         if (this.props.paginationOptionsProtocols.activeSort === 'protocolNumber') {
-          return o.protocol.number;
+          return o.protocolNumber;
         } else if (this.props.paginationOptionsProtocols.activeSort === 'indication') {
-          return o.indication ? o.indication.name : null;
+          return o.indicationName;
         } else if (this.props.paginationOptionsProtocols.activeSort === 'cros') {
-          return o.cro ? o.cro.name : null;
+          return o.croName;
         }
         return o[this.props.paginationOptionsProtocols.activeSort];
       }], [dir]);
@@ -74,7 +74,7 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
                 <th onClick={this.sortBy} data-sort="protocolNumber" className={`col1 ${(this.props.paginationOptionsProtocols.activeSort === 'protocolNumber') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>PROTOCOL NUMBER<i className="caret-arrow" /></th>
                 <th onClick={this.sortBy} data-sort="indication" className={`col2 ${(this.props.paginationOptionsProtocols.activeSort === 'indication') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>INDICATION<i className="caret-arrow" /></th>
                 <th onClick={this.sortBy} data-sort="cros" className={`col3 ${(this.props.paginationOptionsProtocols.activeSort === 'cros') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>CRO<i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="irbName" className={`col4 ${(this.props.paginationOptionsProtocols.activeSort === 'irbName') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>IRB<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="irbName" className={`col4 ${(this.props.paginationOptionsProtocols.activeSort === 'irb') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>IRB<i className="caret-arrow" /></th>
                 <th onClick={this.sortBy} data-sort="iwrs" className={`col5 ${(this.props.paginationOptionsProtocols.activeSort === 'iwrs') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>IWRS<i className="caret-arrow" /></th>
                 <th className="col6" />
                 <th className="col7" />

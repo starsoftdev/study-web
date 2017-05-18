@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import EditSponsorUserForm from '../../../containers/SponsorManageUsers/EditSponsorUserForm';
+import { selectEditUserProcess } from '../selectors';
 
 class ExpandedItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -12,6 +13,7 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
     protocolOptions: PropTypes.array,
     deleteUser: PropTypes.func,
     currentUser: React.PropTypes.object,
+    editUserProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -24,6 +26,12 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
     this.openAddUserModal = this.openAddUserModal.bind(this);
     this.editLocalUser = this.editLocalUser.bind(this);
     this.deleteLocalUser = this.deleteLocalUser.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if ((!newProps.editUserProcess.saving && this.props.editUserProcess.saving)) {
+      this.closeAddUserModal();
+    }
   }
 
   closeAddUserModal() {
@@ -49,6 +57,7 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
         lastName: this.props.item.user.lastName,
         email: this.props.item.user.email,
         id: this.props.item.user.id,
+        protocols: [{ init: true }],
       },
     };
 
@@ -80,6 +89,7 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
 }
 
 const mapStateToProps = createStructuredSelector({
+  editUserProcess: selectEditUserProcess(),
 });
 
 function mapDispatchToProps(dispatch) {
