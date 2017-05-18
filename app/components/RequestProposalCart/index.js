@@ -106,13 +106,13 @@ export class RequestProposalCart extends Component {
 
     const newFormValues = formValues;
     if (!newFormValues.sponsorEmail) {
-      newFormValues.sponsorEmail = null
+      newFormValues.sponsorEmail = null;
     }
     if (!newFormValues.croEmail) {
-      newFormValues.croEmail = null
+      newFormValues.croEmail = null;
     }
     if (!newFormValues.irbEmail) {
-      newFormValues.irbEmail = null
+      newFormValues.irbEmail = null;
     }
 
     this.props.onSubmitForm({
