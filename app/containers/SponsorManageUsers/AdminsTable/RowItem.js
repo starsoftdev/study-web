@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 
 import CenteredModal from '../../../components/CenteredModal/index';
 import EditSponsorUserForm from '../EditSponsorUserForm';
+import { selectEditUserProcess } from '../selectors';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -14,6 +15,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     protocols: PropTypes.array,
     deleteUser: PropTypes.func,
     currentUser: React.PropTypes.object,
+    editUserProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -28,6 +30,12 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
     this.editLocalUser = this.editLocalUser.bind(this);
     this.deleteLocalUser = this.deleteLocalUser.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if ((!newProps.editUserProcess.saving && this.props.editUserProcess.saving)) {
+      this.closeAddUserModal();
+    }
   }
 
   closeAddUserModal() {
@@ -53,6 +61,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         lastName: this.props.item.last_name,
         id: this.props.item.id,
         email: this.props.item.email,
+        protocols: [{ init: true }],
       },
     };
 
@@ -62,6 +71,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         id: protocol.id,
         name: protocol.number,
         value: true,
+        studies: protocol.studies,
       });
     });
 
@@ -102,6 +112,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 }
 
 const mapStateToProps = createStructuredSelector({
+  editUserProcess: selectEditUserProcess(),
 });
 
 function mapDispatchToProps(dispatch) {

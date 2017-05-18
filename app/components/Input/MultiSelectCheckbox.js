@@ -46,6 +46,7 @@ export default class MultiSelectCheckbox extends Component {
     });
 
     this.props.input.onChange(componentValues);
+    this.props.input.onBlur(componentValues);
   }
 
   onHideOverlay() {

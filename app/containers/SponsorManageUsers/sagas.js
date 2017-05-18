@@ -112,7 +112,7 @@ export function* editProtocolWatcher() {
 
 export function* editProtocolWorker(action) {
   try {
-    const requestURL = `${API_URL}/sponsorRoles/editProtocol`;
+    const requestURL = `${API_URL}/protocols/${action.payload.id}`;
 
     const data = new FormData();
     _.forEach(action.payload, (value, index) => {
