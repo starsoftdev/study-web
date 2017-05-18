@@ -111,6 +111,7 @@ function studyPageReducer(state = initialState, action) {
     case REMOVE_PATIENT_INDICATION_SUCCESS:
     case SUBMIT_DELETE_NOTE_SUCCESS:
     case UPDATE_PATIENT_SUCCESS:
+      console.warn(action)
       if (action.payload && action.payload.lastTextMessage) {
         return {
           ...state,

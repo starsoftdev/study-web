@@ -541,6 +541,7 @@ function* addPatientIndication() {
           indicationId: indication.id,
         }),
       });
+      // fetchPatientDetails(patientId);
       yield put(addPatientIndicationSuccess(patientId, indication, payload.isOriginal));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
@@ -597,14 +598,15 @@ function* removePatientIndication() {
 
     try {
       const requestURL = `${API_URL}/patientIndications`;
-      yield call(request, requestURL, {
+      const response = yield call(request, requestURL, {
         method: 'DELETE',
         body: JSON.stringify({
           patientId,
           indicationId,
         }),
       });
-      yield put(removePatientIndicationSuccess(patientId, indicationId));
+
+      yield put(removePatientIndicationSuccess(patientId, indicationId, response && response.patient ? response.patient : null));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while removing the patient indication. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
