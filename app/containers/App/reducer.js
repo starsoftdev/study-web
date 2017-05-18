@@ -1227,7 +1227,7 @@ export default function appReducer(state = initialState, action) {
           }
         }
       }
-      foundIndex = findIndex(clientRolesCollection, (item) => (item.user.id === payload.userResultData.user.id));
+      foundIndex = findIndex(clientRolesCollection, (item) => (item.user_id === payload.userResultData.user.id));
       if (payload.userType === 'admin') {
         if (foundIndex < 0) {
           clientRolesCollection.push(payload.userResultData);
