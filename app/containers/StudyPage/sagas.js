@@ -541,7 +541,6 @@ function* addPatientIndication() {
           indicationId: indication.id,
         }),
       });
-      // fetchPatientDetails(patientId);
       yield put(addPatientIndicationSuccess(patientId, indication, payload.isOriginal));
       if (payload && payload.patient) {
         yield put(updatePatientSuccess(payload.patient));
