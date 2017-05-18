@@ -12,9 +12,9 @@ import SponsorManageUsersSearch from '../../containers/SponsorManageUsers/Sponso
 import SponsorManageUsersAdminsTable from '../../containers/SponsorManageUsers/AdminsTable';
 import SponsorManageUsersProtocolsTable from '../../containers/SponsorManageUsers/ProtocolsTable';
 import { fetchProtocols } from '../../containers/App/actions';
-import { selectCurrentUser, selectProtocols } from '../../containers/App/selectors';
+import { selectCurrentUser } from '../../containers/App/selectors';
 import { fetchManageSponsorUsersData, editSponsorUser, deleteSponsorUser, editProtocol } from '../../containers/SponsorManageUsers/actions';
-import { selectManageSponsorUsersData, selectEditSponsorUserFormValues, selectEditProtocolFormValues } from '../../containers/SponsorManageUsers/selectors';
+import { selectManageSponsorUsersData, selectEditSponsorUserFormValues, selectEditProtocolFormValues, selectProtocols } from '../../containers/SponsorManageUsers/selectors';
 
 export class SponsorManageUsers extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -87,14 +87,14 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
       iwrs: this.props.editProtocolFormValues.iwrs || '',
       irb: this.props.editProtocolFormValues.irb || '',
       file: this.props.editProtocolFormValues.file,
-      id: this.props.editProtocolFormValues.id,
+      id: this.props.editProtocolFormValues.protocolId,
       sponsorRoleId: parseInt(this.props.currentUser.roleForSponsor.id),
     };
     this.props.editProtocol(params);
   }
 
   render() {
-    const protocols = this.props.protocols.details;
+    const protocols = this.props.protocols;
 
     return (
       <div className="container-fluid sponsor-portal">

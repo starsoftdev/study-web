@@ -53,6 +53,8 @@ const initialState = {
 
 function sponsorManageUsersReducer(state = initialState, action) {
   const protocols = [];
+  let studiesList = [];
+  let foundProtocolIndex = null;
   switch (action.type) {
     case FETCH_MANAGE_SPONSOR_USERS_DATA:
       return {
@@ -65,14 +67,26 @@ function sponsorManageUsersReducer(state = initialState, action) {
         },
       };
     case FETCH_MANAGE_SPONSOR_USERS_DATA_SUCCESS:
-      _.forEach(action.payload.studiesList, (item) => {
-        protocols.push({ id: item.id, name: item.protocolNumber });
+      studiesList = _.cloneDeep(action.payload.studiesList);
+      _.forEach(action.payload.studiesList, (item, index) => {
+        foundProtocolIndex = _.findIndex(protocols, (o) => (o.id === item.protocolId));
+        if (foundProtocolIndex !== -1) {
+          protocols[foundProtocolIndex].studies = _.concat(protocols[foundProtocolIndex].studies, item.studyIds);
+        } else {
+          protocols.push({ id: item.protocolId, number: item.protocolNumber, studies: item.studyIds });
+        }
+        _.forEach(item.studies, (study) => {
+          studiesList[index].sponsorUsers = [];
+          if (study.sponsorUsers && study.sponsorUsers.length > 0) {
+            studiesList[index].sponsorUsers = study.sponsorUsers;
+          }
+        });
       });
       return {
         ...state,
         protocols,
         manageSponsorUsersData: {
-          studiesList: action.payload.studiesList,
+          studiesList,
           adminsList: action.payload.adminsList,
           fetching: false,
           error: null,
