@@ -1,6 +1,9 @@
 import { validatorFactory } from '../../../app/utils/reduxForm';
 
 const schema = {
+  title: {
+    presence: false,
+  },
   description: {
     presence: false,
   },
