@@ -68,6 +68,7 @@ export class SponsorManageUsersSearch extends React.Component {
         id: protocol.id,
         name: protocol.number,
         value: false,
+        studies: protocol.studies,
       });
     });
 
