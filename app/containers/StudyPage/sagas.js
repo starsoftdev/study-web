@@ -542,6 +542,9 @@ function* addPatientIndication() {
         }),
       });
       yield put(addPatientIndicationSuccess(patientId, indication, payload.isOriginal));
+      if (payload && payload.patient) {
+        yield put(updatePatientSuccess(payload.patient));
+      }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -597,14 +600,18 @@ function* removePatientIndication() {
 
     try {
       const requestURL = `${API_URL}/patientIndications`;
-      yield call(request, requestURL, {
+      const response = yield call(request, requestURL, {
         method: 'DELETE',
         body: JSON.stringify({
           patientId,
           indicationId,
         }),
       });
-      yield put(removePatientIndicationSuccess(patientId, indicationId));
+
+      yield put(removePatientIndicationSuccess(patientId, indicationId, response && response.patient ? response.patient : null));
+      if (response && response.patient) {
+        yield put(updatePatientSuccess(response.patient));
+      }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while removing the patient indication. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -662,6 +669,9 @@ function* submitPatientNote() {
         }),
       });
       yield put(addPatientNoteSuccess(currentUser, response));
+      if (response && response.patient) {
+        yield put(updatePatientSuccess(response.patient));
+      }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding a patient note. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -683,10 +693,13 @@ function* submitDeleteNote() {
 
     try {
       const requestURL = `${API_URL}/patients/${patientId}/notes/${noteId}`;
-      yield call(request, requestURL, {
+      const response = yield call(request, requestURL, {
         method: 'DELETE',
       });
       yield put(deletePatientNoteSuccess(noteId));
+      if (response && response.patient) {
+        yield put(updatePatientSuccess(response.patient));
+      }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding a patient note. Please try again later.');
       yield put(toastrActions.error('', errorMessage));

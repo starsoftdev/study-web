@@ -40,7 +40,7 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
         };
       }
     }
-    const infoTag = (rewardData.gift) ? <p>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null} now has {balance} KIKs</p> : null;
+    const infoTag = (rewardData && rewardData.gift) ? <p>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null} now has {balance} KIKs</p> : null;
 
     let content = null;
     content = (
@@ -58,7 +58,7 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
               </div>
               :
               <div className="desc">
-                <p><strong>{rewardData.userName}</strong> {(rewardData && rewardData.description) ? rewardData.description : null}</p>
+                <p><strong>{(rewardData && rewardData.userName) ? rewardData.userName : null}</strong> {(rewardData && rewardData.description) ? rewardData.description : null}</p>
                 {infoTag}
               </div>
             }
