@@ -151,7 +151,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     if (site !== null && searchBy !== null) {
       for (const proposal of proposalsArr) {
         if (proposal.site === site.name) {
-          const proposalNumber = String(proposal.proposalNumber);
+          const proposalNumber = String(proposal.id);
           const protocalNumber = String(proposal.protocol);
           if (proposalNumber.includes(searchBy) || protocalNumber.includes(searchBy)) {
             proposalsMatch.push(proposal);
@@ -160,7 +160,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       }
     } else if (searchBy !== null) {
       for (const proposal of proposalsArr) {
-        const proposalNumber = String(proposal.proposalNumber);
+        const proposalNumber = String(proposal.id);
         const protocalNumber = String(proposal.protocol);
         if (proposalNumber.includes(searchBy) || protocalNumber.includes(searchBy)) {
           proposalsMatch.push(proposal);
@@ -234,10 +234,10 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         break;
       case 'proposal':
         proposalsArr.sort((a, b) => {
-          if (a.proposalNumber > b.proposalNumber) {
+          if (a.id > b.id) {
             return directionUnits.more;
           }
-          if (a.proposalNumber < b.proposalNumber) {
+          if (a.id < b.id) {
             return directionUnits.less;
           }
           return 0;
@@ -345,9 +345,9 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       const dateWrapper = moment(source.created).tz(this.props.currentUser.timezone).format('MM/DD/YY');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
 
-      let proposalLink = source.proposalnumber;
+      let proposalLink = source.id;
       if (source.proposalpdfid) {
-        proposalLink = <a className="show-pdf-link" onClick={() => this.props.showProposalPdf(source.id)}>{source.proposalnumber}</a>;
+        proposalLink = <a className="show-pdf-link" onClick={() => this.props.showProposalPdf(source.id)}>{source.id}</a>;
       }
 
       result.push(
