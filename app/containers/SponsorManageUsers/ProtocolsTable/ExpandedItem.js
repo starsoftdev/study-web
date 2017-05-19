@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
@@ -51,13 +52,21 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
   }
 
   render() {
+    const componentValues = [{ isAdmin: false }];
+
+    _.forEach(this.props.protocolOptions, (item) => {
+      if (item.value) {
+        componentValues.push(item);
+      }
+    });
+
     const initialValues = {
       initialValues: {
         firstName: this.props.item.user.firstName,
         lastName: this.props.item.user.lastName,
         email: this.props.item.user.email,
         id: this.props.item.user.id,
-        protocols: [{ init: true }],
+        protocols: componentValues,
       },
     };
 
