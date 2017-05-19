@@ -75,6 +75,11 @@ export function* editSponsorUserWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(editSponsorUserSuccess(response));
+    if (action.params.isNew) {
+      yield put(toastrActions.success('Success!', 'User has been added.'));
+    } else {
+      yield put(toastrActions.success('Success!', 'You have updated your information.'));
+    }
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while editing user. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
@@ -99,6 +104,7 @@ export function* deleteSponsorUserWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(deleteSponsorUserSuccess(response));
+    yield put(toastrActions.success('Success!', 'User has been deleted.'));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while deleting user. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
@@ -133,6 +139,7 @@ export function* editProtocolWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(editProtocolSuccess(response));
+    yield put(toastrActions.success('Success!', 'You have updated your information.'));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while editing the protocol. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
