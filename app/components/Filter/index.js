@@ -58,6 +58,28 @@ class Filter extends React.Component {
     );
   }
 
+  createAddressBox(options) {
+    const { name, style } = options;
+
+    return (
+      <div
+        style={style}
+        className={classNames('filter-search-area')}
+      >
+        <strong className="title">Address</strong>
+        <input
+          type="text" name={name} className="form-control" placeholder="Search" ref={(searchVal) => (
+          this.searchVal = searchVal
+        )}
+        />
+        <button className="btn btn-default" onClick={() => { this.props.onSubmit(this.searchVal.value); }}>Apply</button>
+        <a className="btn-close" onClick={() => this.props.onClose()}>
+          <i className="icomoon-icon_close"></i>
+        </a>
+      </div>
+    );
+  }
+
   createNearByBox(options) {
     const { name, style } = options;
 
@@ -135,6 +157,8 @@ class Filter extends React.Component {
         return this.createComparisonBox(options);
       case 'nearby':
         return this.createNearByBox(options);
+      case 'address':
+        return this.createAddressBox(options);
       default:
         return this.createSearchBox(options);
     }
