@@ -124,6 +124,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.nearbyFilterChange = this.nearbyFilterChange.bind(this);
     this.nearbyFilterSubmit = this.nearbyFilterSubmit.bind(this);
     this.searchFilterSubmit = this.searchFilterSubmit.bind(this);
+    this.addressFilterSubmit = this.addressFilterSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -177,6 +178,11 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     if (filter.name === 'nearbyStudies') {
       pullAt(modalFilters, 'nearbyStudies');
+      this.setState({ modalFilters });
+    }
+
+    if (filter.name === 'address') {
+      pullAt(modalFilters, 'address');
       this.setState({ modalFilters });
     }
 
@@ -273,6 +279,13 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             onChange: this.nearbyFilterChange,
             onSubmit: this.nearbyFilterSubmit,
           });
+        } else if (key === 'address') {
+          newFilters.push({
+            name: key,
+            type: 'address',
+            value: filterValues.value,
+            onSubmit: this.addressFilterSubmit,
+          });
         } else {
           _.forEach(filterValues, (v) => {
             if ((v.label !== 'All') || (v.label === 'All' && filterValues.length === 1)) {
@@ -301,7 +314,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     _.forEach(filters, (filter, key) => {
       const initFilter = _.cloneDeep(filter);
-      if (key !== 'search' && key !== 'percentage' && key !== 'campaign' && key !== 'nearbyStudies') {
+      if (key !== 'search' && key !== 'percentage' && key !== 'campaign' && key !== 'nearbyStudies' && key !== 'address') {
         const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
         filters[key] = withoutAll;
       }
@@ -347,6 +360,11 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   searchFilterSubmit(e) {
     this.props.dispatch(change('dashboardFilters', 'search', { value: e }));
     this.fetchStudiesAccordingToFilters({ value: e }, 'search');
+  }
+
+  addressFilterSubmit(e) {
+    this.props.dispatch(change('dashboardFilters', 'address', { value: e }));
+    this.fetchStudiesAccordingToFilters({ value: e }, 'address');
   }
 
 

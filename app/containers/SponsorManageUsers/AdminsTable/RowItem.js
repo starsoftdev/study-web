@@ -55,16 +55,6 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   }
 
   render() {
-    const initialValues = {
-      initialValues: {
-        firstName: this.props.item.first_name,
-        lastName: this.props.item.last_name,
-        id: this.props.item.id,
-        email: this.props.item.email,
-        protocols: [{ init: true }],
-      },
-    };
-
     const options = [];
     _.forEach(this.props.protocols, (protocol) => {
       options.push({
@@ -74,6 +64,24 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         studies: protocol.studies,
       });
     });
+
+    const componentValues = [{ isAdmin: true }];
+
+    _.forEach(options, (item) => {
+      if (item.value) {
+        componentValues.push(item);
+      }
+    });
+
+    const initialValues = {
+      initialValues: {
+        firstName: this.props.item.first_name,
+        lastName: this.props.item.last_name,
+        id: this.props.item.id,
+        email: this.props.item.email,
+        protocols: componentValues,
+      },
+    };
 
     const isAllowToEdit = (this.props.item.name !== 'Super Admin' && (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin'));
 
