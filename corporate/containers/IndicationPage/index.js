@@ -158,7 +158,9 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
             className="main-heading text-center alt"
             data-view="fadeInUp"
           >
-            <span className="text">{headerText}</span>
+            <span>
+              {headerText}
+            </span>
           </h2>
           <ClinicalTrialsSearchForm
             indications={indications}
