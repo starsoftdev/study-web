@@ -102,7 +102,7 @@ class EditSponsorUserForm extends Component { // eslint-disable-line react/prefe
             <a className="btn btn-gray-outline lightbox-opener" onClick={this.props.onDelete} disabled={this.props.deleteUserProcess.deleting}>
               {this.props.deleteUserProcess.deleting
                 ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
-                : <span>Remove</span>
+                : <span>Delete</span>
               }
             </a>
           }
