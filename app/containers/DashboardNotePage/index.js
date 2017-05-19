@@ -29,7 +29,7 @@ export class DashboardNotePage extends React.Component { // eslint-disable-line 
   }
 
   componentWillMount() {
-    this.props.fetchNote();
+    // this.props.fetchNote();
   }
 
   render() {
