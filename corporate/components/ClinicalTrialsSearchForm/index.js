@@ -20,6 +20,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     handleDistanceChoose: PropTypes.func,
     handleIndicationChoose: PropTypes.func,
     indications: PropTypes.array,
+    individual: PropTypes.bool,
   };
 
   constructor(props) {
@@ -54,6 +55,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
       handleZipChoose,
       handleSubmit,
       indications,
+      individual,
     } = this.props;
     const distances = [
       { id: 10, name: '10 Miles' },
@@ -94,16 +96,19 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
             onChange={handleDistanceChoose}
           />
         </div>
-        <div className="field-row">
-          <Field
-            name="indicationId"
-            component={ReactSelect}
-            placeholder="Select Indication"
-            options={indications}
-            className="field-lg"
-            onChange={handleIndicationChoose}
-          />
-        </div>
+        {
+          !individual &&
+          <div className="field-row">
+            <Field
+              name="indicationId"
+              component={ReactSelect}
+              placeholder="Select Indication"
+              options={indications}
+              className="field-lg"
+              onChange={handleIndicationChoose}
+            />
+          </div>
+        }
         <div className="field-row">
           <input type="reset" className="btn btn-default hidden input-lg" value="Reset" />
           <input type="submit" className="btn btn-default btn-block input-lg" value="FIND Trials!" />
