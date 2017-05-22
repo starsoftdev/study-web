@@ -74,6 +74,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.showLandingPageModal = this.showLandingPageModal.bind(this);
     this.showThankYouPageModal = this.showThankYouPageModal.bind(this);
     this.showPatientThankYouPageModal = this.showPatientThankYouPageModal.bind(this);
+    this.showIndicationPageModal = this.showIndicationPageModal.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.campaignChanged = this.campaignChanged.bind(this);
@@ -102,6 +103,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       showLandingPageModal: false,
       showThankYouPageModal: false,
       showPatientThankYouPageModal: false,
+      showIndicationPageMdal: false,
       studies: bindSelection(props.studies),
       selectedAllStudies: false,
       selectedStudyCount: 0,
@@ -116,6 +118,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       thankYouPageOnTop: false,
       patientThankYouEmailPageOnTop: false,
       editStudyPageOnTop: false,
+      indicationPageOnTop: false,
       stickyLeftOffset: false,
     };
   }
@@ -343,6 +346,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         thankYouPageOnTop: false,
         patientThankYouEmailPageOnTop: false,
         editStudyPageOnTop: false,
+        indicationPageOnTop: false,
 
         openedPages: pages,
       });
@@ -368,6 +372,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         thankYouPageOnTop: visible,
         patientThankYouEmailPageOnTop: false,
         editStudyPageOnTop: false,
+        indicationPageOnTop: false,
 
         openedPages: pages,
       });
@@ -393,6 +398,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         thankYouPageOnTop: false,
         patientThankYouEmailPageOnTop: visible,
         editStudyPageOnTop: false,
+        indicationPageOnTop: false,
 
         openedPages: pages,
       });
@@ -418,6 +424,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         thankYouPageOnTop: false,
         patientThankYouEmailPageOnTop: false,
         editStudyPageOnTop: visible,
+        indicationPageOnTop: false,
 
         openedPages: pages,
       });
@@ -432,6 +439,32 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       });
     }
     // change('dashboardEditStudyForm', 'messagingNumber', this.props.editStudyValues.text_number_id);
+  }
+
+  showIndicationPageModal(visible) {
+    const pages = this.state.openedPages;
+    if (visible) {
+      pages.push('indicationPageOnTop');
+      this.setState({
+        showIndicationPageMdal: visible,
+        landingPageOnTop: false,
+        thankYouPageOnTop: false,
+        patientThankYouEmailPageOnTop: false,
+        editStudyPageOnTop: false,
+        indicationPageOnTop: visible,
+
+        openedPages: pages,
+      });
+    } else {
+      pages.pop();
+      this.setState({
+        showIndicationPageMdal: visible,
+        indicationPageOnTop: visible,
+        [pages[(pages.length - 1)]]: true,
+
+        openedPages: pages,
+      });
+    }
   }
 
   campaignChanged(e) {
@@ -590,6 +623,15 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         data-class="btn-deactivate"
                         onClick={() => this.showPatientThankYouPageModal(true)}
                       > Patient Thank You Email </Button>
+                    }
+                    {
+                      selectedStudyCount === 1 &&
+                      <Button
+                        bsStyle="primary"
+                        className="pull-left"
+                        data-class="btn-deactivate"
+                        onClick={() => this.showIndicationPageModal(true)}
+                      > Indication </Button>
                     }
                     {
                       selectedStudyCount === 1 &&
