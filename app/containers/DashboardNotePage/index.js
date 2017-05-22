@@ -11,12 +11,14 @@ import Helmet from 'react-helmet';
 import { DashboardNoteSearch } from './DashboardNoteSearch/index';
 import { DashboardNoteTable } from './DashboardNoteTable';
 
-import { fetchNote, addNote, editNote, deleteNote, setActiveSort } from './actions';
-import { selectDashboardNote, selectDashboardEditNoteProcess, selectDashboardNoteSearchFormValues, selectPaginationOptions } from './selectors';
+import { fetchNote, addNote, editNote, deleteNote, setActiveSort, fetchSites } from './actions';
+import { selectDashboardNote, selectDashboardEditNoteProcess, selectDashboardNoteSearchFormValues, selectPaginationOptions, selectDashboardClientSites } from './selectors';
 
 export class DashboardNotePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
+    clientSites: PropTypes.object,
+    fetchSites: PropTypes.func,
     fetchNote: PropTypes.func,
     note: PropTypes.object,
     addNote: PropTypes.func,
@@ -29,7 +31,8 @@ export class DashboardNotePage extends React.Component { // eslint-disable-line 
   }
 
   componentWillMount() {
-    // this.props.fetchNote();
+    this.props.fetchNote();
+    this.props.fetchSites();
   }
 
   render() {
@@ -39,8 +42,9 @@ export class DashboardNotePage extends React.Component { // eslint-disable-line 
         <h2 className="main-heading">NOTE</h2>
 
         <DashboardNoteSearch
-          note={this.props.note}
+          clientSites={this.props.clientSites}
           addNote={this.props.addNote}
+          noteSearchFormValues={this.props.noteSearchFormValues}
           editNoteProcess={this.props.editNoteProcess}
         />
         <DashboardNoteTable
@@ -59,6 +63,7 @@ export class DashboardNotePage extends React.Component { // eslint-disable-line 
 
 const mapStateToProps = createStructuredSelector({
   note: selectDashboardNote(),
+  clientSites : selectDashboardClientSites(),
   editNoteProcess: selectDashboardEditNoteProcess(),
   noteSearchFormValues: selectDashboardNoteSearchFormValues(),
   paginationOptions: selectPaginationOptions(),
@@ -66,6 +71,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchSites:       () => dispatch(fetchSites()),
     fetchNote: () => dispatch(fetchNote()),
     addNote: (payload) => dispatch(addNote(payload)),
     editNote: (payload) => dispatch(editNote(payload)),

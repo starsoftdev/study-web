@@ -17,6 +17,9 @@ import {
   DELETE_NOTE,
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_ERROR,
+  FETCH_SITES,
+  FETCH_SITES_SUCCESS,
+  FETCH_SITES_ERROR,
   SET_ACTIVE_SORT,
 } from './constants';
 
@@ -99,6 +102,27 @@ export function deleteNoteSuccess(payload) {
 export function deleteNoteError(payload) {
   return {
     type: DELETE_NOTE_ERROR,
+    payload,
+  };
+}
+
+export function fetchSites(payload) {
+  return {
+    type: FETCH_SITES,
+    payload,
+  };
+}
+
+export function fetchSitesSuccess(payload) {
+  return {
+    type: FETCH_SITES_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchSitesError(payload) {
+  return {
+    type: FETCH_SITES_ERROR,
     payload,
   };
 }

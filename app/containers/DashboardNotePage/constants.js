@@ -20,4 +20,8 @@ export const DELETE_NOTE = 'app/DashboardNotePage/DELETE_NOTE';
 export const DELETE_NOTE_SUCCESS = 'app/DashboardNotePage/DELETE_NOTE_SUCCESS';
 export const DELETE_NOTE_ERROR = 'app/DashboardNotePage/DELETE_NOTE_ERROR';
 
+export const FETCH_SITES = 'app/DashboardNotePage/FETCH_SITES';
+export const FETCH_SITES_SUCCESS = 'app/DashboardNotePage/FETCH_SITES_SUCCESS';
+export const FETCH_SITES_ERROR = 'app/DashboardNotePage/FETCH_SITES_ERROR';
+
 export const SET_ACTIVE_SORT = 'app/DashboardNotePage/SET_ACTIVE_SORT';

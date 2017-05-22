@@ -19,6 +19,9 @@ import {
   DELETE_NOTE,
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_ERROR,
+  FETCH_SITES,
+  FETCH_SITES_SUCCESS,
+  FETCH_SITES_ERROR,
   SET_ACTIVE_SORT,
 } from './constants';
 
@@ -31,6 +34,11 @@ const initialState = {
   editNoteProcess: {
     saving: false,
     deleting: false,
+    error: null,
+  },
+  clientSites: {
+    details: [],
+    fetching: false,
     error: null,
   },
   paginationOptions: {
@@ -66,6 +74,33 @@ function dashboardNotePageReducer(state = initialState, action) {
       return {
         ...state,
         note: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_SITES:
+      return {
+        ...state,
+        clientSites: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_SITES_SUCCESS:
+      return {
+        ...state,
+        clientSites: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_SITES_ERROR:
+      return {
+        ...state,
+        clientSites: {
           details: [],
           fetching: false,
           error: action.payload,

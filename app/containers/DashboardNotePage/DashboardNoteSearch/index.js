@@ -12,9 +12,10 @@ import { AddNoteForm } from './AddNoteForm';
 
 export class DashboardNoteSearch extends React.Component {
   static propTypes = {
-    note: PropTypes.object,
+    clientSites: PropTypes.object,
     addNote: PropTypes.func,
     editNoteProcess: PropTypes.object,
+    noteSearchFormValues: PropTypes.object,
   }
 
   constructor(props) {
@@ -44,12 +45,14 @@ export class DashboardNoteSearch extends React.Component {
   }
 
   addNote(params) {
-    this.props.addNote(params);
+    console.log('----param---', params);
+    console.log('---value---', this.props.noteSearchFormValues);
+    // this.props.addNote(params);
   }
 
   render() {
     const options = [];
-    _.forEach(this.props.note.details, (item) => {
+    _.forEach(this.props.clientSites.details, (item) => {
       options.push({
         label: item.name, value: item.id,
       });
@@ -68,9 +71,9 @@ export class DashboardNoteSearch extends React.Component {
           <div className="pull-left col custom-select">
             <div className="has-feedback ">
               <Field
-                name="note"
+                name="site"
                 component={ReactSelect}
-                placeholder="Select Note"
+                placeholder="Select Site Location"
                 options={options}
               />
             </div>
