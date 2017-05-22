@@ -122,44 +122,44 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
         </td>
         <td>
           <ul className="list-unstyled">
-            <li>{item.count_not_contacted_campaign}</li>
-            <li>{item.count_not_contacted}</li>
+            <li>{item.count_not_contacted_campaign || 0}</li>
+            <li>{item.count_not_contacted || 0}</li>
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            <li>{item.call_attempted_campaign}</li>
-            <li>{item.call_attempted}</li>
+            <li>{item.call_attempted_campaign || 0}</li>
+            <li>{item.call_attempted || 0}</li>
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            <li>{item.dnq_campaign}</li>
-            <li>{item.dnq}</li>
+            <li>{item.dnq_campaign || 0}</li>
+            <li>{item.dnq || 0}</li>
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            <li>{item.action_needed_campaign}</li>
-            <li>{item.action_needed}</li>
+            <li>{item.action_needed_campaign || 0}</li>
+            <li>{item.action_needed || 0}</li>
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            <li>{item.scheduled_campaign}</li>
-            <li>{item.scheduled}</li>
+            <li>{item.scheduled_campaign || 0}</li>
+            <li>{item.scheduled || 0}</li>
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            <li>{item.consented_campaign}</li>
-            <li>{item.consented}</li>
+            <li>{item.consented_campaign || 0}</li>
+            <li>{item.consented || 0}</li>
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            <li>{item.randomized_campaign}</li>
-            <li>{item.randomized}</li>
+            <li>{item.randomized_campaign || 0}</li>
+            <li>{item.randomized || 0}</li>
           </ul>
         </td>
       </tr>
