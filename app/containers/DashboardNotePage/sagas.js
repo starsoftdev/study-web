@@ -9,6 +9,7 @@ import {
   ADD_NOTE,
   EDIT_NOTE,
   DELETE_NOTE,
+  FETCH_SITES,
 } from './constants';
 
 import {
@@ -16,6 +17,8 @@ import {
   fetchNoteError,
   addNoteSuccess,
   addNoteError,
+  fetchSitesSuccess,
+  fetchSitesError,
   editNoteSuccess,
   editNoteError,
   deleteNoteSuccess,
@@ -27,6 +30,7 @@ export function* dashboardNoteSaga() {
   const watcherB = yield fork(addNoteWatcher);
   const watcherC = yield fork(editNoteWatcher);
   const watcherD = yield fork(deleteNoteWatcher);
+  const watcherE = yield fork(fetchSitesWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -34,6 +38,50 @@ export function* dashboardNoteSaga() {
   yield cancel(watcherB);
   yield cancel(watcherC);
   yield cancel(watcherD);
+  yield cancel(watcherE);
+}
+
+export function* fetchSitesWatcher() {
+  yield* takeLatest(FETCH_SITES, fetchSitesWorker);
+}
+
+export function* fetchSitesWorker(action) {
+  try {
+    const requestURL = `${API_URL}/sites`;
+
+    const filterObj = {
+      include: [{
+        relation: 'roles',
+        scope: {
+          include: ['user'],
+        },
+      }, {
+        relation: 'twilioNumber',
+      }, {
+        relation: 'rewards',
+      }],
+    };
+
+    const searchParams = action.payload || {};
+
+    if (searchParams.name) {
+      filterObj.where = {
+        name: {
+          like: `%${searchParams.name}%`,
+        },
+      };
+    }
+
+    const queryParams = {
+      filter: JSON.stringify(filterObj),
+    };
+
+    const response = yield call(request, requestURL, { query: queryParams });
+
+    yield put(fetchSitesSuccess(response));
+  } catch (e) {
+    yield put(fetchSitesError(e));
+  }
 }
 
 export function* fetchNoteWatcher() {
@@ -42,12 +90,21 @@ export function* fetchNoteWatcher() {
 
 export function* fetchNoteWorker() {
   try {
-    const requestURL = `${API_URL}/cros`;
+    const requestURL = `${API_URL}/notes`;
 
-    const params = {
-      method: 'GET',
+    const filterObj = {
+      include: [{
+        relation: 'site',
+      }, {
+        relation: 'user',
+      }],
     };
-    const response = yield call(request, requestURL, params);
+
+    const queryParams = {
+      filter: JSON.stringify(filterObj),
+    };
+
+    const response = yield call(request, requestURL, { query: queryParams });
 
     yield put(fetchNoteSuccess(response));
   } catch (err) {
@@ -63,7 +120,7 @@ export function* addNoteWatcher() {
 
 export function* addNoteWorker(action) {
   try {
-    const requestURL = `${API_URL}/cros`;
+    const requestURL = `${API_URL}/notes`;
 
     const params = {
       method: 'POST',
@@ -85,7 +142,7 @@ export function* editNoteWatcher() {
 
 export function* editNoteWorker(action) {
   try {
-    const requestURL = `${API_URL}/cros/${action.payload.id}`;
+    const requestURL = `${API_URL}/notes/${action.payload.id}`;
 
     const params = {
       method: 'PUT',
@@ -107,7 +164,7 @@ export function* deleteNoteWatcher() {
 
 export function* deleteNoteWorker(action) {
   try {
-    const requestURL = `${API_URL}/cros/${action.payload}`;
+    const requestURL = `${API_URL}/notes/${action.payload}`;
 
     const params = {
       method: 'DELETE',

@@ -31,6 +31,11 @@ const selectDashboardEditNoteProcess = () => createSelector(
   (substate) => substate.editNoteProcess
 );
 
+const selectDashboardClientSites = () => createSelector(
+  selectDashboardNotePageDomain(),
+  (substate) => substate.clientSites
+);
+
 const selectDashboardNoteSearchFormValues = () => createSelector(
   selectFormDomain(),
   (substate) => get(substate, 'dashboardNoteForm.values', {})
