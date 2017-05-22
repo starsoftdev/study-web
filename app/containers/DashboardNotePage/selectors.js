@@ -52,5 +52,6 @@ export {
   selectDashboardNote,
   selectDashboardEditNoteProcess,
   selectDashboardNoteSearchFormValues,
+  selectDashboardClientSites,
   selectPaginationOptions,
 };
