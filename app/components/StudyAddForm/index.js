@@ -124,7 +124,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
       selectedImageHeight: height,
       manualDisable: width > 2000 || height > 2000,
     });
-    console.log('width', width, height);
+    console.log('size', width, height);
   }
 
   logCallback(e) {

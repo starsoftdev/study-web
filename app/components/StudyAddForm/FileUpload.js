@@ -40,7 +40,7 @@ export default class FileUpload extends Component {
     const reader = new FileReader();
     const file = e.target.files[0];
 
-    if (!file || file.type.indexOf('image/') === -1) return;
+    if (!file || (file.type.indexOf('image/') === -1 && file.type.indexOf('application/') === -1)) return;
 
     reader.onload = this.onFileLoad;
     reader.readAsDataURL(file);
@@ -54,7 +54,7 @@ export default class FileUpload extends Component {
           this.inFile = inFile;
         }}
         type="file"
-        accept="image/*"
+        accept="image/*,application/pdf"
         onChange={this.handleFile}
         onDragEnter={this.onDragEnterHandler}
         onDragLeave={this.onDragLeaveHandler}
