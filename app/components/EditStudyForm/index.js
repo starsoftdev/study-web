@@ -318,14 +318,14 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     let fileSrc = null;
 
     let preview =
-      <div className="img-preview">
+      (<div className="img-preview">
         <a
           className="lightbox-opener"
           onClick={this.openStudyPreviewModal}
         >
           <img src={fileSrc} id="img-preview" alt="preview" />
         </a>
-      </div>
+      </div>);
 
     if (this.state.currentStudy) {
       fileSrc = this.state.updatedStudyAd || this.state.currentStudy.image;
@@ -334,11 +334,11 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
 
       if (ext === 'pdf') {
         preview =
-          <div className="img-preview pdf">
+          (<div className="img-preview pdf">
             <object data={`${fileSrc}?#zoom=0&scrollbar=1&toolbar=0`} width="100%" height="100%" type="application/pdf">
-              <embed src={`${fileSrc}?#zoom=0&scrollbar=1&toolbar=0`} width="100%" height="100%" type='application/pdf' />
+              <embed src={`${fileSrc}?#zoom=0&scrollbar=1&toolbar=0`} width="100%" height="100%" type="application/pdf" />
             </object>
-          </div>
+          </div>);
       }
     }
 
