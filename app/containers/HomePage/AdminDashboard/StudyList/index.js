@@ -23,6 +23,7 @@ import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
 import { setHoverRowIndex, setEditStudyFormValues } from '../actions';
+import { submitToClientPortal } from '../../../DashboardPortalsPage/actions';
 
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -52,6 +53,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     setHoverRowIndex: PropTypes.func,
     setEditStudyFormValues: PropTypes.func,
     filtersFormValues: PropTypes.object,
+    submitToClientPortal: PropTypes.func,
   };
 
   constructor(props) {
@@ -508,6 +510,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         onStatusChange={this.changeStudyStatus}
         changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
         setHoverRowIndex={this.props.setHoverRowIndex}
+        submitToClientPortal={this.props.submitToClientPortal}
       />
     );
     const studyListRightContents = studies.map((item, index) =>
@@ -926,6 +929,7 @@ const mapDispatchToProps = (dispatch) => ({
   change: (formName, name, value) => dispatch(change(formName, name, value)),
   setHoverRowIndex: (index) => dispatch(setHoverRowIndex(index)),
   setEditStudyFormValues: (values) => dispatch(setEditStudyFormValues(values)),
+  submitToClientPortal: (id) => dispatch(submitToClientPortal(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyList);

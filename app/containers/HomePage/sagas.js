@@ -801,7 +801,7 @@ export function* homePageSaga() {
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
-  if (options.payload.pathname !== '/') {
+  if (options.payload.pathname !== '/app') {
     yield cancel(watcherA);
     yield cancel(watcherB);
     yield cancel(watcherD);
