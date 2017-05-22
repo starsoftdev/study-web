@@ -71,7 +71,7 @@ class ChangePasswordForm extends React.Component { // eslint-disable-line react/
         <div className="btn-block text-right">
           <input
             type="submit"
-            value="SUBMIT"
+            value="UPDATE"
             className="btn btn-default"
             disabled={submitting}
           />

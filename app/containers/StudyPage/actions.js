@@ -346,11 +346,12 @@ export function addPatientIndicationSuccess(patientId, indication, isOriginal) {
   };
 }
 
-export function removePatientIndicationSuccess(patientId, indicationId) {
+export function removePatientIndicationSuccess(patientId, indicationId, payload) {
   return {
     type: REMOVE_PATIENT_INDICATION_SUCCESS,
     patientId,
     indicationId,
+    payload,
   };
 }
 
