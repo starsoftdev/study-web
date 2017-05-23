@@ -140,21 +140,21 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
     }
   }
 
-  clearPreview(file, img) {
+  clearPreview() {
     this.setState({
       selectedImage: null,
       selectedImageWidth: null,
       selectedImageHeight: null,
       pdfFile: null,
-      pdfPreview: null
-    })
+      pdfPreview: null,
+    });
   }
 
   showPdfPreview(file, img) {
     this.setState({
       pdfFile: file,
-      pdfPreview: img
-    })
+      pdfPreview: img,
+    });
   }
 
   render() {
