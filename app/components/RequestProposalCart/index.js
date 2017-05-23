@@ -201,24 +201,30 @@ export class RequestProposalCart extends Component {
     const { coupon } = this.props;
     const products = this.listProducts();
     const { subTotal, discount, total } = this.calculateTotal(products);
+    const noBorderClassName = '';
+    const formClassName = `form-shopping-cart ${noBorderClassName}`;
 
     return (
-      <div className="shopping-cart order-summary order-summery">
-        <div className="head">
-          <h3>Proposal Summary</h3>
-        </div>
-
-        <div className="scroll jcf--scrollabel">
+      <form className={formClassName}>
+        <div className="shopping-cart order-summary order-summery scroll jcf--scrollabel">
+          <div className="head">
+            <h3>Proposal Summary</h3>
+          </div>
           <div className="scroll-holder">
-
             <div className="table-holder">
               <table className="table-summary">
+                <colgroup>
+                  <col style={{ width: '44.2%' }} />
+                  <col style={{ width: '22.6%' }} />
+                  <col style={{ width: '13.6%' }} />
+                  <col style={{ width: 'auto' }} />
+                </colgroup>
                 <thead>
                   <tr>
                     <th>PRODUCT <i className="caret-arrow" /></th>
-                    <th>PRICE <i className="caret-arrow" /></th>
-                    <th>QTY <i className="caret-arrow" /></th>
-                    <th>TOTAL <i className="caret-arrow" /></th>
+                    <th className="right">PRICE <i className="caret-arrow" /></th>
+                    <th className="right">QTY <i className="caret-arrow" /></th>
+                    <th className="right">TOTAL <i className="caret-arrow" /></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -285,7 +291,7 @@ export class RequestProposalCart extends Component {
             />
           </div>
         </div>
-      </div>
+      </form>
     );
   }
 }
