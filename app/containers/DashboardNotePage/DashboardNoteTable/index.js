@@ -22,7 +22,7 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
   }
 
   componentWillUnmount() {
-    const defaultSort = 'name';
+    const defaultSort = 'noteData';
     this.props.setActiveSort(defaultSort, null);
   }
 
@@ -44,9 +44,10 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
 
   render() {
     let note = this.props.note.details;
-
-    if (this.props.noteSearchFormValues.note) {
-      note = _.filter(note, (item) => (item.id === this.props.noteSearchFormValues.note));
+    if (this.props.noteSearchFormValues.site) {
+      note = _.filter(note, (item) => (item.site_id === this.props.noteSearchFormValues.site));
+    } else {
+      note = [];
     }
 
     if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
@@ -58,11 +59,16 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
       <div className="table-responsive table-holder table-indication alt">
         <table className="table-manage-user table">
           <caption>&nbsp;</caption>
-
+          <colgroup>
+            <col style={{ width: 'auto' }} />
+            <col style={{ width: '11%' }} />
+            <col style={{ width: '11%' }} />
+          </colgroup>
           <thead>
             <tr>
-              <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>Note<i className="caret-arrow" /></th>
-              <th></th>
+              <th onClick={this.sortBy} data-sort="noteData" className={`th ${(this.props.paginationOptions.activeSort === 'noteData') ? this.props.paginationOptions.activeDirection : ''}`}>Note<i className="caret-arrow" /></th>
+              <th>DATE <i className="caret-arrow" /></th>
+              <th>TIME <i className="caret-arrow" /></th>
             </tr>
           </thead>
           <tbody>

@@ -1,7 +1,7 @@
 import { validatorFactory } from '../../../utils/reduxForm';
 
 const schema = {
-  name: { presence: true },
+  noteData: { presence: true },
 };
 
 export default validatorFactory(schema);
