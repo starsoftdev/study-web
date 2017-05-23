@@ -5185,6 +5185,31 @@ div[data-percentage],
 	cursor: default !important;
 }
 
+.tooltip-element {
+  display: inline-block;
+}
+.active-table-row, .active-table-row:hover {
+  .tooltipClass {
+    font-weight: bold;
+  }
+}
+.tooltipClass {
+  &.type-info {
+    background-color: #00AFEF;
+    font-size: 18px;
+    font-weight: bold;
+    pointer-events: auto;
+    padding: 10px;
+    &.place-top::after {
+      border-top-color: #00AFEF;
+    }
+  }
+  &:hover {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
 /* Containers */
 
 /*****************/
