@@ -50,7 +50,7 @@ export class DashboardNoteSearch extends React.Component {
     const nParam = {
       noteData: params.noteData,
       site_id: this.props.noteSearchFormValues.site,
-    }
+    };
     this.props.addNote(nParam);
   }
 
