@@ -141,7 +141,7 @@ export class ReportViewTable extends React.Component {
       } else {
         inActive++;
       }
-      const landingHref = item.url ? `/${item.site_id}-${item.url.toLowerCase().replace(/ /ig, '-')}` : '';
+      const landingHref = item.url ? `/${item.study_id}-${item.url.toLowerCase().replace(/ /ig, '-')}` : '';
       return (
         <tr
           onMouseOver={(e) => this.mouseOverRow(e, index)}
