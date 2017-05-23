@@ -41,13 +41,17 @@ export class DashboardNoteSearch extends React.Component {
   }
 
   openAddNoteModal() {
-    this.setState({ addNoteModalOpen: true });
+    if (this.props.noteSearchFormValues.site) {
+      this.setState({ addNoteModalOpen: true });
+    }
   }
 
   addNote(params) {
-    console.log('----param---', params);
-    console.log('---value---', this.props.noteSearchFormValues);
-    // this.props.addNote(params);
+    const nParam = {
+      noteData: params.noteData,
+      site_id: this.props.noteSearchFormValues.site,
+    }
+    this.props.addNote(nParam);
   }
 
   render() {
@@ -62,7 +66,7 @@ export class DashboardNoteSearch extends React.Component {
       <form action="#" className="form-search clearfix">
         <div className="btns-area row pull-right">
           <div className="col pull-left">
-            <a className="btn btn-primary lightbox-opener" onClick={this.openAddNoteModal}>
+            <a disabled={!(this.props.noteSearchFormValues.site)} className="btn btn-primary lightbox-opener" onClick={this.openAddNoteModal}>
               Add Note
             </a>
           </div>

@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddNoteForm } from '../DashboardNoteSearch/AddNoteForm';
+import moment from 'moment-timezone';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -53,17 +54,24 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   render() {
     const initialValues = {
       initialValues: {
-        name: this.props.item.name,
+        noteData: this.props.item.name,
         id: this.props.item.id,
       },
     };
 
+    const nDate = moment(this.props.item.created).format('MM/DD/YY');
+    const time = moment(this.props.item.created).format('hh:mm A');
+
     return (
       <tr>
         <td>
-          {this.props.item.name}
+          {this.props.item.noteData}
         </td>
         <td>
+          {nDate}
+        </td>
+        <td>
+          {time}
         </td>
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addNoteModalOpen} onHide={this.closeAddNoteModal}>
