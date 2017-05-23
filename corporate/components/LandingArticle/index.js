@@ -45,6 +45,27 @@ export class LandingArticle extends React.Component {
     const indication = landing.indication;
     const siteName = landing.siteName;
 
+    let preview =
+      (<div className="img-holder">
+        <img src={imgSrc} width="854" height="444" alt="preview" className="img-responsive" />
+      </div>);
+
+    if (imgSrc) {
+      const re = /(?:\.([^.]+))?$/;
+      const ext = re.exec(imgSrc)[1];
+
+      if (ext === 'pdf') {
+        preview =
+          (<div className="img-holder pdf">
+            <object data={`${imgSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`} width="100%" height="100%" type="application/pdf">
+              <embed src={`${imgSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`} width="100%" height="100%" type="application/pdf" />
+            </object>
+          </div>);
+      } else {
+
+      }
+    }
+
     const landingDescription = (landing && landing.description && landing.description !== 'seed') ? landing.description : null;
 
     let address = landing.address;
@@ -116,9 +137,7 @@ export class LandingArticle extends React.Component {
             data-view="slideInLeft"
           >
             {imgSrc &&
-              <div className="img-holder">
-                <img src={imgSrc} width="854" height="444" alt="preview" className="img-responsive" />
-              </div>
+              preview
             }
             {imgSrc &&
               <SocialArea {...this.props} imgSrc={imgSrc} />
