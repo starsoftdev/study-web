@@ -156,7 +156,10 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
       change('emailNotifications', fields);
       change('checkAllInput', isAllChecked);
 
-      this.setState({ fileSrc: currentStudy.image || null });
+      this.setState({
+        updatedStudyAd: null,
+        fileSrc: (currentStudy.image || null),
+      });
     }
 
     if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
@@ -181,6 +184,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
 
     if (newProps.updatedStudyAd && this.state.updatedStudyAd !== newProps.updatedStudyAd) {
       this.setState({ updatedStudyAd: newProps.updatedStudyAd });
+      this.closeStudyAddModal();
     }
   }
 
@@ -289,10 +293,13 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   uploadStudyAdd(e) {
-    e.toBlob((blob) => {
-      this.props.submitStudyAdd({ file: blob, study_id: this.state.currentStudy.id });
-      this.closeStudyAddModal();
-    });
+    if (e.type !== 'application/pdf') {
+      e.toBlob((blob) => {
+        this.props.submitStudyAdd({ file: blob, study_id: this.state.currentStudy.id });
+      });
+    } else {
+      this.props.submitStudyAdd({ file: e, study_id: this.state.currentStudy.id });
+    }
   }
 
   renderEmailList() {
@@ -315,7 +322,8 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
 
   render() {
     const { editedStudy } = this.props;
-    let fileSrc = null;
+    const image = (this.state.currentStudy && this.state.currentStudy.image) ? this.state.currentStudy.image : null;
+    const fileSrc = this.state.updatedStudyAd || image;
 
     let preview =
       (<div className="img-preview">
@@ -328,15 +336,14 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
       </div>);
 
     if (this.state.currentStudy) {
-      fileSrc = this.state.updatedStudyAd || this.state.currentStudy.image;
       const re = /(?:\.([^.]+))?$/;
       const ext = re.exec(fileSrc)[1];
 
       if (ext === 'pdf') {
         preview =
           (<div className="img-preview pdf">
-            <object data={`${fileSrc}?#zoom=0&scrollbar=1&toolbar=0`} width="100%" height="100%" type="application/pdf">
-              <embed src={`${fileSrc}?#zoom=0&scrollbar=1&toolbar=0`} width="100%" height="100%" type="application/pdf" />
+            <object data={`${fileSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`} width="100%" height="100%" type="application/pdf">
+              <embed src={`${fileSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`} width="100%" height="100%" type="application/pdf" />
             </object>
           </div>);
       }

@@ -162,11 +162,14 @@ export class ReportViewTable extends React.Component {
           </td>
           <td>{item.level}</td>
           <td>
-            <Toggle
-              name={`status_${item.site_id}_${item.study_id}`}
-              meta={{ touched:false, error:false, active:false }}
-              input={{ value: item.is_active, onChange: (value) => { this.changeStatus(value, item.study_id); } }}
-            />
+            <div className="relative-element">
+              <Toggle
+                name={`status_${item.site_id}_${item.study_id}`}
+                meta={{ touched:false, error:false, active:false }}
+                input={{ value: item.is_active, onChange: (value) => { this.changeStatus(value, item.study_id); } }}
+                disabled
+              />
+            </div>
           </td>
           <td>
             <span className="number">{item.customer_credits || 0}</span>
