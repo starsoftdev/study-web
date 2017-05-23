@@ -61,8 +61,6 @@ export class LandingArticle extends React.Component {
               <embed src={`${imgSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`} width="100%" height="100%" type="application/pdf" />
             </object>
           </div>);
-      } else {
-
       }
     }
 

@@ -41,7 +41,7 @@ export default class FileUpload extends Component {
   handleFile(e) {
     const reader = new FileReader();
     const file = e.target.files[0];
-    this.props.clearPreview()
+    this.props.clearPreview();
 
     if (!file || (file.type.indexOf('image/') === -1 && file.type.indexOf('application/') === -1)) return;
 

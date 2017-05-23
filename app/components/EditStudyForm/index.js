@@ -107,7 +107,6 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
 
   componentWillReceiveProps(newProps) {
     const { clientAdmins, clientSites, change, resetChangeAddState } = this.props;
-    console.log(newProps.selectedStudyId, this.props.selectedStudyId);
     if (newProps.selectedStudyId && newProps.selectedStudyId !== this.props.selectedStudyId) {
       const fields = [];
       let currentStudy = null;
@@ -159,7 +158,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
 
       this.setState({
         updatedStudyAd: null,
-        fileSrc: (currentStudy.image || null)
+        fileSrc: (currentStudy.image || null),
       });
     }
 
@@ -324,7 +323,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   render() {
     const { editedStudy } = this.props;
     const image = (this.state.currentStudy && this.state.currentStudy.image) ? this.state.currentStudy.image : null;
-    let fileSrc = this.state.updatedStudyAd || image;
+    const fileSrc = this.state.updatedStudyAd || image;
 
     let preview =
       (<div className="img-preview">

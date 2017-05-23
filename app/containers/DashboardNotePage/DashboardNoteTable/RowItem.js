@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
+import moment from 'moment-timezone';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddNoteForm } from '../DashboardNoteSearch/AddNoteForm';
-import moment from 'moment-timezone';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

@@ -60,10 +60,10 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
         <table className="table-manage-user table">
           <caption>&nbsp;</caption>
           <colgroup>
-                <col style={{ width: 'auto' }} />
-                <col style={{ width: '11%' }} />
-                <col style={{ width: '11%' }} />
-              </colgroup>
+            <col style={{ width: 'auto' }} />
+            <col style={{ width: '11%' }} />
+            <col style={{ width: '11%' }} />
+          </colgroup>
           <thead>
             <tr>
               <th onClick={this.sortBy} data-sort="noteData" className={`th ${(this.props.paginationOptions.activeSort === 'noteData') ? this.props.paginationOptions.activeDirection : ''}`}>Note<i className="caret-arrow" /></th>
