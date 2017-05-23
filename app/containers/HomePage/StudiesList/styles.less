@@ -15,22 +15,30 @@
   }
   .study-container {
     .index {
-      width: 5%;
+      width: 40px;
     }
     .indication {
-      width: 14%;
+      width: auto;
+      max-width: 14%;
+      word-break: break-word;
     }
     .location {
-      width: 15%;
+      width: auto;
+      max-width: 15%;
+      word-break: break-word;
     }
     .sponsor {
-      width: 15%;
+      width: auto;
+      max-width: 15%;
+      word-break: break-word;
     }
     .protocol {
-      width: 12%;
+      width: auto;
+      max-width: 12%;
+      word-break: break-word;
     }
     .patient-messaging-suite {
-      width: 7%;
+      width: 50px;
       color: #a0cf67;
 
       &.off {
@@ -41,7 +49,7 @@
       }
     }
     .status {
-      width: 9%;
+      width: 80px;
       color: #a0cf67;
 
       &.inactive {
@@ -49,10 +57,10 @@
       }
     }
     .start-date {
-      width: 12%;
+      width: 110px;
     }
     .end-date {
-      width: 12%;
+      width: 110px;
     }
     &.tr-inactive {
       .protocol,
@@ -110,6 +118,17 @@
       &:hover{
         color: #76daff !important;
         text-decoration: underline !important;
+      }
+    }
+    @media screen and (min-width: @psd) {
+      .start-date {
+        width: 130px;
+      }
+      .end-date {
+        width: 130px;
+      }
+      .status {
+        width: 90px;
       }
     }
   }
