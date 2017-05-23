@@ -28,7 +28,7 @@ export class AddNoteForm extends React.Component { // eslint-disable-line react/
           </strong>
           <div className="field">
             <Field
-              name="name"
+              name="noteData"
               component={Input}
               type="text"
             />
