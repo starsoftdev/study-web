@@ -126,31 +126,45 @@
 
     td {
       &.name {
-        width: 13%;
+        width: 15%;
+        word-break: break-word;
       }
 
       &.principal-investigator {
-        width: 13%;
+        width: auto;
+        word-break: break-word;
       }
 
-      &.phone {
-        width: 14%;
+      &.phone, &.phoneNumber {
+        width: 120px
       }
 
       &.address {
-        width: 20%;
+        width: auto;
       }
 
       &.timezone {
-        width: 14%;
+        width: 170px;
       }
 
       &.assigned-users {
-        width: 22%;
+        width: 200px;
       }
 
       &.action {
-        width: auto;
+        width: 100px;
+        vertical-align: top;
+      }
+      @media screen and (min-width: @psd) {
+        &.phone, &.phoneNumber {
+          width: 145px;
+        }
+        &.timezone {
+          width: 200px;
+        }
+        &.assigned-users {
+          width: 240px;
+        }
       }
     }
   }
