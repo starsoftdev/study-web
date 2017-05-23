@@ -91,9 +91,8 @@ export class LandingArticle extends React.Component {
     const markdown = md.render(landingDescription);
 
     const bySignUpText = (landing.bySignUpText) ? landing.bySignUpText :
-      'By providing my personal information to StudyKIK, I explicitly consent to StudyKIK sharing my personal information with participating clinical trial sites and to such ' +
-      'entities contacting me by Text message, email, & phone call for purposes of possible participation in clinical trials. ' +
-      'Text messages and data rates may apply.';
+      'By signing up you agree to receive text messages and emails about this and similar studies near you. ' +
+      'You can unsubscribe at any time. Text messages and data rates may apply. Refer to Privacy Policy.';
     const ifInterestedInstructions = (landing.ifInterestedInstructions) ? landing.ifInterestedInstructions :
       'If interested, enter information above to sign up!';
 
