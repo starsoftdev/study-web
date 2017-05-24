@@ -127,16 +127,16 @@
     td {
       &.name {
         width: 15%;
-        word-break: break-word;
+        .break-word();
       }
 
       &.principal-investigator {
         width: auto;
-        word-break: break-word;
+        .break-word();
       }
 
       &.phone, &.phoneNumber {
-        width: 120px
+        width: 120px;
       }
 
       &.address {
@@ -144,7 +144,8 @@
       }
 
       &.timezone {
-        width: 170px;
+        width: 12%;
+        .break-word();
       }
 
       &.assigned-users {
