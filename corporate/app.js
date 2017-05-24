@@ -9,6 +9,7 @@ import configureStore from '../app/store';
 
 import { default as Corporate } from './containers/Corporate';
 import { default as Home } from './containers/HomePage';
+import { default as Indication } from './containers/IndicationPage';
 import { default as LoginPage } from '../app/containers/LoginPage';
 import { default as ConfirmResetPasswordPage } from './containers/ConfirmResetPasswordPage';
 import { default as ResetPasswordPage } from '../app/containers/ResetPasswordPage';
@@ -56,6 +57,7 @@ const routes = {
     { path: '/privacy-policy', component: PrivacyPolicyPage },
     { path: '/terms-and-conditions', component: TermsAndConditionsPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },
+    { path: '/indication/:indication', component: Indication },
     { path: '/thankyou-page', component: ThankYouPage },
     { path: '/*-:siteLocation', component: LandingPage },
     { path: '*', component: NotFound },

@@ -656,6 +656,10 @@ input[type=search]:-ms-input-placeholder {
         font-size: 21px;
         font-weight: 700;
         text-transform: uppercase;
+
+        strong {
+          font-weight: 700;
+        }
       }
     }
   }
@@ -2425,6 +2429,14 @@ th, .th {
       padding: 6px 12px;
       line-height: 24px;
     }
+
+    .Select-input > input {
+      padding: 4px 0;
+    }
+
+    .form-search .form-control {
+      padding: 4px 11px 2px;
+    }
   }
 }
 
@@ -2442,6 +2454,10 @@ th, .th {
           font-size: 21px;
           font-weight: 700;
           text-transform: uppercase;
+
+          strong {
+            font-weight: 700;
+          }
         }
       }
     }
@@ -2601,13 +2617,13 @@ th, .th {
         width: 5.5%;
       }
       &:nth-child(7) {
-        width: 8.0%;
+        width: 91px;
       }
       &:nth-child(8) {
-        width: 4.9%;
+        width: 55px;
       }
       &:nth-child(9) {
-        width: 11.8%;
+        width: 12.7%;
       }
       &:nth-child(10) {
         width: auto;
@@ -2727,13 +2743,13 @@ th, .th {
           width: 5.5%;
         }
         &:nth-child(7) {
-          width: 8.0%;
+          width: 75px;
         }
         &:nth-child(8) {
-          width: 5.9%;
+          width: 45px;
         }
         &:nth-child(9) {
-          width: 9%;
+          width: 11%;
         }
         &:nth-child(10) {
           width: auto;
@@ -2826,6 +2842,7 @@ th, .th {
         &:hover {
           color: @white;
           background: #00afef;
+          cursor: pointer;
         }
       }
     }
@@ -5175,6 +5192,38 @@ div[data-percentage],
 
 .default-cursor {
 	cursor: default !important;
+}
+
+.tooltip-element {
+  display: inline-block;
+}
+.active-table-row, .active-table-row:hover {
+  .tooltipClass {
+    font-weight: bold;
+  }
+}
+.tooltipClass {
+  &.type-info {
+    background-color: #00AFEF;
+    font-size: 18px;
+    font-weight: bold;
+    pointer-events: auto;
+    padding: 10px;
+    &.place-top::after {
+      border-top-color: #00AFEF;
+    }
+  }
+  &:hover {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+.__react_component_tooltip.type-info.tooltipClass {
+  background-color: #00AFEF;
+  opacity: 1;
+  &.place-top::after {
+    border-top-color: #00AFEF;
+  }
 }
 
 /* Containers */

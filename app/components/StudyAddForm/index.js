@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import FileUpload from './FileUpload';
 
-// import './styles.less';
+import './styles.less';
 
 @reduxForm(
   {
@@ -42,6 +42,8 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
       selectedImageHeight: null,
       isDragOver: false,
       usingDefaultImage: false,
+      pdfFile: null,
+      pdfPreview: null,
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -53,6 +55,8 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
     this.handleLoadSuccess = this.handleLoadSuccess.bind(this);
     this.redraw = this.redraw.bind(this);
     this.handleCropLoad = this.handleCropLoad.bind(this);
+    this.showPdfPreview = this.showPdfPreview.bind(this);
+    this.clearPreview = this.clearPreview.bind(this);
   }
 
   componentDidMount() {
@@ -100,6 +104,9 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
       this.setState({ preview: img, croppingRect: rect });
       // this.props.handleSubmit(avatar.getImage());
     }
+    if (this.state.pdfFile) {
+      this.props.handleSubmit(this.state.pdfFile);
+    }
   }
 
   handleScale() {
@@ -124,13 +131,30 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
       selectedImageHeight: height,
       manualDisable: width > 2000 || height > 2000,
     });
-    console.log('width', width, height);
+    console.log('size', width, height);
   }
 
   logCallback(e) {
     if (e) {
       console.trace('callback', e);
     }
+  }
+
+  clearPreview() {
+    this.setState({
+      selectedImage: null,
+      selectedImageWidth: null,
+      selectedImageHeight: null,
+      pdfFile: null,
+      pdfPreview: null,
+    });
+  }
+
+  showPdfPreview(file, img) {
+    this.setState({
+      pdfFile: file,
+      pdfPreview: img,
+    });
   }
 
   render() {
@@ -188,8 +212,8 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
               defaultValue="1"
             />
           </div>
-          <div className={classNames('avatar-photo', { hidden: this.state.selectedImage }, { dragover: this.state.isDragOver })}>
-            <FileUpload id="avatar_file" handleFileChange={this.handleFileChange} handleDragEnter={this.onDragEnterHandler} handleDragLeave={this.onDragLeaveHandler} />
+          <div className={classNames('avatar-photo', { hidden: (this.state.selectedImage || this.state.pdfPreview) }, { dragover: this.state.isDragOver })}>
+            <FileUpload id="avatar_file" showPdfPreview={this.showPdfPreview} clearPreview={this.clearPreview} handleFileChange={this.handleFileChange} handleDragEnter={this.onDragEnterHandler} handleDragLeave={this.onDragLeaveHandler} />
             <div className="info">
               <i className="icomoon-arrow_up_alt" />
               <span className="text">Drag and drop <br /> image here</span>
@@ -205,6 +229,14 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
               width={this.state.selectedImageWidth}
               height={this.state.selectedImageHeight}
             />
+            :
+            null
+          }
+
+          {this.state.pdfPreview ?
+            <div className="pdf-preview">
+              <iframe src={`${this.state.pdfPreview}#zoom=scale&scrollbar=1&toolbar=0&view=Fit`} id="viewer" frameBorder="0" scrolling="no" width="100%" height="500"></iframe>
+            </div>
             :
             null
           }

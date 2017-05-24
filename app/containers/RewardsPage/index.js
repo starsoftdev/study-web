@@ -94,6 +94,10 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
         fetchRewardsBalance(currentUser.roleForClient.client_id, selectedSite);
       }
     }
+
+    if (nextProps.rewardsBalance && nextProps.rewardsBalance[0] !== this.props.rewardsBalance[0]) {
+      this.props.fetchRewards(currentUser.roleForClient.client_id, currentUser.roleForClient.site_id);
+    }
   }
 
   openRewardModal(value) {

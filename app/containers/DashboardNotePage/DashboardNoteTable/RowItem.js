@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import moment from 'moment-timezone';
 import Modal from 'react-bootstrap/lib/Modal';
+import moment from 'moment-timezone';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddNoteForm } from '../DashboardNoteSearch/AddNoteForm';
 

@@ -10,6 +10,7 @@ import { defaultRanges, DateRange } from 'react-date-range';
 import { Field, change } from 'redux-form';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
+import LoadingSpinner from '../../../../components/LoadingSpinner';
 
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import LandingPageModal from '../../../../components/LandingPageModal';
@@ -23,6 +24,7 @@ import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
 import { setHoverRowIndex, setEditStudyFormValues } from '../actions';
+import { submitToClientPortal } from '../../../DashboardPortalsPage/actions';
 
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -52,6 +54,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     setHoverRowIndex: PropTypes.func,
     setEditStudyFormValues: PropTypes.func,
     filtersFormValues: PropTypes.object,
+    submitToClientPortal: PropTypes.func,
   };
 
   constructor(props) {
@@ -541,6 +544,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         onStatusChange={this.changeStudyStatus}
         changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
         setHoverRowIndex={this.props.setHoverRowIndex}
+        submitToClientPortal={this.props.submitToClientPortal}
       />
     );
     const studyListRightContents = studies.map((item, index) =>
@@ -738,7 +742,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                     loadMore={this.loadItems}
                     initialLoad={false}
                     hasMore={this.props.paginationOptions.hasMoreItems}
-                    loader={<span>Loading...</span>}
+                    loader={<LoadingSpinner showOnlyIcon />}
                   >
                     <StickyContainer className="table-area">
                       <div className="table-left" data-table="">
@@ -884,6 +888,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         </div>
                       </div>
                     </StickyContainer>
+                    { this.props.studies.fetching && <div className="dashboard-studies-spinner"><LoadingSpinner showOnlyIcon /></div> }
                   </InfiniteScroll>
                 </div>
                 <EditInformationModal
@@ -968,6 +973,7 @@ const mapDispatchToProps = (dispatch) => ({
   change: (formName, name, value) => dispatch(change(formName, name, value)),
   setHoverRowIndex: (index) => dispatch(setHoverRowIndex(index)),
   setEditStudyFormValues: (values) => dispatch(setEditStudyFormValues(values)),
+  submitToClientPortal: (id) => dispatch(submitToClientPortal(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyList);
