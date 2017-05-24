@@ -205,7 +205,7 @@ export class RequestProposalCart extends Component {
     const formClassName = `form-shopping-cart ${noBorderClassName}`;
 
     return (
-      <form className={formClassName}>
+      <div className={formClassName}>
         <div className="shopping-cart order-summary order-summery scroll jcf--scrollabel">
           <div className="head">
             <h3>Proposal Summary</h3>
@@ -291,7 +291,7 @@ export class RequestProposalCart extends Component {
             />
           </div>
         </div>
-      </form>
+      </div>
     );
   }
 }
