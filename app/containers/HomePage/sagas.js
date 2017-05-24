@@ -26,6 +26,7 @@ import {
 
 import {
   FETCH_STUDIES_DASHBOARD,
+  FETCH_TOTALS_DASHBOARD,
   FETCH_SITE_LOCATIONS,
   FETCH_SITE_NAMES,
   UPDATE_DASHBOARD_STUDY,
@@ -43,6 +44,8 @@ import {
 import {
   fetchStudiesDashboardSuccess,
   fetchStudiesDashboardError,
+  fetchTotalsDashboardSuccess,
+  fetchTotalsDashboardError,
   fetchSiteLocationsSuccess,
   fetchSiteLocationsError,
   fetchSiteNamesSuccess,
@@ -453,6 +456,31 @@ export function* addEmailNotificationUserWorker(action) {
   }
 }
 
+export function* fetchTotalsDashboardWatcher() {
+  yield* takeLatest(FETCH_TOTALS_DASHBOARD, fetchTotalsDashboardWorker);
+}
+
+export function* fetchTotalsDashboardWorker(action) {
+  const { params, limit, offset } = action;
+
+  try {
+    const requestURL = `${API_URL}/studies/getTotalsForDashboard`;
+    params.limit = limit;
+    params.offset = offset;
+
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchTotalsDashboardSuccess(response));
+  } catch (err) {
+    yield put(fetchTotalsDashboardError(err));
+  }
+}
+
 export function* fetchStudiesDashboardWatcher() {
   yield* takeLatest(FETCH_STUDIES_DASHBOARD, fetchStudiesDashboardWorker);
 }
@@ -786,6 +814,7 @@ export function* homePageSaga() {
   const fetchIndicationsWatcher1 = yield fork(fetchIndicationsWatcher);
   const addEmailNotificationUserWatcher1 = yield fork(addEmailNotificationUserWatcher);
   const fetchStudiesDashboardWatcher1 = yield fork(fetchStudiesDashboardWatcher);
+  const fetchTotalsDashboardWatcher1 = yield fork(fetchTotalsDashboardWatcher);
   const fetchSiteLocationsWatcher1 = yield fork(fetchSiteLocationsWatcher);
   const fetchSiteNamesWatcher1 = yield fork(fetchSiteNamesWatcher);
   const updateDashboardStudyWatcher1 = yield fork(updateDashboardStudyWatcher);
@@ -816,6 +845,7 @@ export function* homePageSaga() {
     yield cancel(fetchIndicationsWatcher1);
     yield cancel(addEmailNotificationUserWatcher1);
     yield cancel(fetchStudiesDashboardWatcher1);
+    yield cancel(fetchTotalsDashboardWatcher1);
     yield cancel(fetchSiteLocationsWatcher1);
     yield cancel(fetchSiteNamesWatcher1);
     yield cancel(updateDashboardStudyWatcher1);
