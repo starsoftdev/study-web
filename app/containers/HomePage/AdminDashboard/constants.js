@@ -12,6 +12,10 @@ export const FETCH_STUDIES_DASHBOARD                     = 'DashboardPage/FETCH_
 export const FETCH_STUDIES_DASHBOARD_SUCCESS             = 'DashboardPage/FETCH_STUDIES_DASHBOARD_SUCCESS';
 export const FETCH_STUDIES_DASHBOARD_ERROR               = 'DashboardPage/FETCH_STUDIES_DASHBOARD_ERROR';
 
+export const FETCH_TOTALS_DASHBOARD                     = 'DashboardPage/FETCH_TOTALS_DASHBOARD';
+export const FETCH_TOTALS_DASHBOARD_SUCCESS             = 'DashboardPage/FETCH_TOTALS_DASHBOARD_SUCCESS';
+export const FETCH_TOTALS_DASHBOARD_ERROR               = 'DashboardPage/FETCH_TOTALS_DASHBOARD_ERROR';
+
 export const FETCH_SITE_NAMES                            = 'DashboardPage/FETCH_SITE_NAMES';
 export const FETCH_SITE_NAMES_SUCCESS                    = 'DashboardPage/FETCH_SITE_NAMES_SUCCESS';
 export const FETCH_SITE_NAMES_ERROR                      = 'DashboardPage/FETCH_SITE_NAMES_ERROR';
