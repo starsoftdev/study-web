@@ -1607,7 +1607,7 @@
 			
 			> thead > tr {
 				> th {
-					
+          vertical-align: top;
 					&:first-child {
 						padding-right: 0;
 						padding-left: 11px;
@@ -1623,8 +1623,7 @@
 				counter-reset: item;
 				
 				> tr {
-					
-					
+
 					> td {
 						
 						&:first-child {
@@ -1641,6 +1640,9 @@
 							content: counters(item, ".", decimal) " ";
 							counter-increment: item;
 						}
+            &:nth-child(3) {
+              word-break: break-word;
+            }
 						
 						&:nth-child(7),
 						&:nth-child(8) {
@@ -2608,13 +2610,16 @@
 		
 		&.alt {
 			
-			.col1 { width: 16%; }
-			.col2 { width: 17%; }
-			.col3 { width: 14%; }
-			.col4 { width: 13%; }
-			.col5 { width: 9%; }
-      .col6 { width: 22%; }
-      .col7 { width: 9%; }
+			.col1 { width: auto; }
+			.col2 { width: auto; }
+			.col3 { width: 10%; }
+			.col4 { width: 10%; }
+			.col5 { width: 10%; }
+      .col6 { width: 250px; }
+      .col7 {
+        width: 100px;
+        vertical-align: top;
+      }
 			
 			[colspan="5"] {
 				width: 100%;
@@ -3816,6 +3821,13 @@
 					}
 				}
 			}
+      a:visited, a:focus {
+        color: #00afef;
+      }
+      a:hover {
+        color: #76daff;
+        text-decoration: underline;
+      }
 		}
 		
 		.fixed-table-thead,

@@ -14,6 +14,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     changeStudyStatusDashboard: PropTypes.func,
     hoverRowIndex: PropTypes.any,
     setHoverRowIndex: PropTypes.func,
+    submitToClientPortal: PropTypes.func,
   };
 
   constructor(props) {
@@ -90,7 +91,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
           </ul>
         </td>
         <td>
-          <span className="site-location">{ item.site_name }</span>
+          <span className="site-location"><a className="landing-link" onClick={() => { this.props.submitToClientPortal(item.siteAdminUserId); }}>{ item.site_name }</a></span>
           <ul className="list-unstyled">
             <li className="site-number">Site Number: <span>{item.site_id}</span></li>
             <li className="protocol">Protocol: <span>{item.protocol_number || 'N/A'}</span></li>
