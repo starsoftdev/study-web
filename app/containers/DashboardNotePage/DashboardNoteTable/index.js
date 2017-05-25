@@ -71,7 +71,7 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
         <table className="table-manage-user table">
           <caption>&nbsp;</caption>
           <colgroup>
-            <col style={{ width: '70%' }} />
+            <col style={{ width: '76%' }} />
             <col style={{ width: '8%' }} />
             <col style={{ width: '8%' }} />
             <col style={{ width: 'auto' }} />
