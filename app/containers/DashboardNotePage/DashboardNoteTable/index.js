@@ -18,12 +18,23 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
   constructor(props) {
     super(props);
 
+    this.editNote = this.editNote.bind(this);
     this.sortBy = this.sortBy.bind(this);
   }
 
   componentWillUnmount() {
     const defaultSort = 'noteData';
     this.props.setActiveSort(defaultSort, null);
+  }
+
+  editNote(params) {
+    const nParam = {
+      id: params.id,
+      noteData: params.noteData,
+      site_id: this.props.noteSearchFormValues.site,
+    };
+    console.log('---param---', nParam);
+    this.props.editNote(nParam);
   }
 
   sortBy(ev) {
@@ -47,7 +58,7 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
     if (this.props.noteSearchFormValues.site) {
       note = _.filter(note, (item) => (item.site_id === this.props.noteSearchFormValues.site));
     } else {
-      note = [];
+      return null;
     }
 
     if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
@@ -60,21 +71,23 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
         <table className="table-manage-user table">
           <caption>&nbsp;</caption>
           <colgroup>
+            <col style={{ width: '76%' }} />
+            <col style={{ width: '8%' }} />
+            <col style={{ width: '8%' }} />
             <col style={{ width: 'auto' }} />
-            <col style={{ width: '11%' }} />
-            <col style={{ width: '11%' }} />
           </colgroup>
           <thead>
             <tr>
               <th onClick={this.sortBy} data-sort="noteData" className={`th ${(this.props.paginationOptions.activeSort === 'noteData') ? this.props.paginationOptions.activeDirection : ''}`}>Note<i className="caret-arrow" /></th>
               <th>DATE <i className="caret-arrow" /></th>
               <th>TIME <i className="caret-arrow" /></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {
               note.map((item, index) => (
-                <RowItem key={index} item={item} editNote={this.props.editNote} deleteNote={this.props.deleteNote} editNoteProcess={this.props.editNoteProcess} />
+                <RowItem key={index} item={item} editNote={this.editNote} deleteNote={this.props.deleteNote} editNoteProcess={this.props.editNoteProcess} />
               ))
             }
           </tbody>

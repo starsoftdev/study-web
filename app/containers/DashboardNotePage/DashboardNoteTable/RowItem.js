@@ -55,7 +55,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   render() {
     const initialValues = {
       initialValues: {
-        noteData: this.props.item.name,
+        noteData: this.props.item.noteData,
         id: this.props.item.id,
       },
     };
@@ -73,6 +73,11 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         </td>
         <td>
           {time}
+        </td>
+        <td>
+          <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openAddNoteModal}>
+            <span>Edit</span>
+          </a>
         </td>
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addNoteModalOpen} onHide={this.closeAddNoteModal}>
