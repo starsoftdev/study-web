@@ -183,7 +183,9 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     }
 
     if (newProps.updatedStudyAd && this.state.updatedStudyAd !== newProps.updatedStudyAd) {
-      this.setState({ updatedStudyAd: newProps.updatedStudyAd });
+      const currentStudy = this.state.currentStudy;
+      currentStudy.image = newProps.updatedStudyAd;
+      this.setState({ updatedStudyAd: newProps.updatedStudyAd, currentStudy });
       this.closeStudyAddModal();
     }
   }
@@ -325,7 +327,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     const image = (this.state.currentStudy && this.state.currentStudy.image) ? this.state.currentStudy.image : null;
     const fileSrc = this.state.updatedStudyAd || image;
 
-    let preview =
+    const preview =
       (<div className="img-preview">
         <a
           className="lightbox-opener"
@@ -334,20 +336,6 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
           <img src={fileSrc} id="img-preview" alt="preview" />
         </a>
       </div>);
-
-    if (this.state.currentStudy) {
-      const re = /(?:\.([^.]+))?$/;
-      const ext = re.exec(fileSrc)[1];
-
-      if (ext === 'pdf') {
-        preview =
-          (<div className="img-preview pdf">
-            <object data={`${fileSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`} width="100%" height="100%" type="application/pdf">
-              <embed src={`${fileSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`} width="100%" height="100%" type="application/pdf" />
-            </object>
-          </div>);
-      }
-    }
 
     return (
       <div>

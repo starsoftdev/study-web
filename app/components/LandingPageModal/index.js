@@ -162,6 +162,7 @@ export class LandingPageModal extends React.Component {
       }, () => {
         fetchLanding(this.state.selected.study_id);
         resetChangeAddState();
+        this.closeStudyAddModal();
       });
     }
   }
@@ -219,10 +220,13 @@ export class LandingPageModal extends React.Component {
   }
 
   uploadStudyAdd(e) {
-    e.toBlob((blob) => {
-      this.props.submitStudyAdd({ file: blob, study_id: this.state.selected.study_id });
-      this.closeStudyAddModal();
-    });
+    if (e.type !== 'application/pdf') {
+      e.toBlob((blob) => {
+        this.props.submitStudyAdd({ file: blob, study_id: this.state.selected.study_id });
+      });
+    } else {
+      this.props.submitStudyAdd({ file: e, study_id: this.state.selected.study_id });
+    }
   }
 
   render() {
