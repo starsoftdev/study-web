@@ -10,6 +10,7 @@ import { defaultRanges, DateRange } from 'react-date-range';
 import { Field, change } from 'redux-form';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
+import LoadingSpinner from '../../../../components/LoadingSpinner';
 
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import LandingPageModal from '../../../../components/LandingPageModal';
@@ -741,7 +742,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                     loadMore={this.loadItems}
                     initialLoad={false}
                     hasMore={this.props.paginationOptions.hasMoreItems}
-                    loader={<span>Loading...</span>}
+                    loader={<LoadingSpinner showOnlyIcon />}
                   >
                     <StickyContainer className="table-area">
                       <div className="table-left" data-table="">
@@ -887,6 +888,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         </div>
                       </div>
                     </StickyContainer>
+                    { this.props.studies.fetching && <div className="dashboard-studies-spinner"><LoadingSpinner showOnlyIcon /></div> }
                   </InfiniteScroll>
                 </div>
                 <EditInformationModal

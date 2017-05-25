@@ -4,6 +4,9 @@ import {
   FETCH_STUDIES_DASHBOARD,
   FETCH_STUDIES_DASHBOARD_SUCCESS,
   FETCH_STUDIES_DASHBOARD_ERROR,
+  FETCH_TOTALS_DASHBOARD,
+  FETCH_TOTALS_DASHBOARD_SUCCESS,
+  FETCH_TOTALS_DASHBOARD_ERROR,
   FETCH_SITE_NAMES_SUCCESS,
   FETCH_SITE_LOCATIONS_SUCCESS,
   CLEAR_FILTERS,
@@ -166,11 +169,6 @@ export default function dashboardPageReducer(state = initialState, action) {
           fetching: false,
           error: null,
         },
-        totals: {
-          details: action.payload.totals,
-          fetching: false,
-          error: null,
-        },
         paginationOptions: {
           hasMoreItems: action.hasMoreItems,
           page: action.page,
@@ -183,6 +181,33 @@ export default function dashboardPageReducer(state = initialState, action) {
           details: [],
           fetching: false,
           error: action.payload,
+        },
+      };
+    case FETCH_TOTALS_DASHBOARD:
+      return {
+        ...state,
+        totals: {
+          details: state.totals.details,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_TOTALS_DASHBOARD_SUCCESS:
+      return {
+        ...state,
+        totals: {
+          details: action.payload.totals,
+          fetching: false,
+          error: true,
+        },
+      };
+    case FETCH_TOTALS_DASHBOARD_ERROR:
+      return {
+        ...state,
+        totals: {
+          details: action.payload.totals,
+          fetching: false,
+          error: null,
         },
       };
     case FETCH_LEVELS_SUCCESS:

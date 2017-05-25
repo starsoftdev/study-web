@@ -127,16 +127,16 @@
     td {
       &.name {
         width: 15%;
-        word-break: break-word;
+        .break-word();
       }
 
       &.principal-investigator {
         width: auto;
-        word-break: break-word;
+        .break-word();
       }
 
       &.phone, &.phoneNumber {
-        width: 120px
+        width: 13%;
       }
 
       &.address {
@@ -144,7 +144,9 @@
       }
 
       &.timezone {
-        width: 170px;
+        width: 12%;
+        padding-right: 1%;
+        .break-word();
       }
 
       &.assigned-users {
@@ -157,13 +159,13 @@
       }
       @media screen and (min-width: @psd) {
         &.phone, &.phoneNumber {
-          width: 145px;
+          width: 12%px;
         }
         &.timezone {
-          width: 200px;
+          width: 16%;
         }
         &.assigned-users {
-          width: 240px;
+          width: 19%;
         }
       }
     }
