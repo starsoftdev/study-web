@@ -5,6 +5,7 @@ import React, { PropTypes } from 'react';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
 import Remarkable from 'remarkable';
+import PDF from 'react-pdf-js';
 
 import SocialArea from '../SocialArea';
 
@@ -57,9 +58,10 @@ export class LandingArticle extends React.Component {
       if (ext === 'pdf') {
         preview =
           (<div className="img-holder pdf">
-            <object data={`${imgSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`} width="100%" height="100%" type="application/pdf">
+            {/*<object data={`${imgSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`} width="100%" height="100%" type="application/pdf">
               <embed src={`${imgSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`} width="100%" height="100%" type="application/pdf" />
-            </object>
+            </object>*/}
+            <PDF file={imgSrc} page="0" />
           </div>);
       }
     }
