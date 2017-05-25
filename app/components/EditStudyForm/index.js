@@ -4,7 +4,6 @@ import { createStructuredSelector } from 'reselect';
 import { Field, FieldArray, change, reduxForm, reset, blur } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import _, { forEach, filter } from 'lodash';
-import PDF from 'react-pdf-js';
 
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import Input from '../../components/Input';
@@ -343,10 +342,9 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
       if (ext === 'pdf') {
         preview =
           (<div className="img-preview pdf">
-            {/* <object data={`${fileSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`} width="100%" height="100%" type="application/pdf">
+            <object data={`${fileSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`} width="100%" height="100%" type="application/pdf">
               <embed src={`${fileSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`} width="100%" height="100%" type="application/pdf" />
-            </object>*/}
-            <PDF file={fileSrc} page="0" />
+            </object>
           </div>);
       }
     }
