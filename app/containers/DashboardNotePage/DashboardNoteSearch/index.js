@@ -62,13 +62,19 @@ export class DashboardNoteSearch extends React.Component {
       });
     });
 
+    const addNoteAddOn = (this.props.noteSearchFormValues.site)
+    ? (
+      <a disabled={!(this.props.noteSearchFormValues.site)} className="btn btn-primary lightbox-opener" onClick={this.openAddNoteModal}>
+        Add Note
+      </a>
+    )
+    : null;
+
     return (
       <form action="#" className="form-search clearfix">
         <div className="btns-area row pull-right">
           <div className="col pull-left">
-            <a disabled={!(this.props.noteSearchFormValues.site)} className="btn btn-primary lightbox-opener" onClick={this.openAddNoteModal}>
-              Add Note
-            </a>
+            {addNoteAddOn}
           </div>
         </div>
         <div className="fields-holder">
