@@ -93,10 +93,10 @@ class FilterBar extends Component {
                   value: protocolNumber.number,
                 };
               }
+              return null;
             }).filter((item) => item);
 
           protocolOptions = _.uniqBy(protocolOptions, (item) => (item.value));
-          console.log(322, protocolOptions);
           protocolOptions = addAllOption(protocolOptions);
           return {
             label: i.name,
@@ -115,6 +115,7 @@ class FilterBar extends Component {
                 value: protocolNumber.number,
               };
             }
+            return null;
           }).filter((item) => item)),
         });
       } else {
@@ -135,6 +136,7 @@ class FilterBar extends Component {
                   value: protocolNumber.number,
                 };
               }
+              return null;
             }).filter((item) => item);
           protocolOptions = addAllOption(protocolOptions);
           return {
@@ -154,6 +156,7 @@ class FilterBar extends Component {
                 value: protocolNumber.number,
               };
             }
+            return null;
           }).filter((item) => item)),
         });
       }
