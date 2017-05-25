@@ -49,28 +49,16 @@ export class DashboardPortalsForm extends React.Component { // eslint-disable-li
   }
 
   render() {
-    let clientsOptions = [];
-    _.forEach(this.props.clients.details, (item) => {
-      clientsOptions.push(
-        {
-          label: `${item.first_name} ${item.last_name}`,
-          value: item.user_id,
-        }
-      );
-    });
-
+    let clientsOptions = this.props.clients.details.map(item => ({
+      label: `${item.first_name} ${item.last_name} (${item.name})`,
+      value: item.user_id,
+    }));
     clientsOptions = _.orderBy(clientsOptions, 'label');
 
-    let sponsorsOptions = [];
-    _.forEach(this.props.sponsors.details, (item) => {
-      sponsorsOptions.push(
-        {
-          label: `${item.first_name} ${item.last_name}`,
-          value: item.user_id,
-        }
-      );
-    });
-
+    let sponsorsOptions = this.props.sponsors.details.map(item => ({
+      label: `${item.first_name} ${item.last_name} (${item.name})`,
+      value: item.user_id,
+    }));
     sponsorsOptions = _.orderBy(sponsorsOptions, 'label');
 
     return (

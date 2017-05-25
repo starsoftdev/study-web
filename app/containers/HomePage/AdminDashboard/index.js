@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { StickyContainer } from 'react-sticky';
 import { Field, reduxForm, reset, change } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 import CenteredModal from '../../../components/CenteredModal';
 import FiltersForm from './FiltersForm';
@@ -35,6 +36,7 @@ import {
 } from './selectors';
 import {
   fetchStudiesDashboard,
+  fetchTotalsDashboard,
   fetchSiteNames,
   fetchSiteLocations,
   updateDashboardStudy,
@@ -59,6 +61,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     studies: PropTypes.array,
     resetForm: PropTypes.func,
     fetchStudiesDashboard: PropTypes.func,
+    fetchTotalsDashboard: PropTypes.func,
     fetchLevels: PropTypes.func,
     levels: PropTypes.array,
     fetchSiteLocations: PropTypes.func,
@@ -137,7 +140,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.props.fetchUsersByRole();
     this.props.fetchMessagingNumbersDashboard();
 
-    this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
+    // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
+    this.props.fetchTotalsDashboard({}, 10, 0);
   }
 
   componentWillReceiveProps(newProps) {
@@ -204,7 +208,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.setState({ customFilters: [],
       modalFilters: [] });
     this.props.resetForm();
-    this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
+    this.props.fetchTotalsDashboard({}, 10, 0);
+    // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
   }
 
   openFiltersModal() {
@@ -333,8 +338,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     if (isEmpty) {
       this.props.clearFilters();
-      this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
+      this.props.fetchTotalsDashboard({}, 10, 0);
+      // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
     } else {
+      this.props.fetchTotalsDashboard(filters, 10, 0);
       this.props.fetchStudiesDashboard(filters, limit, offset);
     }
   }
@@ -533,6 +540,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
           )}
 
           <div className="d-stats clearfix">
+            { this.props.totals.fetching && <div className="dashboard-total-spinner"><LoadingSpinner showOnlyIcon /></div> }
             <ul className="list-unstyled info-list  pull-left">
               <li>
                 <strong className="heading">TODAY: </strong>
@@ -717,6 +725,7 @@ function mapDispatchToProps(dispatch) {
   return {
     resetForm: () => dispatch(reset('dashboardFilters')),
     fetchStudiesDashboard: (params, limit, offset) => dispatch(fetchStudiesDashboard(params, limit, offset)),
+    fetchTotalsDashboard: (params, limit, offset) => dispatch(fetchTotalsDashboard(params, limit, offset)),
     fetchLevels: () => dispatch(fetchLevels()),
     fetchSiteNames: () => dispatch(fetchSiteNames()),
     fetchSiteLocations: () => dispatch(fetchSiteLocations()),
