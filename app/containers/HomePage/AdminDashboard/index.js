@@ -109,6 +109,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
         startDate: moment().clone().subtract(30, 'days'),
         endDate: moment(),
       },
+      prevTotalsFilters: [],
+      prevOffset: null,
     };
 
     this.addFilter = this.addFilter.bind(this);
@@ -341,8 +343,15 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
       this.props.fetchTotalsDashboard({}, 10, 0);
       // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
     } else {
-      this.props.fetchTotalsDashboard(filters, 10, 0);
-      this.props.fetchStudiesDashboard(filters, limit, offset);
+      if (!_.isEqual(this.state.prevTotalsFilters, filters)) {
+        this.setState({ prevTotalsFilters: _.cloneDeep(filters) });
+        this.props.fetchTotalsDashboard(filters, 10, 0);
+      }
+
+      if (this.state.prevOffset !== offset) {
+        this.props.fetchStudiesDashboard(filters, limit, offset);
+        this.setState({ prevOffset: offset });
+      }
     }
   }
 
