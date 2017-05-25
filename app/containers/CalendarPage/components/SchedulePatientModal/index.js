@@ -107,6 +107,7 @@ export default class SchedulePatientModal extends Component {
             siteId: siteLocationOption.siteId,
           };
         }
+        return null;
       }).filter((item) => item);
       this.setState({
         siteLocation: siteLocationOption,
