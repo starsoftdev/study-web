@@ -86,12 +86,17 @@ class FilterBar extends Component {
           let protocolOptions = _.flatten(sites.map(site => site.studies))
             .filter(s => s.indication_id === id)
             .map(s => {
-              const protocolNumber = _.find(protocols, { id: s.protocol_id }).number;
-              return {
-                label: protocolNumber,
-                value: protocolNumber,
-              };
-            });
+              const protocolNumber = _.find(protocols, { id: s.protocol_id });
+              if (protocolNumber) {
+                return {
+                  label: protocolNumber.number,
+                  value: protocolNumber.number,
+                };
+              }
+            }).filter((item) => item);
+
+          protocolOptions = _.uniqBy(protocolOptions, (item) => (item.value));
+          console.log(322, protocolOptions);
           protocolOptions = addAllOption(protocolOptions);
           return {
             label: i.name,
@@ -103,12 +108,14 @@ class FilterBar extends Component {
           label: 'All',
           value: 'All',
           protocolOptions: addAllOption(_.flatten(sites.map(site => site.studies)).map(s => {
-            const protocolNumber = _.find(protocols, { id: s.protocol_id }).number;
-            return {
-              label: protocolNumber,
-              value: protocolNumber,
-            };
-          })),
+            const protocolNumber = _.find(protocols, { id: s.protocol_id });
+            if (protocolNumber) {
+              return {
+                label: protocolNumber.number,
+                value: protocolNumber.number,
+              };
+            }
+          }).filter((item) => item)),
         });
       } else {
         const selectedSite = sites.filter(s => s.id === siteLocationOption.siteId)[0];
@@ -116,16 +123,19 @@ class FilterBar extends Component {
           throw new Error('SiteLocation options are not properly populated.');
         }
         const indicationIds = _.uniq(selectedSite.studies.map(study => study.indication_id));
+
         indicationOptions = indicationIds.map(id => {
           const i = _.find(indications, { id });
           let protocolOptions = selectedSite.studies.filter(s => s.indication_id === id)
             .map(s => {
-              const protocolNumber = _.find(protocols, { id: s.protocol_id }).number;
-              return {
-                label: protocolNumber,
-                value: protocolNumber,
-              };
-            });
+              const protocolNumber = _.find(protocols, { id: s.protocol_id });
+              if (protocolNumber) {
+                return {
+                  label: protocolNumber.number,
+                  value: protocolNumber.number,
+                };
+              }
+            }).filter((item) => item);
           protocolOptions = addAllOption(protocolOptions);
           return {
             label: i.name,
@@ -137,14 +147,17 @@ class FilterBar extends Component {
           label: 'All',
           value: 'All',
           protocolOptions: addAllOption(selectedSite.studies.map(s => {
-            const protocolNumber = _.find(protocols, { id: s.protocol_id }).number;
-            return {
-              label: protocolNumber,
-              value: protocolNumber,
-            };
-          })),
+            const protocolNumber = _.find(protocols, { id: s.protocol_id });
+            if (protocolNumber) {
+              return {
+                label: protocolNumber.number,
+                value: protocolNumber.number,
+              };
+            }
+          }).filter((item) => item)),
         });
       }
+
 
       this.setState({
         siteLocation: siteLocationOption,
