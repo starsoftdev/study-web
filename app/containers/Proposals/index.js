@@ -175,12 +175,16 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
         searchBy,
       });
     }
-
-    if (type === 'site') {
-      const site = siteLocations[value - 1] || null;
+    else if (type === 'site') {
+      const site = _.find(siteLocations, (item) => (item.id === value));
 
       this.setState({
         site,
+      });
+    }
+    else if (type === 'range') {
+      this.setState({
+        range: value,
       });
     }
   }

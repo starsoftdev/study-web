@@ -49,7 +49,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     this.onClickAll = this.onClickAll.bind(this);
     this.onClickCurrent = this.onClickCurrent.bind(this);
     this.sortBy = this.sortBy.bind(this);
-    this.sort = this.sort.bind(this);
+    this.filter = this.filter.bind(this);
 
     this.state = {
       checkAll: false,
@@ -67,15 +67,9 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       });
     }
 
-    if (nextProps.range) {
-      this.rangeSort(nextProps.range);
-    }
-
-    if (nextProps.site || nextProps.searchBy) {
-      this.sort(nextProps.site, nextProps.searchBy);
-    } else {
+    if (nextProps.site || nextProps.searchBy || nextProps.range) {
       this.setState({
-        filteredProposals: null,
+        filteredProposals: this.filter(nextProps.site, nextProps.searchBy, nextProps.range),
       });
     }
   }
@@ -144,37 +138,21 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     });
   }
 
-  sort(site, searchBy) {
-    const proposalsMatch = [];
-    const proposalsArr = this.props.proposals;
+  filter(site, searchBy, range) {
+    let proposalsMatch = this.props.proposals;
 
-    if (site !== null && searchBy !== null) {
-      for (const proposal of proposalsArr) {
-        if (proposal.site === site.name) {
-          const proposalNumber = String(proposal.id);
-          const protocalNumber = String(proposal.protocol);
-          if (proposalNumber.includes(searchBy) || protocalNumber.includes(searchBy)) {
-            proposalsMatch.push(proposal);
-          }
-        }
-      }
-    } else if (searchBy !== null) {
-      for (const proposal of proposalsArr) {
-        const proposalNumber = String(proposal.id);
-        const protocalNumber = String(proposal.protocol);
-        if (proposalNumber.includes(searchBy) || protocalNumber.includes(searchBy)) {
-          proposalsMatch.push(proposal);
-        }
-      }
-    } else if (site !== null) {
-      for (const proposal of proposalsArr) {
-        if (proposal.site === site.name) {
-          proposalsMatch.push(proposal);
-        }
-      }
+    if (site && site.name) {
+      proposalsMatch = proposalsMatch.filter(p => p.sitename === site.name);
+    }
+    if (searchBy) {
+      proposalsMatch = proposalsMatch.filter(p => `${p.id} ${p.protocol}`.toLowerCase().includes(searchBy.toLowerCase()));
+    }
+    if (range && range.startDate && range.endDate) {
+      proposalsMatch = proposalsMatch
+        .filter(p => moment(p.created).valueOf() < range.endDate.valueOf() && moment(p.created).valueOf() > range.startDate.valueOf());
     }
 
-    this.setState({ filteredProposals: proposalsMatch });
+    return proposalsMatch;
   }
 
   get selectedProposal() {
@@ -292,22 +270,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     this.setState({ filteredProposals: proposalsArr, activeSort: sort, activeDirection: direction });
   }
 
-  rangeSort(range) {
-    const proposalsInRange = [];
-    const proposalsArr = this.props.proposals;
-    for (const proposal of proposalsArr) {
-      const created = new Date(proposal.created).getTime();
-      const endDate = new Date(range.endDate).getTime();
-      const startDate = new Date(range.startDate).getTime();
-
-      if (created > startDate && created < endDate) {
-        proposalsInRange.push(proposal);
-      }
-    }
-
-    this.setState({ filteredProposals: proposalsInRange });
-  }
-
   mapHeaders(raw, state, result) {
     _.map(raw, (header, key) => {
       result.push(
@@ -332,10 +294,10 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       raw.sort((a, b) => {
         const aDate = new Date(a.created).getTime();
         const bDate = new Date(b.created).getTime();
-        if (aDate > bDate) {
+        if (aDate < bDate) {
           return directionUnits.more;
         }
-        if (aDate < bDate) {
+        if (aDate > bDate) {
           return directionUnits.less;
         }
         return 0;
