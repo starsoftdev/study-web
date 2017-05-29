@@ -13,7 +13,7 @@ import { StickyContainer } from 'react-sticky';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import {
   getProposals,
-  createPDF,
+  getPDF,
   showProposalPdf,
 } from '../../containers/Proposals/actions';
 import {
@@ -38,7 +38,7 @@ import AlertModal from '../../components/AlertModal';
 export class Proposals extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUser: PropTypes.object,
-    createPDF: PropTypes.func,
+    getPDF: PropTypes.func,
     fetchClientSites: PropTypes.func,
     fetchEvents: PropTypes.func,
     getProposals: PropTypes.func,
@@ -53,7 +53,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
   constructor(props, context) {
     super(props, context);
 
-    this.createPdf = this.createPdf.bind(this);
+    this.getPDF = this.getPDF.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.selectCurrent = this.selectCurrent.bind(this);
     this.selectAll = this.selectAll.bind(this);
@@ -189,9 +189,9 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     }
   }
 
-  createPdf() {
+  getPDF() {
     if (this.selectedProposal) {
-      this.props.createPDF(this.selectedProposal);
+      this.props.getPDF(this.selectedProposal);
     } else {
       this.setState({
         showAlertModal: true,
@@ -215,7 +215,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
           <TableSearchForm
             changeRange={this.changeRange}
             search={this.search}
-            createPdf={this.createPdf}
+            createPdf={this.getPDF}
             {...this.props}
           />
           <AlertModal show={this.state.showAlertModal} onHide={this.hideAlertModal} name="proposal" />
@@ -260,7 +260,7 @@ function mapDispatchToProps(dispatch) {
     fetchEvents: (values) => dispatch(fetchEvents(values)),
     fetchClientSites: (id) => dispatch(fetchClientSites(id)),
     getProposals: (clientRoleId, searchParams) => dispatch(getProposals(clientRoleId, searchParams)),
-    createPDF: (values) => dispatch(createPDF(values)),
+    getPDF: (values) => dispatch(getPDF(values)),
     showProposalPdf: (values) => dispatch(showProposalPdf(values)),
   };
 }
