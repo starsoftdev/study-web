@@ -142,7 +142,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
       options = { data: event.target.value, type };
     } else if (type === 'site') {
       const { siteLocations } = this.props;
-      const site = siteLocations[event - 1] || null;
+      const site = _.find(siteLocations, (item) => (item.id === event));
       if (site) {
         options = { data: site, type };
       }

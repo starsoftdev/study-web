@@ -563,12 +563,13 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     for (let i = 1; i <= maxCampaignCount; i++) {
       if (i === 1) {
         campaignOptions.push({ label: 'Oldest', value: 'oldest' });
-      } else if (i === maxCampaignCount) {
-        campaignOptions.push({ label: 'Newest', value: 'newest' });
       } else {
         campaignOptions.push({ label: i, value: i });
       }
     }
+    campaignOptions.push({ label: 'Current', value: 'newest' });
+
+    const selectedCampaign = this.props.filtersFormValues.campaign || 'oldest';
 
     campaignOptions = campaignOptions.reverse();
 
@@ -678,6 +679,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                           searchable
                           options={campaignOptions}
                           customSearchIconClass="icomoon-icon_search2"
+                          selectedValue={selectedCampaign}
                           onChange={this.campaignChanged}
                         />
                       </div>

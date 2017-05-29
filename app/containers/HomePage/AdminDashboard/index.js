@@ -210,6 +210,9 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.setState({ customFilters: [],
       modalFilters: [] });
     this.props.resetForm();
+
+    this.setState({ prevTotalsFilters: {} });
+    this.setState({ prevOffset: null });
     this.props.fetchTotalsDashboard({}, 10, 0);
     // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
   }
@@ -346,6 +349,11 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
       if (!_.isEqual(this.state.prevTotalsFilters, filters)) {
         this.setState({ prevTotalsFilters: _.cloneDeep(filters) });
         this.props.fetchTotalsDashboard(filters, 10, 0);
+
+        if (this.state.prevOffset === offset) {
+          this.props.fetchStudiesDashboard(filters, limit, offset);
+          this.setState({ prevOffset: offset });
+        }
       }
 
       if (this.state.prevOffset !== offset) {
@@ -549,7 +557,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
           )}
 
           <div className="d-stats clearfix">
-            { this.props.totals.fetching && <div className="dashboard-total-spinner"><LoadingSpinner showOnlyIcon /></div> }
             <ul className="list-unstyled info-list  pull-left">
               <li>
                 <strong className="heading">TODAY: </strong>
@@ -582,6 +589,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
               }
             </ul>
             <div className="chart pull-left">
+              { this.props.totals.fetching && <div className="dashboard-total-spinner"><LoadingSpinner showOnlyIcon /></div> }
               <PieChart
                 data={pieData1}
                 width={180}

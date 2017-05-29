@@ -207,10 +207,33 @@
 
 
 .dashboard{
+  .special_ellipsis_link{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 325px;
+    white-space: nowrap;
+    display: inline-block;
+  }
+  .special_ellipsis_div{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 325px;
+    white-space: nowrap;
+    display: inline-block;
+    line-height: 1.2 !important;
+  }
+  @media screen and (max-width: @psd) {
+    .special_ellipsis_link{
+      width: 245px;
+    }
+    .special_ellipsis_div{
+      width: 245px;
+    }
+  }
+
   .dashboard-total-spinner{
     position: absolute;
     left: 50%;
-    top: 165px;
   }
   .dashboard-studies-spinner{
     position: absolute;
