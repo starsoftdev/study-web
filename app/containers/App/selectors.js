@@ -388,6 +388,11 @@ const selectTrials = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.trials.details', {})
 );
+
+const selectTrialsTotal = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.trials.total', {})
+);
 // end
 
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
@@ -454,4 +459,5 @@ export {
   selectNewContactSuccess,
 
   selectTrials,
+  selectTrialsTotal,
 };

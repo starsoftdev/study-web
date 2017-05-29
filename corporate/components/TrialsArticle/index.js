@@ -12,6 +12,7 @@ import studyKikLogo from '../../assets/images/logo.svg';
 
 export class TrialsArticle extends Component {
   static propTypes = {
+    isShow: PropTypes.func,
     index: PropTypes.number,
     trial: PropTypes.object,
     addr: PropTypes.any,
@@ -35,6 +36,7 @@ export class TrialsArticle extends Component {
   setVisible(el) {
     const viewAtr = el.getAttribute('data-view');
     el.classList.add('in-viewport', viewAtr);
+    this.props.isShow(this.props.trial.study_id);
   }
 
   render() {
