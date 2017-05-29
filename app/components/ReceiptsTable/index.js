@@ -126,7 +126,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     this.setState({ receipts }, () => {
       let all = true;
       this.props.receipts.forEach((receipt) => {
-        if (!receipt.selected) {
+        if (!receipt.selected && receipt.invoice_pdf_id) {
           all = false;
         }
       });
@@ -142,11 +142,14 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   onClickAll(ev) {
     ev.preventDefault();
     const receipts = this.props.receipts;
+    let selectedArr = [];
     this.selectedReceipts = null;
     for (const receipt of receipts) {
-      if (this.state.checkAll && receipt.invoice_pdf_id) {
-        receipt.selected = (!this.state.checkAll);
-        this.selectedReceipts.push(receipt);
+      receipt.selected = (!this.state.checkAll);
+      if (receipt.invoice_pdf_id && receipt.selected) {
+        selectedArr.push(receipt);
+
+        this.selectedReceipts = selectedArr;
       }
     }
 
