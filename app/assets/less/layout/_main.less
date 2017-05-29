@@ -98,11 +98,17 @@ input[type=search]:-ms-input-placeholder {
 
 .form-search {
 	clear: both;
-	margin: 0 -6px 30px;
+	margin: 0 0 30px;
 	position: relative;
 
 	.btns-area {
 		margin: 0 0 0 50px;
+    .col.pull-right {
+      padding: 0 6px;
+      &:first-child {
+        padding-right: 0;
+      }
+    }
 	}
 
 	.btn-primary {
@@ -126,12 +132,21 @@ input[type=search]:-ms-input-placeholder {
 
 	.col {
 		padding: 0 6px;
+    &:last-child {
+      padding-right: 0px;
+    }
 	}
 
-	.search-area {
+	.search-area, .custom-select {
 		width: 33.33%;
 		padding: 0 6px;
 		position: relative;
+    &:first-child {
+      padding-left: 0;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
 
 		.form-control {
 			padding-right: 32px;
@@ -213,13 +228,10 @@ input[type=search]:-ms-input-placeholder {
 	}
 
 	@media screen and (max-width: @psd) {
-		margin-bottom: 0;
-
 		.custom-select,
 		.search-area {
 			margin: 0;
 			width: 33.333%;
-			padding: 0 6px 30px;
       &.first-custom-select {
         padding-bottom: 0;
       }
@@ -471,7 +483,7 @@ input[type=search]:-ms-input-placeholder {
 
 	.number {
 		.align;
-		.font(38px);
+		.font(36px);
 		padding: 20px 34px 0 0;
 		position: relative;
 	}
@@ -904,7 +916,6 @@ input[type=search]:-ms-input-placeholder {
 @media screen and (max-width: 1600px) {
   .individual-study {
     .form-search {
-      margin-bottom: 0 !important;
       .btns-popups {
         width: 100%;
         margin: 0 0 30px !important;
@@ -1919,18 +1930,6 @@ th, .th {
 	}
 
 	@media screen and (max-width: @psd) {
-
-		.form-search {
-			margin-bottom: 0;
-
-
-
-			/*.search-area,
-			.custom-select {
-				width: 50%;
-			}*/
-		}
-
 		.table {
 			font-size: 15px;
 
@@ -2481,11 +2480,11 @@ th, .th {
 
 .patient-database {
   .btns-popups {
-    margin: 0 -6px 25px;
+    margin: 0 0 25px;
     overflow: hidden;
     .search-area {
       width: 25%;
-      padding: 0 6px;
+      padding: 0 6px 0 0;
       .field {
         position: relative;
       }
@@ -4388,7 +4387,7 @@ div[data-percentage],
 	}
 
 	.form-search {
-		margin: 0 -6px 32px;
+		margin: 0 0 32px;
 
     .fields-holder{
       position: absolute;
@@ -4488,7 +4487,7 @@ div[data-percentage],
 
 /*	stats  */
 .stats {
-	margin: 0 0 30px;
+	margin: 0;
 	background: #fff;
 	position: relative;
 	border: solid 2px #f78e1e;
@@ -4636,7 +4635,7 @@ div[data-percentage],
 	h3 {
 		margin: 0;
 		color: #333;
-		font-size: 29px;
+		font-size: 28px;
 		font-weight: 400;
 		text-transform: uppercase;
 	}
@@ -4727,7 +4726,7 @@ div[data-percentage],
       }
     }
     .slide {
-      margin-top: 61px;
+      margin-top: 0;
     }
   }
   .opener {
@@ -4740,10 +4739,10 @@ div[data-percentage],
     white-space: nowrap;
     background: #f78e1e;
     text-transform: uppercase;
-    padding: 16px 5px 16px 42px;
+    padding: 16px 5px 16px 10px;
     &:before {
       content: '';
-      .size(1px, 28px);
+      .size(1px, 32px);
       margin: 0 0 0 -4px;
       .align(@align: middle);
     }
@@ -4752,21 +4751,20 @@ div[data-percentage],
     }
     .text {
       white-space: normal;
-      margin-left: 4px;
+      margin-right: 30px;
       .align(@align: middle);
     }
     .number {
       height: 26px;
-      width: 26px;
-      left: 9px;
-      position: absolute;
-      top: 17px;
+      width: auto;
+      min-width: 26px;
       color: #00afef;
       background: #fff;
       .font(18px, 24px);
       text-align: center;
       .align(@align: middle);
       border: solid 1px #fff;
+      margin-right: 8px;
     }
   }
   li {
@@ -4851,6 +4849,9 @@ div[data-percentage],
     .font(18px);
     span {
       display: block;
+      &.first-name, &.last-name {
+        .break-word();
+      }
     }
   }
   .counter {
@@ -4903,13 +4904,13 @@ div[data-percentage],
   }
   @media screen and (max-width: 1600px) {
     .opener {
-      padding: 5px 5px 5px 31px;
+      padding: 5px 5px 5px 10px;
       .font(12px);
       &:before {
-        height: 44px;
+        height: 46px;
       }
       .text {
-        margin-left: 3px;
+        margin-right: 20px;
         -webkit-hyphens: auto;
         -moz-hyphens: auto;
         -ms-hyphens: auto;
@@ -4917,9 +4918,8 @@ div[data-percentage],
       }
       .number {
         height: 20px;
-        width: 20px;
-        left: 7px;
-        min-height: 20px;
+        min-width: 20px;
+        margin-right: 5px;
         .font(14px, 20px);
       }
     }
@@ -5014,7 +5014,11 @@ div[data-percentage],
     width: 590px;
   }
   .modal-body {
-    padding: 25px 25px 25px 25px;
+    padding: 25px 25px 0 25px;
+
+    .schedule-form {
+      margin-bottom: 25px;
+    }
 
     .rdr-Calendar {
       width: 100% !important;

@@ -133,7 +133,7 @@ class ScheduledPatientModal extends React.Component {
             <div className="current-date" onClick={this.navigateToday}>
               Today: {moment().format('dddd, MMMM DD, YYYY')}
             </div>
-            <form onSubmit={handleSubmit}>
+            <form className="clearfix schedule-form" onSubmit={handleSubmit}>
               <div className="text-center">
                 <div className="field-row patient-name-field-row">
                   <strong className="label required">
