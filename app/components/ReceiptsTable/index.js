@@ -142,7 +142,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   onClickAll(ev) {
     ev.preventDefault();
     const receipts = this.props.receipts;
-    let selectedArr = [];
+    const selectedArr = [];
     this.selectedReceipts = null;
     for (const receipt of receipts) {
       receipt.selected = (!this.state.checkAll);
