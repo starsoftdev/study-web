@@ -7,7 +7,8 @@ import classNames from 'classnames';
 import TrialsArticle from '../../components/TrialsArticle';
 import ClinicalTrialsSearchForm from '../../components/ClinicalTrialsSearchForm';
 import { fetchIndications, clinicalTrialsSearch, clearClinicalTrialsSearch } from '../../../app/containers/App/actions';
-import { selectIndications, selectTrials } from '../../../app/containers/App/selectors';
+import { selectIndications, selectTrials, selectTrialsTotal } from '../../../app/containers/App/selectors';
+import { selectValues } from '../../../app/common/selectors/form.selector';
 
 export class Home extends Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -15,6 +16,8 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
     onSubmitForm: React.PropTypes.func,
     indications: PropTypes.array,
     trials: PropTypes.array,
+    newList: PropTypes.any,
+    total: PropTypes.any,
     resetForm: React.PropTypes.func,
     clearTrialsList: React.PropTypes.func,
     posts: PropTypes.array,
@@ -30,7 +33,11 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
     this.handleZipChoose = this.handleZipChoose.bind(this);
     this.handleDistanceChoose = this.handleDistanceChoose.bind(this);
     this.handleIndicationChoose = this.handleIndicationChoose.bind(this);
+    this.isShow = this.isShow.bind(this);
 
+    this.show = 0;
+    this.total = 0;
+    this.loaded = 0;
     this.distance = 0;
     this.indication = null;
     this.zip = null;
@@ -45,9 +52,16 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
 
   componentWillReceiveProps(newProps) {
     if (newProps.trials === null) {
+      this.show = 0;
+      this.total = 0;
+      this.loaded = 0;
       this.distance = 0;
       this.indication = null;
       this.zip = null;
+    }
+
+    if (newProps.trials && !newProps.trials.fetching) {
+      this.loaded = newProps.trials.length;
     }
   }
 
@@ -58,11 +72,14 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
   }
 
   onSubmitForm(values) {
-    const { onSubmitForm } = this.props;
-    const newValues = Object.assign({}, values);
+    const { onSubmitForm, clearTrialsList } = this.props;
+    const newValues = Object.assign({
+      from: this.show,
+    }, values);
     if (values.indicationId === -1) {
       delete newValues.indicationId;
     }
+    clearTrialsList();
     onSubmitForm(newValues);
   }
 
@@ -83,6 +100,22 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
     this.zip = ev.target.value;
   }
 
+  isShow() {
+    const { onSubmitForm, newList } = this.props;
+    this.show++;
+
+    if (this.show === this.loaded && this.show !== parseInt(this.props.total)) {
+      const newValues = Object.assign({
+        from: this.show,
+      }, newList);
+
+      if (newValues.indicationId === -1) {
+        delete newValues.indicationId;
+      }
+      onSubmitForm(newValues);
+    }
+  }
+
   render() {
     const { indications } = this.props;
     let { trials } = this.props;
@@ -91,9 +124,9 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
 
     if (trials) {
       if (trials.length > 0) {
-        h3Text = `There are ${trials.length} ${(trials.length > 1) ? 'studies' : 'study'}`;
+        h3Text = `There are ${this.props.total} ${(this.props.total > 1) ? 'studies' : 'study'}`;
         if (this.zip) {
-          h3Text = `There are ${trials.length} ${(trials.length > 1) ? 'studies' : 'study'} within ${this.distance || 50} miles of ${this.zip}`;
+          h3Text = `There are ${this.props.total} ${(this.props.total > 1) ? 'studies' : 'study'} within ${this.distance || 50} miles of ${this.zip}`;
         }
 
         if (trials[0].wrongPostalCode) {
@@ -118,6 +151,7 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
         return (
           <TrialsArticle
             {...item}
+            isShow={this.isShow}
             trial={item}
             key={index}
             index={index}
@@ -158,7 +192,9 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
 
 const mapStateToProps = createStructuredSelector({
   indications: selectIndications(),
+  newList: selectValues('find-studies'),
   trials: selectTrials(),
+  total: selectTrialsTotal(),
 });
 
 function mapDispatchToProps(dispatch) {
