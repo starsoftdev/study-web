@@ -264,12 +264,13 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
         });
       }
     }
-    if (patientQualificationSuite) {
+    if (patientQualificationSuite && campaignLength) {
+      const monthLength = find(CAMPAIGN_LENGTH_LIST, { value: campaignLength });
       addOns.push({
         title: 'Patient Qualification Suite',
         price: QUALIFICATION_SUITE_PRICE,
-        quantity: 1,
-        total: QUALIFICATION_SUITE_PRICE,
+        quantity: monthLength.value,
+        total: QUALIFICATION_SUITE_PRICE * monthLength.value,
       });
     }
     if (callTracking) {
