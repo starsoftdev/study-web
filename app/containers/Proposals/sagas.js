@@ -82,7 +82,9 @@ export function* createPdf() {
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       yield put(toastrActions.error('', errorMessage));
-      payload.cb(err, null);
+      if (payload.cb && typeof payload.cb === 'function') {
+        payload.cb(err, null);
+      }
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -94,19 +96,17 @@ export function* getPdf() {
   while (true) {
     const { payload } = yield take(GET_PDF);
     try {
-      const requestURL = `${API_URL}/proposals/getPDF`;
-      const fileName = (payload.data.files.length === 1) ? payload.data.files[0].fileName : null;
+      const requestURL = `${API_URL}/proposals/getProposalsPDF`;
       const authToken = getItem('auth_token');
-      const archiveName = payload.data.archive;
+      const proposals = [];
+      for (const value of payload) {
+        proposals.push(value.proposalpdfid);
+      }
       const params = {
         access_token: authToken,
       };
-
-      if (fileName) {
-        params.fileName = fileName;
-      }
-      if (archiveName) {
-        params.archiveName = archiveName;
+      if (proposals.length > 0) {
+        params.proposals = JSON.stringify(proposals);
       }
       location.replace(`${requestURL}?${serializeParams(params)}`);
     } catch (err) {
