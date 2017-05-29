@@ -141,6 +141,16 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     });
   }
 
+  getPDF() {
+    if (this.selectedProposal) {
+      this.props.getPDF(this.selectedProposal);
+    } else {
+      this.setState({
+        showAlertModal: true,
+      });
+    }
+  }
+
   get selectedProposal() {
     return this.SelectedProposal;
   }
@@ -174,27 +184,15 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
       this.setState({
         searchBy,
       });
-    }
-    else if (type === 'site') {
-      const site = _.find(siteLocations, (item) => (item.id === value));
+    } else if (type === 'site') {
+      const site = siteLocations.find(item => item.id === value);
 
       this.setState({
         site,
       });
-    }
-    else if (type === 'range') {
+    } else if (type === 'range') {
       this.setState({
         range: value,
-      });
-    }
-  }
-
-  getPDF() {
-    if (this.selectedProposal) {
-      this.props.getPDF(this.selectedProposal);
-    } else {
-      this.setState({
-        showAlertModal: true,
       });
     }
   }
