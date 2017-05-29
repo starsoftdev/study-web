@@ -1,3 +1,5 @@
+/* eslint-disable no-case-declarations */
+
 import { forEach, map, remove, cloneDeep, findIndex, concat, sortBy, reverse } from 'lodash';
 import { getItem } from '../../utils/localStorage';
 
@@ -181,6 +183,7 @@ const initialState = {
     },
     trials: {
       details: null,
+      total: null,
       fetching: false,
       error: null,
     },
@@ -381,9 +384,14 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case CLINICAL_TRIALS_SEARCH_SUCCESS:
+      const trialsCollection = concat(state.baseData.trials.details, payload.data);
+      if (trialsCollection && trialsCollection[0] === null) {
+        trialsCollection.splice(0, 1);
+      }
       baseDataInnerState = {
         trials: {
-          details: payload,
+          details: trialsCollection,
+          total: payload.total,
           fetching: false,
           error: null,
         },
@@ -393,6 +401,7 @@ export default function appReducer(state = initialState, action) {
       baseDataInnerState = {
         trials: {
           details: null,
+          total: null,
           fetching: false,
           error: null,
         },
