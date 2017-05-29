@@ -93,7 +93,10 @@ class Patient extends React.Component {
 
   render() {
     const { connectDragSource, category, currentPatientId, onPatientClick, patient } = this.props;
-    const patientPhone = formatPhone(patient.phone);
+    let patientPhone;
+    if (patient.phone) {
+      patientPhone = formatPhone(patient.phone);
+    }
     return connectDragSource(
       <li
         className={classNames({ 'patient-li': true, 'patient-selected': patient.id === currentPatientId })}
