@@ -139,7 +139,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
       piNode = <span>{piFirstName} {piLastName}<br /></span>;
     }
 
-    const addressArr = address.split(',');
+    const addressArr = (address) ? address.split(',') : [];
 
     return (
       <tr className="client-site-container">
