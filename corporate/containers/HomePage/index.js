@@ -162,7 +162,7 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
     }
 
     return (
-      <div id="main" className="visible-overflow">
+      <div id="main" className="visible-overflow corporate-site">
         <div className="container">
           <h2
             ref={(animatedH2) => { this.animatedH2 = animatedH2; }}
