@@ -66,7 +66,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     const startDate = item.campaign_datefrom ? campaignDateFrom.format('MM/DD/YY') : 'TBD';
     const endDate = item.campaign_dateto ? campaignDateTo.format('MM/DD/YY') : 'TBD';
 
-    let campaignName = this.props.filtersFormValues.campaign ? this.props.filtersFormValues.campaign.toString() : 'Newest';
+    let campaignName = this.props.filtersFormValues.campaign ? this.props.filtersFormValues.campaign.toString() : 'Oldest';
     campaignName = campaignName.charAt(0).toUpperCase() + campaignName.slice(1);
 
     return (
@@ -78,7 +78,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 
         className={(this.props.hoverRowIndex === item.study_id) ? 'active-table-row' : ''}
       >
-        <td><span className="location">{`${item.site_address ? item.site_address : ''} ${item.site_city ? item.site_city : ''}, ${item.site_state ? item.site_state : ''} ${item.site_zip ? item.site_zip : ''}`}</span></td>
+        <td><span className="location">{`${item.site_address ? item.site_address : ''} ${item.site_city ? item.site_city : ''}${(item.site_city && item.site_state) ? ',' : ''} ${item.site_state ? item.site_state : ''} ${item.site_zip ? item.site_zip : ''}`}</span></td>
         <td><span className="exposure-level">{item.level_name}</span></td>
         <td>
           <ul className="list-unstyled">
