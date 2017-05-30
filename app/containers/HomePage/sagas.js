@@ -695,7 +695,7 @@ export function* changeStudyAddWorker(action) {
     };
 
     const response = yield call(request, requestURL, options);
-    yield put(toastrActions.success('', 'You have successfully updated study add!'));
+    yield put(toastrActions.success('', 'Success! Study ad has been updated.'));
     yield put(changeStudyAddSuccess(response));
   } catch (err) {
     yield put(toastrActions.error('Error!'));
