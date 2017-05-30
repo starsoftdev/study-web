@@ -27,6 +27,16 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
   componentWillUnmount() {
   }
 
+  focusField(ev) {
+    ev.target.parentElement.classList.add('focus');
+    console.log(ev.target.parentElement.classList);
+  }
+
+  blurField(ev) {
+    ev.target.parentElement.classList.remove('focus');
+    console.log(ev.target.parentElement.classList);
+  }
+
   render() {
     const { handleSubmit } = this.props;
     return (
@@ -45,40 +55,50 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
                 type="text"
                 component={Input}
                 placeholder="* Full Name"
-                className=""
+                className="field-wrapper"
                 bsClass="form-control input-lg"
+                onFocus={this.focusField}
+                onBlur={this.blurField}
               />
               <Field
                 name="email"
                 type="text"
                 component={Input}
                 placeholder="* Email"
-                className=""s
+                className="field-wrapper"
                 bsClass="form-control input-lg"
+                onFocus={this.focusField}
+                onBlur={this.blurField}
               />
               <Field
                 name="company"
                 type="text"
                 component={Input}
                 placeholder="* Company"
-                className=""
+                className="field-wrapper"
                 bsClass="form-control input-lg"
+                onFocus={this.focusField}
+                onBlur={this.blurField}
               />
               <Field
                 name="postalCode"
                 type="text"
                 component={Input}
                 placeholder="* Postal Code"
-                className=""
+                className="field-wrapper"
                 bsClass="form-control input-lg"
+                onFocus={this.focusField}
+                onBlur={this.blurField}
               />
               <Field
                 name="indication"
                 type="text"
                 component={Input}
                 placeholder="* Indication"
-                className=""
+                className="field-wrapper"
                 bsClass="form-control input-lg"
+                onFocus={this.focusField}
+                onBlur={this.blurField}
               />
               <input type="submit" className="btn btn-block input-lg" value="RECEIVE REPORT" />
               <div className="images">
