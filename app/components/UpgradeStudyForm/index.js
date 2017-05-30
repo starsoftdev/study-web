@@ -5,7 +5,7 @@ import { Field, FieldArray, reduxForm, change, reset } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import _, { find } from 'lodash';
 
-import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
+import { CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
 import CenteredModal from '../../components/CenteredModal/index';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
