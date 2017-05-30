@@ -156,7 +156,10 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
       change('emailNotifications', fields);
       change('checkAllInput', isAllChecked);
 
-      this.setState({ fileSrc: currentStudy.image || null });
+      this.setState({
+        updatedStudyAd: null,
+        fileSrc: (currentStudy.image || null),
+      });
     }
 
     if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
@@ -180,7 +183,10 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     }
 
     if (newProps.updatedStudyAd && this.state.updatedStudyAd !== newProps.updatedStudyAd) {
-      this.setState({ updatedStudyAd: newProps.updatedStudyAd });
+      const currentStudy = this.state.currentStudy;
+      currentStudy.image = newProps.updatedStudyAd;
+      this.setState({ updatedStudyAd: newProps.updatedStudyAd, currentStudy });
+      this.closeStudyAddModal();
     }
   }
 
@@ -289,10 +295,13 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   uploadStudyAdd(e) {
-    e.toBlob((blob) => {
-      this.props.submitStudyAdd({ file: blob, study_id: this.state.currentStudy.id });
-      this.closeStudyAddModal();
-    });
+    if (e.type !== 'application/pdf') {
+      e.toBlob((blob) => {
+        this.props.submitStudyAdd({ file: blob, study_id: this.state.currentStudy.id });
+      });
+    } else {
+      this.props.submitStudyAdd({ file: e, study_id: this.state.currentStudy.id });
+    }
   }
 
   renderEmailList() {
@@ -315,11 +324,18 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
 
   render() {
     const { editedStudy } = this.props;
-    let fileSrc = null;
+    const image = (this.state.currentStudy && this.state.currentStudy.image) ? this.state.currentStudy.image : null;
+    const fileSrc = this.state.updatedStudyAd || image;
 
-    if (this.state.currentStudy) {
-      fileSrc = this.state.updatedStudyAd || this.state.currentStudy.image;
-    }
+    const preview =
+      (<div className="img-preview">
+        <a
+          className="lightbox-opener"
+          onClick={this.openStudyPreviewModal}
+        >
+          <img src={fileSrc} id="img-preview" alt="preview" />
+        </a>
+      </div>);
 
     return (
       <div>
@@ -371,14 +387,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
                         </strong>
                         <div className="field">
                           { fileSrc &&
-                          <div className="img-preview">
-                            <a
-                              className="lightbox-opener"
-                              onClick={this.openStudyPreviewModal}
-                            >
-                              <img src={fileSrc} id="img-preview" alt="preview" />
-                            </a>
-                          </div>
+                            preview
                           }
                           <a
                             className="btn btn-gray upload-btn"

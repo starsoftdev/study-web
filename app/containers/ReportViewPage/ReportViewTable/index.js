@@ -5,6 +5,7 @@ import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
+import ReactTooltip from 'react-tooltip';
 import Toggle from '../../../components/Input/Toggle';
 import { selectChangeProtocolStatusProcess } from '../selectors';
 
@@ -140,7 +141,7 @@ export class ReportViewTable extends React.Component {
       } else {
         inActive++;
       }
-
+      const landingHref = item.url ? `/${item.study_id}-${item.url.toLowerCase().replace(/ /ig, '-')}` : '';
       return (
         <tr
           onMouseOver={(e) => this.mouseOverRow(e, index)}
@@ -151,17 +152,24 @@ export class ReportViewTable extends React.Component {
 
           className={(this.state.hoveredRowIndex === index) ? 'active-table-row' : ''}
         >
-          <td>{item.site_id}</td>
           <td>
-            <span className="name" data-placement="top" data-toggle="tooltip" title="" data-original-title="Palmer Tech">{`${item.principalinvestigatorfirstname} ${item.principalinvestigatorlastname}`}</span>
+            <span data-for={`site-id-${index}`} data-tip={item.site_name} className="tooltip-element">{item.site_id}</span>
+            <ReactTooltip id={`site-id-${index}`} type="info" class="tooltipClass" delayHide={500} effect="solid" />
+          </td>
+          <td>
+            <a data-for={`study-id-${index}`} target="_blank" data-tip={item.study_id} href={landingHref} className="tooltip-element">{`${item.principalinvestigatorfirstname} ${item.principalinvestigatorlastname}`}</a>
+            <ReactTooltip id={`study-id-${index}`} type="info" class="tooltipClass" delayHide={500} effect="solid" />
           </td>
           <td>{item.level}</td>
           <td>
-            <Toggle
-              name={`status_${item.site_id}_${item.study_id}`}
-              meta={{ touched:false, error:false, active:false }}
-              input={{ value: item.is_active, onChange: (value) => { this.changeStatus(value, item.study_id); } }}
-            />
+            <div className="relative-element">
+              <Toggle
+                name={`status_${item.site_id}_${item.study_id}`}
+                meta={{ touched:false, error:false, active:false }}
+                input={{ value: item.is_active, onChange: (value) => { this.changeStatus(value, item.study_id); } }}
+                disabled
+              />
+            </div>
           </td>
           <td>
             <span className="number">{item.customer_credits || 0}</span>

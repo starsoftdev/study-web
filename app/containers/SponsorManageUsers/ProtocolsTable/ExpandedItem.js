@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import EditSponsorUserForm from '../../../containers/SponsorManageUsers/EditSponsorUserForm';
+import { selectEditUserProcess } from '../selectors';
 
 class ExpandedItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -12,6 +14,7 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
     protocolOptions: PropTypes.array,
     deleteUser: PropTypes.func,
     currentUser: React.PropTypes.object,
+    editUserProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -24,6 +27,12 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
     this.openAddUserModal = this.openAddUserModal.bind(this);
     this.editLocalUser = this.editLocalUser.bind(this);
     this.deleteLocalUser = this.deleteLocalUser.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if ((!newProps.editUserProcess.saving && this.props.editUserProcess.saving)) {
+      this.closeAddUserModal();
+    }
   }
 
   closeAddUserModal() {
@@ -43,12 +52,21 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
   }
 
   render() {
+    const componentValues = [{ isAdmin: false }];
+
+    _.forEach(this.props.protocolOptions, (item) => {
+      if (item.value) {
+        componentValues.push(item);
+      }
+    });
+
     const initialValues = {
       initialValues: {
         firstName: this.props.item.user.firstName,
         lastName: this.props.item.user.lastName,
         email: this.props.item.user.email,
         id: this.props.item.user.id,
+        protocols: componentValues,
       },
     };
 
@@ -80,6 +98,7 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
 }
 
 const mapStateToProps = createStructuredSelector({
+  editUserProcess: selectEditUserProcess(),
 });
 
 function mapDispatchToProps(dispatch) {

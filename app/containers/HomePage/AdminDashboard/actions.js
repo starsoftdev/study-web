@@ -8,6 +8,9 @@ import {
   FETCH_STUDIES_DASHBOARD,
   FETCH_STUDIES_DASHBOARD_SUCCESS,
   FETCH_STUDIES_DASHBOARD_ERROR,
+  FETCH_TOTALS_DASHBOARD,
+  FETCH_TOTALS_DASHBOARD_SUCCESS,
+  FETCH_TOTALS_DASHBOARD_ERROR,
   FETCH_SITE_LOCATIONS,
   FETCH_SITE_LOCATIONS_SUCCESS,
   FETCH_SITE_LOCATIONS_ERROR,
@@ -82,6 +85,29 @@ export function fetchStudiesDashboardSuccess(payload, hasMoreItems, page) {
 export function fetchStudiesDashboardError(payload) {
   return {
     type: FETCH_STUDIES_DASHBOARD_ERROR,
+    payload,
+  };
+}
+
+export function fetchTotalsDashboard(params, limit, offset) {
+  return {
+    type: FETCH_TOTALS_DASHBOARD,
+    params,
+    limit,
+    offset,
+  };
+}
+
+export function fetchTotalsDashboardSuccess(payload) {
+  return {
+    type: FETCH_TOTALS_DASHBOARD_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchTotalsDashboardError(payload) {
+  return {
+    type: FETCH_TOTALS_DASHBOARD_ERROR,
     payload,
   };
 }

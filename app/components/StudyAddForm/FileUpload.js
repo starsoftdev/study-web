@@ -6,6 +6,8 @@ export default class FileUpload extends Component {
     handleFileChange: PropTypes.func,
     handleDragEnter: PropTypes.func,
     handleDragLeave: PropTypes.func,
+    showPdfPreview: PropTypes.func,
+    clearPreview: PropTypes.func,
   };
 
   constructor(props) {
@@ -39,11 +41,17 @@ export default class FileUpload extends Component {
   handleFile(e) {
     const reader = new FileReader();
     const file = e.target.files[0];
+    this.props.clearPreview();
 
-    if (!file || file.type.indexOf('image/') === -1) return;
+    if (!file || (file.type.indexOf('image/') === -1 && file.type.indexOf('application/') === -1)) return;
 
-    reader.onload = this.onFileLoad;
-    reader.readAsDataURL(file);
+    if (file.type.indexOf('application/') !== -1) {
+      const url = URL.createObjectURL(file);
+      this.props.showPdfPreview(file, url);
+    } else {
+      reader.onload = this.onFileLoad;
+      reader.readAsDataURL(file);
+    }
   }
 
   render() {
@@ -54,7 +62,7 @@ export default class FileUpload extends Component {
           this.inFile = inFile;
         }}
         type="file"
-        accept="image/*"
+        accept="image/*,application/pdf"
         onChange={this.handleFile}
         onDragEnter={this.onDragEnterHandler}
         onDragLeave={this.onDragLeaveHandler}

@@ -67,6 +67,11 @@ const selectPaginationOptionsProtocols = () => createSelector(
   substate => substate.paginationOptionsProtocols
 );
 
+const selectProtocols = () => createSelector(
+  selectSponsorManageUsersDomain(),
+  substate => substate.protocols
+);
+
 export default selectSponsorManageUsers;
 export {
   selectSponsorManageUsersDomain,
@@ -79,4 +84,5 @@ export {
   selectSearchSponsorsFormValues,
   selectEditProtocolFormValues,
   selectEditProtocolProcess,
+  selectProtocols,
 };

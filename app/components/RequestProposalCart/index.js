@@ -7,14 +7,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { find, sumBy } from 'lodash';
+import _, { find, sumBy } from 'lodash';
 import { touch } from 'redux-form';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Money from '../../components/Money';
 import {
   CAMPAIGN_LENGTH_LIST,
-  MESSAGING_SUITE_PRICE,
   QUALIFICATION_SUITE_PRICE,
   CALL_TRACKING_PRICE,
 } from '../../common/constants';
@@ -47,6 +46,9 @@ export class RequestProposalCart extends Component {
     fetchIndicationLevelPrice: PropTypes.func,
     indicationLevelPrice: PropTypes.number,
     touchRequestProposal: PropTypes.func,
+    currentUser: PropTypes.object,
+    siteLocations: PropTypes.array,
+    indications: PropTypes.array,
   }
 
   constructor(props) {
@@ -85,8 +87,49 @@ export class RequestProposalCart extends Component {
       return;
     }
 
-    const { formValues } = this.props;
-    this.props.onSubmitForm(formValues);
+    const { formValues, currentUser, levels, indicationLevelPrice } = this.props;
+
+    const selectedSite = _.find(this.props.siteLocations, (o) => (o.id === formValues.site));
+    const selectedIndication = _.find(this.props.indications, (o) => (o.id === formValues.indication_id));
+    const selectedLevel = _.find(this.props.levels, (o) => (o.id === formValues.level_id));
+
+    const level = find(levels, { id: formValues.level_id });
+    let totalPrice = 0;
+    const months = find(CAMPAIGN_LENGTH_LIST, { value: formValues.campaignLength });
+    if (level && months && indicationLevelPrice) {
+      totalPrice = indicationLevelPrice * months.value;
+    }
+
+    if (formValues.patientQualificationSuite) {
+      totalPrice += QUALIFICATION_SUITE_PRICE * months.value;
+    }
+
+    const newFormValues = formValues;
+    if (!newFormValues.sponsorEmail) {
+      newFormValues.sponsorEmail = null;
+    }
+    if (!newFormValues.croEmail) {
+      newFormValues.croEmail = null;
+    }
+    if (!newFormValues.irbEmail) {
+      newFormValues.irbEmail = null;
+    }
+
+    this.props.onSubmitForm({
+      ...newFormValues,
+      siteLocationName: selectedSite.name,
+      indicationName: selectedIndication.name,
+      protocolNumber: formValues.protocol,
+      proposalNumber: 11,
+      firstName: currentUser.firstName,
+      lastName: currentUser.lastName,
+      email: currentUser.email,
+      site_id: formValues.site,
+      exposureLevelName: selectedLevel.name,
+      phone: '1111',
+      organization: selectedSite.name,
+      total: totalPrice,
+    });
   }
 
   onFetchCoupon() {
@@ -108,21 +151,21 @@ export class RequestProposalCart extends Component {
       });
     }
 
-    if (formValues.patientMessagingSuite) {
-      products.push({
-        title: 'Patient Messaging Suite',
-        price: MESSAGING_SUITE_PRICE,
-        quantity: 1,
-        total: MESSAGING_SUITE_PRICE,
-      });
-    }
+    // if (formValues.patientMessagingSuite) {
+    //   products.push({
+    //     title: 'Patient Messaging Suite',
+    //     price: MESSAGING_SUITE_PRICE,
+    //     quantity: 1,
+    //     total: MESSAGING_SUITE_PRICE,
+    //   });
+    // }
 
     if (formValues.patientQualificationSuite) {
       products.push({
         title: 'Patient Qualification Suite',
         price: QUALIFICATION_SUITE_PRICE,
-        quantity: 1,
-        total: QUALIFICATION_SUITE_PRICE,
+        quantity: months.value,
+        total: QUALIFICATION_SUITE_PRICE * months.value,
       });
     }
 
@@ -158,24 +201,30 @@ export class RequestProposalCart extends Component {
     const { coupon } = this.props;
     const products = this.listProducts();
     const { subTotal, discount, total } = this.calculateTotal(products);
+    const noBorderClassName = '';
+    const formClassName = `form-shopping-cart ${noBorderClassName}`;
 
     return (
-      <div className="shopping-cart order-summary order-summery">
-        <div className="head">
-          <h3>Proposal Summary</h3>
-        </div>
-
-        <div className="scroll jcf--scrollabel">
+      <div className={formClassName}>
+        <div className="shopping-cart order-summary order-summery scroll jcf--scrollabel">
+          <div className="head">
+            <h3>Proposal Summary</h3>
+          </div>
           <div className="scroll-holder">
-
             <div className="table-holder">
               <table className="table-summary">
+                <colgroup>
+                  <col style={{ width: '44.2%' }} />
+                  <col style={{ width: '22.6%' }} />
+                  <col style={{ width: '13.6%' }} />
+                  <col style={{ width: 'auto' }} />
+                </colgroup>
                 <thead>
                   <tr>
                     <th>PRODUCT <i className="caret-arrow" /></th>
-                    <th>PRICE <i className="caret-arrow" /></th>
-                    <th>QTY <i className="caret-arrow" /></th>
-                    <th>TOTAL <i className="caret-arrow" /></th>
+                    <th className="right">PRICE <i className="caret-arrow" /></th>
+                    <th className="right">QTY <i className="caret-arrow" /></th>
+                    <th className="right">TOTAL <i className="caret-arrow" /></th>
                   </tr>
                 </thead>
                 <tbody>

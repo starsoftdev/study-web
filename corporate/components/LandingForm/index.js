@@ -76,6 +76,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
 
     const cityAndState = (city && state) ? ` ${city}, ${state}` : '';
 
+    const title = (landing.title) ? landing.title : indication;
     const fullNamePlaceholder = (landing.fullNamePlaceholder) ? landing.fullNamePlaceholder : '* Full Name';
     const emailPlaceholder = (landing.emailPlaceholder) ? landing.emailPlaceholder : '* Email';
     const phonePlaceholder = (landing.phonePlaceholder) ? landing.phonePlaceholder : '* Mobile Phone';
@@ -110,7 +111,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
         onSubmit={handleSubmit}
       >
         <h1 className="main-heading">
-          {indication}
+          {title}
         </h1>
         {city &&
           <h2 className="txt-orange">

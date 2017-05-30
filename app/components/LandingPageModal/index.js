@@ -122,6 +122,7 @@ export class LandingPageModal extends React.Component {
 
         if (!this.state.initialValuesEntered) {
           const { change } = this.props;
+          change('title', landing.title);
           change('instructions', landing.instructions);
           change('fullNamePlaceholder', landing.fullNamePlaceholder);
           change('emailPlaceholder', landing.emailPlaceholder);
@@ -161,6 +162,7 @@ export class LandingPageModal extends React.Component {
       }, () => {
         fetchLanding(this.state.selected.study_id);
         resetChangeAddState();
+        this.closeStudyAddModal();
       });
     }
   }
@@ -218,10 +220,13 @@ export class LandingPageModal extends React.Component {
   }
 
   uploadStudyAdd(e) {
-    e.toBlob((blob) => {
-      this.props.submitStudyAdd({ file: blob, study_id: this.state.selected.study_id });
-      this.closeStudyAddModal();
-    });
+    if (e.type !== 'application/pdf') {
+      e.toBlob((blob) => {
+        this.props.submitStudyAdd({ file: blob, study_id: this.state.selected.study_id });
+      });
+    } else {
+      this.props.submitStudyAdd({ file: e, study_id: this.state.selected.study_id });
+    }
   }
 
   render() {
@@ -268,6 +273,19 @@ export class LandingPageModal extends React.Component {
               noValidate="novalidate"
             >
               <div className="frame">
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-first-name">Title</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="text"
+                      id="enter-landing-page-name"
+                      name="title"
+                      component={Input}
+                    />
+                  </div>
+                </div>
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-first-name">Enter Your...</label>

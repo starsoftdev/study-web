@@ -2,6 +2,7 @@
 .dashboard-sponsor,
 .dashboard-protocol,
 .dashboard-cro,
+.dashboard-note,
 .dashboard-indication
 {
   .custom-select{
@@ -206,6 +207,45 @@
 
 
 .dashboard{
+  .special_ellipsis_link{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 325px;
+    white-space: nowrap;
+    display: inline-block;
+    line-height: 1.3 !important;
+  }
+  .special_ellipsis_div{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 325px;
+    white-space: nowrap;
+    display: inline-block;
+    line-height: 1 !important;
+  }
+  @media screen and (max-width: @psd) {
+    .special_ellipsis_link{
+      width: 245px;
+    }
+    .special_ellipsis_div{
+      width: 245px;
+    }
+  }
+
+  .dashboard-total-spinner{
+    position: absolute;
+    left: 50%;
+  }
+  .dashboard-studies-spinner{
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+  }
+  .landing-link{
+    &:hover {
+      cursor: pointer;
+    }
+  }
   .table-left {
     overflow-x: hidden;
   }
