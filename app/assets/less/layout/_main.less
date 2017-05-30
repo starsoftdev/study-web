@@ -4862,7 +4862,9 @@ div[data-percentage],
     span {
       display: block;
       &.first-name, &.last-name {
-        .break-word();
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
   }
@@ -5289,7 +5291,7 @@ div[data-percentage],
 /* patient database page  */
 /*****************/
 @import "../../../containers/PatientDatabasePage/styles";
-@import "../../../containers/PatientDatabasePage/PatientsList/styles";
+@import "../../../components/PatientsList/styles";
 @import "../../../components/SearchPatientsForm/styles";
 /*****************/
 /* manage sites/users page  */

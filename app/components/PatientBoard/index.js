@@ -15,6 +15,7 @@ import { touch, change } from 'redux-form';
 import Scroll from 'react-scroll';
 
 import { SchedulePatientModalType } from '../../common/constants/index';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import PatientDetailModal from '../../containers/StudyPage/PatientDetail/PatientDetailModal';
 import ScheduledPatientModal from '../../containers/StudyPage/ScheduledPatientModal/index';
 import {
@@ -68,6 +69,7 @@ class PatientBoard extends React.Component {
     studyId: React.PropTypes.number,
     setFormValueByName: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
+    fetchingPatients: React.PropTypes.any,
   };
 
   constructor(props) {
@@ -247,10 +249,11 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
+          {(fetchingPatients) && <LoadingSpinner showOnlyIcon={false} noMessage />}
           <nav className="nav-status">
             <ul className={classNames('list-inline', { stick: this.state.stick })}>
               {patientCategories.map(patientCategory => (

@@ -8,19 +8,21 @@ import moment from 'moment-timezone';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
 
-import Checkbox from '../../../components/Input/Checkbox';
-import CenteredModal from '../../../components/CenteredModal/index';
-import EditPatientForm from '../../../containers/PatientDatabasePage/EditPatientForm';
-import ChatForm from '../../../components/ChatForm';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import Checkbox from '../../components/Input/Checkbox';
+import CenteredModal from '../../components/CenteredModal/index';
+import EditPatientForm from '../../containers/PatientDatabasePage/EditPatientForm';
+import ChatForm from '../../components/ChatForm';
 import { selectPatients,
   selectSelectedPatient,
   selectSelectedPatientDetailsForForm,
   selectSavedPatient,
-  selectChat } from '../../../containers/PatientDatabasePage/selectors';
+  selectChat } from '../../containers/PatientDatabasePage/selectors';
 import {
   sendStudyPatientMessages,
-} from '../../../containers/GlobalNotifications/actions';
-import { clearSelectedPatient,
+} from '../../containers/GlobalNotifications/actions';
+import {
+  clearSelectedPatient,
   savePatient,
   initChat,
   disableChat,
@@ -28,10 +30,11 @@ import { clearSelectedPatient,
   removePatientsFromTextBlast,
   removePatientFromTextBlast,
   setActiveSort,
-  sortPatientsSuccess } from '../actions';
-import { selectProtocols, selectCurrentUser } from '../../App/selectors';
+  sortPatientsSuccess,
+} from '../../containers/PatientDatabasePage/actions';
+import { selectProtocols, selectCurrentUser } from '../../containers/App/selectors';
 import PatientItem from './PatientItem';
-import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../common/helper/functions';
 
 const formName = 'PatientDatabase.TextBlastModal';
 
@@ -182,6 +185,13 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
         <PatientItem {...patient} key={index} index={index} openChat={this.openChat} />
       );
     });
+
+    if (!patients.details.length && patients.fetching) {
+      return (
+        <LoadingSpinner showOnlyIcon={false} noMessage />
+      );
+    }
+
     if (patients.details.length > 0) {
       return (
         <div className="table">
@@ -191,13 +201,15 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
             loadMore={this.loadItems}
             initialLoad={false}
             hasMore={this.props.paginationOptions.hasMoreItems}
-            loader={<span>Loading...</span>}
+            loader={false}
           >
             {patientsListContents}
+            {(patients.fetching) && <LoadingSpinner showOnlyIcon={false} noMessage />}
           </InfiniteScroll>
         </div>
       );
     }
+
     return null;
   }
 

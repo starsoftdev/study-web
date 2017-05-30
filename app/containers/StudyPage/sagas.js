@@ -627,6 +627,7 @@ function* submitPatientUpdate() {
     // listen for the SUBMIT_PATIENT_UPDATE action
     const { patientId, fields } = yield take(SUBMIT_PATIENT_UPDATE);
     const authToken = getItem('auth_token');
+    const userId = getItem('user_id');
     if (!authToken) {
       return;
     }
@@ -635,7 +636,7 @@ function* submitPatientUpdate() {
       const requestURL = `${API_URL}/patients/${patientId}`;
       const response = yield call(request, requestURL, {
         method: 'PATCH',
-        body: JSON.stringify(fields),
+        body: JSON.stringify({ ...fields, userId }),
       });
       yield put(updatePatientSuccess(response));
     } catch (e) {

@@ -5,7 +5,7 @@ import { map, omit, omitBy, isUndefined } from 'lodash';
 import { createStructuredSelector } from 'reselect';
 
 import SearchPatientsForm from '../../components/SearchPatientsForm/index';
-import PatientsList from '../../containers/PatientDatabasePage/PatientsList/index';
+import PatientsList from '../../components/PatientsList/index';
 import { fetchIndications, fetchSources, fetchClientSites, fetchProtocols } from '../../containers/App/actions';
 import { fetchPatientCategories, fetchPatients, clearPatientsList, resetTextBlast } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
