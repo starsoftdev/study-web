@@ -220,6 +220,13 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
 
     let clientAdmins = this.props.clientAdmins.details;
 
+
+    if (this.props.clientAdminSearchFormValues.name) {
+      clientAdmins = clientAdmins.filter(item => `${item.first_name} ${item.last_name}`.toLowerCase()
+        .indexOf(this.props.clientAdminSearchFormValues.name.toLowerCase()) !== -1 || `${item.client_name}`.toLowerCase()
+        .indexOf(this.props.clientAdminSearchFormValues.name.toLowerCase()) !== -1);
+    }
+
     if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
       const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
 
