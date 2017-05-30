@@ -253,7 +253,7 @@ class PatientBoard extends React.Component {
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
-          {(fetchingPatients) && <LoadingSpinner showOnlyIcon={false} size={50} />}
+          {(fetchingPatients) && <LoadingSpinner showOnlyIcon={false} noMessage />}
           <nav className="nav-status">
             <ul className={classNames('list-inline', { stick: this.state.stick })}>
               {patientCategories.map(patientCategory => (
