@@ -4862,7 +4862,9 @@ div[data-percentage],
     span {
       display: block;
       &.first-name, &.last-name {
-        .break-word();
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
   }

@@ -7,10 +7,32 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import { createStructuredSelector } from 'reselect';
 import { DashboardClientAdminsSearch } from './DashboardClientAdminsSearch';
 import { DashboardClientAdminsTable } from './DashboardClientAdminsTable';
-import { addMessagingNumber, editMessagingNumber, getAvailPhoneNumbers, fetchSites, fetchClientAdmin, addClientAdmin, editClientAdmin, deleteClientAdmin, fetchUsersByRoles, setActiveSort } from './actions';
-import selectDashboardClientAdminsPage, { selectDashboardAddMessagingProcess, selectDashboardEditMessagingProcess, selectDashboardAvailPhoneNumbers, selectDashboardClientSites, selectDashboardClientAdminsUsersByRoles, selectDashboardClientAdmins, selectDashboardClientAdminSearchFormValues, selectDashboardEditUserProcess, selectPaginationOptions } from './selectors';
+import {
+  addMessagingNumber,
+  editMessagingNumber,
+  getAvailPhoneNumbers,
+  fetchSites,
+  fetchClientAdmin,
+  addClientAdmin,
+  editClientAdmin,
+  deleteClientAdmin,
+  fetchUsersByRoles,
+  setActiveSort,
+} from './actions';
+import {
+  selectDashboardAddMessagingProcess,
+  selectDashboardEditMessagingProcess,
+  selectDashboardAvailPhoneNumbers,
+  selectDashboardClientSites,
+  selectDashboardClientAdminsUsersByRoles,
+  selectDashboardClientAdmins,
+  selectDashboardClientAdminSearchFormValues,
+  selectDashboardEditUserProcess,
+  selectPaginationOptions,
+} from './selectors';
 
 export class DashboardClientAdminsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -78,7 +100,7 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
   }
 }
 
-const mapStateToProps = selectDashboardClientAdminsPage({
+const mapStateToProps = createStructuredSelector({
   clientSites : selectDashboardClientSites(),
   availPhoneNumbers: selectDashboardAvailPhoneNumbers(),
   clientAdmins: selectDashboardClientAdmins(),
