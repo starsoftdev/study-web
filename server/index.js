@@ -16,25 +16,12 @@ const app = express();
 app.use(helmet());
 
 // setup CORS for production
-let whitelist;
+// wasn't able to set up CORS for not blocking client requests to it if it wasn't set to allow for all IPs
 const corsOptions = {
   credentials: true,
   maxAge: 86400,
 };
-if (process.env.NODE_ENV === 'production' && (process.env.SOCKET_URL === 'https://api.studykik.org' || process.env.SOCKET_URL === 'https://api.studykik.com')) {
-  whitelist = ['https://api.studykik.com', 'https://studykik.com', 'https://api.studykik.org', 'https://studykik.org', 'https://connect.facebook.net', 'https://connect.facebook.com'];
-  corsOptions.origin = (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      const err = new Error('Not allowed by CORS');
-      err.status = 400;
-      callback(err);
-    }
-  };
-} else {
-  corsOptions.origin = true;
-}
+corsOptions.origin = true;
 app.use(cors(corsOptions));
 
 // In production we need to pass these values in instead of relying on webpack
