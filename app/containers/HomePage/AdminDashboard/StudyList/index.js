@@ -10,6 +10,7 @@ import { defaultRanges, DateRange } from 'react-date-range';
 import { Field, change } from 'redux-form';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
+import LoadingSpinner from '../../../../components/LoadingSpinner';
 
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import LandingPageModal from '../../../../components/LandingPageModal';
@@ -23,6 +24,7 @@ import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
 import { setHoverRowIndex, setEditStudyFormValues } from '../actions';
+import { submitToClientPortal } from '../../../DashboardPortalsPage/actions';
 
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -52,6 +54,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     setHoverRowIndex: PropTypes.func,
     setEditStudyFormValues: PropTypes.func,
     filtersFormValues: PropTypes.object,
+    submitToClientPortal: PropTypes.func,
   };
 
   constructor(props) {
@@ -72,6 +75,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.showLandingPageModal = this.showLandingPageModal.bind(this);
     this.showThankYouPageModal = this.showThankYouPageModal.bind(this);
     this.showPatientThankYouPageModal = this.showPatientThankYouPageModal.bind(this);
+    this.showIndicationPageModal = this.showIndicationPageModal.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.campaignChanged = this.campaignChanged.bind(this);
@@ -100,6 +104,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       showLandingPageModal: false,
       showThankYouPageModal: false,
       showPatientThankYouPageModal: false,
+      showIndicationPageMdal: false,
       studies: bindSelection(props.studies),
       selectedAllStudies: false,
       selectedStudyCount: 0,
@@ -114,6 +119,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       thankYouPageOnTop: false,
       patientThankYouEmailPageOnTop: false,
       editStudyPageOnTop: false,
+      indicationPageOnTop: false,
       stickyLeftOffset: false,
     };
   }
@@ -341,6 +347,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         thankYouPageOnTop: false,
         patientThankYouEmailPageOnTop: false,
         editStudyPageOnTop: false,
+        indicationPageOnTop: false,
 
         openedPages: pages,
       });
@@ -366,6 +373,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         thankYouPageOnTop: visible,
         patientThankYouEmailPageOnTop: false,
         editStudyPageOnTop: false,
+        indicationPageOnTop: false,
 
         openedPages: pages,
       });
@@ -391,6 +399,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         thankYouPageOnTop: false,
         patientThankYouEmailPageOnTop: visible,
         editStudyPageOnTop: false,
+        indicationPageOnTop: false,
 
         openedPages: pages,
       });
@@ -416,6 +425,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         thankYouPageOnTop: false,
         patientThankYouEmailPageOnTop: false,
         editStudyPageOnTop: visible,
+        indicationPageOnTop: false,
 
         openedPages: pages,
       });
@@ -430,6 +440,32 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       });
     }
     // change('dashboardEditStudyForm', 'messagingNumber', this.props.editStudyValues.text_number_id);
+  }
+
+  showIndicationPageModal(visible) {
+    const pages = this.state.openedPages;
+    if (visible) {
+      pages.push('indicationPageOnTop');
+      this.setState({
+        showIndicationPageMdal: visible,
+        landingPageOnTop: false,
+        thankYouPageOnTop: false,
+        patientThankYouEmailPageOnTop: false,
+        editStudyPageOnTop: false,
+        indicationPageOnTop: visible,
+
+        openedPages: pages,
+      });
+    } else {
+      pages.pop();
+      this.setState({
+        showIndicationPageMdal: visible,
+        indicationPageOnTop: visible,
+        [pages[(pages.length - 1)]]: true,
+
+        openedPages: pages,
+      });
+    }
   }
 
   campaignChanged(e) {
@@ -508,6 +544,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         onStatusChange={this.changeStudyStatus}
         changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
         setHoverRowIndex={this.props.setHoverRowIndex}
+        submitToClientPortal={this.props.submitToClientPortal}
       />
     );
     const studyListRightContents = studies.map((item, index) =>
@@ -526,12 +563,13 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     for (let i = 1; i <= maxCampaignCount; i++) {
       if (i === 1) {
         campaignOptions.push({ label: 'Oldest', value: 'oldest' });
-      } else if (i === maxCampaignCount) {
-        campaignOptions.push({ label: 'Newest', value: 'newest' });
       } else {
         campaignOptions.push({ label: i, value: i });
       }
     }
+    campaignOptions.push({ label: 'Current', value: 'newest' });
+
+    const selectedCampaign = this.props.filtersFormValues.campaign || 'oldest';
 
     campaignOptions = campaignOptions.reverse();
 
@@ -594,6 +632,15 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         bsStyle="primary"
                         className="pull-left"
                         data-class="btn-deactivate"
+                        onClick={() => this.showIndicationPageModal(true)}
+                      > Indication </Button>
+                    }
+                    {
+                      selectedStudyCount === 1 &&
+                      <Button
+                        bsStyle="primary"
+                        className="pull-left"
+                        data-class="btn-deactivate"
                         onClick={() => this.showEditInformationModal(true)}
                       > Edit </Button>
                     }
@@ -632,6 +679,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                           searchable
                           options={campaignOptions}
                           customSearchIconClass="icomoon-icon_search2"
+                          selectedValue={selectedCampaign}
                           onChange={this.campaignChanged}
                         />
                       </div>
@@ -696,7 +744,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                     loadMore={this.loadItems}
                     initialLoad={false}
                     hasMore={this.props.paginationOptions.hasMoreItems}
-                    loader={<span>Loading...</span>}
+                    loader={<LoadingSpinner showOnlyIcon />}
                   >
                     <StickyContainer className="table-area">
                       <div className="table-left" data-table="">
@@ -766,7 +814,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                                 <thead>
                                   <tr>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="location" className={`${(this.props.paginationOptions.activeSort === 'location') ? this.props.paginationOptions.activeDirection : ''}`}>LOCATION<i className="caret-arrow" /></div>
+                                      <div onClick={this.sortBy} data-sort="location" className={`${(this.props.paginationOptions.activeSort === 'location') ? this.props.paginationOptions.activeDirection : ''}`}>ADDRESS<i className="caret-arrow" /></div>
                                     </th>
                                     <th>
                                       <div onClick={this.sortBy} data-sort="exposureLevel" className={`${(this.props.paginationOptions.activeSort === 'exposureLevel') ? this.props.paginationOptions.activeDirection : ''}`}>EXPOSURE LEVEL<i className="caret-arrow" /></div>
@@ -842,6 +890,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         </div>
                       </div>
                     </StickyContainer>
+                    { this.props.studies.fetching && <div className="dashboard-studies-spinner"><LoadingSpinner showOnlyIcon /></div> }
                   </InfiniteScroll>
                 </div>
                 <EditInformationModal
@@ -926,6 +975,7 @@ const mapDispatchToProps = (dispatch) => ({
   change: (formName, name, value) => dispatch(change(formName, name, value)),
   setHoverRowIndex: (index) => dispatch(setHoverRowIndex(index)),
   setEditStudyFormValues: (values) => dispatch(setEditStudyFormValues(values)),
+  submitToClientPortal: (id) => dispatch(submitToClientPortal(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyList);

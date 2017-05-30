@@ -6,10 +6,12 @@ import { get } from 'lodash';
 import { takeLatest } from 'redux-saga';
 import { reset } from 'redux-form';
 import moment from 'moment-timezone';
+import { push } from 'react-router-redux';
 
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 import { logout } from '../../containers/LoginPage/actions';
+import { setItem } from '../../utils/localStorage';
 
 import {
   FETCH_INDICATIONS,
@@ -59,6 +61,10 @@ import {
   FETCH_USERS_BY_ROLE,
   CHANGE_TEMPORARY_PASSWORD,
 } from '../../containers/App/constants';
+
+import {
+  SUBMIT_TO_CLIENT_PORTAL,
+} from '../../containers/DashboardPortalsPage/constants';
 
 import {
   indicationsFetched,
@@ -139,6 +145,7 @@ import {
   fetchCroError,
   fetchUsersByRoleSuccess,
   fetchUsersByRoleError,
+  setUserData,
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -186,6 +193,7 @@ export default function* baseDataSaga() {
   yield fork(fetchProtocolsWatcher);
   yield fork(fetchCroWatcher);
   yield fork(fetchUsersByRoleWatcher);
+  yield fork(submitToClientPortalWatcher);
 }
 
 export function* fetchIndicationsWatcher() {
@@ -926,7 +934,7 @@ function* postFindOutPatients(action) {
 
 function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
   try {
-    const { postalCode, distance, indicationId } = action.params;
+    const { postalCode, distance, indicationId, from } = action.params;
     const queryParams = {};
     if (postalCode) {
       queryParams.postalCode = postalCode;
@@ -936,6 +944,9 @@ function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
     }
     if (indicationId) {
       queryParams.indicationId = indicationId;
+    }
+    if (from !== false || from !== null) {
+      queryParams.from = from;
     }
     const queryString = composeQueryString(queryParams);
     const requestURL = `${API_URL}/studies/getNearbyStudies?${queryString}`;
@@ -1131,5 +1142,23 @@ export function* fetchUsersByRoleWatcher() {
       yield put(toastrActions.error('', errorMessage));
       yield put(fetchUsersByRoleError(err));
     }
+  }
+}
+
+export function* submitToClientPortalWatcher() {
+  yield* takeLatest(SUBMIT_TO_CLIENT_PORTAL, submitToClientPortalWorker);
+}
+
+export function* submitToClientPortalWorker(action) {
+  try {
+    const requestURL = `${API_URL}/users/${action.userId}/get-full-user-info`;
+    const response = yield call(request, requestURL);
+
+    yield call(setItem, 'user_id', response.id);
+    yield put(setUserData(response));
+    yield put(push('/app'));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong');
+    yield put(toastrActions.error('', errorMessage));
   }
 }

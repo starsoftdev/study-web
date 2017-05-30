@@ -9,7 +9,7 @@ import {
   PROPOSALS_RECEIVED,
 } from './constants';
 
-const initialState = false;
+const initialState = [];
 
 function proposalsReducer(state = initialState, action) {
   switch (action.type) {

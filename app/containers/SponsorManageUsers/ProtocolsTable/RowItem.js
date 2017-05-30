@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import EditProtocolForm from '../EditProtocolForm';
 import ExpandedItem from './ExpandedItem';
+import { selectEditProtocolProcess } from '../selectors';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -17,6 +18,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     searchFormValues: React.PropTypes.object,
     editProtocol: PropTypes.func,
     currentUser: React.PropTypes.object,
+    editProtocolProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -31,6 +33,12 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     this.closeEditProtocolModal = this.closeEditProtocolModal.bind(this);
     this.openEditProtocolModal = this.openEditProtocolModal.bind(this);
     this.editLocalProtocol = this.editLocalProtocol.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if ((!newProps.editProtocolProcess.saving && this.props.editProtocolProcess.saving)) {
+      this.closeEditProtocolModal();
+    }
   }
 
   toggleAssignedUsers() {
@@ -58,6 +66,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         id: protocol.id,
         name: protocol.number,
         value,
+        studies: protocol.studies,
       });
     });
 
@@ -86,12 +95,12 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
     const initialValues = {
       initialValues: {
-        protocolNumber: this.props.item.protocol.number,
-        indication: this.props.item.indication.name,
-        cro: this.props.item.cro ? this.props.item.cro.name : '',
-        irb: this.props.item.irbName,
+        protocolNumber: this.props.item.protocolNumber,
+        indication: this.props.item.indicationName,
+        cro: this.props.item.cro ? this.props.item.croName : '',
+        irb: this.props.item.irb,
         iwrs: this.props.item.iwrs,
-        id: this.props.item.id,
+        protocolId: this.props.item.protocolId,
       },
     };
 
@@ -100,16 +109,16 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     return (
       <tr>
         <td className="col1">
-          {this.props.item.protocol.number}
+          {this.props.item.protocolNumber}
         </td>
         <td className="col2">
-          {this.props.item.indication.name}
+          {this.props.item.indicationName}
         </td>
         <td className="col3">
-          {this.props.item.cro ? this.props.item.cro.name : ''}
+          {this.props.item.croName}
         </td>
         <td className="col4">
-          {this.props.item.irbName}
+          {this.props.item.irb}
         </td>
         <td className="col5">
           {this.props.item.iwrs}
@@ -152,6 +161,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 }
 
 const mapStateToProps = createStructuredSelector({
+  editProtocolProcess: selectEditProtocolProcess(),
 });
 
 function mapDispatchToProps(dispatch) {

@@ -66,7 +66,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     const startDate = item.campaign_datefrom ? campaignDateFrom.format('MM/DD/YY') : 'TBD';
     const endDate = item.campaign_dateto ? campaignDateTo.format('MM/DD/YY') : 'TBD';
 
-    let campaignName = this.props.filtersFormValues.campaign ? this.props.filtersFormValues.campaign.toString() : 'Newest';
+    let campaignName = this.props.filtersFormValues.campaign ? this.props.filtersFormValues.campaign.toString() : 'Oldest';
     campaignName = campaignName.charAt(0).toUpperCase() + campaignName.slice(1);
 
     return (
@@ -78,7 +78,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
 
         className={(this.props.hoverRowIndex === item.study_id) ? 'active-table-row' : ''}
       >
-        <td><span className="location">{`${item.site_address ? item.site_address : ''} ${item.site_city ? item.site_city : ''}, ${item.site_state ? item.site_state : ''} ${item.site_zip ? item.site_zip : ''}`}</span></td>
+        <td><span className="location">{`${item.site_address ? item.site_address : ''} ${item.site_city ? item.site_city : ''}${(item.site_city && item.site_state) ? ',' : ''} ${item.site_state ? item.site_state : ''} ${item.site_zip ? item.site_zip : ''}`}</span></td>
         <td><span className="exposure-level">{item.level_name}</span></td>
         <td>
           <ul className="list-unstyled">
@@ -122,44 +122,44 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
         </td>
         <td>
           <ul className="list-unstyled">
-            <li>{item.count_not_contacted_campaign}</li>
-            <li>{item.count_not_contacted}</li>
+            <li>{item.count_not_contacted_campaign || 0}</li>
+            <li>{item.count_not_contacted || 0}</li>
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            <li>{item.call_attempted_campaign}</li>
-            <li>{item.call_attempted}</li>
+            <li>{item.call_attempted_campaign || 0}</li>
+            <li>{item.call_attempted || 0}</li>
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            <li>{item.dnq_campaign}</li>
-            <li>{item.dnq}</li>
+            <li>{item.dnq_campaign || 0}</li>
+            <li>{item.dnq || 0}</li>
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            <li>{item.action_needed_campaign}</li>
-            <li>{item.action_needed}</li>
+            <li>{item.action_needed_campaign || 0}</li>
+            <li>{item.action_needed || 0}</li>
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            <li>{item.scheduled_campaign}</li>
-            <li>{item.scheduled}</li>
+            <li>{item.scheduled_campaign || 0}</li>
+            <li>{item.scheduled || 0}</li>
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            <li>{item.consented_campaign}</li>
-            <li>{item.consented}</li>
+            <li>{item.consented_campaign || 0}</li>
+            <li>{item.consented || 0}</li>
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            <li>{item.randomized_campaign}</li>
-            <li>{item.randomized}</li>
+            <li>{item.randomized_campaign || 0}</li>
+            <li>{item.randomized || 0}</li>
           </ul>
         </td>
       </tr>

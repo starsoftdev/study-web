@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 
 import CenteredModal from '../../../components/CenteredModal/index';
 import EditSponsorUserForm from '../EditSponsorUserForm';
+import { selectEditUserProcess } from '../selectors';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -14,6 +15,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     protocols: PropTypes.array,
     deleteUser: PropTypes.func,
     currentUser: React.PropTypes.object,
+    editUserProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -28,6 +30,12 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
     this.editLocalUser = this.editLocalUser.bind(this);
     this.deleteLocalUser = this.deleteLocalUser.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if ((!newProps.editUserProcess.saving && this.props.editUserProcess.saving)) {
+      this.closeAddUserModal();
+    }
   }
 
   closeAddUserModal() {
@@ -47,23 +55,33 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   }
 
   render() {
-    const initialValues = {
-      initialValues: {
-        firstName: this.props.item.first_name,
-        lastName: this.props.item.last_name,
-        id: this.props.item.id,
-        email: this.props.item.email,
-      },
-    };
-
     const options = [];
     _.forEach(this.props.protocols, (protocol) => {
       options.push({
         id: protocol.id,
         name: protocol.number,
         value: true,
+        studies: protocol.studies,
       });
     });
+
+    const componentValues = [{ isAdmin: true }];
+
+    _.forEach(options, (item) => {
+      if (item.value) {
+        componentValues.push(item);
+      }
+    });
+
+    const initialValues = {
+      initialValues: {
+        firstName: this.props.item.first_name,
+        lastName: this.props.item.last_name,
+        id: this.props.item.id,
+        email: this.props.item.email,
+        protocols: componentValues,
+      },
+    };
 
     const isAllowToEdit = (this.props.item.name !== 'Super Admin' && (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin'));
 
@@ -102,6 +120,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 }
 
 const mapStateToProps = createStructuredSelector({
+  editUserProcess: selectEditUserProcess(),
 });
 
 function mapDispatchToProps(dispatch) {

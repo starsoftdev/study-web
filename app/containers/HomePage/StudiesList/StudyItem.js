@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import moment from 'moment-timezone';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
+import ReactTooltip from 'react-tooltip';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 
@@ -108,7 +109,8 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <span>{orderNumber}</span>
         </td>
         <td className="indication">
-          <a href={landingHref} className="landig-link" target="_blank">{indication.name}</a>
+          <a data-for={`indication-${orderNumber}`} data-tip={studyId} href={landingHref} className="tooltip-element landig-link" target="_blank">{indication.name}</a>
+          <ReactTooltip id={`indication-${orderNumber}`} type="info" class="tooltipClass wide" delayHide={500} effect="solid" />
         </td>
         <td className="location">
           <span>{location || siteName}</span>

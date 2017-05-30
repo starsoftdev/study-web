@@ -334,6 +334,18 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
 
           <div className="field-row">
             <Field
+              name="address"
+              className="filter-field"
+              component={ReactMultiCheckBox}
+              placeholder="ADDRESS"
+              optionLabelKey="label"
+              dataSource={filterOptions.nearbyStudiesOptions}
+              customSearchIconClass="icomoon-icon_search2"
+            />
+          </div>
+
+          <div className="field-row">
+            <Field
               name="indication"
               className="filter-field"
               component={ReactMultiCheckBox}

@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { StickyContainer } from 'react-sticky';
 import { Field, reduxForm, reset, change } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 import CenteredModal from '../../../components/CenteredModal';
 import FiltersForm from './FiltersForm';
@@ -35,6 +36,7 @@ import {
 } from './selectors';
 import {
   fetchStudiesDashboard,
+  fetchTotalsDashboard,
   fetchSiteNames,
   fetchSiteLocations,
   updateDashboardStudy,
@@ -59,6 +61,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     studies: PropTypes.array,
     resetForm: PropTypes.func,
     fetchStudiesDashboard: PropTypes.func,
+    fetchTotalsDashboard: PropTypes.func,
     fetchLevels: PropTypes.func,
     levels: PropTypes.array,
     fetchSiteLocations: PropTypes.func,
@@ -106,6 +109,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
         startDate: moment().clone().subtract(30, 'days'),
         endDate: moment(),
       },
+      prevTotalsFilters: [],
+      prevOffset: null,
     };
 
     this.addFilter = this.addFilter.bind(this);
@@ -124,6 +129,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.nearbyFilterChange = this.nearbyFilterChange.bind(this);
     this.nearbyFilterSubmit = this.nearbyFilterSubmit.bind(this);
     this.searchFilterSubmit = this.searchFilterSubmit.bind(this);
+    this.addressFilterSubmit = this.addressFilterSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -136,7 +142,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.props.fetchUsersByRole();
     this.props.fetchMessagingNumbersDashboard();
 
-    this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
+    // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
+    this.props.fetchTotalsDashboard({}, 10, 0);
   }
 
   componentWillReceiveProps(newProps) {
@@ -180,6 +187,11 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
       this.setState({ modalFilters });
     }
 
+    if (filter.name === 'address') {
+      pullAt(modalFilters, 'address');
+      this.setState({ modalFilters });
+    }
+
     if (modalFilters[filter.name]) {
       pullAt(modalFilters[filter.name], findIndex(modalFilters[filter.name], ['label', filter.value]));
       pullAt(modalFilters[filter.name], findIndex(modalFilters[filter.name], ['label', 'All']));
@@ -198,7 +210,11 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.setState({ customFilters: [],
       modalFilters: [] });
     this.props.resetForm();
-    this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
+
+    this.setState({ prevTotalsFilters: {} });
+    this.setState({ prevOffset: null });
+    this.props.fetchTotalsDashboard({}, 10, 0);
+    // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
   }
 
   openFiltersModal() {
@@ -273,6 +289,13 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             onChange: this.nearbyFilterChange,
             onSubmit: this.nearbyFilterSubmit,
           });
+        } else if (key === 'address') {
+          newFilters.push({
+            name: key,
+            type: 'address',
+            value: filterValues.value,
+            onSubmit: this.addressFilterSubmit,
+          });
         } else {
           _.forEach(filterValues, (v) => {
             if ((v.label !== 'All') || (v.label === 'All' && filterValues.length === 1)) {
@@ -301,7 +324,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     _.forEach(filters, (filter, key) => {
       const initFilter = _.cloneDeep(filter);
-      if (key !== 'search' && key !== 'percentage' && key !== 'campaign' && key !== 'nearbyStudies') {
+      if (key !== 'search' && key !== 'percentage' && key !== 'campaign' && key !== 'nearbyStudies' && key !== 'address') {
         const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
         filters[key] = withoutAll;
       }
@@ -320,9 +343,23 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     if (isEmpty) {
       this.props.clearFilters();
-      this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
+      this.props.fetchTotalsDashboard({}, 10, 0);
+      // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
     } else {
-      this.props.fetchStudiesDashboard(filters, limit, offset);
+      if (!_.isEqual(this.state.prevTotalsFilters, filters)) {
+        this.setState({ prevTotalsFilters: _.cloneDeep(filters) });
+        this.props.fetchTotalsDashboard(filters, 10, 0);
+
+        if (this.state.prevOffset === offset) {
+          this.props.fetchStudiesDashboard(filters, limit, offset);
+          this.setState({ prevOffset: offset });
+        }
+      }
+
+      if (this.state.prevOffset !== offset) {
+        this.props.fetchStudiesDashboard(filters, limit, offset);
+        this.setState({ prevOffset: offset });
+      }
     }
   }
 
@@ -347,6 +384,11 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   searchFilterSubmit(e) {
     this.props.dispatch(change('dashboardFilters', 'search', { value: e }));
     this.fetchStudiesAccordingToFilters({ value: e }, 'search');
+  }
+
+  addressFilterSubmit(e) {
+    this.props.dispatch(change('dashboardFilters', 'address', { value: e }));
+    this.fetchStudiesAccordingToFilters({ value: e }, 'address');
   }
 
 
@@ -547,6 +589,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
               }
             </ul>
             <div className="chart pull-left">
+              { this.props.totals.fetching && <div className="dashboard-total-spinner"><LoadingSpinner showOnlyIcon /></div> }
               <PieChart
                 data={pieData1}
                 width={180}
@@ -699,6 +742,7 @@ function mapDispatchToProps(dispatch) {
   return {
     resetForm: () => dispatch(reset('dashboardFilters')),
     fetchStudiesDashboard: (params, limit, offset) => dispatch(fetchStudiesDashboard(params, limit, offset)),
+    fetchTotalsDashboard: (params, limit, offset) => dispatch(fetchTotalsDashboard(params, limit, offset)),
     fetchLevels: () => dispatch(fetchLevels()),
     fetchSiteNames: () => dispatch(fetchSiteNames()),
     fetchSiteLocations: () => dispatch(fetchSiteLocations()),
