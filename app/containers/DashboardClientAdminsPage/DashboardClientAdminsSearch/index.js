@@ -8,7 +8,7 @@ import Input from '../../../components/Input';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddClientAdminsForm } from '../../DashboardClientAdminsPage/AddClientAdminsForm/index';
 
-@reduxForm({ form: 'dashboardClientAdminsSearchForm' })
+@reduxForm({ form: 'dashboardClientAdminSearchForm' })
 
 export class DashboardClientAdminsSearch extends React.Component {
   static propTypes = {

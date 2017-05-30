@@ -230,7 +230,7 @@ export class LandingPageModal extends React.Component {
   }
 
   render() {
-    const { openModal, onClose } = this.props;
+    const { openModal, onClose, changeStudyAddProcess } = this.props;
     let fileSrc = null;
 
     if (this.state.landing) {
@@ -530,7 +530,7 @@ export class LandingPageModal extends React.Component {
               </a>
             </Modal.Header>
             <Modal.Body>
-              <StudyAddForm handleSubmit={this.uploadStudyAdd} />
+              <StudyAddForm handleSubmit={this.uploadStudyAdd} changeStudyAddProcess={changeStudyAddProcess} />
             </Modal.Body>
           </Modal>
           <Modal

@@ -14,6 +14,7 @@ import {
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENT_DETAILS_SUCCESS,
+  FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_PROTOCOL_SUCCESS,
   FETCH_SITE_SUCCESS,
@@ -187,6 +188,12 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         patientBoardLoading: false,
         patientCategories: patientCategories(state.patientCategories, null, action.patientId, action),
+      };
+    case FETCH_PATIENT_CATEGORIES:
+      return {
+        ...state,
+        fetchingPatients: true,
+        fetchingPatientCategories: true,
       };
     case FETCH_PATIENT_CATEGORIES_SUCCESS:
       return {

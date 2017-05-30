@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import FileUpload from './FileUpload';
 
 import './styles.less';
@@ -24,6 +25,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
 
   static propTypes = {
     error: React.PropTypes.object,
+    changeStudyAddProcess: React.PropTypes.object,
     handleSubmit: React.PropTypes.func.isRequired,
     reset: React.PropTypes.func.isRequired,
     pristine: React.PropTypes.bool.isRequired,
@@ -96,7 +98,8 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
     }
   }
 
-  handleSave() {
+  handleSave(ev) {
+    ev.preventDefault();
     if (this.state.selectedImage) {
       const avatar = this.avatar;
       const img = avatar.getImage().toDataURL();
@@ -123,7 +126,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
 
   handleFileChange(img, width, height) {
     if (width > 2000 || height > 2000) {
-      this.props.displayToastrError('Image size is too large. Please try uploading a smaller resolution image at a maximum of 2000 x 2000 pixels.');
+      this.props.displayToastrError('Error! The image size is too large. The maximum supported size is 2000x2000 pixels.');
     }
     this.setState({
       selectedImage: img,
@@ -154,12 +157,14 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
     this.setState({
       pdfFile: file,
       pdfPreview: img,
+      manualDisable: false,
     });
   }
 
   render() {
     let width;
     let height;
+    const { changeStudyAddProcess } = this.props;
     const { manualDisable } = this.state;
     if (this.state.selectedImageWidth) {
       // calculate the ratio
@@ -177,6 +182,9 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
       width = 350;
       height = 350;
     }
+
+    const submitButtonText = (changeStudyAddProcess.saving) ? <LoadingSpinner showOnlyIcon size={20} /> : 'update';
+
     return (
       <form className="form-lightbox">
         <div className="drag-drop-uploader">
@@ -247,7 +255,14 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
             </div>
           </div>
           <div className="text-right">
-            <input type="button" className={manualDisable ? 'btn btn-gray' : 'btn btn-default'} onClick={this.handleSave} value="update" disabled={manualDisable} />
+            <button
+              type="submit"
+              className={manualDisable ? 'btn btn-gray' : 'btn btn-default'}
+              onClick={this.handleSave}
+              disabled={manualDisable || changeStudyAddProcess.saving}
+            >
+              {submitButtonText}
+            </button>
           </div>
         </div>
       </form>
