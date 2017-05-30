@@ -4,6 +4,7 @@ require('dotenv').load();
 const express = require('express');
 const logger = require('./logger');
 const helmet = require('helmet');
+const cors = require('cors');
 
 const argv = require('minimist')(process.argv.slice(2));
 const setup = require('./middlewares/frontendMiddleware');
@@ -14,8 +15,27 @@ const app = express();
 
 app.use(helmet());
 
-// If you need a backend, e.g. an API, add your custom backend-specific middleware here
-// app.use('/api', myApi);
+// setup CORS for production
+let whitelist;
+const corsOptions = {
+  credentials: true,
+  maxAge: 86400,
+};
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging' || process.env.NODE_ENV === 'test') {
+  corsOptions.origin = true;
+} else if (process.env.NODE_ENV === 'production') {
+  whitelist = ['https://api.studykik.com', 'https://studykik.com', 'https://api.studykik.org', 'https://studykik.org', 'https://connect.facebook.net', 'https://connect.facebook.com'];
+  corsOptions.origin = (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      const err = new Error('Not allowed by CORS');
+      err.status = 400;
+      callback(err);
+    }
+  };
+}
+app.use(cors(corsOptions));
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {
