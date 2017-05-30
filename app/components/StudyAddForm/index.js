@@ -183,7 +183,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
       height = 350;
     }
 
-    const submitButtonText = (changeStudyAddProcess.saving) ? <LoadingSpinner showOnlyIcon /> : 'update';
+    const submitButtonText = (changeStudyAddProcess.saving) ? <LoadingSpinner showOnlyIcon size={20} /> : 'update';
 
     return (
       <form className="form-lightbox">
@@ -256,9 +256,9 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
           </div>
           <div className="text-right">
             <button
+              type="submit"
               className={manualDisable ? 'btn btn-gray' : 'btn btn-default'}
               onClick={this.handleSave}
-              value="test"
               disabled={manualDisable || changeStudyAddProcess.saving}
             >
               {submitButtonText}
