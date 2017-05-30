@@ -164,7 +164,6 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
   set selectedReceipts(value) {
     this.SelectedReceipts = value;
-    console.log(this.SelectedReceipts);
   }
 
   loadItems() {
