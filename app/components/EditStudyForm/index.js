@@ -323,7 +323,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    const { editedStudy } = this.props;
+    const { editedStudy, changeStudyAddProcess } = this.props;
     const image = (this.state.currentStudy && this.state.currentStudy.image) ? this.state.currentStudy.image : null;
     const fileSrc = this.state.updatedStudyAd || image;
 
@@ -453,7 +453,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
             </a>
           </Modal.Header>
           <Modal.Body>
-            <StudyAddForm handleSubmit={this.uploadStudyAdd} />
+            <StudyAddForm handleSubmit={this.uploadStudyAdd} changeStudyAddProcess={changeStudyAddProcess} />
           </Modal.Body>
         </Modal>
         <Modal
