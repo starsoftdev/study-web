@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, reset, touch, blur } from 'redux-form';
 import inViewport from 'in-viewport';
 import { Link } from 'react-router';
+import Isvg from 'react-inlinesvg';
 
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
@@ -24,8 +25,6 @@ import img17 from '../../assets/images/img17.svg';
 import img18 from '../../assets/images/img18.svg';
 import imgWifi from '../../assets/images/wifi.svg';
 import formValidator, { fields } from './validator';
-
-const Isvg = require('react-inlinesvg');
 
 const formName = 'contactForm';
 
