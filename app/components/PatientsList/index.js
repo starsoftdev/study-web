@@ -188,7 +188,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
 
     if (!patients.details.length && patients.fetching) {
       return (
-        <LoadingSpinner showOnlyIcon={false} size={50} />
+        <LoadingSpinner showOnlyIcon={false} noMessage />
       );
     }
 
@@ -204,7 +204,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
             loader={false}
           >
             {patientsListContents}
-            {(patients.fetching) && <LoadingSpinner showOnlyIcon={false} size={50} />}
+            {(patients.fetching) && <LoadingSpinner showOnlyIcon={false} noMessage />}
           </InfiniteScroll>
         </div>
       );

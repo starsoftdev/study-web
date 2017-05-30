@@ -1,34 +1,44 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
 import FaSpinner from 'react-icons/lib/fa/spinner';
 
-function LoadingSpinner({ message, showOnlyIcon, size }) {
-  if (showOnlyIcon) {
-    return (
-      <FaSpinner size={size || 30} className="spinner-icon text-info" />
-    );
-  }
+class LoadingSpinner extends Component { // eslint-disable-line react/prefer-stateless-function
+  static propTypes = {
+    message: PropTypes.string,
+    showOnlyIcon: PropTypes.bool,
+    noMessage: PropTypes.bool,
+    size: PropTypes.number,
+  };
 
-  return (
-    <div className="container-fluid">
-      <div className="row">
-        <div className="col-xs-12 text-center spinner-container">
-          <p>
-            <FaSpinner size={size || 30} className="spinner-icon text-info" />
-          </p>
-          <p className="text-info spinner-text">
-            {message || 'Loading'}
-          </p>
+  render() {
+    const { message, showOnlyIcon, size, noMessage } = this.props;
+
+    const spinnerText = (
+      <p className="text-info spinner-text">
+        {message || 'Loading'}
+      </p>
+    );
+
+    if (showOnlyIcon) {
+      return (
+        <FaSpinner size={size || 30} className="spinner-icon text-info" />
+      );
+    }
+
+    return (
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-xs-12 text-center spinner-container">
+            <p>
+              <FaSpinner size={size || 30} className="spinner-icon text-info" />
+            </p>
+            {!noMessage && spinnerText}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
-LoadingSpinner.propTypes = {
-  message: PropTypes.string,
-  showOnlyIcon: PropTypes.bool,
-  size: PropTypes.number,
-};
-
-export default LoadingSpinner;
+export default connect(null, null)(LoadingSpinner);
