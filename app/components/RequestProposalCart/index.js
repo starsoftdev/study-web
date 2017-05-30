@@ -101,7 +101,7 @@ export class RequestProposalCart extends Component {
     }
 
     if (formValues.patientQualificationSuite) {
-      totalPrice += QUALIFICATION_SUITE_PRICE;
+      totalPrice += QUALIFICATION_SUITE_PRICE * months.value;
     }
 
     const newFormValues = formValues;
@@ -164,8 +164,8 @@ export class RequestProposalCart extends Component {
       products.push({
         title: 'Patient Qualification Suite',
         price: QUALIFICATION_SUITE_PRICE,
-        quantity: 1,
-        total: QUALIFICATION_SUITE_PRICE,
+        quantity: months.value,
+        total: QUALIFICATION_SUITE_PRICE * months.value,
       });
     }
 
