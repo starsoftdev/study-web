@@ -1273,7 +1273,7 @@ input[type=submit].input-lg,
 		position: relative;
 	}
 	
-	div > .input-lg {
+	div > .input-lg, .field-wrapper {
     margin: 30px 0 0;
 
     @media screen and (max-width: @desktop) {
@@ -1284,6 +1284,7 @@ input[type=submit].input-lg,
       margin: 15px 0 0;
     }
 		
+		&.focus,
 		&:focus,
 		&:hover {
 			~ .images .img-holder {
