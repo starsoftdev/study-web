@@ -21,9 +21,7 @@ const corsOptions = {
   credentials: true,
   maxAge: 86400,
 };
-if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging' || process.env.NODE_ENV === 'test') {
-  corsOptions.origin = true;
-} else if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' && (process.env.SOCKET_URL === 'https://api.studykik.org' || process.env.SOCKET_URL === 'https://api.studykik.com')) {
   whitelist = ['https://api.studykik.com', 'https://studykik.com', 'https://api.studykik.org', 'https://studykik.org', 'https://connect.facebook.net', 'https://connect.facebook.com'];
   corsOptions.origin = (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1) {
@@ -34,6 +32,8 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging'
       callback(err);
     }
   };
+} else {
+  corsOptions.origin = true;
 }
 app.use(cors(corsOptions));
 
