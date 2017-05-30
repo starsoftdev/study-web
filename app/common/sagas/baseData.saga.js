@@ -934,7 +934,7 @@ function* postFindOutPatients(action) {
 
 function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
   try {
-    const { postalCode, distance, indicationId } = action.params;
+    const { postalCode, distance, indicationId, from } = action.params;
     const queryParams = {};
     if (postalCode) {
       queryParams.postalCode = postalCode;
@@ -944,6 +944,9 @@ function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
     }
     if (indicationId) {
       queryParams.indicationId = indicationId;
+    }
+    if (from !== false || from !== null) {
+      queryParams.from = from;
     }
     const queryString = composeQueryString(queryParams);
     const requestURL = `${API_URL}/studies/getNearbyStudies?${queryString}`;

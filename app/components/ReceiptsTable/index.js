@@ -5,10 +5,13 @@
 */
 
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { Field, reduxForm } from 'redux-form';
 import _ from 'lodash';
 import moment from 'moment-timezone';
 import InfiniteScroll from 'react-infinite-scroller';
 import Money from '../../components/Money';
+import Checkbox from '../../components/Input/Checkbox';
 
 const headers = [
   {
@@ -37,6 +40,8 @@ const headers = [
   },
 ];
 
+const formName = 'ReceiptsTable.Receipts';
+@reduxForm({ form: formName })
 class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUser: PropTypes.object,
@@ -96,7 +101,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
       if (key === parseInt(ev.currentTarget.firstChild.name, 10)) {
         receipt.selected = (!receipt.selected);
 
-        if (receipt.selected) {
+        if (receipt.selected && receipt.invoice_pdf_id) {
           if (_.isEmpty(this.selectedReceipts)) {
             this.selectedReceipts = [];
             this.selectedReceipts.push(receipt);
@@ -121,7 +126,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     this.setState({ receipts }, () => {
       let all = true;
       this.props.receipts.forEach((receipt) => {
-        if (!receipt.selected) {
+        if (!receipt.selected && receipt.invoice_pdf_id) {
           all = false;
         }
       });
@@ -137,12 +142,18 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   onClickAll(ev) {
     ev.preventDefault();
     const receipts = this.props.receipts;
+    const selectedArr = [];
+    this.selectedReceipts = null;
     for (const receipt of receipts) {
       receipt.selected = (!this.state.checkAll);
+      if (receipt.invoice_pdf_id && receipt.selected) {
+        selectedArr.push(receipt);
+
+        this.selectedReceipts = selectedArr;
+      }
     }
 
     this.setState({ checkAll: (!this.state.checkAll), receipts }, () => {
-      this.selectedReceipts = (this.state.checkAll) ? receipts : null;
       this.props.selectAll(this.selectedReceipts);
     });
   }
@@ -210,8 +221,31 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
       const siteName = receipt.site_name || '-';
 
       let invoiceIdLink = receipt.invoice_id;
+      let checkbox = (
+        <span className={(receipt.selected) ? 'sm-container checked' : 'sm-container'}>
+          <span className="input-style" onClick={this.onClickCurrent}>
+            <input
+              className="form-control"
+              type="checkbox"
+              name={key}
+              disabled={!receipt.invoice_pdf_id}
+            />
+          </span>
+        </span>
+      );
+
       if (receipt.invoice_pdf_id) {
         invoiceIdLink = <a className="show-pdf-link" onClick={() => this.props.showInvoicePdf(receipt.invoice_id)}>{receipt.invoice_id}</a>;
+      } else {
+        checkbox = (
+          <Field
+            className="receipt-disabled"
+            name={`receipt-${key}`}
+            type="checkbox"
+            disabled
+            component={Checkbox}
+          />
+        );
       }
 
       if (key === 0 || invoiceId !== receipt.invoice_id) {
@@ -219,11 +253,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
         result.push(
           <tr key={key}>
             <td>
-              <span className={(receipt.selected) ? 'sm-container checked' : 'sm-container'}>
-                <span className="input-style" onClick={this.onClickCurrent}>
-                  <input type="checkbox" name={key} />
-                </span>
-              </span>
+              {checkbox}
               <span>{receipt.orderNumber}</span>
             </td>
             <td>{dateWrapper}</td>
@@ -292,4 +322,4 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
   }
 }
 
-export default ReceiptsTable;
+export default connect(null, null)(ReceiptsTable);
