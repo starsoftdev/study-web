@@ -46,6 +46,13 @@ export function createPDF(payload) {
   };
 }
 
+export function getPDF(payload) {
+  return {
+    type: GET_PDF,
+    payload,
+  };
+}
+
 export function pdfCreated(payload) {
   return {
     type: GET_PDF,

@@ -11,7 +11,7 @@ import { shoppingCartFields } from '../../../components/ShoppingCartForm/validat
 import { fetchLevels, saveCard, fetchClientAdmins } from '../../App/actions';
 import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients, selectCurrentUserClientId, selectClientSites } from '../../App/selectors';
 import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../constants';
-import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice } from '../actions';
+import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice, fetchStudies } from '../actions';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions, selectHomePageClientAdmins } from '../selectors';
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { selectRenewStudyFormValues, selectRenewStudyFormError } from '../../../components/RenewStudyForm/selectors';
@@ -50,6 +50,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     sitePatients: React.PropTypes.object,
     sortSuccess: PropTypes.func,
     studies: PropTypes.object,
+    fetchStudies: PropTypes.func,
     clientAdmins: PropTypes.object,
     studyLevels: PropTypes.array,
     touchEditStudy: PropTypes.func,
@@ -127,6 +128,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
     if (!newRenewedStudy.submitting && oldRenewedStudy.submitting) {
       this.closeRenewModal();
+      this.props.fetchStudies(this.props.currentUser);
     }
 
     if (!newUpgradedStudy.submitting && oldUpgradedStudy.submitting) {
@@ -697,6 +699,7 @@ function mapDispatchToProps(dispatch) {
     touchUpgradeStudy: () => dispatch(touch('upgradeStudy', ...upgradeStudyFields)),
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
     upgradeStudy: (studyId, cartValues, formValues) => dispatch(upgradeStudy(studyId, cartValues, formValues)),
+    fetchStudies: (currentUser, searchParams) => dispatch(fetchStudies(currentUser, searchParams)),
     fetchClientAdmins: (id) => dispatch(fetchClientAdmins(id)),
   };
 }
