@@ -117,24 +117,16 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
       }
     }
     return (
-      <form
-        className="form-search clearfix"
-      >
+      <form className="form-search clearfix">
         <div className="btns-area pull-right">
           <div className="col pull-right">
-            <button
-              className="btn btn-primary pull-right"
-              onClick={this.createPdf}
-            >
+            <button className="btn btn-primary pull-right" onClick={this.createPdf}>
               <i className="icomoon-icon_download" /> DOWNLOAD
             </button>
           </div>
 
           <div className="col pull-right">
-            <a
-              className="btn btn-primary lightbox-opener"
-              onClick={this.showPopup}
-            >
+            <a className="btn btn-primary lightbox-opener" onClick={this.showPopup}>
               <i className="icomoon-icon_calendar" /> DATE RANGE
             </a>
           </div>
