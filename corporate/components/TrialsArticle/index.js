@@ -52,7 +52,7 @@ export class TrialsArticle extends Component {
     });
 
     const markdown = md.render(landingDescription);
-    
+
     return (
       <article
         key={index}
