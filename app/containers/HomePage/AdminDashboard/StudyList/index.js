@@ -569,8 +569,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     }
     campaignOptions.push({ label: 'Current', value: 'current' });
 
-    const selectedCampaign = this.props.filtersFormValues.campaign || 1;
-
     campaignOptions = campaignOptions.reverse();
 
     return (
@@ -674,12 +672,11 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                           name="data-search"
                           className="data-search"
                           component={ReactSelect}
-                          placeholder="Campaign"
+                          placeholder="Select Campaign"
                           searchPlaceholder="Search"
                           searchable
                           options={campaignOptions}
                           customSearchIconClass="icomoon-icon_search2"
-                          selectedValue={selectedCampaign}
                           onChange={this.campaignChanged}
                         />
                       </div>
