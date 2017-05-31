@@ -386,7 +386,7 @@ const selectNewContactSuccess = () => createSelector(
 
 const selectTrials = () => createSelector(
   selectGlobal(),
-  (substate) => get(substate, 'baseData.trials.details', {})
+  (substate) => get(substate, 'baseData.trials', {})
 );
 
 const selectTrialsTotal = () => createSelector(

@@ -65,10 +65,6 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
     this.redraw();
   }
 
-  componentDidUpdate() {
-    this.redraw();
-  }
-
   onDragEnterHandler() {
     this.setState({ isDragOver: true });
   }
@@ -104,8 +100,9 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
       const avatar = this.avatar;
       const img = avatar.getImage().toDataURL();
       const rect = avatar.getCroppingRect();
-      this.setState({ preview: img, croppingRect: rect });
-      // this.props.handleSubmit(avatar.getImage());
+      this.setState({ preview: img, croppingRect: rect }, () => {
+        this.redraw();
+      });
     }
     if (this.state.pdfFile) {
       this.props.handleSubmit(this.state.pdfFile);
@@ -186,7 +183,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
     const submitButtonText = (changeStudyAddProcess.saving) ? <LoadingSpinner showOnlyIcon size={20} /> : 'update';
 
     return (
-      <form className="form-lightbox">
+      <form className="form-lightbox" onSubmit={this.handleSave}>
         <div className="drag-drop-uploader">
           <div className={classNames('avatar-editor', { hidden: !this.state.selectedImage })}>
             <ReactAvatarEditor
@@ -258,7 +255,6 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
             <button
               type="submit"
               className={manualDisable ? 'btn btn-gray' : 'btn btn-default'}
-              onClick={this.handleSave}
               disabled={manualDisable || changeStudyAddProcess.saving}
             >
               {submitButtonText}

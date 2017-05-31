@@ -79,7 +79,7 @@ export class TrialsArticle extends Component {
               <i className="icomoon-car" /> {(trial.distance !== null) ? `${trial.distance} Miles` : 'N/A'}
             </p>
             <span className="tel">
-              <i className="icomoon-phone" /> {trial.phone_number}
+              <i className="icomoon-phone" /> {(trial.phone_number !== null) ? trial.phone_number : 'N/A'}
             </span>
           </div>
           <div className="desc">

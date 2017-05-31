@@ -16,9 +16,6 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
 
   static propTypes = {
     handleSubmit: PropTypes.func.isRequired,
-    handleZipChoose: PropTypes.func,
-    handleDistanceChoose: PropTypes.func,
-    handleIndicationChoose: PropTypes.func,
     indications: PropTypes.array,
     individual: PropTypes.bool,
   };
@@ -50,9 +47,6 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
 
   render() {
     const {
-      handleIndicationChoose,
-      handleDistanceChoose,
-      handleZipChoose,
       handleSubmit,
       indications,
       individual,
@@ -84,7 +78,6 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
           placeholder="Postal Code"
           className="field-row"
           bsClass="form-control input-lg"
-          onChange={handleZipChoose}
         />
         <div className="field-row">
           <Field
@@ -93,7 +86,6 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
             placeholder="Select Distance"
             options={distances}
             className="field-lg"
-            onChange={handleDistanceChoose}
           />
         </div>
         {
@@ -105,7 +97,6 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
               placeholder="Select Indication"
               options={indications}
               className="field-lg"
-              onChange={handleIndicationChoose}
             />
           </div>
         }
