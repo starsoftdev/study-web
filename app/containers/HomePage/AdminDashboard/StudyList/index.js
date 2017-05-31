@@ -562,14 +562,14 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     let campaignOptions = [];
     for (let i = 1; i <= maxCampaignCount; i++) {
       if (i === 1) {
-        campaignOptions.push({ label: 'Oldest', value: 'oldest' });
+        campaignOptions.push({ label: '1', value: 1 });
       } else {
         campaignOptions.push({ label: i, value: i });
       }
     }
-    campaignOptions.push({ label: 'Current', value: 'newest' });
+    campaignOptions.push({ label: 'Current', value: 'current' });
 
-    const selectedCampaign = this.props.filtersFormValues.campaign || 'oldest';
+    const selectedCampaign = this.props.filtersFormValues.campaign || 1;
 
     campaignOptions = campaignOptions.reverse();
 
