@@ -91,7 +91,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
           </ul>
         </td>
         <td>
-          <div><div className="site-location"><a className="special_ellipsis_link landing-link" onClick={() => { this.props.submitToClientPortal(item.siteAdminUserId); }}>{ item.site_name }</a></div></div>
+          <div><div className="site-location special_ellipsis_link_container"><a className="special_ellipsis_link landing-link" onClick={() => { this.props.submitToClientPortal(item.siteAdminUserId); }}>{ item.site_name }</a></div></div>
           <ul className="list-unstyled">
             <li className="site-number">Site Number: <span>{item.site_id}</span></li>
             <li className="protocol"><div className="special_ellipsis_div">Protocol: <span>{item.protocol_number || 'N/A'}</span></div></li>
