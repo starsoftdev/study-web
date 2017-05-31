@@ -21,6 +21,11 @@ const selectRequestProposalPage = () => createSelector(
   (substate) => substate
 );
 
+const selectFormSubmissionStatus = () => createSelector(
+  selectRequestProposalPageDomain(),
+  (substate) => substate.formSubmissionStatus
+);
+
 const selectCoupon = () => createSelector(
   selectRequestProposalPageDomain(),
   (substate) => substate.coupon
@@ -52,6 +57,7 @@ const selectIndicationLevelPrice = () => createSelector(
 export default selectRequestProposalPage;
 export {
   selectRequestProposalPageDomain,
+  selectFormSubmissionStatus,
   selectCoupon,
   selectProposalDetail,
   selectProposalsFormError,
