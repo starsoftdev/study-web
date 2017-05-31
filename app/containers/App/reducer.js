@@ -116,6 +116,7 @@ import {
   PATIENT_SUBSCRIPTION_ERROR,
   FIND_OUT_PATIENTS_POSTED,
 
+  CLINICAL_TRIALS_SEARCH,
   CLINICAL_TRIALS_SEARCH_SUCCESS,
   CLEAR_CLINICAL_TRIALS_SEARCH,
   LIST_SITE_NOW_SUCCESS,
@@ -184,6 +185,7 @@ const initialState = {
     trials: {
       details: null,
       total: null,
+      wrongPostalCode: false,
       fetching: false,
       error: null,
     },
@@ -383,6 +385,17 @@ export default function appReducer(state = initialState, action) {
         },
       };
       break;
+    case CLINICAL_TRIALS_SEARCH:
+      baseDataInnerState = {
+        trials: {
+          details: cloneDeep(state.baseData.trials.details),
+          total: state.baseData.trials.total,
+          wrongPostalCode: state.baseData.trials.wrongPostalCode,
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
     case CLINICAL_TRIALS_SEARCH_SUCCESS:
       const trialsCollection = concat(state.baseData.trials.details, payload.data);
       if (trialsCollection && trialsCollection[0] === null) {
@@ -392,6 +405,7 @@ export default function appReducer(state = initialState, action) {
         trials: {
           details: trialsCollection,
           total: payload.total,
+          wrongPostalCode: payload.wrongPostalCode,
           fetching: false,
           error: null,
         },
@@ -402,6 +416,7 @@ export default function appReducer(state = initialState, action) {
         trials: {
           details: null,
           total: null,
+          wrongPostalCode: false,
           fetching: false,
           error: null,
         },
