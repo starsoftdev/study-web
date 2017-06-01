@@ -132,7 +132,7 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
           </div>
         </div>
         <div className="fields-holder">
-          <div className="search-area pull-left">
+          <div className="search-area pull-left no-left-padding">
             <div className="field">
               <Button className="btn-enter">
                 <i className="icomoon-icon_search2" />
