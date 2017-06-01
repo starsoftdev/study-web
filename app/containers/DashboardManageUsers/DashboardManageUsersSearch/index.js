@@ -10,6 +10,7 @@ import CenteredModal from '../../../components/CenteredModal/index';
 import { AddUserForm } from '../../DashboardManageUsers/DashboardManageUsersAddUserForm';
 import { editDashboardUser } from '../actions';
 import { selectDashboardEditUserProcess } from '../selectors';
+import TableActions from '../../../components/TableActions/index';
 
 const mapStateToProps = createStructuredSelector({
   editUserProcess: selectDashboardEditUserProcess(),
@@ -68,15 +69,10 @@ export class DashboardManageUsersSearch extends React.Component {
   render() {
     return (
       <form action="#" className="form-search clearfix">
-        <div className="btns-area row pull-right">
-          <div className="col pull-left">
-            <a className="btn btn-primary lightbox-opener" onClick={this.openAddUserModal}>
-              + Add User
-            </a>
-          </div>
-        </div>
-        <div className="fields-holder">
-          <div className="pull-left col custom-select">
+        <TableActions
+          buttonClickAction={this.openAddUserModal}
+          buttonText="+ Add User"
+          filters={
             <div className="has-feedback ">
               <Button className="btn-enter">
                 <i className="icomoon-icon_search2" />
@@ -89,8 +85,8 @@ export class DashboardManageUsersSearch extends React.Component {
                 className="keyword-search"
               />
             </div>
-          </div>
-        </div>
+          }
+        />
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
           <Modal.Header>

@@ -5,6 +5,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import ReactSelect from '../../components/Input/ReactSelect';
 import AddCouponModal from './AddCouponModal';
+import TableActions from '../TableActions/index';
 
 @reduxForm({ form: 'dashboardCouponForm' })
 
@@ -71,16 +72,11 @@ export class DashboardCouponSearch extends React.Component {
 
     return (
       <form action="#" className="form-search clearfix">
-        <div className="btns-area row pull-right">
-          <div className="col pull-left">
-            <a className="btn btn-primary lightbox-opener" onClick={this.showAddCouponModal}>
-              Add Coupon
-            </a>
-          </div>
-        </div>
-        <div className="fields-holder">
-          <div className="pull-left col custom-select">
-            <div className="has-feedback ">
+        <TableActions
+          buttonClickAction={this.showAddCouponModal}
+          buttonText="Add Coupon"
+          filters={
+            <div className="has-feedback">
               <Field
                 name="coupon"
                 component={ReactSelect}
@@ -88,8 +84,8 @@ export class DashboardCouponSearch extends React.Component {
                 options={options}
               />
             </div>
-          </div>
-        </div>
+          }
+        />
         <AddCouponModal
           show={this.state.addCouponModalOpen}
           initialValues={initialValues}

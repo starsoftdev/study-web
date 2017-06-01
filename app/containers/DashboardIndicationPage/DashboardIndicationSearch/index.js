@@ -9,6 +9,7 @@ import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddIndicationForm } from './AddIndicationForm';
 import { AddExposureLevelForm } from './AddExposureLevelForm';
+import TableActions from '../../../components/TableActions/index';
 
 @reduxForm({ form: 'dashboardIndicationForm' })
 
@@ -104,16 +105,11 @@ export class DashboardIndicationSearch extends React.Component {
 
     return (
       <form action="#" className="form-search clearfix">
-        <div className="btns-area row pull-right">
-          <div className="col pull-left">
-            <a className="btn btn-primary lightbox-opener" onClick={this.openAddIndicationModal}>
-              Add Indication
-            </a>
-          </div>
-        </div>
-        <div className="fields-holder">
-          <div className="pull-left col custom-select">
-            <div className="has-feedback ">
+        <TableActions
+          buttonClickAction={this.openAddIndicationModal}
+          buttonText="Add Indication"
+          filters={
+            <div className="has-feedback">
               <Field
                 name="indication"
                 component={ReactSelect}
@@ -121,8 +117,8 @@ export class DashboardIndicationSearch extends React.Component {
                 options={options}
               />
             </div>
-          </div>
-        </div>
+          }
+        />
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addIndicationModalOpen} onHide={this.closeAddIndicationModal}>
           <Modal.Header>

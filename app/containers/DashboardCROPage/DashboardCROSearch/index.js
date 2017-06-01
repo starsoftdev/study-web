@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddCROForm } from './AddCROForm';
+import TableActions from '../../../components/TableActions/index';
 
 @reduxForm({ form: 'dashboardCROForm' })
 
@@ -57,15 +58,10 @@ export class DashboardCROSearch extends React.Component {
 
     return (
       <form action="#" className="form-search clearfix">
-        <div className="btns-area row pull-right">
-          <div className="col pull-left">
-            <a className="btn btn-primary lightbox-opener" onClick={this.openAddCROModal}>
-              Add CRO
-            </a>
-          </div>
-        </div>
-        <div className="fields-holder">
-          <div className="pull-left col custom-select">
+        <TableActions
+          buttonClickAction={this.openAddCROModal}
+          buttonText="Add CRO"
+          filters={
             <div className="has-feedback ">
               <Field
                 name="cro"
@@ -74,8 +70,8 @@ export class DashboardCROSearch extends React.Component {
                 options={options}
               />
             </div>
-          </div>
-        </div>
+          }
+        />
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addCROModalOpen} onHide={this.closeAddCROModal}>
           <Modal.Header>

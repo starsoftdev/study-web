@@ -187,10 +187,12 @@ class PatientActionButtons extends React.Component {
   render() {
     return (
       <div>
-        <button type="button" className="btn btn-primary download pull-right" onClick={this.download} disabled>
-          <i className="icomoon-icon_download" />
-          &nbsp;Download
-        </button>
+        <div className="col pull-right no-right-padding">
+          <button type="button" className="btn btn-primary download pull-right" onClick={this.download} disabled>
+            <i className="icomoon-icon_download" />
+            &nbsp;Download
+          </button>
+        </div>
         <div className="col pull-right">
           <label onClick={this.toggleImportPatientsModal} className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload" /> Import</label>
         </div>
