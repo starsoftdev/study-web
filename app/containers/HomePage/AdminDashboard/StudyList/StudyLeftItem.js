@@ -104,8 +104,8 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
             <li className="sponsor"><div className="special_ellipsis_div">Sponsor: <span>{item.sponsor_name || 'N/A'}</span></div></li>
             <li className="cro">CRO: <span>{item.cro_name || 'N/A'}</span></li>
             <li className="login-info">Last Login: <span>{lastLoginTime}</span></li>
+            <span><a className="special_ellipsis_link landing-link" onClick={() => { this.showNote(); }}>Note</a></span>
           </ul>
-          <span><a className="special_ellipsis_link landing-link" onClick={() => { this.showNote(); }}>Note</a></span>
         </td>
         <td>
           <ul className="list-unstyled">
