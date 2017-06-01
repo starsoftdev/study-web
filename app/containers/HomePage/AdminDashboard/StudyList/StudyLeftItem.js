@@ -15,6 +15,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     hoverRowIndex: PropTypes.any,
     setHoverRowIndex: PropTypes.func,
     submitToClientPortal: PropTypes.func,
+    showNoteModal: PropTypes.func,
   };
 
   constructor(props) {
@@ -26,6 +27,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     this.mouseOutRow = this.mouseOutRow.bind(this);
     this.showHover = this.showHover.bind(this);
     this.hideHover = this.hideHover.bind(this);
+    this.showNote = this.showNote.bind(this);
   }
 
   mouseOverRow(e, index) {
@@ -42,6 +44,10 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
 
   hideHover() {
     this.setState({ hover: false });
+  }
+
+  showNote() {
+    this.props.showNoteModal();
   }
 
   render() {
@@ -91,13 +97,14 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
           </ul>
         </td>
         <td>
-          <div><div className="site-location"><a className="special_ellipsis_link landing-link" onClick={() => { this.props.submitToClientPortal(item.siteAdminUserId); }}>{ item.site_name }</a></div></div>
+          <div><div className="site-location special_ellipsis_link_container"><a className="special_ellipsis_link landing-link" onClick={() => { this.props.submitToClientPortal(item.siteAdminUserId); }}>{ item.site_name }</a></div></div>
           <ul className="list-unstyled">
             <li className="site-number">Site Number: <span>{item.site_id}</span></li>
             <li className="protocol"><div className="special_ellipsis_div">Protocol: <span>{item.protocol_number || 'N/A'}</span></div></li>
             <li className="sponsor"><div className="special_ellipsis_div">Sponsor: <span>{item.sponsor_name || 'N/A'}</span></div></li>
             <li className="cro">CRO: <span>{item.cro_name || 'N/A'}</span></li>
             <li className="login-info">Last Login: <span>{lastLoginTime}</span></li>
+            <li className="login-info"><span><a className="special_ellipsis_link landing-link" onClick={() => { this.showNote(); }}>Note</a></span></li>
           </ul>
         </td>
         <td>
