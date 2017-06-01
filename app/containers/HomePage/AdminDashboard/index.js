@@ -414,11 +414,12 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     const { customFilters, modalFilters } = this.state;
 
     const filters = concat(this.mapFilterValues(modalFilters), customFilters);
+    const details = this.props.totals.details || {};
 
-    const redCount = parseInt(this.props.totals.details.total_red) || 0;
-    const yellowCount = parseInt(this.props.totals.details.total_yellow) || 0;
-    const greenCount = parseInt(this.props.totals.details.total_green) || 0;
-    const purpleCount = parseInt(this.props.totals.details.total_purple) || 0;
+    const redCount = parseInt(details.total_red) || 0;
+    const yellowCount = parseInt(details.total_yellow) || 0;
+    const greenCount = parseInt(details.total_green) || 0;
+    const purpleCount = parseInt(details.total_purple) || 0;
 
     const colorsTotal = redCount + yellowCount + greenCount + purpleCount;
 
@@ -427,10 +428,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     const greenPercent = greenCount ? ((greenCount / colorsTotal) * 100).toFixed(2) : 0;
     const purplePercent = purpleCount ? ((purpleCount / colorsTotal) * 100).toFixed(2) : 0;
 
-    const tier1Count = parseInt(this.props.totals.details.total_tier_one) || 0;
-    const tier2Count = parseInt(this.props.totals.details.total_tier_two) || 0;
-    const tier3Count = parseInt(this.props.totals.details.total_tier_three) || 0;
-    const tier4Count = parseInt(this.props.totals.details.total_tier_four) || 0;
+    const tier1Count = parseInt(details.total_tier_one) || 0;
+    const tier2Count = parseInt(details.total_tier_two) || 0;
+    const tier3Count = parseInt(details.total_tier_three) || 0;
+    const tier4Count = parseInt(details.total_tier_four) || 0;
 
     const tiersTotal = tier1Count + tier2Count + tier3Count + tier4Count;
 
@@ -481,7 +482,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             <Button bsStyle="primary" onClick={this.props.updateTwilioNumbers}>
               #
             </Button>
-            <Modal dialogComponentClassName={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.addUserModalOpen} onHide={this.closeFiltersModal}>
+            <Modal dialogComponentClass={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.addUserModalOpen} onHide={this.closeFiltersModal}>
               <Modal.Header>
                 <Modal.Title>Filters</Modal.Title>
                 <a className="lightbox-close close" onClick={this.closeFiltersModal}>
@@ -560,19 +561,19 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             <ul className="list-unstyled info-list  pull-left">
               <li>
                 <strong className="heading">TODAY: </strong>
-                <span className="number">{this.props.totals.details.total_today || 0}</span>
+                <span className="number">{details.total_today || 0}</span>
               </li>
               <li>
                 <strong className="heading">YESTERDAY: </strong>
-                <span className="number">{this.props.totals.details.total_yesterday || 0}</span>
+                <span className="number">{details.total_yesterday || 0}</span>
               </li>
               <li>
                 <strong className="heading">CAMPAIGN TOTAL: </strong>
-                <span className="number">{this.props.totals.details.total_campaign || 0}</span>
+                <span className="number">{details.total_campaign || 0}</span>
               </li>
               <li>
                 <strong className="heading">GRAND TOTAL: </strong>
-                <span className="number">{this.props.totals.details.total_grand || 0}</span>
+                <span className="number">{details.total_grand || 0}</span>
               </li>
             </ul>
             <ul className="list-unstyled info-list pull-left">
