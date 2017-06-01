@@ -11,6 +11,7 @@ import { Field, change } from 'redux-form';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
+import DashboardNotePage from '../../../DashboardNotePage';
 
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import LandingPageModal from '../../../../components/LandingPageModal';
@@ -89,6 +90,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.handleScroll = this.handleScroll.bind(this);
     this.handleBodyScroll = this.handleBodyScroll.bind(this);
     this.handleStickyStateChange = this.handleStickyStateChange.bind(this);
+    this.closeNoteModal = this.closeNoteModal.bind(this);
+    this.showNoteModal = this.showNoteModal.bind(this);
 
 
     this.state = {
@@ -121,6 +124,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       editStudyPageOnTop: false,
       indicationPageOnTop: false,
       stickyLeftOffset: false,
+
+      showNoteModal: false,
     };
   }
 
@@ -513,6 +518,18 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     }
   }
 
+  showNoteModal() {
+    this.setState = ({
+      showNoteModal: true,
+    });
+  }
+
+  closeNoteModal() {
+    this.setState = ({
+      showNoteModal: false,
+    });
+  }
+
   renderDateFooter() {
     const { dateRange } = this.state;
     if (dateRange.startDate) {
@@ -542,6 +559,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         key={index}
         onSelectStudy={this.toggleStudy}
         onStatusChange={this.changeStudyStatus}
+        showNoteModal={this.showNoteModal}
         changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
         setHoverRowIndex={this.props.setHoverRowIndex}
         submitToClientPortal={this.props.submitToClientPortal}
@@ -929,6 +947,38 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   onClose={() => { this.showPatientThankYouPageModal(false); }}
                   isOnTop={this.state.patientThankYouEmailPageOnTop}
                 />
+                <Modal
+                  className="notes"
+                  id="notes"
+                  dialogComponentClass={CenteredModal}
+                  show={this.state.showNoteModal}
+                  onHide={this.closeNoteModal}
+                  backdrop
+                  keyboard
+                >
+                  <Modal.Header>
+                    <Modal.Title>Notes</Modal.Title>
+                    <a className="lightbox-close close" onClick={this.closeNoteModal}>
+                      <i className="icomoon-icon_close" />
+                    </a>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <div className="holder clearfix">
+                      <div className="form-study">
+                        <div className="pull-left col">
+                          <div className="scroll jcf--scrollable">
+                            <div className="holder-inner">
+                              <div className="form-fields">
+                                <DashboardNotePage />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </Modal.Body>
+                </Modal>
                 <Modal
                   dialogComponentClass={CenteredModal}
                   show={this.state.addEmailModalShow}
