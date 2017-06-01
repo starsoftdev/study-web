@@ -53,7 +53,8 @@ export class ThankYouPage extends React.Component {
 
   render() {
     const landing = (this.state.landing) ? this.state.landing : this.props.landing;
-    let address = `${landing.address}<br />`;
+    let addressStr = null;
+    const address = landing.address;
     const city = landing.city;
     const state = landing.state;
     const zip = landing.zip;
@@ -69,16 +70,20 @@ export class ThankYouPage extends React.Component {
     const herIsTheText =
       (thankYouData.herIsThe && thankYouData.herIsThe !== '') ? thankYouData.herIsThe : 'Here is the study location:';
 
+    if (address) {
+      addressStr = `${landing.address}<br />`;
+    }
+
     if (city) {
-      address += city;
+      addressStr += city;
     }
 
     if (state) {
-      address += `, ${state}`;
+      addressStr += `, ${state}`;
     }
 
     if (zip) {
-      address += ` ${zip}`;
+      addressStr += ` ${zip}`;
     }
 
     return (
@@ -96,20 +101,16 @@ export class ThankYouPage extends React.Component {
                 {landing.siteName}
               </strong>
             }
-            {thankYouData.isSharePhone &&
+            {(thankYouData.isSharePhone && landing.recruitmentPhone) &&
             <span className="tel">
               <a href={`tel:${landing.recruitmentPhone}`} className="txt-orange">{normalizePhoneDisplay(landing.recruitmentPhone)}</a>
             </span>
             }
             {!thankYouData.isHideLocationData &&
             <div>
-              <p>
-                {herIsTheText}
-              </p>
-              <address className="txt-green" dangerouslySetInnerHTML={{ __html: address }} />
-              <p>
-                {lookingForwardText}
-              </p>
+              {addressStr && <p>{herIsTheText}</p>}
+              <address className="txt-green" dangerouslySetInnerHTML={{ __html: addressStr }} />
+              <p>{lookingForwardText}</p>
             </div>
             }
             <div className="thanks-img">
