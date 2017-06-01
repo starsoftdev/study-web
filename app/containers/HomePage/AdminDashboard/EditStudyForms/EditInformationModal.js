@@ -17,6 +17,7 @@ import Toggle from '../../../../components/Input/Toggle';
 import Input from '../../../../components/Input/index';
 import DatePicker from '../../../../components/Input/DatePicker';
 import ReactSelect from '../../../../components/Input/ReactSelect';
+import LoadingSpinner from '../../../../components/LoadingSpinner';
 import RenderEmailsList from './RenderEmailsList';
 import { selectStudyCampaigns } from '../selectors';
 import FormGeosuggest from '../../../../components/Input/Geosuggest';
@@ -63,6 +64,7 @@ export class EditInformationModal extends React.Component {
     studyCampaigns: PropTypes.object,
     usersByRoles: PropTypes.object,
     setEditStudyFormValues: PropTypes.func,
+    studyUpdateProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -720,7 +722,12 @@ export class EditInformationModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row text-right">
-                  <Button type="submit" bsStyle="primary"> UPDATE </Button>
+                  <Button type="submit" bsStyle="primary" className="fixed-small-btn">
+                    {this.props.studyUpdateProcess.saving
+                      ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+                      : <span>UPDATE</span>
+                    }
+                  </Button>
                 </div>
               </div>
             </Form>
