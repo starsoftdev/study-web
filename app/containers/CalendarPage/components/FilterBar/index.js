@@ -218,7 +218,7 @@ class FilterBar extends Component {
     return (
       <form action="#" className="form-search clearfix alt">
         <div className="fields-holder">
-          <div className="search-area pull-left">
+          <div className="search-area pull-left no-left-padding">
             <div className="field">
               <Button className="btn-enter">
                 <i className="icomoon-icon_search2" />
@@ -258,7 +258,7 @@ class FilterBar extends Component {
               onChange={(option) => this.handleFilterChange('indication', option)}
             />
           </div>
-          <div className="pull-left custom-select">
+          <div className="pull-left custom-select no-right-padding">
             <Select
               className="form-control data-search"
               value={filter.protocol}

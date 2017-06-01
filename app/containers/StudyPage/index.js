@@ -113,7 +113,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     const ePMS = study && study.patientMessagingSuite;
     if (fetchingStudy || fetchingPatientCategories) {
       return (
-        <LoadingSpinner />
+        <LoadingSpinner noMessage />
       );
     } else if (!study || !sources || !campaigns) {
       return (

@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import Input from '../../../components/Input';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddSponsorAdminForm } from './AddSponsorAdminForm';
+import TableActions from '../../../components/TableActions/index';
 
 @reduxForm({ form: 'dashboardSponsorAdminSearchForm' })
 
@@ -51,15 +52,10 @@ export class DashboardSponsorAdminSearch extends React.Component {
   render() {
     return (
       <form action="#" className="form-search clearfix">
-        <div className="btns-area row pull-right">
-          <div className="col pull-left">
-            <a className="btn btn-primary lightbox-opener" onClick={this.openAddSponsorAdminModal}>
-              Add Sponsor Admin
-            </a>
-          </div>
-        </div>
-        <div className="fields-holder">
-          <div className="pull-left col custom-select">
+        <TableActions
+          buttonClickAction={this.openAddSponsorAdminModal}
+          buttonText="Add Sponsor Admin"
+          filters={
             <div className="field">
               <Button className="btn-enter">
                 <i className="icomoon-icon_search2" />
@@ -72,8 +68,8 @@ export class DashboardSponsorAdminSearch extends React.Component {
                 placeholder="Search"
               />
             </div>
-          </div>
-        </div>
+          }
+        />
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addSponsorAdminModalOpen} onHide={this.closeAddSponsorAdminModal}>
           <Modal.Header>
