@@ -145,7 +145,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
         <section className="rewards">
           <h2 className="main-heading">REWARDS</h2>
           <div className="form-search clearfix">
-            <div className="pull-left custom-select">
+            <div className="pull-left custom-select no-left-padding">
               {siteLocations.length > 0 &&
                 <RewardForm
                   currentUser={currentUser}

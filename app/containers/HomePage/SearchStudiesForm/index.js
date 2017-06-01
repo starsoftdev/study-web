@@ -78,7 +78,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
     return (
       <Form className="form-search form-search-studies pull-left" onSubmit={handleSubmit}>
         <div className="fields-holder clearfix">
-          <div className="search-area pull-left">
+          <div className="search-area pull-left no-left-padding">
             <div className="field">
               <Button className="btn-enter" type="submit">
                 <i className="icomoon-icon_search2" />

@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddSponsorForm } from './AddSponsorForm';
+import TableActions from '../../../components/TableActions/index';
 
 const mapStateToProps = createStructuredSelector({
 });
@@ -61,15 +62,10 @@ export class DashboardSponsorSearch extends React.Component {
 
     return (
       <form action="#" className="form-search clearfix">
-        <div className="btns-area row pull-right">
-          <div className="col pull-left">
-            <a className="btn btn-primary lightbox-opener" onClick={this.openAddSponsorModal}>
-              + Add Sponsor
-            </a>
-          </div>
-        </div>
-        <div className="fields-holder">
-          <div className="pull-left col custom-select">
+        <TableActions
+          buttonClickAction={this.openAddSponsorModal}
+          buttonText="+ Add Sponsor"
+          filters={
             <div className="has-feedback ">
               <Field
                 name="sponsor"
@@ -78,8 +74,8 @@ export class DashboardSponsorSearch extends React.Component {
                 options={options}
               />
             </div>
-          </div>
-        </div>
+          }
+        />
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addSponsorModalOpen} onHide={this.closeAddSponsorModal}>
           <Modal.Header>
