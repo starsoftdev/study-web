@@ -11,6 +11,8 @@ import { Field, change } from 'redux-form';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
+import { DashboardNoteSearch } from '../AdminDashboardNoteSearch/index';
+import { DashboardNoteTable } from '../AdminDashboardNoteTable';
 
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import LandingPageModal from '../../../../components/LandingPageModal';
@@ -19,11 +21,11 @@ import PatientThankYouEmailModal from '../../../../components/PatientThankYouEma
 import CenteredModal from '../../../../components/CenteredModal';
 import AddEmailNotificationForm from '../../../../components/AddEmailNotificationForm';
 import EditInformationModal from '../EditStudyForms/EditInformationModal';
-import { selectStudies, selectPaginationOptions, selectAddNotificationProcess } from '../selectors';
+import { selectStudies, selectPaginationOptions, selectAddNotificationProcess, selectDashboardEditNoteProcess, selectDashboardNote } from '../selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
-import { setHoverRowIndex, setEditStudyFormValues } from '../actions';
+import { setHoverRowIndex, setEditStudyFormValues, fetchNote, addNote, editNote, deleteNote } from '../actions';
 import { submitToClientPortal } from '../../../DashboardPortalsPage/actions';
 
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -55,6 +57,12 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     setEditStudyFormValues: PropTypes.func,
     filtersFormValues: PropTypes.object,
     submitToClientPortal: PropTypes.func,
+    fetchNote: PropTypes.func,
+    note: PropTypes.object,
+    addNote: PropTypes.func,
+    editNote: PropTypes.func,
+    deleteNote: PropTypes.func,
+    editNoteProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -89,6 +97,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.handleScroll = this.handleScroll.bind(this);
     this.handleBodyScroll = this.handleBodyScroll.bind(this);
     this.handleStickyStateChange = this.handleStickyStateChange.bind(this);
+    this.closeNoteModal = this.closeNoteModal.bind(this);
+    this.showNoteModal = this.showNoteModal.bind(this);
 
 
     this.state = {
@@ -121,7 +131,15 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       editStudyPageOnTop: false,
       indicationPageOnTop: false,
       stickyLeftOffset: false,
+
+      showNoteModal: false,
+      adminSiteId: null,
+      adminSiteName: null,
     };
+  }
+
+  componentWillMount() {
+    this.props.fetchNote();
   }
 
   componentDidMount() {
@@ -513,6 +531,20 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     }
   }
 
+  showNoteModal(siteId, siteName) {
+    this.setState({
+      showNoteModal: true,
+      adminSiteId: siteId,
+      adminSiteName: siteName,
+    });
+  }
+
+  closeNoteModal() {
+    this.setState({
+      showNoteModal: false,
+    });
+  }
+
   renderDateFooter() {
     const { dateRange } = this.state;
     if (dateRange.startDate) {
@@ -542,6 +574,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         key={index}
         onSelectStudy={this.toggleStudy}
         onStatusChange={this.changeStudyStatus}
+        showNoteModal={this.showNoteModal}
         changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
         setHoverRowIndex={this.props.setHoverRowIndex}
         submitToClientPortal={this.props.submitToClientPortal}
@@ -910,6 +943,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   messagingNumbers={this.props.messagingNumbers}
                   isOnTop={this.state.editStudyPageOnTop}
                   setEditStudyFormValues={this.props.setEditStudyFormValues}
+                  studyUpdateProcess={this.props.studyUpdateProcess}
                 />
                 <LandingPageModal
                   openModal={this.state.showLandingPageModal}
@@ -929,6 +963,41 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   onClose={() => { this.showPatientThankYouPageModal(false); }}
                   isOnTop={this.state.patientThankYouEmailPageOnTop}
                 />
+                <Modal
+                  className="admin-note-modal"
+                  id="notes"
+                  dialogComponentClass={CenteredModal}
+                  show={this.state.showNoteModal}
+                  onHide={this.closeNoteModal}
+                  backdrop
+                  keyboard
+                >
+                  <Modal.Header>
+                    <Modal.Title>Notes</Modal.Title>
+                    <a className="lightbox-close close" onClick={this.closeNoteModal}>
+                      <i className="icomoon-icon_close" />
+                    </a>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <div className="holder clearfix">
+                      <div className="form-admin-note">
+                        <DashboardNoteSearch
+                          siteId={this.state.adminSiteId}
+                          siteName={this.state.adminSiteName}
+                          addNote={this.props.addNote}
+                          editNoteProcess={this.props.editNoteProcess}
+                        />
+                        <DashboardNoteTable
+                          siteId={this.state.adminSiteId}
+                          note={this.props.note}
+                          editNoteProcess={this.props.editNoteProcess}
+                          editNote={this.props.editNote}
+                          deleteNote={this.props.deleteNote}
+                        />
+                      </div>
+                    </div>
+                  </Modal.Body>
+                </Modal>
                 <Modal
                   dialogComponentClass={CenteredModal}
                   show={this.state.addEmailModalShow}
@@ -966,6 +1035,8 @@ const mapStateToProps = createStructuredSelector({
   studies: selectStudies(),
   paginationOptions: selectPaginationOptions(),
   addNotificationProcess: selectAddNotificationProcess(),
+  note: selectDashboardNote(),
+  editNoteProcess: selectDashboardEditNoteProcess(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -973,6 +1044,10 @@ const mapDispatchToProps = (dispatch) => ({
   setHoverRowIndex: (index) => dispatch(setHoverRowIndex(index)),
   setEditStudyFormValues: (values) => dispatch(setEditStudyFormValues(values)),
   submitToClientPortal: (id) => dispatch(submitToClientPortal(id)),
+  fetchNote: () => dispatch(fetchNote()),
+  addNote: (payload) => dispatch(addNote(payload)),
+  editNote: (payload) => dispatch(editNote(payload)),
+  deleteNote: (payload) => dispatch(deleteNote(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyList);

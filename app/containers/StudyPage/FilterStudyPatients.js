@@ -103,7 +103,7 @@ class FilterStudyPatientsForm extends Component {
           ePMS={ePMS}
         />
         <div className="fields-holder">
-          <div className="search-area pull-left">
+          <div className="search-area pull-left no-left-padding">
             <div className="field">
               <Button className="btn-enter">
                 <i className="icomoon-icon_search2" />
@@ -132,7 +132,7 @@ class FilterStudyPatientsForm extends Component {
               onChange={(event) => this.searchPatient(event, 'campaign')}
             />
           </div>
-          <div className="custom-select pull-left">
+          <div className="custom-select pull-left no-right-padding">
             <Field
               name="source"
               component={ReactSelect}

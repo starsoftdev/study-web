@@ -18,6 +18,7 @@ import Checkbox from '../Input/Checkbox';
 import Input from '../Input/index';
 import CenteredModal from '../../components/CenteredModal/index';
 import StudyAddForm from '../../components/StudyAddForm';
+import LoadingSpinner from '../LoadingSpinner';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
 import { fetchLanding } from '../../containers/App/actions';
 import { selectLanding } from '../../containers/App/selectors';
@@ -510,7 +511,12 @@ export class LandingPageModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row text-right">
-                  <Button bsStyle="primary" type="submit" disabled={false}>Update</Button>
+                  <Button type="submit" bsStyle="primary" className="fixed-small-btn">
+                    {this.props.updateLandingPageProcess.saving
+                      ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+                      : <span>Update</span>
+                    }
+                  </Button>
                 </div>
               </div>
             </Form>

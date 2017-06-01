@@ -1,21 +1,21 @@
-import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
-import ReactSelect from '../../../components/Input/ReactSelect';
-import CenteredModal from '../../../components/CenteredModal/index';
+import ReactSelect from '../../../../components/Input/ReactSelect';
+import CenteredModal from '../../../../components/CenteredModal/index';
 import { AddNoteForm } from './AddNoteForm';
 
 @reduxForm({ form: 'dashboardNoteForm' })
 
 export class DashboardNoteSearch extends React.Component {
   static propTypes = {
-    clientSites: PropTypes.object,
     addNote: PropTypes.func,
     editNoteProcess: PropTypes.object,
     noteSearchFormValues: PropTypes.object,
+    siteId: PropTypes.number,
+    siteName: PropTypes.string,
   }
 
   constructor(props) {
@@ -41,7 +41,7 @@ export class DashboardNoteSearch extends React.Component {
   }
 
   openAddNoteModal() {
-    if (this.props.noteSearchFormValues.site) {
+    if (this.props.siteId) {
       this.setState({ addNoteModalOpen: true });
     }
   }
@@ -49,42 +49,39 @@ export class DashboardNoteSearch extends React.Component {
   addNote(params) {
     const nParam = {
       noteData: params.noteData,
-      site_id: this.props.noteSearchFormValues.site,
+      site_id: this.props.siteId,
     };
     this.props.addNote(nParam);
   }
 
   render() {
     const options = [];
-    _.forEach(this.props.clientSites.details, (item) => {
-      options.push({
-        label: item.name, value: item.id,
-      });
+    options.push({
+      label: this.props.siteName, value: this.props.siteId,
     });
 
-    const addNoteAddOn = (this.props.noteSearchFormValues.site)
-    ? (
-      <a disabled={!(this.props.noteSearchFormValues.site)} className="btn btn-primary lightbox-opener" onClick={this.openAddNoteModal}>
+    const addNoteAddOn = (
+      <a className="btn btn-primary lightbox-opener" onClick={this.openAddNoteModal}>
         Add Note
       </a>
-    )
-    : null;
-
+    );
     return (
       <form action="#" className="form-search clearfix">
         <div className="btns-area row pull-right">
-          <div className="col pull-left no-right-padding">
+          <div className="col pull-left">
             {addNoteAddOn}
           </div>
         </div>
         <div className="fields-holder">
-          <div className="pull-left col custom-select no-left-padding">
+          <div className="pull-left col custom-select">
             <div className="has-feedback ">
               <Field
                 name="site"
                 component={ReactSelect}
                 placeholder="Select Site Location"
                 options={options}
+                selectedValue={this.props.siteId}
+                disabled="true"
               />
             </div>
           </div>

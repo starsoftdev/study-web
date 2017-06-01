@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddProtocolForm } from './AddProtocolForm';
+import TableActions from '../../../components/TableActions/index';
 
 @reduxForm({ form: 'dashboardProtocolForm' })
 
@@ -57,16 +58,11 @@ export class DashboardProtocolSearch extends React.Component {
 
     return (
       <form action="#" className="form-search clearfix">
-        <div className="btns-area row pull-right">
-          <div className="col pull-left">
-            <a className="btn btn-primary lightbox-opener" onClick={this.openAddProtocolModal}>
-              Add Protocol
-            </a>
-          </div>
-        </div>
-        <div className="fields-holder">
-          <div className="pull-left col custom-select">
-            <div className="has-feedback ">
+        <TableActions
+          buttonClickAction={this.openAddProtocolModal}
+          buttonText="Add Protocol"
+          filters={
+            <div className="has-feedback">
               <Field
                 name="protocol"
                 component={ReactSelect}
@@ -74,8 +70,8 @@ export class DashboardProtocolSearch extends React.Component {
                 options={options}
               />
             </div>
-          </div>
-        </div>
+          }
+        />
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addProtocolModalOpen} onHide={this.closeAddProtocolModal}>
           <Modal.Header>

@@ -64,7 +64,7 @@ export class DashboardPortalsForm extends React.Component { // eslint-disable-li
     return (
       <form className="form-search selects-form clearfix">
         <div className="fields-holder row">
-          <div className="pull-left col custom-select first-custom-select">
+          <div className="pull-left col custom-select first-custom-select no-left-padding">
             <Field
               name="client"
               component={ReactSelect}
@@ -78,7 +78,7 @@ export class DashboardPortalsForm extends React.Component { // eslint-disable-li
         </div>
 
         <div className="fields-holder row second-row">
-          <div className="pull-left col custom-select">
+          <div className="pull-left col custom-select no-left-padding">
             <Field
               name="sponsor"
               component={ReactSelect}

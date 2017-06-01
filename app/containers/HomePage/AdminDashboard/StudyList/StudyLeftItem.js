@@ -15,6 +15,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     hoverRowIndex: PropTypes.any,
     setHoverRowIndex: PropTypes.func,
     submitToClientPortal: PropTypes.func,
+    showNoteModal: PropTypes.func,
   };
 
   constructor(props) {
@@ -26,6 +27,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     this.mouseOutRow = this.mouseOutRow.bind(this);
     this.showHover = this.showHover.bind(this);
     this.hideHover = this.hideHover.bind(this);
+    this.showNote = this.showNote.bind(this);
   }
 
   mouseOverRow(e, index) {
@@ -42,6 +44,10 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
 
   hideHover() {
     this.setState({ hover: false });
+  }
+
+  showNote(siteId, siteName) {
+    this.props.showNoteModal(siteId, siteName);
   }
 
   render() {
@@ -98,6 +104,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
             <li className="sponsor"><div className="special_ellipsis_div">Sponsor: <span>{item.sponsor_name || 'N/A'}</span></div></li>
             <li className="cro">CRO: <span>{item.cro_name || 'N/A'}</span></li>
             <li className="login-info">Last Login: <span>{lastLoginTime}</span></li>
+            <li className="login-info"><span><a className="special_ellipsis_link landing-link" onClick={() => { this.showNote(item.site_id, item.site_name); }}>Note</a></span></li>
           </ul>
         </td>
         <td>
