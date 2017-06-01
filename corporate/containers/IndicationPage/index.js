@@ -20,6 +20,7 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
     indications: PropTypes.array,
     trials: PropTypes.any,
     newList: PropTypes.any,
+    total: PropTypes.any,
     resetForm: React.PropTypes.func,
     clearTrialsList: React.PropTypes.func,
     posts: PropTypes.array,
