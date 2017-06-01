@@ -152,7 +152,7 @@ export class BillingPage extends Component {
                             </div>
                             <div className="textbox">
                               <strong className="name">Ruby Listing</strong>
-                              <p>103 Posts</p>
+                              <p>108 Posts</p>
                             </div>
                           </div>
                         </td>
@@ -193,7 +193,7 @@ export class BillingPage extends Component {
                           </div>
                           <div className="textbox">
                             <strong className="name">Diamond Listing</strong>
-                            <p>63 Posts</p>
+                            <p>64 Posts</p>
                           </div>
                         </div></td>
                         <td data-label="Price">
@@ -233,7 +233,7 @@ export class BillingPage extends Component {
                           </div>
                           <div className="textbox">
                             <strong className="name">Platinum Listing</strong>
-                            <p>33 Posts</p>
+                            <p>32 Posts</p>
                           </div>
                         </div></td>
                         <td data-label="Price">
@@ -275,7 +275,7 @@ export class BillingPage extends Component {
                           </div>
                           <div className="textbox">
                             <strong className="name">Gold Listing</strong>
-                            <p>13 Posts</p>
+                            <p>10 Posts</p>
                           </div>
                         </div></td>
                         <td data-label="Price">

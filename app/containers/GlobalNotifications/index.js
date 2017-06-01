@@ -49,7 +49,9 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
         cb: (err, socket) => {
           if (!err) {
             socket.on('notification', (notification) => {
-              this.props.receiveNotification(notification);
+              if (props.currentUser.roleForClient && props.currentUser.roleForClient.client_id === notification.clientId) {
+                this.props.receiveNotification(notification);
+              }
             });
             socket.on('connect', () => {
               this.subscribeToPageEvents();

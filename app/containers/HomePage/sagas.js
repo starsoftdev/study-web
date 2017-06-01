@@ -25,6 +25,10 @@ import {
 } from './constants';
 
 import {
+  FETCH_NOTE,
+  ADD_NOTE,
+  EDIT_NOTE,
+  DELETE_NOTE,
   FETCH_STUDIES_DASHBOARD,
   FETCH_TOTALS_DASHBOARD,
   FETCH_SITE_LOCATIONS,
@@ -72,6 +76,14 @@ import {
   updateTwilioNumbersSuccess,
   updateTwilioNumbersError,
   clearFilters,
+  fetchNoteSuccess,
+  fetchNoteError,
+  addNoteSuccess,
+  addNoteError,
+  editNoteSuccess,
+  editNoteError,
+  deleteNoteSuccess,
+  deleteNoteError,
 } from './AdminDashboard/actions';
 
 import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
@@ -103,6 +115,101 @@ import {
 export default [
   homePageSaga,
 ];
+
+export function* fetchNoteWatcher() {
+  yield* takeLatest(FETCH_NOTE, fetchNoteWorker);
+}
+
+export function* fetchNoteWorker() {
+  try {
+    const requestURL = `${API_URL}/notes`;
+
+    const filterObj = {
+      include: [{
+        relation: 'site',
+      }, {
+        relation: 'user',
+      }],
+    };
+
+    const queryParams = {
+      filter: JSON.stringify(filterObj),
+    };
+
+    const response = yield call(request, requestURL, { query: queryParams });
+
+    yield put(fetchNoteSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching note');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(fetchNoteError(err));
+  }
+}
+
+export function* addNoteWatcher() {
+  yield* takeLatest(ADD_NOTE, addNoteWorker);
+}
+
+export function* addNoteWorker(action) {
+  try {
+    const requestURL = `${API_URL}/notes`;
+
+    const params = {
+      method: 'POST',
+      body: JSON.stringify(action.payload),
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(addNoteSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while saving note');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(addNoteError(err));
+  }
+}
+
+export function* editNoteWatcher() {
+  yield* takeLatest(EDIT_NOTE, editNoteWorker);
+}
+
+export function* editNoteWorker(action) {
+  try {
+    const requestURL = `${API_URL}/notes/${action.payload.id}`;
+
+    const params = {
+      method: 'PUT',
+      body: JSON.stringify(action.payload),
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(editNoteSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while saving note');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(editNoteError(err));
+  }
+}
+
+export function* deleteNoteWatcher() {
+  yield* takeLatest(DELETE_NOTE, deleteNoteWorker);
+}
+
+export function* deleteNoteWorker(action) {
+  try {
+    const requestURL = `${API_URL}/notes/${action.payload}`;
+
+    const params = {
+      method: 'DELETE',
+    };
+    yield call(request, requestURL, params);
+
+    yield put(deleteNoteSuccess({ id: action.payload }));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while deleting note');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(deleteNoteError(err));
+  }
+}
 
 export function* fetchPatientSignUpsWatcher() {
   yield* takeLatest(FETCH_PATIENT_SIGN_UPS, fetchPatientSignUpsWorker);
@@ -827,6 +934,10 @@ export function* homePageSaga() {
   const changeStudyAddWatcher1 = yield fork(changeStudyAddWatcher);
   const fetchMessagingNumbersWatcher1 = yield fork(fetchMessagingNumbersWatcher);
   const updateTwilioNumbersWatcher1 = yield fork(updateTwilioNumbersWatcher);
+  const watcherJ = yield fork(fetchNoteWatcher);
+  const watcherK = yield fork(addNoteWatcher);
+  const watcherL = yield fork(editNoteWatcher);
+  const watcherM = yield fork(deleteNoteWatcher);
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
@@ -858,6 +969,10 @@ export function* homePageSaga() {
     yield cancel(changeStudyAddWatcher1);
     yield cancel(fetchMessagingNumbersWatcher1);
     yield cancel(updateTwilioNumbersWatcher1);
+    yield cancel(watcherJ);
+    yield cancel(watcherK);
+    yield cancel(watcherL);
+    yield cancel(watcherM);
     if (options.payload.pathname !== '/app') {
       yield put(clearFilters());
       yield put(reset('dashboardFilters'));
