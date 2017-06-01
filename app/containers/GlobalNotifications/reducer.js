@@ -52,9 +52,9 @@ function globalNotificationsReducer(state = initialState, action) {
         unreadNotificationsCount: action.payload,
       };
     case RECEIVE_NOTIFICATION:
-      tpmNotification = action.payload
-      if (action.payload.event_log.__data){
-        tpmNotification.event_log = action.payload.event_log.__data;
+      tpmNotification = action.payload;
+      if (action.payload.event_log.__data) { // eslint-disable-line no-underscore-dangle
+        tpmNotification.event_log = action.payload.event_log.__data; // eslint-disable-line no-underscore-dangle
       }
       return {
         ...state,
