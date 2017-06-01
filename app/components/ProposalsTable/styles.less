@@ -168,6 +168,33 @@
                 .input-mixin;
               }
             }
+
+            .proposal-disabled {
+              margin: 0 13px 4px 0;
+              display: inline-block;
+              vertical-align: middle;
+              width: 20px;
+              height: 20px;
+              background: #fff;
+              position: relative;
+
+              .jcf-checkbox{
+                vertical-align: initial !important;
+              }
+
+              .jcf-checkbox[disabled]{
+                cursor: not-allowed;
+
+                span[disabled]{
+                  background-color: lightgray;
+                  border: 2px solid #838383;
+
+                  &:before{
+                    cursor: not-allowed !important;
+                  }
+                }
+              }
+            }
           }
 
           &:nth-child(2) {
