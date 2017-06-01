@@ -519,13 +519,13 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   showNoteModal() {
-    this.setState = ({
+    this.setState({
       showNoteModal: true,
     });
   }
 
   closeNoteModal() {
-    this.setState = ({
+    this.setState({
       showNoteModal: false,
     });
   }
