@@ -11,7 +11,8 @@ import { Field, change } from 'redux-form';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
-import DashboardNotePage from '../../../DashboardNotePage';
+import { DashboardNoteSearch } from '../AdminDashboardNoteSearch/index';
+import { DashboardNoteTable } from '../AdminDashboardNoteTable';
 
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import LandingPageModal from '../../../../components/LandingPageModal';
@@ -20,11 +21,11 @@ import PatientThankYouEmailModal from '../../../../components/PatientThankYouEma
 import CenteredModal from '../../../../components/CenteredModal';
 import AddEmailNotificationForm from '../../../../components/AddEmailNotificationForm';
 import EditInformationModal from '../EditStudyForms/EditInformationModal';
-import { selectStudies, selectPaginationOptions, selectAddNotificationProcess } from '../selectors';
+import { selectStudies, selectPaginationOptions, selectAddNotificationProcess, selectDashboardEditNoteProcess, selectDashboardNote } from '../selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
-import { setHoverRowIndex, setEditStudyFormValues } from '../actions';
+import { setHoverRowIndex, setEditStudyFormValues, fetchNote, addNote, editNote, deleteNote } from '../actions';
 import { submitToClientPortal } from '../../../DashboardPortalsPage/actions';
 
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -56,6 +57,12 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     setEditStudyFormValues: PropTypes.func,
     filtersFormValues: PropTypes.object,
     submitToClientPortal: PropTypes.func,
+    fetchNote: PropTypes.func,
+    note: PropTypes.object,
+    addNote: PropTypes.func,
+    editNote: PropTypes.func,
+    deleteNote: PropTypes.func,
+    editNoteProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -126,7 +133,13 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       stickyLeftOffset: false,
 
       showNoteModal: false,
+      adminSiteId: null,
+      adminSiteName: null,
     };
+  }
+
+  componentWillMount() {
+    this.props.fetchNote();
   }
 
   componentDidMount() {
@@ -518,9 +531,11 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     }
   }
 
-  showNoteModal() {
+  showNoteModal(siteId, siteName) {
     this.setState({
       showNoteModal: true,
+      adminSiteId: siteId,
+      adminSiteName: siteName,
     });
   }
 
@@ -949,7 +964,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   isOnTop={this.state.patientThankYouEmailPageOnTop}
                 />
                 <Modal
-                  className="notes"
+                  className="admin-note-modal"
                   id="notes"
                   dialogComponentClass={CenteredModal}
                   show={this.state.showNoteModal}
@@ -965,18 +980,21 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   </Modal.Header>
                   <Modal.Body>
                     <div className="holder clearfix">
-                      <div className="form-study">
-                        <div className="pull-left col">
-                          <div className="scroll jcf--scrollable">
-                            <div className="holder-inner">
-                              <div className="form-fields">
-                                <DashboardNotePage />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                      <div className="form-admin-note">
+                        <DashboardNoteSearch
+                          siteId={this.state.adminSiteId}
+                          siteName={this.state.adminSiteName}
+                          addNote={this.props.addNote}
+                          editNoteProcess={this.props.editNoteProcess}
+                        />
+                        <DashboardNoteTable
+                          siteId={this.state.adminSiteId}
+                          note={this.props.note}
+                          editNoteProcess={this.props.editNoteProcess}
+                          editNote={this.props.editNote}
+                          deleteNote={this.props.deleteNote}
+                        />
                       </div>
-
                     </div>
                   </Modal.Body>
                 </Modal>
@@ -1017,6 +1035,8 @@ const mapStateToProps = createStructuredSelector({
   studies: selectStudies(),
   paginationOptions: selectPaginationOptions(),
   addNotificationProcess: selectAddNotificationProcess(),
+  note: selectDashboardNote(),
+  editNoteProcess: selectDashboardEditNoteProcess(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -1024,6 +1044,10 @@ const mapDispatchToProps = (dispatch) => ({
   setHoverRowIndex: (index) => dispatch(setHoverRowIndex(index)),
   setEditStudyFormValues: (values) => dispatch(setEditStudyFormValues(values)),
   submitToClientPortal: (id) => dispatch(submitToClientPortal(id)),
+  fetchNote: () => dispatch(fetchNote()),
+  addNote: (payload) => dispatch(addNote(payload)),
+  editNote: (payload) => dispatch(editNote(payload)),
+  deleteNote: (payload) => dispatch(deleteNote(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyList);
