@@ -324,7 +324,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <div className="area">
                   <strong className="h3">Exposure to StudyKIK Patient Enrollment Search</strong>
                   <p>
-                    Atients are able to easily search and find safe and approved clinical trials on studykik.com.
+                    Patients are able to easily search and find safe and approved clinical trials on studykik.com.
                   </p>
                 </div>
               </div>
