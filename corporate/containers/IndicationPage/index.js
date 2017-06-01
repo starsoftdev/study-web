@@ -6,8 +6,10 @@ import inViewport from 'in-viewport';
 import classNames from 'classnames';
 import TrialsArticle from '../../components/TrialsArticle';
 import ClinicalTrialsSearchForm from '../../components/ClinicalTrialsSearchForm';
+import LoadingSpinner from '../../../app/components/LoadingSpinner';
 import { fetchIndications, clinicalTrialsSearch, clearClinicalTrialsSearch } from '../../../app/containers/App/actions';
-import { selectIndications, selectTrials } from '../../../app/containers/App/selectors';
+import { selectIndications, selectTrials, selectTrialsTotal } from '../../../app/containers/App/selectors';
+import { selectValues } from '../../../app/common/selectors/form.selector';
 import NotFoundPage from '../NotFoundPage';
 
 export class Indication extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -16,7 +18,9 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
     params: React.PropTypes.object,
     onSubmitForm: React.PropTypes.func,
     indications: PropTypes.array,
-    trials: PropTypes.array,
+    trials: PropTypes.any,
+    newList: PropTypes.any,
+    total: PropTypes.any,
     resetForm: React.PropTypes.func,
     clearTrialsList: React.PropTypes.func,
     posts: PropTypes.array,
@@ -29,14 +33,10 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
 
     this.setVisible = this.setVisible.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
-    this.handleZipChoose = this.handleZipChoose.bind(this);
-    this.handleDistanceChoose = this.handleDistanceChoose.bind(this);
 
-    this.distance = 0;
-    this.indication = null;
-    this.zip = null;
-    this.currentIndication = null;
-    this.initalFetched = false;
+    this.show = 0;
+    this.h3Text = '';
+    this.loaded = 0;
   }
 
   componentDidMount() {
@@ -47,9 +47,9 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
   componentWillReceiveProps(newProps) {
     const { params, onSubmitForm } = this.props;
     if (newProps.trials === null) {
-      this.distance = 0;
-      this.indication = null;
-      this.zip = null;
+      this.show = 0;
+      this.h3Text = '';
+      this.loaded = 0;
     }
 
     if (params && params.indication && !this.initalFetched) {
@@ -60,9 +60,30 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
           this.currentIndication = indication;
           this.initalFetched = true;
           onSubmitForm({
+            from: 0,
             indicationId: indication.id,
           });
         }
+      }
+    }
+
+    if (newProps.trials !== this.props.trials) {
+      if (newProps.trials.details) {
+        if (newProps.trials.details.length > 0) {
+          this.h3Text = `There are ${newProps.total} ${(newProps.total > 1) ? 'studies' : 'study'}`;
+          if (newProps.newList.postalCode) {
+            this.h3Text = `There are ${newProps.total} ${(newProps.total > 1) ? 'studies' : 'study'} within ${newProps.newList.distance || 50} miles of ${newProps.newList.postalCode}`;
+          }
+        } else {
+          this.h3Text = 'There are no studies';
+          if (newProps.newList.postalCode) {
+            this.h3Text = `There are no studies within ${newProps.newList.distance || 50} miles of ${newProps.newList.postalCode}`;
+          }
+        }
+      }
+
+      if (newProps.trials.wrongPostalCode) {
+        this.h3Text = 'Invalid postal code';
       }
     }
   }
@@ -74,11 +95,14 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
   }
 
   onSubmitForm(values) {
-    const { onSubmitForm } = this.props;
-    const newValues = Object.assign({}, values);
+    const { onSubmitForm, clearTrialsList } = this.props;
+    const newValues = Object.assign({
+      from: 0,
+    }, values);
     if (this.currentIndication) {
       newValues.indicationId = this.currentIndication.id;
     }
+    clearTrialsList();
     onSubmitForm(newValues);
   }
 
@@ -87,40 +111,28 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
     el.classList.add('in-viewport', viewAtr);
   }
 
-  handleDistanceChoose(ev) {
-    this.distance = ev;
-  }
+  isShow() {
+    const { onSubmitForm, newList } = this.props;
+    this.show++;
 
-  handleZipChoose(ev) {
-    this.zip = ev.target.value;
+    if (this.show === this.loaded && this.show !== parseInt(this.props.total)) {
+      const newValues = Object.assign({
+        from: this.show,
+      }, newList);
+      if (this.currentIndication) {
+        newValues.indicationId = this.currentIndication.id;
+      }
+      onSubmitForm(newValues);
+    }
   }
 
   render() {
-    const { indications } = this.props;
-    let { trials } = this.props;
+    const { indications, trials } = this.props;
     let headerText = '';
     let studiesList = [];
-    let h3Text = '';
 
-    if (trials) {
-      if (trials.length > 0) {
-        h3Text = `There are ${trials.length} ${(trials.length > 1) ? 'studies' : 'study'}`;
-        if (this.zip) {
-          h3Text = `There are ${trials.length} ${(trials.length > 1) ? 'studies' : 'study'} within ${this.distance || 50} miles of ${this.zip}`;
-        }
-
-        if (trials[0].wrongPostalCode) {
-          h3Text = 'Invalid postal code';
-          trials = [];
-        }
-      } else {
-        h3Text = 'There are no studies';
-        if (this.zip) {
-          h3Text = `There are no studies within ${this.distance || 50} miles of ${this.zip}`;
-        }
-      }
-
-      studiesList = trials.map((item, index) => {
+    if (trials.details) {
+      studiesList = trials.details.map((item, index) => {
         let addr = null;
         if (item.city && item.state) {
           addr = `${item.city}, ${item.state}`;
@@ -131,6 +143,7 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
         return (
           <TrialsArticle
             {...item}
+            isShow={this.isShow}
             trial={item}
             key={index}
             index={index}
@@ -165,14 +178,13 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
           <ClinicalTrialsSearchForm
             indications={indications}
             individual
-            currentIndication={this.currentIndication}
             onSubmit={this.onSubmitForm}
-            handleZipChoose={this.handleZipChoose}
-            handleDistanceChoose={this.handleDistanceChoose}
           />
           <div className="articles-holder relative">
-            <h3 className="text-center text-uppercase">{h3Text}</h3>
-            <div className={classNames('row', { hidden: (!trials || trials.length <= 0) })}>
+            <h3 className="text-center text-uppercase">{this.h3Text}</h3>
+            {trials.fetching && <LoadingSpinner showOnlyIcon={false} noMessage />}
+            <div className={classNames('row', { hidden: (!trials || !trials.details || trials.details.length <= 0) })}>
+              {(trials.details && trials.details.length > 0) && studiesList}
               {(trials && trials.length > 0) && studiesList}
             </div>
           </div>
@@ -184,7 +196,9 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
 
 const mapStateToProps = createStructuredSelector({
   indications: selectIndications(),
+  newList: selectValues('find-studies'),
   trials: selectTrials(),
+  total: selectTrialsTotal(),
 });
 
 function mapDispatchToProps(dispatch) {
