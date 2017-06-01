@@ -221,7 +221,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
           <div className="search-sites-users-panel form-group">
             <form className="form-search clearfix" onSubmit={this.handleSubmit}>
               <div className="fields-holder pull-left">
-                <div className="search-area pull-left">
+                <div className="search-area pull-left no-left-padding">
                   <div className="field">
                     <Button className="btn-enter" type="submit">
                       <i className="icomoon-icon_search2" />
