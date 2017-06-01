@@ -414,7 +414,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     const { customFilters, modalFilters } = this.state;
 
     const filters = concat(this.mapFilterValues(modalFilters), customFilters);
-    const details = this.props.totals.details || {} ;
+    const details = this.props.totals.details || {};
 
     const redCount = parseInt(details.total_red) || 0;
     const yellowCount = parseInt(details.total_yellow) || 0;
