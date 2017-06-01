@@ -73,12 +73,12 @@ export class DashboardNoteSearch extends React.Component {
     return (
       <form action="#" className="form-search clearfix">
         <div className="btns-area row pull-right">
-          <div className="col pull-left">
+          <div className="col pull-left no-right-padding">
             {addNoteAddOn}
           </div>
         </div>
         <div className="fields-holder">
-          <div className="pull-left col custom-select">
+          <div className="pull-left col custom-select no-left-padding">
             <div className="has-feedback ">
               <Field
                 name="site"
