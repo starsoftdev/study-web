@@ -39,7 +39,7 @@ function globalNotificationsReducer(state = initialState, action) {
         .chain(state.notifications)
         .concat(action.payload)
         .uniqBy('id')
-        .orderBy(['notification.created_date'], ['desc'])
+        .orderBy(['notification.created'], ['desc'])
         .value();
 
       return {
@@ -56,9 +56,15 @@ function globalNotificationsReducer(state = initialState, action) {
       if (action.payload.event_log.__data) { // eslint-disable-line no-underscore-dangle
         tpmNotification.event_log = action.payload.event_log.__data; // eslint-disable-line no-underscore-dangle
       }
+      newNotifications = _
+        .chain(state.notifications)
+        .concat(tpmNotification)
+        .uniqBy('id')
+        .orderBy(['notification.created'], ['desc'])
+        .value();
       return {
         ...state,
-        notifications: [tpmNotification, ...state.notifications],
+        notifications: newNotifications,
         unreadNotificationsCount: state.unreadNotificationsCount + 1,
       };
     case SET_PROCESSING_STATUS:
