@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import inViewport from 'in-viewport';
 import Remarkable from 'remarkable';
+import { formatPhone } from '../../../app/common/helper/functions';
 
 import studyKikLogo from '../../assets/images/logo.svg';
 
@@ -79,7 +80,7 @@ export class TrialsArticle extends Component {
               <i className="icomoon-car" /> {(trial.distance !== null) ? `${trial.distance} Miles` : 'N/A'}
             </p>
             <span className="tel">
-              <i className="icomoon-phone" /> {(trial.phone_number !== null) ? trial.phone_number : 'N/A'}
+              <i className="icomoon-phone" /> {(trial.phone_number !== null) ? formatPhone(trial.phone_number) : 'N/A'}
             </span>
           </div>
           <div className="desc">
