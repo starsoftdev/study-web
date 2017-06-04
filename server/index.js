@@ -21,7 +21,7 @@ const corsOptions = {
   credentials: true,
   maxAge: 86400,
 };
-corsOptions.origin = true;
+corsOptions.origin = '*';
 app.use(cors(corsOptions));
 
 // In production we need to pass these values in instead of relying on webpack
