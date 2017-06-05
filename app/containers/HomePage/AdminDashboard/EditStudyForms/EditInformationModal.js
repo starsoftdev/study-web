@@ -294,9 +294,9 @@ export class EditInformationModal extends React.Component {
 
     for (let i = 0; i < this.props.studyCampaigns.details.length; i++) {
       if (i === 0) {
-        campaignOptions.push({ label: 'Oldest', value: this.props.studyCampaigns.details[i].id });
-      } else if ((i + 1) === this.props.studyCampaigns.details.length) {
-        campaignOptions.push({ label: 'Newest', value: this.props.studyCampaigns.details[i].id });
+        campaignOptions.push({ label: '1', value: this.props.studyCampaigns.details[i].id });
+      } else if (this.props.studyCampaigns.details[i].is_current) {
+        campaignOptions.push({ label: 'Current', value: this.props.studyCampaigns.details[i].id });
       } else {
         campaignOptions.push({ label: (i + 1), value: this.props.studyCampaigns.details[i].id });
       }
