@@ -39,7 +39,7 @@ function globalNotificationsReducer(state = initialState, action) {
         .chain(state.notifications)
         .concat(action.payload)
         .uniqBy('id')
-        .orderBy(['notification.created'], ['desc'])
+        .orderBy(['id'], ['desc'])
         .value();
 
       return {
@@ -60,7 +60,7 @@ function globalNotificationsReducer(state = initialState, action) {
         .chain(state.notifications)
         .concat(tpmNotification)
         .uniqBy('id')
-        .orderBy(['notification.created'], ['desc'])
+        .orderBy(['id'], ['desc'])
         .value();
       return {
         ...state,
