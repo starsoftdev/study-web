@@ -62,7 +62,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
   componentDidMount() {
     const { currentUser, currentUserClientId, userRoleType } = this.props;
     if (currentUserClientId && userRoleType === 'client') {
-      this.props.fetchSitePatients(currentUser.id);
       this.props.fetchPatientMessageUnreadCount(currentUser);
       this.props.fetchClientCredits(currentUser.id);
     }
