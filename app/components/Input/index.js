@@ -23,7 +23,7 @@ function Input({
   componentClass,
   bsClass,
   className,
-  tooltipDisabled,
+  tooltipEnabled,
   onBlur,
   onChange,
   required,
@@ -77,7 +77,7 @@ function Input({
     </FormControl>
   );
 
-  if (hasError && !tooltipDisabled) {
+  if (hasError && tooltipEnabled) {
     inputComponent = (
       <OverlayTrigger
         placement="right"
@@ -110,7 +110,7 @@ Input.propTypes = {
   meta: PropTypes.object.isRequired,
   placeholder: PropTypes.string,
   required: PropTypes.bool,
-  tooltipDisabled: PropTypes.bool,
+  tooltipEnabled: PropTypes.bool,
   type: PropTypes.string,
   min: PropTypes.string,
   max: PropTypes.string,
