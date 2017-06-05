@@ -19,6 +19,7 @@ function ReactSelect({
   objectValue,
   onChange,
   multi,
+  tooltipEnabled,
   meta: { touched, error, active },
   ...rest
 }) {
@@ -56,7 +57,7 @@ function ReactSelect({
     />
   );
 
-  if (hasError) {
+  if (hasError && tooltipEnabled) {
     inputComponent = (
       <OverlayTrigger
         placement="right"
@@ -85,6 +86,7 @@ ReactSelect.propTypes = {
   className: PropTypes.string,
   selectedValue: PropTypes.any,
   objectValue: PropTypes.bool,
+  tooltipEnabled: PropTypes.bool,
 };
 
 export default ReactSelect;
