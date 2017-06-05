@@ -12,6 +12,7 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
     editNoteProcess: PropTypes.object,
     siteId: PropTypes.number,
     tableName: PropTypes.string,
+    hideParentModal: PropTypes.func,
   }
 
   constructor(props) {
@@ -72,7 +73,14 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
           <tbody>
             {
               note.map((item, index) => (
-                <RowItem key={index} item={item} editNote={this.editNote} deleteNote={this.props.deleteNote} editNoteProcess={this.props.editNoteProcess} />
+                <RowItem
+                  key={index}
+                  item={item}
+                  editNote={this.editNote}
+                  deleteNote={this.props.deleteNote}
+                  editNoteProcess={this.props.editNoteProcess}
+                  hideParentModal={this.props.hideParentModal}
+                />
               ))
             }
           </tbody>

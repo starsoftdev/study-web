@@ -14,6 +14,7 @@ export class DashboardNoteSearch extends React.Component {
     editNoteProcess: PropTypes.object,
     noteSearchFormValues: PropTypes.object,
     siteId: PropTypes.number,
+    hideParentModal: PropTypes.func,
   }
 
   constructor(props) {
@@ -36,11 +37,13 @@ export class DashboardNoteSearch extends React.Component {
 
   closeAddNoteModal() {
     this.setState({ addNoteModalOpen: false });
+    this.props.hideParentModal(false);
   }
 
   openAddNoteModal() {
     if (this.props.siteId) {
       this.setState({ addNoteModalOpen: true });
+      this.props.hideParentModal(true);
     }
   }
 
