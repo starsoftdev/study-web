@@ -877,25 +877,53 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                                       <div>TEXTS</div>
                                     </th>
                                     <th>
-                                      <div>NEW PATIENT</div>
+                                      <div>
+                                        <span>NEW PATIENT</span>
+                                        <span className="counter">{this.props.totals.details.count_not_contacted_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.count_not_contacted_total || 0}</span>
+                                      </div>
                                     </th>
                                     <th>
-                                      <div>CALL ATTEMPTED</div>
+                                      <div>
+                                        <span>CALL ATTEMPTED</span>
+                                        <span className="counter">{this.props.totals.details.call_attempted_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.call_attempted_total || 0}</span>
+                                      </div>
                                     </th>
                                     <th>
-                                      <div>NOT QUALIFIED</div>
+                                      <div>
+                                        <span>NOT QUALIFIED</span>
+                                        <span className="counter">{this.props.totals.details.dnq_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.dnq_total || 0}</span>
+                                      </div>
                                     </th>
                                     <th>
-                                      <div>ACTION NEEDED</div>
+                                      <div>
+                                        <span>ACTION NEEDED</span>
+                                        <span className="counter">{this.props.totals.details.action_needed_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.action_needed_total || 0}</span>
+                                      </div>
                                     </th>
                                     <th>
-                                      <div>SCHEDULED</div>
+                                      <div>
+                                        <span>SCHEDULED</span>
+                                        <span className="counter">{this.props.totals.details.scheduled_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.scheduled_total || 0}</span>
+                                      </div>
                                     </th>
                                     <th>
-                                      <div>CONSENTED</div>
+                                      <div>
+                                        <span>CONSENTED</span>
+                                        <span className="counter">{this.props.totals.details.consented_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.consented_total || 0}</span>
+                                      </div>
                                     </th>
                                     <th>
-                                      <div>RANDOMIZED</div>
+                                      <div>
+                                        <span>RANDOMIZED</span>
+                                        <span className="counter">{this.props.totals.details.randomized_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.randomized_total || 0}</span>
+                                      </div>
                                     </th>
                                   </tr>
                                 </thead>
