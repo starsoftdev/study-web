@@ -54,6 +54,16 @@ export class TrialsArticle extends Component {
 
     const markdown = md.render(landingDescription);
 
+    let phoneNumber = (trial.phone_number !== null) ? trial.phone_number : null;
+
+    if (!phoneNumber && trial.click_to_call_button_number) {
+      phoneNumber = trial.click_to_call_button_number;
+    }
+
+    if (!phoneNumber && !trial.click_to_call_button_number && trial.recruitment_phone) {
+      phoneNumber = trial.recruitment_phone;
+    }
+
     return (
       <article
         key={index}
@@ -80,7 +90,7 @@ export class TrialsArticle extends Component {
               <i className="icomoon-car" /> {(trial.distance !== null) ? `${trial.distance} Miles` : 'N/A'}
             </p>
             <span className="tel">
-              <i className="icomoon-phone" /> {(trial.phone_number !== null) ? formatPhone(trial.phone_number) : 'N/A'}
+              <i className="icomoon-phone" /> {(phoneNumber !== null) ? formatPhone(phoneNumber) : 'N/A'}
             </span>
           </div>
           <div className="desc">
