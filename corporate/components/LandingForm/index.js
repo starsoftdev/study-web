@@ -8,7 +8,7 @@ import Alert from 'react-bootstrap/lib/Alert';
 
 import Input from '../../../app/components/Input';
 import landingFormValidator from './validator';
-import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
+import { normalizePhoneDisplay, formatPhone } from '../../../app/common/helper/functions';
 import {
   patientSubscriptionError,
 } from '../../../app/containers/App/actions';
@@ -170,7 +170,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
                 <div className="inline">
                   <span>{clickToCallButtonText}</span>
                   {clickToCallNumber &&
-                    <span>{landing.clickToCallButtonNumber}</span>
+                    <span>{formatPhone(landing.clickToCallButtonNumber)}</span>
                   }
                 </div>
               </a>
