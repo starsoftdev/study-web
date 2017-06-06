@@ -145,6 +145,7 @@
     "react": "15.4.2",
     "react-addons-shallow-compare": "^15.4.1",
     "react-addons-update": "15.3.0",
+    "react-append-to-body": "^2.0.1",
     "react-avatar-editor": "^6.0.0",
     "react-big-calendar": "git+https://github.com/studykik/kik-react-big-calendar.git#446edbb6d1dd27474e93dd32b20ba6e9f26d16bf",
     "react-bootstrap": "^0.30.3",
