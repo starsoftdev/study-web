@@ -391,6 +391,19 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.fetchStudiesAccordingToFilters({ value: e }, 'address');
   }
 
+  formatFilterName(filter) {
+    let name = filter.name;
+    if (name === 'siteLocation') {
+      name = 'Site Location';
+    }
+    if (name === 'exposureLevel') {
+      name = 'Exposure Level';
+    }
+    if (name === 'siteNumber') {
+      name = 'Site Number';
+    }
+    return { ...filter, name };
+  }
 
   renderDateFooter() {
     const { dateRange } = this.state;
@@ -526,7 +539,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
                   <Field
                     name={filter.name}
                     key={index}
-                    options={filter}
+                    options={this.formatFilterName(filter)}
                     component={Filter}
                     onClose={() => this.removeFilter(filter)}
                     onChange={(e) => {
