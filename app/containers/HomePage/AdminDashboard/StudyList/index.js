@@ -99,6 +99,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.handleStickyStateChange = this.handleStickyStateChange.bind(this);
     this.closeNoteModal = this.closeNoteModal.bind(this);
     this.showNoteModal = this.showNoteModal.bind(this);
+    this.setNoteModalClass = this.setNoteModalClass.bind(this);
 
 
     this.state = {
@@ -133,6 +134,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       stickyLeftOffset: false,
 
       showNoteModal: false,
+      hideNoteModal: false,
       adminSiteId: null,
       adminSiteName: null,
     };
@@ -176,6 +178,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleBodyScroll);
+  }
+
+  setNoteModalClass(hidden = false) {
+    this.setState({ hideNoteModal: hidden });
   }
 
   setEditStudyFormValues(study) {
@@ -992,7 +998,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   isOnTop={this.state.patientThankYouEmailPageOnTop}
                 />
                 <Modal
-                  className="admin-note-modal"
+                  className={`admin-note-modal ${this.state.hideNoteModal ? 'invisible' : ''}`}
                   id="notes"
                   dialogComponentClass={CenteredModal}
                   show={this.state.showNoteModal}
@@ -1013,6 +1019,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                           siteId={this.state.adminSiteId}
                           addNote={this.props.addNote}
                           editNoteProcess={this.props.editNoteProcess}
+                          hideParentModal={this.setNoteModalClass}
                         />
                         <DashboardNoteTable
                           siteId={this.state.adminSiteId}
@@ -1021,6 +1028,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                           editNoteProcess={this.props.editNoteProcess}
                           editNote={this.props.editNote}
                           deleteNote={this.props.deleteNote}
+                          hideParentModal={this.setNoteModalClass}
                         />
                       </div>
                     </div>

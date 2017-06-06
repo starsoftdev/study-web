@@ -12,6 +12,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     editNote: PropTypes.func,
     deleteNote: PropTypes.func,
     editNoteProcess: PropTypes.object,
+    hideParentModal: PropTypes.func,
   };
 
   constructor(props) {
@@ -37,10 +38,12 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
   closeAddNoteModal() {
     this.setState({ addNoteModalOpen: false });
+    this.props.hideParentModal(false);
   }
 
   openAddNoteModal() {
     this.setState({ addNoteModalOpen: true });
+    this.props.hideParentModal(true);
   }
 
   editNote(params) {
