@@ -485,18 +485,20 @@ export function* fetchClientSitesWatcher() {
 }
 
 export function* fetchSitePatientsWatcher() {
-  while (true) {
-    const { userId } = yield take(FETCH_SITE_PATIENTS);
-
-    try {
-      const requestURL = `${API_URL}/patients/patientsForUser?userId=${userId}`;
-      const response = yield call(request, requestURL);
-
-      yield put(sitePatientsFetched(response));
-    } catch (err) {
-      yield put(sitePatientsFetchingError(err));
-    }
-  }
+  // while (true) {
+  //   const { userId } = yield take(FETCH_SITE_PATIENTS);
+  //
+  //   try {
+  //     const requestURL = `${API_URL}/patients/patientsForUser?userId=${userId}`;
+  //     const response = yield call(request, requestURL);
+  //
+  //     yield put(sitePatientsFetched(response));
+  // TODO re-enable site patient fetching for global PMS later
+  yield put(sitePatientsFetched([]));
+  //   } catch (err) {
+  //     yield put(sitePatientsFetchingError(err));
+  //   }
+  // }
 }
 
 export function* fetchClientCreditsWatcher() {
@@ -550,17 +552,19 @@ export function* fetchPatientMessagesWatcher() {
   }
 }
 
-export function* fetchPatientMessageUnreadCountWatcher() {
-  while (true) {
-    const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
-    try {
-      const requestURL = `${API_URL}/clients/${currentUser.roleForClient.client_id}/patientMessageStats`;
-      const response = yield call(request, requestURL);
-      yield put(patientMessageUnreadCountFetched(response));
-    } catch (err) {
-      console.trace(err);
-    }
-  }
+export function* fetchPatientMessageUnreadCountWatcher() { // eslint-disable-line no-unused-vars
+  // while (true) {
+  //   const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
+  //   try {
+  //     const requestURL = `${API_URL}/clients/${currentUser.roleForClient.client_id}/patientMessageStats`;
+  //     const response = yield call(request, requestURL);
+  //     yield put(patientMessageUnreadCountFetched(response));
+  // TODO re-enable patient message stat fetching
+  yield put(patientMessageUnreadCountFetched(0));
+  //   } catch (err) {
+  //     console.trace(err);
+  //   }
+  // }
 }
 
 export function* fetchClientRolesWatcher() {
