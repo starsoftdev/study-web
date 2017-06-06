@@ -12,6 +12,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     editNote: PropTypes.func,
     deleteNote: PropTypes.func,
     editNoteProcess: PropTypes.object,
+    hideParentModal: PropTypes.func,
   };
 
   constructor(props) {
@@ -37,10 +38,12 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
   closeAddNoteModal() {
     this.setState({ addNoteModalOpen: false });
+    this.props.hideParentModal(false);
   }
 
   openAddNoteModal() {
     this.setState({ addNoteModalOpen: true });
+    this.props.hideParentModal(true);
   }
 
   editNote(params) {
@@ -79,7 +82,14 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           </a>
         </td>
 
-        <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addNoteModalOpen} onHide={this.closeAddNoteModal}>
+        <Modal
+          dialogComponentClass={CenteredModal}
+          className="new-user"
+          id="new-user"
+          show={this.state.addNoteModalOpen}
+          onHide={this.closeAddNoteModal}
+          backdrop={false}
+        >
           <Modal.Header>
             <Modal.Title>Edit Note</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddNoteModal}>

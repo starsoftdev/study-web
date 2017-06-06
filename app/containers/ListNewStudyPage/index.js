@@ -207,8 +207,8 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       addOns.push({
         title: 'Patient Qualification Suite',
         price: QUALIFICATION_SUITE_PRICE,
-        quantity: 1,
-        total: QUALIFICATION_SUITE_PRICE,
+        quantity: months.value,
+        total: QUALIFICATION_SUITE_PRICE * months.value,
       });
     }
 

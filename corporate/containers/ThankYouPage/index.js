@@ -1,10 +1,12 @@
 /* eslint-disable react/prefer-stateless-function */
 /* eslint-disable prefer-template */
+/* eslint-disable jsx-a11y/img-has-alt */
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
+import { componentWillAppendToBody } from 'react-append-to-body';
 
 import img19 from '../../assets/images/img19.svg';
 
@@ -16,6 +18,13 @@ import {
   clearLanding,
 } from '../../../app/containers/App/actions';
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
+
+function MyComponent({ children }) {
+  return (
+    children
+  );
+}
+
 export class ThankYouPage extends React.Component {
 
   static propTypes = {
@@ -53,6 +62,7 @@ export class ThankYouPage extends React.Component {
 
   render() {
     const landing = (this.state.landing) ? this.state.landing : this.props.landing;
+    const AppendedMyComponent = componentWillAppendToBody(MyComponent);
     let addressStr = null;
     const address = landing.address;
     const city = landing.city;
@@ -85,6 +95,9 @@ export class ThankYouPage extends React.Component {
     if (zip) {
       addressStr += ` ${zip}`;
     }
+
+    const markup = 'fbq(\'track\', \'Lead\', { value: 0, currency: \'USD\' });';
+    const inner = { __html: markup };
 
     return (
       <div id="main">
@@ -119,6 +132,9 @@ export class ThankYouPage extends React.Component {
             </div>
           </section>
         </div>
+        <AppendedMyComponent>
+          <script dangerouslySetInnerHTML={inner} />
+        </AppendedMyComponent>
       </div>
     );
   }
