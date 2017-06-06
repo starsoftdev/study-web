@@ -34,7 +34,7 @@ const labelStyle = {
   paddingRight: 0,
 };
 
-function Toggle({ input, name, initValue, className, onChange, disabled, meta: { touched, error, active } }) {
+function Toggle({ input, name, initValue, className, onChange, disabled, enableTooltip, meta: { touched, error, active } }) {
   const hasError = touched && error && !active;
   const trackColor = hasError ? 'red' : '#cdcdcd';
   const toggleDisabled = disabled ? 'toggleDisabled' : null;
@@ -72,7 +72,7 @@ function Toggle({ input, name, initValue, className, onChange, disabled, meta: {
     }}
   />);
 
-  if (hasError) {
+  if (hasError && enableTooltip) {
     inputComponent = (
       <OverlayTrigger
         placement="right"
@@ -98,6 +98,7 @@ Toggle.propTypes = {
   meta: PropTypes.object.isRequired,
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
+  enableTooltip: PropTypes.bool,
 };
 
 export default Toggle;

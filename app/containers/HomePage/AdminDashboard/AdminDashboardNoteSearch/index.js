@@ -1,9 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
-import ReactSelect from '../../../../components/Input/ReactSelect';
 import CenteredModal from '../../../../components/CenteredModal/index';
 import { AddNoteForm } from './AddNoteForm';
 
@@ -15,7 +14,7 @@ export class DashboardNoteSearch extends React.Component {
     editNoteProcess: PropTypes.object,
     noteSearchFormValues: PropTypes.object,
     siteId: PropTypes.number,
-    siteName: PropTypes.string,
+    hideParentModal: PropTypes.func,
   }
 
   constructor(props) {
@@ -38,11 +37,13 @@ export class DashboardNoteSearch extends React.Component {
 
   closeAddNoteModal() {
     this.setState({ addNoteModalOpen: false });
+    this.props.hideParentModal(false);
   }
 
   openAddNoteModal() {
     if (this.props.siteId) {
       this.setState({ addNoteModalOpen: true });
+      this.props.hideParentModal(true);
     }
   }
 
@@ -55,11 +56,6 @@ export class DashboardNoteSearch extends React.Component {
   }
 
   render() {
-    const options = [];
-    options.push({
-      label: this.props.siteName, value: this.props.siteId,
-    });
-
     const addNoteAddOn = (
       <a className="btn btn-primary lightbox-opener" onClick={this.openAddNoteModal}>
         Add Note
@@ -68,26 +64,19 @@ export class DashboardNoteSearch extends React.Component {
     return (
       <form action="#" className="form-search clearfix">
         <div className="btns-area row pull-right">
-          <div className="col pull-left">
+          <div className="col pull-left no-right-padding">
             {addNoteAddOn}
           </div>
         </div>
-        <div className="fields-holder">
-          <div className="pull-left col custom-select">
-            <div className="has-feedback ">
-              <Field
-                name="site"
-                component={ReactSelect}
-                placeholder="Select Site Location"
-                options={options}
-                selectedValue={this.props.siteId}
-                disabled="true"
-              />
-            </div>
-          </div>
-        </div>
 
-        <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addNoteModalOpen} onHide={this.closeAddNoteModal}>
+        <Modal
+          dialogComponentClass={CenteredModal}
+          className="new-user"
+          id="new-user"
+          show={this.state.addNoteModalOpen}
+          onHide={this.closeAddNoteModal}
+          backdrop={false}
+        >
           <Modal.Header>
             <Modal.Title>Add Note</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddNoteModal}>

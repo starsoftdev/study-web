@@ -201,7 +201,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
             loadMore={this.loadItems}
             initialLoad={false}
             hasMore={this.props.paginationOptions.hasMoreItems}
-            loader={false}
+            loader={null}
           >
             {patientsListContents}
             {(patients.fetching) && <LoadingSpinner showOnlyIcon={false} noMessage />}
