@@ -75,6 +75,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (socket && this.state.socketBinded === false) {
       socket.on('notifyMessage', (message) => {
         let curCategoryId = null;
+        let unreadMessageCount = 0;
         const socketMessage = message;
 
         if (socketMessage.twilioTextMessage.__data) { // eslint-disable-line no-underscore-dangle
@@ -91,17 +92,20 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           _.forEach(item.patients, (patient) => {
             if (patient.id === socketMessage.patient_id) {
               curCategoryId = item.id;
+              unreadMessageCount = patient.unreadMessageCount || 0;
             }
           });
         });
 
         this.props.fetchStudy(params.id);
         this.props.fetchStudyTextNewStats(params.id);
-        this.props.updatePatientSuccess({
-          patientId: socketMessage.patient_id,
-          patientCategoryId: curCategoryId,
-          lastTextMessage: { body: socketMessage.twilioTextMessage.body, dateCreated: socketMessage.twilioTextMessage.dateCreated },
-        });
+        if (curCategoryId) {
+          this.props.updatePatientSuccess({
+            patientId: socketMessage.patient_id,
+            patientCategoryId: curCategoryId,
+            unreadMessageCount: (unreadMessageCount + 1),
+          });
+        }
       });
       this.setState({ socketBinded: true });
     }
