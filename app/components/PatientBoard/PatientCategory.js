@@ -12,7 +12,7 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import moment from 'moment';
 
-import { selectCurrentUser, selectSitePatients } from '../../containers/App/selectors';
+import { selectCurrentUser } from '../../containers/App/selectors';
 import * as Selector from '../../containers/StudyPage/selectors';
 import DragTypes from './dragSourceTypes';
 import Patient from './Patient';
@@ -98,7 +98,6 @@ class PatientCategory extends React.Component {
     onPatientClick: React.PropTypes.func.isRequired,
     isOver: React.PropTypes.bool.isRequired,
     onPatientTextClick: React.PropTypes.func.isRequired,
-    sitePatients: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -138,7 +137,7 @@ class PatientCategory extends React.Component {
   }
 
   renderPatients() {
-    const { category, currentPatientId, currentUser, onPatientClick, onPatientTextClick, studyId, sitePatients } = this.props;
+    const { category, currentPatientId, currentUser, onPatientClick, onPatientTextClick } = this.props;
 
     if (category.patients.length > 0) {
       const getLastUpdate = (patient) => {
@@ -150,33 +149,25 @@ class PatientCategory extends React.Component {
         return tempMax;
       };
 
+      // sort the patients into the categories
       const sorted = _.orderBy(category.patients, (patient) => getLastUpdate(patient), 'desc');
-
-      // const sorted = _.orderBy(category.patients, ['orderNumber'], ['asc']);
 
       return (
         <div className="slide">
           <div className="slide-holder">
             <ul className="list-unstyled">
-              {sorted.map(patient => {
-                const patientData = _.find(sitePatients.details, { study_id: studyId, id: patient.id });
-                let unreadMessageCount = 0;
-                if (patientData !== undefined) {
-                  unreadMessageCount = patientData.count_unread === null ? 0 : parseInt(patientData.count_unread);
-                }
-                return (
-                  <Patient
-                    key={patient.id}
-                    category={category}
-                    currentPatientId={currentPatientId}
-                    patient={patient}
-                    unreadMessageCount={unreadMessageCount}
-                    currentUser={currentUser}
-                    onPatientClick={onPatientClick}
-                    onPatientTextClick={onPatientTextClick}
-                  />
-                );
-              })}
+              {sorted.map(patient => (
+                <Patient
+                  key={patient.id}
+                  category={category}
+                  currentPatientId={currentPatientId}
+                  patient={patient}
+                  unreadMessageCount={patient.unreadMessageCount}
+                  currentUser={currentUser}
+                  onPatientClick={onPatientClick}
+                  onPatientTextClick={onPatientTextClick}
+                />
+                ))}
             </ul>
           </div>
         </div>
@@ -213,7 +204,6 @@ const mapStateToProps = createStructuredSelector({
   currentPatientId: Selector.selectCurrentPatientId(),
   currentUser: selectCurrentUser(),
   studyId: Selector.selectStudyId(),
-  sitePatients: selectSitePatients(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
