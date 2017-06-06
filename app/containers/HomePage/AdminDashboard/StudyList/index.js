@@ -1001,7 +1001,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   keyboard
                 >
                   <Modal.Header>
-                    <Modal.Title>Notes</Modal.Title>
+                    <Modal.Title>{this.state.adminSiteName}</Modal.Title>
                     <a className="lightbox-close close" onClick={this.closeNoteModal}>
                       <i className="icomoon-icon_close" />
                     </a>
@@ -1011,12 +1011,12 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                       <div className="form-admin-note">
                         <DashboardNoteSearch
                           siteId={this.state.adminSiteId}
-                          siteName={this.state.adminSiteName}
                           addNote={this.props.addNote}
                           editNoteProcess={this.props.editNoteProcess}
                         />
                         <DashboardNoteTable
                           siteId={this.state.adminSiteId}
+                          tableName="Notes"
                           note={this.props.note}
                           editNoteProcess={this.props.editNoteProcess}
                           editNote={this.props.editNote}
