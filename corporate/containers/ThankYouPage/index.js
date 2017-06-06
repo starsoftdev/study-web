@@ -1,10 +1,12 @@
 /* eslint-disable react/prefer-stateless-function */
 /* eslint-disable prefer-template */
+/* eslint-disable jsx-a11y/img-has-alt */
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
+import { componentWillAppendToBody } from 'react-append-to-body';
 
 import img19 from '../../assets/images/img19.svg';
 
@@ -16,6 +18,13 @@ import {
   clearLanding,
 } from '../../../app/containers/App/actions';
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
+
+function MyComponent({ children }) {
+  return (
+    children
+  );
+}
+
 export class ThankYouPage extends React.Component {
 
   static propTypes = {
@@ -53,6 +62,7 @@ export class ThankYouPage extends React.Component {
 
   render() {
     const landing = (this.state.landing) ? this.state.landing : this.props.landing;
+    const AppendedMyComponent = componentWillAppendToBody(MyComponent);
     let addressStr = null;
     const address = landing.address;
     const city = landing.city;
@@ -85,6 +95,17 @@ export class ThankYouPage extends React.Component {
     if (zip) {
       addressStr += ` ${zip}`;
     }
+
+    const markup = `
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '914628025278184'); // Insert your pixel ID here.
+      fbq('track', 'PageView');`;
+
+    const inner = { __html: markup };
 
     return (
       <div id="main">
@@ -119,25 +140,19 @@ export class ThankYouPage extends React.Component {
             </div>
           </section>
         </div>
-        <script
-          dangerouslySetInnerHTML={{ __html: `
-            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-            document,'script','https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '914628025278184'); // Insert your pixel ID here.
-            fbq('track', 'PageView');
-          `}}
-        />
-        <noscript>
-          <img
-            height="1"
-            width="1"
-            style="display:none"
-            src="https://www.facebook.com/tr?id=914628025278184&ev=PageView&noscript=1"
-          />
-        </noscript>
+        <AppendedMyComponent>
+          <div>
+            <script dangerouslySetInnerHTML={inner} />
+            <noscript>
+              <img
+                height="1"
+                width="1"
+                style={{ display:'none' }}
+                src="https://www.facebook.com/tr?id=914628025278184&ev=PageView&noscript=1"
+              />
+            </noscript>
+          </div>
+        </AppendedMyComponent>
       </div>
     );
   }
