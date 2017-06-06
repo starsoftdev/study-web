@@ -11,6 +11,7 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
     deleteNote: PropTypes.func,
     editNoteProcess: PropTypes.object,
     siteId: PropTypes.number,
+    tableName: PropTypes.string,
   }
 
   constructor(props) {
@@ -53,7 +54,7 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
     return (
       <div className="table-responsive table-holder table-indication alt">
         <table className="table-manage-user table">
-          <caption>&nbsp;</caption>
+          <caption>{this.props.tableName ? this.props.tableName : '\u00A0'}</caption>
           <colgroup>
             <col style={{ width: '66%' }} />
             <col style={{ width: '12%' }} />

@@ -145,25 +145,27 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     const { level, callTracking, patientQualificationSuite } = this.state;
     const addOns = [];
 
-    if (level) {
+    const campaignLength = (selectedStudy && selectedStudy.campaignlength) ? parseInt(selectedStudy.campaignlength) : null;
+
+    if (level && campaignLength) {
       if (!selectedIndicationLevelPrice.fetching && selectedIndicationLevelPrice.details) {
         const foundLevel = find(studyLevels, { id: level });
 
         addOns.push({
           title: `${foundLevel.type}`,
           price: selectedIndicationLevelPrice.details,
-          quantity: 1,
-          total: selectedIndicationLevelPrice.details,
+          quantity: campaignLength,
+          total: selectedIndicationLevelPrice.details * campaignLength,
         });
       }
     }
-    if (patientQualificationSuite) {
+    if (patientQualificationSuite && campaignLength) {
       if (selectedStudy && selectedStudy.patientQualificationSuite !== 'On') {
         addOns.push({
           title: 'Patient Qualification Suite',
           price: QUALIFICATION_SUITE_PRICE,
-          quantity: 1,
-          total: QUALIFICATION_SUITE_PRICE,
+          quantity: campaignLength,
+          total: QUALIFICATION_SUITE_PRICE * campaignLength,
         });
       }
     }

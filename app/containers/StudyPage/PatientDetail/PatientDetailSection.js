@@ -110,7 +110,6 @@ class PatientDetailSection extends React.Component {
                   placeholder="First Name"
                   isDisabled={submitting}
                   required
-                  tooltipDisabled
                 />
               </div>
               <div className="col pull-right">
@@ -121,7 +120,6 @@ class PatientDetailSection extends React.Component {
                   placeholder="Last Name"
                   isDisabled={submitting}
                   required
-                  tooltipDisabled
                 />
               </div>
             </div>
@@ -136,7 +134,6 @@ class PatientDetailSection extends React.Component {
               type="email"
               name="email"
               component={Input}
-              tooltipDisabled
             />
           </div>
         </div>
@@ -151,7 +148,6 @@ class PatientDetailSection extends React.Component {
               component={Input}
               onBlur={this.onPhoneBlur}
               required
-              tooltipDisabled
             />
           </div>
         </div>

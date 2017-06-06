@@ -69,6 +69,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     sources: PropTypes.array,
     hasError: PropTypes.bool,
     onSubmit: PropTypes.func,
+    handleSubmit: PropTypes.func,
   };
 
   constructor(props) {
@@ -251,7 +252,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       indications: formValues.indications,
     };
     return (
-      <Form className="form-lightbox form-edit-patient-information" onSubmit={this.onSubmit}>
+      <Form className="form-lightbox form-edit-patient-information" onSubmit={this.props.handleSubmit}>
         <div className="field-row form-group">
           <strong className="label required">
             <label>NAME</label>
