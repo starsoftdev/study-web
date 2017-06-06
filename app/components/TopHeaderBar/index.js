@@ -102,7 +102,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
   }
 
   render() {
-    const { userRoleType, patientMessageUnreadCount, currentUser } = this.props;
+    const { userRoleType, currentUser } = this.props;
     let purchasable = true;
     if (userRoleType === 'client') {
       purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
@@ -138,10 +138,10 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             <a
               className={classNames('disabled opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
             >
-              {patientMessageUnreadCount > 0
-                ? {/* <span className="counter">{patientMessageUnreadCount}</span>*/}
+              {/* {patientMessageUnreadCount > 0
+                ? <span className="counter">{patientMessageUnreadCount}</span>
                 : null
-              }
+              }*/}
               <i className="icomoon-credit" />
             </a>
 
