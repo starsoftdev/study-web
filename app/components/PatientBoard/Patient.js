@@ -55,13 +55,35 @@ class Patient extends React.Component {
 
   constructor(props) {
     super(props);
+    this.renderUnreadMessageCount = this.renderUnreadMessageCount.bind(this);
+    this.renderTextCreatedDate = this.renderTextCreatedDate.bind(this);
     this.renderPatientTextMessageSummary = this.renderPatientTextMessageSummary.bind(this);
   }
 
-  renderPatientTextMessageSummary(patient) {
-    const { category, currentUser, onPatientTextClick, unreadMessageCount } = this.props;
+  renderUnreadMessageCount() {
+    const { unreadMessageCount } = this.props;
+    if (unreadMessageCount > 0) {
+      return (
+        <span className="counter-circle">{unreadMessageCount}</span>
+      );
+    }
+    return null;
+  }
 
-    if (patient.lastTextMessage) {
+  renderTextCreatedDate() {
+    const { currentUser, patient: { lastTextMessage } } = this.props;
+    if (lastTextMessage) {
+      return (
+        <time dateTime={lastTextMessage.dateCreated}>{moment.tz(lastTextMessage.dateCreated, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+      );
+    }
+    return null;
+  }
+
+  renderPatientTextMessageSummary() {
+    const { category, onPatientTextClick, patient, unreadMessageCount } = this.props;
+
+    if (patient.lastTextMessage || unreadMessageCount > 0) {
       return (
         <a
           className="bottom"
@@ -71,18 +93,11 @@ class Patient extends React.Component {
         >
           <div className="msg-alert">
             <div className="msg">
-              <p>{patient.lastTextMessage.body}</p>
+              <p>{patient.lastTextMessage ? patient.lastTextMessage.body : ''}</p>
             </div>
             <div className="time">
-              {(() => {
-                if (unreadMessageCount > 0) {
-                  return (
-                    <span className="counter-circle">{unreadMessageCount}</span>
-                  );
-                }
-                return false;
-              })()}
-              <time dateTime={patient.lastTextMessage.dateCreated}>{moment.tz(patient.lastTextMessage.dateCreated, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+              {this.renderUnreadMessageCount()}
+              {this.renderTextCreatedDate()}
             </div>
           </div>
         </a>
@@ -116,7 +131,7 @@ class Patient extends React.Component {
           <span className="email">{patient.email}</span>
           <span className="phone">{patientPhone}</span>
         </a>
-        {this.renderPatientTextMessageSummary(patient)}
+        {this.renderPatientTextMessageSummary()}
       </li>
     );
   }
