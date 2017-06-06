@@ -13,6 +13,8 @@ import { Link } from 'react-router';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
+import InfiniteScroll from 'react-infinite-scroller';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 import Input from '../../components/Input';
 import formValidator from './validator';
@@ -23,6 +25,7 @@ import {
   selectSitePatients,
   selectPatientMessages,
   selectClientCredits,
+  selectGlobalPMSPaginationOptions,
 } from '../../containers/App/selectors';
 
 import MessageItem from './MessageItem';
@@ -74,6 +77,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     hasError: React.PropTypes.bool,
     formValues: React.PropTypes.object,
     change: React.PropTypes.func,
+    globalPMSPaginationOptions: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -84,11 +88,13 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     this.selectPatient = this.selectPatient.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.loadItems = this.loadItems.bind(this);
     this.state = {
       selectedPatient: { id: 0 },
       socketBinded: false,
       playSound: Sound.status.STOPPED,
       searchBy: null,
+      searchTimer: null,
     };
   }
 
@@ -158,20 +164,25 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     } else {
       value = e;
     }
-    this.setState({
-      searchBy: value,
-    });
-    // if (this.state.searchTimer) {
-    //   clearTimeout(this.state.searchTimer);
-    //   this.setState({ searchTimer: null });
-    // }
-    // this.props.searchSitePatients(value);
-    // const timerH = setTimeout(() => { this.setState({ patientLoaded: true }); }, 500);
-    // this.setState({ searchTimer: timerH });
+
+    if (this.state.searchTimer) {
+      clearTimeout(this.state.searchTimer);
+      this.setState({ searchTimer: null });
+    }
+    const timerH = setTimeout(() => {
+      this.props.fetchSitePatients(this.props.currentUser.id, 0, 10, value);
+    }, 500);
+    this.setState({ searchTimer: timerH });
   }
 
   handleClose() {
     this.props.closeModal();
+  }
+
+  loadItems() {
+    const limit = 10;
+    const offset = this.props.globalPMSPaginationOptions.page * 10;
+    this.props.fetchSitePatients(this.props.currentUser.id, offset, limit);
   }
 
   render() {
@@ -240,27 +251,36 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
               <div className="holder clearfix">
                 <aside className="aside-chat">
                   <div className="scroll-holder">
-                    <div className="custom-select-drop">
-                      <div className="field">
-                        <Button className="btn-enter" type="submit">
-                          <i className="icomoon-icon_search2" />
-                        </Button>
-                        <Field
-                          name="name"
-                          component={Input}
-                          onChange={(e) => this.handleKeyPress(e)}
-                          type="text"
-                          className="keyword-search"
-                          placeholder="Search"
-                          ref={(searchKey) => {
-                            this.searchKey = searchKey;
-                          }}
-                        />
+                    <InfiniteScroll
+                      pageStart={0}
+                      loadMore={this.loadItems}
+                      initialLoad={false}
+                      hasMore={this.props.globalPMSPaginationOptions.hasMoreItems}
+                      loader={<div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
+                      useWindow={false}
+                    >
+                      <div className="custom-select-drop">
+                        <div className="field">
+                          <Button className="btn-enter" type="submit">
+                            <i className="icomoon-icon_search2" />
+                          </Button>
+                          <Field
+                            name="name"
+                            component={Input}
+                            onChange={(e) => this.handleKeyPress(e)}
+                            type="text"
+                            className="keyword-search"
+                            placeholder="Search"
+                            ref={(searchKey) => {
+                              this.searchKey = searchKey;
+                            }}
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <ul className="tabset list-unstyled">
-                      {sitePatientsListContents}
-                    </ul>
+                      <ul className="tabset list-unstyled">
+                        {sitePatientsListContents}
+                      </ul>
+                    </InfiniteScroll>
                   </div>
                 </aside>
                 <div className="chatroom">
@@ -307,11 +327,12 @@ const mapStateToProps = createStructuredSelector({
   socket: selectSocket(),
   hasError: selectGlobalPMSFormError(),
   formValues: selectGlobalPMSFormValues(),
+  globalPMSPaginationOptions: selectGlobalPMSPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSitePatients: (siteId) => dispatch(fetchSitePatients(siteId)),
+    fetchSitePatients: (userId, offset, limit, search) => dispatch(fetchSitePatients(userId, offset, limit, search)),
     searchSitePatients: (keyword) => dispatch(searchSitePatients(keyword)),
     updateSitePatients: (newMessage) => dispatch(updateSitePatients(newMessage)),
     fetchPatientMessages: (patientId) => dispatch(fetchPatientMessages(patientId)),

@@ -486,13 +486,19 @@ export function* fetchClientSitesWatcher() {
 
 export function* fetchSitePatientsWatcher() {
   while (true) {
-    const { userId } = yield take(FETCH_SITE_PATIENTS);
+    const { userId, limit, offset, search } = yield take(FETCH_SITE_PATIENTS);
 
     try {
-      const requestURL = `${API_URL}/patients/patientsForUser?userId=${userId}`;
+      const requestURL = `${API_URL}/patients/patientsForUser?userId=${userId}&limit=${limit || 10}&offset=${offset || 0}&search=${search || ''}`;
       const response = yield call(request, requestURL);
 
-      yield put(sitePatientsFetched(response));
+      let hasMore = true;
+      const page = ((offset || 0) / 10) + 1;
+      if (response.length < 10) {
+        hasMore = false;
+      }
+
+      yield put(sitePatientsFetched(response, hasMore, page));
     } catch (err) {
       yield put(sitePatientsFetchingError(err));
     }
