@@ -69,7 +69,14 @@ export class DashboardNoteSearch extends React.Component {
           </div>
         </div>
 
-        <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addNoteModalOpen} onHide={this.closeAddNoteModal}>
+        <Modal
+          dialogComponentClass={CenteredModal}
+          className="new-user"
+          id="new-user"
+          show={this.state.addNoteModalOpen}
+          onHide={this.closeAddNoteModal}
+          backdrop={false}
+        >
           <Modal.Header>
             <Modal.Title>Add Note</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddNoteModal}>

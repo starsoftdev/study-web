@@ -82,7 +82,14 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           </a>
         </td>
 
-        <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addNoteModalOpen} onHide={this.closeAddNoteModal}>
+        <Modal
+          dialogComponentClass={CenteredModal}
+          className="new-user"
+          id="new-user"
+          show={this.state.addNoteModalOpen}
+          onHide={this.closeAddNoteModal}
+          backdrop={false}
+        >
           <Modal.Header>
             <Modal.Title>Edit Note</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddNoteModal}>
