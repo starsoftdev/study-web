@@ -542,17 +542,22 @@ export function clientCreditsFetchingError(payload) {
   };
 }
 
-export function fetchSitePatients(userId) {
+export function fetchSitePatients(userId, offset, limit, search) {
   return {
     type: FETCH_SITE_PATIENTS,
     userId,
+    offset,
+    limit,
+    search,
   };
 }
 
-export function sitePatientsFetched(payload) {
+export function sitePatientsFetched(payload, hasMoreItems, page) {
   return {
     type: FETCH_SITE_PATIENTS_SUCCESS,
     payload,
+    hasMoreItems,
+    page,
   };
 }
 

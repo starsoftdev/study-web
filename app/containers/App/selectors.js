@@ -393,6 +393,11 @@ const selectTrialsTotal = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.trials.total', {})
 );
+
+const selectGlobalPMSPaginationOptions = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.globalPMSPaginationOptions', {})
+);
 // end
 
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
@@ -460,4 +465,5 @@ export {
 
   selectTrials,
   selectTrialsTotal,
+  selectGlobalPMSPaginationOptions,
 };
