@@ -24,13 +24,13 @@ export default class HelpSupportPage extends React.Component { // eslint-disable
         title: 'View Patients', id: 'sijGIJaS688',
       },
       {
-        title: 'View Patients', id: 'c2x9kqM52j8',
+        title: 'Renew a Study', id: 'c2x9kqM52j8',
       },
       {
         title: 'Upgrade a Study', id: 'EH5V-yiNPOo',
       },
       {
-        title: 'PMS', id: 'PxOHrZEVUZw',
+        title: 'Patient messaging suite', id: 'PxOHrZEVUZw',
       },
       {
         title: 'Patient Database', id: 'vJbb6O_My_s',
