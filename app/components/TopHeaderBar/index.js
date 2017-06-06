@@ -136,11 +136,10 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             <HelpMenu />
 
             <a
-              className={classNames('opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
-              onClick={this.showGlobalPMSModal}
+              className={classNames('disabled opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
             >
               {patientMessageUnreadCount > 0
-                ? <span className="counter">{patientMessageUnreadCount}</span>
+                ? {/* <span className="counter">{patientMessageUnreadCount}</span>*/}
                 : null
               }
               <i className="icomoon-credit" />
