@@ -96,14 +96,24 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     const { currentUser } = newProps;
     if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
-        if (currentUser.roleForClient && currentUser.roleForClient.client_id === newMessage.client_id) {
+        const socketMessage = newMessage;
+        if (currentUser.roleForClient && currentUser.roleForClient.client_id === socketMessage.client_id) {
           this.props.fetchClientCredits(currentUser.id);
-          if (newMessage.twilioTextMessage.direction === 'inbound') {
+          if (socketMessage.twilioTextMessage.__data) { // eslint-disable-line no-underscore-dangle
+            socketMessage.twilioTextMessage = socketMessage.twilioTextMessage.__data; // eslint-disable-line no-underscore-dangle
+          }
+          if (socketMessage.study.__data) { // eslint-disable-line no-underscore-dangle
+            socketMessage.study = socketMessage.study.__data; // eslint-disable-line no-underscore-dangle
+          }
+          if (socketMessage.patient.__data) { // eslint-disable-line no-underscore-dangle
+            socketMessage.patient = socketMessage.patient.__data; // eslint-disable-line no-underscore-dangle
+          }
+          if (socketMessage.twilioTextMessage.direction === 'inbound') {
             this.startSound();
           }
-          this.props.updateSitePatients(newMessage);
+          this.props.updateSitePatients(socketMessage);
         }
-        if (this.props.showModal === true && this.state.selectedPatient && this.state.selectedPatient.id === newMessage.patient_id) {
+        if (this.props.showModal === true && this.state.selectedPatient && this.state.selectedPatient.id === socketMessage.patient_id) {
           this.props.fetchPatientMessages(this.state.selectedPatient.id);
           this.props.markAsReadPatientMessages(this.state.selectedPatient.id);
         }
