@@ -13,15 +13,16 @@ import Button from 'react-bootstrap/lib/Button';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Form from 'react-bootstrap/lib/Form';
 
-import Toggle from '../../../../components/Input/Toggle';
-import Input from '../../../../components/Input/index';
-import DatePicker from '../../../../components/Input/DatePicker';
-import ReactSelect from '../../../../components/Input/ReactSelect';
-import LoadingSpinner from '../../../../components/LoadingSpinner';
+import Toggle from '../../components/Input/Toggle';
+import Input from '../../components/Input/index';
+import DatePicker from '../../components/Input/DatePicker';
+import ReactSelect from '../../components/Input/ReactSelect';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import RenderEmailsList from './RenderEmailsList';
-import { selectStudyCampaigns } from '../selectors';
-import FormGeosuggest from '../../../../components/Input/Geosuggest';
-import { normalizePhoneDisplay } from '../../../../common/helper/functions';
+import RenderCustomEmailsList from './RenderCustomEmailsList';
+import { selectStudyCampaigns } from '../../containers/HomePage/AdminDashboard/selectors';
+import FormGeosuggest from '../../components/Input/Geosuggest';
+import { normalizePhoneDisplay } from '../../common/helper/functions';
 const mapStateToProps = createStructuredSelector({
   studyCampaigns: selectStudyCampaigns(),
 });
@@ -49,6 +50,7 @@ export class EditInformationModal extends React.Component {
     fetchAllClientUsersDashboard: PropTypes.func.isRequired,
     formValues: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
+    removeCustomEmailNotification: PropTypes.func.isRequired,
     indications: PropTypes.array,
     isOnTop: React.PropTypes.bool,
     onClose: PropTypes.func.isRequired,
@@ -56,6 +58,7 @@ export class EditInformationModal extends React.Component {
     openModal: PropTypes.bool.isRequired,
     onShow: PropTypes.func,
     levels: PropTypes.array,
+    allCustomNotificationEmails: PropTypes.object,
     messagingNumbers: PropTypes.object,
     protocols: PropTypes.array,
     siteLocations: PropTypes.array,
@@ -84,7 +87,7 @@ export class EditInformationModal extends React.Component {
 
       let studyEmailUsers = formValues.study_notification_users;
 
-      if (studyEmailUsers) {
+      if (studyEmailUsers) { // notification emails
         studyEmailUsers = studyEmailUsers.substr(studyEmailUsers.indexOf('{') + 1);
         studyEmailUsers = studyEmailUsers.substr(0, studyEmailUsers.indexOf('}'));
         studyEmailUsers = studyEmailUsers.split(',');
@@ -95,8 +98,7 @@ export class EditInformationModal extends React.Component {
             isAllChecked = false;
           }
           fields.push({
-            firstName: item.first_name,
-            lastName: item.last_name,
+            email: item.email,
             userId: item.user_id,
             isChecked,
           });
@@ -107,6 +109,34 @@ export class EditInformationModal extends React.Component {
         formValues.checkAllInput = isAllChecked;
         this.props.setEditStudyFormValues(formValues);
       }
+    }
+
+    if (!newProps.allCustomNotificationEmails.fetching && newProps.allCustomNotificationEmails.details) {
+      const customFields = [];
+      let isAllCustomChecked = (newProps.allCustomNotificationEmails.details.length);
+      const customEmailNotifications = newProps.formValues.customEmailNotifications;
+
+      _.forEach(newProps.allCustomNotificationEmails.details, (item) => {
+        const local = _.find(customEmailNotifications, (o) => (o.id === item.id));
+        let isChecked = (item.type === 'active');
+        if (local) {
+          isChecked = local.isChecked;
+          if (!isChecked) {
+            isAllCustomChecked = false;
+          }
+        }
+
+        customFields.push({
+          id: item.id,
+          email: item.email,
+          isChecked,
+        });
+      });
+
+      const formValues = {};
+      formValues.customEmailNotifications = customFields;
+      formValues.checkAllCustomInput = isAllCustomChecked;
+      this.props.setEditStudyFormValues(formValues);
     }
   }
 
@@ -508,7 +538,7 @@ export class EditInformationModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row">
-                  <strong className="label"><label>EMAIL NOTIFICATIONS</label></strong>
+                  <strong className="label"><label>USER EMAIL NOTIFICATIONS</label></strong>
                   <div className="field">
                     <div className="emails-list-holder">
                       {<FieldArray
@@ -520,7 +550,22 @@ export class EditInformationModal extends React.Component {
                         closeEmailNotification={this.closeAddEmailModal}
                       />}
                     </div>
-
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label"><label>EMAIL NOTIFICATIONS</label></strong>
+                  <div className="field">
+                    <div className="emails-list-holder">
+                      {<FieldArray
+                        name="customEmailNotifications"
+                        component={RenderCustomEmailsList}
+                        formValues={this.props.formValues}
+                        change={change}
+                        addEmailNotification={this.props.addEmailNotificationClick}
+                        closeEmailNotification={this.closeAddEmailModal}
+                        removeCustomEmailNotification={this.props.removeCustomEmailNotification}
+                      />}
+                    </div>
                   </div>
                 </div>
                 <div className="field-row">

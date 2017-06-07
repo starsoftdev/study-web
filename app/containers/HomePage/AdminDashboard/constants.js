@@ -72,6 +72,10 @@ export const UPDATE_TWILIO_NUMBERS                       = 'DashboardPage/UPDATE
 export const UPDATE_TWILIO_NUMBERS_SUCCESS               = 'DashboardPage/UPDATE_TWILIO_NUMBERS_SUCCESS';
 export const UPDATE_TWILIO_NUMBERS_ERROR                 = 'DashboardPage/UPDATE_TWILIO_NUMBERS_ERROR';
 
+export const FETCH_CUSTOM_NOTIFICATION_EMAILS             = 'DashboardPage/UPDATE_TWILIO_NUMBERS';
+export const FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS     = 'DashboardPage/UPDATE_TWILIO_NUMBERS_SUCCESS';
+export const FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR       = 'DashboardPage/UPDATE_TWILIO_NUMBERS_ERROR';
+
 export const FETCH_NOTE = 'DashboardPage/FETCH_NOTE';
 export const FETCH_NOTE_SUCCESS = 'DashboardPage/FETCH_NOTE_SUCCESS';
 export const FETCH_NOTE_ERROR = 'DashboardPage/FETCH_NOTE_ERROR';

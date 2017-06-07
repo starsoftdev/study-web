@@ -39,6 +39,9 @@ import {
   ADD_EMAIL_NOTIFICATION_USER,
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
   ADD_EMAIL_NOTIFICATION_USER_ERROR,
+  ADD_CUSTOM_EMAIL_NOTIFICATION,
+  ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+  ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR,
   FETCH_CLIENT_ADMINS,
   FETCH_CLIENT_ADMINS_SUCCESS,
   FETCH_CLIENT_ADMINS_ERROR,
@@ -110,6 +113,11 @@ const initialState = {
     activeDirection: null,
   },
   addNotificationProcess: {
+    saving: false,
+    error: null,
+    savedUser: null,
+  },
+  addCustomNotificationEmailProcess: {
     saving: false,
     error: null,
     savedUser: null,
@@ -532,6 +540,33 @@ export default function homePageReducer(state = initialState, action) {
       return {
         ...state,
         addNotificationProcess: {
+          saving: false,
+          error: action.payload,
+          savedUser: null,
+        },
+      };
+    case ADD_CUSTOM_EMAIL_NOTIFICATION:
+      return {
+        ...state,
+        addCustomNotificationEmailProcess: {
+          saving: true,
+          error: null,
+          savedUser: null,
+        },
+      };
+    case ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS:
+      return {
+        ...state,
+        addCustomNotificationEmailProcess: {
+          saving: false,
+          error: null,
+          savedUser: action.payload,
+        },
+      };
+    case ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR:
+      return {
+        ...state,
+        addCustomNotificationEmailProcess: {
           saving: false,
           error: action.payload,
           savedUser: null,

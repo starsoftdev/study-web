@@ -145,6 +145,14 @@ import {
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
   ADD_EMAIL_NOTIFICATION_USER_ERROR,
 
+  ADD_CUSTOM_EMAIL_NOTIFICATION,
+  ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+  ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR,
+
+  REMOVE_CUSTOM_EMAIL_NOTIFICATION,
+  REMOVE_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+  REMOVE_CUSTOM_EMAIL_NOTIFICATION_ERROR,
+
   LIST_SITE_NOW,
   LIST_SITE_NOW_SUCCESS,
   RESET_LIST_SITE_NOW_SUCCESS,
@@ -971,6 +979,48 @@ export function addEmailNotificationUserSuccess(payload) {
 export function addEmailNotificationUserError(payload) {
   return {
     type: ADD_EMAIL_NOTIFICATION_USER_ERROR,
+    payload,
+  };
+}
+
+export function addCustomEmailNotification(payload) {
+  return {
+    type: ADD_CUSTOM_EMAIL_NOTIFICATION,
+    payload,
+  };
+}
+
+export function addCustomEmailNotificationSuccess(payload) {
+  return {
+    type: ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+    payload,
+  };
+}
+
+export function addCustomEmailNotificationError(payload) {
+  return {
+    type: ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR,
+    payload,
+  };
+}
+
+export function removeCustomEmailNotification(payload) {
+  return {
+    type: REMOVE_CUSTOM_EMAIL_NOTIFICATION,
+    payload,
+  };
+}
+
+export function removeCustomEmailNotificationSuccess(payload) {
+  return {
+    type: REMOVE_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+    payload,
+  };
+}
+
+export function removeCustomEmailNotificationError(payload) {
+  return {
+    type: REMOVE_CUSTOM_EMAIL_NOTIFICATION_ERROR,
     payload,
   };
 }
