@@ -157,14 +157,16 @@ export class LandingPageModal extends React.Component {
     }
 
     if (!newProps.changeStudyAddProcess.saving && newProps.changeStudyAddProcess.success) {
-      this.setState({
+      this.closeStudyAddModal();
+
+      /*this.setState({
         landingFetched: false,
         initialValuesEntered: false,
       }, () => {
         fetchLanding(this.state.selected.study_id);
         resetChangeAddState();
         this.closeStudyAddModal();
-      });
+      });*/
     }
   }
 
