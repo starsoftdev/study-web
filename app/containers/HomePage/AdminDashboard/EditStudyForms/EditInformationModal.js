@@ -466,6 +466,7 @@ export class EditInformationModal extends React.Component {
                       type="text"
                       name="site_city"
                       component={Input}
+                      isDisabled
                     />
                   </div>
                 </div>
@@ -478,6 +479,7 @@ export class EditInformationModal extends React.Component {
                       type="text"
                       name="site_state"
                       component={Input}
+                      isDisabled
                     />
                   </div>
                 </div>
@@ -491,6 +493,7 @@ export class EditInformationModal extends React.Component {
                       id="editInfo-postalCode"
                       name="site_zip"
                       component={Input}
+                      isDisabled
                     />
                   </div>
                 </div>
