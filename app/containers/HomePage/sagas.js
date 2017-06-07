@@ -57,6 +57,7 @@ import {
   fetchSiteNamesError,
   updateDashboardStudySuccess,
   updateDashboardStudyError,
+  fetchAllClientUsersDashboard,
   fetchAllClientUsersDashboardSuccess,
   fetchAllClientUsersDashboardError,
   fetchStudyCampaignsDashboardSuccess,
@@ -566,6 +567,7 @@ export function* addEmailNotificationUserWorker(action) {
   const { payload } = action;
   try {
     const clientId = payload.clientId;
+    const siteId = payload.clientRole.siteId;
     delete payload.clientId;
 
     const requestURL = `${API_URL}/clients/${clientId}/addUserWithClientRole`;
@@ -576,6 +578,7 @@ export function* addEmailNotificationUserWorker(action) {
 
     const response = yield call(request, requestURL, options);
 
+    yield put(fetchAllClientUsersDashboard({ clientId, siteId }));
     yield put(fetchClientSites(clientId, {}));
     yield put(addEmailNotificationUserSuccess(response.user));
   } catch (err) {
