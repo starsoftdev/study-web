@@ -1075,7 +1075,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                     </a>
                   </Modal.Header>
                   <Modal.Body>
-                    <AddEmailNotificationForm onSubmit={this.addEmailNotificationSubmit} />
+                    <AddEmailNotificationForm
+                      onSubmit={this.addEmailNotificationSubmit}
+                      custom={this.state.customAddEmailModal}
+                    />
                   </Modal.Body>
                 </Modal>
               </div>
