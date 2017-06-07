@@ -621,7 +621,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     );
 
 
-    const maxCampaignCount = this.props.totals.details.max_campaign_count ? parseInt(this.props.totals.details.max_campaign_count) : 0;
+    const maxCampaignCount = this.props.totals.details ? parseInt(this.props.totals.details.max_campaign_count) : 0;
 
     let campaignOptions = [];
     for (let i = 1; i <= maxCampaignCount; i++) {

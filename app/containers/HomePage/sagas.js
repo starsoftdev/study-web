@@ -288,19 +288,21 @@ export function* fetchPatientMessagesWatcher() {
   yield* takeLatest(FETCH_PATIENT_MESSAGES, fetchPatientMessagesWorker);
 }
 
-export function* fetchPatientMessagesWorker(action) {
-  try {
-    const requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/patientMessageStats`;
-    const response = yield call(request, requestURL);
-
-    yield put(fetchPatientMessagesSucceeded(response));
-  } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching patient messages');
-    yield put(toastrActions.error('', errorMessage));
-    if (err.status === 401) {
-      yield call(() => { location.href = '/login'; });
-    }
-  }
+export function* fetchPatientMessagesWorker(action) { // eslint-disable-line no-unused-vars
+  // try {
+  //   const requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/patientMessageStats`;
+  //   const response = yield call(request, requestURL);
+  //
+  //   yield put(fetchPatientMessagesSucceeded(response));
+  // TODO re-enable patient message stat fetching
+  yield put(fetchPatientMessagesSucceeded({ unreadTexts: 0, unreadEmails: 0, total: 0 }));
+  // } catch (err) {
+  //   const errorMessage = get(err, 'message', 'Something went wrong while fetching patient messages');
+  //   yield put(toastrActions.error('', errorMessage));
+  //   if (err.status === 401) {
+  //     yield call(() => { location.href = '/login'; });
+  //   }
+  // }
 }
 
 export function* fetchStudiesWatcher() {

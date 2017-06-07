@@ -25,6 +25,7 @@ import {
   switchToEmailSectionDetail,
   switchToOtherSectionDetail,
   readStudyPatientMessages,
+  updatePatientSuccess,
 } from '../actions';
 
 import { markAsReadPatientMessages } from '../../App/actions';
@@ -51,6 +52,7 @@ export class PatientDetailModal extends React.Component {
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
+    updatePatientSuccess: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -104,9 +106,16 @@ export class PatientDetailModal extends React.Component {
       readStudyPatientMessages,
       markAsReadPatientMessages,
       currentPatient,
+      updatePatientSuccess,
+      currentPatientCategory,
     } = this.props;
     readStudyPatientMessages(currentPatient.id);
     markAsReadPatientMessages(currentPatient.id);
+    updatePatientSuccess({
+      patientId: currentPatient.id,
+      patientCategoryId: currentPatientCategory.id,
+      unreadMessageCount: 0,
+    });
     switchToTextSection();
   }
 
@@ -220,6 +229,7 @@ const mapDispatchToProps = (dispatch) => ({
   switchToOtherSection: () => dispatch(switchToOtherSectionDetail()),
   readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
+  updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientDetailModal);
