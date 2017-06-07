@@ -557,12 +557,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       if (item.studyId === this.state.selectedStudyId) {
         selectedStudy = item;
       }
-      const unreadMessageCount = sumBy(filter(sitePatients.details, { study_id: item.studyId }), (sitePatient) => {
-        if (sitePatient.count_unread == null) {
-          return 0;
-        }
-        return parseInt(sitePatient.count_unread);
-      });
       if (siteArray.indexOf(item.siteId) === -1 || (selectedSiteID && item.siteId !== selectedSiteID)) {
         return null;
       }
@@ -573,7 +567,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
           currentUser={currentUser}
           key={index}
           index={index}
-          unreadMessageCount={unreadMessageCount}
+          unreadMessageCount={item.unreadMessageCount}
           onRenew={this.openRenewModal}
           onUpgrade={this.openUpgradeModal}
           onEdit={this.openEditModal}

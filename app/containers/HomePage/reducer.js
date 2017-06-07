@@ -33,6 +33,7 @@ import {
   SET_ACTIVE_SORT,
   NEW_MESSAGE_FOR_PROTOCOL,
   SORT_SUCCESS,
+  INCREMENT_STUDY_UNREAD_MESSAGES,
 } from './constants';
 
 import {
@@ -231,6 +232,7 @@ export default function homePageReducer(state = initialState, action) {
         orderNumber: (index + 1),
         siteId: studyObject.site.id,
         campaignLastDate: studyObject.campaignLastDate,
+        unreadMessageCount: studyObject.unreadMessageCount,
         url: studyObject.url,
       }));
       const nEntities = [];
@@ -579,6 +581,20 @@ export default function homePageReducer(state = initialState, action) {
           error: action.payload,
         },
       };
+
+    case INCREMENT_STUDY_UNREAD_MESSAGES:
+      const studiesCopy = _.cloneDeep(state.studies.details);
+      const foundStudy = _.find(studiesCopy, (o) => (o.studyId === action.studyId));
+      foundStudy.unreadMessageCount += 1;
+      return {
+        ...state,
+        studies: {
+          details: studiesCopy,
+          fetching: false,
+          error: null,
+        },
+      };
+
     default:
       return state;
   }

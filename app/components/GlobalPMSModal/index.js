@@ -46,6 +46,7 @@ import {
 import {
   sendStudyPatientMessages,
 } from '../../containers/GlobalNotifications/actions';
+import { incrementStudyUnreadMessages } from '../../containers/HomePage/actions';
 
 import alertSound from './sounds/message_received.wav';
 
@@ -74,6 +75,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     hasError: React.PropTypes.bool,
     formValues: React.PropTypes.object,
     change: React.PropTypes.func,
+    incrementStudyUnreadMessages: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -112,6 +114,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
             this.startSound();
           }
           this.props.updateSitePatients(socketMessage);
+          this.props.incrementStudyUnreadMessages(socketMessage.study_id);
         }
         if (this.props.showModal === true && this.state.selectedPatient && this.state.selectedPatient.id === socketMessage.patient_id) {
           this.props.fetchPatientMessages(this.state.selectedPatient.id);
@@ -330,6 +333,7 @@ function mapDispatchToProps(dispatch) {
     setChatTextValue: (value) => dispatch(change('chatPatient', 'body', value)),
     fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
     change: (field, value) => dispatch(change('globalPMS', field, value)),
+    incrementStudyUnreadMessages: (studyId) => dispatch(incrementStudyUnreadMessages(studyId)),
   };
 }
 
