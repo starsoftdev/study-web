@@ -34,6 +34,7 @@ import {
   SORT_SUCCESS,
   FETCH_UPGRADE_STUDY_PRICE,
   NEW_MESSAGE_FOR_PROTOCOL,
+  INCREMENT_STUDY_UNREAD_MESSAGES,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser) {
@@ -287,5 +288,12 @@ export function addNewMessageForProtocol(protocolNumber) {
   return {
     type: NEW_MESSAGE_FOR_PROTOCOL,
     protocolNumber,
+  };
+}
+
+export function incrementStudyUnreadMessages(studyId) {
+  return {
+    type: INCREMENT_STUDY_UNREAD_MESSAGES,
+    studyId,
   };
 }
