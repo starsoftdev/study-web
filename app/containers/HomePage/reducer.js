@@ -33,12 +33,16 @@ import {
   SET_ACTIVE_SORT,
   NEW_MESSAGE_FOR_PROTOCOL,
   SORT_SUCCESS,
+  INCREMENT_STUDY_UNREAD_MESSAGES,
 } from './constants';
 
 import {
   ADD_EMAIL_NOTIFICATION_USER,
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
   ADD_EMAIL_NOTIFICATION_USER_ERROR,
+  ADD_CUSTOM_EMAIL_NOTIFICATION,
+  ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+  ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR,
   FETCH_CLIENT_ADMINS,
   FETCH_CLIENT_ADMINS_SUCCESS,
   FETCH_CLIENT_ADMINS_ERROR,
@@ -113,6 +117,11 @@ const initialState = {
     activeDirection: null,
   },
   addNotificationProcess: {
+    saving: false,
+    error: null,
+    savedUser: null,
+  },
+  addCustomNotificationEmailProcess: {
     saving: false,
     error: null,
     savedUser: null,
@@ -234,6 +243,7 @@ export default function homePageReducer(state = initialState, action) {
         orderNumber: (index + 1),
         siteId: studyObject.site.id,
         campaignLastDate: studyObject.campaignLastDate,
+        unreadMessageCount: studyObject.unreadMessageCount,
         url: studyObject.url,
       }));
       const nEntities = [];
@@ -543,6 +553,33 @@ export default function homePageReducer(state = initialState, action) {
           savedUser: null,
         },
       };
+    case ADD_CUSTOM_EMAIL_NOTIFICATION:
+      return {
+        ...state,
+        addCustomNotificationEmailProcess: {
+          saving: true,
+          error: null,
+          savedUser: null,
+        },
+      };
+    case ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS:
+      return {
+        ...state,
+        addCustomNotificationEmailProcess: {
+          saving: false,
+          error: null,
+          savedUser: action.payload,
+        },
+      };
+    case ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR:
+      return {
+        ...state,
+        addCustomNotificationEmailProcess: {
+          saving: false,
+          error: action.payload,
+          savedUser: null,
+        },
+      };
     case NEW_MESSAGE_FOR_PROTOCOL:
       protocols = _.cloneDeep(state.protocols.details);
       _.forEach(protocols, (item, index) => {
@@ -585,6 +622,20 @@ export default function homePageReducer(state = initialState, action) {
           error: action.payload,
         },
       };
+
+    case INCREMENT_STUDY_UNREAD_MESSAGES:
+      const studiesCopy = _.cloneDeep(state.studies.details);
+      const foundStudy = _.find(studiesCopy, (o) => (o.studyId === action.studyId));
+      foundStudy.unreadMessageCount += 1;
+      return {
+        ...state,
+        studies: {
+          details: studiesCopy,
+          fetching: false,
+          error: null,
+        },
+      };
+
     default:
       return state;
   }
