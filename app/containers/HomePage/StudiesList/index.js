@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import _, { find, filter, sumBy } from 'lodash';
+import _, { find } from 'lodash';
 import { touch } from 'redux-form';
 
 import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE } from '../../../common/constants';
@@ -9,7 +9,7 @@ import { normalizePhoneForServer } from '../../../../app/common/helper/functions
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../../components/ShoppingCartForm/validator';
 import { fetchLevels, saveCard, fetchClientAdmins } from '../../App/actions';
-import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients, selectCurrentUserClientId, selectClientSites } from '../../App/selectors';
+import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectCurrentUserClientId, selectClientSites } from '../../App/selectors';
 import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice, fetchStudies } from '../actions';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions, selectHomePageClientAdmins } from '../selectors';
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
@@ -46,7 +46,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     setActiveSort: PropTypes.func,
     shoppingCartFormError: PropTypes.bool,
     shoppingCartFormValues: PropTypes.object,
-    sitePatients: React.PropTypes.object,
     sortSuccess: PropTypes.func,
     studies: PropTypes.object,
     fetchStudies: PropTypes.func,
@@ -532,7 +531,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { studies, sitePatients, currentUser, clientSites } = this.props;
+    const { studies, currentUser, clientSites } = this.props;
 
     let selectedStudy = null;
     let selectedSiteID = null;
@@ -552,12 +551,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       if (item.studyId === this.state.selectedStudyId) {
         selectedStudy = item;
       }
-      const unreadMessageCount = sumBy(filter(sitePatients.details, { study_id: item.studyId }), (sitePatient) => {
-        if (sitePatient.count_unread == null) {
-          return 0;
-        }
-        return parseInt(sitePatient.count_unread);
-      });
       if (siteArray.indexOf(item.siteId) === -1 || (selectedSiteID && item.siteId !== selectedSiteID)) {
         return null;
       }
@@ -568,7 +561,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
           currentUser={currentUser}
           key={index}
           index={index}
-          unreadMessageCount={unreadMessageCount}
+          unreadMessageCount={item.unreadMessageCount}
           onRenew={this.openRenewModal}
           onUpgrade={this.openUpgradeModal}
           onEdit={this.openEditModal}
@@ -664,7 +657,6 @@ const mapStateToProps = createStructuredSelector({
   selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
   shoppingCartFormError: selectShoppingCartFormError(),
   shoppingCartFormValues: selectShoppingCartFormValues(),
-  sitePatients: selectSitePatients(),
   studies: selectStudies(),
   studyLevels: selectStudyLevels(),
   upgradeStudyFormValues: selectUpgradeStudyFormValues(),

@@ -20,27 +20,40 @@ import ThankYouPageModal from '../../../../components/ThankYouPageModal/index';
 import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
 import CenteredModal from '../../../../components/CenteredModal';
 import AddEmailNotificationForm from '../../../../components/AddEmailNotificationForm';
-import EditInformationModal from '../EditStudyForms/EditInformationModal';
-import { selectStudies, selectPaginationOptions, selectAddNotificationProcess, selectDashboardEditNoteProcess, selectDashboardNote } from '../selectors';
+import EditInformationModal from '../../../../components/EditStudyForms/EditInformationModal';
+import {
+  selectStudies,
+  selectPaginationOptions,
+  selectAddNotificationProcess,
+  selectDashboardEditNoteProcess,
+  selectDashboardNote,
+} from '../selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
 import { setHoverRowIndex, setEditStudyFormValues, fetchNote, addNote, editNote, deleteNote } from '../actions';
 import { submitToClientPortal } from '../../../DashboardPortalsPage/actions';
+import {
+  removeCustomEmailNotification,
+} from '../../../../containers/App/actions';
 
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     allClientUsers: PropTypes.object,
     addNotificationProcess: PropTypes.object,
     addEmailNotificationUser: PropTypes.func.isRequired,
+    addCustomEmailNotification: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired,
     changeStudyStatusDashboard: PropTypes.func.isRequired,
     cro: PropTypes.array,
     editStudyValues: PropTypes.object,
     fetchAllClientUsersDashboard: PropTypes.func.isRequired,
     fetchStudyCampaignsDashboard: PropTypes.func.isRequired,
+    fetchCustomNotificationEmails: PropTypes.func.isRequired,
     fetchStudiesAccordingToFilters: PropTypes.func.isRequired,
+    removeCustomEmailNotification: PropTypes.func.isRequired,
     indications: PropTypes.array,
+    allCustomNotificationEmails: PropTypes.object,
     levels: PropTypes.array,
     messagingNumbers: PropTypes.object,
     paginationOptions: PropTypes.object,
@@ -111,6 +124,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         startDate: moment().clone().subtract(30, 'days'),
         endDate: moment(),
       },
+      customAddEmailModal: false,
       showEditInformationModal: false,
       showLandingPageModal: false,
       showThankYouPageModal: false,
@@ -192,6 +206,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
     this.props.setEditStudyFormValues(formValues);
 
+    this.props.fetchCustomNotificationEmails(study.study_id);
     this.props.fetchAllClientUsersDashboard({ clientId: study.client_id, siteId: study.site_id });
     this.props.fetchStudyCampaignsDashboard(study.study_id);
   }
@@ -504,26 +519,36 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.props.updateDashboardStudy(newParam);
   }
 
-  addEmailNotificationClick() {
-    this.setState({ addEmailModalShow: true });
-    // this.props.onHide(true);
+  addEmailNotificationClick(custom = false) {
+    this.setState({ addEmailModalShow: true, customAddEmailModal: custom });
   }
 
-  closeAddEmailModal() {
-    this.setState({ addEmailModalShow: false });
-    // this.props.onShow();
+  closeAddEmailModal(custom = false) {
+    this.setState({ addEmailModalShow: false, customAddEmailModal: custom });
   }
 
   addEmailNotificationSubmit(values) {
-    this.props.addEmailNotificationUser({
-      ...values,
-      clientId: this.props.editStudyValues.client_id,
-      addForNotification: true,
-      studyId: this.props.editStudyValues.study_id,
-      clientRole:{
+    const { addEmailNotificationUser, addCustomEmailNotification } = this.props;
+    const { customAddEmailModal } = this.state;
+    if (!customAddEmailModal) {
+      addEmailNotificationUser({
+        ...values,
+        clientId: this.props.editStudyValues.client_id,
+        addForNotification: true,
+        studyId: this.props.editStudyValues.study_id,
+        clientRole:{
+          siteId: this.props.editStudyValues.site_id,
+        },
+      });
+    } else {
+      addCustomEmailNotification({
+        ...values,
+        type: 'inactive',
+        clientId: this.props.editStudyValues.client_id,
+        studyId: this.props.editStudyValues.study_id,
         siteId: this.props.editStudyValues.site_id,
-      },
-    });
+      });
+    }
 
     this.closeAddEmailModal();
   }
@@ -972,6 +997,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   indications={this.props.indications}
                   fetchAllClientUsersDashboard={this.props.fetchAllClientUsersDashboard}
                   allClientUsers={this.props.allClientUsers}
+                  allCustomNotificationEmails={this.props.allCustomNotificationEmails}
+                  removeCustomEmailNotification={this.props.removeCustomEmailNotification}
                   formValues={this.props.editStudyValues}
                   addEmailNotificationClick={this.addEmailNotificationClick}
                   messagingNumbers={this.props.messagingNumbers}
@@ -1048,7 +1075,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                     </a>
                   </Modal.Header>
                   <Modal.Body>
-                    <AddEmailNotificationForm onSubmit={this.addEmailNotificationSubmit} />
+                    <AddEmailNotificationForm
+                      onSubmit={this.addEmailNotificationSubmit}
+                      custom={this.state.customAddEmailModal}
+                    />
                   </Modal.Body>
                 </Modal>
               </div>
@@ -1082,6 +1112,7 @@ const mapDispatchToProps = (dispatch) => ({
   submitToClientPortal: (id) => dispatch(submitToClientPortal(id)),
   fetchNote: () => dispatch(fetchNote()),
   addNote: (payload) => dispatch(addNote(payload)),
+  removeCustomEmailNotification: (payload) => dispatch(removeCustomEmailNotification(payload)),
   editNote: (payload) => dispatch(editNote(payload)),
   deleteNote: (payload) => dispatch(deleteNote(payload)),
 });
