@@ -53,6 +53,11 @@ export const YEAR_OPTIONS = [
   { label: (thisYear + 3).toString(), value: thisYear + 3 },
   { label: (thisYear + 4).toString(), value: thisYear + 4 },
   { label: (thisYear + 5).toString(), value: thisYear + 5 },
+  { label: (thisYear + 6).toString(), value: thisYear + 6 },
+  { label: (thisYear + 7).toString(), value: thisYear + 7 },
+  { label: (thisYear + 8).toString(), value: thisYear + 8 },
+  { label: (thisYear + 9).toString(), value: thisYear + 9 },
+  { label: (thisYear + 10).toString(), value: thisYear + 10 },
 ];
 
 export const SchedulePatientModalType = {

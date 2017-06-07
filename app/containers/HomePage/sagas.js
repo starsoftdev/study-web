@@ -43,6 +43,7 @@ import {
   UPDATE_PATIENT_THANK_YOU_EMAIL,
   FETCH_MESSAGING_NUMBERS,
   UPDATE_TWILIO_NUMBERS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS,
 } from './AdminDashboard/constants';
 
 import {
@@ -60,6 +61,9 @@ import {
   fetchAllClientUsersDashboardError,
   fetchStudyCampaignsDashboardSuccess,
   fetchStudyCampaignsDashboardError,
+  fetchCustomNotificationEmails,
+  fetchCustomNotificationEmailsSuccess,
+  fetchCustomNotificationEmailsError,
   changeStudyStatusDashboardSuccess,
   changeStudyStatusDashboardError,
   updateLandingPageSuccess,
@@ -86,8 +90,22 @@ import {
   deleteNoteError,
 } from './AdminDashboard/actions';
 
-import { ADD_EMAIL_NOTIFICATION_USER } from '../../containers/App/constants';
-import { addEmailNotificationUserSuccess, addEmailNotificationUserError, fetchClientSites, fetchClientCredits, fetchRewardsBalance } from '../../containers/App/actions';
+import {
+  ADD_EMAIL_NOTIFICATION_USER,
+  ADD_CUSTOM_EMAIL_NOTIFICATION,
+  REMOVE_CUSTOM_EMAIL_NOTIFICATION,
+} from '../../containers/App/constants';
+import {
+  addEmailNotificationUserSuccess,
+  addEmailNotificationUserError,
+  addCustomEmailNotificationSuccess,
+  addCustomEmailNotificationError,
+  removeCustomEmailNotificationSuccess,
+  removeCustomEmailNotificationError,
+  fetchClientSites,
+  fetchClientCredits,
+  fetchRewardsBalance,
+} from '../../containers/App/actions';
 
 import {
   fetchPatientSignUpsSucceeded,
@@ -565,6 +583,50 @@ export function* addEmailNotificationUserWorker(action) {
   }
 }
 
+export function* addCustomEmailNotificationWatcher() {
+  yield* takeLatest(ADD_CUSTOM_EMAIL_NOTIFICATION, addCustomEmailNotificationWorker);
+}
+
+export function* addCustomEmailNotificationWorker(action) {
+  const { payload } = action;
+  try {
+    const requestURL = `${API_URL}/clients/addCustomNotificationEmail`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchCustomNotificationEmails(payload.studyId));
+    yield put(addCustomEmailNotificationSuccess(response));
+  } catch (err) {
+    yield put(addCustomEmailNotificationError(err));
+  }
+}
+
+export function* removeCustomEmailNotificationWatcher() {
+  yield* takeLatest(REMOVE_CUSTOM_EMAIL_NOTIFICATION, removeCustomEmailNotificationWorker);
+}
+
+export function* removeCustomEmailNotificationWorker(action) {
+  const { payload } = action;
+  try {
+    const requestURL = `${API_URL}/clients/removeCustomNotificationEmail`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchCustomNotificationEmails(payload.studyId));
+    yield put(removeCustomEmailNotificationSuccess(response));
+  } catch (err) {
+    yield put(removeCustomEmailNotificationError(err));
+  }
+}
+
 export function* fetchTotalsDashboardWatcher() {
   yield* takeLatest(FETCH_TOTALS_DASHBOARD, fetchTotalsDashboardWorker);
 }
@@ -731,6 +793,28 @@ export function* fetchStudyCampaignsWorker(action) {
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
+  }
+}
+
+export function* fetchCustomNotificationEmailsWatcher() {
+  yield* takeLatest(FETCH_CUSTOM_NOTIFICATION_EMAILS, fetchCustomNotificationEmailsWorker);
+}
+
+export function* fetchCustomNotificationEmailsWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/getCustomNotificationEmails`;
+
+    const params = {
+      method: 'GET',
+      query: {
+        id: action.params,
+      },
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchCustomNotificationEmailsSuccess(response));
+  } catch (err) {
+    yield put(fetchCustomNotificationEmailsError(err));
   }
 }
 
@@ -922,6 +1006,9 @@ export function* homePageSaga() {
   const fetchProtocolNumbersWatcher1 = yield fork(fetchProtocolNumbersWatcher);
   const fetchIndicationsWatcher1 = yield fork(fetchIndicationsWatcher);
   const addEmailNotificationUserWatcher1 = yield fork(addEmailNotificationUserWatcher);
+  const addCustomEmailNotificationWatcher1 = yield fork(addCustomEmailNotificationWatcher);
+  const fetchCustomNotificationEmailsWatcher1 = yield fork(fetchCustomNotificationEmailsWatcher);
+  const removeCustomEmailNotificationWatcher1 = yield fork(removeCustomEmailNotificationWatcher);
   const fetchStudiesDashboardWatcher1 = yield fork(fetchStudiesDashboardWatcher);
   const fetchTotalsDashboardWatcher1 = yield fork(fetchTotalsDashboardWatcher);
   const fetchSiteLocationsWatcher1 = yield fork(fetchSiteLocationsWatcher);
@@ -957,6 +1044,9 @@ export function* homePageSaga() {
     yield cancel(fetchProtocolNumbersWatcher1);
     yield cancel(fetchIndicationsWatcher1);
     yield cancel(addEmailNotificationUserWatcher1);
+    yield cancel(addCustomEmailNotificationWatcher1);
+    yield cancel(fetchCustomNotificationEmailsWatcher1);
+    yield cancel(removeCustomEmailNotificationWatcher1);
     yield cancel(fetchStudiesDashboardWatcher1);
     yield cancel(fetchTotalsDashboardWatcher1);
     yield cancel(fetchSiteLocationsWatcher1);
