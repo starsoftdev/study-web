@@ -90,6 +90,11 @@ export const selectSources = () => createSelector(
   (subState) => subState.sources
 );
 
+export const selectNote = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.note
+);
+
 export const selectStudy = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.study

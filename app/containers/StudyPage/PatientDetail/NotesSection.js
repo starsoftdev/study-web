@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import { Field, formValueSelector, reduxForm, reset, touch } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import classNames from 'classnames';
+import { createStructuredSelector } from 'reselect';
+import * as Selector from '../selectors';
 import { selectSyncErrorBool } from '../../../common/selectors/form.selector';
 import { submitPatientNote, submitDeleteNote } from '../actions';
 import Input from '../../../components/Input/index';
@@ -31,6 +33,7 @@ class NotesSection extends React.Component {
     super(props);
     this.onClick = this.onClick.bind(this);
     this.renderNotes = this.renderNotes.bind(this);
+    this.scrollElement = this.scrollElement.bind(this);
   }
 
   onClick() {
@@ -39,7 +42,16 @@ class NotesSection extends React.Component {
     if (note) {
       submitPatientNote(studyId, currentPatient.id, currentUser, note);
       resetForm();
+      this.scrollElement();
     }
+  }
+
+  scrollElement() {
+    window.requestAnimationFrame(() => {
+      if (this.scrollable && this.props.active) {
+        this.scrollable.scrollTop = this.scrollable.scrollHeight;
+      }
+    });
   }
 
   renderNotes() {
@@ -56,7 +68,7 @@ class NotesSection extends React.Component {
     const { active } = this.props;
     return (
       <div className={classNames('item note', { active })}>
-        <section className="postarea notes">
+        <section className="postarea notes" ref={scrollable => { this.scrollable = scrollable; }}>
           {this.renderNotes()}
         </section>
         <div className="textarea">
@@ -70,12 +82,11 @@ class NotesSection extends React.Component {
 
 const selector = formValueSelector(formName);
 
-const mapStateToProps = state => (
-  {
-    note: selector(state, 'note'),
-    formError: selectSyncErrorBool(formName),
-  }
-);
+const mapStateToProps = createStructuredSelector({
+  note: selector(state, 'note'),
+  formError: selectSyncErrorBool(formName),
+  currentPatient: Selector.selectCurrentPatient(),
+});
 
 function mapDispatchToProps(dispatch) {
   return {
