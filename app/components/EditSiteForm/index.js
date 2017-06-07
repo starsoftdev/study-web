@@ -243,7 +243,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                 name="city"
                 component={Input}
                 type="text"
-                isDisabled={true}
+                isDisabled
               />
             </div>
           </div>
@@ -256,7 +256,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                 name="state"
                 component={Input}
                 type="text"
-                isDisabled={true}
+                isDisabled
               />
             </div>
           </div>
@@ -269,7 +269,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                 name="zip"
                 component={Input}
                 type="text"
-                isDisabled={true}
+                isDisabled
               />
             </div>
           </div>
