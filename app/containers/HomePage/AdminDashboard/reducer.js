@@ -57,6 +57,10 @@ import {
   FETCH_MESSAGING_NUMBERS_SUCCESS,
   FETCH_MESSAGING_NUMBERS_ERROR,
   SET_HOVER_ROW_INDEX,
+
+  FETCH_CUSTOM_NOTIFICATION_EMAILS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
 } from './constants';
 
 import {
@@ -121,6 +125,11 @@ const initialState = {
     error: null,
   },
   allClientUsers: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  allCustomNotificationEmails: {
     details: [],
     fetching: false,
     error: null,
@@ -496,6 +505,33 @@ export default function dashboardPageReducer(state = initialState, action) {
       return {
         ...state,
         allClientUsers: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
           details: [],
           fetching: false,
           error: action.payload,

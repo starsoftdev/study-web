@@ -43,7 +43,8 @@ export default class HelpSupportPage extends React.Component { // eslint-disable
       },
     ];
     const opts = {
-      width: '60%',
+      width: '694',
+      height: '400',
       playerVars: {
         rel: 0,
       },

@@ -549,7 +549,7 @@ export function* fetchPatientMessagesWatcher() {
   }
 }
 
-export function* fetchPatientMessageUnreadCountWatcher() { // eslint-disable-line no-unused-vars
+export function* fetchPatientMessageUnreadCountWatcher() {
   // while (true) {
   //   const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
   //   try {
