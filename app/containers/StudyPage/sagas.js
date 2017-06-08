@@ -7,6 +7,7 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { takeLatest } from 'redux-saga';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
+import moment from 'moment-timezone';
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 import { getItem, removeItem } from '../../utils/localStorage';
@@ -479,7 +480,7 @@ function* fetchPatientDetails() {
         delete mappedTextMessage.user_id;
         return mappedTextMessage;
       });
-      yield put(patientDetailsFetched(response));
+      yield put(patientDetailsFetched(patientId, response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while fetching patient information. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -581,8 +582,7 @@ function* submitMovePatientBetweenCategories() {
           afterPatientId,
         }),
       });
-      yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, patientId));
-      yield call(fetchPatients, studyId);
+      yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, 1, patientId, moment().toISOString()));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -861,7 +861,7 @@ export function* submitSchedule() {
         body: JSON.stringify(data),
       };
       const response = yield call(request, requestURL, params);
-      yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, scheduledCategoryId, data.patientId));
+      yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, scheduledCategoryId, 1, data.patientId, moment().toISOString()));
       yield put(submitScheduleSucceeded(response, data.patientId));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting a schedule');
