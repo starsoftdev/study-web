@@ -186,9 +186,10 @@ export function fetchPatientDetails(patientId) {
   };
 }
 
-export function patientDetailsFetched(payload) {
+export function patientDetailsFetched(patientId, payload) {
   return {
     type: FETCH_PATIENT_DETAILS_SUCCESS,
+    patientId,
     payload,
   };
 }
@@ -404,12 +405,14 @@ export function movePatientBetweenCategoriesLoading() {
   };
 }
 
-export function movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, patientId) {
+export function movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, orderNumber, patientId, updatedAt) {
   return {
     type: MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
     fromCategoryId,
     toCategoryId,
+    orderNumber,
     patientId,
+    updatedAt,
   };
 }
 
