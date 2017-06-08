@@ -10,6 +10,7 @@ import { get } from 'lodash';
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 import { getItem, removeItem } from '../../utils/localStorage';
+import moment from 'moment-timezone'
 import { FIND_PATIENTS_TEXT_BLAST,
 FETCH_PATIENTS,
 EXPORT_PATIENTS,
@@ -207,33 +208,35 @@ function* fetchStudyCallStats(action) {
   }
 }
 
-function* fetchStudyTextStats(action) {
+function* fetchStudyTextStats(action) { // eslint-disable-line no-unused-vars
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
   }
 
   // listen for the latest FETCH_STUDY action
-  const { studyId, campaignId } = action;
-
-  try {
-    const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
-    const options = {
-      method: 'GET',
-      query: {},
-    };
-    if (campaignId) {
-      options.query.campaignId = campaignId;
-    }
-    const response = yield call(request, requestURL, options);
-    yield put(textStatsFetched(response));
-  } catch (e) {
-    const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
-    if (e.status === 401) {
-      yield call(() => { location.href = '/login'; });
-    }
-  }
+  // const { studyId, campaignId } = action;
+  //
+  // try {
+  //   const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
+  //   const options = {
+  //     method: 'GET',
+  //     query: {},
+  //   };
+  //   if (campaignId) {
+  //     options.query.campaignId = campaignId;
+  //   }
+  //   const response = yield call(request, requestURL, options);
+  //   yield put(textStatsFetched(response));
+  // TODO re-enable when fix for caching text message stats is available
+  yield put(textStatsFetched({ total: 0, sent: 0, received: 0 }));
+  // } catch (e) {
+  //   const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
+  //   yield put(toastrActions.error('', errorMessage));
+  //   if (e.status === 401) {
+  //     yield call(() => { location.href = '/login'; });
+  //   }
+  // }
 }
 
 function* fetchStudyTextNewStats() {
@@ -477,7 +480,7 @@ function* fetchPatientDetails() {
         delete mappedTextMessage.user_id;
         return mappedTextMessage;
       });
-      yield put(patientDetailsFetched(response));
+      yield put(patientDetailsFetched(patientId, response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while fetching patient information. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -579,8 +582,7 @@ function* submitMovePatientBetweenCategories() {
           afterPatientId,
         }),
       });
-      yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, patientId));
-      yield call(fetchPatients, studyId);
+      yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, 1, patientId, moment().toISOString()));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -859,7 +861,7 @@ export function* submitSchedule() {
         body: JSON.stringify(data),
       };
       const response = yield call(request, requestURL, params);
-      yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, scheduledCategoryId, data.patientId));
+      yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, scheduledCategoryId, 1, data.patientId, moment().toISOString()));
       yield put(submitScheduleSucceeded(response, data.patientId));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting a schedule');
