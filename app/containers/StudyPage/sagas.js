@@ -28,7 +28,6 @@ SUBMIT_ADD_PATIENT,
 SUBMIT_PATIENT_NOTE,
 SUBMIT_DELETE_NOTE,
 SUBMIT_PATIENT_TEXT,
-FETCH_STUDY_NEW_TEXTS,
 SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
 SUBMIT_SCHEDULE,
 } from './constants';
@@ -241,27 +240,29 @@ function* fetchStudyTextStats(action) { // eslint-disable-line no-unused-vars
 }
 
 function* fetchStudyTextNewStats() {
-  while (true) {
+  // while (true) {
     // listen for the FETCH_STUDY action
-    const { studyId } = yield take(FETCH_STUDY_NEW_TEXTS);
-    const authToken = getItem('auth_token');
-    if (!authToken) {
-      return;
-    }
-    try {
-      const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
-      const response = yield call(request, requestURL, {
-        method: 'GET',
-      });
-      yield put(textStatsFetched(response));
-    } catch (e) {
-      const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
-      if (e.status === 401) {
-        yield call(() => { location.href = '/login'; });
-      }
-    }
-  }
+    // const { studyId } = yield take(FETCH_STUDY_NEW_TEXTS);
+    // const authToken = getItem('auth_token');
+    // if (!authToken) {
+    //   return;
+    // }
+    // try {
+      // const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
+      // const response = yield call(request, requestURL, {
+      //   method: 'GET',
+      // });
+      // yield put(textStatsFetched(response));
+  // TODO re-enable when fix for caching text message stats is available
+  yield put(textStatsFetched({ total: 0, sent: 0, received: 0 }));
+    // } catch (e) {
+    //   const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
+    //   yield put(toastrActions.error('', errorMessage));
+    //   if (e.status === 401) {
+    //     yield call(() => { location.href = '/login'; });
+    //   }
+    // }
+  // }
 }
 
 function* fetchPatientCategories() {
