@@ -38,8 +38,8 @@ export class DashboardNotePage extends React.Component { // eslint-disable-line 
   render() {
     return (
       <div className="container-fluid dashboard-note">
-        <Helmet title="NOTE - StudyKIK" />
-        <h2 className="main-heading">NOTE</h2>
+        <Helmet title="Notes - StudyKIK" />
+        <h2 className="main-heading">NOTES</h2>
 
         <DashboardNoteSearch
           clientSites={this.props.clientSites}

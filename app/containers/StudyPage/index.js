@@ -99,7 +99,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 
         this.props.fetchStudy(params.id);
         this.props.fetchStudyTextNewStats(params.id);
-        if (curCategoryId) {
+        if (curCategoryId && socketMessage.twilioTextMessage.direction === 'inbound') {
           this.props.updatePatientSuccess({
             patientId: socketMessage.patient_id,
             patientCategoryId: curCategoryId,

@@ -207,33 +207,35 @@ function* fetchStudyCallStats(action) {
   }
 }
 
-function* fetchStudyTextStats(action) {
+function* fetchStudyTextStats(action) { // eslint-disable-line no-unused-vars
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
   }
 
   // listen for the latest FETCH_STUDY action
-  const { studyId, campaignId } = action;
-
-  try {
-    const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
-    const options = {
-      method: 'GET',
-      query: {},
-    };
-    if (campaignId) {
-      options.query.campaignId = campaignId;
-    }
-    const response = yield call(request, requestURL, options);
-    yield put(textStatsFetched(response));
-  } catch (e) {
-    const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
-    if (e.status === 401) {
-      yield call(() => { location.href = '/login'; });
-    }
-  }
+  // const { studyId, campaignId } = action;
+  //
+  // try {
+  //   const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
+  //   const options = {
+  //     method: 'GET',
+  //     query: {},
+  //   };
+  //   if (campaignId) {
+  //     options.query.campaignId = campaignId;
+  //   }
+  //   const response = yield call(request, requestURL, options);
+  //   yield put(textStatsFetched(response));
+  // TODO re-enable when fix for caching text message stats is available
+  yield put(textStatsFetched({ total: 0, sent: 0, received: 0 }));
+  // } catch (e) {
+  //   const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
+  //   yield put(toastrActions.error('', errorMessage));
+  //   if (e.status === 401) {
+  //     yield call(() => { location.href = '/login'; });
+  //   }
+  // }
 }
 
 function* fetchStudyTextNewStats() {

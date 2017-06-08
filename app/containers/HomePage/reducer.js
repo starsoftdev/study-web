@@ -33,12 +33,16 @@ import {
   SET_ACTIVE_SORT,
   NEW_MESSAGE_FOR_PROTOCOL,
   SORT_SUCCESS,
+  INCREMENT_STUDY_UNREAD_MESSAGES,
 } from './constants';
 
 import {
   ADD_EMAIL_NOTIFICATION_USER,
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
   ADD_EMAIL_NOTIFICATION_USER_ERROR,
+  ADD_CUSTOM_EMAIL_NOTIFICATION,
+  ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+  ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR,
   FETCH_CLIENT_ADMINS,
   FETCH_CLIENT_ADMINS_SUCCESS,
   FETCH_CLIENT_ADMINS_ERROR,
@@ -69,6 +73,9 @@ const initialState = {
     details: [],
     fetching: false,
     error: null,
+    total: null,
+    active: null,
+    inactive: null,
   },
   protocols: {
     details: [],
@@ -110,6 +117,11 @@ const initialState = {
     activeDirection: null,
   },
   addNotificationProcess: {
+    saving: false,
+    error: null,
+    savedUser: null,
+  },
+  addCustomNotificationEmailProcess: {
     saving: false,
     error: null,
     savedUser: null,
@@ -206,72 +218,13 @@ export default function homePageReducer(state = initialState, action) {
         },
       };
     case FETCH_STUDIES_SUCCESS: {
-      const cDate = new Date();
-      // const dateFrom = campaign.dateFrom ? new Date(campaign.dateFrom) : null
-      // const dateTo = campaign.dateTo ? new Date(campaign.dateTo) : null
-      //
-      // const dateFromStr = dateFrom ? moment(dateFrom).format('MMMM Do, YYYY') : 'To Be Determined'
-      // const dateToStr = dateTo ? moment(dateTo).format('MMMM Do, YYYY') : 'To Be Determined'
-      const entitiesCollection = payload.map((studyObject, index) => ({
-        studyId: studyObject.id,
-        indication: studyObject.indication,
-        siteName: studyObject.site.siteName,
-        siteTimezone: studyObject.site.timezone,
-        sponsor: studyObject.sponsor.name,
-        protocol: studyObject.protocolNumber,
-        patientMessagingSuite: studyObject.patientMessagingSuite ? 'On' : 'Off',
-        patientQualificationSuite: studyObject.patientQualificationSuite ? 'On' : 'Off',
-        status: studyObject.status,
-        callTracking: studyObject.callTracking,
-        startDate: studyObject.campaigns[0].dateFrom,
-        endDate: studyObject.campaigns[0].dateTo,
-        level_id: studyObject.campaigns[0].level_id,
-        campaignId: studyObject.campaigns[0].campaignId,
-        campaignlength: studyObject.campaigns[0].length,
-        orderNumber: (index + 1),
-        siteId: studyObject.site.id,
-        campaignLastDate: studyObject.campaignLastDate,
-        url: studyObject.url,
-      }));
-      const nEntities = [];
-      _.forEach(entitiesCollection, (item) => {
-        const foundItemIndex = _.findIndex(nEntities, { indication : item.indication, protocol : item.protocol });
-
-        if (foundItemIndex !== -1) {
-          const sItem = nEntities[foundItemIndex];
-          if (!sItem.startDate) {
-            nEntities[foundItemIndex] = item;
-          } else if (sItem.startDate && item.startDate) {
-            const sStartDate = new Date(sItem.startDate);
-            const sEndDate = new Date(sItem.endDate);
-            const nStartDate = new Date(item.startDate);
-            const nEndDate = new Date(item.endDate);
-            if (nStartDate <= cDate && nEndDate >= cDate) {
-              nEntities[foundItemIndex] = item;
-            } else if (sStartDate >= cDate || sEndDate <= cDate) {
-              const sDiff = sStartDate.getTime() - cDate.getTime();
-              const nDiff = nStartDate.getTime() - cDate.getTime();
-              if (sDiff < 0 && nDiff > 0) {
-                nEntities[foundItemIndex] = item;
-              } else if (sDiff < 0 && nDiff < 0) {
-                if (nDiff > sDiff) {
-                  nEntities[foundItemIndex] = item;
-                }
-              } else if (sDiff > 0 && nDiff > 0) {
-                if (nDiff < sDiff) {
-                  nEntities[foundItemIndex] = item;
-                }
-              }
-            }
-          }
-        } else {
-          nEntities.push(item);
-        }
-      });
       return {
         ...state,
         studies: {
-          details: nEntities,
+          details: payload.studies,
+          total: payload.total,
+          active: payload.active,
+          inactive: payload.inactive,
           fetching: false,
           error: null,
         },
@@ -537,6 +490,33 @@ export default function homePageReducer(state = initialState, action) {
           savedUser: null,
         },
       };
+    case ADD_CUSTOM_EMAIL_NOTIFICATION:
+      return {
+        ...state,
+        addCustomNotificationEmailProcess: {
+          saving: true,
+          error: null,
+          savedUser: null,
+        },
+      };
+    case ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS:
+      return {
+        ...state,
+        addCustomNotificationEmailProcess: {
+          saving: false,
+          error: null,
+          savedUser: action.payload,
+        },
+      };
+    case ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR:
+      return {
+        ...state,
+        addCustomNotificationEmailProcess: {
+          saving: false,
+          error: action.payload,
+          savedUser: null,
+        },
+      };
     case NEW_MESSAGE_FOR_PROTOCOL:
       protocols = _.cloneDeep(state.protocols.details);
       _.forEach(protocols, (item, index) => {
@@ -579,6 +559,20 @@ export default function homePageReducer(state = initialState, action) {
           error: action.payload,
         },
       };
+
+    case INCREMENT_STUDY_UNREAD_MESSAGES:
+      const studiesCopy = _.cloneDeep(state.studies.details);
+      const foundStudy = _.find(studiesCopy, (o) => (o.studyId === action.studyId));
+      foundStudy.unreadMessageCount += 1;
+      return {
+        ...state,
+        studies: {
+          details: studiesCopy,
+          fetching: false,
+          error: null,
+        },
+      };
+
     default:
       return state;
   }
