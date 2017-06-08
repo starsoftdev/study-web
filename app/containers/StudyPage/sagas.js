@@ -7,11 +7,12 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { takeLatest } from 'redux-saga';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
+import moment from 'moment-timezone';
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 import { getItem, removeItem } from '../../utils/localStorage';
-import moment from 'moment-timezone'
-import { FIND_PATIENTS_TEXT_BLAST,
+import {
+FIND_PATIENTS_TEXT_BLAST,
 FETCH_PATIENTS,
 EXPORT_PATIENTS,
 FETCH_PATIENT_DETAILS,
