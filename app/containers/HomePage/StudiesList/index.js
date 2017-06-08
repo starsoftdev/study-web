@@ -10,6 +10,7 @@ import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../..
 import { shoppingCartFields } from '../../../components/ShoppingCartForm/validator';
 import { fetchLevels, saveCard, fetchClientAdmins } from '../../App/actions';
 import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectCurrentUserClientId, selectClientSites } from '../../App/selectors';
+import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../constants';
 import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice, fetchStudies } from '../actions';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions, selectHomePageClientAdmins } from '../selectors';
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
@@ -532,6 +533,10 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
   render() {
     const { studies, currentUser, clientSites } = this.props;
+    const countResult = _.countBy(studies.details, entityIterator => entityIterator.status);
+    const activeCount = countResult[ACTIVE_STATUS_VALUE] || 0;
+    const inactiveCount = countResult[INACTIVE_STATUS_VALUE] || 0;
+    const totalCount = studies.details.length;
 
     let selectedStudy = null;
     let selectedSiteID = null;
@@ -580,15 +585,15 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                   <span className="pull-right">
                     <span className="inner-info">
                       <span className="info-label">ACTIVE</span>
-                      <span className="info-value">{studies.active || 0}</span>
+                      <span className="info-value">{activeCount}</span>
                     </span>
                     <span className="inner-info">
                       <span className="info-label">INACTIVE</span>
-                      <span className="info-value">{studies.inactive || 0}</span>
+                      <span className="info-value">{inactiveCount}</span>
                     </span>
                     <span className="inner-info">
                       <span className="info-label">TOTAL</span>
-                      <span className="info-value">{studies.total || 0}</span>
+                      <span className="info-value">{totalCount}</span>
                     </span>
                   </span>
                 </caption>
