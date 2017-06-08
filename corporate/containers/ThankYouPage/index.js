@@ -72,6 +72,8 @@ export class ThankYouPage extends React.Component {
       (thankYouData.lookingForwardText && thankYouData.lookingForwardText !== '') ? thankYouData.lookingForwardText : 'Looking forward to having you join.';
     const herIsTheText =
       (thankYouData.herIsThe && thankYouData.herIsThe !== '') ? thankYouData.herIsThe : 'Here is the study location:';
+    const visitOurWebsiteText =
+      (thankYouData.visitOurWebsiteText && thankYouData.visitOurWebsiteText !== '') ? thankYouData.visitOurWebsiteText : 'Visit our website:';
 
     if (address) {
       addressStr = `${landing.address}<br />`;
@@ -125,6 +127,11 @@ export class ThankYouPage extends React.Component {
               <address className="txt-green" dangerouslySetInnerHTML={{ __html: addressStr }} />
               <p>{lookingForwardText}</p>
             </div>
+            }
+            {thankYouData.websiteLink &&
+              <div>
+                <p>{visitOurWebsiteText} <a href={thankYouData.websiteLink} target="_blank">Click Here!</a></p>
+              </div>
             }
             <div className="thanks-img">
               <img src={img19} alt="THANK YOU!" width="369" className="img-responsive center-block" />
