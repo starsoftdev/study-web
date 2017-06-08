@@ -4,9 +4,9 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
-import { componentWillAppendToBody } from 'react-append-to-body';
 
 import img19 from '../../assets/images/img19.svg';
 
@@ -18,12 +18,6 @@ import {
   clearLanding,
 } from '../../../app/containers/App/actions';
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
-
-function MyComponent({ children }) {
-  return (
-    children
-  );
-}
 
 export class ThankYouPage extends React.Component {
 
@@ -62,7 +56,6 @@ export class ThankYouPage extends React.Component {
 
   render() {
     const landing = (this.state.landing) ? this.state.landing : this.props.landing;
-    const AppendedMyComponent = componentWillAppendToBody(MyComponent);
     let addressStr = null;
     const address = landing.address;
     const city = landing.city;
@@ -96,11 +89,18 @@ export class ThankYouPage extends React.Component {
       addressStr += ` ${zip}`;
     }
 
-    const markup = 'fbq(\'track\', \'Lead\', { value: 0, currency: \'USD\' });';
-    const inner = { __html: markup };
+    const thankyouFacebookPixel = 'https://s3.amazonaws.com/studykik-prod/facebookPixel/thankyouFacebookPixel.js';
 
     return (
       <div id="main">
+        <Helmet
+          script={[
+            {
+              type: 'text/javascript',
+              src: thankyouFacebookPixel,
+            },
+          ]}
+        />
         <div className="container">
           <section className="thanks-section text-center">
             <h1 className="main-heading small-font">
@@ -132,9 +132,6 @@ export class ThankYouPage extends React.Component {
             </div>
           </section>
         </div>
-        <AppendedMyComponent>
-          <script dangerouslySetInnerHTML={inner} />
-        </AppendedMyComponent>
       </div>
     );
   }
