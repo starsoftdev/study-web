@@ -28,6 +28,7 @@ import SearchStudiesForm from './SearchStudiesForm';
 import SearchProtocolsForm from './SearchProtocolsForm';
 import ProtocolsList from './ProtocolsList';
 import StudiesList from './StudiesList';
+import { ACTIVE_STATUS_VALUE } from './constants';
 
 export class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -57,7 +58,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     if (currentUserClientId && userRoleType === 'client') {
       this.props.fetchClientSites(currentUserClientId, {});
       this.props.fetchLevels();
-      this.props.fetchStudies(currentUser);
+      this.props.fetchStudies(currentUser, { status: ACTIVE_STATUS_VALUE });
     } else if (currentUser && userRoleType === 'sponsor') {
       this.props.fetchProtocols(currentUser.roleForSponsor.id);
       this.props.fetchProtocolNumbers(currentUser.roleForSponsor.id);
@@ -70,7 +71,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     const queryParams = {
       name: searchParams.name,
       siteId: searchParams.site,
-      status: searchParams.status,
+      status: searchParams.status || ACTIVE_STATUS_VALUE,
     };
     this.props.fetchStudies(currentUser, queryParams);
   }

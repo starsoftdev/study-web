@@ -73,6 +73,9 @@ const initialState = {
     details: [],
     fetching: false,
     error: null,
+    total: null,
+    active: null,
+    inactive: null,
   },
   protocols: {
     details: [],
@@ -221,7 +224,7 @@ export default function homePageReducer(state = initialState, action) {
       //
       // const dateFromStr = dateFrom ? moment(dateFrom).format('MMMM Do, YYYY') : 'To Be Determined'
       // const dateToStr = dateTo ? moment(dateTo).format('MMMM Do, YYYY') : 'To Be Determined'
-      const entitiesCollection = payload.map((studyObject, index) => ({
+      const entitiesCollection = payload.studies.map((studyObject, index) => ({
         studyId: studyObject.id,
         indication: studyObject.indication,
         siteName: studyObject.site.siteName,
@@ -282,6 +285,9 @@ export default function homePageReducer(state = initialState, action) {
         ...state,
         studies: {
           details: nEntities,
+          total: payload.total,
+          active: payload.active,
+          inactive: payload.inactive,
           fetching: false,
           error: null,
         },
