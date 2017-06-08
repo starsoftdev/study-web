@@ -201,6 +201,7 @@ export class ReportViewTable extends React.Component {
           <td><span className="text">{item.count_contacted}<span className="small">{`(${percentage.count_contacted_p}%)`}</span></span></td>
           <td><span className="text">{item.count_not_contacted}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></td>
           <td><span className="text">{item.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></td>
+          <td><span className="text">{item.action_needed}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span></td>
           <td><span className="text">{item.scheduled}<span className="small">{`(${percentage.scheduled_p}%)`}</span></span></td>
           <td><span className="text">{item.consented}<span className="small">{`(${percentage.consented_p}%)`}</span></span></td>
           <td><span className="text">{item.screen_failed}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span></td>
@@ -258,6 +259,7 @@ export class ReportViewTable extends React.Component {
                       <th onClick={this.sortBy} data-sort="count_contacted" className={`th ${(this.props.paginationOptions.activeSort === 'count_contacted') ? this.props.paginationOptions.activeDirection : ''}`}>CONTACTED <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="count_not_contacted" className={`th ${(this.props.paginationOptions.activeSort === 'count_not_contacted') ? this.props.paginationOptions.activeDirection : ''}`}>NOT CONTACTED <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="dnq" className={`th ${(this.props.paginationOptions.activeSort === 'dnq') ? this.props.paginationOptions.activeDirection : ''}`}>DNQ <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="action_needed" className={`th ${(this.props.paginationOptions.activeSort === 'action_needed') ? this.props.paginationOptions.activeDirection : ''}`}>ACTION NEEDED <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="scheduled" className={`th ${(this.props.paginationOptions.activeSort === 'scheduled') ? this.props.paginationOptions.activeDirection : ''}`}>SCHEDULED <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="consented" className={`th ${(this.props.paginationOptions.activeSort === 'consented') ? this.props.paginationOptions.activeDirection : ''}`}>CONSENTED <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="screen_failed" className={`th ${(this.props.paginationOptions.activeSort === 'screen_failed') ? this.props.paginationOptions.activeDirection : ''}`}>SCREEN FAILED <i className="caret-arrow" /></th>
