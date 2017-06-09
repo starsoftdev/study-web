@@ -4,9 +4,9 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
-import { componentWillAppendToBody } from 'react-append-to-body';
 
 import img19 from '../../assets/images/img19.svg';
 
@@ -18,12 +18,6 @@ import {
   clearLanding,
 } from '../../../app/containers/App/actions';
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
-
-function MyComponent({ children }) {
-  return (
-    children
-  );
-}
 
 export class ThankYouPage extends React.Component {
 
@@ -62,7 +56,6 @@ export class ThankYouPage extends React.Component {
 
   render() {
     const landing = (this.state.landing) ? this.state.landing : this.props.landing;
-    const AppendedMyComponent = componentWillAppendToBody(MyComponent);
     let addressStr = null;
     const address = landing.address;
     const city = landing.city;
@@ -79,6 +72,8 @@ export class ThankYouPage extends React.Component {
       (thankYouData.lookingForwardText && thankYouData.lookingForwardText !== '') ? thankYouData.lookingForwardText : 'Looking forward to having you join.';
     const herIsTheText =
       (thankYouData.herIsThe && thankYouData.herIsThe !== '') ? thankYouData.herIsThe : 'Here is the study location:';
+    const visitOurWebsiteText =
+      (thankYouData.visitOurWebsiteText && thankYouData.visitOurWebsiteText !== '') ? thankYouData.visitOurWebsiteText : 'Visit our website:';
 
     if (address) {
       addressStr = `${landing.address}<br />`;
@@ -96,11 +91,18 @@ export class ThankYouPage extends React.Component {
       addressStr += ` ${zip}`;
     }
 
-    const markup = 'fbq(\'track\', \'Lead\', { value: 0, currency: \'USD\' });';
-    const inner = { __html: markup };
+    const thankyouFacebookPixel = 'https://s3.amazonaws.com/studykik-prod/facebookPixel/thankyouFacebookPixel.js';
 
     return (
       <div id="main">
+        <Helmet
+          script={[
+            {
+              type: 'text/javascript',
+              src: thankyouFacebookPixel,
+            },
+          ]}
+        />
         <div className="container">
           <section className="thanks-section text-center">
             <h1 className="main-heading small-font">
@@ -126,15 +128,17 @@ export class ThankYouPage extends React.Component {
               <p>{lookingForwardText}</p>
             </div>
             }
+            {thankYouData.websiteLink &&
+              <div>
+                <p>{visitOurWebsiteText} <a href={thankYouData.websiteLink} target="_blank">Click Here!</a></p>
+              </div>
+            }
             <div className="thanks-img">
               <img src={img19} alt="THANK YOU!" width="369" className="img-responsive center-block" />
               <h2 className="title-caption">THANK YOU!</h2>
             </div>
           </section>
         </div>
-        <AppendedMyComponent>
-          <script dangerouslySetInnerHTML={inner} />
-        </AppendedMyComponent>
       </div>
     );
   }
