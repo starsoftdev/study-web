@@ -248,7 +248,7 @@ export default function homePageReducer(state = initialState, action) {
       }));
       const nEntities = [];
       _.forEach(entitiesCollection, (item) => {
-        const foundItemIndex = _.findIndex(nEntities, { indication : item.indication, protocol : item.protocol });
+        const foundItemIndex = _.findIndex(nEntities, { studyId : item.studyId });
 
         if (foundItemIndex !== -1) {
           const sItem = nEntities[foundItemIndex];
