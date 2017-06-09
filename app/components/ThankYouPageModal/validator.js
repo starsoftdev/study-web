@@ -22,6 +22,13 @@ const schema = {
   isSharePhone: {
     presence: false,
   },
+  visitOurWebsiteText: {
+    presence: false,
+  },
+  websiteLink: {
+    presence: false,
+    url: true,
+  },
 };
 
 const fields = Object.keys(schema);

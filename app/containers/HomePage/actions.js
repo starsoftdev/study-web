@@ -8,6 +8,7 @@ import {
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
+  CLEAR_STUDIES_COLLECTION,
   FETCH_PROTOCOLS,
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_PROTOCOLS_ERROR,
@@ -84,6 +85,12 @@ export function fetchStudies(currentUser, searchParams) {
     type: FETCH_STUDIES,
     currentUser,
     searchParams,
+  };
+}
+
+export function clearStudiesCollection() {
+  return {
+    type: CLEAR_STUDIES_COLLECTION,
   };
 }
 

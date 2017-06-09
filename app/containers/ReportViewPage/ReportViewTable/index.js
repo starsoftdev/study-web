@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import moment from 'moment-timezone';
 import { reduxForm } from 'redux-form';
@@ -6,7 +5,10 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
 import ReactTooltip from 'react-tooltip';
+import _ from 'lodash';
+import classNames from 'classnames';
 import Toggle from '../../../components/Input/Toggle';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import { selectChangeProtocolStatusProcess } from '../selectors';
 
 @reduxForm({ form: 'reportListForm' })
@@ -29,9 +31,13 @@ export class ReportViewTable extends React.Component {
 
     this.state = {
       hoveredRowIndex: null,
+      isFixedBottomScroll: false,
+      fixedScrollWidth: false,
+      fixedScrollContainerWidth: 2236,
     };
 
     this.handleScroll = this.handleScroll.bind(this);
+    this.handleBodyScroll = this.handleBodyScroll.bind(this);
     this.sortBy = this.sortBy.bind(this);
 
     this.mouseOverRow = this.mouseOverRow.bind(this);
@@ -40,17 +46,31 @@ export class ReportViewTable extends React.Component {
   }
 
   componentDidMount() {
-    this.rightDiv.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('scroll', this.handleBodyScroll);
   }
 
   componentWillUnmount() {
-    this.rightDiv.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.handleBodyScroll);
   }
 
   handleScroll(event) {
     const scrollLeft = event.target.scrollLeft;
-
+    this.rightDiv.scrollLeft = scrollLeft;
     this.rightDivHeader.scrollLeft = scrollLeft;
+    this.rightDivParentHeader.scrollLeft = scrollLeft;
+  }
+
+  handleBodyScroll(event) {
+    const scrollTop = event.target.scrollingElement.scrollTop;
+    const scrollHeight = event.target.scrollingElement.scrollHeight;
+
+    if ((window.innerHeight + scrollTop < 990) || (scrollHeight - window.innerHeight - scrollTop < 80)) {
+      if (this.state.isFixedBottomScroll) {
+        this.setState({ isFixedBottomScroll: false });
+      }
+    } else if (!this.state.isFixedBottomScroll || this.state.fixedScrollWidth !== this.tableRight.clientWidth) {
+      this.setState({ isFixedBottomScroll: true, fixedScrollWidth: this.tableRight.clientWidth, fixedScrollContainerWidth: this.tableRightElement.clientWidth });
+    }
   }
 
   sortBy(ev) {
@@ -92,44 +112,6 @@ export class ReportViewTable extends React.Component {
 
   render() {
     const { reportsList } = this.props;
-
-    const items = [
-      {
-        call_attempted: '1',
-        consented: '1',
-        count_contacted: '4',
-        count_not_contacted: '4',
-        count_total: '8',
-        current_level: null,
-        currrent_date_from: null,
-        currrent_date_to: null,
-        dnq: '1',
-        inbound_text: '4',
-        is_active: true,
-        next_date_from: '2017-01-31T22:00:00.000Z',
-        next_date_to: '2017-02-28T22:00:00.000Z',
-        next_level: 'Ruby',
-        outbound_emails: 0,
-        outbound_text: '3',
-        past_date_from: null,
-        past_date_to: null,
-        past_level: null,
-        principal_investigator_active: '1',
-        principal_investigator_inactive: '1',
-        principalinvestigatorfirstname: 'Kosta',
-        principalinvestigatorlastname: 'Petrov',
-        randomized: '0',
-        scheduled: '0',
-        screen_failed: '0',
-        site_id: 1,
-        study_id: 1,
-        unread_text: '0',
-      },
-    ];
-
-    for (let i = 0; i < 7; i++) {
-      items.push(items[0]);
-    }
 
     const total = reportsList.details.length;
     let inActive = 0;
@@ -245,6 +227,7 @@ export class ReportViewTable extends React.Component {
             <div className="table-right">
               <div
                 className="table-right-inner"
+                onScroll={this.handleScroll}
                 ref={(rightDivHeader) => {
                   this.rightDivHeader = rightDivHeader;
                 }}
@@ -276,7 +259,7 @@ export class ReportViewTable extends React.Component {
           </div>
         </Sticky>
         <div className="table-area">
-          <div className="table-left pull-left">
+          <div className="table-left">
             <table className="table">
               <tbody>
                 {leftPartTable}
@@ -285,17 +268,43 @@ export class ReportViewTable extends React.Component {
           </div>
           <div
             className="table-right"
-            ref={(rightDiv) => {
-              this.rightDiv = rightDiv;
+            ref={(tableRight) => {
+              this.tableRight = tableRight;
             }}
           >
-            <table className="table">
-              <tbody>
-                {rightPartTable}
-              </tbody>
-            </table>
+            <div className="scroll-holder jcf-scrollable">
+              <div
+                className="table-inner"
+                onScroll={this.handleScroll}
+                ref={(rightDivParentHeader) => {
+                  this.rightDivParentHeader = rightDivParentHeader;
+                }}
+              >
+                <table
+                  className="table"
+                  ref={(tableRightElement) => {
+                    this.tableRightElement = tableRightElement;
+                  }}
+                >
+                  <tbody>
+                    {rightPartTable}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div
+              onScroll={this.handleScroll}
+              ref={(rightDiv) => {
+                this.rightDiv = rightDiv;
+              }}
+              style={{ width: (this.state.fixedScrollWidth || 'auto') }}
+              className={classNames('table-scroll-wrap', (this.state.isFixedBottomScroll ? 'table-scroll-wrap-fixed' : ''))}
+            >
+              <div className="table-scroll-container" style={{ width: (this.state.fixedScrollContainerWidth || 2236) }} />
+            </div>
           </div>
         </div>
+        { this.props.reportsList.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div> }
       </StickyContainer>
     );
   }
