@@ -5,10 +5,6 @@ const schema = {
     presence: {
       message: '^Name cannot be blank.',
     },
-    format: {
-      pattern: '^\\w+ \\w+$',
-      message: '^Last Name is required.',
-    },
   },
   email: {
     presence: {

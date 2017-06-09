@@ -98,10 +98,12 @@ export class LandingPage extends React.Component {
 
   onSubmitForm(params) {
     const { landing } = this.props;
-    const separateNames = params.name.split(' ');
+    const separateNames = params.name.trim();
+    const firstName = separateNames.substr(0, separateNames.indexOf(' '));
+    const lastName = separateNames.substr(separateNames.indexOf(' ') + 1).trim();
     const data = {
-      firstName: separateNames[0],
-      lastName: separateNames[1] || null,
+      firstName,
+      lastName: lastName || null,
       email: params.email,
       phone: normalizePhoneForServer(params.phone),
       landing_page_id: landing.id,
