@@ -58,14 +58,10 @@ function reportViewPageReducer(state = initialState, action) {
           level = item.current_level;
           levelDateFrom = moment(item.currrent_date_from).tz(item.timezone).format('MM/DD/YY');
           levelDateTo = moment(item.currrent_date_to).tz(item.timezone).format('MM/DD/YY');
-        } else if (item.next_level) {
-          level = item.next_level;
-          levelDateFrom = moment(item.next_date_from).tz(item.timezone).format('MM/DD/YY');
-          levelDateTo = moment(item.next_date_to).tz(item.timezone).format('MM/DD/YY');
-        } else if (item.past_level) {
-          level = item.past_level;
-          levelDateFrom = moment(item.past_date_from).tz(item.timezone).format('MM/DD/YY');
-          levelDateTo = moment(item.past_date_to).tz(item.timezone).format('MM/DD/YY');
+        } else {
+          level = null;
+          levelDateFrom = null;
+          levelDateTo = null;
         }
         reports.push({ ...item, level, levelDateFrom, levelDateTo, count_index: index });
       });
