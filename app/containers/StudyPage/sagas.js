@@ -11,7 +11,6 @@ import moment from 'moment-timezone';
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 import { getItem, removeItem } from '../../utils/localStorage';
-import { FIND_PATIENTS_TEXT_BLAST,
 import {
 FIND_PATIENTS_TEXT_BLAST,
 FETCH_PATIENTS,
