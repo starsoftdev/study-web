@@ -78,6 +78,11 @@ const selectHomePageClientAdmins = () => createSelector(
   substate => substate.clientAdmins
 );
 
+const selectQueryParams = () => createSelector(
+  selectHomePageDomain(),
+  (substate) => substate.queryParams
+);
+
 const selectFormDomain = () => state => state.form;
 
 const selectSearchProtocolsFormValues = () => createSelector(
@@ -104,4 +109,5 @@ export {
   selectSearchProtocolsFormValues,
   selectAddNotificationProcess,
   selectHomePageClientAdmins,
+  selectQueryParams,
 };

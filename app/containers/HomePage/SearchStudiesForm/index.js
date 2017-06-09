@@ -51,7 +51,10 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
   }
 
   performSearch(e, name) {
-    const params = this.props.formValues;
+    const { formValues } = this.props;
+    const params = formValues;
+    params.filter = true;
+
     if (e && e.target) {
       params[e.target.name] = e.target.value;
       this.props.onSubmit(params, true);
