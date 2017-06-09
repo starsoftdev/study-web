@@ -38,11 +38,16 @@ const redirectApp = () => {
   location.href = redirectPath;
 };
 
+const redirectLogin = () => {
+  location.href = '/login';
+};
+
 const routes = {
   path: '/',
   component: Corporate,
   indexRoute: { component: Home },
   childRoutes: [
+    { path: '/login/', component: LoginPage, onEnter: redirectLogin },
     { path: '/login', component: LoginPage },
     { path: '/reset-password', component: ResetPasswordPage },
     { path: '/confirm-reset-password', component: ConfirmResetPasswordPage },
