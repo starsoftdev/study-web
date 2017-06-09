@@ -72,7 +72,6 @@ const initialState = {
   },
   studies: {
     details: [],
-    rawDetails: [],
     fetching: false,
     error: null,
     total: null,
@@ -226,7 +225,6 @@ export default function homePageReducer(state = initialState, action) {
         ...state,
         studies: {
           details: cloneDeep(state.studies.details),
-          rawDetails: cloneDeep(state.studies.rawDetails),
           total: state.studies.total || 0,
           active: state.studies.active || 0,
           inactive: state.studies.inactive || 0,
@@ -235,72 +233,13 @@ export default function homePageReducer(state = initialState, action) {
         },
       };
     case FETCH_STUDIES_SUCCESS:
-      const cDate = new Date();
       queryParams = state.queryParams;
-      queryParams.hasMoreItems = (payload.studies.length > 0);
-      const studiesCollection = (queryParams.filter) ? payload.studies : concat(state.studies.rawDetails, payload.studies);
-      const entitiesCollection = studiesCollection.map((studyObject, index) => ({
-        studyId: studyObject.id,
-        indication: studyObject.indication,
-        siteName: studyObject.site.siteName,
-        siteTimezone: studyObject.site.timezone,
-        sponsor: studyObject.sponsor.name,
-        protocol: studyObject.protocolNumber,
-        patientMessagingSuite: studyObject.patientMessagingSuite ? 'On' : 'Off',
-        patientQualificationSuite: studyObject.patientQualificationSuite ? 'On' : 'Off',
-        status: studyObject.status,
-        callTracking: studyObject.callTracking,
-        startDate: studyObject.campaigns[0].dateFrom,
-        endDate: studyObject.campaigns[0].dateTo,
-        level_id: studyObject.campaigns[0].level_id,
-        campaignId: studyObject.campaigns[0].campaignId,
-        campaignlength: studyObject.campaigns[0].length,
-        orderNumber: (index + 1),
-        siteId: studyObject.site.id,
-        campaignLastDate: studyObject.campaignLastDate,
-        unreadMessageCount: studyObject.unreadMessageCount,
-        url: studyObject.url,
-      }));
-      const nEntities = [];
-      _.forEach(entitiesCollection, (item) => {
-        const foundItemIndex = _.findIndex(nEntities, { studyId : item.studyId });
+      const studiesCollection = (queryParams.skip) ? concat(state.studies.details, payload.studies) : payload.studies;
 
-        if (foundItemIndex !== -1) {
-          const sItem = nEntities[foundItemIndex];
-          if (!sItem.startDate) {
-            nEntities[foundItemIndex] = item;
-          } else if (sItem.startDate && item.startDate) {
-            const sStartDate = new Date(sItem.startDate);
-            const sEndDate = new Date(sItem.endDate);
-            const nStartDate = new Date(item.startDate);
-            const nEndDate = new Date(item.endDate);
-            if (nStartDate <= cDate && nEndDate >= cDate) {
-              nEntities[foundItemIndex] = item;
-            } else if (sStartDate >= cDate || sEndDate <= cDate) {
-              const sDiff = sStartDate.getTime() - cDate.getTime();
-              const nDiff = nStartDate.getTime() - cDate.getTime();
-              if (sDiff < 0 && nDiff > 0) {
-                nEntities[foundItemIndex] = item;
-              } else if (sDiff < 0 && nDiff < 0) {
-                if (nDiff > sDiff) {
-                  nEntities[foundItemIndex] = item;
-                }
-              } else if (sDiff > 0 && nDiff > 0) {
-                if (nDiff < sDiff) {
-                  nEntities[foundItemIndex] = item;
-                }
-              }
-            }
-          }
-        } else {
-          nEntities.push(item);
-        }
-      });
       return {
         ...state,
         studies: {
-          rawDetails: studiesCollection,
-          details: nEntities,
+          details: studiesCollection,
           total: payload.total,
           active: payload.active,
           inactive: payload.inactive,
@@ -318,7 +257,6 @@ export default function homePageReducer(state = initialState, action) {
         ...state,
         studies: {
           details: [],
-          rawDetails: [],
           total: null,
           active: null,
           inactive: null,
@@ -331,7 +269,6 @@ export default function homePageReducer(state = initialState, action) {
         ...state,
         studies: {
           details: [],
-          rawDetails: [],
           total: null,
           active: null,
           inactive: null,
