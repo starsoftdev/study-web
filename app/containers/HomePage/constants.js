@@ -10,6 +10,7 @@ export const FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS = 'HomePage/Dashboard/
 export const FETCH_STUDIES                               = 'HomePage/Viewport/FETCH_STUDIES';
 export const FETCH_STUDIES_SUCCESS                       = 'HomePage/Viewport/FETCH_STUDIES_SUCCESS';
 export const FETCH_STUDIES_ERROR                         = 'HomePage/Viewport/FETCH_STUDIES_ERROR';
+export const CLEAR_STUDIES_COLLECTION                    = 'HomePage/Viewport/CLEAR_STUDIES_COLLECTION';
 
 export const FETCH_PROTOCOLS                             = 'HomePage/Viewport/FETCH_PROTOCOLS';
 export const FETCH_PROTOCOLS_SUCCESS                     = 'HomePage/Viewport/FETCH_PROTOCOLS_SUCCESS';
