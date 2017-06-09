@@ -7,6 +7,7 @@ import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
 import ReactTooltip from 'react-tooltip';
 import Toggle from '../../../components/Input/Toggle';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import { selectChangeProtocolStatusProcess } from '../selectors';
 
 @reduxForm({ form: 'reportListForm' })
@@ -92,44 +93,6 @@ export class ReportViewTable extends React.Component {
 
   render() {
     const { reportsList } = this.props;
-
-    const items = [
-      {
-        call_attempted: '1',
-        consented: '1',
-        count_contacted: '4',
-        count_not_contacted: '4',
-        count_total: '8',
-        current_level: null,
-        currrent_date_from: null,
-        currrent_date_to: null,
-        dnq: '1',
-        inbound_text: '4',
-        is_active: true,
-        next_date_from: '2017-01-31T22:00:00.000Z',
-        next_date_to: '2017-02-28T22:00:00.000Z',
-        next_level: 'Ruby',
-        outbound_emails: 0,
-        outbound_text: '3',
-        past_date_from: null,
-        past_date_to: null,
-        past_level: null,
-        principal_investigator_active: '1',
-        principal_investigator_inactive: '1',
-        principalinvestigatorfirstname: 'Kosta',
-        principalinvestigatorlastname: 'Petrov',
-        randomized: '0',
-        scheduled: '0',
-        screen_failed: '0',
-        site_id: 1,
-        study_id: 1,
-        unread_text: '0',
-      },
-    ];
-
-    for (let i = 0; i < 7; i++) {
-      items.push(items[0]);
-    }
 
     const total = reportsList.details.length;
     let inActive = 0;
@@ -294,6 +257,7 @@ export class ReportViewTable extends React.Component {
             </table>
           </div>
         </div>
+        { this.props.reportsList.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div> }
       </StickyContainer>
     );
   }

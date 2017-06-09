@@ -88,6 +88,8 @@ export class ThankYouPageModal extends React.Component {
           change('isSharePhone', thankYouPage.isSharePhone);
           change('isShareLocation', thankYouPage.isShareLocation);
           change('isHideLocationData', thankYouPage.isHideLocationData);
+          change('visitOurWebsiteText', thankYouPage.visitOurWebsiteText);
+          change('websiteLink', thankYouPage.websiteLink);
           this.setState({
             initialValuesEntered: true,
           });
@@ -228,6 +230,28 @@ export class ThankYouPageModal extends React.Component {
                     className="field"
                     component={Checkbox}
                     checked
+                  />
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">Visit Our Website...</label>
+                  </strong>
+                  <Field
+                    type="text"
+                    name="visitOurWebsiteText"
+                    className="field"
+                    component={Input}
+                  />
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">Link</label>
+                  </strong>
+                  <Field
+                    type="text"
+                    name="websiteLink"
+                    className="field"
+                    component={Input}
                   />
                 </div>
                 <div className="field-row text-right">
