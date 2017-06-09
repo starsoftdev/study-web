@@ -289,7 +289,23 @@
 	.table-area {
 		.clearfix;
 		position: relative;
-		
+    padding: 0 0 0 844px;
+
+
+    .table-scroll-wrap{
+      overflow-x: scroll;
+      .table-scroll-container{
+        height: 0.1px;
+      }
+    }
+
+    .table-scroll-wrap-fixed{
+      position: fixed;
+      bottom: 0px;
+      z-index: 1;
+      width: 300px;
+    }
+
 		.reports & {
 			padding: 0 0 0 844px;
 		}
@@ -327,6 +343,7 @@
 			top: 0;
 			left: 0;
 			width: 844px;
+      position: absolute;
 			
 			.table .number {
 				line-height: 20px;
@@ -348,10 +365,8 @@
 					}
 				}
 			}
-			
-			
+
 		}
-		
 		
 		.reports & {
 			.table-left,
@@ -371,20 +386,16 @@
 		}
 		
 		.table-right {
-			position: absolute;
-      width: calc(~'100% - 844px');
-      left: 844px;
-      overflow-x: scroll;
-			padding-bottom: 2px;
-			
 			.table {
-				width: 2239px;
-				max-width: none;
-				
-				
-				
+				width: 100%;
+				max-width: 100%;
 			}
-			
+
+      .table-inner {
+        overflow-x: scroll;
+        margin-bottom: -15px;
+      }
+
 			.scroll {
 				height: 100% !important;
 			}
@@ -524,6 +535,7 @@
 		}
 		
 		@media screen and (max-width: @psd) {
+      padding-left: 644px;
 			.reports & {
 				padding: 0 0 0 644px;
 			}
@@ -533,11 +545,6 @@
 			.table-right .table {
 				width: 1666px;
 			}
-
-      .table-right{
-        width: calc(~'100% - 644px');
-        left: 644px;
-      }
 		}
 	}
 

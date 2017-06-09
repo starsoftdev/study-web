@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import moment from 'moment-timezone';
 import { reduxForm } from 'redux-form';
@@ -6,6 +5,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
 import ReactTooltip from 'react-tooltip';
+import _ from 'lodash';
+import classNames from 'classnames';
 import Toggle from '../../../components/Input/Toggle';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { selectChangeProtocolStatusProcess } from '../selectors';
@@ -30,9 +31,13 @@ export class ReportViewTable extends React.Component {
 
     this.state = {
       hoveredRowIndex: null,
+      isFixedBottomScroll: false,
+      fixedScrollWidth: false,
+      fixedScrollContainerWidth: 2236,
     };
 
     this.handleScroll = this.handleScroll.bind(this);
+    this.handleBodyScroll = this.handleBodyScroll.bind(this);
     this.sortBy = this.sortBy.bind(this);
 
     this.mouseOverRow = this.mouseOverRow.bind(this);
@@ -41,17 +46,31 @@ export class ReportViewTable extends React.Component {
   }
 
   componentDidMount() {
-    this.rightDiv.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('scroll', this.handleBodyScroll);
   }
 
   componentWillUnmount() {
-    this.rightDiv.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.handleBodyScroll);
   }
 
   handleScroll(event) {
     const scrollLeft = event.target.scrollLeft;
-
+    this.rightDiv.scrollLeft = scrollLeft;
     this.rightDivHeader.scrollLeft = scrollLeft;
+    this.rightDivParentHeader.scrollLeft = scrollLeft;
+  }
+
+  handleBodyScroll(event) {
+    const scrollTop = event.target.scrollingElement.scrollTop;
+    const scrollHeight = event.target.scrollingElement.scrollHeight;
+
+    if ((window.innerHeight + scrollTop < 990) || (scrollHeight - window.innerHeight - scrollTop < 80)) {
+      if (this.state.isFixedBottomScroll) {
+        this.setState({ isFixedBottomScroll: false });
+      }
+    } else if (!this.state.isFixedBottomScroll || this.state.fixedScrollWidth !== this.tableRight.clientWidth) {
+      this.setState({ isFixedBottomScroll: true, fixedScrollWidth: this.tableRight.clientWidth, fixedScrollContainerWidth: this.tableRightElement.clientWidth });
+    }
   }
 
   sortBy(ev) {
@@ -207,6 +226,7 @@ export class ReportViewTable extends React.Component {
             <div className="table-right">
               <div
                 className="table-right-inner"
+                onScroll={this.handleScroll}
                 ref={(rightDivHeader) => {
                   this.rightDivHeader = rightDivHeader;
                 }}
@@ -237,7 +257,7 @@ export class ReportViewTable extends React.Component {
           </div>
         </Sticky>
         <div className="table-area">
-          <div className="table-left pull-left">
+          <div className="table-left">
             <table className="table">
               <tbody>
                 {leftPartTable}
@@ -246,15 +266,40 @@ export class ReportViewTable extends React.Component {
           </div>
           <div
             className="table-right"
-            ref={(rightDiv) => {
-              this.rightDiv = rightDiv;
+            ref={(tableRight) => {
+              this.tableRight = tableRight;
             }}
           >
-            <table className="table">
-              <tbody>
-                {rightPartTable}
-              </tbody>
-            </table>
+            <div className="scroll-holder jcf-scrollable">
+              <div
+                className="table-inner"
+                onScroll={this.handleScroll}
+                ref={(rightDivParentHeader) => {
+                  this.rightDivParentHeader = rightDivParentHeader;
+                }}
+              >
+                <table
+                  className="table"
+                  ref={(tableRightElement) => {
+                    this.tableRightElement = tableRightElement;
+                  }}
+                >
+                  <tbody>
+                    {rightPartTable}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div
+              onScroll={this.handleScroll}
+              ref={(rightDiv) => {
+                this.rightDiv = rightDiv;
+              }}
+              style={{ width: (this.state.fixedScrollWidth || 'auto') }}
+              className={classNames('table-scroll-wrap', (this.state.isFixedBottomScroll ? 'table-scroll-wrap-fixed' : ''))}
+            >
+              <div className="table-scroll-container" style={{ width: (this.state.fixedScrollContainerWidth || 2236) }} />
+            </div>
           </div>
         </div>
         { this.props.reportsList.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div> }
