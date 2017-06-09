@@ -1,5 +1,5 @@
 /* eslint-disable comma-dangle, no-case-declarations */
-import _ from 'lodash';
+import _, { concat, cloneDeep } from 'lodash';
 
 import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
@@ -8,6 +8,7 @@ import {
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
+  CLEAR_STUDIES_COLLECTION,
   FETCH_PROTOCOLS,
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_PROTOCOLS_ERROR,
@@ -71,6 +72,7 @@ const initialState = {
   },
   studies: {
     details: [],
+    rawDetails: [],
     fetching: false,
     error: null,
     total: null,
@@ -116,6 +118,15 @@ const initialState = {
     activeSort: null,
     activeDirection: null,
   },
+  queryParams: {
+    filter: false,
+    name: null,
+    siteId: null,
+    status: null,
+    hasMoreItems: true,
+    limit: 15,
+    skip: 0,
+  },
   addNotificationProcess: {
     saving: false,
     error: null,
@@ -137,6 +148,7 @@ export default function homePageReducer(state = initialState, action) {
   const { payload } = action;
   let newState;
   let protocols;
+  let queryParams;
 
   switch (action.type) {
     case FETCH_PATIENT_SIGN_UPS_SUCCEESS:
@@ -209,22 +221,25 @@ export default function homePageReducer(state = initialState, action) {
       }
       return newState;
     case FETCH_STUDIES:
+      queryParams = state.queryParams;
       return {
         ...state,
         studies: {
-          details: [],
+          details: cloneDeep(state.studies.details),
+          rawDetails: cloneDeep(state.studies.rawDetails),
+          total: state.studies.total || 0,
+          active: state.studies.active || 0,
+          inactive: state.studies.inactive || 0,
           fetching: true,
           error: null,
         },
       };
-    case FETCH_STUDIES_SUCCESS: {
+    case FETCH_STUDIES_SUCCESS:
       const cDate = new Date();
-      // const dateFrom = campaign.dateFrom ? new Date(campaign.dateFrom) : null
-      // const dateTo = campaign.dateTo ? new Date(campaign.dateTo) : null
-      //
-      // const dateFromStr = dateFrom ? moment(dateFrom).format('MMMM Do, YYYY') : 'To Be Determined'
-      // const dateToStr = dateTo ? moment(dateTo).format('MMMM Do, YYYY') : 'To Be Determined'
-      const entitiesCollection = payload.studies.map((studyObject, index) => ({
+      queryParams = state.queryParams;
+      queryParams.hasMoreItems = (payload.studies.length > 0);
+      const studiesCollection = (queryParams.filter) ? payload.studies : concat(state.studies.rawDetails, payload.studies);
+      const entitiesCollection = studiesCollection.map((studyObject, index) => ({
         studyId: studyObject.id,
         indication: studyObject.indication,
         siteName: studyObject.site.siteName,
@@ -284,6 +299,7 @@ export default function homePageReducer(state = initialState, action) {
       return {
         ...state,
         studies: {
+          rawDetails: studiesCollection,
           details: nEntities,
           total: payload.total,
           active: payload.active,
@@ -291,15 +307,45 @@ export default function homePageReducer(state = initialState, action) {
           fetching: false,
           error: null,
         },
+        queryParams: {
+          ...queryParams,
+          skip: (queryParams.hasMoreItems) ? queryParams.skip + queryParams.limit : queryParams.skip,
+          hasMoreItems: (payload.studies.length > 0),
+        },
       };
-    }
     case FETCH_STUDIES_ERROR:
       return {
         ...state,
         studies: {
           details: [],
+          rawDetails: [],
+          total: null,
+          active: null,
+          inactive: null,
           fetching: false,
           error: payload,
+        },
+      };
+    case CLEAR_STUDIES_COLLECTION:
+      return {
+        ...state,
+        studies: {
+          details: [],
+          rawDetails: [],
+          total: null,
+          active: null,
+          inactive: null,
+          fetching: false,
+          error: null,
+        },
+        queryParams: {
+          filter: false,
+          name: null,
+          siteId: null,
+          status: null,
+          hasMoreItems: true,
+          limit: 15,
+          skip: 0,
         },
       };
     case FETCH_PROTOCOLS:
