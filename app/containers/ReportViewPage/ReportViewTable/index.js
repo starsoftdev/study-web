@@ -176,24 +176,22 @@ export class ReportViewTable extends React.Component {
 
           className={(this.state.hoveredRowIndex === index) ? 'active-table-row' : ''}
         >
-          <td>{item.levelDateFrom}</td>
-          <td>{item.levelDateTo}</td>
-          <td>{ (item.last_login_time ? moment(item.last_login_time).tz(item.timezone).format('MM/DD/YY [at] h:mm A') : '')}</td>
-          <td>{item.count_total}</td>
-          <td><span className="text">{item.count_contacted}<span className="small">{`(${percentage.count_contacted_p}%)`}</span></span></td>
-          <td><span className="text">{item.count_not_contacted}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></td>
-          <td><span className="text">{item.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></td>
-          <td><span className="text">{item.action_needed}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span></td>
-          <td><span className="text">{item.scheduled}<span className="small">{`(${percentage.scheduled_p}%)`}</span></span></td>
-          <td><span className="text">{item.consented}<span className="small">{`(${percentage.consented_p}%)`}</span></span></td>
-          <td><span className="text">{item.screen_failed}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span></td>
-          <td><span className="text">{item.randomized}<span className="small">{`(${percentage.randomized_p}%)`}</span></span></td>
-
-
-          <td>{item.outbound_text}</td>
-          <td>{item.inbound_text}</td>
-          <td>{item.unread_text}</td>
-          <td>{item.outbound_emails}</td>
+          <td className="level_date_from">{item.levelDateFrom}</td>
+          <td className="level_date_to">{item.levelDateTo}</td>
+          <td className="last_login_time">{ (item.last_login_time ? moment(item.last_login_time).tz(item.timezone).format('MM/DD/YY [at] h:mm A') : '')}</td>
+          <td className="count_total">{item.count_total}</td>
+          <td className="count_contacted"><span className="text">{item.count_contacted}<span className="small">{`(${percentage.count_contacted_p}%)`}</span></span></td>
+          <td className="count_not_contacted"><span className="text">{item.count_not_contacted}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></td>
+          <td className="dnq"><span className="text">{item.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></td>
+          <td className="action_needed"><span className="text">{item.action_needed}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span></td>
+          <td className="scheduled"><span className="text">{item.scheduled}<span className="small">{`(${percentage.scheduled_p}%)`}</span></span></td>
+          <td className="consented"><span className="text">{item.consented}<span className="small">{`(${percentage.consented_p}%)`}</span></span></td>
+          <td className="screen_failed"><span className="text">{item.screen_failed}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span></td>
+          <td className="randomized"><span className="text">{item.randomized}<span className="small">{`(${percentage.randomized_p}%)`}</span></span></td>
+          <td className="outbound_text">{item.outbound_text}</td>
+          <td className="inbound_text">{item.inbound_text}</td>
+          <td className="unread_text">{item.unread_text}</td>
+          <td className="outbound_emails">{item.outbound_emails}</td>
         </tr>
       );
     }
@@ -235,22 +233,22 @@ export class ReportViewTable extends React.Component {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th onClick={this.sortBy} data-sort="level_date_from" className={`th ${(this.props.paginationOptions.activeSort === 'level_date_from') ? this.props.paginationOptions.activeDirection : ''}`}>START DATE <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="level_date_to" className={`th ${(this.props.paginationOptions.activeSort === 'level_date_to') ? this.props.paginationOptions.activeDirection : ''}`}>END DATE <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="last_login_time" className={`th ${(this.props.paginationOptions.activeSort === 'last_login_time') ? this.props.paginationOptions.activeDirection : ''}`}>LAST LOGIN <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="count_total" className={`th ${(this.props.paginationOptions.activeSort === 'count_total') ? this.props.paginationOptions.activeDirection : ''}`}>REFERRALS <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="count_contacted" className={`th ${(this.props.paginationOptions.activeSort === 'count_contacted') ? this.props.paginationOptions.activeDirection : ''}`}>CONTACTED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="count_not_contacted" className={`th ${(this.props.paginationOptions.activeSort === 'count_not_contacted') ? this.props.paginationOptions.activeDirection : ''}`}>NOT CONTACTED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="dnq" className={`th ${(this.props.paginationOptions.activeSort === 'dnq') ? this.props.paginationOptions.activeDirection : ''}`}>DNQ <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="action_needed" className={`th ${(this.props.paginationOptions.activeSort === 'action_needed') ? this.props.paginationOptions.activeDirection : ''}`}>ACTION NEEDED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="scheduled" className={`th ${(this.props.paginationOptions.activeSort === 'scheduled') ? this.props.paginationOptions.activeDirection : ''}`}>SCHEDULED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="consented" className={`th ${(this.props.paginationOptions.activeSort === 'consented') ? this.props.paginationOptions.activeDirection : ''}`}>CONSENTED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="screen_failed" className={`th ${(this.props.paginationOptions.activeSort === 'screen_failed') ? this.props.paginationOptions.activeDirection : ''}`}>SCREEN FAILED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="randomized" className={`th ${(this.props.paginationOptions.activeSort === 'randomized') ? this.props.paginationOptions.activeDirection : ''}`}>RANDOMIZED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="outbound_text" className={`th ${(this.props.paginationOptions.activeSort === 'outbound_text') ? this.props.paginationOptions.activeDirection : ''}`}>TEXT SENT <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="inbound_text" className={`th ${(this.props.paginationOptions.activeSort === 'inbound_text') ? this.props.paginationOptions.activeDirection : ''}`}>TEXT RECEIVED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="unread_text" className={`th ${(this.props.paginationOptions.activeSort === 'unread_text') ? this.props.paginationOptions.activeDirection : ''}`}>UNREAD TEXT <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="outbound_emails" className={`th ${(this.props.paginationOptions.activeSort === 'outbound_emails') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL SENT <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="level_date_from" className={`level_date_from th ${(this.props.paginationOptions.activeSort === 'level_date_from') ? this.props.paginationOptions.activeDirection : ''}`}>START DATE <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="level_date_to" className={`level_date_to th ${(this.props.paginationOptions.activeSort === 'level_date_to') ? this.props.paginationOptions.activeDirection : ''}`}>END DATE <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="last_login_time" className={`last_login_time th ${(this.props.paginationOptions.activeSort === 'last_login_time') ? this.props.paginationOptions.activeDirection : ''}`}>LAST LOGIN <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="count_total" className={`count_total th ${(this.props.paginationOptions.activeSort === 'count_total') ? this.props.paginationOptions.activeDirection : ''}`}>REFERRALS <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="count_contacted" className={`count_contacted th ${(this.props.paginationOptions.activeSort === 'count_contacted') ? this.props.paginationOptions.activeDirection : ''}`}>CONTACTED <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="count_not_contacted" className={`count_not_contacted th ${(this.props.paginationOptions.activeSort === 'count_not_contacted') ? this.props.paginationOptions.activeDirection : ''}`}>NOT CONTACTED <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="dnq" className={`dnq th ${(this.props.paginationOptions.activeSort === 'dnq') ? this.props.paginationOptions.activeDirection : ''}`}>DNQ <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="action_needed" className={`action_needed th ${(this.props.paginationOptions.activeSort === 'action_needed') ? this.props.paginationOptions.activeDirection : ''}`}>ACTION NEEDED <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="scheduled" className={`scheduled th ${(this.props.paginationOptions.activeSort === 'scheduled') ? this.props.paginationOptions.activeDirection : ''}`}>SCHEDULED <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="consented" className={`consented th ${(this.props.paginationOptions.activeSort === 'consented') ? this.props.paginationOptions.activeDirection : ''}`}>CONSENTED <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="screen_failed" className={`screen_failed th ${(this.props.paginationOptions.activeSort === 'screen_failed') ? this.props.paginationOptions.activeDirection : ''}`}>SCREEN FAILED <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="randomized" className={`randomized th ${(this.props.paginationOptions.activeSort === 'randomized') ? this.props.paginationOptions.activeDirection : ''}`}>RANDOMIZED <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="outbound_text" className={`outbound_text th ${(this.props.paginationOptions.activeSort === 'outbound_text') ? this.props.paginationOptions.activeDirection : ''}`}>TEXT SENT <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="inbound_text" className={`inbound_text th ${(this.props.paginationOptions.activeSort === 'inbound_text') ? this.props.paginationOptions.activeDirection : ''}`}>TEXT RECEIVED <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="unread_text" className={`unread_text th ${(this.props.paginationOptions.activeSort === 'unread_text') ? this.props.paginationOptions.activeDirection : ''}`}>UNREAD TEXT <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="outbound_emails" className={`outbound_emails th ${(this.props.paginationOptions.activeSort === 'outbound_emails') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL SENT <i className="caret-arrow" /></th>
                     </tr>
                   </thead>
                 </table>
