@@ -99,8 +99,15 @@ export class LandingPage extends React.Component {
   onSubmitForm(params) {
     const { landing } = this.props;
     const separateNames = params.name.trim();
-    const firstName = separateNames.substr(0, separateNames.indexOf(' '));
-    const lastName = separateNames.substr(separateNames.indexOf(' ') + 1).trim();
+    let firstName = '';
+    let lastName = '';
+    if (separateNames.indexOf(' ') !== -1) {
+      firstName = separateNames.substr(0, separateNames.indexOf(' '));
+      lastName = separateNames.substr(separateNames.indexOf(' ') + 1).trim();
+    } else {
+      firstName = separateNames;
+    }
+
     const data = {
       firstName,
       lastName: lastName || null,
@@ -109,7 +116,9 @@ export class LandingPage extends React.Component {
       landing_page_id: landing.id,
     };
 
-    if (separateNames[1]) {
+    this.props.subscribeFromLanding(data);
+
+    /* if (separateNames[1]) {
       this.props.subscribeFromLanding(data);
     } else {
       const err = {
@@ -124,7 +133,7 @@ export class LandingPage extends React.Component {
       };
 
       this.props.patientSubscriptionError(err);
-    }
+    }*/
   }
 
   render() {
