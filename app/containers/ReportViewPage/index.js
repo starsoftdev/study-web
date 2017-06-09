@@ -53,6 +53,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
       count_contacted_p: parseInt(item.count_total) ? Math.round(((parseInt(item.count_contacted) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
       count_not_contacted_p: parseInt(item.count_total) ? Math.round(((parseInt(item.count_not_contacted) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
       dnq_p: parseInt(item.count_total) ? Math.round(((parseInt(item.dnq) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
+      action_needed_p: parseInt(item.count_total) ? Math.round(((parseInt(item.action_needed) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
       scheduled_p: parseInt(item.count_total) ? Math.round(((parseInt(item.scheduled) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
       consented_p: parseInt(item.count_total) ? Math.round(((parseInt(item.consented) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
       screen_failed_p: parseInt(item.count_total) ? Math.round(((parseInt(item.screen_failed) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
