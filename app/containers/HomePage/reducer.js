@@ -609,15 +609,18 @@ export default function homePageReducer(state = initialState, action) {
     case INCREMENT_STUDY_UNREAD_MESSAGES:
       const studiesCopy = _.cloneDeep(state.studies.details);
       const foundStudy = _.find(studiesCopy, (o) => (o.studyId === action.studyId));
-      foundStudy.unreadMessageCount += 1;
-      return {
-        ...state,
-        studies: {
-          details: studiesCopy,
-          fetching: false,
-          error: null,
-        },
-      };
+      if (foundStudy) {
+        foundStudy.unreadMessageCount += 1;
+        return {
+          ...state,
+          studies: {
+            details: studiesCopy,
+            fetching: false,
+            error: null,
+          },
+        };
+      }
+      break;
 
     default:
       return state;
