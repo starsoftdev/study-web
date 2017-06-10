@@ -90,7 +90,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     this.closeSubmitFormModal = this.closeSubmitFormModal.bind(this);
     this.goToStudyPage = this.goToStudyPage.bind(this);
     this.state = {
-      uniqueId: '1',
       shoppingcartLoading: props.formSubmissionStatus.submitting,
     };
   }
@@ -161,16 +160,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     };
     params.recruitmentPhone = normalizePhoneForServer(params.recruitmentPhone);
     this.props.submitForm(shoppingCartFormValues, params);
-
-    if (this.state.uniqueId.length > 1) {
-      this.setState({
-        uniqueId: '1',
-      });
-    } else {
-      this.setState({
-        uniqueId: '11',
-      });
-    }
   }
 
   goToStudyPage() {
@@ -188,7 +177,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
   render() {
     const { indications, studyLevels, formValues, fullSiteLocations, indicationLevelPrice, userRoleType, currentUser } = this.props;
     const purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
-    const { uniqueId } = this.state;
 
     const addOns = [];
     const level = find(studyLevels, { id: formValues.exposureLevel });
@@ -233,7 +221,6 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
                 <div className="col-xs-6 form-holder">
                   <ListNewStudyForm
-                    key={uniqueId}
                     formValues={formValues}
                     fullSiteLocations={fullSiteLocations}
                     indications={indications}

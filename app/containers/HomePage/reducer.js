@@ -620,7 +620,7 @@ export default function homePageReducer(state = initialState, action) {
           },
         };
       }
-      break;
+      return state;
 
     default:
       return state;
