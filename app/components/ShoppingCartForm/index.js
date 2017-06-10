@@ -37,6 +37,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    change: (field, value) => dispatch(change(formName, field, value)),
     fetchCoupon: (id) => dispatch(fetchCoupon(id)),
     clearCoupon: () => dispatch(clearCoupon()),
     fetchCards: (clientId, customerId) => dispatch(fetchCards(clientId, customerId)),
@@ -50,8 +51,8 @@ function mapDispatchToProps(dispatch) {
 
 class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    change: PropTypes.func.isRequired,
     clientId: PropTypes.number.isRequired,
-    dispatch: PropTypes.func.isRequired,
     currentUserStripeCustomerId: PropTypes.string,
     title: PropTypes.string,
     noBorder: PropTypes.bool,
@@ -115,14 +116,14 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   onFetchCoupon() {
-    const { fetchCoupon, clearCoupon, resetForm, coupon, couponId } = this.props;
+    const { fetchCoupon, clearCoupon, coupon, couponId } = this.props;
     if (!coupon.details) {
       if (couponId) {
         fetchCoupon(couponId);
       }
     } else {
       clearCoupon();
-      resetForm();
+      change('couponId', '');
     }
   }
 
@@ -138,7 +139,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
 
   changeHiddenTotal() {
     const total = this.calculateTotal().total;
-    this.props.dispatch(change('shoppingCart', 'total', total.toString()));
+    this.props.change('total', total.toString());
   }
 
   calculateTotal() {
@@ -169,7 +170,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     const title = this.props.title || 'Order Summary';
     const noBorderClassName = (this.props.noBorder) ? 'no-border' : '';
     const formClassName = `form-shopping-cart ${noBorderClassName}`;
-    const { addOns, coupon, couponId, showCards, cards, submitting, validateAndSubmit, manualDisableSubmit, resetForm, clearCoupon } = this.props;
+    const { addOns, coupon, couponId, change, showCards, cards, submitting, validateAndSubmit, manualDisableSubmit, clearCoupon } = this.props;
     const { subTotal, discount, total } = this.calculateTotal();
     let addOnsContent = null;
     let couponSelected = false;
@@ -332,7 +333,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
               onClick={(ev) => {
                 this.setState({ showLoading: true });
                 clearCoupon();
-                resetForm();
+                change('couponId', '');
                 validateAndSubmit(ev);
               }}
             >
