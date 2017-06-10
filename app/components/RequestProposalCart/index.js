@@ -74,7 +74,6 @@ export class RequestProposalCart extends Component {
       newProps.formValues.indication_id && newProps.formValues.level_id &&
       newProps.formValues.indication_id !== undefined && newProps.formValues.level_id !== undefined
     ) {
-      console.log('fetch');
       this.props.fetchIndicationLevelPrice(newProps.formValues.indication_id, newProps.formValues.level_id);
     }
 
