@@ -104,6 +104,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             patientId: socketMessage.patient_id,
             patientCategoryId: curCategoryId,
             unreadMessageCount: (unreadMessageCount + 1),
+            lastTextMessage: socketMessage.twilioTextMessage,
           });
         }
       });
