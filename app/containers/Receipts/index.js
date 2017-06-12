@@ -32,7 +32,6 @@ import {
 import { selectReceiptsList, selectPaginationOptions, selectSearchOptions } from './selectors';
 import ReceiptsTable from '../../components/ReceiptsTable';
 import TableSearchForm from '../../components/TableSearchForm';
-import AlertModal from '../../components/AlertModal';
 
 export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -65,7 +64,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
       processPDF: false,
       receipts: null,
       filteredReceipts: null,
-      showAlertModal: false,
+      downloadBtnDisabled: true,
     };
   }
 
@@ -98,17 +97,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
   getPDF() {
     if (this.selectedReceipts) {
       this.props.getPDF(this.selectedReceipts);
-    } else {
-      this.setState({
-        showAlertModal: true,
-      });
     }
-  }
-
-  hideAlertModal = () => {
-    this.setState({
-      showAlertModal: false,
-    });
   }
 
   get selectedReceipts() {
@@ -117,6 +106,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
 
   set selectedReceipts(value) {
     this.SelectedReceipts = value;
+    this.updateBtnState();
   }
 
   get searchOptions() {
@@ -129,10 +119,19 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
 
   selectCurrent(receipt) {
     this.selectedReceipts = receipt;
+    this.updateBtnState();
   }
 
   selectAll(receipt) {
     this.selectedReceipts = receipt;
+    this.updateBtnState();
+  }
+
+  updateBtnState() {
+    const noItems = !(this.SelectedReceipts && this.selectedReceipts.length)
+    if (this.state.downloadBtnDisabled !== noItems) {
+      this.setState({ downloadBtnDisabled: noItems });
+    }
   }
 
   search(event, type) {
@@ -184,9 +183,9 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
             changeRange={this.changeRange}
             search={this.search}
             createPdf={this.getPDF}
+            downloadBtnDisabled={this.state.downloadBtnDisabled}
             {...this.props}
           />
-          <AlertModal show={this.state.showAlertModal} onHide={this.hideAlertModal} name="receipt" />
           <ReceiptsTable
             currentUser={this.props.currentUser}
             selectCurrent={this.selectCurrent}
