@@ -36,6 +36,7 @@ import {
 export class PatientDetailModal extends React.Component {
   static propTypes = {
     carousel: React.PropTypes.object,
+    currentPatientNotes: React.PropTypes.array,
     currentPatientCategory: React.PropTypes.object,
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
@@ -98,7 +99,6 @@ export class PatientDetailModal extends React.Component {
     socket.removeAllListeners('notifyUnsubscribePatient');
     socket.removeAllListeners('notifySubscribePatient');
   }
-
 
   onSelectText() {
     const {
@@ -171,7 +171,8 @@ export class PatientDetailModal extends React.Component {
   }
 
   render() {
-    const { ePMS, carousel, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId, socket, switchToNoteSection, switchToEmailSection, switchToOtherSection } = this.props;
+    const { ePMS, carousel, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId,
+      socket, switchToNoteSection, switchToEmailSection, switchToOtherSection, currentPatientNotes } = this.props;
     return (
       <Collapse
         dimension="width"
@@ -197,7 +198,13 @@ export class PatientDetailModal extends React.Component {
                 <li className={classNames({ active: carousel.other })} onClick={switchToOtherSection}>Other</li>
               </ol>
               <div className="carousel-inner" role="listbox">
-                <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={currentPatient} studyId={studyId} />
+                <NotesSection
+                  active={carousel.note}
+                  currentUser={currentUser}
+                  currentPatient={currentPatient}
+                  notes={currentPatientNotes}
+                  studyId={studyId}
+                />
                 <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={currentPatient} ePMS={ePMS} />
                 <EmailSection active={carousel.email} />
                 {this.renderOtherSection()}
@@ -214,6 +221,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   carousel: Selector.selectCarousel(),
   currentPatient: Selector.selectCurrentPatient(),
+  currentPatientNotes: Selector.selectCurrentPatientNotes(),
   currentPatientCategory: Selector.selectCurrentPatientCategory(),
   openPatientModal: Selector.selectOpenPatientModal(),
   socket: selectSocket(),
