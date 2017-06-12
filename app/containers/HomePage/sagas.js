@@ -994,15 +994,13 @@ export function* updateTwilioNumbersWorker() {
   }
 }
 
-let watcherDReady = false;
+let watcherD = false;
 
 export function* homePageSaga() {
-  let watcherD = false;
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   const watcherB = yield fork(fetchPatientMessagesWatcher);
-  if (!watcherDReady) {
+  if (!watcherD) {
     watcherD = yield fork(fetchStudiesWatcher);
-    watcherDReady = true;
   }
   const watcherE = yield fork(fetchIndicationLevelPriceWatcher);
   const watcherF = yield fork(renewStudyWatcher);
