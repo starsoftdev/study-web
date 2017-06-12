@@ -152,26 +152,24 @@ function* fetchStudyViewsStat(action) {
 }
 
 
-function* fetchPatientReferralStat(action) { // eslint-disable-line no-unused-vars
+function* fetchPatientReferralStat(action) {
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
   }
 
   // listen for the latest FETCH_STUDY action
-  // const { studyId, campaignId } = action;
+  const { studyId, campaignId } = action;
 
   try {
-    // let requestURL = `${API_URL}/studies/${studyId}/getPatientReferrals`;
-    // if (campaignId) {
-    //   requestURL += `?campaignId=${campaignId}`;
-    // }
-    // const response = yield call(request, requestURL, {
-    //   method: 'GET',
-    // });
-    // yield put(patientReferralStatFetched(response));
-    // TODO re-enable patient referral
-    yield put(patientReferralStatFetched(0));
+    let requestURL = `${API_URL}/studies/${studyId}/getPatientReferrals`;
+    if (campaignId) {
+      requestURL += `?campaignId=${campaignId}`;
+    }
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    yield put(patientReferralStatFetched(response));
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching patient referral stats. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
