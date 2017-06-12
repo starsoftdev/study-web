@@ -7,8 +7,6 @@ import { connect } from 'react-redux';
 import { Field, formValueSelector, reduxForm, reset, touch } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import classNames from 'classnames';
-import { createStructuredSelector } from 'reselect';
-import * as Selector from '../selectors';
 import { selectSyncErrorBool } from '../../../common/selectors/form.selector';
 import { submitPatientNote, submitDeleteNote } from '../actions';
 import Input from '../../../components/Input/index';
@@ -24,6 +22,7 @@ class NotesSection extends React.Component {
     currentPatient: React.PropTypes.object,
     studyId: React.PropTypes.number.isRequired,
     note: React.PropTypes.string,
+    notes: React.PropTypes.array,
     resetForm: React.PropTypes.func.isRequired,
     submitPatientNote: React.PropTypes.func.isRequired,
     submitDeleteNote: React.PropTypes.func.isRequired,
@@ -36,13 +35,18 @@ class NotesSection extends React.Component {
     this.scrollElement = this.scrollElement.bind(this);
   }
 
+  componentWillReceiveProps(newProps) {
+    if (newProps.notes && newProps.notes.length > this.props.notes.length) {
+      this.scrollElement();
+    }
+  }
+
   onClick() {
     const { currentPatient, currentUser, note, resetForm, studyId, submitPatientNote } = this.props;
 
     if (note) {
       submitPatientNote(studyId, currentPatient.id, currentUser, note);
       resetForm();
-      this.scrollElement();
     }
   }
 
@@ -55,13 +59,10 @@ class NotesSection extends React.Component {
   }
 
   renderNotes() {
-    const { currentUser, currentPatient, submitDeleteNote } = this.props;
-    if (currentPatient && currentPatient.notes) {
-      return currentPatient.notes.map(note => (
-        <PatientNote key={note.id} currentUser={currentUser} note={note} currentPatient={currentPatient} submitDeleteNote={submitDeleteNote} />
-      ));
-    }
-    return null;
+    const { currentUser, currentPatient, submitDeleteNote, notes } = this.props;
+    return notes.map(note => (
+      <PatientNote key={note.id} currentUser={currentUser} note={note} currentPatient={currentPatient} submitDeleteNote={submitDeleteNote} />
+    ));
   }
 
   render() {
@@ -82,11 +83,12 @@ class NotesSection extends React.Component {
 
 const selector = formValueSelector(formName);
 
-const mapStateToProps = createStructuredSelector({
-  note: selector(state, 'note'),
-  formError: selectSyncErrorBool(formName),
-  currentPatient: Selector.selectCurrentPatient(),
-});
+const mapStateToProps = state => (
+  {
+    note: selector(state, 'note'),
+    formError: selectSyncErrorBool(formName),
+  }
+);
 
 function mapDispatchToProps(dispatch) {
   return {

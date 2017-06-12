@@ -106,8 +106,8 @@ function studyPageReducer(state = initialState, action) {
         }),
         fetchingPatients: false,
       };
-    case ADD_PATIENT_INDICATION_SUCCESS:
     case ADD_PATIENT_NOTE_SUCCESS:
+    case ADD_PATIENT_INDICATION_SUCCESS:
     case REMOVE_PATIENT_INDICATION_SUCCESS:
     case SUBMIT_DELETE_NOTE_SUCCESS:
     case FETCH_PATIENT_DETAILS_SUCCESS:
@@ -118,9 +118,15 @@ function studyPageReducer(state = initialState, action) {
           patientCategories: patientCategories(state.patientCategories, action.payload.patientCategoryId, action.payload.patientId, action),
         };
       }
+      if (action.patientId) {
+        return {
+          ...state,
+          patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, action.patientId, action),
+        };
+      }
       return {
         ...state,
-        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, action.patientId, action),
+        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, action.payload.patient_id, action),
       };
     case CLEAR_FORM_UPLOAD:
       return {
