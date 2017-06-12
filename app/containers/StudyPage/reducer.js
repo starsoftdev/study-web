@@ -112,7 +112,7 @@ function studyPageReducer(state = initialState, action) {
     case SUBMIT_DELETE_NOTE_SUCCESS:
     case FETCH_PATIENT_DETAILS_SUCCESS:
     case UPDATE_PATIENT_SUCCESS:
-      if (action.payload && (action.payload.lastTextMessage || action.payload.unreadMessageCount)) {
+      if (action.payload && (action.payload.lastTextMessage || action.payload.unreadMessageCount || action.payload.unreadMessageCount === 0)) {
         return {
           ...state,
           patientCategories: patientCategories(state.patientCategories, action.payload.patientCategoryId, action.payload.patientId, action),
