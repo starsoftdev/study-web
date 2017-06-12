@@ -249,7 +249,7 @@ export default function homePageReducer(state = initialState, action) {
         queryParams: {
           ...queryParams,
           skip: (queryParams.hasMoreItems) ? queryParams.skip + queryParams.limit : queryParams.skip,
-          hasMoreItems: (payload.studies.length > 0),
+          hasMoreItems: payload.hasMoreItems,
         },
       };
     case FETCH_STUDIES_ERROR:
@@ -262,6 +262,15 @@ export default function homePageReducer(state = initialState, action) {
           inactive: null,
           fetching: false,
           error: payload,
+        },
+        queryParams: {
+          filter: false,
+          name: null,
+          siteId: null,
+          status: null,
+          hasMoreItems: true,
+          limit: 15,
+          skip: 0,
         },
       };
     case CLEAR_STUDIES_COLLECTION:
