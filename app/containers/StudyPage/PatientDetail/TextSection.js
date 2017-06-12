@@ -11,6 +11,7 @@ import Button from 'react-bootstrap/lib/Button';
 import { submitPatientText, readStudyPatientMessages, updatePatientSuccess } from '../actions';
 import CallItem from '../../../components/GlobalPMSModal/CallItem';
 import { fetchClientCredits, markAsReadPatientMessages } from '../../App/actions';
+import * as Selector from '../selectors';
 
 import {
   sendStudyPatientMessages,
@@ -44,6 +45,7 @@ class TextSection extends React.Component {
     fetchClientCredits: React.PropTypes.func,
     updatePatientSuccess: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
+    currentPatientCategory: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -78,6 +80,11 @@ class TextSection extends React.Component {
         if (this.props.active && newMessage) {
           this.props.readStudyPatientMessages(this.props.currentPatient.id);
           this.props.markAsReadPatientMessages(this.props.currentPatient.id);
+          this.props.updatePatientSuccess({
+            patientId: this.props.currentPatient.id,
+            patientCategoryId: this.props.currentPatientCategory.id,
+            unreadMessageCount: 0,
+          });
           this.props.fetchClientCredits(currentUser.id);
         }
       });
@@ -245,6 +252,7 @@ class TextSection extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   clientCredits: selectClientCredits(),
+  currentPatientCategory: Selector.selectCurrentPatientCategory(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
