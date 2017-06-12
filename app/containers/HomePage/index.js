@@ -19,7 +19,7 @@ import _ from 'lodash';
 import { selectUserRoleType, selectCurrentUserClientId, selectCurrentUser } from '../../containers/App/selectors';
 import { fetchClientSites, fetchLevels } from '../../containers/App/actions';
 import { fetchStudies, clearStudiesCollection, fetchProtocols, fetchProtocolNumbers, fetchIndications } from './actions';
-import { selectSearchProtocolsFormValues, selectQueryParams } from '../../containers/HomePage/selectors';
+import { selectStudies, selectSearchProtocolsFormValues, selectQueryParams } from '../../containers/HomePage/selectors';
 
 import Dashboard from './Dashboard';
 import SponsorDashboard from './SponsorDashboard';
@@ -36,6 +36,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     currentUserClientId: PropTypes.number,
     fetchClientSites: PropTypes.func,
     fetchLevels: PropTypes.func,
+    studies: PropTypes.object,
     fetchStudies: PropTypes.func,
     clearStudiesCollection: PropTypes.func,
     fetchProtocols: PropTypes.func.isRequired,
@@ -76,7 +77,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
   }
 
   searchStudies(searchParams) {
-    const { currentUser, queryParams } = this.props;
+    const { currentUser, queryParams, studies } = this.props;
     const params = queryParams;
     params.name = searchParams.name;
     params.site = searchParams.site;
@@ -88,7 +89,9 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
       params.filter = true;
     }
 
-    this.props.fetchStudies(currentUser, params);
+    if (!studies.fetching) {
+      this.props.fetchStudies(currentUser, params);
+    }
   }
 
   searchProtocols(searchParams) {
@@ -156,6 +159,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
 }
 
 const mapStateToProps = createStructuredSelector({
+  studies: selectStudies(),
   queryParams: selectQueryParams(),
   currentUser: selectCurrentUser(),
   currentUserClientId: selectCurrentUserClientId(),

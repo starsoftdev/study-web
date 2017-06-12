@@ -539,9 +539,20 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
   loadItems() {
     const { queryParams, studies } = this.props;
-    const params = queryParams;
-    params.filter = false;
-    if (queryParams.hasMoreItems && !studies.fetching) {
+
+    let allowFetch = false;
+
+    if (queryParams.status === 'Active') {
+      allowFetch = (studies.active > queryParams.skip);
+    } else if (queryParams.status === 'Inactive') {
+      allowFetch = (studies.inactive > queryParams.skip);
+    } else {
+      allowFetch = (studies.total > queryParams.skip);
+    }
+
+    if (queryParams.hasMoreItems && !studies.fetching && allowFetch) {
+      const params = queryParams;
+      params.filter = false;
       this.props.fetchStudies(this.props.currentUser, params);
     }
   }
@@ -581,6 +592,16 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       );
     });
 
+    let showSpinner = false;
+
+    if (queryParams.status === 'Active') {
+      showSpinner = (studies.active > queryParams.skip);
+    } else if (queryParams.status === 'Inactive') {
+      showSpinner = (studies.inactive > queryParams.skip);
+    } else {
+      showSpinner = (studies.total > queryParams.skip);
+    }
+
     if (!studies.details.length && studies.fetching) {
       return (
         <tbody>
@@ -604,6 +625,13 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
           loader={null}
         >
           {studiesListContents}
+          {(studies.fetching && showSpinner) &&
+            <tr>
+              <td colSpan="9">
+                <LoadingSpinner showOnlyIcon={false} noMessage />
+              </td>
+            </tr>
+          }
         </InfiniteScroll>
       );
     }
