@@ -549,7 +549,7 @@ export function* fetchPatientMessagesWatcher() {
   }
 }
 
-export function* fetchPatientMessageUnreadCountWatcher() { // eslint-disable-line no-unused-vars
+export function* fetchPatientMessageUnreadCountWatcher() {
   // while (true) {
   //   const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
   //   try {
@@ -815,7 +815,7 @@ export function* fetchIndicationLevelPriceWatcher() {
       const response = yield call(request, requestURL, params);
       yield put(fetchIndicationLevelPriceSuccess(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Can not get price for Level');
+      const errorMessage = get(err, 'message', 'Can not get price for Exposure Level');
       yield put(toastrActions.error('', errorMessage));
       yield put(fetchIndicationLevelPriceError(err));
     }

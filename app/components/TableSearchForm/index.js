@@ -24,6 +24,7 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
     changeRange: PropTypes.func,
     search: PropTypes.func,
     currentUser: PropTypes.object,
+    downloadBtnDisabled: PropTypes.bool,
   };
 
   constructor(props, context) {
@@ -120,7 +121,7 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
       <form className="form-search clearfix">
         <div className="btns-area pull-right">
           <div className="col pull-right">
-            <button className="btn btn-primary pull-right" onClick={this.createPdf}>
+            <button className={`btn btn-primary pull-right ${this.props.downloadBtnDisabled ? 'disabled' : ''}`} onClick={this.createPdf}>
               <i className="icomoon-icon_download" /> DOWNLOAD
             </button>
           </div>
