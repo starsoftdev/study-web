@@ -33,7 +33,6 @@ import { selectProposals } from './selectors';
 
 import ProposalsTable from '../../components/ProposalsTable';
 import TableSearchForm from '../../components/TableSearchForm';
-import AlertModal from '../../components/AlertModal';
 
 export class Proposals extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -66,7 +65,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
       processPDF: false,
       proposals: null,
       filteredProposals: null,
-      showAlertModal: false,
+      downloadBtnDisabled: true,
     };
   }
 
@@ -144,10 +143,6 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
   getPDF() {
     if (this.selectedProposal) {
       this.props.getPDF(this.selectedProposal);
-    } else {
-      this.setState({
-        showAlertModal: true,
-      });
     }
   }
 
@@ -157,14 +152,24 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
 
   set selectedProposal(value) {
     this.SelectedProposal = value;
+    this.updateBtnState();
   }
 
   selectCurrent(proposal) {
     this.selectedProposal = proposal;
+    this.updateBtnState();
   }
 
   selectAll(proposals) {
     this.selectedProposal = proposals;
+    this.updateBtnState();
+  }
+
+  updateBtnState() {
+    const noItems = !(this.selectedProposal && this.selectedProposal.length)
+    if (this.state.downloadBtnDisabled !== noItems) {
+      this.setState({ downloadBtnDisabled: noItems });
+    }
   }
 
   changeRange(payload) {
@@ -197,12 +202,6 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     }
   }
 
-  hideAlertModal = () => {
-    this.setState({
-      showAlertModal: false,
-    });
-  }
-
   render() {
     const { processPDF } = this.state;
     return (
@@ -214,9 +213,9 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
             changeRange={this.changeRange}
             search={this.search}
             createPdf={this.getPDF}
+            downloadBtnDisabled={this.state.downloadBtnDisabled}
             {...this.props}
           />
-          <AlertModal show={this.state.showAlertModal} onHide={this.hideAlertModal} name="proposal" />
           <ProposalsTable
             currentUser={this.props.currentUser}
             selectCurrent={this.selectCurrent}
