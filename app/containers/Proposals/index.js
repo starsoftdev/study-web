@@ -166,7 +166,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
   }
 
   updateBtnState() {
-    const noItems = !(this.selectedProposal && this.selectedProposal.length)
+    const noItems = !(this.selectedProposal && this.selectedProposal.length);
     if (this.state.downloadBtnDisabled !== noItems) {
       this.setState({ downloadBtnDisabled: noItems });
     }

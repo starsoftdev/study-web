@@ -128,7 +128,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
   }
 
   updateBtnState() {
-    const noItems = !(this.SelectedReceipts && this.selectedReceipts.length)
+    const noItems = !(this.SelectedReceipts && this.selectedReceipts.length);
     if (this.state.downloadBtnDisabled !== noItems) {
       this.setState({ downloadBtnDisabled: noItems });
     }
