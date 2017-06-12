@@ -108,9 +108,9 @@ function studyPageReducer(state = initialState, action) {
       };
     case ADD_PATIENT_INDICATION_SUCCESS:
     case ADD_PATIENT_NOTE_SUCCESS:
-    case FETCH_PATIENT_DETAILS_SUCCESS:
     case REMOVE_PATIENT_INDICATION_SUCCESS:
     case SUBMIT_DELETE_NOTE_SUCCESS:
+    case FETCH_PATIENT_DETAILS_SUCCESS:
     case UPDATE_PATIENT_SUCCESS:
       if (action.payload && (action.payload.lastTextMessage || action.payload.unreadMessageCount)) {
         return {
@@ -120,7 +120,7 @@ function studyPageReducer(state = initialState, action) {
       }
       return {
         ...state,
-        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),
+        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, action.patientId, action),
       };
     case CLEAR_FORM_UPLOAD:
       return {
@@ -438,6 +438,11 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
         const fromPatientCategory = _.find(state, { id: action.fromCategoryId });
         const toPatientCategory = _.find(state, { id: action.toCategoryId });
         const patient = _.find(fromPatientCategory.patients, { id: currentPatientId });
+        const transformedPatient = {
+          ...patient,
+          orderNumber: action.orderNumber,
+          updatedAt: action.updatedAt,
+        };
         return state.map(patientCategory => {
           if (patientCategory.id === fromPatientCategory.id) {
             return {
@@ -453,7 +458,7 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
                 ...patientCategory,
                 patients: [
                   {
-                    ...patient,
+                    ...transformedPatient,
                     appointments: [],
                   },
                   ...patientCategory.patients,
@@ -463,7 +468,7 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
             return {
               ...patientCategory,
               patients: [
-                patient,
+                transformedPatient,
                 ...patientCategory.patients,
               ],
             };

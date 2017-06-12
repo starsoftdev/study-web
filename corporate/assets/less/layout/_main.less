@@ -348,6 +348,9 @@ input[type=submit].input-lg,
 			position: relative;
 			padding: 0 0 0 30px;
       min-height: 25px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
 			
 			i {
 				top: 6px;
@@ -3164,6 +3167,19 @@ section.get-start {
 			font-weight: 700;
 			background: #f1f1f1;
 		}
+
+    .email {
+      word-wrap: break-word;
+    }
+
+    .icomoon-icon_trash {
+      color: #636363;
+
+      &:hover {
+        color: #999;
+        cursor: pointer;
+      }
+    }
 	}
 	
 }
@@ -3295,6 +3311,9 @@ input:focus {
   margin: 0 auto 60px;
 
   p { margin: 0 0 15px; }
+  a:hover {
+    text-decoration: underline;
+  }
 
   .name,
   .tel { display: block; }

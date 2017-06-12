@@ -30,6 +30,7 @@ import {
   selectStudiesTotals,
   selectStudyUpdateProcess,
   selectAllClientUsers,
+  selectAllCustomNotificationEmails,
   selectEditStudyValues,
   selectMessagingNumbers,
   selectPaginationOptions,
@@ -43,12 +44,22 @@ import {
   clearFilters,
   fetchAllClientUsersDashboard,
   fetchStudyCampaignsDashboard,
+  fetchCustomNotificationEmails,
   changeStudyStatusDashboard,
   toggleStudy,
   fetchMessagingNumbersDashboard,
   updateTwilioNumbers,
 } from './actions';
-import { fetchLevels, fetchIndications, fetchSponsors, fetchProtocols, fetchCro, fetchUsersByRole, addEmailNotificationUser } from '../../App/actions';
+import {
+  fetchLevels,
+  fetchIndications,
+  fetchSponsors,
+  fetchProtocols,
+  fetchCro,
+  fetchUsersByRole,
+  addEmailNotificationUser,
+  addCustomEmailNotification,
+} from '../../App/actions';
 
 const PieChart = rd3.PieChart;
 const LineChart = rd3.LineChart;
@@ -86,7 +97,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     allClientUsers: PropTypes.object,
     editStudyValues: PropTypes.object,
     addEmailNotificationUser: PropTypes.func,
+    addCustomEmailNotification: PropTypes.func,
     fetchStudyCampaignsDashboard: PropTypes.func,
+    fetchCustomNotificationEmails: PropTypes.func,
+    allCustomNotificationEmails: PropTypes.object,
     changeStudyStatusDashboard: PropTypes.func,
     toggleStudy: PropTypes.func,
     fetchMessagingNumbersDashboard: PropTypes.func,
@@ -143,7 +157,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.props.fetchMessagingNumbersDashboard();
 
     // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
-    this.props.fetchTotalsDashboard({}, 10, 0);
+    // TODO possibly re-enable the initial totals fetching when production is cached and more able to handle a greater traffic load
+    // this.props.fetchTotalsDashboard({}, 10, 0);
   }
 
   componentWillReceiveProps(newProps) {
@@ -721,7 +736,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             allClientUsers={this.props.allClientUsers}
             editStudyValues={this.props.editStudyValues}
             addEmailNotificationUser={this.props.addEmailNotificationUser}
+            addCustomEmailNotification={this.props.addCustomEmailNotification}
             fetchStudyCampaignsDashboard={this.props.fetchStudyCampaignsDashboard}
+            fetchCustomNotificationEmails={this.props.fetchCustomNotificationEmails}
+            allCustomNotificationEmails={this.props.allCustomNotificationEmails}
             changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
             toggleStudy={this.props.toggleStudy}
             messagingNumbers={this.props.messagingNumbers}
@@ -747,6 +765,7 @@ const mapStateToProps = createStructuredSelector({
   totals: selectStudiesTotals(),
   studyUpdateProcess: selectStudyUpdateProcess(),
   allClientUsers: selectAllClientUsers(),
+  allCustomNotificationEmails: selectAllCustomNotificationEmails(),
   editStudyValues: selectEditStudyValues(),
   messagingNumbers: selectMessagingNumbers(),
   paginationOptions: selectPaginationOptions(),
@@ -769,7 +788,9 @@ function mapDispatchToProps(dispatch) {
     clearFilters: () => dispatch(clearFilters()),
     fetchAllClientUsersDashboard: (params) => dispatch(fetchAllClientUsersDashboard(params)),
     addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
+    addCustomEmailNotification: (payload) => dispatch(addCustomEmailNotification(payload)),
     fetchStudyCampaignsDashboard: (params) => dispatch(fetchStudyCampaignsDashboard(params)),
+    fetchCustomNotificationEmails: (params) => dispatch(fetchCustomNotificationEmails(params)),
     changeStudyStatusDashboard: (params, status, isChecked) => dispatch(changeStudyStatusDashboard(params, status, isChecked)),
     toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
     fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
