@@ -994,11 +994,16 @@ export function* updateTwilioNumbersWorker() {
   }
 }
 
+let watcherDReady = false;
 
 export function* homePageSaga() {
+  let watcherD = false;
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   const watcherB = yield fork(fetchPatientMessagesWatcher);
-  const watcherD = yield fork(fetchStudiesWatcher);
+  if (!watcherDReady) {
+    watcherD = yield fork(fetchStudiesWatcher);
+    watcherDReady = true;
+  }
   const watcherE = yield fork(fetchIndicationLevelPriceWatcher);
   const watcherF = yield fork(renewStudyWatcher);
   const watcherG = yield fork(upgradeStudyWatcher);
@@ -1036,7 +1041,9 @@ export function* homePageSaga() {
   if (options.payload.pathname !== '/app') {
     yield cancel(watcherA);
     yield cancel(watcherB);
-    yield cancel(watcherD);
+    if (watcherD) {
+      yield cancel(watcherD);
+    }
     yield cancel(watcherE);
     yield cancel(watcherF);
     yield cancel(watcherG);
