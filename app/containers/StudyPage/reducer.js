@@ -118,15 +118,9 @@ function studyPageReducer(state = initialState, action) {
           patientCategories: patientCategories(state.patientCategories, action.payload.patientCategoryId, action.payload.patientId, action),
         };
       }
-      if (action.patientId) {
-        return {
-          ...state,
-          patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, action.patientId, action),
-        };
-      }
       return {
         ...state,
-        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, action.payload.patient_id, action),
+        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),
       };
     case CLEAR_FORM_UPLOAD:
       return {
@@ -543,9 +537,7 @@ function patients(state, currentPatientId, action) {
         if (patient.id === currentPatientId) {
           return {
             ...patient,
-            notes: patient.notes.filter(note => (
-              note.id !== action.noteId
-            )),
+            notes: patient.notes.filter(note => note.id !== action.noteId),
           };
         }
         return patient;
