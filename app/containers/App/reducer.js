@@ -127,6 +127,11 @@ import {
   RESET_LEARN_ABOUT_FUTURE_TRIALS,
   NEW_CONTACT_SUCCESS,
   RESET_NEW_CONTACT_SUCCESS,
+
+  GET_CNS_INFO_SUCCESS,
+  SUBMIT_CNS,
+  SUBMIT_CNS_SUCCESS,
+  SUBMIT_CNS_ERROR,
 } from './constants';
 
 import {
@@ -271,6 +276,12 @@ const initialState = {
     changeUsersTimezoneState: {
       saving: false,
     },
+    cnsInfo: {
+      details: {},
+      fetching: false,
+      error: null,
+    },
+    cnsSubmitProcess: {},
   },
 };
 
@@ -833,6 +844,39 @@ export default function appReducer(state = initialState, action) {
         },
       };
       break;
+    case GET_CNS_INFO_SUCCESS:
+      baseDataInnerState = {
+        cnsInfo: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case SUBMIT_CNS:
+      baseDataInnerState = {
+        cnsSubmitProcess: {
+          submitting: true,
+          error: null,
+        },
+      };
+      break;
+    case SUBMIT_CNS_SUCCESS:
+      baseDataInnerState = {
+        cnsSubmitProcess: {
+          submitting: false,
+          error: null,
+        },
+      };
+      break;
+    case SUBMIT_CNS_ERROR:
+      baseDataInnerState = {
+        cnsSubmitProcess: {
+          submitting: false,
+          error: payload,
+        },
+      };
+      break;
     case FETCH_CLIENT_CREDITS:
       baseDataInnerState = {
         clientCredits: {
@@ -1124,6 +1168,7 @@ export default function appReducer(state = initialState, action) {
         },
       };
       break;
+
     case DELETE_CLIENT_ROLE_SUCCESS:
       remove(clientRolesCollection, { id: payload.id });
       baseDataInnerState = {

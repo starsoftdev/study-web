@@ -192,6 +192,14 @@ import {
   FETCH_USERS_BY_ROLE_ERROR,
 
   CHANGE_TEMPORARY_PASSWORD,
+
+  GET_CNS_INFO,
+  GET_CNS_INFO_SUCCESS,
+  GET_CNS_INFO_ERROR,
+
+  SUBMIT_CNS,
+  SUBMIT_CNS_SUCCESS,
+  SUBMIT_CNS_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -1270,6 +1278,48 @@ export function fetchUsersByRoleError(payload) {
 export function changeTemporaryPassword(payload) {
   return {
     type: CHANGE_TEMPORARY_PASSWORD,
+    payload,
+  };
+}
+
+export function getCnsInfo(payload) {
+  return {
+    type: GET_CNS_INFO,
+    payload,
+  };
+}
+
+export function getCnsInfoSuccess(payload) {
+  return {
+    type: GET_CNS_INFO_SUCCESS,
+    payload,
+  };
+}
+
+export function getCnsInfoError(payload) {
+  return {
+    type: GET_CNS_INFO_ERROR,
+    payload,
+  };
+}
+
+export function submitCns(payload) {
+  return {
+    type: SUBMIT_CNS,
+    payload,
+  };
+}
+
+export function submitCnsSuccess(payload) {
+  return {
+    type: SUBMIT_CNS_SUCCESS,
+    payload,
+  };
+}
+
+export function submitCnsError(payload) {
+  return {
+    type: SUBMIT_CNS_ERROR,
     payload,
   };
 }
