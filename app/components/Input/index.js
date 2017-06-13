@@ -25,6 +25,7 @@ function Input({
   className,
   tooltipEnabled,
   onBlur,
+  onFocus,
   onChange,
   required,
   meta: { touched, error, active },
@@ -72,6 +73,12 @@ function Input({
           onBlur(event);
         }
       }}
+      onFocus={(event) => {
+        input.onFocus(event);
+        if (onFocus) {
+          onFocus(event);
+        }
+      }}
     >
       {children}
     </FormControl>
@@ -89,7 +96,7 @@ function Input({
   }
 
   return (
-    <div className={classNames(className, { 'has-error': hasError })}>
+    <div className={classNames(className, { 'has-error': hasError, focus: active })}>
       {inputComponent}
     </div>
   );
@@ -104,6 +111,7 @@ Input.propTypes = {
   id: PropTypes.string,
   input: PropTypes.object.isRequired,
   onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
   onChange: PropTypes.func,
   name: PropTypes.string.isRequired,
   maxLength: PropTypes.string,

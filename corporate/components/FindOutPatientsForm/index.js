@@ -27,16 +27,6 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
   componentWillUnmount() {
   }
 
-  focusField(ev) {
-    ev.target.parentElement.classList.add('focus');
-    console.log(ev.target.parentElement.classList);
-  }
-
-  blurField(ev) {
-    ev.target.parentElement.classList.remove('focus');
-    console.log(ev.target.parentElement.classList);
-  }
-
   render() {
     const { handleSubmit } = this.props;
     return (
@@ -57,8 +47,6 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
                 placeholder="* Full Name"
                 className="field-wrapper"
                 bsClass="form-control input-lg"
-                onFocus={this.focusField}
-                onBlur={this.blurField}
               />
               <Field
                 name="email"
@@ -67,8 +55,6 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
                 placeholder="* Email"
                 className="field-wrapper"
                 bsClass="form-control input-lg"
-                onFocus={this.focusField}
-                onBlur={this.blurField}
               />
               <Field
                 name="company"
@@ -77,8 +63,6 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
                 placeholder="* Company"
                 className="field-wrapper"
                 bsClass="form-control input-lg"
-                onFocus={this.focusField}
-                onBlur={this.blurField}
               />
               <Field
                 name="postalCode"
@@ -87,8 +71,6 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
                 placeholder="* Postal Code"
                 className="field-wrapper"
                 bsClass="form-control input-lg"
-                onFocus={this.focusField}
-                onBlur={this.blurField}
               />
               <Field
                 name="indication"
