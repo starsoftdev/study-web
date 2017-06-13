@@ -51,7 +51,10 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
   }
 
   performSearch(e, name) {
-    const params = this.props.formValues;
+    const { formValues } = this.props;
+    const params = formValues;
+    params.filter = true;
+
     if (e && e.target) {
       params[e.target.name] = e.target.value;
       this.props.onSubmit(params, true);
@@ -78,7 +81,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
     return (
       <Form className="form-search form-search-studies pull-left" onSubmit={handleSubmit}>
         <div className="fields-holder clearfix">
-          <div className="search-area pull-left">
+          <div className="search-area pull-left no-left-padding">
             <div className="field">
               <Button className="btn-enter" type="submit">
                 <i className="icomoon-icon_search2" />

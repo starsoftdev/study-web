@@ -1,6 +1,18 @@
 import _ from 'lodash';
 
 import {
+  FETCH_NOTE,
+  FETCH_NOTE_SUCCESS,
+  FETCH_NOTE_ERROR,
+  ADD_NOTE,
+  ADD_NOTE_SUCCESS,
+  ADD_NOTE_ERROR,
+  EDIT_NOTE,
+  EDIT_NOTE_SUCCESS,
+  EDIT_NOTE_ERROR,
+  DELETE_NOTE,
+  DELETE_NOTE_SUCCESS,
+  DELETE_NOTE_ERROR,
   FETCH_STUDIES_DASHBOARD,
   FETCH_STUDIES_DASHBOARD_SUCCESS,
   FETCH_STUDIES_DASHBOARD_ERROR,
@@ -45,6 +57,10 @@ import {
   FETCH_MESSAGING_NUMBERS_SUCCESS,
   FETCH_MESSAGING_NUMBERS_ERROR,
   SET_HOVER_ROW_INDEX,
+
+  FETCH_CUSTOM_NOTIFICATION_EMAILS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
 } from './constants';
 
 import {
@@ -60,6 +76,16 @@ import {
 } from '../../App/constants';
 
 const initialState = {
+  note: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  editNoteProcess: {
+    saving: false,
+    deleting: false,
+    error: null,
+  },
   values: {
     filters: [],
   },
@@ -103,6 +129,11 @@ const initialState = {
     fetching: false,
     error: null,
   },
+  allCustomNotificationEmails: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
   messagingNumbers: {
     details: [],
     fetching: false,
@@ -135,14 +166,148 @@ const initialState = {
 };
 
 export default function dashboardPageReducer(state = initialState, action) {
+  const newNote = _.cloneDeep(state.note.details);
   const studiesCopy = _.cloneDeep(state.studies.details);
   let savedStudy = null;
   let foundKey = null;
   let totalActive = 0;
   let totalInactive = 0;
   let newStudiesList = [];
+  let foundUserIndex = null;
 
   switch (action.type) {
+    case FETCH_NOTE:
+      return {
+        ...state,
+        note: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_NOTE_SUCCESS:
+      return {
+        ...state,
+        note: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_NOTE_ERROR:
+      return {
+        ...state,
+        note: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case ADD_NOTE:
+      return {
+        ...state,
+        editNoteProcess: {
+          saving: true,
+          deleting: false,
+          error: null,
+        },
+      };
+    case ADD_NOTE_SUCCESS:
+      newNote.push(action.payload);
+      return {
+        ...state,
+        note: {
+          details: newNote,
+          fetching: false,
+          error: action.payload,
+        },
+        editNoteProcess: {
+          saving: false,
+          deleting: false,
+          error: null,
+        },
+      };
+    case ADD_NOTE_ERROR:
+      return {
+        ...state,
+        editNoteProcess: {
+          saving: false,
+          deleting: false,
+          error: action.payload,
+        },
+      };
+    case EDIT_NOTE:
+      return {
+        ...state,
+        editNoteProcess: {
+          saving: true,
+          deleting: false,
+          error: null,
+        },
+      };
+    case EDIT_NOTE_SUCCESS:
+      foundUserIndex = _.findIndex(newNote, item => (item.id === action.payload.id));
+      if (foundUserIndex !== -1) {
+        newNote.splice(foundUserIndex, 1, action.payload);
+      }
+      return {
+        ...state,
+        note: {
+          details: newNote,
+          fetching: false,
+          error: action.payload,
+        },
+        editNoteProcess: {
+          saving: false,
+          deleting: false,
+          error: null,
+        },
+      };
+    case EDIT_NOTE_ERROR:
+      return {
+        ...state,
+        editNoteProcess: {
+          saving: false,
+          deleting: false,
+          error: action.payload,
+        },
+      };
+    case DELETE_NOTE:
+      return {
+        ...state,
+        editNoteProcess: {
+          saving: false,
+          deleting: true,
+          error: null,
+        },
+      };
+    case DELETE_NOTE_SUCCESS:
+      foundUserIndex = _.findIndex(newNote, item => (item.id === action.payload.id));
+      if (foundUserIndex !== -1) {
+        newNote.splice(foundUserIndex, 1);
+      }
+      return {
+        ...state,
+        note: {
+          details: newNote,
+          fetching: false,
+          error: action.payload,
+        },
+        editNoteProcess: {
+          saving: false,
+          deleting: false,
+          error: null,
+        },
+      };
+    case DELETE_NOTE_ERROR:
+      return {
+        ...state,
+        editNoteProcess: {
+          saving: false,
+          deleting: false,
+          error: action.payload,
+        },
+      };
     case FETCH_STUDIES_DASHBOARD:
       return {
         ...state,
@@ -340,6 +505,33 @@ export default function dashboardPageReducer(state = initialState, action) {
       return {
         ...state,
         allClientUsers: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
           details: [],
           fetching: false,
           error: action.payload,

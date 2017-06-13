@@ -4,6 +4,7 @@ require('dotenv').load();
 const express = require('express');
 const logger = require('./logger');
 const helmet = require('helmet');
+const cors = require('cors');
 
 const argv = require('minimist')(process.argv.slice(2));
 const setup = require('./middlewares/frontendMiddleware');
@@ -14,8 +15,14 @@ const app = express();
 
 app.use(helmet());
 
-// If you need a backend, e.g. an API, add your custom backend-specific middleware here
-// app.use('/api', myApi);
+// setup CORS for production
+// wasn't able to set up CORS for not blocking client requests to it if it wasn't set to allow for all IPs
+const corsOptions = {
+  credentials: true,
+  maxAge: 86400,
+};
+corsOptions.origin = '*';
+app.use(cors(corsOptions));
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {

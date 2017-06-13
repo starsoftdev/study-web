@@ -18,6 +18,7 @@ import Checkbox from '../Input/Checkbox';
 import Input from '../Input/index';
 import CenteredModal from '../../components/CenteredModal/index';
 import StudyAddForm from '../../components/StudyAddForm';
+import LoadingSpinner from '../LoadingSpinner';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
 import { fetchLanding } from '../../containers/App/actions';
 import { selectLanding } from '../../containers/App/selectors';
@@ -101,7 +102,7 @@ export class LandingPageModal extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { resetState, resetChangeAddState, onClose, fetchLanding } = this.props;
+    const { resetState, onClose, fetchLanding } = this.props;
 
     if (newProps.studies) {
       for (const study of newProps.studies) {
@@ -156,14 +157,16 @@ export class LandingPageModal extends React.Component {
     }
 
     if (!newProps.changeStudyAddProcess.saving && newProps.changeStudyAddProcess.success) {
-      this.setState({
+      this.closeStudyAddModal();
+
+      /* this.setState({
         landingFetched: false,
         initialValuesEntered: false,
       }, () => {
         fetchLanding(this.state.selected.study_id);
         resetChangeAddState();
         this.closeStudyAddModal();
-      });
+      });*/
     }
   }
 
@@ -230,7 +233,7 @@ export class LandingPageModal extends React.Component {
   }
 
   render() {
-    const { openModal, onClose } = this.props;
+    const { openModal, onClose, changeStudyAddProcess } = this.props;
     let fileSrc = null;
 
     if (this.state.landing) {
@@ -510,7 +513,12 @@ export class LandingPageModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row text-right">
-                  <Button bsStyle="primary" type="submit" disabled={false}>Update</Button>
+                  <Button type="submit" bsStyle="primary" className="fixed-small-btn">
+                    {this.props.updateLandingPageProcess.saving
+                      ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+                      : <span>Update</span>
+                    }
+                  </Button>
                 </div>
               </div>
             </Form>
@@ -530,7 +538,7 @@ export class LandingPageModal extends React.Component {
               </a>
             </Modal.Header>
             <Modal.Body>
-              <StudyAddForm handleSubmit={this.uploadStudyAdd} />
+              <StudyAddForm handleSubmit={this.uploadStudyAdd} changeStudyAddProcess={changeStudyAddProcess} />
             </Modal.Body>
           </Modal>
           <Modal

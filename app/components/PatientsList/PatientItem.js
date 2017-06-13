@@ -4,12 +4,12 @@ import { Field, change } from 'redux-form';
 import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
 
-import Checkbox from '../../../components/Input/Checkbox';
-import { selectSelectedPatient, selectPatients } from '../../../containers/PatientDatabasePage/selectors';
-import LoadingSpinner from '../../../components/LoadingSpinner';
+import Checkbox from '../../components/Input/Checkbox';
+import { selectSelectedPatient, selectPatients } from '../../containers/PatientDatabasePage/selectors';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import { fetchPatient, addPatientsToTextBlast,
-  removePatientFromTextBlast } from '../actions';
-import { selectValues } from '../../../common/selectors/form.selector';
+  removePatientFromTextBlast } from '../../containers/PatientDatabasePage/actions';
+import { selectValues } from '../../common/selectors/form.selector';
 
 const formName = 'PatientDatabase.TextBlastModal';
 

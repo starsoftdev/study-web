@@ -11,6 +11,8 @@ import { Field, change } from 'redux-form';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
+import { DashboardNoteSearch } from '../AdminDashboardNoteSearch/index';
+import { DashboardNoteTable } from '../AdminDashboardNoteTable';
 
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import LandingPageModal from '../../../../components/LandingPageModal';
@@ -18,27 +20,40 @@ import ThankYouPageModal from '../../../../components/ThankYouPageModal/index';
 import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
 import CenteredModal from '../../../../components/CenteredModal';
 import AddEmailNotificationForm from '../../../../components/AddEmailNotificationForm';
-import EditInformationModal from '../EditStudyForms/EditInformationModal';
-import { selectStudies, selectPaginationOptions, selectAddNotificationProcess } from '../selectors';
+import EditInformationModal from '../../../../components/EditStudyForms/EditInformationModal';
+import {
+  selectStudies,
+  selectPaginationOptions,
+  selectAddNotificationProcess,
+  selectDashboardEditNoteProcess,
+  selectDashboardNote,
+} from '../selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
-import { setHoverRowIndex, setEditStudyFormValues } from '../actions';
+import { setHoverRowIndex, setEditStudyFormValues, fetchNote, addNote, editNote, deleteNote } from '../actions';
 import { submitToClientPortal } from '../../../DashboardPortalsPage/actions';
+import {
+  removeCustomEmailNotification,
+} from '../../../../containers/App/actions';
 
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     allClientUsers: PropTypes.object,
     addNotificationProcess: PropTypes.object,
     addEmailNotificationUser: PropTypes.func.isRequired,
+    addCustomEmailNotification: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired,
     changeStudyStatusDashboard: PropTypes.func.isRequired,
     cro: PropTypes.array,
     editStudyValues: PropTypes.object,
     fetchAllClientUsersDashboard: PropTypes.func.isRequired,
     fetchStudyCampaignsDashboard: PropTypes.func.isRequired,
+    fetchCustomNotificationEmails: PropTypes.func.isRequired,
     fetchStudiesAccordingToFilters: PropTypes.func.isRequired,
+    removeCustomEmailNotification: PropTypes.func.isRequired,
     indications: PropTypes.array,
+    allCustomNotificationEmails: PropTypes.object,
     levels: PropTypes.array,
     messagingNumbers: PropTypes.object,
     paginationOptions: PropTypes.object,
@@ -55,6 +70,12 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     setEditStudyFormValues: PropTypes.func,
     filtersFormValues: PropTypes.object,
     submitToClientPortal: PropTypes.func,
+    fetchNote: PropTypes.func,
+    note: PropTypes.object,
+    addNote: PropTypes.func,
+    editNote: PropTypes.func,
+    deleteNote: PropTypes.func,
+    editNoteProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -89,6 +110,9 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.handleScroll = this.handleScroll.bind(this);
     this.handleBodyScroll = this.handleBodyScroll.bind(this);
     this.handleStickyStateChange = this.handleStickyStateChange.bind(this);
+    this.closeNoteModal = this.closeNoteModal.bind(this);
+    this.showNoteModal = this.showNoteModal.bind(this);
+    this.setNoteModalClass = this.setNoteModalClass.bind(this);
 
 
     this.state = {
@@ -100,6 +124,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         startDate: moment().clone().subtract(30, 'days'),
         endDate: moment(),
       },
+      customAddEmailModal: false,
       showEditInformationModal: false,
       showLandingPageModal: false,
       showThankYouPageModal: false,
@@ -121,7 +146,16 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       editStudyPageOnTop: false,
       indicationPageOnTop: false,
       stickyLeftOffset: false,
+
+      showNoteModal: false,
+      hideNoteModal: false,
+      adminSiteId: null,
+      adminSiteName: null,
     };
+  }
+
+  componentWillMount() {
+    this.props.fetchNote();
   }
 
   componentDidMount() {
@@ -160,6 +194,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     window.removeEventListener('scroll', this.handleBodyScroll);
   }
 
+  setNoteModalClass(hidden = false) {
+    this.setState({ hideNoteModal: hidden });
+  }
+
   setEditStudyFormValues(study) {
     const formValues = _.cloneDeep(study);
     formValues.recruitment_phone = normalizePhoneDisplay(formValues.recruitment_phone);
@@ -168,6 +206,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
     this.props.setEditStudyFormValues(formValues);
 
+    this.props.fetchCustomNotificationEmails(study.study_id);
     this.props.fetchAllClientUsersDashboard({ clientId: study.client_id, siteId: study.site_id });
     this.props.fetchStudyCampaignsDashboard(study.study_id);
   }
@@ -480,26 +519,36 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.props.updateDashboardStudy(newParam);
   }
 
-  addEmailNotificationClick() {
-    this.setState({ addEmailModalShow: true });
-    // this.props.onHide(true);
+  addEmailNotificationClick(custom = false) {
+    this.setState({ addEmailModalShow: true, customAddEmailModal: custom });
   }
 
-  closeAddEmailModal() {
-    this.setState({ addEmailModalShow: false });
-    // this.props.onShow();
+  closeAddEmailModal(custom = false) {
+    this.setState({ addEmailModalShow: false, customAddEmailModal: custom });
   }
 
   addEmailNotificationSubmit(values) {
-    this.props.addEmailNotificationUser({
-      ...values,
-      clientId: this.props.editStudyValues.client_id,
-      addForNotification: true,
-      studyId: this.props.editStudyValues.study_id,
-      clientRole:{
+    const { addEmailNotificationUser, addCustomEmailNotification } = this.props;
+    const { customAddEmailModal } = this.state;
+    if (!customAddEmailModal) {
+      addEmailNotificationUser({
+        ...values,
+        clientId: this.props.editStudyValues.client_id,
+        addForNotification: true,
+        studyId: this.props.editStudyValues.study_id,
+        clientRole:{
+          siteId: this.props.editStudyValues.site_id,
+        },
+      });
+    } else {
+      addCustomEmailNotification({
+        ...values,
+        type: 'inactive',
+        clientId: this.props.editStudyValues.client_id,
+        studyId: this.props.editStudyValues.study_id,
         siteId: this.props.editStudyValues.site_id,
-      },
-    });
+      });
+    }
 
     this.closeAddEmailModal();
   }
@@ -511,6 +560,20 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     } else {
       this.setState({ stickyLeftOffset: false });
     }
+  }
+
+  showNoteModal(siteId, siteName) {
+    this.setState({
+      showNoteModal: true,
+      adminSiteId: siteId,
+      adminSiteName: siteName,
+    });
+  }
+
+  closeNoteModal() {
+    this.setState({
+      showNoteModal: false,
+    });
   }
 
   renderDateFooter() {
@@ -542,6 +605,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         key={index}
         onSelectStudy={this.toggleStudy}
         onStatusChange={this.changeStudyStatus}
+        showNoteModal={this.showNoteModal}
         changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
         setHoverRowIndex={this.props.setHoverRowIndex}
         submitToClientPortal={this.props.submitToClientPortal}
@@ -557,19 +621,17 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     );
 
 
-    const maxCampaignCount = this.props.totals.details.max_campaign_count ? parseInt(this.props.totals.details.max_campaign_count) : 0;
+    const maxCampaignCount = this.props.totals.details ? parseInt(this.props.totals.details.max_campaign_count) : 0;
 
     let campaignOptions = [];
     for (let i = 1; i <= maxCampaignCount; i++) {
       if (i === 1) {
-        campaignOptions.push({ label: 'Oldest', value: 'oldest' });
+        campaignOptions.push({ label: '1', value: 1 });
       } else {
         campaignOptions.push({ label: i, value: i });
       }
     }
-    campaignOptions.push({ label: 'Current', value: 'newest' });
-
-    const selectedCampaign = this.props.filtersFormValues.campaign || 'oldest';
+    campaignOptions.push({ label: 'Current', value: 'current' });
 
     campaignOptions = campaignOptions.reverse();
 
@@ -674,12 +736,11 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                           name="data-search"
                           className="data-search"
                           component={ReactSelect}
-                          placeholder="Campaign"
+                          placeholder="Select Campaign"
                           searchPlaceholder="Search"
                           searchable
                           options={campaignOptions}
                           customSearchIconClass="icomoon-icon_search2"
-                          selectedValue={selectedCampaign}
                           onChange={this.campaignChanged}
                         />
                       </div>
@@ -751,7 +812,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         <Sticky className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))} topOffset={-270}>
                           <table className="table table-study">
                             <thead>
-                              <tr>
+                              <tr className="default-cursor">
                                 <th>
                                   <span className={selectedAllStudies ? 'sm-container checked' : 'sm-container'}>
                                     <span className="input-style" onClick={() => this.toggleAllstudies(!selectedAllStudies)}>
@@ -761,22 +822,22 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                                 </th>
                                 <th>
                                   <div>
-                                    <span className="text-uppercase">Status <i className="caret-arrow" /></span>
+                                    <span className="text-uppercase">Status</span>
                                     <span className="counter">Active: {this.props.totals.details.total_active || 0}</span>
                                     <span className="counter">Inactive: {this.props.totals.details.total_inactive || 0}</span>
                                   </div>
                                 </th>
                                 <th>
-                                  <div onClick={this.sortBy} data-sort="orderNumber" className={`${(this.props.paginationOptions.activeSort === 'orderNumber') ? this.props.paginationOptions.activeDirection : ''}`}>#<i className="caret-arrow" /></div>
+                                  <div>#</div>
                                 </th>
                                 <th>
-                                  <div onClick={this.sortBy} data-sort="studyInfo" className={`${(this.props.paginationOptions.activeSort === 'studyInfo') ? this.props.paginationOptions.activeDirection : ''}`}>STUDY INFO<i className="caret-arrow" /></div>
+                                  <div>STUDY INFO</div>
                                 </th>
                                 <th>
-                                  <div onClick={this.sortBy} data-sort="siteInfo" className={`${(this.props.paginationOptions.activeSort === 'siteInfo') ? this.props.paginationOptions.activeDirection : ''}`}>SITE INFO<i className="caret-arrow" /></div>
+                                  <div>SITE INFO</div>
                                 </th>
                                 <th>
-                                  <div onClick={this.sortBy} data-sort="indication" className={`${(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}`}>INDICATION<i className="caret-arrow" /></div>
+                                  <div>INDICATION</div>
                                 </th>
                               </tr>
                             </thead>
@@ -812,60 +873,88 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                             >
                               <table className="table table-study">
                                 <thead>
-                                  <tr>
+                                  <tr className="default-cursor">
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="location" className={`${(this.props.paginationOptions.activeSort === 'location') ? this.props.paginationOptions.activeDirection : ''}`}>ADDRESS<i className="caret-arrow" /></div>
+                                      <div>ADDRESS</div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="exposureLevel" className={`${(this.props.paginationOptions.activeSort === 'exposureLevel') ? this.props.paginationOptions.activeDirection : ''}`}>EXPOSURE LEVEL<i className="caret-arrow" /></div>
+                                      <div>EXPOSURE LEVEL</div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="goal" className={`${(this.props.paginationOptions.activeSort === 'goal') ? this.props.paginationOptions.activeDirection : ''}`}>GOAL<i className="caret-arrow" /></div>
+                                      <div>GOAL</div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="patients" className={`${(this.props.paginationOptions.activeSort === 'patients') ? this.props.paginationOptions.activeDirection : ''}`}>PATIENTS<i className="caret-arrow" /></div>
+                                      <div>PATIENTS</div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="days" className={`${(this.props.paginationOptions.activeSort === 'days') ? this.props.paginationOptions.activeDirection : ''}`}>DAYS<i className="caret-arrow" /></div>
+                                      <div>DAYS</div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="campaign" className={`${(this.props.paginationOptions.activeSort === 'campaign') ? this.props.paginationOptions.activeDirection : ''}`}>CAMPAIGN<i className="caret-arrow" /></div>
+                                      <div>CAMPAIGN</div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="pageViews" className={`${(this.props.paginationOptions.activeSort === 'pageViews') ? this.props.paginationOptions.activeDirection : ''}`}>PAGE VIEWS<i className="caret-arrow" /></div>
+                                      <div>PAGE VIEWS</div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="facebook" className={`${(this.props.paginationOptions.activeSort === 'facebook') ? this.props.paginationOptions.activeDirection : ''}`}>FACEBOOK CLICKS<i className="caret-arrow" /></div>
+                                      <div>FACEBOOK CLICKS</div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="rewards" className={`${(this.props.paginationOptions.activeSort === 'rewards') ? this.props.paginationOptions.activeDirection : ''}`}>REWARDS<i className="caret-arrow" /></div>
+                                      <div>REWARDS</div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="credits" className={`${(this.props.paginationOptions.activeSort === 'credits') ? this.props.paginationOptions.activeDirection : ''}`}>CREDITS<i className="caret-arrow" /></div>
+                                      <div>CREDITS</div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="texts" className={`${(this.props.paginationOptions.activeSort === 'texts') ? this.props.paginationOptions.activeDirection : ''}`}>TEXTS<i className="caret-arrow" /></div>
+                                      <div>TEXTS</div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="newPatients" className={`${(this.props.paginationOptions.activeSort === 'newPatients') ? this.props.paginationOptions.activeDirection : ''}`}>NEW PATIENT<i className="caret-arrow" /></div>
+                                      <div>
+                                        <span>NEW PATIENT</span>
+                                        <span className="counter">{this.props.totals.details.count_not_contacted_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.count_not_contacted_total || 0}</span>
+                                      </div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="callAttempted" className={`${(this.props.paginationOptions.activeSort === 'callAttempted') ? this.props.paginationOptions.activeDirection : ''}`}>CALL ATTEMPTED<i className="caret-arrow" /></div>
+                                      <div>
+                                        <span>CALL ATTEMPTED</span>
+                                        <span className="counter">{this.props.totals.details.call_attempted_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.call_attempted_total || 0}</span>
+                                      </div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="notQualified" className={`${(this.props.paginationOptions.activeSort === 'notQualified') ? this.props.paginationOptions.activeDirection : ''}`}>NOT QUALIFIED<i className="caret-arrow" /></div>
+                                      <div>
+                                        <span>NOT QUALIFIED</span>
+                                        <span className="counter">{this.props.totals.details.dnq_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.dnq_total || 0}</span>
+                                      </div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="actionNeeded" className={`${(this.props.paginationOptions.activeSort === 'actionNeeded') ? this.props.paginationOptions.activeDirection : ''}`}>ACTION NEEDED<i className="caret-arrow" /></div>
+                                      <div>
+                                        <span>ACTION NEEDED</span>
+                                        <span className="counter">{this.props.totals.details.action_needed_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.action_needed_total || 0}</span>
+                                      </div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="scheduled" className={`${(this.props.paginationOptions.activeSort === 'scheduled') ? this.props.paginationOptions.activeDirection : ''}`}>SCHEDULED<i className="caret-arrow" /></div>
+                                      <div>
+                                        <span>SCHEDULED</span>
+                                        <span className="counter">{this.props.totals.details.scheduled_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.scheduled_total || 0}</span>
+                                      </div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="consented" className={`${(this.props.paginationOptions.activeSort === 'consented') ? this.props.paginationOptions.activeDirection : ''}`}>CONSENTED<i className="caret-arrow" /></div>
+                                      <div>
+                                        <span>CONSENTED</span>
+                                        <span className="counter">{this.props.totals.details.consented_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.consented_total || 0}</span>
+                                      </div>
                                     </th>
                                     <th>
-                                      <div onClick={this.sortBy} data-sort="randomized" className={`${(this.props.paginationOptions.activeSort === 'randomized') ? this.props.paginationOptions.activeDirection : ''}`}>RANDOMIZED<i className="caret-arrow" /></div>
+                                      <div>
+                                        <span>RANDOMIZED</span>
+                                        <span className="counter">{this.props.totals.details.randomized_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.randomized_total || 0}</span>
+                                      </div>
                                     </th>
                                   </tr>
                                 </thead>
@@ -908,11 +997,14 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   indications={this.props.indications}
                   fetchAllClientUsersDashboard={this.props.fetchAllClientUsersDashboard}
                   allClientUsers={this.props.allClientUsers}
+                  allCustomNotificationEmails={this.props.allCustomNotificationEmails}
+                  removeCustomEmailNotification={this.props.removeCustomEmailNotification}
                   formValues={this.props.editStudyValues}
                   addEmailNotificationClick={this.addEmailNotificationClick}
                   messagingNumbers={this.props.messagingNumbers}
                   isOnTop={this.state.editStudyPageOnTop}
                   setEditStudyFormValues={this.props.setEditStudyFormValues}
+                  studyUpdateProcess={this.props.studyUpdateProcess}
                 />
                 <LandingPageModal
                   openModal={this.state.showLandingPageModal}
@@ -933,6 +1025,43 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   isOnTop={this.state.patientThankYouEmailPageOnTop}
                 />
                 <Modal
+                  className={`admin-note-modal ${this.state.hideNoteModal ? 'invisible' : ''}`}
+                  id="notes"
+                  dialogComponentClass={CenteredModal}
+                  show={this.state.showNoteModal}
+                  onHide={this.closeNoteModal}
+                  backdrop
+                  keyboard
+                >
+                  <Modal.Header>
+                    <Modal.Title>{this.state.adminSiteName}</Modal.Title>
+                    <a className="lightbox-close close" onClick={this.closeNoteModal}>
+                      <i className="icomoon-icon_close" />
+                    </a>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <div className="holder clearfix">
+                      <div className="form-admin-note">
+                        <DashboardNoteSearch
+                          siteId={this.state.adminSiteId}
+                          addNote={this.props.addNote}
+                          editNoteProcess={this.props.editNoteProcess}
+                          hideParentModal={this.setNoteModalClass}
+                        />
+                        <DashboardNoteTable
+                          siteId={this.state.adminSiteId}
+                          tableName="Notes"
+                          note={this.props.note}
+                          editNoteProcess={this.props.editNoteProcess}
+                          editNote={this.props.editNote}
+                          deleteNote={this.props.deleteNote}
+                          hideParentModal={this.setNoteModalClass}
+                        />
+                      </div>
+                    </div>
+                  </Modal.Body>
+                </Modal>
+                <Modal
                   dialogComponentClass={CenteredModal}
                   show={this.state.addEmailModalShow}
                   onHide={this.closeAddEmailModal}
@@ -946,7 +1075,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                     </a>
                   </Modal.Header>
                   <Modal.Body>
-                    <AddEmailNotificationForm onSubmit={this.addEmailNotificationSubmit} />
+                    <AddEmailNotificationForm
+                      onSubmit={this.addEmailNotificationSubmit}
+                      custom={this.state.customAddEmailModal}
+                    />
                   </Modal.Body>
                 </Modal>
               </div>
@@ -969,6 +1101,8 @@ const mapStateToProps = createStructuredSelector({
   studies: selectStudies(),
   paginationOptions: selectPaginationOptions(),
   addNotificationProcess: selectAddNotificationProcess(),
+  note: selectDashboardNote(),
+  editNoteProcess: selectDashboardEditNoteProcess(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -976,6 +1110,11 @@ const mapDispatchToProps = (dispatch) => ({
   setHoverRowIndex: (index) => dispatch(setHoverRowIndex(index)),
   setEditStudyFormValues: (values) => dispatch(setEditStudyFormValues(values)),
   submitToClientPortal: (id) => dispatch(submitToClientPortal(id)),
+  fetchNote: () => dispatch(fetchNote()),
+  addNote: (payload) => dispatch(addNote(payload)),
+  removeCustomEmailNotification: (payload) => dispatch(removeCustomEmailNotification(payload)),
+  editNote: (payload) => dispatch(editNote(payload)),
+  deleteNote: (payload) => dispatch(deleteNote(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyList);

@@ -62,7 +62,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
   componentDidMount() {
     const { currentUser, currentUserClientId, userRoleType } = this.props;
     if (currentUserClientId && userRoleType === 'client') {
-      this.props.fetchSitePatients(currentUser.id);
       this.props.fetchPatientMessageUnreadCount(currentUser);
       this.props.fetchClientCredits(currentUser.id);
     }
@@ -73,8 +72,10 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
-        socket.on('notifyChangePoints', () => {
-          this.props.fetchClientCredits(currentUser.id);
+        socket.on('notifyChangePoints', (clientId) => {
+          if (currentUser.roleForClient && currentUser.roleForClient.client_id === clientId) {
+            this.props.fetchClientCredits(currentUser.id);
+          }
         });
       });
     }
@@ -101,7 +102,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
   }
 
   render() {
-    const { userRoleType, patientMessageUnreadCount, currentUser } = this.props;
+    const { userRoleType, currentUser } = this.props;
     let purchasable = true;
     if (userRoleType === 'client') {
       purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
@@ -135,13 +136,12 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             <HelpMenu />
 
             <a
-              className={classNames('opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
-              onClick={this.showGlobalPMSModal}
+              className={classNames('disabled opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
             >
-              {patientMessageUnreadCount > 0
+              {/* {patientMessageUnreadCount > 0
                 ? <span className="counter">{patientMessageUnreadCount}</span>
                 : null
-              }
+              }*/}
               <i className="icomoon-credit" />
             </a>
 

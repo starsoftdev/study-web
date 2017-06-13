@@ -24,6 +24,7 @@ const initialState = {
 
 function globalNotificationsReducer(state = initialState, action) {
   let newNotifications;
+  let tpmNotification;
 
   switch (action.type) {
     case SET_SOCKET_CONNECTION:
@@ -38,7 +39,7 @@ function globalNotificationsReducer(state = initialState, action) {
         .chain(state.notifications)
         .concat(action.payload)
         .uniqBy('id')
-        .orderBy(['notification.created_date'], ['desc'])
+        .orderBy(['id'], ['desc'])
         .value();
 
       return {
@@ -51,9 +52,19 @@ function globalNotificationsReducer(state = initialState, action) {
         unreadNotificationsCount: action.payload,
       };
     case RECEIVE_NOTIFICATION:
+      tpmNotification = action.payload;
+      if (action.payload.event_log.__data) { // eslint-disable-line no-underscore-dangle
+        tpmNotification.event_log = action.payload.event_log.__data; // eslint-disable-line no-underscore-dangle
+      }
+      newNotifications = _
+        .chain(state.notifications)
+        .concat(tpmNotification)
+        .uniqBy('id')
+        .orderBy(['id'], ['desc'])
+        .value();
       return {
         ...state,
-        notifications: [action.payload, ...state.notifications],
+        notifications: newNotifications,
         unreadNotificationsCount: state.unreadNotificationsCount + 1,
       };
     case SET_PROCESSING_STATUS:

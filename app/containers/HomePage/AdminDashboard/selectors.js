@@ -84,6 +84,11 @@ const selectAllClientUsers = () => createSelector(
   substate => substate.allClientUsers
 );
 
+const selectAllCustomNotificationEmails = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.allCustomNotificationEmails
+);
+
 const selectAddNotificationProcess = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.addNotificationProcess
@@ -134,12 +139,24 @@ const selectPaginationOptions = () => createSelector(
   substate => substate.paginationOptions
 );
 
+const selectDashboardNote = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.note
+);
+
+const selectDashboardEditNoteProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.editNoteProcess
+);
+
 export default selectDashboardPage;
 export {
   selectDashboardPageDomain,
   selectStudies,
   selectFilterFormValues,
   selectPaginationOptions,
+  selectDashboardNote,
+  selectDashboardEditNoteProcess,
   selectLevels,
   selectSiteNames,
   selectSiteLocations,
@@ -151,6 +168,7 @@ export {
   selectStudiesTotals,
   selectStudyUpdateProcess,
   selectAllClientUsers,
+  selectAllCustomNotificationEmails,
   selectEditStudyValues,
   selectAddNotificationProcess,
   selectStudyCampaigns,

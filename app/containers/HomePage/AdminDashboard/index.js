@@ -30,6 +30,7 @@ import {
   selectStudiesTotals,
   selectStudyUpdateProcess,
   selectAllClientUsers,
+  selectAllCustomNotificationEmails,
   selectEditStudyValues,
   selectMessagingNumbers,
   selectPaginationOptions,
@@ -43,12 +44,22 @@ import {
   clearFilters,
   fetchAllClientUsersDashboard,
   fetchStudyCampaignsDashboard,
+  fetchCustomNotificationEmails,
   changeStudyStatusDashboard,
   toggleStudy,
   fetchMessagingNumbersDashboard,
   updateTwilioNumbers,
 } from './actions';
-import { fetchLevels, fetchIndications, fetchSponsors, fetchProtocols, fetchCro, fetchUsersByRole, addEmailNotificationUser } from '../../App/actions';
+import {
+  fetchLevels,
+  fetchIndications,
+  fetchSponsors,
+  fetchProtocols,
+  fetchCro,
+  fetchUsersByRole,
+  addEmailNotificationUser,
+  addCustomEmailNotification,
+} from '../../App/actions';
 
 const PieChart = rd3.PieChart;
 const LineChart = rd3.LineChart;
@@ -86,7 +97,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     allClientUsers: PropTypes.object,
     editStudyValues: PropTypes.object,
     addEmailNotificationUser: PropTypes.func,
+    addCustomEmailNotification: PropTypes.func,
     fetchStudyCampaignsDashboard: PropTypes.func,
+    fetchCustomNotificationEmails: PropTypes.func,
+    allCustomNotificationEmails: PropTypes.object,
     changeStudyStatusDashboard: PropTypes.func,
     toggleStudy: PropTypes.func,
     fetchMessagingNumbersDashboard: PropTypes.func,
@@ -143,7 +157,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.props.fetchMessagingNumbersDashboard();
 
     // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
-    this.props.fetchTotalsDashboard({}, 10, 0);
+    // TODO possibly re-enable the initial totals fetching when production is cached and more able to handle a greater traffic load
+    // this.props.fetchTotalsDashboard({}, 10, 0);
   }
 
   componentWillReceiveProps(newProps) {
@@ -391,6 +406,19 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.fetchStudiesAccordingToFilters({ value: e }, 'address');
   }
 
+  formatFilterName(filter) {
+    let name = filter.name;
+    if (name === 'siteLocation') {
+      name = 'Site Location';
+    }
+    if (name === 'exposureLevel') {
+      name = 'Exposure Level';
+    }
+    if (name === 'siteNumber') {
+      name = 'Site Number';
+    }
+    return { ...filter, name };
+  }
 
   renderDateFooter() {
     const { dateRange } = this.state;
@@ -414,11 +442,12 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     const { customFilters, modalFilters } = this.state;
 
     const filters = concat(this.mapFilterValues(modalFilters), customFilters);
+    const details = this.props.totals.details || {};
 
-    const redCount = parseInt(this.props.totals.details.total_red) || 0;
-    const yellowCount = parseInt(this.props.totals.details.total_yellow) || 0;
-    const greenCount = parseInt(this.props.totals.details.total_green) || 0;
-    const purpleCount = parseInt(this.props.totals.details.total_purple) || 0;
+    const redCount = parseInt(details.total_red) || 0;
+    const yellowCount = parseInt(details.total_yellow) || 0;
+    const greenCount = parseInt(details.total_green) || 0;
+    const purpleCount = parseInt(details.total_purple) || 0;
 
     const colorsTotal = redCount + yellowCount + greenCount + purpleCount;
 
@@ -427,10 +456,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     const greenPercent = greenCount ? ((greenCount / colorsTotal) * 100).toFixed(2) : 0;
     const purplePercent = purpleCount ? ((purpleCount / colorsTotal) * 100).toFixed(2) : 0;
 
-    const tier1Count = parseInt(this.props.totals.details.total_tier_one) || 0;
-    const tier2Count = parseInt(this.props.totals.details.total_tier_two) || 0;
-    const tier3Count = parseInt(this.props.totals.details.total_tier_three) || 0;
-    const tier4Count = parseInt(this.props.totals.details.total_tier_four) || 0;
+    const tier1Count = parseInt(details.total_tier_one) || 0;
+    const tier2Count = parseInt(details.total_tier_two) || 0;
+    const tier3Count = parseInt(details.total_tier_three) || 0;
+    const tier4Count = parseInt(details.total_tier_four) || 0;
 
     const tiersTotal = tier1Count + tier2Count + tier3Count + tier4Count;
 
@@ -481,7 +510,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             <Button bsStyle="primary" onClick={this.props.updateTwilioNumbers}>
               #
             </Button>
-            <Modal dialogComponentClassName={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.addUserModalOpen} onHide={this.closeFiltersModal}>
+            <Modal dialogComponentClass={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.addUserModalOpen} onHide={this.closeFiltersModal}>
               <Modal.Header>
                 <Modal.Title>Filters</Modal.Title>
                 <a className="lightbox-close close" onClick={this.closeFiltersModal}>
@@ -525,7 +554,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
                   <Field
                     name={filter.name}
                     key={index}
-                    options={filter}
+                    options={this.formatFilterName(filter)}
                     component={Filter}
                     onClose={() => this.removeFilter(filter)}
                     onChange={(e) => {
@@ -560,19 +589,19 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             <ul className="list-unstyled info-list  pull-left">
               <li>
                 <strong className="heading">TODAY: </strong>
-                <span className="number">{this.props.totals.details.total_today || 0}</span>
+                <span className="number">{details.total_today || 0}</span>
               </li>
               <li>
                 <strong className="heading">YESTERDAY: </strong>
-                <span className="number">{this.props.totals.details.total_yesterday || 0}</span>
+                <span className="number">{details.total_yesterday || 0}</span>
               </li>
               <li>
                 <strong className="heading">CAMPAIGN TOTAL: </strong>
-                <span className="number">{this.props.totals.details.total_campaign || 0}</span>
+                <span className="number">{details.total_campaign || 0}</span>
               </li>
               <li>
                 <strong className="heading">GRAND TOTAL: </strong>
-                <span className="number">{this.props.totals.details.total_grand || 0}</span>
+                <span className="number">{details.total_grand || 0}</span>
               </li>
             </ul>
             <ul className="list-unstyled info-list pull-left">
@@ -707,7 +736,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             allClientUsers={this.props.allClientUsers}
             editStudyValues={this.props.editStudyValues}
             addEmailNotificationUser={this.props.addEmailNotificationUser}
+            addCustomEmailNotification={this.props.addCustomEmailNotification}
             fetchStudyCampaignsDashboard={this.props.fetchStudyCampaignsDashboard}
+            fetchCustomNotificationEmails={this.props.fetchCustomNotificationEmails}
+            allCustomNotificationEmails={this.props.allCustomNotificationEmails}
             changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
             toggleStudy={this.props.toggleStudy}
             messagingNumbers={this.props.messagingNumbers}
@@ -733,6 +765,7 @@ const mapStateToProps = createStructuredSelector({
   totals: selectStudiesTotals(),
   studyUpdateProcess: selectStudyUpdateProcess(),
   allClientUsers: selectAllClientUsers(),
+  allCustomNotificationEmails: selectAllCustomNotificationEmails(),
   editStudyValues: selectEditStudyValues(),
   messagingNumbers: selectMessagingNumbers(),
   paginationOptions: selectPaginationOptions(),
@@ -755,7 +788,9 @@ function mapDispatchToProps(dispatch) {
     clearFilters: () => dispatch(clearFilters()),
     fetchAllClientUsersDashboard: (params) => dispatch(fetchAllClientUsersDashboard(params)),
     addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
+    addCustomEmailNotification: (payload) => dispatch(addCustomEmailNotification(payload)),
     fetchStudyCampaignsDashboard: (params) => dispatch(fetchStudyCampaignsDashboard(params)),
+    fetchCustomNotificationEmails: (params) => dispatch(fetchCustomNotificationEmails(params)),
     changeStudyStatusDashboard: (params, status, isChecked) => dispatch(changeStudyStatusDashboard(params, status, isChecked)),
     toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
     fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),

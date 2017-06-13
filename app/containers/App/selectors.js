@@ -386,13 +386,24 @@ const selectNewContactSuccess = () => createSelector(
 
 const selectTrials = () => createSelector(
   selectGlobal(),
-  (substate) => get(substate, 'baseData.trials.details', {})
+  (substate) => get(substate, 'baseData.trials', {})
 );
 
 const selectTrialsTotal = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.trials.total', {})
 );
+
+const selectCnsInfo = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.cnsInfo', {})
+);
+
+const selectCnsSubmitProcess = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.cnsSubmitProcess', {})
+);
+
 // end
 
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
@@ -460,4 +471,6 @@ export {
 
   selectTrials,
   selectTrialsTotal,
+  selectCnsInfo,
+  selectCnsSubmitProcess,
 };

@@ -145,6 +145,14 @@ import {
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
   ADD_EMAIL_NOTIFICATION_USER_ERROR,
 
+  ADD_CUSTOM_EMAIL_NOTIFICATION,
+  ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+  ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR,
+
+  REMOVE_CUSTOM_EMAIL_NOTIFICATION,
+  REMOVE_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+  REMOVE_CUSTOM_EMAIL_NOTIFICATION_ERROR,
+
   LIST_SITE_NOW,
   LIST_SITE_NOW_SUCCESS,
   RESET_LIST_SITE_NOW_SUCCESS,
@@ -184,6 +192,14 @@ import {
   FETCH_USERS_BY_ROLE_ERROR,
 
   CHANGE_TEMPORARY_PASSWORD,
+
+  GET_CNS_INFO,
+  GET_CNS_INFO_SUCCESS,
+  GET_CNS_INFO_ERROR,
+
+  SUBMIT_CNS,
+  SUBMIT_CNS_SUCCESS,
+  SUBMIT_CNS_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -975,6 +991,48 @@ export function addEmailNotificationUserError(payload) {
   };
 }
 
+export function addCustomEmailNotification(payload) {
+  return {
+    type: ADD_CUSTOM_EMAIL_NOTIFICATION,
+    payload,
+  };
+}
+
+export function addCustomEmailNotificationSuccess(payload) {
+  return {
+    type: ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+    payload,
+  };
+}
+
+export function addCustomEmailNotificationError(payload) {
+  return {
+    type: ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR,
+    payload,
+  };
+}
+
+export function removeCustomEmailNotification(payload) {
+  return {
+    type: REMOVE_CUSTOM_EMAIL_NOTIFICATION,
+    payload,
+  };
+}
+
+export function removeCustomEmailNotificationSuccess(payload) {
+  return {
+    type: REMOVE_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+    payload,
+  };
+}
+
+export function removeCustomEmailNotificationError(payload) {
+  return {
+    type: REMOVE_CUSTOM_EMAIL_NOTIFICATION_ERROR,
+    payload,
+  };
+}
+
 export function findOutPatients(params) {
   return {
     type: FIND_OUT_PATIENTS,
@@ -1220,6 +1278,48 @@ export function fetchUsersByRoleError(payload) {
 export function changeTemporaryPassword(payload) {
   return {
     type: CHANGE_TEMPORARY_PASSWORD,
+    payload,
+  };
+}
+
+export function getCnsInfo(payload) {
+  return {
+    type: GET_CNS_INFO,
+    payload,
+  };
+}
+
+export function getCnsInfoSuccess(payload) {
+  return {
+    type: GET_CNS_INFO_SUCCESS,
+    payload,
+  };
+}
+
+export function getCnsInfoError(payload) {
+  return {
+    type: GET_CNS_INFO_ERROR,
+    payload,
+  };
+}
+
+export function submitCns(payload) {
+  return {
+    type: SUBMIT_CNS,
+    payload,
+  };
+}
+
+export function submitCnsSuccess(payload) {
+  return {
+    type: SUBMIT_CNS_SUCCESS,
+    payload,
+  };
+}
+
+export function submitCnsError(payload) {
+  return {
+    type: SUBMIT_CNS_ERROR,
     payload,
   };
 }

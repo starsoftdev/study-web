@@ -66,7 +66,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     const startDate = item.campaign_datefrom ? campaignDateFrom.format('MM/DD/YY') : 'TBD';
     const endDate = item.campaign_dateto ? campaignDateTo.format('MM/DD/YY') : 'TBD';
 
-    let campaignName = this.props.filtersFormValues.campaign ? this.props.filtersFormValues.campaign.toString() : 'Oldest';
+    let campaignName = this.props.filtersFormValues.campaign ? this.props.filtersFormValues.campaign.toString() : '1';
     campaignName = campaignName.charAt(0).toUpperCase() + campaignName.slice(1);
 
     return (

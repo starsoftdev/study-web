@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddExposureLevelForm } from './AddExposureLevelForm';
+import TableActions from '../../../components/TableActions/index';
 
 @reduxForm({ form: 'dashboardExposureLevelForm' })
 
@@ -59,18 +60,9 @@ export class DashboardExposureLevelSearch extends React.Component {
 
     return (
       <form action="#" className="form-search clearfix">
-        <div className="btns-area row pull-right">
-          <div className="col pull-left">
-            {/* <a className="btn btn-primary lightbox-opener" onClick={this.openAddLevelModal}>
-              Add Exposure Level
-            </a> */}
-            <a className="btn btn-primary lightbox-opener" disabled>
-              Add Exposure Level
-            </a>
-          </div>
-        </div>
-        <div className="fields-holder">
-          <div className="pull-left col custom-select">
+        <TableActions
+          buttonText="Add Exposure Level"
+          filters={
             <div className="has-feedback ">
               <Field
                 name="level"
@@ -79,8 +71,8 @@ export class DashboardExposureLevelSearch extends React.Component {
                 options={options}
               />
             </div>
-          </div>
-        </div>
+          }
+        />
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addLevelModalOpen} onHide={this.closeAddLevelModal}>
           <Modal.Header>

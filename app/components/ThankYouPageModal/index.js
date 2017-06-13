@@ -13,6 +13,7 @@ import { createStructuredSelector } from 'reselect';
 
 import Checkbox from '../Input/Checkbox';
 import Input from '../Input/index';
+import LoadingSpinner from '../LoadingSpinner';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
 import { updateThankYouPage, resetThankYouPageState } from '../../containers/HomePage/AdminDashboard/actions';
 import { selectThankYouPageUpdateProcess } from '../../containers/HomePage/AdminDashboard/selectors';
@@ -87,6 +88,9 @@ export class ThankYouPageModal extends React.Component {
           change('isSharePhone', thankYouPage.isSharePhone);
           change('isShareLocation', thankYouPage.isShareLocation);
           change('isHideLocationData', thankYouPage.isHideLocationData);
+          change('visitOurWebsiteText', thankYouPage.visitOurWebsiteText);
+          change('websiteLink', thankYouPage.websiteLink);
+          change('cns', thankYouPage.cns);
           this.setState({
             initialValuesEntered: true,
           });
@@ -229,8 +233,46 @@ export class ThankYouPageModal extends React.Component {
                     checked
                   />
                 </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">Visit Our Website...</label>
+                  </strong>
+                  <Field
+                    type="text"
+                    name="visitOurWebsiteText"
+                    className="field"
+                    component={Input}
+                  />
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">Link</label>
+                  </strong>
+                  <Field
+                    type="text"
+                    name="websiteLink"
+                    className="field"
+                    component={Input}
+                  />
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">CNS CODE</label>
+                  </strong>
+                  <Field
+                    type="text"
+                    name="cns"
+                    className="field"
+                    component={Input}
+                  />
+                </div>
                 <div className="field-row text-right">
-                  <Button bsStyle="primary" type="submit" disabled={false}>Update</Button>
+                  <Button type="submit" bsStyle="primary" className="fixed-small-btn">
+                    {this.props.thankYouPageUpdateProcess.saving
+                      ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
+                      : <span>Update</span>
+                    }
+                  </Button>
                 </div>
               </div>
             </Form>
