@@ -106,13 +106,13 @@ function studyPageReducer(state = initialState, action) {
         }),
         fetchingPatients: false,
       };
-    case ADD_PATIENT_INDICATION_SUCCESS:
     case ADD_PATIENT_NOTE_SUCCESS:
+    case ADD_PATIENT_INDICATION_SUCCESS:
     case REMOVE_PATIENT_INDICATION_SUCCESS:
     case SUBMIT_DELETE_NOTE_SUCCESS:
     case FETCH_PATIENT_DETAILS_SUCCESS:
     case UPDATE_PATIENT_SUCCESS:
-      if (action.payload && (action.payload.lastTextMessage || action.payload.unreadMessageCount)) {
+      if (action.payload && (action.payload.lastTextMessage || action.payload.unreadMessageCount || action.payload.unreadMessageCount === 0)) {
         return {
           ...state,
           patientCategories: patientCategories(state.patientCategories, action.payload.patientCategoryId, action.payload.patientId, action),
@@ -120,7 +120,7 @@ function studyPageReducer(state = initialState, action) {
       }
       return {
         ...state,
-        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, action.patientId, action),
+        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),
       };
     case CLEAR_FORM_UPLOAD:
       return {
@@ -537,9 +537,7 @@ function patients(state, currentPatientId, action) {
         if (patient.id === currentPatientId) {
           return {
             ...patient,
-            notes: patient.notes.filter(note => (
-              note.id !== action.noteId
-            )),
+            notes: patient.notes.filter(note => note.id !== action.noteId),
           };
         }
         return patient;
