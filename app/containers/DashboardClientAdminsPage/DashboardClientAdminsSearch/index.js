@@ -7,8 +7,9 @@ import Button from 'react-bootstrap/lib/Button';
 import Input from '../../../components/Input';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddClientAdminsForm } from '../../DashboardClientAdminsPage/AddClientAdminsForm/index';
+import TableActions from '../../../components/TableActions/index';
 
-@reduxForm({ form: 'dashboardClientAdminsSearchForm' })
+@reduxForm({ form: 'dashboardClientAdminSearchForm' })
 
 export class DashboardClientAdminsSearch extends React.Component {
   static propTypes = {
@@ -50,15 +51,10 @@ export class DashboardClientAdminsSearch extends React.Component {
   render() {
     return (
       <form action="#" className="form-search clearfix">
-        <div className="btns-area row pull-right">
-          <div className="col pull-left">
-            <a className="btn btn-primary lightbox-opener" onClick={this.openAddClientAdminModal}>
-              + Add Client Admin
-            </a>
-          </div>
-        </div>
-        <div className="fields-holder">
-          <div className="pull-left col custom-select">
+        <TableActions
+          buttonClickAction={this.openAddClientAdminModal}
+          buttonText="+ Add Client Admin"
+          filters={
             <div className="has-feedback ">
               <Button className="btn-enter">
                 <i className="icomoon-icon_search2" />
@@ -71,8 +67,8 @@ export class DashboardClientAdminsSearch extends React.Component {
                 className="keyword-search"
               />
             </div>
-          </div>
-        </div>
+          }
+        />
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addClientAdminModalOpen} onHide={this.closeAddClientAdminModal}>
           <Modal.Header>

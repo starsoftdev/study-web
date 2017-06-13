@@ -12,6 +12,7 @@ import Collapse from 'react-bootstrap/lib/Collapse';
 import Form from 'react-bootstrap/lib/Form';
 
 import Input from '../Input/index';
+import LoadingSpinner from '../LoadingSpinner';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
 import { updatePatientThankYouEmail, resetPatientThankYouEmailState } from '../../containers/HomePage/AdminDashboard/actions';
 import { selectUpdatePatientThankYouEmailProcess } from '../../containers/HomePage/AdminDashboard/selectors';
@@ -165,7 +166,12 @@ export class PatientThankYouEmailModal extends React.Component {
                   bsClass="form-control thx-msg"
                 />
                 <div className="field-row text-right">
-                  <Button bsStyle="primary" type="submit" disabled={false}>Update</Button>
+                  <Button type="submit" bsStyle="primary" className="fixed-small-btn">
+                    {this.props.updatePatientThankYouEmailProcess.saving
+                      ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+                      : <span>Update</span>
+                    }
+                  </Button>
                 </div>
               </div>
             </Form>

@@ -9,7 +9,7 @@ import Geosuggest from 'react-geosuggest';
 import classNames from 'classnames';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-function FormGeosuggest({ refObj, input, name, className, meta: { touched, error, active }, ...rest }) {
+function FormGeosuggest({ refObj, input, name, className, enableTooltip, meta: { touched, error, active }, ...rest }) {
   const hasError = touched && error && !active;
   const errorClass = hasError ? 'has-error' : '';
 
@@ -33,7 +33,7 @@ function FormGeosuggest({ refObj, input, name, className, meta: { touched, error
     {...rest}
   />);
 
-  if (hasError) {
+  if (hasError && enableTooltip) {
     inputComponent = (
       <OverlayTrigger
         placement="right"
@@ -57,6 +57,7 @@ FormGeosuggest.propTypes = {
   className: PropTypes.string,
   meta: PropTypes.object.isRequired,
   refObj: PropTypes.func,
+  enableTooltip: PropTypes.bool,
 };
 
 export default FormGeosuggest;

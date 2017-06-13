@@ -59,7 +59,7 @@ const render = () => {
           }
         />
         <ReduxToastr
-          timeOut={6000}
+          timeOut={4000}
           preventDuplicates
           newestOnTop={false}
           position="top-right"

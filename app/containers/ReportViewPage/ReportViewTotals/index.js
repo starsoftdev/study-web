@@ -15,6 +15,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
       count_contacted: 0,
       count_not_contacted: 0,
       dnq: 0,
+      action_needed: 0,
       scheduled: 0,
       consented: 0,
       screen_failed: 0,
@@ -23,15 +24,16 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     };
 
     _.forEach(this.props.reportsList.details, (item) => {
-      totals.count_total += parseInt(item.count_total);
-      totals.count_contacted += parseInt(item.count_contacted);
-      totals.count_not_contacted += parseInt(item.count_not_contacted);
-      totals.call_attempted += parseInt(item.call_attempted);
-      totals.dnq += parseInt(item.dnq);
-      totals.scheduled += parseInt(item.scheduled);
-      totals.consented += parseInt(item.consented);
-      totals.screen_failed += parseInt(item.screen_failed);
-      totals.randomized += parseInt(item.randomized);
+      totals.count_total += parseInt(item.count_total || 0);
+      totals.count_contacted += parseInt(item.count_contacted || 0);
+      totals.count_not_contacted += parseInt(item.count_not_contacted || 0);
+      totals.call_attempted += parseInt(item.call_attempted || 0);
+      totals.dnq += parseInt(item.dnq || 0);
+      totals.action_needed += parseInt(item.action_needed || 0);
+      totals.scheduled += parseInt(item.scheduled || 0);
+      totals.consented += parseInt(item.consented || 0);
+      totals.screen_failed += parseInt(item.screen_failed || 0);
+      totals.randomized += parseInt(item.randomized || 0);
     });
 
     const percentage = this.props.getPercentageObject(totals);
@@ -57,6 +59,10 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         <li>
           <strong className="heading"><span>DNQ</span></strong>
           <strong className="number"><span>{totals.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></strong>
+        </li>
+        <li>
+          <strong className="heading"><span>ACTION NEEDED</span></strong>
+          <strong className="number"><span>{totals.action_needed}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span></strong>
         </li>
         <li>
           <strong className="heading"><span>SCHEDULED</span></strong>

@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import _, { find, sumBy } from 'lodash';
 import { touch } from 'redux-form';
+import Button from 'react-bootstrap/lib/Button';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Money from '../../components/Money';
@@ -30,6 +31,7 @@ import {
 } from '../../containers/RequestProposalPage/actions';
 import {
   selectCoupon,
+  selectFormSubmissionStatus,
   selectIndicationLevelPrice,
 } from '../../containers/RequestProposalPage/selectors';
 
@@ -43,6 +45,7 @@ export class RequestProposalCart extends Component {
     hasError: PropTypes.bool,
     fetchCoupon: PropTypes.func.isRequired,
     onSubmitForm: PropTypes.func.isRequired,
+    formSubmissionStatus: PropTypes.object,
     fetchIndicationLevelPrice: PropTypes.func,
     indicationLevelPrice: PropTypes.number,
     touchRequestProposal: PropTypes.func,
@@ -59,19 +62,23 @@ export class RequestProposalCart extends Component {
 
     this.state = {
       couponId: '',
+      shoppingCartLoading: props.formSubmissionStatus.submitting,
     };
   }
 
   componentWillReceiveProps(newProps) {
-    // indication cahnge
+    // indication change
     if (
       ((newProps.formValues.indication_id !== this.props.formValues.indication_id) ||
       (newProps.formValues.level_id !== this.props.formValues.level_id)) &&
       newProps.formValues.indication_id && newProps.formValues.level_id &&
       newProps.formValues.indication_id !== undefined && newProps.formValues.level_id !== undefined
     ) {
-      console.log('fetch');
       this.props.fetchIndicationLevelPrice(newProps.formValues.indication_id, newProps.formValues.level_id);
+    }
+
+    if (this.props.formSubmissionStatus.submitting !== newProps.formSubmissionStatus.submitting) {
+      this.setState({ shoppingCartLoading: newProps.formSubmissionStatus.submitting });
     }
   }
 
@@ -283,12 +290,15 @@ export class RequestProposalCart extends Component {
               <Money value={total} className="price total-price" />
             </div>
 
-            <input
-              type="submit"
-              className="btn btn-default"
-              value="submit"
+            <Button
+              disabled={coupon.fetching}
               onClick={this.onSubmitForm}
-            />
+            >
+              <span>Submit</span>
+              {(this.state.shoppingCartLoading) &&
+              <span className="pull-right"><LoadingSpinner showOnlyIcon size={20} /></span>
+              }
+            </Button>
           </div>
         </div>
       </div>
@@ -302,6 +312,7 @@ const mapStateToProps = createStructuredSelector({
   hasError: selectProposalFormError(),
   formValues: selectProposalFormValues(),
   indicationLevelPrice: selectIndicationLevelPrice(),
+  formSubmissionStatus: selectFormSubmissionStatus(),
 });
 
 function mapDispatchToProps(dispatch) {

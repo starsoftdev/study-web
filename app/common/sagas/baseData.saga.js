@@ -27,11 +27,9 @@ import {
   ADD_CREDITS,
 
   FETCH_CLIENT_SITES,
-  FETCH_SITE_PATIENTS,
   FETCH_CLIENT_CREDITS,
   SEARCH_SITE_PATIENTS,
   FETCH_PATIENT_MESSAGES,
-  FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
   FETCH_CLIENT_ROLES,
   FETCH_SITE,
   FETCH_USER,
@@ -60,6 +58,8 @@ import {
   FETCH_CRO,
   FETCH_USERS_BY_ROLE,
   CHANGE_TEMPORARY_PASSWORD,
+  GET_CNS_INFO,
+  SUBMIT_CNS,
 } from '../../containers/App/constants';
 
 import {
@@ -93,7 +93,6 @@ import {
   clientSitesFetched,
   clientSitesFetchingError,
   sitePatientsFetched,
-  sitePatientsFetchingError,
   clientCreditsFetched,
   clientCreditsFetchingError,
   sitePatientsSearched,
@@ -146,6 +145,10 @@ import {
   fetchUsersByRoleSuccess,
   fetchUsersByRoleError,
   setUserData,
+  getCnsInfoSuccess,
+  getCnsInfoError,
+  submitCnsSuccess,
+  submitCnsError,
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -194,6 +197,8 @@ export default function* baseDataSaga() {
   yield fork(fetchCroWatcher);
   yield fork(fetchUsersByRoleWatcher);
   yield fork(submitToClientPortalWatcher);
+  yield fork(getCnsInfoWatcher);
+  yield fork(submitCnsWatcher);
 }
 
 export function* fetchIndicationsWatcher() {
@@ -485,18 +490,20 @@ export function* fetchClientSitesWatcher() {
 }
 
 export function* fetchSitePatientsWatcher() {
-  while (true) {
-    const { userId } = yield take(FETCH_SITE_PATIENTS);
-
-    try {
-      const requestURL = `${API_URL}/patients/patientsForUser?userId=${userId}`;
-      const response = yield call(request, requestURL);
-
-      yield put(sitePatientsFetched(response));
-    } catch (err) {
-      yield put(sitePatientsFetchingError(err));
-    }
-  }
+  // while (true) {
+  //   const { userId } = yield take(FETCH_SITE_PATIENTS);
+  //
+  //   try {
+  //     const requestURL = `${API_URL}/patients/patientsForUser?userId=${userId}`;
+  //     const response = yield call(request, requestURL);
+  //
+  //     yield put(sitePatientsFetched(response));
+  // TODO re-enable site patient fetching for global PMS later
+  yield put(sitePatientsFetched([]));
+  //   } catch (err) {
+  //     yield put(sitePatientsFetchingError(err));
+  //   }
+  // }
 }
 
 export function* fetchClientCreditsWatcher() {
@@ -551,16 +558,18 @@ export function* fetchPatientMessagesWatcher() {
 }
 
 export function* fetchPatientMessageUnreadCountWatcher() {
-  while (true) {
-    const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
-    try {
-      const requestURL = `${API_URL}/clients/${currentUser.roleForClient.client_id}/patientMessageStats`;
-      const response = yield call(request, requestURL);
-      yield put(patientMessageUnreadCountFetched(response));
-    } catch (err) {
-      console.trace(err);
-    }
-  }
+  // while (true) {
+  //   const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
+  //   try {
+  //     const requestURL = `${API_URL}/clients/${currentUser.roleForClient.client_id}/patientMessageStats`;
+  //     const response = yield call(request, requestURL);
+  //     yield put(patientMessageUnreadCountFetched(response));
+  // TODO re-enable patient message stat fetching
+  yield put(patientMessageUnreadCountFetched(0));
+  //   } catch (err) {
+  //     console.trace(err);
+  //   }
+  // }
 }
 
 export function* fetchClientRolesWatcher() {
@@ -814,7 +823,7 @@ export function* fetchIndicationLevelPriceWatcher() {
       const response = yield call(request, requestURL, params);
       yield put(fetchIndicationLevelPriceSuccess(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Can not get price for Level');
+      const errorMessage = get(err, 'message', 'Can not get price for Exposure Level');
       yield put(toastrActions.error('', errorMessage));
       yield put(fetchIndicationLevelPriceError(err));
     }
@@ -1160,5 +1169,44 @@ export function* submitToClientPortalWorker(action) {
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong');
     yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+export function* getCnsInfoWatcher() {
+  yield* takeLatest(GET_CNS_INFO, getCnsInfoWorker);
+}
+
+export function* getCnsInfoWorker(action) {
+  try {
+    const requestURL = `${API_URL}/thankYouPages/getCnsInfo?cns=${action.payload}`;
+    const response = yield call(request, requestURL);
+
+    yield put(getCnsInfoSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching cns info');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(getCnsInfoError(err));
+  }
+}
+
+export function* submitCnsWatcher() {
+  yield* takeLatest(SUBMIT_CNS, submitCnsWorker);
+}
+
+export function* submitCnsWorker(action) {
+  try {
+    const requestURL = `${API_URL}/thankYouPages/submitCns`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(action.payload),
+    };
+    const response = yield call(request, requestURL, options);
+    console.log('response', response);
+
+    yield put(submitCnsSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting cns info');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(submitCnsError(err));
   }
 }

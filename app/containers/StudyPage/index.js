@@ -75,22 +75,38 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (socket && this.state.socketBinded === false) {
       socket.on('notifyMessage', (message) => {
         let curCategoryId = null;
+        let unreadMessageCount = 0;
+        const socketMessage = message;
+
+        if (socketMessage.twilioTextMessage.__data) { // eslint-disable-line no-underscore-dangle
+          socketMessage.twilioTextMessage = socketMessage.twilioTextMessage.__data; // eslint-disable-line no-underscore-dangle
+        }
+        if (socketMessage.study.__data) { // eslint-disable-line no-underscore-dangle
+          socketMessage.study = socketMessage.study.__data; // eslint-disable-line no-underscore-dangle
+        }
+        if (socketMessage.patient.__data) { // eslint-disable-line no-underscore-dangle
+          socketMessage.patient = socketMessage.patient.__data; // eslint-disable-line no-underscore-dangle
+        }
 
         _.forEach(this.props.patientCategories, (item) => {
           _.forEach(item.patients, (patient) => {
-            if (patient.id === message.patient_id) {
+            if (patient.id === socketMessage.patient_id) {
               curCategoryId = item.id;
+              unreadMessageCount = patient.unreadMessageCount || 0;
             }
           });
         });
 
         this.props.fetchStudy(params.id);
         this.props.fetchStudyTextNewStats(params.id);
-        this.props.updatePatientSuccess({
-          patientId: message.patient_id,
-          patientCategoryId: curCategoryId,
-          lastTextMessage: { body: message.twilioTextMessage.body, dateCreated: message.twilioTextMessage.dateCreated },
-        });
+        if (curCategoryId && socketMessage.twilioTextMessage.direction === 'inbound') {
+          this.props.updatePatientSuccess({
+            patientId: socketMessage.patient_id,
+            patientCategoryId: curCategoryId,
+            unreadMessageCount: (unreadMessageCount + 1),
+            lastTextMessage: socketMessage.twilioTextMessage,
+          });
+        }
       });
       this.setState({ socketBinded: true });
     }
@@ -109,11 +125,11 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { fetchingPatientCategories, fetchStudy, fetchingStudy, campaigns, patientCategories, protocol, site, sources, study, stats } = this.props;
+    const { fetchingPatientCategories, fetchStudy, fetchingStudy, campaigns, patientCategories, protocol, site, sources, study, stats, fetchingPatients } = this.props;
     const ePMS = study && study.patientMessagingSuite;
     if (fetchingStudy || fetchingPatientCategories) {
       return (
-        <LoadingSpinner />
+        <LoadingSpinner noMessage />
       );
     } else if (!study || !sources || !campaigns) {
       return (
@@ -164,6 +180,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           <StudyStats stats={stats} />
           <PatientBoard
             patientCategories={patientCategories}
+            fetchingPatients={fetchingPatients}
             ePMS={ePMS}
           />
         </section>

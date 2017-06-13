@@ -22,6 +22,7 @@ class NotesSection extends React.Component {
     currentPatient: React.PropTypes.object,
     studyId: React.PropTypes.number.isRequired,
     note: React.PropTypes.string,
+    notes: React.PropTypes.array,
     resetForm: React.PropTypes.func.isRequired,
     submitPatientNote: React.PropTypes.func.isRequired,
     submitDeleteNote: React.PropTypes.func.isRequired,
@@ -31,6 +32,13 @@ class NotesSection extends React.Component {
     super(props);
     this.onClick = this.onClick.bind(this);
     this.renderNotes = this.renderNotes.bind(this);
+    this.scrollElement = this.scrollElement.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.notes && newProps.notes.length > this.props.notes.length) {
+      this.scrollElement();
+    }
   }
 
   onClick() {
@@ -42,21 +50,26 @@ class NotesSection extends React.Component {
     }
   }
 
+  scrollElement() {
+    window.requestAnimationFrame(() => {
+      if (this.scrollable && this.props.active) {
+        this.scrollable.scrollTop = this.scrollable.scrollHeight;
+      }
+    });
+  }
+
   renderNotes() {
-    const { currentUser, currentPatient, submitDeleteNote } = this.props;
-    if (currentPatient && currentPatient.notes) {
-      return currentPatient.notes.map(note => (
-        <PatientNote key={note.id} currentUser={currentUser} note={note} currentPatient={currentPatient} submitDeleteNote={submitDeleteNote} />
-      ));
-    }
-    return null;
+    const { currentUser, currentPatient, submitDeleteNote, notes } = this.props;
+    return notes.map(note => (
+      <PatientNote key={note.id} currentUser={currentUser} note={note} currentPatient={currentPatient} submitDeleteNote={submitDeleteNote} />
+    ));
   }
 
   render() {
     const { active } = this.props;
     return (
       <div className={classNames('item note', { active })}>
-        <section className="postarea notes">
+        <section className="postarea notes" ref={scrollable => { this.scrollable = scrollable; }}>
           {this.renderNotes()}
         </section>
         <div className="textarea">

@@ -15,6 +15,7 @@ import { touch, change } from 'redux-form';
 import Scroll from 'react-scroll';
 
 import { SchedulePatientModalType } from '../../common/constants/index';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import PatientDetailModal from '../../containers/StudyPage/PatientDetail/PatientDetailModal';
 import ScheduledPatientModal from '../../containers/StudyPage/ScheduledPatientModal/index';
 import {
@@ -29,6 +30,7 @@ import {
   readStudyPatientMessages,
   changeScheduledDate,
   submitSchedule,
+  updatePatientSuccess,
 } from '../../containers/StudyPage/actions';
 import { selectCurrentUser } from '../../containers/App/selectors';
 import { markAsReadPatientMessages } from '../../containers/App/actions';
@@ -68,6 +70,8 @@ class PatientBoard extends React.Component {
     studyId: React.PropTypes.number,
     setFormValueByName: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
+    fetchingPatients: React.PropTypes.any,
+    updatePatientSuccess: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -140,6 +144,11 @@ class PatientBoard extends React.Component {
       fetchPatientDetails(patient.id);
       readStudyPatientMessages(patient.id);
       markAsReadPatientMessages(patient.id);
+      this.props.updatePatientSuccess({
+        patientId: patient.id,
+        patientCategoryId: category.id,
+        unreadMessageCount: 0,
+      });
       const options = {
         duration: 500,
       };
@@ -247,10 +256,11 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
+          {(fetchingPatients) && <LoadingSpinner showOnlyIcon={false} noMessage />}
           <nav className="nav-status">
             <ul className={classNames('list-inline', { stick: this.state.stick })}>
               {patientCategories.map(patientCategory => (
@@ -301,6 +311,7 @@ const mapDispatchToProps = (dispatch) => (
     setFormValueByName: (name, attrName, value) => dispatch(change(name, attrName, value)),
     touchSchedulePatientModal: () => dispatch(touch('ScheduledPatientModal', ...fields)),
     submitSchedule: (data, fromCategoryId, scheduleCategoryId) => dispatch(submitSchedule(data, fromCategoryId, scheduleCategoryId)),
+    updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
   }
 );
 

@@ -64,7 +64,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         <td>
           {item.amountOff
             ? <Money value={item.amountOff / 100} />
-            : item.percentOff
+            : `${item.percentOff}%`
           }
         </td>
         <td>

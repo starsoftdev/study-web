@@ -12,29 +12,44 @@
         color: #030303;
       }
     }
+
+    .spinner-container{
+      padding-top: 0 !important;
+    }
   }
   .study-container {
+    .indication,
+    .location,
+    .sponsor,
+    .protocol {
+      & > span {
+        width: 10px;
+        min-width: 100%;
+        display: block;
+      }
+    }
     .index {
       width: 40px;
     }
     .indication {
-      width: 18%;
+      width: 17%;
       .break-word();
     }
     .location {
-      width: 15%;
+      width: 17%;
       .break-word();
     }
     .sponsor {
-      width: 13%;
+      width: auto;
       .break-word();
     }
     .protocol {
-      width: 13%;
+      width: auto;
+      min-width: 100px;
       .break-word();
     }
     .patient-messaging-suite {
-      width: 52px;
+      width: 75px;
       color: #a0cf67;
 
       &.off {

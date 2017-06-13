@@ -5,8 +5,10 @@
 */
 
 import React, { Component, PropTypes } from 'react';
+import { Field, reduxForm } from 'redux-form';
 import _ from 'lodash';
 import moment from 'moment-timezone';
+import Checkbox from '../../components/Input/Checkbox';
 
 const headers = [
   {
@@ -31,6 +33,8 @@ const headers = [
   },
 ];
 
+const formName = 'ProposalsTable.Proposals';
+@reduxForm({ form: formName })
 class ProposalsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUser: PropTypes.object,
@@ -308,18 +312,36 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       const sub = ((source.total % 100) === 0) ? '.00' : false;
 
       let proposalLink = source.id;
+      let checkbox = (
+        <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
+          <span className="input-style" onClick={this.onClickCurrent}>
+            <input
+              className="form-control"
+              type="checkbox"
+              name={key}
+              disabled={!source.proposalpdfid}
+            />
+          </span>
+        </span>
+      );
       if (source.proposalpdfid) {
         proposalLink = <a className="show-pdf-link" onClick={() => this.props.showProposalPdf(source.id)}>{source.id}</a>;
+      } else {
+        checkbox = (
+          <Field
+            className="proposal-disabled"
+            name={`proposal-${key}`}
+            type="checkbox"
+            disabled
+            component={Checkbox}
+          />
+        );
       }
 
       result.push(
         <tr key={key}>
           <td>
-            <span className={(source.selected) ? 'sm-container checked' : 'sm-container'}>
-              <span className="input-style" onClick={this.onClickCurrent}>
-                <input type="checkbox" name={key} />
-              </span>
-            </span>
+            {checkbox}
             <span>{source.order_number}</span>
           </td>
           <td>{dateWrapper}</td>
@@ -359,19 +381,16 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           </colgroup>
           <thead>
             <tr>
-              <th className={state.activeSort === 'order_number' ? state.activeDirection : ''}>
+              <th className="default-cursor">
                 <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
                   <span className="input-style" onClick={this.onClickAll}>
                     <input name="all" type="checkbox" />
                   </span>
                 </span>
                 <span
-                  data-sort="order_number"
-                  onClick={this.sortBy}
                   className={(state.activeSort === 'order_number') ? state.activeDirection : ''}
-                >
-                  #<i className="caret-arrow" />
-                </span>
+                >#</span>
+                <i className="caret-arrow" />
               </th>
               {heads}
             </tr>

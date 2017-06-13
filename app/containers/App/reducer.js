@@ -116,6 +116,7 @@ import {
   PATIENT_SUBSCRIPTION_ERROR,
   FIND_OUT_PATIENTS_POSTED,
 
+  CLINICAL_TRIALS_SEARCH,
   CLINICAL_TRIALS_SEARCH_SUCCESS,
   CLEAR_CLINICAL_TRIALS_SEARCH,
   LIST_SITE_NOW_SUCCESS,
@@ -126,6 +127,11 @@ import {
   RESET_LEARN_ABOUT_FUTURE_TRIALS,
   NEW_CONTACT_SUCCESS,
   RESET_NEW_CONTACT_SUCCESS,
+
+  GET_CNS_INFO_SUCCESS,
+  SUBMIT_CNS,
+  SUBMIT_CNS_SUCCESS,
+  SUBMIT_CNS_ERROR,
 } from './constants';
 
 import {
@@ -184,6 +190,7 @@ const initialState = {
     trials: {
       details: null,
       total: null,
+      wrongPostalCode: false,
       fetching: false,
       error: null,
     },
@@ -269,6 +276,12 @@ const initialState = {
     changeUsersTimezoneState: {
       saving: false,
     },
+    cnsInfo: {
+      details: {},
+      fetching: false,
+      error: null,
+    },
+    cnsSubmitProcess: {},
   },
 };
 
@@ -383,6 +396,17 @@ export default function appReducer(state = initialState, action) {
         },
       };
       break;
+    case CLINICAL_TRIALS_SEARCH:
+      baseDataInnerState = {
+        trials: {
+          details: cloneDeep(state.baseData.trials.details),
+          total: state.baseData.trials.total,
+          wrongPostalCode: state.baseData.trials.wrongPostalCode,
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
     case CLINICAL_TRIALS_SEARCH_SUCCESS:
       const trialsCollection = concat(state.baseData.trials.details, payload.data);
       if (trialsCollection && trialsCollection[0] === null) {
@@ -392,6 +416,7 @@ export default function appReducer(state = initialState, action) {
         trials: {
           details: trialsCollection,
           total: payload.total,
+          wrongPostalCode: payload.wrongPostalCode,
           fetching: false,
           error: null,
         },
@@ -402,6 +427,7 @@ export default function appReducer(state = initialState, action) {
         trials: {
           details: null,
           total: null,
+          wrongPostalCode: false,
           fetching: false,
           error: null,
         },
@@ -811,10 +837,43 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
           stats: {
-            total: state.baseData.patientMessages.stats.total,
-            unreadEmails: state.baseData.patientMessages.stats.unreadEmails,
-            unreadTexts: state.baseData.patientMessages.stats.unreadTexts - unreadCount,
+            total: state.baseData.patientMessages.stats ? state.baseData.patientMessages.stats.total : 0,
+            unreadEmails: state.baseData.patientMessages.stats ? state.baseData.patientMessages.stats.unreadEmails : 0,
+            unreadTexts: state.baseData.patientMessages.stats ? state.baseData.patientMessages.stats.unreadTexts - unreadCount : 0,
           },
+        },
+      };
+      break;
+    case GET_CNS_INFO_SUCCESS:
+      baseDataInnerState = {
+        cnsInfo: {
+          details: payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case SUBMIT_CNS:
+      baseDataInnerState = {
+        cnsSubmitProcess: {
+          submitting: true,
+          error: null,
+        },
+      };
+      break;
+    case SUBMIT_CNS_SUCCESS:
+      baseDataInnerState = {
+        cnsSubmitProcess: {
+          submitting: false,
+          error: null,
+        },
+      };
+      break;
+    case SUBMIT_CNS_ERROR:
+      baseDataInnerState = {
+        cnsSubmitProcess: {
+          submitting: false,
+          error: payload,
         },
       };
       break;
@@ -830,7 +889,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_CLIENT_CREDITS_SUCCESS:
       baseDataInnerState = {
         clientCredits: {
-          details: payload,
+          details: payload.customerCredits,
           fetching: false,
           error: null,
         },
@@ -1109,6 +1168,7 @@ export default function appReducer(state = initialState, action) {
         },
       };
       break;
+
     case DELETE_CLIENT_ROLE_SUCCESS:
       remove(clientRolesCollection, { id: payload.id });
       baseDataInnerState = {

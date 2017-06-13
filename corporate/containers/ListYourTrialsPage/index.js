@@ -325,7 +325,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <div className="area">
                   <strong className="h3">Exposure to StudyKIK Patient Enrollment Search</strong>
                   <p>
-                    Atients are able to easily search and find safe and approved clinical trials on studykik.com.
+                    Patients are able to easily search and find safe and approved clinical trials on studykik.com.
                   </p>
                 </div>
               </div>
@@ -487,7 +487,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                       <img src={diamond1} width="85" alt="package description" />
                     </div>
                     <h2>RUBY</h2>
-                    <p>103 Posts</p>
+                    <p>108 Posts</p>
                     <strong className="price">
                       $5297 <span>/MONTH</span>
                     </strong>
@@ -516,7 +516,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                       <img src={diamond2} width="91" alt="package description" className="img2" />
                     </div>
                     <h2>DIAMOND</h2>
-                    <p>63 Posts</p>
+                    <p>64 Posts</p>
                     <strong className="price">
                       $3297 <span>/MONTH</span>
                     </strong>
@@ -540,7 +540,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                       <img src={diamond3} width="79" alt="package description" className="img3" />
                     </div>
                     <h2>PLATINUM</h2>
-                    <p>33 Posts</p>
+                    <p>32 Posts</p>
                     <strong className="price">$1797 <span>/MONTH</span></strong>
                     <div className="btn-block text-center">
                       <span
@@ -562,7 +562,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                       <img src={diamond4} width="72" alt="package description" className="img4" />
                     </div>
                     <h2>GOLD</h2>
-                    <p>13 Posts</p>
+                    <p>10 Posts</p>
                     <strong className="price">$797 <span>/MONTH</span></strong>
                     <div className="btn-block text-center">
                       <span

@@ -8,6 +8,7 @@ import {
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
+  CLEAR_STUDIES_COLLECTION,
   FETCH_PROTOCOLS,
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_PROTOCOLS_ERROR,
@@ -34,6 +35,7 @@ import {
   SORT_SUCCESS,
   FETCH_UPGRADE_STUDY_PRICE,
   NEW_MESSAGE_FOR_PROTOCOL,
+  INCREMENT_STUDY_UNREAD_MESSAGES,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser) {
@@ -83,6 +85,12 @@ export function fetchStudies(currentUser, searchParams) {
     type: FETCH_STUDIES,
     currentUser,
     searchParams,
+  };
+}
+
+export function clearStudiesCollection() {
+  return {
+    type: CLEAR_STUDIES_COLLECTION,
   };
 }
 
@@ -287,5 +295,12 @@ export function addNewMessageForProtocol(protocolNumber) {
   return {
     type: NEW_MESSAGE_FOR_PROTOCOL,
     protocolNumber,
+  };
+}
+
+export function incrementStudyUnreadMessages(studyId) {
+  return {
+    type: INCREMENT_STUDY_UNREAD_MESSAGES,
+    studyId,
   };
 }
