@@ -18,8 +18,8 @@ import _ from 'lodash';
 
 import { selectUserRoleType, selectCurrentUserClientId, selectCurrentUser } from '../../containers/App/selectors';
 import { fetchClientSites, fetchLevels } from '../../containers/App/actions';
-import { fetchStudies, fetchProtocols, fetchProtocolNumbers, fetchIndications } from './actions';
-import { selectSearchProtocolsFormValues } from '../../containers/HomePage/selectors';
+import { fetchStudies, clearStudiesCollection, fetchProtocols, fetchProtocolNumbers, fetchIndications } from './actions';
+import { selectStudies, selectSearchProtocolsFormValues, selectQueryParams } from '../../containers/HomePage/selectors';
 
 import Dashboard from './Dashboard';
 import SponsorDashboard from './SponsorDashboard';
@@ -27,7 +27,8 @@ import AdminDashboard from './AdminDashboard';
 import SearchStudiesForm from './SearchStudiesForm';
 import SearchProtocolsForm from './SearchProtocolsForm';
 import ProtocolsList from './ProtocolsList';
-import StudiesList from './StudiesList';
+import StudiesList from '../../components/StudiesList';
+import { ACTIVE_STATUS_VALUE } from './constants';
 
 export class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -35,12 +36,15 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     currentUserClientId: PropTypes.number,
     fetchClientSites: PropTypes.func,
     fetchLevels: PropTypes.func,
+    studies: PropTypes.object,
     fetchStudies: PropTypes.func,
+    clearStudiesCollection: PropTypes.func,
     fetchProtocols: PropTypes.func.isRequired,
     fetchProtocolNumbers: PropTypes.func.isRequired,
     fetchIndications: PropTypes.func,
     location: PropTypes.any,
     userRoleType: PropTypes.string,
+    queryParams: PropTypes.object,
     searchProtocolsFormValues: PropTypes.object,
   };
 
@@ -53,11 +57,14 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
   }
 
   componentWillMount() {
-    const { currentUser, currentUserClientId, userRoleType } = this.props;
+    const { currentUser, currentUserClientId, userRoleType, queryParams } = this.props;
+    const params = queryParams;
+    params.status = ACTIVE_STATUS_VALUE;
+
     if (currentUserClientId && userRoleType === 'client') {
       this.props.fetchClientSites(currentUserClientId, {});
       this.props.fetchLevels();
-      this.props.fetchStudies(currentUser);
+      this.props.fetchStudies(currentUser, params);
     } else if (currentUser && userRoleType === 'sponsor') {
       this.props.fetchProtocols(currentUser.roleForSponsor.id);
       this.props.fetchProtocolNumbers(currentUser.roleForSponsor.id);
@@ -65,14 +72,26 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     }
   }
 
+  componentWillUnmount() {
+    this.props.clearStudiesCollection();
+  }
+
   searchStudies(searchParams) {
-    const { currentUser } = this.props;
-    const queryParams = {
-      name: searchParams.name,
-      siteId: searchParams.site,
-      status: searchParams.status,
-    };
-    this.props.fetchStudies(currentUser, queryParams);
+    const { currentUser, queryParams, studies } = this.props;
+    const params = queryParams;
+    params.name = searchParams.name;
+    params.site = searchParams.site;
+    params.status = searchParams.status || ACTIVE_STATUS_VALUE;
+    params.filter = false;
+
+    if (searchParams.filter) {
+      params.skip = 0;
+      params.filter = true;
+    }
+
+    if (!studies.fetching) {
+      this.props.fetchStudies(currentUser, params);
+    }
   }
 
   searchProtocols(searchParams) {
@@ -87,7 +106,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { userRoleType, currentUser } = this.props;
+    const { userRoleType, currentUser, queryParams } = this.props;
     let purchasable = true;
     if (userRoleType === 'client') {
       purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
@@ -109,7 +128,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
               </button>
             </div>
             <div className="table-holder form-group">
-              <StudiesList />
+              <StudiesList queryParams={queryParams} />
             </div>
           </div>
           )
@@ -140,6 +159,8 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
 }
 
 const mapStateToProps = createStructuredSelector({
+  studies: selectStudies(),
+  queryParams: selectQueryParams(),
   currentUser: selectCurrentUser(),
   currentUserClientId: selectCurrentUserClientId(),
   userRoleType: selectUserRoleType(),
@@ -151,6 +172,7 @@ function mapDispatchToProps(dispatch) {
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchLevels: () => dispatch(fetchLevels()),
     fetchStudies: (currentUser, searchParams) => dispatch(fetchStudies(currentUser, searchParams)),
+    clearStudiesCollection: () => dispatch(clearStudiesCollection()),
     fetchProtocols: (sponsorRoleId, searchParams) => dispatch(fetchProtocols(sponsorRoleId, searchParams)),
     fetchProtocolNumbers: (sponsorRoleId) => dispatch(fetchProtocolNumbers(sponsorRoleId)),
     fetchIndications: (currentUser) => dispatch(fetchIndications(currentUser)),

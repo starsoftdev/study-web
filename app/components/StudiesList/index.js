@@ -1,27 +1,28 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import _, { countBy, find, filter, sumBy } from 'lodash';
+import InfiniteScroll from 'react-infinite-scroller';
+import _, { find } from 'lodash';
 import { touch } from 'redux-form';
 
-import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE } from '../../../common/constants';
-import { normalizePhoneForServer } from '../../../../app/common/helper/functions';
-import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../../components/ShoppingCartForm/selectors';
-import { shoppingCartFields } from '../../../components/ShoppingCartForm/validator';
-import { fetchLevels, saveCard, fetchClientAdmins } from '../../App/actions';
-import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectSitePatients, selectCurrentUserClientId, selectClientSites } from '../../App/selectors';
-import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../constants';
-import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice, fetchStudies } from '../actions';
-import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions, selectHomePageClientAdmins } from '../selectors';
-import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
-import { selectRenewStudyFormValues, selectRenewStudyFormError } from '../../../components/RenewStudyForm/selectors';
-import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError } from '../../../components/UpgradeStudyForm/selectors';
-import RenewStudyForm from '../../../components/RenewStudyForm/index';
-import UpgradeStudyForm from '../../../components/UpgradeStudyForm/index';
-import EditStudyForm from '../../../components/EditStudyForm';
-import { upgradeStudyFields } from '../../../components/UpgradeStudyForm/validator';
-import { renewStudyFields } from '../../../components/RenewStudyForm/validator';
-import { editStudyFields } from '../../../components/EditStudyForm/validator';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE } from '../../common/constants';
+import { normalizePhoneForServer } from '../../common/helper/functions';
+import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
+import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
+import { fetchLevels, saveCard, fetchClientAdmins } from '../../containers/App/actions';
+import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectCurrentUserClientId, selectClientSites } from '../../containers/App/selectors';
+import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice, fetchStudies } from '../../containers/HomePage/actions';
+import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions, selectHomePageClientAdmins } from '../../containers/HomePage/selectors';
+import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
+import { selectRenewStudyFormValues, selectRenewStudyFormError } from '../../components/RenewStudyForm/selectors';
+import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError } from '../../components/UpgradeStudyForm/selectors';
+import RenewStudyForm from '../../components/RenewStudyForm/index';
+import UpgradeStudyForm from '../../components/UpgradeStudyForm/index';
+import EditStudyForm from '../../components/EditStudyForm';
+import { upgradeStudyFields } from '../../components/UpgradeStudyForm/validator';
+import { renewStudyFields } from '../../components/RenewStudyForm/validator';
+import { editStudyFields } from '../../components/EditStudyForm/validator';
 import StudyItem from './StudyItem';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -47,7 +48,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     setActiveSort: PropTypes.func,
     shoppingCartFormError: PropTypes.bool,
     shoppingCartFormValues: PropTypes.object,
-    sitePatients: React.PropTypes.object,
     sortSuccess: PropTypes.func,
     studies: PropTypes.object,
     fetchStudies: PropTypes.func,
@@ -65,6 +65,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     clearIndicationLevelPrice: PropTypes.func,
     currentUserClientId: PropTypes.number,
     fetchClientAdmins: PropTypes.func.isRequired,
+    queryParams: PropTypes.object,
   };
 
   constructor(props) {
@@ -101,6 +102,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.showRenewModal = this.showRenewModal.bind(this);
     this.showUpgradeModal = this.showUpgradeModal.bind(this);
     this.showEditModal = this.showEditModal.bind(this);
+    this.loadItems = this.loadItems.bind(this);
+    this.renderStudiesTable = this.renderStudiesTable.bind(this);
   }
 
   componentWillMount() {
@@ -125,6 +128,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const oldExposureLevelOfRenewStudy = this.props.renewStudyFormValues.exposureLevel;
     const newLevelOfUpgradeStudy = newProps.upgradeStudyFormValues.level;
     const oldLevelOfUpgradeStudy = this.props.upgradeStudyFormValues.level;
+
+    // console.log(newProps.studies);
 
     if (!newRenewedStudy.submitting && oldRenewedStudy.submitting) {
       this.closeRenewModal();
@@ -532,14 +537,28 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     this.props.sortSuccess(sorted);
   }
 
-  render() {
-    const { studies, sitePatients, currentUser, clientSites } = this.props;
-    const countResult = countBy(studies.details, entityIterator => entityIterator.status);
-    const activeCount = countResult[ACTIVE_STATUS_VALUE] || 0;
-    const inactiveCount = countResult[INACTIVE_STATUS_VALUE] || 0;
-    const totalCount = studies.details.length;
+  loadItems() {
+    const { queryParams, studies } = this.props;
 
-    let selectedStudy = null;
+    let allowFetch = false;
+
+    if (queryParams.status === 'Active') {
+      allowFetch = (studies.active > queryParams.skip);
+    } else if (queryParams.status === 'Inactive') {
+      allowFetch = (studies.inactive > queryParams.skip);
+    } else {
+      allowFetch = (studies.total > queryParams.skip);
+    }
+
+    if (queryParams.hasMoreItems && !studies.fetching && allowFetch) {
+      const params = queryParams;
+      params.filter = false;
+      this.props.fetchStudies(this.props.currentUser, params);
+    }
+  }
+
+  renderStudiesTable() {
+    const { studies, currentUser, clientSites, queryParams } = this.props;
     let selectedSiteID = null;
     if (currentUser && currentUser.roleForClient) {
       selectedSiteID = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
@@ -553,16 +572,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         item.id
       );
     }
+
     const studiesListContents = studies.details.map((item, index) => {
-      if (item.studyId === this.state.selectedStudyId) {
-        selectedStudy = item;
-      }
-      const unreadMessageCount = sumBy(filter(sitePatients.details, { study_id: item.studyId }), (sitePatient) => {
-        if (sitePatient.count_unread == null) {
-          return 0;
-        }
-        return parseInt(sitePatient.count_unread);
-      });
       if (siteArray.indexOf(item.siteId) === -1 || (selectedSiteID && item.siteId !== selectedSiteID)) {
         return null;
       }
@@ -573,12 +584,68 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
           currentUser={currentUser}
           key={index}
           index={index}
-          unreadMessageCount={unreadMessageCount}
+          unreadMessageCount={item.unreadMessageCount}
           onRenew={this.openRenewModal}
           onUpgrade={this.openUpgradeModal}
           onEdit={this.openEditModal}
         />
       );
+    });
+
+    let showSpinner = false;
+
+    if (queryParams.status === 'Active') {
+      showSpinner = (studies.active > queryParams.skip);
+    } else if (queryParams.status === 'Inactive') {
+      showSpinner = (studies.inactive > queryParams.skip);
+    } else {
+      showSpinner = (studies.total > queryParams.skip);
+    }
+
+    if (!studies.details.length && studies.fetching) {
+      return (
+        <tbody>
+          <tr>
+            <td colSpan="9">
+              <LoadingSpinner showOnlyIcon={false} noMessage />
+            </td>
+          </tr>
+        </tbody>
+      );
+    }
+
+    if (studies.details.length > 0) {
+      return (
+        <InfiniteScroll
+          element="tbody"
+          pageStart={0}
+          loadMore={this.loadItems}
+          initialLoad={false}
+          hasMore={queryParams.hasMoreItems}
+          loader={null}
+        >
+          {studiesListContents}
+          {(studies.fetching && showSpinner) &&
+            <tr>
+              <td colSpan="9">
+                <LoadingSpinner showOnlyIcon={false} noMessage />
+              </td>
+            </tr>
+          }
+        </InfiniteScroll>
+      );
+    }
+
+    return null;
+  }
+
+  render() {
+    const { studies } = this.props;
+
+    let selectedStudy = null; studies.details.forEach((item) => {
+      if (item.studyId === this.state.selectedStudyId) {
+        selectedStudy = item;
+      }
     });
 
     return (
@@ -592,15 +659,15 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                   <span className="pull-right">
                     <span className="inner-info">
                       <span className="info-label">ACTIVE</span>
-                      <span className="info-value">{activeCount}</span>
+                      <span className="info-value">{studies.active || 0}</span>
                     </span>
                     <span className="inner-info">
                       <span className="info-label">INACTIVE</span>
-                      <span className="info-value">{inactiveCount}</span>
+                      <span className="info-value">{studies.inactive || 0}</span>
                     </span>
                     <span className="inner-info">
                       <span className="info-label">TOTAL</span>
-                      <span className="info-value">{totalCount}</span>
+                      <span className="info-value">{studies.total || 0}</span>
                     </span>
                   </span>
                 </caption>
@@ -611,18 +678,13 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                     <th onClick={this.sortBy} data-sort="location" className={(this.props.paginationOptions.activeSort === 'location') ? this.props.paginationOptions.activeDirection : ''}>LOCATION<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="sponsor" className={(this.props.paginationOptions.activeSort === 'sponsor') ? this.props.paginationOptions.activeDirection : ''}>SPONSOR<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="protocol" className={(this.props.paginationOptions.activeSort === 'protocol') ? this.props.paginationOptions.activeDirection : ''}>PROTOCOL<i className="caret-arrow" /></th>
-                    <th onClick={this.sortBy} data-sort="patientMessagingSuite" className={(this.props.paginationOptions.activeSort === 'patientMessagingSuite') ? this.props.paginationOptions.activeDirection : ''}>
-                      <span className="icomoon-credit" data-original-title="Patient Messaging Suite" />
-                      <i className="caret-arrow" />
-                    </th>
+                    <th className="default-cursor"><span className="icomoon-credit" data-original-title="Patient Messaging Suite" /></th>
                     <th onClick={this.sortBy} data-sort="status" className={(this.props.paginationOptions.activeSort === 'status') ? this.props.paginationOptions.activeDirection : ''}>STATUS<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="startDate" className={(this.props.paginationOptions.activeSort === 'startDate') ? this.props.paginationOptions.activeDirection : ''}>START DATE<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="endDate" className={(this.props.paginationOptions.activeSort === 'endDate') ? this.props.paginationOptions.activeDirection : ''}>END DATE<i className="caret-arrow" /></th>
                   </tr>
                 </thead>
-                <tbody>
-                  {studies.details.length > 0 && studiesListContents}
-                </tbody>
+                {this.renderStudiesTable()}
               </table>
             </div>
             <RenewStudyForm
@@ -672,7 +734,6 @@ const mapStateToProps = createStructuredSelector({
   selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
   shoppingCartFormError: selectShoppingCartFormError(),
   shoppingCartFormValues: selectShoppingCartFormValues(),
-  sitePatients: selectSitePatients(),
   studies: selectStudies(),
   studyLevels: selectStudyLevels(),
   upgradeStudyFormValues: selectUpgradeStudyFormValues(),

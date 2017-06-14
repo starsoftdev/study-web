@@ -15,6 +15,7 @@ class AddEmailNotificationForm extends React.Component { // eslint-disable-line 
 
   static propTypes = {
     error: React.PropTypes.object,
+    custom: React.PropTypes.any,
     handleSubmit: React.PropTypes.func.isRequired,
     reset: React.PropTypes.func.isRequired,
     pristine: React.PropTypes.bool.isRequired,
@@ -22,34 +23,38 @@ class AddEmailNotificationForm extends React.Component { // eslint-disable-line 
   };
 
   render() {
-    const { error, handleSubmit, pristine, reset, submitting } = this.props; // eslint-disable-line
+    const { error, handleSubmit, pristine, reset, submitting, custom } = this.props; // eslint-disable-line
+
+    const nameFields = (
+      <div className="field-row">
+        <strong className="label required"><label>Name</label></strong>
+        <div className="field">
+          <div className="row">
+            <div className="col pull-left">
+              <Field
+                name="firstName"
+                component={Input}
+                placeholder="First Name"
+                type="text"
+              />
+            </div>
+            <div className="col pull-right">
+              <Field
+                name="lastName"
+                component={Input}
+                placeholder="Last Name"
+                type="text"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
 
     return (
       <form onSubmit={handleSubmit} className="form-lightbox">
 
-        <div className="field-row">
-          <strong className="label required"><label>Name</label></strong>
-          <div className="field">
-            <div className="row">
-              <div className="col pull-left">
-                <Field
-                  name="firstName"
-                  component={Input}
-                  placeholder="First Name"
-                  type="text"
-                />
-              </div>
-              <div className="col pull-right">
-                <Field
-                  name="lastName"
-                  component={Input}
-                  placeholder="Last Name"
-                  type="text"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        {!custom && nameFields}
 
         <div className="field-row">
           <strong className="label required"><label>Email</label></strong>
