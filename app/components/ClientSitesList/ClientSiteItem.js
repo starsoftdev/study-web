@@ -125,19 +125,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { name, piFirstName, piLastName, phoneNumber, address, city, zip, state, principalInvestigators, timezone } = this.props;
-    let piNode = '';
-    if (principalInvestigators) {
-      for (const pi of principalInvestigators) {
-        if (pi.active) {
-          piNode = <span>{pi.firstName} {pi.lastName}<br /></span>;
-        }
-      }
-    }
-
-    if (piFirstName && piLastName) {
-      piNode = <span>{piFirstName} {piLastName}<br /></span>;
-    }
+    const { name, phoneNumber, address, city, zip, state, timezone } = this.props;
 
     const addressArr = (address) ? address.split(',') : [];
 
@@ -145,9 +133,6 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
       <tr className="client-site-container">
         <td className="name">
           <span>{name}</span>
-        </td>
-        <td className="principal-investigator">
-          {piNode}
         </td>
         <td className="phoneNumber">
           <span>{normalizePhoneDisplay(phoneNumber)}</span>
