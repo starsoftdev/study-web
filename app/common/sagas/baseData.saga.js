@@ -58,6 +58,8 @@ import {
   FETCH_CRO,
   FETCH_USERS_BY_ROLE,
   CHANGE_TEMPORARY_PASSWORD,
+  GET_CNS_INFO,
+  SUBMIT_CNS,
 } from '../../containers/App/constants';
 
 import {
@@ -143,6 +145,10 @@ import {
   fetchUsersByRoleSuccess,
   fetchUsersByRoleError,
   setUserData,
+  getCnsInfoSuccess,
+  getCnsInfoError,
+  submitCnsSuccess,
+  submitCnsError,
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -191,6 +197,8 @@ export default function* baseDataSaga() {
   yield fork(fetchCroWatcher);
   yield fork(fetchUsersByRoleWatcher);
   yield fork(submitToClientPortalWatcher);
+  yield fork(getCnsInfoWatcher);
+  yield fork(submitCnsWatcher);
 }
 
 export function* fetchIndicationsWatcher() {
@@ -1161,5 +1169,44 @@ export function* submitToClientPortalWorker(action) {
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong');
     yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+export function* getCnsInfoWatcher() {
+  yield* takeLatest(GET_CNS_INFO, getCnsInfoWorker);
+}
+
+export function* getCnsInfoWorker(action) {
+  try {
+    const requestURL = `${API_URL}/thankYouPages/getCnsInfo?cns=${action.payload}`;
+    const response = yield call(request, requestURL);
+
+    yield put(getCnsInfoSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching cns info');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(getCnsInfoError(err));
+  }
+}
+
+export function* submitCnsWatcher() {
+  yield* takeLatest(SUBMIT_CNS, submitCnsWorker);
+}
+
+export function* submitCnsWorker(action) {
+  try {
+    const requestURL = `${API_URL}/thankYouPages/submitCns`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(action.payload),
+    };
+    const response = yield call(request, requestURL, options);
+    console.log('response', response);
+
+    yield put(submitCnsSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting cns info');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(submitCnsError(err));
   }
 }
