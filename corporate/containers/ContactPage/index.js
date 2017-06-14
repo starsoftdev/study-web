@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, reset, touch, blur } from 'redux-form';
 import inViewport from 'in-viewport';
 import { Link } from 'react-router';
+import Isvg from 'react-inlinesvg';
 
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
@@ -183,13 +184,13 @@ export class ContactPage extends React.Component { // eslint-disable-line react/
               />
               <input type="submit" className="btn btn-default btn-block input-lg" value="Submit" />
               <div className="image left">
-                <img src={img17} alt="&nbsp;" width="351" height="437" className="svg" />
+                <Isvg src={img17} className="svg" width="351" height="437" />
                 <span className="wifi">
-                  <img src={imgWifi} alt="&nbsp;" width="40" className="svg" />
+                  <Isvg src={imgWifi} className="svg" width="40" />
                 </span>
               </div>
               <div className="image right">
-                <img src={img18} alt="&nbsp;" width="380" height="480" className="svg" />
+                <Isvg src={img18} className="svg" width="380" height="480" />
               </div>
             </div>
           </form>

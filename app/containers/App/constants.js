@@ -196,3 +196,11 @@ export const FETCH_USERS_BY_ROLE_SUCCESS           = 'App/FETCH_USERS_BY_ROLE_SU
 export const FETCH_USERS_BY_ROLE_ERROR             = 'App/FETCH_USERS_BY_ROLE_ERROR';
 
 export const CHANGE_TEMPORARY_PASSWORD             = 'App/CHANGE_TEMPORARY_PASSWORD';
+
+export const GET_CNS_INFO                          = 'App/GET_CNS_INFO';
+export const GET_CNS_INFO_SUCCESS                  = 'App/GET_CNS_INFO_SUCCESS';
+export const GET_CNS_INFO_ERROR                    = 'App/GET_CNS_INFO_ERROR';
+
+export const SUBMIT_CNS                            = 'App/SUBMIT_CNS';
+export const SUBMIT_CNS_SUCCESS                    = 'App/SUBMIT_CNS_SUCCESS';
+export const SUBMIT_CNS_ERROR                      = 'App/SUBMIT_CNS_ERROR';

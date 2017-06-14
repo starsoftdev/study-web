@@ -90,7 +90,6 @@ export class ThankYouPageModal extends React.Component {
           change('isHideLocationData', thankYouPage.isHideLocationData);
           change('visitOurWebsiteText', thankYouPage.visitOurWebsiteText);
           change('websiteLink', thankYouPage.websiteLink);
-          change('cns', thankYouPage.cns);
           this.setState({
             initialValuesEntered: true,
           });
@@ -251,17 +250,6 @@ export class ThankYouPageModal extends React.Component {
                   <Field
                     type="text"
                     name="websiteLink"
-                    className="field"
-                    component={Input}
-                  />
-                </div>
-                <div className="field-row">
-                  <strong className="label">
-                    <label htmlFor="new-patient-phone">CNS CODE</label>
-                  </strong>
-                  <Field
-                    type="text"
-                    name="cns"
                     className="field"
                     component={Input}
                   />

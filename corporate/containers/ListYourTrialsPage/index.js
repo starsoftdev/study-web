@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import { Parallax } from 'react-parallax';
+import Isvg from 'react-inlinesvg';
 
 import bg1 from '../../assets/images/bg1.jpg';
 import img1 from '../../assets/images/img1.svg';
@@ -145,7 +146,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                   GET PROPOSAL
                 </a>
                 <div className="img-holder">
-                  <img src={img1} alt="img1" width="200" height="284" className="img-responsive svg" />
+                  <Isvg src={img1} className="img-responsive svg" width="200" height="284" />
                 </div>
               </div>
             </div>
