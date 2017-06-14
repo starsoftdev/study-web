@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { reset } from 'redux-form';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
+import { scroller, Element } from 'react-scroll';
 import TrialsArticle from '../../components/TrialsArticle';
 import ClinicalTrialsSearchForm from '../../components/ClinicalTrialsSearchForm';
 import LoadingSpinner from '../../../app/components/LoadingSpinner';
@@ -64,6 +65,11 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
           if (newProps.newList.postalCode) {
             this.h3Text = `There are ${newProps.total} ${(newProps.total > 1) ? 'studies' : 'study'} within ${newProps.newList.distance || 50} miles of ${newProps.newList.postalCode}`;
           }
+          scroller.scrollTo('scrollTarget', {
+            duration: 800,
+            smooth: true,
+            offset: -160,
+          });
         } else {
           this.h3Text = 'There are no studies';
           if (newProps.newList.postalCode) {
@@ -159,7 +165,7 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
             onSubmit={this.onSubmitForm}
           />
           <div className="articles-holder relative">
-            <h3 className="text-center text-uppercase">{this.h3Text}</h3>
+            <Element name="scrollTarget"><h3 className="text-center text-uppercase">{this.h3Text}</h3></Element>
             {trials.fetching && <LoadingSpinner showOnlyIcon={false} noMessage />}
             <div className={classNames('row', { hidden: (!trials || !trials.details || trials.details.length <= 0) })}>
               {(trials.details && trials.details.length > 0) && studiesList}
