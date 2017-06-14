@@ -604,12 +604,16 @@ input[type=submit].input-lg,
 	
 	.input-lg:hover ~ .image .wifi,
 	.input-lg:focus ~ .image .wifi,
+  .field:hover ~ .image .wifi,
+  .field.focus ~ .image .wifi,
 	.svg:hover ~ .wifi {
 		opacity: 1;
 	}
-		
+
 	.input-lg:hover ~ .image .svg,
 	.input-lg:focus ~ .image .svg,
+  .field:hover ~ .image .svg,
+  .field.focus ~ .image .svg,
 	.svg:hover {
 		.envelop { animation: envelop 1.5s infinite linear; }
 		
@@ -1285,7 +1289,7 @@ input[type=submit].input-lg,
 		position: relative;
 	}
 	
-	div > .input-lg {
+	div > .input-lg, .field-wrapper {
     margin: 30px 0 0;
 
     @media screen and (max-width: @desktop) {
@@ -1296,6 +1300,7 @@ input[type=submit].input-lg,
       margin: 15px 0 0;
     }
 		
+		&.focus,
 		&:focus,
 		&:hover {
 			~ .images .img-holder {
