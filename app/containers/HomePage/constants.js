@@ -10,6 +10,7 @@ export const FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS = 'HomePage/Dashboard/
 export const FETCH_STUDIES                               = 'HomePage/Viewport/FETCH_STUDIES';
 export const FETCH_STUDIES_SUCCESS                       = 'HomePage/Viewport/FETCH_STUDIES_SUCCESS';
 export const FETCH_STUDIES_ERROR                         = 'HomePage/Viewport/FETCH_STUDIES_ERROR';
+export const CLEAR_STUDIES_COLLECTION                    = 'HomePage/Viewport/CLEAR_STUDIES_COLLECTION';
 
 export const FETCH_PROTOCOLS                             = 'HomePage/Viewport/FETCH_PROTOCOLS';
 export const FETCH_PROTOCOLS_SUCCESS                     = 'HomePage/Viewport/FETCH_PROTOCOLS_SUCCESS';
@@ -49,3 +50,4 @@ export const SORT_SUCCESS                                = 'HomePage/Dashboard/S
 export const FETCH_UPGRADE_STUDY_PRICE                   = 'HomePage/Viewport/FETCH_UPGRADE_STUDY_PRICE';
 
 export const NEW_MESSAGE_FOR_PROTOCOL                    = 'HomePage/Viewport/NEW_MESSAGE_FOR_PROTOCOL';
+export const INCREMENT_STUDY_UNREAD_MESSAGES             = 'HomePage/Viewport/INCREMENT_STUDY_UNREAD_MESSAGES';

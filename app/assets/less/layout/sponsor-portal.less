@@ -236,6 +236,7 @@
 				position: relative;
 				display: table-cell;
 				vertical-align: middle;
+        font-size: 16px;
 			}
 		}
 		
@@ -289,7 +290,23 @@
 	.table-area {
 		.clearfix;
 		position: relative;
-		
+    padding: 0 0 0 844px;
+
+
+    .table-scroll-wrap{
+      overflow-x: scroll;
+      .table-scroll-container{
+        height: 0.1px;
+      }
+    }
+
+    .table-scroll-wrap-fixed{
+      position: fixed;
+      bottom: 0px;
+      z-index: 1;
+      width: 300px;
+    }
+
 		.reports & {
 			padding: 0 0 0 844px;
 		}
@@ -327,6 +344,7 @@
 			top: 0;
 			left: 0;
 			width: 844px;
+      position: absolute;
 			
 			.table .number {
 				line-height: 20px;
@@ -348,10 +366,8 @@
 					}
 				}
 			}
-			
-			
+
 		}
-		
 		
 		.reports & {
 			.table-left,
@@ -371,20 +387,16 @@
 		}
 		
 		.table-right {
-			position: absolute;
-      width: calc(~'100% - 844px');
-      left: 844px;
-      overflow-x: scroll;
-			padding-bottom: 2px;
-			
 			.table {
-				width: 2239px;
-				max-width: none;
-				
-				
-				
+				width: 100%;
+				max-width: 100%;
 			}
-			
+
+      .table-inner {
+        overflow-x: scroll;
+        margin-bottom: -15px;
+      }
+
 			.scroll {
 				height: 100% !important;
 			}
@@ -524,6 +536,7 @@
 		}
 		
 		@media screen and (max-width: @psd) {
+      padding-left: 644px;
 			.reports & {
 				padding: 0 0 0 644px;
 			}
@@ -533,15 +546,8 @@
 			.table-right .table {
 				width: 1666px;
 			}
-
-      .table-right{
-        width: calc(~'100% - 644px');
-        left: 644px;
-      }
 		}
 	}
-
-
 
 	.table-left {
 		td,
@@ -568,41 +574,43 @@
 	.table-right {
 		th,
 		td {
-			&:first-child { width: 145px; }
-			&:nth-child(2) { width: 145px; }
-			&:nth-child(3) { width: 205px; }
-			&:nth-child(4) { width: 130px; }
-			&:nth-child(5) { width: 145px; }
-			&:nth-child(6) { width: 186px; }
-			&:nth-child(7) { width: 90px; }
-			&:nth-child(8) { width: 132px; }
-			&:nth-child(9) { width: 145px; }
-			&:nth-child(10) { width: 170px; }
-			&:nth-child(11) { width: 156px; }//1649
-			&:nth-child(12) { width: 120px; }
-			&:nth-child(13) { width: 170px; }
-			&:nth-child(14) { width: 170px; }
-			&:nth-child(15) { width: 130px; }
+			&.level_date_from { width: 145px; }
+			&.level_date_to { width: 145px; }
+			&.last_login_time { width: 205px; }
+			&.count_total { width: 130px; }
+			&.count_contacted { width: 145px; }
+			&.count_not_contacted { width: 186px; }
+			&.dnq { width: 90px; }
+			&.action_needed { width: 170px; }
+			&.scheduled { width: 132px; }
+			&.consented { width: 145px; }
+			&.screen_failed { width: 170px; }
+			&.randomized { width: 156px; }
+			&.outbound_text { width: 120px; }
+			&.inbound_text { width: 170px; }
+			&.unread_text { width: 170px; }
+			&.outbound_emails { width: 130px; }
 		}
 		
 		@media screen and(max-width: @psd) {
 			th,
 			td {
-				&:first-child { width: 115px; }
-				&:nth-child(2) { width: 115px; }
-				&:nth-child(3) { width: 165px; }
-				&:nth-child(4) { width: 110px; }
-				&:nth-child(5) { width: 125px; }
-				&:nth-child(6) { width: 136px; }
-				&:nth-child(7) { width: 90px; }
-				&:nth-child(8) { width: 110px; }
-				&:nth-child(9) { width: 110px; }
-				&:nth-child(10) { width: 110px; }
-				&:nth-child(11) { width: 120px; }//1296
-				&:nth-child(12) { width: 90px; }
-				&:nth-child(13) { width: 90px; }
-				&:nth-child(14) { width: 90px; }
-				&:nth-child(15) { width: 90px; }
+        &.level_date_from { width: 115px; }
+        &.level_date_to { width: 115px; }
+        &.last_login_time { width: 165px; }
+        &.count_total { width: 110px; }
+        &.count_contacted { width: 125px; }
+        &.count_not_contacted { width: 135px; }
+        &.dnq { width: 90px; }
+        &.action_needed { width: 110px; }
+        &.scheduled { width: 110px; }
+        &.consented { width: 110px; }
+        &.screen_failed { width: 110px; }
+        &.randomized { width: 120px; }
+        &.outbound_text { width: 90px; }
+        &.inbound_text { width: 90px; }
+        &.unread_text { width: 90px; }
+        &.outbound_emails { width: 90px; }
 			}
 		}
 	}

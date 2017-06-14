@@ -30,6 +30,7 @@ import {
   readStudyPatientMessages,
   changeScheduledDate,
   submitSchedule,
+  updatePatientSuccess,
 } from '../../containers/StudyPage/actions';
 import { selectCurrentUser } from '../../containers/App/selectors';
 import { markAsReadPatientMessages } from '../../containers/App/actions';
@@ -70,6 +71,7 @@ class PatientBoard extends React.Component {
     setFormValueByName: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
     fetchingPatients: React.PropTypes.any,
+    updatePatientSuccess: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -142,6 +144,11 @@ class PatientBoard extends React.Component {
       fetchPatientDetails(patient.id);
       readStudyPatientMessages(patient.id);
       markAsReadPatientMessages(patient.id);
+      this.props.updatePatientSuccess({
+        patientId: patient.id,
+        patientCategoryId: category.id,
+        unreadMessageCount: 0,
+      });
       const options = {
         duration: 500,
       };
@@ -304,6 +311,7 @@ const mapDispatchToProps = (dispatch) => (
     setFormValueByName: (name, attrName, value) => dispatch(change(name, attrName, value)),
     touchSchedulePatientModal: () => dispatch(touch('ScheduledPatientModal', ...fields)),
     submitSchedule: (data, fromCategoryId, scheduleCategoryId) => dispatch(submitSchedule(data, fromCategoryId, scheduleCategoryId)),
+    updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
   }
 );
 

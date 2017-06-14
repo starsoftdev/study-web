@@ -4,9 +4,9 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
-import { componentWillAppendToBody } from 'react-append-to-body';
 
 import img19 from '../../assets/images/img19.svg';
 
@@ -18,12 +18,6 @@ import {
   clearLanding,
 } from '../../../app/containers/App/actions';
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
-
-function MyComponent({ children }) {
-  return (
-    children
-  );
-}
 
 export class ThankYouPage extends React.Component {
 
@@ -62,7 +56,6 @@ export class ThankYouPage extends React.Component {
 
   render() {
     const landing = (this.state.landing) ? this.state.landing : this.props.landing;
-    const AppendedMyComponent = componentWillAppendToBody(MyComponent);
     let addressStr = null;
     const address = landing.address;
     const city = landing.city;
@@ -79,6 +72,8 @@ export class ThankYouPage extends React.Component {
       (thankYouData.lookingForwardText && thankYouData.lookingForwardText !== '') ? thankYouData.lookingForwardText : 'Looking forward to having you join.';
     const herIsTheText =
       (thankYouData.herIsThe && thankYouData.herIsThe !== '') ? thankYouData.herIsThe : 'Here is the study location:';
+    const visitOurWebsiteText =
+      (thankYouData.visitOurWebsiteText && thankYouData.visitOurWebsiteText !== '') ? thankYouData.visitOurWebsiteText : 'Visit our website:';
 
     if (address) {
       addressStr = `${landing.address}<br />`;
@@ -96,19 +91,18 @@ export class ThankYouPage extends React.Component {
       addressStr += ` ${zip}`;
     }
 
-    const markup = `
-      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-      document,'script','https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '914628025278184'); // Insert your pixel ID here.
-      fbq('track', 'PageView');`;
-
-    const inner = { __html: markup };
+    const thankyouFacebookPixel = 'https://s3.amazonaws.com/studykik-prod/facebookPixel/thankyouFacebookPixel.js';
 
     return (
       <div id="main">
+        <Helmet
+          script={[
+            {
+              type: 'text/javascript',
+              src: thankyouFacebookPixel,
+            },
+          ]}
+        />
         <div className="container">
           <section className="thanks-section text-center">
             <h1 className="main-heading small-font">
@@ -134,25 +128,17 @@ export class ThankYouPage extends React.Component {
               <p>{lookingForwardText}</p>
             </div>
             }
+            {thankYouData.websiteLink &&
+              <div>
+                <p>{visitOurWebsiteText} <a href={thankYouData.websiteLink} target="_blank">Click Here!</a></p>
+              </div>
+            }
             <div className="thanks-img">
               <img src={img19} alt="THANK YOU!" width="369" className="img-responsive center-block" />
               <h2 className="title-caption">THANK YOU!</h2>
             </div>
           </section>
         </div>
-        <AppendedMyComponent>
-          <div>
-            <script dangerouslySetInnerHTML={inner} />
-            <noscript>
-              <img
-                height="1"
-                width="1"
-                style={{ display:'none' }}
-                src="https://www.facebook.com/tr?id=914628025278184&ev=PageView&noscript=1"
-              />
-            </noscript>
-          </div>
-        </AppendedMyComponent>
       </div>
     );
   }

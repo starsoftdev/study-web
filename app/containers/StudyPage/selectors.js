@@ -53,6 +53,26 @@ export const selectCurrentPatientCategory = () => createSelector(
   }
 );
 
+export const selectCurrentPatientNotes = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => {
+    if (subState.patientCategories) {
+      const filteredPatientCategory = subState.patientCategories.filter(patientCategory => (
+        patientCategory.id === subState.currentPatientCategoryId
+      ))[0];
+      if (filteredPatientCategory && filteredPatientCategory.patients) {
+        const patient = filteredPatientCategory.patients.filter(patient => (
+          patient.id === subState.currentPatientId
+        ))[0];
+        if (patient.notes) {
+          return patient.notes;
+        }
+      }
+    }
+    return [];
+  }
+);
+
 export const selectCurrentPatient = () => createSelector(
   selectStudyPageDomain(),
   (subState) => {

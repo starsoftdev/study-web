@@ -1,6 +1,6 @@
 import {
   SET_EDIT_STUDY_FORM_VALUES,
-} from '../constants';
+} from '../../containers/HomePage/AdminDashboard/constants';
 
 export default function editStudyReducer(state = {}, action) {
   switch (action.type) {

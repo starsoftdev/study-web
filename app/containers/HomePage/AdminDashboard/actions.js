@@ -67,6 +67,9 @@ import {
   UPDATE_TWILIO_NUMBERS_ERROR,
   SET_HOVER_ROW_INDEX,
   SET_EDIT_STUDY_FORM_VALUES,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -337,6 +340,27 @@ export function fetchStudyCampaignsDashboardSuccess(payload) {
 export function fetchStudyCampaignsDashboardError(payload) {
   return {
     type: FETCH_STUDY_CAMPAIGNS_ERROR,
+    payload,
+  };
+}
+
+export function fetchCustomNotificationEmails(params) {
+  return {
+    type: FETCH_CUSTOM_NOTIFICATION_EMAILS,
+    params,
+  };
+}
+
+export function fetchCustomNotificationEmailsSuccess(payload) {
+  return {
+    type: FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchCustomNotificationEmailsError(payload) {
+  return {
+    type: FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
     payload,
   };
 }

@@ -68,7 +68,6 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     }
 
     this.state = {
-      uniqueId: '1',
       shoppingcartLoading: props.formSubmissionStatus.submitting,
     };
   }
@@ -118,16 +117,6 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
       stripeProductId: this.props.productList[0].stripeProductId,
       stripeCustomerId: this.props.currentUser.roleForClient.client.stripeCustomerId,
     });
-
-    if (this.state.uniqueId.length > 1) {
-      this.setState({
-        uniqueId: '1',
-      });
-    } else {
-      this.setState({
-        uniqueId: '11',
-      });
-    }
   }
 
   renderClientIRBAdCreation() {
@@ -136,7 +125,6 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     if (currentUser.roleForClient) {
       purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
     }
-    const { uniqueId } = this.state;
 
     if ((userRoleType === 'client' && purchasable) && productList[0]) {
       const addOns = [{
@@ -154,7 +142,6 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
               <div className="form-study row">
                 <div className="col-xs-6 form-holder">
                   <IrbAdCreationForm
-                    key={uniqueId}
                     siteLocations={siteLocations}
                     indications={indications}
                     initialValues={irbAdCreationDetail}
