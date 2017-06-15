@@ -44,8 +44,9 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const protocolNumber = this.props.location.query.protocol || null;
     const indication = this.props.location.query.indication || null;
     const cro = this.props.location.query.cro || null;
+    const messaging = this.props.location.query.messaging || null;
 
-    this.props.getReportsList({ sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro });
+    this.props.getReportsList({ sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging });
   }
 
   getPercentageObject(item) {

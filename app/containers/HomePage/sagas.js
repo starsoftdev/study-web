@@ -334,6 +334,10 @@ export function* fetchProtocolsWatcher() {
 
 export function* fetchProtocolsWorker(action) {
   try {
+    const limit = action.limit || 10;
+    const offset = action.offset || 0;
+    const sort = action.sort || null;
+    const order = action.order || null;
     const params = {
       method: 'GET',
       query: {
@@ -344,9 +348,22 @@ export function* fetchProtocolsWorker(action) {
     if (action.searchParams) {
       params.query.searchParams = JSON.stringify(action.searchParams);
     }
+    params.query.limit = limit;
+    params.query.offset = offset;
+    if (sort && order) {
+      params.query.orderBy = sort;
+      params.query.orderDir = ((order === 'down') ? 'DESC' : 'ASC');
+    }
     const requestURL = `${API_URL}/protocols/protocolsForHomePage`;
     const response = yield call(request, requestURL, params);
-    yield put(protocolsFetched(response));
+
+    let hasMore = true;
+    const page = (offset / 10) + 1;
+    if (response.length < 10) {
+      hasMore = false;
+    }
+
+    yield put(protocolsFetched(response, hasMore, page));
   } catch (err) {
     yield put(protocolsFetchingError(err));
   }
