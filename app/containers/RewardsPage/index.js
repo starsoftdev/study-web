@@ -124,7 +124,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     if (selectedSite && selectedSite !== '0') {
       const siteDetail = find(this.props.sites, { id: selectedSite });
       return (
-        <h3 className="pull-left">{siteDetail.location} Has <strong>{rewardsBalance[selectedSite]} KIKs</strong></h3>
+        <h3 className="pull-left">{siteDetail.name} Has <strong>{rewardsBalance[selectedSite]} KIKs</strong></h3>
       );
     }
 
