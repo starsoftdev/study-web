@@ -19,7 +19,7 @@ import _ from 'lodash';
 import { selectUserRoleType, selectCurrentUserClientId, selectCurrentUser } from '../../containers/App/selectors';
 import { fetchClientSites, fetchLevels } from '../../containers/App/actions';
 import { fetchStudies, clearStudiesCollection, fetchProtocols, fetchProtocolNumbers, fetchIndications } from './actions';
-import { selectStudies, selectSearchProtocolsFormValues, selectQueryParams } from '../../containers/HomePage/selectors';
+import { selectStudies, selectSearchProtocolsFormValues, selectQueryParams, selectPaginationOptions } from '../../containers/HomePage/selectors';
 
 import Dashboard from './Dashboard';
 import SponsorDashboard from './SponsorDashboard';
@@ -46,14 +46,20 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     userRoleType: PropTypes.string,
     queryParams: PropTypes.object,
     searchProtocolsFormValues: PropTypes.object,
+    paginationOptions: React.PropTypes.object,
   };
 
   constructor(props) {
     super(props);
 
+    this.state = {
+      filters: null,
+    };
+
     this.searchStudies = this.searchStudies.bind(this);
     this.searchProtocols = this.searchProtocols.bind(this);
     this.gotoListNewStudy = this.gotoListNewStudy.bind(this);
+    this.loadProtocols = this.loadProtocols.bind(this);
   }
 
   componentWillMount() {
@@ -98,11 +104,24 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     const { currentUser, fetchProtocols, searchProtocolsFormValues } = this.props;
 
     const filters = _.assign(searchProtocolsFormValues, searchParams);
-    fetchProtocols(currentUser.roleForSponsor.id, filters);
+    this.setState({ filters });
+    fetchProtocols(currentUser.roleForSponsor.id, filters, 10, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
   }
 
   gotoListNewStudy() {
     browserHistory.push('/app/list-new-study');
+  }
+
+  loadProtocols(isSort, sort, direction) {
+    const { currentUser, fetchProtocols } = this.props;
+
+    let offset = 0;
+    if (!isSort) {
+      offset = this.props.paginationOptions.page * 10;
+    }
+    const limit = 10;
+
+    fetchProtocols(currentUser.roleForSponsor.id, this.state.filters, limit, offset, (sort || null), (direction || null));
   }
 
   render() {
@@ -143,7 +162,9 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
                 {/* <Link to="/app/add-credits" className="btn btn-primary btn-list-new-study pull-right"><i className="icomoon-icon_creditcard" /> Add Credits</Link> */}
                 {/* <Link to="/app/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Protocol</Link> */}
               </div>
-              <ProtocolsList />
+              <ProtocolsList
+                loadProtocols={this.loadProtocols}
+              />
             </section>
           </div>
           )
@@ -165,6 +186,7 @@ const mapStateToProps = createStructuredSelector({
   currentUserClientId: selectCurrentUserClientId(),
   userRoleType: selectUserRoleType(),
   searchProtocolsFormValues: selectSearchProtocolsFormValues(),
+  paginationOptions: selectPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -173,7 +195,7 @@ function mapDispatchToProps(dispatch) {
     fetchLevels: () => dispatch(fetchLevels()),
     fetchStudies: (currentUser, searchParams) => dispatch(fetchStudies(currentUser, searchParams)),
     clearStudiesCollection: () => dispatch(clearStudiesCollection()),
-    fetchProtocols: (sponsorRoleId, searchParams) => dispatch(fetchProtocols(sponsorRoleId, searchParams)),
+    fetchProtocols: (sponsorRoleId, searchParams, limit, offset, sort, order) => dispatch(fetchProtocols(sponsorRoleId, searchParams, limit, offset, sort, order)),
     fetchProtocolNumbers: (sponsorRoleId) => dispatch(fetchProtocolNumbers(sponsorRoleId)),
     fetchIndications: (currentUser) => dispatch(fetchIndications(currentUser)),
   };

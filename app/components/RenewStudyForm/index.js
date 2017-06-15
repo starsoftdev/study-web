@@ -96,9 +96,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     }
 
     if (!this.props.selectedStudy && newProps.selectedStudy) {
-      if (newProps.selectedStudy.campaignLastDate && moment(newProps.selectedStudy.campaignLastDate).isAfter(moment())) {
+      if (newProps.selectedStudy.latestDateTo && moment(newProps.selectedStudy.latestDateTo).isAfter(moment())) {
         const { selectedStudy } = newProps;
-        const minDate = moment(selectedStudy.campaignLastDate).add(1, 'days');
+        const minDate = moment(selectedStudy.latestDateTo).add(1, 'days');
         this.setState({
           minDate,
           initDate: minDate,
