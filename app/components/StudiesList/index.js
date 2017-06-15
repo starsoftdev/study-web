@@ -128,12 +128,26 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const oldExposureLevelOfRenewStudy = this.props.renewStudyFormValues.exposureLevel;
     const newLevelOfUpgradeStudy = newProps.upgradeStudyFormValues.level;
     const oldLevelOfUpgradeStudy = this.props.upgradeStudyFormValues.level;
-
-    // console.log(newProps.studies);
+    const studies = this.props.studies;
+    const queryParams = this.props.queryParams;
 
     if (!newRenewedStudy.submitting && oldRenewedStudy.submitting) {
       this.closeRenewModal();
-      this.props.fetchStudies(this.props.currentUser);
+      let allowFetch = false;
+
+      if (queryParams.status === 'Active') {
+        allowFetch = (studies.active > queryParams.skip);
+      } else if (queryParams.status === 'Inactive') {
+        allowFetch = (studies.inactive > queryParams.skip);
+      } else {
+        allowFetch = (studies.total > queryParams.skip);
+      }
+
+      if (queryParams.hasMoreItems && !studies.fetching && allowFetch) {
+        const params = queryParams;
+        params.filter = false;
+        this.props.fetchStudies(this.props.currentUser, params);
+      }
     }
 
     if (!newUpgradedStudy.submitting && oldUpgradedStudy.submitting) {
