@@ -116,6 +116,8 @@ const initialState = {
   paginationOptions: {
     activeSort: null,
     activeDirection: null,
+    hasMoreItems: true,
+    page: 1,
   },
   queryParams: {
     filter: false,
@@ -148,6 +150,8 @@ export default function homePageReducer(state = initialState, action) {
   let newState;
   let protocols;
   let queryParams;
+  const protocolsCopy = _.cloneDeep(state.protocols.details);
+  let newProtocolsList = [];
 
   switch (action.type) {
     case FETCH_PATIENT_SIGN_UPS_SUCCEESS:
@@ -298,18 +302,35 @@ export default function homePageReducer(state = initialState, action) {
       return {
         ...state,
         protocols: {
-          details: [],
+          details: state.protocols.details,
           fetching: true,
           error: null,
         },
+        paginationOptions: {
+          activeSort: state.paginationOptions.activeSort,
+          activeDirection: state.paginationOptions.activeDirection,
+          hasMoreItems: false,
+          page: state.paginationOptions.page,
+        },
       };
     case FETCH_PROTOCOLS_SUCCESS:
+      if (action.page === 1) {
+        newProtocolsList = action.payload;
+      } else {
+        newProtocolsList = protocolsCopy.concat(action.payload);
+      }
       return {
         ...state,
         protocols: {
-          details: payload,
+          details: newProtocolsList,
           fetching: false,
           error: null,
+        },
+        paginationOptions: {
+          activeSort: state.paginationOptions.activeSort,
+          activeDirection: state.paginationOptions.activeDirection,
+          hasMoreItems: action.hasMoreItems,
+          page: action.page,
         },
       };
     case FETCH_PROTOCOLS_ERROR:
@@ -507,6 +528,8 @@ export default function homePageReducer(state = initialState, action) {
         paginationOptions: {
           activeSort: action.sort,
           activeDirection: action.direction,
+          hasMoreItems: state.paginationOptions.hasMoreItems,
+          page: state.paginationOptions.page,
         },
       };
     case SORT_SUCCESS:

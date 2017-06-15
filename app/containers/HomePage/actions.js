@@ -108,18 +108,24 @@ export function studiesFetchingError(payload) {
   };
 }
 
-export function fetchProtocols(sponsorRoleId, searchParams) {
+export function fetchProtocols(sponsorRoleId, searchParams, limit, offset, sort, order) {
   return {
     type: FETCH_PROTOCOLS,
     sponsorRoleId,
     searchParams,
+    limit,
+    offset,
+    sort,
+    order,
   };
 }
 
-export function protocolsFetched(payload) {
+export function protocolsFetched(payload, hasMoreItems, page) {
   return {
     type: FETCH_PROTOCOLS_SUCCESS,
     payload,
+    hasMoreItems,
+    page,
   };
 }
 
