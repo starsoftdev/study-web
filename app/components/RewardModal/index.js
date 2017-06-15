@@ -94,7 +94,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
     if (selectedSite && selectedSite !== '0') {
       const siteDetail = find(this.props.sites, { id: selectedSite });
       return (
-        <label htmlFor="select-rewards" className="text-capitalize">{siteDetail.location} Has <strong>{rewardsBalance[selectedSite]} KIKs</strong></label>
+        <label htmlFor="select-rewards" className="text-capitalize">{siteDetail.name} Has <strong>{rewardsBalance[selectedSite]} KIKs</strong></label>
       );
     }
 
