@@ -1,7 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import _ from 'lodash';
+import InfiniteScroll from 'react-infinite-scroller';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 import { selectCurrentUser } from '../../App/selectors';
 import { setActiveSort, sortSuccess, addNewMessageForProtocol } from '../actions';
@@ -20,6 +21,7 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
     sortSuccess: PropTypes.func,
     socket: React.PropTypes.any,
     addNewMessageForProtocol: PropTypes.func,
+    loadProtocols: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -30,6 +32,7 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
     };
 
     this.sortBy = this.sortBy.bind(this);
+    this.loadItems = this.loadItems.bind(this);
   }
 
   componentDidMount() {
@@ -50,7 +53,6 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
     ev.preventDefault();
     let sort = ev.currentTarget.dataset.sort;
     let direction = 'up';
-    const defaultSort = 'protocolNumber';
 
     if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
       direction = 'down';
@@ -61,11 +63,16 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
 
     this.props.setActiveSort(sort, direction);
 
-    const dir = ((direction === 'down') ? 'desc' : 'asc');
+   /* const dir = ((direction === 'down') ? 'desc' : 'asc');
     const sorted = _.orderBy(this.props.protocols.details, [function (o) {
       return o[(sort || defaultSort)];
     }], [dir]);
-    this.props.sortSuccess(sorted);
+    this.props.sortSuccess(sorted);*/
+    this.props.loadProtocols(true, sort, direction);
+  }
+
+  loadItems() {
+    this.props.loadProtocols(false);
   }
 
   renderProtocols() {
@@ -111,9 +118,18 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
             </thead>
           </table>
         </div>
-        <table className="table table-messaging-suite">
-          {this.renderProtocols()}
-        </table>
+        <InfiniteScroll
+          className="test-test"
+          pageStart={0}
+          loadMore={this.loadItems}
+          initialLoad={false}
+          hasMore={this.props.paginationOptions.hasMoreItems}
+          loader={<div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
+        >
+          <table className="table table-messaging-suite">
+            {this.renderProtocols()}
+          </table>
+        </InfiniteScroll>
       </section>
     );
   }
