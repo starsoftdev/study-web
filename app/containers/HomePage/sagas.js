@@ -1041,6 +1041,7 @@ export function* homePageSaga() {
     yield cancel(watcherB);
     if (watcherD) {
       yield cancel(watcherD);
+      watcherD = false;
     }
     yield cancel(watcherE);
     yield cancel(watcherF);
