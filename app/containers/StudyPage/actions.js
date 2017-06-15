@@ -148,7 +148,6 @@ export function fetchPatients(studyId, text, campaignId, sourceId) {
   };
 }
 
-
 export function exportPatients(studyId, text, campaignId, sourceId) {
   return {
     type: EXPORT_PATIENTS,
