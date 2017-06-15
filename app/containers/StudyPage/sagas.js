@@ -318,6 +318,9 @@ export function* exportPatients() {
 
     try {
       let requestURL = `${API_URL}/studies/${studyId}/getPatientsForDB`;
+      if (authToken) {
+        requestURL += `?access_token=${authToken}`;
+      }
       if (campaignId) {
         requestURL += `&campaignId=${campaignId}`;
       }
