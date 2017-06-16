@@ -11,7 +11,7 @@ import { createStructuredSelector } from 'reselect';
 
 import ReportViewInfo from '../../containers/ReportViewPage/ReportViewInfo';
 import ReportViewTotals from '../../containers/ReportViewPage/ReportViewTotals';
-import ReportViewSearch from '../../containers/ReportViewPage/ReportViewSearch';
+import ReportViewSearch from '../../components/ReportViewSearch';
 import ReportViewTable from '../../containers/ReportViewPage/ReportViewTable';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
@@ -70,8 +70,9 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const protocolNumber = this.props.location.query.protocol || null;
     const indication = this.props.location.query.indication || null;
     const cro = this.props.location.query.cro || null;
+    const messaging = this.props.location.query.messaging || null;
 
-    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro };
+    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging };
 
     filters = _.assign(filters, this.props.formValues, searchFilter);
 
@@ -102,6 +103,9 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
         />
         <ReportViewSearch
           searchReports={this.searchReports}
+          reportsList={this.props.reportsList}
+          location={this.props.location}
+          currentUser={this.props.currentUser}
           formValues={this.props.formValues}
         />
         <ReportViewTable
