@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import { defaultRanges, DateRange } from 'react-date-range';
+import _ from 'lodash';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 
@@ -95,6 +96,20 @@ export class ReportViewSearch extends React.Component {
     this.hidePopup();
   }
 
+  download(ev) {
+    ev.preventDefault();
+    const { exportStudies, currentUser, formValues } = this.props;
+    const protocolNumber = this.props.location.query.protocol || null;
+    const indication = this.props.location.query.indication || null;
+    const cro = this.props.location.query.cro || null;
+    const messaging = this.props.location.query.messaging || null;
+
+    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging };
+    filters = _.assign(filters, this.props.formValues, formValues);
+
+    exportStudies(filters);
+  }
+
   renderDateFooter() {
     const { predefined } = this.state;
     if (predefined.startDate) {
@@ -113,20 +128,6 @@ export class ReportViewSearch extends React.Component {
       );
     }
     return null;
-  }
-
-  download(ev) {
-    ev.preventDefault();
-    const { reportsList, exportStudies, currentUser, formValues } = this.props;
-    const protocolNumber = this.props.location.query.protocol || null;
-    const indication = this.props.location.query.indication || null;
-    const cro = this.props.location.query.cro || null;
-    const messaging = this.props.location.query.messaging || null;
-
-    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging };
-    filters = _.assign(filters, this.props.formValues, formValues);
-
-    exportStudies(filters);
   }
 
   render() {
