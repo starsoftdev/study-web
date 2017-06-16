@@ -86,7 +86,7 @@ export function* exportStudiesWorker(action) {
 
   try {
     const queryString = composeQueryString(action.payload);
-    let requestURL = `${API_URL}/studies/getStudiesForDB?access_token=${authToken}&${queryString}`;
+    const requestURL = `${API_URL}/studies/getStudiesForDB?access_token=${authToken}&${queryString}`;
     location.replace(`${requestURL}`);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
