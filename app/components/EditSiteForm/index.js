@@ -180,33 +180,6 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
           </div>
           <div className="field-row">
             <strong className="label required">
-              <label>PRINCIPAL INVESTIGATOR</label>
-            </strong>
-            <div className="field">
-              <div className="row">
-                <div className="col pull-left">
-                  <Field
-                    name="piFirstName"
-                    component={Input}
-                    type="text"
-                    placeholder="First Name"
-                    disabled={savedSite.saving}
-                  />
-                </div>
-                <div className="col pull-left">
-                  <Field
-                    name="piLastName"
-                    component={Input}
-                    type="text"
-                    placeholder="Last Name"
-                    disabled={savedSite.saving}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label required">
               <label>SITE PHONE</label>
             </strong>
             <div className="field">

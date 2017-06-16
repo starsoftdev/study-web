@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
 import { map, cloneDeep } from 'lodash';
-import classNames from 'classnames';
 
 import { normalizePhoneDisplay, normalizePhoneForServer } from '../../../app/common/helper/functions';
 import CenteredModal from '../../components/CenteredModal/index';
@@ -236,10 +235,6 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                   <tr>
                     <th className={this.getColumnSortClassName('name')} onClick={() => { this.clickSortHandler('name'); }}>
                       <span>SITE NAME</span>
-                      <i className="caret-arrow" />
-                    </th>
-                    <th className={classNames('th-top-arrow', this.getColumnSortClassName('principalInvestigator'))} onClick={() => { this.clickSortHandler('principalInvestigator'); }}>
-                      <span>PRINCIPAL INVESTIGATOR</span>
                       <i className="caret-arrow" />
                     </th>
                     <th className={this.getColumnSortClassName('phoneNumber')} onClick={() => { this.clickSortHandler('phoneNumber'); }}>
