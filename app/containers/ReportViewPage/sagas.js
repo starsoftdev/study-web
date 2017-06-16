@@ -78,7 +78,6 @@ export function* exportStudiesWatcher() {
 }
 
 export function* exportStudiesWorker(action) {
-  const { studyId, text, campaignId, sourceId } = action.payload;
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
