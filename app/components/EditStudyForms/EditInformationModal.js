@@ -556,6 +556,31 @@ export class EditInformationModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row">
+                  <strong className="label required">
+                    <label>PRINCIPAL INVESTIGATOR</label>
+                  </strong>
+                  <div className="field">
+                    <div className="row">
+                      <div className="col pull-left dashboard-edit-study-pi">
+                        <Field
+                          name="piFirstName"
+                          component={Input}
+                          type="text"
+                          placeholder="First Name"
+                        />
+                      </div>
+                      <div className="col pull-left dashboard-edit-study-pi">
+                        <Field
+                          name="piLastName"
+                          component={Input}
+                          type="text"
+                          placeholder="Last Name"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="field-row">
                   <strong className="label"><label>EMAIL NOTIFICATIONS</label></strong>
                   <div className="field">
                     <div className="emails-list-holder">

@@ -2,8 +2,6 @@ import { validatorFactory } from '../../utils/reduxForm';
 
 const schema = {
   name: { presence: true },
-  piFirstName: { presence: true },
-  piLastName: { presence: true },
   phoneNumber: {
     presence: {
       message: '^Phone number cannot be blank',
