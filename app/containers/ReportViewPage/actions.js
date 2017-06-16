@@ -13,6 +13,7 @@ import {
   CHANGE_PROTOCOL_STATUS,
   CHANGE_PROTOCOL_STATUS_SUCCESS,
   CHANGE_PROTOCOL_STATUS_ERROR,
+  EXPORT_STUDIES,
 } from './constants';
 
 export function getReportsList(searchParams) {
@@ -68,6 +69,13 @@ export function changeProtocolStatusSuccess(payload) {
 export function changeProtocolStatusError(payload) {
   return {
     type: CHANGE_PROTOCOL_STATUS_ERROR,
+    payload,
+  };
+}
+
+export function exportStudies(payload) {
+  return {
+    type: EXPORT_STUDIES,
     payload,
   };
 }

@@ -7,17 +7,22 @@ import { defaultRanges, DateRange } from 'react-date-range';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 
-import CenteredModal from '../../../components/CenteredModal/index';
-import ReactSelect from '../../../components/Input/ReactSelect';
-import Input from '../../../components/Input/index';
+import CenteredModal from '../CenteredModal/index';
+import ReactSelect from '../Input/ReactSelect';
+import Input from '../Input/index';
+import { exportStudies } from '../../containers/ReportViewPage/actions';
 
 @reduxForm({ form: 'searchReports' })
 
 export class ReportViewSearch extends React.Component {
   static propTypes = {
+    location: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
     searchReports: PropTypes.func,
+    exportStudies: PropTypes.func,
     formValues: PropTypes.object,
+    currentUser: PropTypes.object,
+    reportsList: PropTypes.object,
   }
 
   constructor(props) {
@@ -39,6 +44,7 @@ export class ReportViewSearch extends React.Component {
     this.handleChange = this.handleChange.bind(this, 'predefined');
     this.changeRange = this.changeRange.bind(this);
     this.renderDateFooter = this.renderDateFooter.bind(this);
+    this.download = this.download.bind(this);
   }
 
   handleChange(which, payload) {
@@ -109,6 +115,20 @@ export class ReportViewSearch extends React.Component {
     return null;
   }
 
+  download(ev) {
+    ev.preventDefault();
+    const { reportsList, exportStudies, currentUser, formValues } = this.props;
+    const protocolNumber = this.props.location.query.protocol || null;
+    const indication = this.props.location.query.indication || null;
+    const cro = this.props.location.query.cro || null;
+    const messaging = this.props.location.query.messaging || null;
+
+    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging };
+    filters = _.assign(filters, this.props.formValues, formValues);
+
+    exportStudies(filters);
+  }
+
   render() {
     const testOptions = [
       {
@@ -141,7 +161,7 @@ export class ReportViewSearch extends React.Component {
         <div className="btns-area pull-right full-width">
           {/* TODO: remove tmp styles */}
           <div className="col pull-right">
-            <a disabled className="btn btn-primary lightbox-opener"><i className="icon-icon_download" /> download</a>
+            <a className="btn btn-primary lightbox-opener" onClick={this.download}><i className="icon-icon_download" /> download</a>
           </div>
           <div className="col pull-right">
             <a disabled className="btn btn-primary lightbox-opener"><i className="icon-icon_creditcard" /> add credits</a>
@@ -231,7 +251,11 @@ export class ReportViewSearch extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({});
-const mapDispatchToProps = {};
+function mapDispatchToProps(dispatch) {
+  return {
+    exportStudies: (payload) => dispatch(exportStudies(payload)),
+  };
+}
 
 export default connect(
   mapStateToProps,
