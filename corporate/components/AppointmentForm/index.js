@@ -17,6 +17,7 @@ export class AppointmentForm extends React.Component { // eslint-disable-line re
     dates: PropTypes.array,
     footer: PropTypes.object,
     header: PropTypes.object,
+    submitDisabled: PropTypes.bool,
   };
 
   constructor(props) {
@@ -110,7 +111,7 @@ export class AppointmentForm extends React.Component { // eslint-disable-line re
             </div>
           </div>
           <div className="field-row">
-            <input type="submit" value="Finish Appointment" className="btn btn-default btn-block input-lg" />
+            <input disabled={this.props.submitDisabled} type="submit" value="Finish Appointment" className="btn btn-default btn-block input-lg" />
           </div>
           {this.props.footer}
         </div>
