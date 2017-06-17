@@ -8,6 +8,7 @@ import Helmet from 'react-helmet';
 import moment from 'moment';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
+import LoadingSpinner from '../../../app/components/LoadingSpinner';
 import AppointmentForm from '../../components/AppointmentForm';
 import img19 from '../../assets/images/img19.svg';
 
@@ -92,6 +93,7 @@ export class ThankYouPage extends React.Component {
       phone: this.state.subscribedFromLanding.phone,
       appt_date: moment(values.date).format('dddd') + '|' + moment(values.date).format('YYYY-MM-DD'),
       appt_time: values.time,
+      patientId: this.state.subscribedFromLanding.id,
     };
     this.props.submitCns(submitValues);
   }
@@ -156,12 +158,15 @@ export class ThankYouPage extends React.Component {
             onSubmit={this.submitAppointment}
             dates={dates}
             footer={<div className="text-center"><div className="appointment-footer-first">We are located at:</div><div className="txt-green">
-              {(this.props.cnsInfo.details ? this.props.cnsInfo.details.site_address : '') + ' ' + (this.props.cnsInfo.details ? this.props.cnsInfo.details.site_address2 : '')}
+              {(this.props.cnsInfo.details.site_address || '') + ' ' + (this.props.cnsInfo.details.site_address2 || '')}
             </div>
               <div className="txt-green">
                 {(this.props.cnsInfo.details.city || '') + ' ' + (this.props.cnsInfo.details.state || '') + ' ' + (this.props.cnsInfo.details.zip || '')}
-              </div></div>}
+              </div>
+              { (!this.props.cnsInfo.details.site_address && !this.props.cnsInfo.details.site_address2) && <div><LoadingSpinner showOnlyIcon /></div>}
+            </div>}
             header={<div className="text-center"><div className="appointment-header-first">Just one more step, {this.state.subscribedFromLanding.firstName}!</div><div className="appointment-header-second">Pick a date and time for your free consultation at CNS Healthcare:</div></div>}
+            submitDisabled={this.props.cnsSubmitProcess.submitting}
           />
         }
 

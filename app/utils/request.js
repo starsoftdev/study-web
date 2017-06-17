@@ -2,6 +2,7 @@
 
 import 'whatwg-fetch';
 import { pick } from 'lodash';
+import retry from 'async-retry';
 
 import { getItem, removeItem } from './localStorage';
 
@@ -41,11 +42,23 @@ export default function request(url, options = {}) {
 
   options.headers = Object.assign({}, headers, options.headers ); // eslint-disable-line
 
-  return fetch(newUrl, options)
+
+  return retry(async () => {
+    // if anything throws, we retry
+    const res = await fetch(newUrl, options);
+
+    if (res.status === 503) {
+      const err = pick(res, ['status', 'statusText']);
+      throw Object.assign(err, { message: 'Unable to handle the request.' });
+    }
+
+    return res;
+  }, {
+    retries: 1,
+  })
     .then(checkStatus)
     .then(parseJSON)
     .then((data) => data);
-  // .catch((err) => err);
 }
 
 /**
