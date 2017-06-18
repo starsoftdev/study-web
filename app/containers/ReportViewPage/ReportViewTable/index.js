@@ -124,6 +124,11 @@ export class ReportViewTable extends React.Component {
         inActive++;
       }
       const landingHref = item.url ? `/${item.study_id}-${item.url.toLowerCase().replace(/ /ig, '-')}` : '';
+      let piName = 'N/A';
+      if (item.principalinvestigatorfirstname && item.principalinvestigatorlastname) {
+        piName = `${item.principalinvestigatorfirstname} ${item.principalinvestigatorlastname}`;
+      }
+
       return (
         <tr
           onMouseOver={(e) => this.mouseOverRow(e, index)}
@@ -139,7 +144,7 @@ export class ReportViewTable extends React.Component {
             <ReactTooltip id={`site-id-${index}`} type="info" class="tooltipClass" delayHide={500} effect="solid" />
           </td>
           <td>
-            <a data-for={`study-id-${index}`} target="_blank" data-tip={item.study_id} href={landingHref} className="tooltip-element">{`${item.principalinvestigatorfirstname} ${item.principalinvestigatorlastname}`}</a>
+            <a data-for={`study-id-${index}`} target="_blank" data-tip={item.study_id} href={landingHref} className="tooltip-element">{`${piName}`}</a>
             <ReactTooltip id={`study-id-${index}`} type="info" class="tooltipClass" delayHide={500} effect="solid" />
           </td>
           <td>{item.level}</td>
