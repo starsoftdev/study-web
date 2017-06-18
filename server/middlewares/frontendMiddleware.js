@@ -102,6 +102,8 @@ const addProdMiddlewares = (app, options) => {
 
   app.get('/app*', (req, res) => res.sendFile(path.resolve(outputPath, 'app.html')));
 
+  app.get('/lv10', (req, res) => res.redirect(301, 'https://studykik.com/4000162-lv10'));
+
   // TODO remove after loader.io is verified
   app.get('/loaderio-9719d1a0d138bda492e5d8e90a243c6e', (req, res) => {
     res.send('loaderio-9719d1a0d138bda492e5d8e90a243c6e');
