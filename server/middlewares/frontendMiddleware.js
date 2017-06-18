@@ -57,6 +57,8 @@ const addDevMiddlewares = (app, webpackConfig) => {
   // artifacts, we use it instead
   const fs = middleware.fileSystem;
 
+  app.get('/lv10', (req, res) => res.redirect(301, 'https://studykik.com/4000162-lv10'));
+
   app.get('/app*', (req, res) => {
     fs.readFile(path.join(compiler.outputPath, 'app.html'), (err, file) => {
       if (err) {

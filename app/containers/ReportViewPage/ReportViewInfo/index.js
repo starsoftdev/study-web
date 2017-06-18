@@ -75,7 +75,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
                 <img width="141" height="119" alt=" " src={graphImage} />
               </div>
               <div className="textbox">
-                <h2>PATIENT <br />SIGN UPS</h2>
+                <h2>PATIENT <br />MESSAGES</h2>
               </div>
             </div>
           </div>
