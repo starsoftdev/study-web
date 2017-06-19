@@ -64,7 +64,7 @@ export const selectCurrentPatientNotes = () => createSelector(
         const patient = filteredPatientCategory.patients.filter(patient => (
           patient.id === subState.currentPatientId
         ))[0];
-        if (patient.notes) {
+        if (patient && patient.notes) {
           return patient.notes;
         }
       }
