@@ -228,7 +228,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     this.setState({ prevTotalsFilters: {} });
     this.setState({ prevOffset: null });
-    this.props.fetchTotalsDashboard({}, 10, 0);
+    // this.props.fetchTotalsDashboard({}, 10, 0);
     // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
   }
 
