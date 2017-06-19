@@ -1,5 +1,6 @@
 /* eslint-disable comma-dangle, no-case-declarations */
 import _, { concat, cloneDeep } from 'lodash';
+import moment from 'moment-timezone';
 
 import {
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
@@ -8,6 +9,7 @@ import {
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
+  UPDATE_STUDY_LATEST_END_DATE,
   CLEAR_STUDIES_COLLECTION,
   FETCH_PROTOCOLS,
   FETCH_PROTOCOLS_SUCCESS,
@@ -152,6 +154,7 @@ export default function homePageReducer(state = initialState, action) {
   let queryParams;
   const protocolsCopy = _.cloneDeep(state.protocols.details);
   let newProtocolsList = [];
+  let studiesCollection = [];
 
   switch (action.type) {
     case FETCH_PATIENT_SIGN_UPS_SUCCEESS:
@@ -238,7 +241,7 @@ export default function homePageReducer(state = initialState, action) {
       };
     case FETCH_STUDIES_SUCCESS:
       queryParams = state.queryParams;
-      const studiesCollection = (queryParams.skip) ? concat(state.studies.details, payload.studies) : payload.studies;
+      studiesCollection = (queryParams.skip) ? concat(state.studies.details, payload.studies) : payload.studies;
 
       return {
         ...state,
@@ -275,6 +278,35 @@ export default function homePageReducer(state = initialState, action) {
           hasMoreItems: true,
           limit: 15,
           skip: 0,
+        },
+      };
+    case UPDATE_STUDY_LATEST_END_DATE:
+      studiesCollection = state.studies.details;
+      const index = _.findIndex(studiesCollection, (o) => o.studyId === payload.studyId);
+
+      if (index !== -1) {
+        const campaignLengthUnit = 'days';
+        let campaignLength = 30 * payload.campaignLength;
+        if (payload.condenseTwoWeeks) {
+          campaignLength = 14;
+        }
+        const latestDateTo = moment(payload.startDate).endOf('day').add(
+          campaignLength - 1,
+          campaignLengthUnit
+        );
+
+        studiesCollection[index].latestDateTo = latestDateTo.format();
+      }
+
+      return {
+        ...state,
+        studies: {
+          details: studiesCollection,
+          total: state.studies.total || 0,
+          active: state.studies.active || 0,
+          inactive: state.studies.inactive || 0,
+          fetching: false,
+          error: null,
         },
       };
     case CLEAR_STUDIES_COLLECTION:

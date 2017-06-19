@@ -11,6 +11,7 @@ export const FETCH_STUDIES                               = 'HomePage/Viewport/FE
 export const FETCH_STUDIES_SUCCESS                       = 'HomePage/Viewport/FETCH_STUDIES_SUCCESS';
 export const FETCH_STUDIES_ERROR                         = 'HomePage/Viewport/FETCH_STUDIES_ERROR';
 export const CLEAR_STUDIES_COLLECTION                    = 'HomePage/Viewport/CLEAR_STUDIES_COLLECTION';
+export const UPDATE_STUDY_LATEST_END_DATE                = 'HomePage/Viewport/UPDATE_STUDY_LATEST_END_DATE';
 
 export const FETCH_PROTOCOLS                             = 'HomePage/Viewport/FETCH_PROTOCOLS';
 export const FETCH_PROTOCOLS_SUCCESS                     = 'HomePage/Viewport/FETCH_PROTOCOLS_SUCCESS';
