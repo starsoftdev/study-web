@@ -57,7 +57,7 @@ const addDevMiddlewares = (app, webpackConfig) => {
   // artifacts, we use it instead
   const fs = middleware.fileSystem;
 
-  app.get('/lv10', (req, res) => res.redirect(301, 'https://studykik.com/4000162-lv10'));
+  app.get('/lv10', (req, res) => res.redirect(301, 'https://studykik.com/4000175-kik-site'));
 
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
@@ -104,7 +104,7 @@ const addProdMiddlewares = (app, options) => {
 
   app.get('/app*', (req, res) => res.sendFile(path.resolve(outputPath, 'app.html')));
 
-  app.get('/lv10', (req, res) => res.redirect(301, 'https://studykik.com/4000162-lv10'));
+  app.get('/lv10', (req, res) => res.redirect(301, 'https://studykik.com/4000175-kik-site'));
 
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
