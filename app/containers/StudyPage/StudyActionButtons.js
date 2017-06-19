@@ -25,6 +25,7 @@ class StudyActionButtons extends Component {
     resetTextBlastForm: PropTypes.func,
     resetAddPatientForm: PropTypes.func,
     ePMS: PropTypes.bool,
+    studyName: PropTypes.string,
   };
   constructor(props) {
     super(props);
@@ -153,6 +154,7 @@ class StudyActionButtons extends Component {
               onClose={this.closeTextBlastModal}
               onHide={this.toggleTextBlastModal}
               ePMS={this.props.ePMS}
+              studyName={this.props.studyName}
             />
           </span>
         </div>

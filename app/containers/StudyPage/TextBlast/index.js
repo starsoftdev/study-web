@@ -58,6 +58,8 @@ class TextBlastModal extends React.Component {
     submitTextBlast: React.PropTypes.func.isRequired,
     ePMS: React.PropTypes.bool,
     campaign: React.PropTypes.number,
+    studyName: React.PropTypes.string,
+    initialize: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -78,6 +80,14 @@ class TextBlastModal extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const message = `Hello, please respond yes or no if you are interested in a research study for ${this.props.studyName}`;
+    this.props.initialize({
+      message,
+    });
+    this.textAreaChange(message);
+  }
+
   closeModal() {
     this.setState({
       sourceDisable: true,
@@ -85,12 +95,9 @@ class TextBlastModal extends React.Component {
     this.props.onHide();
   }
 
-  textAreaChange() {
-    setTimeout(() => {
-      const value = this.textarea.value;
-      this.setState({ enteredCharactersLength: value ? value.length : 0 }, () => {
-      });
-    }, 0);
+  textAreaChange(message = '') {
+    const value = this.textarea ? this.textarea.value : message;
+    this.setState({ enteredCharactersLength: value ? value.length : 0 }, () => {});
   }
 
   selectCategory(checked, categoryId) {
