@@ -8,6 +8,7 @@ import {
   FETCH_STUDIES,
   FETCH_STUDIES_SUCCESS,
   FETCH_STUDIES_ERROR,
+  UPDATE_STUDY_LATEST_END_DATE,
   CLEAR_STUDIES_COLLECTION,
   FETCH_PROTOCOLS,
   FETCH_PROTOCOLS_SUCCESS,
@@ -104,6 +105,13 @@ export function studiesFetched(payload) {
 export function studiesFetchingError(payload) {
   return {
     type: FETCH_STUDIES_ERROR,
+    payload,
+  };
+}
+
+export function updateStudy(payload) {
+  return {
+    type: UPDATE_STUDY_LATEST_END_DATE,
     payload,
   };
 }

@@ -128,6 +128,7 @@ import {
   studyUpgradingError,
   studyEdited,
   studyEditingError,
+  updateStudy,
 } from './actions';
 
 // Bootstrap sagas
@@ -484,6 +485,12 @@ export function* renewStudyWorker(action) {
     yield put(fetchRewardsBalance(formValues.currentUser.roleForClient.client_id, formValues.currentUser.roleForClient.site_id));
     yield put(fetchClientCredits(formValues.user_id));
     yield put(studyRenewed(response));
+    yield put(updateStudy({
+      studyId,
+      condenseTwoWeeks: formValues.condenseTwoWeeks,
+      campaignLength: formValues.campaignLength,
+      startDate: (formValues.startDate ? formValues.startDate.format('YYYY-MM-DD') : null),
+    }));
     yield put(reset('renewStudy'));
     yield put(reset('shoppingCart'));
   } catch (err) {
