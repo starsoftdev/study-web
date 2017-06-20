@@ -345,7 +345,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
             <span>{source.order_number}</span>
           </td>
           <td>{dateWrapper}</td>
-          <td>{source.sitename}</td>
+          <td><span>{source.sitename}</span></td>
           <td>{proposalLink}</td>
           <td>{source.protocol}</td>
           <td>${(sub) ? `${(source.total / 100)}${sub}` : `${(source.total / 100).toFixed(2)}` }</td>
