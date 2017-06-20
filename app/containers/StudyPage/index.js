@@ -160,7 +160,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     }
     let studyName = study.name;
     if (study.indication && study.indication.name) {
-      studyName = study.indication.name
+      studyName = study.indication.name;
     }
     return (
       <div className="container-fluid no-padding">
