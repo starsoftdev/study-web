@@ -110,7 +110,12 @@ class Patient extends React.Component {
     const { connectDragSource, category, currentPatientId, onPatientClick, patient } = this.props;
     let patientPhone;
     if (patient.phone) {
-      patientPhone = formatPhone(patient.phone);
+      // phone number error will be ignored and the phone number will be displayed regardless, even though formatting is incorrect
+      try {
+        patientPhone = formatPhone(patient.phone);
+      } catch (err) {
+        patientPhone = patient.phone;
+      }
     }
     return connectDragSource(
       <li
