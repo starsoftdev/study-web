@@ -16,6 +16,9 @@ import {
   CHANGE_PROTOCOL_STATUS,
   CHANGE_PROTOCOL_STATUS_SUCCESS,
   CHANGE_PROTOCOL_STATUS_ERROR,
+  GET_REPORTS_TOTALS,
+  GET_REPORTS_TOTALS_SUCCESS,
+  GET_REPORTS_TOTALS_ERROR,
 } from './constants';
 
 const initialState = {
@@ -24,9 +27,16 @@ const initialState = {
     fetching: false,
     error: null,
   },
+  totals: {
+    details: {},
+    fetching: false,
+    error: null,
+  },
   paginationOptions: {
     activeSort: null,
     activeDirection: null,
+    hasMoreItems: true,
+    page: 1,
   },
   changeProtocolStatusProcess: {
     saving: false,
@@ -36,6 +46,9 @@ const initialState = {
 
 function reportViewPageReducer(state = initialState, action) {
   const reports = [];
+  let newReportsList = [];
+  const reportsCopy = _.cloneDeep(state.reportsList.details);
+
   let foundIndex = null;
   let copy = null;
   switch (action.type) {
@@ -46,6 +59,12 @@ function reportViewPageReducer(state = initialState, action) {
           details: state.reportsList.details,
           fetching: true,
           error: null,
+        },
+        paginationOptions: {
+          activeSort: state.paginationOptions.activeSort,
+          activeDirection: state.paginationOptions.activeDirection,
+          hasMoreItems: false,
+          page: state.paginationOptions.page,
         },
       };
     case GET_REPORTS_LIST_SUCCESS:
@@ -66,12 +85,24 @@ function reportViewPageReducer(state = initialState, action) {
         reports.push({ ...item, level, levelDateFrom, levelDateTo, count_index: index });
       });
 
+      if (action.page === 1) {
+        newReportsList = reports;
+      } else {
+        newReportsList = reportsCopy.concat(reports);
+      }
+
       return {
         ...state,
         reportsList: {
-          details: reports,
+          details: newReportsList,
           fetching: false,
           error: null,
+        },
+        paginationOptions: {
+          activeSort: state.paginationOptions.activeSort,
+          activeDirection: state.paginationOptions.activeDirection,
+          hasMoreItems: action.hasMoreItems,
+          page: action.page,
         },
       };
     case GET_REPORTS_LIST_ERROR:
@@ -83,12 +114,41 @@ function reportViewPageReducer(state = initialState, action) {
           error: action.payload,
         },
       };
+    case GET_REPORTS_TOTALS:
+      return {
+        ...state,
+        totals: {
+          details: {},
+          fetching: true,
+          error: null,
+        },
+      };
+    case GET_REPORTS_TOTALS_SUCCESS:
+      return {
+        ...state,
+        totals: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case GET_REPORTS_TOTALS_ERROR:
+      return {
+        ...state,
+        totals: {
+          details: {},
+          fetching: false,
+          error: action.payload,
+        },
+      };
     case SET_ACTIVE_SORT:
       return {
         ...state,
         paginationOptions: {
           activeSort: action.sort,
           activeDirection: action.direction,
+          hasMoreItems: state.paginationOptions.hasMoreItems,
+          page: state.paginationOptions.page,
         },
       };
     case SORT_REPORTS_SUCCESS:

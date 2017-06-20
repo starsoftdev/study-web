@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
 import ReactTooltip from 'react-tooltip';
-import _ from 'lodash';
+import InfiniteScroll from 'react-infinite-scroller';
 import classNames from 'classnames';
 import Toggle from '../../../components/Input/Toggle';
 import LoadingSpinner from '../../../components/LoadingSpinner';
@@ -24,6 +24,8 @@ export class ReportViewTable extends React.Component {
     changeProtocolStatus: PropTypes.func,
     changeProtocolStatusProcess: PropTypes.object,
     currentUser: PropTypes.object,
+    totals: PropTypes.object,
+    loadReports: PropTypes.func,
   }
 
   constructor(props) {
@@ -43,6 +45,8 @@ export class ReportViewTable extends React.Component {
     this.mouseOverRow = this.mouseOverRow.bind(this);
     this.mouseOutRow = this.mouseOutRow.bind(this);
     this.changeStatus = this.changeStatus.bind(this);
+
+    this.loadItems = this.loadItems.bind(this);
   }
 
   componentDidMount() {
@@ -77,7 +81,6 @@ export class ReportViewTable extends React.Component {
     ev.preventDefault();
     let sort = ev.currentTarget.dataset.sort;
     let direction = 'up';
-    const defaultSort = 'count_index';
 
     if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
       direction = 'down';
@@ -88,11 +91,7 @@ export class ReportViewTable extends React.Component {
 
     this.props.setActiveSort(sort, direction);
 
-    const dir = ((direction === 'down') ? 'desc' : 'asc');
-    const sortedPatients = _.orderBy(this.props.reportsList.details, [function (o) {
-      return o[sort || defaultSort];
-    }], [dir]);
-    this.props.sortReportsSuccess(sortedPatients);
+    this.props.loadReports(true, sort, direction);
   }
 
   mouseOverRow(e, index) {
@@ -109,20 +108,18 @@ export class ReportViewTable extends React.Component {
     }
   }
 
+  loadItems() {
+    this.props.loadReports(false);
+  }
 
   render() {
     const { reportsList } = this.props;
 
-    const total = reportsList.details.length;
-    let inActive = 0;
-    let active = 0;
+    const inActive = this.props.totals.details.total_inactive ? parseInt(this.props.totals.details.total_inactive) : 0;
+    const active = this.props.totals.details.total_active ? parseInt(this.props.totals.details.total_active) : 0;
+    const total = inActive + active;
 
     const leftPartTable = reportsList.details.map((item, index) => {
-      if (item.is_active) {
-        active++;
-      } else {
-        inActive++;
-      }
       const landingHref = item.url ? `/${item.study_id}-${item.url.toLowerCase().replace(/ /ig, '-')}` : '';
       let piName = 'N/A';
       if (item.principalinvestigatorfirstname && item.principalinvestigatorlastname) {
@@ -222,7 +219,7 @@ export class ReportViewTable extends React.Component {
                     <th onClick={this.sortBy} data-sort="principalinvestigatorfirstname" className={`th ${(this.props.paginationOptions.activeSort === 'principalinvestigatorfirstname') ? this.props.paginationOptions.activeDirection : ''}`}>PRINCIPAL INVESTIGATOR <i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="level" className={`th ${(this.props.paginationOptions.activeSort === 'level') ? this.props.paginationOptions.activeDirection : ''}`}>EXPOSURE LEVEL <i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="is_active" className={`th ${(this.props.paginationOptions.activeSort === 'is_active') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS <i className="caret-arrow" /></th>
-                    <th>CREDITs <i className="caret-arrow" /></th>
+                    <th onClick={this.sortBy} data-sort="credits" className={`th ${(this.props.paginationOptions.activeSort === 'credits') ? this.props.paginationOptions.activeDirection : ''}`}>CREDITs <i className="caret-arrow" /></th>
                   </tr>
                 </thead>
               </table>
@@ -261,53 +258,61 @@ export class ReportViewTable extends React.Component {
             </div>
           </div>
         </Sticky>
-        <div className="table-area">
-          <div className="table-left">
-            <table className="table">
-              <tbody>
-                {leftPartTable}
-              </tbody>
-            </table>
-          </div>
-          <div
-            className="table-right"
-            ref={(tableRight) => {
-              this.tableRight = tableRight;
-            }}
-          >
-            <div className="scroll-holder jcf-scrollable">
-              <div
-                className="table-inner"
-                onScroll={this.handleScroll}
-                ref={(rightDivParentHeader) => {
-                  this.rightDivParentHeader = rightDivParentHeader;
-                }}
-              >
-                <table
-                  className="table"
-                  ref={(tableRightElement) => {
-                    this.tableRightElement = tableRightElement;
-                  }}
-                >
-                  <tbody>
-                    {rightPartTable}
-                  </tbody>
-                </table>
-              </div>
+        <InfiniteScroll
+          className="test-test"
+          pageStart={0}
+          loadMore={this.loadItems}
+          initialLoad={false}
+          hasMore={this.props.paginationOptions.hasMoreItems}
+          loader={<div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
+        >
+          <div className="table-area">
+            <div className="table-left">
+              <table className="table">
+                <tbody>
+                  {leftPartTable}
+                </tbody>
+              </table>
             </div>
             <div
-              onScroll={this.handleScroll}
-              ref={(rightDiv) => {
-                this.rightDiv = rightDiv;
+              className="table-right"
+              ref={(tableRight) => {
+                this.tableRight = tableRight;
               }}
-              style={{ width: (this.state.fixedScrollWidth || 'auto') }}
-              className={classNames('table-scroll-wrap', (this.state.isFixedBottomScroll ? 'table-scroll-wrap-fixed' : ''))}
             >
-              <div className="table-scroll-container" style={{ width: (this.state.fixedScrollContainerWidth || 2236) }} />
+              <div className="scroll-holder jcf-scrollable">
+                <div
+                  className="table-inner"
+                  onScroll={this.handleScroll}
+                  ref={(rightDivParentHeader) => {
+                    this.rightDivParentHeader = rightDivParentHeader;
+                  }}
+                >
+                  <table
+                    className="table"
+                    ref={(tableRightElement) => {
+                      this.tableRightElement = tableRightElement;
+                    }}
+                  >
+                    <tbody>
+                      {rightPartTable}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div
+                onScroll={this.handleScroll}
+                ref={(rightDiv) => {
+                  this.rightDiv = rightDiv;
+                }}
+                style={{ width: (this.state.fixedScrollWidth || 'auto') }}
+                className={classNames('table-scroll-wrap', (this.state.isFixedBottomScroll ? 'table-scroll-wrap-fixed' : ''))}
+              >
+                <div className="table-scroll-container" style={{ width: (this.state.fixedScrollContainerWidth || 2236) }} />
+              </div>
             </div>
           </div>
-        </div>
-        { this.props.reportsList.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div> }
+        </InfiniteScroll>
       </StickyContainer>
     );
   }
