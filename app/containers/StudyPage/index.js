@@ -158,6 +158,10 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (study.sponsor) {
       sponsor = study.sponsor.name;
     }
+    let studyName = study.name;
+    if (study.indication && study.indication.name) {
+      studyName = study.indication.name
+    }
     return (
       <div className="container-fluid no-padding">
         <Helmet title={pageTitle} />
@@ -176,7 +180,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             fetchStudy={fetchStudy}
             handleSubmit={this.handleSubmit}
             ePMS={ePMS}
-            studyName={study.name}
+            studyName={studyName}
           />
           <StudyStats stats={stats} />
           <PatientBoard
