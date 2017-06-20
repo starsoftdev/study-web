@@ -161,7 +161,7 @@ export default class EditScheduleModal extends Component {
               <form className="form-lightbox form-edit-schedule" onSubmit={handleSubmit}>
                 <strong
                   className="name"
-                >{`${selectedCellInfo.data.patient.firstName} ${selectedCellInfo.data.patient.lastName}`}</strong>
+                >{`${selectedCellInfo.data.patient.firstName} ${selectedCellInfo.data.patient.lastName || ''}`}</strong>
                 <span className="site-location">{selectedCellInfo.data.siteLocation}</span>
                 <span className="protocol">{selectedCellInfo.data.protocolNumber}</span>
                 <div className="field-row">
