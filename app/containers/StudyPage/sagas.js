@@ -98,6 +98,9 @@ function* fetchStudyDetails() {
       {
         relation: 'sponsor',
       },
+      {
+        relation: 'indication',
+      },
     ],
   });
   try {
