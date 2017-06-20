@@ -5,6 +5,7 @@ cache:
   - node_modules # NPM packages
 sudo: true
 dist: trusty
+group: edge
 node_js:
   - "7"
 # safelist for specific branches for travis to test
@@ -12,7 +13,7 @@ branches:
   only:
   - master
   - develop
-  - develop-1.1
+  - develop-1.2
 before_install:
   - export CHROME_BIN=/usr/bin/google-chrome
   - export DISPLAY=:99.0
