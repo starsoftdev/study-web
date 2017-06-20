@@ -1,40 +1,30 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import _ from 'lodash';
 
 export class ReportViewTotals extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     reportsList: PropTypes.object,
     getPercentageObject: PropTypes.func,
+    totals: PropTypes.object,
   }
 
   render() {
     const totals = {
       count_total: 0,
       count_contacted: 0,
-      count_not_contacted: 0,
-      dnq: 0,
-      action_needed: 0,
-      scheduled: 0,
-      consented: 0,
-      screen_failed: 0,
-      randomized: 0,
-      call_attempted: 0,
+      count_not_contacted: this.props.totals.details.count_not_contacted ? parseInt(this.props.totals.details.count_not_contacted) : 0,
+      dnq: this.props.totals.details.dnq ? parseInt(this.props.totals.details.dnq) : 0,
+      action_needed: this.props.totals.details.action_needed ? parseInt(this.props.totals.details.action_needed) : 0,
+      scheduled: this.props.totals.details.scheduled ? parseInt(this.props.totals.details.scheduled) : 0,
+      consented: this.props.totals.details.consented ? parseInt(this.props.totals.details.consented) : 0,
+      screen_failed: this.props.totals.details.screen_failed ? parseInt(this.props.totals.details.screen_failed) : 0,
+      randomized: this.props.totals.details.randomized ? parseInt(this.props.totals.details.randomized) : 0,
+      call_attempted: this.props.totals.details.call_attempted ? parseInt(this.props.totals.details.call_attempted) : 0,
     };
 
-    _.forEach(this.props.reportsList.details, (item) => {
-      totals.count_total += parseInt(item.count_total || 0);
-      totals.count_contacted += parseInt(item.count_contacted || 0);
-      totals.count_not_contacted += parseInt(item.count_not_contacted || 0);
-      totals.call_attempted += parseInt(item.call_attempted || 0);
-      totals.dnq += parseInt(item.dnq || 0);
-      totals.action_needed += parseInt(item.action_needed || 0);
-      totals.scheduled += parseInt(item.scheduled || 0);
-      totals.consented += parseInt(item.consented || 0);
-      totals.screen_failed += parseInt(item.screen_failed || 0);
-      totals.randomized += parseInt(item.randomized || 0);
-    });
+    totals.count_total = (totals.count_not_contacted + totals.dnq + totals.action_needed + totals.scheduled + totals.consented + totals.screen_failed + totals.randomized + totals.call_attempted);
+    totals.count_contacted = (totals.dnq + totals.action_needed + totals.scheduled + totals.consented + totals.screen_failed + totals.randomized + totals.call_attempted);
 
     const percentage = this.props.getPercentageObject(totals);
 

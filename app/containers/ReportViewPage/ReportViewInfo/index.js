@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -9,34 +8,19 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
 
   static propTypes = {
     reportsList: PropTypes.object,
+    totals: PropTypes.object,
   }
+
 
   render() {
     const totals = {
-      active: 0,
-      inActive: 0,
-      total: 0,
+      active: this.props.totals.details.total_active ? parseInt(this.props.totals.details.total_active) : 0,
+      inActive: this.props.totals.details.total_inactive ? parseInt(this.props.totals.details.total_inactive) : 0,
       textSent: 0,
       textReceived: 0,
       unreadText: 0,
       emailSent: 0,
     };
-
-    _.forEach(this.props.reportsList.details, (item) => {
-      if (item.is_active) {
-        totals.active++;
-      } else {
-        totals.inActive++;
-      }
-
-      totals.textSent += parseInt(item.outbound_text);
-      totals.textReceived += parseInt(item.inbound_text);
-      totals.unreadText += parseInt(item.unread_text);
-      totals.emailSent += parseInt(item.outbound_emails);
-    });
-
-    totals.total += this.props.reportsList.details.length;
-
 
     return (
       <div className="infoarea row">
@@ -62,7 +46,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
                 </li>
                 <li>
                   <span className="sub-title">Total</span>
-                  <strong className="number">{totals.total}</strong>
+                  <strong className="number">{totals.active + totals.inActive}</strong>
                 </li>
               </ul>
             </div>
