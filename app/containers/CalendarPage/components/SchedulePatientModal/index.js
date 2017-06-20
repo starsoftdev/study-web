@@ -78,7 +78,7 @@ export default class SchedulePatientModal extends Component {
 
     if (!nextProps.fetchingPatientsByStudy && nextProps.patientsByStudy !== this.props.patientsByStudy) {
       const patientOptions = _.flatten(nextProps.patientsByStudy.data.map(pBS => pBS.patients.map(p => ({
-        label: p.firstName + ' ' + p.lastName,
+        label: `${p.firstName} ${p.lastName || ''}`,
         value: p.id,
       }))));
       const availablePatientOptions = _.differenceWith(patientOptions, this.props.schedules, (po, schedule) => po.value === schedule.patient_id);

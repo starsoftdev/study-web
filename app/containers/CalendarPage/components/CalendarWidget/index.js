@@ -55,7 +55,7 @@ class CalendarWidget extends React.Component {
 
       return {
         data: s,
-        title: s.patient.firstName + ' ' + s.patient.lastName + ' ' + localTime.format('h:mm A'),
+        title: `${s.patient.firstName} ${s.patient.lastName || ''} ${localTime.format('h:mm A')}`,
         start: browserTime,
         end: browserTime,
       };
