@@ -207,12 +207,12 @@ input[type=submit].input-lg,
 	
 	@media screen and (max-width: @desktop) {
 		.font(30px, 50px);
-    height: 53px;
+    height: auto;
 	}
 	
 	@media screen and (max-width: @xs) {
 		.font(24px, 40px);
-    height: 43px;
+    height: auto;
 	}
 	
 	&.small {
@@ -843,12 +843,8 @@ input[type=submit].input-lg,
 	
 	
 	.btn-deep.small {
-		.font(21px, 1);
+		.font(21px, 30px);
 		padding: 7px 12px;
-		
-		&:hover {
-			
-		}
 		
 		div,
 		.icon-phone-square {
