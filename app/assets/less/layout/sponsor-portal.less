@@ -552,21 +552,19 @@
 	.table-left {
 		td,
 		th {
-			&:first-child { width: 125px; }
-			&:nth-child(2) { width: 257px; }
-			&:nth-child(3) { width: 173px; }
-			&:nth-child(4) { width: 186px; }
-			&:nth-child(5) { width: 102px; }
+      &:first-child { width: 257px; }
+			&:nth-child(2) { width: 173px; }
+			&:nth-child(3) { width: 186px; }
+			&:nth-child(4) { width: 102px; }
 		}
 		
 		@media screen and(max-width: @psd) {
 			td,
 			th {
-				&:first-child { width: 100px; }
-				&:nth-child(2) { width: 125px; }
-				&:nth-child(3) { width: 130px; }
-				&:nth-child(4) { width: 186px; }
-				&:nth-child(5) { width: 102px; }
+        &:first-child { width: 125px; }
+				&:nth-child(2) { width: 130px; }
+				&:nth-child(3) { width: 186px; }
+				&:nth-child(4) { width: 102px; }
 			}
 		}
 	}
@@ -580,15 +578,16 @@
 			&.count_total { width: 130px; }
 			&.count_contacted { width: 145px; }
 			&.count_not_contacted { width: 186px; }
-			&.dnq { width: 90px; }
-			&.action_needed { width: 170px; }
+			&.call_attempted { width: 170px; }
+			&.dnq { width: 100px; }
+			&.action_needed { width: 140px; }
 			&.scheduled { width: 132px; }
 			&.consented { width: 145px; }
-			&.screen_failed { width: 170px; }
-			&.randomized { width: 156px; }
+			&.screen_failed { width: 130px; }
+			&.randomized { width: 136px; }
 			&.outbound_text { width: 120px; }
-			&.inbound_text { width: 170px; }
-			&.unread_text { width: 170px; }
+			&.inbound_text { width: 130px; }
+			&.unread_text { width: 120px; }
 			&.outbound_emails { width: 130px; }
 		}
 		
@@ -597,16 +596,17 @@
 			td {
         &.level_date_from { width: 115px; }
         &.level_date_to { width: 115px; }
-        &.last_login_time { width: 165px; }
+        &.last_login_time { width: 145px; }
         &.count_total { width: 110px; }
-        &.count_contacted { width: 125px; }
-        &.count_not_contacted { width: 135px; }
+        &.count_contacted { width: 115px; }
+        &.count_not_contacted { width: 115px; }
+        &.call_attempted { width: 105px; }
         &.dnq { width: 90px; }
-        &.action_needed { width: 110px; }
-        &.scheduled { width: 110px; }
-        &.consented { width: 110px; }
-        &.screen_failed { width: 110px; }
-        &.randomized { width: 120px; }
+        &.action_needed { width: 100px; }
+        &.scheduled { width: 100px; }
+        &.consented { width: 100px; }
+        &.screen_failed { width: 100px; }
+        &.randomized { width: 100px; }
         &.outbound_text { width: 90px; }
         &.inbound_text { width: 90px; }
         &.unread_text { width: 90px; }
@@ -624,7 +624,6 @@
 
 	.custom.tooltip {
 		left: 50%;
-		margin: 0;
 		color: #fff;
 		bottom: 100%;
 		margin: 0 0 10px;

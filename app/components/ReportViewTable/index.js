@@ -7,9 +7,9 @@ import { StickyContainer, Sticky } from 'react-sticky';
 import ReactTooltip from 'react-tooltip';
 import _ from 'lodash';
 import classNames from 'classnames';
-import Toggle from '../../../components/Input/Toggle';
-import LoadingSpinner from '../../../components/LoadingSpinner';
-import { selectChangeProtocolStatusProcess } from '../selectors';
+import Toggle from '../../components/Input/Toggle';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import { selectChangeProtocolStatusProcess } from '../../containers/ReportViewPage/selectors';
 
 @reduxForm({ form: 'reportListForm' })
 
@@ -140,11 +140,7 @@ export class ReportViewTable extends React.Component {
           className={(this.state.hoveredRowIndex === index) ? 'active-table-row' : ''}
         >
           <td>
-            <span data-for={`site-id-${index}`} data-tip={item.site_name} className="tooltip-element">{item.site_id}</span>
-            <ReactTooltip id={`site-id-${index}`} type="info" class="tooltipClass" delayHide={500} effect="solid" />
-          </td>
-          <td>
-            <a data-for={`study-id-${index}`} target="_blank" data-tip={item.study_id} href={landingHref} className="tooltip-element">{`${piName}`}</a>
+            <a data-for={`study-id-${index}`} target="_blank" data-tip={`${item.study_id} - ${item.site_name}`} href={landingHref} className="tooltip-element">{`${piName}`}</a>
             <ReactTooltip id={`study-id-${index}`} type="info" class="tooltipClass" delayHide={500} effect="solid" />
           </td>
           <td>{item.level}</td>
@@ -187,6 +183,7 @@ export class ReportViewTable extends React.Component {
           <td className="count_total">{item.count_total}</td>
           <td className="count_contacted"><span className="text">{item.count_contacted}<span className="small">{`(${percentage.count_contacted_p}%)`}</span></span></td>
           <td className="count_not_contacted"><span className="text">{item.count_not_contacted}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></td>
+          <td className="call_attempted"><span className="text">{item.call_attempted}<span className="small">{`(${percentage.call_attempted_p}%)`}</span></span></td>
           <td className="dnq"><span className="text">{item.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></td>
           <td className="action_needed"><span className="text">{item.action_needed}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span></td>
           <td className="scheduled"><span className="text">{item.scheduled}<span className="small">{`(${percentage.scheduled_p}%)`}</span></span></td>
@@ -218,7 +215,6 @@ export class ReportViewTable extends React.Component {
               <table className="table">
                 <thead>
                   <tr>
-                    <th onClick={this.sortBy} data-sort="site_name" className={`th ${(this.props.paginationOptions.activeSort === 'site_name') ? this.props.paginationOptions.activeDirection : ''}`}>SITE # <i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="principalinvestigatorfirstname" className={`th ${(this.props.paginationOptions.activeSort === 'principalinvestigatorfirstname') ? this.props.paginationOptions.activeDirection : ''}`}>PRINCIPAL INVESTIGATOR <i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="level" className={`th ${(this.props.paginationOptions.activeSort === 'level') ? this.props.paginationOptions.activeDirection : ''}`}>EXPOSURE LEVEL <i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="is_active" className={`th ${(this.props.paginationOptions.activeSort === 'is_active') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS <i className="caret-arrow" /></th>
@@ -244,6 +240,7 @@ export class ReportViewTable extends React.Component {
                       <th onClick={this.sortBy} data-sort="count_total" className={`count_total th ${(this.props.paginationOptions.activeSort === 'count_total') ? this.props.paginationOptions.activeDirection : ''}`}>REFERRALS <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="count_contacted" className={`count_contacted th ${(this.props.paginationOptions.activeSort === 'count_contacted') ? this.props.paginationOptions.activeDirection : ''}`}>CONTACTED <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="count_not_contacted" className={`count_not_contacted th ${(this.props.paginationOptions.activeSort === 'count_not_contacted') ? this.props.paginationOptions.activeDirection : ''}`}>NOT CONTACTED <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="call_attempted" className={`call_attempted th ${(this.props.paginationOptions.activeSort === 'call_attempted') ? this.props.paginationOptions.activeDirection : ''}`}>CALL ATTEMPTED <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="dnq" className={`dnq th ${(this.props.paginationOptions.activeSort === 'dnq') ? this.props.paginationOptions.activeDirection : ''}`}>DNQ <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="action_needed" className={`action_needed th ${(this.props.paginationOptions.activeSort === 'action_needed') ? this.props.paginationOptions.activeDirection : ''}`}>ACTION NEEDED <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="scheduled" className={`scheduled th ${(this.props.paginationOptions.activeSort === 'scheduled') ? this.props.paginationOptions.activeDirection : ''}`}>SCHEDULED <i className="caret-arrow" /></th>
