@@ -176,6 +176,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             fetchStudy={fetchStudy}
             handleSubmit={this.handleSubmit}
             ePMS={ePMS}
+            studyName={study.name}
           />
           <StudyStats stats={stats} />
           <PatientBoard
