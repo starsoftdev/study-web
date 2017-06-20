@@ -82,7 +82,7 @@ class TextBlastModal extends React.Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.show && !this.props.show) {
-      const message = `Hello, please respond yes or no if you are interested in a research study for ${newProps.studyName}`;
+      const message = `Hello, please respond yes or no if you are interested in a research study for ${newProps.studyName}.`;
       this.props.initialize({
         message,
       });
