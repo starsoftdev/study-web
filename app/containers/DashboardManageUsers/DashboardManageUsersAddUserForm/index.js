@@ -101,7 +101,7 @@ export class AddUserForm extends React.Component { // eslint-disable-line react/
         </div>
 
         <div className="field-row">
-          <strong className="label required">
+          <strong className="label">
             <label className="add-exposure-level">Phone</label>
           </strong>
           <div className="field">
