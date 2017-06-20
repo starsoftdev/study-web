@@ -12,7 +12,7 @@ import { createStructuredSelector } from 'reselect';
 import ReportViewInfo from '../../containers/ReportViewPage/ReportViewInfo';
 import ReportViewTotals from '../../containers/ReportViewPage/ReportViewTotals';
 import ReportViewSearch from '../../components/ReportViewSearch';
-import ReportViewTable from '../../containers/ReportViewPage/ReportViewTable';
+import ReportViewTable from '../../components/ReportViewTable';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
 import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus } from '../../containers/ReportViewPage/actions';
