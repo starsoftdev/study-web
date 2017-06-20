@@ -125,6 +125,13 @@
     }
 
     td {
+      &.name, &.address, &.timezone {
+        & > span {
+          width: 10px;
+          min-width: 100%;
+          display: block;
+        }
+      }
       &.name {
         width: 18%;
         .break-word();

@@ -257,7 +257,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
               <span>{receipt.orderNumber}</span>
             </td>
             <td>{dateWrapper}</td>
-            <td>{siteName}</td>
+            <td><span>{siteName}</span></td>
             <td>{invoiceIdLink}</td>
             <td>{receipt.protocol_number || ''}</td>
             <td>{receipt.payment_type}</td>
