@@ -11,6 +11,7 @@ import {
   GET_REPORTS_LIST,
   CHANGE_PROTOCOL_STATUS,
   EXPORT_STUDIES,
+  GET_REPORTS_TOTALS,
 } from './constants';
 
 import {
@@ -18,6 +19,8 @@ import {
   getReportsListError,
   changeProtocolStatusSuccess,
   changeProtocolStatusError,
+  getReportsTotalsSuccess,
+  getReportsTotalsError,
 } from './actions';
 
 
@@ -25,12 +28,14 @@ export function* reportViewPageSaga() {
   const watcherA = yield fork(fetchReportsWatcher);
   const watcherB = yield fork(changeProtocolStatusWatcher);
   const watcherC = yield fork(exportStudiesWatcher);
+  const watcherD = yield fork(fetchReportsTotalsWatcher);
 
   yield take(LOCATION_CHANGE);
 
   yield cancel(watcherA);
   yield cancel(watcherB);
   yield cancel(watcherC);
+  yield cancel(watcherD);
 }
 
 export function* fetchReportsWatcher() {
@@ -39,16 +44,34 @@ export function* fetchReportsWatcher() {
 
 export function* fetchReportsWorker(action) {
   try {
-    let queryString;
-    let requestURL;
-    if (action.searchParams) {
-      queryString = composeQueryString(action.searchParams);
-      requestURL = `${API_URL}/studies/getStudiesByProtocol?${queryString}`;
-    } else {
-      requestURL = `${API_URL}/studies/getStudiesByProtocol`;
+    const params = action.searchParams;
+
+    const limit = action.limit || 10;
+    const offset = action.offset || 0;
+    const sort = action.sort || null;
+    const order = action.order || null;
+
+    params.limit = limit;
+    params.offset = offset;
+    if (sort && order) {
+      params.orderBy = sort;
+      params.orderDir = ((order === 'down') ? 'DESC' : 'ASC');
     }
+
+    const queryString = composeQueryString(params);
+
+    const requestURL = `${API_URL}/studies/getStudiesByProtocol?${queryString}`;
+
+
     const response = yield call(request, requestURL);
-    yield put(getReportsListSuccess(response));
+
+    let hasMore = true;
+    const page = (offset / 10) + 1;
+    if (response.length < 10) {
+      hasMore = false;
+    }
+
+    yield put(getReportsListSuccess(response, hasMore, page));
   } catch (err) {
     yield put(getReportsListError(err));
   }
@@ -97,6 +120,27 @@ export function* exportStudiesWorker(action) {
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
+  }
+}
+
+export function* fetchReportsTotalsWatcher() {
+  yield* takeLatest(GET_REPORTS_TOTALS, fetchReportsTotalsWorker);
+}
+
+export function* fetchReportsTotalsWorker(action) {
+  try {
+    let queryString;
+    let requestURL;
+    if (action.searchParams) {
+      queryString = composeQueryString(action.searchParams);
+      requestURL = `${API_URL}/studies/getStudiesByProtocolTotals?${queryString}`;
+    } else {
+      requestURL = `${API_URL}/studies/getStudiesByProtocolTotals`;
+    }
+    const response = yield call(request, requestURL);
+    yield put(getReportsTotalsSuccess(response));
+  } catch (err) {
+    yield put(getReportsTotalsError(err));
   }
 }
 

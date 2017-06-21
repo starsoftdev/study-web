@@ -15,8 +15,8 @@ import ReportViewSearch from '../../components/ReportViewSearch';
 import ReportViewTable from '../../components/ReportViewTable';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
-import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus } from '../../containers/ReportViewPage/actions';
-import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues } from '../../containers/ReportViewPage/selectors';
+import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals } from '../../containers/ReportViewPage/actions';
+import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals } from '../../containers/ReportViewPage/selectors';
 
 export class ReportViewPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -31,12 +31,19 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     formTableValues: PropTypes.object,
     currentUser: PropTypes.object,
     changeProtocolStatus: PropTypes.func,
+    getReportsTotals: PropTypes.func,
+    totals: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
 
+    this.state = {
+      filters: null,
+    };
+
     this.searchReports = this.searchReports.bind(this);
+    this.loadReports = this.loadReports.bind(this);
   }
 
   componentWillMount() {
@@ -46,7 +53,11 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const cro = this.props.location.query.cro || null;
     const messaging = this.props.location.query.messaging || null;
 
-    this.props.getReportsList({ sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging });
+    const filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging };
+    this.setState({ filters });
+
+    this.props.getReportsList(filters);
+    this.props.getReportsTotals(filters);
   }
 
   getPercentageObject(item) {
@@ -76,7 +87,20 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 
     filters = _.assign(filters, this.props.formValues, searchFilter);
 
-    this.props.getReportsList(filters);
+    this.setState({ filters });
+
+    this.props.getReportsTotals(filters);
+    this.props.getReportsList(filters, 10, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
+  }
+
+  loadReports(isSort, sort, direction) {
+    let offset = 0;
+    if (!isSort) {
+      offset = this.props.paginationOptions.page * 10;
+    }
+    const limit = 10;
+
+    this.props.getReportsList(this.state.filters, limit, offset, (sort || null), (direction || null));
   }
 
   render() {
@@ -96,10 +120,12 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
         </section>
         <ReportViewInfo
           reportsList={this.props.reportsList}
+          totals={this.props.totals}
         />
         <ReportViewTotals
           reportsList={this.props.reportsList}
           getPercentageObject={this.getPercentageObject}
+          totals={this.props.totals}
         />
         <ReportViewSearch
           searchReports={this.searchReports}
@@ -117,6 +143,8 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           formTableValues={this.props.formTableValues}
           changeProtocolStatus={this.props.changeProtocolStatus}
           currentUser={this.props.currentUser}
+          totals={this.props.totals}
+          loadReports={this.loadReports}
         />
       </div>
     );
@@ -129,14 +157,16 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectSearchReportsFormValues(),
   paginationOptions: selectPaginationOptions(),
   formTableValues: selectTableFormValues(),
+  totals: selectReportsTotals(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    getReportsList: searchParams => dispatch(getReportsList(searchParams)),
+    getReportsList: (searchParams, limit, offset, sort, order) => dispatch(getReportsList(searchParams, limit, offset, sort, order)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
     sortReportsSuccess: (reports) => dispatch(sortReportsSuccess(reports)),
     changeProtocolStatus: (payload) => dispatch(changeProtocolStatus(payload)),
+    getReportsTotals: searchParams => dispatch(getReportsTotals(searchParams)),
   };
 }
 

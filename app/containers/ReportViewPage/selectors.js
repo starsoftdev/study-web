@@ -25,6 +25,11 @@ const selectReportsList = () => createSelector(
   substate => substate.reportsList
 );
 
+const selectReportsTotals = () => createSelector(
+  selectReportViewPageDomain(),
+  substate => substate.totals
+);
+
 const selectFormDomain = () => state => state.form;
 
 const selectSearchReportsFormValues = () => createSelector(
@@ -55,4 +60,5 @@ export {
   selectPaginationOptions,
   selectTableFormValues,
   selectChangeProtocolStatusProcess,
+  selectReportsTotals,
 };
