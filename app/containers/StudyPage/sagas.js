@@ -834,7 +834,7 @@ function* submitAddPatient() {
       yield put(submitAddPatientSuccess(response));
     } catch (e) {
       let errorMessages;
-      if (e.details.messages) {
+      if (e.details && e.details.messages) {
         if (e.details.messages.email) {
           errorMessages = e.details.messages.email[0];
         } else if (e.details.messages.phone) {
@@ -842,6 +842,8 @@ function* submitAddPatient() {
         } else {
           errorMessages = e.details.messages[0];
         }
+      } else if (e.message) {
+        errorMessages = e.message;
       } else {
         errorMessages = 'Something went wrong while adding a patient. Please try again later.';
       }
