@@ -14,19 +14,28 @@ import {
   CHANGE_PROTOCOL_STATUS_SUCCESS,
   CHANGE_PROTOCOL_STATUS_ERROR,
   EXPORT_STUDIES,
+  GET_REPORTS_TOTALS,
+  GET_REPORTS_TOTALS_SUCCESS,
+  GET_REPORTS_TOTALS_ERROR,
 } from './constants';
 
-export function getReportsList(searchParams) {
+export function getReportsList(searchParams, limit, offset, sort, order) {
   return {
     type: GET_REPORTS_LIST,
     searchParams,
+    limit,
+    offset,
+    sort,
+    order,
   };
 }
 
-export function getReportsListSuccess(payload) {
+export function getReportsListSuccess(payload, hasMoreItems, page) {
   return {
     type: GET_REPORTS_LIST_SUCCESS,
     payload,
+    hasMoreItems,
+    page,
   };
 }
 
@@ -76,6 +85,27 @@ export function changeProtocolStatusError(payload) {
 export function exportStudies(payload) {
   return {
     type: EXPORT_STUDIES,
+    payload,
+  };
+}
+
+export function getReportsTotals(searchParams) {
+  return {
+    type: GET_REPORTS_TOTALS,
+    searchParams,
+  };
+}
+
+export function getReportsTotalsSuccess(payload) {
+  return {
+    type: GET_REPORTS_TOTALS_SUCCESS,
+    payload,
+  };
+}
+
+export function getReportsTotalsError(payload) {
+  return {
+    type: GET_REPORTS_TOTALS_ERROR,
     payload,
   };
 }
