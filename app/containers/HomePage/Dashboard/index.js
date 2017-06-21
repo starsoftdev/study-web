@@ -6,12 +6,12 @@ import { createStructuredSelector } from 'reselect';
 
 import RewardModal from '../../../components/RewardModal';
 
-import { selectCurrentUser, selectSitePatients, selectUserSiteLocations, selectRewardsBalance, selectPatientMessageUnreadCount } from '../../App/selectors';
+import { selectCurrentUser, selectSitePatients, selectUserSiteLocations, selectRewardsBalance } from '../../App/selectors';
 import { fetchRewardsBalance, redeem } from '../../App/actions';
 import { pickReward } from '../../../containers/RewardsPage/actions';
 
 import { fetchPatientSignUps, fetchPatientMessages } from '../actions';
-import { selectPatientSignUps, selectPatientMessages } from '../selectors';
+import { selectPatientSignUps, selectPatientMessagesCount } from '../selectors';
 
 import graph from '../../../assets/images/graph.svg';
 
@@ -19,7 +19,7 @@ export class Dashboard extends React.Component {
   static propTypes = {
     currentUser: PropTypes.any,
     patientSignUps: PropTypes.object,
-    patientMessages: PropTypes.object,
+    patientMessagesCount: PropTypes.object,
     rewardsBalance: PropTypes.object,
     fetchPatientSignUps: PropTypes.func,
     fetchPatientMessages: PropTypes.func,
@@ -28,7 +28,6 @@ export class Dashboard extends React.Component {
     siteLocations: PropTypes.array,
     redeem: PropTypes.func,
     pickReward: PropTypes.func,
-    patientMessageUnreadCount: PropTypes.number,
   }
 
   state = {
@@ -60,7 +59,7 @@ export class Dashboard extends React.Component {
   }
 
   render() {
-    const { currentUser, patientSignUps, patientMessages, rewardsBalance, siteLocations, pickReward, patientMessageUnreadCount } = this.props;
+    const { currentUser, patientSignUps, patientMessagesCount, rewardsBalance, siteLocations, pickReward } = this.props;
     const redeemable = (currentUser.roleForClient && currentUser.roleForClient.canRedeemRewards) || currentUser.roleForClient.name === 'Super Admin';
     const redeemableSiteLocations = reject(siteLocations, { id: 0 });
     return (
@@ -93,17 +92,17 @@ export class Dashboard extends React.Component {
             </div>
             <div className="textbox">
               <h2>PATIENT<br /> MESSAGES</h2>
-              <span className="counter">TOTAL {patientMessages.total}</span>
+              <span className="counter">TOTAL {patientMessagesCount.total}</span>
             </div>
           </div>
           <div className="box">
             <div className="col pull-left">
               <span className="sub-title">UNREAD<br /> EMAILS</span>
-              <strong className="number"><i className="icomoon-envelop" /> {patientMessages.unreadEmails}</strong>
+              <strong className="number"><i className="icomoon-envelop" /> {patientMessagesCount.unreadEmails}</strong>
             </div>
             <div className="col pull-right">
               <span className="sub-title">UNREAD<br /> TEXTS</span>
-              <strong className="number"><i className="icomoon-icon_chat_alt" /> {patientMessageUnreadCount}</strong>
+              <strong className="number"><i className="icomoon-icon_chat_alt" /> {patientMessagesCount.unreadTexts}</strong>
             </div>
           </div>
         </article>
@@ -143,11 +142,10 @@ export class Dashboard extends React.Component {
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   patientSignUps: selectPatientSignUps(),
-  patientMessages: selectPatientMessages(),
+  patientMessagesCount: selectPatientMessagesCount(),
   rewardsBalance: selectRewardsBalance(),
   sitePatients: selectSitePatients(),
   siteLocations: selectUserSiteLocations(),
-  patientMessageUnreadCount: selectPatientMessageUnreadCount(),
 });
 const mapDispatchToProps = {
   fetchPatientSignUps,

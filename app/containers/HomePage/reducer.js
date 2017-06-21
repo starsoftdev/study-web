@@ -67,7 +67,7 @@ const initialState = {
     inactive: 0,
     total: 0,
   },
-  patientMessages: {
+  patientMessagesCount: {
     unreadTexts: 0,
     unreadEmails: 0,
     total: 0,
@@ -169,7 +169,7 @@ export default function homePageReducer(state = initialState, action) {
     case FETCH_PATIENT_MESSAGES_SUCCEESS:
       return {
         ...state,
-        patientMessages: {
+        patientMessagesCount: {
           unreadTexts: payload.unreadTexts,
           unreadEmails: payload.unreadEmails,
           total: payload.total,
@@ -188,10 +188,10 @@ export default function homePageReducer(state = initialState, action) {
       newState = state;
       return {
         ...state,
-        patientMessages: {
-          unreadTexts: newState.patientMessages.unreadTexts,
-          unreadEmails: newState.patientMessages.unreadEmails,
-          total: newState.patientMessages.total + 1,
+        patientMessagesCount: {
+          unreadTexts: newState.patientMessagesCount.unreadTexts,
+          unreadEmails: newState.patientMessagesCount.unreadEmails,
+          total: newState.patientMessagesCount.total + 1,
         },
       };
     case RECEIVE_NOTIFICATION:
@@ -209,10 +209,10 @@ export default function homePageReducer(state = initialState, action) {
         case 'twilio-message':
           newState = {
             ...state,
-            patientMessages: {
-              unreadTexts: newState.patientMessages.unreadTexts + 1,
-              unreadEmails: newState.patientMessages.unreadEmails,
-              total: newState.patientMessages.total + 1,
+            patientMessagesCount: {
+              unreadTexts: newState.patientMessagesCount.unreadTexts + 1,
+              unreadEmails: newState.patientMessagesCount.unreadEmails,
+              total: newState.patientMessagesCount.total + 1,
             },
           };
           break;
@@ -511,6 +511,9 @@ export default function homePageReducer(state = initialState, action) {
           details: studies,
           fetching: false,
           error: null,
+          total: state.studies.total || 0,
+          active: state.studies.active || 0,
+          inactive: state.studies.inactive || 0,
         },
         upgradedStudy: {
           details: payload,
@@ -571,6 +574,9 @@ export default function homePageReducer(state = initialState, action) {
           details: payload,
           fetching: false,
           error: null,
+          total: state.studies.total || 0,
+          active: state.studies.active || 0,
+          inactive: state.studies.inactive || 0,
         },
       };
     case ADD_EMAIL_NOTIFICATION_USER:
@@ -674,13 +680,21 @@ export default function homePageReducer(state = initialState, action) {
       const studiesCopy = _.cloneDeep(state.studies.details);
       const foundStudy = _.find(studiesCopy, (o) => (o.studyId === action.studyId));
       if (foundStudy) {
-        foundStudy.unreadMessageCount += 1;
+        foundStudy.unreadMessageCount ++;
         return {
           ...state,
           studies: {
             details: studiesCopy,
             fetching: false,
             error: null,
+            total: state.studies.total || 0,
+            active: state.studies.active || 0,
+            inactive: state.studies.inactive || 0,
+          },
+          patientMessagesCount: {
+            unreadTexts: state.patientMessagesCount.unreadTexts + 1,
+            unreadEmails: state.patientMessagesCount.unreadEmails,
+            total: state.patientMessagesCount.total + 1,
           },
         };
       }
