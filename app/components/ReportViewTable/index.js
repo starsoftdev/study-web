@@ -109,7 +109,9 @@ export class ReportViewTable extends React.Component {
   }
 
   loadItems() {
-    this.props.loadReports(false);
+    if (!this.props.reportsList.fetching) {
+      this.props.loadReports(false);
+    }
   }
 
   render() {
@@ -310,6 +312,7 @@ export class ReportViewTable extends React.Component {
             </div>
           </div>
         </InfiniteScroll>
+        { this.props.reportsList.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div> }
       </StickyContainer>
     );
   }

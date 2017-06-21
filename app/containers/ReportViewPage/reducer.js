@@ -53,10 +53,16 @@ function reportViewPageReducer(state = initialState, action) {
   let copy = null;
   switch (action.type) {
     case GET_REPORTS_LIST:
+      if (action.offset === 0) {
+        newReportsList = [];
+      } else {
+        newReportsList = state.reportsList.details;
+      }
+
       return {
         ...state,
         reportsList: {
-          details: state.reportsList.details,
+          details: newReportsList,
           fetching: true,
           error: null,
         },
