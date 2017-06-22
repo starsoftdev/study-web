@@ -343,7 +343,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     _.forEach(this.props.clientSites.details, (site) => {
       _.forEach(site.roles, (role) => {
         const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.user_id));
-        if (isChecked) {
+        if (isChecked && role.user) {
           emailNotificationArray.push({
             firstName: role.user.firstName,
             lastName: role.user.lastName,
@@ -357,7 +357,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       // add admin users to the list
       _.forEach(this.props.clientAdmins.details, (role) => {
         const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.userId));
-        if (isChecked) {
+        if (isChecked && role) {
           emailNotificationArray.push({
             firstName: role.firstName,
             lastName: role.lastName,
