@@ -228,6 +228,11 @@ const initialState = {
       details: [],
       fetching: false,
       error: null,
+      stats: {
+        unreadText: 0,
+        unreadEmails: 0,
+        total: 0,
+      },
     },
     rewards: [],
     rewardsBalance: {},
@@ -775,9 +780,8 @@ export default function appReducer(state = initialState, action) {
       break;
     case UPDATE_SITE_PATIENTS:
       unreadCount = 0;
-      sitePatientsCollection = map(state.baseData.sitePatients.details, item => {
-        let patientData = null;
-        patientData = item;
+      sitePatientsCollection = state.baseData.sitePatients.details.map(item => {
+        const patientData = item;
         if (patientData.id === action.newMessage.patient_id && patientData.study_id === action.newMessage.study_id) {
           const countUnread = patientData.count_unread;
           if (countUnread) {
@@ -837,9 +841,9 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
           stats: {
-            total: state.baseData.patientMessages.stats ? state.baseData.patientMessages.stats.total : 0,
-            unreadEmails: state.baseData.patientMessages.stats ? state.baseData.patientMessages.stats.unreadEmails : 0,
-            unreadTexts: state.baseData.patientMessages.stats ? state.baseData.patientMessages.stats.unreadTexts - unreadCount : 0,
+            total: state.baseData.patientMessages.stats || 0,
+            unreadEmails: state.baseData.patientMessages.stats || 0,
+            unreadTexts: state.baseData.patientMessages.stats || 0,
           },
         },
       };
@@ -911,6 +915,11 @@ export default function appReducer(state = initialState, action) {
           details: [],
           fetching: true,
           error: null,
+          stats: {
+            total: state.baseData.patientMessages.stats || 0,
+            unreadEmails: state.baseData.patientMessages.stats || 0,
+            unreadTexts: state.baseData.patientMessages.stats || 0,
+          },
         },
       };
       break;
@@ -921,6 +930,11 @@ export default function appReducer(state = initialState, action) {
           details: payload,
           fetching: false,
           error: null,
+          stats: {
+            total: state.baseData.patientMessages.stats || 0,
+            unreadEmails: state.baseData.patientMessages.stats || 0,
+            unreadTexts: state.baseData.patientMessages.stats || 0,
+          },
         },
       };
 
@@ -933,6 +947,11 @@ export default function appReducer(state = initialState, action) {
           details: [],
           fetching: false,
           error: payload,
+          stats: {
+            unreadText: 0,
+            unreadEmails: 0,
+            total: 0,
+          },
         },
       };
       break;
@@ -944,14 +963,11 @@ export default function appReducer(state = initialState, action) {
           details: patientMessagesCollection,
           fetching: false,
           error: null,
-        },
-      };
-      baseDataInnerState = {
-        patientMessages: {
-          ...state.baseData.patientMessages,
-          details: patientMessagesCollection,
-          fetching: false,
-          error: null,
+          stats: {
+            total: state.baseData.patientMessages.stats || 0,
+            unreadEmails: state.baseData.patientMessages.stats || 0,
+            unreadTexts: state.baseData.patientMessages.stats || 0,
+          },
         },
       };
       break;
@@ -959,7 +975,11 @@ export default function appReducer(state = initialState, action) {
       baseDataInnerState = {
         patientMessages: {
           ...state.baseData.patientMessages,
-          stats: action.payload,
+          stats: {
+            total: action.payload.total || 0,
+            unreadEmails: action.payload.unreadEmails || 0,
+            unreadTexts: action.payload.unreadTexts || 0,
+          },
         },
       };
       break;
