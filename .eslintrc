@@ -20,7 +20,8 @@
   },
   "globals": {
     "API_URL": true,
-    "SOCKET_URL": true
+    "SOCKET_URL": true,
+    "ga": true
   },
   "rules": {
     "arrow-parens": 0,
