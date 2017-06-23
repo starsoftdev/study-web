@@ -166,7 +166,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         this.props.setChatTextValue('');
       }
       this.props.change('name', '');
-      this.handleKeyPress('');
+      // this.handleKeyPress('');
     }
   }
 
