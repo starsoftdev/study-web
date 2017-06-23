@@ -51,6 +51,7 @@ export class ThankYouPage extends React.Component {
   }
 
   componentWillMount() {
+    ga('send', 'event', 'formSubmission');
     if (!this.props.subscribedFromLanding && !this.state.subscribedFromLanding) {
       browserHistory.push('/');
     } else {
