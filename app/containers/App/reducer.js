@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 
-import { forEach, map, remove, cloneDeep, findIndex, concat, sortBy, reverse } from 'lodash';
+import { forEach, map, remove, cloneDeep, findIndex, concat, sortBy } from 'lodash';
 import { getItem } from '../../utils/localStorage';
 
 import {
@@ -281,6 +281,11 @@ const initialState = {
     changeUsersTimezoneState: {
       saving: false,
     },
+    globalPMSPaginationOptions: {
+      hasMoreItems: true,
+      page: 1,
+      search: '',
+    },
     cnsInfo: {
       details: {},
       fetching: false,
@@ -297,6 +302,7 @@ export default function appReducer(state = initialState, action) {
   const clientSitesCollection = map(state.baseData.clientSites.details, cloneDeep);
   const clientRolesCollection = map(state.baseData.clientRoles.details, cloneDeep);
   const sitesCopy = map(state.baseData.sites.details, cloneDeep);
+  const patientsCopy = cloneDeep(state.baseData.sitePatients.details);
   let sitePatientsCollection = [];
   let unreadCount = 0;
   let patientMessagesCollection = [];
@@ -304,6 +310,7 @@ export default function appReducer(state = initialState, action) {
   let resultState = null;
   let userRoleType = '';
   let temRoleID = null;
+  let newPatientsList = [];
 
   switch (action.type) {
     case SET_AUTH_STATE:
@@ -753,19 +760,33 @@ export default function appReducer(state = initialState, action) {
     case FETCH_SITE_PATIENTS:
       baseDataInnerState = {
         sitePatients: {
-          details: [],
+          details: state.baseData.sitePatients.details,
           fetching: true,
           error: null,
+        },
+        globalPMSPaginationOptions: {
+          hasMoreItems: false,
+          page: state.baseData.globalPMSPaginationOptions.page,
         },
       };
       break;
     case FETCH_SITE_PATIENTS_SUCCESS:
-      sitePatientsCollection = reverse(sortBy(payload, item => item.twtm_max_date_created));
+      if (action.page === 1) {
+        console.log(1);
+        newPatientsList = payload;
+      } else {
+        console.log(2, patientsCopy);
+        newPatientsList = patientsCopy.concat(payload);
+      }
       baseDataInnerState = {
         sitePatients: {
-          details: sitePatientsCollection,
+          details: newPatientsList,
           fetching: false,
           error: null,
+        },
+        globalPMSPaginationOptions: {
+          hasMoreItems: action.hasMoreItems,
+          page: action.page,
         },
       };
       break;

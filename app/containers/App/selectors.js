@@ -394,6 +394,11 @@ const selectTrialsTotal = () => createSelector(
   (substate) => get(substate, 'baseData.trials.total', {})
 );
 
+const selectGlobalPMSPaginationOptions = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.globalPMSPaginationOptions', {})
+);
+
 const selectCnsInfo = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.cnsInfo', {})
@@ -471,6 +476,7 @@ export {
 
   selectTrials,
   selectTrialsTotal,
+  selectGlobalPMSPaginationOptions,
   selectCnsInfo,
   selectCnsSubmitProcess,
 };

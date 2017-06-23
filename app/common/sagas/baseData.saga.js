@@ -27,6 +27,7 @@ import {
   ADD_CREDITS,
 
   FETCH_CLIENT_SITES,
+  FETCH_SITE_PATIENTS,
   FETCH_CLIENT_CREDITS,
   SEARCH_SITE_PATIENTS,
   FETCH_PATIENT_MESSAGES,
@@ -93,6 +94,7 @@ import {
   clientSitesFetched,
   clientSitesFetchingError,
   sitePatientsFetched,
+  sitePatientsFetchingError,
   clientCreditsFetched,
   clientCreditsFetchingError,
   sitePatientsSearched,
@@ -490,20 +492,24 @@ export function* fetchClientSitesWatcher() {
 }
 
 export function* fetchSitePatientsWatcher() {
-  // while (true) {
-  //   const { userId } = yield take(FETCH_SITE_PATIENTS);
-  //
-  //   try {
-  //     const requestURL = `${API_URL}/patients/patientsForUser?userId=${userId}`;
-  //     const response = yield call(request, requestURL);
-  //
-  //     yield put(sitePatientsFetched(response));
-  // TODO re-enable site patient fetching for global PMS later
-  yield put(sitePatientsFetched([]));
-  //   } catch (err) {
-  //     yield put(sitePatientsFetchingError(err));
-  //   }
-  // }
+  while (true) {
+    const { userId, limit, offset, search } = yield take(FETCH_SITE_PATIENTS);
+
+    try {
+      const requestURL = `${API_URL}/patients/patientsForUser?userId=${userId}&limit=${limit || 10}&offset=${offset || 0}&search=${search || ''}`;
+      const response = yield call(request, requestURL);
+
+      let hasMore = true;
+      const page = ((offset || 0) / 10) + 1;
+      if (response.length < 10) {
+        hasMore = false;
+      }
+
+      yield put(sitePatientsFetched(response, hasMore, page));
+    } catch (err) {
+      yield put(sitePatientsFetchingError(err));
+    }
+  }
 }
 
 export function* fetchClientCreditsWatcher() {

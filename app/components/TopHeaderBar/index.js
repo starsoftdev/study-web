@@ -269,7 +269,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchSitePatients: (userId) => dispatch(fetchSitePatients(userId)),
+  fetchSitePatients: (userId, offset, limit) => dispatch(fetchSitePatients(userId, offset, limit)),
   fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
   logout: () => dispatch(logout()),
   fetchPatientMessageUnreadCount: (currentUser) => dispatch(fetchPatientMessageUnreadCount(currentUser)),
