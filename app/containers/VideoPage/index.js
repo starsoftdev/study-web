@@ -41,6 +41,9 @@ export default class HelpSupportPage extends React.Component { // eslint-disable
       {
         title: 'IRB Ad', id: 'lYE4xkDrfdw',
       },
+      {
+        title: 'Proposal', id: '9Ah2VEO5pvI',
+      },
     ];
     const opts = {
       width: '694',
