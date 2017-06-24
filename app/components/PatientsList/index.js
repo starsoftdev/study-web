@@ -13,6 +13,7 @@ import Checkbox from '../../components/Input/Checkbox';
 import CenteredModal from '../../components/CenteredModal/index';
 import EditPatientForm from '../../containers/PatientDatabasePage/EditPatientForm';
 import ChatForm from '../../components/ChatForm';
+import PatientItem from './PatientItem';
 import { selectPatients,
   selectSelectedPatient,
   selectSelectedPatientDetailsForForm,
@@ -31,9 +32,10 @@ import {
   removePatientFromTextBlast,
   setActiveSort,
   sortPatientsSuccess,
+  updateSelectAll,
 } from '../../containers/PatientDatabasePage/actions';
 import { selectProtocols, selectCurrentUser } from '../../containers/App/selectors';
-import PatientItem from './PatientItem';
+import { selectValues } from '../../common/selectors/form.selector';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../common/helper/functions';
 
 const formName = 'PatientDatabase.TextBlastModal';
@@ -61,6 +63,8 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     sortPatientsSuccess: PropTypes.func,
     protocols: PropTypes.object,
     currentUser: PropTypes.object,
+    formValues: PropTypes.object,
+    updateSelectAll: PropTypes.func,
   };
 
   constructor(props) {
@@ -121,12 +125,13 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   }
 
   toggleAllPatientSelection(checked) {
-    const { addPatientsToTextBlast, change, patients, removePatientsFromTextBlast, removePatientFromTextBlast } = this.props;
+    const { addPatientsToTextBlast, change, patients, removePatientsFromTextBlast, removePatientFromTextBlast, updateSelectAll } = this.props;
     if (checked) {
       addPatientsToTextBlast(patients.details);
     } else {
       removePatientsFromTextBlast(patients.details);
     }
+    updateSelectAll(checked);
     for (const patient of patients.details) {
       if (patient.unsubscribed && checked) {
         const { id } = patient;
@@ -242,7 +247,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
         <StickyContainer className="table-holder fixed-table">
           <Sticky className="fixed-table-sticky-header">
             <header className="fixed-table-head">
-              <h2>TOTAL PATIENT COUNT: {patients.details.length}</h2>
+              <h2>TOTAL PATIENT COUNT: {patients.total}</h2>
             </header>
             <div className="fixed-table-thead">
               <div className="table">
@@ -328,6 +333,7 @@ const mapStateToProps = createStructuredSelector({
   chat: selectChat(),
   protocols: selectProtocols(),
   currentUser: selectCurrentUser(),
+  formValues: selectValues(formName),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -343,6 +349,7 @@ function mapDispatchToProps(dispatch) {
     sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
     sortPatientsSuccess: (patients) => dispatch(sortPatientsSuccess(patients)),
+    updateSelectAll: (val) => dispatch(updateSelectAll(val)),
   };
 }
 

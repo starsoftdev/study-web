@@ -204,7 +204,7 @@ export function* fetchPatientsWatcher() {
         yield put(downloadComplete());
       } else {
         const response = yield call(request, requestURL);
-        yield put(patientsFetched(searchParams, response, patients, searchFilter));
+        yield put(patientsFetched(searchParams, response, patients, searchFilter, { filter: filterObj, clientId }));
       }
     } catch (err) {
       yield put(patientsFetchingError(err));
@@ -399,7 +399,7 @@ export function* savePatientWatcher() {
 function* submitTextBlast() {
   while (true) {
     // listen for the SUBMIT_TEXT_BLAST action
-    const { patients, message, clientRoleId, onClose } = yield take(SUBMIT_TEXT_BLAST);
+    const { formValues, clientRoleId, onClose } = yield take(SUBMIT_TEXT_BLAST);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -409,11 +409,11 @@ function* submitTextBlast() {
       yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
-          patientsIDs: patients.map(patient => (
-            patient.id
-          )),
+          patientsIDs: formValues.patients.map(patient => patient.id),
+          queryParams: formValues.queryParams,
+          selectAll: formValues.selectAll,
+          message: formValues.message,
           clientRoleId,
-          message,
         }),
       });
       onClose();

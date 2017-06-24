@@ -36,6 +36,7 @@ import {
 const initialState = {
   patients: {
     details: [],
+    total: 0,
     fetching: false,
     error: null,
   },
@@ -76,7 +77,7 @@ const initialState = {
 };
 
 export default function patientDatabasePageReducer(state = initialState, action) {
-  const { payload } = action;
+  const { payload, total } = action;
   const patientsCollection = map(state.patients.details, cloneDeep);
   let foundIndex = -1;
 
@@ -130,6 +131,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         ...state,
         patients: {
           details: state.patients.details,
+          total: state.patients.total,
           fetching: false,
           error: null,
         },
@@ -139,6 +141,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         ...state,
         patients: {
           details: state.patients.details,
+          total: state.patients.total,
           fetching: true,
           error: null,
         },
@@ -155,6 +158,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         ...state,
         patients: {
           details: payload,
+          total,
           fetching: false,
           error: null,
         },
@@ -171,6 +175,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         ...state,
         patients: {
           details: [],
+          total: 0,
           fetching: false,
           error: payload,
         },
@@ -180,6 +185,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         ...state,
         patients: {
           details: [],
+          total: 0,
           fetching: false,
           error: null,
         },
@@ -279,6 +285,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         },
         patients: {
           details: patientsCollection,
+          total: state.patients.total,
           fetching: false,
           error: null,
         },
@@ -336,6 +343,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         ...state,
         patients: {
           details: action.patients,
+          total: state.patients.total,
           fetching: false,
           error: null,
         },

@@ -40,6 +40,7 @@ import {
   SUBMIT_ADD_PATIENT_FAILURE,
   CLEAR_PATIENTS_LIST,
   CLEAR_IMPORT_FORM,
+  UPDATE_SELECT_ALL,
 } from './constants';
 
 export function fetchPatients(clientId, searchParams = {}, patients = {}, searchFilter = {}, isExport = false) {
@@ -53,9 +54,9 @@ export function fetchPatients(clientId, searchParams = {}, patients = {}, search
   };
 }
 
-export function patientsFetched(searchParams, payload, patients, searchFilter) {
-  const result = payload;
-  const initResult = payload;
+export function patientsFetched(searchParams, payload, patients, searchFilter, queryParams) {
+  const result = payload.patients;
+  const initResult = payload.patients;
 
   let resultArr = [];
   if (searchParams.skip === 0) {
@@ -93,6 +94,8 @@ export function patientsFetched(searchParams, payload, patients, searchFilter) {
     searchFilter,
     searchParams,
     result,
+    queryParams,
+    total: payload.total,
   };
 }
 
@@ -263,11 +266,10 @@ export function removePatientsFromTextBlast(patients) {
   };
 }
 
-export function submitTextBlast(patients, message, clientRoleId, onClose) {
+export function submitTextBlast(formValues, clientRoleId, onClose) {
   return {
     type: SUBMIT_TEXT_BLAST,
-    patients,
-    message,
+    formValues,
     clientRoleId,
     onClose,
   };
@@ -334,5 +336,12 @@ export function clearPatientsList() {
 export function clearForm() {
   return {
     type: CLEAR_IMPORT_FORM,
+  };
+}
+
+export function updateSelectAll(value) {
+  return {
+    type: UPDATE_SELECT_ALL,
+    selectAll: value,
   };
 }
