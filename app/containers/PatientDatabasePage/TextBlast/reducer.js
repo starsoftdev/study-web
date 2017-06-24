@@ -10,10 +10,13 @@ import {
   REMOVE_PATIENTS_FROM_TEXT_BLAST,
   FETCH_PATIENTS_SUCCESS,
   RESET_TEXT_BLAST,
+  UPDATE_SELECT_ALL,
 } from '../constants';
 
 const initialState = {
   values: {
+    queryParams: {},
+    selectAll: true,
     uncheckedPatients: [],
   },
 };
@@ -21,7 +24,7 @@ const initialState = {
 export default function TextBlastModal(state = initialState, action) {
   let patientsIdsToAdd = [];
   let patientsIdsToRemove = [];
-  const checkedPatinets = {};
+  const checkedPatients = {};
   let patients = {};
   let allPatients = false;
   switch (action.type) {
@@ -86,7 +89,7 @@ export default function TextBlastModal(state = initialState, action) {
       });
       _.forEach(patients, (patient) => {
         if (!patient.unsubscribed) {
-          checkedPatinets[`patient-${patient.id}`] = true;
+          checkedPatients[`patient-${patient.id}`] = true;
         }
       });
 
@@ -99,8 +102,17 @@ export default function TextBlastModal(state = initialState, action) {
         values: {
           ...state.values,
           patients,
-          ...checkedPatinets,
+          ...checkedPatients,
           'all-patients': allPatients,
+          queryParams: action.queryParams,
+        },
+      };
+    case UPDATE_SELECT_ALL:
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          selectAll: action.selectAll,
         },
       };
     default:

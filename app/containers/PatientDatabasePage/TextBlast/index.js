@@ -18,6 +18,7 @@ import Input from '../../../components/Input/index';
 import { removePatientsFromTextBlast, submitTextBlast } from '../actions';
 import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
 import { selectCurrentUser, selectClientCredits } from '../../App/selectors';
+import { selectPatients } from '../selectors';
 
 const formName = 'PatientDatabase.TextBlastModal';
 
@@ -42,6 +43,7 @@ class TextBlastModal extends React.Component {
     show: React.PropTypes.bool.isRequired,
     style: React.PropTypes.object,
     submitTextBlast: React.PropTypes.func.isRequired,
+    patients: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -58,7 +60,7 @@ class TextBlastModal extends React.Component {
     event.preventDefault();
     const { displayToastrError, formSyncErrors, formValues, submitTextBlast, onClose, currentUser } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
-      submitTextBlast(formValues.patients, formValues.message, currentUser.roleForClient.id, onClose);
+      submitTextBlast(formValues, currentUser.roleForClient.id, onClose);
     } else if (formSyncErrors.message) {
       displayToastrError(formSyncErrors.message);
     } else if (formSyncErrors.patients) {
@@ -76,11 +78,13 @@ class TextBlastModal extends React.Component {
   }
 
   renderPatientCount() {
-    const { formValues } = this.props;
+    const { formValues, patients } = this.props;
     if (formValues.patients && formValues.patients.length > 0) {
+      const remainingPatients = formValues.selectAll ? (patients.total - (formValues.queryParams.filter.skip + formValues.queryParams.filter.limit)) : 0;
+      const count = formValues.patients.length + (remainingPatients > 0 ? remainingPatients : 0);
       return (
         <span className="emails-counter">
-          <span className="counter">{formValues.patients.length}</span>
+          <span className="counter">{count}</span>
           <span className="text"> Patients</span>
         </span>
       );
@@ -142,7 +146,7 @@ class TextBlastModal extends React.Component {
                       type="submit"
                       className="pull-right"
                       onClick={this.submitTextBlast}
-                      disabled={disabled}
+                      disabled={disabled || enteredCharactersLength === 0}
                     >
                       Send
                     </Button>
@@ -159,6 +163,7 @@ class TextBlastModal extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
+  patients: selectPatients(),
   formValues: selectValues(formName),
   clientCredits: selectClientCredits(),
   formSyncErrors: selectSyncErrors(formName),
@@ -169,7 +174,7 @@ function mapDispatchToProps(dispatch) {
   return {
     displayToastrError: (error) => dispatch(toastrActions.error(error)),
     removePatients: () => dispatch(removePatientsFromTextBlast()),
-    submitTextBlast: (patients, message, clientRoleId, onClose) => dispatch(submitTextBlast(patients, message, clientRoleId, onClose)),
+    submitTextBlast: (formValues, clientRoleId, onClose) => dispatch(submitTextBlast(formValues, clientRoleId, onClose)),
   };
 }
 
