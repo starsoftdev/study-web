@@ -1,7 +1,7 @@
 import { validatorFactory } from '../../../utils/reduxForm';
 
 const schema = {
-  patients: { presence: { message: '^Patients are required.' } },
+  patients: { presence: { message: '^Error! No patients selected.' } },
 };
 
 export default validatorFactory(schema);

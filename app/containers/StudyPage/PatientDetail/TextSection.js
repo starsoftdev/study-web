@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
+import { actions as toastrActions } from 'react-redux-toastr';
 import Button from 'react-bootstrap/lib/Button';
 import { submitPatientText, readStudyPatientMessages, updatePatientSuccess } from '../actions';
 import CallItem from '../../../components/GlobalPMSModal/CallItem';
@@ -46,6 +47,7 @@ class TextSection extends React.Component {
     updatePatientSuccess: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
     currentPatientCategory: React.PropTypes.object,
+    displayToastrError: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -150,6 +152,8 @@ class TextSection extends React.Component {
         this.setState({ enteredCharactersLength: 0 }, () => {
           textarea.value = '';
         });
+      } else {
+        this.props.displayToastrError(err.errorMessage);
       }
     });
   }
@@ -256,6 +260,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  displayToastrError: (error) => dispatch(toastrActions.error(error)),
   submitPatientText: (text) => dispatch(submitPatientText(text)),
   sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
   fetchStudyPatientMessages: (payload) => dispatch(fetchStudyPatientMessages(payload)),
