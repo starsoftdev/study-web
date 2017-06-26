@@ -19,7 +19,6 @@ FETCH_PATIENT_DETAILS,
 FETCH_PATIENT_CATEGORIES,
 FETCH_STUDY,
 FETCH_STUDY_NEW_TEXTS,
-READ_STUDY_PATIENT_MESSAGES,
 ADD_PATIENT_INDICATION,
 REMOVE_PATIENT_INDICATION,
 SUBMIT_PATIENT_UPDATE,
@@ -60,8 +59,6 @@ import {
   movePatientBetweenCategoriesLoading,
   movePatientBetweenCategoriesSuccess,
   movePatientBetweenCategoriesFailed,
-  readStudyPatientMessagesSuccess,
-  readStudyPatientMessagesError,
   submitScheduleSucceeded,
   submitScheduleFailed,
 } from './actions';
@@ -288,24 +285,6 @@ function* fetchPatientCategories() {
     yield put(toastrActions.error('', errorMessage));
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
-    }
-  }
-}
-
-function* readStudyPatientMessages() {
-  while (true) {
-    const { patientId } = yield take(READ_STUDY_PATIENT_MESSAGES);
-    if (patientId && patientId > 0) {
-      try {
-        const requestURL = `${API_URL}/patients/${patientId}/markMessagesAsRead`;
-        const response = yield call(request, requestURL);
-
-        yield put(readStudyPatientMessagesSuccess(response));
-      } catch (err) {
-        yield put(readStudyPatientMessagesError(err));
-      }
-    } else {
-      yield put(readStudyPatientMessagesSuccess([]));
     }
   }
 }
@@ -891,7 +870,6 @@ export function* fetchStudySaga() {
     const watcherH = yield fork(exportPatients);
     const watcherI = yield fork(fetchPatientDetails);
     const watcherJ = yield fork(findPatientsSaga);
-    const watcherK = yield fork(readStudyPatientMessages);
     const watcherL = yield fork(addPatientIndication);
     const watcherM = yield fork(submitMovePatientBetweenCategories);
     const watcherN = yield fork(removePatientIndication);
@@ -916,7 +894,6 @@ export function* fetchStudySaga() {
     yield cancel(watcherH);
     yield cancel(watcherI);
     yield cancel(watcherJ);
-    yield cancel(watcherK);
     yield cancel(watcherL);
     yield cancel(watcherM);
     yield cancel(watcherN);
