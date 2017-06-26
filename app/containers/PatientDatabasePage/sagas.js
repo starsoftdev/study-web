@@ -405,7 +405,7 @@ function* submitTextBlast() {
       return;
     }
     try {
-      const requestURL = `${API_URL}/twilioTextMessages/textBlast`;
+      const requestURL = `${API_URL}/twilioTextMessages/scheduleTextBlast`;
       yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
@@ -417,7 +417,7 @@ function* submitTextBlast() {
         }),
       });
       onClose();
-      yield put(toastrActions.success('Text Blast', 'Text blast submitted successfully!'));
+      yield put(toastrActions.success('Text Blast', 'Texts are scheduled successfully!'));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
