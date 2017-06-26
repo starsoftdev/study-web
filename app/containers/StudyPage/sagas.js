@@ -128,31 +128,33 @@ function* fetchStudyDetails() {
   }
 }
 
-function* fetchStudyViewsStat(action) {
-  const authToken = getItem('auth_token');
-  if (!authToken) {
-    return;
-  }
-
-  // listen for the latest FETCH_STUDY action
-  const { studyId, campaignId } = action;
-
-  try {
-    let requestURL = `${API_URL}/studies/${studyId}/landingPageViews`;
-    if (campaignId) {
-      requestURL += `?campaignId=${campaignId}`;
-    }
-    const response = yield call(request, requestURL, {
-      method: 'GET',
-    });
-    yield put(studyViewsStatFetched(response));
-  } catch (e) {
-    const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
-    if (e.status === 401) {
-      yield call(() => { location.href = '/login'; });
-    }
-  }
+function* fetchStudyViewsStat(action) { // eslint-disable-line
+  // const authToken = getItem('auth_token');
+  // if (!authToken) {
+  //   return;
+  // }
+  //
+  // // listen for the latest FETCH_STUDY action
+  // const { studyId, campaignId } = action;
+  //
+  // try {
+  //   let requestURL = `${API_URL}/studies/${studyId}/landingPageViews`;
+  //   if (campaignId) {
+  //     requestURL += `?campaignId=${campaignId}`;
+  //   }
+  //   const response = yield call(request, requestURL, {
+  //     method: 'GET',
+  //   });
+  //   yield put(studyViewsStatFetched(response));
+  // TODO re-enable when optimized for high traffic
+  yield put(studyViewsStatFetched(0));
+  // } catch (e) {
+  //   const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
+  //   yield put(toastrActions.error('', errorMessage));
+  //   if (e.status === 401) {
+  //     yield call(() => { location.href = '/login'; });
+  //   }
+  // }
 }
 
 
