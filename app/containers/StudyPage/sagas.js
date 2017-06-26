@@ -18,7 +18,6 @@ EXPORT_PATIENTS,
 FETCH_PATIENT_DETAILS,
 FETCH_PATIENT_CATEGORIES,
 FETCH_STUDY,
-FETCH_STUDY_NEW_TEXTS,
 READ_STUDY_PATIENT_MESSAGES,
 ADD_PATIENT_INDICATION,
 REMOVE_PATIENT_INDICATION,
@@ -50,8 +49,6 @@ import {
   submitAddPatientSuccess,
   submitAddPatientFailure,
   patientReferralStatFetched,
-  callStatsFetched,
-  textStatsFetched,
   addPatientIndicationSuccess,
   removePatientIndicationSuccess,
   updatePatientSuccess,
@@ -185,85 +182,87 @@ function* fetchPatientReferralStat(action) {
   }
 }
 
-function* fetchStudyCallStats(action) {
-  const authToken = getItem('auth_token');
-  if (!authToken) {
-    return;
-  }
+// TODO re-enable when optimized for high traffic
+// function* fetchStudyCallStats(action) {
+//   const authToken = getItem('auth_token');
+//   if (!authToken) {
+//     return;
+//   }
+//
+//   // listen for the latest FETCH_STUDY action
+//   const { studyId, campaignId } = action;
+//
+//   try {
+//     let requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}`;
+//     if (campaignId) {
+//       requestURL += `?campaignId=${campaignId}`;
+//     }
+//     const response = yield call(request, requestURL, {
+//       method: 'GET',
+//     });
+//     yield put(callStatsFetched(response));
+//   } catch (e) {
+//     const errorMessage = get(e, 'message', 'Something went wrong while fetching call stats. Please try again later.');
+//     yield put(toastrActions.error('', errorMessage));
+//     if (e.status === 401) {
+//       yield call(() => { location.href = '/login'; });
+//     }
+//   }
+// }
 
-  // listen for the latest FETCH_STUDY action
-  const { studyId, campaignId } = action;
+// function* fetchStudyTextStats(action) {
+//   const authToken = getItem('auth_token');
+//   if (!authToken) {
+//     return;
+//   }
+//
+//   // listen for the latest FETCH_STUDY action
+//   const { studyId, campaignId } = action;
+//
+//   try {
+//     const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
+//     const options = {
+//       method: 'GET',
+//       query: {},
+//     };
+//     if (campaignId) {
+//       options.query.campaignId = campaignId;
+//     }
+//     const response = yield call(request, requestURL, options);
+//     yield put(textStatsFetched(response));
+//   } catch (e) {
+//     const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
+//     yield put(toastrActions.error('', errorMessage));
+//     if (e.status === 401) {
+//       yield call(() => { location.href = '/login'; });
+//     }
+//   }
+// }
 
-  try {
-    let requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}`;
-    if (campaignId) {
-      requestURL += `?campaignId=${campaignId}`;
-    }
-    const response = yield call(request, requestURL, {
-      method: 'GET',
-    });
-    yield put(callStatsFetched(response));
-  } catch (e) {
-    const errorMessage = get(e, 'message', 'Something went wrong while fetching call stats. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
-    if (e.status === 401) {
-      yield call(() => { location.href = '/login'; });
-    }
-  }
-}
-
-function* fetchStudyTextStats(action) {
-  const authToken = getItem('auth_token');
-  if (!authToken) {
-    return;
-  }
-
-  // listen for the latest FETCH_STUDY action
-  const { studyId, campaignId } = action;
-
-  try {
-    const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
-    const options = {
-      method: 'GET',
-      query: {},
-    };
-    if (campaignId) {
-      options.query.campaignId = campaignId;
-    }
-    const response = yield call(request, requestURL, options);
-    yield put(textStatsFetched(response));
-  } catch (e) {
-    const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
-    if (e.status === 401) {
-      yield call(() => { location.href = '/login'; });
-    }
-  }
-}
-
-function* fetchStudyTextNewStats() {
-  while (true) {
-    // listen for the FETCH_STUDY action
-    const { studyId } = yield take(FETCH_STUDY_NEW_TEXTS);
-    const authToken = getItem('auth_token');
-    if (!authToken) {
-      return;
-    }
-    try {
-      const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
-      const response = yield call(request, requestURL, {
-        method: 'GET',
-      });
-      yield put(textStatsFetched(response));
-    } catch (e) {
-      const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
-      if (e.status === 401) {
-        yield call(() => { location.href = '/login'; });
-      }
-    }
-  }
-}
+// TODO re-enable when optimized for high traffic
+// function* fetchStudyTextNewStats() {
+//   while (true) {
+//     // listen for the FETCH_STUDY action
+//     const { studyId } = yield take(FETCH_STUDY_NEW_TEXTS);
+//     const authToken = getItem('auth_token');
+//     if (!authToken) {
+//       return;
+//     }
+//     try {
+//       const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
+//       const response = yield call(request, requestURL, {
+//         method: 'GET',
+//       });
+//       yield put(textStatsFetched(response));
+//     } catch (e) {
+//       const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
+//       yield put(toastrActions.error('', errorMessage));
+//       if (e.status === 401) {
+//         yield call(() => { location.href = '/login'; });
+//       }
+//     }
+//   }
+// }
 
 function* fetchPatientCategories() {
   const authToken = getItem('auth_token');
@@ -886,8 +885,8 @@ export function* fetchStudySaga() {
     const watcherA = yield fork(fetchStudyDetails);
     const watcherB = yield fork(takeLatest, FETCH_STUDY, fetchStudyViewsStat);
     const watcherC = yield fork(takeLatest, FETCH_STUDY, fetchPatientReferralStat);
-    const watcherD = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
-    const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
+    // const watcherD = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
+    // const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);
     const watcherH = yield fork(exportPatients);
@@ -905,14 +904,14 @@ export function* fetchStudySaga() {
     const watcherT = yield fork(submitDeleteNote);
     const watcherU = yield fork(submitPatientText);
     const watcherV = yield fork(submitSchedule);
-    const watcherZ = yield fork(fetchStudyTextNewStats);
+    // const watcherZ = yield fork(fetchStudyTextNewStats);
 
     yield take(LOCATION_CHANGE);
     yield cancel(watcherA);
     yield cancel(watcherB);
     yield cancel(watcherC);
-    yield cancel(watcherD);
-    yield cancel(watcherE);
+    // yield cancel(watcherD);
+    // yield cancel(watcherE);
     yield cancel(watcherF);
     yield cancel(watcherG);
     yield cancel(watcherH);
@@ -930,7 +929,7 @@ export function* fetchStudySaga() {
     yield cancel(watcherT);
     yield cancel(watcherU);
     yield cancel(watcherV);
-    yield cancel(watcherZ);
+    // yield cancel(watcherZ);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

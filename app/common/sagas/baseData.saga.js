@@ -774,6 +774,7 @@ export function* saveUserWatcher() {
   }
 }
 
+// TODO what is the purpose of this API call?? Is it a test API call, since the area code is hardcoded?
 export function* getAvailPhoneNumbersWatcher() {
   while (true) {
     yield take(GET_AVAIL_PHONE_NUMBERS);
