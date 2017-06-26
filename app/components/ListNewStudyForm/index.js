@@ -170,12 +170,14 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
         });
         // add site users
         _.forEach(fullSiteLocation.roles, (role) => {
-          fields.push({
-            firstName: role.user.firstName,
-            lastName: role.user.lastName,
-            userId: role.user.id,
-            isChecked: true,
-          });
+          if (role.user) {
+            fields.push({
+              firstName: role.user.firstName,
+              lastName: role.user.lastName,
+              userId: role.user.id,
+              isChecked: true,
+            });
+          }
         });
 
         change('emailNotifications', fields);
