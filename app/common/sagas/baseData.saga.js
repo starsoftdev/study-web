@@ -62,6 +62,9 @@ import {
   SUBMIT_CNS,
 } from '../../containers/App/constants';
 
+import { READ_STUDY_PATIENT_MESSAGES } from '../../containers/StudyPage/constants';
+import { readStudyPatientMessagesSuccess, readStudyPatientMessagesError } from '../../containers/StudyPage/actions';
+
 import {
   SUBMIT_TO_CLIENT_PORTAL,
 } from '../../containers/DashboardPortalsPage/constants';
@@ -199,6 +202,7 @@ export default function* baseDataSaga() {
   yield fork(submitToClientPortalWatcher);
   yield fork(getCnsInfoWatcher);
   yield fork(submitCnsWatcher);
+  yield fork(readStudyPatientMessages);
 }
 
 export function* fetchIndicationsWatcher() {
@@ -1209,5 +1213,23 @@ export function* submitCnsWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting cns info');
     yield put(toastrActions.error('', errorMessage));
     yield put(submitCnsError(err));
+  }
+}
+
+function* readStudyPatientMessages() {
+  while (true) {
+    const { patientId } = yield take(READ_STUDY_PATIENT_MESSAGES);
+    if (patientId && patientId > 0) {
+      try {
+        const requestURL = `${API_URL}/patients/${patientId}/markMessagesAsRead`;
+        const response = yield call(request, requestURL);
+
+        yield put(readStudyPatientMessagesSuccess(response));
+      } catch (err) {
+        yield put(readStudyPatientMessagesError(err));
+      }
+    } else {
+      yield put(readStudyPatientMessagesSuccess([]));
+    }
   }
 }
