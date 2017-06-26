@@ -410,8 +410,6 @@ function* submitTextBlast() {
         method: 'POST',
         body: JSON.stringify({
           patientsIDs: formValues.patients.map(patient => patient.id),
-          queryParams: formValues.queryParams,
-          selectAll: formValues.selectAll,
           message: formValues.message,
           clientRoleId,
         }),
