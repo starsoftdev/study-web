@@ -750,7 +750,7 @@ function* submitTextBlast() {
         }),
       });
       onClose();
-      yield put(toastrActions.success('Text Blast', 'Success! Your text blast have been sent.'));
+      yield put(toastrActions.success('', 'Success! Your text blast have been sent.'));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       yield put(toastrActions.error('', errorMessage));

@@ -153,7 +153,8 @@ class TextSection extends React.Component {
           textarea.value = '';
         });
       } else {
-        this.props.displayToastrError('', err.errorMessage);
+        const errorMessage = err.errorMessage || err.message
+        this.props.displayToastrError('', errorMessage);
       }
     });
   }
