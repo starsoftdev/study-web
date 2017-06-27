@@ -62,9 +62,9 @@ class TextBlastModal extends React.Component {
     if (!formSyncErrors.message && !formSyncErrors.patients) {
       submitTextBlast(formValues, currentUser.roleForClient.id, onClose);
     } else if (formSyncErrors.message) {
-      displayToastrError(formSyncErrors.message);
+      displayToastrError('', formSyncErrors.message);
     } else if (formSyncErrors.patients) {
-      displayToastrError(formSyncErrors.patients);
+      displayToastrError('', formSyncErrors.patients);
     }
   }
 
@@ -172,7 +172,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    displayToastrError: (error) => dispatch(toastrActions.error(error)),
+    displayToastrError: (heading, error) => dispatch(toastrActions.error(heading, error)),
     removePatients: () => dispatch(removePatientsFromTextBlast()),
     submitTextBlast: (formValues, clientRoleId, onClose) => dispatch(submitTextBlast(formValues, clientRoleId, onClose)),
   };

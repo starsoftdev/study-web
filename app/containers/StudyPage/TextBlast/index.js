@@ -217,9 +217,9 @@ class TextBlastModal extends React.Component {
         this.props.fetchClientCredits(currentUser.id);
       });
     } else if (formSyncErrors.message) {
-      displayToastrError(formSyncErrors.message);
+      displayToastrError('', formSyncErrors.message);
     } else if (formSyncErrors.patients) {
-      displayToastrError(formSyncErrors.patients);
+      displayToastrError('', formSyncErrors.patients);
     }
   }
 
@@ -478,7 +478,7 @@ function mapDispatchToProps(dispatch) {
   return {
     addPatients: (patients) => dispatch(addPatientsToTextBlast(patients)),
     change: (field, value) => dispatch(change(formName, field, value)),
-    displayToastrError: (error) => dispatch(toastrActions.error(error)),
+    displayToastrError: (heading, error) => dispatch(toastrActions.error(heading, error)),
     findPatients: (studyId, text, categoryIds, sourceIds, campaignId) => dispatch(findPatientsForTextBlast(studyId, text, categoryIds, sourceIds, campaignId)),
     filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
     removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
