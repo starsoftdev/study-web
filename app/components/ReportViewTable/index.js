@@ -139,8 +139,6 @@ export class ReportViewTable extends React.Component {
           className={(this.state.hoveredRowIndex === index) ? 'active-table-row' : ''}
         >
           <td>
-          </td>
-          <td>
             <a data-for={`study-id-${index}`} target="_blank" data-tip={`${item.study_id} - ${item.site_name}`} href={landingHref} className="tooltip-element">{`${piName}`}</a>
             <ReactTooltip id={`study-id-${index}`} type="info" class="tooltipClass" delayHide={500} effect="solid" />
           </td>
@@ -216,7 +214,6 @@ export class ReportViewTable extends React.Component {
               <table className="table">
                 <thead>
                   <tr>
-                    <th className="default-cursor">#<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="principalinvestigatorfirstname" className={`th ${(this.props.paginationOptions.activeSort === 'principalinvestigatorfirstname') ? this.props.paginationOptions.activeDirection : ''}`}>PRINCIPAL INVESTIGATOR <i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="level" className={`th ${(this.props.paginationOptions.activeSort === 'level') ? this.props.paginationOptions.activeDirection : ''}`}>EXPOSURE LEVEL <i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="is_active" className={`th ${(this.props.paginationOptions.activeSort === 'is_active') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS <i className="caret-arrow" /></th>
