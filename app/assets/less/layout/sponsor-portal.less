@@ -550,9 +550,10 @@
 	}
 
 	.table-left {
-    tbody > tr > td:first-child:before {
+    counter-reset: item;
+    tbody > tr > td:first-child::before {
       counter-increment: item;
-      content: counters(item, ".", decimal) "";
+      content: counter(item);
     }
 		td, th {
       &:first-child { width: 37px; }
