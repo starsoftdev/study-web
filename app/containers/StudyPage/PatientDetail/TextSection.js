@@ -153,7 +153,7 @@ class TextSection extends React.Component {
           textarea.value = '';
         });
       } else {
-        this.props.displayToastrError(err.errorMessage);
+        this.props.displayToastrError('', err.errorMessage);
       }
     });
   }
@@ -260,7 +260,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  displayToastrError: (error) => dispatch(toastrActions.error(error)),
+  displayToastrError: (heading, error) => dispatch(toastrActions.error(heading, error)),
   submitPatientText: (text) => dispatch(submitPatientText(text)),
   sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
   fetchStudyPatientMessages: (payload) => dispatch(fetchStudyPatientMessages(payload)),
