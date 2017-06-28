@@ -144,12 +144,13 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
                 {(isNewPatient) && <div className="name font-bold">{`Patient #${innerCounter} (${note.siteName})`}</div>}
                 <div className="category-notes-item">
                   <div>
-                    <div className="img-holder">
+                    { isNewPatient && <div className="img-holder">
                       <img alt="" src={unknownImageUrl} />
-                    </div>
+                    </div> }
                     <div className={classNames('post-content', switchColorClass ? '' : 'reply')}>
                       <p>{note.note}</p>
                     </div>
+                    <div className="username font-bold">{`${note.firstName} ${note.lastName}`}</div>
                     <time dateTime={note.created_at}>{moment.tz(note.created_at, this.props.currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
                   </div>
                 </div>
