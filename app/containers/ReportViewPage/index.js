@@ -141,7 +141,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
             isNextPatientDifferent = (nextPatient && note.patient_id !== nextPatient);
             const result =
               (<div key={index}>
-                {(isNewPatient) && <strong className="name">{`Patient #${innerCounter} (${note.siteName})`}</strong>}
+                {(isNewPatient) && <div className="name font-bold">{`Patient #${innerCounter} (${note.siteName})`}</div>}
                 <div className="category-notes-item">
                   <div>
                     <div className="img-holder">
