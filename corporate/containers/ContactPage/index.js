@@ -116,7 +116,7 @@ export class ContactPage extends React.Component { // eslint-disable-line react/
         <div className="container">
           <h2 className="main-heading alt text-center small-font">
             STUDYKIK IS DEDICATED TO HELPING PEOPLE FIND CLINICAL TRIALS IN THEIR AREA. IF YOU WISH TO HAVE VOLUNTEERS
-            FIND YOUR CLINICAL TRIALS, <Link to="/" title="find your clinical trials">CLICK HERE</Link>
+            FIND YOUR CLINICAL TRIALS, <Link to="/list-your-trials">CLICK HERE</Link>
           </h2>
           <form
             ref={(animatedForm) => { this.animatedForm = animatedForm; }}
