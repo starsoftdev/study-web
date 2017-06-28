@@ -20,3 +20,7 @@ export const CHANGE_PROTOCOL_STATUS_SUCCESS = 'app/ReportViewPage/CHANGE_PROTOCO
 export const CHANGE_PROTOCOL_STATUS_ERROR = 'app/ReportViewPage/CHANGE_PROTOCOL_STATUS_ERROR';
 export const EXPORT_STUDIES = 'app/ReportViewPage/EXPORT_STUDIES';
 
+export const GET_CATEGORY_NOTES = 'app/ReportViewPage/GET_CATEGORY_NOTES';
+export const GET_CATEGORY_NOTES_SUCCESS = 'app/ReportViewPage/GET_CATEGORY_NOTES_SUCCESS';
+export const GET_CATEGORY_NOTES_ERROR = 'app/ReportViewPage/GET_CATEGORY_NOTES_ERROR';
+
