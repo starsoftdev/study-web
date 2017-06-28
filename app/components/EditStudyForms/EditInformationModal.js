@@ -541,21 +541,6 @@ export class EditInformationModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row">
-                  <strong className="label"><label>USER EMAIL NOTIFICATIONS</label></strong>
-                  <div className="field">
-                    <div className="emails-list-holder">
-                      {<FieldArray
-                        name="emailNotifications"
-                        component={RenderEmailsList}
-                        formValues={this.props.formValues}
-                        change={change}
-                        addEmailNotification={this.props.addEmailNotificationClick}
-                        closeEmailNotification={this.closeAddEmailModal}
-                      />}
-                    </div>
-                  </div>
-                </div>
-                <div className="field-row">
                   <strong className="label required">
                     <label>PRINCIPAL INVESTIGATOR</label>
                   </strong>
@@ -577,6 +562,21 @@ export class EditInformationModal extends React.Component {
                           placeholder="Last Name"
                         />
                       </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label"><label>USER EMAIL NOTIFICATIONS</label></strong>
+                  <div className="field">
+                    <div className="emails-list-holder">
+                      {<FieldArray
+                        name="emailNotifications"
+                        component={RenderEmailsList}
+                        formValues={this.props.formValues}
+                        change={change}
+                        addEmailNotification={this.props.addEmailNotificationClick}
+                        closeEmailNotification={this.closeAddEmailModal}
+                      />}
                     </div>
                   </div>
                 </div>
