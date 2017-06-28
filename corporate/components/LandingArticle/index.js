@@ -5,9 +5,10 @@ import React, { PropTypes } from 'react';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
 import Remarkable from 'remarkable';
-
+import Scroll from 'react-scroll';
 import SocialArea from '../SocialArea';
 
+const scroll = Scroll.animateScroll;
 export class LandingArticle extends React.Component {
 
   static propTypes = {
@@ -35,6 +36,13 @@ export class LandingArticle extends React.Component {
   setVisible(el) {
     const viewAtr = el.getAttribute('data-view');
     el.classList.add('in-viewport', viewAtr);
+  }
+
+  scrollToTop() {
+    const options = {
+      duration: 500,
+    };
+    scroll.scrollTo(0, options);
   }
 
   render() {
@@ -118,7 +126,7 @@ export class LandingArticle extends React.Component {
                 <address>{address}</address>
               </div>
             }
-            <p className="text-underline">
+            <p className="instruction text-underline" onClick={this.scrollToTop}>
               {ifInterestedInstructions}
             </p>
             <p className="note">
