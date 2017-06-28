@@ -17,6 +17,9 @@ import {
   GET_REPORTS_TOTALS,
   GET_REPORTS_TOTALS_SUCCESS,
   GET_REPORTS_TOTALS_ERROR,
+  GET_CATEGORY_NOTES,
+  GET_CATEGORY_NOTES_SUCCESS,
+  GET_CATEGORY_NOTES_ERROR,
 } from './constants';
 
 export function getReportsList(searchParams, limit, offset, sort, order) {
@@ -106,6 +109,29 @@ export function getReportsTotalsSuccess(payload) {
 export function getReportsTotalsError(payload) {
   return {
     type: GET_REPORTS_TOTALS_ERROR,
+    payload,
+  };
+}
+
+export function getCategoryNotes(searchParams, category, studyId) {
+  return {
+    type: GET_CATEGORY_NOTES,
+    searchParams,
+    category,
+    studyId,
+  };
+}
+
+export function getCategoryNotesSuccess(payload) {
+  return {
+    type: GET_CATEGORY_NOTES_SUCCESS,
+    payload,
+  };
+}
+
+export function getCategoryNotesError(payload) {
+  return {
+    type: GET_CATEGORY_NOTES_ERROR,
     payload,
   };
 }
