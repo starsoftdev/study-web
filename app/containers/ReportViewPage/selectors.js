@@ -52,6 +52,12 @@ const selectChangeProtocolStatusProcess = () => createSelector(
   substate => substate.changeProtocolStatusProcess
 );
 
+const selectCategoryNotes = () => createSelector(
+  selectReportViewPageDomain(),
+  substate => substate.categoryNotes
+);
+
+
 export default selectReportViewPage;
 export {
   selectReportViewPageDomain,
@@ -61,4 +67,5 @@ export {
   selectTableFormValues,
   selectChangeProtocolStatusProcess,
   selectReportsTotals,
+  selectCategoryNotes,
 };
