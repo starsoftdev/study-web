@@ -243,7 +243,7 @@ class FilterBar extends Component {
             />
             : <Select
               className="form-control data-search"
-              disabled={fetchingSites || !isAdmin || bDisabled}
+              disabled={fetchingSites || bDisabled}
               options={siteLocationOptions}
               value={filter.siteLocation}
               placeholder="Select Site Location"
