@@ -195,7 +195,6 @@ class FilterBar extends Component {
 
   render() {
     const {
-      isAdmin,
       fetchingSites,
       filter,
     } = this.props;
