@@ -95,7 +95,6 @@ export class RequestProposalCart extends Component {
     }
 
     const { formValues, currentUser, levels, indicationLevelPrice } = this.props;
-
     const selectedSite = _.find(this.props.siteLocations, (o) => (o.id === formValues.site));
     const selectedIndication = _.find(this.props.indications, (o) => (o.id === formValues.indication_id));
     const selectedLevel = _.find(this.props.levels, (o) => (o.id === formValues.level_id));

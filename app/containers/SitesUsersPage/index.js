@@ -208,10 +208,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     }
     let bDisabled = true;
     if (currentUser && currentUser.roleForClient) {
-      bDisabled = (
-        currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards ||
-        currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Site'
-      ) ? null : true;
+      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin') ? null : true;
     }
     const siteOptions = map(sites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
