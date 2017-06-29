@@ -108,7 +108,10 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
     const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
     let bDisabled = true;
     if (currentUser && currentUser.roleForClient) {
-      bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
+      bDisabled = (
+        currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards ||
+        currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Site'
+      ) ? null : true;
     }
     let defaultValue = null;
     if (!isAdmin && bDisabled) {

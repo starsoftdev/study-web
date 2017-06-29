@@ -68,7 +68,10 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
     const { clientSites, studies, hasError, handleSubmit, currentUser } = this.props;
     let bDisabled = true;
     if (currentUser && currentUser.roleForClient) {
-      bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
+      bDisabled = (
+        currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards ||
+        currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Site'
+      ) ? null : true;
     }
     const siteOptions = [{ label: 'All', value: '0' }].concat(map(clientSites.details, siteIterator => ({
       label: siteIterator.name,
