@@ -608,7 +608,6 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('dashboardProtocolPage', reducer.default);
-          injectReducer('dashboardProtocolPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });
@@ -629,7 +628,6 @@ export default function createRoutes(store) {
         const renderRoute = loadModule(cb);
 
         importModules.then(([reducer, sagas, component]) => {
-          injectReducer('dashboardCROPage', reducer.default);
           injectReducer('dashboardCROPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
@@ -652,7 +650,27 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('dashboardNotePage', reducer.default);
-          injectReducer('dashboardNotePage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/app/dashboard-messaging-numbers',
+      name: 'dashboardMessagingNumbersPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardMessagingNumbersPage/reducer'),
+          System.import('./containers/DashboardMessagingNumbersPage/sagas'),
+          System.import('./containers/DashboardMessagingNumbersPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardMessagingNumbersPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });
@@ -673,7 +691,6 @@ export default function createRoutes(store) {
         const renderRoute = loadModule(cb);
 
         importModules.then(([reducer, sagas, component]) => {
-          injectReducer('dashboardExposureLevelPage', reducer.default);
           injectReducer('dashboardExposureLevelPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
@@ -696,7 +713,6 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('dashboardCouponPage', reducer.default);
-          injectReducer('dashboardCouponPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });
@@ -718,7 +734,6 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('dashboardIndicationPage', reducer.default);
-          injectReducer('dashboardIndicationPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });
@@ -739,7 +754,6 @@ export default function createRoutes(store) {
         const renderRoute = loadModule(cb);
 
         importModules.then(([reducer, sagas, component]) => {
-          injectReducer('dashboardSponsorAdminPage', reducer.default);
           injectReducer('dashboardSponsorAdminPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
