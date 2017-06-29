@@ -17,7 +17,7 @@ class TextEmailBlastModal extends React.Component {
   }
 
   render() {
-    const { toggleTextBlast, ...props } = this.props;
+    const { toggleTextBlast, ...props } = this.props; // eslint-disable-line
     return (
       <Modal
         {...props}
