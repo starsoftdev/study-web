@@ -182,6 +182,85 @@
   }
 }
 
+.category-notes-container{
+  margin: 25px;
+  .name{
+    padding-left: 75px;
+    margin-bottom: 10px;
+  }
+  .patient-note-container{
+    position: relative;
+  }
+  .img-holder {
+    position: absolute;
+    width: 50px;
+    border-radius: 100%;
+    top: 0;
+    left: 0;
+    img{
+      display: block;
+      max-width: 100%;
+      border-radius: 100%;
+    }
+  }
+  .category-notes-item{
+    position: relative;
+    padding-left: 75px;
+    .post-content {
+      &.reply{
+        background: #00afef;
+        border-color: #76daff;
+        &:after {
+          border-right-color: #00afef;
+        }
+        &:before {
+          border-right-color: #76daff;
+        }
+      }
+      .font(18px);
+      margin: 0 0 5px;
+      position: relative;
+      padding: 7px 15px 5px;
+      border: solid 2px #c0e890;
+      color: #fff;
+      background: #a0cf67;
+      &:after, &:before {
+        top: 11px;
+        right: 100%;
+        .arrow(10px 10px 10px 0);
+        border-right-color: #c0e890;
+      }
+      &:after {
+        top: 13px;
+        z-index: 2;
+        margin: 0 -1px 0 0;
+        border-width: 8px 8px 8px 0;
+        border-right-color: #a0cf67;
+      }
+      .stop-list-notification,
+      .blast-message-notification{
+        display: inline-block;
+        margin: 10px 0 0;
+        font-size: 15px;
+        width: 100%;
+      }
+      p{
+        margin-bottom: 5px;
+      }
+    }
+    time{
+      color: #949ca1;
+      display: block;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+  }
+}
+
+.font-bold{
+  font-weight: bold;
+}
+
 .tooltop-inner{
   padding: 7px 5px;
   min-width: 132px;

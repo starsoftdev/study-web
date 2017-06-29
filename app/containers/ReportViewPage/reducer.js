@@ -19,6 +19,9 @@ import {
   GET_REPORTS_TOTALS,
   GET_REPORTS_TOTALS_SUCCESS,
   GET_REPORTS_TOTALS_ERROR,
+  GET_CATEGORY_NOTES,
+  GET_CATEGORY_NOTES_ERROR,
+  GET_CATEGORY_NOTES_SUCCESS,
 } from './constants';
 
 const initialState = {
@@ -40,6 +43,11 @@ const initialState = {
   },
   changeProtocolStatusProcess: {
     saving: false,
+    error: null,
+  },
+  categoryNotes: {
+    details: [],
+    fetching: false,
     error: null,
   },
 };
@@ -195,6 +203,33 @@ function reportViewPageReducer(state = initialState, action) {
         ...state,
         changeProtocolStatusProcess: {
           saving: false,
+          error: action.payload,
+        },
+      };
+    case GET_CATEGORY_NOTES:
+      return {
+        ...state,
+        categoryNotes: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case GET_CATEGORY_NOTES_SUCCESS:
+      return {
+        ...state,
+        categoryNotes: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case GET_CATEGORY_NOTES_ERROR:
+      return {
+        ...state,
+        categoryNotes: {
+          details: [],
+          fetching: false,
           error: action.payload,
         },
       };

@@ -49,6 +49,7 @@ const routes = {
   childRoutes: [
     { path: '/login/', component: LoginPage, onEnter: redirectLogin },
     { path: '/login', component: LoginPage },
+    { path: '/dashboard', component: LoginPage, onEnter: redirectLogin },
     { path: '/reset-password', component: ResetPasswordPage },
     { path: '/confirm-reset-password', component: ConfirmResetPasswordPage },
     { path: '/about', component: AboutPage },

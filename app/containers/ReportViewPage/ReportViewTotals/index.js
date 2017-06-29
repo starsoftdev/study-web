@@ -7,6 +7,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     reportsList: PropTypes.object,
     getPercentageObject: PropTypes.func,
     totals: PropTypes.object,
+    openDnqModal: PropTypes.func,
   }
 
   render() {
@@ -46,9 +47,9 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
           <strong className="heading"><span>CALL<br /> ATTEMPTED</span></strong>
           <strong className="number"><span>{totals.call_attempted}<span className="small">{`(${percentage.call_attempted_p}%)`}</span></span></strong>
         </li>
-        <li>
+        <li onClick={() => { this.props.openDnqModal(); }}>
           <strong className="heading"><span>DNQ</span></strong>
-          <strong className="number"><span>{totals.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></strong>
+          <strong className="number pointer"><span>{totals.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></strong>
         </li>
         <li>
           <strong className="heading"><span>ACTION NEEDED</span></strong>
