@@ -113,7 +113,7 @@ export class ThankYouPage extends React.Component {
     const thankyouForText =
       (thankYouData.thankyouFor && thankYouData.thankyouFor !== '') ? thankYouData.thankyouFor : 'Thank you for signing up for our research study!';
     const youWillBeText =
-      (thankYouData.youWillBe && thankYouData.youWillBe !== '') ? thankYouData.youWillBe : 'You will be receiving a phone call or text message from the research site soon. If you\'d like to call and schedule an appointment, you can do so at.';
+      (thankYouData.youWillBe && thankYouData.youWillBe !== '') ? thankYouData.youWillBe : 'You will be receiving a phone call or text message from the research site soon. If you\'d like to call and schedule an appointment, you can do so at:';
     const lookingForwardText =
       (thankYouData.lookingForwardText && thankYouData.lookingForwardText !== '') ? thankYouData.lookingForwardText : 'Looking forward to having you join.';
     const herIsTheText =
