@@ -8,15 +8,21 @@ import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import Modal from 'react-bootstrap/lib/Modal';
+import moment from 'moment';
+import classNames from 'classnames';
 
+import LoadingSpinner from '../../components/LoadingSpinner';
 import ReportViewInfo from '../../containers/ReportViewPage/ReportViewInfo';
 import ReportViewTotals from '../../containers/ReportViewPage/ReportViewTotals';
 import ReportViewSearch from '../../components/ReportViewSearch';
 import ReportViewTable from '../../components/ReportViewTable';
+import CenteredModal from '../../components/CenteredModal/index';
+import unknownImageUrl from '../../assets/images/unknown.png';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
-import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals } from '../../containers/ReportViewPage/actions';
-import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals } from '../../containers/ReportViewPage/selectors';
+import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes } from '../../containers/ReportViewPage/actions';
+import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes } from '../../containers/ReportViewPage/selectors';
 
 export class ReportViewPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -33,6 +39,8 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     changeProtocolStatus: PropTypes.func,
     getReportsTotals: PropTypes.func,
     totals: PropTypes.object,
+    getCategoryNotes: PropTypes.func,
+    categoryNotes: PropTypes.object,
   };
 
   constructor(props) {
@@ -40,10 +48,13 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 
     this.state = {
       filters: null,
+      showCategoryModal: false,
     };
 
     this.searchReports = this.searchReports.bind(this);
     this.loadReports = this.loadReports.bind(this);
+    this.openDnqModal = this.openDnqModal.bind(this);
+    this.closeCategoryModal = this.closeCategoryModal.bind(this);
   }
 
   componentWillMount() {
@@ -103,10 +114,62 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.props.getReportsList(this.state.filters, limit, offset, (sort || null), (direction || null));
   }
 
+  openDnqModal(id) {
+    this.setState({ showCategoryModal: true });
+    this.props.getCategoryNotes(this.state.filters, 'Not Qualified / Not Interested', id);
+  }
+
+  closeCategoryModal() {
+    this.setState({ showCategoryModal: false });
+  }
+
   render() {
     const protocolNumber = this.props.location.query.protocol || null;
     const indication = this.props.location.query.indication || null;
     const cro = (this.props.location.query.cro && this.props.location.query.cro !== 'null') ? this.props.location.query.cro : 'N/A';
+    let notes = '';
+    if (this.props.categoryNotes.details.length > 0) {
+      let innerCounter = 1;
+      let switchColorClass = false;
+      let isNextPatientDifferent = true;
+      notes =
+        (<div className="category-notes-container">
+          {
+          this.props.categoryNotes.details.map((note, index) => {
+            const nextPatient = this.props.categoryNotes.details[index + 1] ? this.props.categoryNotes.details[index + 1].patient_id : null;
+            const isNewPatient = isNextPatientDifferent;
+            isNextPatientDifferent = (nextPatient && note.patient_id !== nextPatient);
+            const result =
+              (<div className="patient-note-container" key={index}>
+                {(isNewPatient) && <div className="name font-bold">{`Patient #${innerCounter} (${note.siteName})`}</div>}
+                { isNewPatient && <div className="img-holder">
+                  <img alt="" src={unknownImageUrl} />
+                </div> }
+                <div className="category-notes-item">
+                  <div>
+
+                    <div className={classNames('post-content', switchColorClass ? '' : 'reply')}>
+                      <p>{note.note}</p>
+                    </div>
+                    <div className="username font-bold">{`${note.firstName} ${note.lastName}`}</div>
+                    <time dateTime={note.created_at}>{moment.tz(note.created_at, this.props.currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+                  </div>
+                </div>
+                {isNextPatientDifferent && <hr></hr>}
+              </div>);
+            if (isNextPatientDifferent) {
+              innerCounter++;
+              switchColorClass = !switchColorClass;
+            }
+
+            return result;
+          })
+        }
+        </div>);
+    } else {
+      notes = <div></div>;
+    }
+
 
     return (
       <div className="container-fluid sponsor-portal report-view-page">
@@ -126,6 +189,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           reportsList={this.props.reportsList}
           getPercentageObject={this.getPercentageObject}
           totals={this.props.totals}
+          openDnqModal={this.openDnqModal}
         />
         <ReportViewSearch
           searchReports={this.searchReports}
@@ -145,7 +209,25 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           currentUser={this.props.currentUser}
           totals={this.props.totals}
           loadReports={this.loadReports}
+          openDnqModal={this.openDnqModal}
         />
+        <Modal
+          dialogComponentClass={CenteredModal}
+          show={this.state.showCategoryModal}
+        >
+          <Modal.Header>
+            <Modal.Title>
+              DNQ NOTES
+              <a className="lightbox-close close" onClick={() => { this.closeCategoryModal(); }}>
+                <i className="icomoon-icon_close" />
+              </a>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            { this.props.categoryNotes.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div> }
+            { notes }
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }
@@ -158,6 +240,7 @@ const mapStateToProps = createStructuredSelector({
   paginationOptions: selectPaginationOptions(),
   formTableValues: selectTableFormValues(),
   totals: selectReportsTotals(),
+  categoryNotes: selectCategoryNotes(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -167,6 +250,7 @@ function mapDispatchToProps(dispatch) {
     sortReportsSuccess: (reports) => dispatch(sortReportsSuccess(reports)),
     changeProtocolStatus: (payload) => dispatch(changeProtocolStatus(payload)),
     getReportsTotals: searchParams => dispatch(getReportsTotals(searchParams)),
+    getCategoryNotes: (searchParams, category, studyId) => dispatch(getCategoryNotes(searchParams, category, studyId)),
   };
 }
 

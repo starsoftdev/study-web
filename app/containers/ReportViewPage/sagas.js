@@ -12,6 +12,7 @@ import {
   CHANGE_PROTOCOL_STATUS,
   EXPORT_STUDIES,
   GET_REPORTS_TOTALS,
+  GET_CATEGORY_NOTES,
 } from './constants';
 
 import {
@@ -21,6 +22,8 @@ import {
   changeProtocolStatusError,
   getReportsTotalsSuccess,
   getReportsTotalsError,
+  getCategoryNotesSuccess,
+  getCategoryNotesError,
 } from './actions';
 
 
@@ -29,6 +32,7 @@ export function* reportViewPageSaga() {
   const watcherB = yield fork(changeProtocolStatusWatcher);
   const watcherC = yield fork(exportStudiesWatcher);
   const watcherD = yield fork(fetchReportsTotalsWatcher);
+  const watcherE = yield fork(getCategoryNotesWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -36,6 +40,7 @@ export function* reportViewPageSaga() {
   yield cancel(watcherB);
   yield cancel(watcherC);
   yield cancel(watcherD);
+  yield cancel(watcherE);
 }
 
 export function* fetchReportsWatcher() {
@@ -141,6 +146,31 @@ export function* fetchReportsTotalsWorker(action) {
     yield put(getReportsTotalsSuccess(response));
   } catch (err) {
     yield put(getReportsTotalsError(err));
+  }
+}
+
+export function* getCategoryNotesWatcher() {
+  yield* takeLatest(GET_CATEGORY_NOTES, getCategoryNotesWorker);
+}
+
+export function* getCategoryNotesWorker(action) {
+  try {
+    console.log('saga getCategoryNotesWorker', action);
+    const params = action.searchParams || {};
+
+    params.category = action.category;
+    params.studyId = action.studyId;
+
+    const queryString = composeQueryString(params);
+    console.log('saga', params);
+    const requestURL = `${API_URL}/studies/getPatientNotesByCategory?${queryString}`;
+
+
+    const response = yield call(request, requestURL);
+
+    yield put(getCategoryNotesSuccess(response));
+  } catch (err) {
+    yield put(getCategoryNotesError(err));
   }
 }
 
