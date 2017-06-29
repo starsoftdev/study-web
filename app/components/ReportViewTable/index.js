@@ -26,6 +26,7 @@ export class ReportViewTable extends React.Component {
     currentUser: PropTypes.object,
     totals: PropTypes.object,
     loadReports: PropTypes.func,
+    openDnqModal: PropTypes.func,
   }
 
   constructor(props) {
@@ -185,7 +186,7 @@ export class ReportViewTable extends React.Component {
           <td className="count_contacted"><span className="text">{item.count_contacted}<span className="small">{`(${percentage.count_contacted_p}%)`}</span></span></td>
           <td className="count_not_contacted"><span className="text">{item.count_not_contacted}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></td>
           <td className="call_attempted"><span className="text">{item.call_attempted}<span className="small">{`(${percentage.call_attempted_p}%)`}</span></span></td>
-          <td className="dnq"><span className="text">{item.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></td>
+          <td className="dnq"><span className="text" onClick={() => { this.props.openDnqModal(item.study_id); }}>{item.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></td>
           <td className="action_needed"><span className="text">{item.action_needed}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span></td>
           <td className="scheduled"><span className="text">{item.scheduled}<span className="small">{`(${percentage.scheduled_p}%)`}</span></span></td>
           <td className="consented"><span className="text">{item.consented}<span className="small">{`(${percentage.consented_p}%)`}</span></span></td>
