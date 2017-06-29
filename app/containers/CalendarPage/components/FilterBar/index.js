@@ -204,7 +204,10 @@ class FilterBar extends Component {
     let bDisabled = true;
     let defaultValue = null;
     if (currentUser && currentUser.roleForClient) {
-      bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
+      bDisabled = (
+        currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards ||
+        currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Site'
+      ) ? null : true;
       if (bDisabled) {
         if (sites) {
           const site = _.find(sites, { id: currentUser.roleForClient.site_id });
@@ -232,7 +235,7 @@ class FilterBar extends Component {
             {(bDisabled)
             ? <Select
               className="form-control data-search"
-              disabled={fetchingSites || !isAdmin || bDisabled}
+              disabled={fetchingSites || bDisabled}
               options={siteLocationOptions}
               placeholder="Select Site Location"
               value={defaultValue}

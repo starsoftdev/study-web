@@ -208,7 +208,10 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
     }
     let bDisabled = true;
     if (currentUser && currentUser.roleForClient) {
-      bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
+      bDisabled = (
+        currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards ||
+        currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Site'
+      ) ? null : true;
     }
     const siteOptions = map(sites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
@@ -245,7 +248,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
               </div>
               <section className="btns-area pull-right">
                 <div className="col pull-right">
-                  <button type="button" className="btn btn-primary" onClick={this.openAddUserModal} disabled={!((currentUser.roleForClient.canPurchase && currentUser.roleForClient.canRedeemRewards) || currentUser.roleForClient.name === 'Super Admin')}>
+                  <button type="button" className="btn btn-primary" onClick={this.openAddUserModal} disabled={bDisabled}>
                     + Add User
                   </button>
                   <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
