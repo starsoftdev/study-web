@@ -113,7 +113,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
       const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
       let bDisabled = true;
       if (currentUser && currentUser.roleForClient) {
-        bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
+        bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin');
       }
       let defaultValue = null;
       if (!isAdmin && bDisabled) {
