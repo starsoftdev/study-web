@@ -4,6 +4,14 @@
     "color-hex-case": "upper",
     "string-quotes": "single",
     "font-family-name-quotes": "always-where-recommended",
+    "declaration-empty-line-before": "never",
+    "rule-empty-line-before": [
+      "always", {
+        "ignore": [
+          "inside-block"
+        ]
+      }
+    ],
     "selector-pseudo-class-no-unknown": [
       true,
       {
