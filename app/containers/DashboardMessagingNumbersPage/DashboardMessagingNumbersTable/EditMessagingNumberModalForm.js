@@ -5,7 +5,7 @@ import { Field, reduxForm } from 'redux-form';
 import Input from '../../../components/Input';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 
-@reduxForm({ form: 'dashboardEditMessagingNumberModalForm' })
+@reduxForm({ form: 'dashboardMessagingNumberForm' })
 
 export class EditMessagingNumberModalForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -26,10 +26,10 @@ export class EditMessagingNumberModalForm extends React.Component { // eslint-di
           </strong>
           <div className="field disabled">
             <Field
-              name="messagingNumber"
+              name="number"
               component={Input}
               type="text"
-              disabled
+              isDisabled
             />
           </div>
         </div>
@@ -39,10 +39,10 @@ export class EditMessagingNumberModalForm extends React.Component { // eslint-di
           </strong>
           <div className="field">
             <Field
-              name="location"
+              name="site"
               component={Input}
               type="text"
-              disabled
+              isDisabled
             />
           </div>
         </div>

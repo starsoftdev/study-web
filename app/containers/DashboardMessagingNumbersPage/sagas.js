@@ -70,6 +70,9 @@ export function* addMessagingNumberWatcher() {
 
 export function* addMessagingNumberWorker(action) {
   try {
+    yield put(addMessagingNumberError('adding a messaging number is not implemented yet'));
+    console.log('adding messaging number: ', action.payload);
+    /*
     const requestURL = `${API_URL}/messaging_number`;
 
     const params = {
@@ -79,6 +82,7 @@ export function* addMessagingNumberWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(addMessagingNumberSuccess(response));
+    */
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving messaging number');
     yield put(toastrActions.error('', errorMessage));
@@ -92,11 +96,11 @@ export function* editMessagingNumberWatcher() {
 
 export function* editMessagingNumberWorker(action) {
   try {
-    const requestURL = `${API_URL}/messaging_number/${action.payload.id}`;
+    const requestURL = `${API_URL}/twilioNumbers/${action.payload.id}`;
 
     const params = {
-      method: 'PUT',
-      body: JSON.stringify(action.payload),
+      method: 'PATCH',
+      body: JSON.stringify({ name: action.payload.name }),
     };
     const response = yield call(request, requestURL, params);
 
@@ -114,7 +118,10 @@ export function* deleteMessagingNumberWatcher() {
 
 export function* deleteMessagingNumberWorker(action) {
   try {
-    const requestURL = `${API_URL}/messaging_number/${action.payload}`;
+    console.log('deleting is disabled temporarely, id:', action.payload);
+    yield put(deleteMessagingNumberError('deleting is disabled temporarely'));
+    /*
+    const requestURL = `${API_URL}/twilioNumbers/${action.payload}`;
 
     const params = {
       method: 'DELETE',
@@ -122,6 +129,7 @@ export function* deleteMessagingNumberWorker(action) {
     yield call(request, requestURL, params);
 
     yield put(deleteMessagingNumberSuccess({ id: action.payload }));
+    */
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while deleting messaging number');
     yield put(toastrActions.error('', errorMessage));
