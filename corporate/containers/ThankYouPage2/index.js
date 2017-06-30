@@ -26,7 +26,7 @@ export class ThankYouPage2 extends React.Component {
             Thank you for signing up for our research study!
           </h1>
           <p>
-            You will be receiving a phone call or text message from the research site soon
+            You will be receiving a phone call or text message from the research site soon.
           </p>
           <div>
             <p>Looking forward to having you join.</p>
