@@ -41,6 +41,10 @@ const initialState = {
     hasMoreItems: true,
     page: 1,
   },
+  dnqPaginationOptions: {
+    hasMoreItems: true,
+    page: 1,
+  },
   changeProtocolStatusProcess: {
     saving: false,
     error: null,
@@ -55,7 +59,9 @@ const initialState = {
 function reportViewPageReducer(state = initialState, action) {
   const reports = [];
   let newReportsList = [];
+  let newNotesList = [];
   const reportsCopy = _.cloneDeep(state.reportsList.details);
+  const notesCopy = _.cloneDeep(state.categoryNotes.details);
 
   let foundIndex = null;
   let copy = null;
@@ -207,21 +213,39 @@ function reportViewPageReducer(state = initialState, action) {
         },
       };
     case GET_CATEGORY_NOTES:
+      if (action.offset === 0) {
+        newNotesList = [];
+      } else {
+        newNotesList = state.categoryNotes.details;
+      }
       return {
         ...state,
         categoryNotes: {
-          details: [],
+          details: newNotesList,
           fetching: true,
           error: null,
         },
+        dnqPaginationOptions: {
+          hasMoreItems: false,
+          page: state.dnqPaginationOptions.page,
+        },
       };
     case GET_CATEGORY_NOTES_SUCCESS:
+      if (action.page === 1) {
+        newNotesList = action.payload;
+      } else {
+        newNotesList = notesCopy.concat(action.payload);
+      }
       return {
         ...state,
         categoryNotes: {
-          details: action.payload,
+          details: newNotesList,
           fetching: false,
           error: null,
+        },
+        dnqPaginationOptions: {
+          hasMoreItems: action.hasMoreItems,
+          page: action.page,
         },
       };
     case GET_CATEGORY_NOTES_ERROR:
