@@ -31,13 +31,14 @@ export function* receiptSaga() {
   const watcherC = yield fork(getPdf);
   const watcherB = yield fork(showPdf);
 
-
-  // Suspend execution until location changes
-  yield take(LOCATION_CHANGE);
-  yield put(receiptsReceived([], true, 1));
-  yield cancel(watcherA);
-  yield cancel(watcherC);
-  yield cancel(watcherB);
+  const options = yield take(LOCATION_CHANGE);
+  if (options.payload.pathname !== '/app/receipts') {
+    // Suspend execution until location changes
+    yield put(receiptsReceived([], true, 1));
+    yield cancel(watcherA);
+    yield cancel(watcherC);
+    yield cancel(watcherB);
+  }
 }
 
 export function* getReceipts() {
