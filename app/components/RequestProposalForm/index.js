@@ -69,6 +69,19 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
     } else if (messagingSuiteToggled && newProps.formValues.patientQualificationSuite === true) {
       this.props.dispatch(change('requestProposal', 'patientQualificationSuite', false));
     }
+
+    let bDisabled = true;
+    if (newProps.currentUser && newProps.currentUser.roleForClient) {
+      bDisabled = !(
+        newProps.currentUser.roleForClient.canPurchase || newProps.currentUser.roleForClient.canRedeemRewards ||
+        newProps.currentUser.roleForClient.name === 'Super Admin' || newProps.currentUser.roleForClient.name === 'Admin');
+    }
+    if (bDisabled) {
+      this.props.dispatch(change('requestProposal', 'site', newProps.currentUser.site_id));
+      if (newProps.currentUser && newProps.currentUser.roleForClient) {
+        this.props.dispatch(change('requestProposal', 'site', newProps.currentUser.roleForClient.site_id));
+      }
+    }
   }
 
   campaignLengthChaged(campaignLength) {
@@ -84,7 +97,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
     const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
     let bDisabled = true;
     if (currentUser && currentUser.roleForClient) {
-      bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
+      bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin');
     }
     let defaultValue = null;
     if (!isAdmin && bDisabled) {
@@ -93,6 +106,8 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
         defaultValue = currentUser.roleForClient.site_id;
       }
     }
+
+    console.log('defaultValue', defaultValue);
 
     return (
       <div className="form-study">
