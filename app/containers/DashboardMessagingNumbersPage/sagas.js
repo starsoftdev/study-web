@@ -14,7 +14,6 @@ import {
 import {
   fetchMessagingNumbersSuccess,
   fetchMessagingNumbersError,
-  addMessagingNumberSuccess,
   addMessagingNumberError,
   editMessagingNumberSuccess,
   editMessagingNumberError,
