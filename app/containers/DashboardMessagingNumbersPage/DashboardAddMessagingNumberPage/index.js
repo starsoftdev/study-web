@@ -130,7 +130,7 @@ export class DashboardAddMessagingNumberPage extends React.Component { // eslint
             </div>
           </div>
           <div className="fields-holder row second-row">
-            <div className="pull-left col">
+            <div className="pull-left col custom-select no-left-padding">
               <a className="btn btn-default" onClick={this.props.submitForm}>Submit</a>
             </div>
           </div>
