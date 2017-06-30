@@ -14,9 +14,9 @@ import {
   EDIT_MESSAGING_NUMBER,
   EDIT_MESSAGING_NUMBER_SUCCESS,
   EDIT_MESSAGING_NUMBER_ERROR,
-  DELETE_MESSAGING_NUMBER,
-  DELETE_MESSAGING_NUMBER_SUCCESS,
-  DELETE_MESSAGING_NUMBER_ERROR,
+  ARCHIVE_MESSAGING_NUMBER,
+  ARCHIVE_MESSAGING_NUMBER_SUCCESS,
+  ARCHIVE_MESSAGING_NUMBER_ERROR,
   SET_ACTIVE_SORT,
 } from './constants';
 
@@ -82,23 +82,23 @@ export function editMessagingNumberError(payload) {
   };
 }
 
-export function deleteMessagingNumber(payload) {
+export function archiveMessagingNumber(payload) {
   return {
-    type: DELETE_MESSAGING_NUMBER,
+    type: ARCHIVE_MESSAGING_NUMBER,
     payload,
   };
 }
 
-export function deleteMessagingNumberSuccess(payload) {
+export function archiveMessagingNumberSuccess(payload) {
   return {
-    type: DELETE_MESSAGING_NUMBER_SUCCESS,
+    type: ARCHIVE_MESSAGING_NUMBER_SUCCESS,
     payload,
   };
 }
 
-export function deleteMessagingNumberError(payload) {
+export function archiveMessagingNumberError(payload) {
   return {
-    type: DELETE_MESSAGING_NUMBER_ERROR,
+    type: ARCHIVE_MESSAGING_NUMBER_ERROR,
     payload,
   };
 }

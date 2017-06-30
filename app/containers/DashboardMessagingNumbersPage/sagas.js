@@ -8,7 +8,7 @@ import {
   FETCH_MESSAGING_NUMBERS,
   ADD_MESSAGING_NUMBER,
   EDIT_MESSAGING_NUMBER,
-  DELETE_MESSAGING_NUMBER,
+  ARCHIVE_MESSAGING_NUMBER,
 } from './constants';
 
 import {
@@ -18,15 +18,15 @@ import {
   addMessagingNumberError,
   editMessagingNumberSuccess,
   editMessagingNumberError,
-  deleteMessagingNumberSuccess,
-  deleteMessagingNumberError,
+  archiveMessagingNumberSuccess,
+  archiveMessagingNumberError,
 } from './actions';
 
 export function* dashboardMessagingNumberSaga() {
   const watcherA = yield fork(fetchMessagingNumbersWatcher);
   const watcherB = yield fork(addMessagingNumberWatcher);
   const watcherC = yield fork(editMessagingNumberWatcher);
-  const watcherD = yield fork(deleteMessagingNumberWatcher);
+  const watcherD = yield fork(archiveMessagingNumberWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -45,6 +45,9 @@ export function* fetchMessagingNumbersWorker() {
     const requestURL = `${API_URL}/twilioNumbers`;
 
     const filterObj = {
+      where: {
+        archived: false,
+      },
       include: [{
         relation: 'site',
       }],
@@ -112,28 +115,25 @@ export function* editMessagingNumberWorker(action) {
   }
 }
 
-export function* deleteMessagingNumberWatcher() {
-  yield* takeLatest(DELETE_MESSAGING_NUMBER, deleteMessagingNumberWorker);
+export function* archiveMessagingNumberWatcher() {
+  yield* takeLatest(ARCHIVE_MESSAGING_NUMBER, archiveMessagingNumberWorker);
 }
 
-export function* deleteMessagingNumberWorker(action) {
+export function* archiveMessagingNumberWorker(action) {
   try {
-    console.log('deleting is disabled temporarely, id:', action.payload);
-    yield put(deleteMessagingNumberError('deleting is disabled temporarely'));
-    /*
     const requestURL = `${API_URL}/twilioNumbers/${action.payload}`;
 
     const params = {
-      method: 'DELETE',
+      method: 'PATCH',
+      body: JSON.stringify({ archived: true }),
     };
-    yield call(request, requestURL, params);
+    const response = yield call(request, requestURL, params);
 
-    yield put(deleteMessagingNumberSuccess({ id: action.payload }));
-    */
+    yield put(archiveMessagingNumberSuccess({ id: response.id }));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while deleting messaging number');
+    const errorMessage = get(err, 'message', 'Something went wrong while archiving messaging number');
     yield put(toastrActions.error('', errorMessage));
-    yield put(deleteMessagingNumberError(err));
+    yield put(archiveMessagingNumberError(err));
   }
 }
 
