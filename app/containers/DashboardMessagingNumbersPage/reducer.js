@@ -16,9 +16,9 @@ import {
   EDIT_MESSAGING_NUMBER,
   EDIT_MESSAGING_NUMBER_SUCCESS,
   EDIT_MESSAGING_NUMBER_ERROR,
-  DELETE_MESSAGING_NUMBER,
-  DELETE_MESSAGING_NUMBER_SUCCESS,
-  DELETE_MESSAGING_NUMBER_ERROR,
+  ARCHIVE_MESSAGING_NUMBER,
+  ARCHIVE_MESSAGING_NUMBER_SUCCESS,
+  ARCHIVE_MESSAGING_NUMBER_ERROR,
   SET_ACTIVE_SORT,
 } from './constants';
 
@@ -140,7 +140,7 @@ function dashboardMessagingNumbersPageReducer(state = initialState, action) {
           error: action.payload,
         },
       };
-    case DELETE_MESSAGING_NUMBER:
+    case ARCHIVE_MESSAGING_NUMBER:
       return {
         ...state,
         editMessagingNumberProcess: {
@@ -149,7 +149,7 @@ function dashboardMessagingNumbersPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case DELETE_MESSAGING_NUMBER_SUCCESS:
+    case ARCHIVE_MESSAGING_NUMBER_SUCCESS:
       foundIndex = _.findIndex(newMessagingNumber, item => (item.id === action.payload.id));
       if (foundIndex !== -1) {
         newMessagingNumber.splice(foundIndex, 1);
@@ -167,7 +167,7 @@ function dashboardMessagingNumbersPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case DELETE_MESSAGING_NUMBER_ERROR:
+    case ARCHIVE_MESSAGING_NUMBER_ERROR:
       return {
         ...state,
         editMessagingNumberProcess: {
