@@ -51,8 +51,10 @@ app.start = (httpOnly) => {
       key: sslConfig.privateKey,
       cert: sslConfig.certificate,
     };
+    https.globalAgent.maxSockets = 50;
     server = https.createServer(options, app);
   } else {
+    http.globalAgent.maxSockets = 50;
     server = http.createServer(app);
   }
   // Start your app.
