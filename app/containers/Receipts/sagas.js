@@ -28,7 +28,7 @@ const serializeParams = (obj) => {
 
 // Individual exports for testing
 export function* receiptSaga() {
-  const watcherA = yield fork(getReceiptsWatcher);
+  const watcherA = yield fork(getReceipts);
   const watcherC = yield fork(getPdf);
   const watcherB = yield fork(showPdf);
 
@@ -42,14 +42,9 @@ export function* receiptSaga() {
   }
 }
 
-export function* getReceiptsWatcher() {
-  yield* takeLatest(GET_RECEIPTS, getReceipts);
-}
-
-export function* getReceipts(action) {
-  const { clientRoleId, limit, offset, receipts, orderBy, orderDir, payload } = action;
-
+export function* getReceipts() {
   while (true) {
+    const { clientRoleId, limit, offset, receipts, orderBy, orderDir, payload } = yield take(GET_RECEIPTS);
     try {
       const body = {
         clientRoleId,
