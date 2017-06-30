@@ -241,10 +241,10 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
               loadMore={this.loadNotesItems}
               initialLoad={false}
               hasMore={this.props.dnqPaginationOptions.hasMoreItems}
-              loader={<div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
               useWindow={false}
             >
               { notes }
+              { this.props.categoryNotes.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div> }
             </InfiniteScroll>
           </Modal.Body>
         </Modal>
