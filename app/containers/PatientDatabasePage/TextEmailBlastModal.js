@@ -17,7 +17,7 @@ class TextEmailBlastModal extends React.Component {
   }
 
   render() {
-    const { toggleTextBlast, ...props } = this.props;
+    const { toggleTextBlast, ...props } = this.props; // eslint-disable-line
     return (
       <Modal
         {...props}
@@ -35,11 +35,12 @@ class TextEmailBlastModal extends React.Component {
           </a>
         </Modal.Header>
         <Modal.Body>
-          <span className="modal-opener" onClick={toggleTextBlast}>
+          <span className="modal-opener coming-soon-wrapper">
             <div className="table">
               <div className="table-cell">
                 <i className="icomoon-icon_comment_alt" />
-                <span className="text">Text Blast</span>
+                <span className="text coming-soon-old">Text Blast</span>
+                <span className="text coming-soon-new" />
               </div>
             </div>
           </span>
