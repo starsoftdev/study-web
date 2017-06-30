@@ -41,6 +41,7 @@ export class DashboardMessagingNumbersPage extends React.Component {
         <Helmet title="Messaging Numbers - StudyKIK" />
         <h2 className="main-heading">Messaging Numbers</h2>
         <DashboardMessagingNumberSearch
+          messagingNumber={this.props.messagingNumber}
           messagingNumberSearchFormValues={this.props.messagingNumberSearchFormValues}
         />
         <DashboardMessagingNumbersTable
@@ -48,7 +49,7 @@ export class DashboardMessagingNumbersPage extends React.Component {
           editMessagingNumberProcess={this.props.editMessagingNumberProcess}
           editMessagingNumber={this.props.editMessagingNumber}
           deleteMessagingNumber={this.props.deleteMessagingNumber}
-          messagingnumbersearchformvalues={this.props.messagingNumberSearchFormValues}
+          messagingNumberSearchFormValues={this.props.messagingNumberSearchFormValues}
           setActiveSort={this.props.setActiveSort}
           paginationOptions={this.props.paginationOptions}
         />

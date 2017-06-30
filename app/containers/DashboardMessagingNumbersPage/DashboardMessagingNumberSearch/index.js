@@ -11,20 +11,21 @@ import TableActions from '../../../components/TableActions/index';
 
 export class DashboardMessagingNumberSearch extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    messagingNumber: PropTypes.object,
     messagingNumberSearchFormValues: PropTypes.object,
   }
 
   render() {
-    const options = [];
+    const options = this.props.messagingNumber.details.map(item => ({ label: item.phoneNumber, value: item.id }));
     return (
       <form action="#" className="form-search clearfix">
         <TableActions
-          buttonClickAction={() => browserHistory.push('/app/add-messaging-number')}
+          buttonClickAction={() => browserHistory.push('/app/dashboard-messaging-numbers/add')}
           buttonText="Add Messaging Number"
           filters={
             <div className="has-feedback">
               <Field
-                name="protocol"
+                name="messagingNumber"
                 component={ReactSelect}
                 placeholder="Select Messaging Number"
                 options={options}
@@ -37,8 +38,7 @@ export class DashboardMessagingNumberSearch extends React.Component { // eslint-
   }
 }
 
-const mapStateToProps = createStructuredSelector({
-});
+const mapStateToProps = createStructuredSelector({});
 const mapDispatchToProps = {};
 
 export default connect(

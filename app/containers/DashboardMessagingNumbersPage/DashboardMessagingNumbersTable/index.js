@@ -11,24 +11,19 @@ export class DashboardMessagingNumbersTable extends React.Component { // eslint-
     deleteMessagingNumber: PropTypes.func,
     setActiveSort: PropTypes.func,
     editMessagingNumberProcess: PropTypes.object,
-    MessagingNumberSearchFormValues: PropTypes.object,
+    messagingNumberSearchFormValues: PropTypes.object,
     paginationOptions: PropTypes.object,
   }
 
   constructor(props) {
     super(props);
 
-    this.editMessagingNumber = this.editMessagingNumber.bind(this);
     this.sortBy = this.sortBy.bind(this);
   }
 
   componentWillUnmount() {
     const defaultSort = 'noteData';
     this.props.setActiveSort(defaultSort, null);
-  }
-
-  editMessagingNumber(params) {
-    this.props.editMessagingNumber(params);
   }
 
   sortBy(ev) {
@@ -49,6 +44,11 @@ export class DashboardMessagingNumbersTable extends React.Component { // eslint-
 
   render() {
     let messagingNumbers = this.props.messagingNumber.details;
+
+    if (this.props.messagingNumberSearchFormValues && this.props.messagingNumberSearchFormValues.messagingNumber) {
+      messagingNumbers = messagingNumbers.filter(item => item.id === this.props.messagingNumberSearchFormValues.messagingNumber);
+    }
+
     if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
       const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
       messagingNumbers = _.orderBy(messagingNumbers, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
@@ -78,7 +78,7 @@ export class DashboardMessagingNumbersTable extends React.Component { // eslint-
                 <RowItem
                   key={index}
                   item={item}
-                  editMessagingNumber={this.editMessagingNumber}
+                  editMessagingNumber={this.props.editMessagingNumber}
                   deleteMessagingNumber={this.props.deleteMessagingNumber}
                   editMessagingNumberProcess={this.props.editMessagingNumberProcess}
                 />
