@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
@@ -104,6 +103,16 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
   render() {
     const { userRoleType, currentUser } = this.props;
     let purchasable = true;
+
+    const tooltip = (
+      <Tooltip
+        id={'ms-tooltip'}
+        className="tooltop-inner"
+      >
+        {'Coming Soon'}
+      </Tooltip>
+    );
+
     if (userRoleType === 'client') {
       purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
     }
@@ -121,30 +130,40 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
             <NotificationBox currentUser={this.props.currentUser} />
 
-            <div className="emails pull-left">
-              <a
-                className="opener"
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="Coming Soon"
-              >
-                <i className="icomoon-envelop" />
-                <span className="counter">1</span>
-              </a>
-            </div>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={tooltip}
+            >
+              <div className="emails pull-left">
+                <a
+                  className="opener"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Coming Soon"
+                >
+                  <i className="icomoon-envelop" />
+                  <span className="counter">1</span>
+                </a>
+              </div>
+            </OverlayTrigger>
 
             <HelpMenu />
 
-            <a
-              className={classNames('opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
-              onClick={this.showGlobalPMSModal}
+            <OverlayTrigger
+              placement="bottom"
+              overlay={tooltip}
             >
-              {/* {patientMessageUnreadCount > 0
-                ? <span className="counter">{patientMessageUnreadCount}</span>
-                : null
-              }*/}
-              <i className="icomoon-credit" />
-            </a>
+              <div className="chat-popup pull-left">
+                <a
+                  className="opener btn-chat-popup"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Coming Soon"
+                >
+                  <i className="icomoon-credit" />
+                </a>
+              </div>
+            </OverlayTrigger>
 
             <div className="get-credits pull-left">
               <span>{credits} Credits</span>
@@ -167,15 +186,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
         </header>
       );
     }
-
-    const tooltip = (
-      <Tooltip
-        id={'ms-tooltip'}
-        className="tooltop-inner"
-      >
-        {'Coming Soon'}
-      </Tooltip>
-    );
 
     return (
       <header id="header">
@@ -201,23 +211,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
                 <i className="icomoon-bell" />
               </a>
             </div>
-          </OverlayTrigger>
-
-          <OverlayTrigger
-            placement="bottom"
-            overlay={tooltip}
-          >
-            <div className="emails pull-left">
-              <a
-                className="opener"
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="Coming Soon"
-              >
-              </a>
-            </div>
-
-
           </OverlayTrigger>
 
           <OverlayTrigger
