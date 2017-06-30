@@ -155,20 +155,29 @@ export function* getCategoryNotesWatcher() {
 
 export function* getCategoryNotesWorker(action) {
   try {
-    console.log('saga getCategoryNotesWorker', action);
     const params = action.searchParams || {};
+
+    const limit = action.limit || 10;
+    const offset = action.offset || 0;
 
     params.category = action.category;
     params.studyId = action.studyId;
+    params.limit = limit;
+    params.offset = offset;
 
     const queryString = composeQueryString(params);
-    console.log('saga', params);
     const requestURL = `${API_URL}/studies/getPatientNotesByCategory?${queryString}`;
 
 
     const response = yield call(request, requestURL);
 
-    yield put(getCategoryNotesSuccess(response));
+    let hasMore = true;
+    const page = (offset / 10) + 1;
+    if (response.length < 10) {
+      hasMore = false;
+    }
+
+    yield put(getCategoryNotesSuccess(response, hasMore, page));
   } catch (err) {
     yield put(getCategoryNotesError(err));
   }
