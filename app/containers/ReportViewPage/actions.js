@@ -113,19 +113,23 @@ export function getReportsTotalsError(payload) {
   };
 }
 
-export function getCategoryNotes(searchParams, category, studyId) {
+export function getCategoryNotes(searchParams, category, studyId, limit, offset) {
   return {
     type: GET_CATEGORY_NOTES,
     searchParams,
     category,
     studyId,
+    limit,
+    offset,
   };
 }
 
-export function getCategoryNotesSuccess(payload) {
+export function getCategoryNotesSuccess(payload, hasMoreItems, page) {
   return {
     type: GET_CATEGORY_NOTES_SUCCESS,
     payload,
+    hasMoreItems,
+    page,
   };
 }
 
