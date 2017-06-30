@@ -679,6 +679,27 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/app/dashboard-messaging-numbers/add',
+      name: 'dashboardAddMessagingNumberPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardMessagingNumbersPage/reducer'),
+          System.import('./containers/DashboardMessagingNumbersPage/sagas'),
+          System.import('./containers/DashboardMessagingNumbersPage/DashboardAddMessagingNumberPage/'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardMessagingNumbersPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/app/dashboard-exposure-level',
       name: 'dashboardExposureLevelPage',
       getComponent(nextState, cb) {
