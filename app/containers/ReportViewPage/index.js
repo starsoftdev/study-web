@@ -11,6 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 import moment from 'moment';
 import classNames from 'classnames';
+import InfiniteScroll from 'react-infinite-scroller';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ReportViewInfo from '../../containers/ReportViewPage/ReportViewInfo';
@@ -22,7 +23,7 @@ import unknownImageUrl from '../../assets/images/unknown.png';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
 import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes } from '../../containers/ReportViewPage/actions';
-import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes } from '../../containers/ReportViewPage/selectors';
+import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectDnqPaginationOptions } from '../../containers/ReportViewPage/selectors';
 
 export class ReportViewPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -41,6 +42,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     totals: PropTypes.object,
     getCategoryNotes: PropTypes.func,
     categoryNotes: PropTypes.object,
+    dnqPaginationOptions: PropTypes.object,
   };
 
   constructor(props) {
@@ -49,12 +51,14 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.state = {
       filters: null,
       showCategoryModal: false,
+      currentDnqStudyId: false,
     };
 
     this.searchReports = this.searchReports.bind(this);
     this.loadReports = this.loadReports.bind(this);
     this.openDnqModal = this.openDnqModal.bind(this);
     this.closeCategoryModal = this.closeCategoryModal.bind(this);
+    this.loadNotesItems = this.loadNotesItems.bind(this);
   }
 
   componentWillMount() {
@@ -115,12 +119,19 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
   }
 
   openDnqModal(id) {
-    this.setState({ showCategoryModal: true });
-    this.props.getCategoryNotes(this.state.filters, 'Not Qualified / Not Interested', id);
+    this.setState({ showCategoryModal: true, currentDnqStudyId: id });
+    this.props.getCategoryNotes(this.state.filters, 'Not Qualified / Not Interested', id, 10, 0);
   }
 
   closeCategoryModal() {
     this.setState({ showCategoryModal: false });
+  }
+
+  loadNotesItems() {
+    const offset = this.props.dnqPaginationOptions.page * 10;
+    const limit = 10;
+
+    this.props.getCategoryNotes(this.state.filters, 'Not Qualified / Not Interested', this.state.currentDnqStudyId, limit, offset);
   }
 
   render() {
@@ -167,7 +178,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
         }
         </div>);
     } else {
-      notes = <div></div>;
+      notes = <div className="text-center btn-default-padding">No Notes.</div>;
     }
 
 
@@ -224,8 +235,17 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            { this.props.categoryNotes.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div> }
-            { notes }
+            <InfiniteScroll
+              className="sponsor-portal-dnq-inf-scroll"
+              pageStart={0}
+              loadMore={this.loadNotesItems}
+              initialLoad={false}
+              hasMore={this.props.dnqPaginationOptions.hasMoreItems}
+              loader={<div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
+              useWindow={false}
+            >
+              { notes }
+            </InfiniteScroll>
           </Modal.Body>
         </Modal>
       </div>
@@ -241,6 +261,7 @@ const mapStateToProps = createStructuredSelector({
   formTableValues: selectTableFormValues(),
   totals: selectReportsTotals(),
   categoryNotes: selectCategoryNotes(),
+  dnqPaginationOptions: selectDnqPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -250,7 +271,7 @@ function mapDispatchToProps(dispatch) {
     sortReportsSuccess: (reports) => dispatch(sortReportsSuccess(reports)),
     changeProtocolStatus: (payload) => dispatch(changeProtocolStatus(payload)),
     getReportsTotals: searchParams => dispatch(getReportsTotals(searchParams)),
-    getCategoryNotes: (searchParams, category, studyId) => dispatch(getCategoryNotes(searchParams, category, studyId)),
+    getCategoryNotes: (searchParams, category, studyId, limit, offset) => dispatch(getCategoryNotes(searchParams, category, studyId, limit, offset)),
   };
 }
 
