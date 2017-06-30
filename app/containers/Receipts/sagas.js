@@ -1,6 +1,7 @@
 // import React from 'react';
 import _, { get } from 'lodash';
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
+import { takeLatest } from 'redux-saga';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 
@@ -27,22 +28,28 @@ const serializeParams = (obj) => {
 
 // Individual exports for testing
 export function* receiptSaga() {
-  const watcherA = yield fork(getReceipts);
+  const watcherA = yield fork(getReceiptsWatcher);
   const watcherC = yield fork(getPdf);
   const watcherB = yield fork(showPdf);
 
-
-  // Suspend execution until location changes
-  yield take(LOCATION_CHANGE);
-  yield put(receiptsReceived([], true, 1));
-  yield cancel(watcherA);
-  yield cancel(watcherC);
-  yield cancel(watcherB);
+  const options = yield take(LOCATION_CHANGE);
+  if (options.payload.pathname !== '/app/receipts') {
+    // Suspend execution until location changes
+    yield put(receiptsReceived([], true, 1));
+    yield cancel(watcherA);
+    yield cancel(watcherC);
+    yield cancel(watcherB);
+  }
 }
 
-export function* getReceipts() {
+export function* getReceiptsWatcher() {
+  yield* takeLatest(GET_RECEIPTS, getReceipts);
+}
+
+export function* getReceipts(action) {
+  const { clientRoleId, limit, offset, receipts, orderBy, orderDir, payload } = action;
+
   while (true) {
-    const { clientRoleId, limit, offset, receipts, orderBy, orderDir, payload } = yield take(GET_RECEIPTS);
     try {
       const body = {
         clientRoleId,
