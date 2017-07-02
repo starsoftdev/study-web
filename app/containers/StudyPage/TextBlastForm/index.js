@@ -1,20 +1,21 @@
 /**
+ * Created by mike on 7/2/17.
+ */
+
+/**
  * Created by mike on 10/6/16.
  */
 
 import _ from 'lodash';
 import React from 'react';
-import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { Field, reduxForm, change } from 'redux-form';
+import { Field, reduxForm, change, reset } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import { actions as toastrActions } from 'react-redux-toastr';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
-import Modal from 'react-bootstrap/lib/Modal';
 import formValidator from './validator';
-import CenteredModal from '../../../components/CenteredModal/index';
 import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/index';
 import * as Selector from '../selectors';
@@ -29,17 +30,14 @@ const formName = 'StudyPage.TextBlastModal';
   form: formName,
   validate: formValidator,
 })
-class TextBlastModal extends React.Component {
+class TextBlastForm extends React.Component {
   static propTypes = {
     activeField: React.PropTypes.any,
     addPatients: React.PropTypes.func.isRequired,
-    bsClass: React.PropTypes.string,
     change: React.PropTypes.func.isRequired,
-    className: React.PropTypes.any,
     currentUser: React.PropTypes.object,
     clientCredits: React.PropTypes.object,
     fetchClientCredits: React.PropTypes.func,
-    dialogClassName: React.PropTypes.string,
     displayToastrError: React.PropTypes.func.isRequired,
     findPatients: React.PropTypes.func.isRequired,
     filterPatients: React.PropTypes.func.isRequired,
@@ -50,11 +48,9 @@ class TextBlastModal extends React.Component {
     patientCategories: React.PropTypes.array,
     removePatient: React.PropTypes.func.isRequired,
     removePatients: React.PropTypes.func.isRequired,
-    role: React.PropTypes.string,
-    show: React.PropTypes.bool.isRequired,
+    reset: React.PropTypes.func.isRequired,
     sources: React.PropTypes.array.isRequired,
     studyId: React.PropTypes.number,
-    style: React.PropTypes.object,
     submitTextBlast: React.PropTypes.func.isRequired,
     ePMS: React.PropTypes.bool,
     campaign: React.PropTypes.number,
@@ -80,21 +76,22 @@ class TextBlastModal extends React.Component {
     };
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.show && !this.props.show) {
-      const message = `Hello, please respond yes or no if you are interested in a research study for ${newProps.studyName}.`;
-      this.props.initialize({
-        message,
-      });
-      this.textAreaChange(message);
-    }
+  componentDidMount() {
+    const { studyName } = this.props;
+    const message = `Hello, please respond yes or no if you are interested in a research study for ${studyName}.`;
+    this.props.initialize({
+      message,
+    });
+    this.textAreaChange(message);
   }
 
   closeModal() {
     this.setState({
       sourceDisable: true,
     });
-    this.props.onHide();
+    const { onHide, reset } = this.props;
+    onHide();
+    reset();
   }
 
   textAreaChange(message = '') {
@@ -298,167 +295,139 @@ class TextBlastModal extends React.Component {
   }
 
   render() {
-    const { patientCategories, sources, show, role, bsClass, dialogClassName, className, style, ePMS } = this.props;
+    const { patientCategories, sources, ePMS } = this.props;
     const { enteredCharactersLength } = this.state;
     const clientCredits = this.props.clientCredits.details.customerCredits;
     const disabled = (clientCredits === 0 || clientCredits === null);
     return (
-      <Modal
-        className={classNames('study-text-blast', className)}
-        id="text-blast"
-        bsClass={bsClass}
-        dialogClassName={dialogClassName}
-        dialogComponentClass={CenteredModal}
-        show={show}
-        role={role}
-        style={style}
-        backdrop
-        keyboard
-      >
-        <Modal.Header>
-          <div className="sidebar pull-left">
-            <Modal.Title>
-              <strong>Select Contacts</strong>
-            </Modal.Title>
-          </div>
-          <Modal.Title>
-            <strong className="title">Text Blast</strong>
-          </Modal.Title>
-          <a className="close" onClick={this.closeModal}>
-            <i className="icomoon-icon_close" />
-          </a>
-        </Modal.Header>
-        <Modal.Body>
-          <Form className="text-email-blast-form">
-            <div className="sidebar pull-left">
-              <div className="scroll-holder jcf--scrollable">
-                <div className="sub-holder">
-                  <div className="custom-select-drop">
-                    <div className="search-holder">
-                      <div className="field">
-                        <Field
-                          name="search"
-                          type="search"
-                          component={Input}
-                          onChange={this.filterPatients}
-                          className="keyword-search"
-                        />
-                        <Button className="btn-enter" type="submit">
-                          <i className="icomoon-icon_search2" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="category">
-                    <strong className="heading">Category</strong>
-                    <ul className="check-list list-unstyled">
-                      <li>
-                        <Field
-                          name="category"
-                          type="checkbox"
-                          component={Checkbox}
-                          className="pull-left"
-                          onChange={(checked) => {
-                            this.selectCategory(checked, 0);
-                          }}
-                        />
-                        All
-                      </li>
-                      {patientCategories.map(patientCategory => (
-                        <li key={patientCategory.id}>
-                          <Field
-                            name={`category-${patientCategory.id}`}
-                            type="checkbox"
-                            component={Checkbox}
-                            className="pull-left"
-                            onChange={(checked) => {
-                              this.selectCategory(checked, patientCategory.id);
-                            }}
-                          />
-                          {patientCategory.name}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="category">
-                    <strong className="heading">SOURCE</strong>
-                    <ul className="check-list list-unstyled">
-                      <li>
-                        <Field
-                          name="source"
-                          type="checkbox"
-                          disabled={this.state.sourceDisable}
-                          component={Checkbox}
-                          className="pull-left"
-                          onChange={(checked) => {
-                            this.selectSource(checked, 0);
-                          }}
-                        />
-                        All
-                      </li>
-                      {sources.map(source => (
-                        <li key={source.id}>
-                          <Field
-                            name={`source-${source.id}`}
-                            type="checkbox"
-                            disabled={this.state.sourceDisable}
-                            component={Checkbox}
-                            className="pull-left"
-                            onChange={(checked) => {
-                              this.selectSource(checked, source.id);
-                            }}
-                          />
-                          {source.type}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  {this.renderPatients()}
-                </div>
-              </div>
-            </div>
-            <div className="form-holder">
-              <div className="scroll-holder jcf--scrollable">
-                <div className="sub-holder">
-                  <div className="subject-field">
-                    <FormControl type="text" className="recievers" placeholder="To" disabled />
-                    {this.renderPatientCount()}
-                  </div>
-                  <Field
-                    name="message"
-                    component={Input}
-                    componentClass="textarea"
-                    className="message"
-                    placeholder="Type a message..."
-                    maxLength="160"
-                    required
-                    onChange={this.textAreaChange}
-                    style={{ height: '350px' }}
-                    ref={(textarea) => {
-                      this.textarea = textarea;
-                    }}
-                    isDisabled={disabled}
-                  />
-                  <div className="footer">
-                    <span className="characters-counter">
-                      {`${160 - enteredCharactersLength}`}
-                    </span>
-                    <Button
-                      type="submit"
-                      className="pull-right"
-                      disabled={disabled || !ePMS}
-                      onClick={this.submitTextBlast}
-                    >
-                      Send
+      <Form className="text-email-blast-form">
+        <div className="sidebar pull-left">
+          <div className="scroll-holder jcf--scrollable">
+            <div className="sub-holder">
+              <div className="custom-select-drop">
+                <div className="search-holder">
+                  <div className="field">
+                    <Field
+                      name="search"
+                      type="search"
+                      component={Input}
+                      onChange={this.filterPatients}
+                      className="keyword-search"
+                    />
+                    <Button className="btn-enter" type="submit">
+                      <i className="icomoon-icon_search2" />
                     </Button>
                   </div>
                 </div>
               </div>
+              <div className="category">
+                <strong className="heading">Category</strong>
+                <ul className="check-list list-unstyled">
+                  <li>
+                    <Field
+                      name="category"
+                      type="checkbox"
+                      component={Checkbox}
+                      className="pull-left"
+                      onChange={(checked) => {
+                        this.selectCategory(checked, 0);
+                      }}
+                    />
+                    All
+                  </li>
+                  {patientCategories.map(patientCategory => (
+                    <li key={patientCategory.id}>
+                      <Field
+                        name={`category-${patientCategory.id}`}
+                        type="checkbox"
+                        component={Checkbox}
+                        className="pull-left"
+                        onChange={(checked) => {
+                          this.selectCategory(checked, patientCategory.id);
+                        }}
+                      />
+                      {patientCategory.name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="category">
+                <strong className="heading">SOURCE</strong>
+                <ul className="check-list list-unstyled">
+                  <li>
+                    <Field
+                      name="source"
+                      type="checkbox"
+                      disabled={this.state.sourceDisable}
+                      component={Checkbox}
+                      className="pull-left"
+                      onChange={(checked) => {
+                        this.selectSource(checked, 0);
+                      }}
+                    />
+                    All
+                  </li>
+                  {sources.map(source => (
+                    <li key={source.id}>
+                      <Field
+                        name={`source-${source.id}`}
+                        type="checkbox"
+                        disabled={this.state.sourceDisable}
+                        component={Checkbox}
+                        className="pull-left"
+                        onChange={(checked) => {
+                          this.selectSource(checked, source.id);
+                        }}
+                      />
+                      {source.type}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {this.renderPatients()}
             </div>
-            <input type="reset" className="hidden btn btn-gray-outline" value="reset" />
-          </Form>
-        </Modal.Body>
-      </Modal>
+          </div>
+        </div>
+        <div className="form-holder">
+          <div className="scroll-holder jcf--scrollable">
+            <div className="sub-holder">
+              <div className="subject-field">
+                <FormControl type="text" className="recievers" placeholder="To" disabled />
+                {this.renderPatientCount()}
+              </div>
+              <Field
+                name="message"
+                component={Input}
+                componentClass="textarea"
+                className="message"
+                placeholder="Type a message..."
+                maxLength="160"
+                required
+                onChange={this.textAreaChange}
+                style={{ height: '350px' }}
+                ref={(textarea) => {
+                  this.textarea = textarea;
+                }}
+                isDisabled={disabled}
+              />
+              <div className="footer">
+                <span className="characters-counter">
+                  {`${160 - enteredCharactersLength}`}
+                </span>
+                <Button
+                  type="submit"
+                  className="pull-right"
+                  disabled={disabled || !ePMS}
+                  onClick={this.submitTextBlast}
+                >
+                  Send
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <input type="reset" className="hidden btn btn-gray-outline" value="reset" />
+      </Form>
     );
   }
 }
@@ -483,9 +452,10 @@ function mapDispatchToProps(dispatch) {
     filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
     removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
     removePatients: () => dispatch(removePatientsFromTextBlast()),
+    reset: () => dispatch(reset(formName)),
     submitTextBlast: (patients, message, clientRoleId, onClose) => dispatch(submitTextBlast(patients, message, clientRoleId, onClose)),
     fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextBlastModal);
+export default connect(mapStateToProps, mapDispatchToProps)(TextBlastForm);
