@@ -8,6 +8,7 @@ import Toggle from '../../../../components/Input/Toggle';
 import { selectHoverRowIndex } from '../selectors';
 class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    id: PropTypes.number,
     item: PropTypes.object,
     onSelectStudy: PropTypes.func,
     onStatusChange: PropTypes.func,
@@ -51,12 +52,12 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    const { item, onSelectStudy } = this.props;
+    const { item, onSelectStudy, id } = this.props;
 
     const lastLoginTime = item.last_login_time ? moment(item.last_login_time).tz(item.timezone).format('MM/DD/YY [at] h:mm A') : 'N/A';
 
     const landingHref = item.landing_page_url ? `/${item.study_id}-${item.landing_page_url.toLowerCase().replace(/ /ig, '-')}` : '';
-
+    const facebookHref = item.landing_page_facebook_url;
     return (
       <tr
         onMouseEnter={(e) => this.mouseOverRow(e, item.study_id)}
@@ -82,7 +83,11 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
             initValue={item.is_active}
           />
         </td>
-        <td></td>
+        <td>
+          {
+            facebookHref ? <a href={facebookHref} className="landig-link" target="_blank">{id + 1}</a> : `${id + 1}`
+          }
+        </td>
         <td className="list">
           <ul className="list-unstyled">
             <li><span><a href={landingHref} className="landig-link" target="_blank">{item.study_id}</a></span></li>
