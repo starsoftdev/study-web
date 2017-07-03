@@ -445,10 +445,12 @@ export function submitTextBlast(patients, message, clientRoleId, onClose) {
   };
 }
 
-export function fetchStudyTextNewStats(studyId) {
+export function fetchStudyTextNewStats(studyId, campaignId, sourceId) {
   return {
     type: FETCH_STUDY_NEW_TEXTS,
     studyId,
+    campaignId,
+    sourceId,
   };
 }
 
