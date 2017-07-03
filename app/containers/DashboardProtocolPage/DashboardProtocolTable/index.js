@@ -74,6 +74,7 @@ export class DashboardProtocolTable extends React.Component { // eslint-disable-
           loadMore={this.loadItems}
           initialLoad={false}
           hasMore={this.props.paginationOptions.hasMoreItems}
+          loader={<div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
         >
           <table className="table-manage-user table">
             <caption>&nbsp;</caption>
@@ -90,8 +91,8 @@ export class DashboardProtocolTable extends React.Component { // eslint-disable-
                 ))
               }
             </tbody>
+            
           </table>
-          { this.props.protocol.fetching && <div className="dashboard-studies-spinner"><LoadingSpinner showOnlyIcon /></div> }
         </InfiniteScroll>
       </div>
     );
