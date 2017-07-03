@@ -194,13 +194,20 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
       patientQualificationSuite = selectedStudy.patientQualificationSuite;
 
       if (selectedStudy.level_id) {
-        filteredLevels = _.filter(studyLevels, (o) => (o.id > selectedStudy.level_id));
+        const selectedLevel = studyLevels.filter(l => l.id === selectedStudy.level_id)[0];
+
+        filteredLevels = studyLevels
+          .filter(o => o.id > selectedStudy.level_id)
+          .map(l => ({
+            ...l,
+            label:`${l.name} $${l.price - selectedLevel.price} (+${l.posts - selectedLevel.posts} Posts and +${l.texts - selectedLevel.texts} Text Credits)`,
+          }));
       }
     }
 
     if (filteredLevels.length === 0 && selectedStudy) {
       const topLevel = _.find(studyLevels, o => o.isTop);
-      filteredLevels.push(topLevel);
+      filteredLevels.push({ ...topLevel, label: 'Ruby' });
       value = topLevel.id;
       isDisabled = true;
     }

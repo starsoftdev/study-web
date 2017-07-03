@@ -505,11 +505,30 @@ export default function appReducer(state = initialState, action) {
         sources: payload,
       };
       break;
-    case FETCH_LEVELS_SUCCESS:
+    case FETCH_LEVELS_SUCCESS: {
+      const levels = payload.map(l => {
+        switch (l.name) {
+          case 'Ruby':
+            return { ...l, price: 5297, posts: 108, texts: 400 };
+          case 'Diamond':
+            return { ...l, price: 3297, posts: 64, texts: 300 };
+          case 'Platinum':
+            return { ...l, price: 1797, posts: 32, texts: 200 };
+          case 'Gold':
+            return { ...l, price: 797, posts: 10, texts: 50 };
+          case 'Silver':
+            return { ...l, price: 297, posts: 3, texts: 15 };
+          case 'Bronze':
+            return { ...l, price: 97, posts: 1, texts: 5 };
+          default:
+            return l;
+        }
+      });
       baseDataInnerState = {
-        levels: payload,
+        levels,
       };
       break;
+    }
     case FETCH_COUPON:
       baseDataInnerState = {
         coupon: {
