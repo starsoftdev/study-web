@@ -111,7 +111,7 @@ class TextBlastModal extends React.Component {
         className={classNames('patient-database-text-blast', className)}
         id="text-blast-popup"
         dialogComponentClass={CenteredModal}
-        onHide={onHide}
+        onHide={this.onHide}
         backdrop
         keyboard
       >
