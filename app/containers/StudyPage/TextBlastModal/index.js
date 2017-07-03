@@ -48,7 +48,7 @@ class TextBlastModal extends React.Component {
 
   render() {
     const { campaign, ePMS, studyName, className, onClose, onHide, ...props } = this.props;
-    const sanitizedProps = sanitizeProps(props)
+    const sanitizedProps = sanitizeProps(props);
     return (
       <Modal
         className={classNames('study-text-blast', className)}
