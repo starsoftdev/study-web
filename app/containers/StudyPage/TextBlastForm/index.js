@@ -2,10 +2,6 @@
  * Created by mike on 7/2/17.
  */
 
-/**
- * Created by mike on 10/6/16.
- */
-
 import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -36,18 +32,16 @@ const mapStateToProps = createStructuredSelector({
   studyId: Selector.selectStudyId(),
 });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    change: (field, value) => dispatch(change(formName, field, value)),
-    displayToastrError: (heading, error) => dispatch(toastrActions.error(heading, error)),
-    findPatients: (studyId, text, categoryIds, sourceIds, campaignId) => dispatch(findPatientsForTextBlast(studyId, text, categoryIds, sourceIds, campaignId)),
-    filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
-    removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
-    removePatients: () => dispatch(removePatientsFromTextBlast()),
-    submitTextBlast: (patients, message, clientRoleId, onClose) => dispatch(submitTextBlast(patients, message, clientRoleId, onClose)),
-    fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
-  };
-}
+const mapDispatchToProps = (dispatch) => ({
+  change: (field, value) => dispatch(change(formName, field, value)),
+  displayToastrError: (heading, error) => dispatch(toastrActions.error(heading, error)),
+  findPatients: (studyId, text, categoryIds, sourceIds, campaignId) => dispatch(findPatientsForTextBlast(studyId, text, categoryIds, sourceIds, campaignId)),
+  filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
+  removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
+  removePatients: () => dispatch(removePatientsFromTextBlast()),
+  submitTextBlast: (patients, message, clientRoleId, onClose) => dispatch(submitTextBlast(patients, message, clientRoleId, onClose)),
+  fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
+});
 
 @reduxForm({
   form: formName,
@@ -196,6 +190,7 @@ class TextBlastForm extends React.Component {
   }
 
   filterPatients(event) {
+    event.preventDefault();
     const { formValues, filterPatients } = this.props;
     if (formValues.patientSearchValues) {
       filterPatients(event.target.value, formValues.patients);
@@ -301,22 +296,6 @@ class TextBlastForm extends React.Component {
         <div className="sidebar pull-left">
           <div className="scroll-holder jcf--scrollable">
             <div className="sub-holder">
-              <div className="custom-select-drop">
-                <div className="search-holder">
-                  <div className="field">
-                    <Field
-                      name="search"
-                      type="search"
-                      component={Input}
-                      onChange={this.filterPatients}
-                      className="keyword-search"
-                    />
-                    <Button className="btn-enter" type="submit">
-                      <i className="icomoon-icon_search2" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
               <div className="category">
                 <strong className="heading">Category</strong>
                 <ul className="check-list list-unstyled">
