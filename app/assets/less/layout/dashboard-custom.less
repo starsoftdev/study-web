@@ -21,6 +21,7 @@
       &:nth-child(1) { width: 40%; }
       &:nth-child(2) { width: 40%; }
       &:nth-child(6) { width: auto; }
+      border-color: #fff;
     }
   }
 }
@@ -155,8 +156,29 @@
   }
 }
 
-.dashboard-exposure-level
-{
+.dashboard-add-messaging-number {
+  .inline-checkbox {
+    display: inline-block;
+    .label {
+      display: inline-block;
+      min-width: 70px;
+      margin-top: -5px;
+      text-align: left;
+    }
+    .field {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  }
+  .custom-select {
+    z-index: auto;
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+.dashboard-exposure-level {
   .custom-select{
     width: 25%;
   }

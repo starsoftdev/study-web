@@ -603,6 +603,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       <StudyLeftItem
         item={item}
         key={index}
+        id={index}
         onSelectStudy={this.toggleStudy}
         onStatusChange={this.changeStudyStatus}
         showNoteModal={this.showNoteModal}
