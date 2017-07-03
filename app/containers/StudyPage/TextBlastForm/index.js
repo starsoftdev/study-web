@@ -9,7 +9,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, change, reset } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import { actions as toastrActions } from 'react-redux-toastr';
 import Button from 'react-bootstrap/lib/Button';
@@ -19,21 +19,43 @@ import formValidator from './validator';
 import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/index';
 import * as Selector from '../selectors';
-import { addPatientsToTextBlast, findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitTextBlast } from '../actions';
-import { selectActiveField, selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
+import { findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitTextBlast } from '../actions';
+import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
 import { fetchClientCredits } from '../../App/actions';
 import { selectCurrentUser, selectClientCredits, selectSources } from '../../App/selectors';
 
 const formName = 'StudyPage.TextBlastModal';
 
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
+  clientCredits: selectClientCredits(),
+  formValues: selectValues(formName),
+  formSyncErrors: selectSyncErrors(formName),
+  patientCategories: Selector.selectPatientCategories(),
+  sources: selectSources(),
+  studyId: Selector.selectStudyId(),
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    change: (field, value) => dispatch(change(formName, field, value)),
+    displayToastrError: (heading, error) => dispatch(toastrActions.error(heading, error)),
+    findPatients: (studyId, text, categoryIds, sourceIds, campaignId) => dispatch(findPatientsForTextBlast(studyId, text, categoryIds, sourceIds, campaignId)),
+    filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
+    removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
+    removePatients: () => dispatch(removePatientsFromTextBlast()),
+    submitTextBlast: (patients, message, clientRoleId, onClose) => dispatch(submitTextBlast(patients, message, clientRoleId, onClose)),
+    fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
+  };
+}
+
 @reduxForm({
   form: formName,
   validate: formValidator,
 })
+@connect(mapStateToProps, mapDispatchToProps)
 class TextBlastForm extends React.Component {
   static propTypes = {
-    activeField: React.PropTypes.any,
-    addPatients: React.PropTypes.func.isRequired,
     change: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
     clientCredits: React.PropTypes.object,
@@ -44,11 +66,9 @@ class TextBlastForm extends React.Component {
     formValues: React.PropTypes.object,
     formSyncErrors: React.PropTypes.object,
     onClose: React.PropTypes.func.isRequired,
-    onHide: React.PropTypes.func.isRequired,
     patientCategories: React.PropTypes.array,
     removePatient: React.PropTypes.func.isRequired,
     removePatients: React.PropTypes.func.isRequired,
-    reset: React.PropTypes.func.isRequired,
     sources: React.PropTypes.array.isRequired,
     studyId: React.PropTypes.number,
     submitTextBlast: React.PropTypes.func.isRequired,
@@ -67,7 +87,6 @@ class TextBlastForm extends React.Component {
     this.renderPatients = this.renderPatients.bind(this);
     this.renderPatientCount = this.renderPatientCount.bind(this);
     this.textAreaChange = this.textAreaChange.bind(this);
-    this.closeModal = this.closeModal.bind(this);
     this.checkCategories = this.checkCategories.bind(this);
     this.removeSelectedPatient = this.removeSelectedPatient.bind(this);
     this.state = {
@@ -83,15 +102,6 @@ class TextBlastForm extends React.Component {
       message,
     });
     this.textAreaChange(message);
-  }
-
-  closeModal() {
-    this.setState({
-      sourceDisable: true,
-    });
-    const { onHide, reset } = this.props;
-    onHide();
-    reset();
   }
 
   textAreaChange(message = '') {
@@ -137,11 +147,7 @@ class TextBlastForm extends React.Component {
         }
       }
       if ((categoryIds && categoryIds.length) || (sourceIds && sourceIds.length)) {
-        // if (sourceIds) {
         findPatients(studyId, null, categoryIds, sourceIds, newCampaign);
-        // } else {
-        //   findPatients(studyId, null, categoryIds, []);
-        // }
       } else {
         removePatients();
       }
@@ -193,15 +199,6 @@ class TextBlastForm extends React.Component {
     const { formValues, filterPatients } = this.props;
     if (formValues.patientSearchValues) {
       filterPatients(event.target.value, formValues.patients);
-      // formValues.patients.map((patient) => {
-      //   const firstname = patient.firstName.toUpperCase();
-      //   const lastname = patient.lastName.toUpperCase();
-      //   if (firstname.includes(event.target.value.toUpperCase() || lastname.includes(event.target.value.toUpperCase()))) {
-      //     this.props.removePatient(patient.id);
-      //   } else {
-      //     this.props.addPatients(patient.id);
-      //   }
-      // });
     }
   }
 
@@ -432,30 +429,4 @@ class TextBlastForm extends React.Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser(),
-  clientCredits: selectClientCredits(),
-  activeField: selectActiveField(formName),
-  formValues: selectValues(formName),
-  formSyncErrors: selectSyncErrors(formName),
-  patientCategories: Selector.selectPatientCategories(),
-  sources: selectSources(),
-  studyId: Selector.selectStudyId(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    addPatients: (patients) => dispatch(addPatientsToTextBlast(patients)),
-    change: (field, value) => dispatch(change(formName, field, value)),
-    displayToastrError: (heading, error) => dispatch(toastrActions.error(heading, error)),
-    findPatients: (studyId, text, categoryIds, sourceIds, campaignId) => dispatch(findPatientsForTextBlast(studyId, text, categoryIds, sourceIds, campaignId)),
-    filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
-    removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
-    removePatients: () => dispatch(removePatientsFromTextBlast()),
-    reset: () => dispatch(reset(formName)),
-    submitTextBlast: (patients, message, clientRoleId, onClose) => dispatch(submitTextBlast(patients, message, clientRoleId, onClose)),
-    fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TextBlastForm);
+export default TextBlastForm;

@@ -4,10 +4,22 @@
 
 import React from 'react';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
+import { reset } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
 import TextBlastForm from '../TextBlastForm/index';
 import CenteredModal from '../../../components/CenteredModal/index';
+import sanitizeProps from '../../../utils/sanitizeProps';
 
+const formName = 'StudyPage.TextBlastModal';
+
+function mapDispatchToProps(dispatch) {
+  return {
+    reset: () => dispatch(reset(formName)),
+  };
+}
+
+@connect(null, mapDispatchToProps)
 class TextBlastModal extends React.Component {
   static propTypes = {
     bsClass: React.PropTypes.string,
@@ -35,19 +47,17 @@ class TextBlastModal extends React.Component {
   }
 
   render() {
-    const { campaign, ePMS, studyName, show, role, bsClass, dialogClassName, className, style } = this.props;
+    const { campaign, ePMS, studyName, className, onClose, onHide, ...props } = this.props;
+    const sanitizedProps = sanitizeProps(props)
     return (
       <Modal
         className={classNames('study-text-blast', className)}
         id="text-blast"
-        bsClass={bsClass}
-        dialogClassName={dialogClassName}
         dialogComponentClass={CenteredModal}
-        show={show}
-        role={role}
-        style={style}
         backdrop
         keyboard
+        onHide={onHide}
+        {...sanitizedProps}
       >
         <Modal.Header>
           <div className="sidebar pull-left">
@@ -63,7 +73,7 @@ class TextBlastModal extends React.Component {
           </a>
         </Modal.Header>
         <Modal.Body>
-          <TextBlastForm campaign={campaign} ePMS={ePMS} studyName={studyName} />
+          <TextBlastForm onClose={onClose} studyName={studyName} campaign={campaign} ePMS={ePMS} />
         </Modal.Body>
       </Modal>
     );
