@@ -40,16 +40,22 @@ export function* fetchProtocolWatcher() {
   yield* takeLatest(FETCH_PROTOCOL, fetchProtocolWorker);
 }
 
-export function* fetchProtocolWorker() {
+export function* fetchProtocolWorker(action) {
   try {
-    const requestURL = `${API_URL}/protocols`;
-
+    const limit = action.limit || 2;
+    const offset = action.offset || 0;
+    const orderDir = action.orderDir || 'ASC';
+    const requestURL = `${API_URL}/protocols/protocolsForDashboard?limit=${limit}&offset=${offset}&orderDir=${orderDir}`;
     const params = {
       method: 'GET',
     };
     const response = yield call(request, requestURL, params);
-
-    yield put(fetchProtocolSuccess(response));
+    let hasMore = true;
+    const page = (offset / 2) + 1;
+    if (response.length < 2) {
+      hasMore = false;
+    }
+    yield put(fetchProtocolSuccess(response, hasMore, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching protocols');
     yield put(toastrActions.error('', errorMessage));
@@ -92,8 +98,11 @@ export function* editProtocolWorker(action) {
       body: JSON.stringify(action.payload),
     };
     const response = yield call(request, requestURL, params);
-
-    yield put(editProtocolSuccess(response));
+    if (response) {
+      yield put(editProtocolSuccess(action.payload));
+    } else {
+      yield put(editProtocolSuccess(response));
+    }
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving protocols');
     yield put(toastrActions.error('', errorMessage));
