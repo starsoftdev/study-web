@@ -35,13 +35,13 @@ export class DashboardProtocolPage extends React.Component { // eslint-disable-l
   }
 
   componentWillMount() {
-    this.props.fetchProtocols(2, 0);
+    this.props.fetchProtocols();
   }
 
   loadMore() {
     const { fetchProtocols } = this.props;
-    const offset = this.props.paginationOptions.page * 2;
-    const limit = 2;
+    const offset = this.props.paginationOptions.page * 10;
+    const limit = 10;
     fetchProtocols(limit, offset);
   }
 
