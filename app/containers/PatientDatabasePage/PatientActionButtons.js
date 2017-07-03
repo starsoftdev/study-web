@@ -23,7 +23,6 @@ import { clearForm, importPatients } from '../../containers/PatientDatabasePage/
 class PatientActionButtons extends React.Component {
   static propTypes = {
     clientId: React.PropTypes.number,
-    clearTextBlastMessage: React.PropTypes.func,
     clearForm: React.PropTypes.func,
     formValues: React.PropTypes.object,
     importPatients: React.PropTypes.func,
@@ -95,7 +94,6 @@ class PatientActionButtons extends React.Component {
   }
 
   toggleTextBlastModal() {
-    this.props.clearTextBlastMessage();
     this.setState({
       showTextEmailBlastModal: !this.state.showTextEmailBlastModal,
       showTextBlastModal: !this.state.showTextBlastModal,
@@ -261,7 +259,6 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     clearForm: () => (dispatch(clearForm())),
-    clearTextBlastMessage: () => dispatch(change(formName, 'message', '')),
     importPatients: (clientId, payload, onClose) => dispatch(importPatients(clientId, payload, onClose)),
   };
 }

@@ -4,13 +4,12 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { reset } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import ImportPatientsModal from './ImportPatients/index';
 import TextEmailBlastModal from './TextEmailBlastModal';
-import TextBlastModal from './TextBlast/index';
+import TextBlastModal from './TextBlastModal/index';
 import AddPatientForm from './ImportPatients/AddPatientForm';
 
 import { exportPatients } from './actions';
@@ -22,8 +21,6 @@ class StudyActionButtons extends Component {
     source: PropTypes.number,
     studyId: PropTypes.number.isRequired,
     exportPatients: PropTypes.func,
-    resetTextBlastForm: PropTypes.func,
-    resetAddPatientForm: PropTypes.func,
     ePMS: PropTypes.bool,
     studyName: PropTypes.string,
   };
@@ -74,7 +71,6 @@ class StudyActionButtons extends Component {
   }
 
   toggleTextBlastModal() {
-    this.props.resetTextBlastForm();
     this.setState({
       showTextEmailBlastModal: !this.state.showTextEmailBlastModal,
       showTextBlastModal: !this.state.showTextBlastModal,
@@ -166,7 +162,6 @@ class StudyActionButtons extends Component {
 function mapDispatchToProps(dispatch) {
   return {
     exportPatients: (studyId, text, campaignId, sourceId) => dispatch(exportPatients(studyId, text, campaignId, sourceId)),
-    resetTextBlastForm: () => dispatch(reset('StudyPage.TextBlastModal')),
   };
 }
 
