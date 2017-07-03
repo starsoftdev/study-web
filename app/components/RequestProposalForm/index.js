@@ -107,8 +107,6 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
       }
     }
 
-    console.log('defaultValue', defaultValue);
-
     return (
       <div className="form-study">
         <div className="form-fields">
