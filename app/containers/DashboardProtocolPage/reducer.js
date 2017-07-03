@@ -41,24 +41,36 @@ const initialState = {
 function dashboardProtocolPageReducer(state = initialState, action) {
   const newProtocols = _.cloneDeep(state.protocol.details);
   let foundUserIndex = null;
+  let newProtocolsList = [];
 
   switch (action.type) {
     case FETCH_PROTOCOL:
       return {
         ...state,
         protocol: {
-          details: [],
+          details: state.protocol.details,
           fetching: true,
           error: null,
         },
       };
     case FETCH_PROTOCOL_SUCCESS:
+      if (action.page === 1) {
+        newProtocolsList = action.payload;
+      } else {
+        newProtocolsList = newProtocols.concat(action.payload);
+      }
       return {
         ...state,
         protocol: {
-          details: action.payload,
+          details: newProtocolsList,
           fetching: false,
           error: null,
+        },
+        paginationOptions: {
+          activeSort: state.paginationOptions.activeSort,
+          activeDirection: state.paginationOptions.activeDirection,
+          hasMoreItems: action.hasMoreItems,
+          page: action.page,
         },
       };
     case FETCH_PROTOCOL_ERROR:
@@ -117,6 +129,8 @@ function dashboardProtocolPageReducer(state = initialState, action) {
       if (foundUserIndex !== -1) {
         newProtocols.splice(foundUserIndex, 1, action.payload);
       }
+
+      console.log('edit', action.payload, foundUserIndex);
       return {
         ...state,
         protocol: {
