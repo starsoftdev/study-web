@@ -66,7 +66,7 @@ const routes = {
     { path: '/app', component: LoginPage, onEnter: redirectApp },
     { path: '/indication/:indication', component: Indication },
     { path: '/thankyou-page', component: ThankYouPage },
-    { path: '/thankyou-page2', component: ThankYouPage2 },
+    { path: '/thankyou2', component: ThankYouPage2 },
     { path: '/*-:siteLocation', component: LandingPage },
     { path: '*', component: NotFound },
   ],
