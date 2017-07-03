@@ -137,6 +137,7 @@ export class LandingPageModal extends React.Component {
           change('showSocialMediaButtons', landing.showSocialMediaButtons);
           change('hideClickToCall', landing.hideClickToCall);
           change('initialMessageText', landing.initialMessageText);
+          change('facebookUrl', landing.facebookUrl);
 
           this.setState({
             initialValuesEntered: true,
@@ -512,6 +513,21 @@ export class LandingPageModal extends React.Component {
                     />
                   </div>
                 </div>
+
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="facebook-url">FACEBOOK URL</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      id="facebook-url"
+                      type="text"
+                      name="facebookUrl"
+                      component={Input}
+                    />
+                  </div>
+                </div>
+
                 <div className="field-row text-right">
                   <Button type="submit" bsStyle="primary" className="fixed-small-btn">
                     {this.props.updateLandingPageProcess.saving
