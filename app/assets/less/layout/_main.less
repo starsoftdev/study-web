@@ -3738,10 +3738,8 @@ div[data-percentage],
 			counter-reset: item;
 
 			> tr > td:nth-child(3) {
-				&:before {
-					counter-increment: item;
-					content: counters(item, ".", decimal) "";
-				}
+				cursor: pointer;
+				
 			}
 		}
 
