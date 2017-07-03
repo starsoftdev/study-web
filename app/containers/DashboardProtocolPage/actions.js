@@ -20,16 +20,20 @@ import {
   SET_ACTIVE_SORT,
 } from './constants';
 
-export function fetchProtocol() {
+export function fetchProtocol(limit, offset) {
   return {
     type: FETCH_PROTOCOL,
+    limit,
+    offset,
   };
 }
 
-export function fetchProtocolSuccess(payload) {
+export function fetchProtocolSuccess(payload, hasMoreItems, page) {
   return {
     type: FETCH_PROTOCOL_SUCCESS,
     payload,
+    hasMoreItems,
+    page,
   };
 }
 
