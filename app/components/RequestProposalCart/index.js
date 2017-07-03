@@ -80,6 +80,10 @@ export class RequestProposalCart extends Component {
     if (this.props.formSubmissionStatus.submitting !== newProps.formSubmissionStatus.submitting) {
       this.setState({ shoppingCartLoading: newProps.formSubmissionStatus.submitting });
     }
+
+    if (newProps.coupon.details) {
+      this.calculateTotal();
+    }
   }
 
   onCouponChange(evt) {
@@ -98,16 +102,18 @@ export class RequestProposalCart extends Component {
     const selectedSite = _.find(this.props.siteLocations, (o) => (o.id === formValues.site));
     const selectedIndication = _.find(this.props.indications, (o) => (o.id === formValues.indication_id));
     const selectedLevel = _.find(this.props.levels, (o) => (o.id === formValues.level_id));
+    const { coupon } = this.props;
 
     const level = find(levels, { id: formValues.level_id });
-    let totalPrice = 0;
+    let total = 0;
+    let discount = 0;
     const months = find(CAMPAIGN_LENGTH_LIST, { value: formValues.campaignLength });
     if (level && months && indicationLevelPrice) {
-      totalPrice = indicationLevelPrice * months.value;
+      total = indicationLevelPrice * months.value;
     }
 
     if (formValues.patientQualificationSuite) {
-      totalPrice += QUALIFICATION_SUITE_PRICE * months.value;
+      total += QUALIFICATION_SUITE_PRICE * months.value;
     }
 
     const newFormValues = formValues;
@@ -119,6 +125,14 @@ export class RequestProposalCart extends Component {
     }
     if (!newFormValues.irbEmail) {
       newFormValues.irbEmail = null;
+    }
+
+    if (coupon.details) {
+      if (coupon.details.amountOff) {
+        discount = coupon.details.amountOff;
+      } else if (coupon.details.percentOff) {
+        discount = Math.round(total * (coupon.details.percentOff / 100));
+      }
     }
 
     this.props.onSubmitForm({
@@ -134,7 +148,10 @@ export class RequestProposalCart extends Component {
       exposureLevelName: selectedLevel.name,
       phone: '1111',
       organization: selectedSite.name,
-      total: totalPrice,
+      totalBeforeDiscount: total,
+      coupon: this.props.coupon.details,
+      total: Math.round(total - discount < 0 ? 0 : total - discount),
+      discount,
     });
   }
 
@@ -192,13 +209,13 @@ export class RequestProposalCart extends Component {
     const subTotal = sumBy(products, 'total') / 100;
     let discount = 0;
     if (coupon.details) {
-      if (coupon.details.amount_off) {
-        discount = coupon.details.amount_off;
-      } else if (coupon.details.percent_off) {
-        discount = subTotal * (coupon.details.percent_off / 100);
+      if (coupon.details.amountOff) {
+        discount = coupon.details.amountOff / 100;
+      } else if (coupon.details.percentOff) {
+        discount = subTotal * (coupon.details.percentOff / 100);
       }
     }
-    const total = subTotal - discount;
+    const total = subTotal - discount < 0 ? 0 : subTotal - discount;
 
     return { subTotal, discount, total };
   }

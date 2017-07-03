@@ -188,7 +188,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                         value="3"
                         checked={this.state.card === '3'}
                       />
-                      <div className="text"> 1,559 KIKs = $1,559 StudyKIK Platinum Listing</div>
+                      <div className="text"> 1,797 KIKs = $1,797 StudyKIK Platinum Listing</div>
                     </label>
                   </li>
                 </ul>

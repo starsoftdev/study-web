@@ -51,6 +51,10 @@ const schema = {
   initialMessageText: {
     presence: false,
   },
+  facebookUrl: {
+    presence: false,
+    url: true,
+  },
 };
 
 const fields = Object.keys(schema);
