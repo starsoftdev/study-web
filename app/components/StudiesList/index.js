@@ -667,8 +667,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         <div className="row">
           <div className="col-sm-12">
             <div className="table-responsive">
-              <table className="table">
-                <caption>
+              <table className="table has-absolute-caption">
+                <caption className="absolute-caption">
                   <span className="pull-left">Study Status</span>
                   <span className="pull-right">
                     <span className="inner-info">
