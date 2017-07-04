@@ -27,7 +27,7 @@ import {
   selectLevels,
 } from '../../containers/App/selectors';
 import {
-  submitForm, fetchCoupon,
+  submitForm, fetchCoupon, clearCoupon,
 } from '../../containers/RequestProposalPage/actions';
 import {
   selectCoupon,
@@ -52,6 +52,7 @@ export class RequestProposalCart extends Component {
     currentUser: PropTypes.object,
     siteLocations: PropTypes.array,
     indications: PropTypes.array,
+    clearCoupon: PropTypes.func,
   }
 
   constructor(props) {
@@ -79,6 +80,10 @@ export class RequestProposalCart extends Component {
 
     if (this.props.formSubmissionStatus.submitting !== newProps.formSubmissionStatus.submitting) {
       this.setState({ shoppingCartLoading: newProps.formSubmissionStatus.submitting });
+      if (!newProps.formSubmissionStatus.submitting) {
+        this.props.clearCoupon();
+        this.setState({ couponId: '' });
+      }
     }
 
     if (newProps.coupon.details) {
@@ -86,10 +91,12 @@ export class RequestProposalCart extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.clearCoupon();
+  }
+
   onCouponChange(evt) {
-    this.setState({
-      couponId: evt.target.value,
-    });
+    this.setState({ couponId: evt.target.value });
   }
 
   onSubmitForm() {
@@ -102,7 +109,7 @@ export class RequestProposalCart extends Component {
     const selectedSite = _.find(this.props.siteLocations, (o) => (o.id === formValues.site));
     const selectedIndication = _.find(this.props.indications, (o) => (o.id === formValues.indication_id));
     const selectedLevel = _.find(this.props.levels, (o) => (o.id === formValues.level_id));
-    const { coupon } = this.props;
+    const { coupon, clearCoupon } = this.props;
 
     const level = find(levels, { id: formValues.level_id });
     let total = 0;
@@ -156,7 +163,15 @@ export class RequestProposalCart extends Component {
   }
 
   onFetchCoupon() {
-    this.props.fetchCoupon(this.state.couponId);
+    const { fetchCoupon, clearCoupon, coupon } = this.props;
+    if (!coupon.details) {
+      if (this.state.couponId) {
+        fetchCoupon(this.state.couponId);
+      }
+    } else {
+      clearCoupon();
+      this.setState({ couponId: '' });
+    }
   }
 
   listProducts() {
@@ -226,6 +241,7 @@ export class RequestProposalCart extends Component {
     const { subTotal, discount, total } = this.calculateTotal(products);
     const noBorderClassName = '';
     const formClassName = `form-shopping-cart ${noBorderClassName}`;
+    const couponSelected = coupon && coupon.details;
 
     return (
       <div className={formClassName}>
@@ -270,19 +286,32 @@ export class RequestProposalCart extends Component {
             </div>
 
             <div className="coupon-area">
-              <input
-                type="text"
-                placeholder="Coupon"
-                className="form-control"
-                value={this.state.couponId}
-                onChange={this.onCouponChange}
-              />
+              {couponSelected ?
+                <input
+                  className="form-control"
+                  value={this.state.couponId}
+                  type="text"
+                  name="couponId"
+                  disabled
+                />
+                :
+                <input
+                  type="text"
+                  placeholder="Coupon"
+                  className="form-control"
+                  value={this.state.couponId}
+                  onChange={this.onCouponChange}
+                />
+              }
               <button
                 className="btn btn-primary coupon-btn"
                 onClick={this.onFetchCoupon}
-                disabled={coupon.fetching}
+                disabled={coupon.fetching || this.state.shoppingCartLoading}
               >
-                <span>APPLY</span>
+                {couponSelected
+                  ? <span>Remove</span>
+                  : <span>Apply</span>
+                }
               </button>
             </div>
 
@@ -334,6 +363,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchCoupon: (id) => dispatch(fetchCoupon(id)),
+    clearCoupon: () => dispatch(clearCoupon()),
     onSubmitForm: (values) => dispatch(submitForm(values)),
     fetchIndicationLevelPrice: (indicationId, levelId) => dispatch(fetchIndicationLevelPrice(indicationId, levelId)),
     touchRequestProposal: () => dispatch(touch('requestProposal', ...fields)),
