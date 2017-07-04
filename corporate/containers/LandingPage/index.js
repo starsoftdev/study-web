@@ -92,7 +92,7 @@ export class LandingPage extends React.Component {
 
     if (subscribedFromLanding) {
       sendThankYouEmail(subscribedFromLanding);
-      browserHistory.push('/thankyou-page');
+      browserHistory.push('/thankyou');
     }
   }
 
