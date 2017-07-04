@@ -13,6 +13,7 @@ import {
   FETCHING_STUDY,
   FETCH_CAMPAIGNS_SUCCESS,
   FETCH_PATIENTS_SUCCESS,
+  FETCH_PATIENTS_ERROR,
   FETCH_PATIENT_DETAILS_SUCCESS,
   FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
@@ -64,6 +65,7 @@ const initialState = {
   addPatientStatus:{
     adding: false,
   },
+  fetchingPatientsError: {},
   submittingSchedule:false,
 };
 
@@ -104,6 +106,12 @@ function studyPageReducer(state = initialState, action) {
             patients: [],
           };
         }),
+        fetchingPatients: false,
+      };
+    case FETCH_PATIENTS_ERROR:
+      return {
+        ...state,
+        fetchingPatientsError: action.payload,
         fetchingPatients: false,
       };
     case ADD_PATIENT_NOTE_SUCCESS:
