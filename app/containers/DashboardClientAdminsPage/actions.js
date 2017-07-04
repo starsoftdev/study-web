@@ -98,17 +98,20 @@ export function getAvailPhoneNumbersError(payload) {
   };
 }
 
-export function fetchClientAdmin(payload) {
+export function fetchClientAdmin(limit, offset) {
   return {
     type: FETCH_CLIENT_ADMINS,
-    payload,
+    limit,
+    offset,
   };
 }
 
-export function fetchClientAdminSuccess(payload) {
+export function fetchClientAdminSuccess(payload, hasMoreItems, page) {
   return {
     type: FETCH_CLIENT_ADMINS_SUCCESS,
     payload,
+    hasMoreItems,
+    page,
   };
 }
 
