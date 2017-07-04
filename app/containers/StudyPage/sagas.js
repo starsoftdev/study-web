@@ -38,6 +38,7 @@ import {
   findPatientsForTextBlastSuccess,
   patientCategoriesFetched,
   patientsFetched,
+  patientsFetchedError,
   patientDetailsFetched,
   patientsExported,
   protocolFetched,
@@ -367,6 +368,7 @@ function* fetchPatients(studyId, text, campaignId, sourceId) {
     if (e.status === 401) {
       removeItem('auth_token');
     }
+    yield put(patientsFetchedError(e));
     const errorMessage = get(e, 'message', 'Something went wrong while fetching patients. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
     if (e.status === 401) {
