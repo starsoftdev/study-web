@@ -12,6 +12,7 @@ import {
   FETCH_COUPON,
   FETCH_COUPON_SUCCESS,
   FETCH_COUPON_ERROR,
+  CLEAR_COUPON,
 
   FETCH_PROPOSAL,
   FETCH_PROPOSAL_SUCCESS,
@@ -44,6 +45,12 @@ export function fetchCoupon(couponId) {
   return {
     type: FETCH_COUPON,
     couponId,
+  };
+}
+
+export function clearCoupon() {
+  return {
+    type: CLEAR_COUPON,
   };
 }
 
