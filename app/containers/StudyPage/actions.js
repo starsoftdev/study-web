@@ -72,6 +72,7 @@ import {
   SUBMIT_SCHEDULE_SUCCEEDED,
   SUBMIT_SCHEDULE_FAILED,
   SET_SCHEDULED_FORM_INITIALIZED,
+  FETCH_PATIENTS_ERROR,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -174,6 +175,13 @@ export function setStudyId(id) {
 export function patientsFetched(payload) {
   return {
     type: FETCH_PATIENTS_SUCCESS,
+    payload,
+  };
+}
+
+export function patientsFetchedError(payload) {
+  return {
+    type: FETCH_PATIENTS_ERROR,
     payload,
   };
 }
