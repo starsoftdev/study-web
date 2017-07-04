@@ -8,6 +8,7 @@ import {
   FETCH_COUPON,
   FETCH_COUPON_SUCCESS,
   FETCH_COUPON_ERROR,
+  CLEAR_COUPON,
   FETCH_PROPOSAL_SUCCESS,
   SUBMIT_FORM,
   SUBMIT_FORM_SUCCESS,
@@ -88,6 +89,15 @@ function requestProposalPageReducer(state = initialState, action) {
           details: null,
           fetching: false,
           error: action.payload,
+        },
+      };
+    case CLEAR_COUPON:
+      return {
+        ...state,
+        coupon: {
+          details: null,
+          fetching: false,
+          error: null,
         },
       };
     case FETCH_PROPOSAL_SUCCESS:
