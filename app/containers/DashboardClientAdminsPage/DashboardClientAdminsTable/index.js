@@ -3,6 +3,8 @@ import React, { PropTypes } from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import InfiniteScroll from 'react-infinite-scroller';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 import CenteredModal from '../../../components/CenteredModal/index';
 import AddMessagingNumberForm from '../AddMessagingNumberForm';
@@ -10,6 +12,10 @@ import EditClientAdminsForm from '../EditClientAdminsForm';
 import EditMessagingNumberForm from './EditMessagingNumber';
 import RowItem from './RowItem';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
+import {
+  selectDashboardClientAdmins,
+  selectPaginationOptions,
+} from '../selectors';
 
 export class DashboardClientAdminsTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -27,6 +33,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     editMessagingProcess: PropTypes.object,
     addMessagingNumber: PropTypes.func,
     addMessagingProcess: PropTypes.object,
+    loadMore: PropTypes.func,
   }
 
   constructor(props) {
@@ -209,6 +216,10 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
 
   render() {
     const { clientSites } = this.props;
+    if (!this.props.clientAdmins) {
+      return null;
+    }
+
 
     let messagingNumberOptions = [];
     if (this.props.availPhoneNumbers.details) {
@@ -243,27 +254,46 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
 
     return (
       <div className="table-holder">
-        <table className="table-manage-user table client-admins">
-          <caption>Admins</caption>
+        <InfiniteScroll
+          className="test-test"
+          pageStart={0}
+          loadMore={this.props.loadMore}
+          initialLoad={false}
+          hasMore={this.props.paginationOptions.hasMoreItems}
+          loader={null}
+        >
 
-          <thead>
-            <tr>
-              <th onClick={this.sortBy} data-sort="client_name" className={`th ${(this.props.paginationOptions.activeSort === 'client_name') ? this.props.paginationOptions.activeDirection : ''}`}>Company<i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>Name<i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>Email<i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="bd_name" className={`th ${(this.props.paginationOptions.activeSort === 'bd_name') ? this.props.paginationOptions.activeDirection : ''}`}>BD<i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="ae_name" className={`th ${(this.props.paginationOptions.activeSort === 'ae_name') ? this.props.paginationOptions.activeDirection : ''}`}>AE<i className="caret-arrow" /></th>
-              <th>&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              clientAdmins.map((item, index) => (
-                <RowItem key={index} item={item} editAdminClick={this.editAdminClick} editMessagingClick={this.editMessagingClick} clientSites={clientSites} />
-            ))
-          }
-          </tbody>
-        </table>
+          <table className="table-manage-user table client-admins">
+            <caption>Admins</caption>
+
+            <thead>
+              <tr>
+                <th onClick={this.sortBy} data-sort="client_name" className={`th ${(this.props.paginationOptions.activeSort === 'client_name') ? this.props.paginationOptions.activeDirection : ''}`}>Company<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>Name<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>Email<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="bd_name" className={`th ${(this.props.paginationOptions.activeSort === 'bd_name') ? this.props.paginationOptions.activeDirection : ''}`}>BD<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="ae_name" className={`th ${(this.props.paginationOptions.activeSort === 'ae_name') ? this.props.paginationOptions.activeDirection : ''}`}>AE<i className="caret-arrow" /></th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                clientAdmins.map((item, index) => (
+                  <RowItem key={index} item={item} editAdminClick={this.editAdminClick} editMessagingClick={this.editMessagingClick} clientSites={clientSites} />
+              ))
+            }
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colSpan="6">
+                  {this.props.clientAdmins.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
+                </td>
+              </tr>
+            </tfoot>
+
+          </table>
+        </InfiniteScroll>
+
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.editClientAdminModalOpen} onHide={this.closeEditAdminModal}>
           <Modal.Header>
@@ -327,6 +357,8 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
 }
 
 const mapStateToProps = createStructuredSelector({
+  clientAdmins: selectDashboardClientAdmins(),
+  paginationOptions: selectPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
