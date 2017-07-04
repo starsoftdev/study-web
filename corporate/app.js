@@ -65,7 +65,7 @@ const routes = {
     { path: '/terms-and-conditions', component: TermsAndConditionsPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },
     { path: '/indication/:indication', component: Indication },
-    { path: '/thankyou-page', component: ThankYouPage },
+    { path: '/thankyou', component: ThankYouPage },
     { path: '/thankyou2', component: ThankYouPage2 },
     { path: '/*-:siteLocation', component: LandingPage },
     { path: '*', component: NotFound },
