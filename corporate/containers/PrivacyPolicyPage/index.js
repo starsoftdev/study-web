@@ -48,7 +48,7 @@ export default class PrivacyPolicyPage extends React.Component { // eslint-disab
               The Personal Information that we collect from you on this website may be used in the following ways:
             </p>
             <ul>
-              <li>To send you information about clinical trials and information related to clinical trials of interest to you.</li>
+              <li>To send you information about clinical trials and information related to clinical trials of interest to you. You may receive phone calls, voicemails, text messages and emails regarding clinical trials. You may opt out at any time.</li>
               <li>To enable you to connect with a research facility conducting a clinical trial of interest to you, and, with your permission, to enable that clinical trial site to access personal information provided by you on our Website and connect with you.</li>
               <li>To improve our Website. We continually strive to improve our Website based on the feedback we receive from you.</li>
               <li>To improve customer service. Your personal information helps us to more effectively respond to your customer service requests and support needs.</li>
