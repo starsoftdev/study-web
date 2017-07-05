@@ -3,7 +3,7 @@
  * DashboardSponsorAdminPage reducer
  *
  */
-
+import _ from 'lodash';
 import {
   FETCH_SPONSORS,
   FETCH_SPONSORS_SUCCESS,
@@ -51,23 +51,38 @@ const initialState = {
 };
 
 function dashboardSponsorAdminPageReducer(state = initialState, action) {
+  const sponsors = _.cloneDeep(state.sponsors.details);
+  let newSponsorList = [];
+
   switch (action.type) {
     case FETCH_SPONSORS:
       return {
         ...state,
         sponsors: {
-          details: [],
+          details: state.sponsors.details,
           fetching: true,
           error: null,
         },
       };
     case FETCH_SPONSORS_SUCCESS:
+      if (action.page === 1) {
+        newSponsorList = action.payload;
+      } else {
+        newSponsorList = sponsors.concat(action.payload);
+      }
+
       return {
         ...state,
         sponsors: {
-          details: action.payload,
+          details: newSponsorList,
           fetching: false,
           error: null,
+        },
+        paginationOptions: {
+          activeSort: state.paginationOptions.activeSort,
+          activeDirection: state.paginationOptions.activeDirection,
+          hasMoreItems: action.hasMoreItems,
+          page: action.page,
         },
       };
     case FETCH_SPONSORS_ERROR:
