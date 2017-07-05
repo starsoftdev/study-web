@@ -204,7 +204,7 @@ export function* fetchClientAdminWatcher() {
 
 export function* fetchClientAdminWorker(action) {
   try {
-    const limit = action.limit || 2;
+    const limit = action.limit || 10;
     const offset = action.offset || 0;
     const orderDir = action.orderDir || 'ASC';
     const requestURL = `${API_URL}/clients/fetchAllDashboardClientAdmins?limit=${limit}&offset=${offset}&orderDir=${orderDir}`;
@@ -215,8 +215,8 @@ export function* fetchClientAdminWorker(action) {
     const response = yield call(request, requestURL, params);
 
     let hasMore = true;
-    const page = (offset / 2) + 1;
-    if (response.length < 2) {
+    const page = (offset / 10) + 1;
+    if (response.length < 10) {
       hasMore = false;
     }
     yield put(fetchClientAdminSuccess(response, hasMore, page));
