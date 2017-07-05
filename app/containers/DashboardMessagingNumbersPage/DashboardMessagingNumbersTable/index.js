@@ -59,15 +59,17 @@ export class DashboardMessagingNumbersTable extends React.Component { // eslint-
         <table className="table-manage-user table">
           <caption>&nbsp;</caption>
           <colgroup>
-            <col style={{ width: '30%' }} />
-            <col style={{ width: '30%' }} />
-            <col style={{ width: '30%' }} />
+            <col style={{ width: '23%' }} />
+            <col style={{ width: '23%' }} />
+            <col style={{ width: '23%' }} />
+            <col style={{ width: '23%' }} />
             <col style={{ width: 'auto' }} />
           </colgroup>
           <thead>
             <tr>
               <th onClick={this.sortBy} data-sort="noteData" className={`th ${(this.props.paginationOptions.activeSort === 'noteData') ? this.props.paginationOptions.activeDirection : ''}`}>Messaging Number<i className="caret-arrow" /></th>
-              <th>Location <i className="caret-arrow" /></th>
+              <th>Study Number <i className="caret-arrow" /></th>
+              <th>Site Location <i className="caret-arrow" /></th>
               <th>Friendly Name <i className="caret-arrow" /></th>
               <th></th>
             </tr>
