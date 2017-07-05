@@ -52,8 +52,8 @@ export class DashboardSponsorAdminPage extends React.Component { // eslint-disab
 
   loadMore() {
     const { fetchSponsors } = this.props;
-    const offset = this.props.paginationOptions.page * 2;
-    const limit = 2;
+    const offset = this.props.paginationOptions.page * 10;
+    const limit = 10;
     fetchSponsors(limit, offset);
   }
 
