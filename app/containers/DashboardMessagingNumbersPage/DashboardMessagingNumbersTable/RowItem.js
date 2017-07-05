@@ -53,17 +53,21 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   render() {
     const initialValues = {
       id: this.props.item.id,
-      number: this.props.item.phoneNumber,
+      number: this.props.item.phone_number,
       name: this.props.item.name,
-      site: this.props.item.site ? this.props.item.site.name || '' : '',
+      study: this.props.item.study_id || '',
+      site: this.props.item.site_name || '',
     };
     return (
       <tr>
         <td>
-          {this.props.item.phoneNumber}
+          {this.props.item.phone_number}
         </td>
         <td>
-          {initialValues.site}
+          {this.props.item.study_id || ''}
+        </td>
+        <td>
+          {this.props.item.site_name || ''}
         </td>
         <td>
           {this.props.item.name}

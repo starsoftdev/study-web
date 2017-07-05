@@ -41,22 +41,9 @@ export function* fetchMessagingNumbersWatcher() {
 
 export function* fetchMessagingNumbersWorker() {
   try {
-    const requestURL = `${API_URL}/twilioNumbers`;
+    const requestURL = `${API_URL}/twilioNumbers/getMessagingNumbers`;
 
-    const filterObj = {
-      where: {
-        archived: false,
-      },
-      include: [{
-        relation: 'site',
-      }],
-    };
-
-    const queryParams = {
-      filter: JSON.stringify(filterObj),
-    };
-
-    const response = yield call(request, requestURL, { query: queryParams });
+    const response = yield call(request, requestURL);
 
     yield put(fetchMessagingNumbersSuccess(response));
   } catch (err) {
