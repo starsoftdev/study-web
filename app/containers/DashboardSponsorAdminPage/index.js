@@ -8,8 +8,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
-import { DashboardSponsorAdminSearch } from './DashboardSponsorAdminSearch/index';
-import { DashboardSponsorAdminTable } from './DashboardSponsorAdminTable';
+import DashboardSponsorAdminSearch from './DashboardSponsorAdminSearch/index';
+import DashboardSponsorAdminTable from './DashboardSponsorAdminTable';
 import { fetchSponsors, fetchSponsorsWithoutAdmin, fetchUsersByRoles, addSponsorAdmin, editSponsorAdmin, deleteSponsorAdmin, setActiveSort } from './actions';
 import {
   selectDashboardSponsorAdminsSponsors,
@@ -38,10 +38,23 @@ export class DashboardSponsorAdminPage extends React.Component { // eslint-disab
     setActiveSort: PropTypes.func,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.loadMore = this.loadMore.bind(this);
+  }
+
   componentWillMount() {
     this.props.fetchSponsors();
     this.props.fetchSponsorsWithoutAdmin();
     this.props.fetchUsersByRoles();
+  }
+
+  loadMore() {
+    const { fetchSponsors } = this.props;
+    const offset = this.props.paginationOptions.page * 2;
+    const limit = 2;
+    fetchSponsors(limit, offset);
   }
 
   render() {
@@ -57,13 +70,12 @@ export class DashboardSponsorAdminPage extends React.Component { // eslint-disab
           editUserProcess={this.props.editUserProcess}
         />
         <DashboardSponsorAdminTable
-          sponsors={this.props.sponsors}
+          loadMore={this.loadMore}
           sponsorsWithoutAdmin={this.props.sponsorsWithoutAdmin}
           usersByRoles={this.props.usersByRoles}
           editUserProcess={this.props.editUserProcess}
           editSponsorAdmin={this.props.editSponsorAdmin}
           deleteSponsorAdmin={this.props.deleteSponsorAdmin}
-          paginationOptions={this.props.paginationOptions}
           sponsorAdminSearchFormValues={this.props.sponsorAdminSearchFormValues}
           setActiveSort={this.props.setActiveSort}
         />
@@ -83,7 +95,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSponsors: () => dispatch(fetchSponsors()),
+    fetchSponsors: (limit, offset) => dispatch(fetchSponsors(limit, offset)),
     fetchSponsorsWithoutAdmin: () => dispatch(fetchSponsorsWithoutAdmin()),
     fetchUsersByRoles: () => dispatch(fetchUsersByRoles()),
     addSponsorAdmin: (payload) => dispatch(addSponsorAdmin(payload)),

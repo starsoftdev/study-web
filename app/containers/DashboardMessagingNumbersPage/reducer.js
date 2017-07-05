@@ -116,7 +116,7 @@ function dashboardMessagingNumbersPageReducer(state = initialState, action) {
     case EDIT_MESSAGING_NUMBER_SUCCESS:
       foundIndex = _.findIndex(newMessagingNumber, item => (item.id === action.payload.id));
       if (foundIndex !== -1) {
-        newMessagingNumber.splice(foundIndex, 1, action.payload);
+        newMessagingNumber.splice(foundIndex, 1, { ...newMessagingNumber[foundIndex], name: action.payload.name });
       }
       return {
         ...state,

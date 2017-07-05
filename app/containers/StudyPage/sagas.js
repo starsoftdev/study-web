@@ -120,6 +120,9 @@ function* fetchStudyDetails() {
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
+    if (e.status === 404) {
+      yield call(() => { location.href = '/app/notfound'; });
+    }
   }
 }
 
