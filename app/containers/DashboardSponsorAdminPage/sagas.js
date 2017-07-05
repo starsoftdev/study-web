@@ -68,7 +68,6 @@ export function* fetchSponsorsWorker(action) {
     const response = yield call(request, requestURL, params);
     let hasMoreItems = true;
     const page = (offset / 2) + 1;
-    
     if (response.length < 2) {
       hasMoreItems = false;
     }
