@@ -139,7 +139,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
                   className="opener"
                   data-toggle="tooltip"
                   data-placement="bottom"
-                  title="Coming Soon"
                 >
                   <i className="icomoon-envelop" />
                   <span className="counter">1</span>
@@ -158,7 +157,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
                   className="opener btn-chat-popup"
                   data-toggle="tooltip"
                   data-placement="bottom"
-                  title="Coming Soon"
                 >
                   <i className="icomoon-credit" />
                 </a>
@@ -206,7 +204,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
                 className="opener"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                title="Coming Soon"
               >
                 <i className="icomoon-bell" />
               </a>
@@ -222,7 +219,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
                 className="opener"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                title="Coming Soon"
               >
                 <i className="icomoon-envelop" />
                 <span className="counter">1</span>
@@ -239,7 +235,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
                 className="link-help pull-left opener"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                title="Coming Soon"
               >
                 ?
               </a>
