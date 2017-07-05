@@ -26,16 +26,20 @@ import {
   SET_ACTIVE_SORT,
 } from './constants';
 
-export function fetchSponsors() {
+export function fetchSponsors(limit, offset) {
   return {
     type: FETCH_SPONSORS,
+    limit,
+    offset,
   };
 }
 
-export function fetchSponsorsSuccess(payload) {
+export function fetchSponsorsSuccess(payload, hasMoreItems, page) {
   return {
     type: FETCH_SPONSORS_SUCCESS,
     payload,
+    hasMoreItems,
+    page,
   };
 }
 
