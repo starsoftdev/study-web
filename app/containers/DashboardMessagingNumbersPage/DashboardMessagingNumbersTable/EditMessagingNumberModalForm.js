@@ -35,11 +35,24 @@ export class EditMessagingNumberModalForm extends React.Component { // eslint-di
         </div>
         <div className="field-row">
           <strong className="label">
-            <label className="add-exposure-level">Location</label>
+            <label className="add-exposure-level">Site Location</label>
           </strong>
           <div className="field">
             <Field
               name="site"
+              component={Input}
+              type="text"
+              isDisabled
+            />
+          </div>
+        </div>
+        <div className="field-row">
+          <strong className="label">
+            <label className="add-exposure-level">Study</label>
+          </strong>
+          <div className="field">
+            <Field
+              name="study"
               component={Input}
               type="text"
               isDisabled

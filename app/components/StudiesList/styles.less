@@ -1,5 +1,17 @@
 .studies {
   table {
+    &.has-absolute-caption {
+      position: relative;
+      caption.absolute-caption {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+      }
+      thead tr th {
+        padding-top: 70px;
+      }
+    }
     .inner-info {
       margin-left: 17px;
       font-size: 21px;
