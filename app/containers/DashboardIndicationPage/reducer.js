@@ -54,23 +54,39 @@ const initialState = {
 
 function dashboardIndicationPageReducer(state = initialState, action) {
   const newLevel = _.cloneDeep(state.levels.details);
+  const newIndications = _.cloneDeep(state.indications.details);
+  let newIndicationList = [];
+
+
   switch (action.type) {
     case FETCH_INDICATIONS:
       return {
         ...state,
         indications: {
-          details: [],
+          details: state.indications.details,
           fetching: true,
           error: null,
         },
       };
     case FETCH_INDICATIONS_SUCCESS:
+      if (action.page === 1) {
+        newIndicationList = action.payload;
+      } else {
+        newIndicationList = newIndications.concat(action.payload);
+      }
+
       return {
         ...state,
         indications: {
-          details: action.payload,
+          details: newIndicationList,
           fetching: false,
           error: null,
+        },
+        paginationOptions: {
+          activeSort: state.paginationOptions.activeSort,
+          activeDirection: state.paginationOptions.activeDirection,
+          hasMoreItems: action.hasMoreItems,
+          page: action.page,
         },
       };
     case FETCH_INDICATIONS_ERROR:
