@@ -115,13 +115,14 @@ function* fetchStudyDetails() {
     // put in the study in the state
     yield put(studyFetched(response));
   } catch (e) {
-    const errorMessage = get(e, 'message', 'Something went wrong while fetching study information. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
-    if (e.status === 401) {
-      yield call(() => { location.href = '/login'; });
-    }
     if (e.status === 404) {
       yield call(() => { location.href = '/app/notfound'; });
+    } else {
+      const errorMessage = get(e, 'message', 'Something went wrong while fetching study information. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+      if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
     }
   }
 }
