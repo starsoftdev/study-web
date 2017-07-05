@@ -42,16 +42,23 @@ export function* fetchAdminsWatcher() {
   yield* takeLatest(FETCH_ADMINS, fetchAdminsWorker);
 }
 
-export function* fetchAdminsWorker() {
+export function* fetchAdminsWorker(action) {
   try {
-    const requestURL = `${API_URL}/users/fetchAllDashboardAdmins`;
+    const limit = action.limit || 10;
+    const skip = action.skip || 0;
+    const requestURL = `${API_URL}/users/fetchAllDashboardAdmins?limit=${limit}&offset=${skip}`;
 
     const params = {
       method: 'GET',
     };
     const response = yield call(request, requestURL, params);
 
-    yield put(fetchAdminsSuccess(response));
+    let hasMoreItems = true;
+    const page = (skip / 10) + 1;
+    if (response.length < 10) {
+      hasMoreItems = false;
+    }
+    yield put(fetchAdminsSuccess(response, hasMoreItems, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching users');
     yield put(toastrActions.error('', errorMessage));
