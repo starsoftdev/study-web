@@ -76,16 +76,19 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
   }
 
   getPercentageObject(item) {
+    const countTotal = parseInt(item.count_not_contacted || 0) + parseInt(item.call_attempted || 0) + parseInt(item.dnq || 0) + parseInt(item.action_needed || 0) + parseInt(item.scheduled || 0) + parseInt(item.consented || 0) + parseInt(item.screen_failed || 0) + parseInt(item.randomized || 0);
+    const countContacted = parseInt(item.call_attempted || 0) + parseInt(item.dnq || 0) + parseInt(item.action_needed || 0) + parseInt(item.scheduled || 0) + parseInt(item.consented || 0) + parseInt(item.screen_failed || 0) + parseInt(item.randomized || 0);
+
     const result = {
-      count_contacted_p: parseInt(item.count_total) ? Math.round(((parseInt(item.count_contacted) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
-      count_not_contacted_p: parseInt(item.count_total) ? Math.round(((parseInt(item.count_not_contacted) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
-      dnq_p: parseInt(item.count_total) ? Math.round(((parseInt(item.dnq) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
-      action_needed_p: parseInt(item.count_total) ? Math.round(((parseInt(item.action_needed) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
-      scheduled_p: parseInt(item.count_total) ? Math.round(((parseInt(item.scheduled) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
-      consented_p: parseInt(item.count_total) ? Math.round(((parseInt(item.consented) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
-      screen_failed_p: parseInt(item.count_total) ? Math.round(((parseInt(item.screen_failed) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
-      randomized_p: parseInt(item.count_total) ? Math.round(((parseInt(item.randomized) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
-      call_attempted_p: parseInt(item.count_total) ? Math.round(((parseInt(item.call_attempted) / parseInt(item.count_total)) * 100) * 10) / 10 : 0,
+      count_contacted_p: parseInt(countTotal) ? Math.round(((parseInt(countContacted) / parseInt(countTotal)) * 100) * 10) / 10 : 0,
+      count_not_contacted_p: parseInt(countTotal) ? Math.round(((parseInt(item.count_not_contacted || 0) / parseInt(countTotal)) * 100) * 10) / 10 : 0,
+      dnq_p: parseInt(countTotal) ? Math.round(((parseInt(item.dnq || 0) / parseInt(countTotal)) * 100) * 10) / 10 : 0,
+      action_needed_p: parseInt(countTotal) ? Math.round(((parseInt(item.action_needed || 0) / parseInt(countTotal)) * 100) * 10) / 10 : 0,
+      scheduled_p: parseInt(countTotal) ? Math.round(((parseInt(item.scheduled || 0) / parseInt(countTotal)) * 100) * 10) / 10 : 0,
+      consented_p: parseInt(countTotal) ? Math.round(((parseInt(item.consented || 0) / parseInt(countTotal)) * 100) * 10) / 10 : 0,
+      screen_failed_p: parseInt(countTotal) ? Math.round(((parseInt(item.screen_failed || 0) / parseInt(countTotal)) * 100) * 10) / 10 : 0,
+      randomized_p: parseInt(countTotal) ? Math.round(((parseInt(item.randomized || 0) / parseInt(countTotal)) * 100) * 10) / 10 : 0,
+      call_attempted_p: parseInt(countTotal) ? Math.round(((parseInt(item.call_attempted || 0) / parseInt(countTotal)) * 100) * 10) / 10 : 0,
     };
 
     return result;
