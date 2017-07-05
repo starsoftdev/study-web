@@ -47,25 +47,40 @@ const initialState = {
 function dashboardManageUsersReducer(state = initialState, action) {
   const newAdmins = _.cloneDeep(state.admins.details);
   let foundUserIndex = null;
+  let newAdminList = [];
+
 
   switch (action.type) {
     case FETCH_ADMINS:
       return {
         ...state,
         admins: {
-          details: [],
+          details: state.admins.details,
           fetching: true,
           error: null,
         },
       };
     case FETCH_ADMINS_SUCCESS:
+      if (action.page === 1) {
+        newAdminList = action.payload;
+      } else {
+        newAdminList = newAdmins.concat(action.payload);
+      }
+
       return {
         ...state,
         admins: {
-          details: action.payload,
+          details: newAdminList,
           fetching: false,
           error: null,
         },
+        paginationOptions: {
+          activeSort: state.paginationOptions.activeSort,
+          activeDirection: state.paginationOptions.activeDirection,
+          hasMoreItems: action.hasMoreItems,
+          page: action.page,
+        },
+
       };
     case FETCH_ADMINS_ERROR:
       return {
