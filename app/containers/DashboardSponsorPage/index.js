@@ -11,8 +11,8 @@ import { createStructuredSelector } from 'reselect';
 import { fetchSponsors, addSponsor, editSponsor, deleteSponsor, setActiveSort } from './actions';
 import { selectDashboardSponsors, selectDashboardEditSponsorProcess, selectDashboardSponsorSearchFormValues, selectPaginationOptions } from './selectors';
 
-import { DashboardSponsorSearch } from './DashboardSponsorSearch/index';
-import { DashboardSponsorTable } from './DashboardSponsorTable';
+import DashboardSponsorSearch from './DashboardSponsorSearch/index';
+import DashboardSponsorTable from './DashboardSponsorTable';
 
 export class DashboardSponsorPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -28,9 +28,23 @@ export class DashboardSponsorPage extends React.Component { // eslint-disable-li
     paginationOptions: PropTypes.object,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.loadMore = this.loadMore.bind(this);
+  }
+
   componentWillMount() {
     this.props.fetchSponsors();
   }
+
+  loadMore() {
+    const { fetchSponsors } = this.props;
+    const offset = this.props.paginationOptions.page * 10;
+    const limit = 10;
+    fetchSponsors(limit, offset);
+  }
+
 
   render() {
     return (
@@ -44,13 +58,12 @@ export class DashboardSponsorPage extends React.Component { // eslint-disable-li
           editSponsorProcess={this.props.editSponsorProcess}
         />
         <DashboardSponsorTable
-          sponsors={this.props.sponsors}
           editSponsorProcess={this.props.editSponsorProcess}
           editSponsor={this.props.editSponsor}
           deleteSponsor={this.props.deleteSponsor}
           sponsorSearchFormValues={this.props.sponsorSearchFormValues}
           setActiveSort={this.props.setActiveSort}
-          paginationOptions={this.props.paginationOptions}
+          loadMore={this.loadMore}
         />
       </div>
     );
@@ -66,7 +79,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSponsors: () => dispatch(fetchSponsors()),
+    fetchSponsors: (limit, offset) => dispatch(fetchSponsors(limit, offset)),
     addSponsor: (payload) => dispatch(addSponsor(payload)),
     editSponsor: (payload) => dispatch(editSponsor(payload)),
     deleteSponsor: (payload) => dispatch(deleteSponsor(payload)),
