@@ -2,15 +2,6 @@
 @orange: #f78e1e;
 @gray: #808080;
 
-.calendar-section{
-  &.sponsor {
-
-    .rbc-selected{
-      background-color: inherit !important;
-    }
-  }
-}
-
 .event-style(@color) {
 	color: @color;
 	border-color: @color;
@@ -125,6 +116,63 @@
 
 .custom-select {
   z-index: 5;
+}
+
+.calendar-section{
+  &.sponsor {
+
+    .rbc-row,
+    .rbc-row-segment,
+    .rbc-date-cell,
+    .rbc-event,
+    .rbc-selected,
+    .rbc-header,
+    .rbc-day-bg{
+      cursor: inherit;
+
+      a{
+        cursor: inherit;
+
+        &.rbc-show-more{
+          cursor: pointer;
+        }
+      }
+    }
+
+    .rbc-row-content {
+      .rbc-row:nth-child(3n+2) {
+        .rbc-event {
+          .event-style(@blue);
+          &:hover, &.rbc-selected {
+            background-color: #ffffff;
+            border-color: @blue;
+            color: @blue;
+          }
+        }
+      }
+      .rbc-row:nth-child(3n+3) {
+        .rbc-event {
+          .event-style(@orange);
+          &:hover, &.rbc-selected {
+            background-color:#ffffff;
+            border-color:@orange;
+            color: @orange;
+          }
+        }
+      }
+      .rbc-row:nth-child(3n+4) {
+        .rbc-event {
+          .event-style(@gray);
+          &:hover, &.rbc-selected {
+            .event-style(@gray);
+            background-color:#ffffff;
+            border-color:@gray;
+            color: @gray;
+          }
+        }
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 1350px) {
