@@ -202,16 +202,24 @@ export function* fetchClientAdminWatcher() {
   yield* takeLatest(FETCH_CLIENT_ADMINS, fetchClientAdminWorker);
 }
 
-export function* fetchClientAdminWorker() {
+export function* fetchClientAdminWorker(action) {
   try {
-    const requestURL = `${API_URL}/clients/fetchAllDashboardClientAdmins`;
+    const limit = action.limit || 10;
+    const offset = action.offset || 0;
+    const orderDir = action.orderDir || 'ASC';
+    const requestURL = `${API_URL}/clients/fetchAllDashboardClientAdmins?limit=${limit}&offset=${offset}&orderDir=${orderDir}`;
 
     const params = {
       method: 'GET',
     };
     const response = yield call(request, requestURL, params);
 
-    yield put(fetchClientAdminSuccess(response));
+    let hasMore = true;
+    const page = (offset / 10) + 1;
+    if (response.length < 10) {
+      hasMore = false;
+    }
+    yield put(fetchClientAdminSuccess(response, hasMore, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching sponsors');
     yield put(toastrActions.error('', errorMessage));

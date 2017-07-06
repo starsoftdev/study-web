@@ -53,11 +53,15 @@ export function* fetchIndicationsWatcher() {
   yield* takeLatest(FETCH_INDICATIONS, fetchIndicationsWorker);
 }
 
-export function* fetchIndicationsWorker() {
+export function* fetchIndicationsWorker(action) {
   try {
+    const limit = action.limit || 10;
+    const offset = action.offset || 0;
     const requestURL = `${API_URL}/indications`;
 
-    const filterObj = {
+    const filter = {
+      limit,
+      skip: offset,
       include: [{
         relation: 'patientIndicationGoals',
       }],
@@ -67,17 +71,23 @@ export function* fetchIndicationsWorker() {
       order: 'name',
     };
 
-    filterObj.where.and.push({
+    filter.where.and.push({
       isArchived: false,
     });
 
     const queryParams = {
-      filter: JSON.stringify(filterObj),
+      filter: JSON.stringify(filter),
     };
 
     const response = yield call(request, requestURL, { query: queryParams });
 
-    yield put(fetchIndicationsSuccess(response));
+    let hasMoreItems = true;
+    const page = (offset / 10) + 1;
+    if (response.length < 10) {
+      hasMoreItems = false;
+    }
+
+    yield put(fetchIndicationsSuccess(response, hasMoreItems, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching indications');
     yield put(toastrActions.error('', errorMessage));

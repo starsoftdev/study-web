@@ -26,16 +26,20 @@ import {
   ADD_LEVEL_ERROR,
 } from './constants';
 
-export function fetchIndications() {
+export function fetchIndications(limit, offset) {
   return {
     type: FETCH_INDICATIONS,
+    limit,
+    offset,
   };
 }
 
-export function fetchIndicationsSuccess(payload) {
+export function fetchIndicationsSuccess(payload, hasMoreItems, page) {
   return {
     type: FETCH_INDICATIONS_SUCCESS,
     payload,
+    hasMoreItems,
+    page,
   };
 }
 

@@ -14,6 +14,7 @@ import { selectCurrentUser, selectSitePatients } from '../../containers/App/sele
 import { fetchSources } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
+import NotFoundPage from '../../containers/NotFoundPage/index';
 import StudyStats from './StudyStats';
 import PatientBoard from '../../components/PatientBoard/index';
 import * as Selector from './selectors';
@@ -46,6 +47,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     fetchSources: PropTypes.func,
     sitePatients: React.PropTypes.object,
     fetchStudyTextNewStats: React.PropTypes.func,
+    fetchingPatientsError: PropTypes.object,
   };
 
   static defaultProps = {
@@ -164,6 +166,10 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (study.indication && study.indication.name) {
       studyName = study.indication.name;
     }
+
+    if (this.props.fetchingPatientsError && this.props.fetchingPatientsError.status === 404) {
+      return <NotFoundPage />;
+    }
     return (
       <div className="container-fluid no-padding">
         <Helmet title={pageTitle} />
@@ -210,6 +216,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   socket: selectSocket(),
   sitePatients: selectSitePatients(),
+  fetchingPatientsError: Selector.selectFetchingPatientsError(),
 });
 
 function mapDispatchToProps(dispatch) {

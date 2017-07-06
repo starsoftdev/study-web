@@ -20,16 +20,20 @@ import {
   SET_ACTIVE_SORT,
 } from './constants';
 
-export function fetchAdmins() {
+export function fetchAdmins(limit, skip) {
   return {
     type: FETCH_ADMINS,
+    limit,
+    skip,
   };
 }
 
-export function fetchAdminsSuccess(payload) {
+export function fetchAdminsSuccess(payload, hasMoreItems, page) {
   return {
     type: FETCH_ADMINS_SUCCESS,
     payload,
+    hasMoreItems,
+    page,
   };
 }
 

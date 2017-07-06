@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, reset } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
 import { actions as toastrActions } from 'react-redux-toastr';
@@ -39,6 +39,7 @@ class TextBlastModal extends React.Component {
     onClose: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
     removePatients: React.PropTypes.func.isRequired,
+    reset: React.PropTypes.func.isRequired,
     role: React.PropTypes.string,
     show: React.PropTypes.bool.isRequired,
     style: React.PropTypes.object,
@@ -51,9 +52,16 @@ class TextBlastModal extends React.Component {
     this.submitTextBlast = this.submitTextBlast.bind(this);
     this.renderPatientCount = this.renderPatientCount.bind(this);
     this.textAreaChange = this.textAreaChange.bind(this);
+    this.onHide = this.onHide.bind(this);
     this.state = {
       enteredCharactersLength: 0,
     };
+  }
+
+  onHide() {
+    const { onHide, reset } = this.props;
+    onHide();
+    reset();
   }
 
   submitTextBlast(event) {
@@ -93,7 +101,7 @@ class TextBlastModal extends React.Component {
   }
 
   render() {
-    const { show, className, onHide } = this.props;
+    const { show, className } = this.props;
     const { enteredCharactersLength } = this.state;
     const clientCredits = this.props.clientCredits.details.customerCredits;
     const disabled = (clientCredits === 0 || clientCredits === null);
@@ -103,7 +111,7 @@ class TextBlastModal extends React.Component {
         className={classNames('patient-database-text-blast', className)}
         id="text-blast-popup"
         dialogComponentClass={CenteredModal}
-        onHide={onHide}
+        onHide={this.onHide}
         backdrop
         keyboard
       >
@@ -111,7 +119,7 @@ class TextBlastModal extends React.Component {
           <Modal.Title>
             <strong className="title">Text Blast</strong>
           </Modal.Title>
-          <a className="close" onClick={onHide}>
+          <a className="close" onClick={this.onHide}>
             <i className="icomoon-icon_close" />
           </a>
         </Modal.Header>
@@ -174,6 +182,7 @@ function mapDispatchToProps(dispatch) {
   return {
     displayToastrError: (heading, error) => dispatch(toastrActions.error(heading, error)),
     removePatients: () => dispatch(removePatientsFromTextBlast()),
+    reset: () => dispatch(reset(formName)),
     submitTextBlast: (formValues, clientRoleId, onClose) => dispatch(submitTextBlast(formValues, clientRoleId, onClose)),
   };
 }

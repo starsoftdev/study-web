@@ -5,7 +5,6 @@
 import React from 'react';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { change } from 'redux-form';
 import Form from 'react-bootstrap/lib/Form';
 import Modal from 'react-bootstrap/lib/Modal';
 
@@ -23,7 +22,6 @@ import { clearForm, importPatients } from '../../containers/PatientDatabasePage/
 class PatientActionButtons extends React.Component {
   static propTypes = {
     clientId: React.PropTypes.number,
-    clearTextBlastMessage: React.PropTypes.func,
     clearForm: React.PropTypes.func,
     formValues: React.PropTypes.object,
     importPatients: React.PropTypes.func,
@@ -95,7 +93,6 @@ class PatientActionButtons extends React.Component {
   }
 
   toggleTextBlastModal() {
-    this.props.clearTextBlastMessage();
     this.setState({
       showTextEmailBlastModal: !this.state.showTextEmailBlastModal,
       showTextBlastModal: !this.state.showTextBlastModal,
@@ -261,7 +258,6 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     clearForm: () => (dispatch(clearForm())),
-    clearTextBlastMessage: () => dispatch(change(formName, 'message', '')),
     importPatients: (clientId, payload, onClose) => dispatch(importPatients(clientId, payload, onClose)),
   };
 }
