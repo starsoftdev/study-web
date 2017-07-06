@@ -6,11 +6,9 @@ import Select from 'react-select';
 
 class FilterBar extends Component {
   static propTypes = {
-    isAdmin: PropTypes.bool.isRequired,
     sites: PropTypes.array.isRequired,
     sponsorSchedules: PropTypes.array.isRequired,
     protocols: PropTypes.array.isRequired,
-    fetchingSites: PropTypes.bool,
     filter: PropTypes.object.isRequired,
     updateFilter: PropTypes.func.isRequired,
     currentUser: PropTypes.object,
@@ -90,7 +88,7 @@ class FilterBar extends Component {
   }
 
   render() {
-    const { isAdmin, fetchingSites, filter } = this.props;
+    const { filter } = this.props;
     const { siteLocationOptions, protocolOptions } = this.state;
 
     return (
@@ -119,7 +117,7 @@ class FilterBar extends Component {
           <div className="pull-left custom-select no-right-padding">
             <Select
               className="form-control data-search"
-              disabled={fetchingSites || !isAdmin || this.state.protocol === null}
+              disabled={this.state.protocol === null}
               options={siteLocationOptions}
               value={filter.siteLocation}
               placeholder={this.state.protocol ? 'Select Site Location' : 'N/A'}
