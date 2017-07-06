@@ -172,7 +172,7 @@ export default class CalendarPage extends React.Component {
       this.props.fetchProtocols(currentUser.roleForClient.id);
     } else if (currentUser.roleForSponsor) {
       this.props.fetchSponsorProtocols(currentUser.roleForSponsor.id, {}, 0, 0, null, null);
-      this.props.fetchSponsorSchedules(currentUser.roleForSponsor.user_id, {});
+      this.props.fetchSponsorSchedules(currentUser.roleForSponsor.sponsor_id, {});
     }
   }
 
