@@ -94,17 +94,7 @@ class FilterBar extends Component {
     return (
       <form action="#" className="form-search clearfix alt">
         <div className="fields-holder">
-          <div className="search-area pull-left no-left-padding custom-select">
-            <div className="field">
-              <Button className="btn-enter">
-                <i className="icomoon-icon_search2" />
-              </Button>
-              <input type="search" id="search" className="form-control keyword-search" placeholder="Search"
-                onChange={(ev) => this.handleFilterChange('patientName', ev.target)}
-              />
-            </div>
-          </div>
-          <div className="pull-left custom-select">
+          <div className="pull-left no-left-padding custom-select">
             <Select
               className="form-control data-search"
               value={filter.protocol}
