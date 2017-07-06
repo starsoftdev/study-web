@@ -9,9 +9,9 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 
-import { DashboardManageUsersSearch } from './DashboardManageUsersSearch';
-import { DashboardManageUsersTable } from './DashboardManageUsersTable';
-import { selectDashboardAdmins, selectDashboardRoles } from './selectors';
+import DashboardManageUsersSearch from './DashboardManageUsersSearch';
+import DashboardManageUsersTable from './DashboardManageUsersTable';
+import { selectDashboardAdmins, selectDashboardRoles, selectPaginationOptions } from './selectors';
 import { fetchAdmins, fetchAdminRoles } from './actions';
 
 export class DashboardManageUsers extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -21,12 +21,28 @@ export class DashboardManageUsers extends React.Component { // eslint-disable-li
     fetchAdminRoles: PropTypes.func,
     admins: PropTypes.object,
     roles: PropTypes.object,
+    paginationOptions: PropTypes.object,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.loadMore = this.loadMore.bind(this);
+  }
+
 
   componentWillMount() {
     this.props.fetchAdmins();
     this.props.fetchAdminRoles();
   }
+
+  loadMore() {
+    const { fetchAdmins } = this.props;
+    const offset = this.props.paginationOptions.page * 10;
+    const limit = 10;
+    fetchAdmins(limit, offset);
+  }
+
 
   render() {
     return (
@@ -40,6 +56,7 @@ export class DashboardManageUsers extends React.Component { // eslint-disable-li
         <DashboardManageUsersTable
           roles={this.props.roles}
           admins={this.props.admins}
+          loadMore={this.loadMore}
         />
 
       </div>
@@ -50,11 +67,12 @@ export class DashboardManageUsers extends React.Component { // eslint-disable-li
 const mapStateToProps = createStructuredSelector({
   admins: selectDashboardAdmins(),
   roles: selectDashboardRoles(),
+  paginationOptions: selectPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchAdmins: () => dispatch(fetchAdmins()),
+    fetchAdmins: (limit, skip) => dispatch(fetchAdmins(limit, skip)),
     fetchAdminRoles: () => dispatch(fetchAdminRoles()),
   };
 }
