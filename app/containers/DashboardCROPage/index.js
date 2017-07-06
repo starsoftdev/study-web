@@ -8,8 +8,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
-import { DashboardCROSearch } from './DashboardCROSearch/index';
-import { DashboardCROTable } from './DashboardCROTable';
+import DashboardCROSearch from './DashboardCROSearch/index';
+import DashboardCROTable from './DashboardCROTable';
 
 import { fetchCro, addCro, editCro, deleteCro, setActiveSort } from './actions';
 import { selectDashboardCro, selectDashboardEditCroProcess, selectDashboardCroSearchFormValues, selectPaginationOptions } from './selectors';
@@ -28,8 +28,21 @@ export class DashboardCROPage extends React.Component { // eslint-disable-line r
     paginationOptions: PropTypes.object,
   }
 
+  constructor(props) {
+    super(props);
+
+    this.loadMore = this.loadMore.bind(this);
+  }
+
   componentWillMount() {
     this.props.fetchCro();
+  }
+
+  loadMore() {
+    const { fetchCro } = this.props;
+    const offset = this.props.paginationOptions.page * 10;
+    const limit = 10;
+    fetchCro(limit, offset);
   }
 
   render() {
@@ -44,13 +57,12 @@ export class DashboardCROPage extends React.Component { // eslint-disable-line r
           editCroProcess={this.props.editCroProcess}
         />
         <DashboardCROTable
-          cro={this.props.cro}
           editCroProcess={this.props.editCroProcess}
           editCro={this.props.editCro}
           deleteCro={this.props.deleteCro}
           croSearchFormValues={this.props.croSearchFormValues}
           setActiveSort={this.props.setActiveSort}
-          paginationOptions={this.props.paginationOptions}
+          loadMore={this.loadMore}
         />
       </div>
     );
@@ -66,7 +78,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchCro: () => dispatch(fetchCro()),
+    fetchCro: (limit, offset) => dispatch(fetchCro(limit, offset)),
     addCro: (payload) => dispatch(addCro(payload)),
     editCro: (payload) => dispatch(editCro(payload)),
     deleteCro: (payload) => dispatch(deleteCro(payload)),
