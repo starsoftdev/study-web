@@ -2,7 +2,13 @@ import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import InfiniteScroll from 'react-infinite-scroller';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import RowItem from './RowItem';
+import {
+  selectDashboardSponsorAdminsSponsors,
+  selectPaginationOptions,
+} from '../selectors';
 
 export class DashboardSponsorAdminTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -15,6 +21,7 @@ export class DashboardSponsorAdminTable extends React.Component { // eslint-disa
     paginationOptions: PropTypes.object,
     sponsorAdminSearchFormValues: PropTypes.object,
     setActiveSort: PropTypes.func,
+    loadMore: PropTypes.func,
   }
 
   constructor(props) {
@@ -45,6 +52,10 @@ export class DashboardSponsorAdminTable extends React.Component { // eslint-disa
   }
 
   render() {
+    if (!this.props.sponsors) {
+      return null;
+    }
+
     let sponsors = this.props.sponsors.details;
 
     if (this.props.sponsorAdminSearchFormValues.name) {
@@ -74,33 +85,54 @@ export class DashboardSponsorAdminTable extends React.Component { // eslint-disa
 
     return (
       <div className="table-responsive table-holder table-sponsor-admin alt">
-        <table className="table-manage-user table">
-          <caption>Admins</caption>
+        <InfiniteScroll
+          className="test-test"
+          pageStart={0}
+          loadMore={this.props.loadMore}
+          initialLoad={false}
+          hasMore={this.props.paginationOptions.hasMoreItems}
+          loader={null}
+        >
 
-          <thead>
-            <tr>
-              <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>Sponsor <i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptions.activeSort === 'first_name') ? this.props.paginationOptions.activeDirection : ''}`}>Name <i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL <i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="bd_user_first_name" className={`th ${(this.props.paginationOptions.activeSort === 'bd_user_first_name') ? this.props.paginationOptions.activeDirection : ''}`}>BD <i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="ae_user_first_name" className={`th ${(this.props.paginationOptions.activeSort === 'ae_user_first_name') ? this.props.paginationOptions.activeDirection : ''}`}>AE <i className="caret-arrow" /></th>
-              <th> </th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              sponsors.map((item, index) => (
-                <RowItem key={index} item={item} sponsorsWithoutAdmin={this.props.sponsorsWithoutAdmin} usersByRoles={this.props.usersByRoles} editUserProcess={this.props.editUserProcess} editSponsorAdmin={this.props.editSponsorAdmin} deleteSponsorAdmin={this.props.deleteSponsorAdmin} />
-              ))
-            }
-          </tbody>
-        </table>
+          <table className="table-manage-user table">
+            <caption>Admins</caption>
+
+            <thead>
+              <tr>
+                <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>Sponsor <i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptions.activeSort === 'first_name') ? this.props.paginationOptions.activeDirection : ''}`}>Name <i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL <i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="bd_user_first_name" className={`th ${(this.props.paginationOptions.activeSort === 'bd_user_first_name') ? this.props.paginationOptions.activeDirection : ''}`}>BD <i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="ae_user_first_name" className={`th ${(this.props.paginationOptions.activeSort === 'ae_user_first_name') ? this.props.paginationOptions.activeDirection : ''}`}>AE <i className="caret-arrow" /></th>
+                <th> </th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                sponsors.map((item, index) => (
+                  <RowItem key={index} item={item} sponsorsWithoutAdmin={this.props.sponsorsWithoutAdmin} usersByRoles={this.props.usersByRoles} editUserProcess={this.props.editUserProcess} editSponsorAdmin={this.props.editSponsorAdmin} deleteSponsorAdmin={this.props.deleteSponsorAdmin} />
+                ))
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colSpan="6">
+                  {this.props.sponsors.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </InfiniteScroll>
+
       </div>
     );
   }
 }
 
 const mapStateToProps = createStructuredSelector({
+  sponsors: selectDashboardSponsorAdminsSponsors(),
+  paginationOptions: selectPaginationOptions(),
+
 });
 
 function mapDispatchToProps(dispatch) {
