@@ -475,11 +475,9 @@ export default class CalendarPage extends React.Component {
                 <h2 className="main-heading">CALENDAR</h2>
                 <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
                 <SponsorFilterBar
-                  isAdmin={isAdmin}
                   sites={sites}
                   protocols={protocols.details}
                   sponsorSchedules={localSponsorSchedules}
-                  fetchingSites={fetchingSites}
                   filter={this.state.filter}
                   updateFilter={this.updateFilter}
                   currentUser={currentUser}
