@@ -54,7 +54,7 @@ const getFilteredSchedules = (schedules, filter) =>
 
 const getFilteredSponsorSchedules = (sponsorSchedules, filter) =>
   sponsorSchedules.filter(s =>
-    `${s.firstName} ${s.lastName}`.toLowerCase().indexOf(filter.patientName.toLowerCase()) > -1 &&
+    // `${s.firstName} ${s.lastName}`.toLowerCase().indexOf(filter.patientName.toLowerCase()) > -1 &&
     (!filter.siteLocation || filter.siteLocation === 'all' || s.siteLocation === filter.siteLocation) &&
     (!filter.protocol || filter.protocol === 'all' || s.protocolNumber === filter.protocol)
   );
