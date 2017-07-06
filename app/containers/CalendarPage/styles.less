@@ -2,6 +2,15 @@
 @orange: #f78e1e;
 @gray: #808080;
 
+.calendar-section{
+  &.sponsor {
+
+    .rbc-selected{
+      background-color: inherit !important;
+    }
+  }
+}
+
 .event-style(@color) {
 	color: @color;
 	border-color: @color;
@@ -121,5 +130,9 @@
 @media screen and (max-width: 1350px) {
   .calendar-box .rbc-calendar .rbc-month-view .rbc-month-header div span:first-of-type{
     font-size: 18px;
+  }
+
+  .custom-select {
+    width: 33.3% !important;
   }
 }

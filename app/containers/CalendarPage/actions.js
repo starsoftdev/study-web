@@ -5,6 +5,12 @@ import {
   FETCH_SCHEDULES,
   FETCH_SCHEDULES_SUCCESS,
   FETCH_SCHEDULES_ERROR,
+  FETCH_SPONSOR_SCHEDULES,
+  FETCH_SPONSOR_SCHEDULES_SUCCESS,
+  FETCH_SPONSOR_SCHEDULES_ERROR,
+  FETCH_SPONSOR_PROTOCOLS,
+  FETCH_SPONSOR_PROTOCOLS_SUCCESS,
+  FETCH_SPONSOR_PROTOCOLS_ERROR,
   SUBMIT_SCHEDULE,
   SUBMIT_SCHEDULE_SUCCESS,
   SUBMIT_SCHEDULE_ERROR,
@@ -49,6 +55,50 @@ export function fetchSchedulesSucceeded(payload) {
 export function fetchSchedulesFailed(payload) {
   return {
     type: FETCH_SCHEDULES_ERROR,
+    payload,
+  };
+}
+
+export function fetchSponsorSchedules(sponsorId, searchParams) {
+  return {
+    type: FETCH_SPONSOR_SCHEDULES,
+    sponsorId,
+    searchParams,
+  };
+}
+export function fetchSponsorSchedulesSucceeded(payload) {
+  return {
+    type: FETCH_SPONSOR_SCHEDULES_SUCCESS,
+    payload,
+  };
+}
+export function fetchSponsorSchedulesFailed(payload) {
+  return {
+    type: FETCH_SPONSOR_SCHEDULES_ERROR,
+    payload,
+  };
+}
+
+export function fetchSponsorProtocols(sponsorRoleId, searchParams, limit, offset, sort, order) {
+  return {
+    type: FETCH_SPONSOR_PROTOCOLS,
+    sponsorRoleId,
+    searchParams,
+    limit,
+    offset,
+    sort,
+    order,
+  };
+}
+export function fetchSponsorProtocolsSucceeded(payload) {
+  return {
+    type: FETCH_SPONSOR_PROTOCOLS_SUCCESS,
+    payload,
+  };
+}
+export function fetchSponsorProtocolsFailed(payload) {
+  return {
+    type: FETCH_SPONSOR_PROTOCOLS_ERROR,
     payload,
   };
 }

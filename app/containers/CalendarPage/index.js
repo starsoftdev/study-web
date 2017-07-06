@@ -14,6 +14,9 @@ import CalendarWidget from './components/CalendarWidget';
 import SchedulePatientModal from './components/SchedulePatientModal';
 import EditScheduleModal from './components/EditScheduleModal';
 import FilterBar from './components/FilterBar';
+import SponsorFilterBar from '../../components/SponsorFilterBar/index';
+import SponsorCalendarWidget from '../../components/SponsorCalendarWidget/index';
+import SponsorAllEventsModal from '../../components/SponsorAllEventsModal/index';
 import AllEventsModal from './components/AllEventsModal';
 
 import {
@@ -32,11 +35,13 @@ import {
 import {
   fetchPatientsByStudy,
   fetchSchedules,
+  fetchSponsorSchedules,
+  fetchSponsorProtocols,
   submitSchedule,
   deleteSchedule,
   setActiveSort,
 } from './actions';
-import { selectSchedules, selectPatientsByStudy, selectPaginationOptions } from './selectors';
+import { selectSchedules, selectSponsorSchedules, selectSponsorProtocols, selectPatientsByStudy, selectPaginationOptions } from './selectors';
 
 
 const getFilteredSchedules = (schedules, filter) =>
@@ -45,6 +50,13 @@ const getFilteredSchedules = (schedules, filter) =>
       (!filter.siteLocation || filter.siteLocation === 'All' || s.sitelocation === filter.siteLocation) &&
       (!filter.indication || filter.indication === 'All' || s.indication === filter.indication) &&
       (!filter.protocol || filter.protocol === 'All' || s.protocolNumber === filter.protocol)
+  );
+
+const getFilteredSponsorSchedules = (sponsorSchedules, filter) =>
+  sponsorSchedules.filter(s =>
+    `${s.firstName} ${s.lastName}`.toLowerCase().indexOf(filter.patientName.toLowerCase()) > -1 &&
+    (!filter.siteLocation || filter.siteLocation === 'all' || s.siteLocation === filter.siteLocation) &&
+    (!filter.protocol || filter.protocol === 'all' || s.protocolNumber === filter.protocol)
   );
 
 function numberSequenceCreator(start, end) {
@@ -75,7 +87,8 @@ const mapStateToProps = createStructuredSelector({
   sites: selectUserSites(),
   indications: selectIndications(),
   schedules: selectSchedules(),
-  protocols: selectProtocols(),
+  sponsorSchedules: selectSponsorSchedules(),
+  protocols: selectSponsorProtocols(),
   patientsByStudy: selectPatientsByStudy(),
   paginationOptions: selectPaginationOptions(),
   userRoleType: selectUserRoleType(),
@@ -86,7 +99,9 @@ const mapDispatchToProps = (dispatch) => ({
   fetchIndications: () => dispatch(fetchIndications()),
   fetchPatientsByStudy: (studyId, siteId) => dispatch(fetchPatientsByStudy(studyId, siteId)),
   fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
+  fetchSponsorProtocols: (sponsorRoleId, searchParams, limit, offset, sort, order) => dispatch(fetchSponsorProtocols(sponsorRoleId, searchParams, limit, offset, sort, order)),
   fetchSchedules: (data) => dispatch(fetchSchedules(data)),
+  fetchSponsorSchedules: (sponsorId, searchParams) => dispatch(fetchSponsorSchedules(sponsorId, searchParams)),
   submitSchedule: (data) => dispatch(submitSchedule(data)),
   deleteSchedule: (scheduleId, clientId) => dispatch(deleteSchedule(scheduleId, clientId)),
   setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
@@ -100,12 +115,15 @@ export default class CalendarPage extends React.Component {
     indications: PropTypes.array.isRequired,
     patientsByStudy: PropTypes.object.isRequired,
     schedules: PropTypes.object.isRequired,
+    sponsorSchedules: PropTypes.object.isRequired,
     protocols: PropTypes.object.isRequired,
     fetchClientSites: PropTypes.func.isRequired,
     fetchIndications: PropTypes.func.isRequired,
     fetchPatientsByStudy: PropTypes.func.isRequired,
     fetchProtocols: PropTypes.func.isRequired,
+    fetchSponsorProtocols: PropTypes.func.isRequired,
     fetchSchedules: PropTypes.func.isRequired,
+    fetchSponsorSchedules: PropTypes.func.isRequired,
     submitSchedule: PropTypes.func.isRequired,
     deleteSchedule: PropTypes.func.isRequired,
     paginationOptions: PropTypes.object,
@@ -139,7 +157,9 @@ export default class CalendarPage extends React.Component {
     },
     allModalDeferred: false,
     filteredSchedules: [],
+    filteredSponsorSchedules: [],
     localSchedules: [],
+    localSponsorSchedules: [],
   };
 
   componentDidMount() {
@@ -150,6 +170,9 @@ export default class CalendarPage extends React.Component {
       this.props.fetchIndications();
       this.props.fetchSchedules({ clientId: currentUser.roleForClient.client_id });
       this.props.fetchProtocols(currentUser.roleForClient.id);
+    } else if (currentUser.roleForSponsor) {
+      this.props.fetchSponsorProtocols(currentUser.roleForSponsor.id, {}, 0, 0, null, null);
+      this.props.fetchSponsorSchedules(currentUser.roleForSponsor.user_id, {});
     }
   }
 
@@ -165,6 +188,18 @@ export default class CalendarPage extends React.Component {
       });
       this.filterSchedules(localSchedules, this.state.filter);
     }
+
+    if (this.props.sponsorSchedules.data !== nextProps.sponsorSchedules.data || this.props.currentUser.timezone !== nextProps.currentUser.timezone) {
+      const timezone = nextProps.currentUser.timezone;
+      const localSponsorSchedules = nextProps.sponsorSchedules.data.map(s => ({
+        ...s,
+        time: moment(s.time).tz(timezone),
+      }));
+      this.setState({
+        localSponsorSchedules,
+      });
+      this.filterSchedules(localSponsorSchedules, this.state.filter);
+    }
   }
 
   setAllModalDeferred = (allModalDeferred) => {
@@ -174,9 +209,19 @@ export default class CalendarPage extends React.Component {
   }
 
   filterSchedules(schedules, filter) {
-    this.setState({
-      filteredSchedules: getFilteredSchedules(schedules, filter),
-    });
+    const { currentUser } = this.props;
+
+    if (currentUser && currentUser.roleForClient) {
+      this.setState({
+        filteredSchedules: getFilteredSchedules(schedules, filter),
+      });
+    }
+
+    if (currentUser && currentUser.roleForSponsor) {
+      this.setState({
+        filteredSponsorSchedules: getFilteredSponsorSchedules(schedules, filter),
+      });
+    }
   }
 
   handleModalVisibility = (modalType, data) => {
@@ -260,25 +305,40 @@ export default class CalendarPage extends React.Component {
   }
 
   updateFilter(field, newValue) {
+    const { currentUser } = this.props;
     const newFilter = this.state.filter;
+    const schedules = (currentUser && currentUser.roleForSponsor) ? this.state.localSponsorSchedules : this.state.localSchedules;
     newFilter[field] = newValue;
 
-    if (field === 'siteLocation' && !newValue) {
-      newFilter.siteLocation = null;
-      newFilter.indication = null;
-      newFilter.protocol = null;
+    if (currentUser && currentUser.roleForClient) {
+      if (field === 'siteLocation' && !newValue) {
+        newFilter.siteLocation = null;
+        newFilter.indication = null;
+        newFilter.protocol = null;
+      }
+
+      if (field === 'indication' && !newValue) {
+        newFilter.indication = null;
+        newFilter.protocol = null;
+      }
     }
 
-    if (field === 'indication' && !newValue) {
-      newFilter.indication = null;
-      newFilter.protocol = null;
+    if (currentUser && currentUser.roleForSponsor) {
+      if (field === 'siteLocation' && !newValue) {
+        newFilter.siteLocation = null;
+      }
+
+      if (field === 'protocol' && !newValue) {
+        newFilter.protocol = null;
+        newFilter.siteLocation = null;
+      }
     }
 
     this.setState({
       filter: newFilter,
     });
 
-    this.filterSchedules(this.state.localSchedules, newFilter);
+    this.filterSchedules(schedules, newFilter);
   }
 
   sortBy(ev) {
@@ -299,7 +359,7 @@ export default class CalendarPage extends React.Component {
 
   render() {
     const { currentUser, sites, indications, patientsByStudy, userRoleType, protocols } = this.props;
-    const { showAll, localSchedules } = this.state;
+    const { showAll, localSchedules, localSponsorSchedules } = this.state;
     const fetchingSites = sites.isFetching;
     const fetchingPatientsByStudy = patientsByStudy.isFetching;
     let isAdmin = false;
@@ -307,6 +367,11 @@ export default class CalendarPage extends React.Component {
     if (currentUser && currentUser.roleForClient) {
       isAdmin = (currentUser.roleForClient.name === 'Super Admin') || (currentUser.roleForClient.name === 'Admin');
     }
+
+    if (currentUser && currentUser.roleForSponsor) {
+      isAdmin = (currentUser.roleForSponsor.name === 'Super Admin') || (currentUser.roleForSponsor.name === 'Admin');
+    }
+
     let siteLocationOptions = [];
     if (isAdmin) {
       siteLocationOptions = sites.map(s => ({
@@ -406,7 +471,35 @@ export default class CalendarPage extends React.Component {
           userRoleType === 'sponsor' &&
             <div>
               <Helmet title="Calendar - StudyKIK" />
-              <ComingSoon />
+              <section className="sponsor calendar-section">
+                <h2 className="main-heading">CALENDAR</h2>
+                <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
+                <SponsorFilterBar
+                  isAdmin={isAdmin}
+                  sites={sites}
+                  protocols={protocols.details}
+                  sponsorSchedules={localSponsorSchedules}
+                  fetchingSites={fetchingSites}
+                  filter={this.state.filter}
+                  updateFilter={this.updateFilter}
+                  currentUser={currentUser}
+                />
+                <SponsorCalendarWidget
+                  currentUser={currentUser}
+                  sponsorSchedules={this.state.filteredSponsorSchedules}
+                  handleOpenModal={this.handleModalVisibility}
+                  handleShowAll={this.handleShowAll}
+                  ref={(c) => { this.calendarWidget = c; }}
+                />
+                <SponsorAllEventsModal
+                  visible={showAll.visible}
+                  date={showAll.date}
+                  events={showAll.events}
+                  handleCloseModal={() => this.handleShowAll(false)}
+                  sortBy={this.sortBy}
+                  paginationOptions={this.props.paginationOptions}
+                />
+              </section>
             </div>
         }
       </div>
