@@ -225,7 +225,6 @@ export class EditInformationModal extends React.Component {
       change('campaign_datefrom', foundCampaign.datefrom);
       change('campaign_dateto', foundCampaign.dateto);
       change('custom_patient_goal', foundCampaign.custom_patient_goal);
-      change('campaign_facebook_url', foundCampaign.facebook_url);
       change('level_id', foundCampaign.level_id);
       change('patient_qualification_suite', foundCampaign.patient_qualification_suite);
     }
@@ -791,19 +790,6 @@ export class EditInformationModal extends React.Component {
                     <Field
                       type="text"
                       name="custom_patient_goal"
-                      component={Input}
-                    />
-                  </div>
-                </div>
-                <div className="field-row">
-                  <strong className="label">
-                    <label htmlFor="facebook-url">FACEBOOK URL</label>
-                  </strong>
-                  <div className="field">
-                    <Field
-                      id="facebook-url"
-                      type="text"
-                      name="campaign_facebook_url"
                       component={Input}
                     />
                   </div>

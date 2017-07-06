@@ -3,6 +3,7 @@
  * DashboardClientAdminsPage reducer
  *
  */
+import _ from 'lodash';
 import {
   DEFAULT_ACTION,
   FETCH_CLIENT_ADMINS,
@@ -76,6 +77,9 @@ const initialState = {
 };
 
 function dashboardClientAdminsPageReducer(state = initialState, action) {
+  const clientAdmins = _.cloneDeep(state.clientAdmins.details);
+  let newClientAdminList = [];
+
   switch (action.type) {
     case DEFAULT_ACTION:
       return state;
@@ -92,18 +96,29 @@ function dashboardClientAdminsPageReducer(state = initialState, action) {
       return {
         ...state,
         clientAdmins: {
-          details: [],
+          details: state.clientAdmins.details,
           fetching: true,
           error: null,
         },
       };
     case FETCH_CLIENT_ADMINS_SUCCESS:
+      if (action.page === 1) {
+        newClientAdminList = action.payload;
+      } else {
+        newClientAdminList = clientAdmins.concat(action.payload);
+      }
       return {
         ...state,
         clientAdmins: {
-          details: action.payload,
+          details: newClientAdminList,
           fetching: false,
           error: null,
+        },
+        paginationOptions: {
+          activeSort: state.paginationOptions.activeSort,
+          activeDirection: state.paginationOptions.activeDirection,
+          hasMoreItems: action.hasMoreItems,
+          page: action.page,
         },
       };
     case FETCH_CLIENT_ADMINS_ERROR:
