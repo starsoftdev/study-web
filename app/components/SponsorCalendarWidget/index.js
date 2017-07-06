@@ -2,6 +2,7 @@
 
 import React, { PropTypes } from 'react';
 import Calendar from 'react-big-calendar';
+import ReactTooltip from 'react-tooltip';
 import moment from 'moment-timezone';
 
 import 'react-big-calendar/lib/less/styles.less';
@@ -88,6 +89,14 @@ class CalendarWidget extends React.Component {
           eventOffset={300}
           onShowMore={(events, date) => {
             this.props.handleShowAll(true, events, date);
+          }}
+          components={{
+            event: (ev) => {
+              return <div>
+                <span className="custom-event-block" data-for={`event-${ev.event.data.id}`} data-tip={ev.title}>{ev.title}</span>
+                <ReactTooltip id={`event-${ev.event.data.id}`} type="info" class="tooltipClass wide" delayHide={300} effect="solid" />
+              </div>
+            },
           }}
           ref={(c) => { this.bigCalendar = c; }}
         />
