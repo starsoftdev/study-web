@@ -3,7 +3,6 @@
 import React, { Component, PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import Select from 'react-select';
-import _ from 'lodash';
 
 class FilterBar extends Component {
   static propTypes = {
@@ -91,26 +90,8 @@ class FilterBar extends Component {
   }
 
   render() {
-    const {
-      isAdmin,
-      fetchingSites,
-      filter,
-    } = this.props;
+    const { isAdmin, fetchingSites, filter } = this.props;
     const { siteLocationOptions, protocolOptions } = this.state;
-    const { currentUser, sites } = this.props;
-    let bDisabled = true;
-    let defaultValue = null;
-    if (currentUser && currentUser.roleForSponsor) {
-      bDisabled = !(currentUser.roleForSponsor.name === 'Super Admin' || currentUser.roleForSponsor.name === 'Admin');
-      if (bDisabled) {
-        if (sites) {
-          const site = _.find(sites, { id: currentUser.roleForClient.site_id });
-          if (site) {
-            defaultValue = site.name;
-          }
-        }
-      }
-    }
 
     return (
       <form action="#" className="form-search clearfix alt">
@@ -136,16 +117,7 @@ class FilterBar extends Component {
             />
           </div>
           <div className="pull-left custom-select no-right-padding">
-            {(bDisabled)
-            ? <Select
-              className="form-control data-search"
-              disabled={fetchingSites || !isAdmin || this.state.protocol === null}
-              options={siteLocationOptions}
-              placeholder={this.state.protocol ? 'Select Site Location' : 'N/A'}
-              value={defaultValue}
-              onChange={(option) => this.handleFilterChange('siteLocation', option)}
-            />
-            : <Select
+            <Select
               className="form-control data-search"
               disabled={fetchingSites || !isAdmin || this.state.protocol === null}
               options={siteLocationOptions}
@@ -153,7 +125,6 @@ class FilterBar extends Component {
               placeholder={this.state.protocol ? 'Select Site Location' : 'N/A'}
               onChange={(option) => this.handleFilterChange('siteLocation', option)}
             />
-            }
           </div>
         </div>
       </form>
