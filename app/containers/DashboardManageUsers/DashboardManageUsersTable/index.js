@@ -3,17 +3,21 @@ import React, { PropTypes } from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import InfiniteScroll from 'react-infinite-scroller';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../app/common/helper/functions';
 import RowItem from './RowItem';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddUserForm } from '../../DashboardManageUsers/DashboardManageUsersAddUserForm';
-import { selectDashboardEditUserProcess, selectDashboardManageUsersSearchFormValues, selectPaginationOptions } from '../selectors';
+import { selectDashboardAdmins, selectDashboardEditUserProcess, selectDashboardManageUsersSearchFormValues, selectPaginationOptions } from '../selectors';
 import { editDashboardUser, deleteDashboardUser, setActiveSort } from '../actions';
 
 const mapStateToProps = createStructuredSelector({
   editUserProcess: selectDashboardEditUserProcess(),
   searchFormValues: selectDashboardManageUsersSearchFormValues(),
   paginationOptions: selectPaginationOptions(),
+  admins: selectDashboardAdmins(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -25,9 +29,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
-export class DashboardManageUsersTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export default class DashboardManageUsersTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    admins: PropTypes.object,
+    admins: React.PropTypes.object,
     editDashboardUser: React.PropTypes.func,
     deleteDashboardUser: React.PropTypes.func,
     editUserProcess: React.PropTypes.object,
@@ -35,6 +39,7 @@ export class DashboardManageUsersTable extends React.Component { // eslint-disab
     searchFormValues: React.PropTypes.object,
     setActiveSort: React.PropTypes.func,
     paginationOptions: React.PropTypes.object,
+    loadMore: PropTypes.func,
   }
 
   constructor(props) {
@@ -116,6 +121,10 @@ export class DashboardManageUsersTable extends React.Component { // eslint-disab
   }
 
   render() {
+    if (!this.props.admins) {
+      return null;
+    }
+
     let admins = this.props.admins.details;
 
     if (this.props.searchFormValues.name) {
@@ -129,26 +138,43 @@ export class DashboardManageUsersTable extends React.Component { // eslint-disab
 
     return (
       <div className="table-holder">
-        <table className="table-manage-user table client-admins">
-          <caption>Admins</caption>
+        <InfiniteScroll
+          className="test-test"
+          pageStart={0}
+          loadMore={this.props.loadMore}
+          initialLoad={false}
+          hasMore={this.props.paginationOptions.hasMoreItems}
+          loader={null}
+        >
+          <table className="table-manage-user table client-admins">
+            <caption>Admins</caption>
 
-          <thead>
-            <tr>
-              <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptions.activeSort === 'first_name') ? this.props.paginationOptions.activeDirection : ''}`}>Name<i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>Email<i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="phone" className={`th ${(this.props.paginationOptions.activeSort === 'phone') ? this.props.paginationOptions.activeDirection : ''}`}>Phone<i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="role_name" className={`th ${(this.props.paginationOptions.activeSort === 'role_name') ? this.props.paginationOptions.activeDirection : ''}`}>Role<i className="caret-arrow" /></th>
-              <th>&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              admins.map((item, index) => (
-                <RowItem key={index} item={item} editUserClick={this.editUserClick} />
-              ))
-            }
-          </tbody>
-        </table>
+            <thead>
+              <tr>
+                <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptions.activeSort === 'first_name') ? this.props.paginationOptions.activeDirection : ''}`}>Name<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>Email<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="phone" className={`th ${(this.props.paginationOptions.activeSort === 'phone') ? this.props.paginationOptions.activeDirection : ''}`}>Phone<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="role_name" className={`th ${(this.props.paginationOptions.activeSort === 'role_name') ? this.props.paginationOptions.activeDirection : ''}`}>Role<i className="caret-arrow" /></th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                admins.map((item, index) => (
+                  <RowItem key={index} item={item} editUserClick={this.editUserClick} />
+                ))
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colSpan="5">
+                  {this.props.admins.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </InfiniteScroll>
+
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.editUserModalOpen} onHide={this.closeEditUserModal}>
           <Modal.Header>
@@ -176,5 +202,3 @@ export class DashboardManageUsersTable extends React.Component { // eslint-disab
     );
   }
 }
-
-export default DashboardManageUsersTable;
