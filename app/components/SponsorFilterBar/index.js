@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-first-prop-new-line */
 
 import React, { Component, PropTypes } from 'react';
-import Button from 'react-bootstrap/lib/Button';
 import Select from 'react-select';
 
 class FilterBar extends Component {
