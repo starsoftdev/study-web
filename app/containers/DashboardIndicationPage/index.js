@@ -8,8 +8,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
-import { DashboardIndicationSearch } from './DashboardIndicationSearch/index';
-import { DashboardIndicationTable } from './DashboardIndicationTable';
+import DashboardIndicationSearch from './DashboardIndicationSearch/index';
+import DashboardIndicationTable from './DashboardIndicationTable';
 import { fetchIndications, fetchLevels, addLevel, addIndication, deleteIndication, editIndication, setActiveSort } from './actions';
 import { selectDashboardIndicationSearchFormValues, selectIndications, selectLevels, selectDashboardAddLevelProcess, selectDashboardAddIndicationProcess, selectPaginationOptions } from './selectors';
 
@@ -30,9 +30,22 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
     paginationOptions: PropTypes.object,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.loadMore = this.loadMore.bind(this);
+  }
+
   componentWillMount() {
     this.props.fetchIndications();
     this.props.fetchLevels();
+  }
+
+  loadMore() {
+    const { fetchIndications } = this.props;
+    const offset = this.props.paginationOptions.page * 10;
+    const limit = 10;
+    fetchIndications(limit, offset);
   }
 
   render() {
@@ -51,14 +64,13 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
           indications={indications}
         />
         <DashboardIndicationTable
-          indications={indications}
           levels={levels}
           editIndication={this.props.editIndication}
           deleteIndication={this.props.deleteIndication}
           addIndicationProcess={addIndicationProcess}
           indicationSearchFormValues={indicationSearchFormValues}
           setActiveSort={this.props.setActiveSort}
-          paginationOptions={this.props.paginationOptions}
+          loadMore={this.loadMore}
         />
       </div>
     );
@@ -76,7 +88,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchIndications: () => dispatch(fetchIndications()),
+    fetchIndications: (limit, offset) => dispatch(fetchIndications(limit, offset)),
     fetchLevels: () => dispatch(fetchLevels()),
     addLevel: (payload) => dispatch(addLevel(payload)),
     addIndication: (payload) => dispatch(addIndication(payload)),
