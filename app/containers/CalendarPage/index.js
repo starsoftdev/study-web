@@ -54,7 +54,6 @@ const getFilteredSchedules = (schedules, filter) =>
 
 const getFilteredSponsorSchedules = (sponsorSchedules, filter) =>
   sponsorSchedules.filter(s =>
-    // `${s.firstName} ${s.lastName}`.toLowerCase().indexOf(filter.patientName.toLowerCase()) > -1 &&
     (!filter.siteLocation || filter.siteLocation === 'all' || s.siteLocation === filter.siteLocation) &&
     (!filter.protocol || filter.protocol === 'all' || s.protocolNumber === filter.protocol)
   );
@@ -469,7 +468,7 @@ export default class CalendarPage extends React.Component {
         }
         {
           userRoleType === 'sponsor' &&
-            <div>
+            <div className="container-fluid">
               <Helmet title="Calendar - StudyKIK" />
               <section className="sponsor calendar-section">
                 <h2 className="main-heading">CALENDAR</h2>
