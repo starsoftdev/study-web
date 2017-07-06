@@ -66,6 +66,11 @@ export default class AddPatientForm extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      siteLocation: null,
+    };
+
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
     this.addPatient = this.addPatient.bind(this);
@@ -80,6 +85,7 @@ export default class AddPatientForm extends React.Component {
   }
 
   changeSiteLocation(siteId) {
+    this.setState({ siteLocation: siteId });
     if (siteId) {
       const { currentUser, fetchFilteredProtcols } = this.props;
       fetchFilteredProtcols(currentUser.roleForClient.id, siteId);
@@ -244,10 +250,10 @@ export default class AddPatientForm extends React.Component {
           <Field
             name="protocol"
             component={ReactSelect}
+            placeholder={this.state.siteLocation ? 'Select Protocol' : 'N/A'}
             className="field"
-            placeholder="Select Protocol"
             options={protocolOptions}
-            disabled={isFetchingProtocols}
+            disabled={isFetchingProtocols || !this.state.siteLocation}
             onChange={this.selectProtocol}
           />
         </div>

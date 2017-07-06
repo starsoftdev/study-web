@@ -8,8 +8,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
-import { DashboardClientAdminsSearch } from './DashboardClientAdminsSearch';
-import { DashboardClientAdminsTable } from './DashboardClientAdminsTable';
+import DashboardClientAdminsSearch from './DashboardClientAdminsSearch';
+import DashboardClientAdminsTable from './DashboardClientAdminsTable';
 import {
   addMessagingNumber,
   editMessagingNumber,
@@ -57,6 +57,12 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
     addMessagingNumber: PropTypes.func,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.loadMore = this.loadMore.bind(this);
+  }
+
   componentWillMount() {
     this.props.fetchClientAdmins();
     this.props.fetchUsersByRoles();
@@ -65,8 +71,16 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
     this.props.getAvailPhoneNumbers();
   }
 
+  loadMore() {
+    const { fetchClientAdmins } = this.props;
+    const offset = this.props.paginationOptions.page * 10;
+    const limit = 10;
+    fetchClientAdmins(limit, offset);
+  }
+
+
   render() {
-    const { addMessagingProcess, addMessagingNumber, editMessagingProcess, availPhoneNumbers, editMessagingNumber, clientSites, usersByRoles, clientAdmins, editUserProcess, addClientAdmin, editClientAdmin, deleteClientAdmin, paginationOptions, setActiveSort, clientAdminSearchFormValues } = this.props;
+    const { addMessagingProcess, addMessagingNumber, editMessagingProcess, availPhoneNumbers, editMessagingNumber, clientSites, usersByRoles, clientAdmins, editUserProcess, addClientAdmin, editClientAdmin, deleteClientAdmin, setActiveSort, clientAdminSearchFormValues } = this.props;
     return (
       <div className="container-fluid dashboard-clients-admins">
         <Helmet title="Client Admins - StudyKIK" />
@@ -79,13 +93,12 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
           editUserProcess={editUserProcess}
         />
         <DashboardClientAdminsTable
-          clientAdmins={clientAdmins}
+          loadMore={this.loadMore}
           editClientAdmin={editClientAdmin}
           deleteClientAdmin={deleteClientAdmin}
           editUserProcess={editUserProcess}
           editMessagingProcess={editMessagingProcess}
           usersByRoles={usersByRoles}
-          paginationOptions={paginationOptions}
           clientAdminSearchFormValues={clientAdminSearchFormValues}
           setActiveSort={setActiveSort}
           clientSites={clientSites}
@@ -116,7 +129,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchSites:       () => dispatch(fetchSites()),
     getAvailPhoneNumbers: () => dispatch(getAvailPhoneNumbers()),
-    fetchClientAdmins: () => dispatch(fetchClientAdmin()),
+    fetchClientAdmins: (limit, offset) => dispatch(fetchClientAdmin(limit, offset)),
     fetchUsersByRoles: () => dispatch(fetchUsersByRoles()),
     addClientAdmin: (payload) => dispatch(addClientAdmin(payload)),
     editClientAdmin: (payload) => dispatch(editClientAdmin(payload)),
