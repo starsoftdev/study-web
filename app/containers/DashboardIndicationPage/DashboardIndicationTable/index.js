@@ -101,7 +101,7 @@ export class DashboardIndicationTable extends React.Component { // eslint-disabl
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan="6">
+                <td colSpan="3">
                   {this.props.indications.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
                 </td>
               </tr>
