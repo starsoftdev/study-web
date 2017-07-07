@@ -73,6 +73,15 @@ class CalendarWidget extends React.Component {
 
     this.currentDate = moment().toDate();
 
+    window.requestAnimationFrame(() => {
+      const evWrap = document.getElementsByClassName('rbc-event-content');
+      const evWrapNum = evWrap.length;
+
+      for (let i=0; i<evWrapNum; i++){
+        evWrap[i].removeAttribute('title');
+      }
+    });
+
     return (
       <div className="calendar-box calendar-slider">
         <Calendar
