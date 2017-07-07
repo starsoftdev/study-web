@@ -76,7 +76,7 @@ class CalendarWidget extends React.Component {
     return (
       <div className="calendar-box calendar-slider">
         <Calendar
-          selectable
+          selectable={false}
           events={eventsList}
           defaultDate={this.currentDate}
           culture="en"
