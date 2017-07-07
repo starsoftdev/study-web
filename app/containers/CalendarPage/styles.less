@@ -112,6 +112,24 @@
 		color: #76daff;
 		text-decoration: underline;
 	}
+
+  .rbc-selected-cell {
+    opacity: 1;
+  }
+
+  .rbc-header,
+  .total-col-header,
+  .total-col {
+    cursor: default !important;
+
+    a {
+      cursor: inherit;
+
+      &.rbc-show-more {
+        cursor: pointer;
+      }
+    }
+  }
 }
 
 .custom-select {
@@ -128,10 +146,10 @@
     .rbc-selected,
     .rbc-header,
     .rbc-day-bg{
-      cursor: inherit;
+      cursor: default;
 
       a {
-        cursor: inherit;
+        cursor: default;
 
         &.rbc-show-more {
           cursor: pointer;
