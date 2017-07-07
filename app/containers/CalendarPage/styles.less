@@ -154,31 +154,67 @@
       .rbc-row:nth-child(3n+2) {
         .rbc-event {
           .event-style(@blue);
-          &:hover, &.rbc-selected {
+          &:hover {
+            background-color: @blue;
+            border-color: @blue;
+            color: #ffffff;
+          }
+          &.rbc-selected {
             background-color: #ffffff;
             border-color: @blue;
             color: @blue;
+
+            &:hover {
+              background-color: @blue;
+              border-color: @blue;
+              color: #ffffff;
+            }
           }
         }
       }
       .rbc-row:nth-child(3n+3) {
         .rbc-event {
           .event-style(@orange);
-          &:hover, &.rbc-selected {
+          &:hover {
+            background-color:@orange;
+            border-color:@orange;
+            color: #ffffff;
+          }
+          &.rbc-selected {
             background-color:#ffffff;
             border-color:@orange;
             color: @orange;
+
+            &:hover {
+              background-color:@orange;
+              border-color:@orange;
+              color: #ffffff;
+            }
           }
         }
       }
       .rbc-row:nth-child(3n+4) {
         .rbc-event {
           .event-style(@gray);
-          &:hover, &.rbc-selected {
+          &:hover {
+            .event-style(@gray);
+            background-color:@gray;
+            border-color:@gray;
+            color: #ffffff;
+          }
+          &.rbc-selected {
             .event-style(@gray);
             background-color:#ffffff;
             border-color:@gray;
             color: @gray;
+
+
+            &:hover {
+              .event-style(@gray);
+              background-color:@gray;
+              border-color:@gray;
+              color: #ffffff;
+            }
           }
         }
       }
