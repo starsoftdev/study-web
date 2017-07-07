@@ -18,7 +18,7 @@ import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import AddNewCardForm from '../../components/AddNewCardForm';
 import { selectCouponId, selectTotal } from './selectors';
-import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSavedCard, selectCurrentUserClientId } from '../../containers/App/selectors';
+import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSavedCard, selectCurrentUserClientId, selectCurrentUser } from '../../containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Money from '../../components/Money';
@@ -33,6 +33,7 @@ const mapStateToProps = createStructuredSelector({
   cards: selectCards(),
   currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
   savedCard: selectSavedCard(),
+  currentUser: selectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -72,6 +73,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     resetForm: PropTypes.func.isRequired,
     manualDisableSubmit: PropTypes.bool,
     showAddNewCard: PropTypes.func,
+    currentUser: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -200,6 +202,13 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
       label: 'Add New Card',
       value: -1,
     }].concat(creditCardOptions);
+
+    if (this.props.currentUser && this.props.currentUser.roleForClient && this.props.currentUser.roleForClient && this.props.currentUser.roleForClient.client && this.props.currentUser.roleForClient.client.isPayByCheckEnabled === true) {
+      creditCardOptions.push({
+        label: 'Pay By Check',
+        value: 'payByCheck',
+      });
+    }
 
     let cardsPanelContent = null;
     if (showCards) {
