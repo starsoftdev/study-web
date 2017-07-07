@@ -130,24 +130,17 @@
     .rbc-day-bg{
       cursor: inherit;
 
-      a{
+      a {
         cursor: inherit;
 
-        &.rbc-show-more{
+        &.rbc-show-more {
           cursor: pointer;
         }
       }
     }
 
-    .rbc-row-segment{
+    .rbc-row-segment {
       margin-bottom: 5px;
-    }
-
-    .custom-event-block{
-      display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
     .rbc-row-content {
@@ -219,6 +212,28 @@
       }
     }
   }
+}
+
+.calendar-tooltip{
+  padding: 7px 5px;
+  min-width: 132px;
+  font-size: 18px;
+  line-height: 23px;
+  text-align: center;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+.rbc-event {
+  padding: 0 !important;
+}
+
+.custom-event-block {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 2px 5px;
 }
 
 @media screen and (max-width: 1350px) {
