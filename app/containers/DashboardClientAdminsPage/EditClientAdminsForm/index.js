@@ -6,6 +6,7 @@ import { Field, reduxForm } from 'redux-form';
 import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import Checkbox from '../../../components/Input/Checkbox';
 
 @reduxForm({ form: 'dashboardEditClientAdminsForm' })
 
@@ -125,6 +126,19 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
               component={ReactSelect}
               placeholder="Select AE"
               options={aes}
+            />
+          </div>
+        </div>
+
+        <div className="field-row">
+          <strong className="label">
+            <label className="add-exposure-level">PAY BY CHECK</label>
+          </strong>
+          <div className="field">
+            <Field
+              name="isPayByCheckEnabled"
+              type="checkbox"
+              component={Checkbox}
             />
           </div>
         </div>
