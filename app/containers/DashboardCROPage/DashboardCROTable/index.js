@@ -2,17 +2,23 @@ import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import InfiniteScroll from 'react-infinite-scroller';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+
 import RowItem from './RowItem';
+import { selectDashboardCro, selectPaginationOptions } from '../selectors';
+
 
 export class DashboardCROTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    cro: PropTypes.object,
+    cros: PropTypes.object,
     editCro: PropTypes.func,
     deleteCro: PropTypes.func,
     setActiveSort: PropTypes.func,
     editCroProcess: PropTypes.object,
     croSearchFormValues: PropTypes.object,
     paginationOptions: PropTypes.object,
+    loadMore: PropTypes.func,
   }
 
   constructor(props) {
@@ -43,7 +49,11 @@ export class DashboardCROTable extends React.Component { // eslint-disable-line 
   }
 
   render() {
-    let cro = this.props.cro.details;
+    if (!this.props.cros) {
+      return null;
+    }
+
+    let cro = this.props.cros.details;
 
     if (this.props.croSearchFormValues.cro) {
       cro = _.filter(cro, (item) => (item.id === this.props.croSearchFormValues.cro));
@@ -56,29 +66,50 @@ export class DashboardCROTable extends React.Component { // eslint-disable-line 
 
     return (
       <div className="table-responsive table-holder table-indication alt">
-        <table className="table-manage-user table">
-          <caption>&nbsp;</caption>
+        <InfiniteScroll
+          className="test-test"
+          pageStart={0}
+          loadMore={this.props.loadMore}
+          initialLoad={false}
+          hasMore={this.props.paginationOptions.hasMoreItems}
+          loader={null}
+        >
 
-          <thead>
-            <tr>
-              <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>CRO<i className="caret-arrow" /></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              cro.map((item, index) => (
-                <RowItem key={index} item={item} editCro={this.props.editCro} deleteCro={this.props.deleteCro} editCroProcess={this.props.editCroProcess} />
-              ))
-            }
-          </tbody>
-        </table>
+          <table className="table-manage-user table">
+            <caption>&nbsp;</caption>
+
+            <thead>
+              <tr>
+                <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>CRO<i className="caret-arrow" /></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                cro.map((item, index) => (
+                  <RowItem key={index} item={item} editCro={this.props.editCro} deleteCro={this.props.deleteCro} editCroProcess={this.props.editCroProcess} />
+                ))
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colSpan="2">
+                  {this.props.cros.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </InfiniteScroll>
+
       </div>
     );
   }
 }
 
 const mapStateToProps = createStructuredSelector({
+  cros: selectDashboardCro(),
+  paginationOptions: selectPaginationOptions(),
+
 });
 
 function mapDispatchToProps(dispatch) {

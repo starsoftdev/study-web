@@ -115,7 +115,7 @@ class CalendarWidget extends React.Component {
               );
 
               return (
-                <OverlayTrigger placement="bottom" overlay={tooltip}>
+                <OverlayTrigger placement="top" overlay={tooltip}>
                   <span className="custom-event-block">{ev.title}</span>
                 </OverlayTrigger>
               );
