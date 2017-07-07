@@ -40,16 +40,29 @@ export function* fetchCroWatcher() {
   yield* takeLatest(FETCH_CRO, fetchCroWorker);
 }
 
-export function* fetchCroWorker() {
+export function* fetchCroWorker(action) {
   try {
     const requestURL = `${API_URL}/cros`;
+    const limit = action.limit || 10;
+    const offset = action.offset || 0;
 
-    const params = {
-      method: 'GET',
+    const filter = {
+      limit,
+      skip: offset,
     };
-    const response = yield call(request, requestURL, params);
 
-    yield put(fetchCroSuccess(response));
+    const queryParams = {
+      filter: JSON.stringify(filter),
+    };
+
+    const response = yield call(request, requestURL, { query: queryParams });
+
+    let hasMoreItems = true;
+    const page = (offset / 10) + 1;
+    if (response.length < 10) {
+      hasMoreItems = false;
+    }
+    yield put(fetchCroSuccess(response, hasMoreItems, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching cro');
     yield put(toastrActions.error('', errorMessage));

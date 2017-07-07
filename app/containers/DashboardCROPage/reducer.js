@@ -42,24 +42,38 @@ const initialState = {
 function dashboardCROPageReducer(state = initialState, action) {
   const newCro = _.cloneDeep(state.cro.details);
   let foundUserIndex = null;
+  let newCroList = [];
+
 
   switch (action.type) {
     case FETCH_CRO:
       return {
         ...state,
         cro: {
-          details: [],
+          details: state.cro.details,
           fetching: true,
           error: null,
         },
       };
     case FETCH_CRO_SUCCESS:
+      if (action.page === 1) {
+        newCroList = action.payload;
+      } else {
+        newCroList = newCro.concat(action.payload);
+      }
+
       return {
         ...state,
         cro: {
-          details: action.payload,
+          details: newCroList,
           fetching: false,
           error: null,
+        },
+        paginationOptions: {
+          activeSort: state.paginationOptions.activeSort,
+          activeDirection: state.paginationOptions.activeDirection,
+          hasMoreItems: action.hasMoreItems,
+          page: action.page,
         },
       };
     case FETCH_CRO_ERROR:
