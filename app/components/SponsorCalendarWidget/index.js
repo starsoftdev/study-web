@@ -77,7 +77,7 @@ class CalendarWidget extends React.Component {
       const evWrap = document.getElementsByClassName('rbc-event-content');
       const evWrapNum = evWrap.length;
 
-      for (let i=0; i<evWrapNum; i++){
+      for (let i = 0; i < evWrapNum; i++) {
         evWrap[i].removeAttribute('title');
       }
     });
