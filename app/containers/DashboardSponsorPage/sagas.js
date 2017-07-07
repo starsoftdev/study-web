@@ -40,16 +40,30 @@ export function* fetchSponsorsWatcher() {
   yield* takeLatest(FETCH_SPONSORS, fetchSponsorsWorker);
 }
 
-export function* fetchSponsorsWorker() {
+export function* fetchSponsorsWorker(action) {
   try {
     const requestURL = `${API_URL}/sponsors`;
+    const limit = action.limit || 10;
+    const offset = action.offset || 0;
 
-    const params = {
-      method: 'GET',
+
+    const filter = {
+      limit,
+      skip: offset,
     };
-    const response = yield call(request, requestURL, params);
 
-    yield put(fetchSponsorsSuccess(response));
+    const queryParams = {
+      filter: JSON.stringify(filter),
+    };
+
+    const response = yield call(request, requestURL, { query: queryParams });
+
+    let hasMoreItems = true;
+    const page = (offset / 10) + 1;
+    if (response.length < 10) {
+      hasMoreItems = false;
+    }
+    yield put(fetchSponsorsSuccess(response, hasMoreItems, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching sponsors');
     yield put(toastrActions.error('', errorMessage));
