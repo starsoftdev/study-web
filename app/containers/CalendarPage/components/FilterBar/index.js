@@ -228,7 +228,7 @@ class FilterBar extends Component {
               />
             </div>
           </div>
-          <div className="pull-left custom-select">
+          <div className="search-area pull-left">
             {(bDisabled)
             ? <Select
               className="form-control data-search"
@@ -248,7 +248,7 @@ class FilterBar extends Component {
             />
             }
           </div>
-          <div className="pull-left custom-select">
+          <div className="search-area pull-left">
             <Select
               className="form-control data-search"
               value={filter.indication}
@@ -258,7 +258,7 @@ class FilterBar extends Component {
               onChange={(option) => this.handleFilterChange('indication', option)}
             />
           </div>
-          <div className="pull-left custom-select no-right-padding">
+          <div className="search-area pull-left no-right-padding">
             <Select
               className="form-control data-search"
               value={filter.protocol}
