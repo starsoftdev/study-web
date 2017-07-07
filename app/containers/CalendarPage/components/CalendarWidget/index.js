@@ -3,6 +3,8 @@
 import React, { PropTypes } from 'react';
 import Calendar from 'react-big-calendar';
 import moment from 'moment-timezone';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
 
 import 'react-big-calendar/lib/less/styles.less';
 
@@ -63,6 +65,15 @@ class CalendarWidget extends React.Component {
 
     this.currentDate = moment().toDate();
 
+    window.requestAnimationFrame(() => {
+      const evWrap = document.getElementsByClassName('rbc-event-content');
+      const evWrapNum = evWrap.length;
+
+      for (let i = 0; i < evWrapNum; i++) {
+        evWrap[i].removeAttribute('title');
+      }
+    });
+
     return (
       <div className="calendar-box calendar-slider">
         <Calendar
@@ -91,6 +102,24 @@ class CalendarWidget extends React.Component {
           }}
           onShowMore={(events, date) => {
             this.props.handleShowAll(true, events, date);
+          }}
+          components={{
+            event: (ev) => {
+              const tooltip = (
+                <Tooltip
+                  id={'ms-tooltip'}
+                  className="calendar-tooltip"
+                >
+                  {ev.title}
+                </Tooltip>
+              );
+
+              return (
+                <OverlayTrigger placement="bottom" overlay={tooltip}>
+                  <span className="custom-event-block">{ev.title}</span>
+                </OverlayTrigger>
+              );
+            },
           }}
           ref={(c) => { this.bigCalendar = c; }}
         />
