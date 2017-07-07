@@ -9,6 +9,12 @@ import {
   FETCH_SCHEDULES,
   FETCH_SCHEDULES_SUCCESS,
   FETCH_SCHEDULES_ERROR,
+  FETCH_SPONSOR_SCHEDULES,
+  FETCH_SPONSOR_SCHEDULES_SUCCESS,
+  FETCH_SPONSOR_SCHEDULES_ERROR,
+  FETCH_SPONSOR_PROTOCOLS,
+  FETCH_SPONSOR_PROTOCOLS_SUCCESS,
+  FETCH_SPONSOR_PROTOCOLS_ERROR,
   SUBMIT_SCHEDULE,
   SUBMIT_SCHEDULE_SUCCESS,
   SUBMIT_SCHEDULE_ERROR,
@@ -29,6 +35,18 @@ const initialState = {
     isSubmitting: false,
     isDeleting: false,
     data: [],
+    error: null,
+  },
+  sponsorSchedules: {
+    isFetching: false,
+    isSubmitting: false,
+    isDeleting: false,
+    data: [],
+    error: null,
+  },
+  sponsorProtocols: {
+    details: [],
+    fetching: false,
     error: null,
   },
   paginationOptions: {
@@ -85,6 +103,53 @@ export default function calendarPageReducer(state = initialState, action) {
           error: { $set: payload },
         }
       });
+    case FETCH_SPONSOR_SCHEDULES:
+      return update(state, {
+        sponsorSchedules: {
+          isFetching: { $set: true },
+        }
+      });
+    case FETCH_SPONSOR_SCHEDULES_SUCCESS:
+      return update(state, {
+        sponsorSchedules: {
+          isFetching: { $set: false },
+          data: { $set: payload },
+        }
+      });
+    case FETCH_SPONSOR_SCHEDULES_ERROR:
+      return update(state, {
+        sponsorSchedules: {
+          isFetching: { $set: false },
+          error: { $set: payload },
+        }
+      });
+    case FETCH_SPONSOR_PROTOCOLS:
+      return {
+        ...state,
+        sponsorProtocols: {
+          details: state.sponsorProtocols.details,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_SPONSOR_PROTOCOLS_SUCCESS:
+      return {
+        ...state,
+        sponsorProtocols: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_SPONSOR_PROTOCOLS_ERROR:
+      return {
+        ...state,
+        sponsorProtocols: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
+      };
     case SUBMIT_SCHEDULE:
       return update(state, {
         schedules: {
