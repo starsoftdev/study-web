@@ -63,6 +63,7 @@ class SideNavBar extends React.Component {
         { upperText: 'Find Out How Many Sites Are Listing Your Protocol', link: '/app/find-out-how-many-sites-are-listing-your-protocol', icon: 'icomoon-help-with-circle' },
       ];
       menuItemsGroupB = [
+        { upperText: 'Calendar', link: '/app/calendar', icon: 'icomoon-icon_calendar' },
         { upperText: 'Manage Users', lowerText: '', link: '/app/manage-users', icon: 'icomoon-icon_group' },
       ];
     }
