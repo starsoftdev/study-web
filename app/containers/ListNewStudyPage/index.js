@@ -33,7 +33,7 @@ import {
   fetchIndications,
   fetchLevels,
   saveSite,
-  getAvailPhoneNumbers,
+  // getAvailPhoneNumbers,
   fetchIndicationLevelPrice,
   fetchClientAdmins,
   fetchClientSites,
@@ -105,7 +105,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
   componentDidMount() {
     this.props.fetchIndications();
     this.props.fetchLevels();
-    this.props.getAvailPhoneNumbers();
+    // this.props.getAvailPhoneNumbers();
     if (this.props.userRoleType === 'client') {
       this.props.fetchClientAdmins(this.props.currentUserClientId);
       this.props.fetchClientSites(this.props.currentUserClientId, {});
@@ -341,7 +341,7 @@ function mapDispatchToProps(dispatch) {
     fetchLevels:      () => dispatch(fetchLevels()),
     submitForm:     (cartValues, formValues) => dispatch(submitForm(cartValues, formValues)),
     saveSite: (clientId, id, data) => dispatch(saveSite(clientId, id, data)),
-    getAvailPhoneNumbers: () => dispatch(getAvailPhoneNumbers()),
+    // getAvailPhoneNumbers: () => dispatch(getAvailPhoneNumbers()),
     hideSubmitFormModal:  () => dispatch(hideSubmitFormModal()),
     fetchIndicationLevelPrice: (indicationId, levelId) => dispatch(fetchIndicationLevelPrice(indicationId, levelId)),
     clearFormSubmissionData: () => (dispatch(clearFormSubmissionData())),
