@@ -102,8 +102,8 @@ class CalendarWidget extends React.Component {
           components={{
             event: (ev) => <div>
               <span className="custom-event-block" data-for={`event-${ev.event.data.id}`} data-tip={ev.title}>{ev.title}</span>
-              <ReactTooltip id={`event-${ev.event.data.id}`} type="info" class="tooltipClass wide" delayHide={300} effect="solid" />
-            </div>,
+              <ReactTooltip id={`event-${ev.event.data.id}`} type="info" class="tooltipClass wide" delayHide={10} effect="solid" />
+            </div>
           }}
           ref={(c) => { this.bigCalendar = c; }}
         />
