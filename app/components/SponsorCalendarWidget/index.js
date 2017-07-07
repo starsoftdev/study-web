@@ -2,13 +2,11 @@
 
 import React, { PropTypes } from 'react';
 import Calendar from 'react-big-calendar';
-import moment from 'moment-timezone';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
+import moment from 'moment-timezone';
 
 import 'react-big-calendar/lib/less/styles.less';
-
-import { SchedulePatientModalType } from '../../../../common/constants';
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
@@ -17,7 +15,7 @@ Calendar.momentLocalizer(moment); // or globalizeLocalizer
 class CalendarWidget extends React.Component {
   static propTypes = {
     currentUser: PropTypes.object,
-    schedules: PropTypes.array.isRequired,
+    sponsorSchedules: PropTypes.array.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
     handleShowAll: PropTypes.func.isRequired,
   };
@@ -43,10 +41,12 @@ class CalendarWidget extends React.Component {
   }
 
   render() {
-    const { currentUser, schedules } = this.props;
+    const { currentUser, sponsorSchedules } = this.props;
+    let currDate = null;
+    let counter = 0;
 
-    const eventsList = schedules.map(s => {
-      const localTime = s.time;
+    const eventsList = sponsorSchedules.map(s => {
+      const localTime = moment(s.time);
       const browserTime = moment()
         .year(localTime.year())
         .month(localTime.month())
@@ -55,12 +55,21 @@ class CalendarWidget extends React.Component {
         .minute(localTime.minute())
         .seconds(0);
 
-      return {
+      const result = {
         data: s,
-        title: `${s.patient.firstName} ${s.patient.lastName || ''} ${localTime.format('h:mm A')}`,
         start: browserTime,
         end: browserTime,
       };
+
+      if (currDate === null || currDate === moment(s.time).startOf('date').date()) {
+        counter++;
+      } else {
+        counter = 1;
+      }
+
+      result.title = `Patient #${counter} ${moment(s.time).format('h:mm A')}`;
+      currDate = moment(s.time).startOf('date').date();
+      return result;
     });
 
     this.currentDate = moment().toDate();
@@ -77,7 +86,7 @@ class CalendarWidget extends React.Component {
     return (
       <div className="calendar-box calendar-slider">
         <Calendar
-          selectable
+          selectable={false}
           events={eventsList}
           defaultDate={this.currentDate}
           culture="en"
@@ -88,18 +97,6 @@ class CalendarWidget extends React.Component {
           eventPropGetter={(event, start, end, isSelected) => ({
           })}
           eventOffset={300}
-          onSelectSlot={({ start, end, slots }) => {
-            if (slots.length === 1) {
-              const selectedDate = this.getTimezoneDate(start);
-              this.props.handleOpenModal(SchedulePatientModalType.CREATE, { selectedDate });
-            }
-          }}
-          onSelectDate={(label, date) => {
-            this.props.handleOpenModal(SchedulePatientModalType.CREATE, { selectedDate: date });
-          }}
-          onSelectEvent={(event) => {
-            this.props.handleOpenModal(SchedulePatientModalType.UPDATE, event);
-          }}
           onShowMore={(events, date) => {
             this.props.handleShowAll(true, events, date);
           }}

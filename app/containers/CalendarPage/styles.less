@@ -118,8 +118,130 @@
   z-index: 5;
 }
 
+.calendar-section{
+  &.sponsor {
+
+    .rbc-row,
+    .rbc-row-segment,
+    .rbc-date-cell,
+    .rbc-event,
+    .rbc-selected,
+    .rbc-header,
+    .rbc-day-bg{
+      cursor: inherit;
+
+      a {
+        cursor: inherit;
+
+        &.rbc-show-more {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .rbc-row-segment {
+      margin-bottom: 5px;
+    }
+
+    .rbc-row-content {
+      .rbc-row:nth-child(3n+2) {
+        .rbc-event {
+          .event-style(@blue);
+          &:hover {
+            background-color: @blue;
+            border-color: @blue;
+            color: #ffffff;
+          }
+          &.rbc-selected {
+            background-color: #ffffff;
+            border-color: @blue;
+            color: @blue;
+
+            &:hover {
+              background-color: @blue;
+              border-color: @blue;
+              color: #ffffff;
+            }
+          }
+        }
+      }
+      .rbc-row:nth-child(3n+3) {
+        .rbc-event {
+          .event-style(@orange);
+          &:hover {
+            background-color:@orange;
+            border-color:@orange;
+            color: #ffffff;
+          }
+          &.rbc-selected {
+            background-color:#ffffff;
+            border-color:@orange;
+            color: @orange;
+
+            &:hover {
+              background-color:@orange;
+              border-color:@orange;
+              color: #ffffff;
+            }
+          }
+        }
+      }
+      .rbc-row:nth-child(3n+4) {
+        .rbc-event {
+          .event-style(@gray);
+          &:hover {
+            .event-style(@gray);
+            background-color:@gray;
+            border-color:@gray;
+            color: #ffffff;
+          }
+          &.rbc-selected {
+            .event-style(@gray);
+            background-color:#ffffff;
+            border-color:@gray;
+            color: @gray;
+
+            &:hover {
+              .event-style(@gray);
+              background-color:@gray;
+              border-color:@gray;
+              color: #ffffff;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.calendar-tooltip{
+  padding: 7px 5px;
+  min-width: 132px;
+  font-size: 18px;
+  line-height: 23px;
+  text-align: center;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+.rbc-event {
+  padding: 0 !important;
+}
+
+.custom-event-block {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 2px 5px;
+}
+
 @media screen and (max-width: 1350px) {
   .calendar-box .rbc-calendar .rbc-month-view .rbc-month-header div span:first-of-type{
     font-size: 18px;
+  }
+
+  .custom-select {
+    width: 33.3% !important;
   }
 }
