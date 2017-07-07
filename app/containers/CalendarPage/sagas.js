@@ -15,6 +15,10 @@ import {
   fetchPatientsByStudyFailed,
   fetchSchedulesSucceeded,
   fetchSchedulesFailed,
+  fetchSponsorSchedulesSucceeded,
+  fetchSponsorSchedulesFailed,
+  fetchSponsorProtocolsSucceeded,
+  fetchSponsorProtocolsFailed,
   submitScheduleSucceeded,
   submitScheduleFailed,
   deleteScheduleSucceeded,
@@ -24,6 +28,8 @@ import {
 import {
   FETCH_PATIENTS_BY_STUDY,
   FETCH_SCHEDULES,
+  FETCH_SPONSOR_SCHEDULES,
+  FETCH_SPONSOR_PROTOCOLS,
   SUBMIT_SCHEDULE,
   DELETE_SCHEDULE,
 } from './constants';
@@ -79,6 +85,77 @@ export function* fetchSchedulesWorker(action) {
       removeItem('auth_token');
       yield call(() => { location.href = '/login'; });
     }
+  }
+}
+
+export function* fetchSponsorSchedulesWatcher() {
+  yield* takeLatest(FETCH_SPONSOR_SCHEDULES, fetchSponsorSchedulesWorker);
+}
+
+export function* fetchSponsorSchedulesWorker(action) {
+  try {
+    const requestURL = `${API_URL}/appointments/sponsorSchedules`;
+    const params = {
+      query: {
+        sponsorId: action.sponsorId,
+      },
+    };
+
+    if (action.searchParams) {
+      params.query.searchParams = JSON.stringify(action.searchParams);
+    }
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchSponsorSchedulesSucceeded(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching schedules');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(fetchSponsorSchedulesFailed(err));
+    if (err.status === 401) {
+      removeItem('auth_token');
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* fetchSponsorProtocolsWatcher() {
+  yield* takeLatest(FETCH_SPONSOR_PROTOCOLS, fetchSponsorProtocolsWorker);
+}
+
+export function* fetchSponsorProtocolsWorker(action) {
+  try {
+    const limit = action.limit || 10;
+    const offset = action.offset || 0;
+    const sort = action.sort || null;
+    const order = action.order || null;
+    const params = {
+      method: 'GET',
+      query: {
+        sponsorRoleId: action.sponsorRoleId,
+      },
+    };
+
+    if (action.searchParams) {
+      params.query.searchParams = JSON.stringify(action.searchParams);
+    }
+    params.query.limit = limit;
+    params.query.offset = offset;
+    if (sort && order) {
+      params.query.orderBy = sort;
+      params.query.orderDir = ((order === 'down') ? 'DESC' : 'ASC');
+    }
+    const requestURL = `${API_URL}/protocols/protocolsForHomePage`;
+    const response = yield call(request, requestURL, params);
+
+    let hasMore = true;
+    const page = (offset / 10) + 1;
+    if (response.length < 10) {
+      hasMore = false;
+    }
+
+    yield put(fetchSponsorProtocolsSucceeded(response, hasMore, page));
+  } catch (err) {
+    yield put(fetchSponsorProtocolsFailed(err));
   }
 }
 
@@ -139,6 +216,8 @@ export function* calendarPageSaga() {
   const watcherB = yield fork(fetchSchedulesWatcher);
   const watcherC = yield fork(submitSchedulesWatcher);
   const watcherD = yield fork(deleteSchedulesWatcher);
+  const watcherE = yield fork(fetchSponsorSchedulesWatcher);
+  const watcherF = yield fork(fetchSponsorProtocolsWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -147,4 +226,6 @@ export function* calendarPageSaga() {
   yield cancel(watcherB);
   yield cancel(watcherC);
   yield cancel(watcherD);
+  yield cancel(watcherE);
+  yield cancel(watcherF);
 }

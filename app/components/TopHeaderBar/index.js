@@ -164,7 +164,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             </OverlayTrigger>
 
             <div className="get-credits pull-left">
-              <span>{credits} Credits</span>
+              <span>{credits} Messaging Credits</span>
               <Button disabled={!purchasable} onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
             </div>
 
