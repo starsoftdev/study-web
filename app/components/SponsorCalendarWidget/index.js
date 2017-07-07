@@ -2,7 +2,8 @@
 
 import React, { PropTypes } from 'react';
 import Calendar from 'react-big-calendar';
-import ReactTooltip from 'react-tooltip';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
 import moment from 'moment-timezone';
 
 import 'react-big-calendar/lib/less/styles.less';
@@ -100,10 +101,22 @@ class CalendarWidget extends React.Component {
             this.props.handleShowAll(true, events, date);
           }}
           components={{
-            event: (ev) => <div>
-              <span className="custom-event-block" data-for={`event-${ev.event.data.id}`} data-tip={ev.title}>{ev.title}</span>
-              <ReactTooltip id={`event-${ev.event.data.id}`} type="info" class="tooltipClass wide" delayHide={10} effect="solid" />
-            </div>,
+            event: (ev) => {
+              const tooltip = (
+                <Tooltip
+                  id={'ms-tooltip'}
+                  className="calendar-tooltip"
+                >
+                  {ev.title}
+                </Tooltip>
+              );
+
+              return (
+                <OverlayTrigger placement="bottom" overlay={tooltip}>
+                  <span className="custom-event-block">{ev.title}</span>
+                </OverlayTrigger>
+              );
+            },
           }}
           ref={(c) => { this.bigCalendar = c; }}
         />
