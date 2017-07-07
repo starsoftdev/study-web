@@ -20,16 +20,20 @@ import {
   SET_ACTIVE_SORT,
 } from './constants';
 
-export function fetchCro() {
+export function fetchCro(limit, offset) {
   return {
     type: FETCH_CRO,
+    limit,
+    offset,
   };
 }
 
-export function fetchCroSuccess(payload) {
+export function fetchCroSuccess(payload, hasMoreItems, page) {
   return {
     type: FETCH_CRO_SUCCESS,
     payload,
+    hasMoreItems,
+    page,
   };
 }
 
