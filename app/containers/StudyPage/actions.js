@@ -73,6 +73,9 @@ import {
   SUBMIT_SCHEDULE_FAILED,
   SET_SCHEDULED_FORM_INITIALIZED,
   FETCH_PATIENTS_ERROR,
+  DELETE_PATIENT,
+  DELETE_PATIENT_SUCCESS,
+  DELETE_PATIENT_ERROR,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -587,3 +590,25 @@ export function setScheduledFormInitialized(formInitialized) {
     formInitialized,
   };
 }
+
+export function deletePatient(id) {
+  return {
+    type: DELETE_PATIENT,
+    id,
+  };
+}
+
+export function deletePatientSuccess(payload) {
+  return {
+    type: DELETE_PATIENT_SUCCESS,
+    payload,
+  };
+}
+
+export function deletePatientError(payload) {
+  return {
+    type: DELETE_PATIENT_ERROR,
+    payload,
+  };
+}
+

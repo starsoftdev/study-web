@@ -29,6 +29,7 @@ SUBMIT_DELETE_NOTE,
 SUBMIT_PATIENT_TEXT,
 SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
 SUBMIT_SCHEDULE,
+DELETE_PATIENT,
 } from './constants';
 
 import {
@@ -59,6 +60,8 @@ import {
   movePatientBetweenCategoriesFailed,
   submitScheduleSucceeded,
   submitScheduleFailed,
+  deletePatientSuccess,
+  deletePatientError,
 } from './actions';
 
 // Bootstrap sagas
@@ -865,6 +868,24 @@ export function* submitSchedule() {
   }
 }
 
+export function* deletePatient() {
+  while (true) {
+    const { id } = yield take(DELETE_PATIENT);
+    try {
+      const requestURL = `${API_URL}/patients/${id}`;
+      const params = {
+        method: 'DELETE',
+      };
+      yield call(request, requestURL, params);
+      yield put(deletePatientSuccess(id));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while deleting a patient.');
+      yield put(toastrActions.error('', errorMessage));
+      yield put(deletePatientError(err));
+    }
+  }
+}
+
 export function* fetchStudySaga() {
   try {
     const watcherA = yield fork(fetchStudyDetails);
@@ -888,6 +909,7 @@ export function* fetchStudySaga() {
     const watcherT = yield fork(submitDeleteNote);
     const watcherU = yield fork(submitPatientText);
     const watcherV = yield fork(submitSchedule);
+    const deletePatientWatcher = yield fork(deletePatient);
     // const watcherZ = yield fork(fetchStudyTextNewStats);
 
     yield take(LOCATION_CHANGE);
@@ -912,6 +934,7 @@ export function* fetchStudySaga() {
     yield cancel(watcherT);
     yield cancel(watcherU);
     yield cancel(watcherV);
+    yield cancel(deletePatientWatcher);
     // yield cancel(watcherZ);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
