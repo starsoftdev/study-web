@@ -189,6 +189,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             handleSubmit={this.handleSubmit}
             ePMS={ePMS}
             studyName={studyName}
+            fetchStudyTextNewStats={this.props.fetchStudyTextNewStats}
           />
           <StudyStats stats={stats} />
           <PatientBoard
@@ -227,7 +228,7 @@ function mapDispatchToProps(dispatch) {
     setStudyId: (id) => dispatch(setStudyId(id)),
     updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
     fetchSources: () => dispatch(fetchSources()),
-    fetchStudyTextNewStats: (studyId) => dispatch(fetchStudyTextNewStats(studyId)),
+    fetchStudyTextNewStats: (studyId, campaignId, sourceId) => dispatch(fetchStudyTextNewStats(studyId, campaignId, sourceId)),
   };
 }
 
