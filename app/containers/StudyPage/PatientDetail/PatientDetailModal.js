@@ -153,7 +153,7 @@ export class PatientDetailModal extends React.Component {
     if (currentPatientCategory && currentPatientCategory.name === 'Scheduled') {
       if (currentPatient && currentPatient.appointments && currentPatient.appointments.length > 0) {
         return (
-          <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.UPDATED)}>
+          <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.UPDATE)}>
             <span className="date">{moment(currentPatient.appointments[0].time).format('MM/DD/YY')}</span>
             <span> at </span>
             <span className="time">{moment(currentPatient.appointments[0].time).format('hh:mm A')} </span>
