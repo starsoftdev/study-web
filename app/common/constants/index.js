@@ -62,6 +62,6 @@ export const YEAR_OPTIONS = [
 
 export const SchedulePatientModalType = {
   CREATE: 'CREATE',
-  UPDATED: 'UPDATE',
+  UPDATE: 'UPDATE',
   HIDDEN: 'HIDDEN',
 };
