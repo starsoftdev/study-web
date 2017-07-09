@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
+import { Link } from 'react-router';
 import { Modal } from 'react-bootstrap';
 import moment from 'moment-timezone';
 import { Calendar } from 'react-date-range';
@@ -162,8 +163,8 @@ export default class EditScheduleModal extends Component {
                 <strong
                   className="name"
                 >{`${selectedCellInfo.data.patient.firstName} ${selectedCellInfo.data.patient.lastName || ''}`}</strong>
-                <span className="site-location">{selectedCellInfo.data.siteLocation}</span>
-                <span className="protocol">{selectedCellInfo.data.protocolNumber}</span>
+                <span className="site-location"><Link to={`/app/study/${selectedCellInfo.data.studyId}`}>{selectedCellInfo.data.sitelocation}</Link></span>
+                <span className="protocol"><Link to={`/app/study/${selectedCellInfo.data.studyId}`}>{selectedCellInfo.data.protocolNumber}</Link></span>
                 <div className="field-row">
                   <strong className="label">* When</strong>
                   <div className="field" onClick={() => { this.handleDatePickerClose(true); }}>
