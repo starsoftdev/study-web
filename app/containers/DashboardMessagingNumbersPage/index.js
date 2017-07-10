@@ -13,8 +13,8 @@ import { fetchMessagingNumbers, addMessagingNumber, editMessagingNumber, archive
   setActiveSort } from './actions';
 import { selectDashboardMessagingNumber, selectDashboardEditMessagingNumberProcess,
   selectDashboardMessagingNumberSearchFormValues, selectPaginationOptions } from './selectors';
-import { DashboardMessagingNumberSearch } from './DashboardMessagingNumberSearch/index';
-import { DashboardMessagingNumbersTable } from './DashboardMessagingNumbersTable/index';
+import DashboardMessagingNumberSearch from './DashboardMessagingNumberSearch/index';
+import DashboardMessagingNumbersTable from './DashboardMessagingNumbersTable/index';
 
 // eslint-disable-line react/prefer-stateless-function
 export class DashboardMessagingNumbersPage extends React.Component {
@@ -31,8 +31,21 @@ export class DashboardMessagingNumbersPage extends React.Component {
     paginationOptions: PropTypes.object,
   }
 
+  constructor(props) {
+    super(props);
+
+    this.loadMore = this.loadMore.bind(this);
+  }
+
   componentWillMount() {
     this.props.fetchMessagingNumbers();
+  }
+
+  loadMore() {
+    const { fetchMessagingNumbers } = this.props;
+    const offset = this.props.paginationOptions.page * 10;
+    const limit = 10;
+    fetchMessagingNumbers(limit, offset);
   }
 
   render() {
@@ -45,13 +58,12 @@ export class DashboardMessagingNumbersPage extends React.Component {
           messagingNumberSearchFormValues={this.props.messagingNumberSearchFormValues}
         />
         <DashboardMessagingNumbersTable
-          messagingNumber={this.props.messagingNumber}
           editMessagingNumberProcess={this.props.editMessagingNumberProcess}
           editMessagingNumber={this.props.editMessagingNumber}
           deleteMessagingNumber={this.props.deleteMessagingNumber}
           messagingNumberSearchFormValues={this.props.messagingNumberSearchFormValues}
           setActiveSort={this.props.setActiveSort}
-          paginationOptions={this.props.paginationOptions}
+          loadMore={this.loadMore}
         />
       </div>
     );
@@ -67,7 +79,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchMessagingNumbers: () => dispatch(fetchMessagingNumbers()),
+    fetchMessagingNumbers: (limit, offset) => dispatch(fetchMessagingNumbers(limit, offset)),
     addMessagingNumber: (payload) => dispatch(addMessagingNumber(payload)),
     editMessagingNumber: (payload) => dispatch(editMessagingNumber(payload)),
     deleteMessagingNumber: (payload) => dispatch(archiveMessagingNumber(payload)),
