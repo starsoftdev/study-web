@@ -19,6 +19,8 @@ import {
   fetchSponsorSchedulesFailed,
   fetchSponsorProtocolsSucceeded,
   fetchSponsorProtocolsFailed,
+  fetchSponsorSitesSucceeded,
+  fetchSponsorSitesFailed,
   submitScheduleSucceeded,
   submitScheduleFailed,
   deleteScheduleSucceeded,
@@ -30,6 +32,7 @@ import {
   FETCH_SCHEDULES,
   FETCH_SPONSOR_SCHEDULES,
   FETCH_SPONSOR_PROTOCOLS,
+  FETCH_SPONSOR_SITES,
   SUBMIT_SCHEDULE,
   DELETE_SCHEDULE,
 } from './constants';
@@ -111,6 +114,36 @@ export function* fetchSponsorSchedulesWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching schedules');
     yield put(toastrActions.error('', errorMessage));
     yield put(fetchSponsorSchedulesFailed(err));
+    if (err.status === 401) {
+      removeItem('auth_token');
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* fetchSponsorSitesWatcher() {
+  yield* takeLatest(FETCH_SPONSOR_SITES, fetchSponsorSitesWorker);
+}
+
+export function* fetchSponsorSitesWorker(action) {
+  try {
+    const requestURL = `${API_URL}/sites/getSponsorSites`;
+    const params = {
+      query: {
+        sponsorId: action.sponsorId,
+      },
+    };
+
+    if (action.searchParams) {
+      params.query.searchParams = JSON.stringify(action.searchParams);
+    }
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchSponsorSitesSucceeded(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching sites');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(fetchSponsorSitesFailed(err));
     if (err.status === 401) {
       removeItem('auth_token');
       yield call(() => { location.href = '/login'; });
@@ -218,6 +251,7 @@ export function* calendarPageSaga() {
   const watcherD = yield fork(deleteSchedulesWatcher);
   const watcherE = yield fork(fetchSponsorSchedulesWatcher);
   const watcherF = yield fork(fetchSponsorProtocolsWatcher);
+  const watcherG = yield fork(fetchSponsorSitesWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -228,4 +262,5 @@ export function* calendarPageSaga() {
   yield cancel(watcherD);
   yield cancel(watcherE);
   yield cancel(watcherF);
+  yield cancel(watcherG);
 }
