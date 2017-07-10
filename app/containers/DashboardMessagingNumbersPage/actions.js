@@ -20,16 +20,20 @@ import {
   SET_ACTIVE_SORT,
 } from './constants';
 
-export function fetchMessagingNumbers() {
+export function fetchMessagingNumbers(limit, offset) {
   return {
     type: FETCH_MESSAGING_NUMBERS,
+    limit,
+    offset,
   };
 }
 
-export function fetchMessagingNumbersSuccess(payload) {
+export function fetchMessagingNumbersSuccess(payload, hasMoreItems, page) {
   return {
     type: FETCH_MESSAGING_NUMBERS_SUCCESS,
     payload,
+    hasMoreItems,
+    page,
   };
 }
 
