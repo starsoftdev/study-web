@@ -30,7 +30,6 @@ class FilterStudyPatientsForm extends Component {
     studyId: PropTypes.number.isRequired,
     ePMS: PropTypes.bool,
     studyName: PropTypes.string,
-    fetchStudyTextNewStats: PropTypes.func,
   };
   static defaultProps = {
     submitting: false,
@@ -67,7 +66,6 @@ class FilterStudyPatientsForm extends Component {
         fetchPatients(studyId, search, newCampaign, null);
       } else {
         fetchPatients(studyId, search, newCampaign, event);
-        this.props.fetchStudyTextNewStats(studyId, newCampaign, event);
       }
     } else {
       /* -1 means all was selected */
