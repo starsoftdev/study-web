@@ -11,6 +11,9 @@ import {
   FETCH_SPONSOR_PROTOCOLS,
   FETCH_SPONSOR_PROTOCOLS_SUCCESS,
   FETCH_SPONSOR_PROTOCOLS_ERROR,
+  FETCH_SPONSOR_SITES,
+  FETCH_SPONSOR_SITES_SUCCESS,
+  FETCH_SPONSOR_SITES_ERROR,
   SUBMIT_SCHEDULE,
   SUBMIT_SCHEDULE_SUCCESS,
   SUBMIT_SCHEDULE_ERROR,
@@ -75,6 +78,26 @@ export function fetchSponsorSchedulesSucceeded(payload) {
 export function fetchSponsorSchedulesFailed(payload) {
   return {
     type: FETCH_SPONSOR_SCHEDULES_ERROR,
+    payload,
+  };
+}
+
+export function fetchSponsorSites(sponsorId, searchParams) {
+  return {
+    type: FETCH_SPONSOR_SITES,
+    sponsorId,
+    searchParams,
+  };
+}
+export function fetchSponsorSitesSucceeded(payload) {
+  return {
+    type: FETCH_SPONSOR_SITES_SUCCESS,
+    payload,
+  };
+}
+export function fetchSponsorSitesFailed(payload) {
+  return {
+    type: FETCH_SPONSOR_SITES_ERROR,
     payload,
   };
 }
