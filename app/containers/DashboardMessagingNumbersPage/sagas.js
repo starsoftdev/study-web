@@ -39,13 +39,20 @@ export function* fetchMessagingNumbersWatcher() {
   yield* takeLatest(FETCH_MESSAGING_NUMBERS, fetchMessagingNumbersWorker);
 }
 
-export function* fetchMessagingNumbersWorker() {
+export function* fetchMessagingNumbersWorker(action) {
   try {
-    const requestURL = `${API_URL}/twilioNumbers/getMessagingNumbers`;
+    const limit = action.limit || 10;
+    const offset = action.offset || 0;
+
+    const requestURL = `${API_URL}/twilioNumbers/getMessagingNumbers?limit=${limit}&offset=${offset}`;
 
     const response = yield call(request, requestURL);
-
-    yield put(fetchMessagingNumbersSuccess(response));
+    let hasMoreItems = true;
+    const page = (offset / 10) + 1;
+    if (response.length < 10) {
+      hasMoreItems = false;
+    }
+    yield put(fetchMessagingNumbersSuccess(response, hasMoreItems, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching messaging numbers');
     yield put(toastrActions.error('', errorMessage));
