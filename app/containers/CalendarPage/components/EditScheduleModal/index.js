@@ -163,7 +163,7 @@ export default class EditScheduleModal extends Component {
                 <strong
                   className="name"
                 >{`${selectedCellInfo.data.patient.firstName} ${selectedCellInfo.data.patient.lastName || ''}`}</strong>
-                <span className="site-location"><Link to={`/app/study/${selectedCellInfo.data.studyId}`}>{selectedCellInfo.data.sitelocation}</Link></span>
+                <span className="site-location">{selectedCellInfo.data.sitelocation}</span>
                 <span className="protocol"><Link to={`/app/study/${selectedCellInfo.data.studyId}`}>{selectedCellInfo.data.protocolNumber}</Link></span>
                 <div className="field-row">
                   <strong className="label">* When</strong>
