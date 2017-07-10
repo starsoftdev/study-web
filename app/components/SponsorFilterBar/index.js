@@ -5,7 +5,7 @@ import Select from 'react-select';
 
 class FilterBar extends Component {
   static propTypes = {
-    sites: PropTypes.array.isRequired,
+    sites: PropTypes.object.isRequired,
     sponsorSchedules: PropTypes.array.isRequired,
     protocols: PropTypes.array.isRequired,
     filter: PropTypes.object.isRequired,
@@ -23,21 +23,26 @@ class FilterBar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { protocols } = nextProps;
+    const { protocols, sites } = nextProps;
 
     if (protocols.length) {
       const protocolOptions = [{ label: 'All', value: 'all' }].concat(protocols.map(protocol => ({
         label: protocol.protocolNumber,
         value: protocol.protocolNumber,
       })));
-      const siteLocationOptions = [{ label: 'All', value: 'all' }].concat(protocols.map(protocol => ({
-        label: protocol.siteName,
-        value: protocol.siteId,
-      })));
-
 
       this.setState({
         protocolOptions,
+      });
+    }
+
+    if (!sites.fetching && sites.details.length) {
+      const siteLocationOptions = [{ label: 'All', value: 'all' }].concat(sites.details.map(site => ({
+        label: site.site_name,
+        value: site.site_id,
+      })));
+
+      this.setState({
         siteLocationOptions,
       });
     }

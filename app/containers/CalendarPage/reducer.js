@@ -15,6 +15,9 @@ import {
   FETCH_SPONSOR_PROTOCOLS,
   FETCH_SPONSOR_PROTOCOLS_SUCCESS,
   FETCH_SPONSOR_PROTOCOLS_ERROR,
+  FETCH_SPONSOR_SITES,
+  FETCH_SPONSOR_SITES_SUCCESS,
+  FETCH_SPONSOR_SITES_ERROR,
   SUBMIT_SCHEDULE,
   SUBMIT_SCHEDULE_SUCCESS,
   SUBMIT_SCHEDULE_ERROR,
@@ -45,6 +48,11 @@ const initialState = {
     error: null,
   },
   sponsorProtocols: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  sponsorSites: {
     details: [],
     fetching: false,
     error: null,
@@ -145,6 +153,33 @@ export default function calendarPageReducer(state = initialState, action) {
       return {
         ...state,
         sponsorProtocols: {
+          details: [],
+          fetching: false,
+          error: payload,
+        },
+      };
+    case FETCH_SPONSOR_SITES:
+      return {
+        ...state,
+        sponsorSites: {
+          details: state.sponsorSites.details,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_SPONSOR_SITES_SUCCESS:
+      return {
+        ...state,
+        sponsorSites: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_SPONSOR_SITES_ERROR:
+      return {
+        ...state,
+        sponsorSites: {
           details: [],
           fetching: false,
           error: payload,
