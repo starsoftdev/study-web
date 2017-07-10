@@ -22,6 +22,11 @@ const selectSponsorProtocols = () => createSelector(
   substate => substate.sponsorProtocols
 );
 
+const selectSponsorSites = () => createSelector(
+  selectCalendarPageDomain(),
+  substate => substate.sponsorSites
+);
+
 const selectPaginationOptions = () => createSelector(
   selectCalendarPageDomain(),
   (substate) => substate.paginationOptions,
@@ -33,5 +38,6 @@ export {
   selectSchedules,
   selectSponsorSchedules,
   selectSponsorProtocols,
+  selectSponsorSites,
   selectPaginationOptions,
 };

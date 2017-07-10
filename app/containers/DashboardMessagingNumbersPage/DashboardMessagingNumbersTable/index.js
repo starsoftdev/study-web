@@ -2,6 +2,10 @@ import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import InfiniteScroll from 'react-infinite-scroller';
+
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import { selectDashboardMessagingNumber, selectPaginationOptions } from '../selectors';
 import RowItem from './RowItem';
 
 export class DashboardMessagingNumbersTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -13,6 +17,7 @@ export class DashboardMessagingNumbersTable extends React.Component { // eslint-
     editMessagingNumberProcess: PropTypes.object,
     messagingNumberSearchFormValues: PropTypes.object,
     paginationOptions: PropTypes.object,
+    loadMore: PropTypes.func,
   }
 
   constructor(props) {
@@ -43,6 +48,10 @@ export class DashboardMessagingNumbersTable extends React.Component { // eslint-
   }
 
   render() {
+    if (!this.props.messagingNumber) {
+      return null;
+    }
+
     let messagingNumbers = this.props.messagingNumber.details;
 
     if (this.props.messagingNumberSearchFormValues && this.props.messagingNumberSearchFormValues.messagingNumber) {
@@ -56,44 +65,63 @@ export class DashboardMessagingNumbersTable extends React.Component { // eslint-
 
     return (
       <div className="table-responsive table-holder table-indication alt">
-        <table className="table-manage-user table">
-          <caption>&nbsp;</caption>
-          <colgroup>
-            <col style={{ width: '23%' }} />
-            <col style={{ width: '23%' }} />
-            <col style={{ width: '23%' }} />
-            <col style={{ width: '23%' }} />
-            <col style={{ width: 'auto' }} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th onClick={this.sortBy} data-sort="noteData" className={`th ${(this.props.paginationOptions.activeSort === 'noteData') ? this.props.paginationOptions.activeDirection : ''}`}>Messaging Number<i className="caret-arrow" /></th>
-              <th>Study Number <i className="caret-arrow" /></th>
-              <th>Site Location <i className="caret-arrow" /></th>
-              <th>Friendly Name <i className="caret-arrow" /></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              messagingNumbers.map((item, index) => (
-                <RowItem
-                  key={index}
-                  item={item}
-                  editMessagingNumber={this.props.editMessagingNumber}
-                  deleteMessagingNumber={this.props.deleteMessagingNumber}
-                  editMessagingNumberProcess={this.props.editMessagingNumberProcess}
-                />
-              ))
-            }
-          </tbody>
-        </table>
+        <InfiniteScroll
+          className="test-test"
+          pageStart={0}
+          loadMore={this.props.loadMore}
+          initialLoad={false}
+          hasMore={this.props.paginationOptions.hasMoreItems}
+          loader={null}
+        >
+
+          <table className="table-manage-user table">
+            <caption>&nbsp;</caption>
+            <colgroup>
+              <col style={{ width: '23%' }} />
+              <col style={{ width: '23%' }} />
+              <col style={{ width: '23%' }} />
+              <col style={{ width: '23%' }} />
+              <col style={{ width: 'auto' }} />
+            </colgroup>
+            <thead>
+              <tr>
+                <th onClick={this.sortBy} data-sort="noteData" className={`th ${(this.props.paginationOptions.activeSort === 'noteData') ? this.props.paginationOptions.activeDirection : ''}`}>Messaging Number<i className="caret-arrow" /></th>
+                <th>Study Number <i className="caret-arrow" /></th>
+                <th>Site Location <i className="caret-arrow" /></th>
+                <th>Friendly Name <i className="caret-arrow" /></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                messagingNumbers.map((item, index) => (
+                  <RowItem
+                    key={index}
+                    item={item}
+                    editMessagingNumber={this.props.editMessagingNumber}
+                    deleteMessagingNumber={this.props.deleteMessagingNumber}
+                    editMessagingNumberProcess={this.props.editMessagingNumberProcess}
+                  />
+                ))
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colSpan="5">
+                  {this.props.messagingNumber.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </InfiniteScroll>
       </div>
     );
   }
 }
 
 const mapStateToProps = createStructuredSelector({
+  messagingNumber: selectDashboardMessagingNumber(),
+  paginationOptions: selectPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
