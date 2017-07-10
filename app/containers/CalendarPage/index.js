@@ -37,11 +37,19 @@ import {
   fetchSchedules,
   fetchSponsorSchedules,
   fetchSponsorProtocols,
+  fetchSponsorSites,
   submitSchedule,
   deleteSchedule,
   setActiveSort,
 } from './actions';
-import { selectSchedules, selectSponsorSchedules, selectSponsorProtocols, selectPatientsByStudy, selectPaginationOptions } from './selectors';
+import {
+  selectSchedules,
+  selectSponsorSchedules,
+  selectSponsorProtocols,
+  selectSponsorSites,
+  selectPatientsByStudy,
+  selectPaginationOptions,
+} from './selectors';
 
 
 const getFilteredSchedules = (schedules, filter) =>
@@ -88,6 +96,7 @@ const mapStateToProps = createStructuredSelector({
   schedules: selectSchedules(),
   sponsorSchedules: selectSponsorSchedules(),
   protocols: selectSponsorProtocols(),
+  sponsorSites: selectSponsorSites(),
   patientsByStudy: selectPatientsByStudy(),
   paginationOptions: selectPaginationOptions(),
   userRoleType: selectUserRoleType(),
@@ -101,6 +110,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchSponsorProtocols: (sponsorRoleId, searchParams, limit, offset, sort, order) => dispatch(fetchSponsorProtocols(sponsorRoleId, searchParams, limit, offset, sort, order)),
   fetchSchedules: (data) => dispatch(fetchSchedules(data)),
   fetchSponsorSchedules: (sponsorId, searchParams) => dispatch(fetchSponsorSchedules(sponsorId, searchParams)),
+  fetchSponsorSites: (sponsorId, searchParams) => dispatch(fetchSponsorSites(sponsorId, searchParams)),
   submitSchedule: (data) => dispatch(submitSchedule(data)),
   deleteSchedule: (scheduleId, clientId) => dispatch(deleteSchedule(scheduleId, clientId)),
   setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
@@ -111,6 +121,7 @@ export default class CalendarPage extends React.Component {
   static propTypes = {
     currentUser: PropTypes.any,
     sites: PropTypes.array.isRequired,
+    sponsorSites: PropTypes.object.isRequired,
     indications: PropTypes.array.isRequired,
     patientsByStudy: PropTypes.object.isRequired,
     schedules: PropTypes.object.isRequired,
@@ -123,6 +134,7 @@ export default class CalendarPage extends React.Component {
     fetchSponsorProtocols: PropTypes.func.isRequired,
     fetchSchedules: PropTypes.func.isRequired,
     fetchSponsorSchedules: PropTypes.func.isRequired,
+    fetchSponsorSites: PropTypes.func.isRequired,
     submitSchedule: PropTypes.func.isRequired,
     deleteSchedule: PropTypes.func.isRequired,
     paginationOptions: PropTypes.object,
@@ -172,6 +184,7 @@ export default class CalendarPage extends React.Component {
     } else if (currentUser.roleForSponsor) {
       this.props.fetchSponsorProtocols(currentUser.roleForSponsor.id, {}, 0, 0, null, null);
       this.props.fetchSponsorSchedules(currentUser.roleForSponsor.sponsor_id, {});
+      this.props.fetchSponsorSites(currentUser.roleForSponsor.sponsor_id, {});
     }
   }
 
@@ -357,7 +370,7 @@ export default class CalendarPage extends React.Component {
   }
 
   render() {
-    const { currentUser, sites, indications, patientsByStudy, userRoleType, protocols } = this.props;
+    const { currentUser, sites, sponsorSites, indications, patientsByStudy, userRoleType, protocols } = this.props;
     const { showAll, localSchedules, localSponsorSchedules } = this.state;
     const fetchingSites = sites.isFetching;
     const fetchingPatientsByStudy = patientsByStudy.isFetching;
@@ -474,7 +487,7 @@ export default class CalendarPage extends React.Component {
                 <h2 className="main-heading">CALENDAR</h2>
                 <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
                 <SponsorFilterBar
-                  sites={sites}
+                  sites={sponsorSites}
                   protocols={protocols.details}
                   sponsorSchedules={localSponsorSchedules}
                   filter={this.state.filter}
