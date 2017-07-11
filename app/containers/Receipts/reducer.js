@@ -14,6 +14,7 @@ import {
 } from './constants';
 
 const initialState = {
+  receiptsFetching: false,
   receiptsList: [],
   paginationOptions: {
     hasMoreItems: true,
@@ -31,6 +32,7 @@ function receiptsReducer(state = initialState, action) {
     case GET_RECEIPTS:
       return {
         ...state,
+        receiptsFetching: true,
         paginationOptions:{
           hasMoreItems: false,
           page: state.paginationOptions.page,
@@ -41,6 +43,7 @@ function receiptsReducer(state = initialState, action) {
     case RECEIPTS_RECEIVED:
       return {
         ...state,
+        receiptsFetching: false,
         receiptsList: action.payload,
         paginationOptions: {
           hasMoreItems: action.hasMore,
