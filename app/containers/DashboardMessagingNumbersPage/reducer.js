@@ -42,24 +42,38 @@ const initialState = {
 function dashboardMessagingNumbersPageReducer(state = initialState, action) {
   const newMessagingNumber = _.cloneDeep(state.messagingNumber.details);
   let foundIndex = null;
+  let newMessagingNumberList = [];
+
 
   switch (action.type) {
     case FETCH_MESSAGING_NUMBERS:
       return {
         ...state,
         messagingNumber: {
-          details: [],
+          details: state.messagingNumber.details,
           fetching: true,
           error: null,
         },
       };
     case FETCH_MESSAGING_NUMBERS_SUCCESS:
+      if (action.page === 1) {
+        newMessagingNumberList = action.payload;
+      } else {
+        newMessagingNumberList = newMessagingNumber.concat(action.payload);
+      }
+
       return {
         ...state,
         messagingNumber: {
-          details: action.payload,
+          details: newMessagingNumberList,
           fetching: false,
           error: null,
+        },
+        paginationOptions: {
+          activeSort: state.paginationOptions.activeSort,
+          activeDirection: state.paginationOptions.activeDirection,
+          hasMoreItems: action.hasMoreItems,
+          page: action.page,
         },
       };
     case FETCH_MESSAGING_NUMBERS_ERROR:
