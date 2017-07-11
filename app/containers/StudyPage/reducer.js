@@ -50,6 +50,9 @@ import {
   SUBMIT_SCHEDULE_SUCCEEDED,
   SUBMIT_SCHEDULE_FAILED,
   SET_SCHEDULED_FORM_INITIALIZED,
+  DELETE_PATIENT,
+  DELETE_PATIENT_SUCCESS,
+  DELETE_PATIENT_ERROR,
 } from './constants';
 
 const initialState = {
@@ -67,6 +70,10 @@ const initialState = {
   },
   fetchingPatientsError: {},
   submittingSchedule:false,
+  deletePatientProcess: {
+    isDeleting: false,
+    error: null,
+  },
 };
 
 function studyPageReducer(state = initialState, action) {
@@ -400,6 +407,43 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         scheduledFormInitialized: action.formInitialized,
+      };
+    case DELETE_PATIENT:
+      return {
+        ...state,
+        deletePatientProcess: {
+          isDeleting: true,
+          error: null,
+        },
+      };
+    case DELETE_PATIENT_SUCCESS:
+      return {
+        ...state,
+        patientCategories: state.patientCategories.map(category => {
+          const foundPatientIndex = _.findIndex(category.patients, { id: action.payload });
+          if (foundPatientIndex !== -1) {
+            const patientsArr = _.cloneDeep(category.patients);
+            patientsArr.splice(foundPatientIndex, 1);
+            return {
+              ...category,
+              patients: patientsArr,
+            };
+          }
+          return category;
+        }),
+        deletePatientProcess: {
+          isDeleting: false,
+          error: null,
+        },
+        openPatientModal: false,
+      };
+    case DELETE_PATIENT_ERROR:
+      return {
+        ...state,
+        deletePatientProcess: {
+          isDeleting: false,
+          error: action.payload,
+        },
       };
     default:
       return state;
