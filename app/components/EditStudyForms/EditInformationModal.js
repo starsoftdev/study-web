@@ -794,6 +794,19 @@ export class EditInformationModal extends React.Component {
                     />
                   </div>
                 </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">DELETE PATIENT</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      name="canDeletePatient"
+                      component={Toggle}
+                      className="field"
+                      onChange={(e) => { if (e === false) change('canDeletePatient', e.toString()); }}
+                    />
+                  </div>
+                </div>
                 <div className="field-row text-right">
                   <Button type="submit" bsStyle="primary" className="fixed-small-btn">
                     {this.props.studyUpdateProcess.saving
