@@ -18,7 +18,8 @@ import Input from '../../../components/Input/index';
 import { fetchIndications } from '../../App/actions';
 import { selectIndications } from '../../App/selectors';
 import { selectValues, selectSyncErrors, selectFormDidChange } from '../../../common/selectors/form.selector';
-import { addPatientIndication, removePatientIndication, submitPatientUpdate } from '../actions';
+import { addPatientIndication, removePatientIndication, submitPatientUpdate, deletePatient } from '../actions';
+import { selectStudy, selectDeletePatientProcess } from '../selectors';
 import IndicationOverlay from './IndicationOverlay';
 import formValidator from './otherValidator';
 import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
@@ -47,6 +48,9 @@ class OtherSection extends React.Component {
     addPatientIndication: React.PropTypes.func.isRequired,
     removePatientIndication: React.PropTypes.func.isRequired,
     submitPatientUpdate: React.PropTypes.func.isRequired,
+    currentStudy: React.PropTypes.object,
+    deletePatient: React.PropTypes.func,
+    deletePatientProcess: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -276,6 +280,22 @@ class OtherSection extends React.Component {
                     &nbsp;Download
                   </button>
                 </div>
+                {
+                  this.props.currentStudy.canDeletePatient &&
+                  <div className="field-row">
+                    <strong className="label">
+                      <label htmlFor="patient-source5">DELETE PATIENT</label>
+                    </strong>
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-default-padding"
+                      onClick={() => { this.props.deletePatient(this.props.initialValues.id); }}
+                      disabled={this.props.deletePatientProcess.isDeleting}
+                    >
+                      DELETE
+                    </button>
+                  </div>
+                }
               </div>
               {this.renderUpdateButtons()}
             </Form>
@@ -292,6 +312,8 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectValues(formName),
   formDidChange: selectFormDidChange(formName),
   indications: selectIndications(),
+  currentStudy: selectStudy(),
+  deletePatientProcess: selectDeletePatientProcess(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -300,6 +322,7 @@ const mapDispatchToProps = (dispatch) => ({
   addPatientIndication: (patientId, indication) => dispatch(addPatientIndication(patientId, indication)),
   removePatientIndication: (patientId, indicationId) => dispatch(removePatientIndication(patientId, indicationId)),
   submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),
+  deletePatient: (id) => dispatch(deletePatient(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OtherSection);
