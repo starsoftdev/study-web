@@ -19,8 +19,26 @@ const selectProposals = () => createSelector(
   (substate) => substate
 );
 
+const selectProposalsList = () => createSelector(
+  selectProposalsDomain(),
+  (substate) => substate.proposalsList
+);
+
+const selectProposalsStatus = () => createSelector(
+  selectProposalsDomain(),
+  (substate) => substate.proposalsFetching
+);
+
+const selectPaginationOptions = () => createSelector(
+  selectProposalsDomain(),
+  (substate) => substate.paginationOptions
+);
+
 export default selectProposals;
 export {
   selectProposalsDomain,
   selectProposals,
+  selectProposalsList,
+  selectProposalsStatus,
+  selectPaginationOptions,
 };
