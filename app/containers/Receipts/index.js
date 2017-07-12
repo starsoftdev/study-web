@@ -70,9 +70,9 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
   }
 
   componentDidMount() {
-    const { currentUser, fetchClientSites } = this.props;
+    const { currentUser, fetchClientSites, getReceipts, receipts } = this.props;
     fetchClientSites(currentUser.roleForClient.client_id);
-    this.props.getReceipts(currentUser.roleForClient.id, 15, 0, this.props.receipts);
+    getReceipts(currentUser.roleForClient.id, 15, 0, receipts);
   }
 
   componentWillReceiveProps(nProps) {
