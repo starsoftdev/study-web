@@ -12,6 +12,7 @@ import moment from 'moment-timezone';
 import InfiniteScroll from 'react-infinite-scroller';
 import Money from '../../components/Money';
 import Checkbox from '../../components/Input/Checkbox';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const headers = [
   {
@@ -49,6 +50,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     selectAll: PropTypes.func,
     searchBy: PropTypes.any,
     receipts: PropTypes.array,
+    receiptsStatus: PropTypes.bool,
     getReceipts: PropTypes.func,
     paginationOptions: PropTypes.object,
     searchOptions: PropTypes.array,
@@ -312,9 +314,16 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
             loadMore={this.loadItems}
             initialLoad={false}
             hasMore={this.props.paginationOptions.hasMoreItems}
-            loader={<tr><td>Loading...</td></tr>}
+            loader={null}
           >
             {receipts}
+            {(this.props.receiptsStatus) &&
+            <tr>
+              <td colSpan="7">
+                <LoadingSpinner showOnlyIcon={false} noMessage />
+              </td>
+            </tr>
+            }
           </InfiniteScroll>
         </table>
       </div>
