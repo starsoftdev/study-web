@@ -77,16 +77,25 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
 
   renderProtocols() {
     const { protocols } = this.props;
-    if (protocols.details) {
+    if (protocols.details || protocols.fetching) {
       return (
         <tbody>
-          {protocols.details.map((item, index) => ((
-            <ProtocolItem
-              {...item}
-              key={index}
-              index={index}
-            />
-          )))}
+          {
+            protocols.details.map((item, index) => (
+              <ProtocolItem
+                {...item}
+                key={index}
+                index={index}
+              />
+            ))
+          }
+          {
+            (protocols.fetching &&
+              <tr>
+                <LoadingSpinner showOnlyIcon={false} noMessage />
+              </tr>
+            )
+          }
         </tbody>
       );
     }
@@ -124,7 +133,7 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
           loadMore={this.loadItems}
           initialLoad={false}
           hasMore={this.props.paginationOptions.hasMoreItems}
-          loader={<div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
+          loader={null}
         >
           <table className="table table-messaging-suite">
             {this.renderProtocols()}

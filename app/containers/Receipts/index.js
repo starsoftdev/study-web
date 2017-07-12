@@ -29,7 +29,7 @@ import {
   selectEvents,
 } from '../../containers/App/selectors';
 
-import { selectReceiptsList, selectPaginationOptions, selectSearchOptions } from './selectors';
+import { selectReceiptsList, selectPaginationOptions, selectSearchOptions, selectReceiptsStatus } from './selectors';
 import ReceiptsTable from '../../components/ReceiptsTable';
 import TableSearchForm from '../../components/TableSearchForm';
 
@@ -40,6 +40,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     getReceipts: PropTypes.func,
     getPDF: PropTypes.func,
     receipts: PropTypes.array,
+    receiptsStatus: PropTypes.bool,
     currentUser: PropTypes.any,
     paginationOptions: PropTypes.object,
     searchOptions: PropTypes.array,
@@ -192,6 +193,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
             selectAll={this.selectAll}
             getReceipts={this.props.getReceipts}
             receipts={this.props.receipts}
+            receiptsStatus={this.props.receiptsStatus}
             paginationOptions={this.props.paginationOptions}
             searchOptions={this.props.searchOptions}
             setActiveSort={this.props.setActiveSort}
@@ -209,6 +211,7 @@ const mapStateToProps = createStructuredSelector({
   siteLocations : selectSiteLocations(),
   currentUser: selectCurrentUser(),
   receipts: selectReceiptsList(),
+  receiptsStatus: selectReceiptsStatus(),
   pageEvents: selectEvents(),
   paginationOptions: selectPaginationOptions(),
   searchOptions: selectSearchOptions(),
