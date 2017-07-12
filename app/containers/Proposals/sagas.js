@@ -43,19 +43,36 @@ export function* proposalSaga() {
 
 export function* getProposals() {
   while (true) {
-    const { clientRoleId, searchParams } = yield take(GET_PROPOSALS);
+    const { clientRoleId, limit, offset, proposals, searchParams } = yield take(GET_PROPOSALS);
     try {
-      const params = {
-        method: 'GET',
-        query: {
-          clientRoleId,
-          searchParams,
-        },
+      const body = {
+        clientRoleId,
+        limit,
+        skip: offset,
+        searchParams,
       };
-      const requestURL = `${API_URL}/proposals`;
+      const params = {
+        method: 'POST',
+        body: JSON.stringify(body),
+      };
+      const requestURL = `${API_URL}/proposals/getProposals`;
       const response = yield call(request, requestURL, params);
 
-      yield put(proposalsReceived(response));
+      let resultArr = [];
+      if (offset === 0) {
+        resultArr = response.map((p, i) => ({ ...p, orderNumber: i + 1 }));
+      } else {
+        resultArr = proposals.concat(response.map((p, i) => ({ ...p, orderNumber: proposals.length + i + 1 })));
+      }
+
+      let hasMore = true;
+      let page = (offset / 15) + 1;
+      if (response.length < limit) {
+        hasMore = false;
+        page = 1;
+      }
+
+      yield put(proposalsReceived(resultArr, hasMore, page));
     } catch (err) {
       const errorMessage = get(err, 'message', 'We encountered an error loading proposals. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
