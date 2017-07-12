@@ -4,7 +4,6 @@
  *
  */
 
-import _ from 'lodash';
 import {
   DEFAULT_ACTION,
   GET_PROPOSALS,
@@ -20,21 +19,22 @@ export function defaultAction() {
   };
 }
 
-export function proposalsReceived(payload) {
-  const result = payload;
-  _.forEach(result, (item, index) => {
-    result[index].order_number = index + 1;
-  });
+export function proposalsReceived(payload, hasMore, page) {
   return {
     type: PROPOSALS_RECEIVED,
-    payload: result,
+    payload,
+    hasMore,
+    page,
   };
 }
 
-export function getProposals(clientRoleId, searchParams) {
+export function getProposals(clientRoleId, limit, offset, proposals, searchParams) {
   return {
     type: GET_PROPOSALS,
     clientRoleId,
+    limit,
+    offset,
+    proposals,
     searchParams,
   };
 }
