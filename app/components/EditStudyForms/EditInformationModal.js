@@ -12,7 +12,9 @@ import { arrayRemoveAll, arrayPush, change, Field, FieldArray, reduxForm, blur }
 import Button from 'react-bootstrap/lib/Button';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Form from 'react-bootstrap/lib/Form';
+import Overlay from 'react-bootstrap/lib/Overlay';
 
+import IndicationOverlay from './IndicationOverlay';
 import Toggle from '../../components/Input/Toggle';
 import Input from '../../components/Input/index';
 import DatePicker from '../../components/Input/DatePicker';
@@ -23,17 +25,22 @@ import RenderCustomEmailsList from './RenderCustomEmailsList';
 import { selectStudyCampaigns } from '../../containers/HomePage/AdminDashboard/selectors';
 import FormGeosuggest from '../../components/Input/Geosuggest';
 import { normalizePhoneDisplay } from '../../common/helper/functions';
-const mapStateToProps = createStructuredSelector({
-  studyCampaigns: selectStudyCampaigns(),
-});
+import { addStudyIndicationTag, removeStudyIndicationTag } from '../../containers/HomePage/AdminDashboard/actions';
 
 const formName = 'dashboardEditStudyForm';
+
+const mapStateToProps = createStructuredSelector({
+  studyCampaigns: selectStudyCampaigns(),
+  // formValues: selectValues(formName),
+});
 
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
   arrayRemoveAll: (field) => dispatch(arrayRemoveAll(formName, field)),
   arrayPush: (field, value) => dispatch(arrayPush(formName, field, value)),
   change: (field, value) => dispatch(change(formName, field, value)),
+  addStudyIndicationTag: (studyId, indicationId) => dispatch(addStudyIndicationTag(studyId, indicationId)),
+  removeStudyIndicationTag: (studyId, indicationId) => dispatch(removeStudyIndicationTag(studyId, indicationId)),
 });
 
 @reduxForm({ form: formName })
@@ -68,15 +75,22 @@ export class EditInformationModal extends React.Component {
     usersByRoles: PropTypes.object,
     setEditStudyFormValues: PropTypes.func,
     studyUpdateProcess: PropTypes.object,
+    addStudyIndicationTag: PropTypes.func,
+    removeStudyIndicationTag: PropTypes.func,
+    studyIndicationTags: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
-
+    this.state = {
+      showIndicationPopover: false,
+    };
     this.siteLocationChanged = this.siteLocationChanged.bind(this);
     this.campaignChanged = this.campaignChanged.bind(this);
     this.onSuggestSelect = this.onSuggestSelect.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
+    this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
+    this.selectIndication = this.selectIndication.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -104,10 +118,10 @@ export class EditInformationModal extends React.Component {
           });
         });
 
-        const formValues = {};
-        formValues.emailNotifications = fields;
-        formValues.checkAllInput = isAllChecked;
-        this.props.setEditStudyFormValues(formValues);
+        const newFormValues = {};
+        newFormValues.emailNotifications = fields;
+        newFormValues.checkAllInput = isAllChecked;
+        this.props.setEditStudyFormValues(newFormValues);
       }
     }
 
@@ -133,10 +147,24 @@ export class EditInformationModal extends React.Component {
         });
       });
 
-      const formValues = {};
-      formValues.customEmailNotifications = customFields;
-      formValues.checkAllCustomInput = isAllCustomChecked;
-      this.props.setEditStudyFormValues(formValues);
+      const newFormValues = {};
+      newFormValues.customEmailNotifications = customFields;
+      newFormValues.checkAllCustomInput = isAllCustomChecked;
+      this.props.setEditStudyFormValues(newFormValues);
+    }
+
+    if (!newProps.studyIndicationTags.fetching && newProps.studyIndicationTags.details) {
+      const customFields = [];
+      _.forEach(newProps.studyIndicationTags.details, (item) => {
+        customFields.push({
+          value: item.indication_id,
+          label: item.name,
+        });
+      });
+
+      const newFormValues = {};
+      newFormValues.indicationTags = customFields;
+      this.props.setEditStudyFormValues(newFormValues);
     }
   }
 
@@ -230,6 +258,54 @@ export class EditInformationModal extends React.Component {
     }
   }
 
+  selectIndication(studyId, indication) {
+    const { change, formValues, addStudyIndicationTag } = this.props;
+    console.log('****select indication*****', studyId, indication);
+    change('indicationTags', formValues.indicationTags.concat([{
+      value: indication.id,
+      label: indication.name,
+    }]));
+    addStudyIndicationTag(studyId, indication.id);
+  }
+
+  deleteIndication(studyId, indication) {
+    const { change, formValues: { indicationTags }, removeStudyIndicationTag } = this.props;
+    console.log('****delete Indication*****', studyId, indication);
+    const newArr = _.remove(indicationTags, (n) => (n.id !== indication.id));
+    change('indicationTags', newArr);
+    removeStudyIndicationTag(studyId, indication.value);
+  }
+
+  toggleIndicationPopover() {
+    this.setState({
+      showIndicationPopover: !this.state.showIndicationPopover,
+    });
+  }
+
+  renderIndications() {
+    const { formValues } = this.props;
+    if (formValues.indicationTags) {
+      return (
+        <div className="category-list">
+          {formValues.indicationTags.map((indication) => (
+            <div key={indication.id} className="category">
+              <span className="link">
+                <span className="text">{indication.label}</span>
+                <span
+                  className="icomoon-icon_trash"
+                  onClick={() => {
+                    this.deleteIndication(formValues.study_id, indication);
+                  }}
+                />
+              </span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  }
+
   render() {
     const { change, openModal, onClose } = this.props;
     const smOptions = [];
@@ -297,6 +373,13 @@ export class EditInformationModal extends React.Component {
       });
     });
 
+    const studyValues = {
+      id: this.props.study ? this.props.study.study_id : null,
+      indicationTags: [],
+    };
+
+    // console.log('studyValues', studyValues);
+
     const exposureLevelOptions = [];
     _.forEach(this.props.levels, (level) => {
       exposureLevelOptions.push({
@@ -338,7 +421,7 @@ export class EditInformationModal extends React.Component {
     const campaignDateTo = this.props.formValues.campaign_dateto ? moment(this.props.formValues.campaign_dateto) : null;
 
     return (
-      <Collapse dimension="width" in={openModal} timeout={250} className={classNames('form-edit-information', (this.props.isOnTop > 0 ? 'slider-on-top' : ''))}>
+      <Collapse dimension="width" in={openModal} timeout={250} className={classNames('form-lightbox', 'form-edit-information', (this.props.isOnTop > 0 ? 'slider-on-top' : ''))}>
         <div>
           <div className="form-area">
             <div className="head">
@@ -721,6 +804,63 @@ export class EditInformationModal extends React.Component {
                     />
                   </div>
                 </div>
+                <div className="field-row study-indication-hidden">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone"> </label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      name="indicationTags"
+                      component={ReactSelect}
+                      placeholder="Select Indication"
+                      options={indicationsOptions}
+                      multi
+                      joinValues
+                      objectValue
+                      clearable={false}
+                      disabled={this.props.studyUpdateProcess.saving}
+                      className="multiSelectWrap field"
+                    />
+                  </div>
+                </div>
+                <div className="field-row small-spacing">
+                  <strong className="label"> </strong>
+                  <div
+                    className="field add-indications"
+                    ref={(parent) => (
+                      this.parent = parent
+                    )}
+                  >
+                    <Button
+                      bsStyle="primary"
+                      ref={(target) => (
+                        this.target = target
+                      )}
+                      onClick={this.toggleIndicationPopover}
+                    >
+                      + Add Indication
+                    </Button>
+                    <Overlay
+                      show={this.state.showIndicationPopover}
+                      placement="bottom"
+                      container={this.parent}
+                      target={() => this.target}
+                      rootClose
+                      onHide={() => { this.toggleIndicationPopover(); }}
+                    >
+                      <IndicationOverlay indications={this.props.indications} selectIndication={this.selectIndication} study={studyValues} onClose={this.toggleIndicationPopover} />
+                    </Overlay>
+                  </div>
+                </div>
+                {
+                  this.props.formValues.indicationTags && this.props.formValues.indicationTags.length > 0 &&
+                  <div className="field-row remove-indication small-spacing">
+                    <span className="label" />
+                    <div className="field">
+                      {this.renderIndications()}
+                    </div>
+                  </div>
+                }
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-phone">EXPOSURE LEVEL</label>
