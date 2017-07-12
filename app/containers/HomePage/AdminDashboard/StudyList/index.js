@@ -27,11 +27,12 @@ import {
   selectAddNotificationProcess,
   selectDashboardEditNoteProcess,
   selectDashboardNote,
+  selectStudyIndicationTags,
 } from '../selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
-import { setHoverRowIndex, setEditStudyFormValues, fetchNote, addNote, editNote, deleteNote } from '../actions';
+import { setHoverRowIndex, setEditStudyFormValues, fetchNote, addNote, editNote, deleteNote, fetchStudyIndicationTag } from '../actions';
 import { submitToClientPortal } from '../../../DashboardPortalsPage/actions';
 import {
   removeCustomEmailNotification,
@@ -50,6 +51,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     fetchAllClientUsersDashboard: PropTypes.func.isRequired,
     fetchStudyCampaignsDashboard: PropTypes.func.isRequired,
     fetchCustomNotificationEmails: PropTypes.func.isRequired,
+    fetchStudyIndicationTag: PropTypes.func.isRequired,
     fetchStudiesAccordingToFilters: PropTypes.func.isRequired,
     removeCustomEmailNotification: PropTypes.func.isRequired,
     indications: PropTypes.array,
@@ -76,6 +78,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     editNote: PropTypes.func,
     deleteNote: PropTypes.func,
     editNoteProcess: PropTypes.object,
+    studyIndicationTags: PropTypes.object,
   };
 
   constructor(props) {
@@ -207,6 +210,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.props.setEditStudyFormValues(formValues);
 
     this.props.fetchCustomNotificationEmails(study.study_id);
+    this.props.fetchStudyIndicationTag(study.study_id);
+    console.log('***fetching indication tag***');
     this.props.fetchAllClientUsersDashboard({ clientId: study.client_id, siteId: study.site_id });
     this.props.fetchStudyCampaignsDashboard(study.study_id);
   }
@@ -1006,6 +1011,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   isOnTop={this.state.editStudyPageOnTop}
                   setEditStudyFormValues={this.props.setEditStudyFormValues}
                   studyUpdateProcess={this.props.studyUpdateProcess}
+                  studyIndicationTags={this.props.studyIndicationTags}
                 />
                 <LandingPageModal
                   openModal={this.state.showLandingPageModal}
@@ -1104,6 +1110,7 @@ const mapStateToProps = createStructuredSelector({
   addNotificationProcess: selectAddNotificationProcess(),
   note: selectDashboardNote(),
   editNoteProcess: selectDashboardEditNoteProcess(),
+  studyIndicationTags: selectStudyIndicationTags(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -1116,6 +1123,7 @@ const mapDispatchToProps = (dispatch) => ({
   removeCustomEmailNotification: (payload) => dispatch(removeCustomEmailNotification(payload)),
   editNote: (payload) => dispatch(editNote(payload)),
   deleteNote: (payload) => dispatch(deleteNote(payload)),
+  fetchStudyIndicationTag: (studyId) => dispatch(fetchStudyIndicationTag(studyId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyList);
