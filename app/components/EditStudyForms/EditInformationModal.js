@@ -260,7 +260,6 @@ export class EditInformationModal extends React.Component {
 
   selectIndication(studyId, indication) {
     const { change, formValues, addStudyIndicationTag } = this.props;
-    console.log('****select indication*****', studyId, indication);
     change('indicationTags', formValues.indicationTags.concat([{
       value: indication.id,
       label: indication.name,
@@ -270,7 +269,6 @@ export class EditInformationModal extends React.Component {
 
   deleteIndication(studyId, indication) {
     const { change, formValues: { indicationTags }, removeStudyIndicationTag } = this.props;
-    console.log('****delete Indication*****', studyId, indication);
     const newArr = _.remove(indicationTags, (n) => (n.id !== indication.id));
     change('indicationTags', newArr);
     removeStudyIndicationTag(studyId, indication.value);
@@ -374,11 +372,9 @@ export class EditInformationModal extends React.Component {
     });
 
     const studyValues = {
-      id: this.props.study ? this.props.study.study_id : null,
+      id: this.props.formValues.study_id ? this.props.formValues.study_id : null,
       indicationTags: [],
     };
-
-    // console.log('studyValues', studyValues);
 
     const exposureLevelOptions = [];
     _.forEach(this.props.levels, (level) => {
