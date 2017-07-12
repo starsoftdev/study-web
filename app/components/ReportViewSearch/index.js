@@ -11,7 +11,11 @@ import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../CenteredModal/index';
 import ReactSelect from '../Input/ReactSelect';
 import Input from '../Input/index';
-import { exportStudies } from '../../containers/ReportViewPage/actions';
+import { exportStudies, downloadReport } from '../../containers/ReportViewPage/actions';
+
+import {
+  selectSocket,
+} from '../../containers/GlobalNotifications/selectors';
 
 @reduxForm({ form: 'searchReports' })
 
@@ -21,15 +25,18 @@ export class ReportViewSearch extends React.Component {
     dispatch: PropTypes.func.isRequired,
     searchReports: PropTypes.func,
     exportStudies: PropTypes.func,
+    downloadReport: PropTypes.func,
     formValues: PropTypes.object,
     currentUser: PropTypes.object,
     reportsList: PropTypes.object,
+    socket: React.PropTypes.any,
   }
 
   constructor(props) {
     super(props);
 
     this.state = {
+      socketBinded: false,
       searchTimer: null,
       showPopup: false,
       predefined : {
@@ -46,6 +53,20 @@ export class ReportViewSearch extends React.Component {
     this.changeRange = this.changeRange.bind(this);
     this.renderDateFooter = this.renderDateFooter.bind(this);
     this.download = this.download.bind(this);
+  }
+
+  componentWillReceiveProps() {
+    const { currentUser, socket } = this.props;
+
+    if (socket && this.state.socketBinded === false) {
+      this.setState({ socketBinded: true }, () => {
+        socket.on('notifySponsorReportReady', (data) => {
+          if (currentUser.roleForSponsor && currentUser.roleForSponsor.id === data.sponsorRoleId) {
+            this.props.downloadReport({ reportName: data.reportName });
+          }
+        });
+      });
+    }
   }
 
   handleChange(which, payload) {
@@ -171,7 +192,7 @@ export class ReportViewSearch extends React.Component {
             <a disabled className="btn btn-primary lightbox-opener">+ add site</a>
           </div>
           <div className="col pull-right">
-            <a disabled className="btn btn-primary lightbox-opener"><i className="icomoon-icon_calendar" /> Date Range</a>
+            <a className="btn btn-primary lightbox-opener" onClick={this.showPopup}><i className="icomoon-icon_calendar" /> Date Range</a>
           </div>
         </div>
         <div className="fields-holder full-width">
@@ -251,10 +272,14 @@ export class ReportViewSearch extends React.Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({});
+const mapStateToProps = createStructuredSelector({
+  socket: selectSocket(),
+});
+
 function mapDispatchToProps(dispatch) {
   return {
     exportStudies: (payload) => dispatch(exportStudies(payload)),
+    downloadReport: (payload) => dispatch(downloadReport(payload)),
   };
 }
 

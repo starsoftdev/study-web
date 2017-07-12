@@ -171,6 +171,11 @@ export const selectSubmittingSchedule = () => createSelector(
   (subState) => subState.submittingSchedule
 );
 
+export const selectDeletePatientProcess = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.deletePatientProcess
+);
+
 export const selectScheduledFormInitialized = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.scheduledFormInitialized
