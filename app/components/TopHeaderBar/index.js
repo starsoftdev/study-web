@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
@@ -148,20 +149,16 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
             <HelpMenu />
 
-            <OverlayTrigger
-              placement="bottom"
-              overlay={tooltip}
+            <a
+              className={classNames('link-help opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
+              onClick={this.showGlobalPMSModal}
             >
-              <div className="chat-popup pull-left">
-                <a
-                  className="opener btn-chat-popup"
-                  data-toggle="tooltip"
-                  data-placement="bottom"
-                >
-                  <i className="icomoon-credit" />
-                </a>
-              </div>
-            </OverlayTrigger>
+              {/* {patientMessageUnreadCount > 0
+               ? <span className="counter">{patientMessageUnreadCount}</span>
+               : null
+               }*/}
+              <i className="icomoon-credit" />
+            </a>
 
             <div className="get-credits pull-left">
               <span>{credits} Messaging Credits</span>
