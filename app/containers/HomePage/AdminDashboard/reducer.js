@@ -61,6 +61,18 @@ import {
   FETCH_CUSTOM_NOTIFICATION_EMAILS,
   FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
   FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
+
+  ADD_STUDY_INDICATION_TAG,
+  ADD_STUDY_INDICATION_TAG_SUCCESS,
+  ADD_STUDY_INDICATION_TAG_ERROR,
+
+  REMOVE_STUDY_INDICATION_TAG,
+  REMOVE_STUDY_INDICATION_TAG_SUCCESS,
+  REMOVE_STUDY_INDICATION_TAG_ERROR,
+
+  FETCH_STUDY_INDICATION_TAG,
+  FETCH_STUDY_INDICATION_TAG_SUCCESS,
+  FETCH_STUDY_INDICATION_TAG_ERROR,
 } from './constants';
 
 import {
@@ -134,6 +146,16 @@ const initialState = {
     fetching: false,
     error: null,
   },
+  studyIndicationTags: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  updateStudyIndicationTagsProcess: {
+    success: false,
+    saving: false,
+    error: null,
+  },
   messagingNumbers: {
     details: [],
     fetching: false,
@@ -176,6 +198,87 @@ export default function dashboardPageReducer(state = initialState, action) {
   let foundUserIndex = null;
 
   switch (action.type) {
+    case FETCH_STUDY_INDICATION_TAG:
+      return {
+        ...state,
+        studyIndicationTags: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_STUDY_INDICATION_TAG_SUCCESS:
+      return {
+        ...state,
+        studyIndicationTags: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_STUDY_INDICATION_TAG_ERROR:
+      return {
+        ...state,
+        studyIndicationTags: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case ADD_STUDY_INDICATION_TAG:
+      return {
+        ...state,
+        updateStudyIndicationTagsProcess: {
+          success: true,
+          saving: true,
+          error: null,
+        },
+      };
+    case ADD_STUDY_INDICATION_TAG_SUCCESS:
+      return {
+        ...state,
+        updateStudyIndicationTagsProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case ADD_STUDY_INDICATION_TAG_ERROR:
+      return {
+        ...state,
+        updateStudyIndicationTagsProcess: {
+          success: false,
+          saving: false,
+          error: action.payload,
+        },
+      };
+    case REMOVE_STUDY_INDICATION_TAG:
+      return {
+        ...state,
+        updateStudyIndicationTagsProcess: {
+          success: true,
+          saving: true,
+          error: null,
+        },
+      };
+    case REMOVE_STUDY_INDICATION_TAG_SUCCESS:
+      return {
+        ...state,
+        updateStudyIndicationTagsProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case REMOVE_STUDY_INDICATION_TAG_ERROR:
+      return {
+        ...state,
+        updateStudyIndicationTagsProcess: {
+          success: false,
+          saving: false,
+          error: action.payload,
+        },
+      };
     case FETCH_NOTE:
       return {
         ...state,

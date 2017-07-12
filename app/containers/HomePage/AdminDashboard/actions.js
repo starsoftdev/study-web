@@ -70,6 +70,16 @@ import {
   FETCH_CUSTOM_NOTIFICATION_EMAILS,
   FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
   FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
+  ADD_STUDY_INDICATION_TAG,
+  ADD_STUDY_INDICATION_TAG_SUCCESS,
+  ADD_STUDY_INDICATION_TAG_ERROR,
+  REMOVE_STUDY_INDICATION_TAG,
+  REMOVE_STUDY_INDICATION_TAG_SUCCESS,
+  REMOVE_STUDY_INDICATION_TAG_ERROR,
+  FETCH_STUDY_INDICATION_TAG,
+  FETCH_STUDY_INDICATION_TAG_SUCCESS,
+  FETCH_STUDY_INDICATION_TAG_ERROR,
+
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -533,3 +543,71 @@ export function setEditStudyFormValues(values) {
   };
 }
 
+export function addStudyIndicationTag(studyId, indicationId) {
+  return {
+    type: ADD_STUDY_INDICATION_TAG,
+    payload: {
+      studyId,
+      indicationId,
+    },
+  };
+}
+
+export function addStudyIndicationTagSuccess(payload) {
+  return {
+    type: ADD_STUDY_INDICATION_TAG_SUCCESS,
+    payload,
+  };
+}
+
+export function addStudyIndicationTagError(payload) {
+  return {
+    type: ADD_STUDY_INDICATION_TAG_ERROR,
+    payload,
+  };
+}
+
+export function removeStudyIndicationTag(studyId, indicationId) {
+  return {
+    type: REMOVE_STUDY_INDICATION_TAG,
+    payload: {
+      studyId,
+      indicationId,
+    },
+  };
+}
+
+export function removeStudyIndicationTagSuccess(payload) {
+  return {
+    type: REMOVE_STUDY_INDICATION_TAG_SUCCESS,
+    payload,
+  };
+}
+
+export function removeStudyIndicationTagError(payload) {
+  return {
+    type: REMOVE_STUDY_INDICATION_TAG_ERROR,
+    payload,
+  };
+}
+
+export function fetchStudyIndicationTag(params) {
+  return {
+    type: FETCH_STUDY_INDICATION_TAG,
+    params,
+  };
+}
+
+export function fetchStudyIndicationTagSuccess(payload) {
+  return {
+    type: FETCH_STUDY_INDICATION_TAG_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchStudyIndicationTagError(payload) {
+  return {
+    type: FETCH_STUDY_INDICATION_TAG_ERROR,
+    payload,
+  };
+}
