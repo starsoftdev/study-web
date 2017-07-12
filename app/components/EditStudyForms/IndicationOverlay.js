@@ -19,6 +19,7 @@ class IndicationOverlay extends React.Component {
     super(props);
     this.state = {
       indicationFilter: '',
+      study: props.study,
     };
     this.onClick = this.onClick.bind(this);
     this.setIndicationFilter = this.setIndicationFilter.bind(this);
@@ -26,7 +27,8 @@ class IndicationOverlay extends React.Component {
   }
 
   onClick(indication) {
-    const { selectIndication, onClose, study } = this.props;
+    const { selectIndication, onClose } = this.props;
+    const { study } = this.state;
     selectIndication(study.id, indication);
     onClose();
   }
@@ -38,8 +40,7 @@ class IndicationOverlay extends React.Component {
   }
 
   compareIndication(indication) {
-    const { study: { indicationTags } } = this.props;
-    const { indicationFilter } = this.state;
+    const { study: { indicationTags }, indicationFilter } = this.state;
     if (indicationFilter !== '') {
       const indicationName = _.toLower(indication.name);
       const lowerIndicationFilter = _.toLower(indicationFilter);
