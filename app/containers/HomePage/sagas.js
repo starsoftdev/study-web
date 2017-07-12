@@ -44,6 +44,9 @@ import {
   FETCH_MESSAGING_NUMBERS,
   UPDATE_TWILIO_NUMBERS,
   FETCH_CUSTOM_NOTIFICATION_EMAILS,
+  ADD_STUDY_INDICATION_TAG,
+  REMOVE_STUDY_INDICATION_TAG,
+  FETCH_STUDY_INDICATION_TAG,
 } from './AdminDashboard/constants';
 
 import {
@@ -89,6 +92,15 @@ import {
   editNoteError,
   deleteNoteSuccess,
   deleteNoteError,
+  fetchStudyIndicationTag,
+  fetchStudyIndicationTagSuccess,
+  fetchStudyIndicationTagError,
+  addStudyIndicationTagSuccess,
+  addStudyIndicationTagError,
+  removeStudyIndicationTagSuccess,
+  removeStudyIndicationTagError,
+
+
 } from './AdminDashboard/actions';
 
 import {
@@ -135,6 +147,72 @@ import {
 export default [
   homePageSaga,
 ];
+
+export function* addStudyIndicationTagWatcher() {
+  yield* takeLatest(ADD_STUDY_INDICATION_TAG, addStudyIndicationTagWorker);
+}
+
+export function* addStudyIndicationTagWorker(action) {
+  const { payload } = action;
+  try {
+    const requestURL = `${API_URL}/studyIndicationTags`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchStudyIndicationTag(payload.studyId));
+    yield put(addStudyIndicationTagSuccess(response));
+  } catch (err) {
+    yield put(addStudyIndicationTagError(err));
+  }
+}
+
+export function* removeStudyIndicationTagWatcher() {
+  yield* takeLatest(REMOVE_STUDY_INDICATION_TAG, removeStudyIndicationTagWorker);
+}
+
+export function* removeStudyIndicationTagWorker(action) {
+  const { payload } = action;
+  try {
+    const requestURL = `${API_URL}/studyIndicationTags`;
+    const options = {
+      method: 'DELETE',
+      body: JSON.stringify(payload),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchStudyIndicationTag(payload.studyId));
+    yield put(removeStudyIndicationTagSuccess(response));
+  } catch (err) {
+    yield put(removeStudyIndicationTagError(err));
+  }
+}
+
+export function* fetchStudyIndicationTagsWatcher() {
+  yield* takeLatest(FETCH_STUDY_INDICATION_TAG, fetchStudyIndicationTagsWorker);
+}
+
+export function* fetchStudyIndicationTagsWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/getStudyIndicationTags`;
+
+    const params = {
+      method: 'GET',
+      query: {
+        id: action.params,
+      },
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchStudyIndicationTagSuccess(response));
+  } catch (err) {
+    yield put(fetchStudyIndicationTagError(err));
+  }
+}
 
 export function* fetchNoteWatcher() {
   yield* takeLatest(FETCH_NOTE, fetchNoteWorker);
@@ -1057,6 +1135,9 @@ export function* homePageSaga() {
   const watcherK = yield fork(addNoteWatcher);
   const watcherL = yield fork(editNoteWatcher);
   const watcherM = yield fork(deleteNoteWatcher);
+  const watcherN = yield fork(fetchStudyIndicationTagsWatcher);
+  const watcherO = yield fork(addStudyIndicationTagWatcher);
+  const watcherP = yield fork(removeStudyIndicationTagWatcher);
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
@@ -1098,6 +1179,9 @@ export function* homePageSaga() {
     yield cancel(watcherK);
     yield cancel(watcherL);
     yield cancel(watcherM);
+    yield cancel(watcherN);
+    yield cancel(watcherO);
+    yield cancel(watcherP);
     if (options.payload.pathname !== '/app') {
       yield put(clearFilters());
       yield put(reset('dashboardFilters'));
