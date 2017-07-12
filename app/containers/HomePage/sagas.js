@@ -95,10 +95,8 @@ import {
   fetchStudyIndicationTag,
   fetchStudyIndicationTagSuccess,
   fetchStudyIndicationTagError,
-  addStudyIndicationTag,
   addStudyIndicationTagSuccess,
   addStudyIndicationTagError,
-  removeStudyIndicationTag,
   removeStudyIndicationTagSuccess,
   removeStudyIndicationTagError,
 
