@@ -29,7 +29,7 @@ import {
   selectCurrentUser,
   selectEvents,
 } from '../../containers/App/selectors';
-import { selectProposals } from './selectors';
+import { selectProposalsList, selectProposalsStatus, selectPaginationOptions } from './selectors';
 
 import ProposalsTable from '../../components/ProposalsTable';
 import TableSearchForm from '../../components/TableSearchForm';
@@ -47,6 +47,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     siteLocations: PropTypes.array,
     unsubscribeFromAll: PropTypes.func,
     unsubscribeFromPageEvent: PropTypes.func,
+    paginationOptions: PropTypes.object,
   }
 
   constructor(props, context) {
@@ -57,6 +58,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     this.selectCurrent = this.selectCurrent.bind(this);
     this.selectAll = this.selectAll.bind(this);
     this.search = this.search.bind(this);
+    this.getPaginatedProposals = this.getPaginatedProposals.bind(this);
 
     this.state = {
       range: null,
@@ -91,9 +93,9 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
       },
     ];
 
-    const { currentUser, fetchClientSites, fetchEvents, getProposals } = this.props;
+    const { currentUser, fetchClientSites, fetchEvents } = this.props;
     fetchClientSites(currentUser.roleForClient.client_id);
-    getProposals(currentUser.roleForClient.id);
+    this.getPaginatedProposals(15, 0);
     fetchEvents(events);
   }
 
@@ -138,6 +140,11 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
         console.log(err, data);
       },
     });
+  }
+
+  getPaginatedProposals(limit, offset) {
+    const { currentUser, proposals } = this.props;
+    this.props.getProposals(currentUser.roleForClient.id, limit, offset, proposals);
   }
 
   getPDF() {
@@ -224,6 +231,9 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
             site={this.state.site}
             searchBy={this.state.searchBy}
             proposals={this.state.proposals}
+            getPaginatedProposals={this.getPaginatedProposals}
+            proposalsStatus={this.state.proposalsStatus}
+            paginationOptions={this.props.paginationOptions}
             showProposalPdf={showProposalPdf}
             {...this.props}
           />
@@ -246,7 +256,9 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
 const mapStateToProps = createStructuredSelector({
   siteLocations : selectSiteLocations(),
   currentUser: selectCurrentUser(),
-  proposals: selectProposals(),
+  proposals: selectProposalsList(),
+  proposalsStatus: selectProposalsStatus(),
+  paginationOptions: selectPaginationOptions(),
   pageEvents: selectEvents(),
 });
 
@@ -256,7 +268,7 @@ function mapDispatchToProps(dispatch) {
     unsubscribeFromPageEvent: (values) => dispatch(unsubscribeFromPageEvent(values)),
     fetchEvents: (values) => dispatch(fetchEvents(values)),
     fetchClientSites: (id) => dispatch(fetchClientSites(id)),
-    getProposals: (clientRoleId, searchParams) => dispatch(getProposals(clientRoleId, searchParams)),
+    getProposals: (clientRoleId, limit, offset, proposals, searchParams) => dispatch(getProposals(clientRoleId, limit, offset, proposals, searchParams)),
     getPDF: (values) => dispatch(getPDF(values)),
     showProposalPdf: (values) => dispatch(showProposalPdf(values)),
   };
