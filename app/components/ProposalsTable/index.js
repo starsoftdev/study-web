@@ -8,7 +8,9 @@ import React, { Component, PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import _ from 'lodash';
 import moment from 'moment-timezone';
+import InfiniteScroll from 'react-infinite-scroller';
 import Checkbox from '../../components/Input/Checkbox';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const headers = [
   {
@@ -43,8 +45,11 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     range: PropTypes.any,
     searchBy: PropTypes.any,
     site: PropTypes.any,
+    getPaginatedProposals: PropTypes.func,
     proposals: PropTypes.any,
+    proposalsStatus: PropTypes.bool,
     showProposalPdf: PropTypes.func,
+    paginationOptions: PropTypes.object,
   };
 
   constructor(props) {
@@ -167,6 +172,10 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     this.SelectedProposal = value;
   }
 
+  loadItems() {
+    this.props.getPaginatedProposals(15, (this.props.paginationOptions.page) * 15);
+  }
+
   sortBy(ev) {
     ev.preventDefault();
     let sort = ev.currentTarget.dataset.sort;
@@ -247,12 +256,12 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           return 0;
         });
         break;
-      case 'order_number':
+      case 'orderNumber':
         proposalsArr.sort((a, b) => {
-          if (a.order_number > b.order_number) {
+          if (a.orderNumber > b.orderNumber) {
             return directionUnits.more;
           }
-          if (a.order_number < b.order_number) {
+          if (a.orderNumber < b.orderNumber) {
             return directionUnits.less;
           }
           return 0;
@@ -260,10 +269,10 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         break;
       default:
         proposalsArr.sort((a, b) => {
-          if (a.order_number > b.order_number) {
+          if (a.orderNumber > b.orderNumber) {
             return 1;
           }
-          if (a.order_number < b.order_number) {
+          if (a.orderNumber < b.orderNumber) {
             return -1;
           }
           return 0;
@@ -342,7 +351,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
         <tr key={key}>
           <td>
             {checkbox}
-            <span>{source.order_number}</span>
+            <span>{source.orderNumber}</span>
           </td>
           <td>{dateWrapper}</td>
           <td><span>{source.sitename}</span></td>
@@ -356,6 +365,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
   render() {
     const state = this.state;
+    const { getPaginatedProposals, paginationOptions, proposalsStatus } = this.props;
     const proposalsArr = state.filteredProposals || this.props.proposals;
     const proposals = [];
     const heads = [];
@@ -382,22 +392,36 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           <thead>
             <tr>
               <th className="default-cursor">
-                <span className={(this.state.checkAll) ? 'sm-container checked' : 'sm-container'}>
+                <span className={(state.checkAll) ? 'sm-container checked' : 'sm-container'}>
                   <span className="input-style" onClick={this.onClickAll}>
                     <input name="all" type="checkbox" />
                   </span>
                 </span>
                 <span
-                  className={(state.activeSort === 'order_number') ? state.activeDirection : ''}
+                  className={(state.activeSort === 'orderNumber') ? state.activeDirection : ''}
                 >#</span>
                 <i className="caret-arrow" />
               </th>
               {heads}
             </tr>
           </thead>
-          <tbody>
+          <InfiniteScroll
+            element="tbody"
+            pageStart={0}
+            loadMore={() => getPaginatedProposals(15, (paginationOptions.page) * 15)}
+            initialLoad={false}
+            hasMore={paginationOptions.hasMoreItems}
+            loader={null}
+          >
             {proposals}
-          </tbody>
+            {(proposalsStatus) &&
+            <tr>
+              <td colSpan="6">
+                <LoadingSpinner showOnlyIcon={false} noMessage />
+              </td>
+            </tr>
+            }
+          </InfiniteScroll>
         </table>
       </div>
     );
