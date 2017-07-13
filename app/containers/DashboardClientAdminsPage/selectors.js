@@ -67,6 +67,12 @@ const selectDashboardAvailPhoneNumbers = () => createSelector(
   (substate) => substate.availPhoneNumbers
 );
 
+const selectSearchQuery = () => createSelector(
+  selectDashboardClientAdminsPage(),
+  (substate) => substate.searchParam
+);
+
+
 export default selectDashboardClientAdminsPage;
 export {
   selectDashboardClientAdminsPageDomain,
@@ -79,4 +85,5 @@ export {
   selectDashboardAvailPhoneNumbers,
   selectDashboardEditMessagingProcess,
   selectDashboardAddMessagingProcess,
+  selectSearchQuery,
 };
