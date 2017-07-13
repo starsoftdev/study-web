@@ -185,20 +185,30 @@
       min-height: 65px;
       position: relative;
       padding: 14px 5px 14px 69px;
-      a {
-        padding: 0;
-        min-height: auto;
-      }
 
       &:hover {
         background: #00afef;
-
         color: #fff;
 
         time {
           color: #fff;
         }
+        a time {
+          color: #354052;
+        }
       }
+      a {
+        color: #354052;
+        padding: 0;
+        min-height: auto;
+        &:hover {
+          color: #fff;
+          time {
+            color: #fff;
+          }
+        }
+      }
+
     }
 
     li {

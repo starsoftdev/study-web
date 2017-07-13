@@ -22,7 +22,6 @@ import {
 } from '../../../containers/GlobalNotifications/selectors';
 
 import {
-  getRedirectionUrl,
   getAvatarUrl,
   eventMessage,
 } from '../../../containers/NotificationsPage';
@@ -90,15 +89,28 @@ class NotificationBox extends React.Component {
               <div className="jcf-scrollable">
                 <ul className="list-unstyled">
                   {
-                    _.take(this.props.notifications, 3).map(n => (
-                      <li key={n.id}>
-                        <a>
-                          <div className="img-circle bg-gray"><img src={getAvatarUrl(n)} width="43" height="43" alt="Avatar" /></div>
-                          <p dangerouslySetInnerHTML={{ __html: eventMessage(n.event_log) }} />
-                          <time>{this.parseNotificationTime(n.event_log.created, currentUser.timezone)}</time>
-                        </a>
-                      </li>
-                    ))
+                    _.take(this.props.notifications, 3).map(n => {
+                      let html = eventMessage(n.event_log);
+                      let showTime = true;
+                      if (html.indexOf('<a href="/app/study') !== -1) {
+                        showTime = false;
+                        html = `${html.substring(0, html.indexOf('</a>'))}
+                          <time>${this.parseNotificationTime(n.event_log.created, currentUser.timezone)}</time></a>`;
+                      }
+                      return (
+                        <li key={n.id}>
+                          <a>
+                            <div className="img-circle bg-gray">
+                              <img src={getAvatarUrl(n)} width="43" height="43" alt="Avatar" />
+                            </div>
+                            <p dangerouslySetInnerHTML={{ __html: html }} />
+                            {showTime &&
+                            <time>{this.parseNotificationTime(n.event_log.created, currentUser.timezone)}</time>
+                            }
+                          </a>
+                        </li>
+                      );
+                    })
                   }
                 </ul>
               </div>
