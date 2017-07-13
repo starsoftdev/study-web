@@ -31,12 +31,18 @@ export class DashboardClientAdminsSearch extends React.Component {
     this.openAddClientAdminModal = this.openAddClientAdminModal.bind(this);
     this.addClientAdmin = this.addClientAdmin.bind(this);
     this.setQueryParam = this.setQueryParam.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
     if (!newProps.editUserProcess.saving && this.props.editUserProcess.saving) {
       this.closeAddClientAdminModal();
     }
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    this.setQueryParam();
   }
 
   setQueryParam() {
@@ -57,7 +63,7 @@ export class DashboardClientAdminsSearch extends React.Component {
 
   render() {
     return (
-      <form action="#" className="form-search clearfix">
+      <form action="#" className="form-search clearfix" onSubmit={this.onSubmit}>
         <TableActions
           buttonClickAction={this.openAddClientAdminModal}
           buttonText="+ Add Client Admin"
