@@ -32,6 +32,7 @@ import {
   ADD_MESSAGING_NUMBER,
   ADD_MESSAGING_NUMBER_SUCCESS,
   ADD_MESSAGING_NUMBER_ERROR,
+  SET_SEARCH_QUERY,
 } from './constants';
 
 const initialState = {
@@ -73,6 +74,9 @@ const initialState = {
   paginationOptions: {
     activeSort: null,
     activeDirection: null,
+  },
+  searchParam: {
+    query: null,
   },
 };
 
@@ -325,6 +329,13 @@ function dashboardClientAdminsPageReducer(state = initialState, action) {
         paginationOptions: {
           activeSort: action.sort,
           activeDirection: action.direction,
+        },
+      };
+    case SET_SEARCH_QUERY:
+      return {
+        ...state,
+        searchParam: {
+          query: action.query,
         },
       };
     default:
