@@ -15,6 +15,7 @@ import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/
 import {
   selectDashboardClientAdmins,
   selectPaginationOptions,
+  selectSearchQuery,
 } from '../selectors';
 
 export class DashboardClientAdminsTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -34,6 +35,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     addMessagingNumber: PropTypes.func,
     addMessagingProcess: PropTypes.object,
     loadMore: PropTypes.func,
+    searchParam: PropTypes.object,
   }
 
   constructor(props) {
@@ -231,11 +233,11 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
 
     let clientAdmins = this.props.clientAdmins.details;
 
-
-    if (this.props.clientAdminSearchFormValues.name) {
+    if (this.props.searchParam.query) {
       clientAdmins = clientAdmins.filter(item => `${item.first_name} ${item.last_name}`.toLowerCase()
-        .indexOf(this.props.clientAdminSearchFormValues.name.toLowerCase()) !== -1 || `${item.client_name}`.toLowerCase()
-        .indexOf(this.props.clientAdminSearchFormValues.name.toLowerCase()) !== -1);
+        .indexOf(this.props.searchParam.query.toLowerCase()) !== -1 || `${item.client_name}`.toLowerCase()
+        .indexOf(this.props.searchParam.query.toLowerCase()) !== -1 || `${item.email}`.toLowerCase()
+        .indexOf(this.props.searchParam.query.toLowerCase()) !== -1);
     }
 
     if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
@@ -359,6 +361,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
 const mapStateToProps = createStructuredSelector({
   clientAdmins: selectDashboardClientAdmins(),
   paginationOptions: selectPaginationOptions(),
+  searchParam: selectSearchQuery(),
 });
 
 function mapDispatchToProps(dispatch) {
