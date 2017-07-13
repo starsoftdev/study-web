@@ -63,7 +63,6 @@ export const eventMessage = (eventLog) => {
     return `${eventLog.eventMessage} at ${time} on ${date}.`;
     */
   }
-
   return eventLog.eventMessage;
 };
 
@@ -166,7 +165,7 @@ export class NotificationsPage extends React.Component {
             <header>
               <h2>HISTORY</h2>
             </header>
-            <table className="table">
+            <table className="table notifications">
               <colgroup>
                 <col style={{ width: 'auto' }} />
                 <col style={{ width: '11%' }} />
