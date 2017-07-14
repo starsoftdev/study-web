@@ -151,7 +151,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
             <a
               className={classNames('link-help opener pull-left btn-chat-popup', { active: this.state.showGlobalPMSModal })}
-              onClick={this.showGlobalPMSModal}
             >
               {/* {patientMessageUnreadCount > 0
                ? <span className="counter">{patientMessageUnreadCount}</span>
