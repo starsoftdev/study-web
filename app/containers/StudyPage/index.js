@@ -18,7 +18,7 @@ import NotFoundPage from '../../containers/NotFoundPage/index';
 import StudyStats from './StudyStats';
 import PatientBoard from '../../components/PatientBoard/index';
 import * as Selector from './selectors';
-import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats, downloadReport } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats } from './actions';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
@@ -28,7 +28,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     campaigns: PropTypes.array,
     currentUser: PropTypes.any,
     fetchPatients: PropTypes.func.isRequired,
-    downloadReport: PropTypes.func,
     fetchPatientCategories: PropTypes.func.isRequired,
     fetchingPatientCategories: PropTypes.bool.isRequired,
     fetchingPatients: PropTypes.bool.isRequired,
@@ -76,52 +75,44 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   componentWillReceiveProps(newProps) {
     const { params, socket, setStudyId, fetchStudy, fetchPatientCategories, fetchSources } = this.props;
     if (socket && this.state.socketBinded === false) {
-      this.setState({ socketBinded: true }, () => {
-        socket.on('notifyMessage', (message) => {
-          let curCategoryId = null;
-          let unreadMessageCount = 0;
-          const socketMessage = message;
+      socket.on('notifyMessage', (message) => {
+        let curCategoryId = null;
+        let unreadMessageCount = 0;
+        const socketMessage = message;
 
-          if (socketMessage.twilioTextMessage.__data) { // eslint-disable-line no-underscore-dangle
-            socketMessage.twilioTextMessage = socketMessage.twilioTextMessage.__data; // eslint-disable-line no-underscore-dangle
-          }
-          if (socketMessage.study.__data) { // eslint-disable-line no-underscore-dangle
-            socketMessage.study = socketMessage.study.__data; // eslint-disable-line no-underscore-dangle
-          }
-          if (socketMessage.patient.__data) { // eslint-disable-line no-underscore-dangle
-            socketMessage.patient = socketMessage.patient.__data; // eslint-disable-line no-underscore-dangle
-          }
+        if (socketMessage.twilioTextMessage.__data) { // eslint-disable-line no-underscore-dangle
+          socketMessage.twilioTextMessage = socketMessage.twilioTextMessage.__data; // eslint-disable-line no-underscore-dangle
+        }
+        if (socketMessage.study.__data) { // eslint-disable-line no-underscore-dangle
+          socketMessage.study = socketMessage.study.__data; // eslint-disable-line no-underscore-dangle
+        }
+        if (socketMessage.patient.__data) { // eslint-disable-line no-underscore-dangle
+          socketMessage.patient = socketMessage.patient.__data; // eslint-disable-line no-underscore-dangle
+        }
 
-          _.forEach(this.props.patientCategories, (item) => {
-            _.forEach(item.patients, (patient) => {
-              if (patient.id === socketMessage.patient_id) {
-                curCategoryId = item.id;
-                unreadMessageCount = patient.unreadMessageCount || 0;
-              }
-            });
+        _.forEach(this.props.patientCategories, (item) => {
+          _.forEach(item.patients, (patient) => {
+            if (patient.id === socketMessage.patient_id) {
+              curCategoryId = item.id;
+              unreadMessageCount = patient.unreadMessageCount || 0;
+            }
           });
-
-          this.props.fetchStudy(params.id);
-          this.props.fetchStudyTextNewStats(params.id);
-          console.log(socketMessage.twilioTextMessage.direction);
-          console.log(unreadMessageCount);
-          if (curCategoryId && socketMessage.twilioTextMessage.direction === 'inbound') {
-            this.props.updatePatientSuccess({
-              patientId: socketMessage.patient_id,
-              patientCategoryId: curCategoryId,
-              unreadMessageCount: (unreadMessageCount + 1),
-              lastTextMessage: socketMessage.twilioTextMessage,
-            });
-          }
         });
 
-        socket.on('notifyClientReportReady', (data) => {
-          if (params.id && data.url && parseInt(params.id) === data.studyId) {
-            // this.props.downloadReport(data.reportName);
-            location.replace(data.url);
-          }
-        });
+        this.props.fetchStudy(params.id);
+        this.props.fetchStudyTextNewStats(params.id);
+        console.log(socketMessage.twilioTextMessage.direction);
+        console.log(unreadMessageCount);
+        if (curCategoryId && socketMessage.twilioTextMessage.direction === 'inbound') {
+          this.props.updatePatientSuccess({
+            patientId: socketMessage.patient_id,
+            patientCategoryId: curCategoryId,
+            unreadMessageCount: (unreadMessageCount + 1),
+            lastTextMessage: socketMessage.twilioTextMessage,
+          });
+        }
       });
+      this.setState({ socketBinded: true });
     }
 
     if (params.id !== newProps.params.id) {
@@ -231,7 +222,6 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchPatients: (studyId, text, campaignId, sourceId) => dispatch(fetchPatients(studyId, text, campaignId, sourceId)),
-    downloadReport: (reportName) => dispatch(downloadReport(reportName)),
     fetchPatientCategories: (studyId) => dispatch(fetchPatientCategories(studyId)),
     fetchStudy: (studyId, campaignId) => dispatch(fetchStudy(studyId, campaignId)),
     setStudyId: (id) => dispatch(setStudyId(id)),
