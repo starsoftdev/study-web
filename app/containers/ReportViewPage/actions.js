@@ -14,7 +14,6 @@ import {
   CHANGE_PROTOCOL_STATUS_SUCCESS,
   CHANGE_PROTOCOL_STATUS_ERROR,
   EXPORT_STUDIES,
-  DOWNLOAD_REPORT,
   GET_REPORTS_TOTALS,
   GET_REPORTS_TOTALS_SUCCESS,
   GET_REPORTS_TOTALS_ERROR,
@@ -89,13 +88,6 @@ export function changeProtocolStatusError(payload) {
 export function exportStudies(payload) {
   return {
     type: EXPORT_STUDIES,
-    payload,
-  };
-}
-
-export function downloadReport(payload) {
-  return {
-    type: DOWNLOAD_REPORT,
     payload,
   };
 }
