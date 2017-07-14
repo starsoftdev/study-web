@@ -150,7 +150,7 @@ export function* downloadReportWorker(action) {
     if (e.status === 401) {
       removeItem('auth_token');
     }
-    const errorMessage = get(e, 'message', 'Something went wrong while while downloading report. Please try again later.');
+    const errorMessage = get(e, 'message', 'Something went wrong while exporting studies. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
