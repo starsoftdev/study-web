@@ -76,6 +76,7 @@ import {
   DELETE_PATIENT,
   DELETE_PATIENT_SUCCESS,
   DELETE_PATIENT_ERROR,
+  DOWNLOAD_CLIENT_REPORT,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -159,6 +160,13 @@ export function exportPatients(studyId, text, campaignId, sourceId) {
     text,
     campaignId,
     sourceId,
+  };
+}
+
+export function downloadReport(reportName) {
+  return {
+    type: DOWNLOAD_CLIENT_REPORT,
+    reportName,
   };
 }
 
