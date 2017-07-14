@@ -61,8 +61,9 @@ export class ReportViewSearch extends React.Component {
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('notifySponsorReportReady', (data) => {
-          if (currentUser.roleForSponsor && currentUser.roleForSponsor.id === data.sponsorRoleId) {
-            this.props.downloadReport({ reportName: data.reportName });
+          if (currentUser.roleForSponsor && data.url && currentUser.roleForSponsor.id === data.sponsorRoleId) {
+            // this.props.downloadReport({ reportName: data.reportName });
+            location.replace(data.url);
           }
         });
       });
