@@ -74,6 +74,9 @@ const initialState = {
   paginationOptions: {
     activeSort: null,
     activeDirection: null,
+    hasMoreItems: false,
+    page: 1,
+    query: null,
   },
   searchParam: {
     query: null,
@@ -119,8 +122,7 @@ function dashboardClientAdminsPageReducer(state = initialState, action) {
           error: null,
         },
         paginationOptions: {
-          activeSort: state.paginationOptions.activeSort,
-          activeDirection: state.paginationOptions.activeDirection,
+          ...state.paginationOptions,
           hasMoreItems: action.hasMoreItems,
           page: action.page,
         },
@@ -334,7 +336,11 @@ function dashboardClientAdminsPageReducer(state = initialState, action) {
     case SET_SEARCH_QUERY:
       return {
         ...state,
-        searchParam: {
+        paginationOptions: {
+          activeSort: null,
+          activeDirection: null,
+          hasMoreItems: false,
+          page: 1,
           query: action.query,
         },
       };
