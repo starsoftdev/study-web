@@ -301,7 +301,7 @@ function* fetchPatientCategories() {
 export function* exportPatients() {
   while (true) {
     // listen for the FETCH_PATIENTS action
-    const { studyId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
+    const { studyId, userId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -314,6 +314,9 @@ export function* exportPatients() {
       }
       if (campaignId) {
         requestURL += `&campaignId=${campaignId}`;
+      }
+      if (userId) {
+        requestURL += `&userId=${userId}`;
       }
       if (sourceId) {
         requestURL += `&sourceId=${sourceId}`;
