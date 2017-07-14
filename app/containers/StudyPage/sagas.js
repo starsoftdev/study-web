@@ -30,7 +30,6 @@ SUBMIT_PATIENT_TEXT,
 SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
 SUBMIT_SCHEDULE,
 DELETE_PATIENT,
-DOWNLOAD_CLIENT_REPORT,
 } from './constants';
 
 import {
@@ -302,7 +301,7 @@ function* fetchPatientCategories() {
 export function* exportPatients() {
   while (true) {
     // listen for the FETCH_PATIENTS action
-    const { studyId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
+    const { studyId, userId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -315,6 +314,9 @@ export function* exportPatients() {
       }
       if (campaignId) {
         requestURL += `&campaignId=${campaignId}`;
+      }
+      if (userId) {
+        requestURL += `&userId=${userId}`;
       }
       if (sourceId) {
         requestURL += `&sourceId=${sourceId}`;
@@ -333,32 +335,6 @@ export function* exportPatients() {
         removeItem('auth_token');
       }
       const errorMessage = get(e, 'message', 'Something went wrong while fetching patients. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
-      if (e.status === 401) {
-        yield call(() => { location.href = '/login'; });
-      }
-    }
-  }
-}
-
-export function* downloadReport() {
-  while (true) {
-    // listen for the DOWNLOAD_CLIENT_REPORT action
-    const { reportName } = yield take(DOWNLOAD_CLIENT_REPORT);
-    const authToken = getItem('auth_token');
-    if (!authToken) {
-      return;
-    }
-
-    try {
-      const requestURL = `${API_URL}/downloadClientReport?access_token=${authToken}&reportName=${reportName}`;
-      location.replace(`${requestURL}`);
-    } catch (e) {
-      // if returns forbidden we remove the token from local storage
-      if (e.status === 401) {
-        removeItem('auth_token');
-      }
-      const errorMessage = get(e, 'message', 'Something went wrong while downloading report. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -938,7 +914,6 @@ export function* fetchStudySaga() {
     const watcherT = yield fork(submitDeleteNote);
     const watcherU = yield fork(submitPatientText);
     const watcherV = yield fork(submitSchedule);
-    const watcherW = yield fork(downloadReport);
     const deletePatientWatcher = yield fork(deletePatient);
     // const watcherZ = yield fork(fetchStudyTextNewStats);
 
@@ -964,7 +939,6 @@ export function* fetchStudySaga() {
     yield cancel(watcherT);
     yield cancel(watcherU);
     yield cancel(watcherV);
-    yield cancel(watcherW);
     yield cancel(deletePatientWatcher);
     // yield cancel(watcherZ);
   } catch (e) {
