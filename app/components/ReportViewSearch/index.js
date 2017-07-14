@@ -191,7 +191,7 @@ export class ReportViewSearch extends React.Component {
             <a disabled className="btn btn-primary lightbox-opener">+ add site</a>
           </div>
           <div className="col pull-right">
-            <a disabled className="btn btn-primary lightbox-opener"><i className="icomoon-icon_calendar" /> Date Range</a>
+            <a className="btn btn-primary lightbox-opener" onClick={this.showPopup}><i className="icomoon-icon_calendar" /> Date Range</a>
           </div>
         </div>
         <div className="fields-holder full-width">
