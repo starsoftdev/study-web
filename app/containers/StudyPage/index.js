@@ -18,7 +18,7 @@ import NotFoundPage from '../../containers/NotFoundPage/index';
 import StudyStats from './StudyStats';
 import PatientBoard from '../../components/PatientBoard/index';
 import * as Selector from './selectors';
-import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats, downloadReport } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats } from './actions';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
@@ -28,7 +28,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     campaigns: PropTypes.array,
     currentUser: PropTypes.any,
     fetchPatients: PropTypes.func.isRequired,
-    downloadReport: PropTypes.func,
     fetchPatientCategories: PropTypes.func.isRequired,
     fetchingPatientCategories: PropTypes.bool.isRequired,
     fetchingPatients: PropTypes.bool.isRequired,
@@ -74,7 +73,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, socket, setStudyId, fetchStudy, fetchPatientCategories, fetchSources } = this.props;
+    const { params, socket, setStudyId, fetchStudy, fetchPatientCategories, fetchSources, currentUser } = this.props;
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('notifyMessage', (message) => {
@@ -116,8 +115,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         });
 
         socket.on('notifyClientReportReady', (data) => {
-          if (params.id && data.url && parseInt(params.id) === data.studyId) {
-            // this.props.downloadReport(data.reportName);
+          if (currentUser.id && data.url && currentUser.id === data.userId) {
             location.replace(data.url);
           }
         });
@@ -231,7 +229,6 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchPatients: (studyId, text, campaignId, sourceId) => dispatch(fetchPatients(studyId, text, campaignId, sourceId)),
-    downloadReport: (reportName) => dispatch(downloadReport(reportName)),
     fetchPatientCategories: (studyId) => dispatch(fetchPatientCategories(studyId)),
     fetchStudy: (studyId, campaignId) => dispatch(fetchStudy(studyId, campaignId)),
     setStudyId: (id) => dispatch(setStudyId(id)),
