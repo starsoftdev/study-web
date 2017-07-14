@@ -116,8 +116,9 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         });
 
         socket.on('notifyClientReportReady', (data) => {
-          if (params.id && parseInt(params.id) === data.studyId) {
-            this.props.downloadReport(data.reportName);
+          if (params.id && data.url && parseInt(params.id) === data.studyId) {
+            // this.props.downloadReport(data.reportName);
+            location.replace(data.url);
           }
         });
       });
