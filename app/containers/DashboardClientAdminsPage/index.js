@@ -75,15 +75,19 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
   }
 
   onSubmitQuery(query) {
-    console.log('query', query);
+    const { fetchClientAdmins } = this.props;
     this.props.setSearchQuery(query);
+    const offset = 0;
+    const limit = 10;
+    fetchClientAdmins(query, limit, offset);
   }
 
   loadMore() {
     const { fetchClientAdmins } = this.props;
+    const query = this.props.paginationOptions.query;
     const offset = this.props.paginationOptions.page * 10;
     const limit = 10;
-    fetchClientAdmins(limit, offset);
+    fetchClientAdmins(query, limit, offset);
   }
 
   render() {
@@ -137,7 +141,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchSites:       () => dispatch(fetchSites()),
     getAvailPhoneNumbers: () => dispatch(getAvailPhoneNumbers()),
-    fetchClientAdmins: (limit, offset) => dispatch(fetchClientAdmin(limit, offset)),
+    fetchClientAdmins: (query, limit, offset) => dispatch(fetchClientAdmin(query, limit, offset)),
     fetchUsersByRoles: () => dispatch(fetchUsersByRoles()),
     addClientAdmin: (payload) => dispatch(addClientAdmin(payload)),
     editClientAdmin: (payload) => dispatch(editClientAdmin(payload)),
