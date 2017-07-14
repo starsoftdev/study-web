@@ -10,7 +10,7 @@ import moment from 'moment-timezone';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser, selectSitePatients } from '../../containers/App/selectors';
+import { selectSitePatients } from '../../containers/App/selectors';
 import { fetchSources } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
@@ -26,7 +26,6 @@ import {
 export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     campaigns: PropTypes.array,
-    currentUser: PropTypes.any,
     fetchPatients: PropTypes.func.isRequired,
     downloadReport: PropTypes.func,
     fetchPatientCategories: PropTypes.func.isRequired,
@@ -222,7 +221,6 @@ const mapStateToProps = createStructuredSelector({
   protocol: Selector.selectProtocol(),
   study: Selector.selectStudy(),
   stats: Selector.selectStudyStats(),
-  currentUser: selectCurrentUser(),
   socket: selectSocket(),
   sitePatients: selectSitePatients(),
   fetchingPatientsError: Selector.selectFetchingPatientsError(),
