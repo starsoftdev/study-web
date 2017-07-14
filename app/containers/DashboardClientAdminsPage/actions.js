@@ -99,9 +99,10 @@ export function getAvailPhoneNumbersError(payload) {
   };
 }
 
-export function fetchClientAdmin(limit, offset) {
+export function fetchClientAdmin(query, limit, offset) {
   return {
     type: FETCH_CLIENT_ADMINS,
+    query,
     limit,
     offset,
   };
