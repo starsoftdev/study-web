@@ -11,7 +11,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../CenteredModal/index';
 import ReactSelect from '../Input/ReactSelect';
 import Input from '../Input/index';
-import { exportStudies, downloadReport } from '../../containers/ReportViewPage/actions';
+import { exportStudies } from '../../containers/ReportViewPage/actions';
 
 import {
   selectSocket,
@@ -25,7 +25,6 @@ export class ReportViewSearch extends React.Component {
     dispatch: PropTypes.func.isRequired,
     searchReports: PropTypes.func,
     exportStudies: PropTypes.func,
-    downloadReport: PropTypes.func,
     formValues: PropTypes.object,
     currentUser: PropTypes.object,
     reportsList: PropTypes.object,
@@ -62,7 +61,6 @@ export class ReportViewSearch extends React.Component {
       this.setState({ socketBinded: true }, () => {
         socket.on('notifySponsorReportReady', (data) => {
           if (currentUser.roleForSponsor && data.url && currentUser.roleForSponsor.id === data.sponsorRoleId) {
-            // this.props.downloadReport({ reportName: data.reportName });
             location.replace(data.url);
           }
         });
@@ -280,7 +278,6 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     exportStudies: (payload) => dispatch(exportStudies(payload)),
-    downloadReport: (payload) => dispatch(downloadReport(payload)),
   };
 }
 
