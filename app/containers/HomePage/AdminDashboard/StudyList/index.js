@@ -15,6 +15,7 @@ import { DashboardNoteSearch } from '../AdminDashboardNoteSearch/index';
 import { DashboardNoteTable } from '../AdminDashboardNoteTable';
 
 import ReactSelect from '../../../../components/Input/ReactSelect';
+import CampaignPageModal from '../../../../components/CampaignPageModal';
 import LandingPageModal from '../../../../components/LandingPageModal';
 import ThankYouPageModal from '../../../../components/ThankYouPageModal/index';
 import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
@@ -99,7 +100,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.showLandingPageModal = this.showLandingPageModal.bind(this);
     this.showThankYouPageModal = this.showThankYouPageModal.bind(this);
     this.showPatientThankYouPageModal = this.showPatientThankYouPageModal.bind(this);
-    this.showIndicationPageModal = this.showIndicationPageModal.bind(this);
+    this.showCampaignPageModal = this.showCampaignPageModal.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.campaignChanged = this.campaignChanged.bind(this);
@@ -132,7 +133,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       showLandingPageModal: false,
       showThankYouPageModal: false,
       showPatientThankYouPageModal: false,
-      showIndicationPageMdal: false,
+      showCampaignPageModal: false,
       studies: bindSelection(props.studies),
       selectedAllStudies: false,
       selectedStudyCount: 0,
@@ -147,7 +148,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       thankYouPageOnTop: false,
       patientThankYouEmailPageOnTop: false,
       editStudyPageOnTop: false,
-      indicationPageOnTop: false,
+      campaignPageOnTop: false,
       stickyLeftOffset: false,
 
       showNoteModal: false,
@@ -223,15 +224,17 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   handleBodyScroll(event) {
-    const scrollTop = event.target.scrollingElement.scrollTop;
-    const scrollHeight = event.target.scrollingElement.scrollHeight;
+    if (event.target.scrollingElement) {
+      const scrollTop = event.target.scrollingElement.scrollTop;
+      const scrollHeight = event.target.scrollingElement.scrollHeight;
 
-    if ((window.innerHeight + scrollTop < 1130) || (scrollHeight - window.innerHeight - scrollTop < 80)) {
-      if (this.state.isFixedBottomScroll) {
-        this.setState({ isFixedBottomScroll: false });
+      if ((window.innerHeight + scrollTop < 1130) || (scrollHeight - window.innerHeight - scrollTop < 80)) {
+        if (this.state.isFixedBottomScroll) {
+          this.setState({ isFixedBottomScroll: false });
+        }
+      } else if (!this.state.isFixedBottomScroll || this.state.fixedScrollWidth !== this.tableRight.clientWidth) {
+        this.setState({ isFixedBottomScroll: true, fixedScrollWidth: this.tableRight.clientWidth, fixedScrollContainerWidth: (2891 + this.tableRight.clientWidth) });
       }
-    } else if (!this.state.isFixedBottomScroll || this.state.fixedScrollWidth !== this.tableRight.clientWidth) {
-      this.setState({ isFixedBottomScroll: true, fixedScrollWidth: this.tableRight.clientWidth, fixedScrollContainerWidth: (2891 + this.tableRight.clientWidth) });
     }
   }
 
@@ -391,7 +394,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         thankYouPageOnTop: false,
         patientThankYouEmailPageOnTop: false,
         editStudyPageOnTop: false,
-        indicationPageOnTop: false,
+        campaignPageOnTop: false,
 
         openedPages: pages,
       });
@@ -417,7 +420,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         thankYouPageOnTop: visible,
         patientThankYouEmailPageOnTop: false,
         editStudyPageOnTop: false,
-        indicationPageOnTop: false,
+        campaignPageOnTop: false,
 
         openedPages: pages,
       });
@@ -443,7 +446,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         thankYouPageOnTop: false,
         patientThankYouEmailPageOnTop: visible,
         editStudyPageOnTop: false,
-        indicationPageOnTop: false,
+        campaignPageOnTop: false,
 
         openedPages: pages,
       });
@@ -469,7 +472,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         thankYouPageOnTop: false,
         patientThankYouEmailPageOnTop: false,
         editStudyPageOnTop: visible,
-        indicationPageOnTop: false,
+        campaignPageOnTop: false,
 
         openedPages: pages,
       });
@@ -486,25 +489,25 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     // change('dashboardEditStudyForm', 'messagingNumber', this.props.editStudyValues.text_number_id);
   }
 
-  showIndicationPageModal(visible) {
+  showCampaignPageModal(visible) {
     const pages = this.state.openedPages;
     if (visible) {
-      pages.push('indicationPageOnTop');
+      pages.push('campaignPageOnTop');
       this.setState({
-        showIndicationPageMdal: visible,
+        showCampaignPageModal: visible,
         landingPageOnTop: false,
         thankYouPageOnTop: false,
         patientThankYouEmailPageOnTop: false,
         editStudyPageOnTop: false,
-        indicationPageOnTop: visible,
+        campaignPageOnTop: visible,
 
         openedPages: pages,
       });
     } else {
       pages.pop();
       this.setState({
-        showIndicationPageMdal: visible,
-        indicationPageOnTop: visible,
+        showCampaignPageModal: visible,
+        campaignPageOnTop: visible,
         [pages[(pages.length - 1)]]: true,
 
         openedPages: pages,
@@ -700,8 +703,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         bsStyle="primary"
                         className="pull-left"
                         data-class="btn-deactivate"
-                        onClick={() => this.showIndicationPageModal(true)}
-                      > Indication </Button>
+                        onClick={() => this.showCampaignPageModal(true)}
+                      > Campaign </Button>
                     }
                     {
                       selectedStudyCount === 1 &&
@@ -999,7 +1002,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   sponsors={this.props.sponsors}
                   protocols={this.props.protocols}
                   cro={this.props.cro}
-                  levels={this.props.levels}
                   indications={this.props.indications}
                   fetchAllClientUsersDashboard={this.props.fetchAllClientUsersDashboard}
                   allClientUsers={this.props.allClientUsers}
@@ -1030,6 +1032,14 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   studies={this.state.studies}
                   onClose={() => { this.showPatientThankYouPageModal(false); }}
                   isOnTop={this.state.patientThankYouEmailPageOnTop}
+                />
+                <CampaignPageModal
+                  study={this.state.studies[0]}
+                  openModal={this.state.showCampaignPageModal}
+                  onClose={() => { this.showCampaignPageModal(false); }}
+                  isOnTop={this.state.campaignPageOnTop}
+                  levels={this.props.levels}
+                  formValues={this.props.editStudyValues}
                 />
                 <Modal
                   className={`admin-note-modal ${this.state.hideNoteModal ? 'invisible' : ''}`}
