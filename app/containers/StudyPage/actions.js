@@ -227,11 +227,10 @@ export function patientCategoriesFetched(payload) {
   };
 }
 
-export function fetchStudy(studyId, campaignId) {
+export function fetchStudy(studyId) {
   return {
     type: FETCH_STUDY,
     studyId,
-    campaignId,
   };
 }
 

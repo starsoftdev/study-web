@@ -223,10 +223,9 @@ function* fetchStudyTextStats(action) {
   if (!authToken) {
     return;
   }
-//
   // listen for the latest FETCH_STUDY action
-  const { studyId, campaignId } = action;
-//
+  const { studyId, campaignId, sourceId } = action;
+
   try {
     const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
     const options = {
@@ -236,6 +235,9 @@ function* fetchStudyTextStats(action) {
     if (campaignId) {
       options.query.campaignId = campaignId;
     }
+    if (sourceId) {
+      options.query.sourceId = sourceId;
+    }
     const response = yield call(request, requestURL, options);
     yield put(textStatsFetched(response));
   } catch (e) {
@@ -243,39 +245,6 @@ function* fetchStudyTextStats(action) {
     yield put(toastrActions.error('', errorMessage));
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
-    }
-  }
-}
-
-// TODO re-enable when optimized for high traffic
-function* fetchStudyTextNewStats() {
-  while (true) {
-    // listen for the FETCH_STUDY action
-    const { studyId, campaignId, sourceId } = yield take(FETCH_STUDY_NEW_TEXTS);
-    const authToken = getItem('auth_token');
-    if (!authToken) {
-      return;
-    }
-    try {
-      const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
-      const queryOptions = {};
-      if (campaignId) {
-        queryOptions.campaignId = campaignId;
-      }
-      if (sourceId) {
-        queryOptions.sourceId = sourceId;
-      }
-      const response = yield call(request, requestURL, {
-        method: 'GET',
-        query: queryOptions,
-      });
-      yield put(textStatsFetched(response));
-    } catch (e) {
-      const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
-      if (e.status === 401) {
-        yield call(() => { location.href = '/login'; });
-      }
     }
   }
 }
@@ -934,7 +903,10 @@ export function* fetchStudySaga() {
     const watcherB = yield fork(takeLatest, FETCH_STUDY, fetchStudyViewsStat);
     const watcherC = yield fork(takeLatest, FETCH_STUDY, fetchPatientReferralStat);
     // const watcherD = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
+    // watch for initial fetch actions that will load the text message stats
     const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
+    // watch for socket.io or filtering actions that will refresh the text message stats
+    const refreshTextStatsWatcher = yield fork(takeLatest, FETCH_STUDY_NEW_TEXTS, fetchStudyTextStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);
     const watcherH = yield fork(exportPatients);
@@ -952,7 +924,6 @@ export function* fetchStudySaga() {
     const watcherU = yield fork(submitPatientText);
     const watcherV = yield fork(submitSchedule);
     const watcherW = yield fork(downloadReport);
-    const watcherZ = yield fork(fetchStudyTextNewStats);
     const deletePatientWatcher = yield fork(deletePatient);
 
     yield take(LOCATION_CHANGE);
@@ -961,6 +932,7 @@ export function* fetchStudySaga() {
     yield cancel(watcherC);
     // yield cancel(watcherD);
     yield cancel(watcherE);
+    yield cancel(refreshTextStatsWatcher);
     yield cancel(watcherF);
     yield cancel(watcherG);
     yield cancel(watcherH);
@@ -978,7 +950,6 @@ export function* fetchStudySaga() {
     yield cancel(watcherU);
     yield cancel(watcherV);
     yield cancel(watcherW);
-    yield cancel(watcherZ);
     yield cancel(deletePatientWatcher);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
