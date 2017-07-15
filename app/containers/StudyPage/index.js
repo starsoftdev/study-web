@@ -73,7 +73,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, socket, setStudyId, fetchStudy, fetchPatientCategories, fetchSources } = this.props;
+    const { params, socket, setStudyId, fetchStudyTextNewStats, fetchPatientCategories } = this.props;
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('notifyMessage', (message) => {
@@ -100,8 +100,10 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             });
           });
 
-          this.props.fetchStudy(params.id);
-          this.props.fetchStudyTextNewStats(params.id);
+          // fetch the new text stats
+          // TODO instead of fetching, why not update the stats directly in the reducer instead? improves latency too
+          // TODO needs to take into account the stats are filtered based on campaign and source selected
+          fetchStudyTextNewStats(params.id);
           console.log(socketMessage.twilioTextMessage.direction);
           console.log(unreadMessageCount);
           if (curCategoryId && socketMessage.twilioTextMessage.direction === 'inbound') {
@@ -125,9 +127,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 
     if (params.id !== newProps.params.id) {
       setStudyId(parseInt(newProps.params.id));
-      fetchStudy(newProps.params.id);
       fetchPatientCategories(newProps.params.id);
-      fetchSources();
     }
   }
 
@@ -232,7 +232,7 @@ function mapDispatchToProps(dispatch) {
     fetchPatients: (studyId, text, campaignId, sourceId) => dispatch(fetchPatients(studyId, text, campaignId, sourceId)),
     downloadReport: (reportName) => dispatch(downloadReport(reportName)),
     fetchPatientCategories: (studyId) => dispatch(fetchPatientCategories(studyId)),
-    fetchStudy: (studyId, campaignId) => dispatch(fetchStudy(studyId, campaignId)),
+    fetchStudy: (studyId) => dispatch(fetchStudy(studyId)),
     setStudyId: (id) => dispatch(setStudyId(id)),
     updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
     fetchSources: () => dispatch(fetchSources()),
