@@ -119,8 +119,6 @@ import {
   siteSavingError,
   userSaved,
   userSavingError,
-  getAvailPhoneNumbersSuccess,
-  getAvailPhoneNumbersError,
   getCreditsPriceSuccess,
   getCreditsPriceError,
   fetchIndicationLevelPriceSuccess,
@@ -182,7 +180,6 @@ export default function* baseDataSaga() {
   yield fork(deleteClientRoleWatcher);
   yield fork(saveSiteWatcher);
   yield fork(saveUserWatcher);
-  yield fork(getAvailPhoneNumbersWatcher);
   yield fork(fetchCreditsPrice);
   yield fork(fetchIndicationLevelPriceWatcher);
   yield fork(changeUsersTimezoneWatcher);
@@ -780,27 +777,6 @@ export function* saveUserWatcher() {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));
       yield put(userSavingError(err));
-    }
-  }
-}
-
-// TODO what is the purpose of this API call?? Is it a test API call, since the area code is hardcoded?
-export function* getAvailPhoneNumbersWatcher() {
-  while (true) {
-    yield take(GET_AVAIL_PHONE_NUMBERS);
-
-    try {
-      const requestURL = `${API_URL}/studySources/getAvailPhoneNumbers`;
-      const params = {
-        query: {
-          country: 'US',
-          areaCode: '510',
-        },
-      };
-      const response = yield call(request, requestURL, params);
-      yield put(getAvailPhoneNumbersSuccess(response));
-    } catch (e) {
-      yield put(getAvailPhoneNumbersError(e));
     }
   }
 }
