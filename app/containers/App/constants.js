@@ -200,3 +200,6 @@ export const GET_CNS_INFO_ERROR                    = 'App/GET_CNS_INFO_ERROR';
 export const SUBMIT_CNS                            = 'App/SUBMIT_CNS';
 export const SUBMIT_CNS_SUCCESS                    = 'App/SUBMIT_CNS_SUCCESS';
 export const SUBMIT_CNS_ERROR                      = 'App/SUBMIT_CNS_ERROR';
+
+export const ADD_MESSAGES_COUNT_STAT               = 'App/ADD_MESSAGES_COUNT_STAT';
+export const DELETE_MESSAGES_COUNT_STAT            = 'App/DELETE_MESSAGES_COUNT_STAT';

@@ -196,6 +196,9 @@ import {
   SUBMIT_CNS,
   SUBMIT_CNS_SUCCESS,
   SUBMIT_CNS_ERROR,
+
+  ADD_MESSAGES_COUNT_STAT,
+  DELETE_MESSAGES_COUNT_STAT,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -1301,6 +1304,20 @@ export function submitCnsSuccess(payload) {
 export function submitCnsError(payload) {
   return {
     type: SUBMIT_CNS_ERROR,
+    payload,
+  };
+}
+
+export function addMessagesCountStat(payload) {
+  return {
+    type: ADD_MESSAGES_COUNT_STAT,
+    payload,
+  };
+}
+
+export function deleteMessagesCountStat(payload) {
+  return {
+    type: DELETE_MESSAGES_COUNT_STAT,
     payload,
   };
 }
