@@ -73,15 +73,15 @@ export class PatientDetailModal extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { socket, currentPatient, fetchPatientDetails } = newProps;
+    const { socket, currentPatient, currentPatientCategory, fetchPatientDetails } = newProps;
 
     if (socket && this.state.socketBinded === false && currentPatient) {
       socket.on('notifyUnsubscribePatient', () => {
-        fetchPatientDetails(currentPatient.id);
+        fetchPatientDetails(currentPatient.id, currentPatientCategory.id);
       });
 
       socket.on('notifySubscribePatient', () => {
-        fetchPatientDetails(currentPatient.id);
+        fetchPatientDetails(currentPatient.id, currentPatientCategory.id);
       });
 
       this.setState({ socketBinded: true });
@@ -111,16 +111,14 @@ export class PatientDetailModal extends React.Component {
     } = this.props;
     readStudyPatientMessages(currentPatient.id);
     markAsReadPatientMessages(currentPatient.id);
-    updatePatientSuccess({
-      patientId: currentPatient.id,
-      patientCategoryId: currentPatientCategory.id,
+    updatePatientSuccess(currentPatient.id, currentPatientCategory.id, {
       unreadMessageCount: 0,
     });
     switchToTextSection();
   }
 
   renderOtherSection() {
-    const { carousel, currentPatient, currentUser } = this.props;
+    const { carousel, currentPatient, currentPatientCategory, currentUser } = this.props;
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       if (currentPatient.dob) {
@@ -129,6 +127,7 @@ export class PatientDetailModal extends React.Component {
         formattedPatient.dobDay = dob.date();
         formattedPatient.dobYear = dob.year();
       }
+      formattedPatient.patientCategoryId = currentPatientCategory.id;
       return (
         <OtherSection active={carousel.other} initialValues={formattedPatient} currentUser={currentUser} />
       );
@@ -137,11 +136,12 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderPatientDetail() {
-    const { currentPatient } = this.props;
+    const { currentPatient, currentPatientCategory } = this.props;
 
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       formattedPatient.phone = normalizePhoneDisplay(currentPatient.phone);
+      formattedPatient.patientCategoryId = currentPatientCategory.id;
       return (
         <PatientDetailSection initialValues={formattedPatient} />
       );
@@ -171,8 +171,12 @@ export class PatientDetailModal extends React.Component {
   }
 
   render() {
-    const { ePMS, carousel, currentPatientCategory, currentPatient, currentUser, openPatientModal, onClose, studyId,
+    const { ePMS, carousel, currentPatient, currentPatientCategory, currentUser, openPatientModal, onClose, studyId,
       socket, switchToNoteSection, switchToEmailSection, switchToOtherSection, currentPatientNotes } = this.props;
+    const formattedPatient = Object.assign({}, currentPatient);
+    if (currentPatientCategory) {
+      formattedPatient.patientCategoryId = currentPatientCategory.id;
+    }
     return (
       <Collapse
         dimension="width"
@@ -201,11 +205,11 @@ export class PatientDetailModal extends React.Component {
                 <NotesSection
                   active={carousel.note}
                   currentUser={currentUser}
-                  currentPatient={currentPatient}
+                  currentPatient={formattedPatient}
                   notes={currentPatientNotes}
                   studyId={studyId}
                 />
-                <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={currentPatient} ePMS={ePMS} />
+                <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
                 <EmailSection active={carousel.email} />
                 {this.renderOtherSection()}
               </div>
@@ -230,14 +234,14 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   showScheduledModal: (type) => dispatch(showScheduledModal(type)),
-  fetchPatientDetails: (patientId) => dispatch(fetchPatientDetails(patientId)),
+  fetchPatientDetails: (patientId, patientCategoryId) => dispatch(fetchPatientDetails(patientId, patientCategoryId)),
   switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
   switchToTextSection: () => dispatch(switchToTextSectionDetail()),
   switchToEmailSection: () => dispatch(switchToEmailSectionDetail()),
   switchToOtherSection: () => dispatch(switchToOtherSectionDetail()),
   readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
-  updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
+  updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientDetailModal);
