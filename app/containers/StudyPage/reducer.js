@@ -127,15 +127,9 @@ function studyPageReducer(state = initialState, action) {
     case SUBMIT_DELETE_NOTE_SUCCESS:
     case FETCH_PATIENT_DETAILS_SUCCESS:
     case UPDATE_PATIENT_SUCCESS:
-      if (action.payload && (action.payload.lastTextMessage || action.payload.unreadMessageCount || action.payload.unreadMessageCount === 0)) {
-        return {
-          ...state,
-          patientCategories: patientCategories(state.patientCategories, action.payload.patientCategoryId, action.payload.patientId, action),
-        };
-      }
       return {
         ...state,
-        patientCategories: patientCategories(state.patientCategories, state.currentPatientCategoryId, state.currentPatientId, action),
+        patientCategories: patientCategories(state.patientCategories, action.patientId, action),
       };
     case CLEAR_FORM_UPLOAD:
       return {
@@ -202,7 +196,7 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         patientBoardLoading: false,
-        patientCategories: patientCategories(state.patientCategories, null, action.patientId, action),
+        patientCategories: patientCategories(state.patientCategories, action.patientId, action),
       };
     case FETCH_PATIENT_CATEGORIES:
       return {
@@ -451,14 +445,14 @@ function studyPageReducer(state = initialState, action) {
 }
 
 // additional reducer specifically for patient categories
-function patientCategories(state, currentPatientCategoryId, currentPatientId, action) {
+function patientCategories(state, currentPatientId, action) {
   switch (action.type) {
     case ADD_PATIENT_NOTE_SUCCESS:
     case ADD_PATIENT_INDICATION_SUCCESS:
     case REMOVE_PATIENT_INDICATION_SUCCESS:
     case SUBMIT_DELETE_NOTE_SUCCESS:
       return state.map(patientCategory => {
-        if (patientCategory.id === currentPatientCategoryId) {
+        if (patientCategory.id === action.patientCategoryId) {
           return {
             ...patientCategory,
             patients: patients(patientCategory.patients, currentPatientId, action),
@@ -469,11 +463,11 @@ function patientCategories(state, currentPatientCategoryId, currentPatientId, ac
     case FETCH_PATIENT_DETAILS_SUCCESS:
     case UPDATE_PATIENT_SUCCESS:
       return state.map(patientCategory => {
-        if (patientCategory.id === currentPatientCategoryId) {
+        if (patientCategory.id === action.patientCategoryId) {
           return {
             ...patientCategory,
             patients: patientCategory.patients.map(patient => {
-              if (patient.id === currentPatientId) {
+              if (patient.id === action.patientId) {
                 return {
                   ...patient,
                   ...action.payload,

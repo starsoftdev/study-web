@@ -82,9 +82,7 @@ class TextSection extends React.Component {
         if (this.props.active && newMessage) {
           this.props.readStudyPatientMessages(this.props.currentPatient.id);
           this.props.markAsReadPatientMessages(this.props.currentPatient.id);
-          this.props.updatePatientSuccess({
-            patientId: this.props.currentPatient.id,
-            patientCategoryId: this.props.currentPatientCategory.id,
+          this.props.updatePatientSuccess(this.props.currentPatient.id, this.props.currentPatientCategory.id, {
             unreadMessageCount: 0,
           });
           this.props.fetchClientCredits(currentUser.id);
@@ -135,7 +133,7 @@ class TextSection extends React.Component {
   }
 
   submitText() {
-    const { currentUser, currentPatient, studyId } = this.props;
+    const { currentUser, currentPatient, currentPatientCategory, studyId } = this.props;
     const textarea = this.textarea;
     const options = {
       studyId,
@@ -146,7 +144,7 @@ class TextSection extends React.Component {
     };
     this.props.sendStudyPatientMessages(options, (err, data) => {
       if (!err) {
-        this.props.updatePatientSuccess({
+        this.props.updatePatientSuccess(currentPatient.id, currentPatientCategory.id, {
           lastTextMessage: { body: data.body, dateCreated: data.dateCreated },
         });
         this.setState({ enteredCharactersLength: 0 }, () => {
@@ -269,7 +267,7 @@ const mapDispatchToProps = (dispatch) => ({
   readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
   fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
-  updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
+  updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextSection);
