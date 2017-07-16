@@ -38,7 +38,6 @@ import {
   DELETE_CLIENT_ROLE,
   SAVE_SITE,
   SAVE_USER,
-  GET_AVAIL_PHONE_NUMBERS,
   GET_CREDITS_PRICE,
   FETCH_INDICATION_LEVEL_PRICE,
 
@@ -61,6 +60,7 @@ import {
   CHANGE_TEMPORARY_PASSWORD,
   GET_CNS_INFO,
   SUBMIT_CNS,
+  FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
 } from '../../containers/App/constants';
 
 import { READ_STUDY_PATIENT_MESSAGES } from '../../containers/StudyPage/constants';
@@ -565,18 +565,16 @@ export function* fetchPatientMessagesWatcher() {
 }
 
 export function* fetchPatientMessageUnreadCountWatcher() {
-  // while (true) {
-  //   const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
-  //   try {
-  //     const requestURL = `${API_URL}/clients/${currentUser.roleForClient.client_id}/patientMessageStats`;
-  //     const response = yield call(request, requestURL);
-  //     yield put(patientMessageUnreadCountFetched(response));
-  // TODO re-enable patient message stat fetching
-  yield put(patientMessageUnreadCountFetched(0));
-  //   } catch (err) {
-  //     console.trace(err);
-  //   }
-  // }
+  while (true) {
+    const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
+    try {
+      const requestURL = `${API_URL}/clients/${currentUser.roleForClient.client_id}/patientMessageStats`;
+      const response = yield call(request, requestURL);
+      yield put(patientMessageUnreadCountFetched(response));
+    } catch (err) {
+      console.trace(err);
+    }
+  }
 }
 
 export function* fetchClientRolesWatcher() {
