@@ -107,9 +107,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           console.log(socketMessage.twilioTextMessage.direction);
           console.log(unreadMessageCount);
           if (curCategoryId && socketMessage.twilioTextMessage.direction === 'inbound') {
-            this.props.updatePatientSuccess({
-              patientId: socketMessage.patient_id,
-              patientCategoryId: curCategoryId,
+            this.props.updatePatientSuccess(socketMessage.patient_id, curCategoryId, {
               unreadMessageCount: (unreadMessageCount + 1),
               lastTextMessage: socketMessage.twilioTextMessage,
             });
@@ -234,7 +232,7 @@ function mapDispatchToProps(dispatch) {
     fetchPatientCategories: (studyId) => dispatch(fetchPatientCategories(studyId)),
     fetchStudy: (studyId) => dispatch(fetchStudy(studyId)),
     setStudyId: (id) => dispatch(setStudyId(id)),
-    updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
+    updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
     fetchSources: () => dispatch(fetchSources()),
     fetchStudyTextNewStats: (studyId, campaignId, sourceId) => dispatch(fetchStudyTextNewStats(studyId, campaignId, sourceId)),
   };

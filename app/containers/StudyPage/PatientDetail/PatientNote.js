@@ -45,7 +45,7 @@ class PatientNote extends React.Component {
           <a
             className="btn-trash"
             onClick={() => {
-              submitDeleteNote(currentPatient.id, note.id);
+              submitDeleteNote(currentPatient.id, currentPatient.patientCategoryId, note.id);
             }}
           >
             <i className="icomoon-icon_trash" />
