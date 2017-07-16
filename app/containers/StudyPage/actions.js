@@ -56,12 +56,10 @@ import {
   SUBMIT_PATIENT_NOTE,
   SUBMIT_DELETE_NOTE,
   SUBMIT_DELETE_NOTE_SUCCESS,
-  SUBMIT_PATIENT_TEXT,
   ADD_PATIENT_INDICATION_SUCCESS,
   REMOVE_PATIENT_INDICATION_SUCCESS,
   UPDATE_PATIENT_SUCCESS,
   ADD_PATIENT_NOTE_SUCCESS,
-  ADD_PATIENT_TEXT_SUCCESS,
   SWITCH_TO_NOTE_SECTION_DETAIL,
   SWITCH_TO_TEXT_SECTION_DETAIL,
   SWITCH_TO_EMAIL_SECTION_DETAIL,
@@ -400,15 +398,6 @@ export function addPatientNoteSuccess(patientId, patientCategoryId, currentUser,
   };
 }
 
-export function addPatientTextSuccess(patientId, patientCategoryId, payload) {
-  return {
-    type: ADD_PATIENT_TEXT_SUCCESS,
-    patientId,
-    patientCategoryId,
-    payload,
-  };
-}
-
 export function schedulePatient(studyId, fromCategoryId, toCategoryId, patientId) {
   return {
     type: SCHEDULE_PATIENT,
@@ -512,15 +501,6 @@ export function deletePatientNoteSuccess(patientId, patientCategoryId, noteId) {
     patientId,
     patientCategoryId,
     noteId,
-  };
-}
-
-export function submitPatientText(studyId, patientId, text) {
-  return {
-    type: SUBMIT_PATIENT_TEXT,
-    studyId,
-    patientId,
-    text,
   };
 }
 
