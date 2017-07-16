@@ -28,7 +28,7 @@ import {
   updatePatientSuccess,
 } from '../actions';
 
-import { markAsReadPatientMessages } from '../../App/actions';
+import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
 import {
   selectSocket,
 } from '../../GlobalNotifications/selectors';
@@ -52,6 +52,7 @@ export class PatientDetailModal extends React.Component {
     switchToOtherSection: React.PropTypes.func.isRequired,
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
+    deleteMessagesCountStat: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
     updatePatientSuccess: React.PropTypes.func,
   };
@@ -104,13 +105,14 @@ export class PatientDetailModal extends React.Component {
     const {
       switchToTextSection,
       readStudyPatientMessages,
-      markAsReadPatientMessages,
+      deleteMessagesCountStat,
       currentPatient,
       updatePatientSuccess,
       currentPatientCategory,
     } = this.props;
     readStudyPatientMessages(currentPatient.id);
-    markAsReadPatientMessages(currentPatient.id);
+    // markAsReadPatientMessages(currentPatient.id);
+    deleteMessagesCountStat(currentPatient.unreadMessageCount);
     updatePatientSuccess({
       patientId: currentPatient.id,
       patientCategoryId: currentPatientCategory.id,
@@ -237,6 +239,7 @@ const mapDispatchToProps = (dispatch) => ({
   switchToOtherSection: () => dispatch(switchToOtherSectionDetail()),
   readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
+  deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
   updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
 });
 
