@@ -398,7 +398,7 @@ function* fetchPatients(studyId, text, campaignId, sourceId) {
 function* fetchPatientDetails() {
   while (true) {
     // listen for the FETCH_PATIENT_DETAILS action
-    const { patientId } = yield take(FETCH_PATIENT_DETAILS);
+    const { patientId, patientCategoryId } = yield take(FETCH_PATIENT_DETAILS);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -483,7 +483,7 @@ function* fetchPatientDetails() {
         delete mappedTextMessage.user_id;
         return mappedTextMessage;
       });
-      yield put(patientDetailsFetched(patientId, response));
+      yield put(patientDetailsFetched(patientId, patientCategoryId, response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while fetching patient information. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -535,7 +535,7 @@ function* findPatientsSaga() {
 function* addPatientIndication() {
   while (true) {
     // listen for the SUBMIT_ADD_PATIENT_INDICATION action
-    const { patientId, indication } = yield take(ADD_PATIENT_INDICATION);
+    const { patientId, patientCategoryId, indication } = yield take(ADD_PATIENT_INDICATION);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -550,9 +550,9 @@ function* addPatientIndication() {
           indicationId: indication.id,
         }),
       });
-      yield put(addPatientIndicationSuccess(patientId, indication, payload.isOriginal));
+      yield put(addPatientIndicationSuccess(patientId, patientCategoryId, indication, payload.isOriginal));
       if (payload && payload.patient) {
-        yield put(updatePatientSuccess(payload.patient));
+        yield put(updatePatientSuccess(patientId, patientCategoryId, payload.patient));
       }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
@@ -600,7 +600,7 @@ function* submitMovePatientBetweenCategories() {
 function* removePatientIndication() {
   while (true) {
     // listen for the SUBMIT_REMOVE_PATIENT_INDICATION action
-    const { patientId, indicationId } = yield take(REMOVE_PATIENT_INDICATION);
+    const { patientId, patientCategoryId, indicationId } = yield take(REMOVE_PATIENT_INDICATION);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -616,9 +616,9 @@ function* removePatientIndication() {
         }),
       });
 
-      yield put(removePatientIndicationSuccess(patientId, indicationId, response && response.patient ? response.patient : null));
+      yield put(removePatientIndicationSuccess(patientId, patientCategoryId, indicationId, response && response.patient ? response.patient : null));
       if (response && response.patient) {
-        yield put(updatePatientSuccess(response.patient));
+        yield put(updatePatientSuccess(patientId, patientCategoryId, response.patient));
       }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while removing the patient indication. Please try again later.');
@@ -633,7 +633,7 @@ function* removePatientIndication() {
 function* submitPatientUpdate() {
   while (true) {
     // listen for the SUBMIT_PATIENT_UPDATE action
-    const { patientId, fields } = yield take(SUBMIT_PATIENT_UPDATE);
+    const { patientId, patientCategoryId, fields } = yield take(SUBMIT_PATIENT_UPDATE);
     const authToken = getItem('auth_token');
     const userId = getItem('user_id');
     if (!authToken) {
@@ -646,7 +646,7 @@ function* submitPatientUpdate() {
         method: 'PATCH',
         body: JSON.stringify({ ...fields, userId }),
       });
-      yield put(updatePatientSuccess(response));
+      yield put(updatePatientSuccess(patientId, patientCategoryId, response));
     } catch (e) {
       let errorMessage = get(e, 'message', 'Something went wrong while updating patient information. Please try again later.');
       if (errorMessage.includes('email')) {
@@ -662,7 +662,7 @@ function* submitPatientUpdate() {
 function* submitPatientNote() {
   while (true) {
     // listen for the SUBMIT_PATIENT_NOTE action
-    const { patientId, studyId, currentUser, note } = yield take(SUBMIT_PATIENT_NOTE);
+    const { patientId, patientCategoryId, studyId, currentUser, note } = yield take(SUBMIT_PATIENT_NOTE);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -677,9 +677,9 @@ function* submitPatientNote() {
           note,
         }),
       });
-      yield put(addPatientNoteSuccess(currentUser, response));
+      yield put(addPatientNoteSuccess(patientId, patientCategoryId, currentUser, response));
       if (response && response.patient) {
-        yield put(updatePatientSuccess(response.patient));
+        yield put(updatePatientSuccess(patientId, patientCategoryId, response.patient));
       }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding a patient note. Please try again later.');
@@ -694,7 +694,7 @@ function* submitPatientNote() {
 function* submitDeleteNote() {
   while (true) {
     // listen for the SUBMIT_DELETE_NOTE action
-    const { patientId, noteId } = yield take(SUBMIT_DELETE_NOTE);
+    const { patientId, patientCategoryId, noteId } = yield take(SUBMIT_DELETE_NOTE);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -705,9 +705,9 @@ function* submitDeleteNote() {
       const response = yield call(request, requestURL, {
         method: 'DELETE',
       });
-      yield put(deletePatientNoteSuccess(noteId));
+      yield put(deletePatientNoteSuccess(patientId, patientCategoryId, noteId));
       if (response && response.patient) {
-        yield put(updatePatientSuccess(response.patient));
+        yield put(updatePatientSuccess(patientId, patientCategoryId, response.patient));
       }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding a patient note. Please try again later.');
