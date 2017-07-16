@@ -27,7 +27,6 @@ SUBMIT_PATIENT_IMPORT,
 SUBMIT_ADD_PATIENT,
 SUBMIT_PATIENT_NOTE,
 SUBMIT_DELETE_NOTE,
-SUBMIT_PATIENT_TEXT,
 SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
 SUBMIT_SCHEDULE,
 DELETE_PATIENT,
@@ -57,7 +56,6 @@ import {
   removePatientIndicationSuccess,
   updatePatientSuccess,
   addPatientNoteSuccess,
-  addPatientTextSuccess,
   movePatientBetweenCategoriesLoading,
   movePatientBetweenCategoriesSuccess,
   movePatientBetweenCategoriesFailed,
@@ -719,35 +717,6 @@ function* submitDeleteNote() {
   }
 }
 
-function* submitPatientText() {
-  while (true) {
-    // listen for the SUBMIT_PATIENT_TEXT action
-    const { id, studyId, message } = yield take(SUBMIT_PATIENT_TEXT);
-    const authToken = getItem('auth_token');
-    if (!authToken) {
-      return;
-    }
-
-    try {
-      const requestURL = `${API_URL}/patients/${id}/textMessages`;
-      const response = yield call(request, requestURL, {
-        method: 'POST',
-        body: JSON.stringify({
-          study_id: studyId,
-          message,
-        }),
-      });
-      yield put(addPatientTextSuccess(response));
-    } catch (e) {
-      const errorMessage = get(e, 'message', 'Something went wrong while sending a patient text. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
-      if (e.status === 401) {
-        yield call(() => { location.href = '/login'; });
-      }
-    }
-  }
-}
-
 function* submitTextBlast() {
   while (true) {
     // listen for the SUBMIT_TEXT_BLAST action
@@ -921,7 +890,6 @@ export function* fetchStudySaga() {
     const watcherR = yield fork(submitAddPatient);
     const watcherS = yield fork(submitPatientNote);
     const watcherT = yield fork(submitDeleteNote);
-    const watcherU = yield fork(submitPatientText);
     const watcherV = yield fork(submitSchedule);
     const watcherW = yield fork(downloadReport);
     const deletePatientWatcher = yield fork(deletePatient);
