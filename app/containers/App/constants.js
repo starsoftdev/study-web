@@ -109,10 +109,6 @@ export const SAVE_USER                             = 'App/SAVE_USER';
 export const SAVE_USER_SUCCESS                     = 'App/SAVE_USER_SUCCESS';
 export const SAVE_USER_ERROR                       = 'App/SAVE_USER_ERROR';
 
-export const GET_AVAIL_PHONE_NUMBERS               = 'App/GET_AVAIL_PHONE_NUMBERS';
-export const GET_AVAIL_PHONE_NUMBERS_SUCCESS       = 'App/GET_AVAIL_PHONE_NUMBERS_SUCCESS';
-export const GET_AVAIL_PHONE_NUMBERS_ERROR         = 'App/GET_AVAIL_PHONE_NUMBERS_ERROR';
-
 export const GET_CREDITS_PRICE                     = 'App/GET_CREDITS_PRICE';
 export const GET_CREDITS_PRICE_SUCCESS             = 'App/GET_CREDITS_PRICE_SUCCESS';
 export const GET_CREDITS_PRICE_ERROR               = 'App/GET_CREDITS_PRICE_ERROR ';
@@ -204,3 +200,6 @@ export const GET_CNS_INFO_ERROR                    = 'App/GET_CNS_INFO_ERROR';
 export const SUBMIT_CNS                            = 'App/SUBMIT_CNS';
 export const SUBMIT_CNS_SUCCESS                    = 'App/SUBMIT_CNS_SUCCESS';
 export const SUBMIT_CNS_ERROR                      = 'App/SUBMIT_CNS_ERROR';
+
+export const ADD_MESSAGES_COUNT_STAT               = 'App/ADD_MESSAGES_COUNT_STAT';
+export const DELETE_MESSAGES_COUNT_STAT            = 'App/DELETE_MESSAGES_COUNT_STAT';

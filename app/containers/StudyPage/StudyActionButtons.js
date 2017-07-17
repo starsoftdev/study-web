@@ -5,12 +5,14 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Modal from 'react-bootstrap/lib/Modal';
+import { createStructuredSelector } from 'reselect';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import ImportPatientsModal from './ImportPatients/index';
 import TextEmailBlastModal from './TextEmailBlastModal';
 import TextBlastModal from './TextBlastModal/index';
 import AddPatientForm from './ImportPatients/AddPatientForm';
+import { selectCurrentUser } from '../../containers/App/selectors';
 
 import { exportPatients } from './actions';
 
@@ -23,6 +25,7 @@ class StudyActionButtons extends Component {
     exportPatients: PropTypes.func,
     ePMS: PropTypes.bool,
     studyName: PropTypes.string,
+    currentUser: PropTypes.any,
   };
   constructor(props) {
     super(props);
@@ -99,8 +102,8 @@ class StudyActionButtons extends Component {
   }
 
   download() {
-    const { exportPatients, studyId, campaign, source, search } = this.props;
-    exportPatients(studyId, search, campaign, source);
+    const { exportPatients, studyId, campaign, source, search, currentUser } = this.props;
+    exportPatients(studyId, currentUser.id, search, campaign, source);
   }
 
   render() {
@@ -159,10 +162,14 @@ class StudyActionButtons extends Component {
   }
 }
 
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
+});
+
 function mapDispatchToProps(dispatch) {
   return {
     exportPatients: (studyId, text, campaignId, sourceId) => dispatch(exportPatients(studyId, text, campaignId, sourceId)),
   };
 }
 
-export default connect(null, mapDispatchToProps)(StudyActionButtons);
+export default connect(mapStateToProps, mapDispatchToProps)(StudyActionButtons);

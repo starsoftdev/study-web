@@ -48,3 +48,5 @@ export const ADD_MESSAGING_NUMBER_SUCCESS = 'app/DashboardClientAdminsPage/ADD_M
 export const ADD_MESSAGING_NUMBER_ERROR = 'app/DashboardClientAdminsPage/ADD_MESSAGING_NUMBER_ERROR';
 
 export const SET_ACTIVE_SORT = 'app/DashboardClientAdminsPage/SET_ACTIVE_SORT';
+
+export const SET_SEARCH_QUERY = 'app/DashboardClientAdminsPage/SET_SEARCH_QUERY';
