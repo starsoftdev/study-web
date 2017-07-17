@@ -644,6 +644,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
     campaignOptions = campaignOptions.reverse();
 
+    const selectedStudies = studies.filter(s => s.selected);
+
     return (
       <div>
         {(() => {
@@ -1034,12 +1036,11 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   isOnTop={this.state.patientThankYouEmailPageOnTop}
                 />
                 <CampaignPageModal
-                  study={this.state.studies[0]}
+                  study={selectedStudies[0]}
                   openModal={this.state.showCampaignPageModal}
                   onClose={() => { this.showCampaignPageModal(false); }}
                   isOnTop={this.state.campaignPageOnTop}
                   levels={this.props.levels}
-                  formValues={this.props.editStudyValues}
                 />
                 <Modal
                   className={`admin-note-modal ${this.state.hideNoteModal ? 'invisible' : ''}`}
