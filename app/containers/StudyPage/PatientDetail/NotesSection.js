@@ -45,7 +45,7 @@ class NotesSection extends React.Component {
     const { currentPatient, currentUser, note, resetForm, studyId, submitPatientNote } = this.props;
 
     if (note) {
-      submitPatientNote(studyId, currentPatient.id, currentUser, note);
+      submitPatientNote(studyId, currentPatient.id, currentPatient.patientCategoryId, currentUser, note);
       resetForm();
     }
   }
@@ -92,8 +92,8 @@ const mapStateToProps = state => (
 
 function mapDispatchToProps(dispatch) {
   return {
-    submitPatientNote: (studyId, patientId, currentUser, note) => dispatch(submitPatientNote(studyId, patientId, currentUser, note)),
-    submitDeleteNote: (patientId, noteId) => dispatch(submitDeleteNote(patientId, noteId)),
+    submitPatientNote: (studyId, patientId, patientCategoryId, currentUser, note) => dispatch(submitPatientNote(studyId, patientId, patientCategoryId, currentUser, note)),
+    submitDeleteNote: (patientId, patientCategoryId, noteId) => dispatch(submitDeleteNote(patientId, patientCategoryId, noteId)),
     resetForm: () => dispatch(reset(formName)),
     touchFields: () => dispatch(touch(formName, ...fields)),
   };
