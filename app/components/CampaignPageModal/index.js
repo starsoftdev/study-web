@@ -10,81 +10,104 @@ import Form from 'react-bootstrap/lib/Form';
 import moment from 'moment';
 import _ from 'lodash';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm, change, blur } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Button from 'react-bootstrap/lib/Button';
 import DatePicker from '../../components/Input/DatePicker';
 import ReactSelect from '../../components/Input/ReactSelect';
 import Input from '../Input/index';
+import Toggle from '../../components/Input/Toggle';
 import LoadingSpinner from '../LoadingSpinner';
-import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
-import { selectStudyCampaigns } from '../../containers/HomePage/AdminDashboard/selectors';
-import formValidator from './validator';
+import { selectValues } from '../../common/selectors/form.selector';
+import { selectDashboardCampaigns, selectDashboardEditCampaignProcess } from '../../containers/HomePage/AdminDashboard/selectors';
+import { fetchCampaignsByStudy } from '../../containers/HomePage/AdminDashboard/actions';
 
 const formName = 'campaignPageForm';
 
-function mapDispatchToProps(dispatch) {
-  return {
-    change: (name, value) => dispatch(change(formName, name, value)),
-    blur: (field, value) => dispatch(blur(formName, field, value)),
-  };
-}
-
 @reduxForm({
   form: formName,
-  validate: formValidator,
 })
-@connect(null, mapDispatchToProps)
+@connect(mapStateToProps, mapDispatchToProps)
 
 export class CampaignPageModal extends React.Component {
   static propTypes = {
     study: PropTypes.object,
-    formValues: PropTypes.object,
     studyCampaigns: PropTypes.object,
     updateCampaignProcess: PropTypes.object,
+    fetchCampaignsByStudy: PropTypes.func,
+    formValues: PropTypes.object,
     levels: PropTypes.array,
     isOnTop: React.PropTypes.bool,
     onClose: PropTypes.func.isRequired,
     openModal: PropTypes.bool.isRequired,
     handleSubmit: PropTypes.func,
     change: PropTypes.func.isRequired,
-    blur: React.PropTypes.func.isRequired,
   };
 
-  /* campaignChanged(e) {
-    const foundCampaign = _.find(this.props.studyCampaigns.details, (item) => (item.id === e));
+  constructor(props) {
+    super(props);
+
+    this.campaignChanged = this.campaignChanged.bind(this);
+    this.submitCampaignForm = this.submitCampaignForm.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.study && newProps.study !== this.props.study) {
+      console.log('study changed to: ', newProps.study.study_id);
+    }
+    if (newProps.openModal && !this.props.openModal && this.props.study.study_id) {
+      console.log('fetching campaigns for study: ', this.props.study.study_id);
+      this.props.fetchCampaignsByStudy(this.props.study.study_id);
+    }
+    if (newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
+      this.props.studyCampaigns.details !== newProps.studyCampaigns.details) {
+      console.log('new campaigns: ', newProps.studyCampaigns.details);
+      this.campaignChanged(newProps.studyCampaigns.details[0].id, newProps.studyCampaigns.details);
+    }
+  }
+
+  campaignChanged(e, studyCampaigns = this.props.studyCampaigns.details) {
+    const foundCampaign = _.find(studyCampaigns, (item) => (item.id === e));
     if (foundCampaign) {
       const { change } = this.props;
-      change('campaign_datefrom', foundCampaign.datefrom);
-      change('campaign_dateto', foundCampaign.dateto);
-      change('custom_patient_goal', foundCampaign.custom_patient_goal);
+      change('campaign_id', foundCampaign.id);
+      change('datefrom', foundCampaign.dateFrom);
+      change('dateto', foundCampaign.dateTo);
+      change('custom_patient_goal', foundCampaign.customPatientGoal);
       change('level_id', foundCampaign.level_id);
-      // change('patient_qualification_suite', foundCampaign.patient_qualification_suite);
+      change('patient_qualification_suite', foundCampaign.patientQualificationSuite);
     }
-  }*/
+  }
+
+  submitCampaignForm(e) {
+    e.preventDefault();
+    const submitValues = Object.assign({}, this.props.formValues);
+    submitValues.studyId = this.props.study.study_id;
+    console.log(submitValues);
+    // this.props.handleSubmit()
+  }
 
   render() {
-    const { openModal, onClose, levels, handleSubmit, study } = this.props;
+    const { openModal, onClose, levels, studyCampaigns, formValues, updateCampaignProcess } = this.props;
     const exposureLevelOptions = levels.map(level => ({ value: level.id, label: level.name }));
-    const campaignOptions = [];
-    const campaignDateFrom = null;
-    const campaignDateTo = null;
-    const updateCampaignProcess = { saving: false };
-    console.log(study);
 
-    /* let campaignOptions = studyCampaigns.details.map((c, i) => {
-      if (i === 0) {
-        return { label: '1', value: c.id };
-      } else if (c.is_current) {
-        return { label: 'Current', value: c.id };
+    const campaignOptions = studyCampaigns.details.map(c => {
+      if (c.isCurrent) {
+        return { label: `${c.orderNumber} - Current`, value: c.id };
       }
-      return { label: (i + 1), value: c.id };
+      return { label: c.orderNumber, value: c.id };
     });
 
-    campaignOptions = campaignOptions.reverse();
-
-    const campaignDateFrom = formValues.campaign_datefrom ? moment(formValues.campaign_datefrom) : null;
-    const campaignDateTo = formValues.campaign_dateto ? moment(formValues.campaign_dateto) : null;*/
+    const dateFrom = formValues.datefrom ? moment(formValues.datefrom) : null;
+    const dateTo = formValues.dateto ? moment(formValues.dateto) : null;
+    const minDate = (studyCampaigns.details.length > 1) ? moment(studyCampaigns.details[1].dateTo).add(1, 'days') : null;
+    let isLatest = false;
+    if (formValues.campaign_id && studyCampaigns.details.length > 0) {
+      const latestCampaign = studyCampaigns.details.filter(c => c.id === formValues.campaign_id)[0];
+      if (latestCampaign) {
+        isLatest = latestCampaign.orderNumber === studyCampaigns.details.length;
+      }
+    }
 
     return (
       <Collapse
@@ -103,7 +126,7 @@ export class CampaignPageModal extends React.Component {
             </div>
             <Form
               className="holder landing-holder"
-              onSubmit={handleSubmit}
+              onSubmit={this.submitCampaignForm}
               noValidate="novalidate"
             >
               <div className="frame">
@@ -147,10 +170,12 @@ export class CampaignPageModal extends React.Component {
                   <div className="field">
                     <Field
                       id="start-date"
-                      name="campaign_datefrom"
+                      name="datefrom"
                       component={DatePicker}
-                      className="form-control datepicker-input"
-                      initialDate={campaignDateFrom}
+                      className={`form-control datepicker-input ${isLatest ? '' : 'disabled'}`}
+                      initialDate={dateFrom}
+                      isDisabled={!isLatest}
+                      minDate={minDate}
                     />
                   </div>
                 </div>
@@ -161,10 +186,12 @@ export class CampaignPageModal extends React.Component {
                   <div className="field">
                     <Field
                       id="end-date"
-                      name="campaign_dateto"
+                      name="dateto"
                       component={DatePicker}
-                      className="form-control datepicker-input"
-                      initialDate={campaignDateTo}
+                      className={`form-control datepicker-input ${isLatest ? '' : 'disabled'}`}
+                      initialDate={dateTo}
+                      isDisabled={!isLatest}
+                      minDate={moment(formValues.datefrom)}
                     />
                   </div>
                 </div>
@@ -177,6 +204,19 @@ export class CampaignPageModal extends React.Component {
                       type="text"
                       name="custom_patient_goal"
                       component={Input}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-first-name">PQS</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      name="patient_qualification_suite"
+                      component={Toggle}
+                      className="field"
+                      onChange={(e) => { change('patientQualificationSuite', e.toString()); }}
                     />
                   </div>
                 </div>
@@ -199,9 +239,15 @@ export class CampaignPageModal extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  formError: selectSyncErrorBool(formName),
-  newList: selectValues(formName),
-  studyCampaigns: selectStudyCampaigns(),
+  studyCampaigns: selectDashboardCampaigns(),
+  updateCampaignProcess: selectDashboardEditCampaignProcess(),
+  formValues: selectValues(formName),
 });
+function mapDispatchToProps(dispatch) {
+  return {
+    change: (name, value) => dispatch(change(formName, name, value)),
+    fetchCampaignsByStudy: (id) => dispatch(fetchCampaignsByStudy(id)),
+  };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(CampaignPageModal);
