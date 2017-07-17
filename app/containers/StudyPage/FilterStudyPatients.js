@@ -49,7 +49,7 @@ class FilterStudyPatientsForm extends Component {
   }
 
   searchPatient(event, type) {
-    const { fetchPatients, fetchStudy, studyId, campaign, source, search } = this.props;
+    const { fetchPatients, fetchStudyTextNewStats, studyId, campaign, source, search } = this.props;
     let newCampaign = campaign;
     let newSource = source;
     /* nulling the values if all is selected */
@@ -67,7 +67,7 @@ class FilterStudyPatientsForm extends Component {
         fetchPatients(studyId, search, newCampaign, null);
       } else {
         fetchPatients(studyId, search, newCampaign, event);
-        this.props.fetchStudyTextNewStats(studyId, newCampaign, event);
+        fetchStudyTextNewStats(studyId, newCampaign, event);
       }
     } else {
       /* -1 means all was selected */
@@ -76,9 +76,11 @@ class FilterStudyPatientsForm extends Component {
       });
       if (event === -1) {
         fetchPatients(studyId, search, null, newSource);
+        fetchStudyTextNewStats(studyId, null, newSource);
+      } else {
+        fetchPatients(studyId, search, event, newSource);
+        fetchStudyTextNewStats(studyId, event, newSource);
       }
-      fetchPatients(studyId, search, event, newSource);
-      fetchStudy(studyId, event);
     }
   }
 
