@@ -856,7 +856,7 @@ export default function appReducer(state = initialState, action) {
           stats: {
             total: state.baseData.patientMessages.stats.total,
             unreadEmails: state.baseData.patientMessages.stats.unreadEmails,
-            unreadTexts: state.baseData.patientMessages.stats.unreadTexts + unreadCount,
+            unreadTexts: state.baseData.patientMessages.stats.unreadTexts,
           },
         },
       };
