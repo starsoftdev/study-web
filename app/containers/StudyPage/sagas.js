@@ -27,7 +27,6 @@ SUBMIT_PATIENT_IMPORT,
 SUBMIT_ADD_PATIENT,
 SUBMIT_PATIENT_NOTE,
 SUBMIT_DELETE_NOTE,
-SUBMIT_PATIENT_TEXT,
 SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
 SUBMIT_SCHEDULE,
 DELETE_PATIENT,
@@ -57,7 +56,6 @@ import {
   removePatientIndicationSuccess,
   updatePatientSuccess,
   addPatientNoteSuccess,
-  addPatientTextSuccess,
   movePatientBetweenCategoriesLoading,
   movePatientBetweenCategoriesSuccess,
   movePatientBetweenCategoriesFailed,
@@ -223,10 +221,9 @@ function* fetchStudyTextStats(action) {
   if (!authToken) {
     return;
   }
-//
   // listen for the latest FETCH_STUDY action
-  const { studyId, campaignId } = action;
-//
+  const { studyId, campaignId, sourceId } = action;
+
   try {
     const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
     const options = {
@@ -236,6 +233,9 @@ function* fetchStudyTextStats(action) {
     if (campaignId) {
       options.query.campaignId = campaignId;
     }
+    if (sourceId) {
+      options.query.sourceId = sourceId;
+    }
     const response = yield call(request, requestURL, options);
     yield put(textStatsFetched(response));
   } catch (e) {
@@ -243,39 +243,6 @@ function* fetchStudyTextStats(action) {
     yield put(toastrActions.error('', errorMessage));
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
-    }
-  }
-}
-
-// TODO re-enable when optimized for high traffic
-function* fetchStudyTextNewStats() {
-  while (true) {
-    // listen for the FETCH_STUDY action
-    const { studyId, campaignId, sourceId } = yield take(FETCH_STUDY_NEW_TEXTS);
-    const authToken = getItem('auth_token');
-    if (!authToken) {
-      return;
-    }
-    try {
-      const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
-      const queryOptions = {};
-      if (campaignId) {
-        queryOptions.campaignId = campaignId;
-      }
-      if (sourceId) {
-        queryOptions.sourceId = sourceId;
-      }
-      const response = yield call(request, requestURL, {
-        method: 'GET',
-        query: queryOptions,
-      });
-      yield put(textStatsFetched(response));
-    } catch (e) {
-      const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
-      if (e.status === 401) {
-        yield call(() => { location.href = '/login'; });
-      }
     }
   }
 }
@@ -429,7 +396,7 @@ function* fetchPatients(studyId, text, campaignId, sourceId) {
 function* fetchPatientDetails() {
   while (true) {
     // listen for the FETCH_PATIENT_DETAILS action
-    const { patientId } = yield take(FETCH_PATIENT_DETAILS);
+    const { patientId, patientCategoryId } = yield take(FETCH_PATIENT_DETAILS);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -514,7 +481,7 @@ function* fetchPatientDetails() {
         delete mappedTextMessage.user_id;
         return mappedTextMessage;
       });
-      yield put(patientDetailsFetched(patientId, response));
+      yield put(patientDetailsFetched(patientId, patientCategoryId, response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while fetching patient information. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
@@ -566,7 +533,7 @@ function* findPatientsSaga() {
 function* addPatientIndication() {
   while (true) {
     // listen for the SUBMIT_ADD_PATIENT_INDICATION action
-    const { patientId, indication } = yield take(ADD_PATIENT_INDICATION);
+    const { patientId, patientCategoryId, indication } = yield take(ADD_PATIENT_INDICATION);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -581,9 +548,9 @@ function* addPatientIndication() {
           indicationId: indication.id,
         }),
       });
-      yield put(addPatientIndicationSuccess(patientId, indication, payload.isOriginal));
+      yield put(addPatientIndicationSuccess(patientId, patientCategoryId, indication, payload.isOriginal));
       if (payload && payload.patient) {
-        yield put(updatePatientSuccess(payload.patient));
+        yield put(updatePatientSuccess(patientId, patientCategoryId, payload.patient));
       }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
@@ -631,7 +598,7 @@ function* submitMovePatientBetweenCategories() {
 function* removePatientIndication() {
   while (true) {
     // listen for the SUBMIT_REMOVE_PATIENT_INDICATION action
-    const { patientId, indicationId } = yield take(REMOVE_PATIENT_INDICATION);
+    const { patientId, patientCategoryId, indicationId } = yield take(REMOVE_PATIENT_INDICATION);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -647,9 +614,9 @@ function* removePatientIndication() {
         }),
       });
 
-      yield put(removePatientIndicationSuccess(patientId, indicationId, response && response.patient ? response.patient : null));
+      yield put(removePatientIndicationSuccess(patientId, patientCategoryId, indicationId, response && response.patient ? response.patient : null));
       if (response && response.patient) {
-        yield put(updatePatientSuccess(response.patient));
+        yield put(updatePatientSuccess(patientId, patientCategoryId, response.patient));
       }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while removing the patient indication. Please try again later.');
@@ -664,7 +631,7 @@ function* removePatientIndication() {
 function* submitPatientUpdate() {
   while (true) {
     // listen for the SUBMIT_PATIENT_UPDATE action
-    const { patientId, fields } = yield take(SUBMIT_PATIENT_UPDATE);
+    const { patientId, patientCategoryId, fields } = yield take(SUBMIT_PATIENT_UPDATE);
     const authToken = getItem('auth_token');
     const userId = getItem('user_id');
     if (!authToken) {
@@ -677,7 +644,7 @@ function* submitPatientUpdate() {
         method: 'PATCH',
         body: JSON.stringify({ ...fields, userId }),
       });
-      yield put(updatePatientSuccess(response));
+      yield put(updatePatientSuccess(patientId, patientCategoryId, response));
     } catch (e) {
       let errorMessage = get(e, 'message', 'Something went wrong while updating patient information. Please try again later.');
       if (errorMessage.includes('email')) {
@@ -693,7 +660,7 @@ function* submitPatientUpdate() {
 function* submitPatientNote() {
   while (true) {
     // listen for the SUBMIT_PATIENT_NOTE action
-    const { patientId, studyId, currentUser, note } = yield take(SUBMIT_PATIENT_NOTE);
+    const { patientId, patientCategoryId, studyId, currentUser, note } = yield take(SUBMIT_PATIENT_NOTE);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -708,9 +675,9 @@ function* submitPatientNote() {
           note,
         }),
       });
-      yield put(addPatientNoteSuccess(currentUser, response));
+      yield put(addPatientNoteSuccess(patientId, patientCategoryId, currentUser, response));
       if (response && response.patient) {
-        yield put(updatePatientSuccess(response.patient));
+        yield put(updatePatientSuccess(patientId, patientCategoryId, response.patient));
       }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding a patient note. Please try again later.');
@@ -725,7 +692,7 @@ function* submitPatientNote() {
 function* submitDeleteNote() {
   while (true) {
     // listen for the SUBMIT_DELETE_NOTE action
-    const { patientId, noteId } = yield take(SUBMIT_DELETE_NOTE);
+    const { patientId, patientCategoryId, noteId } = yield take(SUBMIT_DELETE_NOTE);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -736,41 +703,12 @@ function* submitDeleteNote() {
       const response = yield call(request, requestURL, {
         method: 'DELETE',
       });
-      yield put(deletePatientNoteSuccess(noteId));
+      yield put(deletePatientNoteSuccess(patientId, patientCategoryId, noteId));
       if (response && response.patient) {
-        yield put(updatePatientSuccess(response.patient));
+        yield put(updatePatientSuccess(patientId, patientCategoryId, response.patient));
       }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding a patient note. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
-      if (e.status === 401) {
-        yield call(() => { location.href = '/login'; });
-      }
-    }
-  }
-}
-
-function* submitPatientText() {
-  while (true) {
-    // listen for the SUBMIT_PATIENT_TEXT action
-    const { id, studyId, message } = yield take(SUBMIT_PATIENT_TEXT);
-    const authToken = getItem('auth_token');
-    if (!authToken) {
-      return;
-    }
-
-    try {
-      const requestURL = `${API_URL}/patients/${id}/textMessages`;
-      const response = yield call(request, requestURL, {
-        method: 'POST',
-        body: JSON.stringify({
-          study_id: studyId,
-          message,
-        }),
-      });
-      yield put(addPatientTextSuccess(response));
-    } catch (e) {
-      const errorMessage = get(e, 'message', 'Something went wrong while sending a patient text. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -934,7 +872,10 @@ export function* fetchStudySaga() {
     const watcherB = yield fork(takeLatest, FETCH_STUDY, fetchStudyViewsStat);
     const watcherC = yield fork(takeLatest, FETCH_STUDY, fetchPatientReferralStat);
     // const watcherD = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
+    // watch for initial fetch actions that will load the text message stats
     const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
+    // watch for socket.io or filtering actions that will refresh the text message stats
+    const refreshTextStatsWatcher = yield fork(takeLatest, FETCH_STUDY_NEW_TEXTS, fetchStudyTextStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);
     const watcherH = yield fork(exportPatients);
@@ -949,10 +890,8 @@ export function* fetchStudySaga() {
     const watcherR = yield fork(submitAddPatient);
     const watcherS = yield fork(submitPatientNote);
     const watcherT = yield fork(submitDeleteNote);
-    const watcherU = yield fork(submitPatientText);
     const watcherV = yield fork(submitSchedule);
     const watcherW = yield fork(downloadReport);
-    const watcherZ = yield fork(fetchStudyTextNewStats);
     const deletePatientWatcher = yield fork(deletePatient);
 
     yield take(LOCATION_CHANGE);
@@ -961,6 +900,7 @@ export function* fetchStudySaga() {
     yield cancel(watcherC);
     // yield cancel(watcherD);
     yield cancel(watcherE);
+    yield cancel(refreshTextStatsWatcher);
     yield cancel(watcherF);
     yield cancel(watcherG);
     yield cancel(watcherH);
@@ -975,10 +915,8 @@ export function* fetchStudySaga() {
     yield cancel(watcherR);
     yield cancel(watcherS);
     yield cancel(watcherT);
-    yield cancel(watcherU);
     yield cancel(watcherV);
     yield cancel(watcherW);
-    yield cancel(watcherZ);
     yield cancel(deletePatientWatcher);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
