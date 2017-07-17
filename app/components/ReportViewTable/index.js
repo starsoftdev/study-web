@@ -169,6 +169,9 @@ export class ReportViewTable extends React.Component {
     const rightPartTable = reportsList.details.map((item, index) => {
       const percentage = this.props.getPercentageObject(item);
 
+      const countTotal = parseInt(item.count_not_contacted || 0) + parseInt(item.call_attempted || 0) + parseInt(item.dnq || 0) + parseInt(item.action_needed || 0) + parseInt(item.scheduled || 0) + parseInt(item.consented || 0) + parseInt(item.screen_failed || 0) + parseInt(item.randomized || 0);
+      const countContacted = parseInt(item.call_attempted || 0) + parseInt(item.dnq || 0) + parseInt(item.action_needed || 0) + parseInt(item.scheduled || 0) + parseInt(item.consented || 0) + parseInt(item.screen_failed || 0) + parseInt(item.randomized || 0);
+
       return (
         <tr
           onMouseOver={(e) => this.mouseOverRow(e, index)}
@@ -182,16 +185,16 @@ export class ReportViewTable extends React.Component {
           <td className="level_date_from">{item.levelDateFrom}</td>
           <td className="level_date_to">{item.levelDateTo}</td>
           <td className="last_login_time">{ (item.last_login_time ? moment(item.last_login_time).tz(item.timezone).format('MM/DD/YY [at] h:mm A') : '')}</td>
-          <td className="count_total">{item.count_total}</td>
-          <td className="count_contacted"><span className="text">{item.count_contacted}<span className="small">{`(${percentage.count_contacted_p}%)`}</span></span></td>
-          <td className="count_not_contacted"><span className="text">{item.count_not_contacted}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></td>
-          <td className="call_attempted"><span className="text">{item.call_attempted}<span className="small">{`(${percentage.call_attempted_p}%)`}</span></span></td>
-          <td className="dnq"><span className="text" onClick={() => { this.props.openDnqModal(item.study_id); }}>{item.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></td>
-          <td className="action_needed"><span className="text">{item.action_needed}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span></td>
-          <td className="scheduled"><span className="text">{item.scheduled}<span className="small">{`(${percentage.scheduled_p}%)`}</span></span></td>
-          <td className="consented"><span className="text">{item.consented}<span className="small">{`(${percentage.consented_p}%)`}</span></span></td>
-          <td className="screen_failed"><span className="text">{item.screen_failed}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span></td>
-          <td className="randomized"><span className="text">{item.randomized}<span className="small">{`(${percentage.randomized_p}%)`}</span></span></td>
+          <td className="count_total">{countTotal}</td>
+          <td className="count_contacted"><span className="text">{countContacted}<span className="small">{`(${percentage.count_contacted_p}%)`}</span></span></td>
+          <td className="count_not_contacted"><span className="text">{item.count_not_contacted || 0}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></td>
+          <td className="call_attempted"><span className="text">{item.call_attempted || 0}<span className="small">{`(${percentage.call_attempted_p}%)`}</span></span></td>
+          <td className="dnq"><span className="text" onClick={() => { this.props.openDnqModal(item.study_id); }}>{item.dnq || 0}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></td>
+          <td className="action_needed"><span className="text">{item.action_needed || 0}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span></td>
+          <td className="scheduled"><span className="text">{item.scheduled || 0}<span className="small">{`(${percentage.scheduled_p}%)`}</span></span></td>
+          <td className="consented"><span className="text">{item.consented || 0}<span className="small">{`(${percentage.consented_p}%)`}</span></span></td>
+          <td className="screen_failed"><span className="text">{item.screen_failed || 0}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span></td>
+          <td className="randomized"><span className="text">{item.randomized || 0}<span className="small">{`(${percentage.randomized_p}%)`}</span></span></td>
           <td className="outbound_text">{item.outbound_text}</td>
           <td className="inbound_text">{item.inbound_text}</td>
           <td className="unread_text">{item.unread_text}</td>

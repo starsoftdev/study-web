@@ -18,6 +18,7 @@ EXPORT_PATIENTS,
 FETCH_PATIENT_DETAILS,
 FETCH_PATIENT_CATEGORIES,
 FETCH_STUDY,
+FETCH_STUDY_NEW_TEXTS,
 ADD_PATIENT_INDICATION,
 REMOVE_PATIENT_INDICATION,
 SUBMIT_PATIENT_UPDATE,
@@ -30,6 +31,7 @@ SUBMIT_PATIENT_TEXT,
 SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
 SUBMIT_SCHEDULE,
 DELETE_PATIENT,
+DOWNLOAD_CLIENT_REPORT,
 } from './constants';
 
 import {
@@ -49,6 +51,7 @@ import {
   studyViewsStatFetched,
   submitAddPatientSuccess,
   submitAddPatientFailure,
+  textStatsFetched,
   patientReferralStatFetched,
   addPatientIndicationSuccess,
   removePatientIndicationSuccess,
@@ -215,59 +218,67 @@ function* fetchPatientReferralStat(action) {
 //   }
 // }
 
-// function* fetchStudyTextStats(action) {
-//   const authToken = getItem('auth_token');
-//   if (!authToken) {
-//     return;
-//   }
+function* fetchStudyTextStats(action) {
+  const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 //
-//   // listen for the latest FETCH_STUDY action
-//   const { studyId, campaignId } = action;
+  // listen for the latest FETCH_STUDY action
+  const { studyId, campaignId } = action;
 //
-//   try {
-//     const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
-//     const options = {
-//       method: 'GET',
-//       query: {},
-//     };
-//     if (campaignId) {
-//       options.query.campaignId = campaignId;
-//     }
-//     const response = yield call(request, requestURL, options);
-//     yield put(textStatsFetched(response));
-//   } catch (e) {
-//     const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
-//     yield put(toastrActions.error('', errorMessage));
-//     if (e.status === 401) {
-//       yield call(() => { location.href = '/login'; });
-//     }
-//   }
-// }
+  try {
+    const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
+    const options = {
+      method: 'GET',
+      query: {},
+    };
+    if (campaignId) {
+      options.query.campaignId = campaignId;
+    }
+    const response = yield call(request, requestURL, options);
+    yield put(textStatsFetched(response));
+  } catch (e) {
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
+    yield put(toastrActions.error('', errorMessage));
+    if (e.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
 
 // TODO re-enable when optimized for high traffic
-// function* fetchStudyTextNewStats() {
-//   while (true) {
-//     // listen for the FETCH_STUDY action
-//     const { studyId } = yield take(FETCH_STUDY_NEW_TEXTS);
-//     const authToken = getItem('auth_token');
-//     if (!authToken) {
-//       return;
-//     }
-//     try {
-//       const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
-//       const response = yield call(request, requestURL, {
-//         method: 'GET',
-//       });
-//       yield put(textStatsFetched(response));
-//     } catch (e) {
-//       const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
-//       yield put(toastrActions.error('', errorMessage));
-//       if (e.status === 401) {
-//         yield call(() => { location.href = '/login'; });
-//       }
-//     }
-//   }
-// }
+function* fetchStudyTextNewStats() {
+  while (true) {
+    // listen for the FETCH_STUDY action
+    const { studyId, campaignId, sourceId } = yield take(FETCH_STUDY_NEW_TEXTS);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+    try {
+      const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
+      const queryOptions = {};
+      if (campaignId) {
+        queryOptions.campaignId = campaignId;
+      }
+      if (sourceId) {
+        queryOptions.sourceId = sourceId;
+      }
+      const response = yield call(request, requestURL, {
+        method: 'GET',
+        query: queryOptions,
+      });
+      yield put(textStatsFetched(response));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+      if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
 
 function* fetchPatientCategories() {
   const authToken = getItem('auth_token');
@@ -301,7 +312,7 @@ function* fetchPatientCategories() {
 export function* exportPatients() {
   while (true) {
     // listen for the FETCH_PATIENTS action
-    const { studyId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
+    const { studyId, userId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -315,6 +326,9 @@ export function* exportPatients() {
       if (campaignId) {
         requestURL += `&campaignId=${campaignId}`;
       }
+      if (userId) {
+        requestURL += `&userId=${userId}`;
+      }
       if (sourceId) {
         requestURL += `&sourceId=${sourceId}`;
       }
@@ -322,7 +336,9 @@ export function* exportPatients() {
         requestURL += `&text=${encodeURIComponent(text)}`;
       }
 
-      location.replace(`${requestURL}`);
+      yield call(request, requestURL, {
+        method: 'GET',
+      });
       yield put(patientsExported());
     } catch (e) {
       // if returns forbidden we remove the token from local storage
@@ -330,6 +346,32 @@ export function* exportPatients() {
         removeItem('auth_token');
       }
       const errorMessage = get(e, 'message', 'Something went wrong while fetching patients. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+      if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
+export function* downloadReport() {
+  while (true) {
+    // listen for the DOWNLOAD_CLIENT_REPORT action
+    const { reportName } = yield take(DOWNLOAD_CLIENT_REPORT);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/downloadClientReport?access_token=${authToken}&reportName=${reportName}`;
+      location.replace(`${requestURL}`);
+    } catch (e) {
+      // if returns forbidden we remove the token from local storage
+      if (e.status === 401) {
+        removeItem('auth_token');
+      }
+      const errorMessage = get(e, 'message', 'Something went wrong while downloading report. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -892,7 +934,7 @@ export function* fetchStudySaga() {
     const watcherB = yield fork(takeLatest, FETCH_STUDY, fetchStudyViewsStat);
     const watcherC = yield fork(takeLatest, FETCH_STUDY, fetchPatientReferralStat);
     // const watcherD = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
-    // const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
+    const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);
     const watcherH = yield fork(exportPatients);
@@ -909,15 +951,16 @@ export function* fetchStudySaga() {
     const watcherT = yield fork(submitDeleteNote);
     const watcherU = yield fork(submitPatientText);
     const watcherV = yield fork(submitSchedule);
+    const watcherW = yield fork(downloadReport);
+    const watcherZ = yield fork(fetchStudyTextNewStats);
     const deletePatientWatcher = yield fork(deletePatient);
-    // const watcherZ = yield fork(fetchStudyTextNewStats);
 
     yield take(LOCATION_CHANGE);
     yield cancel(watcherA);
     yield cancel(watcherB);
     yield cancel(watcherC);
     // yield cancel(watcherD);
-    // yield cancel(watcherE);
+    yield cancel(watcherE);
     yield cancel(watcherF);
     yield cancel(watcherG);
     yield cancel(watcherH);
@@ -934,8 +977,9 @@ export function* fetchStudySaga() {
     yield cancel(watcherT);
     yield cancel(watcherU);
     yield cancel(watcherV);
+    yield cancel(watcherW);
+    yield cancel(watcherZ);
     yield cancel(deletePatientWatcher);
-    // yield cancel(watcherZ);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

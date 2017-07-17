@@ -21,6 +21,7 @@ import {
   deleteClientAdmin,
   fetchUsersByRoles,
   setActiveSort,
+  setSearchQuery,
 } from './actions';
 import {
   selectDashboardAddMessagingProcess,
@@ -55,12 +56,14 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
     setActiveSort: PropTypes.func,
     editMessagingNumber: PropTypes.func,
     addMessagingNumber: PropTypes.func,
+    setSearchQuery: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
 
     this.loadMore = this.loadMore.bind(this);
+    this.onSubmitQuery = this.onSubmitQuery.bind(this);
   }
 
   componentWillMount() {
@@ -71,13 +74,21 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
     this.props.getAvailPhoneNumbers();
   }
 
-  loadMore() {
+  onSubmitQuery(query) {
     const { fetchClientAdmins } = this.props;
-    const offset = this.props.paginationOptions.page * 10;
+    this.props.setSearchQuery(query);
+    const offset = 0;
     const limit = 10;
-    fetchClientAdmins(limit, offset);
+    fetchClientAdmins(query, limit, offset);
   }
 
+  loadMore() {
+    const { fetchClientAdmins } = this.props;
+    const query = this.props.paginationOptions.query;
+    const offset = this.props.paginationOptions.page * 10;
+    const limit = 10;
+    fetchClientAdmins(query, limit, offset);
+  }
 
   render() {
     const { addMessagingProcess, addMessagingNumber, editMessagingProcess, availPhoneNumbers, editMessagingNumber, clientSites, usersByRoles, clientAdmins, editUserProcess, addClientAdmin, editClientAdmin, deleteClientAdmin, setActiveSort, clientAdminSearchFormValues } = this.props;
@@ -91,6 +102,7 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
           addClientAdmin={addClientAdmin}
           usersByRoles={usersByRoles}
           editUserProcess={editUserProcess}
+          onSubmitQuery={this.onSubmitQuery}
         />
         <DashboardClientAdminsTable
           loadMore={this.loadMore}
@@ -129,7 +141,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchSites:       () => dispatch(fetchSites()),
     getAvailPhoneNumbers: () => dispatch(getAvailPhoneNumbers()),
-    fetchClientAdmins: (limit, offset) => dispatch(fetchClientAdmin(limit, offset)),
+    fetchClientAdmins: (query, limit, offset) => dispatch(fetchClientAdmin(query, limit, offset)),
     fetchUsersByRoles: () => dispatch(fetchUsersByRoles()),
     addClientAdmin: (payload) => dispatch(addClientAdmin(payload)),
     editClientAdmin: (payload) => dispatch(editClientAdmin(payload)),
@@ -137,6 +149,7 @@ function mapDispatchToProps(dispatch) {
     editMessagingNumber: (payload) => dispatch(editMessagingNumber(payload)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
     addMessagingNumber: (payload) => dispatch(addMessagingNumber(payload)),
+    setSearchQuery: (query) => dispatch(setSearchQuery(query)),
   };
 }
 
