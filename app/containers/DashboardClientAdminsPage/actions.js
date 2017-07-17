@@ -34,6 +34,7 @@ import {
   ADD_MESSAGING_NUMBER,
   ADD_MESSAGING_NUMBER_SUCCESS,
   ADD_MESSAGING_NUMBER_ERROR,
+  SET_SEARCH_QUERY,
 } from './constants';
 
 export function addMessagingNumber(payload) {
@@ -98,9 +99,10 @@ export function getAvailPhoneNumbersError(payload) {
   };
 }
 
-export function fetchClientAdmin(limit, offset) {
+export function fetchClientAdmin(query, limit, offset) {
   return {
     type: FETCH_CLIENT_ADMINS,
+    query,
     limit,
     offset,
   };
@@ -236,6 +238,13 @@ export function setActiveSort(sort, direction) {
     type: SET_ACTIVE_SORT,
     sort,
     direction,
+  };
+}
+
+export function setSearchQuery(query) {
+  return {
+    type: SET_SEARCH_QUERY,
+    query,
   };
 }
 
