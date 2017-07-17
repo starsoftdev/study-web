@@ -915,7 +915,6 @@ export function* fetchStudySaga() {
     yield cancel(watcherR);
     yield cancel(watcherS);
     yield cancel(watcherT);
-    yield cancel(watcherU);
     yield cancel(watcherV);
     yield cancel(watcherW);
     yield cancel(deletePatientWatcher);
