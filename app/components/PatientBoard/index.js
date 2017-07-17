@@ -33,7 +33,7 @@ import {
   updatePatientSuccess,
 } from '../../containers/StudyPage/actions';
 import { selectCurrentUser } from '../../containers/App/selectors';
-import { markAsReadPatientMessages } from '../../containers/App/actions';
+import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../containers/App/actions';
 import { fields } from '../../containers/StudyPage/ScheduledPatientModal/validator';
 import * as Selector from '../../containers/StudyPage/selectors';
 import PatientCategory from './PatientCategory';
@@ -67,6 +67,7 @@ class PatientBoard extends React.Component {
     schedulePatientFormErrors: React.PropTypes.object,
     selectedDate: React.PropTypes.object,
     markAsReadPatientMessages: React.PropTypes.func,
+    deleteMessagesCountStat: React.PropTypes.func,
     studyId: React.PropTypes.number,
     setFormValueByName: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
@@ -135,7 +136,7 @@ class PatientBoard extends React.Component {
       setOpenPatientModal,
       switchToTextSection,
       readStudyPatientMessages,
-      markAsReadPatientMessages,
+      deleteMessagesCountStat,
     } = this.props;
     const show = (patient && currentPatientId !== patient.id) || false;
     if (show) {
@@ -143,7 +144,8 @@ class PatientBoard extends React.Component {
       setCurrentPatientCategoryId(category.id);
       fetchPatientDetails(patient.id, category.id);
       readStudyPatientMessages(patient.id);
-      markAsReadPatientMessages(patient.id);
+      // markAsReadPatientMessages(patient.id);
+      deleteMessagesCountStat(patient.unreadMessageCount);
       this.props.updatePatientSuccess(patient.id, category.id, {
         unreadMessageCount: 0,
       });
@@ -306,6 +308,7 @@ const mapDispatchToProps = (dispatch) => (
     push: (url) => dispatch(push(url)),
     readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
     markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
+    deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
     setFormValueByName: (name, attrName, value) => dispatch(change(name, attrName, value)),
     touchSchedulePatientModal: () => dispatch(touch('ScheduledPatientModal', ...fields)),
     submitSchedule: (data, fromCategoryId, scheduleCategoryId) => dispatch(submitSchedule(data, fromCategoryId, scheduleCategoryId)),
