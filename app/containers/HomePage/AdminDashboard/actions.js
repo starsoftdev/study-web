@@ -79,6 +79,12 @@ import {
   FETCH_STUDY_INDICATION_TAG,
   FETCH_STUDY_INDICATION_TAG_SUCCESS,
   FETCH_STUDY_INDICATION_TAG_ERROR,
+  FETCH_CAMPAIGNS_BY_STUDY,
+  FETCH_CAMPAIGNS_BY_STUDY_SUCCESS,
+  FETCH_CAMPAIGNS_BY_STUDY_ERROR,
+  EDIT_CAMPAIGN,
+  EDIT_CAMPAIGN_SUCCESS,
+  EDIT_CAMPAIGN_ERROR,
 
 } from './constants';
 
@@ -608,6 +614,48 @@ export function fetchStudyIndicationTagSuccess(payload) {
 export function fetchStudyIndicationTagError(payload) {
   return {
     type: FETCH_STUDY_INDICATION_TAG_ERROR,
+    payload,
+  };
+}
+
+export function fetchCampaignsByStudy(payload) {
+  return {
+    type: FETCH_CAMPAIGNS_BY_STUDY,
+    payload,
+  };
+}
+
+export function fetchCampaignsByStudySuccess(payload) {
+  return {
+    type: FETCH_CAMPAIGNS_BY_STUDY_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchCampaignsByStudyError(payload) {
+  return {
+    type: FETCH_CAMPAIGNS_BY_STUDY_ERROR,
+    payload,
+  };
+}
+
+export function editCampaign(payload) {
+  return {
+    type: EDIT_CAMPAIGN,
+    payload,
+  };
+}
+
+export function editCampaignSuccess(payload) {
+  return {
+    type: EDIT_CAMPAIGN_SUCCESS,
+    payload,
+  };
+}
+
+export function editCampaignError(payload) {
+  return {
+    type: EDIT_CAMPAIGN_ERROR,
     payload,
   };
 }

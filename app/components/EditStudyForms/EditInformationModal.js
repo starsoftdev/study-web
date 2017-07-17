@@ -306,7 +306,7 @@ export class EditInformationModal extends React.Component {
 
     const messagingNumbersOptions = messagingNumbers.details.map(item => ({ value: item.id, label: item.phone_number }));
     if (formValues.text_number_id) {
-      messagingNumbers.unshift({
+      messagingNumbers.details.unshift({
         value: formValues.text_number_id,
         label: formValues.phone_number,
       });
@@ -576,19 +576,6 @@ export class EditInformationModal extends React.Component {
                       component={Toggle}
                       className="field"
                       onChange={(e) => { change('patientMessagingSuite', e.toString()); }}
-                    />
-                  </div>
-                </div>
-                <div className="field-row">
-                  <strong className="label">
-                    <label htmlFor="new-patient-first-name">PQS</label>
-                  </strong>
-                  <div className="field">
-                    <Field
-                      name="patient_qualification_suite"
-                      component={Toggle}
-                      className="field"
-                      onChange={(e) => { change('patientQualificationSuite', e.toString()); }}
                     />
                   </div>
                 </div>

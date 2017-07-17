@@ -154,6 +154,16 @@ const selectDashboardEditNoteProcess = () => createSelector(
   (substate) => substate.editNoteProcess
 );
 
+const selectDashboardCampaigns = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.campaigns
+);
+
+const selectDashboardEditCampaignProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.editCampaignProcess
+);
+
 export default selectDashboardPage;
 export {
   selectDashboardPageDomain,
@@ -185,4 +195,6 @@ export {
   selectUpdatedStudyAd,
   selectHoverRowIndex,
   selectStudyIndicationTags,
+  selectDashboardCampaigns,
+  selectDashboardEditCampaignProcess,
 };
