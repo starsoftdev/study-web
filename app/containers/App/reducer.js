@@ -131,6 +131,9 @@ import {
   SUBMIT_CNS,
   SUBMIT_CNS_SUCCESS,
   SUBMIT_CNS_ERROR,
+
+  ADD_MESSAGES_COUNT_STAT,
+  DELETE_MESSAGES_COUNT_STAT,
 } from './constants';
 
 import {
@@ -790,10 +793,8 @@ export default function appReducer(state = initialState, action) {
       break;
     case FETCH_SITE_PATIENTS_SUCCESS:
       if (action.page === 1) {
-        console.log(1);
         newPatientsList = payload;
       } else {
-        console.log(2, patientsCopy);
         newPatientsList = patientsCopy.concat(payload);
       }
       baseDataInnerState = {
@@ -855,7 +856,7 @@ export default function appReducer(state = initialState, action) {
           stats: {
             total: state.baseData.patientMessages.stats.total,
             unreadEmails: state.baseData.patientMessages.stats.unreadEmails,
-            unreadTexts: state.baseData.patientMessages.stats.unreadTexts + unreadCount,
+            unreadTexts: state.baseData.patientMessages.stats.unreadTexts,
           },
         },
       };
@@ -882,7 +883,7 @@ export default function appReducer(state = initialState, action) {
           stats: {
             total: state.baseData.patientMessages.stats.total || 0,
             unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
-            unreadTexts: state.baseData.patientMessages.stats.unreadText || 0,
+            unreadTexts: (state.baseData.patientMessages.stats.unreadTexts - unreadCount) || 0,
           },
         },
       };
@@ -955,9 +956,9 @@ export default function appReducer(state = initialState, action) {
           fetching: true,
           error: null,
           stats: {
-            total: state.baseData.patientMessages.stats || 0,
-            unreadEmails: state.baseData.patientMessages.stats || 0,
-            unreadTexts: state.baseData.patientMessages.stats || 0,
+            total: state.baseData.patientMessages.stats.total || 0,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
+            unreadTexts: state.baseData.patientMessages.stats.unreadTexts || 0,
           },
         },
       };
@@ -970,14 +971,42 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
           stats: {
-            total: state.baseData.patientMessages.stats || 0,
-            unreadEmails: state.baseData.patientMessages.stats || 0,
-            unreadTexts: state.baseData.patientMessages.stats || 0,
+            total: state.baseData.patientMessages.stats.total || 0,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
+            unreadTexts: state.baseData.patientMessages.stats.unreadTexts || 0,
           },
         },
       };
-
-
+      break;
+    case ADD_MESSAGES_COUNT_STAT:
+      baseDataInnerState = {
+        patientMessages: {
+          ...state.baseData.patientMessages,
+          details: state.baseData.patientMessages.details,
+          fetching: false,
+          error: null,
+          stats: {
+            total: state.baseData.patientMessages.stats.total || 0,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
+            unreadTexts: (parseInt(state.baseData.patientMessages.stats.unreadTexts) + payload) || 0,
+          },
+        },
+      };
+      break;
+    case DELETE_MESSAGES_COUNT_STAT:
+      baseDataInnerState = {
+        patientMessages: {
+          ...state.baseData.patientMessages,
+          details: state.baseData.patientMessages.details,
+          fetching: false,
+          error: null,
+          stats: {
+            total: state.baseData.patientMessages.stats.total || 0,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
+            unreadTexts: (state.baseData.patientMessages.stats.unreadTexts - payload) || 0,
+          },
+        },
+      };
       break;
     case FETCH_PATIENT_MESSAGES_ERROR:
       baseDataInnerState = {
