@@ -40,7 +40,6 @@ export class CampaignPageModal extends React.Component {
     isOnTop: React.PropTypes.bool,
     onClose: PropTypes.func.isRequired,
     openModal: PropTypes.bool.isRequired,
-    handleSubmit: PropTypes.func,
     change: PropTypes.func.isRequired,
   };
 
@@ -81,8 +80,18 @@ export class CampaignPageModal extends React.Component {
 
   submitCampaignForm(e) {
     e.preventDefault();
-    const submitValues = Object.assign({}, this.props.formValues);
-    submitValues.studyId = this.props.study.study_id;
+    const { formValues, study } = this.props;
+    const submitValues = {
+      dateFrom: formValues.datefrom,
+      dateTo: formValues.dateto,
+      campaignId: formValues.campaign_id,
+      levelId: formValues.level_id,
+      patientQualificationSuite: formValues.patient_qualification_suite,
+      studyId: study.study_id,
+    };
+    if (formValues.custom_patient_goal) {
+      submitValues.customPatientGoal = formValues.custom_patient_goal;
+    }
     console.log(submitValues);
     // this.props.handleSubmit()
   }
