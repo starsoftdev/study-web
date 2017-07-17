@@ -30,7 +30,7 @@ class TextBlastModal extends React.Component {
     reset: React.PropTypes.func.isRequired,
     role: React.PropTypes.string,
     show: React.PropTypes.bool.isRequired,
-    campaign: React.PropTypes.object,
+    campaign: React.PropTypes.number,
     ePMS: React.PropTypes.bool,
     studyName: React.PropTypes.string,
   };

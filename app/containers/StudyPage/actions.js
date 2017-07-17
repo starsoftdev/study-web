@@ -56,12 +56,10 @@ import {
   SUBMIT_PATIENT_NOTE,
   SUBMIT_DELETE_NOTE,
   SUBMIT_DELETE_NOTE_SUCCESS,
-  SUBMIT_PATIENT_TEXT,
   ADD_PATIENT_INDICATION_SUCCESS,
   REMOVE_PATIENT_INDICATION_SUCCESS,
   UPDATE_PATIENT_SUCCESS,
   ADD_PATIENT_NOTE_SUCCESS,
-  ADD_PATIENT_TEXT_SUCCESS,
   SWITCH_TO_NOTE_SECTION_DETAIL,
   SWITCH_TO_TEXT_SECTION_DETAIL,
   SWITCH_TO_EMAIL_SECTION_DETAIL,
@@ -198,17 +196,19 @@ export function patientsFetchedError(payload) {
   };
 }
 
-export function fetchPatientDetails(patientId) {
+export function fetchPatientDetails(patientId, patientCategoryId) {
   return {
     type: FETCH_PATIENT_DETAILS,
     patientId,
+    patientCategoryId,
   };
 }
 
-export function patientDetailsFetched(patientId, payload) {
+export function patientDetailsFetched(patientId, patientCategoryId, payload) {
   return {
     type: FETCH_PATIENT_DETAILS_SUCCESS,
     patientId,
+    patientCategoryId,
     payload,
   };
 }
@@ -227,11 +227,10 @@ export function patientCategoriesFetched(payload) {
   };
 }
 
-export function fetchStudy(studyId, campaignId) {
+export function fetchStudy(studyId) {
   return {
     type: FETCH_STUDY,
     studyId,
-    campaignId,
   };
 }
 
@@ -333,66 +332,68 @@ export function setOpenPatientModal(show) {
   };
 }
 
-export function addPatientIndication(patientId, indication) {
+export function addPatientIndication(patientId, patientCategoryId, indication) {
   return {
     type: ADD_PATIENT_INDICATION,
     patientId,
+    patientCategoryId,
     indication,
   };
 }
 
-export function removePatientIndication(patientId, indicationId) {
+export function removePatientIndication(patientId, patientCategoryId, indicationId) {
   return {
     type: REMOVE_PATIENT_INDICATION,
     patientId,
+    patientCategoryId,
     indicationId,
   };
 }
 
-export function submitPatientUpdate(patientId, fields) {
+export function submitPatientUpdate(patientId, patientCategoryId, fields) {
   return {
     type: SUBMIT_PATIENT_UPDATE,
     patientId,
+    patientCategoryId,
     fields,
   };
 }
 
-export function addPatientIndicationSuccess(patientId, indication, isOriginal) {
+export function addPatientIndicationSuccess(patientId, patientCategoryId, indication, isOriginal) {
   return {
     type: ADD_PATIENT_INDICATION_SUCCESS,
     patientId,
+    patientCategoryId,
     indication,
     isOriginal,
   };
 }
 
-export function removePatientIndicationSuccess(patientId, indicationId, payload) {
+export function removePatientIndicationSuccess(patientId, patientCategoryId, indicationId, payload) {
   return {
     type: REMOVE_PATIENT_INDICATION_SUCCESS,
     patientId,
+    patientCategoryId,
     indicationId,
     payload,
   };
 }
 
-export function updatePatientSuccess(payload) {
+export function updatePatientSuccess(patientId, patientCategoryId, payload) {
   return {
     type: UPDATE_PATIENT_SUCCESS,
+    patientId,
+    patientCategoryId,
     payload,
   };
 }
 
-export function addPatientNoteSuccess(currentUser, payload) {
+export function addPatientNoteSuccess(patientId, patientCategoryId, currentUser, payload) {
   return {
     type: ADD_PATIENT_NOTE_SUCCESS,
+    patientId,
+    patientCategoryId,
     currentUser,
-    payload,
-  };
-}
-
-export function addPatientTextSuccess(payload) {
-  return {
-    type: ADD_PATIENT_TEXT_SUCCESS,
     payload,
   };
 }
@@ -474,37 +475,32 @@ export function fetchStudyTextNewStats(studyId, campaignId, sourceId) {
   };
 }
 
-export function submitPatientNote(studyId, patientId, currentUser, note) {
+export function submitPatientNote(studyId, patientId, patientCategoryId, currentUser, note) {
   return {
     type: SUBMIT_PATIENT_NOTE,
     studyId,
     patientId,
+    patientCategoryId,
     currentUser,
     note,
   };
 }
 
-export function submitDeleteNote(patientId, noteId) {
+export function submitDeleteNote(patientId, patientCategoryId, noteId) {
   return {
     type: SUBMIT_DELETE_NOTE,
     patientId,
+    patientCategoryId,
     noteId,
   };
 }
 
-export function deletePatientNoteSuccess(noteId) {
+export function deletePatientNoteSuccess(patientId, patientCategoryId, noteId) {
   return {
     type: SUBMIT_DELETE_NOTE_SUCCESS,
-    noteId,
-  };
-}
-
-export function submitPatientText(studyId, patientId, text) {
-  return {
-    type: SUBMIT_PATIENT_TEXT,
-    studyId,
     patientId,
-    text,
+    patientCategoryId,
+    noteId,
   };
 }
 
