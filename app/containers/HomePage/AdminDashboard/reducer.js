@@ -974,7 +974,19 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case EDIT_CAMPAIGN_SUCCESS:
+    case EDIT_CAMPAIGN_SUCCESS: {
+      // updating the campaigns with the edited object
+      const updatedCampaigns = state.campaigns.details.map(item => (item.id === action.payload.campaignId
+        ? {
+          ...item,
+          dateFrom: action.payload.dateFrom,
+          dateTo: action.payload.dateTo,
+          customPatientGoal: action.payload.customPatientGoal,
+          patientQualificationSuite: action.payload.patientQualificationSuite,
+          level_id: action.payload.levelId,
+        } :
+        item
+      ));
       return {
         ...state,
         editCampaignProcess: {
@@ -982,11 +994,12 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
         campaigns: {
-          details: state.campaign.details.map(item => (item.id === action.payload.id ? action.payload : item)),
+          details: updatedCampaigns,
           fetching: false,
           error: null,
         },
       };
+    }
     case EDIT_CAMPAIGN_ERROR:
       return {
         ...state,

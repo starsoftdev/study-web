@@ -1136,14 +1136,17 @@ export function* editCampaignWatcher() {
 
 export function* editCampaignWorker(action) {
   try {
-    const requestURL = `${API_URL}/campaigns/`;
-
+    const requestURL = `${API_URL}/studies/${action.payload.studyId}/campaigns/${action.payload.campaignId}`;
     const params = {
       method: 'PUT',
-      body: action,
+      body: JSON.stringify(action.payload),
     };
     const response = yield call(request, requestURL, params);
-    yield put(editCampaignSuccess(response));
+    if (response.success) {
+      yield put(editCampaignSuccess(action.payload));
+    } else {
+      yield put(editCampaignError(response));
+    }
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
     yield put(toastrActions.error('', errorMessage));

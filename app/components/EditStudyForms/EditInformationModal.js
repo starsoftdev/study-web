@@ -6,7 +6,6 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 import { arrayRemoveAll, arrayPush, change, Field, FieldArray, reduxForm, blur } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Collapse from 'react-bootstrap/lib/Collapse';
@@ -25,10 +24,6 @@ import { normalizePhoneDisplay } from '../../common/helper/functions';
 import { addStudyIndicationTag, removeStudyIndicationTag } from '../../containers/HomePage/AdminDashboard/actions';
 
 const formName = 'dashboardEditStudyForm';
-const mapStateToProps = createStructuredSelector({
-  // studyCampaigns: selectStudyCampaigns(),
-  // formValues: selectValues(formName),
-});
 
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
@@ -40,7 +35,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 @reduxForm({ form: formName })
-@connect(mapStateToProps, mapDispatchToProps)
+@connect(null, mapDispatchToProps)
 export class EditInformationModal extends React.Component {
   static propTypes = {
     addEmailNotificationClick: PropTypes.func.isRequired,
@@ -306,7 +301,7 @@ export class EditInformationModal extends React.Component {
 
     const messagingNumbersOptions = messagingNumbers.details.map(item => ({ value: item.id, label: item.phone_number }));
     if (formValues.text_number_id) {
-      messagingNumbers.details.unshift({
+      messagingNumbersOptions.unshift({
         value: formValues.text_number_id,
         label: formValues.phone_number,
       });
