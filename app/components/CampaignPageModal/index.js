@@ -20,7 +20,7 @@ import Toggle from '../../components/Input/Toggle';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectValues } from '../../common/selectors/form.selector';
 import { selectDashboardCampaigns, selectDashboardEditCampaignProcess } from '../../containers/HomePage/AdminDashboard/selectors';
-import { fetchCampaignsByStudy } from '../../containers/HomePage/AdminDashboard/actions';
+import { fetchCampaignsByStudy, editCampaign } from '../../containers/HomePage/AdminDashboard/actions';
 
 const formName = 'campaignPageForm';
 
@@ -35,6 +35,7 @@ export class CampaignPageModal extends React.Component {
     studyCampaigns: PropTypes.object,
     updateCampaignProcess: PropTypes.object,
     fetchCampaignsByStudy: PropTypes.func,
+    submitForm: PropTypes.func,
     formValues: PropTypes.object,
     levels: PropTypes.array,
     isOnTop: React.PropTypes.bool,
@@ -51,16 +52,11 @@ export class CampaignPageModal extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.study && newProps.study !== this.props.study) {
-      console.log('study changed to: ', newProps.study.study_id);
-    }
     if (newProps.openModal && !this.props.openModal && this.props.study.study_id) {
-      console.log('fetching campaigns for study: ', this.props.study.study_id);
       this.props.fetchCampaignsByStudy(this.props.study.study_id);
     }
     if (newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
       this.props.studyCampaigns.details !== newProps.studyCampaigns.details) {
-      console.log('new campaigns: ', newProps.studyCampaigns.details);
       this.campaignChanged(newProps.studyCampaigns.details[0].id, newProps.studyCampaigns.details);
     }
   }
@@ -80,20 +76,19 @@ export class CampaignPageModal extends React.Component {
 
   submitCampaignForm(e) {
     e.preventDefault();
-    const { formValues, study } = this.props;
+    const { formValues, study, submitForm } = this.props;
     const submitValues = {
       dateFrom: formValues.datefrom,
       dateTo: formValues.dateto,
-      campaignId: formValues.campaign_id,
+      campaignId: +formValues.campaign_id,
       levelId: formValues.level_id,
-      patientQualificationSuite: formValues.patient_qualification_suite,
-      studyId: study.study_id,
+      patientQualificationSuite: formValues.patient_qualification_suite || false,
+      studyId: +study.study_id,
     };
     if (formValues.custom_patient_goal) {
-      submitValues.customPatientGoal = formValues.custom_patient_goal;
+      submitValues.customPatientGoal = +formValues.custom_patient_goal;
     }
-    console.log(submitValues);
-    // this.props.handleSubmit()
+    submitForm(submitValues);
   }
 
   render() {
@@ -200,7 +195,7 @@ export class CampaignPageModal extends React.Component {
                       className={`form-control datepicker-input ${isLatest ? '' : 'disabled'}`}
                       initialDate={dateTo}
                       isDisabled={!isLatest}
-                      minDate={moment(formValues.datefrom)}
+                      minDate={moment(formValues.datefrom).add(1, 'days')}
                     />
                   </div>
                 </div>
@@ -210,7 +205,7 @@ export class CampaignPageModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      type="text"
+                      type="number"
                       name="custom_patient_goal"
                       component={Input}
                     />
@@ -256,6 +251,7 @@ function mapDispatchToProps(dispatch) {
   return {
     change: (name, value) => dispatch(change(formName, name, value)),
     fetchCampaignsByStudy: (id) => dispatch(fetchCampaignsByStudy(id)),
+    submitForm: (values) => dispatch(editCampaign(values)),
   };
 }
 
