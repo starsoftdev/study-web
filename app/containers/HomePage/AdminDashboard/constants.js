@@ -76,34 +76,42 @@ export const FETCH_CUSTOM_NOTIFICATION_EMAILS            = 'DashboardPage/FETCH_
 export const FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS    = 'DashboardPage/FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS';
 export const FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR      = 'DashboardPage/FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR';
 
-export const FETCH_NOTE = 'DashboardPage/FETCH_NOTE';
-export const FETCH_NOTE_SUCCESS = 'DashboardPage/FETCH_NOTE_SUCCESS';
-export const FETCH_NOTE_ERROR = 'DashboardPage/FETCH_NOTE_ERROR';
+export const FETCH_NOTE                                  = 'DashboardPage/FETCH_NOTE';
+export const FETCH_NOTE_SUCCESS                          = 'DashboardPage/FETCH_NOTE_SUCCESS';
+export const FETCH_NOTE_ERROR                            = 'DashboardPage/FETCH_NOTE_ERROR';
 
-export const ADD_NOTE = 'DashboardPage/ADD_NOTE';
-export const ADD_NOTE_SUCCESS = 'DashboardPage/ADD_NOTE_SUCCESS';
-export const ADD_NOTE_ERROR = 'DashboardPage/ADD_NOTE_ERROR';
+export const ADD_NOTE                                    = 'DashboardPage/ADD_NOTE';
+export const ADD_NOTE_SUCCESS                            = 'DashboardPage/ADD_NOTE_SUCCESS';
+export const ADD_NOTE_ERROR                              = 'DashboardPage/ADD_NOTE_ERROR';
 
-export const EDIT_NOTE = 'DashboardPage/EDIT_NOTE';
-export const EDIT_NOTE_SUCCESS = 'DashboardPage/EDIT_NOTE_SUCCESS';
-export const EDIT_NOTE_ERROR = 'DashboardPage/EDIT_NOTE_ERROR';
+export const EDIT_NOTE                                   = 'DashboardPage/EDIT_NOTE';
+export const EDIT_NOTE_SUCCESS                           = 'DashboardPage/EDIT_NOTE_SUCCESS';
+export const EDIT_NOTE_ERROR                             = 'DashboardPage/EDIT_NOTE_ERROR';
 
-export const DELETE_NOTE_SUCCESS = 'DashboardPage/DELETE_NOTE_SUCCESS';
-export const DELETE_NOTE_ERROR = 'DashboardPage/DELETE_NOTE_ERROR';
-export const DELETE_NOTE = 'DashboardPage/DELETE_NOTE';
+export const DELETE_NOTE_SUCCESS                         = 'DashboardPage/DELETE_NOTE_SUCCESS';
+export const DELETE_NOTE_ERROR                           = 'DashboardPage/DELETE_NOTE_ERROR';
+export const DELETE_NOTE                                 = 'DashboardPage/DELETE_NOTE';
 
-export const ADD_STUDY_INDICATION_TAG = 'DashboardPage/ADD_STUDY_INDICATION_TAG';
-export const ADD_STUDY_INDICATION_TAG_SUCCESS = 'DashboardPage/ADD_STUDY_INDICATION_TAG_SUCCESS';
-export const ADD_STUDY_INDICATION_TAG_ERROR = 'DashboardPage/ADD_STUDY_INDICATION_TAG_ERROR';
+export const ADD_STUDY_INDICATION_TAG                    = 'DashboardPage/ADD_STUDY_INDICATION_TAG';
+export const ADD_STUDY_INDICATION_TAG_SUCCESS            = 'DashboardPage/ADD_STUDY_INDICATION_TAG_SUCCESS';
+export const ADD_STUDY_INDICATION_TAG_ERROR              = 'DashboardPage/ADD_STUDY_INDICATION_TAG_ERROR';
 
-export const REMOVE_STUDY_INDICATION_TAG = 'DashboardPage/REMOVE_STUDY_INDICATION_TAG';
-export const REMOVE_STUDY_INDICATION_TAG_SUCCESS = 'DashboardPage/REMOVE_STUDY_INDICATION_TAG_SUCCESS';
-export const REMOVE_STUDY_INDICATION_TAG_ERROR = 'DashboardPage/REMOVE_STUDY_INDICATION_TAG_ERROR';
+export const REMOVE_STUDY_INDICATION_TAG                 = 'DashboardPage/REMOVE_STUDY_INDICATION_TAG';
+export const REMOVE_STUDY_INDICATION_TAG_SUCCESS         = 'DashboardPage/REMOVE_STUDY_INDICATION_TAG_SUCCESS';
+export const REMOVE_STUDY_INDICATION_TAG_ERROR           = 'DashboardPage/REMOVE_STUDY_INDICATION_TAG_ERROR';
 
-export const FETCH_STUDY_INDICATION_TAG = 'DashboardPage/FETCH_STUDY_INDICATION_TAG';
-export const FETCH_STUDY_INDICATION_TAG_SUCCESS = 'DashboardPage/FETCH_STUDY_INDICATION_TAG_SUCCESS';
-export const FETCH_STUDY_INDICATION_TAG_ERROR = 'DashboardPage/FETCH_STUDY_INDICATION_TAG_ERROR';
+export const FETCH_STUDY_INDICATION_TAG                  = 'DashboardPage/FETCH_STUDY_INDICATION_TAG';
+export const FETCH_STUDY_INDICATION_TAG_SUCCESS          = 'DashboardPage/FETCH_STUDY_INDICATION_TAG_SUCCESS';
+export const FETCH_STUDY_INDICATION_TAG_ERROR            = 'DashboardPage/FETCH_STUDY_INDICATION_TAG_ERROR';
 
 export const SET_HOVER_ROW_INDEX                         = 'DashboardPage/SET_HOVER_ROW_INDEX';
 
 export const SET_EDIT_STUDY_FORM_VALUES                  = 'DashboardPage/SET_EDIT_STUDY_FORM_VALUES';
+
+export const FETCH_CAMPAIGNS_BY_STUDY                    = 'DashboardPage/FETCH_CAMPAIGNS_BY_STUDY';
+export const FETCH_CAMPAIGNS_BY_STUDY_SUCCESS            = 'DashboardPage/FETCH_CAMPAIGNS_BY_STUDY_SUCCESS';
+export const FETCH_CAMPAIGNS_BY_STUDY_ERROR              = 'DashboardPage/FETCH_CAMPAIGNS_BY_STUDY_ERROR';
+
+export const EDIT_CAMPAIGN                               = 'DashboardPage/EDIT_CAMPAIGN';
+export const EDIT_CAMPAIGN_SUCCESS                       = 'DashboardPage/EDIT_CAMPAIGN_SUCCESS';
+export const EDIT_CAMPAIGN_ERROR                         = 'DashboardPage/EDIT_CAMPAIGN_ERROR';
