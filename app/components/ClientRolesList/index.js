@@ -173,7 +173,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     }
     const sortedClientRoles = this.getSortedClientRoles();
     const clientRolesListContents = sortedClientRoles.filter(filterMethod).map((item, index) => (
-      ((item.canPurchase || item.canRedeemRewards || item.name === 'Super Admin' || !item.site_id || item.site_id === 0 || item.isAdmin) && item.user && !item.user.isArchived) ? <ClientRoleItem {...item} key={index} bDisabled={bDisabled} /> : null
+      ((item.canPurchase || item.canRedeemRewards || item.name === 'Super Admin' || !item.site_id || item.site_id === 0 || item.isAdmin) && item.user && !item.user.isArchived) ? <ClientRoleItem {...item} key={index} currentUser={currentUser} bDisabled={bDisabled} /> : null
     )
     );
     const siteOptions = map(sites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
@@ -181,6 +181,8 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     let siteLocation = (selectedUser && selectedUser.details && selectedUser.details.roleForClient) ? selectedUser.details.roleForClient.site_id : null;
     let cPurchasable = false;
     let cRedeemable = false;
+    let cEditPurchasable = false;
+    let cEditRedeemable = false;
     if (selectedUser && selectedUser.details && selectedUser.details.roleForClient) {
       if (selectedUser.details.roleForClient.canPurchase || selectedUser.details.roleForClient.canRedeemRewards || selectedUser.details.roleForClient.name === 'Super Admin' || selectedUser.details.roleForClient.name === 'Admin') {
         siteLocation = 0;
@@ -188,6 +190,16 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
         cRedeemable = selectedUser.details.roleForClient.canRedeemRewards;
       }
     }
+    if (currentUser.roleForClient) {
+      if (currentUser.roleForClient.canPurchase) {
+        cEditPurchasable = true;
+      }
+
+      if (currentUser.roleForClient.canRedeemRewards) {
+        cEditRedeemable = true;
+      }
+    }
+
     const editUserModalShown = this.editUserModalShouldBeShown();
 
     return (
@@ -246,6 +258,8 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
                       newSiteLocation={siteLocation}
                       Purchase={cPurchasable}
                       Redeem={cRedeemable}
+                      EditPurchase={cEditPurchasable}
+                      EditRedeem={cEditRedeemable}
                       isEdit
                     />
                   </div>
