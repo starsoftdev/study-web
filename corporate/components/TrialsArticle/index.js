@@ -82,7 +82,7 @@ export class TrialsArticle extends Component {
             />
           </div>
           <div className="info">
-            <h4>{trial.name || trial.study_name}</h4>
+            <h4>{trial.study_name}</h4>
             <address>
               <i className="icomoon-map-marker" /> {(addr !== null) ? addr : 'N/A'}
             </address>
@@ -98,7 +98,7 @@ export class TrialsArticle extends Component {
               <div className="custom-description" dangerouslySetInnerHTML={{ __html: markdown }} />
               ) : (
                 <p>
-                  {trial.name || trial.study_name}
+                  {trial.name}
                 </p>
               )
             }
