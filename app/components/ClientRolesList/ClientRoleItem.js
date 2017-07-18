@@ -16,6 +16,7 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
     selectedUser: PropTypes.object,
     fetchUser: PropTypes.func,
     bDisabled: PropTypes.bool,
+    currentUser: PropTypes.object,
   };
 
   constructor(props) {
@@ -35,20 +36,35 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { name, canRedeemRewards, canPurchase, user } = this.props;
+    const { name, canRedeemRewards, canPurchase, user, currentUser } = this.props;
     let accessStr = '';
+    let cEdit = false;
     const isSuperAdmin = (name === 'Super Admin');
 
     if (isSuperAdmin) {
       accessStr = 'ADMIN';
+      cEdit = true;
     } else if (canPurchase && canRedeemRewards) {
       accessStr = 'ALL ACCESS';
+      if (currentUser.roleForClient.canPurchase && currentUser.roleForClient.canRedeemRewards) {
+        cEdit = true;
+      }
     } else if (canPurchase && !canRedeemRewards) {
       accessStr = 'PURCHASE';
+      if (currentUser.roleForClient.canPurchase) {
+        cEdit = true;
+      }
     } else if (!canPurchase && canRedeemRewards) {
       accessStr = 'REWARDS';
+      if (currentUser.roleForClient.canRedeemRewards) {
+        cEdit = true;
+      }
     } else {
       accessStr = 'SITE LOCATION';
+      if ((currentUser.roleForClient.canPurchase && currentUser.roleForClient.canRedeemRewards) ||
+        (!currentUser.roleForClient.canPurchase && !currentUser.roleForClient.canRedeemRewards)) {
+        cEdit = true;
+      }
     }
 
     return (
@@ -64,7 +80,12 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
         </td>
         <td className="action">
           {!isSuperAdmin &&
-            <button type="button" className="btn btn-primary btn-edit-user pull-right" onClick={this.editUser} disabled={(this.currentUserIsBeingFetched() || this.props.bDisabled)}>
+            <button
+              type="button"
+              className="btn btn-primary btn-edit-user pull-right"
+              onClick={this.editUser}
+              disabled={(this.currentUserIsBeingFetched() || !cEdit)}
+            >
               {(this.currentUserIsBeingFetched())
                 ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                 : <span>Edit</span>

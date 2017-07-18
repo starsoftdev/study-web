@@ -213,8 +213,8 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       }
     });
     const sitePatientsListContents = sitePatients.details.map((item, index) => {
-      const firstname = item.first_name.toUpperCase();
-      const lastname = item.last_name.toUpperCase();
+      const firstname = item.first_name ? item.first_name.toUpperCase() : '';
+      const lastname = item.last_name ? item.last_name.toUpperCase() : '';
       if (!this.state.searchBy || firstname.includes(this.state.searchBy.toUpperCase()) || lastname.includes(this.state.searchBy.toUpperCase())) {
         return (<PatientItem
           patientData={item}
