@@ -29,6 +29,8 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
     onDelete: PropTypes.func,
     deleting: PropTypes.bool,
     isEdit: PropTypes.bool,
+    EditPurchase: PropTypes.bool,
+    EditRedeem: PropTypes.bool,
   };
 
   constructor(props) {
@@ -40,9 +42,6 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
     };
   }
 
-  componentDidMount() {
-  }
-
   handleSelect() {
     if (this.state) {
       this.setState({
@@ -52,7 +51,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
   }
 
   render() {
-    const { savedUser, siteOptions, site, handleSubmit, onDelete, deleting, isEdit } = this.props;
+    const { savedUser, siteOptions, site, handleSubmit, onDelete, deleting, isEdit, EditPurchase, EditRedeem } = this.props;
     let clientRolePanelContent = null;
 
     if (!site || site === '0') {
@@ -66,7 +65,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
               <Field
                 name="purchase"
                 component={Toggle}
-                disabled={savedUser.saving || deleting}
+                disabled={savedUser.saving || deleting || !EditPurchase}
               />
             </div>
           </div>
@@ -78,7 +77,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
               <Field
                 name="reward"
                 component={Toggle}
-                disabled={savedUser.saving || deleting}
+                disabled={savedUser.saving || deleting || !EditRedeem}
               />
             </div>
           </div>
