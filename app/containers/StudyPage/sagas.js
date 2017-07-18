@@ -30,7 +30,6 @@ SUBMIT_DELETE_NOTE,
 SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
 SUBMIT_SCHEDULE,
 DELETE_PATIENT,
-DOWNLOAD_CLIENT_REPORT,
 } from './constants';
 
 import {
@@ -303,9 +302,7 @@ export function* exportPatients() {
         requestURL += `&text=${encodeURIComponent(text)}`;
       }
 
-      yield call(request, requestURL, {
-        method: 'GET',
-      });
+      location.replace(`${requestURL}`);
       yield put(patientsExported());
     } catch (e) {
       // if returns forbidden we remove the token from local storage
@@ -313,32 +310,6 @@ export function* exportPatients() {
         removeItem('auth_token');
       }
       const errorMessage = get(e, 'message', 'Something went wrong while fetching patients. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
-      if (e.status === 401) {
-        yield call(() => { location.href = '/login'; });
-      }
-    }
-  }
-}
-
-export function* downloadReport() {
-  while (true) {
-    // listen for the DOWNLOAD_CLIENT_REPORT action
-    const { reportName } = yield take(DOWNLOAD_CLIENT_REPORT);
-    const authToken = getItem('auth_token');
-    if (!authToken) {
-      return;
-    }
-
-    try {
-      const requestURL = `${API_URL}/downloadClientReport?access_token=${authToken}&reportName=${reportName}`;
-      location.replace(`${requestURL}`);
-    } catch (e) {
-      // if returns forbidden we remove the token from local storage
-      if (e.status === 401) {
-        removeItem('auth_token');
-      }
-      const errorMessage = get(e, 'message', 'Something went wrong while downloading report. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -891,7 +862,6 @@ export function* fetchStudySaga() {
     const watcherS = yield fork(submitPatientNote);
     const watcherT = yield fork(submitDeleteNote);
     const watcherV = yield fork(submitSchedule);
-    const watcherW = yield fork(downloadReport);
     const deletePatientWatcher = yield fork(deletePatient);
 
     yield take(LOCATION_CHANGE);
@@ -916,7 +886,6 @@ export function* fetchStudySaga() {
     yield cancel(watcherS);
     yield cancel(watcherT);
     yield cancel(watcherV);
-    yield cancel(watcherW);
     yield cancel(deletePatientWatcher);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
