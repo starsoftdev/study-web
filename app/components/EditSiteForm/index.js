@@ -93,7 +93,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   }
 
   componentWillReceiveProps(newProps) {
-    if(newProps.formValues.selectedRegion !== this.props.formValues.selectedRegion) {
+    if (newProps.formValues.selectedRegion !== this.props.formValues.selectedRegion) {
       console.log('region', newProps.formValues.selectedRegion);
       this.props.change('selectedTimezone', '');
     }
@@ -213,13 +213,13 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                 onSuggestSelect={this.onSuggestSelect}
                 initialValue={isEdit ? this.props.initialValues.address : ''}
                 placeholder=""
-                onFocus={(e)=> {
+                onFocus={(e) => {
                   console.log('onFocus', e);
                   this.valid = false;
                 }}
                 onBlur={(e) => {
                   console.log('onBlur', e, this.valid);
-                  if(this.valid === false) {
+                  if (this.valid === false) {
                     this.geoSuggest.update('');
                     this.props.change('address', '');
                   }
