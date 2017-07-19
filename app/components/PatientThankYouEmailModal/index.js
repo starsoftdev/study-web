@@ -74,24 +74,12 @@ export class PatientThankYouEmailModal extends React.Component {
       this.setState({
         landingFetched: true,
       }, () => {
-        let landing = null;
-        let thankYouPage = null;
-        let study = null;
+        const thankYouPage = newProps.landing.thankYouPage;
 
-        if (this.props.landing) {
-          study = this.props.landing;
-
-          for (const studySource of study.studySources) {
-            if (studySource.landingPage) {
-              landing = studySource.landingPage;
-              thankYouPage = landing.thankYouPage;
-            }
-          }
-        }
-
-        if (!this.state.initialValuesEntered) {
+        if (!this.state.initialValuesEntered && thankYouPage) {
           const { change } = this.props;
           change('thankYouEmailBlock', thankYouPage.thankYouEmailBlock);
+          change('thankYouEmailSubject', thankYouPage.thankYouEmailSubject);
           this.setState({
             initialValuesEntered: true,
           });
@@ -157,14 +145,32 @@ export class PatientThankYouEmailModal extends React.Component {
               noValidate="novalidate"
             >
               <div className="frame">
-                <Field
-                  type="text"
-                  name="thankYouEmailBlock"
-                  component={Input}
-                  componentClass="textarea"
-                  className="field-row"
-                  bsClass="form-control thx-msg"
-                />
+                <div className="field-row sub">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">Subject</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="text"
+                      name="thankYouEmailSubject"
+                      component={Input}
+                      componentClass="textarea"
+                    />
+                  </div>
+                </div>
+                <div className="field-row msg">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">Body</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="text"
+                      name="thankYouEmailBlock"
+                      component={Input}
+                      componentClass="textarea"
+                    />
+                  </div>
+                </div>
                 <div className="field-row text-right">
                   <Button type="submit" bsStyle="primary" className="fixed-small-btn">
                     {this.props.updatePatientThankYouEmailProcess.saving
