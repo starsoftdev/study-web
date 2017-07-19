@@ -19,6 +19,7 @@ export default class DatePicker extends Component {
     initialDate: PropTypes.object,
     dateStyle: PropTypes.string,
     minDate: PropTypes.any,
+    isDisabled: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -99,11 +100,13 @@ export default class DatePicker extends Component {
   }
 
   toggleModal(visible) {
-    this.setState({ modalVisible: visible });
+    if (!this.props.isDisabled) {
+      this.setState({ modalVisible: visible });
+    }
   }
 
   render() {
-    const { name, className, dateStyle, minDate, ...rest } = this.props;
+    const { name, className, dateStyle, minDate, isDisabled, ...rest } = this.props;
     const { date, modalVisible } = this.state;
 
     const currentDate = moment();
@@ -117,6 +120,7 @@ export default class DatePicker extends Component {
         name={name}
         readOnly
         value={inputValue}
+        disabled={isDisabled}
         {...rest}
       />
     );
