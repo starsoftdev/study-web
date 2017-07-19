@@ -92,6 +92,13 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     };
   }
 
+  componentWillReceiveProps(newProps) {
+    if(newProps.formValues.selectedRegion !== this.props.formValues.selectedRegion) {
+      console.log('region', newProps.formValues.selectedRegion);
+      this.props.change('selectedTimezone', '');
+    }
+  }
+
   onPhoneBlur(event) {
     const { blur } = this.props;
     const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
