@@ -77,7 +77,7 @@ export class TrialsArticle extends Component {
               src={trial.image || studyKikLogo}
               width="854"
               height="444"
-              alt="description"
+              alt=""
               className={classNames('img-responsive', { placeholder: !trial.image })}
             />
           </div>

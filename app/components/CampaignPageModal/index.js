@@ -8,7 +8,6 @@ import classNames from 'classnames';
 import Form from 'react-bootstrap/lib/Form';
 
 import moment from 'moment';
-import _ from 'lodash';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import Collapse from 'react-bootstrap/lib/Collapse';
@@ -47,6 +46,10 @@ export class CampaignPageModal extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      selectedCampaign: 0,
+    };
+
     this.campaignChanged = this.campaignChanged.bind(this);
     this.submitCampaignForm = this.submitCampaignForm.bind(this);
   }
@@ -54,16 +57,19 @@ export class CampaignPageModal extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.openModal && !this.props.openModal && this.props.study.study_id) {
       this.props.fetchCampaignsByStudy(this.props.study.study_id);
+      this.setState({ selectedCampaign : 0 });
     }
     if (newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
       this.props.studyCampaigns.details !== newProps.studyCampaigns.details) {
-      this.campaignChanged(newProps.studyCampaigns.details[0].id, newProps.studyCampaigns.details);
+      this.campaignChanged(newProps.studyCampaigns.details[this.state.selectedCampaign].id, newProps.studyCampaigns.details);
     }
   }
 
   campaignChanged(e, studyCampaigns = this.props.studyCampaigns.details) {
-    const foundCampaign = _.find(studyCampaigns, (item) => (item.id === e));
-    if (foundCampaign) {
+    const campaignIndex = studyCampaigns.findIndex(item => (item.id === e));
+    if (campaignIndex !== undefined) {
+      const foundCampaign = studyCampaigns[campaignIndex];
+      this.setState({ selectedCampaign : campaignIndex });
       const { change } = this.props;
       change('campaign_id', foundCampaign.id);
       change('datefrom', foundCampaign.dateFrom);
