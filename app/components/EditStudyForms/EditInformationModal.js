@@ -161,7 +161,6 @@ export class EditInformationModal extends React.Component {
     const { change } = this.props;
     if (e.gmaps && e.gmaps.address_components) {
       const addressComponents = e.gmaps.address_components;
-      const addr = e.label;
 
       for (const val of addressComponents) {
         if (!city) {
@@ -452,10 +451,10 @@ export class EditInformationModal extends React.Component {
                       onSuggestSelect={this.onSuggestSelect}
                       initialValue={this.props.formValues.site_address}
                       placeholder=""
-                      onFocus={(e) => {
+                      onFocus={() => {
                         this.valid = false;
                       }}
-                      onBlur={(e) => {
+                      onBlur={() => {
                         if (this.valid === false) {
                           this.geoSuggest.update('');
                           this.props.change('site_address', '');
