@@ -504,7 +504,7 @@ export class EditInformationModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row">
-                  <strong className="label required">
+                  <strong className="label">
                     <label htmlFor="new-patient-phone">RECRUITMENT PHONE</label>
                   </strong>
                   <div className="field">
@@ -517,7 +517,7 @@ export class EditInformationModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row">
-                  <strong className="label required">
+                  <strong className="label">
                     <label>PRINCIPAL INVESTIGATOR</label>
                   </strong>
                   <div className="field">
