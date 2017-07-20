@@ -22,6 +22,7 @@ import RenderCustomEmailsList from './RenderCustomEmailsList';
 import FormGeosuggest from '../../components/Input/Geosuggest';
 import { normalizePhoneDisplay } from '../../common/helper/functions';
 import { addStudyIndicationTag, removeStudyIndicationTag } from '../../containers/HomePage/AdminDashboard/actions';
+import formValidator from './validator';
 
 const formName = 'dashboardEditStudyForm';
 
@@ -34,7 +35,7 @@ const mapDispatchToProps = (dispatch) => ({
   removeStudyIndicationTag: (studyId, indicationId) => dispatch(removeStudyIndicationTag(studyId, indicationId)),
 });
 
-@reduxForm({ form: formName })
+@reduxForm({ form: formName, validate: formValidator })
 @connect(null, mapDispatchToProps)
 export class EditInformationModal extends React.Component {
   static propTypes = {
@@ -160,6 +161,7 @@ export class EditInformationModal extends React.Component {
     const { change } = this.props;
     if (e.gmaps && e.gmaps.address_components) {
       const addressComponents = e.gmaps.address_components;
+      const addr = e.label;
 
       for (const val of addressComponents) {
         if (!city) {
@@ -181,10 +183,10 @@ export class EditInformationModal extends React.Component {
           }
         }
         if (!streetNmber && _.find(val.types, (o) => (o === 'street_number'))) {
-          streetNmber = val.short_name;
+          streetNmber = val.long_name;
         }
         if (!route && _.find(val.types, (o) => (o === 'route'))) {
-          route = val.short_name;
+          route = val.long_name;
         }
         if (streetNmber && route) {
           this.geoSuggest.update(`${streetNmber} ${route}`);
@@ -206,6 +208,7 @@ export class EditInformationModal extends React.Component {
       this.geoSuggest.update(`${addressArr[0]}`);
       change('site_address', `${addressArr[0]}`);
     }
+    this.valid = true;
   }
 
   onPhoneBlur(event) {
@@ -449,6 +452,15 @@ export class EditInformationModal extends React.Component {
                       onSuggestSelect={this.onSuggestSelect}
                       initialValue={this.props.formValues.site_address}
                       placeholder=""
+                      onFocus={(e) => {
+                        this.valid = false;
+                      }}
+                      onBlur={(e) => {
+                        if (this.valid === false) {
+                          this.geoSuggest.update('');
+                          this.props.change('site_address', '');
+                        }
+                      }}
                     />
                   </div>
                 </div>
