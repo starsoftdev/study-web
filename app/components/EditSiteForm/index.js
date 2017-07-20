@@ -213,10 +213,10 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                 onSuggestSelect={this.onSuggestSelect}
                 initialValue={isEdit ? this.props.initialValues.address : ''}
                 placeholder=""
-                onFocus={(e) => {
+                onFocus={() => {
                   this.valid = false;
                 }}
-                onBlur={(e) => {
+                onBlur={() => {
                   if (this.valid === false) {
                     this.geoSuggest.update('');
                     this.props.change('address', '');
