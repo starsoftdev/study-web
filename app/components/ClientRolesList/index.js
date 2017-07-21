@@ -202,7 +202,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     }
 
     const editUserModalShown = this.editUserModalShouldBeShown();
-    
+
     if (selectedUser.details && selectedUser.details.id === currentUser.id) {
       editSelf = true;
     }
