@@ -50,7 +50,7 @@ import {
 import {
   sendStudyPatientMessages,
 } from '../../containers/GlobalNotifications/actions';
-import { incrementStudyUnreadMessages } from '../../containers/HomePage/actions';
+import { incrementStudyUnreadMessages, subtractStudyUnreadMessages } from '../../containers/HomePage/actions';
 
 import alertSound from './sounds/message_received.wav';
 
@@ -83,6 +83,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     incrementStudyUnreadMessages: React.PropTypes.func,
     readStudyPatientMessages: React.PropTypes.func,
     addMessagesCountStat: React.PropTypes.func,
+    subtractStudyUnreadMessages: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -166,7 +167,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       this.props.fetchPatientMessages(item.id);
       this.props.markAsReadPatientMessages(item.id);
       this.props.readStudyPatientMessages(item.id);
-
+      this.props.subtractStudyUnreadMessages(item.study_id, item.count_unread);
       if (!initialSelect) {
         this.props.setChatTextValue('');
       }
@@ -362,6 +363,7 @@ function mapDispatchToProps(dispatch) {
     change: (field, value) => dispatch(change('globalPMS', field, value)),
     incrementStudyUnreadMessages: (studyId) => dispatch(incrementStudyUnreadMessages(studyId)),
     addMessagesCountStat: (payload) => dispatch(addMessagesCountStat(payload)),
+    subtractStudyUnreadMessages: (studyId, count) => dispatch(subtractStudyUnreadMessages(studyId, count)),
   };
 }
 
