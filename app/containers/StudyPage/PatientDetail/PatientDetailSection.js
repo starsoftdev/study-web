@@ -64,7 +64,7 @@ class PatientDetailSection extends React.Component {
       blur('phone', formattedPhoneNumber);
       // normalize the number in international format for submission to the server
       const phoneNumber = normalizePhoneForServer(formValues.phone);
-      submitPatientUpdate(initialValues.id, {
+      submitPatientUpdate(initialValues.id, initialValues.patientCategoryId, {
         firstName: formValues.firstName,
         lastName: formValues.lastName,
         email: formValues.email,
@@ -179,7 +179,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
   reset: () => dispatch(reset(formName)),
-  submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),
+  submitPatientUpdate: (patientId, patientCategoryId, fields) => dispatch(submitPatientUpdate(patientId, patientCategoryId, fields)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientDetailSection);

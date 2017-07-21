@@ -73,6 +73,15 @@ import {
   FETCH_STUDY_INDICATION_TAG,
   FETCH_STUDY_INDICATION_TAG_SUCCESS,
   FETCH_STUDY_INDICATION_TAG_ERROR,
+
+  FETCH_CAMPAIGNS_BY_STUDY,
+  FETCH_CAMPAIGNS_BY_STUDY_SUCCESS,
+  FETCH_CAMPAIGNS_BY_STUDY_ERROR,
+
+  EDIT_CAMPAIGN,
+  EDIT_CAMPAIGN_SUCCESS,
+  EDIT_CAMPAIGN_ERROR,
+
 } from './constants';
 
 import {
@@ -174,6 +183,15 @@ const initialState = {
   paginationOptions: {
     hasMoreItems: true,
     page: 1,
+  },
+  campaigns: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  editCampaignProcess: {
+    saving: false,
+    error: false,
   },
   updatedStudyAd: null,
   levels: [],
@@ -921,7 +939,75 @@ export default function dashboardPageReducer(state = initialState, action) {
         ...state,
         hoverRowIndex: action.index,
       };
-
+    case FETCH_CAMPAIGNS_BY_STUDY:
+      return {
+        ...state,
+        campaigns: {
+          details: state.campaigns.details,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_CAMPAIGNS_BY_STUDY_SUCCESS:
+      return {
+        ...state,
+        campaigns: {
+          details: action.payload.reverse(),
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_CAMPAIGNS_BY_STUDY_ERROR:
+      return {
+        ...state,
+        campaigns: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case EDIT_CAMPAIGN:
+      return {
+        ...state,
+        editCampaignProcess: {
+          saving: true,
+          error: null,
+        },
+      };
+    case EDIT_CAMPAIGN_SUCCESS: {
+      // updating the campaigns with the edited object
+      const updatedCampaigns = state.campaigns.details.map(item => (item.id === action.payload.campaignId
+        ? {
+          ...item,
+          dateFrom: action.payload.dateFrom,
+          dateTo: action.payload.dateTo,
+          customPatientGoal: action.payload.customPatientGoal,
+          patientQualificationSuite: action.payload.patientQualificationSuite,
+          level_id: action.payload.levelId,
+        } :
+        item
+      ));
+      return {
+        ...state,
+        editCampaignProcess: {
+          saving: false,
+          error: null,
+        },
+        campaigns: {
+          details: updatedCampaigns,
+          fetching: false,
+          error: null,
+        },
+      };
+    }
+    case EDIT_CAMPAIGN_ERROR:
+      return {
+        ...state,
+        editCampaignProcess: {
+          saving: false,
+          error: action.payload,
+        },
+      };
     default:
       return state;
   }

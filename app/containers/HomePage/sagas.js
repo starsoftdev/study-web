@@ -47,6 +47,8 @@ import {
   ADD_STUDY_INDICATION_TAG,
   REMOVE_STUDY_INDICATION_TAG,
   FETCH_STUDY_INDICATION_TAG,
+  FETCH_CAMPAIGNS_BY_STUDY,
+  EDIT_CAMPAIGN,
 } from './AdminDashboard/constants';
 
 import {
@@ -99,7 +101,10 @@ import {
   addStudyIndicationTagError,
   removeStudyIndicationTagSuccess,
   removeStudyIndicationTagError,
-
+  fetchCampaignsByStudySuccess,
+  fetchCampaignsByStudyError,
+  editCampaignSuccess,
+  editCampaignError,
 
 } from './AdminDashboard/actions';
 
@@ -1096,6 +1101,59 @@ export function* updateTwilioNumbersWorker() {
   }
 }
 
+export function* fetchCampaignsByStudyWatcher() {
+  yield* takeLatest(FETCH_CAMPAIGNS_BY_STUDY, fetchCampaignsByStudyWorker);
+}
+
+export function* fetchCampaignsByStudyWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/${action.payload}/campaigns`;
+
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchCampaignsByStudySuccess(response));
+  } catch (err) {
+    yield put(fetchCampaignsByStudyError(err));
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching campaigns for selected study');
+    yield put(toastrActions.error('', errorMessage));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+
+export function* editCampaignWatcher() {
+  yield* takeLatest(EDIT_CAMPAIGN, editCampaignWorker);
+}
+
+export function* editCampaignWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/${action.payload.studyId}/campaigns/${action.payload.campaignId}`;
+    const params = {
+      method: 'PUT',
+      body: JSON.stringify(action.payload),
+    };
+    const response = yield call(request, requestURL, params);
+    if (response.success) {
+      yield put(editCampaignSuccess(action.payload));
+    } else {
+      yield put(editCampaignError(response));
+    }
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(editCampaignError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+
 let watcherD = false;
 
 export function* homePageSaga() {
@@ -1131,6 +1189,8 @@ export function* homePageSaga() {
   const changeStudyAddWatcher1 = yield fork(changeStudyAddWatcher);
   const fetchMessagingNumbersWatcher1 = yield fork(fetchMessagingNumbersWatcher);
   const updateTwilioNumbersWatcher1 = yield fork(updateTwilioNumbersWatcher);
+  const fetchCampaignsByStudyWatcher1 = yield fork(fetchCampaignsByStudyWatcher);
+  const editCampaignWatcher1 = yield fork(editCampaignWatcher);
   const watcherJ = yield fork(fetchNoteWatcher);
   const watcherK = yield fork(addNoteWatcher);
   const watcherL = yield fork(editNoteWatcher);
@@ -1175,6 +1235,8 @@ export function* homePageSaga() {
     yield cancel(changeStudyAddWatcher1);
     yield cancel(fetchMessagingNumbersWatcher1);
     yield cancel(updateTwilioNumbersWatcher1);
+    yield cancel(fetchCampaignsByStudyWatcher1);
+    yield cancel(editCampaignWatcher1);
     yield cancel(watcherJ);
     yield cancel(watcherK);
     yield cancel(watcherL);

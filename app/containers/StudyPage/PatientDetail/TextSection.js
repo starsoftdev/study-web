@@ -9,9 +9,9 @@ import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
 import { actions as toastrActions } from 'react-redux-toastr';
 import Button from 'react-bootstrap/lib/Button';
-import { submitPatientText, readStudyPatientMessages, updatePatientSuccess } from '../actions';
+import { readStudyPatientMessages, updatePatientSuccess } from '../actions';
 import CallItem from '../../../components/GlobalPMSModal/CallItem';
-import { fetchClientCredits, markAsReadPatientMessages } from '../../App/actions';
+import { fetchClientCredits, markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
 import * as Selector from '../selectors';
 
 import {
@@ -35,14 +35,14 @@ class TextSection extends React.Component {
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     clientCredits: React.PropTypes.object,
-    submitPatientText: React.PropTypes.func.isRequired,
-    fetchStudyPatientMessages: React.PropTypes.func,
-    sendStudyPatientMessages: React.PropTypes.func,
+    fetchStudyPatientMessages: React.PropTypes.func.isRequired,
+    sendStudyPatientMessages: React.PropTypes.func.isRequired,
     setProcessingStatus: React.PropTypes.func,
     socket: React.PropTypes.any,
     studyId: React.PropTypes.any,
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
+    deleteMessagesCountStat: React.PropTypes.func,
     fetchClientCredits: React.PropTypes.func,
     updatePatientSuccess: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
@@ -81,10 +81,9 @@ class TextSection extends React.Component {
         this.initStudyPatientMessagesFetch(newProps);
         if (this.props.active && newMessage) {
           this.props.readStudyPatientMessages(this.props.currentPatient.id);
-          this.props.markAsReadPatientMessages(this.props.currentPatient.id);
-          this.props.updatePatientSuccess({
-            patientId: this.props.currentPatient.id,
-            patientCategoryId: this.props.currentPatientCategory.id,
+          // this.props.markAsReadPatientMessages(this.props.currentPatient.id);
+          this.props.deleteMessagesCountStat(this.props.currentPatient.unreadMessageCount);
+          this.props.updatePatientSuccess(this.props.currentPatient.id, this.props.currentPatientCategory.id, {
             unreadMessageCount: 0,
           });
           this.props.fetchClientCredits(currentUser.id);
@@ -135,7 +134,7 @@ class TextSection extends React.Component {
   }
 
   submitText() {
-    const { currentUser, currentPatient, studyId } = this.props;
+    const { currentUser, currentPatient, currentPatientCategory, studyId } = this.props;
     const textarea = this.textarea;
     const options = {
       studyId,
@@ -146,7 +145,7 @@ class TextSection extends React.Component {
     };
     this.props.sendStudyPatientMessages(options, (err, data) => {
       if (!err) {
-        this.props.updatePatientSuccess({
+        this.props.updatePatientSuccess(currentPatient.id, currentPatientCategory.id, {
           lastTextMessage: { body: data.body, dateCreated: data.dateCreated },
         });
         this.setState({ enteredCharactersLength: 0 }, () => {
@@ -262,14 +261,14 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   displayToastrError: (heading, error) => dispatch(toastrActions.error(heading, error)),
-  submitPatientText: (text) => dispatch(submitPatientText(text)),
   sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
   fetchStudyPatientMessages: (payload) => dispatch(fetchStudyPatientMessages(payload)),
   setProcessingStatus: (payload) => dispatch(setProcessingStatus(payload)),
   readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
+  deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
   fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
-  updatePatientSuccess: (payload) => dispatch(updatePatientSuccess(payload)),
+  updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextSection);

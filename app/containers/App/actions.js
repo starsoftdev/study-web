@@ -108,10 +108,6 @@ import {
   SAVE_USER_SUCCESS,
   SAVE_USER_ERROR,
 
-  GET_AVAIL_PHONE_NUMBERS,
-  GET_AVAIL_PHONE_NUMBERS_SUCCESS,
-  GET_AVAIL_PHONE_NUMBERS_ERROR,
-
   GET_CREDITS_PRICE,
   GET_CREDITS_PRICE_SUCCESS,
   GET_CREDITS_PRICE_ERROR,
@@ -200,6 +196,9 @@ import {
   SUBMIT_CNS,
   SUBMIT_CNS_SUCCESS,
   SUBMIT_CNS_ERROR,
+
+  ADD_MESSAGES_COUNT_STAT,
+  DELETE_MESSAGES_COUNT_STAT,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -843,26 +842,6 @@ export function userSavingError(payload) {
   };
 }
 
-export function getAvailPhoneNumbers() {
-  return {
-    type: GET_AVAIL_PHONE_NUMBERS,
-  };
-}
-
-export function getAvailPhoneNumbersSuccess(payload) {
-  return {
-    type: GET_AVAIL_PHONE_NUMBERS_SUCCESS,
-    payload,
-  };
-}
-
-export function getAvailPhoneNumbersError(payload) {
-  return {
-    type: GET_AVAIL_PHONE_NUMBERS_ERROR,
-    payload,
-  };
-}
-
 export function getCreditsPrice() {
   return {
     type: GET_CREDITS_PRICE,
@@ -1325,6 +1304,20 @@ export function submitCnsSuccess(payload) {
 export function submitCnsError(payload) {
   return {
     type: SUBMIT_CNS_ERROR,
+    payload,
+  };
+}
+
+export function addMessagesCountStat(payload) {
+  return {
+    type: ADD_MESSAGES_COUNT_STAT,
+    payload,
+  };
+}
+
+export function deleteMessagesCountStat(payload) {
+  return {
+    type: DELETE_MESSAGES_COUNT_STAT,
     payload,
   };
 }

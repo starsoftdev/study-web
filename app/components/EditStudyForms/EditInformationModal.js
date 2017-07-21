@@ -5,9 +5,7 @@
 import classNames from 'classnames';
 import _ from 'lodash';
 import React, { PropTypes } from 'react';
-import moment from 'moment';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 import { arrayRemoveAll, arrayPush, change, Field, FieldArray, reduxForm, blur } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Collapse from 'react-bootstrap/lib/Collapse';
@@ -17,22 +15,16 @@ import Overlay from 'react-bootstrap/lib/Overlay';
 import IndicationOverlay from './IndicationOverlay';
 import Toggle from '../../components/Input/Toggle';
 import Input from '../../components/Input/index';
-import DatePicker from '../../components/Input/DatePicker';
 import ReactSelect from '../../components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import RenderEmailsList from './RenderEmailsList';
 import RenderCustomEmailsList from './RenderCustomEmailsList';
-import { selectStudyCampaigns } from '../../containers/HomePage/AdminDashboard/selectors';
 import FormGeosuggest from '../../components/Input/Geosuggest';
 import { normalizePhoneDisplay } from '../../common/helper/functions';
 import { addStudyIndicationTag, removeStudyIndicationTag } from '../../containers/HomePage/AdminDashboard/actions';
+import formValidator from './validator';
 
 const formName = 'dashboardEditStudyForm';
-
-const mapStateToProps = createStructuredSelector({
-  studyCampaigns: selectStudyCampaigns(),
-  // formValues: selectValues(formName),
-});
 
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
@@ -43,8 +35,8 @@ const mapDispatchToProps = (dispatch) => ({
   removeStudyIndicationTag: (studyId, indicationId) => dispatch(removeStudyIndicationTag(studyId, indicationId)),
 });
 
-@reduxForm({ form: formName })
-@connect(mapStateToProps, mapDispatchToProps)
+@reduxForm({ form: formName, validate: formValidator })
+@connect(null, mapDispatchToProps)
 export class EditInformationModal extends React.Component {
   static propTypes = {
     addEmailNotificationClick: PropTypes.func.isRequired,
@@ -71,7 +63,6 @@ export class EditInformationModal extends React.Component {
     siteLocations: PropTypes.array,
     sponsors: PropTypes.array,
     study: PropTypes.object,
-    studyCampaigns: PropTypes.object,
     usersByRoles: PropTypes.object,
     setEditStudyFormValues: PropTypes.func,
     studyUpdateProcess: PropTypes.object,
@@ -87,7 +78,6 @@ export class EditInformationModal extends React.Component {
       initial: true,
     };
     this.siteLocationChanged = this.siteLocationChanged.bind(this);
-    this.campaignChanged = this.campaignChanged.bind(this);
     this.onSuggestSelect = this.onSuggestSelect.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
@@ -108,7 +98,7 @@ export class EditInformationModal extends React.Component {
         studyEmailUsers = studyEmailUsers.substr(0, studyEmailUsers.indexOf('}'));
         studyEmailUsers = studyEmailUsers.split(',');
 
-        _.forEach(newProps.allClientUsers.details, (item) => {
+        newProps.allClientUsers.details.forEach(item => {
           const isChecked = _.find(studyEmailUsers, (o) => (parseInt(o) === item.user_id));
           if (!isChecked) {
             isAllChecked = false;
@@ -132,7 +122,7 @@ export class EditInformationModal extends React.Component {
       let isAllCustomChecked = (newProps.allCustomNotificationEmails.details.length);
       const customEmailNotifications = newProps.formValues.customEmailNotifications;
 
-      _.forEach(newProps.allCustomNotificationEmails.details, (item) => {
+      newProps.allCustomNotificationEmails.details.forEach(item => {
         const local = _.find(customEmailNotifications, (o) => (o.id === item.id));
         let isChecked = (item.type === 'active');
         if (local) {
@@ -156,13 +146,7 @@ export class EditInformationModal extends React.Component {
     }
 
     if (!newProps.studyIndicationTags.fetching && newProps.studyIndicationTags.details) {
-      const customFields = [];
-      _.forEach(newProps.studyIndicationTags.details, (item) => {
-        customFields.push({
-          value: item.indication_id,
-          label: item.name,
-        });
-      });
+      const customFields = newProps.studyIndicationTags.details.map(item => ({ value: item.indication_id, label: item.name }));
 
       const newFormValues = {};
       newFormValues.indicationTags = customFields;
@@ -227,10 +211,10 @@ export class EditInformationModal extends React.Component {
           }
         }
         if (!streetNmber && _.find(val.types, (o) => (o === 'street_number'))) {
-          streetNmber = val.short_name;
+          streetNmber = val.long_name;
         }
         if (!route && _.find(val.types, (o) => (o === 'route'))) {
-          route = val.short_name;
+          route = val.long_name;
         }
         if (streetNmber && route) {
           this.geoSuggest.update(`${streetNmber} ${route}`);
@@ -252,6 +236,7 @@ export class EditInformationModal extends React.Component {
       this.geoSuggest.update(`${addressArr[0]}`);
       change('site_address', `${addressArr[0]}`);
     }
+    this.valid = true;
   }
 
   onPhoneBlur(event) {
@@ -279,18 +264,6 @@ export class EditInformationModal extends React.Component {
       change('site_state', foundSiteLocation.state);
       change('site_zip', foundSiteLocation.zip);
       change('client_id', foundSiteLocation.client_id);
-    }
-  }
-
-  campaignChanged(e) {
-    const foundCampaign = _.find(this.props.studyCampaigns.details, (item) => (item.id === e));
-    if (foundCampaign) {
-      const { change } = this.props;
-      change('campaign_datefrom', foundCampaign.datefrom);
-      change('campaign_dateto', foundCampaign.dateto);
-      change('custom_patient_goal', foundCampaign.custom_patient_goal);
-      change('level_id', foundCampaign.level_id);
-      change('patient_qualification_suite', foundCampaign.patient_qualification_suite);
     }
   }
 
@@ -341,116 +314,36 @@ export class EditInformationModal extends React.Component {
   }
 
   render() {
-    const { change, openModal } = this.props;
-    const smOptions = [];
+    const { change, openModal, onClose, usersByRoles, siteLocations, sponsors, protocols, cro, indications, formValues,
+      messagingNumbers } = this.props;
+    const smOptions = usersByRoles.sm.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
 
-    _.forEach(this.props.usersByRoles.sm, (item) => {
-      smOptions.push({
-        value: item.id,
-        label: `${item.first_name} ${item.last_name}`,
-      });
-    });
+    const bdOptions = usersByRoles.bd.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
 
-    const bdOptions = [];
-    _.forEach(this.props.usersByRoles.bd, (item) => {
-      bdOptions.push({
-        value: item.id,
-        label: `${item.first_name} ${item.last_name}`,
-      });
-    });
+    const aeOptions = usersByRoles.ae.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
 
-    const aeOptions = [];
-    _.forEach(this.props.usersByRoles.ae, (item) => {
-      aeOptions.push({
-        value: item.id,
-        label: `${item.first_name} ${item.last_name}`,
-      });
-    });
+    const siteLocationsOptions = siteLocations.map(item => ({ value: item.id, label: item.location }));
 
-    const siteLocationsOptions = [];
-    _.forEach(this.props.siteLocations, (item) => {
-      siteLocationsOptions.push({
-        value: item.id,
-        label: item.location,
-      });
-    });
+    const sponsorsOptions = sponsors.map(item => ({ value: item.id, label: item.name }));
 
-    const sponsorsOptions = [];
-    _.forEach(this.props.sponsors, (item) => {
-      sponsorsOptions.push({
-        value: item.id,
-        label: item.name,
-      });
-    });
+    const protocolsOptions = protocols.map(item => ({ value: item.id, label: item.number }));
 
-    const protocolsOptions = [];
-    _.forEach(this.props.protocols, (item) => {
-      protocolsOptions.push({
-        value: item.id,
-        label: item.number,
-      });
-    });
+    const croOptions = cro.map(item => ({ value: item.id, label: item.name }));
 
-    const croOptions = [];
-    _.forEach(this.props.cro, (item) => {
-      croOptions.push({
-        value: item.id,
-        label: item.name,
-      });
-    });
-
-    const indicationsOptions = [];
-    _.forEach(this.props.indications, (item) => {
-      indicationsOptions.push({
-        value: item.id,
-        label: item.name,
-      });
-    });
+    const indicationsOptions = indications.map(item => ({ value: item.id, label: item.name }));
 
     const studyValues = {
       id: this.props.formValues.study_id ? this.props.formValues.study_id : null,
       indicationTags: [],
     };
 
-    const exposureLevelOptions = [];
-    _.forEach(this.props.levels, (level) => {
-      exposureLevelOptions.push({
-        value: level.id,
-        label: level.name,
-      });
-    });
-
-    const messagingNumbers = [];
-    if (this.props.formValues.text_number_id) {
-      messagingNumbers.push({
-        value: this.props.formValues.text_number_id,
-        label: this.props.formValues.phone_number,
+    const messagingNumbersOptions = messagingNumbers.details.map(item => ({ value: item.id, label: item.phone_number }));
+    if (formValues.text_number_id) {
+      messagingNumbersOptions.unshift({
+        value: formValues.text_number_id,
+        label: formValues.phone_number,
       });
     }
-    _.forEach(this.props.messagingNumbers.details, (number) => {
-      messagingNumbers.push({
-        value: number.id,
-        label: number.phone_number,
-      });
-    });
-
-
-    let campaignOptions = [];
-
-    for (let i = 0; i < this.props.studyCampaigns.details.length; i++) {
-      if (i === 0) {
-        campaignOptions.push({ label: '1', value: this.props.studyCampaigns.details[i].id });
-      } else if (this.props.studyCampaigns.details[i].is_current) {
-        campaignOptions.push({ label: 'Current', value: this.props.studyCampaigns.details[i].id });
-      } else {
-        campaignOptions.push({ label: (i + 1), value: this.props.studyCampaigns.details[i].id });
-      }
-    }
-
-    campaignOptions = campaignOptions.reverse();
-
-    const campaignDateFrom = this.props.formValues.campaign_datefrom ? moment(this.props.formValues.campaign_datefrom) : null;
-    const campaignDateTo = this.props.formValues.campaign_dateto ? moment(this.props.formValues.campaign_dateto) : null;
 
     return (
       <Collapse dimension="width" in={openModal} timeout={250} className={classNames('form-lightbox', 'form-edit-information', (this.props.isOnTop > 0 ? 'slider-on-top' : ''))}>
@@ -459,7 +352,7 @@ export class EditInformationModal extends React.Component {
             <div className="head">
               <div className="inner-head">
                 <strong className="title">EDIT INFORMATION</strong>
-                <a className="btn-right-arrow" onClick={this.onClose}><i className="glyphicon glyphicon-menu-right" /></a>
+                <a className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right" /></a>
               </div>
             </div>
             <Form className="form-holder" onSubmit={this.props.handleSubmit}>
@@ -594,12 +487,16 @@ export class EditInformationModal extends React.Component {
                       onSuggestSelect={this.onSuggestSelect}
                       initialValue={this.props.formValues.site_address}
                       placeholder=""
+                      onFocus={() => {
+                        this.valid = false;
+                      }}
+                      onBlur={() => {
+                        if (this.valid === false) {
+                          this.geoSuggest.update('');
+                          this.props.change('site_address', '');
+                        }
+                      }}
                     />
-                    {/* <Field
-                      type="text"
-                      name="site_address"
-                      component={Input}
-                    />*/}
                   </div>
                 </div>
                 <div className="field-row">
@@ -656,7 +553,7 @@ export class EditInformationModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row">
-                  <strong className="label required">
+                  <strong className="label">
                     <label>PRINCIPAL INVESTIGATOR</label>
                   </strong>
                   <div className="field">
@@ -726,19 +623,6 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-first-name">PQS</label>
-                  </strong>
-                  <div className="field">
-                    <Field
-                      name="patient_qualification_suite"
-                      component={Toggle}
-                      className="field"
-                      onChange={(e) => { change('patientQualificationSuite', e.toString()); }}
-                    />
-                  </div>
-                </div>
-                <div className="field-row">
-                  <strong className="label">
                     <label htmlFor="new-patient-phone">MESSAGING NUMBER</label>
                   </strong>
                   <div className="field">
@@ -748,7 +632,7 @@ export class EditInformationModal extends React.Component {
                       placeholder="Select Messaging Number"
                       searchPlaceholder="Search"
                       searchable
-                      options={messagingNumbers}
+                      options={messagingNumbersOptions}
                       customSearchIconClass="icomoon-icon_search2"
                       onChange={(e) => { change('messaging_number', e.toString()); }}
                     />
@@ -893,79 +777,6 @@ export class EditInformationModal extends React.Component {
                     </div>
                   </div>
                 }
-                <div className="field-row">
-                  <strong className="label">
-                    <label htmlFor="new-patient-phone">EXPOSURE LEVEL</label>
-                  </strong>
-                  <div className="field">
-                    <Field
-                      name="level_id"
-                      component={ReactSelect}
-                      placeholder="Select Exposure Level"
-                      searchPlaceholder="Search"
-                      searchable
-                      options={exposureLevelOptions}
-                      customSearchIconClass="icomoon-icon_search2"
-                    />
-                  </div>
-                </div>
-                <div className="field-row">
-                  <strong className="label">
-                    <label htmlFor="new-patient-phone">CAMPAIGN</label>
-                  </strong>
-                  <div className="field">
-                    <Field
-                      name="campaign_id"
-                      component={ReactSelect}
-                      placeholder="Select Campaign"
-                      searchPlaceholder="Search"
-                      searchable
-                      options={campaignOptions}
-                      onChange={(e) => { this.campaignChanged(e); }}
-                      customSearchIconClass="icomoon-icon_search2"
-                    />
-                  </div>
-                </div>
-                <div className="field-row">
-                  <strong className="label">
-                    <label htmlFor="new-patient-phone">START DATE</label>
-                  </strong>
-                  <div className="field">
-                    <Field
-                      id="start-date"
-                      name="campaign_datefrom"
-                      component={DatePicker}
-                      className="form-control datepicker-input"
-                      initialDate={campaignDateFrom}
-                    />
-                  </div>
-                </div>
-                <div className="field-row">
-                  <strong className="label">
-                    <label htmlFor="new-patient-phone">END DATE</label>
-                  </strong>
-                  <div className="field">
-                    <Field
-                      id="end-date"
-                      name="campaign_dateto"
-                      component={DatePicker}
-                      className="form-control datepicker-input"
-                      initialDate={campaignDateTo}
-                    />
-                  </div>
-                </div>
-                <div className="field-row">
-                  <strong className="label">
-                    <label htmlFor="new-patient-phone">CUSTOM GOAL</label>
-                  </strong>
-                  <div className="field">
-                    <Field
-                      type="text"
-                      name="custom_patient_goal"
-                      component={Input}
-                    />
-                  </div>
-                </div>
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-phone">DELETE PATIENT</label>
