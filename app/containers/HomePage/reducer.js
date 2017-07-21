@@ -37,6 +37,7 @@ import {
   NEW_MESSAGE_FOR_PROTOCOL,
   SORT_SUCCESS,
   INCREMENT_STUDY_UNREAD_MESSAGES,
+  SUBTRACT_STUDY_UNREAD_MESSAGES,
 } from './constants';
 
 import {
@@ -155,6 +156,8 @@ export default function homePageReducer(state = initialState, action) {
   const protocolsCopy = _.cloneDeep(state.protocols.details);
   let newProtocolsList = [];
   let studiesCollection = [];
+  let studiesCopy = [];
+  let foundStudy = null;
 
   switch (action.type) {
     case FETCH_PATIENT_SIGN_UPS_SUCCEESS:
@@ -677,8 +680,8 @@ export default function homePageReducer(state = initialState, action) {
       };
 
     case INCREMENT_STUDY_UNREAD_MESSAGES:
-      const studiesCopy = _.cloneDeep(state.studies.details);
-      const foundStudy = _.find(studiesCopy, (o) => (o.studyId === action.studyId));
+      studiesCopy = _.cloneDeep(state.studies.details);
+      foundStudy = _.find(studiesCopy, (o) => (o.studyId === action.studyId));
       if (foundStudy) {
         foundStudy.unreadMessageCount ++;
         return {
@@ -695,6 +698,25 @@ export default function homePageReducer(state = initialState, action) {
             unreadTexts: state.patientMessagesCount.unreadTexts + 1,
             unreadEmails: state.patientMessagesCount.unreadEmails,
             total: state.patientMessagesCount.total + 1,
+          },
+        };
+      }
+      return state;
+
+    case SUBTRACT_STUDY_UNREAD_MESSAGES:
+      studiesCopy = _.cloneDeep(state.studies.details);
+      foundStudy = _.find(studiesCopy, (o) => (o.studyId === action.studyId));
+      if (foundStudy) {
+        foundStudy.unreadMessageCount -= action.count;
+        return {
+          ...state,
+          studies: {
+            details: studiesCopy,
+            fetching: false,
+            error: null,
+            total: state.studies.total || 0,
+            active: state.studies.active || 0,
+            inactive: state.studies.inactive || 0,
           },
         };
       }
